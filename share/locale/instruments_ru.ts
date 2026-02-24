@@ -10240,35 +10240,35 @@
         <source>Lead Pan</source>
         <comment>soprano-steel-drums shortName</comment>
         <extracomment>shortName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Тенор-пан</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
         <source>Double tenor steel pans.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Двойной теноровый стальной барабан — набор из двух барабанов). Обладает более низким и насыщенным звучанием, чем теноровый стальной барабан, часто используется для игры гармонических партий и аккомпанемента.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums trackName</comment>
         <extracomment>trackName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Двойной теноровый стальной барабан</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3455"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums longName</comment>
         <extracomment>longName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Двойной теноровый стальной барабан</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3457"/>
         <source>Dbl. T. Pans</source>
         <comment>alto-steel-drums shortName</comment>
         <extracomment>shortName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Дв. тенор. пан</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>

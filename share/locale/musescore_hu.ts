@@ -1144,6 +1144,12 @@
         <translation>Arpeggiók</translation>
     </message>
     <message>
+        <location filename="../../src/notationscene/widgets/editstyle.ui" line="121"/>
+        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6937"/>
+        <source>Chord brackets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="126"/>
         <source>Slurs &amp; ties</source>
         <translation>Legato- &amp; átkötőívek</translation>
@@ -2358,7 +2364,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4253"/>
-        <source>Center on the left system barline</source>
+        <source>Center on the leftmost system barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2368,7 +2374,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4473"/>
-        <source>Center on the right system barline</source>
+        <source>Center on the rightmost system barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2971,9 +2977,9 @@ space unit</extracomment>
         <translation>„Utolsó kottaszár utáni távolság” alaphelyzetbe</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6976"/>
-        <source>Hook length:</source>
-        <translation>Függőleges vonalka magassága:</translation>
+        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6825"/>
+        <source>Do not show arpeggios in standard notation when displayed in tablature</source>
+        <translation>Ne jelenítse meg az arpeggiót a hagyományos kottán, ha a tabulatúrán látszik</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6848"/>
@@ -2994,15 +3000,9 @@ space unit</extracomment>
         <translation>Távolság a hangjegytől:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6825"/>
-        <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation>Ne jelenítse meg az arpeggiót a hagyományos kottán, ha a tabulatúrán látszik</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/widgets/editstyle.ui" line="121"/>
-        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6937"/>
-        <source>Chord brackets</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/notationscene/widgets/editstyle.ui" line="6976"/>
+        <source>Hook length:</source>
+        <translation>Függőleges vonalka magassága:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7084"/>
@@ -3445,8 +3445,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10428"/>
-        <source>Reset &apos;Min. distance&apos; value</source>
-        <translation>„Min. távolság” alaphelyzetbe</translation>
+        <source>Reset &apos;Min. space between lyrics&apos; value</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10451"/>
@@ -10741,21 +10741,21 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3397"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3409"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2533"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1095"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3421"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3433"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2538"/>
         <source>Start of %1</source>
         <translation>%1 kezdete</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1098"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1118"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3401"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3417"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2548"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3425"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3441"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2553"/>
         <source>End of %1</source>
         <translation>%1 vége</translation>
     </message>
@@ -10806,77 +10806,77 @@ Fret %1 on strings %2</source>
         <translation>&lt;b&gt;Túl hosszú szólam&lt;/b&gt;: %1, %2. ütem, %3. kotta, %4. szólam. Találva: %4. Elvárt: %5.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="504"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
         <source>Duplet</source>
         <translation>Duola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="507"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="497"/>
         <source>Triplet</source>
         <translation>Triola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="510"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="500"/>
         <source>Quadruplet</source>
         <translation>Kvartola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="513"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="503"/>
         <source>Quintuplet</source>
         <translation>Kvintola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="516"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="506"/>
         <source>Sextuplet</source>
         <translation>Szextola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="519"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="509"/>
         <source>Septuplet</source>
         <translation>Szeptola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="522"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="512"/>
         <source>Octuplet</source>
         <translation>Oktola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="525"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="515"/>
         <source>Nonuplet</source>
         <translation>Novemola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="519"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
         <translation>%1 értékű n-ola</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="539"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Dotted %1</source>
         <translation>Pontozott %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="542"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="532"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Double dotted %1</source>
         <translation>Kétszeresen pontozott %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="545"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="535"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Triple dotted %1</source>
         <translation>Háromszorosan pontozott %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="548"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="538"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
         <source>Quadruple dotted %1</source>
         <translation>Pontozott kvartola %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1114"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1104"/>
         <source>Start and end of %1</source>
         <translation>%1 kezdete és vége</translation>
     </message>
@@ -11003,116 +11003,116 @@ Fret %1 on strings %2</source>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
-        <source>%1; Duration: %n measure(s)</source>
-        <translation><numerusform>%1; Ritmusérték: %n ütem</numerusform><numerusform>%1; Ritmusérték: %n ütem</numerusform></translation>
+        <source>%1; Duration: %Ln measure(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
-        <source>%n measure(s)</source>
-        <translation><numerusform>%n ütem</numerusform><numerusform>%n ütem</numerusform></translation>
+        <source>%Ln measure(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="861"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="862"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1 (hangzás mint %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2227"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2248"/>
         <source>Acciaccatura</source>
         <translation>acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2229"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2250"/>
         <source>Appoggiatura</source>
         <translation>appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2254"/>
         <source>Grace note after</source>
         <translation>Utóka</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2258"/>
         <source>Grace note before</source>
         <translation>Előke</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2239"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2260"/>
         <source>Note</source>
         <translation>Hangjegy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3304"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3328"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3366"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="506"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="518"/>
         <source>Voice: %1</source>
         <translation>Szólam: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3312"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3336"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(be: %1‰ ki: %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3318"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3347"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
         <source>Beat slash</source>
         <translation>Ütésvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3318"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3347"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3342"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
         <source>Rhythm slash</source>
         <translation>Ritmusvonal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3322"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3351"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Húr: %2; Érintő: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3328"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3352"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Hangmagasság: %2; Ritmusérték: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3357"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3381"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 kottafej %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3359"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3383"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="521"/>
         <source>Cross-staff above</source>
         <translation>Soron átnyúlás föfelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3361"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="523"/>
         <source>Cross-staff below</source>
         <translation>Soron átnyúlás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3365"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
         <source>too low</source>
         <translation>túl mély</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3367"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3391"/>
         <source>too high</source>
         <translation>túl magas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3369"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3393"/>
         <source>too low for amateurs</source>
         <translation>túl mély amatőröknek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3371"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3395"/>
         <source>too high for amateurs</source>
         <translation>túl magas amatőröknek</translation>
     </message>
@@ -11142,7 +11142,7 @@ Fret %1 on strings %2</source>
         <translation>%1; Ritmusérték: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2507"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2512"/>
         <source>Annotations:</source>
         <translation>Jegyzetek:</translation>
     </message>
@@ -11431,18 +11431,18 @@ Fret %1 on strings %2</source>
         <translation>Nem lehet %1:%2 arányú n-olát létrehozni</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7916"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="8064"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7920"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="8068"/>
         <source>Remove stale partial tie</source>
         <translation>Elavult részleges átkötőív eltávolítása</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7974"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7978"/>
         <source>Reset incoming partial slur</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="7984"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="7988"/>
         <source>Reset outgoing partial slur</source>
         <translation type="unfinished"/>
     </message>
@@ -16177,7 +16177,7 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="63"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="311"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="313"/>
         <source>color</source>
         <translation type="unfinished"/>
     </message>
@@ -16232,1750 +16232,1760 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="75"/>
-        <source>tonal pitch class</source>
+        <location filename="../../src/engraving/dom/property.cpp" line="74"/>
+        <source>cent offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="76"/>
-        <source>transposed tonal pitch class</source>
+        <source>tonal pitch class</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
-        <source>line</source>
+        <source>transposed tonal pitch class</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="78"/>
-        <source>fixed</source>
+        <source>line</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
-        <source>fixed line</source>
+        <source>fixed</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="80"/>
-        <source>head type</source>
+        <source>fixed line</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="81"/>
-        <source>head</source>
+        <source>head type</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="82"/>
+        <source>head</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="83"/>
         <source>velocity type</source>
         <translation>billentési hangerő típusa</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="83"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="204"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="84"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="206"/>
         <source>velocity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="84"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="256"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="85"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>anchor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="86"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="87"/>
         <source>direction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="87"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="88"/>
         <source>horizontal direction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="88"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="89"/>
         <source>stem direction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="89"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="309"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="90"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="311"/>
         <source>stemless</source>
         <translation>csak kottafej</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="90"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="91"/>
         <source>up</source>
         <translation>fel</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="91"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="92"/>
         <source>leading space</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="92"/>
-        <source>mirror</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/engraving/dom/property.cpp" line="93"/>
-        <source>parentheses</source>
+        <source>end of measure change</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
-        <source>hide generated parentheses</source>
+        <source>mirror</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="95"/>
-        <source>dot position</source>
+        <source>parentheses</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="96"/>
-        <source>combine voice</source>
+        <source>hide generated parentheses</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
-        <source>tuning</source>
+        <source>dot position</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="98"/>
-        <source>pause</source>
+        <source>combine voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="99"/>
+        <source>tuning</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
-        <source>barline type</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="101"/>
-        <source>span</source>
+        <source>pause</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
-        <source>span from</source>
+        <source>barline type</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
-        <source>span to</source>
+        <source>span</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="104"/>
-        <source>show tips</source>
+        <source>span from</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="105"/>
+        <source>span to</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="106"/>
-        <source>offset</source>
-        <translation>eltolás</translation>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="107"/>
-        <source>fret</source>
+        <source>show tips</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="108"/>
-        <source>string</source>
-        <translation type="unfinished"/>
+        <source>offset</source>
+        <translation>eltolás</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="109"/>
-        <source>ghost</source>
+        <source>fret</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="110"/>
-        <source>dead</source>
+        <source>string</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="111"/>
-        <source>played</source>
+        <source>ghost</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="112"/>
-        <source>nominal time signature</source>
+        <source>dead</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="113"/>
-        <source>actual time signature</source>
+        <source>played</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
-        <source>number type</source>
+        <source>nominal time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
-        <source>bracket type</source>
+        <source>actual time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="116"/>
-        <source>normal notes</source>
+        <source>number type</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
-        <source>actual notes</source>
+        <source>bracket type</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
-        <source>bracket start offset</source>
+        <source>normal notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
-        <source>bracket end offset</source>
+        <source>actual notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="120"/>
-        <source>grow left</source>
+        <source>bracket start offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="121"/>
-        <source>grow right</source>
+        <source>bracket end offset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="122"/>
+        <source>grow left</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="123"/>
-        <source>height</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="124"/>
-        <source>width</source>
+        <source>grow right</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="125"/>
-        <source>autosize frame</source>
+        <source>height</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="126"/>
-        <source>top gap</source>
+        <source>width</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="127"/>
-        <source>bottom gap</source>
+        <source>autosize frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="128"/>
-        <source>left padding</source>
+        <source>top gap</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="129"/>
-        <source>right padding</source>
+        <source>bottom gap</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="130"/>
-        <source>top padding</source>
+        <source>left padding</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="131"/>
-        <source>bottom padding</source>
+        <source>right padding</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="132"/>
-        <source>padding to notation above</source>
+        <source>top padding</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="133"/>
-        <source>padding to notation below</source>
+        <source>bottom padding</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="134"/>
+        <source>padding to notation above</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="135"/>
-        <source>layout break type</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="136"/>
-        <source>autoscale</source>
+        <source>padding to notation below</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="137"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="328"/>
-        <source>size</source>
+        <source>layout break type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="138"/>
+        <source>autoscale</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="139"/>
-        <source>image height</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="140"/>
-        <source>image width</source>
+        <location filename="../../src/engraving/dom/property.cpp" line="330"/>
+        <source>size</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="141"/>
-        <source>image framed</source>
+        <source>image height</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="142"/>
+        <source>image width</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="143"/>
-        <source>text scale</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="144"/>
-        <source>diagram scale</source>
+        <source>image framed</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="145"/>
-        <source>column gap</source>
+        <source>text scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="146"/>
-        <source>row gap</source>
+        <source>diagram scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="147"/>
-        <source>chord symbols per row</source>
+        <source>column gap</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="148"/>
-        <source>horizontal alignment</source>
+        <source>row gap</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="149"/>
-        <source>diagrams order</source>
+        <source>chord symbols per row</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="150"/>
+        <source>horizontal alignment</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="151"/>
-        <source>scale</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="152"/>
-        <source>aspect ratio locked</source>
+        <source>diagrams order</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="153"/>
-        <source>size is spatium</source>
+        <source>scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="154"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="220"/>
+        <source>aspect ratio locked</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="155"/>
+        <source>size is spatium</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="156"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="222"/>
         <source>text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="157"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="159"/>
         <source>beam position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="158"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="160"/>
         <source>beam mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="159"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="161"/>
         <source>without slope</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="160"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="162"/>
         <source>beam staff move</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="161"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="163"/>
         <source>length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="162"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="164"/>
         <source>show stem slash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="164"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="166"/>
         <source>space</source>
         <translation>szóköz</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="165"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="167"/>
         <source>tempo</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="166"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="168"/>
         <source>following text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="167"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="169"/>
         <source>tempo align right of rehearsal mark</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="169"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="171"/>
         <source>bracket</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="170"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="172"/>
         <source>accidental type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="171"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="173"/>
         <source>stacking order offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="172"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="174"/>
         <source>numerator string</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="173"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="175"/>
         <source>denominator string</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="174"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="176"/>
         <source>prefix</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="175"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="177"/>
         <source>digit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="176"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="178"/>
         <source>suffix</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="177"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="179"/>
         <source>continuation line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="185"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="187"/>
         <source>ottava type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="186"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="188"/>
         <source>numbers only</source>
         <translation>csak számok</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="187"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="189"/>
         <source>trill type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="188"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="190"/>
         <source>vibrato type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="189"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="191"/>
         <source>hairpin with circled tip</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="191"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="193"/>
         <source>hairpin type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="192"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="194"/>
         <source>hairpin height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="193"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="195"/>
         <source>hairpin cont height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="194"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="196"/>
         <source>velocity change</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="195"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="197"/>
         <source>velocity change method</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="196"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="198"/>
         <source>velocity change speed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="197"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="199"/>
         <source>dynamic type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="199"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="201"/>
         <source>single note dynamics</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="200"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="202"/>
         <source>change method</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="201"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="203"/>
         <source>placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="202"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="204"/>
         <source>horizontal placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="203"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="205"/>
         <source>multimeasure rest range bracket type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="205"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="207"/>
         <source>jump to</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="206"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="208"/>
         <source>play until</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="207"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>continue at</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="208"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="210"/>
         <source>label</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="209"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="211"/>
         <source>marker type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="210"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>music symbol size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="211"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>marker center on symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="212"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="214"/>
         <source>length 1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="213"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="215"/>
         <source>length 2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="214"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>repeat end</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="215"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="217"/>
         <source>repeat start</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="216"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>repeat jump</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="217"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="219"/>
         <source>measure number mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="219"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="221"/>
         <source>glissando type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="221"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="223"/>
         <source>showing text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="222"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="224"/>
         <source>glissando style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="223"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="225"/>
         <source>glissando shift</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="224"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="226"/>
         <source>ease in</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="225"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="227"/>
         <source>ease out</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="226"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="228"/>
         <source>diagonal</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="227"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="229"/>
         <source>groups</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="228"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="230"/>
         <source>line style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="229"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="231"/>
         <source>line width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="230"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="232"/>
         <source>time stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="231"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="233"/>
         <source>ornament style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="232"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="234"/>
         <source>interval above</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="233"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="235"/>
         <source>interval below</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="234"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="236"/>
         <source>ornament show accidental</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="235"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="237"/>
         <source>ornament show cue note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="236"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="238"/>
         <source>start on upper note</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="238"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="240"/>
         <source>time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="239"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="241"/>
         <source>time signature stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="240"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="242"/>
         <source>time signature type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="241"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="295"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="243"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="297"/>
         <source>tick</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="242"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="265"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="244"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="267"/>
         <source>ticks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="243"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="245"/>
         <source>end track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="244"/>
-        <location filename="../../src/engraving/dom/property.cpp" line="260"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="246"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="262"/>
         <source>end offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="245"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="247"/>
         <source>breaking multimeasure rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="246"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="248"/>
         <source>vertical position of multimeasure rest number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="247"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="249"/>
         <source>vertical offset of multimeasure rest number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="248"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="250"/>
         <source>visibility of multimeasure rest number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="250"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="252"/>
         <source>vertical position of measure repeat number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="251"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>repeat count</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="253"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="255"/>
         <source>stretch</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="254"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="256"/>
         <source>numbering offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="255"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="257"/>
         <source>irregular</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="257"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
         <source>start offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="258"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="260"/>
         <source>left shoulder offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="259"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="261"/>
         <source>right shoulder offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="261"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="263"/>
         <source>staff move</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="262"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="264"/>
         <source>verse</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="264"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="266"/>
         <source>syllabic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="266"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="268"/>
         <source>endings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="267"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="269"/>
         <source>visible line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="268"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="270"/>
         <source>magnification</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="269"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="271"/>
         <source>using drumset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="270"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="272"/>
         <source>duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="271"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="273"/>
         <source>duration type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="272"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="274"/>
         <source>role</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="273"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="275"/>
         <source>track</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="275"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="277"/>
         <source>strings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="276"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="278"/>
         <source>frets</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="277"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="279"/>
         <source>show nut</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="278"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="280"/>
         <source>fret offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="279"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="281"/>
         <source>fret number position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="280"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="282"/>
         <source>orientation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="281"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="283"/>
         <source>fretboard diagram fingering visible</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="282"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="284"/>
         <source>fretboard diagram fingering</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="284"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol interpretation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="285"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol voicing</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="286"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="288"/>
         <source>chord symbol duration</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="287"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>chord symbol bass scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="288"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>chord symbol do not stack modifiers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="290"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="292"/>
         <source>type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="291"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="293"/>
         <source>gap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="292"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="294"/>
         <source>autoplace</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="293"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="295"/>
         <source>dash line length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="294"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="296"/>
         <source>dash gap length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="296"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="298"/>
         <source>playback voice 1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="297"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="299"/>
         <source>playback voice 2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="298"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="300"/>
         <source>playback voice 3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="300"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="302"/>
         <source>playback voice 4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="301"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="303"/>
         <source>symbol</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="302"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="304"/>
         <source>playing repeats</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="303"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="305"/>
         <source>creating system header</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="304"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="306"/>
         <source>lines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="305"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="307"/>
         <source>line distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="306"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="308"/>
         <source>step offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="307"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="309"/>
         <source>showing barlines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="308"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="310"/>
         <source>showing ledgerlines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="310"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="312"/>
         <source>invisible</source>
         <translation>láthatatlan</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="313"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="315"/>
         <source>notehead scheme</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="314"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="316"/>
         <source>generating clefs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="315"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="317"/>
         <source>generating time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="316"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="318"/>
         <source>generating key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="317"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="319"/>
         <source>y-offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="318"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="320"/>
         <source>distance offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="319"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="321"/>
         <source>barline span</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="320"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="322"/>
         <source>barline span from</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="321"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="323"/>
         <source>barline span to</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="322"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="324"/>
         <source>bracket span</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="324"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="326"/>
         <source>level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="325"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="327"/>
         <source>layout position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="326"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="328"/>
         <source>style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="327"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="329"/>
         <source>family</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="329"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="331"/>
         <source>font style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="330"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="332"/>
         <source>user line distancing</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="332"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="334"/>
         <source>frame type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="333"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="335"/>
         <source>frame width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="334"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="336"/>
         <source>frame padding</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="335"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="337"/>
         <source>frame round</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="336"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="338"/>
         <source>frame foreground color</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="337"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="339"/>
         <source>frame background color</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="338"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="340"/>
         <source>spatium dependent size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="339"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="341"/>
         <source>spatium dependent text size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="340"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="342"/>
         <source>musical symbols scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="341"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="343"/>
         <source>align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="342"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>text script align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="343"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="345"/>
         <source>system flag</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="345"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="347"/>
         <source>begin text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="346"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="348"/>
         <source>begin text align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="347"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="349"/>
         <source>begin text position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="348"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="350"/>
         <source>begin text place</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="349"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="351"/>
         <source>begin hook type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="350"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="352"/>
         <source>begin hook height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="351"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="353"/>
         <source>begin line arrow height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="352"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="354"/>
         <source>begin line arrow width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="353"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="355"/>
         <source>begin filled arrow height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="354"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="356"/>
         <source>begin filled arrow width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="355"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="357"/>
         <source>begin font face</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="356"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="358"/>
         <source>begin font size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="357"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="359"/>
         <source>begin font style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="358"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="360"/>
         <source>begin text offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="359"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
         <source>gap between text and line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>continue text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="362"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
         <source>continue text align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
         <source>continue text position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
         <source>continue text place</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
         <source>continue font face</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="368"/>
         <source>continue font size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="369"/>
         <source>continue font style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="368"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
         <source>continue text offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="372"/>
         <source>end text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="371"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
         <source>end text align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="372"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="374"/>
         <source>end text position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
         <source>end text place</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="374"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
         <source>end hook type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="377"/>
         <source>end hook height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
         <source>end line arrow height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="377"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="379"/>
         <source>end line arrow width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
         <source>end filled arrow height</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="379"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
         <source>end filled arrow width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
         <source>end font face</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="383"/>
         <source>end font size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>end font style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="383"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
         <source>end text offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
         <source>note-anchored line placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
         <source>avoid barlines</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="388"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
         <source>dynamic size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="391"/>
         <source>use text alignment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="392"/>
         <source>anchor to end of previous</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="392"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="394"/>
         <source>snap expression</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="393"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="395"/>
         <source>snap before</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="394"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
         <source>snap after</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="398"/>
         <source>voice assignment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="397"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="399"/>
         <source>center between staves</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="399"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
         <source>position above</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="403"/>
         <source>staves distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="402"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
         <source>voices distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="403"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="405"/>
         <source>measures distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="406"/>
         <source>position distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="405"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="407"/>
         <source>grace note index</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="406"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="408"/>
         <source>note index</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="408"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="410"/>
         <source>voice</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="409"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
         <source>position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>concert clef type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="412"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>transposing clef type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="415"/>
         <source>clef to barline position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>is header</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="415"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="417"/>
         <source>concert key</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="418"/>
         <source>key</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="418"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>autoplace minimum distance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>arpeggio type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>chord line type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="424"/>
         <source>straight chord line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="425"/>
         <source>wavy chord line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="424"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
         <source>tremolo type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="425"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="427"/>
         <source>tremolo style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>harmony type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>arpeggio span</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>bracket hook length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="431"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="433"/>
         <source>bracket hook position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>bracket right side</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="435"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="437"/>
         <source>bend type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="436"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>bend curve</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="437"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>bend vertex offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>bend show hold line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="441"/>
         <source>bend start time factor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="442"/>
         <source>bend end time factor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="441"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="443"/>
         <source>guitar dive tab pos</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="442"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
         <source>guitar bend amount</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="443"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="445"/>
         <source>guitar dip tremolo line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
         <source>guitar dive is slack</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>tremolobar type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="447"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="449"/>
         <source>tremolobar curve</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="449"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>start with long names</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="450"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>start with measure one</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="451"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="453"/>
         <source>first system indentation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="453"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>path</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="455"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="457"/>
         <source>prefer sharps or flats</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="457"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>playing technique type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="459"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="461"/>
         <source>gradual tempo change type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="460"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="462"/>
         <source>tempo easing method</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="461"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="463"/>
         <source>tempo change factor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="463"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="465"/>
         <source>is diagram</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="465"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="467"/>
         <source>active</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="467"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>fret position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="468"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="470"/>
         <source>ignored strings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="469"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="471"/>
         <source>automatically generate text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="470"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>transposition behaviour</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="474"/>
         <source>tie placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="473"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="475"/>
         <source>minimum length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="474"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="476"/>
         <source>partial spanner direction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="476"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="478"/>
         <source>position linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="477"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="479"/>
         <source>appearance linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="478"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="480"/>
         <source>text linked to main score</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="479"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="481"/>
         <source>exclude from parts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="481"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="483"/>
         <source>strings count</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="482"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="484"/>
         <source>strings preset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="483"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="485"/>
         <source>visible strings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="485"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="487"/>
         <source>score font</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="486"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="488"/>
         <source>symbols size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="487"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="489"/>
         <source>symbol angle</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="489"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="491"/>
         <source>apply to all staves</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="490"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>is courtesy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="491"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="493"/>
         <source>exclude vertical align</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="493"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="495"/>
         <source>show measure numbers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="494"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="496"/>
         <source>play count text setting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="495"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="497"/>
         <source>play count text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="497"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="499"/>
         <source>align with other rests in the same voice</source>
         <translation type="unfinished"/>
     </message>
@@ -20611,7 +20621,7 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="80"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="282"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="284"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="184"/>
         <source>Clear</source>
         <translation>Törlés</translation>
@@ -21015,7 +21025,7 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="158"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="130"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="131"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="65"/>
         <source>pt</source>
         <extracomment>Abbreviation of &quot;points&quot;, used to specify a font size</extracomment>
@@ -21023,7 +21033,7 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="186"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="394"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="395"/>
         <source>li</source>
         <extracomment>Stands for &quot;Lines&quot;. Used for text line spacing controls, for example.</extracomment>
         <translation>li</translation>
@@ -21193,9 +21203,9 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="104"/>
-        <source>%n byte(s)</source>
+        <source>%Ln byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation><numerusform>%n byte</numerusform><numerusform>%n byte</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="57"/>
@@ -22553,12 +22563,12 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
         <translation>Szabad metrum</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1048"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1044"/>
         <source>Music by %1</source>
         <translation>Zeneszerző: %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1055"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1051"/>
         <location filename="../../src/importexport/guitarpro/internal/importgtp.cpp" line="2787"/>
         <source>Words by %1</source>
         <translation>Szövegíró: %1</translation>
@@ -22568,7 +22578,7 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
     <name>iex_mei</name>
     <message numerus="yes">
         <location filename="../../src/importexport/mei/internal/meireader.cpp" line="64"/>
-        <source>%n problem(s) occurred and the import may be incomplete.</source>
+        <source>%Ln problem(s) occurred and the import may be incomplete.</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
@@ -22803,8 +22813,8 @@ felismerése</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/import/importmusicxml.cpp" line="117"/>
-        <source>%n error(s) found, import may be incomplete.</source>
-        <translation><numerusform>%n hibát találtunk, az importban lehetnek hiányosságok.</numerusform><numerusform>%n hibát találtunk, az importban lehetnek hiányosságok.</numerusform></translation>
+        <source>%Ln error(s) found, import may be incomplete.</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/import/musicxmlvalidation.cpp" line="96"/>
@@ -22837,16 +22847,6 @@ felismerése</translation>
         <translation>A(z) „%1” fájl nem érvényes MusicXML fájl.</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/shared/musicxmlsupport.cpp" line="48"/>
-        <source>byte offset %1:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/importexport/musicxml/internal/shared/musicxmlsupport.cpp" line="61"/>
-        <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation>a(z) „%1 EndElement” típusú és nevű tokenre számítottunk, de a valóságban „%2 %3”</translation>
-    </message>
-    <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="60"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
@@ -22856,6 +22856,16 @@ felismerése</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="65"/>
         <source>Export invisible elements to MusicXML</source>
         <translation>A láthatatlan elemek MusicXML-be exportálása</translation>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/shared/musicxmlsupport.cpp" line="48"/>
+        <source>byte offset %1:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/importexport/musicxml/internal/shared/musicxmlsupport.cpp" line="61"/>
+        <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
+        <translation>a(z) „%1 EndElement” típusú és nevű tokenre számítottunk, de a valóságban „%2 %3”</translation>
     </message>
 </context>
 <context>
@@ -22948,7 +22958,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml" line="66"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="470"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="471"/>
         <source>Frame</source>
         <translation>Keret</translation>
     </message>
@@ -23669,6 +23679,13 @@ felismerése</translation>
         <translation>Semmi</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="94"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="116"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="191"/>
+        <source>Normal</source>
+        <translation>Normál</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="95"/>
         <source>Wide</source>
         <translation>Széles</translation>
@@ -23689,14 +23706,41 @@ felismerése</translation>
         <translation>A kottasor felett</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="135"/>
-        <source>Customize bend</source>
-        <translation>Bend testreszabása</translation>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="119"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="45"/>
+        <source>Line style</source>
+        <translation>Vonal stílusa</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="127"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="81"/>
+        <source>Normal</source>
+        <comment>line type</comment>
+        <translation>Normál</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="128"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="82"/>
+        <source>Dashed</source>
+        <comment>line type</comment>
+        <translation>Szaggatott</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="129"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
+        <source>Dotted</source>
+        <comment>line type</comment>
+        <translation>Pontozott</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="135"/>
         <source>Customize dive</source>
         <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="135"/>
+        <source>Customize bend</source>
+        <translation>Bend testreszabása</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="158"/>
@@ -23899,7 +23943,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="60"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="222"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="276"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
         <source>Align left</source>
         <translation>Balra igazítás</translation>
     </message>
@@ -23911,7 +23955,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="66"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="228"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="282"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
         <source>Align center</source>
         <translation>Középre igazítás</translation>
     </message>
@@ -23923,7 +23967,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="72"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="234"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="288"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
         <source>Align right</source>
         <translation>Jobbra igazítás</translation>
     </message>
@@ -24106,13 +24150,6 @@ felismerése</translation>
         <translation>Jelzés típusa</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="94"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="116"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="191"/>
-        <source>Normal</source>
-        <translation>Normál</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="117"/>
         <source>Cross</source>
         <translation>Kereszt</translation>
@@ -24269,6 +24306,21 @@ felismerése</translation>
         <translation>Lokriszi</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
+        <source>Hooks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="69"/>
+        <source>Both</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="78"/>
+        <source>Hook length</source>
+        <translation>Zászló hossza</translation>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Line type</source>
         <translation>Vonal típusa</translation>
@@ -24382,33 +24434,6 @@ felismerése</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="119"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="45"/>
-        <source>Line style</source>
-        <translation>Vonal stílusa</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="127"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="81"/>
-        <source>Normal</source>
-        <comment>line type</comment>
-        <translation>Normál</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="128"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="82"/>
-        <source>Dashed</source>
-        <comment>line type</comment>
-        <translation>Szaggatott</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="129"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
-        <source>Dotted</source>
-        <comment>line type</comment>
-        <translation>Pontozott</translation>
-    </message>
-    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="100"/>
         <source>Dash</source>
         <translation>Szaggatott</translation>
@@ -24444,9 +24469,20 @@ felismerése</translation>
         <translation>Csak számokat mutasson</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="62"/>
+        <source>Make line to asterisk visible</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml" line="52"/>
         <source>Repeat list</source>
         <translation>Ismétlés lista</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/LyricsLineSettings.qml" line="65"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml" line="48"/>
+        <source>Set to verse</source>
+        <translation>Versszakhoz igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
@@ -24476,12 +24512,6 @@ felismerése</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="106"/>
         <source>Minimum length</source>
         <translation>Minimális hossz</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/LyricsLineSettings.qml" line="65"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml" line="48"/>
-        <source>Set to verse</source>
-        <translation>Versszakhoz igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="48"/>
@@ -25007,7 +25037,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="95"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="55"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="89"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="90"/>
         <source>Font</source>
         <translation>Betűtípus</translation>
     </message>
@@ -25191,25 +25221,25 @@ felismerése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="104"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="219"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="220"/>
         <source>Bold</source>
         <translation>Félkövér</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="109"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="224"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="225"/>
         <source>Italic</source>
         <translation>Kurzív</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="114"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="229"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="230"/>
         <source>Underline</source>
         <translation>Aláhúzott</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="119"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="234"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="235"/>
         <source>Strikethrough</source>
         <translation>Áthúzott</translation>
     </message>
@@ -25235,61 +25265,61 @@ felismerése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="240"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="294"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="295"/>
         <source>Justify</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="241"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="295"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="296"/>
         <source>Justify text to fill the available width</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="349"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="155"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="156"/>
         <source>Align top</source>
         <translation>Tetejéhez igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="350"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="156"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="157"/>
         <source>Align top edge of text to reference point</source>
         <translation>A szöveg felső szélét igazítja a referenciaponthoz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="355"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="161"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="162"/>
         <source>Align middle</source>
         <translation>Közepéhez igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="356"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="162"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="163"/>
         <source>Align vertical center of text to reference point</source>
         <translation>A szöveg függőleges középpontját igazítja a referenciaponthoz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="361"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="167"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="168"/>
         <source>Align bottom</source>
         <translation>Aljához igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="362"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="168"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="169"/>
         <source>Align bottom edge of text to reference point</source>
         <translation>A szöveg alsó szélét igazítja a referenciaponthoz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="367"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="173"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="174"/>
         <source>Align baseline</source>
         <translation>Alapvonalhoz igazítás</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="368"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="174"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="175"/>
         <source>Align baseline of text to reference point</source>
         <translation>A szöveg alapvonalát igazítja a referenciaponthoz</translation>
     </message>
@@ -25305,25 +25335,25 @@ felismerése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="120"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="335"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="336"/>
         <source>Subscript</source>
         <translation>Alsó index</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="121"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="340"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="341"/>
         <source>Superscript</source>
         <translation>Felső index</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="184"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="388"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="389"/>
         <source>Line spacing</source>
         <translation>Sorköz</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="202"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="446"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="447"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml" line="54"/>
         <source>Text style</source>
         <translation>Szövegstílus</translation>
@@ -25339,57 +25369,57 @@ felismerése</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="72"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="73"/>
         <source>Text style settings buttons</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="125"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="126"/>
         <source>Font size</source>
         <translation>Betűméret</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="184"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="185"/>
         <source>Vertical alignment buttons</source>
         <translation>Függőleges igazítás gombok</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="242"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="243"/>
         <source>Text style buttons</source>
         <translation>Szövegstílus gombok</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="277"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="278"/>
         <source>Align left edge of text to reference point</source>
         <translation>A szöveg bal szélét igazítja a referenciaponthoz</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="283"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="284"/>
         <source>Align horizontal center of text to reference point</source>
         <translation>A szöveg vízszintes középpontját igazítja a referenciaponthoz</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="289"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="290"/>
         <source>Align right edge of text to reference point</source>
         <translation>A szöveg jobb szélét igazítja a referenciaponthoz</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="303"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="304"/>
         <source>Horizontal alignment buttons</source>
         <translation>Vízszintes igazítás gombok</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="348"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="349"/>
         <source>Subscript buttons</source>
         <translation>Alsó index gombok</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="379"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="380"/>
         <source>Line spacing:</source>
         <translation>Sorköz:</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="423"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="424"/>
         <source>Add symbols</source>
         <translation>Szimbólumok hozzáadása</translation>
     </message>
@@ -25570,6 +25600,11 @@ felismerése</translation>
         <translation>Előjegyzés</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/chordbracketsettingsmodel.cpp" line="36"/>
+        <source>Chord bracket</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/glissandosettingsmodel.cpp" line="78"/>
         <source>Straight</source>
         <translation>Egyenes</translation>
@@ -25595,6 +25630,16 @@ felismerése</translation>
         <translation>Villa</translation>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="34"/>
+        <source>Lyrics line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="38"/>
+        <source>Partial lyrics line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/notelinesettingsmodel.cpp" line="32"/>
         <source>Note-anchored line</source>
         <translation>Hangjegyhez rögzített vonal</translation>
@@ -25603,36 +25648,6 @@ felismerése</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="36"/>
         <source>Ottava</source>
         <translation>Ottava</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="82"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="56"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="68"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="430"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="442"/>
-        <source>Normal</source>
-        <comment>hook type</comment>
-        <translation>Normál</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="83"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="57"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="70"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="431"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="443"/>
-        <source>Hooked 90°</source>
-        <comment>hook type</comment>
-        <translation>90°-os vonalkával</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="84"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="58"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="71"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="432"/>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="444"/>
-        <source>Hooked 45°</source>
-        <comment>hook type</comment>
-        <translation>45°-os vonalkával</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="56"/>
@@ -25663,6 +25678,36 @@ felismerése</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="61"/>
         <source>22ma bassa</source>
         <translation>22ma bassa</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="82"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="56"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="68"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="430"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="442"/>
+        <source>Normal</source>
+        <comment>hook type</comment>
+        <translation>Normál</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="83"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="57"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="70"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="431"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="443"/>
+        <source>Hooked 90°</source>
+        <comment>hook type</comment>
+        <translation>90°-os vonalkával</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="84"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="58"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/pedalsettingsmodel.cpp" line="71"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="432"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="444"/>
+        <source>Hooked 45°</source>
+        <comment>hook type</comment>
+        <translation>45°-os vonalkával</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="85"/>
@@ -26024,83 +26069,48 @@ felismerése</translation>
         <translation>A kotta megjelenése</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="760"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="762"/>
         <source>Left-align text box within frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="762"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="764"/>
         <source>Left-align text box to note/rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="764"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="766"/>
         <source>Left-align text box to barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="778"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="780"/>
         <source>Horizontally center text box within frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="780"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="782"/>
         <source>Horizontally center text box to note/rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="782"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="784"/>
         <source>Horizontally center text box to barline</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="796"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="798"/>
         <source>Right-align text box within frame</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="798"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="800"/>
         <source>Right-align text box to note/rest</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="800"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="802"/>
         <source>Right-align text box to barline</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="63"/>
-        <source>Hooks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="69"/>
-        <source>Both</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ChordBracketSettings.qml" line="78"/>
-        <source>Hook length</source>
-        <translation>Zászló hossza</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/chordbracketsettingsmodel.cpp" line="36"/>
-        <source>Chord bracket</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="34"/>
-        <source>Lyrics line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="38"/>
-        <source>Partial lyrics line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/PedalStyleSettings.qml" line="62"/>
-        <source>Make line to asterisk visible</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -26775,72 +26785,265 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Függőleges rács:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="66"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="67"/>
         <source>Capo settings</source>
         <translation>Capo beállítások</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="78"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="79"/>
         <source>Capo</source>
         <translation>Kápó</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="97"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="98"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
         <translation>Be</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="99"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="100"/>
         <source>Off</source>
         <extracomment>as opposed to On</extracomment>
         <translation>Ki</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="118"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
         <source>Affects playback only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
         <source>Affects staff notation only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="121"/>
         <source>Affects tablature fingering only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="135"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="136"/>
         <source>Fret</source>
         <translation>Bund</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="167"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="168"/>
         <source>Apply to</source>
         <translation>Alkalmazás erre</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="206"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="190"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="207"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="191"/>
         <source>String %1</source>
         <translation>Húr %1</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="224"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="225"/>
         <source>Manually specify instruction text</source>
         <translation>Kézi utasítás szövegének megadása</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="252"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="253"/>
         <source>Position</source>
         <translation>Pozíció</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="263"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="264"/>
         <source>Capo position</source>
         <translation>Capo pozíció</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/DynamicPopup.qml" line="47"/>
+        <source>Dynamics popup</source>
+        <translation>Dinamika felugró menü</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
+        <source>D flat</source>
+        <translation>Desz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
+        <source>D natural</source>
+        <translation>D</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
+        <source>D sharp</source>
+        <translation>D színbővítés</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
+        <source>C flat</source>
+        <translation>Cesz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
+        <source>C natural</source>
+        <translation>C természetes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
+        <source>C sharp</source>
+        <translation>Cisz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
+        <source>B flat</source>
+        <translation>B</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
+        <source>B natural</source>
+        <translation>B természetes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
+        <source>B sharp</source>
+        <translation>B kettős kereszt</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
+        <source>E flat</source>
+        <translation>Es</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
+        <source>E natural</source>
+        <translation>E természetes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
+        <source>E sharp</source>
+        <translation>E kettős kereszt</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
+        <source>F flat</source>
+        <translation>Feszített f</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
+        <source>F natural</source>
+        <translation>F természetes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
+        <source>F sharp</source>
+        <translation>Fisz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="97"/>
+        <source>G flat</source>
+        <translation>Gesz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="97"/>
+        <source>G natural</source>
+        <translation>G természetes</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="97"/>
+        <source>G sharp</source>
+        <translation>Gisz</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="98"/>
+        <source>A flat</source>
+        <translation>A</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="98"/>
+        <source>A natural</source>
+        <translation>A kiküszöbölő</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="98"/>
+        <source>A sharp</source>
+        <translation>Kereszt</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="115"/>
+        <source>Pedal settings buttons</source>
+        <translation>Pedálbeállítás gombok</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="142"/>
+        <source>D</source>
+        <translation>D</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="143"/>
+        <source>C</source>
+        <translation>C</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="144"/>
+        <source>B</source>
+        <translation>H</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="145"/>
+        <source>E</source>
+        <translation>E</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="146"/>
+        <source>F</source>
+        <translation>F</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="147"/>
+        <source>G</source>
+        <translation>G</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="148"/>
+        <source>A</source>
+        <translation>A</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="271"/>
+        <source>Diagram type buttons</source>
+        <translation>Diagramtípus gombok</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="292"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="297"/>
+        <source>Diagram</source>
+        <translation>Diagram</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="315"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="320"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="587"/>
+        <source>Text</source>
+        <translation>Szöveg</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="69"/>
+        <source>String tunings settings</source>
+        <translation>Húrok hangolásának beállításai</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="81"/>
+        <source>Presets</source>
+        <translation>Előbeállítások</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="117"/>
+        <source>Number of strings:</source>
+        <translation>Húrok száma:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="135"/>
+        <source>Strings</source>
+        <translation>Húrok</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="178"/>
+        <source>Value %1</source>
+        <translation>Érték: %1</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="49"/>
@@ -26870,9 +27073,142 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Mozgatás lefelé</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/DynamicPopup.qml" line="47"/>
-        <source>Dynamics popup</source>
-        <translation>Dinamika felugró menü</translation>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="108"/>
+        <source>Not saved</source>
+        <translation>Nincs mentve</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="148"/>
+        <source>Scroll left</source>
+        <translation>Görgetés balra</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="165"/>
+        <source>Scroll right</source>
+        <translation>Görgetés jobbra</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="59"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="191"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="199"/>
+        <source>Customize toolbar</source>
+        <translation>Eszköztár testreszabása</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="167"/>
+        <source>Duplicate</source>
+        <translation>Kettőzés</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="168"/>
+        <source>Rename</source>
+        <translation>Átnevezés</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="169"/>
+        <source>Reset</source>
+        <translation>Visszaállítás</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="41"/>
+        <source>Parts actions</source>
+        <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
+        <translation>Szólam műveletek</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="54"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="32"/>
+        <source>Parts</source>
+        <translation>Szólamkották</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="59"/>
+        <source>Create new part</source>
+        <translation>Új szólamkotta létrehozása</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="58"/>
+        <source>Name</source>
+        <translation>Név</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="84"/>
+        <source>Parts view</source>
+        <translation>Szólamkotta nézet</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="87"/>
+        <source>Close search</source>
+        <translation>Keresés bezárása</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="98"/>
+        <source>Find / Go to:</source>
+        <translation>Keresés / Ugrás:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="45"/>
+        <source>Voices visible on this staff</source>
+        <translation>Ezen a kottasoron látható szólamok</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="61"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="51"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="53"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="55"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="57"/>
+        <source>Voice %1</source>
+        <translation>%1. szólam</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NotationToolBar.qml" line="30"/>
+        <source>Notation toolbar</source>
+        <translation>Hangjegyírási eszköztár</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="47"/>
+        <source>Note input toolbar</source>
+        <translation>Hangjegy bevitel eszköztár</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="192"/>
+        <source>Show/hide toolbar buttons</source>
+        <translation>Eszköztár gombjainak megjelenítése/elrejtése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="80"/>
+        <source>Voices</source>
+        <translation>Ének</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="126"/>
+        <source>Chords</source>
+        <translation>Akkordok</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="168"/>
+        <source>Include single notes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="187"/>
+        <source>Notation elements</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="262"/>
+        <source>Clear all</source>
+        <translation>Összes törlése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="281"/>
+        <source>Select all</source>
+        <translation>Összes kijelölése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
+        <source>Number of measures to insert:</source>
+        <translation>Beszúrandó üres ütemek száma:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/AccidentalsPage.qml" line="74"/>
@@ -26938,6 +27274,15 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="152"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
         <translation>A belső kottaszárakat a legközelebbi gerendához rajzolja („francia” stílus)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="263"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="378"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="100"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="355"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="192"/>
+        <source>Edit text style</source>
+        <translation>Szövegstílus szerkesztése</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="168"/>
@@ -27246,15 +27591,6 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="263"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="378"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="100"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="355"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="192"/>
-        <source>Edit text style</source>
-        <translation>Szövegstílus szerkesztése</translation>
-    </message>
-    <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/NoteFlagsTypeSelector.qml" line="45"/>
         <source>Traditional</source>
         <translation>Hagyományos</translation>
@@ -27358,332 +27694,6 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="272"/>
         <source>Always after dots</source>
         <translation>Mindig a pontok után</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="90"/>
-        <source>D flat</source>
-        <translation>Desz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="90"/>
-        <source>D natural</source>
-        <translation>D</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="90"/>
-        <source>D sharp</source>
-        <translation>D színbővítés</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="91"/>
-        <source>C flat</source>
-        <translation>Cesz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="91"/>
-        <source>C natural</source>
-        <translation>C természetes</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="91"/>
-        <source>C sharp</source>
-        <translation>Cisz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
-        <source>B flat</source>
-        <translation>B</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
-        <source>B natural</source>
-        <translation>B természetes</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="92"/>
-        <source>B sharp</source>
-        <translation>B kettős kereszt</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
-        <source>E flat</source>
-        <translation>Es</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
-        <source>E natural</source>
-        <translation>E természetes</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="93"/>
-        <source>E sharp</source>
-        <translation>E kettős kereszt</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
-        <source>F flat</source>
-        <translation>Feszített f</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
-        <source>F natural</source>
-        <translation>F természetes</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="94"/>
-        <source>F sharp</source>
-        <translation>Fisz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
-        <source>G flat</source>
-        <translation>Gesz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
-        <source>G natural</source>
-        <translation>G természetes</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="95"/>
-        <source>G sharp</source>
-        <translation>Gisz</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
-        <source>A flat</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
-        <source>A natural</source>
-        <translation>A kiküszöbölő</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="96"/>
-        <source>A sharp</source>
-        <translation>Kereszt</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="113"/>
-        <source>Pedal settings buttons</source>
-        <translation>Pedálbeállítás gombok</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="140"/>
-        <source>D</source>
-        <translation>D</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="141"/>
-        <source>C</source>
-        <translation>C</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="142"/>
-        <source>B</source>
-        <translation>H</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="143"/>
-        <source>E</source>
-        <translation>E</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="144"/>
-        <source>F</source>
-        <translation>F</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="145"/>
-        <source>G</source>
-        <translation>G</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="146"/>
-        <source>A</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="269"/>
-        <source>Diagram type buttons</source>
-        <translation>Diagramtípus gombok</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="290"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="295"/>
-        <source>Diagram</source>
-        <translation>Diagram</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="313"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/HarpPedalPopup.qml" line="318"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="587"/>
-        <source>Text</source>
-        <translation>Szöveg</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="108"/>
-        <source>Not saved</source>
-        <translation>Nincs mentve</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="148"/>
-        <source>Scroll left</source>
-        <translation>Görgetés balra</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="165"/>
-        <source>Scroll right</source>
-        <translation>Görgetés jobbra</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="59"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="191"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="199"/>
-        <source>Customize toolbar</source>
-        <translation>Eszköztár testreszabása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="167"/>
-        <source>Duplicate</source>
-        <translation>Kettőzés</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="168"/>
-        <source>Rename</source>
-        <translation>Átnevezés</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="169"/>
-        <source>Reset</source>
-        <translation>Visszaállítás</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="41"/>
-        <source>Parts actions</source>
-        <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
-        <translation>Szólam műveletek</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="54"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/PartsDialog.qml" line="32"/>
-        <source>Parts</source>
-        <translation>Szólamkották</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="59"/>
-        <source>Create new part</source>
-        <translation>Új szólamkotta létrehozása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="58"/>
-        <source>Name</source>
-        <translation>Név</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/PartsView.qml" line="84"/>
-        <source>Parts view</source>
-        <translation>Szólamkotta nézet</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="87"/>
-        <source>Close search</source>
-        <translation>Keresés bezárása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="98"/>
-        <source>Find / Go to:</source>
-        <translation>Keresés / Ugrás:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="68"/>
-        <source>String tunings settings</source>
-        <translation>Húrok hangolásának beállításai</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="80"/>
-        <source>Presets</source>
-        <translation>Előbeállítások</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="116"/>
-        <source>Number of strings:</source>
-        <translation>Húrok száma:</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="134"/>
-        <source>Strings</source>
-        <translation>Húrok</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StringTuningsPopup.qml" line="177"/>
-        <source>Value %1</source>
-        <translation>Érték: %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="45"/>
-        <source>Voices visible on this staff</source>
-        <translation>Ezen a kottasoron látható szólamok</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="61"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="51"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="53"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="55"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/voicesselectionfiltermodel.cpp" line="57"/>
-        <source>Voice %1</source>
-        <translation>%1. szólam</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NotationToolBar.qml" line="30"/>
-        <source>Notation toolbar</source>
-        <translation>Hangjegyírási eszköztár</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="47"/>
-        <source>Note input toolbar</source>
-        <translation>Hangjegy bevitel eszköztár</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/NoteInputBar.qml" line="192"/>
-        <source>Show/hide toolbar buttons</source>
-        <translation>Eszköztár gombjainak megjelenítése/elrejtése</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="80"/>
-        <source>Voices</source>
-        <translation>Ének</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="126"/>
-        <source>Chords</source>
-        <translation>Akkordok</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="168"/>
-        <source>Include single notes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="187"/>
-        <source>Notation elements</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="262"/>
-        <source>Clear all</source>
-        <translation>Összes törlése</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectionFilterPanel.qml" line="281"/>
-        <source>Select all</source>
-        <translation>Összes kijelölése</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
-        <source>Number of measures to insert:</source>
-        <translation>Beszúrandó üres ütemek száma:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/UndoRedoToolBar.qml" line="32"/>
@@ -27793,6 +27803,16 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation>Jelöljön ki tükrözhető elemet és próbálja újra</translation>
     </message>
     <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="77"/>
+        <source>No measure selected</source>
+        <translation>Nincs kijelölve ütem</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
+        <source>Please select a measure and retry</source>
+        <translation>Jelöljön ki ütemet és próbálja újra</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="81"/>
         <source>No staff selected</source>
         <translation>Nincs kijelölve kottasor</translation>
@@ -27811,6 +27831,16 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="86"/>
         <source>Please select a note or figured bass and retry</source>
         <translation>Jelöljön ki hangjegyet vagy számozottbasszus-jelet és próbálja újra</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="89"/>
+        <source>No note or rest or chord symbol selected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
+        <source>Please select a note or rest or chord symbol and retry</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="93"/>
@@ -27905,24 +27935,9 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
-        <source>Can’t explode or implode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="184"/>
-        <source>Cannot explode or implode between different local time signatures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Please select all notes that are part of this tremolo and try again.</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
-        <source>Please select a measure and retry</source>
-        <translation>Jelöljön ki ütemet és próbálja újra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
@@ -28001,6 +28016,16 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
+        <source>Can’t explode or implode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="184"/>
+        <source>Cannot explode or implode between different local time signatures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="123"/>
         <source>List selection</source>
         <translation>Többszörös kijelölés</translation>
@@ -28014,6 +28039,150 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="188"/>
         <source>Staff %1</source>
         <translation>%1. kottasor</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="200"/>
+        <source>Note input preview note color</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="293"/>
+        <source>Smooth panning</source>
+        <translation>Simított görgetés</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2251"/>
+        <source>Sorry, instrument change on the web is not supported at this time.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4550"/>
+        <source>‘</source>
+        <extracomment>Single open quotation mark</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4552"/>
+        <source>’</source>
+        <extracomment>Single close quotation mark</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4554"/>
+        <source>“</source>
+        <extracomment>Double open quotation mark</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4556"/>
+        <source>”</source>
+        <extracomment>Double close quotation mark</extracomment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="58"/>
+        <source>%1 in %2</source>
+        <comment>Transposing instrument displayed in the score</comment>
+        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
+        <translation>%2 %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="78"/>
+        <source>%1 in %2 %3</source>
+        <comment>One of several transposing instruments displayed in the score</comment>
+        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
+        <translation>%2 %1 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="83"/>
+        <source>%1 %2</source>
+        <comment>One of several instruments displayed in the score</comment>
+        <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationerrors.h" line="45"/>
+        <source>Unknown error</source>
+        <translation>Ismeretlen hiba</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationerrors.h" line="48"/>
+        <source>Please select the complete tuplet or tremolo and retry</source>
+        <translation>Kérjük, válassza ki a teljes n-olát vagy tremolót, és próbálja újra</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationerrors.h" line="51"/>
+        <source>The selection is empty</source>
+        <translation>Nincs kijelölve semmi</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="265"/>
+        <source>Percentage</source>
+        <translation>Százalékos arány</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="266"/>
+        <source>Page width</source>
+        <translation>Oldalszélesség</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="267"/>
+        <source>Whole page</source>
+        <translation>Egész oldal</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="268"/>
+        <source>Two pages</source>
+        <translation>Két oldal</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="306"/>
+        <source>%1 %2</source>
+        <comment>Tuned instrument displayed in the UI</comment>
+        <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="310"/>
+        <source>%1 in %2</source>
+        <comment>Transposing instrument displayed in the UI</comment>
+        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
+        <translation>%2 %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="314"/>
+        <source>%1 (%2)</source>
+        <comment>String instrument displayed in the UI</comment>
+        <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
+        <translation>%1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="335"/>
+        <source>%1 %2 %3</source>
+        <comment>One of several tuned instruments displayed in the UI</comment>
+        <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
+        <translation>%1 %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="339"/>
+        <source>%1 in %2 %3</source>
+        <comment>One of several transposing instruments displayed in the UI</comment>
+        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
+        <translation>%2 %1 %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="343"/>
+        <source>%1 (%2) %3</source>
+        <comment>One of several string instruments displayed in the UI</comment>
+        <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
+        <translation>%1 (%2) %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/notationtypes.h" line="347"/>
+        <source>%1 %2</source>
+        <comment>One of several instruments displayed in the UI</comment>
+        <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="993"/>
@@ -28113,165 +28282,6 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="1875"/>
         <source>An error occurred.</source>
         <translation>Hiba történt.</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="200"/>
-        <source>Note input preview note color</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="293"/>
-        <source>Smooth panning</source>
-        <translation>Simított görgetés</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="2251"/>
-        <source>Sorry, instrument change on the web is not supported at this time.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4550"/>
-        <source>‘</source>
-        <extracomment>Single open quotation mark</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4552"/>
-        <source>’</source>
-        <extracomment>Single close quotation mark</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4554"/>
-        <source>“</source>
-        <extracomment>Double open quotation mark</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="4556"/>
-        <source>”</source>
-        <extracomment>Double close quotation mark</extracomment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="58"/>
-        <source>%1 in %2</source>
-        <comment>Transposing instrument displayed in the score</comment>
-        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
-        <translation>%2 %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="78"/>
-        <source>%1 in %2 %3</source>
-        <comment>One of several transposing instruments displayed in the score</comment>
-        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
-        <translation>%2 %1 %3</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="83"/>
-        <source>%1 %2</source>
-        <comment>One of several instruments displayed in the score</comment>
-        <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
-        <translation>%1 %2</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationerrors.h" line="45"/>
-        <source>Unknown error</source>
-        <translation>Ismeretlen hiba</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="77"/>
-        <source>No measure selected</source>
-        <translation>Nincs kijelölve ütem</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="89"/>
-        <source>No note or rest or chord symbol selected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
-        <source>Please select a note or rest or chord symbol and retry</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationerrors.h" line="48"/>
-        <source>Please select the complete tuplet or tremolo and retry</source>
-        <translation>Kérjük, válassza ki a teljes n-olát vagy tremolót, és próbálja újra</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationerrors.h" line="51"/>
-        <source>The selection is empty</source>
-        <translation>Nincs kijelölve semmi</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="265"/>
-        <source>Percentage</source>
-        <translation>Százalékos arány</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="266"/>
-        <source>Page width</source>
-        <translation>Oldalszélesség</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="267"/>
-        <source>Whole page</source>
-        <translation>Egész oldal</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="268"/>
-        <source>Two pages</source>
-        <translation>Két oldal</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="306"/>
-        <source>%1 %2</source>
-        <comment>Tuned instrument displayed in the UI</comment>
-        <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;). Example: &quot;D Tin Whistle&quot;</extracomment>
-        <translation>%1 %2</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="310"/>
-        <source>%1 in %2</source>
-        <comment>Transposing instrument displayed in the UI</comment>
-        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
-        <translation>%2 %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="314"/>
-        <source>%1 (%2)</source>
-        <comment>String instrument displayed in the UI</comment>
-        <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;). Example: &quot;Tenor Lute (7-course)&quot;</extracomment>
-        <translation>%1 (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="335"/>
-        <source>%1 %2 %3</source>
-        <comment>One of several tuned instruments displayed in the UI</comment>
-        <extracomment>%1=tuning (&quot;D&quot;), %2=name (&quot;Tin Whistle&quot;), %3=number (&quot;2&quot;). Example: &quot;D Tin Whistle 2&quot;</extracomment>
-        <translation>%1 %2 %3</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="339"/>
-        <source>%1 in %2 %3</source>
-        <comment>One of several transposing instruments displayed in the UI</comment>
-        <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
-        <translation>%2 %1 %3</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="343"/>
-        <source>%1 (%2) %3</source>
-        <comment>One of several string instruments displayed in the UI</comment>
-        <extracomment>%1=name (&quot;Tenor Lute&quot;), %2=course/strings (&quot;7-course&quot;), %3=number (&quot;2&quot;). Example: &quot;Tenor Lute (7-course) 2&quot;</extracomment>
-        <translation>%1 (%2) %3</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/notationtypes.h" line="347"/>
-        <source>%1 %2</source>
-        <comment>One of several instruments displayed in the UI</comment>
-        <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
-        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/caposettingsmodel.cpp" line="139"/>
@@ -30190,22 +30200,22 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
 <context>
     <name>notation/staffvisibilitypopup</name>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="58"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="59"/>
         <source>Staff visibility popup</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="84"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="85"/>
         <source>Hide empty staves</source>
         <translation>Üres sorok elrejtése</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="92"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="93"/>
         <source>System %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="103"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/StaffVisibilityPopup.qml" line="104"/>
         <source>Reset all</source>
         <translation type="unfinished"/>
     </message>
@@ -30509,8 +30519,8 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     </message>
     <message numerus="yes">
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="531"/>
-        <source>%1, contains %n matching element(s)</source>
-        <translation><numerusform>%1, %n megfelelő elemet tartalmaz</numerusform><numerusform>%1, %n megfelelő elemet tartalmaz</numerusform></translation>
+        <source>%1, contains %Ln matching element(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="532"/>
@@ -33296,12 +33306,12 @@ megnyitása sikertelen:
         <translation>Lejátszási eszköztár</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="81"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="82"/>
         <source>Sound flag settings</source>
         <translation>Hangszínjelölő-beállítások</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="134"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="135"/>
         <source>Sound flag menu</source>
         <translation>Hangszínjelölő menü</translation>
     </message>
@@ -33450,6 +33460,31 @@ megnyitása sikertelen:
         <translation>A hangszer hangszínjelölői alaphelyzetbe állíthatók, de a kottaszöveg megmarad. Ez a művelet nem vonható vissza.</translation>
     </message>
     <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="44"/>
+        <source>Labels</source>
+        <translation>Címkék</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="49"/>
+        <source>Fader</source>
+        <translation>Halkító</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="50"/>
+        <source>Mute and solo</source>
+        <translation>Némítás és szóló</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="170"/>
+        <source>View</source>
+        <translation>Nézet</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelmodel.cpp" line="547"/>
+        <source>Master</source>
+        <translation>Master</translation>
+    </message>
+    <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/onlinesoundsstatusmodel.cpp" line="47"/>
         <source>You’ve reached your current render limit for %1. You will be able to process online sounds again after your quota resets on %2.</source>
         <translation type="unfinished"/>
@@ -33493,31 +33528,6 @@ megnyitása sikertelen:
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
         <translation>szokásos</translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="44"/>
-        <source>Labels</source>
-        <translation>Címkék</translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="49"/>
-        <source>Fader</source>
-        <translation>Halkító</translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="50"/>
-        <source>Mute and solo</source>
-        <translation>Némítás és szóló</translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelcontextmenumodel.cpp" line="170"/>
-        <source>View</source>
-        <translation>Nézet</translation>
-    </message>
-    <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerpanelmodel.cpp" line="547"/>
-        <source>Master</source>
-        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="161"/>
@@ -33796,6 +33806,21 @@ megnyitása sikertelen:
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="30"/>
+        <source>MNX</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
+        <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
+        <source>Require exact schema validation</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -34422,21 +34447,6 @@ megnyitása sikertelen:
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="197"/>
         <source>Braille</source>
         <translation>Braille</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="30"/>
-        <source>MNX</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
-        <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
-        <source>Require exact schema validation</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -35209,6 +35219,11 @@ megnyitása sikertelen:
         <translation>Fő kotta</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml" line="31"/>
+        <source>LRC enhanced format</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
         <source>Include page and system breaks</source>
         <translation>Oldal- és sorvégek beillesztése</translation>
@@ -35232,6 +35247,41 @@ megnyitása sikertelen:
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
         <translation>Minden kiválasztott szólam külön MIDI fájlként lesz exportálva</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
+        <source>Disable to let the importing app choose beam groupings.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
+        <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
+        <source>JSON indent:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="50"/>
+        <source>No line breaks</source>
+        <translation type="unfinished"/>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="52"/>
+        <source>%n space(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="92"/>
+        <source>Export beams</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
+        <source>Export rest positions</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
@@ -35523,46 +35573,6 @@ megnyitása sikertelen:
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Sorcsoport- és oldaltörések nélkül</translation>
     </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml" line="31"/>
-        <source>LRC enhanced format</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
-        <source>Disable to let the importing app choose beam groupings.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
-        <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
-        <source>JSON indent:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="50"/>
-        <source>No line breaks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="52"/>
-        <source>%1 spaces</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="92"/>
-        <source>Export beams</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
-        <source>Export rest positions</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>project/migration</name>
@@ -35711,8 +35721,8 @@ megnyitása sikertelen:
     </message>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="60"/>
-        <source>%n measure(s),</source>
-        <translation><numerusform>%n ütem</numerusform><numerusform>%n ütem</numerusform></translation>
+        <source>%Ln measure(s),</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="103"/>
@@ -36008,11 +36018,6 @@ megnyitása sikertelen:
         <translation>Hogyan szeretné menteni?</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
-        <source>Save to cloud</source>
-        <translation>Mentés a felhőbe</translation>
-    </message>
-    <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>To the Cloud (free)</source>
         <translation>A felhőbe (ingyenes)</translation>
@@ -36079,6 +36084,11 @@ megnyitása sikertelen:
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
         <translation>Minden mentésnél néhány percig is eltarthat a kotta méretétől függően. Ezek bármikor megváltoztathatók a Beállításokban.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="136"/>
+        <source>Save to cloud</source>
+        <translation>Mentés a felhőbe</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="154"/>
@@ -36542,26 +36552,6 @@ megnyitása sikertelen:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="106"/>
-        <source>Note %1</source>
-        <extracomment>A MIDI remote event, namely a note event</extracomment>
-        <translation>%1 hang</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="110"/>
-        <source>CC %1</source>
-        <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
-        <translation>CC %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="114"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="506"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="700"/>
-        <source>None</source>
-        <extracomment>No MIDI remote event</extracomment>
-        <translation>Semmi</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/editshortcutmodel.cpp" line="223"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="140"/>
         <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
@@ -36597,6 +36587,26 @@ megnyitása sikertelen:
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/shortcutsmodel.cpp" line="204"/>
         <source>Export shortcuts</source>
         <translation>Gyorsbillentyűk exportálása</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="106"/>
+        <source>Note %1</source>
+        <extracomment>A MIDI remote event, namely a note event</extracomment>
+        <translation>%1 hang</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="110"/>
+        <source>CC %1</source>
+        <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
+        <translation>CC %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="114"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="506"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="700"/>
+        <source>None</source>
+        <extracomment>No MIDI remote event</extracomment>
+        <translation>Semmi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="101"/>
@@ -37023,8 +37033,8 @@ megnyitása sikertelen:
     <name>undoableAction</name>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="712"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="2056"/>
-        <location filename="../../src/engraving/editing/edit.cpp" line="2191"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="2060"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="2195"/>
         <source>Add tie</source>
         <translation type="unfinished"/>
     </message>
@@ -37076,17 +37086,17 @@ megnyitása sikertelen:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="2192"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="2196"/>
         <source>Remove tie</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="2278"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="2282"/>
         <source>Toggle laissez vibrer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/edit.cpp" line="4536"/>
+        <location filename="../../src/engraving/editing/edit.cpp" line="4540"/>
         <source>Enter rest</source>
         <translation>Szünet írása</translation>
     </message>
@@ -37201,6 +37211,16 @@ megnyitása sikertelen:
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
+        <source>Add notehead parentheses</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
+        <source>Remove notehead parentheses</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/stemsettingsmodel.cpp" line="115"/>
         <source>Change stem direction</source>
         <translation type="unfinished"/>
@@ -37244,12 +37264,12 @@ megnyitása sikertelen:
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="489"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="491"/>
         <source>Add/remove parts</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="534"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="536"/>
         <source>Reset part</source>
         <translation type="unfinished"/>
     </message>
@@ -37324,36 +37344,6 @@ megnyitása sikertelen:
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="316"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="931"/>
         <source>Remove system object layer below the bottom staff</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="479"/>
-        <source>Toggle multimeasure rests</source>
-        <translation>Többsoros szünetek ki-/bekapcsolása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="481"/>
-        <source>Toggle empty staves</source>
-        <translation>Üres kottasorok ki-/bekapcsolása</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="484"/>
-        <source>Mirror notehead</source>
-        <translation>Kottafej tükrözése</translation>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="499"/>
-        <source>Enter full-measure rest</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2177"/>
-        <source>Display concert pitch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2178"/>
-        <source>Display transposed</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -37487,7 +37477,7 @@ megnyitása sikertelen:
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5150"/>
-        <source>Add %n measure(s)</source>
+        <source>Add %Ln measure(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
@@ -37720,8 +37710,8 @@ megnyitása sikertelen:
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6426"/>
-        <source>Delete %n measure(s)</source>
-        <translation><numerusform>%n ütem törlése</numerusform><numerusform>%n ütem törlése</numerusform></translation>
+        <source>Delete %Ln measure(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6437"/>
@@ -38064,6 +38054,36 @@ megnyitása sikertelen:
         <translation>Stílus betöltése</translation>
     </message>
     <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="479"/>
+        <source>Toggle multimeasure rests</source>
+        <translation>Többsoros szünetek ki-/bekapcsolása</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="481"/>
+        <source>Toggle empty staves</source>
+        <translation>Üres kottasorok ki-/bekapcsolása</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="484"/>
+        <source>Mirror notehead</source>
+        <translation>Kottafej tükrözése</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="499"/>
+        <source>Enter full-measure rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2177"/>
+        <source>Display concert pitch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/internal/notationactioncontroller.cpp" line="2178"/>
+        <source>Display transposed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/dynamicpopupmodel.cpp" line="196"/>
         <source>Remove hairpin</source>
         <translation type="unfinished"/>
@@ -38141,16 +38161,6 @@ megnyitása sikertelen:
     <message>
         <location filename="../../src/project/internal/projectmigrator.cpp" line="174"/>
         <source>Migrate project</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
-        <source>Add notehead parentheses</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
-        <source>Remove notehead parentheses</source>
         <translation type="unfinished"/>
     </message>
 </context>

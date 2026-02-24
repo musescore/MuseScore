@@ -10226,70 +10226,70 @@
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums trackName</comment>
         <extracomment>trackName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3446"/>
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums longName</comment>
         <extracomment>longName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3448"/>
         <source>Lead Pan</source>
         <comment>soprano-steel-drums shortName</comment>
         <extracomment>shortName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
         <source>Double tenor steel pans.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift tenor çelik davul.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums trackName</comment>
         <extracomment>trackName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift Tenor Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3455"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums longName</comment>
         <extracomment>longName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift Tenor Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3457"/>
         <source>Dbl. T. Pans</source>
         <comment>alto-steel-drums shortName</comment>
         <extracomment>shortName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çft. T. Dvl</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
         <source>Double second steel pans.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift ikinci çelik davul.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3462"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums trackName</comment>
         <extracomment>trackName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift İkinci Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3464"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums longName</comment>
         <extracomment>longName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Çift İkinci Çelik Davul</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3466"/>
@@ -10464,49 +10464,49 @@
         <source>B. Pans</source>
         <comment>bass-steel-drums shortName</comment>
         <extracomment>shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6285"/>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanarya Adaları kökenli küçük 5 telli gitar. Tiz bir Do teli (geri tepmeli) ve ek bir Re teli (dizek notasyonu) olan ukulele gibidir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6287"/>
         <source>Canarian Timple</source>
         <comment>timple-canario trackName</comment>
         <extracomment>trackName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanarya Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6289"/>
         <source>Timple</source>
         <comment>timple-canario longName</comment>
         <extracomment>longName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6294"/>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</source>
         <comment>timple-canario-tablature description</comment>
         <extracomment>description for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanarya Adaları kökenli küçük 5 telli gitar. Tiz bir Do teli (geri tepmeli) ve ek bir Re teli (tablatür) olan ukulele gibidir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6296"/>
         <source>Canarian Timple (tablature)</source>
         <comment>timple-canario-tablature trackName</comment>
         <extracomment>trackName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kanarya Timple (tablatür)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6298"/>
         <source>Timple</source>
         <comment>timple-canario-tablature longName</comment>
         <extracomment>longName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3523"/>
@@ -20636,7 +20636,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Guzhengs</source>
-        <translation type="unfinished"/>
+        <translation>Guzhengs</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
@@ -20676,7 +20676,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Timples</source>
-        <translation type="unfinished"/>
+        <translation>Timples</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>

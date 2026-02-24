@@ -10219,294 +10219,294 @@
         <source>High C single tenor steel pan.</source>
         <comment>soprano-steel-drums description</comment>
         <extracomment>description for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>High C single tenor steel pan.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3444"/>
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums trackName</comment>
         <extracomment>trackName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Steel Pan</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3446"/>
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums longName</comment>
         <extracomment>longName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Steel Pan</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3448"/>
         <source>Lead Pan</source>
         <comment>soprano-steel-drums shortName</comment>
         <extracomment>shortName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Lead Pan</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
         <source>Double tenor steel pans.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double tenor steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums trackName</comment>
         <extracomment>trackName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double Tenor Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3455"/>
         <source>Double Tenor Steel Pans</source>
         <comment>alto-steel-drums longName</comment>
         <extracomment>longName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double Tenor Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3457"/>
         <source>Dbl. T. Pans</source>
         <comment>alto-steel-drums shortName</comment>
         <extracomment>shortName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dbl. T. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
         <source>Double second steel pans.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double second steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3462"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums trackName</comment>
         <extracomment>trackName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double Second Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3464"/>
         <source>Double Second Steel Pans</source>
         <comment>tenor-steel-drums longName</comment>
         <extracomment>longName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Double Second Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3466"/>
         <source>Dbl. Sec. Pans</source>
         <comment>tenor-steel-drums shortName</comment>
         <extracomment>shortName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dbl. Sec. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3469"/>
         <source>Guitar steel pans.</source>
         <comment>guitar-steel-drums description</comment>
         <extracomment>description for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Guitar steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3471"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums trackName</comment>
         <extracomment>trackName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Guitar Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3473"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums longName</comment>
         <extracomment>longName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Guitar Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3475"/>
         <source>Gtr. Pans</source>
         <comment>guitar-steel-drums shortName</comment>
         <extracomment>shortName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gtr. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3478"/>
         <source>Three cello steel pans.</source>
         <comment>cello-steel-drums description</comment>
         <extracomment>description for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Three cello steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3480"/>
         <source>Triple Cello Steel Pans</source>
         <comment>cello-steel-drums trackName</comment>
         <extracomment>trackName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Triple Cello Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3482"/>
         <source>Triple Cello Steel Pans</source>
         <comment>cello-steel-drums longName</comment>
         <extracomment>longName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Triple Cello Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3484"/>
         <source>3 Cello Pans</source>
         <comment>cello-steel-drums shortName</comment>
         <extracomment>shortName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>3 Cello Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3487"/>
         <source>Four cello steel pans.</source>
         <comment>cello-steel-drums-four description</comment>
         <extracomment>description for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Four cello steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3489"/>
         <source>Four Cello Steel Pans</source>
         <comment>cello-steel-drums-four trackName</comment>
         <extracomment>trackName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Four Cello Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3491"/>
         <source>Four Cello Steel Pans</source>
         <comment>cello-steel-drums-four longName</comment>
         <extracomment>longName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Four Cello Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3493"/>
         <source>4 Cello Pans</source>
         <comment>cello-steel-drums-four shortName</comment>
         <extracomment>shortName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4 Cello Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3496"/>
         <source>Tenor bass steel pans.</source>
         <comment>tenor-bass-steel-drums description</comment>
         <extracomment>description for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor bass steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3498"/>
         <source>Tenor Bass Steel Pans</source>
         <comment>tenor-bass-steel-drums trackName</comment>
         <extracomment>trackName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor Bass Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3500"/>
         <source>Tenor Bass Steel Pans</source>
         <comment>tenor-bass-steel-drums longName</comment>
         <extracomment>longName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor Bass Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3502"/>
         <source>T.B. Pans</source>
         <comment>tenor-bass-steel-drums shortName</comment>
         <extracomment>shortName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>T.B. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3505"/>
         <source>Steel pans on a grand staff.</source>
         <comment>steel-drums description</comment>
         <extracomment>description for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Steel pans on a great stave.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3507"/>
         <source>Steel Pans</source>
         <comment>steel-drums trackName</comment>
         <extracomment>trackName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3509"/>
         <source>Steel Pans</source>
         <comment>steel-drums longName</comment>
         <extracomment>longName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3511"/>
         <source>St. Pans</source>
         <comment>steel-drums shortName</comment>
         <extracomment>shortName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>St. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3514"/>
         <source>Bass steel pans.</source>
         <comment>bass-steel-drums description</comment>
         <extracomment>description for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bass steel pans.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3516"/>
         <source>Bass Steel Pans</source>
         <comment>bass-steel-drums trackName</comment>
         <extracomment>trackName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bass Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3518"/>
         <source>Bass Steel Pans</source>
         <comment>bass-steel-drums longName</comment>
         <extracomment>longName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bass Steel Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3520"/>
         <source>B. Pans</source>
         <comment>bass-steel-drums shortName</comment>
         <extracomment>shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Pans</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6285"/>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Stave notation).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6287"/>
         <source>Canarian Timple</source>
         <comment>timple-canario trackName</comment>
         <extracomment>trackName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Canarian Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6289"/>
         <source>Timple</source>
         <comment>timple-canario longName</comment>
         <extracomment>longName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6294"/>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</source>
         <comment>timple-canario-tablature description</comment>
         <extracomment>description for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6296"/>
         <source>Canarian Timple (tablature)</source>
         <comment>timple-canario-tablature trackName</comment>
         <extracomment>trackName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Canarian Timple (tablature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6298"/>
         <source>Timple</source>
         <comment>timple-canario-tablature longName</comment>
         <extracomment>longName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3523"/>
@@ -20636,7 +20636,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Guzhengs</source>
-        <translation type="unfinished"/>
+        <translation>Guzhengs</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
@@ -20676,7 +20676,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Timples</source>
-        <translation type="unfinished"/>
+        <translation>Timples</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>

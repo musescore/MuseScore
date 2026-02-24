@@ -13,14 +13,14 @@
         <source>Winds</source>
         <comment>winds trackName</comment>
         <extracomment>trackName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>管乐器</translation>
+        <translation>管乐组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="212"/>
         <source>Winds</source>
         <comment>winds longName</comment>
         <extracomment>longName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>管乐器</translation>
+        <translation>管乐组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="214"/>
@@ -20636,7 +20636,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Guzhengs</source>
-        <translation type="unfinished"/>
+        <translation>古筝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
