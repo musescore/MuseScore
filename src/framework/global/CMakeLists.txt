@@ -152,10 +152,19 @@ target_sources(muse_global PRIVATE
     serialization/xmlstreamwriter.h
     serialization/xmldom.cpp
     serialization/xmldom.h
-
-    thirdparty/pugixml/pugixml.hpp
-    thirdparty/pugixml/pugixml.cpp
 )
+if (MUE_COMPILE_USE_SYSTEM_PUGIXML)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(pugixml REQUIRED IMPORTED_TARGET pugixml)
+    target_link_libraries(muse_global PRIVATE PkgConfig::pugixml)
+    target_include_directories(muse_global PRIVATE ${pugixml_INCLUDE_DIRS})
+else()
+    target_sources(muse_global PRIVATE
+        thirdparty/pugixml/pugixml.hpp
+        thirdparty/pugixml/pugixml.cpp
+    )
+    target_include_directories(muse_global PRIVATE thirdparty/pugixml)
+endif()
 
 if (MUSE_THREADS_SUPPORT)
     target_sources(muse_global PRIVATE

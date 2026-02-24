@@ -160,6 +160,7 @@ option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
 option(MUE_COMPILE_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
+option(MUE_COMPILE_USE_SYSTEM_PUGIXML "Try use system pugixml" OFF)
 
 # === Debug ===
 option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
