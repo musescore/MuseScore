@@ -64,7 +64,8 @@ signals:
     void isAnyPopupOpenChanged();
 
 private:
-    void classBegin() override {}
-    void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override {}
+    void init();
 };
 }
