@@ -77,7 +77,7 @@ public:
     static Spatium tabStemLength(const Chord* item, const StaffType* st);
     static Spatium tabStemPosX() { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
     static Spatium tabRestStemPosY(const ChordRest* item, const StaffType* st);
-    static PointF tabStemPos(const Chord* item, const StaffType* st);
+    static PointSp tabStemPos(const Chord* item, const StaffType* st);
 
 private:
     static int stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx);

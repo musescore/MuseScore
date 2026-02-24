@@ -229,7 +229,7 @@ PointF StemLayout::stemPos(const Chord* item)
     const Staff* staff = item->staff();
     const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
     if (staffType && staffType->isTabStaff()) {
-        return item->pagePos() + rendering::score::StemLayout::tabStemPos(item, staffType) * item->spatium();
+        return item->pagePos() + StemLayout::tabStemPos(item, staffType).toAbsolute(item->spatium());
     }
 
     if (item->ldata()->up) {
@@ -309,7 +309,7 @@ Spatium StemLayout::tabStemLength(const Chord* item, const StaffType* st)
 //    return position of note at other side of beam
 //---------------------------------------------------------
 
-PointF StemLayout::tabStemPos(const Chord* item, const StaffType* st)
+PointSp StemLayout::tabStemPos(const Chord* item, const StaffType* st)
 {
     Spatium y = 0.0_sp;
     if (st->stemThrough()) {
@@ -320,8 +320,7 @@ PointF StemLayout::tabStemPos(const Chord* item, const StaffType* st)
         // according to TAB parameters and stem up/down
         y = tabRestStemPosY(item, st);
     }
-    // TODO - I don't like using PointF for spatium points [J.M]
-    return PointF(0.5 * item->score()->noteHeadWidth() * item->mag() / item->spatium(), y.val());
+    return PointSp(Spatium::fromAbsolute(item->score()->noteHeadWidth(), item->spatium()) * item->mag() * 0.5, y);
 }
 
 int StemLayout::stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx)

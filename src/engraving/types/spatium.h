@@ -23,8 +23,10 @@
 #pragma once
 
 #include "realfn.h"
+#include "draw/types/geometry.h"
 
 namespace mu::engraving {
+using PointF = muse::PointF;
 //---------------------------------------------------------
 //   Spatium
 //    - a unit of measure
@@ -126,6 +128,55 @@ public:
 private:
     double m_val = 0.0;
 };
+
+//---------------------------------------------------------
+//   PointSp
+//    - a point in spatium units
+//---------------------------------------------------------
+class PointSp
+{
+public:
+    constexpr PointSp() = default;
+    constexpr PointSp(Spatium x, Spatium y)
+        : m_x(x), m_y(y) {}
+
+    constexpr Spatium x() const { return m_x; }
+    constexpr Spatium y() const { return m_y; }
+
+    constexpr void setX(Spatium x) { m_x = x; }
+    constexpr void setY(Spatium y) { m_y = y; }
+    constexpr void setXY(Spatium x, Spatium y) { m_x = x; m_y = y; }
+
+    bool operator==(const PointSp& p) const { return m_x == p.m_x && m_y == p.m_y; }
+    bool operator!=(const PointSp& p) const { return !(*this == p); }
+
+    constexpr PointSp operator-() const { return PointSp(-m_x, -m_y); }
+    constexpr PointSp operator-(const PointSp& p) const { return PointSp(m_x - p.m_x, m_y - p.m_y); }
+    constexpr PointSp operator+(const PointSp& p) const { return PointSp(m_x + p.m_x, m_y + p.m_y); }
+
+    constexpr PointSp& operator+=(const PointSp& p) { m_x += p.m_x; m_y += p.m_y; return *this; }
+    constexpr PointSp& operator-=(const PointSp& p) { m_x -= p.m_x; m_y -= p.m_y; return *this; }
+    constexpr PointSp& operator*=(double c) { m_x *= c; m_y *= c; return *this; }
+    constexpr PointSp& operator/=(double divisor) { m_x /= divisor; m_y /= divisor; return *this; }
+
+    PointF toAbsolute(double spval) const
+    {
+        return PointF(m_x.toAbsolute(spval), m_y.toAbsolute(spval));
+    }
+
+    static PointSp fromAbsolute(const PointF& pf, double spval)
+    {
+        return PointSp(Spatium::fromAbsolute(pf.x(), spval), Spatium::fromAbsolute(pf.y(), spval));
+    }
+
+private:
+    Spatium m_x;
+    Spatium m_y;
+};
+
+inline PointSp operator*(const PointSp& p, double c) { return PointSp(p.x() * c, p.y() * c); }
+inline PointSp operator*(double c, const PointSp& p) { return PointSp(p.x() * c, p.y() * c); }
+inline PointSp operator/(const PointSp& p, double c) { return PointSp(p.x() / c, p.y() / c); }
 
 constexpr Spatium operator""_sp(long double v) { return Spatium(static_cast<double>(v)); }
 constexpr Spatium operator""_sp(unsigned long long v) { return Spatium(static_cast<double>(v)); }
