@@ -5487,6 +5487,7 @@ void NotationInteraction::pasteIntoTextEdit()
     if (mimeData->hasFormat(TextEditData::mimeRichTextFormat)) {
         const QString txt = QString::fromUtf8(mimeData->data(TextEditData::mimeRichTextFormat));
         toTextBase(m_editData.element)->paste(m_editData, txt);
+        notifyAboutTextEditingChanged();
         return;
     }
 
@@ -5497,6 +5498,7 @@ void NotationInteraction::pasteIntoTextEdit()
     }
 
     toTextBase(m_editData.element)->paste(m_editData, textForPaste);
+    notifyAboutTextEditingChanged();
 
     if (textForPaste.isEmpty() || !m_editData.element->isLyrics()) {
         return;
@@ -5546,7 +5548,11 @@ void NotationInteraction::deleteSelection()
         if (!textBase->deleteSelectedText(m_editData)) {
             m_editData.key = Qt::Key_Backspace;
             m_editData.modifiers = {};
-            textBase->edit(m_editData);
+            if (textBase->edit(m_editData)) {
+                notifyAboutTextEditingChanged();
+            }
+        } else {
+            notifyAboutTextEditingChanged();
         }
     } else {
         doEndEditElement();
