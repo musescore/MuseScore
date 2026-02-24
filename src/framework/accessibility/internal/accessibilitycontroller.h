@@ -72,6 +72,7 @@ public:
     // IAccessibilityController
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
+    bool isReg(IAccessible* item) const override;
 
     void announce(const QString& announcement) override;
     QString announcement() const override;
