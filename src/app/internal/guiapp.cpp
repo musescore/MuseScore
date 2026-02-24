@@ -453,6 +453,8 @@ void GuiApp::finish()
     m_modules.clear();
 
     removeIoC();
+
+    BaseApplication::finish();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)
