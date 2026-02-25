@@ -499,7 +499,7 @@ void EditStaff::applyStaffProperties()
     config.userDistance = Spatium(spinExtraDistance->value());
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
-    config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
+    config.clefTypeList = m_orgStaff->defaultClefType();
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
     config.reflectTranspositionInLinkedTab = !noReflectTranspositionInLinkedTab->isChecked();
 
