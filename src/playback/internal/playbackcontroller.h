@@ -255,6 +255,8 @@ private:
 
     muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> m_auxChannelNameChanged;
 
+    muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupSequenceTracks
+
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;
 
