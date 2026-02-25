@@ -374,25 +374,25 @@ Chord::Chord(const Chord& c, bool link)
     }
 
     if (!c.noteParens().empty()) {
-        for (const NoteParenthesisInfo& info : c.noteParens()) {
-            Parenthesis* newLeftParen = toParenthesis(info.leftParen->clone());
+        for (const NoteParenInfoPtr& info : c.noteParens()) {
+            Parenthesis* newLeftParen = toParenthesis(info->leftParen->clone());
             newLeftParen->setParent(this);
-            Parenthesis* newRightParen = toParenthesis(info.rightParen->clone());
+            Parenthesis* newRightParen = toParenthesis(info->rightParen->clone());
             newRightParen->setParent(this);
 
-            if (link && !info.leftParen->generated()) {
-                score()->undo(new Link(newLeftParen, info.leftParen));
+            if (link && !info->leftParen->generated()) {
+                score()->undo(new Link(newLeftParen, info->leftParen));
             }
-            if (link && !info.rightParen->generated()) {
-                score()->undo(new Link(newRightParen, info.rightParen));
+            if (link && !info->rightParen->generated()) {
+                score()->undo(new Link(newRightParen, info->rightParen));
             }
 
             std::vector<Note*> newNotes;
-            for (Note* note : info.notes) {
+            for (Note* note : info->notes) {
                 newNotes.push_back(findNote(note->pitch()));
             }
 
-            m_noteParens.push_back(NoteParenthesisInfo(newLeftParen, newRightParen, newNotes));
+            m_noteParens.push_back(std::make_unique<NoteParenthesisInfo>(newLeftParen, newRightParen, newNotes));
         }
     }
 }
@@ -1294,18 +1294,17 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
 
     for (auto& p : m_noteParens) {
-        p.leftParen->scanElements(func);
-        p.rightParen->scanElements(func);
+        p->leftParen->scanElements(func);
+        p->rightParen->scanElements(func);
     }
     ChordRest::scanElements(func);
 }
 
 const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) const
 {
-    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        const NoteParenthesisInfo& noteParenInfo = *it;
-        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
-            return &noteParenInfo;
+    for (const auto& infoPtr : m_noteParens) {
+        if (paren == infoPtr->leftParen || paren == infoPtr->rightParen) {
+            return infoPtr.get();
         }
     }
 
@@ -1314,10 +1313,9 @@ const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) co
 
 NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 {
-    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        NoteParenthesisInfo& noteParenInfo = *it;
-        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
-            return &noteParenInfo;
+    for (auto& infoPtr : m_noteParens) {
+        if (paren == infoPtr->leftParen || paren == infoPtr->rightParen) {
+            return infoPtr.get();
         }
     }
 
@@ -1326,23 +1324,21 @@ NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 
 const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
 {
-    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        const NoteParenthesisInfo& noteParenInfo = *it;
-        for (const Note* parenNote : noteParenInfo.notes) {
+    for (const auto& infoPtr : m_noteParens) {
+        for (const Note* parenNote : infoPtr->notes) {
             if (parenNote == note) {
-                return &noteParenInfo;
+                return infoPtr.get();
             }
         }
     }
 
     DO_ASSERT(u"Parentheses are not in chord");
-
     return nullptr;
 }
 
 void Chord::addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes)
 {
-    m_noteParens.emplace_back(NoteParenthesisInfo(leftParen, rightParen, notes));
+    m_noteParens.push_back(std::make_unique<NoteParenthesisInfo>(leftParen, rightParen, notes));
 }
 
 void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
@@ -1351,18 +1347,17 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
         return;
     }
 
-    Parenthesis* paren = noteParenInfo->leftParen;
-
-    NoteParenthesisInfoList::iterator itToRemove = m_noteParens.end();
-
-    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        NoteParenthesisInfo& info = *it;
-        if (paren == info.leftParen) {
-            itToRemove = it;
-        }
+    if (!noteParenInfo) {
+        return;
     }
 
-    m_noteParens.erase(itToRemove);
+    auto it = std::find_if(m_noteParens.begin(), m_noteParens.end(), [noteParenInfo](const NoteParenInfoPtr& ptr) {
+        return ptr.get() == noteParenInfo;
+    });
+
+    if (it != m_noteParens.end()) {
+        m_noteParens.erase(it);
+    }
 }
 
 void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)

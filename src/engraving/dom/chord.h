@@ -124,7 +124,8 @@ struct NoteParenthesisInfo {
     std::vector<Note*> notes;
 };
 
-using NoteParenthesisInfoList = std::vector<NoteParenthesisInfo>;
+using NoteParenInfoPtr = std::unique_ptr<NoteParenthesisInfo>;
+using NoteParenthesisInfoList = std::vector<NoteParenInfoPtr>;
 
 class Chord final : public ChordRest
 {
