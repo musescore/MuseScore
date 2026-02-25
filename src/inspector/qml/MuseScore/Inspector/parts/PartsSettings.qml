@@ -78,7 +78,7 @@ InspectorSectionView {
                 navigation.panel: root.navigationPanel
                 navigation.row: positionLinkedToMasterToggle.navigation.row + 1
 
-                propertyItem: root.model?.appearanceLinkedToMaster
+                propertyItem: root.model ? root.model.appearanceLinkedToMaster : null
                 text: qsTrc("inspector", "Style/appearance")
             }
 
