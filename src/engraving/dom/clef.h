@@ -149,6 +149,9 @@ public:
     bool isHeader() const { return m_isHeader; }
     void setIsHeader(bool val) { m_isHeader = val; }
 
+    bool isTrailer() const { return m_isTrailer; }
+    void setIsTrailer(bool val) { m_isTrailer = val; }
+
     bool isMidMeasureClef() const;
 
     bool canBeExcludedFromOtherParts() const override { return !isHeader(); }
@@ -169,6 +172,7 @@ private:
     bool m_forInstrumentChange = false;
     bool m_isHeader = false;
     bool m_isCourtesy = false;
+    bool m_isTrailer = false;
     ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     ClefTypeList m_clefTypes = ClefType::INVALID;
 };
