@@ -203,6 +203,7 @@ private:
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
 
     static void updateTimeSigAboveStavesXPos(System* system, LayoutContext& ctx);
+    static void clearBigTimeSigNotShown(System* system, LayoutContext& ctx);
 
     static void layoutSticking(const std::vector<Sticking*> stickings, System* system, LayoutContext& ctx);
 
