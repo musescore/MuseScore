@@ -129,8 +129,8 @@ target_sources(muse_global PRIVATE
     io/dir.cpp
     io/dir.h
 
-    io/devtools/allzerosfilecorruptor.cpp
-    io/devtools/allzerosfilecorruptor.h
+    io/devtools/allzerosbuffercorruptor.cpp
+    io/devtools/allzerosbuffercorruptor.h
 
     serialization/zipreader.cpp
     serialization/zipreader.h
