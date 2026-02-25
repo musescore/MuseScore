@@ -67,11 +67,11 @@ public:
 #ifdef MUSE_MODULE_MUSESAMPLER
     muse::GlobalInject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo;
 #endif
+    muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
     muse::ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
     muse::ContextInject<IAppMenuModelHook> appMenuModelHook = { this };
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
-    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::ui::INavigationController> navigationController = { this };
     muse::ContextInject<muse::workspace::IWorkspaceManager> workspacesManager = { this };

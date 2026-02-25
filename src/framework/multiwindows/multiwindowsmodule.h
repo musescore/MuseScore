@@ -35,7 +35,7 @@ class SingleProcessProvider;
 class MultiProcessProvider;
 #endif
 
-class MultiInstancesModule : public modularity::IModuleSetup
+class MultiWindowsModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -43,11 +43,24 @@ public:
     void resolveImports() override;
     void onPreInit(const IApplication::RunMode& mode) override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
 #ifdef MUSE_MULTICONTEXT_WIP
     std::shared_ptr<SingleProcessProvider> m_windowsProvider;
 #else
     std::shared_ptr<MultiProcessProvider> m_windowsProvider;
 #endif
+};
+
+class MultiWindowsContext : public modularity::IContextSetup
+{
+public:
+    MultiWindowsContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx)
+    {
+    }
+
+    void resolveImports() override;
 };
 }

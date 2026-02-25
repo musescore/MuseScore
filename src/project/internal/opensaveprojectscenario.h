@@ -36,10 +36,10 @@ namespace mu::project {
 class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Contextable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
+    muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
     muse::ContextInject<IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
-    muse::ContextInject<muse::cloud::IAudioComService> audioComService = { this };
 
 public:
     OpenSaveProjectScenario(const muse::modularity::ContextPtr& iocCtx)

@@ -33,7 +33,7 @@ SOFTWARE.
 #include "imoduleinterface.h"
 
 // Temporary disabled
-// #define IOC_CHECK_INTERFACE_TYPE
+//#define IOC_CHECK_INTERFACE_TYPE
 
 namespace kors::modularity {
 class ModulesIoCBase

@@ -40,8 +40,8 @@ public:
     GlobalInject<IGlobalConfiguration> globalConfiguration;
     GlobalInject<IProcess> process;
     GlobalInject<IKnownAudioPluginsRegister> knownPluginsRegister;
-    ContextInject<IAudioPluginsScannerRegister> scannerRegister = { this };
-    ContextInject<IAudioPluginMetaReaderRegister> metaReaderRegister = { this };
+    GlobalInject<IAudioPluginsScannerRegister> scannerRegister;
+    GlobalInject<IAudioPluginMetaReaderRegister> metaReaderRegister;
     ContextInject<IInteractive> interactive = { this };
 
 public:

@@ -39,41 +39,51 @@
 using namespace muse::mi;
 using namespace muse::modularity;
 
-std::string MultiInstancesModule::moduleName() const
+static const std::string mname("multiwindows");
+
+std::string MultiWindowsModule::moduleName() const
 {
-    return "multiwindows";
+    return mname;
 }
 
-void MultiInstancesModule::registerExports()
+void MultiWindowsModule::registerExports()
 {
 #ifdef MUSE_MULTICONTEXT_WIP
     m_windowsProvider = std::make_shared<SingleProcessProvider>();
 #else
     m_windowsProvider = std::make_shared<MultiProcessProvider>(globalCtx());
-    globalIoc()->registerExport<IMultiProcessProvider>(moduleName(), m_windowsProvider);
+    globalIoc()->registerExport<IMultiProcessProvider>(mname, m_windowsProvider);
 #endif
 
-    globalIoc()->registerExport<IMultiWindowsProvider>(moduleName(), m_windowsProvider);
+    globalIoc()->registerExport<IMultiWindowsProvider>(mname, m_windowsProvider);
 }
 
-void MultiInstancesModule::resolveImports()
+void MultiWindowsModule::resolveImports()
 {
-    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("muse://devtools/multiwindows/info"), "Muse.MultiWindows", "MultiInstancesDevDialog");
     }
-
-    auto ar = globalIoc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<MultiInstancesUiActions>());
-    }
 }
 
-void MultiInstancesModule::onPreInit(const IApplication::RunMode& mode)
+void MultiWindowsModule::onPreInit(const IApplication::RunMode& mode)
 {
     if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 
     m_windowsProvider->init();
+}
+
+IContextSetup* MultiWindowsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new MultiWindowsContext(ctx);
+}
+
+void MultiWindowsContext::resolveImports()
+{
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(std::make_shared<MultiInstancesUiActions>());
+    }
 }

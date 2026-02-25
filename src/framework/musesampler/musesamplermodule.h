@@ -37,9 +37,20 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
     std::shared_ptr<MuseSamplerConfiguration> m_configuration;
     std::shared_ptr<MuseSamplerActionController> m_actionController;
     std::shared_ptr<MuseSamplerResolver> m_resolver;
+};
+
+class MuseSamplerContext : public modularity::IContextSetup
+{
+public:
+    MuseSamplerContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void resolveImports() override;
 };
 }

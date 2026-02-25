@@ -53,6 +53,8 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
+    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalInject<muse::extensions::IExtensionInstaller> extensionInstaller;
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
@@ -60,8 +62,6 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<muse::audio::ISoundFontController> soundFontController = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
-    muse::GlobalInject<muse::IApplication> application;
-    muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
 

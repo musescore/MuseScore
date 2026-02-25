@@ -45,7 +45,7 @@ class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncab
     QML_ELEMENT
 
     muse::GlobalInject<IProjectConfiguration> configuration;
-    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
 
 public:
     CloudScoresModel(QObject* parent = nullptr);

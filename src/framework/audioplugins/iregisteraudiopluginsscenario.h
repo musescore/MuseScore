@@ -34,7 +34,7 @@ struct PluginScanResult {
     audio::AudioResourceIdList missingPluginIds;
 };
 
-class IRegisterAudioPluginsScenario : MODULE_CONTEXT_INTERFACE
+class IRegisterAudioPluginsScenario : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IRegisterAudioPluginsScenario)
 

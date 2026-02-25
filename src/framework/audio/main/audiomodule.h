@@ -54,12 +54,6 @@ public:
 
 private:
     std::shared_ptr<AudioConfiguration> m_configuration;
-    std::shared_ptr<AudioDriverController> m_audioDriverController;
-    std::shared_ptr<ISoundFontController> m_soundFontController;
-    std::shared_ptr<StartAudioController> m_startAudioController;
-    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    Ticker m_rpcTicker;
-    bool m_audioInited = false;
 };
 
 class AudioContext : public modularity::IContextSetup
@@ -76,5 +70,11 @@ public:
 private:
     std::shared_ptr<AudioActionsController> m_actionsController;
     std::shared_ptr<Playback> m_mainPlayback;
+    std::shared_ptr<AudioDriverController> m_audioDriverController;
+    std::shared_ptr<ISoundFontController> m_soundFontController;
+    std::shared_ptr<StartAudioController> m_startAudioController;
+    std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
+    Ticker m_rpcTicker;
+    bool m_audioInited = false;
 };
 }

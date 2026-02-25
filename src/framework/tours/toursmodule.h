@@ -36,9 +36,22 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
+private:
+    std::shared_ptr<ToursConfiguration> m_configuration;
+};
+
+class ToursContext : public modularity::IContextSetup
+{
+public:
+    ToursContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
+
 private:
     std::shared_ptr<ToursService> m_service;
-    std::shared_ptr<ToursConfiguration> m_configuration;
     std::shared_ptr<ToursProvider> m_provider;
 };
 }

@@ -42,9 +42,9 @@ class CloudsModel : public QAbstractListModel, public Contextable, public async:
     QML_ELEMENT
 
 #ifdef MUSE_MODULE_CLOUD_MUSESCORECOM
-    ContextInject<IMuseScoreComService> museScoreComService = { this };
+    GlobalInject<IMuseScoreComService> museScoreComService;
 #endif
-    ContextInject<IAudioComService> audioComService = { this };
+    GlobalInject<IAudioComService> audioComService;
 
 public:
     explicit CloudsModel(QObject* parent = nullptr);

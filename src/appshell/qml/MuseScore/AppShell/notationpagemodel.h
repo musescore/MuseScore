@@ -51,9 +51,9 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     muse::GlobalInject<notation::INotationSceneConfiguration> notationSceneConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
-    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:

@@ -37,7 +37,7 @@ class QString;
 using DevicePtr = std::shared_ptr<QIODevice>;
 
 namespace muse::cloud {
-class IMuseScoreComService : MODULE_CONTEXT_INTERFACE
+class IMuseScoreComService : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMuseScoreComService)
 

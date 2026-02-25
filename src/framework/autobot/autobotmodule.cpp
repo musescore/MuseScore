@@ -62,6 +62,12 @@ void AutobotModule::resolveImports()
         ir->registerQmlUri(Uri("muse://diagnostics/autobot/scripts"), "Muse.Autobot", "ScriptsDialog");
         ir->registerQmlUri(Uri("muse://autobot/selectfile"), "Muse.Autobot", "AutobotSelectFileDialog");
     }
+
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
+    if (api) {
+        api->regApiCreator(mname, "api.autobot", new ApiCreator<api::AutobotApi>());
+        api->regApiCreator(mname, "api.context", new ApiCreator<ContextApi>());
+    }
 }
 
 void AutobotModule::onInit(const IApplication::RunMode&)
@@ -103,12 +109,6 @@ void AutobotContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
-    }
-
-    auto api = ioc()->resolve<IApiRegister>(mname);
-    if (api) {
-        api->regApiCreator(mname, "api.autobot", new ApiCreator<api::AutobotApi>());
-        api->regApiCreator(mname, "api.context", new ApiCreator<ContextApi>());
     }
 }
 

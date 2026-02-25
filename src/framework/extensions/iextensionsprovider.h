@@ -30,7 +30,7 @@
 #include "extensionstypes.h"
 
 namespace muse::extensions {
-class IExtensionsProvider : MODULE_CONTEXT_INTERFACE
+class IExtensionsProvider : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IExtensionsProvider)
 public:

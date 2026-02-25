@@ -50,14 +50,6 @@ std::string InteractiveModule::moduleName() const
 
 void InteractiveModule::registerExports()
 {
-    auto interactive = std::make_shared<Interactive>(globalCtx());
-#ifdef Q_OS_WASM
-    globalIoc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
-#else
-    globalIoc()->registerExport<IInteractive>(mname, interactive);
-#endif
-
-    globalIoc()->registerExport<IInteractiveProvider>(mname, interactive);
     globalIoc()->registerExport<IInteractiveUriRegister>(mname, new InteractiveUriRegister());
 }
 
@@ -95,13 +87,12 @@ IContextSetup* InteractiveModule::newContext(const ContextPtr& ctx) const
 
 void InteractiveContext::registerExports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
-    // forward to context
-    auto globalUriRegister = globalIoc()->resolve<IInteractiveUriRegister>(mname);
-    ioc()->registerExport<IInteractiveUriRegister>(mname, globalUriRegister);
-
     auto interactive = std::make_shared<Interactive>(iocContext());
+#ifdef Q_OS_WASM
+    ioc()->registerExport<IInteractive>(mname, new WebInteractive(interactive));
+#else
     ioc()->registerExport<IInteractive>(mname, interactive);
-    ioc()->registerExport<IInteractiveProvider>(mname, interactive);
 #endif
+
+    ioc()->registerExport<IInteractiveProvider>(mname, interactive);
 }
