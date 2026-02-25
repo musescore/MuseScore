@@ -74,6 +74,11 @@ void AccessibilityModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
 }
 
+IContextSetup* AccessibilityModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new AccessibilityContext(ctx);
+}
+
 // Context
 void AccessibilityContext::registerExports()
 {
