@@ -113,6 +113,8 @@ Item {
                 Loader {
                     id: loader
 
+                    property int itemIndex: delegateItem.index
+
                     anchors.verticalCenter: parent.verticalCenter
 
                     sourceComponent: {
