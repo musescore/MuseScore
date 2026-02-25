@@ -115,8 +115,8 @@ void MuseSamplerWrapper::setOutputSpec(const audio::OutputSpec& spec)
 
     m_outputSpec = spec;
 
-    if (isOffline) {
-        LOGD() << "Start offline mode, sampleRate: " << spec.sampleRate;
+    if (isOffline && !m_offlineModeStarted) {
+        LOGI() << "Start offline mode, sampleRate: " << spec.sampleRate;
         m_samplerLib->startOfflineMode(m_sampler, spec.sampleRate);
         m_offlineModeStarted = true;
     }
@@ -351,9 +351,10 @@ void MuseSamplerWrapper::setupOnlineSound()
 {
     constexpr double AUTO_PROCESS_INTERVAL = 3.0;
     constexpr double NO_AUTO_PROCESS = -1.0; // interval < 0 -> no auto process
-
     const bool autoProcess = config()->autoProcessOnlineSoundsInBackground();
+    const bool lazyProcess = config()->isLazyProcessingOfOnlineSoundsEnabled();
 
+    m_samplerLib->setLazyRender(m_sampler, lazyProcess);
     m_sequencer.setUpdateMainStreamWhenInactive(autoProcess);
     m_samplerLib->setAutoRenderInterval(m_sampler, autoProcess ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
 
@@ -373,13 +374,17 @@ void MuseSamplerWrapper::setupOnlineSound()
         m_sequencer.updateMainStream();
         m_samplerLib->setAutoRenderInterval(m_sampler, on ? AUTO_PROCESS_INTERVAL : NO_AUTO_PROCESS);
     });
+
+    config()->isLazyProcessingOfOnlineSoundsEnabledChanged().onReceive(this, [this](bool on) {
+        m_samplerLib->setLazyRender(m_sampler, on);
+    });
 }
 
 void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int size)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+    IF_ASSERT_FAILED(m_samplerLib) {
         return;
     }
 
@@ -388,6 +393,7 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
 
     long long chunksDurationUs = 0;
     bool isRendering = false;
+    m_hasPendingChunks = false;
 
     // Call it N + 1 times so that the sampler can delete the list to avoid memory leak
     for (int i = 0; i <= size; ++i) {
@@ -399,6 +405,9 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
         switch (info._state) {
         case ms_RenderingState_Rendering:
             isRendering = true;
+            break;
+        case ms_RenderingState_OutOfRange:
+            m_hasPendingChunks = true;
             break;
         case ms_RenderingState_ErrorNetwork:
             m_renderingInfo.errorCode = (int)Err::OnlineSoundsProcessingError;
@@ -466,7 +475,11 @@ void MuseSamplerWrapper::updateRenderingProgress(ms_RenderingRangeList list, int
     }
 
     if (isChanged) {
-        m_inputProcessingProgress.process(chunks, std::lround(percentage), 100);
+        m_inputProcessingProgress.process(chunks, percentage, 100);
+    }
+
+    if (m_hasPendingChunks && !config()->isLazyProcessingOfOnlineSoundsEnabled()) {
+        return;
     }
 
     // Finish progress

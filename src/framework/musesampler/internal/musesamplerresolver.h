@@ -39,6 +39,7 @@ public:
     MuseSamplerResolver() = default;
 
     void init();
+    void deinit();
 
     bool reloadAllInstruments();
     int buildNumber() const;

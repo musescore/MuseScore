@@ -121,6 +121,11 @@ void SynthesizerStub::setIsActive(bool)
 {
 }
 
+bool SynthesizerStub::hasPendingChunks() const
+{
+    return false;
+}
+
 void SynthesizerStub::processInput()
 {
 }

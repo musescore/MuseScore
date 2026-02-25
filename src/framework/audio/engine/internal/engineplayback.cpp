@@ -23,6 +23,7 @@
 
 #include "audio/common/audiosanitizer.h"
 #include "audio/common/audioerrors.h"
+#include "audio/common/audioutils.h"
 
 #include "tracksequence.h"
 
@@ -54,7 +55,6 @@ void EnginePlayback::deinit()
 
     m_sequences.clear();
     m_saveSoundTracksProgressMap.clear();
-    m_saveSoundTracksWritersMap.clear();
 
     // Explicitly disconnect and clear all channel members before
     // async_disconnectAll() and before the destructor runs. This ensures
@@ -139,10 +139,7 @@ void EnginePlayback::removeSequence(const TrackSequenceId id)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    auto it = m_sequences.find(id);
-    if (it != m_sequences.end()) {
-        m_sequences.erase(it);
-    }
+    muse::remove(m_sequences, id);
 }
 
 TrackSequenceIdList EnginePlayback::sequenceIdList() const
@@ -163,13 +160,7 @@ ITrackSequencePtr EnginePlayback::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    auto search = m_sequences.find(id);
-
-    if (search != m_sequences.end()) {
-        return search->second;
-    }
-
-    return nullptr;
+    return muse::value(m_sequences, id, nullptr);
 }
 
 // 2. Setup tracks for Sequence
@@ -177,7 +168,6 @@ RetVal<TrackIdList> EnginePlayback::trackIdList(const TrackSequenceId sequenceId
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    RetVal<TrackIdList> result;
     ITrackSequencePtr s = sequence(sequenceId);
     if (!s) {
         return RetVal<TrackIdList>::make_ret((int)Err::InvalidSequenceId, "invalid sequence id");
@@ -613,37 +603,172 @@ RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
     return RetVal<AudioSignalChanges>::make_ok(mixer()->masterAudioSignalChanges());
 }
 
-Ret EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format, io::IODevice& dstDevice)
+async::Promise<Ret> EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice,
+                                                   const SoundTrackFormat& format)
 {
-    ONLY_AUDIO_ENGINE_THREAD;
+    return async::make_promise<Ret>([this, sequenceId, &dstDevice, format](auto resolve, auto) {
+        ONLY_AUDIO_ENGINE_THREAD;
 
-    IF_ASSERT_FAILED(mixer()) {
-        return make_ret(Err::Undefined, "undefined reference to a mixer");
+        IF_ASSERT_FAILED(mixer()) {
+            return resolve(make_ret(Err::Undefined, "undefined reference to a mixer"));
+        }
+
+        ITrackSequencePtr s = sequence(sequenceId);
+        if (!s) {
+            return resolve(make_ret(Err::InvalidSequenceId, "invalid sequence id"));
+        }
+
+#ifdef MUSE_MODULE_AUDIO_EXPORT
+        s->player()->stop();
+        s->player()->seek(0);
+
+        const bool lazyProcessingWasEnabled = configuration()->isLazyProcessingOfOnlineSoundsEnabled();
+        configuration()->setIsLazyProcessingOfOnlineSoundsEnabled(false);
+
+        listenInputProcessing(s, [this, sequenceId, &dstDevice, format, lazyProcessingWasEnabled, resolve](Ret ret) {
+            if (ret) {
+                ret = doSaveSoundTrack(sequenceId, dstDevice, format);
+            }
+
+            configuration()->setIsLazyProcessingOfOnlineSoundsEnabled(lazyProcessingWasEnabled);
+            (void)resolve(ret);
+        });
+
+        return async::Promise<Ret>::dummy_result();
+#else
+        return resolve(make_ret(Err::DisabledAudioExport, "audio export is disabled"));
+#endif
+    });
+}
+
+void EnginePlayback::listenInputProcessing(ITrackSequencePtr s, std::function<void(const Ret&)> completed)
+{
+#ifdef MUSE_MODULE_AUDIO_EXPORT
+    const TrackSequenceId sequenceId = s->id();
+    const ISequenceIOPtr audioIO = s->audioIO();
+    SaveSoundTrackProgressData& progressData = m_saveSoundTracksProgressMap[sequenceId];
+    auto soundsInProgress = std::make_shared<size_t>(0);
+
+    for (TrackId trackId : s->trackIdList()) {
+        if (!isOnlineAudioResource(audioIO->inputParams(trackId).val.resourceMeta)) {
+            continue;
+        }
+
+        InputProcessingProgress inputProgress = audioIO->inputProcessingProgress(trackId);
+        if (!inputProgress.isStarted && !audioIO->hasPendingChunks(trackId)) {
+            continue;
+        }
+
+        (*soundsInProgress)++;
+
+        if (inputProgress.isStarted) {
+            progressData.progress.send(0, 100, SaveSoundTrackStage::ProcessingOnlineSounds);
+        }
+
+        using StatusInfo = InputProcessingProgress::StatusInfo;
+        using ChunkInfoList = InputProcessingProgress::ChunkInfoList;
+        using ProgressInfo = InputProcessingProgress::ProgressInfo;
+
+        auto ch = inputProgress.processedChannel;
+        ch.onReceive(this, [this, sequenceId, trackId, soundsInProgress, completed](const StatusInfo& status,
+                                                                                    const ChunkInfoList&,
+                                                                                    const ProgressInfo& info) {
+            ITrackSequencePtr s = sequence(sequenceId);
+            if (!s) {
+                completed(make_ret(Err::InvalidSequenceId, "invalid sequence id"));
+                return;
+            }
+
+            const size_t tracksBeingProcessedCount = this->tracksBeingProcessedCount(s);
+
+            if (status.status == InputProcessingProgress::Status::Finished) {
+                s->audioIO()->inputProcessingProgress(trackId).processedChannel.disconnect(this);
+            }
+
+            if (tracksBeingProcessedCount == 0) {
+                m_saveSoundTracksProgressMap[sequenceId].aborted.disconnect(this);
+                completed(make_ok());
+            } else if (tracksBeingProcessedCount == 1) {
+                SaveSoundTrackProgress& progress = m_saveSoundTracksProgressMap[sequenceId].progress;
+                progress.send(info.current, info.total, SaveSoundTrackStage::ProcessingOnlineSounds);
+            } else {
+                const int64_t percentage = 100 - (100 / *soundsInProgress) * tracksBeingProcessedCount;
+                SaveSoundTrackProgress& progress = m_saveSoundTracksProgressMap[sequenceId].progress;
+                progress.send(percentage, 100, SaveSoundTrackStage::ProcessingOnlineSounds);
+            }
+        });
     }
 
+    if ((*soundsInProgress) == 0) {
+        completed(make_ok());
+        return;
+    }
+
+    progressData.aborted.onNotify(this, [this, sequenceId, completed]() {
+        m_saveSoundTracksProgressMap[sequenceId].aborted.disconnect(this);
+
+        ITrackSequencePtr s = sequence(sequenceId);
+        if (!s) {
+            completed(make_ret(Ret::Code::Cancel));
+            return;
+        }
+
+        for (TrackId trackId : s->trackIdList()) {
+            if (isOnlineAudioResource(s->audioIO()->inputParams(trackId).val.resourceMeta)) {
+                s->audioIO()->inputProcessingProgress(trackId).processedChannel.disconnect(this);
+            }
+        }
+
+        completed(make_ret(Ret::Code::Cancel));
+    });
+#else
+    UNUSED(s);
+    UNUSED(completed);
+#endif
+}
+
+size_t EnginePlayback::tracksBeingProcessedCount(const ITrackSequencePtr s) const
+{
+    const ISequenceIOPtr audioIO = s->audioIO();
+    size_t count = 0;
+
+    for (TrackId trackId : s->trackIdList()) {
+        if (audioIO->inputProcessingProgress(trackId).isStarted || audioIO->hasPendingChunks(trackId)) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+Ret EnginePlayback::doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format)
+{
+#ifdef MUSE_MODULE_AUDIO_EXPORT
     ITrackSequencePtr s = sequence(sequenceId);
     if (!s) {
         return make_ret(Err::InvalidSequenceId, "invalid sequence id");
     }
 
-#ifdef MUSE_MODULE_AUDIO_EXPORT
-    s->player()->stop();
-    s->player()->seek(0);
-    msecs_t totalDuration = s->player()->duration();
-
+    const msecs_t totalDuration = s->player()->duration();
     SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, mixer(), iocContext());
-    m_saveSoundTracksWritersMap[sequenceId] = writer;
+    SaveSoundTrackProgressData progressData = m_saveSoundTracksProgressMap[s->id()];
 
-    async::Channel<int64_t, int64_t> progress = saveSoundTrackProgressChanged(sequenceId);
-    writer->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, std::string /*title*/) {
-        async::Channel<int64_t, int64_t> mutprogress = progress;
-        mutprogress.send(current, total);
+    writer->progress().progressChanged().onReceive(this, [progressData](int64_t current, int64_t total, std::string /*title*/) {
+        SaveSoundTrackProgress mutProgress = progressData.progress;
+        mutProgress.send(current, total, SaveSoundTrackStage::WritingSoundTrack);
+    });
+
+    std::weak_ptr<SoundTrackWriter> weakPtr = writer;
+    progressData.aborted.onNotify(this, [weakPtr]() {
+        if (auto writer = weakPtr.lock()) {
+            writer->abort();
+        }
     });
 
     Ret ret = writer->write();
     s->player()->seek(0);
 
-    m_saveSoundTracksWritersMap.erase(sequenceId);
+    progressData.aborted.disconnect(this);
 
     return ret;
 #else
@@ -654,21 +779,21 @@ Ret EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, const Sound
 void EnginePlayback::abortSavingAllSoundTracks()
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
-    for (auto& writer : m_saveSoundTracksWritersMap) {
-        writer.second->abort();
+    for (auto& pair : m_saveSoundTracksProgressMap) {
+        pair.second.aborted.notify();
     }
 #endif
 }
 
-async::Channel<int64_t, int64_t> EnginePlayback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
+SaveSoundTrackProgress EnginePlayback::saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const
 {
     //! FIXME
     ONLY_AUDIO_MAIN_OR_ENGINE_THREAD;
     if (!muse::contains(m_saveSoundTracksProgressMap, sequenceId)) {
-        m_saveSoundTracksProgressMap.emplace(sequenceId, async::Channel<int64_t, int64_t>());
+        m_saveSoundTracksProgressMap.emplace(sequenceId, SaveSoundTrackProgressData());
     }
 
-    return m_saveSoundTracksProgressMap.at(sequenceId);
+    return m_saveSoundTracksProgressMap.at(sequenceId).progress;
 }
 
 void EnginePlayback::clearAllFx()

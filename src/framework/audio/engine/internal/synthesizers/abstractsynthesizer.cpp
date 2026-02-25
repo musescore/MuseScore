@@ -87,6 +87,13 @@ void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
     ONLY_AUDIO_ENGINE_THREAD;
 }
 
+bool AbstractSynthesizer::hasPendingChunks() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    return m_hasPendingChunks;
+}
+
 void AbstractSynthesizer::processInput()
 {
     ONLY_AUDIO_ENGINE_THREAD;

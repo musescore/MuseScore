@@ -30,6 +30,7 @@
 #include "../ifxresolver.h"
 #include "../iaudioengine.h"
 #include "../itracksequence.h"
+#include "../iaudioengineconfiguration.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter;
@@ -42,6 +43,7 @@ class EnginePlayback : public IEnginePlayback, public Contextable, public async:
 {
     GlobalInject<synth::ISynthResolver> synthResolver;
     GlobalInject<fx::IFxResolver> fxResolver;
+    GlobalInject<IAudioEngineConfiguration> configuration;
     ContextInject<IAudioEngine> audioEngine = { this };
 
 public:
@@ -119,18 +121,22 @@ public:
     RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     RetVal<AudioSignalChanges> masterSignalChanges() const override;
 
-    Ret saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format, io::IODevice& dstDevice) override;
+    async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format) override;
     void abortSavingAllSoundTracks() override;
-    async::Channel<int64_t, int64_t> saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
+    SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
 
     void clearAllFx() override;
 
 private:
-
     std::shared_ptr<Mixer> mixer() const;
 
     void ensureSubscriptions(const ITrackSequencePtr s);
     void ensureMixerSubscriptions();
+
+    void listenInputProcessing(ITrackSequencePtr s, std::function<void(const Ret&)> completed);
+    size_t tracksBeingProcessedCount(const ITrackSequencePtr s) const;
+
+    Ret doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format);
 
     async::Channel<TrackSequenceId, TrackId> m_trackAdded;
     async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
@@ -140,7 +146,11 @@ private:
 
     std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
 
-    mutable std::unordered_map<TrackSequenceId, async::Channel<int64_t, int64_t> > m_saveSoundTracksProgressMap;
-    std::unordered_map<TrackSequenceId, soundtrack::SoundTrackWriterPtr> m_saveSoundTracksWritersMap;
+    struct SaveSoundTrackProgressData {
+        SaveSoundTrackProgress progress;
+        async::Notification aborted;
+    };
+
+    mutable std::unordered_map<TrackSequenceId, SaveSoundTrackProgressData> m_saveSoundTracksProgressMap;
 };
 }

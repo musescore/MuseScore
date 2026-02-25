@@ -66,7 +66,7 @@ private:
     std::map<std::string /*sfname*/, std::vector<PendingTrack> > m_pendingTracks;
     bool m_soundFontsChangedSubscribed = false;
 
-    async::Channel<TrackSequenceId, int64_t, int64_t> m_saveSoundTrackProgressStream;
+    async::Channel<TrackSequenceId, int64_t, int64_t, SaveSoundTrackStage> m_saveSoundTrackProgressStream;
     rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
 }
