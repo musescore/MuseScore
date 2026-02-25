@@ -76,8 +76,8 @@ void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<
             continue;
         }
 
-        // Only some notes marked for removal. Remove from bottom up. This keeps the paren group splitting logic safe
-        for (auto noteIterator = groupNotesPair.second.rbegin(); noteIterator != groupNotesPair.second.rend();
+        // Only some notes marked for removal. Remove from lowest note up. This keeps the paren group splitting logic safe
+        for (auto noteIterator = groupNotesPair.second.begin(); noteIterator != groupNotesPair.second.end();
              noteIterator = std::next(noteIterator)) {
             // Remove paren from single note and create new paren group for all notes below
             Note* note = *noteIterator;
