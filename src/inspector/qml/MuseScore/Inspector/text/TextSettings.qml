@@ -99,7 +99,7 @@ Column {
 
             navigation.name: "Scale with staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: root.model.isSymbolSizeAvailable ? symbolSize.navigationRowEnd  : symbolScale.navigationRowEnd + 1
+            navigation.row: root.model && root.model.isSymbolSizeAvailable ? symbolSize.navigationRowEnd  : symbolScale.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Scale with staff size")
             propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
