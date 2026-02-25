@@ -260,6 +260,11 @@ MenuView {
         }
 
         Keys.onShortcutOverride: function(event) {
+            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return || event.key === Qt.Key_Escape) {
+                event.accepted = false
+                return
+            }
+
             if (root.isSubMenuOpen && shortcutOverrideModel.isShortcutOverrideAllowed(event.key, event.modifiers)) {
                 event.accepted = true
             } else {
