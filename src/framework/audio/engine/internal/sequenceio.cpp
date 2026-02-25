@@ -161,6 +161,22 @@ AudioSignalChanges SequenceIO::audioSignalChanges(const TrackId id) const
     return track->outputHandler->audioSignalChanges();
 }
 
+bool SequenceIO::hasPendingChunks(const TrackId id) const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return false;
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return false;
+    }
+
+    return track->inputHandler && track->inputHandler->hasPendingChunks();
+}
+
 void SequenceIO::processInput(const TrackId id) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -174,7 +190,9 @@ void SequenceIO::processInput(const TrackId id) const
         return;
     }
 
-    track->inputHandler->processInput();
+    if (track->inputHandler) {
+        track->inputHandler->processInput();
+    }
 }
 
 InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) const
@@ -190,7 +208,7 @@ InputProcessingProgress SequenceIO::inputProcessingProgress(const TrackId id) co
         return {};
     }
 
-    return track->inputHandler->inputProcessingProgress();
+    return track->inputHandler ? track->inputHandler->inputProcessingProgress() : InputProcessingProgress();
 }
 
 void SequenceIO::clearCache(const TrackId id) const
@@ -206,5 +224,7 @@ void SequenceIO::clearCache(const TrackId id) const
         return;
     }
 
-    track->inputHandler->clearCache();
+    if (track->inputHandler) {
+        track->inputHandler->clearCache();
+    }
 }

@@ -55,6 +55,7 @@ public:
     virtual bool readyToPlay() const = 0;
     virtual async::Notification readyToPlayChanged() const = 0;
 
+    virtual bool hasPendingChunks() const = 0;
     virtual void processInput() = 0;
     virtual InputProcessingProgress inputProcessingProgress() const = 0;
 

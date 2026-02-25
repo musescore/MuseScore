@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H
-#define MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H
+#pragma once
 
 #include <memory>
 
@@ -137,5 +136,3 @@ private:
 
 using MuseSamplerWrapperPtr = std::shared_ptr<MuseSamplerWrapper>;
 }
-
-#endif // MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H

@@ -592,8 +592,9 @@ void EngineRpcController::init()
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, destination, format)) {
             return;
         }
-        Ret ret = playback()->saveSoundTrack(seqId, destination, format);
-        channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+        playback()->saveSoundTrack(seqId, destination, format).onResolve(this, [this, msg](const Ret& ret) {
+            channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
+        });
     });
 
     onLongMethod(Method::AbortSavingAllSoundTracks, [this](const Msg&) {
@@ -608,9 +609,9 @@ void EngineRpcController::init()
             return;
         }
 
-        async::Channel<int64_t, int64_t> ch = playback()->saveSoundTrackProgressChanged(seqId);
-        ch.onReceive(this, [this, seqId](int64_t current, int64_t total) {
-            m_saveSoundTrackProgressStream.send(seqId, current, total);
+        SaveSoundTrackProgress ch = playback()->saveSoundTrackProgressChanged(seqId);
+        ch.onReceive(this, [this, seqId](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+            m_saveSoundTrackProgressStream.send(seqId, current, total, stage);
         });
 
         if (m_saveSoundTrackProgressStreamId == 0) {

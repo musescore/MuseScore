@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SYNTHESIZERSTUB_H
-#define MU_AUDIO_SYNTHESIZERSTUB_H
+
+#pragma once
 
 #include "audio/engine/isynthesizer.h"
 
@@ -60,6 +60,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    bool hasPendingChunks() const override;
     void processInput() override;
     InputProcessingProgress inputProcessingProgress() const override;
 
@@ -69,5 +70,3 @@ private:
     audio::AudioInputParams m_params;
 };
 }
-
-#endif // MU_AUDIO_SYNTHESIZERSTUB_H

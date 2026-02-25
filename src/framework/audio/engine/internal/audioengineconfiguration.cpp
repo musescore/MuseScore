@@ -52,6 +52,8 @@ void AudioEngineConfiguration::setConfig(const AudioEngineConfig& conf)
         m_conf.autoProcessOnlineSoundsInBackground = conf.autoProcessOnlineSoundsInBackground;
         m_autoProcessOnlineSoundsInBackgroundChanged.send(m_conf.autoProcessOnlineSoundsInBackground);
     }
+
+    setIsLazyProcessingOfOnlineSoundsEnabled(conf.isLazyProcessingOfOnlineSoundsEnabled);
 }
 
 bool AudioEngineConfiguration::autoProcessOnlineSoundsInBackground() const
@@ -62,6 +64,26 @@ bool AudioEngineConfiguration::autoProcessOnlineSoundsInBackground() const
 async::Channel<bool> AudioEngineConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
 {
     return m_autoProcessOnlineSoundsInBackgroundChanged;
+}
+
+void AudioEngineConfiguration::setIsLazyProcessingOfOnlineSoundsEnabled(bool enabled)
+{
+    if (m_conf.isLazyProcessingOfOnlineSoundsEnabled == enabled) {
+        return;
+    }
+
+    m_conf.isLazyProcessingOfOnlineSoundsEnabled = enabled;
+    m_isLazyProcessingOfOnlineSoundsEnabledChanged.send(enabled);
+}
+
+bool AudioEngineConfiguration::isLazyProcessingOfOnlineSoundsEnabled() const
+{
+    return m_conf.isLazyProcessingOfOnlineSoundsEnabled;
+}
+
+async::Channel<bool> AudioEngineConfiguration::isLazyProcessingOfOnlineSoundsEnabledChanged() const
+{
+    return m_isLazyProcessingOfOnlineSoundsEnabledChanged;
 }
 
 AudioInputParams AudioEngineConfiguration::defaultAudioInputParams() const

@@ -53,6 +53,7 @@ public:
     bool readyToPlay() const override;
     async::Notification readyToPlayChanged() const override;
 
+    bool hasPendingChunks() const override;
     void processInput() override;
     InputProcessingProgress inputProcessingProgress() const override;
 
@@ -76,5 +77,6 @@ protected:
     async::Notification m_readyToPlayChanged;
 
     InputProcessingProgress m_inputProcessingProgress;
+    bool m_hasPendingChunks = false;
 };
 }

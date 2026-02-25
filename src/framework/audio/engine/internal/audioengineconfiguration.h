@@ -36,6 +36,10 @@ public:
     bool autoProcessOnlineSoundsInBackground() const override;
     async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;
 
+    bool isLazyProcessingOfOnlineSoundsEnabled() const override;
+    void setIsLazyProcessingOfOnlineSoundsEnabled(bool enabled) override;
+    async::Channel<bool> isLazyProcessingOfOnlineSoundsEnabledChanged() const override;
+
     AudioInputParams defaultAudioInputParams() const override;
 
     size_t desiredAudioThreadNumber() const override;
@@ -46,5 +50,6 @@ private:
     AudioEngineConfig m_conf;
 
     async::Channel<bool> m_autoProcessOnlineSoundsInBackgroundChanged;
+    async::Channel<bool> m_isLazyProcessingOfOnlineSoundsEnabledChanged;
 };
 }
