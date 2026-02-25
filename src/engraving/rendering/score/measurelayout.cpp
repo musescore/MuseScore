@@ -224,7 +224,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                 cs->setRtick(len);
             }
         }
-        MeasureLayout::removeSystemTrailer(mmrMeasure);
+        MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
     } else {
         mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
         mmrMeasure->setTicks(len);
@@ -2791,13 +2791,14 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     }
 
     Segment* courtesyClefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
-    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        const track_idx_t track = staffIdx * VOICES;
+    if (courtesyClefSeg) {
+        for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            const track_idx_t track = staffIdx * VOICES;
 
-        if (courtesyClefSeg) {
             Clef* courtesyClef = toClef(courtesyClefSeg->element(track));
             if (courtesyClef) {
                 courtesyClef->setSmall(true);
+                courtesyClef->setIsTrailer(true);
             }
         }
     }
@@ -2808,12 +2809,25 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     m->checkTrailer();
 }
 
-void MeasureLayout::removeSystemTrailer(Measure* m)
+void MeasureLayout::removeSystemTrailer(Measure* m, LayoutContext& ctx)
 {
     for (Segment* seg = m->last(); seg != m->first(); seg = seg->prev()) {
         if (seg->isChordRestType()) {
             break;
         }
+
+        if (seg->isClefType()) {
+            for (EngravingItem* el : seg->elist()) {
+                if (!el) {
+                    continue;
+                }
+                Clef* clef = toClef(el);
+                clef->setIsTrailer(false);
+                TLayout::layoutClef(clef, clef->mutldata(), ctx.conf());
+            }
+            seg->createShapes();
+        }
+
         if (seg->isTimeTickType() || !seg->trailer()) {
             continue;
         }

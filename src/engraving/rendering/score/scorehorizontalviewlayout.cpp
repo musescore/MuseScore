@@ -326,7 +326,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 MeasureLayout::removeSystemHeader(m);
             }
             if (m->trailer()) {
-                MeasureLayout::removeSystemTrailer(m);
+                MeasureLayout::removeSystemTrailer(m, ctx);
             }
 
             if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
