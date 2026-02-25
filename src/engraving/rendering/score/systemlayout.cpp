@@ -416,6 +416,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         HorizontalSpacing::justifySystem(system, curSysWidth, targetSystemWidth);
     }
 
+    clearBigTimeSigNotShown(system, ctx);
+
     // LAYOUT MEASURES
     bool createBrackets = false;
     for (MeasureBase* mb : system->measures()) {
@@ -864,6 +866,33 @@ void SystemLayout::updateTimeSigAboveStavesXPos(System* system, LayoutContext& c
             }
 
             seg.createShapes();
+        }
+    }
+}
+
+void SystemLayout::clearBigTimeSigNotShown(System* system, LayoutContext& ctx)
+{
+    if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::NORMAL) {
+        return;
+    }
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isType(SegmentType::TimeSigType)) {
+                continue;
+            }
+            for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                TimeSig* ts = toTimeSig(seg.element(staff2track(staffIdx)));
+                if (!ts) {
+                    continue;
+                }
+                if (!ts->showOnThisStaff() || ts->effectiveStaffIdx() == muse::nidx) {
+                    ts->mutldata()->reset(); // Deletes shape
+                }
+            }
         }
     }
 }
