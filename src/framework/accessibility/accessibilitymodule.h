@@ -41,6 +41,8 @@ public:
 
     void onInit(const IApplication::RunMode& mode) override;
 
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
     std::shared_ptr<AccessibilityConfiguration> m_configuration;
 };
