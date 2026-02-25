@@ -31,7 +31,7 @@
 namespace muse::extensions {
 class ExtensionsUiActions : public ui::IUiActionsModule, public Contextable, public async::Asyncable
 {
-    ContextInject<extensions::IExtensionsProvider> provider = { this };
+    GlobalInject<extensions::IExtensionsProvider> provider;
 
 public:
     ExtensionsUiActions(const modularity::ContextPtr& iocCtx)

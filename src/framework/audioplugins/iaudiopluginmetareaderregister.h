@@ -27,7 +27,7 @@
 #include "iaudiopluginmetareader.h"
 
 namespace muse::audioplugins {
-class IAudioPluginMetaReaderRegister : MODULE_CONTEXT_INTERFACE
+class IAudioPluginMetaReaderRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IAudioPluginMetaReaderRegister)
 

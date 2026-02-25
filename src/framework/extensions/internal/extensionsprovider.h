@@ -36,7 +36,7 @@ class ExtensionsProvider : public IExtensionsProvider, public Contextable, publi
 {
     GlobalInject<IExtensionsConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
-    ContextInject<IExtensionsExecPointsRegister> execPointsRegister = { this };
+    GlobalInject<IExtensionsExecPointsRegister> execPointsRegister;
     ContextInject<IInteractive> interactive = { this };
 
 public:

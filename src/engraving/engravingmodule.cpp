@@ -295,6 +295,13 @@ void EngravingModule::onInit(const IApplication::RunMode&)
     //! NOTE And some initialization in the `Notation::init()`
 }
 
+void EngravingModule::onDeinit()
+{
+#ifndef ENGRAVING_NO_INTERNAL
+    m_engravingfonts->deinit();
+#endif
+}
+
 void EngravingModule::onDestroy()
 {
     delete gpaletteScore;

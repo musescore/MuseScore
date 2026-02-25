@@ -33,6 +33,9 @@ class EngravingFont;
 class EngravingFontsProvider : public IEngravingFontsProvider
 {
 public:
+
+    void deinit();
+
     void addInternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) override;
     void addExternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
                          const muse::io::path_t& metadataPath) override;

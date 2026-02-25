@@ -50,7 +50,7 @@ using namespace muse::modularity;
 using namespace muse::accessibility;
 
 AccessibleObject* s_rootObject = nullptr;
-std::shared_ptr<IQAccessibleInterfaceRegister> accessibleInterfaceRegister = nullptr;
+std::shared_ptr<IQAccessibleInterfaceRegister> s_accessibleInterfaceRegister = nullptr;
 
 static void updateHandlerNoop(QAccessibleEvent*)
 {
@@ -84,11 +84,11 @@ void AccessibilityController::setAccessibilityEnabled(bool enabled)
 
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
-    if (!accessibleInterfaceRegister) {
-        accessibleInterfaceRegister = globalIoc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
+    if (!s_accessibleInterfaceRegister) {
+        s_accessibleInterfaceRegister = globalIoc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
 
-    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
+    auto interfaceGetter = s_accessibleInterfaceRegister->interfaceGetter(classname);
     if (interfaceGetter) {
         return interfaceGetter(object);
     }

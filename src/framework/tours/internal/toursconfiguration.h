@@ -22,16 +22,13 @@
 
 #pragma once
 
-#include "modularity/ioc.h"
-
 #include "itoursconfiguration.h"
 
 namespace muse::tours {
-class ToursConfiguration : public IToursConfiguration, public Contextable
+class ToursConfiguration : public IToursConfiguration
 {
 public:
-    ToursConfiguration(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    ToursConfiguration() = default;
 
     String lastShownTourIdForEvent(const String& eventCode) const override;
     void setLastShownTourIdForEvent(const String& eventCode, const String& tourId) override;

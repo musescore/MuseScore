@@ -14,7 +14,7 @@ class ExtensionInstaller : public IExtensionInstaller, public async::Asyncable, 
 {
     muse::GlobalInject<IExtensionsConfiguration> configuration;
     muse::GlobalInject<io::IFileSystem> fileSystem;
-    muse::ContextInject<IExtensionsProvider> provider = { this };
+    muse::GlobalInject<IExtensionsProvider> provider;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

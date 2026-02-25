@@ -25,6 +25,15 @@
 #include <QDir>
 #include <QProcess>
 
+#include "global/modularity/ioc.h"
+#include "global/iglobalconfiguration.h"
+#include "extensions/iextensionsconfiguration.h"
+#include "project/iprojectconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "audio/main/iaudioconfiguration.h"
+#include "engraving/infrastructure/mscio.h"
+#include "context/iglobalcontext.h"
+
 namespace mu::engraving::apiv1 {
 //---------------------------------------------------------
 ///   \class FileIO
@@ -50,16 +59,22 @@ namespace mu::engraving::apiv1 {
 ///   \endcode
 //---------------------------------------------------------
 
-class FileIO : public QObject
+class FileIO : public QObject, public muse::Contextable
 {
     Q_OBJECT
 
-public:
     /// Path to the file which is operated on
-    Q_PROPERTY(QString source
-               READ source
-               WRITE setSource
-               )
+    Q_PROPERTY(QString source READ source WRITE setSource)
+
+    muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
+    muse::GlobalInject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
+    muse::GlobalInject<mu::project::IProjectConfiguration> projectConfiguration;
+    muse::GlobalInject<mu::notation::INotationConfiguration> notationConfiguration;
+    muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+
+public:
+
     /// \cond PLUGIN_API \private \endcond
     explicit FileIO(QObject* parent = 0);
 

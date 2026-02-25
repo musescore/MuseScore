@@ -28,7 +28,7 @@
 #include "extensionstypes.h"
 
 namespace muse::extensions {
-class IExtensionsExecPointsRegister : MODULE_CONTEXT_INTERFACE
+class IExtensionsExecPointsRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IExtensionsExecPointsRegister)
 public:

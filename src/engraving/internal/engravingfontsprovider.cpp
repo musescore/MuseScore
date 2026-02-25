@@ -29,6 +29,13 @@
 using namespace mu;
 using namespace mu::engraving;
 
+void EngravingFontsProvider::deinit()
+{
+    m_symbolFonts.clear();
+    m_externalSymbolFonts.clear();
+    m_fallback.font = nullptr;
+}
+
 void EngravingFontsProvider::addInternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath)
 {
     muse::io::path_t basePath = muse::io::dirpath(filePath.toQString());

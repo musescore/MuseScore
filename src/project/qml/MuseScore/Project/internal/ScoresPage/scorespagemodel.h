@@ -44,9 +44,10 @@ class ScoresPageModel : public QObject, public muse::Contextable
     QML_ELEMENT
 
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::cloud::IMuseScoreComService> museScoreComService = { this };
+
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
 

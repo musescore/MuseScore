@@ -28,14 +28,6 @@
 #include "util.h"
 
 #include "log.h"
-#include "modularity/ioc.h"
-#include "global/iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
-#include "project/iprojectconfiguration.h"
-#include "notation/inotationconfiguration.h"
-#include "audio/main/iaudioconfiguration.h"
-#include "engraving/infrastructure/mscio.h"
-#include "context/iglobalcontext.h"
 
 using namespace muse;
 
@@ -45,83 +37,49 @@ namespace mu::engraving::apiv1 {
 //---------------------------------------------------------
 
 FileIO::FileIO(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
 }
 
 // User's MuseScore documents directory (default location for scores, plugins, etc.)
 QString FileIO::userDataPath()
 {
-    // Get global configuration to access allowed paths
-    auto globalConfig = muse::modularity::globalIoc()->resolve<IGlobalConfiguration>("extensions");
-    if (!globalConfig) {
-        LOGE() << "Failed to resolve IGlobalConfiguration";
-        return QString();
-    }
-
-    return globalConfig->userDataPath().toQString();
+    return globalConfiguration() ? globalConfiguration()->userDataPath().toQString() : QString();
 }
 
 // User-configured Plugins directory (Preferences → Folders → Plugins)
 QString FileIO::pluginsUserPath()
 {
-    auto extensionsConfig = muse::modularity::globalIoc()->resolve<extensions::IExtensionsConfiguration>("extensions");
-    if (!extensionsConfig) {
-        LOGE() << "Failed to resolve IExtensionsConfiguration";
-        return QString();
-    }
-
-    return extensionsConfig->pluginsUserPath().toQString();
+    return extensionsConfiguration() ? extensionsConfiguration()->pluginsUserPath().toQString() : QString();
 }
 
 // User-configured Scores directory (Preferences → Folders → Scores)
 QString FileIO::userProjectsPath()
 {
-    auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
-    if (!projectConfig) {
-        LOGE() << "Failed to resolve IProjectConfiguration";
-        return QString();
-    }
-
-    return projectConfig->userProjectsPath().toQString();
+    return projectConfiguration() ? projectConfiguration()->userProjectsPath().toQString() : QString();
 }
 
 // User-configured Templates directory (Preferences → Folders → Templates)
 QString FileIO::userTemplatesPath()
 {
-    auto projectConfig = muse::modularity::globalIoc()->resolve<mu::project::IProjectConfiguration>("project");
-    if (!projectConfig) {
-        LOGE() << "Failed to resolve IProjectConfiguration";
-        return QString();
-    }
-
-    return projectConfig->userTemplatesPath().toQString();
+    return projectConfiguration() ? projectConfiguration()->userTemplatesPath().toQString() : QString();
 }
 
 // User-configured Styles directory (Preferences → Folders → Styles)
 QString FileIO::userStylesPath()
 {
-    auto notationConfig = muse::modularity::globalIoc()->resolve<mu::notation::INotationConfiguration>("notation");
-    if (!notationConfig) {
-        LOGE() << "Failed to resolve INotationConfiguration";
-        return QString();
-    }
-
-    return notationConfig->userStylesPath().toQString();
+    return notationConfiguration() ? notationConfiguration()->userStylesPath().toQString() : QString();
 }
 
 // User-configured SoundFonts directories (Preferences → Folders → SoundFonts)
 QStringList FileIO::userSoundFontDirectories()
 {
     QStringList paths;
-    auto audioConfig = muse::modularity::globalIoc()->resolve<audio::IAudioConfiguration>("audio");
-
-    if (!audioConfig) {
-        LOGE() << "Failed to resolve IAudioConfiguration";
-        return paths; // empty list
+    if (!audioConfiguration()) {
+        return paths;
     }
 
-    for (const auto& path : audioConfig->userSoundFontDirectories()) {
+    for (const auto& path : audioConfiguration()->userSoundFontDirectories()) {
         if (!path.empty()) {
             paths << path.toQString();
         }
@@ -151,13 +109,11 @@ QString FileIO::pluginDirectoryPath()
 // Path of project file (ex: .../Desktop/project.mscz)
 QString FileIO::projectPath()
 {
-    auto globalContext = muse::modularity::globalIoc()->resolve<context::IGlobalContext>("project");
-    if (!globalContext) {
-        LOGE() << "Failed to resolve IGlobalContext";
+    if (!globalContext()) {
         return QString();
     }
 
-    auto project = globalContext->currentProject();
+    auto project = globalContext()->currentProject();
     if (!project) {
         return QString();
     }

@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MI_MULTIINSTANCESSTUBMODULE_H
-#define MUSE_MI_MULTIINSTANCESSTUBMODULE_H
+#pragma once
 
 #include "modularity/imodulesetup.h"
 
 namespace muse::mi {
-class MultiInstancesModule : public modularity::IModuleSetup
+class MultiWindowsModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -33,5 +32,3 @@ public:
     void registerExports() override;
 };
 }
-
-#endif // MUSE_MI_MULTIINSTANCESSTUBMODULE_H

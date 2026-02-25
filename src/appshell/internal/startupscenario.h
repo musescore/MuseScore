@@ -44,11 +44,11 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<ISessionsManager> sessionsManager = { this };
     muse::ContextInject<project::IProjectAutoSaver> projectAutoSaver = { this };
-    muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
     muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
     muse::ContextInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
     muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario = { this };

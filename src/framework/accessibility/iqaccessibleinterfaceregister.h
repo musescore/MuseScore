@@ -27,7 +27,7 @@
 #include <QAccessibleInterface>
 
 namespace muse::accessibility {
-class IQAccessibleInterfaceRegister : MODULE_CONTEXT_INTERFACE
+class IQAccessibleInterfaceRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IQAccessibleInterfaceRegister)
 

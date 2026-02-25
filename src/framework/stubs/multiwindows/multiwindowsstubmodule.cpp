@@ -27,12 +27,12 @@
 using namespace muse::mi;
 using namespace muse::modularity;
 
-std::string MultiInstancesModule::moduleName() const
+std::string MultiWindowsModule::moduleName() const
 {
     return "multiwindows_stub";
 }
 
-void MultiInstancesModule::registerExports()
+void MultiWindowsModule::registerExports()
 {
     globalIoc()->registerExport<IMultiWindowsProvider>(moduleName(), new MultiWindowsStubProvider());
 }

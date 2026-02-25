@@ -27,7 +27,7 @@
 #include "learntypes.h"
 
 namespace muse::learn {
-class ILearnService : MODULE_CONTEXT_INTERFACE
+class ILearnService : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(ILearnService)
 

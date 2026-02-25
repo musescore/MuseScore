@@ -26,7 +26,7 @@
 #include "iaudiopluginsscanner.h"
 
 namespace muse::audioplugins {
-class IAudioPluginsScannerRegister : MODULE_CONTEXT_INTERFACE
+class IAudioPluginsScannerRegister : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IAudioPluginsScannerRegister)
 
