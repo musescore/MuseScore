@@ -35,7 +35,7 @@ static const QString FIRST_GROUP_ID("FIRST_GROUP_ID");
 static const QString INSTRUMENT_TEMPLATE_KEY("instrumentTemplate");
 
 InstrumentListModel::InstrumentListModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), m_selection(new ItemMultiSelectionModel(this))
 {
     connect(m_selection, &ItemMultiSelectionModel::selectionChanged, this,
             [this](const QItemSelection& selected, const QItemSelection& deselected) {
