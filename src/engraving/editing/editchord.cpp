@@ -83,6 +83,7 @@ void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<
             Note* note = *noteIterator;
             const std::vector<Note*> notesList = parenInfo->notes;
             Parenthesis* leftParen = parenInfo->leftParen;
+            Parenthesis* rightParen = parenInfo->rightParen;
             auto notePos = std::find(notesList.begin(), notesList.end(), note);
 
             if (notePos != notesList.end() && std::next(notePos) != notesList.end() && notePos != notesList.begin()) {
@@ -90,12 +91,20 @@ void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<
                 std::vector<Note*> newNoteGroup(notePos + 1, notesList.end());
 
                 for (Note* noteToRemove : newNoteGroup) {
-                    undoRemoveParenFromNote(chord, noteToRemove, leftParen, addToLinked);
+                    if (parenInfo->notes.size() == 1) {
+                        undoClearParenGroup(chord, { noteToRemove }, leftParen, rightParen, addToLinked);
+                    } else {
+                        undoRemoveParenFromNote(chord, noteToRemove, leftParen, addToLinked);
+                    }
                 }
 
                 undoAddParensToNotes(chord, newNoteGroup, addToLinked, generated);
             }
-            undoRemoveParenFromNote(chord, note, leftParen, addToLinked);
+            if (parenInfo->notes.size() == 1) {
+                undoClearParenGroup(chord, { note }, leftParen, rightParen, addToLinked);
+            } else {
+                undoRemoveParenFromNote(chord, note, leftParen, addToLinked);
+            }
         }
     }
 }
