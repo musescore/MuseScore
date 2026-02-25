@@ -30,7 +30,7 @@
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/ioretcodes.h"
-#include "global/io/devtools/allzerosfilecorruptor.h"
+#include "global/io/devtools/allzerosbuffercorruptor.h"
 
 #include "engraving/compat/engravingcompat.h"
 #include "engraving/dom/masterscore.h"
@@ -678,20 +678,16 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
 
         std::unique_ptr<Buffer> maybeOutBuf;
         if (shouldCorrupt) {
-            // Create a corrupted file so devs/qa can simulate a saved corrupted file.
-            params.device = new AllZerosFileCorruptor(savePath);
+            // Create corrupted data so devs/qa can simulate a saved corrupted file.
+            maybeOutBuf = std::make_unique<AllZerosBufferCorruptor>();
         } else if (ioMode != engraving::MscIoMode::Dir) {
             maybeOutBuf = std::make_unique<Buffer>();
-            params.device = maybeOutBuf.get();
         }
+        params.device = maybeOutBuf.get();
 
         MscWriter msczWriter(params);
         Ret ret = writeProject(msczWriter, createThumbnail);
         msczWriter.close();
-        if (shouldCorrupt) {
-            delete params.device;
-            params.device = nullptr;
-        }
 
         if (!ret) {
             LOGE() << "failed write project to buffer: " << ret.toString();

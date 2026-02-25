@@ -19,19 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "allzerosfilecorruptor.h"
 
-using namespace muse::io;
+#pragma once
 
-AllZerosFileCorruptor::AllZerosFileCorruptor(const path_t& filePath)
-    : File(filePath)
+#include "global/io/buffer.h"
+
+namespace muse::io {
+class AllZerosBufferCorruptor : public Buffer
 {
-}
-
-size_t AllZerosFileCorruptor::writeData(const uint8_t*, size_t len)
-{
-    // Ignore the actual data and write all zeros so as to corrupt the file.
-    uint8_t* corruptData = new uint8_t[len];
-    memset(corruptData, 0, len);
-    return File::writeData(corruptData, len);
+private:
+    size_t writeData(const uint8_t* data, size_t len) override;
+};
 }
