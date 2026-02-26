@@ -174,6 +174,7 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
     ev.setVelocity7(80);
 
     notation->midiInput()->onMidiEventReceived(ev);
+    m_noteOnTimePointMap[key] = std::chrono::high_resolution_clock::now();
 }
 
 void PianoKeyboardController::sendNoteOff(piano_key_t key)
@@ -188,7 +189,31 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
     ev.setOpcode(muse::midi::Event::Opcode::NoteOff);
     ev.setNote(key);
 
-    notation->midiInput()->onMidiEventReceived(ev);
+    auto noteOnTimePointIt = m_noteOnTimePointMap.find(key);
+    if (noteOnTimePointIt == m_noteOnTimePointMap.end()) {
+        notation->midiInput()->onMidiEventReceived(ev);
+        return;
+    }
+
+    const auto now = std::chrono::high_resolution_clock::now();
+    const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - noteOnTimePointIt->second);
+    const size_t durationMs = static_cast<size_t>(duration.count());
+    constexpr size_t MIN_DURATION_MS = 30;
+
+    if (durationMs >= MIN_DURATION_MS) {
+        notation->midiInput()->onMidiEventReceived(ev);
+        m_noteOnTimePointMap.erase(noteOnTimePointIt);
+        return;
+    }
+
+    // Postpone the note off event
+    QTimer::singleShot(MIN_DURATION_MS - durationMs, [this, ev]() {
+        if (auto notation = currentNotation()) {
+            notation->midiInput()->onMidiEventReceived(ev);
+        }
+
+        muse::remove(m_noteOnTimePointMap, ev.note());
+    });
 }
 
 INotationPtr PianoKeyboardController::currentNotation() const

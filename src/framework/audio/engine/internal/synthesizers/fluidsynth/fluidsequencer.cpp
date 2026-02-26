@@ -127,7 +127,7 @@ void FluidSequencer::addDynamicEvents(EventSequenceMap& destination, const mpe::
             event.setIndex(midi::EXPRESSION_CONTROLLER);
             event.setData(expressionLevel(dynamic.second));
 
-            destination[dynamic.first].emplace_back(std::move(event));
+            destination[dynamic.first].emplace(std::move(event));
         }
     }
 }
@@ -152,7 +152,7 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
         noteOn.setVelocity16(velocity);
         noteOn.setPitchNote(noteIdx, tuning);
 
-        destination[arrangementCtx.actualTimestamp].emplace_back(std::move(noteOn));
+        destination[arrangementCtx.actualTimestamp].emplace(std::move(noteOn));
     }
 
     if (arrangementCtx.hasEnd()) {
@@ -162,7 +162,7 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
         noteOff.setPitchNote(noteIdx, tuning);
 
         const timestamp_t timestampTo = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration;
-        destination[timestampTo].emplace_back(std::move(noteOff));
+        destination[timestampTo].emplace(std::move(noteOff));
     }
 
     for (const auto& artPair : noteEvent.expressionCtx().articulations) {
@@ -242,7 +242,7 @@ void FluidSequencer::addControlChange(EventSequenceMap& destination, const mpe::
     cc.setChannel(channelIdx);
     cc.setData(value);
 
-    destination[timestamp].emplace_back(std::move(cc));
+    destination[timestamp].emplace(std::move(cc));
 }
 
 void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
@@ -300,7 +300,7 @@ void FluidSequencer::addPitchBend(EventSequenceMap& destination, const mpe::time
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
     event.setData(value);
-    destination[timestamp].push_back(event);
+    destination[timestamp].insert(event);
 }
 
 void FluidSequencer::addSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
