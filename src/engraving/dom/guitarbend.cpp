@@ -39,6 +39,11 @@
 #include "whammybar.h"
 
 namespace mu::engraving {
+static constexpr float GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR = 0.25f;
+static constexpr float SCOOP_DEFAULT_END_TIME_FACTOR = 0.25f;
+static constexpr float DIP_DEFAULT_START_TIME_FACTOR = 0.25f;
+static constexpr float DIP_DEFAULT_END_TIME_FACTOR = 0.5f;
+
 /****************************************
  *              GuitarBend
  * **************************************/
@@ -418,6 +423,9 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
         }
         if (m_bendType == GuitarBendType::DIP) {
             return DIP_DEFAULT_END_TIME_FACTOR;
+        }
+        if (m_bendType == GuitarBendType::SCOOP) {
+            return SCOOP_DEFAULT_END_TIME_FACTOR;
         }
         return 1.f;
     case Pid::GUITAR_DIVE_TAB_POS:

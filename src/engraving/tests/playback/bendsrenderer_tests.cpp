@@ -485,8 +485,7 @@ TEST_F(Engraving_BendsRendererTests, Scoop)
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, -50); // Go down (-1/2)
-    expectedPitchCurve.emplace(2500, -50); // Hold
-    expectedPitchCurve.emplace(10000, 0); // Go to the origin pitch (B3)
+    expectedPitchCurve.emplace(2500, 0); // Go to the origin pitch (B3)
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::B, 3));
