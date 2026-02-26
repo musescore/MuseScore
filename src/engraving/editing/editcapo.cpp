@@ -113,6 +113,10 @@ void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const Ca
     // ctx.stringData = nullptr;
     // ctx.possibleFretConflict = false;
 
+    Score* score = staff->score();
+    Fraction layoutEndTick = endTick != -1 ? Fraction::fromTicks(endTick) : Fraction::max();
+    score->setLayout(layoutEndTick, staff->idx());
+
     const bool modeChanged = oldParams.transposeMode != newParams.transposeMode;
     const bool fretChanged = oldParams.fretPosition != newParams.fretPosition;
     const bool stringsChanged = oldParams.ignoredStrings != newParams.ignoredStrings;
