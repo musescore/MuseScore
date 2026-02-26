@@ -21,11 +21,11 @@
  */
 
 #include "editcapo.h"
-#include "staff.h"
-#include "note.h"
-#include "stringdata.h"
-#include "score.h"
-#include "part.h"
+#include "dom/staff.h"
+#include "dom/note.h"
+#include "dom/stringdata.h"
+#include "dom/score.h"
+#include "dom/part.h"
 
 namespace mu::engraving {
 // static
@@ -112,6 +112,10 @@ void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const Ca
     // These two have to be set in applyCapoTranspose for every chord!
     // ctx.stringData = nullptr;
     // ctx.possibleFretConflict = false;
+
+    Score* score = staff->score();
+    Fraction layoutEndTick = endTick != -1 ? Fraction::fromTicks(endTick) : Fraction::max();
+    score->setLayout(layoutEndTick, staff->idx());
 
     const bool modeChanged = oldParams.transposeMode != newParams.transposeMode;
     const bool fretChanged = oldParams.fretPosition != newParams.fretPosition;
