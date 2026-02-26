@@ -497,15 +497,6 @@
           <stem>1</stem>
           </Drum>
         <singleNoteDynamics>0</singleNoteDynamics>
-        <StringData>
-          <frets>24</frets>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          </StringData>
         <Channel>
           <controller ctrl="0" value="1"/>
           <program value="0"/>

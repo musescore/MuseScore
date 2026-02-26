@@ -61,6 +61,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 #include "engraving/types/symid.h"
+#include "engraving/dom/stringtunings.h"
 
 #include "guitarprodrumset.h"
 #include "utils.h"
@@ -88,6 +89,7 @@ static TremoloType tremoloType(int division)
     return TremoloType::INVALID_TREMOLO;
 }
 
+static std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
 //---------------------------------------------------------
 //   readInfo
 //---------------------------------------------------------
@@ -539,6 +541,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
 
 bool GuitarPro5::readTracks()
 {
+    stringDatas.clear();
     for (size_t i = 0; i < staves; ++i) {
         int tuning[GP_MAX_STRING_NUMBER];
         Staff* staff = score->staff(i);
@@ -591,6 +594,7 @@ bool GuitarPro5::readTracks()
         instr->setSingleNoteDynamics(false);
         part->setPartName(name);
         part->setPlainLongName(name);
+        stringDatas.insert_or_assign(part->id().toUint64(), stringData);
 
         //
         // determine clef
@@ -970,6 +974,51 @@ bool GuitarPro5::read(IODevice* io)
         return false;
     }
     readMeasures(tempo);
+    const Measure* m = score->firstMeasure();
+
+    // NOTE: GP doesn't support multiple tunings on one part
+    // We're safe to just take the very first chord rest segment
+    // and check if it has any non-standard tuning
+    const Fraction& f{ 0, 1 };
+
+    for (auto p : score->parts()) {
+        for (auto s : p->staves()) {
+            if (!s->isPrimaryStaff() || p->instrument()->useDrumset()) {
+                continue;
+            }
+
+            Segment* seg = m->findSegment(SegmentType::ChordRest, f);
+
+            IF_ASSERT_FAILED(seg) {
+                LOGE() << "First measure MUST has a chord rest segment after import";
+                return false;
+            }
+
+            if (stringDatas.find(p->id().toUint64()) == stringDatas.end()) {
+                continue;
+            }
+            StringData sd = stringDatas.at(p->id().toUint64());
+
+            std::vector<int> tuningPitches(sd.strings());
+            for (size_t i = 0; i < tuningPitches.size(); ++i) {
+                tuningPitches[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
+            }
+
+            if (utils::isStandardTuning(p->instrument()->channel(0)->program(), tuningPitches)) {
+                continue;
+            }
+
+            StringTunings* tun = Factory::createStringTunings(seg);
+            tun->setStringData(sd);
+            tun->setTrack(staff2track(s->idx()));
+            tun->setParent(seg);
+            seg->add(tun);
+
+            auto tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());
+            sd = StringData(sd.frets(), (int)tuning.size(), tuning.data());
+            p->instrument()->setStringData(sd);
+        }
+    }
     for (auto n : slideList) {
         auto segment = n->chord()->segment();
         auto measure = segment->measure();

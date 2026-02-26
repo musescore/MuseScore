@@ -21,6 +21,7 @@
  */
 
 #include "importgtp.h"
+#include "utils.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
@@ -49,6 +50,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
 
 #include "guitarprodrumset.h"
@@ -743,11 +745,12 @@ bool GuitarPro4::read(IODevice* io)
         part->setPartName(name);
         part->setPlainLongName(name);
 
+        int patch = channelDefaults[midiChannel].patch;
+
         //
         // determine clef
         //
         Staff* staff = score->staff(i);
-        int patch = channelDefaults[midiChannel].patch;
         ClefType clefId = ClefType::G;
         if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
             clefId = ClefType::PERC;
@@ -1191,6 +1194,7 @@ bool GuitarPro4::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     m_guitarBendImporter->applyBendsToChords();
+    addTunings();
 
     return true;
 }
