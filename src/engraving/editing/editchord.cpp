@@ -34,7 +34,7 @@
 
 using namespace mu::engraving;
 
-void mu::engraving::EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
+void EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
 {
     if (notes.empty()) {
         return;
@@ -42,7 +42,7 @@ void mu::engraving::EditChord::addChordParentheses(Chord* chord, std::vector<Not
     undoAddParensToNotes(chord, notes, addToLinked, generated);
 }
 
-void mu::engraving::EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
+void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)
 {
     if (notes.empty()) {
         return;
