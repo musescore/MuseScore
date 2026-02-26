@@ -3152,7 +3152,12 @@ EngravingItem* Score::move(const String& cmd)
             el = box->nextMeasure()->first()->nextChordRest(0, false);
         }
         if (cr) {
-            el = nextMeasure(cr);
+            if (noteEntryMode() && cr->measure() == lastMeasure()) {
+                m_is.setBeyondScore(true);
+                el = lastMeasure()->lastChordRest(cr->track());
+            } else {
+                el = nextMeasure(cr);
+            }
         }
         if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
@@ -3161,18 +3166,29 @@ EngravingItem* Score::move(const String& cmd)
         if (box && box->prevMeasure() && box->prevMeasure()->first()) {
             el = box->prevMeasure()->first()->nextChordRest(0, false);
         }
-        if (cr) {
+        if (noteEntryMode() && m_is.beyondScore()) {
+            m_is.setBeyondScore(false);
+            el = lastMeasure()->first()->nextChordRest(0, false);
+        } else if (cr) {
             el = prevMeasure(cr);
         }
         if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
         }
     } else if (cmd == u"next-system" && cr) {
-        el = cmdNextPrevSystem(cr, true);
-        if (noteEntryMode()) {
+        if (noteEntryMode() && cr->measure()->system()->endTick() == endTick()) {
+            m_is.setBeyondScore(true);
+            el = lastMeasure()->lastChordRest(cr->track());
+        } else {
+            el = cmdNextPrevSystem(cr, true);
+        }
+        if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
         }
     } else if (cmd == u"prev-system" && cr) {
+        if (noteEntryMode() && m_is.beyondScore()) {
+            m_is.setBeyondScore(false);
+        }
         el = cmdNextPrevSystem(cr, false);
         if (noteEntryMode()) {
             m_is.moveInputPos(el);
