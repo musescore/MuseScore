@@ -42,9 +42,9 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         const int mno = measure->no() + 1;
         xml.comment(String(u"Measure %1").arg(mno));
     }
-    if (measure->m_len != measure->m_timesig) {
+    if (measure->ticks() != measure->timesig()) {
         // this is an irregular measure
-        xml.startElement(measure, { { "len", measure->m_len.toString() } });
+        xml.startElement(measure, { { "len", measure->ticks().toString() } });
     } else {
         xml.startElement(measure);
     }
@@ -52,8 +52,8 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
     ctx.setCurTick(measure->tick());
     ctx.setCurTrack(staff * VOICES);
 
-    if (measure->m_mmRestCount > 0) {
-        xml.tag("multiMeasureRest", measure->m_mmRestCount);
+    if (measure->mmRestCount() > 0) {
+        xml.tag("multiMeasureRest", measure->mmRestCount());
     }
     if (writeSystemElements) {
         TWrite::writeItemEid(measure, xml, ctx);
@@ -61,7 +61,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
             xml.tag("startRepeat");
         }
         if (measure->repeatEnd()) {
-            xml.tag("endRepeat", measure->m_repeatCount);
+            xml.tag("endRepeat", measure->repeatCount());
         }
         TWrite::writeProperty(measure, xml, Pid::IRREGULAR);
         TWrite::writeProperty(measure, xml, Pid::BREAK_MMR);
@@ -69,7 +69,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         TWrite::writeProperty(measure, xml, Pid::NO_OFFSET);
         TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
-    MStaff* mstaff = measure->m_mstaves[staff];
+    MStaff* mstaff = measure->mstaves()[staff];
     if (mstaff->measureNumber() && !mstaff->measureNumber()->generated()) {
         TWrite::write(mstaff->measureNumber(), xml, ctx);
     }

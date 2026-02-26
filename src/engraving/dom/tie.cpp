@@ -404,6 +404,8 @@ PropertyValue Tie::getProperty(Pid propertyId) const
 PropertyValue Tie::propertyDefault(Pid id) const
 {
     switch (id) {
+    case Pid::ANCHOR:
+        return int(Anchor::NOTE);
     case Pid::TIE_PLACEMENT:
         return TiePlacement::AUTO;
     default:

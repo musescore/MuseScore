@@ -5271,7 +5271,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     mu::engraving::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
     mu::engraving::Score::InsertMeasureOptions options;
-    options.createEmptyMeasures = false;
+    options.createMeasureRests = false;
     options.moveSignaturesClef = moveSignaturesClef;
     options.needDeselectAll = false;
     options.cloneBoxToAllParts = boxType != BoxType::Fret;

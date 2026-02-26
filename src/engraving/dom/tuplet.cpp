@@ -73,7 +73,6 @@ Tuplet::Tuplet(Measure* parent)
     m_number       = 0;
     m_hasBracket   = false;
     m_isUp         = true;
-    m_id           = 0;
     initElementStyle(&tupletStyle);
 }
 
@@ -96,7 +95,6 @@ Tuplet::Tuplet(const Tuplet& t)
     m_userP1            = t.m_userP1;
     m_userP2            = t.m_userP2;
 
-    m_id            = t.m_id;
     // recreated on layout
     m_number = 0;
 }

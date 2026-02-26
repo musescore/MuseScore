@@ -38,7 +38,6 @@
 #include "accessibleobject.h"
 #include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
-#include "interactive/internal/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
 

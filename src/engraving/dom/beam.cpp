@@ -71,7 +71,6 @@ Beam::Beam(const Beam& b)
     : BeamBase(b)
 {
     m_elements     = b.m_elements;
-    m_id           = b.m_id;
     m_growLeft           = b.m_growLeft;
     m_growRight           = b.m_growRight;
     m_beamDist        = b.m_beamDist;

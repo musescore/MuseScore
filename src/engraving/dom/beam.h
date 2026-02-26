@@ -84,9 +84,6 @@ public:
 
     void move(const PointF&) override;
 
-    void setId(int i) const { m_id = i; }
-    int id() const { return m_id; }
-
     void setDirection(DirectionV d) override;
 
     void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
@@ -205,8 +202,6 @@ private:
     const StaffType* m_tab = nullptr;
 
     std::vector<BeamFragment*> m_fragments; // beam splits across systems
-
-    mutable int m_id = 0;                // used in read()/write()
 
     int m_minCRMove = 0;                   // set in layout1()
     int m_maxCRMove = 0;

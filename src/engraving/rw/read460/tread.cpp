@@ -1499,8 +1499,6 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
 {
-    t->setId(e.intAttribute("id", 0));
-
     Text* number = nullptr;
     Fraction ratio;
     TDuration baseLen;
@@ -2599,9 +2597,6 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         tapping->setTrack(ch->track());
         TRead::read(tapping, e, ctx);
         ch->add(tapping);
-    } else if (tag == "leadingSpace" || tag == "trailingSpace") {
-        LOGD("ChordRest: %s obsolete", tag.ascii());
-        e.skipCurrentElement();
     } else if (tag == "small") {
         ch->setSmall(e.readInt());
     } else if (tag == "duration") {
@@ -4348,55 +4343,6 @@ void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)
     s->setStretch(stretch);
     s->setNumeratorString(numeratorString);
     s->setDenominatorString(denominatorString);
-}
-
-void TRead::read(TimeSigMap* item, XmlReader& e, ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "sig") {
-            SigEvent t;
-            int tick = TRead::read(&t, e, ctx.fileDivision());
-            (*item)[tick] = t;
-        } else {
-            e.unknown();
-        }
-    }
-    item->normalize();
-}
-
-int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
-{
-    int tick  = e.intAttribute("tick", 0);
-    tick      = tick * Constants::DIVISION / fileDivision;
-
-    int numerator = 1;
-    int denominator = 1;
-    int denominator2 = -1;
-    int numerator2   = -1;
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "nom") {
-            numerator = e.readInt();
-        } else if (tag == "denom") {
-            denominator = e.readInt();
-        } else if (tag == "nom2") {
-            numerator2 = e.readInt();
-        } else if (tag == "denom2") {
-            denominator2 = e.readInt();
-        } else {
-            e.unknown();
-        }
-    }
-    if ((numerator2 == -1) || (denominator2 == -1)) {
-        numerator2   = numerator;
-        denominator2 = denominator;
-    }
-
-    item->setTimesig(TimeSigFrac(numerator, denominator));
-    item->setNominal(TimeSigFrac(numerator2, denominator2));
-    return tick;
 }
 
 void TRead::read(TremoloTwoChord* t, XmlReader& xml, ReadContext& ctx)

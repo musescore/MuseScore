@@ -253,7 +253,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
             const engraving::Staff* currentStaff = score->staff(staffIdx);
             const engraving::Instrument* instrument = currentStaff->part()->instrument(tick);
 
-            // Staff toString
+            // Staff name
             String staffName = instrument->longName();
             if (staffName.empty()) {
                 staffName = instrument->shortName();

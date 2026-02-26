@@ -934,7 +934,7 @@ public:
     struct InsertMeasureOptions {
         InsertMeasureOptions() {}
 
-        bool createEmptyMeasures = false;
+        bool createMeasureRests = false;
         bool moveSignaturesClef = true;
         bool needDeselectAll = true;
         bool cloneBoxToAllParts = true;

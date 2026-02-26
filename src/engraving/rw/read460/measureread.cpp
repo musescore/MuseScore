@@ -74,21 +74,21 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
     int nextTrack = staffIdx * VOICES;
     ctx.setTrack(nextTrack);
 
-    for (int n = int(measure->m_mstaves.size()); n <= staffIdx; ++n) {
+    for (int n = int(measure->mstaves().size()); n <= staffIdx; ++n) {
         Staff* staff = ctx.staff(n);
         MStaff* s = new MStaff;
         s->setLines(Factory::createStaffLines(measure));
         s->lines()->setParent(measure);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(measure->tick()));
-        measure->m_mstaves.push_back(s);
+        measure->mstaves().push_back(s);
     }
 
     bool irregular = false;
     if (e.hasAttribute("len")) {
         bool ok = true;
-        measure->m_len = Fraction::fromString(e.attribute("len"), &ok);
-        if (!ok || measure->m_len < Fraction(1, 128)) {
+        measure->setTicks(Fraction::fromString(e.attribute("len"), &ok));
+        if (!ok || measure->ticks() < Fraction(1, 128)) {
             e.raiseError(muse::mtrc("engraving", "MSCX error at byte offset %1: invalid measure length: %2")
                          .arg(e.byteOffset()).arg(e.attribute("len")));
             return;
@@ -124,43 +124,43 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         } else if (tag == "irregular") {
             measure->setIrregular(e.readBool());
         } else if (tag == "breakMultiMeasureRest") {
-            measure->m_breakMultiMeasureRest = e.readBool();
+            measure->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "startRepeat") {
             measure->setRepeatStart(true);
             e.readNext();
         } else if (tag == "endRepeat") {
-            measure->m_repeatCount = e.readInt();
+            measure->setRepeatCount(e.readInt());
             measure->setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
-            if (!measure->m_mstaves[staffIdx]->vspacerDown()) {
+            if (!measure->mstaves()[staffIdx]->vspacerDown()) {
                 Spacer* spacer = Factory::createSpacer(measure);
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
+            measure->mstaves()[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacerFixed") {
-            if (!measure->m_mstaves[staffIdx]->vspacerDown()) {
+            if (!measure->mstaves()[staffIdx]->vspacerDown()) {
                 Spacer* spacer = Factory::createSpacer(measure);
                 spacer->setSpacerType(SpacerType::FIXED);
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
+            measure->mstaves()[staffIdx]->vspacerDown()->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacerUp") {
-            if (!measure->m_mstaves[staffIdx]->vspacerUp()) {
+            if (!measure->mstaves()[staffIdx]->vspacerUp()) {
                 Spacer* spacer = Factory::createSpacer(measure);
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerUp()->setGap(Spatium(e.readDouble()));
+            measure->mstaves()[staffIdx]->vspacerUp()->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
-            measure->m_mstaves[staffIdx]->setVisible(e.readInt());
+            measure->mstaves()[staffIdx]->setVisible(e.readInt());
         } else if (tag == "stemless") {
-            measure->m_mstaves[staffIdx]->setStemless(e.readInt());
+            measure->mstaves()[staffIdx]->setStemless(e.readInt());
         } else if (tag == "hideIfEmpty") {
-            measure->m_mstaves[staffIdx]->setHideIfEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+            measure->mstaves()[staffIdx]->setHideIfEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
         } else if (tag == "measureRepeatCount") {
             measure->setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {
@@ -172,7 +172,7 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             //! but when we add it to Measure, the parent will be rewritten.
             measure->add(sd);
         } else if (tag == "multiMeasureRest") {
-            measure->m_mmRestCount = e.readInt();
+            measure->setMMRestCount(e.readInt());
             // set tick to previous measure
             measure->setTick(ctx.lastMeasure()->tick());
             ctx.setTick(ctx.lastMeasure()->tick());
@@ -373,10 +373,10 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
 
                 if (currTick == measure->tick()) {
                     timeStretch = ts->stretch().reduced();
-                    measure->m_timesig = ts->sig() / timeStretch;
+                    measure->setTimesig(ts->sig() / timeStretch);
 
                     if (!irregular) {
-                        measure->m_len = measure->m_timesig;
+                        measure->setTicks(measure->timesig());
                     }
                 }
 

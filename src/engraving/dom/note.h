@@ -335,7 +335,6 @@ public:
     const std::vector<NoteDot*>& dots() const { return m_dots; }
     std::vector<NoteDot*>& dots() { return m_dots; }
 
-    int qmlDotsCount();
     void updateAccidental(AccidentalState*);
     void updateLine();
     void setNval(const NoteVal&, Fraction = { -1, 1 });

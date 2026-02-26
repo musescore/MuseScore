@@ -19,10 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_XMLREADER_H
-#define MU_ENGRAVING_XMLREADER_H
 
-#include <map>
+#pragma once
 
 #include "serialization/xmlstreamreader.h"
 
@@ -80,5 +78,3 @@ private:
     int64_t m_byteOffsetAdjustment = 0;
 };
 }
-
-#endif // MU_ENGRAVING_XMLREADER_H

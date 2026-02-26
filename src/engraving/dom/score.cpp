@@ -4400,7 +4400,7 @@ void Score::appendPart(const InstrumentTemplate* t)
 void Score::appendMeasures(int n)
 {
     InsertMeasureOptions options;
-    options.createEmptyMeasures = false;
+    options.createMeasureRests = false;
 
     for (int i = 0; i < n; ++i) {
         insertMeasure(ElementType::MEASURE, nullptr, options);

@@ -41,6 +41,7 @@ jobs:
           fi
 
       - name: "Configure workflow"
+        id: configure
         run: |
           DO_CREATE_PR='false'
           DO_PUSH_TO_S3='false'
@@ -62,14 +63,14 @@ jobs:
             exit 1
           fi
 
-          echo "DO_CREATE_PR=$DO_CREATE_PR" | tee -a $GITHUB_ENV
-          echo "DO_PUSH_TO_S3=$DO_PUSH_TO_S3" | tee -a $GITHUB_ENV
+          echo "DO_CREATE_PR=$DO_CREATE_PR" | tee -a $GITHUB_OUTPUT
+          echo "DO_PUSH_TO_S3=$DO_PUSH_TO_S3" | tee -a $GITHUB_OUTPUT
 
       - name: Clone repository
         uses: actions/checkout@v6
 
       - name: Install Qt for lrelease
-        if: env.DO_PUSH_TO_S3 == 'true'
+        if: steps.configure.outputs.DO_PUSH_TO_S3 == 'true'
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.10.2
@@ -79,7 +80,7 @@ jobs:
           cache: true
 
       - name: Setup environment for pushing to S3
-        if: env.DO_PUSH_TO_S3 == 'true'
+        if: steps.configure.outputs.DO_PUSH_TO_S3 == 'true'
         run: |
           bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
 
@@ -95,7 +96,8 @@ jobs:
           args: "pull -f"
 
       - name: Create Pull Request
-        if: env.DO_CREATE_PR == 'true'
+        id: create-pr
+        if: steps.configure.outputs.DO_CREATE_PR == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -108,13 +110,18 @@ jobs:
           labels: strings
           reviewers: shoogle
 
+      - name: Add PR link to job summary
+        if: steps.configure.outputs.DO_CREATE_PR == 'true' && steps.create-pr.outputs.pull-request-number
+        run: |
+          echo "Pull Request: [#${{ steps.create-pr.outputs.pull-request-number }}](${{ steps.create-pr.outputs.pull-request-url }})" >> $GITHUB_STEP_SUMMARY
+
       - name: Pack and send to s3
-        if: env.DO_PUSH_TO_S3 == 'true'
+        if: steps.configure.outputs.DO_PUSH_TO_S3 == 'true'
         run: |
           bash ./buildscripts/ci/translation/s3_packandsend.sh
 
       - name: Upload artifacts on GitHub
-        if: env.DO_PUSH_TO_S3 == 'true'
+        if: steps.configure.outputs.DO_PUSH_TO_S3 == 'true'
         uses: actions/upload-artifact@v6
         with:
           name: MuseScore_Studio_locale_${{ env.BUILD_NUMBER }}

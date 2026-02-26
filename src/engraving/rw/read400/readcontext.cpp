@@ -318,14 +318,14 @@ void ReadContext::setBarLineSpan(const BarLine* barLine, const size_t barLineSpa
     DO_ASSERT(didInsert)
 }
 
-void ReadContext::addBeam(Beam* s)
+void ReadContext::addBeam(int beamId, Beam* s)
 {
-    _beams.insert_or_assign(s->id(), s);
+    _beams.insert_or_assign(beamId, s);
 }
 
-void ReadContext::addTuplet(Tuplet* s)
+void ReadContext::addTuplet(int tupletId, Tuplet* s)
 {
-    _tuplets.insert_or_assign(s->id(), s);
+    _tuplets.insert_or_assign(tupletId, s);
 }
 
 void ReadContext::checkTuplets()
@@ -334,7 +334,7 @@ void ReadContext::checkTuplets()
         Tuplet* tuplet = p.second;
         if (tuplet->elements().empty()) {
             // this should not happen and is a sign of input file corruption
-            LOGD("Measure:read(): empty tuplet id %d (%p), input file corrupted?", tuplet->id(), tuplet);
+            LOGD("Measure:read(): empty tuplet id %d (%p), input file corrupted?", p.first, tuplet);
             delete tuplet;
         } else {
             //sort tuplet elements. Needed for nested tuplets #22537

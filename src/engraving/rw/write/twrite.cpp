@@ -692,7 +692,7 @@ void TWrite::write(const Articulation* item, XmlWriter& xml, WriteContext& ctx)
     if (!ctx.canWrite(item)) {
         return;
     }
-    if (toEngravingItem(item)->isOrnament()) {
+    if (item->isOrnament()) {
         write(toOrnament(item), xml, ctx);
         return;
     }

@@ -3468,16 +3468,6 @@ NoteVal Note::noteVal() const
 }
 
 //---------------------------------------------------------
-//   qmlDotsCount
-//    returns number of dots for plugins
-//---------------------------------------------------------
-
-int Note::qmlDotsCount()
-{
-    return static_cast<int>(m_dots.size());
-}
-
-//---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------
 

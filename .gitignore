@@ -5,6 +5,7 @@
 .qped
 .directory
 .idea
+.qtcreator
 .vscode/
 /builds
 build

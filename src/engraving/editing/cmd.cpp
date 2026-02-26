@@ -1617,7 +1617,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
         if (!m) {
             LOGD("EOS reached");
             InsertMeasureOptions options;
-            options.createEmptyMeasures = false;
+            options.createMeasureRests = false;
             insertMeasure(ElementType::MEASURE, nullptr, options);
             m = cr->measure()->nextMeasure();
             if (!m) {

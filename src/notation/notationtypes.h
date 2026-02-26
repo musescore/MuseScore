@@ -123,7 +123,6 @@ using StaffGroup = mu::engraving::StaffGroup;
 using StaffType = mu::engraving::StaffType;
 using StaffTypeId = mu::engraving::StaffTypes;
 using StaffName = mu::engraving::StaffName;
-using StaffNameList = mu::engraving::StaffNameList;
 using Segment = mu::engraving::Segment;
 using TextStyleType = mu::engraving::TextStyleType;
 using TraitType = mu::engraving::TraitType;

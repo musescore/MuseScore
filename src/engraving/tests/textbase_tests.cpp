@@ -248,9 +248,9 @@ TEST_F(Engraving_TextBaseTests, lineBreakTest)
     // Read
     {
         MasterScore* score = ScoreRW::readScore(u"lineBreak.mscx", true);
-        EXPECT_TRUE(score);
+        ASSERT_TRUE(score);
         Segment* seg = score->firstSegment(SegmentType::ChordRest);
-        EXPECT_TRUE(seg);
+        ASSERT_TRUE(seg);
 
         StaffText* staffText = toStaffText(seg->findAnnotation(ElementType::STAFF_TEXT, 0, 0));
         EXPECT_TRUE(staffText);

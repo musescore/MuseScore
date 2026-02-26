@@ -1,10 +1,11 @@
 [project]
 description = "Python scripts for MuseScore Studio development."
 readme = "https://github.com/musescore/MuseScore/wiki/Running-Python-scripts"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "requests>=2.32.3",
     "markdown>=3.6",
+    "tiktoken>=0.12.0",
 ]
 # Show files that use these dependencies, e.g. for requests: rg -lt py "import requests"
 

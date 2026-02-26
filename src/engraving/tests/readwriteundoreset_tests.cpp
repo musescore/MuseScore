@@ -78,7 +78,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
     String recreateMMRestRefFile(RWUNDORESET_DATA_DIR + file + u"-recreate-mmrest-ref.mscx");
 
     MasterScore* score = ScoreRW::readScore(readFile);
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
 
     // Regenerate MM rests from scratch:
     // 1) turn MM rests off
@@ -90,6 +90,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, disableMMRestRefFile));
     delete score;
     score = ScoreRW::readScore(writeFile, true);
+    ASSERT_TRUE(score);
 
     // 3) turn MM rests back on
     score->startCmd(TranslatableString::untranslatable("Read/write/undo/reset tests"));

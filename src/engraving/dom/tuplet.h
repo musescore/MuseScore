@@ -105,9 +105,6 @@ public:
 
     void reset() override;
 
-    int id() const { return m_id; }
-    void setId(int i) const { m_id = i; }
-
     TDuration baseLen() const { return m_baseLen; }
     void setBaseLen(const TDuration& d) { m_baseLen = d; }
 
@@ -197,7 +194,6 @@ private:
 
     PointF m_p1, m_p2;
     PointF m_userP1, m_userP2;      // user offset
-    mutable int m_id;                   // used during read/write
 
     Text* m_number = nullptr;
 };

@@ -122,6 +122,55 @@ using namespace mu::engraving::compat;
 
 static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingItem* be);
 
+static int readSigEvent(SigEvent* sigEvent, XmlReader& e, int fileDivision)
+{
+    int tick  = e.intAttribute("tick", 0);
+    tick      = tick * Constants::DIVISION / fileDivision;
+
+    int numerator = 1;
+    int denominator = 1;
+    int denominator2 = -1;
+    int numerator2   = -1;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "nom") {
+            numerator = e.readInt();
+        } else if (tag == "denom") {
+            denominator = e.readInt();
+        } else if (tag == "nom2") {
+            numerator2 = e.readInt();
+        } else if (tag == "denom2") {
+            denominator2 = e.readInt();
+        } else {
+            e.unknown();
+        }
+    }
+    if ((numerator2 == -1) || (denominator2 == -1)) {
+        numerator2   = numerator;
+        denominator2 = denominator;
+    }
+
+    sigEvent->setTimesig(TimeSigFrac(numerator, denominator));
+    sigEvent->setNominal(TimeSigFrac(numerator2, denominator2));
+    return tick;
+}
+
+void Read206::readTimeSigMap(TimeSigMap* map, XmlReader& e, read400::ReadContext& ctx)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "sig") {
+            SigEvent t;
+            int tick = readSigEvent(&t, e, ctx.fileDivision());
+            (*map)[tick] = t;
+        } else {
+            e.unknown();
+        }
+    }
+    map->normalize();
+}
+
 //---------------------------------------------------------
 //   excessTextStyles206
 //    The first map has the name of the style as the string
@@ -1554,7 +1603,6 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
 
 static void readTuplet206(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 {
-    tuplet->setId(e.intAttribute("id", 0));
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Number") {
@@ -3069,12 +3117,13 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             barLine->setBarLineType(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
+            int tupletId = e.attribute("id").toInt();
             Tuplet* tuplet = Factory::createTuplet(m);
             tuplet->setTrack(ctx.track());
             tuplet->setTick(ctx.tick());
             tuplet->setParent(m);
             readTuplet206(tuplet, e, ctx);
-            ctx.addTuplet(tuplet);
+            ctx.addTuplet(tupletId, tuplet);
         } else if (tag == "startRepeat") {
             m->setRepeatStart(true);
             e.readNext();
@@ -3102,11 +3151,12 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
+            int beamId = e.attribute("id").toInt();
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(ctx.track());
             read400::TRead::read(beam, e, ctx);
             beam->resetExplicitParent();
-            ctx.addBeam(beam);
+            ctx.addBeam(beamId, beam);
         } else if (tag == "Segment") {
             if (segment) {
                 read400::TRead::read(segment, e, ctx);
@@ -3381,7 +3431,7 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
         if (tag == "Staff") {
             readStaffContent206(score, e, ctx);
         } else if (tag == "siglist") {
-            read400::TRead::read(ctx.compatTimeSigMap(), e, ctx);
+            readTimeSigMap(ctx.compatTimeSigMap(), e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
