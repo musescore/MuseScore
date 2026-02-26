@@ -2031,14 +2031,14 @@
               <eid>QTYuu6zZFzJ_12SCXUE6dJK</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>2</fret>
+              <fret>4</fret>
               <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>7</guitarBendType>
-                  <bendStartTimeFactor>0.25</bendStartTimeFactor>
-                  <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>WALXFyAemfO_DrNOaNdWhkF</eid>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
+                  <eid>9u7738nOMPC_ErFck52RPWF</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>

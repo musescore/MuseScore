@@ -254,19 +254,14 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
-    int totBendAmount = bend->totBendAmountIncludingPrecedingBends();
+    const int totBendAmount = bend->totBendAmountIncludingPrecedingBends();
+    const int localBendAmount = bend->bendAmountInQuarterTones();
+    const int pitchDiff = bendAmountToCurvePitch(localBendAmount);
+
     int endPitch = bendAmountToCurvePitch(totBendAmount);
-
-    int localBendAmount = bend->bendAmountInQuarterTones();
-    int pitchDiff = bendAmountToCurvePitch(localBendAmount);
-
     int startPitch = endPitch - pitchDiff;
 
-    int starTime = bend->startTimeFactor() * CurvePoint::MAX_TIME;
-    int endTime = bend->endTimeFactor() * CurvePoint::MAX_TIME;
-
-    bool isHold = this->isHold(item);
-    if (isHold) {
+    if (isHold(item)) {
         m_bendCurve = {
             CurvePoint(0, endPitch, true),
             CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true)
@@ -279,9 +274,12 @@ void BendSettingsModel::loadBendCurve()
 
     if (!bend->isDive()) {
         endPitch = std::max(endPitch, 0);
+    } else if (bend->bendType() == GuitarBendType::SCOOP) {
+        std::swap(startPitch, endPitch);
     }
 
-    bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
+    const int starTime = bend->startTimeFactor() * CurvePoint::MAX_TIME;
+    const int endTime = bend->endTimeFactor() * CurvePoint::MAX_TIME;
 
     QString startPointName = muse::qtrc("inspector", "Start point");
     QString endPointName = muse::qtrc("inspector", "End point");
@@ -291,6 +289,7 @@ void BendSettingsModel::loadBendCurve()
                         CurvePoint(0, endPitch, true),
                         CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true, endPointName) };
     } else {
+        const bool isSlightBend = bend->bendType() == GuitarBendType::SLIGHT_BEND;
         m_bendCurve = { CurvePoint(0, startPitch, true),
                         CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true, startPointName),
                         CurvePoint(endTime, endPitch,
