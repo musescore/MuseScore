@@ -107,6 +107,8 @@ target_sources(engraving PRIVATE
     editing/edit.cpp
     editing/editbrackets.cpp
     editing/editbrackets.h
+    editing/editcapo.cpp
+    editing/editcapo.h
     editing/editchord.cpp
     editing/editchord.h
     editing/editclef.cpp
