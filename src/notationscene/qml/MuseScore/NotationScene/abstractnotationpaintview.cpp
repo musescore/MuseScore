@@ -38,11 +38,6 @@ using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
-static void compensateFloatPart(RectF& rect)
-{
-    rect.adjust(-1, -1, 1, 1);
-}
-
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : muse::uicomponents::QuickPaintedView(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -319,7 +314,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         RectF shadowNoteRect = fromLogical(notationInteraction()->shadowNoteRect());
 
         if (shadowNoteRect.isValid()) {
-            compensateFloatPart(shadowNoteRect);
             scheduleRedraw(shadowNoteRect);
         }
 
@@ -328,7 +322,6 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         RectF previewMeasureRect = fromLogical(notationInteraction()->previewMeasureRect());
 
         if (previewMeasureRect.isValid()) {
-            compensateFloatPart(previewMeasureRect);
             scheduleRedraw(previewMeasureRect);
         }
 
@@ -1152,7 +1145,9 @@ RectF AbstractNotationPaintView::correctDrawRect(const RectF& rect) const
         return RectF(0, 0, width(), height());
     }
 
-    return rect;
+    // Compensate for floating point precision issues resulting in occasional
+    // thin unpainted lines at the edges of the update rectangle.
+    return rect.padded(1);
 }
 
 void AbstractNotationPaintView::moveCanvasVertical(qreal dy)
