@@ -3515,10 +3515,11 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         // AND we're not force hiding naturals (continuous mode)
         // AND key sig is CMaj/Amin OR style says they are on
         const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
+        const bool isCourtesy = s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero());
+        const bool prevTrailerCourtesy = pm && !pm->sectionBreak() && (!pm->trailer() || !pm->hasCourtesyKeySig());
         if (!item->hideNaturals() && track != muse::nidx
             && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
-            && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
-                || (pm && !pm->sectionBreak() && !pm->hasCourtesyKeySig()))) {
+            && (isCourtesy || prevTrailerCourtesy)) {
             KeySigEvent prevKsEvent = item->staff() ? item->staff()->keySigEvent(item->tick() - Fraction::eps()) : KeySigEvent();
             int t2 = int(prevKsEvent.key());
 
