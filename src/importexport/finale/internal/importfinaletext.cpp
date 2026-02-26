@@ -738,6 +738,7 @@ void FinaleParser::importTextExpressions()
                 /// @note currently only CR
                 Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick() + rTick);
                 img->setTrack(curTrackIdx);
+                img->setSize(img->size() * DPMM / spatium());
                 s->add(img);
                 continue;
             }
