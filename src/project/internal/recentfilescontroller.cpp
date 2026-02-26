@@ -273,13 +273,13 @@ Promise<QPixmap> RecentFilesController::thumbnail(const muse::io::path_t& filePa
                 }
             }
 
-            RetVal<ProjectMeta> rv = mscMetaReader()->readMeta(filePath);
-            if (!rv.ret) {
+            RetVal<QPixmap> thumbnail = mscMetaReader()->readThumbnail(filePath);
+            if (!thumbnail.ret) {
                 m_thumbnailCache[filePath] = CachedThumbnail();
-                (void)reject(rv.ret.code(), rv.ret.toString());
+                (void)reject(thumbnail.ret.code(), thumbnail.ret.toString());
             } else {
-                m_thumbnailCache[filePath] = CachedThumbnail { rv.val.thumbnail, lastModified };
-                (void)resolve(rv.val.thumbnail);
+                m_thumbnailCache[filePath] = CachedThumbnail { thumbnail.val, lastModified };
+                (void)resolve(thumbnail.val);
             }
         });
 #else

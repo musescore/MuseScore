@@ -21,6 +21,7 @@
 set(MODULE_TEST project_test)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/mscmetareadermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/projectconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mscmetareadertests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp

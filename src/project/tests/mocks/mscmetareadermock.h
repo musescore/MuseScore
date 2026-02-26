@@ -19,20 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONMSCZREADERMOCK_H
-#define MU_NOTATION_NOTATIONMSCZREADERMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
 #include "project/imscmetareader.h"
 
 namespace mu::notation {
-class MsczReaderMock : public project::IMscMetaReader
+class MscMetaReaderMock : public project::IMscMetaReader
 {
 public:
+    MOCK_METHOD(muse::RetVal<QPixmap>, readThumbnail, (const muse::io::path_t& filePath), (const, override));
     MOCK_METHOD(muse::RetVal<project::ProjectMeta>, readMeta, (const muse::io::path_t& filePath), (const, override));
     MOCK_METHOD(muse::RetVal<project::CloudProjectInfo>, readCloudProjectInfo, (const muse::io::path_t& filePath), (const, override));
 };
 }
-
-#endif // MU_NOTATION_NOTATIONMSCZREADERMOCK_H
