@@ -28,6 +28,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fingering.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
@@ -227,20 +228,55 @@ static void connectTie(mu::engraving::Chord* chord, Note* note)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, track_idx_t track, int pitch, int fret, int string, bool tie,
-                           muse::draw::Color color)
+static String fingeringTextLH(int leftFinger)
+{
+    switch (leftFinger) {
+    case 0: return u"0";
+    case 1: return u"1";
+    case 2: return u"2";
+    case 3: return u"3";
+    case 4: return u"4";
+    default: return u"invalid"; // shouldn't happen
+    }
+}
+
+static String fingeringTextRH(int rightFinger)
+{
+    switch (rightFinger) {
+    case 0: return u"p";
+    case 1: return u"i";
+    case 2: return u"m";
+    case 3: return u"a";
+    case 4: return u"c";
+    default: return u"invalid"; // shouldn't happen
+    }
+}
+
+static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int pitch, muse::draw::Color color)
 {
     LOGN("pitch %d", pitch);
     mu::engraving::Note* note = Factory::createNote(chord);
     if (note) {
-        note->setTrack(track);
+        note->setTrack(chord->track());
         note->setPitch(pitch);
         note->setTpcFromPitch(Prefer::NEAREST);
-        note->setFret(fret);
-        note->setString(string);
+        note->setFret(tefNote->fret);
+        note->setString(tefNote->string - 1);
         note->setColor(color);
-        if (tie) {
+        if (tefNote->tie) {
             connectTie(chord, note);
+        }
+        if (tefNote->fingeringLH) {
+            Fingering* fi = Factory::createFingering(note, TextStyleType::LH_GUITAR_FINGERING);
+            String finger { fingeringTextLH(tefNote->fingeringLH - 1) };
+            fi->setPlainText(finger);
+            note->add(fi);
+        }
+        if (tefNote->fingeringRH) {
+            Fingering* fi = Factory::createFingering(note, TextStyleType::RH_GUITAR_FINGERING);
+            String finger { fingeringTextRH(tefNote->fingeringRH - 1) };
+            fi->setPlainText(finger);
+            note->add(fi);
         }
         chord->add(note);
     }
@@ -401,7 +437,7 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                             int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->fret;
                             LOGN("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
                             // note TableEdit's strings start at 1, MuseScore's at 0
-                            addNoteToChord(chord, track, pitch, note->fret, note->string - 1, note->tie, toColor(voice));
+                            addNoteToChord(chord, note, pitch, toColor(voice));
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
                                 int gracePitch = 96 - instrument.tuning.at(/* todo */ note->string - stringOffset - 1) + note->graceFret;
@@ -892,7 +928,7 @@ void TablEdit::readTefContents()
         uint8_t byte4 = readUInt8();
         /* uint8_t byte5 = */ readUInt8();
         /* uint8_t byte6 = */ readUInt8();
-        /* uint8_t byte7 = */ readUInt8();
+        uint8_t byte7 = readUInt8();
         /* uint8_t byte8 = */ readUInt8();
         TefNote note;
         note.position = (offset >> 3) / totalNumberOfStrings;
@@ -920,6 +956,9 @@ void TablEdit::readTefContents()
                 note.hasGrace = true;
                 //LOGD("graceEffect %d graceFret %d", note.graceEffect, note.graceFret);
             }
+            note.fingeringLH = (byte7 & 0x1F) % 6;
+            note.fingeringRH = (byte7 & 0x1F) / 6;
+            LOGD("fingeringLH %d fingeringRH %d", note.fingeringLH, note.fingeringRH);
             tefContents.push_back(note);
         } else if (noteRestMarker == 0x39) {
             TefTextMarker tefTextMarker;
