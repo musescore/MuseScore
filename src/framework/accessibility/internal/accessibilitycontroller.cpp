@@ -68,13 +68,17 @@ AccessibilityController::AccessibilityController(const muse::modularity::Context
 
 AccessibilityController::~AccessibilityController()
 {
-    m_pretendFocusTimer.stop();
-    unreg(this);
 }
 
 QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
 {
     return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+}
+
+void AccessibilityController::deinit()
+{
+    m_pretendFocusTimer.stop();
+    unreg(this);
 }
 
 void AccessibilityController::setAccessibilityEnabled(bool enabled)

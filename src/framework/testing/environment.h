@@ -27,6 +27,10 @@
 
 #include "modularity/imodulesetup.h"
 
+namespace muse {
+class GlobalModule;
+}
+
 namespace muse::testing {
 class Environment
 {
@@ -52,6 +56,7 @@ private:
     static PreInit m_preInit;
     static PostInit m_postInit;
     static DeInit m_deInit;
+    static muse::GlobalModule* m_globalModule;
 };
 
 class SuiteEnvironment

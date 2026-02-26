@@ -50,7 +50,7 @@ private:
     appshell::SplashScreen* m_splashScreen = nullptr;
 
     //! NOTE Separately to initialize logger and profiler as early as possible
-    muse::GlobalModule m_globalModule;
+    muse::GlobalModule* m_globalModule = nullptr;
     std::vector<muse::modularity::IModuleSetup*> m_modules;
 
     struct Context {

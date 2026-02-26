@@ -94,7 +94,7 @@ private:
     CmdOptions m_options;
 
     //! NOTE Separately to initialize logger and profiler as early as possible
-    muse::GlobalModule m_globalModule;
+    muse::GlobalModule* m_globalModule = nullptr;
 
     std::vector<muse::modularity::IModuleSetup*> m_modules;
     muse::modularity::ContextPtr m_context;

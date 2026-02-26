@@ -68,10 +68,11 @@ void GuiApp::setup()
     // ====================================================
     // Setup modules: Resources, Exports, Imports, UiTypes
     // ====================================================
-    m_globalModule.setApplication(shared_from_this());
-    m_globalModule.registerResources();
-    m_globalModule.registerExports();
-    m_globalModule.registerUiTypes();
+    m_globalModule = new GlobalModule();
+    m_globalModule->setApplication(shared_from_this());
+    m_globalModule->registerResources();
+    m_globalModule->registerExports();
+    m_globalModule->registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->setApplication(shared_from_this());
@@ -91,8 +92,8 @@ void GuiApp::setup()
     }
 #endif
 
-    m_globalModule.resolveImports();
-    m_globalModule.registerApi();
+    m_globalModule->resolveImports();
+    m_globalModule->registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
@@ -113,7 +114,7 @@ void GuiApp::setup()
     // ====================================================
     // Setup modules: onPreInit
     // ====================================================
-    m_globalModule.onPreInit(runMode);
+    m_globalModule->onPreInit(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
@@ -155,7 +156,7 @@ void GuiApp::setup()
     // ====================================================
     // Setup modules: onInit
     // ====================================================
-    m_globalModule.onInit(runMode);
+    m_globalModule->onInit(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onInit(runMode);
     }
@@ -169,7 +170,7 @@ void GuiApp::setup()
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
-    m_globalModule.onAllInited(runMode);
+    m_globalModule->onAllInited(runMode);
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
@@ -184,7 +185,7 @@ void GuiApp::setup()
     // Setup modules: onStartApp (on next event loop)
     // ====================================================
     QMetaObject::invokeMethod(qApp, [this]() {
-        m_globalModule.onStartApp();
+        m_globalModule->onStartApp();
         for (modularity::IModuleSetup* m : m_modules) {
             m->onStartApp();
         }
@@ -194,7 +195,7 @@ void GuiApp::setup()
     // Setup modules: onDelayedInit
     // ====================================================
     QTimer::singleShot(5000, [this]() {
-        m_globalModule.onDelayedInit();
+        m_globalModule->onDelayedInit();
         for (modularity::IModuleSetup* m : m_modules) {
             m->onDelayedInit();
         }
@@ -260,7 +261,7 @@ std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse:
     Context& ref = m_contexts.back();
     ref.ctx = ctx;
 
-    modularity::IContextSetup* global = m_globalModule.newContext(ctx);
+    modularity::IContextSetup* global = m_globalModule->newContext(ctx);
     if (global) {
         ref.setups.push_back(global);
     }
@@ -508,17 +509,22 @@ void GuiApp::finish()
         m->onDeinit();
     }
 
-    m_globalModule.onDeinit();
+    m_globalModule->onDeinit();
 
     for (modularity::IModuleSetup* m : m_modules) {
         m->onDestroy();
     }
 
-    m_globalModule.onDestroy();
+    m_globalModule->onDestroy();
 
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
+
+    delete m_globalModule;
+    m_globalModule = nullptr;
+
+    muse::modularity::resetAll();
 
     BaseApplication::finish();
 }
@@ -552,6 +558,6 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
     }
 
     if (options.app.loggerLevel) {
-        m_globalModule.setLoggerLevel(options.app.loggerLevel.value());
+        m_globalModule->setLoggerLevel(options.app.loggerLevel.value());
     }
 }

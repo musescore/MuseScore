@@ -55,6 +55,7 @@ public:
 
     void registerExports() override;
     void onPreInit(const IApplication::RunMode& mode) override;
+    void onDeinit() override;
 
 private:
     std::shared_ptr<AccessibilityController> m_controller;

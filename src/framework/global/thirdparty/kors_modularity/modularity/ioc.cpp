@@ -94,3 +94,11 @@ void kors::modularity::removeIoC(const ContextPtr& ctx)
         s_contexts.erase(it);
     }
 }
+
+void kors::modularity::resetAll()
+{
+    for (auto& c : s_contexts) {
+        c.second->reset();
+    }
+    globalIoc()->reset();
+}
