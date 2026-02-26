@@ -46,7 +46,7 @@ static constexpr std::string_view AUTOREPEAT_TAG("autorepeat");
 
 static const std::string SHORTCUTS_RESOURCE_NAME("SHORTCUTS");
 
-static const std::map<QKeySequence::StandardKey, int> SHORTCUTS_EXPAND_IGNORE_MAP = {
+static const std::map<QKeySequence::StandardKey, QKeyCombination> SHORTCUTS_EXPAND_IGNORE_MAP = {
     { QKeySequence::StandardKey::HelpContents, Qt::Key_Help },
     { QKeySequence::StandardKey::Open, Qt::Key_Open },
     { QKeySequence::StandardKey::Close, Qt::Key_Close },
