@@ -65,6 +65,11 @@ inline void removeIoC(const ContextPtr& ctx = nullptr)
 {
     kors::modularity::removeIoC(ctx);
 }
+
+inline void resetAll()
+{
+    kors::modularity::resetAll();
+}
 }
 
 namespace muse {

@@ -82,6 +82,8 @@ IContextSetup* AccessibilityModule::newContext(const muse::modularity::ContextPt
 // Context
 void AccessibilityContext::registerExports()
 {
+    //! FIXME AccessibilityController has a global component and a contextual component.
+    // It probably needs to be split into two separate classes.
     m_controller = std::make_shared<AccessibilityController>(iocContext());
     ioc()->registerExport<IAccessibilityController>(mname, m_controller);
 }
@@ -89,4 +91,9 @@ void AccessibilityContext::registerExports()
 void AccessibilityContext::onPreInit(const IApplication::RunMode&)
 {
     m_controller->setAccessibilityEnabled(true);
+}
+
+void AccessibilityContext::onDeinit()
+{
+    m_controller->deinit();
 }

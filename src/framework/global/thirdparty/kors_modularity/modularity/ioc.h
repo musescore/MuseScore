@@ -42,6 +42,7 @@ ModulesIoCBase* ioc(const ContextPtr& ctx);
 #endif
 
 void removeIoC(const ContextPtr& ctx);
+void resetAll();
 
 //! NOTE Internal base class
 template<class I>
@@ -68,22 +69,21 @@ public:
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
-            static std::string_view module = "";
             if constexpr (I::modularity_isGlobalInterface()) {
-                m_i = globalIoc()->template resolve<I>(module);
+                doResolve(globalIoc());
             } else {
 #ifdef IOC_CHECK_INTERFACE_TYPE
-                m_i = ioc(iocContext())->template resolve<I>(module);
+                doResolve(ioc(iocContext()));
 #else
                 if (iocContext()) {
-                    m_i = ioc(iocContext())->template resolve<I>(module);
+                    doResolve(ioc(iocContext()));
                     if (!m_i) {
                         //! NOTE Temporary for compatibility
-                        m_i = globalIoc()->template resolve<I>(module);
+                        doResolve(globalIoc());
                     }
                 } else {
                     //! NOTE Temporary for compatibility
-                    m_i = globalIoc()->template resolve<I>(module);
+                    doResolve(globalIoc());
                 }
 #endif
             }
@@ -113,9 +113,23 @@ protected:
     {
     }
 
+    template<class C>
+    void doResolve(const C& ioc) const
+    {
+        static std::string_view module = "";
+        m_i = ioc->template resolve<I>(module);
+        if (m_i) {
+            m_subscriber.onChanged = [this](const std::shared_ptr<I>& p) {
+                m_i = p;
+            };
+            ioc->template subscribe<I>(&m_subscriber);
+        }
+    }
+
     const ContextPtr m_ctx;
     const Contextable* m_inj = nullptr;
     mutable std::shared_ptr<I> m_i = nullptr;
+    mutable Subscriber<I> m_subscriber;
 };
 
 template<class I>

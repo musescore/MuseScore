@@ -31,6 +31,7 @@ Environment::Modules Environment::m_dependencyModules;
 Environment::PreInit Environment::m_preInit;
 Environment::PostInit Environment::m_postInit;
 Environment::PostInit Environment::m_deInit;
+muse::GlobalModule* Environment::m_globalModule = nullptr;
 
 void Environment::setDependency(const Modules& modules)
 {
@@ -54,16 +55,15 @@ void Environment::setDeInit(const DeInit& deInit)
 
 void Environment::setup()
 {
-    static muse::GlobalModule globalModule;
-
     IApplication::RunMode runMode = IApplication::RunMode::GuiApp;
 
-    globalModule.registerResources();
-    globalModule.registerExports();
-    globalModule.registerUiTypes();
+    m_globalModule = new GlobalModule();
+    m_globalModule->registerResources();
+    m_globalModule->registerExports();
+    m_globalModule->registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_dependencyModules) {
-        m->setApplication(globalModule.application());
+        m->setApplication(m_globalModule->application());
         m->registerResources();
     }
 
@@ -71,13 +71,13 @@ void Environment::setup()
         m->registerExports();
     }
 
-    globalModule.resolveImports();
+    m_globalModule->resolveImports();
     for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerUiTypes();
         m->resolveImports();
     }
 
-    globalModule.onPreInit(runMode);
+    m_globalModule->onPreInit(runMode);
     //! NOTE Now we can use logger and profiler
 
     for (modularity::IModuleSetup* m : m_dependencyModules) {
@@ -88,17 +88,17 @@ void Environment::setup()
         m_preInit();
     }
 
-    globalModule.onInit(runMode);
+    m_globalModule->onInit(runMode);
     for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onInit(runMode);
     }
 
-    globalModule.onAllInited(runMode);
+    m_globalModule->onAllInited(runMode);
     for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onAllInited(runMode);
     }
 
-    globalModule.onStartApp();
+    m_globalModule->onStartApp();
     for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->onStartApp();
     }
@@ -113,4 +113,24 @@ void Environment::deinit()
     if (m_deInit) {
         m_deInit();
     }
+
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
+        m->onDeinit();
+    }
+
+    m_globalModule->onDeinit();
+
+    for (modularity::IModuleSetup* m : m_dependencyModules) {
+        m->onDestroy();
+    }
+
+    m_globalModule->onDestroy();
+
+    qDeleteAll(m_dependencyModules);
+    m_dependencyModules.clear();
+
+    delete m_globalModule;
+    m_globalModule = nullptr;
+
+    muse::modularity::resetAll();
 }
