@@ -79,6 +79,8 @@ struct TefNote {
     bool hasGrace { false };
     int graceEffect{ -1 };  // invalid
     int graceFret { -1 };   // invalid
+    int fingeringLH { 0 };
+    int fingeringRH { 0 };
 };
 
 struct TefReadingListItem {
