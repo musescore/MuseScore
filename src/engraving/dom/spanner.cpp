@@ -424,6 +424,7 @@ Spanner::Spanner(const Spanner& s)
     : EngravingItem(s)
 {
     m_playSpanner  = s.m_playSpanner;
+    m_playOnPasses = s.m_playOnPasses;
     m_anchor       = s.m_anchor;
     m_startElement = s.m_startElement;
     m_endElement   = s.m_endElement;
@@ -605,6 +606,8 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::PLAY:
         return m_playSpanner;
+    case Pid::PLAY_ON_PASSES:
+        return m_playOnPasses;
     case Pid::SPANNER_TICK:
         return m_tick;
     case Pid::SPANNER_TICKS:
@@ -638,6 +641,9 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::PLAY:
         setPlaySpanner(v.toBool());
+        break;
+    case Pid::PLAY_ON_PASSES:
+        setPlayOnPasses(v.value<std::vector<int> >());
         break;
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
@@ -696,6 +702,8 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::PLAY:
         return true;
+    case Pid::PLAY_ON_PASSES:
+        return std::vector<int>();
     case Pid::ANCHOR:
         return int(Anchor::SEGMENT);
     default:

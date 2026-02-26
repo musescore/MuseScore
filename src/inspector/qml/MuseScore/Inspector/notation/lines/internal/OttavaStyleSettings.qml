@@ -65,13 +65,22 @@ FocusableItem {
             navigation.row: typeSection.navigationRowEnd + 1
         }
 
+        TextSection {
+            id: playbackPasses
+            titleText: qsTrc("inspector", "Playback passes")
+            propertyItem: root.model ? root.model.playbackPasses : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: showNumbersOnlyCheckBox.navigation.row + 1
+        }
+
         SeparatorLine { anchors.margins: -12 }
 
         LineWithHooksCommonStyleSettings {
             model: root.model
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: showNumbersOnlyCheckBox.navigation.row + 1
+            navigationRowStart: playbackPasses.navigationRowStart + 2
         }
     }
 }

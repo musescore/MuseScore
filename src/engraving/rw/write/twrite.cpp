@@ -2433,6 +2433,7 @@ void TWrite::write(const Ottava* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::OTTAVA_TYPE);
     writeProperty(item, xml, Pid::PLACEMENT);
     writeProperty(item, xml, Pid::NUMBERS_ONLY);
+    writeProperty(item, xml, Pid::PLAY_ON_PASSES);
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
