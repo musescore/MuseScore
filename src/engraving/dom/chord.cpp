@@ -78,6 +78,12 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+NoteParenthesisInfo::NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList)
+    : leftParen(lParen), rightParen(rParen), notes(nList)
+{
+    std::sort(notes.begin(), notes.end(), noteIsBefore);
+}
+
 //---------------------------------------------------------
 //   upNote
 //---------------------------------------------------------
@@ -1368,7 +1374,7 @@ void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
         return;
     }
 
-    noteParenInfo->notes.push_back(note);
+    noteParenInfo->notes.insert(std::upper_bound(noteParenInfo->notes.begin(), noteParenInfo->notes.end(), note, noteIsBefore), note);
 }
 
 void Chord::removeNoteFromParenInfo(Note* note, const Parenthesis* paren)
