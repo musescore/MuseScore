@@ -189,13 +189,13 @@ void EditChord::undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Pare
                                     bool removeFromLinked)
 {
     if (!removeFromLinked) {
-        doRemoveAllNoteParens(chord, notes, leftParen, rightParen);
+        doRemoveAllNoteParens(chord, leftParen);
         return;
     }
 
     for (EngravingObject* linkedObject : chord->linkList()) {
         if (linkedObject == chord) {
-            doRemoveAllNoteParens(chord, notes, leftParen, rightParen);
+            doRemoveAllNoteParens(chord, leftParen);
             continue;
         }
 
@@ -214,17 +214,18 @@ void EditChord::undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Pare
             linkedNotes.push_back(linkedNote);
         }
 
-        doRemoveAllNoteParens(linkedChord, linkedNotes, linkedLeftParen, linkedRightParen);
+        doRemoveAllNoteParens(linkedChord, linkedLeftParen);
     }
 }
 
 void EditChord::doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen)
 {
+    NoteParenthesisInfo* parenInfo = new NoteParenthesisInfo(leftParen, rightParen, notes);
     if (leftParen->generated()) {
-        chord->addNoteParenInfo(leftParen, rightParen, notes);
+        chord->addNoteParenInfo(parenInfo);
     } else {
         Score* score = chord->score();
-        score->undo(new AddNoteParentheses(chord, notes, leftParen, rightParen));
+        score->undo(new AddNoteParenthesisInfo(chord, parenInfo));
     }
 }
 
@@ -240,17 +241,21 @@ void EditChord::doRemoveSingleNoteParen(Chord* chord, Note* note, Parenthesis* l
     }
 }
 
-void EditChord::doRemoveAllNoteParens(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen)
+void EditChord::doRemoveAllNoteParens(Chord* chord, Parenthesis* leftParen)
 {
     if (leftParen->generated()) {
         const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenInfo(leftParen);
 
         chord->removeNoteParenInfo(noteParenInfo);
+        //! HACK: don't delete as it may still be used in Inspector - see Score::doUndoRemoveElement
+        // delete noteParenInfo
 
         chord->triggerLayout();
     } else {
         Score* score = chord->score();
-        score->undo(new RemoveNoteParentheses(chord, notes, leftParen, rightParen));
+        NoteParenthesisInfo* noteParenInfo = chord->findNoteParenInfo(leftParen);
+
+        score->undo(new RemoveNoteParenthesisInfo(chord, noteParenInfo));
     }
 }
 
@@ -320,34 +325,48 @@ void ChangeSpanArpeggio::flip(EditData*)
     m_spanArpeggio = f_spanArp;
 }
 
-void AddNoteParentheses::redo(EditData*)
+void AddNoteParenthesisInfo::redo(EditData*)
 {
-    m_chord->addNoteParenInfo(m_leftParen, m_rightParen, m_notes);
-}
-
-void AddNoteParentheses::undo(EditData*)
-{
-    const NoteParenthesisInfo* noteParenInfo = m_chord->findNoteParenInfo(m_leftParen);
-
-    m_chord->removeNoteParenInfo(noteParenInfo);
+    m_chord->addNoteParenInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void RemoveNoteParentheses::redo(EditData*)
+void mu::engraving::AddNoteParenthesisInfo::undo(EditData*)
 {
-    const NoteParenthesisInfo* noteParenInfo = m_chord->findNoteParenInfo(m_leftParen);
-
-    m_chord->removeNoteParenInfo(noteParenInfo);
+    m_chord->removeNoteParenInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
 }
 
-void RemoveNoteParentheses::undo(EditData*)
+void AddNoteParenthesisInfo::cleanup(bool undo)
 {
-    m_chord->addNoteParenInfo(m_leftParen, m_rightParen, m_notes);
+    if (!undo) {
+        delete m_noteParenInfo;
+        m_noteParenInfo = nullptr;
+    }
+}
+
+void RemoveNoteParenthesisInfo::redo(EditData*)
+{
+    m_chord->removeNoteParenInfo(m_noteParenInfo);
 
     m_chord->triggerLayout();
+}
+
+void RemoveNoteParenthesisInfo::undo(EditData*)
+{
+    m_chord->addNoteParenInfo(m_noteParenInfo);
+
+    m_chord->triggerLayout();
+}
+
+void RemoveNoteParenthesisInfo::cleanup(bool undo)
+{
+    if (undo) {
+        delete m_noteParenInfo;
+        m_noteParenInfo = nullptr;
+    }
 }
 
 void RemoveSingleNoteParentheses::redo(EditData*)

@@ -41,7 +41,7 @@ private:
 
     static void doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
     static void doRemoveSingleNoteParen(Chord* chord, Note* note, Parenthesis* leftParen);
-    static void doRemoveAllNoteParens(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
+    static void doRemoveAllNoteParens(Chord* chord, Parenthesis* leftParen);
 };
 
 class ChangeChordStaffMove : public UndoCommand
@@ -96,52 +96,52 @@ public:
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
 
-class AddNoteParentheses : public UndoCommand
+class AddNoteParenthesisInfo : public UndoCommand
 {
-    OBJECT_ALLOCATOR(engraving, AddNoteParentheses)
-
-    Chord* m_chord = nullptr;
-    std::vector<Note*> m_notes;
-    Parenthesis* m_leftParen = nullptr;
-    Parenthesis* m_rightParen = nullptr;
+    OBJECT_ALLOCATOR(engraving, AddNoteParenthesisInfo)
 
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-public:
-    AddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen)
-        : m_chord(chord), m_notes(notes), m_leftParen(leftParen), m_rightParen(rightParen) {}
-
-    UNDO_NAME("AddNoteParentheses")
-    UNDO_TYPE(CommandType::AddNoteParentheses)
-    UNDO_CHANGED_OBJECTS({ m_chord, m_leftParen, m_rightParen })
-};
-class RemoveNoteParentheses : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, RemoveNoteParentheses)
+    void cleanup(bool undo) override;
 
     Chord* m_chord = nullptr;
-    std::vector<Note*> m_notes;
-    Parenthesis* m_leftParen = nullptr;
-    Parenthesis* m_rightParen = nullptr;
+    NoteParenthesisInfo* m_noteParenInfo = nullptr;
+
+public:
+    AddNoteParenthesisInfo(Chord* chord, NoteParenthesisInfo* noteParenInfo)
+        : m_chord(chord), m_noteParenInfo(noteParenInfo) {}
+
+    UNDO_NAME("AddNoteParenthesesInfo")
+    UNDO_TYPE(CommandType::AddNoteParenthesesInfo)
+};
+
+class RemoveNoteParenthesisInfo : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveNoteParenthesisInfo)
 
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-public:
-    RemoveNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen)
-        : m_chord(chord), m_notes(notes), m_leftParen(leftParen), m_rightParen(rightParen) {}
+    void cleanup(bool undo) override;
 
-    UNDO_NAME("RemoveNoteParentheses")
-    UNDO_TYPE(CommandType::RemoveNoteParentheses)
-    UNDO_CHANGED_OBJECTS({ m_chord, m_leftParen, m_rightParen })
+    Chord* m_chord = nullptr;
+    NoteParenthesisInfo* m_noteParenInfo = nullptr;
+
+public:
+    RemoveNoteParenthesisInfo(Chord* chord, NoteParenthesisInfo* noteParenInfo)
+        : m_chord(chord), m_noteParenInfo(noteParenInfo) {}
+
+    UNDO_NAME("RemoveNoteParenthesesInfo")
+    UNDO_TYPE(CommandType::RemoveNoteParenthesesInfo)
 };
+
 class RemoveSingleNoteParentheses : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSingleNoteParentheses)
 
     Chord* m_chord = nullptr;
-    Note* m_note;
+    Note* m_note = nullptr;
     Parenthesis* m_paren = nullptr;
 
     void redo(EditData*) override;
@@ -149,9 +149,7 @@ class RemoveSingleNoteParentheses : public UndoCommand
 
 public:
     RemoveSingleNoteParentheses(Chord* chord, Note* note, Parenthesis* paren)
-        : m_chord(chord), m_note(note), m_paren(paren)
-    {
-    }
+        : m_chord(chord), m_note(note), m_paren(paren) {}
 
     UNDO_NAME("RemoveSingleNoteParentheses")
     UNDO_TYPE(CommandType::RemoveSingleNoteParentheses)
