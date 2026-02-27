@@ -7944,9 +7944,9 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part, const std::vecto
             if (needWriteLineDistance || needWriteMag) {
                 XmlWriter::Attributes scaleAttributes;
                 if (needWriteMag) {
-                    attributes.emplace_back(std::make_pair("scale", mag));
+                    scaleAttributes.emplace_back(std::make_pair("scaling", mag * 100));
                 }
-                xml.element("staff-size", scaleAttributes, lineDistance * 100);
+                xml.element("staff-size", scaleAttributes, mag * lineDistance * 100);
             }
 
             xml.endElement();
