@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 
 #include "project/inotationreadersregister.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 #include "internal/meireader.h"
 #include "internal/meiwriter.h"
 
@@ -54,9 +54,9 @@ void MeiModule::resolveImports()
         readers->reg({ "mei" }, std::make_shared<MeiReader>(muse::modularity::globalCtx()));
     }
 
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mei" }, std::make_shared<MeiWriter>());
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "mei" }, std::make_shared<MeiWriter>());
     }
 }
 

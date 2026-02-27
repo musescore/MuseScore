@@ -21,7 +21,7 @@
  */
 #include "engravingpluginapihelper.h"
 
-#include "inotationwriter.h"
+#include "types/projecttypes.h"
 #include "types/projecttypes.h"
 
 #include "log.h"
@@ -66,18 +66,18 @@ void EngravingPluginAPIHelper::closeScore()
     projectFilesController()->closeOpenedProject();
 }
 
-std::optional<INotationWriter::UnitType> EngravingPluginAPIHelper::determineWriterUnitType(const std::string& ext) const
+std::optional<WriteUnitType> EngravingPluginAPIHelper::determineWriterUnitType(const std::string& ext) const
 {
-    const INotationWriterPtr writer = writers()->writer(ext);
-    if (!writer) {
+    auto projectWriter = projectRW()->writer(ext);
+    if (!projectWriter) {
         return std::nullopt;
     }
 
-    if (writer->supportsUnitType(INotationWriter::UnitType::PER_PAGE)) {
-        return INotationWriter::UnitType::PER_PAGE;
-    } else if (writer->supportsUnitType(INotationWriter::UnitType::PER_PART)) {
-        return INotationWriter::UnitType::PER_PART;
+    if (projectWriter->supportsUnitType(WriteUnitType::PER_PAGE)) {
+        return WriteUnitType::PER_PAGE;
+    } else if (projectWriter->supportsUnitType(WriteUnitType::PER_PART)) {
+        return WriteUnitType::PER_PART;
     } else {
-        return INotationWriter::UnitType::MULTI_PART;
+        return WriteUnitType::MULTI_PART;
     }
 }

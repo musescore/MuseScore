@@ -17,6 +17,7 @@
 #include "modularity/ioc.h"
 #include "notation/notationmodule.h"
 #include "project/inotationproject.h"
+#include "project/iprojectwriter.h"
 #include "project/iprojectconfiguration.h"
 #include "project/iprojectcreator.h"
 #include "project/projectmodule.h"
@@ -130,7 +131,12 @@ std::vector<uint8_t> PreviewProviderCxx::getPdfPreviewData(const std::string& fi
     buffer.open(muse::io::IODevice::WriteOnly);
 
     mu::iex::imagesexport::PdfWriter pdfWriter;
-    pdfWriter.write(project->masterNotation()->notation(), buffer);
+    mu::project::WriteOptions options;
+    options[mu::project::WriteOptionKey::UNIT_TYPE] = muse::Val(static_cast<int>(mu::project::WriteUnitType::PER_PART));
+    options[mu::project::WriteOptionKey::NOTATIONS] = muse::Val(muse::ValList {
+        muse::Val(project->masterNotation()->notation()->id().toStdString())
+    });
+    pdfWriter.write(project, buffer, options);
 
     muse::ByteArray byteArray = buffer.data();
     std::vector<uint8_t> data = byteArray.vdata();

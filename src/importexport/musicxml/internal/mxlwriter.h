@@ -27,6 +27,9 @@ namespace mu::iex::musicxml {
 class MxlWriter : public MusicXmlWriter
 {
 public:
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 };
 }

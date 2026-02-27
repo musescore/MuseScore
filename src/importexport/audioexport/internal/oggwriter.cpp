@@ -22,14 +22,11 @@
 
 #include "oggwriter.h"
 
-#include "log.h"
-
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
-using namespace muse;
-using namespace muse::io;
 
-Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+muse::Ret OggWriter::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                           const project::WriteOptions& /*options*/)
 {
     const SoundTrackFormat format {
         SoundTrackType::OGG,
@@ -42,5 +39,5 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         128 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(project, destinationDevice, format);
 }

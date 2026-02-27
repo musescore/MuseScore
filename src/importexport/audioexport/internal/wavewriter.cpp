@@ -22,13 +22,11 @@
 
 #include "wavewriter.h"
 
-#include "log.h"
-
-using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+muse::Ret WaveWriter::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                            const project::WriteOptions& /*options*/)
 {
     const SoundTrackFormat format {
         SoundTrackType::WAV,
@@ -41,5 +39,5 @@ Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destination
         0 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(project, destinationDevice, format);
 }

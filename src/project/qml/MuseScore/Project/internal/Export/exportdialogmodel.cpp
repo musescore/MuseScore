@@ -25,6 +25,8 @@
 
 #include <QItemSelectionModel>
 
+#include "app_config.h"
+
 #include "async/async.h"
 #include "translation.h"
 #include "log.h"
@@ -34,9 +36,7 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::iex::musicxml;
 
-using UnitType = INotationWriter::UnitType;
-
-static const UnitType DEFAULT_EXPORT_UNITTYPE = UnitType::PER_PART;
+static const WriteUnitType DEFAULT_EXPORT_UNITTYPE = WriteUnitType::PER_PART;
 
 ExportDialogModel::ExportDialogModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
@@ -89,6 +89,11 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "AudioSettingsPage.qml"),
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+        ExportType::makeWithSuffixes({ "mp4" },
+                                     muse::qtrc("project/export", "MP4 video"),
+                                     muse::qtrc("project/export", "MP4 video files")),
+#endif
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
                                      muse::qtrc("project/export", "MIDI file"),
                                      muse::qtrc("project/export", "MIDI files"),
@@ -289,7 +294,7 @@ void ExportDialogModel::setExportType(const ExportType& type)
     emit availableSampleFormatsChanged();
     emit selectedSampleFormatChanged();
 
-    std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
+    std::vector<WriteUnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
@@ -325,15 +330,15 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 
 QVariantList ExportDialogModel::availableUnitTypes() const
 {
-    QMap<UnitType, QString> unitTypeNames {
-        { UnitType::PER_PAGE, muse::qtrc("project/export", "Each page to a separate file") },
-        { UnitType::PER_PART, muse::qtrc("project/export", "Each part to a separate file") },
-        { UnitType::MULTI_PART, muse::qtrc("project/export", "All parts combined in one file") },
+    QMap<WriteUnitType, QString> unitTypeNames {
+        { WriteUnitType::PER_PAGE, muse::qtrc("project/export", "Each page to a separate file") },
+        { WriteUnitType::PER_PART, muse::qtrc("project/export", "Each part to a separate file") },
+        { WriteUnitType::MULTI_PART, muse::qtrc("project/export", "All parts combined in one file") },
     };
 
     QVariantList result;
 
-    for (UnitType type : exportProjectScenario()->supportedUnitTypes(m_selectedExportType)) {
+    for (WriteUnitType type : exportProjectScenario()->supportedUnitTypes(m_selectedExportType)) {
         QVariantMap obj;
         obj["text"] = unitTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -350,10 +355,10 @@ int ExportDialogModel::selectedUnitType() const
 
 void ExportDialogModel::setUnitType(int unitType)
 {
-    setUnitType(static_cast<UnitType>(unitType));
+    setUnitType(static_cast<WriteUnitType>(unitType));
 }
 
-void ExportDialogModel::setUnitType(UnitType unitType)
+void ExportDialogModel::setUnitType(WriteUnitType unitType)
 {
     if (m_selectedUnitType == unitType) {
         return;
@@ -412,7 +417,7 @@ bool ExportDialogModel::exportScores()
     struct Params {
         INotationPtrList notations;
         muse::io::path_t exportPath;
-        project::INotationWriter::UnitType selectedUnitType;
+        project::WriteUnitType selectedUnitType;
         bool openFolderOnExport = false;
     };
 

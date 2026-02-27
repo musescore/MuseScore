@@ -22,7 +22,6 @@
 
 #include "mscnotationwriter.h"
 
-#include "io/buffer.h"
 #include "io/file.h"
 
 #include "engraving/engravingproject.h"
@@ -41,25 +40,24 @@ MscNotationWriter::MscNotationWriter(engraving::MscIoMode mode)
 {
 }
 
-std::vector<INotationWriter::UnitType> MscNotationWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> MscNotationWriter::supportedUnitTypes() const
 {
-    return { UnitType::MULTI_PART };
+    return { WriteUnitType::MULTI_PART };
 }
 
-bool MscNotationWriter::supportsUnitType(UnitType unitType) const
+bool MscNotationWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const Options&)
+Ret MscNotationWriter::write(INotationProjectPtr project, io::IODevice& device, const WriteOptions& /*options*/)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::Score* score = notation->elements()->msScore();
-
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -85,7 +83,7 @@ Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const 
         return Ret(Ret::Code::UnknownError);
     }
 
-    notation->elements()->msScore()->masterScore()->project().lock()->writeMscz(msczWriter, true);
+    score->masterScore()->project().lock()->writeMscz(msczWriter, true);
 
     msczWriter.close();
 
@@ -97,8 +95,15 @@ Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const 
     return Ret(Ret::Code::Ok);
 }
 
-Ret MscNotationWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
+Ret MscNotationWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
 {
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
+    muse::io::File file(filePath);
+    file.setMeta("file_path", filePath.toStdString());
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
 }

@@ -55,6 +55,8 @@ class INotation
 public:
     virtual ~INotation() = default;
 
+    virtual muse::ID id() const = 0;
+
     virtual project::INotationProject* project() const = 0;
     virtual IMasterNotationPtr masterNotation() const = 0;
 

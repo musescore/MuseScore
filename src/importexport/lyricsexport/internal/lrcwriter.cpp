@@ -37,22 +37,34 @@ using namespace Qt::Literals;
 using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
+using namespace mu::notation;
 using namespace mu::project;
 using namespace mu::iex::lrcexport;
 
-std::vector<INotationWriter::UnitType> LRCWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> LRCWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool LRCWriter::supportsUnitType(UnitType ut) const { return ut == UnitType::PER_PART; }
+bool LRCWriter::supportsUnitType(WriteUnitType ut) const { return ut == WriteUnitType::PER_PART; }
 
-muse::Ret LRCWriter::write(notation::INotationPtr notation, muse::io::IODevice& device, const Options&)
+muse::Ret LRCWriter::write(project::INotationProjectPtr project, muse::io::IODevice& device, const WriteOptions& /*options*/)
 {
-    Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
     bool enhancedLrc = configuration()->lrcUseEnhancedFormat();
 
     return doWrite(score, &device, enhancedLrc);
+}
+
+muse::Ret LRCWriter::write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(muse::io::IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
 }
 
 bool LRCWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc)
@@ -65,11 +77,6 @@ bool LRCWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& 
     outBuf.close();
 
     return File::writeFile(path, outBuf.data());
-}
-
-muse::Ret LRCWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
-{
-    return make_ret(Ret::Code::NotSupported);
 }
 
 void LRCWriter::writeMetadata(muse::io::IODevice* device, const engraving::Score* score) const

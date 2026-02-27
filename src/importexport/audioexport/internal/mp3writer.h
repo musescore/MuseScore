@@ -32,7 +32,8 @@ public:
     Mp3Writer(const muse::modularity::ContextPtr& iocCtx)
         : AbstractAudioWriter(iocCtx) {}
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 };
 }
 
