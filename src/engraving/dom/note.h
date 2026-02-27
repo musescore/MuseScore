@@ -417,7 +417,7 @@ public:
 
     bool isGrace() const;
 
-    bool isPreBendStart() const;
+    bool isPreBendOrDiveStart() const;
     bool isGraceBendStart() const;
     bool isContinuationOfBend() const;
 

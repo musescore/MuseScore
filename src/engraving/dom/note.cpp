@@ -3593,7 +3593,7 @@ EngravingItem* Note::nextElement()
         return nullptr;
 
     case ElementType::NOTE: {
-        if (isPreBendStart() || isGraceBendStart()) {
+        if (isPreBendOrDiveStart() || isGraceBendStart()) {
             return bendFor()->frontSegment();
         }
 
@@ -3995,15 +3995,19 @@ bool Note::isGrace() const
     return noteType() != NoteType::NORMAL;
 }
 
-bool Note::isPreBendStart() const
+bool Note::isPreBendOrDiveStart() const
 {
     if (!isGrace()) {
         return false;
     }
 
-    GuitarBend* bend = bendFor();
+    const GuitarBend* bend = bendFor();
+    if (!bend) {
+        return false;
+    }
 
-    return bend && bend->bendType() == GuitarBendType::PRE_BEND;
+    const GuitarBendType bendType = bend->bendType();
+    return bendType == GuitarBendType::PRE_BEND || bendType == GuitarBendType::PRE_DIVE;
 }
 
 bool Note::isGraceBendStart() const
@@ -4012,7 +4016,7 @@ bool Note::isGraceBendStart() const
         return false;
     }
 
-    GuitarBend* bend = bendFor();
+    const GuitarBend* bend = bendFor();
 
     return bend && bend->bendType() == GuitarBendType::GRACE_NOTE_BEND;
 }
