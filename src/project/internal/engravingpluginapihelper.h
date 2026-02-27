@@ -28,7 +28,7 @@
 #include "context/iglobalcontext.h"
 #include "iprojectfilescontroller.h"
 #include "iexportprojectscenario.h"
-#include "inotationwritersregister.h"
+#include "iprojectrwregister.h"
 
 namespace mu::project {
 class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, public muse::Contextable
@@ -36,7 +36,7 @@ class EngravingPluginAPIHelper : public engraving::IEngravingPluginAPIHelper, pu
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
-    muse::ContextInject<INotationWritersRegister> writers = { this };
+    muse::ContextInject<IProjectRWRegister> projectRW = { this };
 
 public:
     EngravingPluginAPIHelper(const muse::modularity::ContextPtr& iocCtx)
@@ -47,6 +47,6 @@ public:
     void closeScore() override;
 
 private:
-    std::optional<INotationWriter::UnitType> determineWriterUnitType(const std::string& ext) const;
+    std::optional<WriteUnitType> determineWriterUnitType(const std::string& ext) const;
 };
 }

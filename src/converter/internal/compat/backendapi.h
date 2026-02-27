@@ -86,7 +86,7 @@ private:
     static muse::Ret devInfo(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
     static muse::RetVal<QByteArray> processWriter(const project::INotationProjectPtr project, const std::string& writerName,
-                                                  const muse::IDList& notationsIds = {});
+                                                  bool isMultiPart = false, const muse::IDList& notationsIds = {});
 
     static muse::Ret doExportScoreParts(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice);
     static muse::Ret doExportScorePartsPdfs(const project::INotationProjectPtr project, const notation::IMasterNotationPtr notation,

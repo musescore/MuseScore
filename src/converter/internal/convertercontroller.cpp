@@ -142,8 +142,8 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
 
     std::string suffix = io::suffix(out);
 
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
+    auto projectWriter = projectRW()->writer(suffix);
+    if (!projectWriter) {
         return make_ret(Err::ConvertTypeUnknown);
     }
 
@@ -199,17 +199,21 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
     // Check if this is a part conversion job
     QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
     if (baseName.contains('*')) {
-        return convertScoreParts(writer, notationProject->masterNotation(), out);
+        return convertScoreParts(projectWriter, notationProject, out);
     }
 
     // use a extension for convert
     if (extensionUri.isValid()) {
-        ret = convertByExtension(writer, notationProject->masterNotation()->notation(), out, extensionUri);
+        ret = extensionsProvider()->perform(extensionUri);
+        if (!ret) {
+            return ret;
+        }
+        ret = convertFullNotation(projectWriter, notationProject, out);
         if (!ret) {
             LOGE() << "Failed to convert by extension, err: " << ret.toString();
         }
     }
-    // standart convert
+    // standard convert
     else {
         const bool pageNumIsSet = target.has_value() && std::holds_alternative<page_num_t>(target.value());
         const bool regionIsSet = target.has_value() && std::holds_alternative<ConvertRegionJson>(target.value());
@@ -227,16 +231,17 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
         if (pageNumIsSet || isConvertPageByPage(suffix)) {
             if (pageNumIsSet) {
                 page_num_t pageNum = std::get<page_num_t>(target.value());
-                ret = convertPage(writer, notationProject->masterNotation()->notation(), pageNum, out);
+                ret = convertPage(projectWriter, notationProject, notationProject->masterNotation()->notation(),
+                                  pageNum, out);
             } else {
-                ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
+                ret = convertPageByPage(projectWriter, notationProject, notationProject->masterNotation()->notation(), out);
             }
 
             if (!ret) {
                 LOGE() << "Failed to convert page by page, err: " << ret.toString();
             }
         } else {
-            ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
+            ret = convertFullNotation(projectWriter, notationProject, out);
             if (!ret) {
                 LOGE() << "Failed to convert full notation, err: " << ret.toString();
             }
@@ -260,8 +265,8 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
     }
 
     std::string suffix = io::suffix(out);
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
+    auto projectWriter = projectRW()->writer(suffix);
+    if (!projectWriter) {
         return make_ret(Err::ConvertTypeUnknown);
     }
 
@@ -271,24 +276,23 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
         return make_ret(Err::InFileFailedLoad);
     }
 
-    ret = convertScoreParts(writer, notationProject->masterNotation(), out);
-
-    return ret;
+    return convertScoreParts(projectWriter, notationProject, out);
 }
 
-Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const muse::io::path_t& out)
+Ret ConverterController::convertScoreParts(IProjectWriterPtr writer, INotationProjectPtr project,
+                                           const muse::io::path_t& out)
 {
+    static const std::vector<std::string> SUPPORTED_TYPES = {
+        PDF_SUFFIX, PNG_SUFFIX, MP3_SUFFIX
+    };
+
     std::string suffix = io::suffix(out);
 
-    if (suffix == PDF_SUFFIX) {
-        return convertScorePartsToPdf(writer, masterNotation, out);
-    } else if (suffix == PNG_SUFFIX) {
-        return convertScorePartsToPngs(writer, masterNotation, out);
-    } else if (suffix == MP3_SUFFIX) {
-        return convertScorePartsToMp3(writer, masterNotation, out);
+    if (!muse::contains(SUPPORTED_TYPES, suffix)) {
+        return make_ret(Ret::Code::NotSupported);
     }
 
-    return make_ret(Ret::Code::NotSupported);
+    return doConvertScorePartsExcerpts(writer, project, out, suffix);
 }
 
 RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const muse::io::path_t& batchJobFile) const
@@ -404,34 +408,6 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
     return rv;
 }
 
-Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
-                                            const muse::UriQuery& extensionUri)
-{
-    //! NOTE First we do the extension, it can modify the notation (score)
-    Ret ret = extensionsProvider()->perform(extensionUri);
-    if (!ret) {
-        return ret;
-    }
-
-    auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-    outBuf.setMeta("file_path", out.toStdString());
-    ret = writer->write(notation, outBuf);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    outBuf.close();
-    ret = File::writeFile(out, outBuf.data());
-    if (!ret) {
-        LOGE() << "failed to write file: " << ret.toString();
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    return make_ret(Ret::Code::Ok);
-}
-
 bool ConverterController::isConvertPageByPage(const std::string& suffix) const
 {
     static const std::unordered_set<std::string> TYPES {
@@ -442,16 +418,17 @@ bool ConverterController::isConvertPageByPage(const std::string& suffix) const
     return muse::contains(TYPES, suffix);
 }
 
-Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertPageByPage(IProjectWriterPtr writer, INotationProjectPtr project,
+                                           INotationPtr notation, const muse::io::path_t& out) const
 {
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
         const String filePath = muse::io::path_t(io::dirpath(out) + "/"
                                                  + io::completeBasename(out) + "-%1."
-                                                 + io::suffix(out)).toString().arg(i + 1);
+                                                 + io::suffix(out)).toString().arg(static_cast<int>(i + 1));
 
-        Ret ret = convertPage(writer, notation, i, filePath, out);
+        Ret ret = convertPage(writer, project, notation, i, filePath, out);
         if (!ret) {
             return ret;
         }
@@ -460,23 +437,24 @@ Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationP
     return make_ret(Ret::Code::Ok);
 }
 
-muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationPtr notation, const size_t pageNum,
-                                           const muse::io::path_t& filePath, const muse::io::path_t& dirPath) const
+Ret ConverterController::convertPage(IProjectWriterPtr writer, INotationProjectPtr project,
+                                     INotationPtr notation, const size_t pageNum,
+                                     const muse::io::path_t& filePath, const muse::io::path_t& dirPath) const
 {
     TRACEFUNC;
 
+    WriteOptions options;
+    options[WriteOptionKey::UNIT_TYPE] = Val(static_cast<int>(WriteUnitType::PER_PAGE));
+    options[WriteOptionKey::PAGE_NUMBER] = Val(static_cast<int>(pageNum));
+    options[WriteOptionKey::NOTATIONS] = Val(ValList { Val(notation->id().toStdString()) });
+
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-    const INotationWriter::Options options {
-        { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(pageNum)) },
-    };
-
     outBuf.setMeta("file_path", filePath.toStdString());
     if (!dirPath.empty()) {
         outBuf.setMeta("dir_path", dirPath.toStdString());
     }
 
-    Ret ret = writer->write(notation, outBuf, options);
+    Ret ret = writer->write(project, outBuf, options);
     if (!ret) {
         return make_ret(Err::OutFileFailedWrite);
     }
@@ -490,104 +468,42 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
     return make_ok();
 }
 
-Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertFullNotation(IProjectWriterPtr writer, INotationProjectPtr project, const muse::io::path_t& out) const
 {
-    auto outBuf = Buffer::opened(IODevice::WriteOnly);
+    WriteOptions options;
+    options[WriteOptionKey::UNIT_TYPE] = Val(static_cast<int>(WriteUnitType::PER_PART));
 
-    outBuf.setMeta("file_path", out.toStdString());
-    Ret ret = writer->write(notation, outBuf);
+    Ret ret = writer->write(project, out, options);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
     }
 
-    outBuf.close();
-    ret = File::writeFile(out, outBuf.data());
-    if (!ret) {
-        LOGE() << "failed to write file: " << ret.toString();
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
     return make_ret(Ret::Code::Ok);
 }
 
-Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
-                                                const muse::io::path_t& out) const
+Ret ConverterController::doConvertScorePartsExcerpts(IProjectWriterPtr writer, INotationProjectPtr project,
+                                                     const muse::io::path_t& out, const std::string& suffix) const
 {
     TRACEFUNC;
 
-    const INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::PER_PART) },
-    };
+    QString baseNameTemplate = QString::fromStdString(io::completeBasename(out).toStdString());
 
-    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
+    auto masterNotation = project->masterNotation();
+    const auto& excerpts = masterNotation->excerpts();
+
+    for (const IExcerptNotationPtr& e : excerpts) {
+        QString baseName = baseNameTemplate;
         QString partName = e->notation()->name();
-        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
-        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".pdf";
+        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + "." + suffix;
 
-        auto outBuf = Buffer::opened(IODevice::WriteOnly);
-        Ret ret = writer->write(e->notation(), outBuf, options);
+        WriteOptions options;
+        options[WriteOptionKey::UNIT_TYPE] = Val(static_cast<int>(WriteUnitType::PER_PART));
+        options[WriteOptionKey::NOTATIONS] = Val(ValList { Val(e->notation()->id().toStdString()) });
+
+        Ret ret = writer->write(project, partOut, options);
         if (!ret) {
             LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
-            return make_ret(Err::OutFileFailedWrite);
-        }
-
-        outBuf.close();
-        ret = File::writeFile(partOut, outBuf.data());
-        if (!ret) {
-            LOGE() << "failed to write file: " << ret.toString();
-            return make_ret(Err::OutFileFailedWrite);
-        }
-    }
-
-    return make_ret(Ret::Code::Ok);
-}
-
-Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
-                                                 const muse::io::path_t& out) const
-{
-    TRACEFUNC;
-
-    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
-        QString partName = e->notation()->name();
-        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
-        muse::io::path_t pngFilePath = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".png";
-        Ret ret = convertPageByPage(writer, e->notation(), pngFilePath);
-        if (!ret) {
-            return ret;
-        }
-    }
-
-    return make_ret(Ret::Code::Ok);
-}
-
-Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
-                                                const muse::io::path_t& out) const
-{
-    TRACEFUNC;
-
-    const INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::PER_PART) },
-    };
-
-    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
-        QString partName = e->notation()->name();
-        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
-        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".mp3";
-
-        auto outBuf = Buffer::opened(IODevice::WriteOnly);
-
-        outBuf.setMeta("file_path", partOut.toStdString());
-        Ret ret = writer->write(e->notation(), outBuf, options);
-        if (!ret) {
-            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
-            return make_ret(Err::OutFileFailedWrite);
-        }
-
-        outBuf.close();
-        ret = File::writeFile(partOut, outBuf.data());
-        if (!ret) {
-            LOGE() << "failed to write file: " << ret.toString();
             return make_ret(Err::OutFileFailedWrite);
         }
     }

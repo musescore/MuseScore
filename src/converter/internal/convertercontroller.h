@@ -27,7 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "project/iprojectcreator.h"
-#include "project/inotationwritersregister.h"
 #include "project/iprojectrwregister.h"
 #include "context/iglobalcontext.h"
 #include "extensions/iextensionsprovider.h"
@@ -39,7 +38,6 @@ class ConverterController : public IConverterController, public muse::Contextabl
 {
     muse::GlobalInject<project::IProjectCreator> notationCreator;
     muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
-    muse::ContextInject<project::INotationWritersRegister> writers = { this };
     muse::ContextInject<project::IProjectRWRegister> projectRW = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
@@ -100,23 +98,17 @@ private:
                           const std::optional<ConvertTarget>& target = std::nullopt, const std::vector<size_t>& visibleParts = {},
                           const CopyrightInfo& copyright = {});
 
-    muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                const muse::io::path_t& out);
+    muse::Ret convertScoreParts(project::IProjectWriterPtr writer, project::INotationProjectPtr project, const muse::io::path_t& out);
+    muse::Ret doConvertScorePartsExcerpts(project::IProjectWriterPtr writer, project::INotationProjectPtr project,
+                                          const muse::io::path_t& out, const std::string& suffix) const;
 
-    muse::Ret convertByExtension(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
-                                 const muse::UriQuery& extensionUri);
     bool isConvertPageByPage(const std::string& suffix) const;
-    muse::Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
-    muse::Ret convertPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const size_t pageNum,
-                          const muse::io::path_t& filePath, const muse::io::path_t& dirPath = {}) const;
-    muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
-
-    muse::Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                     const muse::io::path_t& out) const;
-    muse::Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                      const muse::io::path_t& out) const;
-    muse::Ret convertScorePartsToMp3(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                     const muse::io::path_t& out) const;
+    muse::Ret convertPageByPage(project::IProjectWriterPtr writer, project::INotationProjectPtr project, notation::INotationPtr notation,
+                                const muse::io::path_t& out) const;
+    muse::Ret convertPage(project::IProjectWriterPtr writer, project::INotationProjectPtr project, notation::INotationPtr notation,
+                          const size_t pageNum, const muse::io::path_t& filePath, const muse::io::path_t& dirPath = {}) const;
+    muse::Ret convertFullNotation(project::IProjectWriterPtr writer, project::INotationProjectPtr project,
+                                  const muse::io::path_t& out) const;
 
     muse::Ret saveRegion(project::INotationProjectPtr project, const ConvertRegionJson& regionJson, const muse::io::path_t& out) const;
 
