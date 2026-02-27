@@ -185,7 +185,11 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
                 }
             }
             symName = String::fromAscii(SymNames::nameForSymId(articSym).ascii());
-        } else if (theChar) {
+        } else {
+            IF_ASSERT_FAILED(theChar) {
+                ctx.logger()->logWarning(String(u"Incomplete shape!"));
+                return false;
+            }
             articSym = FinaleTextConv::symIdFromFinaleChar(theChar, font); // articDef fonts are guaranteed non-null by musxdom
             isMusicalSymbol = ctx.fontIsEngravingFont(font, true);
             articChar = isMusicalSymbol ? FinaleTextConv::mappedChar(theChar, font) : theChar;
@@ -244,8 +248,8 @@ ReadableArticulation::ReadableArticulation(const FinaleParser& ctx, const MusxIn
         // MuseScore accounts for distance to ledger lines, Finale does not. So we use an in-between value
         arpeggioDistance -= ctx.score()->style().styleS(Sid::ledgerLineLength).val() / 2.0;
         if (arpeggioDistance > 0) {
-            ctx.score()->style().set(Sid::arpeggioNoteDistance, Spatium(arpeggioDistance));
-            ctx.score()->style().set(Sid::arpeggioAccidentalDistance, Spatium(arpeggioDistance));
+            ctx.collectGlobalProperty(Sid::arpeggioNoteDistance, Spatium(arpeggioDistance));
+            ctx.collectGlobalProperty(Sid::arpeggioAccidentalDistance, Spatium(arpeggioDistance));
         }
     } else if (articSym == SymId::graceNoteAcciaccaturaStemUp || articSym == SymId::graceNoteAcciaccaturaStemDown
                || articSym == SymId::graceNoteAppoggiaturaStemUp || articSym == SymId::graceNoteAppoggiaturaStemDown) {
@@ -550,12 +554,10 @@ void FinaleParser::importArticulations()
     };
 
     for (auto [entryNumber, cr] : m_entryNumber2CR) {
-        const MusxInstanceList<details::ArticulationAssign> articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(
-            m_currentMusxPartId, entryNumber);
+        const auto articAssignList = m_doc->getDetails()->getArray<details::ArticulationAssign>(m_currentMusxPartId, entryNumber);
         const bool isDrumStaff = cr->staff()->isDrumStaff(cr->segment()->tick());
         for (const MusxInstance<details::ArticulationAssign>& articAssign : articAssignList) {
-            const MusxInstance<others::ArticulationDef>& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId,
-                                                                                                                     articAssign->articDef);
+            const auto& articDef = m_doc->getOthers()->get<others::ArticulationDef>(m_currentMusxPartId, articAssign->articDef);
             ReadableArticulation* musxArtic = [&]() -> ReadableArticulation* {
                 // Search our converted shape library, or if not found add to it
                 ReadableArticulation* line = muse::value(m_articulations, articAssign->articDef, nullptr);
@@ -578,7 +580,7 @@ void FinaleParser::importArticulations()
             }
 
             // Fermatas
-            if (musxArtic->isFermataSym) {
+            if (musxArtic->isFermataSym && !cr->isGrace()) {
                 Fermata* fermata = Factory::createFermata(cr->segment());
                 fermata->setTrack(cr->track());
                 fermata->setPlacement(calculateUp(articAssign, articDef->autoVertMode, cr) ? PlacementV::ABOVE : PlacementV::BELOW);
@@ -914,7 +916,7 @@ void FinaleParser::importArticulations()
                 setOrnamentIntervalFromAccidental(o, c->upNote(), musxArtic->ornamentDefinition.value().accBelow, false);
                 a = toArticulation(o);
                 a->setSymId(musxArtic->ornamentDefinition.value().symId);
-            } else if (musxArtic->isArticulation) {
+            } else if (musxArtic->isArticulation || musxArtic->isFermataSym) {
                 a = Factory::createArticulation(c);
                 a->setSymId(musxArtic->articSym);
             } else {
