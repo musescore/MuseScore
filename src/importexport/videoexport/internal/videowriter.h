@@ -29,12 +29,15 @@
 #include "project/iprojectwriter.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::IProjectWriter
+class VideoWriter : public project::IProjectWriter, public muse::Contextable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::GlobalInject<muse::IApplication> application;
 
 public:
+    explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
+        : Contextable(iocCtx) {}
+
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
