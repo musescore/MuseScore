@@ -1311,6 +1311,13 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
 
     { ClefType::C4_8VB,     "C4_8VB",   muse::TranslatableString("engraving/cleftype", "Tenor clef 8va bassa") },
     { ClefType::G8_VB_C,    "G8vbc",    muse::TranslatableString("engraving/cleftype", "G clef ottava bassa with C clef") },
+    { ClefType::G_R,        "G_R",      muse::TranslatableString("engraving/cleftype", "Treble clef (Renaissance)") },
+    { ClefType::C1_R,       "C1_R",     muse::TranslatableString("engraving/cleftype", "Soprano clef (Renaissance)") },
+    { ClefType::C2_R,       "C2_R",     muse::TranslatableString("engraving/cleftype", "Mezzo-soprano clef (Renaissance)") },
+    { ClefType::C3_R,       "C3_R",     muse::TranslatableString("engraving/cleftype", "Alto clef (Renaissance)") },
+    { ClefType::C4_R,       "C4_R",     muse::TranslatableString("engraving/cleftype", "Tenor clef (Renaissance)") },
+    { ClefType::C5_R,       "C5_R",     muse::TranslatableString("engraving/cleftype", "Baritone clef (Renaissance)") },
+    { ClefType::F_R,        "F_R",      muse::TranslatableString("engraving/cleftype", "Bass clef (Renaissance)") },
 };
 
 const muse::TranslatableString& TConv::userName(ClefType v)

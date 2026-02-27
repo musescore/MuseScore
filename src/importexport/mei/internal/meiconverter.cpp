@@ -797,6 +797,48 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
             default:
                 break;
             }
+        } else if (meiClef.GetGlyphName() == "mensuralGclefPetrucci") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::G_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosLowest") {
+            switch (meiClef.GetLine()) {
+            case 1: return engraving::ClefType::C1_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosLow") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::C2_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosMiddle") {
+            switch (meiClef.GetLine()) {
+            case 3: return engraving::ClefType::C3_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosHigh") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::C4_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralCclefPetrucciPosHigest") {
+            switch (meiClef.GetLine()) {
+            case 5: return engraving::ClefType::C5_R;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "mensuralFclefPetrucci") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::F_R;
+            default:
+                break;
+            }
         } else {
             LOGD() << "Unsupported clef@glyph.name";
             // try to find a proper replacement from other attributes
@@ -910,16 +952,23 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         break;
     default:
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(engraving::ClefInfo::symId(clef));
-        meiClef.SetGlyphName(glyphName.ascii());
+        const char* glyphNameAscii = glyphName.ascii();
+        meiClef.SetGlyphName(glyphNameAscii);
         meiClef.SetGlyphAuth(SMUFL_AUTH);
-        switch (glyphName.at(0).unicode()) {
-        case 'c':
+        char16_t clefType = glyphName.at(0).unicode();
+        if (!strncmp(glyphNameAscii, "mensural", 8)) { // "mensural[CGF]clefPetrucciPos..." and "mensural[CGF]clef"
+            clefType = tolower(glyphName.at(8).unicode());
+        } else if (!strncmp(glyphNameAscii, "chant", 5)) { // "chant[CF]clef"
+            clefType = tolower(glyphName.at(5).unicode());
+        }
+        switch (clefType) {
+        case u'c':
             meiClef.SetShape(libmei::CLEFSHAPE_C);
             break;
-        case 'f':
+        case u'f':
             meiClef.SetShape(libmei::CLEFSHAPE_F);
             break;
-        case 'g':
+        case u'g':
             meiClef.SetShape(libmei::CLEFSHAPE_G);
             break;
         default:
