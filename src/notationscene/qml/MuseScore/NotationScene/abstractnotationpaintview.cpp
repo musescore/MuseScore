@@ -36,7 +36,7 @@ using namespace muse::ui;
 using namespace muse::draw;
 using namespace muse::actions;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
+static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.5;
 
 static void compensateFloatPart(RectF& rect)
 {
@@ -871,11 +871,12 @@ RectF AbstractNotationPaintView::notationContentRect() const
 RectF AbstractNotationPaintView::scrollableAreaRect() const
 {
     TRACEFUNC;
-    RectF viewport = this->viewport();
-    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
+    const RectF viewport = this->viewport();
+    const qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
 
-    qreal overscrollX = viewport.width() * overscrollFactor;
-    qreal overscrollY = viewport.height() * overscrollFactor;
+    const ViewMode& viewMode = notation()->viewMode();
+    const qreal overscrollX = viewMode == engraving::LayoutMode::LINE ? 0 : viewport.width() * overscrollFactor;
+    const qreal overscrollY = viewMode == engraving::LayoutMode::SYSTEM ? 0 : viewport.height() * overscrollFactor;
 
     return notationContentRect().adjusted(-overscrollX, -overscrollY, overscrollX, overscrollY);
 }
