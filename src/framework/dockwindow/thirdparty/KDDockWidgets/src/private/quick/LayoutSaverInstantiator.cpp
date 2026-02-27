@@ -39,7 +39,7 @@ void LayoutSaverInstantiator::componentComplete()
     assert(qmlCtx);
     const int ctx = qmlCtx->contextProperty(QStringLiteral("_kddw_context")).value<int>();
 
-    m_saver = new LayoutSaver(ctx);
+    m_saver = new LayoutSaver(ctx, RestoreOption_None);
 }
 
 bool LayoutSaverInstantiator::saveToFile(const QString &jsonFilename)
