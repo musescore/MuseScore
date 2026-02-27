@@ -75,7 +75,7 @@ class ModulesIoCBase
 {
 public:
 
-    virtual ~ModulesIoCBase() 
+    virtual ~ModulesIoCBase()
     {
         reset();
     }

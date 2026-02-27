@@ -70,6 +70,11 @@ void ProjectModule::registerExports()
     globalIoc()->registerExport<IProjectConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
     globalIoc()->registerExport<IMscMetaReader>(mname, new MscMetaReader());
+
+    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
+    globalIoc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
+    globalIoc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
+    globalIoc()->registerExport<IProjectRWRegister>(mname, new ProjectRWRegister());
 }
 
 void ProjectModule::resolveImports()
@@ -86,6 +91,18 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
         ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
+    }
+
+    auto er = globalIoc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(mname);
+    if (er) {
+        er->reg(mname, { EXEC_ONPOST_PROJECT_CREATED,
+                         TranslatableString::untranslatable("On post project created") });
+        er->reg(mname, { EXEC_ONPOST_PROJECT_OPENED,
+                         TranslatableString::untranslatable("On post project opened") });
+        er->reg(mname, { EXEC_ONPRE_PROJECT_SAVE,
+                         TranslatableString::untranslatable("On pre project save") });
+        er->reg(mname, { EXEC_ONPOST_PROJECT_SAVED,
+                         TranslatableString::untranslatable("On post project saved") });
     }
 }
 
@@ -126,11 +143,6 @@ void ProjectContext::registerExports()
     ioc()->registerExport<IProjectMigrator>(mname, new ProjectMigrator(iocContext()));
     ioc()->registerExport<IProjectAutoSaver>(mname, m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
-
-    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
-    ioc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
-    ioc()->registerExport<IProjectRWRegister>(mname, new ProjectRWRegister());
 }
 
 void ProjectContext::resolveImports()
@@ -138,18 +150,6 @@ void ProjectContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController, iocContext()));
-    }
-
-    auto er = ioc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(mname);
-    if (er) {
-        er->reg(mname, { EXEC_ONPOST_PROJECT_CREATED,
-                         TranslatableString::untranslatable("On post project created") });
-        er->reg(mname, { EXEC_ONPOST_PROJECT_OPENED,
-                         TranslatableString::untranslatable("On post project opened") });
-        er->reg(mname, { EXEC_ONPRE_PROJECT_SAVE,
-                         TranslatableString::untranslatable("On pre project save") });
-        er->reg(mname, { EXEC_ONPOST_PROJECT_SAVED,
-                         TranslatableString::untranslatable("On post project saved") });
     }
 }
 

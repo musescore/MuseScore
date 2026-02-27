@@ -35,6 +35,7 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
+    void resolveImports() override;
     void onInit(const muse::IApplication::RunMode&) override;
 
     muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
@@ -50,7 +51,5 @@ class NotationContext : public muse::modularity::IContextSetup
 public:
     NotationContext(const muse::modularity::ContextPtr& ctx)
         : muse::modularity::IContextSetup(ctx) {}
-
-    void resolveImports() override;
 };
 }

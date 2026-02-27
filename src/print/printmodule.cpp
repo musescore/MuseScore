@@ -30,12 +30,19 @@
 using namespace mu::print;
 using namespace muse::modularity;
 
+static const std::string mname("print");
+
 std::string PrintModule::moduleName() const
 {
-    return "print";
+    return mname;
 }
 
-void PrintModule::registerExports()
+IContextSetup* PrintModule::newContext(const ContextPtr& ctx) const
 {
-    globalIoc()->registerExport<IPrintProvider>(moduleName(), std::make_shared<PrintProvider>(globalCtx()));
+    return new PrintContext(ctx);
+}
+
+void PrintContext::registerExports()
+{
+    ioc()->registerExport<IPrintProvider>(mname, std::make_shared<PrintProvider>(iocContext()));
 }

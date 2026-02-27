@@ -74,6 +74,12 @@ void PaletteModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
     }
+
+    auto accr = globalIoc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>(mname);
+    if (accr) {
+        accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
+        accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
+    }
 }
 
 void PaletteModule::onInit(const IApplication::RunMode&)
@@ -101,12 +107,6 @@ void PaletteContext::resolveImports()
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(m_paletteUiActions);
-    }
-
-    auto accr = ioc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>(mname);
-    if (accr) {
-        accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
-        accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
 }
 

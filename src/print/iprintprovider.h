@@ -22,9 +22,6 @@
 #ifndef MU_PRINT_IPRINTPROVIDER_H
 #define MU_PRINT_IPRINTPROVIDER_H
 
-#include <functional>
-#include <QSizeF>
-
 #include "modularity/imoduleinterface.h"
 #include "types/ret.h"
 #include "notation/inotation.h"

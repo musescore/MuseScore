@@ -56,11 +56,6 @@ inline ModulesContextIoC* ioc(const ContextPtr& ctx)
     return kors::modularity::ioc(ctx);
 }
 
-inline ModulesGlobalIoC* fixmeIoc()
-{
-    return kors::modularity::globalIoc();
-}
-
 inline void removeIoC(const ContextPtr& ctx = nullptr)
 {
     kors::modularity::removeIoC(ctx);

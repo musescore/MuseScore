@@ -27,7 +27,7 @@
 #include "musesoundstypes.h"
 
 namespace mu::musesounds {
-class IMuseSoundsRepository : MODULE_CONTEXT_INTERFACE
+class IMuseSoundsRepository : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMuseSoundsRepository)
 

@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
 #include "types/string.h"
 #include "engraving/engravingerrors.h"
 

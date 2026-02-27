@@ -35,7 +35,7 @@ class Score;
 }
 
 namespace mu::notation {
-class PositionsWriter : public project::INotationWriter, public muse::Contextable
+class PositionsWriter : public project::INotationWriter
 {
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
 
@@ -45,8 +45,8 @@ public:
         MEASURE
     };
 
-    explicit PositionsWriter(const muse::modularity::ContextPtr& ctx);
-    explicit PositionsWriter(ElementType elementType, const muse::modularity::ContextPtr& ctx);
+    explicit PositionsWriter() = default;
+    explicit PositionsWriter(ElementType elementType);
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;

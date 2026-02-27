@@ -30,6 +30,16 @@ class PrintModule : public muse::modularity::IModuleSetup
 public:
 
     std::string moduleName() const override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class PrintContext : public muse::modularity::IContextSetup
+{
+public:
+    PrintContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
     void registerExports() override;
 };
 }
