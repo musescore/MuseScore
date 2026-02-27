@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "internal/lrcwriter.h"
 #include "internal/lyricsexportconfiguration.h"
@@ -46,9 +46,9 @@ void LyricsExportModule::registerExports()
 
 void LyricsExportModule::resolveImports()
 {
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "lrc" }, std::make_shared<LRCWriter>(muse::modularity::globalCtx()));
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "lrc" }, std::make_shared<LRCWriter>(muse::modularity::globalCtx()));
     }
 }
 

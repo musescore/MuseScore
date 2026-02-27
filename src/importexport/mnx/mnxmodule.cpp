@@ -27,7 +27,7 @@
 #include "internal/notationmnxreader.h"
 #include "internal/notationmnxwriter.h"
 #include "project/inotationreadersregister.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 using namespace muse::modularity;
 using namespace mu::iex::mnxio;
@@ -50,9 +50,9 @@ void MnxModule::resolveImports()
     if (readers) {
         readers->reg({ "mnx", "json" }, std::make_shared<NotationMnxReader>(globalCtx()));
     }
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mnx" }, std::make_shared<NotationMnxWriter>(globalCtx()));
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "mnx" }, std::make_shared<NotationMnxWriter>(globalCtx()));
     }
 }
 
