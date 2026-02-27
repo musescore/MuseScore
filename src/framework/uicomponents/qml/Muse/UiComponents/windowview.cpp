@@ -426,18 +426,14 @@ void WindowView::resolveParentWindow()
 
 QScreen* WindowView::resolveScreen() const
 {
-    QScreen* screen = nullptr;
-
-    if (!m_globalPos.isNull()) {
-        screen = QGuiApplication::screenAt(m_globalPos.toPoint());
-    } else {
-        screen = m_parentWindow ? m_parentWindow->screen() : nullptr;
+    QScreen* screen = m_parentWindow ? m_parentWindow->screen() : nullptr;
+    QScreen* virtualScreen = screen ? screen->virtualSiblingAt(viewGeometry().center()) : nullptr;
+    if (virtualScreen) {
+        return virtualScreen;
     }
-
     if (!screen) {
         screen = QGuiApplication::primaryScreen();
     }
-
     return screen;
 }
 
