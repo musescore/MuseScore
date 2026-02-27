@@ -398,6 +398,7 @@ public:
     void cmdAddBraces();
     void cmdAddFret(int fret);
     void cmdSetBeamMode(BeamMode);
+    void cmdBeamSelectedRange();
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     Tie* cmdToggleTie();
