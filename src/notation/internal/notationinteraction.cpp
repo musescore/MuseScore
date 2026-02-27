@@ -5325,6 +5325,12 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
 
     std::vector<EngravingItem*> toSelect;
     std::unordered_set<const Chord*> foundChords;
+
+    // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
+    // new notes have been created we can call cmdAddParentheses on each group...
+    using NoteList = std::list<Note*>;
+    std::unordered_map</*leftParen*/ const Parenthesis*, NoteList> parenMap;
+
     for (Note* n : notes) {
         if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
             continue;
@@ -5350,9 +5356,29 @@ void NotationInteraction::repeatListSelection(const Selection& selection)
         IF_ASSERT_FAILED(newNote) {
             continue;
         }
+
         newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
         toSelect.push_back(newNote);
+
+        const Parenthesis* leftParen = n->parenInfo() ? n->parenInfo()->leftParen : nullptr;
+        if (!leftParen) {
+            continue;
+        }
+
+        auto search = parenMap.find(leftParen);
+        if (search != parenMap.end()) {
+            NoteList& nl = search->second;
+            nl.emplace_back(newNote);
+            continue;
+        }
+
+        parenMap.emplace(leftParen, NoteList { newNote });
     }
+
+    for (auto& pair : parenMap) {
+        score()->cmdAddParenthesesToNotes(pair.second);
+    }
+
     score()->select(toSelect, SelectType::ADD);
 
     apply();
