@@ -3065,35 +3065,67 @@ EngravingItem* Score::move(const String& cmd)
         if (noteEntryMode()) {
             m_is.moveToNextInputPos();
         }
+        std::vector<EngravingItem*> els = selection().elements();
+        deselectAll();
 
-        // selection "cursor"
-        // find next chordrest, which might be a grace note
-        // this may override note input cursor
-        el = nextChordRest(cr);
+        for (EngravingItem* e : els) {
+            if (!e->isNote() && !e->isRest()) {
+                continue;
+            }
+            ChordRest* cr = nullptr;
+            size_t noteLevel = 0;
+            if (e->isNote()) {
+                Note* n = toNote(e);
+                Chord* c = n->chord();
+                cr = toChordRest(c);
+                for (size_t i = 0; i < c->notes().size(); i++) {
+                    if (c->notes()[i] == n) {
+                        noteLevel = i;
+                        break;
+                    }
+                }
+            } else {
+                cr = toChordRest(toRest(e));
+            }
 
-        // Skip gap rests if we're not in note entry mode...
-        while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
-            el = nextChordRest(toChordRest(el));
-        }
-        if (el && noteEntryMode()) {
-            // do not use if not in original or new measure (don't skip measures)
-            Measure* m = toChordRest(el)->measure();
-            Segment* nis = m_is.segment();
-            Measure* nim = nis ? nis->measure() : nullptr;
-            if (m != oim && m != nim) {
+            // selection "cursor"
+            // find next chordrest, which might be a grace note
+            // this may override note input cursor
+            el = nextChordRest(cr);
+
+            // Skip gap rests if we're not in note entry mode...
+            while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
+                el = nextChordRest(toChordRest(el));
+            }
+            if (el && noteEntryMode()) {
+                // do not use if not in original or new measure (don't skip measures)
+                Measure* m = toChordRest(el)->measure();
+                Segment* nis = m_is.segment();
+                Measure* nim = nis ? nis->measure() : nullptr;
+                if (m != oim && m != nim) {
+                    el = cr;
+                }
+                // do not use if new input segment is current cr
+                // this means input cursor just caught up to current selection
+                else if (cr && nis == cr->segment()) {
+                    el = cr;
+                }
+            } else if (!el) {
+                if (noteEntryMode()) {
+                    m_is.setBeyondScore(true);
+                }
                 el = cr;
             }
-            // do not use if new input segment is current cr
-            // this means input cursor just caught up to current selection
-            else if (cr && nis == cr->segment()) {
-                el = cr;
+            if (el->isChord()) {
+                Chord* ch = toChord(el);
+                if (noteLevel > ch->notes().size() - 1) {
+                    noteLevel = ch->notes().size() - 1;
+                }
+                el = ch->notes()[noteLevel];             // originally downNote
             }
-        } else if (!el) {
-            if (noteEntryMode()) {
-                m_is.setBeyondScore(true);
-            }
-            el = cr;
+            select(el, SelectType::ADD, 0);
         }
+        return el;
     } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
         if (noteEntryMode()) {
@@ -3120,28 +3152,59 @@ EngravingItem* Score::move(const String& cmd)
         // selection "cursor"
         // find previous chordrest, which might be a grace note
         // this may override note input cursor
-        el = prevChordRest(cr);
+        std::vector<EngravingItem*> els = selection().elements();
+        deselectAll();
+        for (EngravingItem* e : els) {
+            if (!e->isNote() && !e->isRest()) {
+                continue;
+            }
+            ChordRest* cr = nullptr;
+            size_t noteLevel = 0;
+            if (e->isNote()) {
+                Note* n = toNote(e);
+                Chord* c = n->chord();
+                cr = toChordRest(c);
+                for (size_t i = 0; i < c->notes().size(); i++) {
+                    if (c->notes()[i] == n) {
+                        noteLevel = i;
+                        break;
+                    }
+                }
+            } else {
+                cr = toChordRest(toRest(e));
+            }
+            el = prevChordRest(cr);
 
-        // Skip gap rests if we're not in note entry mode...
-        while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
-            el = prevChordRest(toChordRest(el));
-        }
-        if (el && noteEntryMode()) {
-            // do not use if not in original or new measure (don't skip measures)
-            Measure* m = toChordRest(el)->measure();
-            Segment* nis = m_is.segment();
-            Measure* nim = nis ? nis->measure() : nullptr;
-            if (m != oim && m != nim) {
+            // Skip gap rests if we're not in note entry mode...
+            while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
+                el = prevChordRest(toChordRest(el));
+            }
+            if (el && noteEntryMode()) {
+                // do not use if not in original or new measure (don't skip measures)
+                Measure* m = toChordRest(el)->measure();
+                Segment* nis = m_is.segment();
+                Measure* nim = nis ? nis->measure() : nullptr;
+                if (m != oim && m != nim) {
+                    el = cr;
+                }
+                // do not use if new input segment is current cr
+                // this means input cursor just caught up to current selection
+                else if (cr && nis == cr->segment()) {
+                    el = cr;
+                }
+            } else if (!el) {
                 el = cr;
             }
-            // do not use if new input segment is current cr
-            // this means input cursor just caught up to current selection
-            else if (cr && nis == cr->segment()) {
-                el = cr;
+            if (el->isChord()) {
+                Chord* ch = toChord(el);
+                if (noteLevel > ch->notes().size() - 1) {
+                    noteLevel = ch->notes().size() - 1;
+                }
+                el = ch->notes()[noteLevel];             // originally downNote
             }
-        } else if (!el) {
-            el = cr;
+            select(el, SelectType::ADD, 0);
         }
+        return el;
     } else if (cmd == u"next-measure") {
         if (box && box->nextMeasure() && box->nextMeasure()->first()) {
             el = box->nextMeasure()->first()->nextChordRest(0, false);
