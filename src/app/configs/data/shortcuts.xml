@@ -21,12 +21,12 @@
     <SC>
         <key>nav-next-section</key>
         <seq>F6</seq>
-        <seq>`</seq>
+        <!--<seq>`</seq>--><!-- 'Shift+´' on a German keyboard -->
     </SC>
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
-        <seq>Shift+`</seq>
+        <!--<seq>Shift+`</seq>--><!-- '~' on an US keyboard -->
     </SC>
     <SC>
         <key>nav-next-panel</key>
@@ -394,7 +394,7 @@
     </SC>
   <SC>
     <key>stretch+</key>
-    <seq>}</seq>
+    <seq>}</seq><!-- same as 'Ctrl+Alt+0' for and as such collision with 'voice-assignment-all-in-instrument' on German keyboards! -->
     </SC>
   <SC>
     <key>stretch-</key>
@@ -594,11 +594,11 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>Shift+,</seq>
+    <seq>&gt;</seq><!-- but see also 'next-beat-TEXT' -->
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>
-    <seq>Shift+.</seq>
+    <seq>&lt;</seq><!-- but see also 'prev-beat-TEXT' -->
     </SC>
   <SC>
     <key>time-delete</key>
@@ -720,11 +720,11 @@
     </SC>
   <SC>
     <key>voice-1</key>
-    <seq>Ctrl+Alt+1</seq>
+    <seq>Ctrl+Alt+1</seq><!-- super-script 2 on a German keyboard -->
     </SC>
   <SC>
     <key>voice-2</key>
-    <seq>Ctrl+Alt+2</seq>
+    <seq>Ctrl+Alt+2</seq><!-- super-script 3 on a German keyboard -->
     </SC>
   <SC>
     <key>voice-3</key>
@@ -736,7 +736,7 @@
     </SC>
   <SC>
     <key>voice-assignment-all-in-instrument</key>
-    <seq>Ctrl+Alt+0</seq>
+    <seq>Ctrl+Alt+5</seq><!-- avoid collission with 'stretch+', '}' ('Ctrl+Alt+0' or rather "AltGr+0') on German keyboards
     </SC>
   <SC>
     <key>voice-assignment-all-in-staff</key>
@@ -841,6 +841,10 @@
   <SC>
     <key>move-measure-to-next-system</key>
     <seq>Alt+Down</seq>
+    </SC>
+  <SC>
+    <key>preference-dialog</key>
+    <seq>Ctrl+,</seq><!--sync with macOS system shortcut-->
     </SC>
   <SC>
     <key>edit-element</key>
@@ -960,7 +964,7 @@
   </SC>
   <SC>
     <key>add-melisma</key>
-    <seq>Shift+-</seq>
+    <seq>_</seq><!-- 'Shift+-' on an US keyboard as well as on a German keyboard -->
   </SC>
   <SC>
     <key>next-lyric-verse</key>
@@ -994,42 +998,42 @@
 <!-- TAB specific shortcuts -->
   <SC>
     <key>pad-note-1-TAB</key>
-    <seq>Shift+7</seq>
+    <seq>Shift+7</seq> <!-- '&' on an US keyboard (or rather '&amp;'), '/' on a German keyboard -->
     <seq>Num+7</seq>
     </SC>
   <SC>
     <key>pad-note-2-TAB</key>
-    <seq>Shift+6</seq>
+    <seq>Shift+6</seq><!-- '^' on an US keyboard, '&' on a German keyboard (or rather '&amp;') -->
     <seq>Num+6</seq>
     </SC>
   <SC>
     <key>pad-note-4-TAB</key>
-    <seq>Shift+5</seq>
+    <seq>Shift+5</seq><!-- '%' -->
     <seq>Num+5</seq>
     </SC>
   <SC>
     <key>pad-note-8-TAB</key>
-    <seq>Shift+4</seq>
+    <seq>Shift+4</seq><!-- '$' -->
     <seq>Num+4</seq>
     </SC>
   <SC>
     <key>pad-note-16-TAB</key>
-    <seq>Shift+3</seq>
+    <seq>Shift+3</seq><!-- '#' on an US keyboard (conflict with 'sharp'?), '§' on a German keyboard -->
     <seq>Num+3</seq>
     </SC>
   <SC>
     <key>pad-note-32-TAB</key>
-    <seq>Shift+2</seq>
+    <seq>Shift+2</seq><!-- '@' on an US keyboard, '"' on a German keyboard -->
     <seq>Num+2</seq>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
-    <seq>Shift+1</seq>
+    <seq>Shift+1</seq><!-- '!' --> 
     <seq>Num+1</seq>
     </SC>
   <SC>
     <key>pad-note-128-TAB</key>
-    <seq>Shift+0</seq>
+    <seq>Shift+0</seq><!-- ')' on US keyboard, '=' on a German keyboard (conflict with 'nat' there?) -->
     <seq>Num+0</seq>
     </SC>
   <SC>
@@ -1148,15 +1152,15 @@
     </SC>
   <SC>
     <key>prev-beat-TEXT</key>
-    <seq>Shift+;</seq>
+    <seq>:</seq><!-- 'Shift+.' on a German keyboard, 'Shift+;' on an US keyboard (conflict with 'add-hairpin-reverse' there, without the change further up?) -->
     </SC>
   <SC>
     <key>next-beat-TEXT</key>
-    <seq>;</seq>
+    <seq>;</seq><!-- 'Shift+,' on a German keyboard (conflict with 'add-hairpin' and 'prev-beat-TEXT' there without the changes further up?) -->
     </SC>
   <SC>
     <key>add-parentheses</key>
-    <seq>Shift+9</seq>
+    <seq>(</seq><!-- 'Shift+9' on an US keyboard, 'Shift+8' on a German keyboard -->
     </SC>
   <SC>
     <key>toggle-mmrest</key>
