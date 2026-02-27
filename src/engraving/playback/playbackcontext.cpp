@@ -40,6 +40,7 @@
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
 #include "types/typesconv.h"
+#include "types/constants.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -626,8 +627,9 @@ void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositi
     }
 
     // --- Render
+    const int steps = std::max(spannerDurationTicks / (Constants::DIVISION / 4), 24);
     std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                               24 /*stepsCount*/,
+                                                               steps,
                                                                static_cast<int>(levelTo - levelFrom),
                                                                hairpin->veloChangeMethod());
 
