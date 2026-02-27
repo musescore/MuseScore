@@ -130,8 +130,7 @@ private:
     std::vector<Note*> m_notes;
 };
 
-using NoteParenInfoPtr = std::unique_ptr<NoteParenthesisInfo>;
-using NoteParenthesisInfoList = std::vector<NoteParenInfoPtr>;
+using NoteParenthesisInfoList = std::vector<NoteParenthesisInfo*>;
 
 class Chord final : public ChordRest
 {

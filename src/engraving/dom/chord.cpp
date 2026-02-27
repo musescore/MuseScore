@@ -390,7 +390,7 @@ Chord::Chord(const Chord& c, bool link)
     }
 
     if (!c.noteParens().empty()) {
-        for (const NoteParenInfoPtr& info : c.noteParens()) {
+        for (const NoteParenthesisInfo* info : c.noteParens()) {
             Parenthesis* newLeftParen = toParenthesis(info->leftParen()->clone());
             newLeftParen->setParent(this);
             Parenthesis* newRightParen = toParenthesis(info->rightParen()->clone());
@@ -408,7 +408,7 @@ Chord::Chord(const Chord& c, bool link)
                 newNotes.push_back(findNote(note->pitch()));
             }
 
-            m_noteParens.push_back(std::make_unique<NoteParenthesisInfo>(newLeftParen, newRightParen, newNotes));
+            m_noteParens.push_back(new NoteParenthesisInfo(newLeftParen, newRightParen, newNotes));
         }
     }
 }
@@ -469,7 +469,7 @@ Chord::~Chord()
     muse::DeleteAll(m_ledgerLines);
     muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
-    // muse::DeleteAll(m_noteParens);
+    muse::DeleteAll(m_noteParens);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -1319,9 +1319,9 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
 
 const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) const
 {
-    for (const auto& infoPtr : m_noteParens) {
+    for (const NoteParenthesisInfo* infoPtr : m_noteParens) {
         if (paren == infoPtr->leftParen() || paren == infoPtr->rightParen()) {
-            return infoPtr.get();
+            return infoPtr;
         }
     }
 
@@ -1330,9 +1330,9 @@ const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) co
 
 NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 {
-    for (auto& infoPtr : m_noteParens) {
+    for (NoteParenthesisInfo* infoPtr : m_noteParens) {
         if (paren == infoPtr->leftParen() || paren == infoPtr->rightParen()) {
-            return infoPtr.get();
+            return infoPtr;
         }
     }
 
@@ -1341,10 +1341,10 @@ NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 
 const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
 {
-    for (const auto& infoPtr : m_noteParens) {
+    for (const NoteParenthesisInfo* infoPtr : m_noteParens) {
         for (const Note* parenNote : infoPtr->notes()) {
             if (parenNote == note) {
-                return infoPtr.get();
+                return infoPtr;
             }
         }
     }
@@ -1355,7 +1355,7 @@ const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
 
 void Chord::addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes)
 {
-    m_noteParens.push_back(std::make_unique<NoteParenthesisInfo>(leftParen, rightParen, notes));
+    m_noteParens.push_back(new NoteParenthesisInfo(leftParen, rightParen, notes));
 }
 
 void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
@@ -1368,8 +1368,8 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
         return;
     }
 
-    auto it = std::find_if(m_noteParens.begin(), m_noteParens.end(), [noteParenInfo](const NoteParenInfoPtr& ptr) {
-        return ptr.get() == noteParenInfo;
+    auto it = std::find_if(m_noteParens.begin(), m_noteParens.end(), [noteParenInfo](const NoteParenthesisInfo* ptr) {
+        return ptr == noteParenInfo;
     });
 
     if (it != m_noteParens.end()) {

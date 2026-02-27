@@ -302,7 +302,7 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
         if (linesThrough) {
             return;
         }
-        for (const NoteParenInfoPtr& i : chord->noteParens()) {
+        for (const NoteParenthesisInfo* i : chord->noteParens()) {
             const Parenthesis* leftParen = i->leftParen();
             const Parenthesis* rightParen = i->rightParen();
             bool allHidden = false;

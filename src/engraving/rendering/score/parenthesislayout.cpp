@@ -62,7 +62,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
 
 void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutContext& ctx)
 {
-    for (const NoteParenInfoPtr& parenNotesInfo : chord->noteParens()) {
+    for (const NoteParenthesisInfo* parenNotesInfo : chord->noteParens()) {
         Parenthesis* leftParen = parenNotesInfo->leftParen();
         Parenthesis* rightParen = parenNotesInfo->rightParen();
 
