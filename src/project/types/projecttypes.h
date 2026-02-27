@@ -22,12 +22,14 @@
 
 #pragma once
 
+#include <map>
 #include <variant>
 
 #include <QString>
 #include <QUrl>
 
 #include "io/path.h"
+#include "types/val.h"
 #include "progress.h"
 #include "log.h"
 
@@ -36,9 +38,25 @@
 #include "cloud/cloudtypes.h"
 #include "notation/inotation.h"
 #include "notation/notationtypes.h"
-#include "../inotationwriter.h"
 
 namespace mu::project {
+enum class WriteUnitType {
+    PER_PAGE,
+    PER_PART,
+    MULTI_PART
+};
+
+enum class WriteOptionKey {
+    UNIT_TYPE,
+    PAGE_NUMBER,
+    NOTATIONS,  // ValList of Val(string) — notation IDs
+    TRANSPARENT_BACKGROUND,
+    NOTES_COLORS,
+    BEATS_COLORS
+};
+
+using WriteOptions = std::map<WriteOptionKey, muse::Val>;
+
 struct ProjectCreateOptions
 {
     QString title;
@@ -127,7 +145,7 @@ struct CloudAudioInfo {
 struct ExportInfo {
     QString id;
     muse::io::path_t exportPath;
-    INotationWriter::UnitType unitType;
+    WriteUnitType unitType;
     std::vector<notation::INotationWeakPtr> notations;
 };
 

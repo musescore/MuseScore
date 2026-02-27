@@ -36,7 +36,6 @@
 #include "internal/projectautosaver.h"
 
 #include "internal/notationreadersregister.h"
-#include "internal/notationwritersregister.h"
 #include "internal/projectrwregister.h"
 
 #ifdef Q_OS_MAC
@@ -127,9 +126,7 @@ void ProjectContext::registerExports()
     ioc()->registerExport<IProjectAutoSaver>(mname, m_projectAutoSaver);
     ioc()->registerExport<mu::engraving::IEngravingPluginAPIHelper>(mname, m_engravingPluginAPIHelper);
 
-    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
-    ioc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
     ioc()->registerExport<IProjectRWRegister>(mname, new ProjectRWRegister());
 }
 

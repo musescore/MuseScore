@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,21 +20,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_NOTATIONWRITERSREGISTER_H
-#define MU_PROJECT_NOTATIONWRITERSREGISTER_H
+#pragma once
 
-#include "../inotationwritersregister.h"
+#include "global/containers.h"
+#include "global/types/id.h"
+
+#include "inotationproject.h"
+
+#include "types/projecttypes.h"
 
 namespace mu::project {
-class NotationWritersRegister : public INotationWritersRegister
+inline notation::INotationPtrList resolveNotations(INotationProjectPtr project, const WriteOptions& options)
 {
-public:
-    void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) override;
-    INotationWriterPtr writer(const std::string& suffix) const override;
+    auto notationsVal = muse::value(options, WriteOptionKey::NOTATIONS);
+    if (!notationsVal.toList().empty()) {
+        return { project->masterNotation()->notation() };
+    }
 
-private:
-    std::map<std::string, INotationWriterPtr> m_writers;
-};
+    notation::INotationPtrList notations;
+    for (const muse::Val& v : notationsVal.toList()) {
+        auto notation = project->notationById(muse::ID(v.toString()));
+        if (notation) {
+            notations.push_back(notation);
+        }
+    }
+
+    return notations;
 }
-
-#endif // MU_PROJECT_NOTATIONWRITERSREGISTER_H
+}
