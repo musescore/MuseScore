@@ -120,8 +120,6 @@ ComboBox {
             height: comboDropdown.itemHeight
             width: comboDropdown.contentWidth
 
-            normalColor: ui.theme.buttonColor
-
             isSelected: index === comboDropdown.currentIndex
 
             StyledTextLabel {
