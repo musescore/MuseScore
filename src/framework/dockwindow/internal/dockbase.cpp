@@ -632,8 +632,7 @@ void DockBase::componentComplete()
 
     const int ctx = iocContext()->id;
 
-    QString name = objectName();
-    name +=  "_" + QString::number(ctx);
+    const QString name = objectName();
 
     if (content->objectName().isEmpty()) {
         content->setObjectName(name + "_content");

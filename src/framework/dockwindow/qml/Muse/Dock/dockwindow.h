@@ -124,10 +124,9 @@ private:
 
     void handleUnknownDock(const DockPageView* page, DockBase* unknownDock);
 
-    void restoreGeometry();
-
     QByteArray windowState() const;
-
+    void saveWindowGeometry();
+    void restoreGeometry();
     void savePageState(const QString& pageName);
     void restorePageState(const DockPageView* page);
 
