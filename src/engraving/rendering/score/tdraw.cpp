@@ -2359,6 +2359,113 @@ void TDraw::draw(const Note* item, Painter* painter, const PaintOptions& opt)
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }
         }
+        NoteHeadScheme headScheme = Note::resolveHeadScheme(item);
+        if (headScheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE) {
+            painter->save();
+
+            constexpr double OUTLINE_WIDTH_FACTOR = 0.11;
+            constexpr double CORNER_RADIUS_FACTOR = 0.25;
+            constexpr double STROKE_CENTER_FACTOR = 0.5;
+            constexpr double TEXT_WIDTH_FACTOR = 0.90;
+            constexpr double TEXT_HEIGHT_FACTOR = 0.90;
+
+            const RectF headBox = ldata->bbox();
+            const SymId headSym = ldata->cachedNoteheadSym.value();
+            const bool isFilled = headSym == SymId::noteheadSquareBlack || headSym == SymId::noteheadSquareBlackLarge;
+            // Preserve warning/critical colors already set on the painter.
+            const Color noteColor = painter->pen().color();
+            const double outlineWidth = item->spatium() * OUTLINE_WIDTH_FACTOR;
+
+            // rounded rectangle (capsule-like)
+            const double cornerRadius = std::min(headBox.width(), headBox.height()) * CORNER_RADIUS_FACTOR;
+
+            if (isFilled) {
+                painter->setNoPen();
+                painter->setBrush(Brush(noteColor));
+                painter->drawRoundedRect(headBox, cornerRadius, cornerRadius);
+                painter->setBrush(BrushStyle::NoBrush);
+                painter->setPen(noteColor);
+                painter->drawRoundedRect(headBox, cornerRadius, cornerRadius);
+            } else {
+                // Keep white noteheads visually aligned with black ones by drawing the stroke inward.
+                const double inset = outlineWidth * STROKE_CENTER_FACTOR;
+                // Fallback for tiny boxes where inward stroke would collapse the rect.
+                const bool canInset = headBox.width() > 2.0 * inset && headBox.height() > 2.0 * inset;
+                const RectF outlineBox = canInset
+                                         ? RectF(headBox.x() + inset,
+                                                 headBox.y() + inset,
+                                                 headBox.width() - 2.0 * inset,
+                                                 headBox.height() - 2.0 * inset)
+                                         : headBox;
+                const double outlineCornerRadius = std::min(outlineBox.width(), outlineBox.height())
+                                                   * CORNER_RADIUS_FACTOR;
+
+                painter->setNoPen();
+                painter->setBrush(Brush(config->noteBackgroundColor()));
+                painter->drawRoundedRect(outlineBox, outlineCornerRadius, outlineCornerRadius);
+
+                Pen pen(noteColor);
+                pen.setCapStyle(PenCapStyle::RoundCap);
+                pen.setJoinStyle(PenJoinStyle::RoundJoin);
+                pen.setWidthF(outlineWidth);
+                painter->setPen(pen);
+                painter->setBrush(BrushStyle::NoBrush);
+                painter->drawRoundedRect(outlineBox, outlineCornerRadius, outlineCornerRadius);
+            }
+
+            String syllable;
+            const Char stepName = tpc2stepName(item->tpc());
+            if (stepName == u'C') {
+                syllable = u"do";
+            } else if (stepName == u'D') {
+                syllable = u"re";
+            } else if (stepName == u'E') {
+                syllable = u"mi";
+            } else if (stepName == u'F') {
+                syllable = u"fa";
+            } else if (stepName == u'G') {
+                syllable = u"sol";
+            } else if (stepName == u'A') {
+                syllable = u"la";
+            } else if (stepName == u'B') {
+                syllable = u"si";
+            }
+
+            if (!syllable.empty()) {
+                Font font(item->style().styleSt(Sid::defaultFontFace),
+                          Font::Type::Text);
+                font.setBold(true);
+
+                const double staffScale = item->spatium() / item->defaultSpatium();
+                const double startPt = 1.0 * staffScale;
+                font.setPointSizeF(startPt);
+
+                RectF textRect = FontMetrics(font).boundingRect(syllable);
+                const double widthAvail = headBox.width() * TEXT_WIDTH_FACTOR;
+                const double heightAvail = headBox.height() * TEXT_HEIGHT_FACTOR;
+
+                if (textRect.width() > 0.0 && textRect.height() > 0.0) {
+                    // Fit the syllable inside the custom notehead without changing head geometry.
+                    const double scale = std::min(widthAvail / textRect.width(),
+                                                  heightAvail / textRect.height());
+                    font.setPointSizeF(std::max(startPt, startPt * scale));
+                    textRect = FontMetrics(font).boundingRect(syllable);
+                }
+
+                painter->setFont(font);
+                // Keep contrast: light text on filled heads, note color on outlined heads.
+                painter->setPen(isFilled ? config->noteBackgroundColor() : noteColor);
+
+                const PointF targetCenter = headBox.center();
+                const PointF textCenter(textRect.x() + textRect.width() * 0.5,
+                                        textRect.y() + textRect.height() * 0.5);
+                painter->drawText(targetCenter - textCenter, syllable);
+            }
+
+            painter->restore();
+            return;
+        }
+
         // draw blank notehead to avoid staff and ledger lines
         if (ldata->cachedSymNull.value() != SymId::noSym) {
             painter->save();

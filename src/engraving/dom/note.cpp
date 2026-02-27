@@ -336,6 +336,24 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
     if (scheme == NoteHeadScheme::HEAD_NORMAL) {
         return noteHeads[direction][int(group)][int(t)];
     }
+
+    // This scheme draws the head in the renderer and does not use NoteHeadGroup-based glyph mapping,
+    // so return the base square head glyph based on the duration's head type.
+    if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE) {
+        switch (t) {
+        case NoteHeadType::HEAD_WHOLE:
+        case NoteHeadType::HEAD_HALF:
+            return SymId::noteheadSquareWhite;
+        case NoteHeadType::HEAD_QUARTER:
+            return SymId::noteheadSquareBlack;
+        case NoteHeadType::HEAD_BREVIS:
+            return SymId::noteheadDoubleWholeSquare;
+        default:
+            break;
+        }
+        return SymId::noteheadSquareBlack;
+    }
+
     // other schemes
     if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
         if (tpc == Tpc::TPC_A) {
@@ -518,6 +536,27 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
 
 NoteHead::NoteHead(Note* parent)
     : Symbol(ElementType::NOTEHEAD, parent) {}
+
+//---------------------------------------------------------
+//   resolveHeadScheme
+//   Resolves the effective notehead scheme for a note,
+//   taking into account HEAD_AUTO scheme resolution
+//---------------------------------------------------------
+
+NoteHeadScheme Note::resolveHeadScheme(const Note* note)
+{
+    NoteHeadScheme scheme = note->headScheme();
+    if (scheme == NoteHeadScheme::HEAD_AUTO) {
+        const Staff* staff = note->staff();
+        if (staff) {
+            scheme = staff->staffTypeForElement(note)->noteHeadScheme();
+        }
+    }
+    if (scheme == NoteHeadScheme::HEAD_AUTO) {
+        scheme = NoteHeadScheme::HEAD_NORMAL;
+    }
+    return scheme;
+}
 
 //---------------------------------------------------------
 //   headGroup

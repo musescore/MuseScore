@@ -203,13 +203,22 @@ bool NoteheadSettingsModel::isTrillCueNote() const
 
 QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
 {
-    QMap<mu::engraving::NoteHeadScheme, QString> types {
+    struct HeadSchemeUiItem {
+        mu::engraving::NoteHeadScheme scheme;
+        QString text;
+    };
+
+    // Keep the UI order explicit and stable (independent of enum values / container key ordering),
+    // so new schemes can be inserted in a logical position in the dropdown.
+    const QList<HeadSchemeUiItem> types {
         { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    muse::qtrc("inspector", "Auto", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("inspector", "Normal", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("inspector", "Pitch names", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,        muse::qtrc("inspector", "German pitch names", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,                 muse::qtrc("inspector", "Solfège movable do", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,           muse::qtrc("inspector", "Solfège fixed do", "notehead scheme") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE,
+          muse::qtrc("inspector", "Solfège fixed do (Full syllables, rounded square)", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,            muse::qtrc("inspector", "4-shape (Walker)", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,      muse::qtrc("inspector", "7-shape (Aikin)", "notehead scheme") },
         { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,       muse::qtrc("inspector", "7-shape (Funk)", "notehead scheme") },
@@ -218,11 +227,11 @@ QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
 
     QVariantList result;
 
-    for (mu::engraving::NoteHeadScheme type : types.keys()) {
+    for (const HeadSchemeUiItem& type : types) {
         QVariantMap obj;
 
-        obj["text"] = types[type];
-        obj["value"] = static_cast<int>(type);
+        obj["text"] = type.text;
+        obj["value"] = static_cast<int>(type.scheme);
 
         result << obj;
     }
