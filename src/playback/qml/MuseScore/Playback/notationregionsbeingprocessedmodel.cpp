@@ -32,7 +32,7 @@ using namespace mu::notation;
 static const Segment* findSegmentFrom(const Score* score, const System* system,
                                       const int tickFrom, const staff_idx_t staffIdx)
 {
-    const Segment* segment = score->tick2segment(Fraction::fromTicks(tickFrom), true, SegmentType::ChordRest);
+    const Segment* segment = score->tick2segmentMM(Fraction::fromTicks(tickFrom), true, SegmentType::ChordRest);
     if (!segment || segment->system() != system) {
         return nullptr;
     }
@@ -58,7 +58,7 @@ static const Segment* findSegmentFrom(const Score* score, const System* system,
 static const Segment* findSegmentTo(const Score* score, const System* system, const Segment* segmentFrom,
                                     const int tickTo, const staff_idx_t staffIdx)
 {
-    const Segment* segment = score->tick2segment(Fraction::fromTicks(tickTo), true, SegmentType::ChordRest);
+    const Segment* segment = score->tick2segmentMM(Fraction::fromTicks(tickTo), true, SegmentType::ChordRest);
     if (!segment || segment->system() != system) {
         return nullptr;
     }
@@ -504,7 +504,7 @@ std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Par
     }
 
     const Score* score = system->score();
-    const Measure* lastMeasure = score->lastMeasure();
+    const Measure* lastMeasure = score->lastMeasureMM();
     const double lastMeasureEndX = lastMeasure ? lastMeasure->canvasPos().x() + lastMeasure->width() : 0.0;
 
     std::vector<QRectF> result;
