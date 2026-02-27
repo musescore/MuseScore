@@ -131,13 +131,14 @@ MuseScore {
                     }
                 }
                 // list selections / selection filter could be individual notes
-                if (!note.selected) {
+                if (!note.selected || note.tieBack) {
                     continue
                 }
                 // Then apply new names
                 var text = newElement(Element.TEXT) // This adds the text to the note: Better for grace notes and easier to remove
                 text.text = nameNote(note)
                 text.autoplace = false
+                text.visible = note.visble
                 if (note.noteType != NoteType.NORMAL) {
                     text.fontSize *= curScore.style.value("graceNoteMag")
                 }
