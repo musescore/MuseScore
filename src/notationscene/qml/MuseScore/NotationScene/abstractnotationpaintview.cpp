@@ -1016,7 +1016,7 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
 bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& cursorRect)
 {
     RectF viewRect = viewport();
-    PointF pos(cursorRect.x() - (viewRect.width() / 2), viewRect.y());
+    PointF pos(cursorRect.x() - (viewRect.width() * 0.25), viewRect.y());
 
     if (!viewport().intersects(cursorRect)) {
         pos.setY(cursorRect.y() - (viewRect.height() / 2));
