@@ -132,7 +132,7 @@ INotationPtr MasterNotation::notation()
     return shared_from_this();
 }
 
-void MasterNotation::initAfterSettingScore(const MasterScore* score)
+void MasterNotation::initAfterSettingScore(const MasterScore* score, bool disablePlayback)
 {
     IF_ASSERT_FAILED(score) {
         return;
@@ -146,11 +146,14 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score)
         }
     });
 
-    m_notationPlayback->init();
+    if (!disablePlayback) {
+        m_notationPlayback->init();
+    }
+
     initExcerptNotations(score->excerpts());
 }
 
-void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
+void MasterNotation::setMasterScore(mu::engraving::MasterScore* score, bool disablePlayback)
 {
     if (masterScore() == score) {
         return;
@@ -162,7 +165,7 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
 
     score->updateSwing();
 
-    initAfterSettingScore(score);
+    initAfterSettingScore(score, disablePlayback);
 }
 
 mu::engraving::MasterScore* MasterNotation::masterScore() const

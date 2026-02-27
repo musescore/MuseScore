@@ -103,12 +103,16 @@ void TemplatePaintView::onViewSizeChanged()
 
 void TemplatePaintView::onNotationSetup()
 {
+    TRACEFUNC;
+
     resetNotation();
 
     m_notationProject = notationCreator()->newProject(iocContext());
 
-    Ret ret = m_notationProject->load(m_templatePath);
+    OpenParams params;
+    params.disablePlayback = true;
 
+    Ret ret = m_notationProject->load(m_templatePath, params);
     if (!ret) {
         LOGE() << ret.toString();
         return;
