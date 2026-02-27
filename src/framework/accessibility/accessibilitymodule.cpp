@@ -52,7 +52,9 @@ void AccessibilityModule::resolveImports()
 {
     auto accr = globalIoc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
     if (accr) {
+#ifndef Q_OS_LINUX // https://github.com/musescore/MuseScore/pull/32258#issuecomment-3972545361
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
+#endif
         accr->registerInterfaceGetter("muse::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
     }
 }
