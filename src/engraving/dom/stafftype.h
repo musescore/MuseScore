@@ -115,10 +115,10 @@ struct TablatureDurationFont {
 };
 
 // ready-made staff types
-// keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset
+// keep in sync with the _presets initialization in StaffType::initStaffTypes()
 
 enum class StaffTypes : signed char {
-    STANDARD,
+    STANDARD, JIANPU,
     PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
     TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
     TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
@@ -295,6 +295,10 @@ public:
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
     void  setFretPreset(const String& str);
+
+    const muse::draw::Font& jianpuFont() const { return m_fretFont; } // Jianpu temporarly uses fret font
+    double jianpuFontSize() const { return fretFontSize(); } // Jianpu temporarly uses fret font
+    double jianpuBoxH() const { return fretBoxH(); } // Jianpu temporarly uses fret font
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }

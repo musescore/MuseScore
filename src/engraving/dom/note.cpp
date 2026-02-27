@@ -58,6 +58,7 @@
 #include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
+#include "octavedot.h"
 #include "parenthesis.h"
 #include "part.h"
 #include "partialtie.h"
@@ -557,6 +558,7 @@ Note::~Note()
     }
 
     muse::DeleteAll(m_dots);
+    muse::DeleteAll(m_octaveDots);
 }
 
 std::vector<Note*> Note::compoundNotes() const
@@ -680,7 +682,8 @@ Note::Note(const Note& n, bool link)
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
-    m_mark      = n.m_mark;
+    m_mark = n.m_mark;
+    m_jianpuDigit = n.m_jianpuDigit;
 
     setDropTarget(false);
 }
@@ -2082,6 +2085,26 @@ void Note::setDotRelativeLine(int dotMove)
     int cdots = static_cast<int>(chord()->dots());
     int ndots = static_cast<int>(m_dots.size());
 
+    // remove dots for jianpu which already convert to lengthen duration lines
+    int ddots = 0;
+    if (staff()->isJianpuStaff(chord()->tick())) {
+        if (chord()->upNote() == this) {
+            TDuration durationType = chord()->durationType();
+            if (durationType == DurationType::V_LONG) {
+                ddots = 4;
+            } else if (durationType == DurationType::V_BREVE) {
+                ddots = 3;
+            } else if (durationType == DurationType::V_WHOLE) {
+                ddots = 2;
+            } else if (durationType == DurationType::V_HALF) {
+                ddots = 1;
+            }
+        } else {
+            cdots = 0; // only show dots for up note in jianpu
+        }
+    }
+    cdots = std::max(0, cdots - ddots);
+
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
         NoteDot* dot = Factory::createNoteDot(this);
@@ -2283,6 +2306,9 @@ void Note::scanElements(std::function<void(EngravingItem*)> func)
     }
     for (NoteDot* dot : m_dots) {
         func(dot);
+    }
+    for (OctaveDot* od : m_octaveDots) {
+        func(od);
     }
 }
 
@@ -4159,5 +4185,16 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
     }
     score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
     return true;
+}
+
+void Note::resizeOctaveDotsTo(size_t newSize)
+{
+    while (m_octaveDots.size() < newSize) {
+        m_octaveDots.push_back(new OctaveDot(score()->dummy()));
+    }
+    while (m_octaveDots.size() > newSize) {
+        delete m_octaveDots.back();
+        m_octaveDots.pop_back();
+    }
 }
 }

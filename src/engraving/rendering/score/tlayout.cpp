@@ -54,6 +54,7 @@
 #include "dom/capo.h"
 
 #include "dom/deadslapped.h"
+#include "dom/durationline.h"
 #include "dom/dynamic.h"
 
 #include "dom/expression.h"
@@ -101,6 +102,7 @@
 #include "dom/notedot.h"
 #include "dom/noteline.h"
 
+#include "dom/octavedot.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -375,6 +377,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
+        break;
+    case ElementType::OCTAVE_DOT:       layoutOctaveDot(item_cast<OctaveDot*>(item));
         break;
     case ElementType::OTTAVA:           layoutOttava(item_cast<Ottava*>(item), ctx);
         break;
@@ -1641,6 +1645,11 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         const Fraction tick = endOfMeasureClef && !item->isTrailer() ? item->tick() : clefSeg->measure()->tick();
 
         const Fraction tickPrev = tick - Fraction::eps();
+
+        if (item->staff()->isJianpuStaff(tick)) {
+            return; // Jianpu do not need to show clef
+        }
+
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
         bool show = st->genClef();            // check staff type allows clef display
@@ -1796,6 +1805,21 @@ void TLayout::layoutDeadSlapped(const DeadSlapped* item, DeadSlapped::LayoutData
         ldata->path1 = path1;
         ldata->path2 = path2;
     }
+}
+
+void TLayout::layoutDurationLine(DurationLine* item, const LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+    double mag = item->mag();
+    DurationLine::LayoutData* ldata = item->mutldata();
+    ldata->setMag(mag);
+    ldata->lineWidth = ctx.conf().styleAbsolute(Sid::staffLineWidth) * mag;
+    if (item->staff()) {
+        const_cast<DurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
+    }
+
+    double w2 = ldata->lineWidth * .5;
+    ldata->setBbox(0, -w2, item->len(), 2 * w2);
 }
 
 void TLayout::layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -4032,6 +4056,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+    bool useJianpu = item->staff() && item->staff()->isJianpuStaff(item->chord()->tick());
     ldata->useTablature.set_value(useTablature);
 
     RectF noteBBox;
@@ -4065,6 +4090,19 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         double height = item->deadNote() ? tab->deadFretBoxH() : tab->fretBoxH();
 
         noteBBox = RectF(0, y * mags, w, height * mags);
+    } else if (useJianpu) {
+        const Staff* st = item->staff();
+        const StaffType* jianpu = st->staffTypeForElement(item);
+
+        KeySigEvent ks = st->keySigEvent(item->chord()->tick());
+        String accName, stepName;
+        tpc2Function(item->tpc(), ks.key(), accName, stepName);
+        const_cast<Note*>(item)->setJianpuDigit(String(u"%1").arg(stepName));
+
+        double width = item->headWidth();
+        double height = jianpu->jianpuBoxH() * item->magS();
+
+        noteBBox = RectF(0, -height * .5, width, height);
     } else {
         if (item->deadNote()) {
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
@@ -4149,6 +4187,10 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
         }
     }
 
+    for (OctaveDot* octaveDot : item->octaveDots()) {
+        shape.add(octaveDot->ldata()->bbox().translated(octaveDot->pos()), octaveDot);
+    }
+
     ldata->setShape(shape);
 }
 
@@ -4162,6 +4204,17 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
     }
 
     ldata->setBbox(item->symBbox(SymId::augmentationDot));
+}
+
+void TLayout::layoutOctaveDot(OctaveDot* item)
+{
+    LAYOUT_CALL_ITEM(item);
+    OctaveDot::LayoutData* ldata = item->mutldata();
+    ldata->setMag(item->note()->mag());
+    ldata->radius = item->defaultSpatium() * .1; // TODO: style
+
+    double diameter = ldata->radius * 2;
+    ldata->setBbox(0, -ldata->radius, item->len(), diameter);
 }
 
 void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -4530,6 +4583,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     double mag = item->mag();
     RectF noteheadBbox = item->symBbox(item->noteheadSymbol());
     bool up = item->computeUp();
+    bool isJianpu = item->staff() && item->staff()->isJianpuStaff(item->tick());
 
     // Layout dots
     double dotWidth = 0.0;
@@ -4584,6 +4638,12 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
 
         double lw = ctx.conf().styleAbsolute(Sid::ledgerLineWidth);
 
+        // jianpu will show the 5-line staff with more extra length
+        if (isJianpu && lineIdx > 0) {
+            x -= 2 * extraLen;
+            w += 4 * extraLen;
+        }
+
         RectF r(x, -lw * .5, w, lw);
         const int topLine = -2 + yOffset / step;
         for (int i = topLine; i >= lineIdx; i -= 2) {
@@ -4614,6 +4674,66 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         newBbox.setHeight(newBbox.height() + dh);
     }
 
+    // Layout jianpu
+    RectF jianpuBbox(noteheadBbox.x(), 0, noteheadBbox.width(), 0);
+    if (isJianpu) {
+        const Staff* staff = item->staff();
+        const StaffType* st = staff->staffTypeForElement(item);
+        int dots = 0;
+
+        // jianpu digit
+        if (item->isRest()) {
+            item->setJianpuDigit(String(u"0"));
+        } else {
+            Position pos;
+            Score* score = item->score();
+            score->getPosition(&pos, item->pos(), item->track());
+            bool error = false;
+            NoteVal nval = score->noteValForPosition(pos, item->accidentalType(), error);
+            if (!error) {
+                bool concertPitch = ctx.conf().styleB(Sid::concertPitch);
+                int tpc = nval.tpc(concertPitch);
+
+                if (tpc != Tpc::TPC_INVALID) {
+                    String accName, stepName;
+                    KeySigEvent ks = staff->keySigEvent(item->tick());
+                    tpc2Function(tpc, ks.key(), accName, stepName);
+                    item->setJianpuDigit(String(u"%1").arg(stepName));
+
+                    Interval transpose = item->part()->instrument(item->tick())->transpose();
+                    int alteration = static_cast<int>(tpc2alter(tpc));
+                    int epitch = nval.pitch - transpose.chromatic;
+                    int octave = (epitch - alteration) / 12 - 1; // See Note::octave
+                    int baseOctave = 3; // Default base octave for Jianpu is C3
+                    dots = baseOctave - octave;
+                }
+            }
+        }
+        double distance = _spatium * .3;
+        jianpuBbox.setHeight(st->jianpuBoxH() * mag + distance);
+        if (!up) {
+            jianpuBbox.setY(noteheadBbox.y() - jianpuBbox.height()); // Jianpu is above the head note
+        } else {
+            jianpuBbox.setY(newBbox.y() + newBbox.height()); // Jianpu is under the head note
+        }
+
+        // jianpu duration line
+        int lines = item->duration().diminutionLines();
+        item->setJianpuDurationLine(lines);
+
+        // jianpu octave dots
+        item->setJianpuOctaveDot(dots);
+
+        // Always has one extra distance
+        double extraHeight = (1 + abs(dots) + lines) * distance;
+
+        jianpuBbox.setHeight(jianpuBbox.height() + extraHeight);
+        if (!up) {
+            jianpuBbox.setY(jianpuBbox.y() - extraHeight); // Jianpu is above the head note
+        }
+        newBbox |= jianpuBbox;
+    }
+
     const std::set<SymId>& articulationIds = item->articulationIds();
     if (articulationIds.empty()) {
         item->setbbox(newBbox);
@@ -4634,7 +4754,6 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             if (topY > 0.0) {
                 topY = 0.0;
             }
-
             rectWithArticulations.setTop(topY - symH - _spatium);
         } else {
             rectWithArticulations.setHeight(rectWithArticulations.height() + symH + _spatium);
@@ -4645,6 +4764,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         }
     }
 
+    rectWithArticulations.setTop(rectWithArticulations.y() - jianpuBbox.height());
     newBbox.unite(rectWithArticulations);
 
     item->setbbox(newBbox);
