@@ -1,0 +1,1902 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#include "internal/importfinaleparser.h"
+#include "internal/importfinalelogger.h"
+#include "internal/finaletypesconv.h"
+#include "internal/text/finaletextconv.h"
+
+#include <vector>
+#include <exception>
+
+#include "musx/musx.h"
+
+#include "types/string.h"
+
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/arpeggio.h"
+#include "engraving/dom/barline.h"
+#include "engraving/dom/box.h"
+#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/breath.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/drumset.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/fermata.h"
+#include "engraving/dom/groups.h"
+#include "engraving/dom/instrument.h"
+#include "engraving/dom/instrchange.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/key.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/lyrics.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/rest.h"
+#include "engraving/dom/sig.h"
+#include "engraving/dom/spacer.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafftypechange.h"
+#include "engraving/dom/stafftype.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/utils.h"
+
+#include "engraving/types/symnames.h"
+
+#include "log.h"
+
+using namespace mu::engraving;
+using namespace muse;
+using namespace musx::dom;
+using namespace mu::iex::finale;
+
+namespace mu::iex::finale {
+static ClefType toMuseScoreClefType(const MusxInstance<options::ClefOptions::ClefDef>& clefDef,
+                                    const MusxInstance<others::Staff>& musxStaff)
+{
+    // Musx staff positions start with the reference line as 0. (The reference line on a standard 5-line staff is the top line.)
+    // We don't account for any potential difference here (Staff::calcTopLinePosition()) because we set the stepOffset in StaffType later.
+    // Positive values are above the reference line. Negative values are below the reference line.
+
+    using MusxClefType = music_theory::ClefType;
+    auto [clefType, octaveShift] = clefDef->calcInfo(musxStaff);
+
+    // First pass: try to find a perfect match (symbol and pitch)
+    if (!clefDef->isShape) {
+        SymId clefSym = SymId::noSym;
+        if (clefDef->useOwnFont) {
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefDef->font);
+        } else {
+            const auto& clefFont = options::FontOptions::getFontInfo(musxStaff->getDocument(), options::FontOptions::FontType::Clef);
+            clefSym = FinaleTextConv::symIdFromFinaleChar(clefDef->clefChar, clefFont);
+        }
+        for (int i = 0; i < int(ClefType::MAX); ++i) {
+            ClefType ct = ClefType(i);
+            if (ClefInfo::symId(ct) == clefSym && ClefInfo::pitchOffset(ct) + clefDef->middleCPos == 35) {
+                return ct;
+            }
+        }
+    }
+
+    // Second attempt: Use sensible defaults for non-standard clef types
+    // We could skip this pass (and set middleCPos to -10), but this yields better results
+    switch (clefType) {
+    case MusxClefType::Percussion1: return ClefType::PERC;
+    case MusxClefType::Percussion2: return ClefType::PERC2;
+    case MusxClefType::Tab: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4 : ClefType::TAB;
+    case MusxClefType::TabSerif: return musxStaff->calcNumberOfStafflines() <= 4 ? ClefType::TAB4_SERIF : ClefType::TAB_SERIF;
+    default: break;
+    }
+
+    // Final attempt: prioritise clef type (C/G/F/Tab/Perc)
+    for (int i = 0; i < int(ClefType::MAX); ++i) {
+        ClefType ct = ClefType(i);
+        if (ClefInfo::pitchOffset(ct) + clefDef->middleCPos == /*MuseScore line for middle C*/ 35) {
+            String clefSymName = String::fromAscii(SymNames::nameForSymId(ClefInfo::symId(ct)).ascii());
+            if ((clefType == MusxClefType::G && clefSymName.contains(u"gClef"))
+                || (clefType == MusxClefType::C && clefSymName.contains(u"cClef"))
+                || (clefType == MusxClefType::F && clefSymName.contains(u"fClef"))) {
+                return ct;
+            }
+        }
+    }
+
+    return ClefType::INVALID;
+}
+
+static NoteHeadGroup consolidateDrumNoteHeads(DrumInstrument di)
+{
+    for (int direction = 1; direction >= 0; --direction) {
+        for (NoteHeadGroup group = NoteHeadGroup::HEAD_NORMAL; group < NoteHeadGroup::HEAD_GROUPS; group = NoteHeadGroup(int(group) + 1)) {
+            if (engraving::Note::noteHead(direction, group,
+                                          NoteHeadType::HEAD_QUARTER) == di.noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)]) {
+                for (NoteHeadType type = NoteHeadType::HEAD_WHOLE; type < NoteHeadType::HEAD_TYPES; type = NoteHeadType(int(type) + 1)) {
+                    if (engraving::Note::noteHead(direction, group, type) != di.noteheads[static_cast<int>(type)]) {
+                        return NoteHeadGroup::HEAD_CUSTOM;
+                    }
+                }
+                return group;
+            }
+        }
+    }
+    return NoteHeadGroup::HEAD_CUSTOM;
+}
+
+static Drumset* createDrumset(const MusxInstanceList<others::PercussionNoteInfo>& percNoteInfoList,
+                              const MusxInstance<others::Staff>& musxStaff, Instrument* instrument)
+{
+    Drumset* drumset = new Drumset();
+    Drumset* defaultDrumset = mu::engraving::smDrumset;
+    int numberOfColumns = 8;
+
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
+        drumset->drum(i) = DrumInstrument(String(), NoteHeadGroup::HEAD_INVALID, 0, DirectionV::AUTO);
+    }
+
+    for (size_t i = 0; i < percNoteInfoList.size(); ++i) {
+        const auto& percNoteInfo = percNoteInfoList.at(i);
+        int midiPitch = midiNoteFromPercussionNoteType(instrument->id(), percNoteInfo->getBaseNoteTypeId());
+        const bool hasDefault = defaultDrumset->isValid(midiPitch);
+        if (!pitchIsValid(midiPitch)) {
+            // Finale doesn't base percussion off general MIDI
+            continue;
+        }
+        drumset->drum(midiPitch) = DrumInstrument(
+            String(percNoteInfo->getNoteType().rawName),
+            NoteHeadGroup::HEAD_CUSTOM,
+            -(percNoteInfo->calcStaffReferencePosition() - musxStaff->calcTopLinePosition()), // staff line
+            hasDefault ? defaultDrumset->stemDirection(midiPitch) : DirectionV::AUTO,
+            int(i) / numberOfColumns, // row
+            int(i) % numberOfColumns, // column
+            hasDefault ? defaultDrumset->voice(midiPitch) : 0,
+            hasDefault ? defaultDrumset->shortcut(midiPitch) : String()
+            );
+
+        const MusxInstance<FontInfo> percFont = options::FontOptions::getFontInfo(
+            percNoteInfo->getDocument(), options::FontOptions::FontType::Percussion);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_QUARTER)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->closedNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_HALF)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->halfNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_WHOLE)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->wholeNotehead, percFont);
+        drumset->drum(midiPitch).noteheads[static_cast<int>(NoteHeadType::HEAD_BREVIS)] = FinaleTextConv::symIdFromFinaleChar(
+            percNoteInfo->dwholeNotehead, percFont);
+
+        drumset->drum(midiPitch).notehead = consolidateDrumNoteHeads(drumset->drum(midiPitch));
+
+        // MuseScore requires a note name
+        if (drumset->drum(midiPitch).name.empty()) {
+            drumset->drum(midiPitch).name = String(u"Percussion note");
+        }
+    }
+
+    return drumset;
+}
+
+static StringData createStringData(const MusxInstance<others::FretInstrument> fretInstrument)
+{
+    std::vector<instrString> strings;
+    strings.reserve(fretInstrument->numStrings);
+    for (auto it = fretInstrument->strings.rbegin(); it != fretInstrument->strings.rend(); ++it) {
+        strings.emplace_back(instrString((*it)->pitch, false, (*it)->nutOffset));
+    }
+    return StringData(fretInstrument->numFrets, strings);
+}
+
+static String nameFromEnigmaText(const FinaleParser& ctx, const String& sidNamePrefix,
+                                 const musx::util::EnigmaParsingContext& parsingContext)
+{
+    EnigmaParsingOptions options;
+    options.initialFont = FontTracker(ctx.score()->style(), sidNamePrefix);
+    /// @note Finale uses system spatium, MS the largest staff spatium visible in the system
+    options.referenceSpatium = ctx.score()->style().spatium();
+    return ctx.stringFromEnigmaText(parsingContext, options);
+}
+
+static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::Staff> musxStaff, Instrument* instrument)
+{
+    // Initialise drumset
+    if (musxStaff->percussionMapId.has_value()) {
+        const MusxInstanceList<others::PercussionNoteInfo> percNoteInfoList
+            = musxStaff->getDocument()->getOthers()->getArray<others::PercussionNoteInfo>(
+                  musxStaff->getSourcePartId(), musxStaff->percussionMapId.value());
+        instrument->setUseDrumset(true);
+        instrument->setDrumset(createDrumset(percNoteInfoList, musxStaff, instrument));
+    } else {
+        instrument->setUseDrumset(false);
+    }
+
+    // Names
+    instrument->setTrackName(String::fromStdString(musxStaff->getFullInstrumentName()));
+    if (musxStaff->calcShowInstrumentName()) {
+        instrument->setLongName(nameFromEnigmaText(ctx, u"longInstrument",
+                                                   musxStaff->getFullInstrumentNameCtx(ctx.currentMusxPartId())));
+        instrument->setShortName(nameFromEnigmaText(ctx, u"shortInstrument",
+                                                    musxStaff->getAbbreviatedInstrumentNameCtx(ctx.currentMusxPartId())));
+    } else {
+        instrument->setLongName(u"");
+        instrument->setShortName(u"");
+    }
+
+    // Transposition
+    // Note that transposition in MuseScore is instrument-based,
+    // so it can change throughout the score but not differ between staves of the same part.
+    // Also note that Finale transposition has opposite signs.
+    auto [diatonic, alteration] = musxStaff->calcTranspositionInterval();
+    instrument->setTranspose(Interval(-diatonic, -music_theory::calc12EdoHalfstepsInInterval(diatonic, alteration)));
+
+    // Fret and string data
+    if (const MusxInstance<others::FretInstrument> fretInstrument
+            = musxStaff->getDocument()->getOthers()->get<others::FretInstrument>(musxStaff->getSourcePartId(), musxStaff->fretInstId)) {
+        instrument->setStringData(createStringData(fretInstrument));
+    }
+}
+
+Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, const InstrumentTemplate* it)
+{
+    auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff> musxStaff) -> std::optional<ClefTypeList>
+    {
+        const auto concertClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
+        ClefType concertClef = toMuseScoreClefType(concertClefDef, musxStaff);
+        ClefType transposeClef = concertClef;
+        if (musxStaff->transposition && musxStaff->transposition->setToClef) {
+            const auto trasposeClefDef = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
+            transposeClef = toMuseScoreClefType(trasposeClefDef, musxStaff);
+        }
+        if (concertClef == ClefType::INVALID || transposeClef == ClefType::INVALID) {
+            return std::nullopt;
+        }
+        return ClefTypeList(concertClef, transposeClef);
+    };
+
+    Staff* s = Factory::createStaff(part);
+
+    // Initialise MuseScore's default values
+    if (it) {
+        const StaffType* pst = it->staffTypePreset ? it->staffTypePreset : StaffType::getDefaultPreset(it->staffGroup);
+        s->setStaffType(Fraction(0, 1), *pst);
+        s->setDefaultClefType(it->clefType(int(part->staves().size())));
+    }
+
+    // Clefs
+    if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
+        s->setDefaultClefType(defaultClefs.value());
+    } else {
+        // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
+        // at the beginning of the piece only.
+        /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
+        s->staffType(Fraction(0, 1))->setGenClef(false);
+    }
+
+    // Drumset and transposition
+    loadInstrument(*this, musxStaff, part->instrument());
+
+    // Barline vertical offsets relative to staff
+    auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
+        // Finale and MuseScore use opposite signs for up/down
+        return int(std::lround(evpuToSp(-offset) * 2.0));
+    };
+    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
+    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
+
+    // hide when empty override
+    if (musxStaff->noOptimize) {
+        s->setHideWhenEmpty(AutoOnOff::OFF);
+    }
+
+    // measure numbers
+    if (m_score->style().styleI(Sid::measureNumberPlacementMode) == static_cast<int>(MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES)) {
+        m_score->addSystemObjectStaff(s);
+        if (musxStaff->hideMeasNums) {
+            s->setProperty(Pid::SHOW_MEASURE_NUMBERS, AutoOnOff::OFF);
+        } else {
+            s->setProperty(Pid::SHOW_MEASURE_NUMBERS, AutoOnOff::ON);
+        }
+    }
+
+    m_score->appendStaff(s);
+    m_inst2Staff.emplace(StaffCmper(musxStaff->getCmper()), s->idx());
+    m_staff2Inst.emplace(s->idx(), StaffCmper(musxStaff->getCmper()));
+    return s;
+}
+
+void FinaleParser::importMeasures()
+{
+    // add default time signature
+    Fraction currTimeSig = Fraction(4, 4);
+    m_score->sigmap()->clear();
+    m_score->sigmap()->add(0, currTimeSig);
+
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    int lastDisplayNum = 0;
+    for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+        Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+        Fraction tick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
+        measure->setTick(tick);
+        m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
+        m_tick2Meas.emplace(tick, musxMeasure->getCmper());
+        const MusxInstance<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
+        Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), musxMeasure->calcMinLegacyPickupSpacer(),
+                                                            logger());
+        if (scoreTimeSig != currTimeSig) {
+            m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
+            currTimeSig = scoreTimeSig;
+        }
+        measure->setTimesig(scoreTimeSig);
+        measure->setTicks(scoreTimeSig);
+        m_score->measures()->append(measure);
+
+        // Needed for later calculations, saves a global layout call
+        if (!m_score->noStaves()) {
+            measure->createStaves(m_score->nstaves() - 1);
+        }
+
+        measure->setBreakMultiMeasureRest(musxMeasure->breakMmRest);
+        if (const MusxInstance<others::MeasureNumberRegion> measNumRegion = musxMeasure->findMeasureNumberRegion()) {
+            if (musxMeasure->getCmper() == measNumRegion->startMeas) {
+                measure->setNoOffset(measNumRegion->numberOffset - lastDisplayNum);
+            }
+            if (musxMeasure->getCmper() == measNumRegion->endMeas - 1) {
+                if (std::optional<int> currLast = measNumRegion->calcLastDisplayNumber()) {
+                    lastDisplayNum = currLast.value();
+                }
+            }
+            if (musxMeasure->noMeasNum) {
+                measure->setIrregular(true);
+            }
+        } else {
+            measure->setIrregular(true);
+        }
+    }
+}
+
+void FinaleParser::importParts()
+{
+    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+
+    const bool hideEmptyStaves = m_score->style().styleB(Sid::hideEmptyStaves);
+    const AutoOnOff doNotHideVal = hideEmptyStaves ? AutoOnOff::OFF : AutoOnOff::AUTO;
+    for (const MusxInstance<others::StaffUsed>& item : scrollView) {
+        const MusxInstance<others::Staff> staff = item->getStaffInstance();
+        IF_ASSERT_FAILED(staff) {
+            continue; // safety check
+        }
+        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, staff->getCmper(), 1, 0);
+        IF_ASSERT_FAILED(compositeStaff) {
+            continue; // safety check
+        }
+
+        const auto instIt = m_doc->getInstruments().find(staff->getCmper());
+        if (instIt == m_doc->getInstruments().end()) {
+            continue;
+        }
+
+        Part* part = new Part(m_score);
+
+        // load default part settings (most of which are overwritten later)
+        const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(compositeStaff->instUuid));
+        if (it) {
+            part->initFromInstrTemplate(it);
+        }
+
+        const auto& [topStaffId, instInfo] = *instIt;
+        if (instInfo.staffGroupId != 0) {
+            if (const auto group = m_doc->getDetails()->get<details::StaffGroup>(m_currentMusxPartId,
+                                                                                 m_doc->calcScrollViewCmper(m_currentMusxPartId),
+                                                                                 instInfo.staffGroupId)) {
+                if (group->hideStaves == details::StaffGroup::HideStaves::None) {
+                    part->setHideWhenEmpty(doNotHideVal);
+                } else if (group->hideStaves != details::StaffGroup::HideStaves::AsGroup) {
+                    part->setHideStavesWhenIndividuallyEmpty(true);
+                }
+            }
+        }
+        for (const StaffCmper inst : instInfo.getSequentialStaves()) {
+            if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
+                createStaff(part, instStaff, it);
+            }
+        }
+
+        // Instrument names
+        part->setPartName(String::fromStdString(staff->getFullInstrumentName()));
+        if (staff->calcShowInstrumentName()) {
+            part->setLongName(nameFromEnigmaText(*this, u"longInstrument", staff->getFullInstrumentNameCtx(m_currentMusxPartId)));
+            part->setShortName(nameFromEnigmaText(*this, u"shortInstrument",
+                                                  compositeStaff->getAbbreviatedInstrumentNameCtx(m_currentMusxPartId)));
+        }
+
+        m_score->appendPart(part);
+    }
+}
+
+void FinaleParser::importBrackets()
+{
+    struct StaffGroupLayer
+    {
+        details::StaffGroupInfo info;
+        int layer{};
+    };
+
+    auto computeStaffGroupLayers = [](std::vector<details::StaffGroupInfo> groups) -> std::vector<StaffGroupLayer> {
+        const size_t n = groups.size();
+        std::vector<StaffGroupLayer> result;
+        result.reserve(n);
+
+        for (auto& g : groups) {
+            result.push_back({ std::move(g), 0 });
+        }
+
+        for (size_t i = 0; i < n; ++i) {
+            const auto& gi = result[i].info;
+            if (!gi.startSlot || !gi.endSlot) {
+                continue;
+            }
+
+            for (size_t j = 0; j < n; ++j) {
+                if (i == j) {
+                    continue;
+                }
+                const auto& gj = result[j].info;
+                if (!gj.startSlot || !gj.endSlot) {
+                    continue;
+                }
+
+                if (*gi.startSlot >= *gj.startSlot && *gi.endSlot <= *gj.endSlot
+                    && (*gi.startSlot > *gj.startSlot || *gi.endSlot < *gj.endSlot)) {
+                    result[i].layer = std::max(result[i].layer, result[j].layer + 1);
+                }
+            }
+        }
+
+        std::sort(result.begin(), result.end(), [](const StaffGroupLayer& a, const StaffGroupLayer& b) {
+            if (a.layer != b.layer) {
+                return a.layer < b.layer;
+            }
+            if (!a.info.startSlot || !b.info.startSlot) {
+                return static_cast<bool>(b.info.startSlot);
+            }
+            return *a.info.startSlot < *b.info.startSlot;
+        });
+
+        return result;
+    };
+
+    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, m_currentMusxPartId);
+    if (!scorePartInfo) {
+        throw std::logic_error("Unable to read PartDefinition for score");
+        return;
+    }
+    const MusxInstanceList<others::StaffUsed> scrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+
+    const auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
+    const auto groupsByLayer = computeStaffGroupLayers(staffGroups);
+    m_stavesWithPianoBraces.assign(m_score->nstaves(), false);
+    for (const auto& groupInfo : groupsByLayer) {
+        IF_ASSERT_FAILED(groupInfo.info.startSlot.has_value() && groupInfo.info.endSlot.has_value()) {
+            logger()->logWarning(String(u"Group info encountered without start or end slot information"));
+            continue;
+        }
+        auto musxStartStaff = scrollView.getStaffInstanceAtIndex(Cmper(groupInfo.info.startSlot.value()));
+        auto musxEndStaff = scrollView.getStaffInstanceAtIndex(Cmper(groupInfo.info.endSlot.value()));
+        IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
+            logger()->logWarning(String(u"Group info encountered missing start or end staff information"));
+            continue;
+        }
+        staff_idx_t startStaffIdx = muse::value(m_inst2Staff, StaffCmper(musxStartStaff->getCmper()), muse::nidx);
+        IF_ASSERT_FAILED(startStaffIdx != muse::nidx) {
+            logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff"), m_doc, musxStartStaff->getCmper());
+            continue;
+        }
+        const MusxInstance<details::StaffGroup> staffGroup = groupInfo.info.group;
+
+        // Bracket type
+        BracketItem* bi = Factory::createBracketItem(m_score->dummy());
+        bi->setBracketType(toMuseScoreBracketType(staffGroup->bracket->style));
+        int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
+        bi->setBracketSpan(groupSpan);
+        bi->setColumn(size_t(groupInfo.layer));
+        m_score->staff(startStaffIdx)->addBracket(bi);
+        if (bi->bracketType() == BracketType::BRACE) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                m_stavesWithPianoBraces.at(idx) = true;
+            }
+        }
+
+        // Barline defaults (these will be overridden later, but good to have nice defaults)
+        if (staffGroup->ownBarline && staffGroup->barlineType == others::Measure::BarlineType::Tick) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan; idx++) {
+                Staff* s = m_score->staff(idx);
+                s->setBarLineSpan(false);
+                int lines = s->lines(Fraction(0, 1)) - 1;
+                s->setBarLineFrom(tickSpanFrom(lines));
+                s->setBarLineTo(tickSpanTo(lines));
+            }
+        } else if (staffGroup->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                m_score->staff(idx)->setBarLineSpan(true);
+                m_score->staff(idx)->setBarLineTo(0);
+            }
+        } else if (staffGroup->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche) {
+            for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                Staff* s = m_score->staff(idx);
+                s->setBarLineSpan(true);
+                int lines = s->lines(Fraction(0, 1)) - 1;
+                s->setBarLineFrom(mensurStricheSpanFrom(lines));
+                s->setBarLineTo(0);
+            }
+        }
+    }
+}
+
+Clef* FinaleParser::createClef(const MusxInstance<others::StaffComposite>& musxStaff,
+                               staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Fraction musxPos,
+                               bool afterBarline, bool visible)
+{
+    const MusxInstance<options::ClefOptions::ClefDef>& clefDef = musxOptions().clefOptions->getClefDef(musxClef);
+    ClefType entryClefType = toMuseScoreClefType(clefDef, musxStaff);
+    if (entryClefType == ClefType::INVALID) {
+        return nullptr;
+    }
+    ClefType transposeClefType = entryClefType;
+    if (musxStaff->transposition && musxStaff->transposition->setToClef) {
+        const MusxInstance<options::ClefOptions::ClefDef>& trasposeClefDef
+            = musxOptions().clefOptions->getClefDef(musxStaff->transposedClef);
+        transposeClefType = toMuseScoreClefType(trasposeClefDef, musxStaff);
+    }
+    // Clef positions in musx are staff-level, so back out any time stretch to get global position.
+    Staff* staff = measure->score()->staff(staffIdx);
+    Fraction timeStretch = staff->timeStretch(measure->tick());
+    Fraction clefTick = musxPos / timeStretch;
+    const bool isHeader = !afterBarline && !measure->prevMeasure() && clefTick.isZero();
+    Segment* clefSeg = measure->getSegmentR(isHeader ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
+    Clef* clef = Factory::createClef(clefSeg);
+    clef->setTrack(staff2track(staffIdx));
+    clef->setConcertClef(entryClefType);
+    clef->setTransposingClef(transposeClefType);
+    if (Segment* se = measure->findSegmentR(Segment::CHORD_REST_OR_TIME_TICK_TYPE, clefSeg->rtick())) {
+        for (EngravingItem* e : se->annotations()) {
+            if (e->isInstrumentChange() && e->staffIdx() == staffIdx) {
+                clef->setForInstrumentChange(true);
+                break;
+            }
+        }
+    }
+    clef->setVisible(visible && !clefDef->isBlank());
+    clef->setGenerated(false);
+    clef->setIsHeader(isHeader);
+    if (afterBarline) {
+        clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+    } else if (clefTick.isZero()) {
+        clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
+    }
+
+    clefSeg->add(clef);
+    return clef;
+}
+
+template<typename T>
+static bool changed(const T& a, const T& b, bool& result)
+{
+    const bool isNotEqual = [&]() {
+        if constexpr (std::is_floating_point_v<T>) {
+            return !muse::RealIsEqual(a, b);
+        } else {
+            return a != b;
+        }
+    }();
+    result = result || isNotEqual;
+    return isNotEqual;
+}
+
+bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<others::StaffComposite>& currStaff)
+{
+    bool result = false;
+    if (changed(staffType->genClef(), !currStaff->hideClefs, result)) {
+        staffType->setGenClef(!currStaff->hideClefs);
+    }
+    bool displayKeySigs = !currStaff->hideKeySigs && !staffType->isDrumStaff(); // Is this hard-coded?
+    if (changed(staffType->genKeysig(), displayKeySigs, result)) {
+        staffType->setGenKeysig(displayKeySigs);
+    }
+    if (changed(staffType->genTimesig(), !currStaff->hideTimeSigs, result)) {
+        staffType->setGenTimesig(!currStaff->hideTimeSigs);
+    }
+    StaffGroup staffGroup = staffGroupFromNotationStyle(currStaff->notationStyle);
+    if (changed(staffType->group(), staffGroup, result)) {
+        staffType->setGroup(staffGroup);
+    }
+    int numLines = currStaff->calcNumberOfStafflines();
+    bool staffInvisible = numLines <= 0;
+    if (staffInvisible) {
+        numLines = 5;
+    }
+    if (changed(staffType->lines(), numLines, result)) {
+        staffType->setLines(numLines);
+    }
+    if (changed(staffType->invisible(), staffInvisible, result)) {
+        staffType->setInvisible(staffInvisible);
+    }
+    Spatium lineDistance = Spatium(evpuToSp(currStaff->lineSpace));
+    if (changed(staffType->lineDistance(), lineDistance, result)) {
+        staffType->setLineDistance(lineDistance);
+    }
+    int stepOffset = currStaff->calcTopLinePosition();
+    Spatium yoffset = Spatium(-stepOffset / 2.0);
+    if (changed(staffType->yoffset(), yoffset, result)) {
+        staffType->setYoffset(yoffset);
+    }
+    if (changed(staffType->stepOffset(), stepOffset, result)) {
+        staffType->setStepOffset(stepOffset);
+    }
+    bool showBarlines = musxOptions().barlineOptions->drawBarlines && !currStaff->hideBarlines;
+    if (changed(staffType->showBarlines(), showBarlines, result)) {
+        staffType->setShowBarlines(showBarlines);
+    }
+    if (changed(staffType->stemless(), currStaff->hideStems, result)) {
+        staffType->setStemless(currStaff->hideStems);
+    }
+
+    // Tablature settings
+    if (staffType->isTabStaff()) {
+        if (changed(staffType->useNumbers(), !currStaff->useTabLetters, result)) {
+            staffType->setUseNumbers(!currStaff->useTabLetters);
+        }
+        if (changed(staffType->linesThrough(), !currStaff->breakTabLinesAtNotes, result)) {
+            staffType->setLinesThrough(!currStaff->breakTabLinesAtNotes);
+        }
+        // Finale offers an exact vertical offset for tab numbers.
+        // MuseScore does too, but using it results in much more
+        // limited font options (only face and pt size available).
+        // We import the numbers without offset but use the toggleable
+        // above/on staff line property to approximate positioning instead.
+        // Alternative: set onLines to false, and use regular offset conversion to get exact Y.
+        /// @todo account for font size, currently using default values and offset (-2/3, Arial/11pt)
+        bool tabNumsNearStaffLine = muse::RealIsEqualOrMore(efixToSp(-currStaff->vertTabNumOff), 0.66);
+        if (changed(staffType->onLines(), tabNumsNearStaffLine, result)) {
+            staffType->setOnLines(tabNumsNearStaffLine);
+        }
+        // Only available for tablature staves in MuseScore
+        if (changed(staffType->showRests(), !currStaff->hideRests, result)) {
+            staffType->setShowRests(!currStaff->hideRests);
+        }
+        // Use the fret number font settings from Finale
+        staffType->setFretUseTextStyle(true);
+        staffType->setFretTextStyle(TextStyleType::TAB_FRET_NUMBER); /// @todo fix default in editstafftype.cpp?
+
+        /// @todo some element visibility options are available as style settings (see styledef.cpp, near bottom)
+        /// We could track what is used on tab styles and then (if possible) set the correct values globally.
+        /// @todo better integration with showing note values/stems on tab staves.
+    }
+
+    // userMag is not based on staff styles but on others::StaffUsed
+    if (const auto system = m_doc->calcSystemFromMeasure(m_currentMusxPartId, currStaff->getMeasureId())) {
+        const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, system->getCmper());
+        if (std::optional<size_t> index = systemStaves.getIndexForStaff(currStaff->getCmper())) {
+            const double newUserMag
+                = (systemStaves[index.value()]->calcEffectiveScaling() / musxOptions().combinedDefaultStaffScaling).toDouble();
+            if (changed(staffType->userMag(), newUserMag, result)) {
+                staffType->setUserMag(newUserMag);
+            }
+        }
+    }
+
+    return result;
+}
+
+static bool instChanged(const MusxInstance<others::StaffComposite>& prev, const MusxInstance<others::StaffComposite>& curr)
+{
+    if (!curr) {
+        return false;
+    }
+    if (!prev) {
+        return true;
+    }
+    // inst id
+    if (curr->instUuid != prev->instUuid) {
+        if (curr->hasInstrumentAssigned() || prev->hasInstrumentAssigned()) {
+            return true;
+        }
+    }
+    // notation style
+    if (!curr->calcIsSameNotationStyle(*prev)) {
+        return true;
+    }
+    // transposition
+    if (static_cast<bool>(curr->transposition) != static_cast<bool>(prev->transposition)) {
+        return true;
+    }
+    if (curr->transposition && !curr->transposition->isSame(*prev->transposition)) {
+        return true;
+    }
+    /// @todo Default clef, note color, and whether to hide key signatures and show accidentals
+    /// only occur with instrument changes in Finale. But it does not seem like we should trigger
+    /// a MuseScore instrument change for any of these *alone* without some other change as well.
+    /// We can revisit this if necessary.
+    return false;
+}
+
+static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
+{
+    // Other beaming options (such as over rests or beamThreeEighthsInCommonTime) not supported
+    const MusxInstance<options::BeamOptions> config = timeSig->getDocument()->getOptions()->get<options::BeamOptions>();
+    if (config->beamFourEighthsInCommonTime && timeSig->isCommonTime()) {
+        return Groups({ { 8, 0x110 }, { 16, 0x111 }, { 24, 0x110 } });
+    }
+
+    Groups groups;
+    int pos = 0;
+    const Fraction measureLength = musxFractionToFraction(timeSig->calcTotalDuration());
+    for (const TimeSignature::TimeSigComponent& component : timeSig->components) {
+        Fraction f = musxFractionToFraction(component.sumCounts()).reduced();
+        if (f.denominator() != 1) {
+            logger->logWarning(String(u"Unable to read beam groups for time signature"));
+            return Groups::endings(measureLength);
+        }
+        for (int i = 0; i < f.numerator(); ++i) {
+            for (Edu d : component.units) {
+                Fraction beat = eduToFraction(d * 32).reduced();
+                if (beat.denominator() != 1) {
+                    logger->logWarning(String(u"Unable to read beam groups for time signature"));
+                    return Groups::endings(measureLength);
+                }
+                pos += beat.numerator();
+                if (Fraction(pos, 32) >= measureLength) {
+                    return groups;
+                }
+                GroupNode n;
+                n.pos    = pos;
+                n.action = 0x111;
+                groups.addNode(n);
+            }
+        }
+    }
+    return groups;
+}
+
+static String computeTimeSignatureString(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
+{
+    String numerator;
+    String denominator;
+    for (size_t j = 0; j < timeSig->components.size(); ++j) {
+        TimeSignature::TimeSigComponent component = timeSig->components.at(j);
+        bool canUseMismatchedSizes = component.counts.size() == component.units.size()
+                                     || j + 1 >= timeSig->components.size();
+
+        // MuseScore can't center a plus symbol between lines, so just add one to both.
+        if (j > 0) {
+            numerator.append(u"+");
+            denominator.append(u"+");
+        }
+
+        for (size_t i = 0; i < component.units.size(); ++i) {
+            if (i > 0) {
+                denominator.append(u"+");
+            }
+            Fraction f = eduToFraction(component.units.at(i));
+            denominator.append(String::number(f.denominator()));
+        }
+
+        // For compound meters: If there is one unit value, Finale modifies the numerators
+        int multiplier = component.units.size() == 1 ? eduToFraction(component.units.front()).numerator() : 1;
+
+        for (size_t i = 0; i < component.counts.size(); ++i) {
+            if (i > 0) {
+                numerator.append(u"+");
+            }
+            Fraction f = musxFractionToFraction(component.counts.at(i)).reduced();
+            if (f.denominator() != 1) {
+                logger->logWarning(String(u"Time signature has fractional portion that could not be reduced."));
+                return String();
+            }
+            numerator.append(String::number(f.numerator() * multiplier));
+        }
+
+        // Hack: MuseScore doesn't have a concept of components, and will not align
+        // text accordingly. To compensate, we repeat the last used number as many
+        // times as needed, so it visually still lines up.
+        if (!canUseMismatchedSizes) {
+            int diff = int(component.units.size()) - int(component.counts.size());
+            String* target = diff > 0 ? &numerator : &denominator;
+            size_t x = target->lastIndexOf(u'+');
+            const String toAdd = String(u"+") + (x == muse::nidx ? *target : (*target).mid(x + 1));
+            for (int i = 0; i < std::abs(diff); ++i) {
+                (*target).append(toAdd);
+            }
+        }
+    }
+    return String(numerator + u"/" + denominator);
+}
+
+void FinaleParser::importStaffItems()
+{
+    if (!m_score->firstMeasure()) {
+        return;
+    }
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffUsed> musxScrollView = m_doc->getScrollViewStaves(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> musxSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : musxScrollView) {
+        // Retrieve staff
+        const StaffCmper musxStaffId = musxScrollViewItem->staffId;
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxStaffId);
+        IF_ASSERT_FAILED(rawStaff) {
+            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxStaffId, 1);
+            return;
+        }
+        staff_idx_t staffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
+        Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+        IF_ASSERT_FAILED(staff) {
+            logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxStaffId);
+            return;
+        }
+        track_idx_t curTrackIdx = staff2track(staffIdx);
+
+        // Find locations where staff styles or instruments change
+        // In MuseScore, these must occur on measure boundaries
+        std::set<MeasCmper> styleChanges;
+        styleChanges.emplace(1); // there is always a style change on the first measure.
+        if (rawStaff->hasStyles) {
+            const auto musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId);
+            for (const auto& musxStyleChange : musxStyleChanges) {
+                styleChanges.emplace(musxStyleChange->startMeas);
+                if (std::optional<std::pair<MeasCmper, Edu> > nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
+                    auto [nextMeas, nextEdu] = nextLoc.value();
+                    if (nextMeas == musxStyleChange->startMeas && nextMeas < MeasCmper(musxMeasures.size())) {
+                        styleChanges.emplace(nextMeas + 1);
+                    } else {
+                        styleChanges.emplace(nextMeas);
+                    }
+                }
+            }
+        }
+        for (const auto& musxSystem : musxSystems) {
+            if (musxSystem->startMeas <= 1) { // we already added measure 1 at init time
+                continue;
+            }
+            const auto systemStaves = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, musxSystem->getCmper());
+            if (systemStaves.getIndexForStaff(rawStaff->getCmper()).has_value()) {
+                styleChanges.emplace(musxSystem->startMeas);
+            }
+        }
+
+        // Apply any given changes
+        MusxInstance<others::StaffComposite> prevStaff;
+        for (MeasCmper measNum : styleChanges) {
+            Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
+            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measNum);
+                return;
+            }
+
+            const auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measNum, 0);
+            IF_ASSERT_FAILED(currStaff) {
+                logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxStaffId, measNum);
+                return;
+            }
+            Fraction tick = measure->tick();
+
+            // Instrument changes
+            if (tick.isNotZero() && staff == staff->part()->staff(0)) {
+                if (instChanged(currStaff, prevStaff)) {
+                    if (const InstrumentTemplate* it = searchTemplate(instrTemplateIdfromUuid(currStaff->instUuid))) {
+                        Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+                        InstrumentChange* c = Factory::createInstrumentChange(segment, Instrument::fromTemplate(it));
+                        loadInstrument(*this, currStaff, c->instrument());
+                        c->setTrack(staff2track(staffIdx));
+                        const String newInstrChangeText = muse::mtrc("engraving", "To %1").arg(c->instrument()->trackName());
+                        c->setXmlText(TextBase::plainToXmlText(newInstrChangeText));
+                        c->setVisible(false);
+                        segment->add(c);
+                    }
+                }
+            }
+
+            // Staff type
+            StaffType* staffType = tick.isZero() ? staff->staffType(tick) : new StaffType(*(staff->staffType(tick)));
+            IF_ASSERT_FAILED(staffType) {
+                logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxStaffId, measNum);
+                break;
+            }
+            if (collectStaffType(staffType, currStaff) && tick.isNotZero()) {
+                StaffTypeChange* stc = Factory::createStaffTypeChange(measure);
+                stc->setParent(measure);
+                stc->setTrack(curTrackIdx);
+                stc->setStaffType(staffType, true);
+                measure->add(stc);
+            } else if (tick.isNotZero()) {
+                delete staffType;
+            }
+
+            prevStaff = currStaff;
+        }
+
+        // Clefs, key signatures, and time signatures
+        MusxInstance<TimeSignature> currMusxTimeSig;
+        std::optional<musx::util::Fraction> currLegacyPickupSpacer;
+        MusxInstance<TimeSignature> currVisualTimeSig;
+        MusxInstance<KeySignature> currMusxKeySig;
+        std::optional<KeySigEvent> currKeySigEvent;
+        MusxInstance<others::Measure> prevMusxMeasure;
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxStaffId);
+        for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+            MeasCmper measId = musxMeasure->getCmper();
+            Fraction currTick = muse::value(m_meas2Tick, measId, Fraction(-1, 1));
+            Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, measId);
+                return;
+            }
+
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId, measId, 0);
+            IF_ASSERT_FAILED(currStaff) {
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxStaffId, measId);
+                return;
+            }
+
+            // Time signatures
+            const MusxInstance<TimeSignature> localTimeSig = musxMeasure->createTimeSignature(musxStaffId);
+            const musx::util::Fraction legacyPickupSpacer = musxMeasure->calcMinLegacyPickupSpacer(musxStaffId);
+            const MusxInstance<TimeSignature> visualTimeSig = musxMeasure->createDisplayTimeSignature(musxStaffId);
+            const bool visualTimeSigChanged = !currVisualTimeSig || !currVisualTimeSig->isSame(*visualTimeSig);
+            const bool actualTimeSigChanged = !currMusxTimeSig || !currMusxTimeSig->isSame(*localTimeSig)
+                                              || currLegacyPickupSpacer != legacyPickupSpacer;
+            const bool forceDisplayTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always;
+            const bool forceHideTimeSig = musxMeasure->showTime == others::Measure::ShowTimeSigMode::Never;
+            if (actualTimeSigChanged || visualTimeSigChanged || forceDisplayTimeSig) {
+                const MusxInstance<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
+                Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+                TimeSig* ts = Factory::createTimeSig(seg);
+                Fraction timeSig = simpleMusxTimeSigToFraction(localTimeSig->calcSimplified(), legacyPickupSpacer, logger());
+
+                // Display text: Attempt to inherit it, where possible
+                if (visualTimeSig->getAbbreviatedSymbol().has_value()) {
+                    ts->setSig(timeSig, visualTimeSig->isCutTime() ? TimeSigType::ALLA_BREVE : TimeSigType::FOUR_FOUR);
+                } else {
+                    ts->setSig(timeSig);
+                    bool ok = true;
+                    String visualString = computeTimeSignatureString(visualTimeSig, logger());
+                    if (!visualString.empty() && (timeSig != Fraction::fromString(visualString, &ok) || !ok)) {
+                        const size_t i = visualString.indexOf(u'/');
+                        ts->setNumeratorString(visualString.left(i));
+                        ts->setDenominatorString(visualString.mid(i + 1));
+                    }
+                }
+
+                ts->setTrack(curTrackIdx);
+                ts->setVisible(forceDisplayTimeSig || (visualTimeSigChanged && !forceHideTimeSig));
+                ts->setShowCourtesySig(ts->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
+                ts->setGroups(computeTimeSignatureGroups(localTimeSig, logger()));
+                Fraction timeStretch { localTimeSig->calcTotalDuration().calcEduDuration(),
+                                       globalTimeSig->calcTotalDuration().calcEduDuration() };
+                ts->setStretch(timeStretch.reduced());
+                seg->add(ts);
+            }
+            currMusxTimeSig = localTimeSig;
+            currLegacyPickupSpacer = legacyPickupSpacer;
+            currVisualTimeSig = visualTimeSig;
+
+            // Clefs
+            if (musxOptions().partGlobals->showTransposed && currStaff->transposition && currStaff->transposition->setToClef) {
+                // The Finale UI requires transposition to be a full-measure staff-style assignment,
+                // so checking only the beginning of the bar should be sufficient.
+                // However, it is possible to defeat this requirement using plugins.
+                // That said, doing so produces erratic results, so I'm not sure we should support it.
+                // For now, only check the start of the measure.
+                if (currStaff->transposedClef != musxCurrClef) {
+                    const ClefIndex concertClef = currStaff->calcClefIndex(/*forWrittenPitch*/ false);
+                    if (Clef* clef = createClef(currStaff, staffIdx, concertClef, measure, /*pos*/ Fraction(0, 1), false, true)) {
+                        clef->setShowCourtesy(clef->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
+                        musxCurrClef = currStaff->transposedClef;
+                    }
+                }
+            } else if (auto gfHold = m_doc->getDetails()->get<details::GFrameHold>(m_currentMusxPartId, musxStaffId, measId)) {
+                if (gfHold->clefId.has_value()) {
+                    if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
+                        const bool visible = gfHold->showClefMode != ShowClefMode::Never;
+                        if (createClef(currStaff, staffIdx, gfHold->clefId.value(), measure, /*pos*/ Fraction(0, 1),
+                                       gfHold->clefAfterBarline, visible)) {
+                            musxCurrClef = gfHold->clefId.value();
+                        }
+                    }
+                } else {
+                    const auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(m_currentMusxPartId, gfHold->clefListId);
+                    const auto gfHoldCtx = details::GFrameHoldContext(gfHold);
+                    for (const MusxInstance<others::ClefList>& midMeasureClef : midMeasureClefs) {
+                        if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef
+                            || midMeasureClef->clefMode == ShowClefMode::Always) {
+                            const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
+                            const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                            auto midStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxStaffId,
+                                                                                  measId, midMeasureClef->xEduPos);
+                            const auto clefPos = musx::util::Fraction::fromEdu(midMeasureClef->xEduPos);
+                            musx::util::Fraction clefPosAdj = gfHoldCtx.snapLocationToEntryOrKeep(clefPos, /*findExact*/ true);
+                            if (Clef* clef = createClef(midStaff, staffIdx, midMeasureClef->clefIndex, measure,
+                                                        musxFractionToFraction(clefPosAdj), afterBarline, visible)) {
+                                // only set y offset because MuseScore automatically calculates the horizontal spacing offset
+                                clef->setOffset(0.0, -evpuToSp(midMeasureClef->yEvpuPos) * clef->spatium());
+                                /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
+                                musxCurrClef = midMeasureClef->clefIndex;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Key signatures
+            const MusxInstance<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxStaffId);
+            if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig)
+                || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
+                /// @todo microtonal keysigs
+                std::optional<KeySigEvent> keySigEvent;
+                if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
+                    const bool usesChromaticTransposition = currStaff->transposition && currStaff->transposition->chromatic
+                                                            && (currStaff->transposition->chromatic->alteration
+                                                                || currStaff->transposition->chromatic->diatonic);
+                    if (usesChromaticTransposition && musxKeySig->getAlteration(KeySignature::KeyContext::Concert) != 0) {
+                        logger()->logWarning(String(
+                                                 u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(
+                                                 musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
+                    }
+                    const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis
+                                         || currStaff->hideKeySigsShowAccis;
+                    keySigEvent = KeySigEvent();
+                    // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
+                    KeySigEvent& ksEvent = keySigEvent.value();
+                    if (keyless) {
+                        ksEvent.setConcertKey(Key::C);
+                        ksEvent.setKey(Key::C);
+                        ksEvent.setMode(KeyMode::NONE);
+                    } else if (musxKeySig->isLinear()) {
+                        ksEvent.setConcertKey(keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Concert)));
+                        if (!score()->style().styleB(Sid::concertPitch)) {
+                            ksEvent.setKey(keyFromAlteration(musxKeySig->getAlteration(KeySignature::KeyContext::Written)));
+                        } else {
+                            // Setting this to the transposing key causes MuseScore to display the transposed key in concert pitch view.
+                            // Anyway, this is what the musicxml import does, and it fixes the problem.
+                            ksEvent.setKey(ksEvent.concertKey());
+                        }
+                        if (musxKeySig->isMajor()) {
+                            ksEvent.setMode(KeyMode::MAJOR);
+                        } else if (musxKeySig->isMinor()) {
+                            ksEvent.setMode(KeyMode::MINOR);
+                        } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
+                            ksEvent.setMode(keyModeFromDiatonicMode(mode.value()));
+                        }
+                    } else if (musxKeySig->isNonLinear()) {
+                        const auto musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId,
+                                                                                                musxKeySig->getKeyMode());
+                        const auto musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId,
+                                                                                                   musxKeySig->getKeyMode());
+                        IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
+                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
+                            return;
+                        }
+                        ksEvent.setConcertKey(Key::C);
+                        ksEvent.setKey(Key::C);
+                        ksEvent.setCustom(true);
+                        for (size_t i = 0; i < musxAccis->values.size(); ++i) {
+                            int amount = musxAmounts->values[i];
+                            if (amount == 0) {
+                                break;
+                            }
+                            SymId accidental = acciSymbolFromAcciAmount(amount);
+                            if (accidental == SymId::noSym) {
+                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(
+                                                         amount, musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
+                                continue;
+                            }
+                            CustDef cd;
+                            cd.sym = accidental;
+                            cd.degree = musxAccis->values[i];
+                            /// @todo calculate any octave offset. Finale specifies the exact octave for every clef
+                            /// while MuseScore specifies an offset from the default octave for the currently active clef.
+                            /// Since this is a poor mapping, we are taking the MuseScore default for now.
+                            ksEvent.customKeyDefs().emplace_back(cd);
+                        }
+                        if (ksEvent.customKeyDefs().empty()) {
+                            ksEvent.setCustom(false);
+                            ksEvent.setMode(KeyMode::NONE);
+                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(
+                                                     musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
+                        }
+                    } else {
+                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(
+                                                 musxKeySig->getKeyMode()), m_doc, musxStaffId, measId);
+                    }
+                } else {
+                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxStaffId, measId);
+                }
+                if (keySigEvent.has_value()) {
+                    if (currKeySigEvent.has_value() && !musxOptions().keyOptions->redisplayOnModeChange) {
+                        currKeySigEvent.value().setMode(keySigEvent.value().mode());
+                    }
+                    if (keySigEvent != currKeySigEvent) {
+                        Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
+                        KeySig* ks = Factory::createKeySig(seg);
+                        ks->setKeySigEvent(keySigEvent.value());
+                        ks->setTrack(curTrackIdx);
+                        ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
+                        ks->setShowCourtesy(ks->visible() && (!prevMusxMeasure || !prevMusxMeasure->hideCaution));
+                        seg->add(ks);
+                        staff->setKey(currTick, ks->keySigEvent());
+                    }
+                }
+                currKeySigEvent = keySigEvent;
+            }
+            currMusxKeySig = musxKeySig;
+            prevMusxMeasure = musxMeasure;
+
+            importChordsFrets(musxStaffId, measId, staff, measure);
+        }
+    }
+}
+
+void FinaleParser::applyStaffStyles()
+{
+    /// @note Finale's staff styles control some options not available in MuseScore's StaffType.
+    /// As they affect later visibility of added elements, this method is called once all elements have been imported.
+    auto layerFromTrack = [this](track_idx_t track, Fraction tick) -> LayerIndex {
+        if (m_track2Layer.empty() || m_track2Layer.at(track).empty()) {
+            return 0;
+        }
+        const auto it = muse::findLessOrEqual(m_track2Layer.at(track), tick.ticks());
+        if (it != m_track2Layer.at(track).cend()) {
+            return it->second;
+        }
+        return 0;
+    };
+
+    if (!m_score->firstMeasure()) {
+        return;
+    }
+
+    for (const MusxInstance<others::StaffUsed>& musxScrollViewItem : m_doc->getScrollViewStaves(m_currentMusxPartId)) {
+        // Retrieve staff
+        const StaffCmper musxStaffId = musxScrollViewItem->staffId;
+        const MusxInstance<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxStaffId);
+        IF_ASSERT_FAILED(rawStaff) {
+            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxStaffId, 1);
+            return;
+        }
+        if (!rawStaff->hasStyles) {
+            continue;
+        }
+        staff_idx_t staffIdx = muse::value(m_inst2Staff, musxStaffId, muse::nidx);
+        Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+        IF_ASSERT_FAILED(staff) {
+            logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxStaffId);
+            return;
+        }
+
+        for (const auto& staffStyleAssign : m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId)) {
+            const auto staffStyle = staffStyleAssign->getStaffStyle();
+            Fraction startTick = muse::value(m_meas2Tick, staffStyleAssign->startMeas, Fraction(-1, 1));
+            Measure* startMeasure = startTick.positive() ? m_score->tick2measure(startTick) : nullptr;
+            IF_ASSERT_FAILED(startMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->startMeas);
+                continue;
+            }
+            startTick += eduToFraction(staffStyleAssign->startEdu);
+
+            /// WARNING: staff style assignments can be beyond the end of the document.
+            const MeasCmper endMeas = std::min(staffStyleAssign->endMeas, static_cast<MeasCmper>(m_meas2Tick.size()));
+            Fraction endTick = muse::value(m_meas2Tick, endMeas, Fraction(-1, 1));
+            Measure* endMeasure = endTick.positive() ? m_score->tick2measure(endTick) : nullptr;
+            IF_ASSERT_FAILED(endMeasure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxStaffId, staffStyleAssign->endMeas);
+                continue;
+            }
+            endTick += eduToFraction(staffStyleAssign->endEdu);
+
+            // SmartShapes visibility
+            // Observed behaviour: Only affects entry-attached SmartShapes
+            if (staffStyle->altHideSmartShapes || staffStyle->altHideOtherSmartShapes) {
+                for (auto sp : score()->spannerMap().findOverlapping(startTick.ticks(), endTick.ticks())) {
+                    if (sp.value->staffIdx() != staffIdx || !sp.value->visible()) {
+                        continue;
+                    }
+                    if (sp.value->isVolta()) {
+                        sp.value->setVisible(!staffStyle->hideRepeats);
+                    }
+                    if (sp.value->anchor() != Spanner::Anchor::CHORD || sp.value->anchor() == Spanner::Anchor::NOTE) {
+                        continue;
+                    }
+                    bool isAltLayer = layerFromTrack(sp.value->track(), sp.value->tick()) == staffStyle->altLayer;
+                    sp.value->setVisible(isAltLayer ? staffStyle->altHideSmartShapes : staffStyle->altHideOtherSmartShapes);
+                }
+            }
+
+            for (Segment* s = startMeasure->first(); s && s->tick() < endTick; s = s->next1()) {
+                if (s->tick() < startTick) {
+                    continue;
+                }
+
+                // Called once per measure
+                if (s == s->measure()->first()) {
+                    if (staffStyle->hideMeasNums && s->measure()->measureNumber(staffIdx)) {
+                        s->measure()->measureNumber(staffIdx)->setVisible(false);
+                    }
+                    for (EngravingItem* e : s->measure()->el()) {
+                        if (e->staffIdx() != staffIdx) {
+                            continue;
+                        }
+                        if (e->isJump() || e->isMarker()) {
+                            e->setVisible(e->visible() && !staffStyle->hideRepeats);
+                        }
+                    }
+                    // if (staffStyle->hideStems && endTick >= s->measure()->endTick()) {
+                    //     s->measure()->setStaffStemless(staffIdx, true);
+                    // }
+                }
+
+                for (EngravingItem* el : s->annotations()) {
+                    if (el->staffIdx() != staffIdx || !el->visible()) {
+                        continue;
+                    }
+                    if (el->isHarmony()) {
+                        el->setVisible(!staffStyle->hideChords);
+                        continue;
+                    }
+                    if (el->isFretDiagram()) {
+                        el->setVisible(!staffStyle->hideFretboards);
+                        continue;
+                    }
+                    bool isAltLayer = layerFromTrack(el->track(), s->tick()) == staffStyle->altLayer;
+                    if (el->isTextBase()) {
+                        if (el->isSticking() || el->isPlayTechAnnotation()) {
+                            el->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                        } else {
+                            el->setVisible(isAltLayer ? !staffStyle->altHideExpressions : !staffStyle->altHideOtherExpressions);
+                        }
+                    }
+                    if (el->isFermata()) {
+                        el->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                    }
+                }
+
+                if (s->isChordRestType()) {
+                    const bool normalNotation = staffStyle->altNotation == others::Staff::AlternateNotation::Normal;
+                    for (track_idx_t t = staff2track(staffIdx); t < staff2track(staffIdx + 1); ++t) {
+                        bool isAltLayer = layerFromTrack(t, s->tick()) == staffStyle->altLayer;
+                        bool hideNotes = isAltLayer ? !normalNotation : staffStyle->altHideOtherNotes;
+                        ChordRest* cr = toChordRest(s->element(t));
+                        if (!cr) {
+                            continue;
+                        }
+                        for (Lyrics* l : cr->lyrics()) {
+                            l->setVisible(l->visible() && (isAltLayer ? !staffStyle->altHideLyrics : !staffStyle->altHideOtherLyrics));
+                        }
+                        if (staffStyle->hideTuplets || hideNotes) {
+                            for (Tuplet* t = cr->tuplet(); t; t = t->tuplet()) {
+                                t->setVisible(false);
+                            }
+                        }
+
+                        if ((staffStyle->hideBeams || hideNotes) && cr->beam()) {
+                            cr->beam()->setVisible(false);
+                        }
+
+                        if (cr->isRest()) {
+                            if (hideNotes) {
+                                cr->setVisible(false);
+                            }
+                            if (staffStyle->hideDots || hideNotes) {
+                                for (NoteDot* nd : toRest(cr)->dotList()) {
+                                    nd->setVisible(false);
+                                }
+                            }
+                            continue;
+                        }
+
+                        auto processChord = [&](Chord* c) {
+                            DirectionV stemDir = toMuseScoreStemDirection(staffStyle->stemDirection);
+                            if (stemDir != DirectionV::AUTO) {
+                                c->setStemDirection(stemDir);
+                            }
+                            if (isAltLayer ? staffStyle->altHideArtics : staffStyle->altHideOtherArtics) {
+                                for (Articulation* a : c->articulations()) {
+                                    a->setVisible(false);
+                                }
+                                if (c->arpeggio()) {
+                                    c->arpeggio()->setVisible(false);
+                                }
+                                if (c->tremoloSingleChord()) {
+                                    c->tremoloSingleChord()->setVisible(false);
+                                }
+                            }
+                            if (hideNotes && c->stem()) {
+                                c->stem()->setVisible(false);
+                            }
+                            for (engraving::Note* n : c->notes()) {
+                                if (staffStyle->hideDots) {
+                                    for (NoteDot* nd : n->dots()) {
+                                        nd->setVisible(false);
+                                    }
+                                }
+                                if (staffStyle->hideTies) {
+                                    if (n->tieFor()) {
+                                        n->tieFor()->setVisible(false);
+                                    }
+                                    if (n->tieBack()) {
+                                        n->tieBack()->setVisible(false);
+                                    }
+                                }
+                                if (staffStyle->showNoteColors) {
+                                    int pitch = n->pitch(); /// @todo transposition?
+                                    n->setColor(musxOptions().convertedColors.at(pitch % PITCH_DELTA_OCTAVE));
+                                }
+                                if (isAltLayer ? staffStyle->altHideSmartShapes : staffStyle->altHideOtherSmartShapes) {
+                                    for (Spanner* sp : n->spannerFor()) {
+                                        sp->setVisible(false);
+                                    }
+                                    // Not for spanners back - they don't fall within the range
+                                }
+                                if (hideNotes) {
+                                    n->setVisible(false);
+                                }
+                                if (isAltLayer ? staffStyle->altHideArtics : staffStyle->altHideOtherArtics) {
+                                    for (EngravingItem* e : n->el()) {
+                                        if (e->isFingering()) {
+                                            e->setVisible(false);
+                                        }
+                                    }
+                                }
+                                if (hideNotes && n->accidental()) {
+                                    n->accidental()->setVisible(false);
+                                }
+                            }
+                        };
+
+                        Chord* c = toChord(cr);
+                        for (Chord* gc : c->graceNotes()) {
+                            if ((staffStyle->hideBeams || hideNotes) && gc->beam()) {
+                                gc->beam()->setVisible(false);
+                            }
+
+                            processChord(gc);
+                        }
+                        processChord(c);
+                    }
+                }
+
+                EngravingItem* e = s->element(staff2track(staffIdx));
+                if (e) {
+                    if (e->isBarLine()) {
+                        BarLine* bl = toBarLine(e);
+                        if (bl->barLineType() == engraving::BarLineType::START_REPEAT
+                            || bl->barLineType() == engraving::BarLineType::END_REPEAT) {
+                            bl->setSpanStaff(bl->spanStaff() && !staffStyle->rbarBreak);
+                            bl->setVisible(bl->visible() && !staffStyle->hideRptBars);
+                        } else {
+                            bl->setSpanStaff(bl->spanStaff() && !staffStyle->blineBreak);
+                        }
+                    } else if (e->isBreath() && e->visible()) {
+                        bool isAltLayer = layerFromTrack(e->track(), s->tick()) == staffStyle->altLayer;
+                        e->setVisible(isAltLayer ? !staffStyle->altHideArtics : !staffStyle->altHideOtherArtics);
+                    }
+                }
+
+                if (s->measure() == endMeasure->nextMeasure()) {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void FinaleParser::importBarlines()
+{
+    using MusxBarlineType = others::Measure::BarlineType;
+    const MusxInstanceList<others::Measure> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    const MusxInstance<options::BarlineOptions>& config = musxOptions().barlineOptions;
+    for (const MusxInstance<others::Measure>& musxMeasure : musxMeasures) {
+        MeasCmper measId = musxMeasure->getCmper();
+        Fraction currTick = muse::value(m_meas2Tick, measId, Fraction(-1, 1));
+        Measure* measure = currTick.positive() ? m_score->tick2measure(currTick) : nullptr;
+        IF_ASSERT_FAILED(measure) {
+            logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc);
+            return;
+        }
+
+        bool startsStaffSystem = false;
+        bool endsStaffSystem = false;
+        std::vector<details::StaffGroupInfo> staffGroups;
+        if (const auto staffSystem = m_doc->calcSystemFromMeasure(m_currentMusxPartId, measId)) {
+            startsStaffSystem = staffSystem->startMeas == measId;
+            endsStaffSystem = staffSystem->getLastMeasure() == measId;
+            const auto scrollView = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, staffSystem->getCmper());
+            staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(measId, m_currentMusxPartId, scrollView);
+        }
+
+        // Left barline
+        if (startsStaffSystem) {
+            MusxBarlineType musxBarlineType = musxMeasure->leftBarlineType;
+            if (musxBarlineType == MusxBarlineType::OptionsDefault
+                && config->leftBarlineUsePrevStyle && measure->prevMeasure()) {
+                if (MeasCmper prevMeasureId = muse::value(m_tick2Meas, measure->prevMeasure()->tick(), 0)) {
+                    musxBarlineType = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, prevMeasureId)->barlineType;
+                }
+            }
+            engraving::BarLineType lblt = toMuseScoreBarLineType(musxBarlineType);
+            /// @todo MusxBarlineType::Custom
+
+            // observed: unaffected by musxOptions/drawBarlines, same as MuseScore
+            const bool lblVisible = musxBarlineType != MusxBarlineType::None;
+            const bool lblSpan = true; // Can this even be false for left barlines in Finale?
+            const bool lblGenerated = musxBarlineType == MusxBarlineType::Normal;
+            const bool lblTicked = musxBarlineType == MusxBarlineType::Tick;
+
+            Segment* lbls = measure->getSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
+
+            // Finale adds distance between 'segments' even if barlines are invisible,
+            // but (like MuseScore) not their width. So we add the distance as leading space.
+            if (importCustomPositions() && !lblVisible) {
+                if (Segment* nextSeg = lbls->nextActive()) {
+                    if (nextSeg->isKeySigType()) {
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::keysigLeftMargin));
+                    } else if (nextSeg->isTimeSigType()) {
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::timesigLeftMargin));
+                    } else { /* if (nextSeg->isClefType()) */
+                        // default to clef distance
+                        nextSeg->setExtraLeadingSpace(m_score->style().styleS(Sid::clefLeftMargin));
+                    }
+                }
+            }
+
+            for (track_idx_t track = 0; track < m_score->ntracks(); track += VOICES) {
+                BarLine* bl = Factory::createBarLine(lbls);
+                bl->setParent(lbls);
+                bl->setTrack(track);
+                bl->setVisible(lblVisible);
+                bl->setGenerated(lblGenerated);
+                bl->setSpanStaff(lblSpan || bl->staff()->barLineSpan());
+                bl->setBarLineType(lblt);
+                if (lblTicked) {
+                    int lines = bl->staff()->lines(lbls->tick()) - 1;
+                    bl->setSpanFrom(tickSpanFrom(lines));
+                    bl->setSpanTo(tickSpanTo(lines));
+                } else {
+                    bl->setSpanFrom(0);
+                    bl->setSpanTo(0);
+                }
+                lbls->add(bl);
+            }
+        }
+
+        // Right barline
+        engraving::BarLineType blt = toMuseScoreBarLineType(musxMeasure->barlineType);
+        if (musxMeasure->barlineType == MusxBarlineType::Normal && !measure->nextMeasure()
+            && config->drawFinalBarlineOnLastMeas) {
+            blt = engraving::BarLineType::FINAL;
+        }
+
+        // musxOptions/drawBarlines hides barlines on a layout level, so we still want to read their settings correctly
+        const bool blVisible = musxMeasure->barlineType != MusxBarlineType::None;
+
+        const bool blSpan = (endsStaffSystem && config->drawCloseSystemBarline)
+                            || (!measure->nextMeasure() && config->drawCloseFinalBarline);
+
+        // Setting generated allows correct inheriting of other score behavior
+        // (Double barlines before key signatures, final barline....)
+        const bool blGenerated = (musxMeasure->barlineType == MusxBarlineType::Normal)
+                                 && (measure->nextMeasure() || blt == engraving::BarLineType::FINAL);
+
+        const bool blTicked = musxMeasure->barlineType == MusxBarlineType::Tick;
+
+        Segment* bls = measure->getSegmentR(SegmentType::EndBarLine, measure->ticks());
+        for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
+            engraving::BarLineType localType = blt;
+            bool localVisible = blVisible;
+            bool localGenerated = blGenerated;
+            bool localSpan = blSpan;
+            bool localTick = blTicked;
+            bool mensurStriche = false;
+            bool mensurLast = false;
+            size_t priority = m_score->nstaves() + 1;
+
+            StaffCmper musxStaffId = muse::value(m_staff2Inst, staffIdx, 0);
+            for (details::StaffGroupInfo groupInfo : staffGroups) {
+                if (muse::contains(groupInfo.group->staves, musxStaffId)) {
+                    bool canUseStaffBarline = !musxMeasure->groupBarlineOverride && groupInfo.group->ownBarline;
+                    localGenerated = localGenerated || canUseStaffBarline;
+                    localSpan = localSpan || groupInfo.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves;
+
+                    // Deal with overlapping groups by prioritise the smallest group.
+                    // Except for span and generated, which can be set by any group
+                    if (priority > groupInfo.group->staves.size()) {
+                        if (canUseStaffBarline) {
+                            localType = toMuseScoreBarLineType(groupInfo.group->barlineType);
+                            localVisible = groupInfo.group->barlineType != MusxBarlineType::None;
+                            localTick = groupInfo.group->barlineType == MusxBarlineType::Tick;
+                        }
+                        // Draw Mensurstriche if determined by smallest group
+                        mensurStriche = groupInfo.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::Mensurstriche;
+                        mensurLast = mensurStriche ? musxStaffId == groupInfo.group->endInst : false;
+                        priority = groupInfo.group->staves.size();
+                    }
+                }
+            }
+            // Only actually draw Mensurstriche if we don't span over them and don't use tick barline
+            mensurStriche = mensurStriche && !localSpan && !localTick;
+
+            BarLine* bl = Factory::createBarLine(bls);
+            bl->setParent(bls);
+            bl->setTrack(staff2track(staffIdx));
+            bl->setVisible(localVisible);
+            bl->setGenerated(localGenerated);
+            bl->setSpanStaff(!localTick && (localSpan || mensurStriche));
+            bl->setBarLineType(localType);
+            if (localTick) {
+                int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
+                bl->setSpanFrom(tickSpanFrom(lines));
+                bl->setSpanTo(tickSpanTo(lines));
+            } else if (mensurStriche) {
+                bl->setVisible(!mensurLast);
+                int lines = bl->staff()->lines(bls->tick() - Fraction::eps()) - 1;
+                bl->setSpanFrom(mensurStricheSpanFrom(lines));
+                bl->setSpanFrom(0);
+            } else {
+                bl->setSpanFrom(0);
+                bl->setSpanTo(0);
+            }
+            bls->add(bl);
+        }
+
+        // Set repeats and other measure properties
+        measure->setRepeatStart(musxMeasure->forwardRepeatBar);
+        measure->setRepeatEnd(musxMeasure->backwardsRepeatBar);
+    }
+}
+
+void FinaleParser::importPageLayout()
+{
+    // Requires staff heights (importStaffItems), which do not require layout
+
+    std::pair<double, double> systemDistances { DBL_MAX, -DBL_MAX };
+    std::pair<double, double> staffDistances { DBL_MAX, -DBL_MAX };
+    std::pair<double, double> akkoladeDistances { DBL_MAX, -DBL_MAX };
+
+    // Handle blank pages
+    const MusxInstanceList<others::Page> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
+    size_t blankPagesToAdd = 0;
+    for (const auto& page : pages) {
+        if (page->isBlank()) {
+            ++blankPagesToAdd;
+        } else if (blankPagesToAdd) {
+            Fraction pageStartTick = muse::value(m_meas2Tick, page->firstMeasureId.value_or(-1), Fraction(-1, 1));
+            Measure* afterBlank = pageStartTick.positive() ? m_score->tick2measure(pageStartTick) : nullptr;
+            IF_ASSERT_FAILED(afterBlank) {
+                logger()->logWarning(String(u"Can't find first measure for non-blank page %1").arg(String::number(page->getCmper())));
+                continue;
+            }
+            MeasureBase* prev = afterBlank->prev();
+            for (; blankPagesToAdd > 0; --blankPagesToAdd) {
+                VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+                pageFrame->setTick(pageStartTick);
+                pageFrame->setNext(afterBlank);
+                pageFrame->setPrev(prev);
+                m_score->measures()->insert(pageFrame, pageFrame);
+                LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
+                lb->setLayoutBreakType(LayoutBreakType::PAGE);
+                pageFrame->add(lb);
+                prev = pageFrame;
+            }
+        }
+    }
+    for (; blankPagesToAdd > 0; --blankPagesToAdd) {
+        VBox* pageFrame = Factory::createVBox(m_score->dummy()->system());
+        pageFrame->setTick(m_score->last() ? m_score->last()->endTick() : Fraction(0, 1));
+        m_score->measures()->append(pageFrame);
+        LayoutBreak* lb = Factory::createLayoutBreak(pageFrame);
+        lb->setLayoutBreakType(LayoutBreakType::PAGE);
+        pageFrame->add(lb);
+    }
+
+    // No measures or staves means no valid staff systems
+    if (!m_score->firstMeasure() || m_score->noStaves()) {
+        return;
+    }
+    const MusxInstanceList<others::StaffSystem> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId);
+    logger()->logDebugTrace(String(u"Document contains %1 staff systems and %2 pages.").arg(staffSystems.size(), pages.size()));
+    std::vector<Staff*> alwaysVisibleStaves = m_score->staves();
+    std::vector<Staff*> alwaysInvisibleStaves = m_score->staves();
+    const double scoreSpatium = m_score->style().spatium();
+    const double defaultSpatium = m_score->style().defaultSpatium();
+    for (size_t i = 0; i < staffSystems.size(); ++i) {
+        const MusxInstance<others::StaffSystem>& leftStaffSystem = staffSystems[i];
+        MusxInstance<others::StaffSystem> rightStaffSystem = staffSystems[i];
+
+        // Retrieve leftmost measure of system
+        Fraction startTick = muse::value(m_meas2Tick, leftStaffSystem->startMeas, Fraction(-1, 1));
+        Measure* startMeasure = startTick.positive() ? m_score->tick2measure(startTick) : nullptr;
+
+        // Determine if system is first on the page
+        // Determine the current page the staffsystem is on
+        const MusxInstance<others::Page> page = leftStaffSystem->getPage();
+        const bool isFirstSystemOnPage = (i == 0) || (leftStaffSystem->pageId != staffSystems[i - 1]->pageId);
+
+        // Compute system scaling factors
+        /// @note Distances between staves and the bottom system margin use system scaling, everything else uses page scaling.
+        const double pageSpatium = page->calcPageScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
+        const double systemSpatium = leftStaffSystem->calcEffectiveScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
+
+        /// @todo Detect coda systems
+
+        // Now we have moved Coda Systems, compute end of System
+        Fraction endTick = muse::value(m_meas2Tick, rightStaffSystem->getLastMeasure(), Fraction(-1, 1));
+        Measure* endMeasure = endTick.positive() ? m_score->tick2measure(endTick) : nullptr;
+        IF_ASSERT_FAILED(startMeasure && endMeasure) {
+            logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for staffsystem"));
+            continue;
+        }
+
+        // Create system left and right margins
+        /// @note In Finale, up is positive and down is negative. That means we have to reverse the signs of the vertical axis for MuseScore.
+        /// HOWEVER, the top and right margins have signs reversed from the U.I. Are we confused yet?
+        MeasureBase* sysStart = startMeasure;
+        if (importCustomPositions() && !muse::RealIsNull(double(leftStaffSystem->left))) {
+            // for the very first system, create a non-frame indent instead
+            double leftMargin = evpuToSp(leftStaffSystem->left) * pageSpatium;
+            if (startMeasure->tick().isZero()) {
+                m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
+                m_score->style().set(Sid::firstSystemIndentationValue, Spatium::fromAbsolute(leftMargin, scoreSpatium));
+            } else {
+                HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+                setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
+                leftBox->setBoxWidth(Spatium::fromAbsolute(leftMargin, defaultSpatium));
+                leftBox->setTick(startMeasure->tick());
+                leftBox->setNext(startMeasure);
+                leftBox->setPrev(startMeasure->prev());
+                m_score->measures()->insert(leftBox, leftBox);
+                // leftBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+                sysStart = leftBox;
+            }
+        } else {
+            logger()->logInfo(String(u"No need to add left margin for system %1").arg(i));
+        }
+        MeasureBase* sysEnd = endMeasure;
+        if (importCustomPositions() && !muse::RealIsNull(double(-rightStaffSystem->right))) {
+            HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
+            setAndStyleProperty(rightBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
+            double rightMargin = evpuToSp(-rightStaffSystem->right) * pageSpatium;
+            rightBox->setBoxWidth(Spatium::fromAbsolute(rightMargin, defaultSpatium));
+            rightBox->setTick(endMeasure->endTick());
+            rightBox->setNext(endMeasure->next());
+            rightBox->setPrev(endMeasure);
+            m_score->measures()->insert(rightBox, rightBox);
+            // rightBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+            sysEnd = rightBox;
+        } else {
+            logger()->logInfo(String(u"No need to add right margin for system %1").arg(i));
+        }
+
+        // Lock measures in place, to guarantee we end up with the correct measure distribution
+        m_score->addSystemLock(new SystemLock(sysStart, sysEnd));
+
+        // Calculate if this is the last system on the page and add a page break if needed
+        const bool isLastSystemInScore = i + 1 >= staffSystems.size();
+        const bool isLastSystemOnPage = isLastSystemInScore || (staffSystems[i + 1]->pageId != staffSystems[i]->pageId);
+        if (isLastSystemOnPage && (!isLastSystemInScore || m_score->last()->isVBox())) {
+            LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
+            lb->setLayoutBreakType(LayoutBreakType::PAGE);
+            sysEnd->add(lb);
+        }
+
+        // If following measure should show full instrument names, add section break to sysEnd
+        const auto nextMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->endMeas);
+        if (nextMeasure && nextMeasure->showFullNames) {
+            LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
+            lb->setLayoutBreakType(LayoutBreakType::SECTION);
+            lb->setStartWithMeasureOne(false);
+            lb->setStartWithLongNames(true);
+            lb->setPause(0.0);
+            lb->setFirstSystemIndentation(false);
+            const auto lastMeasure = m_doc->getOthers()->get<others::Measure>(m_currentMusxPartId, rightStaffSystem->getLastMeasure());
+            lb->setShowCourtesy(!lastMeasure->hideCaution);
+            sysEnd->add(lb);
+        }
+
+        // Hide systems (when empty, but ideally whenever)
+        auto instrumentsUsedInSystem = m_doc->getOthers()->getArray<others::StaffUsed>(m_currentMusxPartId, leftStaffSystem->getCmper());
+        std::vector<staff_idx_t> visibleStaves;
+        visibleStaves.reserve(instrumentsUsedInSystem.size());
+        for (const MusxInstance<others::StaffUsed>& musxStaff : instrumentsUsedInSystem) {
+            visibleStaves.emplace_back(muse::value(m_inst2Staff, musxStaff->staffId, muse::nidx));
+        }
+        for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
+            Staff* s = m_score->staff(j);
+            if (muse::contains(visibleStaves, j)) {
+                muse::remove(alwaysInvisibleStaves, s);
+            } else {
+                muse::remove(alwaysVisibleStaves, s);
+            }
+        }
+        for (Measure* m = startMeasure; m && m->tick() <= endMeasure->tick(); m = m->nextMeasure()) {
+            for (staff_idx_t j = 0; j < m_score->nstaves(); ++j) {
+                m->setHideStaffIfEmpty(j, muse::contains(visibleStaves, j) ? AutoOnOff::OFF : AutoOnOff::ON);
+            }
+        }
+
+        if (!importCustomPositions()) {
+            continue;
+        }
+
+        // Create system top and bottom margins
+        if (isFirstSystemOnPage) {
+            Spacer* upSpacer = Factory::createSpacer(startMeasure);
+            upSpacer->setSpacerType(SpacerType::UP);
+            upSpacer->setTrack(staff2track(muse::value(m_inst2Staff, instrumentsUsedInSystem.at(0)->staffId, 0)));
+            double topGap = evpuToSp(-leftStaffSystem->top - leftStaffSystem->distanceToPrev) * pageSpatium;
+            upSpacer->setGap(Spatium::fromAbsolute(topGap, upSpacer->spatium()));
+            startMeasure->add(upSpacer);
+        }
+        if (!isLastSystemOnPage) {
+            Spacer* downSpacer = Factory::createSpacer(startMeasure);
+            downSpacer->setSpacerType(SpacerType::FIXED);
+            StaffCmper lastVisibleMusxStaffId = instrumentsUsedInSystem.at(instrumentsUsedInSystem.size() - 1)->staffId;
+            downSpacer->setTrack(staff2track(muse::value(m_inst2Staff, lastVisibleMusxStaffId, m_score->nstaves() - 1)));
+            double bottomGap = evpuToSp(-rightStaffSystem->bottom * systemSpatium
+                                        - (staffSystems[i + 1]->top + staffSystems[i + 1]->distanceToPrev) * pageSpatium)
+                               - downSpacer->staff()->staffHeight(startMeasure->tick());
+            systemDistances.first = std::min(systemDistances.first, bottomGap);
+            systemDistances.second = std::max(systemDistances.second, bottomGap);
+            downSpacer->setGap(Spatium::fromAbsolute(bottomGap, downSpacer->spatium()));
+            startMeasure->add(downSpacer);
+        }
+
+        // Add distance between the staves
+        for (size_t j = 1; j < instrumentsUsedInSystem.size(); ++j) {
+            const MusxInstance<others::StaffUsed>& prevMusxStaff = instrumentsUsedInSystem.at(j - 1);
+            const MusxInstance<others::StaffUsed>& nextMusxStaff = instrumentsUsedInSystem.at(j);
+            staff_idx_t prevStaffIdx = muse::value(m_inst2Staff, prevMusxStaff->staffId, muse::nidx);
+            staff_idx_t nextStaffIdx = muse::value(m_inst2Staff, nextMusxStaff->staffId, muse::nidx);
+            if (nextStaffIdx == muse::nidx || prevStaffIdx == muse::nidx) {
+                continue;
+            }
+            Spacer* staffSpacer = Factory::createSpacer(startMeasure);
+            staffSpacer->setSpacerType(SpacerType::FIXED);
+            staffSpacer->setTrack(staff2track(prevStaffIdx));
+            double staffDist = evpuToSp(prevMusxStaff->distFromTop - nextMusxStaff->distFromTop) * systemSpatium
+                               - m_score->staff(prevStaffIdx)->staffHeight(startMeasure->tick());
+            if (m_stavesWithPianoBraces.at(nextStaffIdx)) {
+                akkoladeDistances.first = std::min(akkoladeDistances.first, staffDist);
+                akkoladeDistances.second = std::max(akkoladeDistances.second, staffDist);
+            } else {
+                staffDistances.first = std::min(staffDistances.first, staffDist);
+                staffDistances.second = std::max(staffDistances.second, staffDist);
+            }
+            staffSpacer->setGap(Spatium::fromAbsolute(staffDist, staffSpacer->spatium()));
+            startMeasure->add(staffSpacer);
+        }
+    }
+
+    // Apply global visibility settings
+    for (Part* p : m_score->parts()) {
+        bool alwaysVisible = true;
+        bool alwaysInvisible = true;
+        for (Staff* s : p->staves()) {
+            const bool staffIsVisible = muse::contains(alwaysVisibleStaves, s);
+            const bool staffIsInvisible = muse::contains(alwaysInvisibleStaves, s);
+            if (staffIsVisible || staffIsInvisible) {
+                for (Measure* m = m_score->firstMeasure(); m; m = m->nextMeasure()) {
+                    m->setHideStaffIfEmpty(s->idx(), AutoOnOff::AUTO);
+                }
+            }
+            alwaysVisible = alwaysVisible && staffIsVisible;
+            alwaysInvisible = alwaysInvisible && staffIsInvisible;
+            s->setVisible(!staffIsInvisible);
+        }
+        if (alwaysVisible || alwaysInvisible) {
+            p->setHideWhenEmpty(alwaysVisible ? AutoOnOff::OFF : AutoOnOff::AUTO);
+            p->setShow(alwaysVisible);
+        }
+    }
+
+    // Apply staff distances as styles
+    if (importCustomPositions()) {
+        const double pageHeight = m_score->style().styleD(Sid::pageHeight) * engraving::DPI;
+        if (systemDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromAbsolute(systemDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::minSystemDistance, dist);
+            m_score->style().set(Sid::minSystemSpread, dist);
+        }
+        if (systemDistances.second > 0) {
+            Spatium dist = Spatium::fromAbsolute(systemDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxSystemDistance, dist);
+            m_score->style().set(Sid::maxSystemSpread, dist);
+        }
+        if (staffDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromAbsolute(staffDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::staffDistance, dist);
+            m_score->style().set(Sid::minStaffSpread, dist);
+        }
+        if (staffDistances.second > 0) {
+            Spatium dist = Spatium::fromAbsolute(staffDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxStaffSpread, dist);
+            m_score->style().set(Sid::maxPageFillSpread, dist);
+        }
+        if (akkoladeDistances.first < pageHeight) {
+            Spatium dist = Spatium::fromAbsolute(akkoladeDistances.first, m_score->style().spatium());
+            m_score->style().set(Sid::akkoladeDistance, dist);
+        }
+        if (akkoladeDistances.second > 0) {
+            Spatium dist = Spatium::fromAbsolute(akkoladeDistances.second, m_score->style().spatium());
+            m_score->style().set(Sid::maxAkkoladeDistance, dist);
+        }
+    }
+}
+
+void FinaleParser::rebaseSystemLeftMargins()
+{
+    // This method is required to deal with inconsistencies between Finale and MuseScore's system positioning.
+    // In Finale, the left barline of the first measure is always used as a reference, whereas MuseScore
+    // computes its own left margin based on the presence of instrument names and brackets.
+    for (System* s : m_score->systems()) {
+        if (s->vbox()) {
+            continue;
+        }
+        const bool isFirst = s->firstMeasure() && s->firstMeasure()->tick().isZero(); // Section breaks created by the importer don't indent
+        const double idealMargin = isFirst ? s->styleP(Sid::firstSystemIndentationValue) * s->mag() : 0.0;
+        if (muse::RealIsEqual(s->leftMargin(), idealMargin)) {
+            continue;
+        }
+        MeasureBase* newStart = nullptr;
+        if (s->first()->isHBox()) {
+            HBox* leftBox = toHBox(s->first());
+            leftBox->setBoxWidth(leftBox->boxWidth() - Spatium::fromAbsolute(s->leftMargin(), leftBox->defaultSpatium()));
+            // remove box with no width
+            if (muse::RealIsEqual(leftBox->boxWidth().val(), idealMargin)) {
+                newStart = s->nextMeasure(leftBox);
+                s->removeMeasure(leftBox);
+                m_score->measures()->remove(leftBox, leftBox);
+            }
+        } else {
+            HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+            leftBox->setBoxWidth(Spatium::fromAbsolute(-s->leftMargin(), leftBox->defaultSpatium()));
+            setAndStyleProperty(leftBox, Pid::SIZE_SPATIUM_DEPENDENT, false);
+            leftBox->setTick(s->first()->tick());
+            leftBox->setNext(s->first());
+            leftBox->setPrev(s->first()->prev());
+            m_score->measures()->insert(leftBox, leftBox);
+            newStart = leftBox;
+            // leftBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+        }
+        if (newStart && s->systemLock()) {
+            m_score->removeSystemLock(s->systemLock());
+            m_score->addSystemLock(new SystemLock(newStart, s->last()));
+        }
+    }
+}
+}
