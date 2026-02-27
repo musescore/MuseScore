@@ -1507,7 +1507,7 @@ void Note::setVisible(bool v)
         return;
     }
 
-    const std::vector<Note*>& notes = noteParenInfo->notes;
+    const std::vector<Note*>& notes = noteParenInfo->notes();
     bool visible = false;
     for (const Note* note : notes) {
         if (note->visible()) {
@@ -1516,11 +1516,11 @@ void Note::setVisible(bool v)
         }
     }
 
-    if (noteParenInfo->leftParen) {
-        noteParenInfo->leftParen->setVisible(visible);
+    if (noteParenInfo->leftParen()) {
+        noteParenInfo->leftParen()->setVisible(visible);
     }
-    if (noteParenInfo->rightParen) {
-        noteParenInfo->rightParen->setVisible(visible);
+    if (noteParenInfo->rightParen()) {
+        noteParenInfo->rightParen()->setVisible(visible);
     }
 }
 
@@ -3961,7 +3961,7 @@ void Note::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool g
 
     const NoteParenthesisInfo* noteParenInfo = parenInfo();
 
-    Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen : nullptr;
+    Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen() : nullptr;
 
     const bool hasGeneratedParen = leftParen && leftParen->generated();
     const bool hasUserParen = leftParen && !leftParen->generated();

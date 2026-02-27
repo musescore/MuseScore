@@ -117,10 +117,17 @@ private:
 
 struct NoteParenthesisInfo {
     NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList);
-    NoteParenthesisInfo() {}
-    Parenthesis* leftParen = nullptr;
-    Parenthesis* rightParen = nullptr;
-    std::vector<Note*> notes;
+    Parenthesis* leftParen() const { return m_leftParen; }
+    Parenthesis* rightParen() const { return m_rightParen; }
+    const std::vector<Note*>& notes() const { return m_notes; }
+
+    void insertNote(Note* note);
+    void removeNote(Note* note);
+
+private:
+    Parenthesis* m_leftParen = nullptr;
+    Parenthesis* m_rightParen = nullptr;
+    std::vector<Note*> m_notes;
 };
 
 using NoteParenInfoPtr = std::unique_ptr<NoteParenthesisInfo>;
