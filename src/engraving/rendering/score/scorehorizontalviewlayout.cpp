@@ -53,6 +53,7 @@
 #include "horizontalspacing.h"
 #include "tremololayout.h"
 #include "slurtielayout.h"
+#include "masklayout.h"
 
 #include "log.h"
 
@@ -249,6 +250,9 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     system->setPos(lm, tm);
     ctx.mutState().page()->setWidth(lm + system->width() + rm);
     ctx.mutState().page()->setHeight(tm + system->height() + bm);
+
+    MaskLayout::computeMasks(ctx, ctx.mutState().page());
+
     ctx.mutState().page()->invalidateBspTree();
 }
 

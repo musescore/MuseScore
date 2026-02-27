@@ -88,7 +88,8 @@ enum class TabVal : char {
 enum class TablatureMinimStyle : char {
     NONE = 0,                         // do not draw half notes at all
     SHORTER,                          // draw half notes with a shorter stem
-    SLASHED                           // draw half notes with stem with two slashes
+    SLASHED,                          // draw half notes with stem with two slashes
+    CIRCLED                           // draw circle/ellipse around fret number
 };
 
 enum class TablatureSymbolRepeat : char {
@@ -205,7 +206,8 @@ public:
     double spatium() const;
 
     void setStemless(bool val) { m_stemless = val; }
-    bool stemless() const { return m_stemless; }
+    bool stemless() const { return m_genDurations || m_stemless; }
+
     bool genTimesig() const { return m_genTimesig; }
     void setGenTimesig(bool val) { m_genTimesig = val; }
 
@@ -258,7 +260,8 @@ public:
     double fretFontYOffset() const;
     bool  genDurations() const { return m_genDurations; }
     bool  linesThrough() const { return m_linesThrough; }
-    TablatureMinimStyle minimStyle() const { return m_minimStyle; }
+    TablatureMinimStyle minimStyle() const { return (m_stemless || m_genDurations) ? TablatureMinimStyle::NONE : m_minimStyle; }
+
     TablatureSymbolRepeat symRepeat() const { return m_symRepeat; }
     bool  onLines() const { return m_onLines; }
     bool  showRests() const { return m_showRests; }
