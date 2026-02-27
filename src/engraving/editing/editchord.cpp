@@ -70,9 +70,9 @@ void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, b
     for (auto pairIterator = notesByGroup.rbegin(); pairIterator != notesByGroup.rend(); pairIterator = std::next(pairIterator)) {
         auto groupNotesPair = *pairIterator;
         const NoteParenthesisInfo* parenInfo = groupNotesPair.first;
-        if (parenInfo->notes.size() == groupNotesPair.second.size()) {
+        if (parenInfo->notes().size() == groupNotesPair.second.size()) {
             // All notes marked for paren removal, clear parentheses group
-            undoClearParenGroup(chord, parenInfo->notes, parenInfo->leftParen, parenInfo->rightParen, addToLinked);
+            undoClearParenGroup(chord, parenInfo->notes(), parenInfo->leftParen(), parenInfo->rightParen(), addToLinked);
             continue;
         }
 
@@ -82,9 +82,9 @@ void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, b
             // Remove paren from single note and create new paren group for all notes below
             Note* note = *noteIterator;
             const NoteParenthesisInfo* curParenInfo = note->parenInfo();
-            const std::vector<Note*> notesList = curParenInfo->notes;
-            Parenthesis* leftParen = curParenInfo->leftParen;
-            Parenthesis* rightParen = curParenInfo->rightParen;
+            const std::vector<Note*> notesList = curParenInfo->notes();
+            Parenthesis* leftParen = curParenInfo->leftParen();
+            Parenthesis* rightParen = curParenInfo->rightParen();
             auto notePos = std::find(notesList.begin(), notesList.end(), note);
 
             if (notePos != notesList.end() && std::next(notePos) != notesList.end() && notePos != notesList.begin()) {
@@ -92,7 +92,7 @@ void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, b
                 std::vector<Note*> newNoteGroup(notePos + 1, notesList.end());
 
                 for (Note* noteToRemove : newNoteGroup) {
-                    if (curParenInfo->notes.size() == 1) {
+                    if (curParenInfo->notes().size() == 1) {
                         undoClearParenGroup(chord, { noteToRemove }, leftParen, rightParen, addToLinked);
                     } else {
                         undoRemoveParenFromNote(chord, noteToRemove, leftParen, addToLinked);
@@ -101,7 +101,7 @@ void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, b
 
                 undoAddParensToNotes(chord, newNoteGroup, addToLinked, generated);
             }
-            if (curParenInfo->notes.size() == 1) {
+            if (curParenInfo->notes().size() == 1) {
                 undoClearParenGroup(chord, { note }, leftParen, rightParen, addToLinked);
             } else {
                 undoRemoveParenFromNote(chord, note, leftParen, addToLinked);

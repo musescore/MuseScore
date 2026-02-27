@@ -63,8 +63,8 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
 void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutContext& ctx)
 {
     for (const NoteParenInfoPtr& parenNotesInfo : chord->noteParens()) {
-        Parenthesis* leftParen = parenNotesInfo->leftParen;
-        Parenthesis* rightParen = parenNotesInfo->rightParen;
+        Parenthesis* leftParen = parenNotesInfo->leftParen();
+        Parenthesis* rightParen = parenNotesInfo->rightParen();
 
         if (!(leftParen || rightParen)) {
             return;
@@ -422,7 +422,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         return;
     }
 
-    const std::vector<Note*>& notes = parenInfo->notes;
+    const std::vector<Note*>& notes = parenInfo->notes();
 
     assert(!notes.empty());
 

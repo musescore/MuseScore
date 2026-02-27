@@ -495,8 +495,8 @@ RectF GuitarDiveLayout::getNoteAndParenthesesShape(const Note* note)
         return noteBbox;
     }
 
-    const Parenthesis* leftParen = parenInfo->leftParen;
-    const Parenthesis* rightParen = parenInfo->rightParen;
+    const Parenthesis* leftParen = parenInfo->leftParen();
+    const Parenthesis* rightParen = parenInfo->rightParen();
 
     noteBbox.unite(leftParen->ldata()->bbox().translated(leftParen->pos() - note->pos()));
     noteBbox.unite(rightParen->ldata()->bbox().translated(rightParen->pos() - note->pos()));

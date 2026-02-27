@@ -1918,7 +1918,7 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
 
     Parenthesis* paren = nullptr;
     if (noteParenInfo) {
-        paren = noteParenInfo->leftParen;
+        paren = noteParenInfo->leftParen();
     }
 
     const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == lv->up();

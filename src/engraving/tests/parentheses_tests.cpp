@@ -170,8 +170,8 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     EXPECT_TRUE(noteStd->parenInfo());
     EXPECT_TRUE(noteTab->parenInfo());
 
-    EXPECT_TRUE(noteStd->parenInfo()->leftParen->isLinked(noteTab->parenInfo()->leftParen));
-    EXPECT_TRUE(noteStd->parenInfo()->rightParen->isLinked(noteTab->parenInfo()->rightParen));
+    EXPECT_TRUE(noteStd->parenInfo()->leftParen()->isLinked(noteTab->parenInfo()->leftParen()));
+    EXPECT_TRUE(noteStd->parenInfo()->rightParen()->isLinked(noteTab->parenInfo()->rightParen()));
 
     undoAndCheckRemovedLinked(score, singleNoteChordStd, singleNoteChordTab);
 
