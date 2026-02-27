@@ -21,7 +21,6 @@
 set(MODULE_TEST notation_tests)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/msczreadermock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationinteractionmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/notationselectionmock.h

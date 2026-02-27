@@ -60,6 +60,28 @@ static std::string readTextAndChildrenText(XmlStreamReader& reader)
     }
 }
 
+muse::RetVal<QPixmap> MscMetaReader::readThumbnail(const muse::io::path_t& filePath) const
+{
+    MscReader msczReader;
+    Ret ret = prepareReader(filePath, msczReader);
+    if (!ret) {
+        return ret;
+    }
+
+    RetVal<QPixmap> thumbnail;
+    thumbnail.ret = make_ok();
+    const ByteArray thumbnailData = msczReader.readThumbnailFile();
+    if (thumbnailData.empty()) {
+        LOGD() << "Can't find thumbnail";
+    } else {
+        if (!thumbnail.val.loadFromData(thumbnailData.toQByteArrayNoCopy(), "PNG")) {
+            thumbnail.ret = make_ret(Ret::Code::BadData);
+        }
+    }
+
+    return thumbnail;
+}
+
 RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) const
 {
     MscReader msczReader;
@@ -81,7 +103,9 @@ RetVal<ProjectMeta> MscMetaReader::readMeta(const muse::io::path_t& filePath) co
     if (thumbnailData.empty()) {
         LOGD() << "Can't find thumbnail";
     } else {
-        meta.val.thumbnail.loadFromData(thumbnailData.toQByteArray(), "PNG");
+        if (!meta.val.thumbnail.loadFromData(thumbnailData.toQByteArrayNoCopy(), "PNG")) {
+            meta.ret = make_ret(Ret::Code::BadData);
+        }
     }
 
     meta.val.filePath = filePath;
