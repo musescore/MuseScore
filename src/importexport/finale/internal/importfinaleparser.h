@@ -291,7 +291,7 @@ struct OrnamentDefinition {
 struct ReadableArticulation
 {
     ReadableArticulation() = default;
-    ReadableArticulation(const FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>&);
+    ReadableArticulation(FinaleParser&, const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>&);
 
     engraving::SymId articSym = engraving::SymId::noSym;
     std::optional<char32_t> articChar;
@@ -377,6 +377,10 @@ public:
                                                                                 engraving::track_idx_t track);
     double musicStartPosForMeasure(const engraving::Measure* m) const;
 
+    void collectElementStyle(const mu::engraving::EngravingObject* e);
+    void collectGlobalProperty(const mu::engraving::Sid styleId, const mu::engraving::PropertyValue& newV);
+    void collectGlobalFont(const std::string& namePrefix, const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
+
     IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
     bool importCustomPositions() const { return m_importPositionsType != IFinaleConfiguration::ImportPositionsType::None; }
     bool importAllPositions() const { return m_importPositionsType == IFinaleConfiguration::ImportPositionsType::All; }
@@ -425,9 +429,6 @@ private:
     // styles
     void importStyles();
     void repositionMeasureNumbersBelow();
-    void collectElementStyle(const mu::engraving::EngravingObject* e);
-    void collectGlobalProperty(const mu::engraving::Sid styleId, const mu::engraving::PropertyValue& newV);
-    void collectGlobalFont(const std::string& namePrefix, const musx::dom::MusxInstance<musx::dom::FontInfo>& fontInfo);
     std::unordered_map<engraving::Sid, engraving::PropertyValue> m_elementStyles;
 
     // smart shapes
