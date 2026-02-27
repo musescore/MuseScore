@@ -32,6 +32,7 @@
 #include "global/stringutils.h"
 #include "types/string.h"
 
+#include "engraving/dom/image.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measurenumber.h"
@@ -174,6 +175,45 @@ void FinaleParser::parse()
         }
     }
     logger()->logInfo(String(u"Import complete. Opening file..."));
+}
+
+Image* FinaleParser::getImageFromShape(const Cmper& shapeId)
+{
+    std::unique_ptr<Image> registeredImage = muse::value(m_registeredShapes, shapeId, nullptr);
+    if (!registeredImage) {
+        const auto shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeId);
+        const std::string shapeSvgData
+            = musx::util::SvgConvert::toSvg(*shape, [this](const musx::dom::FontInfo& font,
+                                                           std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
+            if (text.empty()) {
+                return std::nullopt;
+            }
+
+            muse::draw::FontMetrics fm(FontTracker(std::make_shared<musx::dom::FontInfo>(font),
+                                                   score()->style().defaultSpatium()).toFontMetrics());
+            const char32_t& codePoint = text.front();
+
+            // Scaled as EvpuFloat
+            musx::util::SvgConvert::GlyphMetrics result;
+            result.advance = fm.horizontalAdvance(codePoint) * engraving::DPI / EVPU_PER_INCH;
+            result.ascent = fm.tightBoundingRect(codePoint).top() * engraving::DPI / EVPU_PER_INCH;
+            result.descent = fm.tightBoundingRect(codePoint).bottom() * engraving::DPI / EVPU_PER_INCH;
+            return result;
+        });
+
+        if (shapeSvgData.empty()) {
+            return nullptr;
+        }
+
+        ByteArray ba(shapeSvgData.c_str(), shapeSvgData.size());
+        registeredImage = new Image(score()->dummy());
+        // registeredImage->setImageType(ImageType::SVG);
+        registeredImage->loadFromData(std::to_string(shapeExpr->shapeDef) + ".svg", ba);
+    }
+    IF_ASSERT_FAILED(registeredImage) {
+        logger()->logWarning(String(u"Unable to create image from shape with cmper %1.").arg(String::fromStdString(std::to_string(shapeId))));
+    }
+    return registeredImage->clone();
 }
 
 staff_idx_t FinaleParser::staffIdxFromAssignment(StaffCmper assign)

@@ -691,37 +691,12 @@ void FinaleParser::importTextExpressions()
             if (!expressionAssignment->textExprId) {
                 const auto shapeExpr = m_doc->getOthers()->get<others::ShapeExpressionDef>(m_currentMusxPartId,
                                                                                            expressionAssignment->shapeExprId);
-                const auto shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeExpr->shapeDef);
-                const std::string shapeSvgData
-                    = musx::util::SvgConvert::toSvg(*shape, [this](const musx::dom::FontInfo& font,
-                                                                   std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
-                    if (text.empty()) {
-                        return std::nullopt;
-                    }
-
-                    muse::draw::FontMetrics fm(FontTracker(std::make_shared<musx::dom::FontInfo>(font),
-                                                           score()->style().defaultSpatium()).toFontMetrics());
-                    const char32_t& codePoint = text.front();
-
-                    // Scaled as EvpuFloat
-                    musx::util::SvgConvert::GlyphMetrics result;
-                    result.advance = fm.horizontalAdvance(codePoint) * engraving::DPI / EVPU_PER_INCH;
-                    result.ascent = fm.tightBoundingRect(codePoint).top() * engraving::DPI / EVPU_PER_INCH;
-                    result.descent = fm.tightBoundingRect(codePoint).bottom() * engraving::DPI / EVPU_PER_INCH;
-                    return result;
-                });
-                if (shapeSvgData.empty()) {
+                Image* img = getImageFromShape(shapeExpr->shapeDef);
+                IF_ASSERT_FAILED(img) {
                     continue;
                 }
-                ByteArray ba(shapeSvgData.c_str(), shapeSvgData.size());
-                std::unique_ptr<Image> image(new Image(score()->dummy()));
-                // image->setImageType(ImageType::SVG);
-                image->loadFromData(std::to_string(shapeExpr->shapeDef) + ".svg", ba);
-
-                Image* img = image->clone();
                 img->setAutoplace(false);
 
-                // Find staff
                 staff_idx_t curStaffIdx = staffIdxFromAssignment(expressionAssignment->staffAssign);
                 if (curStaffIdx == muse::nidx) {
                     logger()->logWarning(String(u"Add text: Musx inst value not found."), m_doc, expressionAssignment->staffAssign);

@@ -376,6 +376,7 @@ public:
     musx::dom::MusxInstance<musx::dom::others::LayerAttributes> layerAttributes(const engraving::Fraction& tick,
                                                                                 engraving::track_idx_t track);
     double musicStartPosForMeasure(const engraving::Measure* m) const;
+    engraving::Image* getImageFromShape(const Cmper& shapeId);
 
     IFinaleConfiguration::ImportPositionsType importPositionsType() const { return m_importPositionsType; }
     bool importCustomPositions() const { return m_importPositionsType != IFinaleConfiguration::ImportPositionsType::None; }
@@ -463,6 +464,7 @@ private:
     std::vector<std::map<int, musx::dom::LayerIndex> > m_track2Layer;
     std::set<engraving::Chord*> m_fixedChords;
     std::unordered_set<musx::dom::Cmper> m_smartShapesInterpretedAsTies;
+    std::unordered_map<musx::dom::Cmper, std::unique_ptr<engraving::Image> > m_registeredShapes;
     ReadableCustomLineMap m_customLines;
     ReadableExpressionMap m_expressions;
     ReadableRepeatTextMap m_repeatTexts;
