@@ -117,6 +117,7 @@ private:
 
 struct NoteParenthesisInfo {
     NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList);
+    ~NoteParenthesisInfo();
     Parenthesis* leftParen() const { return m_leftParen; }
     Parenthesis* rightParen() const { return m_rightParen; }
     const std::vector<Note*>& notes() const { return m_notes; }

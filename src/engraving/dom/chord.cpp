@@ -84,6 +84,12 @@ NoteParenthesisInfo::NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rPar
     std::sort(m_notes.begin(), m_notes.end(), noteIsBefore);
 }
 
+NoteParenthesisInfo::~NoteParenthesisInfo()
+{
+    delete m_leftParen;
+    delete m_rightParen;
+}
+
 void NoteParenthesisInfo::insertNote(Note* note)
 {
     m_notes.insert(std::upper_bound(m_notes.begin(), m_notes.end(), note, noteIsBefore), note);
