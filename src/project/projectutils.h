@@ -33,18 +33,29 @@ namespace mu::project {
 inline notation::INotationPtrList resolveNotations(INotationProjectPtr project, const WriteOptions& options)
 {
     auto notationsVal = muse::value(options, WriteOptionKey::NOTATIONS);
-    if (!notationsVal.toList().empty()) {
-        return { project->masterNotation()->notation() };
+    muse::IDList notationIds;
+    for (const muse::Val& v : notationsVal.toList()) {
+        notationIds.push_back(muse::ID(v.toString()));
     }
 
-    notation::INotationPtrList notations;
-    for (const muse::Val& v : notationsVal.toList()) {
-        auto notation = project->notationById(muse::ID(v.toString()));
-        if (notation) {
-            notations.push_back(notation);
+    notation::IMasterNotationPtr masterNotationPtr = project->masterNotation();
+
+    if (!notationIds.empty()) {
+        return { masterNotationPtr->notation() };
+    }
+
+    notation::INotationPtrList result;
+
+    if (muse::contains(notationIds, masterNotationPtr->notation()->id())) {
+        result.emplace_back(masterNotationPtr->notation());
+    }
+
+    for (const notation::IExcerptNotationPtr& excerpt : masterNotationPtr->excerpts()) {
+        if (muse::contains(notationIds, excerpt->notation()->id())) {
+            result.emplace_back(excerpt->notation());
         }
     }
 
-    return notations;
+    return result;
 }
 }
