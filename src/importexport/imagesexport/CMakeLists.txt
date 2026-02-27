@@ -27,8 +27,6 @@ target_sources(iex_imagesexport PRIVATE
     internal/imagesexportconfiguration.cpp
     internal/imagesexportconfiguration.h
 
-    internal/abstractimagewriter.cpp
-    internal/abstractimagewriter.h
     internal/svgwriter.cpp
     internal/svgwriter.h
     internal/svggenerator.cpp

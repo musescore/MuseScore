@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 
 namespace muse {
 class XmlStreamWriter;
@@ -35,7 +35,7 @@ class Score;
 }
 
 namespace mu::notation {
-class PositionsWriter : public project::INotationWriter, public muse::Contextable
+class PositionsWriter : public project::IProjectWriter, public muse::Contextable
 {
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imagesExportConfiguration;
 
@@ -48,11 +48,13 @@ public:
     explicit PositionsWriter(const muse::modularity::ContextPtr& ctx);
     explicit PositionsWriter(ElementType elementType, const muse::modularity::ContextPtr& ctx);
 
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
-    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
 private:
     qreal pngDpiResolution() const;

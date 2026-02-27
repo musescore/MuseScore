@@ -21,19 +21,20 @@
  */
 #pragma once
 
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::mei {
-class MeiWriter : public project::INotationWriter
+class MeiWriter : public project::IProjectWriter
 {
 public:
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
-    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
-                        const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
     mu::engraving::Err writeScore(mu::engraving::Score* score, const muse::io::path_t& path);
 };
 } // namespace

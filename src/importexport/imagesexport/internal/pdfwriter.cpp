@@ -22,10 +22,13 @@
 
 #include "pdfwriter.h"
 
+#include "project/projectutils.h"
+
 #include <QPdfWriter>
 #include <QBuffer>
 
 #include "engraving/dom/masterscore.h"
+#include "global/types/id.h"
 
 #include "log.h"
 
@@ -37,73 +40,77 @@ using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 
-std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> PdfWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART, UnitType::MULTI_PART };
+    return { WriteUnitType::PER_PART, WriteUnitType::MULTI_PART };
 }
 
-Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+bool PdfWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    UnitType unitType = unitTypeFromOptions(options);
-    IF_ASSERT_FAILED(unitType == UnitType::PER_PART) {
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
+    return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
+}
+
+Ret PdfWriter::write(INotationProjectPtr project, muse::io::IODevice& destinationDevice, const WriteOptions& options)
+{
+    WriteUnitType unitType = static_cast<WriteUnitType>(value(options, WriteOptionKey::UNIT_TYPE, Val(static_cast<int>(WriteUnitType::PER_PART))).toInt());
+    IF_ASSERT_FAILED(supportsUnitType(unitType)) {
         return Ret(Ret::Code::NotSupported);
     }
 
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    QByteArray qdata;
-    QBuffer buf(&qdata);
-    buf.open(QIODevice::WriteOnly);
-
-    QPdfWriter pdfWriter(&buf);
-    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(), notation->painting()->pageSizeInch().toQSizeF());
-
-    Painter painter(&pdfWriter, "pdfwriter");
-    if (!painter.isActive()) {
-        return false;
-    }
-
-    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                    Val(configuration()->exportPdfWithTransparentBackground())).toBool();
-
-    INotationPainting::Options opt;
-    opt.deviceDpi = pdfWriter.logicalDpiX();
-    opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
-    opt.printPageBackground = !TRANSPARENT_BACKGROUND;
-
-    auto pageNumIt = options.find(OptionKey::PAGE_NUMBER);
-    if (pageNumIt != options.end()) {
-        opt.fromPage = pageNumIt->second.toInt();
-        opt.toPage = opt.fromPage;
-    }
-
-    notation->painting()->paintPdf(&painter, opt);
-
-    painter.endDraw();
-
-    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
-    destinationDevice.write(data);
-
-    return true;
-}
-
-Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destinationDevice, const Options& options)
-{
+    notation::INotationPtrList notations = project::resolveNotations(project, options);
     IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    UnitType unitType = unitTypeFromOptions(options);
-    IF_ASSERT_FAILED(unitType == UnitType::MULTI_PART) {
+    if (unitType == WriteUnitType::PER_PART) {
+        IF_ASSERT_FAILED(notations.size() == 1) {
+            return Ret(Ret::Code::NotSupported);
+        }
+
+        INotationPtr notation = notations.front();
+
+        QByteArray qdata;
+        QBuffer buf(&qdata);
+        buf.open(QIODevice::WriteOnly);
+
+        QPdfWriter pdfWriter(&buf);
+        preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(), notation->painting()->pageSizeInch().toQSizeF());
+
+        Painter painter(&pdfWriter, "pdfwriter");
+        if (!painter.isActive()) {
+            return false;
+        }
+
+        const bool TRANSPARENT_BACKGROUND = value(options, WriteOptionKey::TRANSPARENT_BACKGROUND,
+                                                         Val(configuration()->exportPdfWithTransparentBackground())).toBool();
+
+        INotationPainting::Options opt;
+        opt.deviceDpi = pdfWriter.logicalDpiX();
+        opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
+        opt.printPageBackground = !TRANSPARENT_BACKGROUND;
+
+        if (contains(options, WriteOptionKey::PAGE_NUMBER)) {
+            opt.fromPage = options.at(WriteOptionKey::PAGE_NUMBER).toInt();
+            opt.toPage = opt.fromPage;
+        }
+
+        notation->painting()->paintPdf(&painter, opt);
+
+        painter.endDraw();
+
+        ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+        destinationDevice.write(data);
+
+        return true;
+    }
+
+    // MULTI_PART
+    IF_ASSERT_FAILED(unitType == WriteUnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
     }
 
     INotationPtr firstNotation = notations.front();
-    IF_ASSERT_FAILED(firstNotation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
 
     QByteArray qdata;
     QBuffer buf(&qdata);
@@ -117,8 +124,8 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
         return false;
     }
 
-    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                    Val(configuration()->exportPdfWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = value(options, WriteOptionKey::TRANSPARENT_BACKGROUND,
+                                                     Val(configuration()->exportPdfWithTransparentBackground())).toBool();
 
     INotationPainting::Options opt;
     opt.deviceDpi = pdfWriter.logicalDpiX();
@@ -145,6 +152,19 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     destinationDevice.write(data);
 
     return true;
+}
+
+Ret PdfWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+
+    return ret;
 }
 
 void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const

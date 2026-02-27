@@ -31,10 +31,10 @@
 #include "playback/iplaybackcontroller.h"
 #include "global/iapplication.h"
 
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 
 namespace mu::iex::audioexport {
-class AbstractAudioWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
+class AbstractAudioWriter : public project::IProjectWriter, public muse::Contextable, public muse::async::Asyncable
 {
 public:
     muse::GlobalInject<IAudioExportConfiguration> configuration;
@@ -48,23 +48,25 @@ public:
     AbstractAudioWriter(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
-    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
-                        const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
     muse::Progress* progress() override;
     void abort() override;
 
 protected:
-    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    muse::Ret doWriteAndWait(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                             const muse::audio::SoundTrackFormat& format);
 
 private:
     void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
 
-    UnitType unitTypeFromOptions(const Options& options) const;
+    project::WriteUnitType unitTypeFromOptions(const project::WriteOptions& options) const;
 
     muse::Progress m_progress;
     bool m_isCompleted = false;

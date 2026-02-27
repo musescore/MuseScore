@@ -24,30 +24,33 @@
 
 #include <QBuffer>
 
+#include "global/io/file.h"
+
 #include "braille.h"
 
 using namespace mu::project;
 using namespace muse;
 
 namespace mu::engraving {
-std::vector<INotationWriter::UnitType> BrailleWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> BrailleWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool BrailleWriter::supportsUnitType(UnitType unitType) const
+bool BrailleWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret BrailleWriter::write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options&)
+muse::Ret BrailleWriter::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                               const project::WriteOptions& /*options*/)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -64,9 +67,15 @@ muse::Ret BrailleWriter::write(notation::INotationPtr notation, muse::io::IODevi
     return ret;
 }
 
-muse::Ret BrailleWriter::writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&)
+muse::Ret BrailleWriter::write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const project::WriteOptions& options)
 {
-    NOT_SUPPORTED;
-    return muse::Ret(muse::Ret::Code::NotSupported);
+    muse::io::File file(filePath);
+    if (!file.open(io::IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
 }
 }

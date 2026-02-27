@@ -23,22 +23,24 @@
 #ifndef MU_NOTATION_MSCNOTATIONWRITER_H
 #define MU_NOTATION_MSCNOTATIONWRITER_H
 
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 
 #include "engraving/infrastructure/mscio.h"
 
 namespace mu::notation {
-class MscNotationWriter : public project::INotationWriter
+class MscNotationWriter : public project::IProjectWriter
 {
 public:
 
     explicit MscNotationWriter(engraving::MscIoMode mode);
 
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
-    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
 private:
     engraving::MscIoMode m_mode;

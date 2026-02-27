@@ -35,24 +35,24 @@ using namespace muse;
 using namespace mu::iex::mei;
 using namespace mu::project;
 
-std::vector<INotationWriter::UnitType> MeiWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> MeiWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool MeiWriter::supportsUnitType(UnitType unitType) const
+bool MeiWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret MeiWriter::write(INotationProjectPtr project, muse::io::IODevice& destinationDevice, const WriteOptions& /*options*/)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -68,6 +68,17 @@ Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
     }
 }
 
+Ret MeiWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(muse::io::IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
+}
+
 mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& path)
 {
     MeiExporter exporter(score);
@@ -79,10 +90,4 @@ mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const muse
     } else {
         return engraving::Err::UnknownError;
     }
-}
-
-Ret MeiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
-{
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
 }

@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 
 #include "../ilyricsexportconfiguration.h"
 
@@ -31,7 +31,7 @@ class Score;
 }
 
 namespace mu::iex::lrcexport {
-class LRCWriter : public project::INotationWriter, public muse::Contextable
+class LRCWriter : public project::IProjectWriter, public muse::Contextable
 {
 public:
     muse::GlobalInject<mu::iex::lrcexport::ILyricsExportConfiguration> configuration;
@@ -43,12 +43,13 @@ public:
     }
 
     // Interface implementation
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType) const override;
-    muse::Ret write(notation::INotationPtr, muse::io::IODevice&, const Options&) override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType) const override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
     void writeMetadata(muse::io::IODevice* device, const engraving::Score* score) const;
-    muse::Ret writeList(const notation::INotationPtrList&, muse::io::IODevice&, const Options&) override;
-
     bool writeScore(mu::engraving::Score* score, const muse::io::path_t& path, bool enhancedLrc);
 
 private:
