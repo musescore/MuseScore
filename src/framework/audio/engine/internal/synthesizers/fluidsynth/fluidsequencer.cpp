@@ -277,7 +277,7 @@ void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::Not
         Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
 
         //! NOTE: Increasing this number results in fewer points being interpolated
-        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 5;
+        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 10;
         size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
         pointCount = std::max(pointCount, size_t(1));
 
