@@ -163,6 +163,7 @@ public:
     void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
     void addExcerpt(Excerpt*, size_t index = muse::nidx);
+    void addLightweightExcerpt(Excerpt*, size_t index = muse::nidx);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
 

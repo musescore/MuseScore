@@ -578,6 +578,12 @@ void MasterScore::initExcerpt(Excerpt* excerpt)
 
 void MasterScore::initParts(Excerpt* excerpt)
 {
+    // For lightweight excerpts (no excerptScore), parts and tracksMapping
+    // are already set from the file read, so we can skip this function
+    if (!excerpt->excerptScore()) {
+        return;
+    }
+
     int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
     std::set<ID> assignedStavesIds;
     for (Staff* excerptStaff : excerpt->excerptScore()->staves()) {

@@ -115,16 +115,29 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     bool isExportingOnlyOneScore = notations.size() == 1;
 
     // The user might have selected not-yet-inited excerpts
+    // Check both potentialExcerpts and regular excerpts (which may be lightweight/uninitialized)
     ExcerptNotationList excerptsToInit;
     ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+    ExcerptNotationList regularExcerpts = masterNotation()->excerpts();
 
     for (const INotationPtr& notation : notations) {
+        // Check in potential excerpts
         auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
             return excerpt->notation() == notation;
         });
 
         if (it != potentialExcerpts.cend()) {
             excerptsToInit.push_back(*it);
+            continue;
+        }
+
+        // Check in regular excerpts for uninitialized (lightweight) ones
+        auto it2 = std::find_if(regularExcerpts.cbegin(), regularExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+            return excerpt->notation() == notation && !excerpt->isInited();
+        });
+
+        if (it2 != regularExcerpts.cend()) {
+            excerptsToInit.push_back(*it2);
         }
     }
 
@@ -163,6 +176,10 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     DEFER {
         // Restore view modes
         setViewModes(notations, viewModes);
+
+        // Deinitialize excerpts that were only initialized for export
+        // This keeps them as lightweight excerpts so they don't get saved as full excerpts
+        masterNotation()->deinitExcerpts(excerptsToInit);
 
         if (writerProgress) {
             m_exportProgress.finish(muse::make_ok());

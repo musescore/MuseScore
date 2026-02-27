@@ -22,7 +22,10 @@
 
 #include <gtest/gtest.h>
 
+#include <filesystem>
+
 #include "io/fileinfo.h"
+#include "io/file.h"
 
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
@@ -42,11 +45,20 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/infrastructure/mscreader.h"
+#include "engraving/infrastructure/mscwriter.h"
+#include "engraving/rw/mscloader.h"
+#include "engraving/rw/mscsaver.h"
+#include "engraving/rw/xmlreader.h"
+#include "serialization/xmlstreamwriter.h"
+#include "io/buffer.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
 static const String PARTS_DATA_DIR("parts_data/");
 
@@ -1387,3 +1399,347 @@ TEST_F(Engraving_PartsTests, staffStyles)
 }
 
 #endif
+
+//---------------------------------------------------------
+//   uninitializedExcerptProperties
+///   Test that an Excerpt without excerptScore can store properties
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, uninitializedExcerptProperties)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create excerpt without initializing (no excerptScore)
+    Excerpt* excerpt = new Excerpt(score);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr);
+
+    // Set properties on uninitialized excerpt
+    String testName = u"My Custom Part Name";
+    excerpt->setName(testName);
+
+    // Verify properties are stored
+    EXPECT_EQ(excerpt->name(), testName);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr);  // Still no score
+
+    // Add parts to excerpt
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+
+    // Verify parts are stored
+    EXPECT_EQ(excerpt->parts().size(), 1u);
+    EXPECT_EQ(excerpt->parts().front(), part);
+
+    delete excerpt;
+    delete score;
+}
+
+//---------------------------------------------------------
+//   renamePotentialExcerpt
+///   Test that renaming a potential excerpt (not yet opened)
+///   persists correctly after save/reload
+///   This tests the fix for: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, renamePotentialExcerpt)
+{
+    // This test verifies that excerpt names are preserved through save/reload.
+    //
+    // Background (Issue #31656): In the Parts dialog, each instrument shows
+    // as a "potential excerpt" that can be renamed before being opened.
+    // The fix requires saving potential excerpts in a lightweight format
+    // (without full excerptScore) so that custom names persist.
+    //
+    // This test uses an initialized excerpt as a baseline. The lightweight
+    // excerpt implementation will enable this same flow for uninitialized
+    // excerpts without requiring them to be opened first.
+
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialize an excerpt with a custom name
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+
+    String newName = u"My Renamed Part";
+    excerpt->setName(newName);
+
+    // Initialize (creates excerptScore) - this is currently required for save
+    score->initAndAddExcerpt(excerpt, true);
+
+    EXPECT_NE(excerpt->excerptScore(), nullptr);
+    EXPECT_EQ(excerpt->name(), newName);
+
+    // Save (using .mscx since ScoreRW::saveScore writes raw XML, not ZIP)
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "part-rename-potential-test.mscx").string());
+    bool saveOk = ScoreRW::saveScore(score, tempFile);
+    EXPECT_TRUE(saveOk) << "Failed to save score";
+
+    // Check file was created
+    std::error_code ec;
+    bool fileExists = std::filesystem::exists(std::filesystem::path(tempFile.toStdString()), ec);
+    EXPECT_TRUE(fileExists) << "Save file was not created";
+
+    if (fileExists) {
+        auto fileSize = std::filesystem::file_size(std::filesystem::path(tempFile.toStdString()), ec);
+        EXPECT_GT(fileSize, 0u) << "Save file is empty";
+    }
+
+    delete score;
+
+    if (saveOk && fileExists) {
+        MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);  // true = absolute path
+        ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+        // Verify excerpt was saved and name preserved
+        ASSERT_FALSE(reloadedScore->excerpts().empty()) << "No excerpts in reloaded score";
+        Excerpt* loadedExcerpt = reloadedScore->excerpts().back();
+        EXPECT_EQ(loadedExcerpt->name(), newName);
+
+        delete reloadedScore;
+    }
+
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   saveLightweightExcerpt
+///   Test that lightweight (uninitialized) excerpts can be saved and loaded
+///   using MSCZ format (the container format that supports multiple excerpts)
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, saveLightweightExcerpt)
+{
+    using namespace muse::io;
+    using namespace mu::engraving::rw;
+
+    // Load a score
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create a lightweight excerpt (no excerptScore, just like "potential excerpts" in Parts dialog)
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setInitialPartId(part->id());
+
+    // Set a custom name - this is what we're primarily testing persists
+    String customName = u"My Custom Lightweight Part";
+    excerpt->setName(customName, false);
+
+    // Add excerpt to score without initializing (lightweight - no excerptScore created)
+    // initParts will be called but now handles null excerptScore
+    score->addExcerpt(excerpt);
+
+    // Verify it's a lightweight excerpt (no excerptScore)
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be lightweight (no excerptScore)";
+    ASSERT_EQ(excerpt->name(), customName);
+
+    // Save to MSCZ using MscSaver
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "lightweight-excerpt-test.mscz").string());
+
+    // Clean up any existing file
+    if (File::exists(tempFile)) {
+        File::remove(tempFile);
+    }
+
+    {
+        MscWriter::Params writerParams;
+        writerParams.filePath = tempFile;
+        writerParams.mode = MscIoMode::Zip;
+
+        MscWriter mscWriter(writerParams);
+        ASSERT_TRUE(mscWriter.open()) << "Failed to open MscWriter";
+
+        MscSaver saver(score->iocContext());
+        bool saveOk = saver.writeMscz(score, mscWriter, false);  // no thumbnail
+        ASSERT_TRUE(saveOk) << "Failed to save score with lightweight excerpt";
+    }
+
+    delete score;
+
+    // Load back the score
+    MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);  // true = absolute path
+    ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+    // Verify the lightweight excerpt was restored
+    ASSERT_EQ(reloadedScore->excerpts().size(), 1u) << "Should have one excerpt";
+    Excerpt* loadedExcerpt = reloadedScore->excerpts().front();
+
+    // The key test: name should be preserved
+    EXPECT_EQ(loadedExcerpt->name(), customName) << "Excerpt name should persist";
+
+    // It should still be lightweight (no excerptScore)
+    EXPECT_EQ(loadedExcerpt->excerptScore(), nullptr) << "Excerpt should still be lightweight after reload";
+
+    // Parts should be restored (by ID matching)
+    EXPECT_EQ(loadedExcerpt->parts().size(), 1u) << "Parts should be restored";
+    if (!loadedExcerpt->parts().empty()) {
+        // Verify it references the correct part from the reloaded score
+        Part* loadedPart = loadedExcerpt->parts().front();
+        EXPECT_TRUE(std::find(reloadedScore->parts().begin(), reloadedScore->parts().end(), loadedPart)
+                    != reloadedScore->parts().end()) << "Excerpt part should be in score's parts";
+    }
+
+    // initialPartId should be preserved
+    EXPECT_TRUE(loadedExcerpt->initialPartId().isValid()) << "initialPartId should be preserved";
+
+    delete reloadedScore;
+
+    // Verify that lightweight excerpts don't have extra files and XML is minimal
+    {
+        MscReader::Params readerParams;
+        readerParams.filePath = tempFile;
+        readerParams.mode = MscIoMode::Zip;
+
+        MscReader mscReader(readerParams);
+        ASSERT_TRUE(mscReader.open()) << "Failed to open MscReader for verification";
+
+        // Get the excerpt file names from the archive
+        std::vector<String> excerptFiles = mscReader.excerptFileNames();
+        ASSERT_EQ(excerptFiles.size(), 1u) << "Should have one excerpt file";
+
+        // Lightweight excerpts should NOT have viewsettings.json or audiosettings.json
+        path_t excerptPath = u"Excerpts/" + excerptFiles.front() + u"/";
+        ByteArray viewSettings = mscReader.readViewSettingsJsonFile(excerptPath);
+        ByteArray audioSettings = mscReader.readAudioSettingsJsonFile(excerptPath);
+
+        EXPECT_TRUE(viewSettings.empty()) << "Lightweight excerpt should not have viewsettings.json";
+        EXPECT_TRUE(audioSettings.empty()) << "Lightweight excerpt should not have audiosettings.json";
+
+        // Verify the excerpt XML is minimal (lightweight marker, no measures, staves, etc.)
+        ByteArray excerptData = mscReader.readExcerptFile(excerptFiles.front());
+        ASSERT_FALSE(excerptData.empty()) << "Excerpt file should exist";
+
+        String excerptXml = String::fromUtf8(excerptData);
+
+        // Lightweight excerpt should have lightweight marker and essential elements
+        EXPECT_TRUE(excerptXml.contains(u"<lightweight>")) << "Should have lightweight marker";
+        EXPECT_TRUE(excerptXml.contains(u"<name>")) << "Should have name element";
+        EXPECT_TRUE(excerptXml.contains(u"<initialPartId>")) << "Should have initialPartId element";
+
+        // Should NOT have full score content (measures, staves, parts with full data)
+        EXPECT_FALSE(excerptXml.contains(u"<Staff>")) << "Lightweight excerpt should not have Staff element";
+        EXPECT_FALSE(excerptXml.contains(u"<Measure>")) << "Lightweight excerpt should not have Measure element";
+        EXPECT_FALSE(excerptXml.contains(u"<vBox>")) << "Lightweight excerpt should not have vBox element";
+
+        // Verify file size is small (lightweight should be < 1KB, full excerpt would be > 10KB)
+        EXPECT_LT(excerptData.size(), 1024u) << "Lightweight excerpt XML should be small (< 1KB)";
+    }
+
+    // Cleanup - comment out for debugging
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   lightweightExcerptAfterInitDeinit
+///   Test that lightweight excerpts remain lightweight after being
+///   temporarily initialized (e.g., for export) and then deinitialized.
+///   This simulates the export flow where excerpts are initialized for
+///   rendering but should return to lightweight state after export.
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, lightweightExcerptAfterInitDeinit)
+{
+    using namespace muse::io;
+    using namespace mu::engraving::rw;
+
+    // Load a score
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create a lightweight excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setInitialPartId(part->id());
+
+    String customName = u"Init Deinit Test Part";
+    excerpt->setName(customName, false);
+
+    // Add as lightweight excerpt
+    score->addLightweightExcerpt(excerpt);
+
+    // Verify it's lightweight
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should start as lightweight";
+
+    // Initialize the excerpt (simulates what export does)
+    score->initExcerpt(excerpt);
+    ASSERT_NE(excerpt->excerptScore(), nullptr) << "Excerpt should be initialized after initExcerpt";
+    EXPECT_TRUE(excerpt->inited()) << "Excerpt should be marked as inited";
+
+    // Deinitialize the excerpt (simulates what happens after export)
+    Score* excerptScore = excerpt->excerptScore();
+    excerpt->setExcerptScore(nullptr);
+    excerpt->setInited(false);
+    delete excerptScore;
+
+    // Verify it's back to lightweight
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be lightweight after deinit";
+    EXPECT_FALSE(excerpt->inited()) << "Excerpt should not be marked as inited after deinit";
+
+    // Save to MSCZ
+    String tempFile = String::fromStdString(
+        (std::filesystem::temp_directory_path() / "init-deinit-test.mscz").string());
+
+    if (File::exists(tempFile)) {
+        File::remove(tempFile);
+    }
+
+    {
+        MscWriter::Params writerParams;
+        writerParams.filePath = tempFile;
+        writerParams.mode = MscIoMode::Zip;
+
+        MscWriter mscWriter(writerParams);
+        ASSERT_TRUE(mscWriter.open()) << "Failed to open MscWriter";
+
+        MscSaver saver(score->iocContext());
+        bool saveOk = saver.writeMscz(score, mscWriter, false);
+        ASSERT_TRUE(saveOk) << "Failed to save score";
+    }
+
+    delete score;
+
+    // Verify the saved file has lightweight excerpt
+    {
+        MscReader::Params readerParams;
+        readerParams.filePath = tempFile;
+        readerParams.mode = MscIoMode::Zip;
+
+        MscReader mscReader(readerParams);
+        ASSERT_TRUE(mscReader.open()) << "Failed to open MscReader";
+
+        std::vector<String> excerptFiles = mscReader.excerptFileNames();
+        ASSERT_EQ(excerptFiles.size(), 1u) << "Should have one excerpt file";
+
+        ByteArray excerptData = mscReader.readExcerptFile(excerptFiles.front());
+        ASSERT_FALSE(excerptData.empty()) << "Excerpt file should exist";
+
+        String excerptXml = String::fromUtf8(excerptData);
+
+        // Should be lightweight (small size, lightweight marker, no full content)
+        EXPECT_TRUE(excerptXml.contains(u"<lightweight>")) << "Should have lightweight marker";
+        EXPECT_FALSE(excerptXml.contains(u"<Staff>")) << "Should not have Staff element";
+        EXPECT_FALSE(excerptXml.contains(u"<Measure>")) << "Should not have Measure element";
+        EXPECT_LT(excerptData.size(), 1024u) << "Lightweight excerpt should be small (< 1KB)";
+    }
+
+    // Reload and verify
+    MasterScore* reloadedScore = ScoreRW::readScore(tempFile, true);
+    ASSERT_TRUE(reloadedScore) << "Failed to reload score";
+
+    ASSERT_EQ(reloadedScore->excerpts().size(), 1u) << "Should have one excerpt";
+    Excerpt* loadedExcerpt = reloadedScore->excerpts().front();
+
+    EXPECT_EQ(loadedExcerpt->name(), customName) << "Name should be preserved";
+    EXPECT_EQ(loadedExcerpt->excerptScore(), nullptr) << "Should still be lightweight after reload";
+
+    delete reloadedScore;
+    std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}

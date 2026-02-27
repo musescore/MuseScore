@@ -96,12 +96,13 @@ public:
     static void cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track_idx_t dstTrack2);
     static void createLinkedTabs(MasterScore* score);
 
+    void setInited(bool inited);
+
 private:
     friend class MasterScore;
 
     static void promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx);
 
-    void setInited(bool inited);
     void writeNameToMetaTags();
 
     void updateTracksMapping();

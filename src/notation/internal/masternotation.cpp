@@ -65,11 +65,15 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
     return static_cast<ExcerptNotation*>(excerpt.get());
 }
 
-static IExcerptNotationPtr createAndInitExcerptNotation(MasterNotation* master, mu::engraving::Excerpt* excerpt,
-                                                        const muse::modularity::ContextPtr& iocCtx)
+static IExcerptNotationPtr createExcerptNotation(MasterNotation* master, mu::engraving::Excerpt* excerpt,
+                                                 const muse::modularity::ContextPtr& iocCtx)
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(master, excerpt, iocCtx);
-    excerptNotation->init();
+
+    // Only init if excerpt has a score (non-lightweight)
+    if (excerpt->excerptScore()) {
+        excerptNotation->init();
+    }
 
     return excerptNotation;
 }
@@ -478,6 +482,14 @@ void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
     }
 }
 
+void MasterNotation::deinitExcerpts(const ExcerptNotationList& excerpts)
+{
+    for (const IExcerptNotationPtr& excerptNotation : excerpts) {
+        ExcerptNotation* impl = get_impl(excerptNotation);
+        impl->deinit();
+    }
+}
+
 void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;
@@ -596,6 +608,35 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     }
 }
 
+void MasterNotation::promotePotentialExcerptToLightweight(engraving::Excerpt* excerpt)
+{
+    if (!excerpt) {
+        return;
+    }
+
+    // Check if already in masterScore->excerpts()
+    const std::vector<mu::engraving::Excerpt*>& msExcerpts = masterScore()->excerpts();
+    if (std::find(msExcerpts.begin(), msExcerpts.end(), excerpt) != msExcerpts.end()) {
+        return;
+    }
+
+    // Add to masterScore as lightweight excerpt
+    masterScore()->addLightweightExcerpt(excerpt);
+
+    // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts
+    auto it = std::find_if(m_potentialExcerpts.begin(), m_potentialExcerpts.end(),
+                           [excerpt](const IExcerptNotationPtr& en) {
+        return get_impl(en)->excerpt() == excerpt;
+    });
+
+    if (it != m_potentialExcerpts.end()) {
+        m_excerpts.push_back(*it);
+        m_potentialExcerpts.erase(it);
+        m_excerptsChanged.notify();
+        static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(m_excerpts);
+    }
+}
+
 void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;
@@ -636,13 +677,14 @@ void MasterNotation::updateExcerpts()
             continue;
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
-        bool open = excerpt->excerptScore()->isOpen();
-        if (open) {
-            excerptNotation->notation()->elements()->msScore()->doLayout();
-        }
+        IExcerptNotationPtr excerptNotation = createExcerptNotation(this, excerpt, iocContext());
 
-        initNotationSoloMuteState(excerptNotation->notation());
+        if (excerpt->excerptScore()) {
+            if (excerpt->excerptScore()->isOpen()) {
+                excerptNotation->notation()->elements()->msScore()->doLayout();
+            }
+            initNotationSoloMuteState(excerptNotation->notation());
+        }
 
         updatedExcerpts.push_back(excerptNotation);
     }
@@ -791,12 +833,11 @@ void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excer
     ExcerptNotationList notationExcerpts;
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
-        if (excerpt->isEmpty()) {
+        if (excerpt->excerptScore() && excerpt->isEmpty()) {
             masterScore()->initEmptyExcerpt(excerpt);
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(this, excerpt, iocContext());
-        notationExcerpts.push_back(excerptNotation);
+        notationExcerpts.push_back(createExcerptNotation(this, excerpt, iocContext()));
     }
 
     masterScore()->setExcerptsChanged(false);

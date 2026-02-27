@@ -22,8 +22,12 @@
 
 #include "excerptnotation.h"
 
+#include <algorithm>
+
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/editing/editexcerpt.h"
+#include "masternotation.h"
 
 using namespace mu::notation;
 
@@ -48,6 +52,24 @@ void ExcerptNotation::init()
     setScore(m_excerpt->excerptScore());
 
     m_inited = true;
+}
+
+void ExcerptNotation::deinit()
+{
+    if (!m_inited) {
+        return;
+    }
+
+    // Delete the excerptScore and reset to lightweight state
+    mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
+    if (excerptScore) {
+        setScore(nullptr);
+        m_excerpt->setExcerptScore(nullptr);
+        m_excerpt->setInited(false);
+        delete excerptScore;
+    }
+
+    m_inited = false;
 }
 
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
@@ -91,6 +113,14 @@ void ExcerptNotation::setName(const QString& name)
     m_excerpt->setName(name);
 
     if (changed) {
+        // For potential excerpts, promote to lightweight excerpt so they get saved
+        if (!m_inited && m_masterNotation) {
+            m_masterNotation->promotePotentialExcerptToLightweight(m_excerpt);
+            // Mark project as unsaved so asterisk appears and save confirmation is shown
+            if (m_masterNotation->project()) {
+                m_masterNotation->project()->markAsUnsaved();
+            }
+        }
         notifyAboutNotationChanged();
     }
 }

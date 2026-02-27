@@ -894,8 +894,11 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         return make_ret(Ret::Code::Ok);
     }
 
-    // Write excerpt view settings and solo-mute state
+    // Write excerpt view settings and solo-mute state (skip lightweight excerpts)
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
 
