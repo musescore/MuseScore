@@ -244,6 +244,10 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             if (!systemLock) {
                 curSysWidth = HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
             }
+
+            if (ctx.state().curMeasure()->isMeasure()) {
+                MeasureLayout::updateKeySignatures(toMeasure(ctx.state().curMeasure()), ctx);
+            }
         }
 
         const MeasureBase* mb = ctx.state().curMeasure();

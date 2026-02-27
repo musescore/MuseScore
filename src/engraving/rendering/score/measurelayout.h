@@ -80,6 +80,8 @@ public:
     static MeasureStartEndPos getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg, const staff_idx_t staffIdx,
                                                     const bool needsHeaderException, const bool modernMMRest, const LayoutContext& ctx);
 
+    static void updateKeySignatures(const Measure* measure, LayoutContext& ctx);
+
 private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
