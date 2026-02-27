@@ -3412,7 +3412,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(note->shape().translate(note->pos()));
     }
 
-    for (const NoteParenInfoPtr& parenInfo : item->noteParens()) {
+    for (const NoteParenthesisInfo* parenInfo : item->noteParens()) {
         Parenthesis* leftParen = parenInfo->leftParen();
         Parenthesis* rightParen = parenInfo->rightParen();
 
