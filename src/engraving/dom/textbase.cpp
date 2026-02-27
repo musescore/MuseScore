@@ -26,6 +26,7 @@
 #include "dom/harppedaldiagram.h"
 #include "draw/fontmetrics.h"
 
+#include "engraving/rendering/score/textlayout.h"
 #include "iengravingfont.h"
 
 #include "style/textstyle.h"
@@ -58,6 +59,7 @@
 using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
@@ -280,11 +282,9 @@ RectF TextCursor::cursorRect() const
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
     Font _font  = fragment ? fragment->font(m_text) : m_text->font();
-    if (fragment && _font.type() == Font::Type::MusicSymbol) {
+    if (fragment) {
         // Ensure the cursor height matches that of the associated text font
-        String textFontId(_font.family().id() + String(u" Text"));
-        _font.setFamily(textFontId, Font::Type::MusicSymbolText);
-        _font.setPointSizeF(fragment->format.fontSize());
+        TextLayout::substituteMusicSymbolFontWithMusicSymbolText(_font, fragment->format.fontSize());
     }
 
     double ascent = FontMetrics::ascent(_font);

@@ -307,13 +307,15 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
 
     if (fragments.empty()) {
         FontMetrics fm = t->fontMetrics();
-        shape.add(RectF(0.0, -fm.ascent(), 1.0, fm.descent()), t);
+        shape.add(RectF(0.0, -fm.ascent(), 1.0, fm.ascent()), t);
         lineSpacing = fm.lineSpacing();
     } else if (fragments.size() == 1 && fragments.front().text.isEmpty()) {
         auto fi = fragments.begin();
         TextFragment& f = *fi;
         f.pos.setX(x);
-        FontMetrics fm(f.font(t));
+        Font font = f.font(t);
+        substituteMusicSymbolFontWithMusicSymbolText(font, f.format.fontSize());
+        FontMetrics fm(font);
         if (f.format.valign() != VerticalAlignment::AlignNormal) {
             double voffset = fm.xHeight() / SUBSCRIPT_SIZE;   // use original height
             if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -327,7 +329,7 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
             f.pos.setY(0.0);
         }
 
-        RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
+        RectF temp(0.0, -fm.ascent(), 1.0, fm.ascent());
         shape.add(temp, t);
         lineSpacing = std::max(lineSpacing, fm.lineSpacing());
     } else {
@@ -386,6 +388,16 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
     // Apply style/custom line spacing
     lineSpacing *= t->textLineSpacing();
     item->setLineSpacing(lineSpacing);
+}
+
+void TextLayout::substituteMusicSymbolFontWithMusicSymbolText(Font& font, double size)
+{
+    if (font.type() != Font::Type::MusicSymbol) {
+        return;
+    }
+    String textFontId(font.family().id() + String(u" Text"));
+    font.setFamily(textFontId, Font::Type::MusicSymbolText);
+    font.setPointSizeF(size);
 }
 
 double TextLayout::musicSymbolBaseLineAdjust(const TextBlock* block, const TextBase* t, const TextFragment& f,
