@@ -127,6 +127,7 @@ void WindowView::setViewContent(QQuickItem* item)
         }
         if (item->implicitHeight() != m_view->height()) {
             updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
+            repositionWindowIfNeed();
         }
     });
 }
