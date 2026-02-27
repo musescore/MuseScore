@@ -85,7 +85,7 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
 
     const TextBlock& block = ldata->blocks.at(cursor->row());
     const CharFormat* previousFormat = block.formatAt(std::max(int(cursor->column()) - 1, 0));
-    if (previousFormat && previousFormat->fontFamily() == "ScoreText" && s == " ") {
+    if (previousFormat && s == " ") {
         // This space would be ignored by the xml parser (see #15629)
         // We must use the nonBreaking space character instead
         String nonBreakingSpace = String(Char(0xa0));
