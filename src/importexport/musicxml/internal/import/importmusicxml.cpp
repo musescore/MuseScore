@@ -59,9 +59,10 @@ namespace mu::iex::musicxml {
  Show a dialog displaying the MusicXML import error(s).
  */
 #ifndef MUSICXML_NO_INTERACTIVE
-static IInteractive::Button musicXmlImportErrorDialog(const String& text, const String& detailedText)
+static IInteractive::Button musicXmlImportErrorDialog(const muse::modularity::ContextPtr& ctx, const String& text,
+                                                      const String& detailedText)
 {
-    auto interactive = modularity::fixmeIoc()->resolve<IInteractive>("musicxml");
+    auto interactive = modularity::ioc(ctx)->resolve<IInteractive>("musicxml");
 
     std::string msg = text.toStdString();
     msg += '\n';
@@ -116,7 +117,7 @@ Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArr
         if (!MScore::noGui) {
             const String text = muse::mtrc("iex_musicxml", "%Ln error(s) found, import may be incomplete.",
                                            nullptr, int(pass1_errors.size() + pass2_errors.size()));
-            if (musicXmlImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
+            if (musicXmlImportErrorDialog(score->iocContext(), text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
                 res = Err::UserAbort;
             }
         }

@@ -40,8 +40,8 @@ class MuseSoundsListModel : public QAbstractListModel, public muse::async::Async
 
     QML_ELEMENT
 
+    muse::GlobalInject<IMuseSoundsRepository> repository;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<IMuseSoundsRepository> repository = { this };
 
 public:
     explicit MuseSoundsListModel(QObject* parent = nullptr);

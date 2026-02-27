@@ -125,6 +125,6 @@ void NotationSceneContext::onInit(const IApplication::RunMode& mode)
 void NotationSceneContext::onAllInited(const IApplication::RunMode& mode)
 {
     if (mode == IApplication::RunMode::GuiApp) {
-        NotationActionsShortcutsMigrator::migrate();
+        NotationActionsShortcutsMigrator::migrate(iocContext());
     }
 }

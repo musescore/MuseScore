@@ -21,13 +21,10 @@
  */
 #pragma once
 
-#include "async/promise.h"
-#include "types/ret.h"
-
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
-class IMuseSamplerCheckUpdateScenario : MODULE_CONTEXT_INTERFACE
+class IMuseSamplerCheckUpdateScenario : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerCheckUpdateScenario)
 

@@ -65,7 +65,7 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
     muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
     muse::GlobalInject<converter::IConverterController> converter;
-    muse::ContextInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider = { this };
+    muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
     muse::ContextInject<muse::autobot::IAutobot> autobot = { this };
     muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { this };
 

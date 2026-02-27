@@ -29,7 +29,7 @@
 #include "drawdatatypes.h"
 
 namespace mu::engraving {
-class IDiagnosticDrawProvider : MODULE_CONTEXT_INTERFACE
+class IDiagnosticDrawProvider : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IDiagnosticDrawProvider)
 public:

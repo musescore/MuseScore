@@ -56,7 +56,7 @@ class NotationProject : public INotationProject, public muse::Contextable, publi
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationReadersRegister> readers;
-    muse::ContextInject<INotationWritersRegister> writers = { this };
+    muse::GlobalInject<INotationWritersRegister> writers;
     muse::ContextInject<IProjectMigrator> migrator = { this };
 
 public:

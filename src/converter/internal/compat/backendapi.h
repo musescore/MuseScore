@@ -47,7 +47,7 @@ class BackendApi
     inline static muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     inline static muse::GlobalInject<muse::IApplication> application;
     inline static muse::GlobalInject<project::IProjectCreator> notationCreator;
-    inline static muse::ContextInject<project::INotationWritersRegister> writers = { nullptr }; // FIXME
+    inline static muse::GlobalInject<project::INotationWritersRegister> writers;
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,

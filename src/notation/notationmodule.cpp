@@ -56,6 +56,17 @@ void NotationModule::registerExports()
     globalIoc()->registerExport<IInstrumentsRepository>(mname, m_instrumentsRepository);
 }
 
+void NotationModule::resolveImports()
+{
+    auto writers = globalIoc()->resolve<project::INotationWritersRegister>(mname);
+    if (writers) {
+        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
+        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
+        writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
+        writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
+    }
+}
+
 void NotationModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
@@ -83,17 +94,4 @@ void NotationModule::onInit(const IApplication::RunMode&)
 IContextSetup* NotationModule::newContext(const ContextPtr& ctx) const
 {
     return new NotationContext(ctx);
-}
-
-// === NotationContext ===
-
-void NotationContext::resolveImports()
-{
-    auto writers = ioc()->resolve<project::INotationWritersRegister>(mname);
-    if (writers) {
-        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT, iocContext()));
-        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE, iocContext()));
-        writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
-        writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
-    }
 }

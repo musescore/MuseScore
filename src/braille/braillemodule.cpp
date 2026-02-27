@@ -52,6 +52,14 @@ void BrailleModule::registerExports()
     globalIoc()->registerExport<IBrailleConfiguration>(mname, m_brailleConfiguration);
 }
 
+void BrailleModule::resolveImports()
+{
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(mname);
+    if (writers) {
+        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
+    }
+}
+
 void BrailleModule::onInit(const IApplication::RunMode&)
 {
     m_brailleConfiguration->init();
@@ -71,14 +79,6 @@ void BrailleModuleContext::registerExports()
 
     ioc()->registerExport<IBrailleConverter>(mname, m_brailleConverter);
     ioc()->registerExport<INotationBraille>(mname, m_notationBraille);
-}
-
-void BrailleModuleContext::resolveImports()
-{
-    auto writers = ioc()->resolve<INotationWritersRegister>(mname);
-    if (writers) {
-        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
-    }
 }
 
 void BrailleModuleContext::onInit(const muse::IApplication::RunMode&)

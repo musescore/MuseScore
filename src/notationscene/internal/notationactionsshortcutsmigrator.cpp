@@ -38,9 +38,9 @@ using namespace mu::notation;
 // the user or simply did not exist in the version that created the
 // shortcuts.xml file.
 
-void NotationActionsShortcutsMigrator::migrate()
+void NotationActionsShortcutsMigrator::migrate(const muse::modularity::ContextPtr& ctx)
 {
-    auto shortcutsRegister = modularity::fixmeIoc()->resolve<shortcuts::IShortcutsRegister>("notationscene");
+    auto shortcutsRegister = modularity::ioc(ctx)->resolve<shortcuts::IShortcutsRegister>("notationscene");
     if (!shortcutsRegister) {
         return;
     }

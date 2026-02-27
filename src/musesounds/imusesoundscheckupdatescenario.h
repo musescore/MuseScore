@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
-class IMuseSoundsCheckUpdateScenario : MODULE_CONTEXT_INTERFACE
+class IMuseSoundsCheckUpdateScenario : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IMuseSoundsCheckUpdateScenario)
 

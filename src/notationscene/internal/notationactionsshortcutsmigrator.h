@@ -22,10 +22,12 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+
 namespace mu::notation {
 class NotationActionsShortcutsMigrator
 {
 public:
-    static void migrate();
+    static void migrate(const muse::modularity::ContextPtr& ctx);
 };
 }

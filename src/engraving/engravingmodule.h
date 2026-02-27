@@ -43,10 +43,22 @@ public:
     void onDeinit() override;
     void onDestroy() override;
 
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
 
     std::shared_ptr<EngravingConfiguration> m_configuration;
     std::shared_ptr<EngravingFontsProvider> m_engravingfonts;
+};
+
+class EngravingContext : public muse::modularity::IContextSetup
+{
+public:
+
+    EngravingContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }
 
