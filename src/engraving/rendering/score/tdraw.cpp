@@ -471,9 +471,9 @@ void TDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
     if (item->segment() && item->track() != muse::nidx) {
         Fraction tick = item->segment()->tick();
         Staff* staff = item->score()->staff(item->staffIdx());
-        double lineDist = staff->lineDistance(tick);
+        Spatium lineDist = staff->lineDistance(tick);
         int numOfLines = staff->lines(tick);
-        double step = lineDist * spatium;
+        double step = lineDist.toAbsolute(spatium);
         double stepTolerance = step * 0.1;
         double ledgerLineLength = item->style().styleS(Sid::ledgerLineLength).val() * spatium;
         double ledgerLineWidth = item->style().styleS(Sid::ledgerLineWidth).val() * spatium;
@@ -2798,19 +2798,19 @@ void TDraw::draw(const Stem* item, Painter* painter, const PaintOptions& opt)
     if (item->chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        double y = isUp ? -item->length() + StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
-                   : item->length() - StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        double y = isUp ? -item->length() + StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_UP.toAbsolute(sp)
+                   : item->length() - StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_DN.toAbsolute(sp);
         // if stems through, try to align slashes within or across lines
         if (staffType->stemThrough()) {
             double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
-            double halfSlashHgt = StemLayout::STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            double halfSlashHgt = StemLayout::STAFFTYPE_TAB_SLASH_2TOTHEIGHT.toAbsolute(sp) * 0.5;
             y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
         }
         // draw slashes
-        double hlfWdt= sp * StemLayout::STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
-        double sln   = sp * StemLayout::STAFFTYPE_TAB_SLASH_SLANTY;
-        double thk   = sp * StemLayout::STAFFTYPE_TAB_SLASH_THICK;
-        double displ = sp * StemLayout::STAFFTYPE_TAB_SLASH_DISPL;
+        double hlfWdt= StemLayout::STAFFTYPE_TAB_SLASH_WIDTH.toAbsolute(sp) * 0.5;
+        double sln   = StemLayout::STAFFTYPE_TAB_SLASH_SLANTY.toAbsolute(sp);
+        double thk   = StemLayout::STAFFTYPE_TAB_SLASH_THICK.toAbsolute(sp);
+        double displ = StemLayout::STAFFTYPE_TAB_SLASH_DISPL.toAbsolute(sp);
         PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
@@ -2831,7 +2831,7 @@ void TDraw::draw(const Stem* item, Painter* painter, const PaintOptions& opt)
     int nDots = item->chord()->dots();
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = item->chord()->dotPosX();
-        double y     = ((StemLayout::STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double y     = ((StemLayout::STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2).toAbsolute(sp)) * (isUp ? -1.0 : 1.0);
         double step  = item->style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));

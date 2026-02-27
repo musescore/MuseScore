@@ -1868,9 +1868,9 @@ void Staff::setLines(const Fraction& tick, int val)
 //    distance between staff lines
 //---------------------------------------------------------
 
-double Staff::lineDistance(const Fraction& tick) const
+Spatium Staff::lineDistance(const Fraction& tick) const
 {
-    return staffType(tick)->lineDistance().val();
+    return staffType(tick)->lineDistance();
 }
 
 //---------------------------------------------------------
