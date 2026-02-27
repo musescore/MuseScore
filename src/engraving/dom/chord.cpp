@@ -78,6 +78,28 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+NoteParenthesisInfo::NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList)
+    : m_leftParen(lParen), m_rightParen(rParen), m_notes(nList)
+{
+    std::sort(m_notes.begin(), m_notes.end(), noteIsBefore);
+}
+
+NoteParenthesisInfo::~NoteParenthesisInfo()
+{
+    delete m_leftParen;
+    delete m_rightParen;
+}
+
+void NoteParenthesisInfo::insertNote(Note* note)
+{
+    m_notes.insert(std::upper_bound(m_notes.begin(), m_notes.end(), note, noteIsBefore), note);
+}
+
+void NoteParenthesisInfo::removeNote(Note* note)
+{
+    muse::remove(m_notes, note);
+}
+
 //---------------------------------------------------------
 //   upNote
 //---------------------------------------------------------
@@ -374,25 +396,25 @@ Chord::Chord(const Chord& c, bool link)
     }
 
     if (!c.noteParens().empty()) {
-        for (const NoteParenthesisInfo& info : c.noteParens()) {
-            Parenthesis* newLeftParen = toParenthesis(info.leftParen->clone());
+        for (const NoteParenthesisInfo* info : c.noteParens()) {
+            Parenthesis* newLeftParen = toParenthesis(info->leftParen()->clone());
             newLeftParen->setParent(this);
-            Parenthesis* newRightParen = toParenthesis(info.rightParen->clone());
+            Parenthesis* newRightParen = toParenthesis(info->rightParen()->clone());
             newRightParen->setParent(this);
 
-            if (link && !info.leftParen->generated()) {
-                score()->undo(new Link(newLeftParen, info.leftParen));
+            if (link && !info->leftParen()->generated()) {
+                score()->undo(new Link(newLeftParen, info->leftParen()));
             }
-            if (link && !info.rightParen->generated()) {
-                score()->undo(new Link(newRightParen, info.rightParen));
+            if (link && !info->rightParen()->generated()) {
+                score()->undo(new Link(newRightParen, info->rightParen()));
             }
 
             std::vector<Note*> newNotes;
-            for (Note* note : info.notes) {
+            for (Note* note : info->notes()) {
                 newNotes.push_back(findNote(note->pitch()));
             }
 
-            m_noteParens.push_back(NoteParenthesisInfo(newLeftParen, newRightParen, newNotes));
+            m_noteParens.push_back(new NoteParenthesisInfo(newLeftParen, newRightParen, newNotes));
         }
     }
 }
@@ -453,6 +475,7 @@ Chord::~Chord()
     muse::DeleteAll(m_ledgerLines);
     muse::DeleteAll(m_graceNotes);
     muse::DeleteAll(m_notes);
+    muse::DeleteAll(m_noteParens);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -1294,30 +1317,17 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     }
 
     for (auto& p : m_noteParens) {
-        p.leftParen->scanElements(func);
-        p.rightParen->scanElements(func);
+        p->leftParen()->scanElements(func);
+        p->rightParen()->scanElements(func);
     }
     ChordRest::scanElements(func);
 }
 
-const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) const
-{
-    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        const NoteParenthesisInfo& noteParenInfo = *it;
-        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
-            return &noteParenInfo;
-        }
-    }
-
-    return nullptr;
-}
-
 NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 {
-    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        NoteParenthesisInfo& noteParenInfo = *it;
-        if (paren == noteParenInfo.leftParen || paren == noteParenInfo.rightParen) {
-            return &noteParenInfo;
+    for (NoteParenthesisInfo* infoPtr : m_noteParens) {
+        if (paren == infoPtr->leftParen() || paren == infoPtr->rightParen()) {
+            return infoPtr;
         }
     }
 
@@ -1326,23 +1336,21 @@ NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 
 const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
 {
-    for (NoteParenthesisInfoList::const_iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        const NoteParenthesisInfo& noteParenInfo = *it;
-        for (const Note* parenNote : noteParenInfo.notes) {
+    for (const NoteParenthesisInfo* infoPtr : m_noteParens) {
+        for (const Note* parenNote : infoPtr->notes()) {
             if (parenNote == note) {
-                return &noteParenInfo;
+                return infoPtr;
             }
         }
     }
 
     DO_ASSERT(u"Parentheses are not in chord");
-
     return nullptr;
 }
 
-void Chord::addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes)
+void Chord::addNoteParenInfo(NoteParenthesisInfo* noteParenInfo)
 {
-    m_noteParens.emplace_back(NoteParenthesisInfo(leftParen, rightParen, notes));
+    m_noteParens.push_back(noteParenInfo);
 }
 
 void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
@@ -1351,18 +1359,17 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
         return;
     }
 
-    Parenthesis* paren = noteParenInfo->leftParen;
-
-    NoteParenthesisInfoList::iterator itToRemove = m_noteParens.end();
-
-    for (NoteParenthesisInfoList::iterator it = m_noteParens.begin(); it != m_noteParens.end(); ++it) {
-        NoteParenthesisInfo& info = *it;
-        if (paren == info.leftParen) {
-            itToRemove = it;
-        }
+    if (!noteParenInfo) {
+        return;
     }
 
-    m_noteParens.erase(itToRemove);
+    auto it = std::find_if(m_noteParens.begin(), m_noteParens.end(), [noteParenInfo](const NoteParenthesisInfo* ptr) {
+        return ptr == noteParenInfo;
+    });
+
+    if (it != m_noteParens.end()) {
+        m_noteParens.erase(it);
+    }
 }
 
 void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
@@ -1373,7 +1380,7 @@ void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
         return;
     }
 
-    noteParenInfo->notes.push_back(note);
+    noteParenInfo->insertNote(note);
 }
 
 void Chord::removeNoteFromParenInfo(Note* note, const Parenthesis* paren)
@@ -1384,7 +1391,7 @@ void Chord::removeNoteFromParenInfo(Note* note, const Parenthesis* paren)
         return;
     }
 
-    muse::remove(noteParenInfo->notes, note);
+    noteParenInfo->removeNote(note);
 }
 
 //---------------------------------------------------------

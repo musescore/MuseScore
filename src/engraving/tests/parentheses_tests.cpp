@@ -170,8 +170,8 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     EXPECT_TRUE(noteStd->parenInfo());
     EXPECT_TRUE(noteTab->parenInfo());
 
-    EXPECT_TRUE(noteStd->parenInfo()->leftParen->isLinked(noteTab->parenInfo()->leftParen));
-    EXPECT_TRUE(noteStd->parenInfo()->rightParen->isLinked(noteTab->parenInfo()->rightParen));
+    EXPECT_TRUE(noteStd->parenInfo()->leftParen()->isLinked(noteTab->parenInfo()->leftParen()));
+    EXPECT_TRUE(noteStd->parenInfo()->rightParen()->isLinked(noteTab->parenInfo()->rightParen()));
 
     undoAndCheckRemovedLinked(score, singleNoteChordStd, singleNoteChordTab);
 
@@ -201,6 +201,33 @@ TEST_F(Engraving_ParenthesesTests, addParensManyNotes)
 
     // Check that paren info has been removed
     checkNoNotesHaveParenInfo(chord->notes());
+}
+
+TEST_F(Engraving_ParenthesesTests, removeParensBottomNotes)
+{
+    MasterScore* score = loadScore(u"single_staff.mscx");
+
+    // Find chord in second measure
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    Chord* chord = findChordInMeasure(m2, Fraction(1, 1), 0);
+    checkChordHasNoParens(chord);
+
+    // Toggle parentheses for all notes
+    toggleMultipleNoteParen(score, chord->notes());
+    checkChordHasParens(chord, 1);
+    checkAllNotesHaveParenInfo(chord->notes());
+
+    // Remove parentheses from bottom 2 notes
+    std::vector<Note*> notes = chord->notes();
+    std::vector<EngravingItem*> bottomNotes{ notes.at(notes.size() - 2), notes.at(notes.size() - 1) };
+    score->select(bottomNotes, SelectType::ADD);
+    score->startCmd(TranslatableString::untranslatable("Parentheses tests remove bottom notes"));
+    score->cmdRemoveParenthesesFromNotes();
+    score->endCmd();
+
+    // Assert that these 2 notes have no paren info
+    EXPECT_FALSE(notes.at(notes.size() - 2)->parenInfo());
+    EXPECT_FALSE(notes.at(notes.size() - 1)->parenInfo());
 }
 
 TEST_F(Engraving_ParenthesesTests, addParensManyNotesLinkedStaff)

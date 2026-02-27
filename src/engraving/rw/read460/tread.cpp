@@ -3895,8 +3895,8 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         Note* firstNote = notes.front();
         Note* mainNote = firstNote ? toNote(firstNote->findLinkedInStaff(mainChord->staff())) : nullptr;
         const NoteParenthesisInfo* mainNoteParenInfo = mainChord && mainNote ? mainChord->findNoteParenInfo(mainNote) : nullptr;
-        Parenthesis* mainLeftParen = mainNoteParenInfo ? mainNoteParenInfo->leftParen : nullptr;
-        Parenthesis* mainRightParen = mainNoteParenInfo ? mainNoteParenInfo->rightParen : nullptr;
+        Parenthesis* mainLeftParen = mainNoteParenInfo ? mainNoteParenInfo->leftParen() : nullptr;
+        Parenthesis* mainRightParen = mainNoteParenInfo ? mainNoteParenInfo->rightParen() : nullptr;
 
         if (mainLeftParen && mainRightParen) {
             leftParen->linkTo(mainLeftParen);
@@ -3904,7 +3904,8 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    ch->addNoteParenInfo(leftParen, rightParen, notes);
+    NoteParenthesisInfo* noteParenInfo = new NoteParenthesisInfo(leftParen, rightParen, notes);
+    ch->addNoteParenInfo(noteParenInfo);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
