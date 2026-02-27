@@ -2733,7 +2733,7 @@ void GuitarPro::addTunings()
     // NOTE: GP doesn't support multiple tunings on one part
     // We're safe to just take the very first chord rest segment
     // and check if it has any non-standard tuning
-    const Fraction& f{ 0, 1 };
+    const Fraction& frac{ 0, 1 };
 
     for (auto p : score->parts()) {
         for (auto s : p->staves()) {
@@ -2741,7 +2741,7 @@ void GuitarPro::addTunings()
                 continue;
             }
 
-            Segment* seg = m->findSegment(SegmentType::ChordRest, f);
+            Segment* seg = m->findSegment(SegmentType::ChordRest, frac);
 
             IF_ASSERT_FAILED(seg) {
                 LOGE() << "First measure MUST has a chord rest segment after import";
