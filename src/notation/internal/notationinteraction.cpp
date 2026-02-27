@@ -5283,23 +5283,25 @@ void NotationInteraction::repeatSelection()
     if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
-    if (endSegment) {
-        for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
-            EngravingItem* e = endSegment->element(track);
-            if (e) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
-                ChordRest* cr = toChordRest(e);
-                if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
-                    rollback();
-                    checkAndShowError();
-                    return;
-                }
-                apply();
-
-                showItem(cr);
-                break;
-            }
+    if (!endSegment) {
+        return;
+    }
+    for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
+        EngravingItem* e = endSegment->element(track);
+        if (!e) {
+            continue;
         }
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        ChordRest* cr = toChordRest(e);
+        if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+            rollback();
+            checkAndShowError();
+            return;
+        }
+        apply();
+
+        showItem(cr);
+        break;
     }
 }
 
