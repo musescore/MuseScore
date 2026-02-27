@@ -1317,17 +1317,6 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     ChordRest::scanElements(func);
 }
 
-const NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren) const
-{
-    for (const NoteParenthesisInfo* infoPtr : m_noteParens) {
-        if (paren == infoPtr->leftParen() || paren == infoPtr->rightParen()) {
-            return infoPtr;
-        }
-    }
-
-    return nullptr;
-}
-
 NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
 {
     for (NoteParenthesisInfo* infoPtr : m_noteParens) {
@@ -1353,9 +1342,9 @@ const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
     return nullptr;
 }
 
-void Chord::addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes)
+void Chord::addNoteParenInfo(NoteParenthesisInfo* noteParenInfo)
 {
-    m_noteParens.push_back(new NoteParenthesisInfo(leftParen, rightParen, notes));
+    m_noteParens.push_back(noteParenInfo);
 }
 
 void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
