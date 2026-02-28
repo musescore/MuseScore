@@ -550,10 +550,12 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("autobot-show-scripts"),
         };
 
+#ifdef MUSE_MODULE_VST
         MenuItemList vstItems {
             makeMenuItem("vst-use-oldview"),
             makeMenuItem("vst-use-newview"),
         };
+#endif
 
         MenuItemList audioItems {
             makeMenuItem("action://audio/dev/use-workermode"),
@@ -565,9 +567,13 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot");
+
+#ifdef MUSE_MODULE_VST
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&VST"), vstItems, "menu-vst");
+#endif
+
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Audio"), audioItems, "menu-audio")
               << makeMenuItem("multiwindows-dev-show-info");
     }
 
