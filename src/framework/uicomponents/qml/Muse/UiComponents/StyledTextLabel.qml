@@ -21,10 +21,13 @@
  */
 import QtQuick
 
+pragma ComponentBehavior: Bound
+
 Text {
     id: root
 
     readonly property bool isEmpty: text.length === 0
+    property bool displayTruncatedTextOnHover: false
 
     color: ui.theme.fontPrimaryColor
     linkColor: ui.theme.linkColor
@@ -43,21 +46,28 @@ Text {
         Qt.openUrlExternally(link)
     }
 
-    onHoveredLinkChanged: {
-        if (Boolean(hoveredLink)) {
-            mouseAreaLoader.active = true
-        }
-    }
-
     Loader {
         id: mouseAreaLoader
         anchors.fill: parent
-        active: false
+        active: (root.displayTruncatedTextOnHover && root.truncated) || root.hoveredLink
 
         sourceComponent: MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.NoButton
             cursorShape: root.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            hoverEnabled: true
+
+            onPressed: {
+                ui.tooltip.hide(root, true)
+            }
+
+            onContainsMouseChanged: {
+                if (!containsMouse || !root.truncated || root.hoveredLink) {
+                    ui.tooltip.hide(root)
+                    return
+                }
+                ui.tooltip.show(root, root.text)
+            }
         }
     }
 }

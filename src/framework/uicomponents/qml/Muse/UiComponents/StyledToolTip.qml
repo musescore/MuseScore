@@ -72,7 +72,6 @@ StyledPopupView {
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.WordWrap
-                maximumLineCount: 2
             }
 
             StyledTextLabel {

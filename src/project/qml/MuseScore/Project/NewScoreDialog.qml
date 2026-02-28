@@ -120,9 +120,10 @@ StyledDialogView {
 
         StyledTextLabel {
             id: descriptionLabel
-            text: pagesStack.currentIndex === 0
-                  ? chooseInstrumentsAndTemplatePage.description
-                  : ""
+
+            // DO NOT MERGE THIS:
+            text: "Hello world - this is an extremely long instrument description to simulate truncated labels and tooltips. This instrument has 13 strings, a hihat, a mouthpiece, and sounds terrible. Nobody should ever use this instrument. Lorem ipsum dolor etc, etc. End of text."
+            displayTruncatedTextOnHover: true
 
             Layout.fillWidth: true
             Layout.maximumHeight: buttonBox.height
