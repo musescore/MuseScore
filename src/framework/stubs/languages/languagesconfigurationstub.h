@@ -40,6 +40,8 @@ public:
     io::path_t builtinLanguagesJsonPath() const override;
     io::path_t builtinLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
     io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
+
+    QStringList languageResourceNames() const override;
 };
 }
 

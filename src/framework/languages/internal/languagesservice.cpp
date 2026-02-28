@@ -46,11 +46,6 @@ using namespace muse;
 using namespace muse::languages;
 using namespace muse::network;
 
-static const QStringList LANGUAGE_RESOURCE_NAMES = {
-    "musescore",
-    "instruments"
-};
-
 static const std::string LANGUAGES_RESOURCE_NAME("LANGUAGES");
 
 void LanguagesService::init()
@@ -114,7 +109,7 @@ const Language& LanguagesService::placeholderLanguage() const
 
 bool LanguagesService::hasPlaceholderLanguage() const
 {
-    for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
+    for (const QString& resourceName : configuration()->languageResourceNames()) {
         if (!fileSystem()->exists(configuration()->builtinLanguageFilePath(resourceName, PLACEHOLDER_LANGUAGE_CODE))) {
             return false;
         }
@@ -334,7 +329,7 @@ Ret LanguagesService::doLoadLanguage(Language& lang)
         lang.files[resourceName] = useUserPath ? userFilePath : appFilePath;
     }
 
-    for (const QString& resourceName : LANGUAGE_RESOURCE_NAMES) {
+    for (const QString& resourceName : configuration()->languageResourceNames()) {
         if (!lang.files.contains(resourceName)) {
             LOGE() << "Could not find resource " << resourceName << " for language " << lang.code;
             return muse::make_ret(muse::Ret::Code::InternalError);
@@ -446,7 +441,7 @@ QStringList LanguagesService::languagesToUpdate(const QString& mainLanguageCode,
         const Language& lang = m_languagesHash[code];
         const QJsonObject languageObject = serverLanguagesInfo.value(code).toObject();
 
-        for (const QString& resource : LANGUAGE_RESOURCE_NAMES) {
+        for (const QString& resource : configuration()->languageResourceNames()) {
             RetVal<QString> hash = fileHash(lang.files[resource]);
             QString latestHash = languageObject.value(resource).toObject().value("hash").toString();
 

@@ -67,3 +67,8 @@ io::path_t LanguagesConfigurationStub::userLanguageFilePath(const QString&, cons
 {
     return io::path_t();
 }
+
+QStringList LanguagesConfigurationStub::languageResourceNames() const
+{
+    return {};
+}
