@@ -43,9 +43,8 @@ AccessibleItem::~AccessibleItem()
         ch->setAccessibleParent(nullptr);
     }
 
-    if (m_registred) {
+    if (accessibilityController() && accessibilityController()->isReg(this)) {
         accessibilityController()->unreg(this);
-        m_registred = false;
     }
 
     if (m_accessibleParent) {
@@ -382,9 +381,8 @@ void AccessibleItem::classBegin()
 
 void AccessibleItem::componentComplete()
 {
-    if (accessibilityController()) {
+    if (accessibilityController() && !accessibilityController()->isReg(this)) {
         accessibilityController()->reg(this);
-        m_registred = true;
     }
 }
 

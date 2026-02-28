@@ -244,6 +244,11 @@ void AccessibilityController::unreg(IAccessible* aitem)
     delete item.object;
 }
 
+bool AccessibilityController::isReg(IAccessible* item) const
+{
+    return m_allItems.contains(item);
+}
+
 // Force the screen reader to speak an arbitrary message that isn't covered
 // by standard accessibility events. For example, use this function to report
 // that an action was performed, a different mode was entered, or a change
