@@ -623,6 +623,8 @@ Note::Note(const Note& n, bool link)
     m_fixed             = n.m_fixed;
     m_fixedLine         = n.m_fixedLine;
     m_harmonic          = n.m_harmonic;
+    m_hasParens         = n.m_hasParens;
+    m_hideGeneratedParens = n.m_hideGeneratedParens;
 
     if (n.m_accidental) {
         add(new Accidental(*(n.m_accidental)));
