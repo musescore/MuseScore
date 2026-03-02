@@ -1837,6 +1837,9 @@ static void updateStyles(Score* score,
         // Roman numeral analysis and harp pedal diagrams (special case, leave untouched)
         // and text types used in the title frame
         // Some further tweaking may still be required.
+        if (wordFamily.empty()) {
+            break;   // no need to loop if no font family is specified
+        }
 
         if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
             || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER
@@ -1860,13 +1863,15 @@ static void updateStyles(Score* score,
     }
 
     // handle lyrics odd and even lines separately
-    if (!needUseDefaultFont) {
-        score->style().set(Sid::lyricsOddFontFace, lyricFamily);
-        score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
-    }
-    if (dblLyricSize > epsilon) {
-        score->style().set(Sid::lyricsOddFontSize, dblLyricSize);
-        score->style().set(Sid::lyricsEvenFontSize, dblLyricSize);
+    if (!lyricFamily.empty()) {
+        if (!needUseDefaultFont) {
+            score->style().set(Sid::lyricsOddFontFace, lyricFamily);
+            score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
+        }
+        if (dblLyricSize > epsilon) {
+            score->style().set(Sid::lyricsOddFontSize, dblLyricSize);
+            score->style().set(Sid::lyricsEvenFontSize, dblLyricSize);
+        }
     }
 }
 
@@ -2081,7 +2086,6 @@ void MusicXmlParserPass1::defaults()
            muPrintable(wordFontFamily), muPrintable(wordFontSize),
            muPrintable(lyricFontFamily), muPrintable(lyricFontSize));
     */
-    wordFontFamily = wordFontFamily.empty() ? u"Edwin" : wordFontFamily;
     lyricFontFamily = lyricFontFamily.empty() ? wordFontFamily : lyricFontFamily;
     updateStyles(m_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
 
