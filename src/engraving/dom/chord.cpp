@@ -395,8 +395,8 @@ Chord::Chord(const Chord& c, bool link)
         }
     }
 
-    if (!c.noteParens().empty()) {
-        for (const NoteParenthesisInfo* info : c.noteParens()) {
+    if (!c.noteParentheses().empty()) {
+        for (const NoteParenthesisInfo* info : c.noteParentheses()) {
             Parenthesis* newLeftParen = toParenthesis(info->leftParen()->clone());
             newLeftParen->setParent(this);
             Parenthesis* newRightParen = toParenthesis(info->rightParen()->clone());
@@ -1323,7 +1323,7 @@ void Chord::scanElements(std::function<void(EngravingItem*)> func)
     ChordRest::scanElements(func);
 }
 
-NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
+NoteParenthesisInfo* Chord::findNoteParenthesisInfo(const Parenthesis* paren)
 {
     for (NoteParenthesisInfo* infoPtr : m_noteParens) {
         if (paren == infoPtr->leftParen() || paren == infoPtr->rightParen()) {
@@ -1334,7 +1334,7 @@ NoteParenthesisInfo* Chord::findNoteParenInfo(const Parenthesis* paren)
     return nullptr;
 }
 
-const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
+const NoteParenthesisInfo* Chord::findNoteParenthesisInfo(const Note* note) const
 {
     for (const NoteParenthesisInfo* infoPtr : m_noteParens) {
         for (const Note* parenNote : infoPtr->notes()) {
@@ -1348,12 +1348,12 @@ const NoteParenthesisInfo* Chord::findNoteParenInfo(const Note* note) const
     return nullptr;
 }
 
-void Chord::addNoteParenInfo(NoteParenthesisInfo* noteParenInfo)
+void Chord::addNoteParenthesisInfo(NoteParenthesisInfo* noteParenInfo)
 {
     m_noteParens.push_back(noteParenInfo);
 }
 
-void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
+void Chord::removeNoteParenthesisInfo(const NoteParenthesisInfo* noteParenInfo)
 {
     if (m_noteParens.empty()) {
         return;
@@ -1372,9 +1372,9 @@ void Chord::removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo)
     }
 }
 
-void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
+void Chord::addNoteToParenthesisInfo(Note* note, const Parenthesis* paren)
 {
-    NoteParenthesisInfo* noteParenInfo = findNoteParenInfo(paren);
+    NoteParenthesisInfo* noteParenInfo = findNoteParenthesisInfo(paren);
 
     if (!noteParenInfo) {
         return;
@@ -1383,9 +1383,9 @@ void Chord::addNoteToParenInfo(Note* note, const Parenthesis* paren)
     noteParenInfo->insertNote(note);
 }
 
-void Chord::removeNoteFromParenInfo(Note* note, const Parenthesis* paren)
+void Chord::removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren)
 {
-    NoteParenthesisInfo* noteParenInfo = findNoteParenInfo(paren);
+    NoteParenthesisInfo* noteParenInfo = findNoteParenthesisInfo(paren);
 
     if (!noteParenInfo) {
         return;

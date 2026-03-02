@@ -1914,7 +1914,7 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
     Note* note = lv->startNote();
     Chord* chord = note->chord();
 
-    const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenInfo(note);
+    const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenthesisInfo(note);
 
     Parenthesis* paren = nullptr;
     if (noteParenInfo) {

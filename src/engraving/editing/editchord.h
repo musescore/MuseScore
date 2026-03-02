@@ -34,14 +34,14 @@ public:
 
 private:
 
-    static void undoAddParensToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
-    static void undoRemoveParenFromNote(Chord* chord, Note* note, Parenthesis* leftParen, bool removeFromLinked = true);
-    static void undoClearParenGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
-                                    bool removeFromLinked = true);
+    static void undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthesis* leftParen, bool removeFromLinked = true);
+    static void undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
+                                          bool removeFromLinked = true);
 
     static void doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
-    static void doRemoveSingleNoteParen(Chord* chord, Note* note, Parenthesis* leftParen);
-    static void doRemoveAllNoteParens(Chord* chord, Parenthesis* leftParen);
+    static void doRemoveSingleNoteParenthesis(Chord* chord, Note* note, Parenthesis* leftParen);
+    static void doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen);
 };
 
 class ChangeChordStaffMove : public UndoCommand

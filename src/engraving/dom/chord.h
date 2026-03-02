@@ -177,13 +177,13 @@ public:
     std::vector<Note*>& notes() { return m_notes; }
     const std::vector<Note*>& notes() const { return m_notes; }
 
-    const NoteParenthesisInfoList& noteParens() const { return m_noteParens; }
-    const NoteParenthesisInfo* findNoteParenInfo(const Note* note) const;
-    NoteParenthesisInfo* findNoteParenInfo(const Parenthesis* paren);
-    void addNoteParenInfo(NoteParenthesisInfo* noteParenInfo);
-    void removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo);
-    void addNoteToParenInfo(Note* note, const Parenthesis* paren);
-    void removeNoteFromParenInfo(Note* note, const Parenthesis* paren);
+    const NoteParenthesisInfoList& noteParentheses() const { return m_noteParens; }
+    const NoteParenthesisInfo* findNoteParenthesisInfo(const Note* note) const;
+    NoteParenthesisInfo* findNoteParenthesisInfo(const Parenthesis* paren);
+    void addNoteParenthesisInfo(NoteParenthesisInfo* noteParenInfo);
+    void removeNoteParenthesisInfo(const NoteParenthesisInfo* noteParenInfo);
+    void addNoteToParenthesisInfo(Note* note, const Parenthesis* paren);
+    void removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren);
 
     bool isChordPlayable() const;
     void setIsChordPlayable(const bool isPlayable);

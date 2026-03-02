@@ -1042,7 +1042,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     // Write parens
-    for (const NoteParenthesisInfo* parenPair : item->noteParens()) {
+    for (const NoteParenthesisInfo* parenPair : item->noteParentheses()) {
         xml.startElement("NoteParenGroup");
         if (parenPair->leftParen()->isUserModified()) {
             write(parenPair->leftParen(), xml, ctx);

@@ -62,7 +62,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
 
 void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutContext& ctx)
 {
-    for (const NoteParenthesisInfo* parenNotesInfo : chord->noteParens()) {
+    for (const NoteParenthesisInfo* parenNotesInfo : chord->noteParentheses()) {
         Parenthesis* leftParen = parenNotesInfo->leftParen();
         Parenthesis* rightParen = parenNotesInfo->rightParen();
 
@@ -416,7 +416,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
 
     Shape notesShape;
 
-    const NoteParenthesisInfo* parenInfo = chord->findNoteParenInfo(item);
+    const NoteParenthesisInfo* parenInfo = chord->findNoteParenthesisInfo(item);
     IF_ASSERT_FAILED(parenInfo) {
         LOGD() << "No parenthesis info found for this chord";
         return;

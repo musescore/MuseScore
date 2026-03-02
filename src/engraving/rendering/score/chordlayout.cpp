@@ -3223,7 +3223,7 @@ void ChordLayout::createParenGroups(Chord* chord)
     std::vector<Note*> removeParens;
 
     for (Note* note : chord->notes()) {
-        const NoteParenthesisInfo* noteParenInfo = note->parenInfo();
+        const NoteParenthesisInfo* noteParenInfo = note->parenthesisInfo();
         const Parenthesis* leftParen = noteParenInfo ? noteParenInfo->leftParen() : nullptr;
         bool parenGenerated = leftParen && leftParen->generated();
 
@@ -3412,7 +3412,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         shape.add(note->shape().translate(note->pos()));
     }
 
-    for (const NoteParenthesisInfo* parenInfo : item->noteParens()) {
+    for (const NoteParenthesisInfo* parenInfo : item->noteParentheses()) {
         Parenthesis* leftParen = parenInfo->leftParen();
         Parenthesis* rightParen = parenInfo->rightParen();
 
