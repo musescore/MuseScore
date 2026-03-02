@@ -27,11 +27,13 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "engraving/ipalettescoreprovider.h"
 
 namespace mu::palette {
 class PaletteCreator : public muse::Contextable
 {
     muse::GlobalInject<IPaletteConfiguration> configuration;
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
 
@@ -72,6 +74,9 @@ public:
 
     PaletteTreePtr newMasterPaletteTree();
     PaletteTreePtr newDefaultPaletteTree();
+
+private:
+    engraving::MasterScore* paletteScore() const;
 };
 }
 

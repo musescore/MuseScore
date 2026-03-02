@@ -30,6 +30,7 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/ipalettescoreprovider.h"
 #include "ui/iuiconfiguration.h"
 
 #include "engraving/dom/drumset.h"
@@ -50,7 +51,7 @@ public:
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);
 

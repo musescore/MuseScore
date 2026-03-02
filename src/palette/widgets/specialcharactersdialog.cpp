@@ -666,21 +666,23 @@ void SpecialCharactersDialog::populateCommon()
 {
     m_pCommon->clear();
 
+    auto paletteScore = paletteScoreProvider()->paletteScore();
+
     for (char32_t id : unicodeAccidentals) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(paletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
         m_pCommon->appendElement(fs, QString::fromUcs4(&id, 1));
     }
 
     for (SymId id : commonScoreSymbols) {
-        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(id, gpaletteScore->engravingFont());
+        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(paletteScore->dummy());
+        s->setSym(id, paletteScore->engravingFont());
         m_pCommon->appendElement(s, SymNames::translatedUserNameForSymId(id));
     }
 
     for (char32_t id : commonTextSymbols) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(paletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
         m_pCommon->appendElement(fs, QString::fromUcs4(&id, 1));
@@ -698,9 +700,10 @@ void SpecialCharactersDialog::populateSmufl()
     int row = m_lws->currentRow();
     std::vector<SymId> symIds = std::next(Smufl::smuflRanges().begin(), row)->second;
 
+    auto paletteScore = paletteScoreProvider()->paletteScore();
     for (SymId symId : symIds) {
-        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
-        s->setSym(symId, gpaletteScore->engravingFont());
+        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(paletteScore->dummy());
+        s->setSym(symId, paletteScore->engravingFont());
         m_pSmufl->appendElement(s, SymNames::translatedUserNameForSymId(symId));
     }
 }
@@ -714,8 +717,10 @@ void SpecialCharactersDialog::populateUnicode()
     int row = m_lwu->currentItem()->data(Qt::UserRole).toInt();
     const UnicodeRange& range = unicodeRanges[row];
     m_pUnicode->clear();
+
+    auto paletteScore = paletteScoreProvider()->paletteScore();
     for (char32_t code = range.first; code <= range.last; ++code) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(paletteScore->dummy());
         fs->setCode(code);
         fs->setFont(m_font);
         m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<int>(code), 5, 16, QLatin1Char('0')));

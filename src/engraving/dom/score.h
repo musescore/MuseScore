@@ -39,6 +39,7 @@
 #include "draw/iimageprovider.h"
 #include "global/iapplication.h"
 #include "../iengravingfontsprovider.h"
+#include "../ipalettescoreprovider.h"
 
 #include "../types/constants.h"
 
@@ -333,7 +334,7 @@ class Score : public EngravingObject, public muse::Contextable
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
     muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
-
+    muse::ContextInject<IPaletteScoreProvider> paletteScoreProvider = { this };
     // internal
     muse::GlobalInject<rendering::IScoreRenderer> renderer;
 
@@ -343,7 +344,7 @@ public:
     virtual ~Score();
     Score* clone();
 
-    static Score* paletteScore();
+    Score* paletteScore() const;
     bool isPaletteScore() const;
 
     virtual bool isMaster() const { return false; }

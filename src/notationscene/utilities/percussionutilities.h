@@ -22,10 +22,11 @@
 
 #pragma once
 
+#include "global/modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
 #include "shortcuts/ishortcutsregister.h"
-
 #include "interactive/iinteractive.h"
+#include "engraving/ipalettescoreprovider.h"
 
 #include "engraving/rendering/isinglerenderer.h"
 
@@ -37,12 +38,11 @@
 namespace mu::notation {
 class PercussionUtilities : public muse::Contextable
 {
+    muse::GlobalInject<mu::engraving::rendering::ISingleRenderer> engravingRender;
     muse::ContextInject<muse::ui::IUiActionsRegister> uiactionsRegister = { this };
     muse::ContextInject<muse::shortcuts::IShortcutsRegister> shortcutsRegister = { this };
-
+    muse::ContextInject<mu::engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
-
-    muse::GlobalInject<mu::engraving::rendering::ISingleRenderer> engravingRender;
 
 public:
 

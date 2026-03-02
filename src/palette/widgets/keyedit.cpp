@@ -58,10 +58,11 @@ using namespace mu::palette;
 //---------------------------------------------------------
 
 KeyCanvas::KeyCanvas(QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setAcceptDrops(true);
-    qreal mag = configuration()->paletteSpatium() * configuration()->paletteScaling() / gpaletteScore->style().spatium();
+    qreal mag = configuration()->paletteSpatium() * configuration()->paletteScaling()
+                / paletteScoreProvider()->paletteScore()->style().spatium();
     _matrix = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
     imatrix = _matrix.inverted();
     dragElement = 0;
@@ -69,7 +70,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     QAction* a = new QAction("delete", this);
     a->setShortcut(Qt::Key_Delete);
     addAction(a);
-    clef = Factory::createClef(gpaletteScore->dummy()->segment());
+    clef = Factory::createClef(paletteScoreProvider()->paletteScore()->dummy()->segment());
     clef->setClefType(ClefType::G);
     connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
@@ -115,7 +116,8 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     qreal ww = double(width());
     double y = wh * .5 - 2 * configuration()->paletteSpatium() * extraMag;
 
-    qreal mag  = configuration()->paletteSpatium() * extraMag / gpaletteScore->style().spatium();
+    const double paletteScoreSpatium = paletteScoreProvider()->paletteScore()->style().spatium();
+    qreal mag  = configuration()->paletteSpatium() * extraMag / paletteScoreSpatium;
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, y);
     imatrix    = _matrix.inverted();
 
@@ -134,23 +136,26 @@ void KeyCanvas::paintEvent(QPaintEvent*)
 
     muse::draw::Pen pen(opt.invertColors ? engravingConfiguration()->scoreInversionColor()
                         : engravingConfiguration()->defaultColor());
-    pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(
+                      Sid::staffLineWidth).val() * paletteScoreSpatium);
     painter.setPen(pen);
 
     for (int i = 0; i < 5; ++i) {
-        qreal yy = r.y() + i * gpaletteScore->style().spatium();
+        qreal yy = r.y() + i * paletteScoreSpatium;
         painter.drawLine(LineF(r.x(), yy, r.x() + r.width(), yy));
     }
+
+    const auto paletteRenderer = paletteScoreProvider()->paletteScore()->renderer();
     if (dragElement) {
         painter.save();
         painter.translate(dragElement->pagePos());
-        gpaletteScore->renderer()->drawItem(dragElement, &painter, opt);
+        paletteRenderer->drawItem(dragElement, &painter, opt);
         painter.restore();
     }
     foreach (Accidental* a, accidentals) {
         painter.save();
         painter.translate(a->pagePos());
-        gpaletteScore->renderer()->drawItem(a, &painter, opt);
+        paletteRenderer->drawItem(a, &painter, opt);
         painter.restore();
     }
     clef->setPos(0.0, 0.0);
@@ -158,7 +163,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     engravingRender()->layoutItem(clef);
 
     painter.translate(clef->pagePos());
-    gpaletteScore->renderer()->drawItem(clef, &painter, opt);
+    paletteRenderer->drawItem(clef, &painter, opt);
 }
 
 //---------------------------------------------------------
@@ -229,7 +234,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         }
 
         event->acceptProposedAction();
-        dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
+        dragElement = static_cast<Accidental*>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
         dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
@@ -280,7 +285,7 @@ void KeyCanvas::dropEvent(QDropEvent*)
 
 void KeyCanvas::snap(Accidental* a)
 {
-    double _spatium = gpaletteScore->style().spatium();
+    double _spatium = paletteScoreProvider()->paletteScore()->style().spatium();
     double spatium2 = _spatium * .5;
     double y = a->ldata()->pos().y();
     double x = KEYEDIT_ACC_ZERO_POINT * _spatium;
@@ -380,7 +385,7 @@ KeyEditor::KeyEditor(QWidget* parent)
 void KeyEditor::addClicked()
 {
     const QList<Accidental*> al = canvas->getAccidentals();
-    double spatium = gpaletteScore->style().spatium();
+    double spatium = paletteScoreProvider()->paletteScore()->style().spatium();
     double xoff = KEYEDIT_ACC_ZERO_POINT * spatium;
 
     KeySigEvent e;
@@ -406,7 +411,7 @@ void KeyEditor::addClicked()
         c.octAlt = static_cast<int>((line - (line >= 0 ? 0 : 6)) / 7);
         e.customKeyDefs().push_back(c);
     }
-    auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
+    auto ks = Factory::makeKeySig(paletteScoreProvider()->paletteScore()->dummy()->segment());
     ks->setKeySigEvent(e);
     m_keySigPaletteWidget->appendElement(ks, "custom");
     m_dirty = true;

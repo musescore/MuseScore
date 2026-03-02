@@ -131,7 +131,7 @@ PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, Action
 {
     const muse::ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
-    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    auto icon = std::make_shared<ActionIcon>(paletteScoreProvider()->paletteScore()->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
 
@@ -166,7 +166,7 @@ PaletteCellPtr Palette::appendActionIcon(ActionIconType type, ActionCode code, d
 {
     const muse::ui::UiAction& action = actionsRegister()->action(code);
     const QString name = !action.description.isEmpty() ? action.description.str : action.title.raw().str;
-    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    auto icon = std::make_shared<ActionIcon>(paletteScoreProvider()->paletteScore()->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
 
@@ -345,7 +345,7 @@ bool Palette::read(XmlReader& e, bool pasteMode)
     }
 
     PaletteCompat::removeOldItemsIfNeeded(*this);
-    PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
+    PaletteCompat::addNewItemsIfNeeded(*this, paletteScoreProvider()->paletteScore());
 
     return true;
 }
@@ -457,7 +457,7 @@ bool Palette::readFromFile(const QString& p)
             QString version = e.attribute("version");
             QStringList sl = version.split('.');
             int mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
-            gpaletteScore->setMscVersion(mscVersion);
+            paletteScoreProvider()->paletteScore()->setMscVersion(mscVersion);
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {

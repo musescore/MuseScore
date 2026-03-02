@@ -26,13 +26,14 @@
 #include "workspace/iworkspacesdataprovider.h"
 #include "ipaletteprovider.h"
 #include "async/asyncable.h"
+#include "engraving/ipalettescoreprovider.h"
 
 namespace mu::palette {
 class PaletteWorkspaceSetup : public muse::async::Asyncable, public muse::Contextable
 {
     muse::ContextInject<muse::workspace::IWorkspacesDataProvider> workspacesDataProvider = { this };
     muse::ContextInject<IPaletteProvider> paletteProvider = { this };
-
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
 
     explicit PaletteWorkspaceSetup(const muse::modularity::ContextPtr& iocCtx)

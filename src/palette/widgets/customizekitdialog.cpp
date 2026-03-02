@@ -569,7 +569,7 @@ void CustomizeKitDialog::updateExample()
     int v         = m_editedDrumset.voice(pitch);
     DirectionV dir = m_editedDrumset.stemDirection(pitch);
     bool up = (DirectionV::UP == dir) || (DirectionV::AUTO == dir && line > 4);
-    std::shared_ptr<Chord> chord = Factory::makeChord(gpaletteScore->dummy()->segment());
+    std::shared_ptr<Chord> chord = Factory::makeChord(paletteScoreProvider()->paletteScore()->dummy()->segment());
     chord->setDurationType(DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);
@@ -580,7 +580,7 @@ void CustomizeKitDialog::updateExample()
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setLine(line);
-    note->setPos(0.0, gpaletteScore->style().spatium() * .5 * line);
+    note->setPos(0.0, paletteScoreProvider()->paletteScore()->style().spatium() * .5 * line);
     note->setHeadType(NoteHeadType::HEAD_QUARTER);
     note->setHeadGroup(nh);
     note->mutldata()->cachedNoteheadSym.set_value(static_cast<SymId>(quarterCmb->currentData().toInt()));

@@ -123,7 +123,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         SymId::mensuralProlation11, // tempus imperf., prol. imperfecta, dimin. 5
     };
 
-    IEngravingFontPtr symbolFont = gpaletteScore->engravingFont();
+    IEngravingFontPtr symbolFont = paletteScoreProvider()->paletteScore()->engravingFont();
 
     otherCombo->clear();
     otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2px; max-height: 30px } ")
