@@ -35,8 +35,8 @@ class VideoWriter : public project::IProjectWriter, public muse::Contextable
     muse::ContextInject<muse::IApplication> application = { this };
 
 public:
-    VideoWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
+        : Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
