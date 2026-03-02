@@ -1417,10 +1417,10 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const Note* not
             elems.emplace(sp);
         }
     }
-    const NoteParenthesisInfo* noteParenInfo = note->parenInfo();
-    if (noteParenInfo && noteParenInfo->notes.size()) {
-        elems.emplace(noteParenInfo->leftParen);
-        elems.emplace(noteParenInfo->rightParen);
+    const NoteParenthesisInfo* noteParenInfo = note->parenthesisInfo();
+    if (noteParenInfo && noteParenInfo->notes().size()) {
+        elems.emplace(noteParenInfo->leftParen());
+        elems.emplace(noteParenInfo->rightParen());
     }
     return elems;
 }

@@ -409,7 +409,7 @@ public:
 
     void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
 
-    const NoteParenthesisInfo* parenInfo() const;
+    const NoteParenthesisInfo* parenthesisInfo() const;
 
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
