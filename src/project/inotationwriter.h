@@ -28,7 +28,6 @@
 #include "global/types/ret.h"
 #include "global/types/val.h"
 #include "global/io/iodevice.h"
-#include "global/async/channel.h"
 #include "global/progress.h"
 #include "notation/inotation.h"
 
