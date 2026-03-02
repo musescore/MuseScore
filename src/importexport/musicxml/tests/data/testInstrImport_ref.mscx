@@ -16,7 +16,6 @@
       <pageTwosided>0</pageTwosided>
       <staffDistance>7.25</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
-      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <spatium>1.05833</spatium>
       </Style>
     <showInvisible>1</showInvisible>
