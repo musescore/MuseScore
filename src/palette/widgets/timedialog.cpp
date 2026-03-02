@@ -106,7 +106,7 @@ bool TimeDialog::showTimePalette() const
 
 void TimeDialog::addClicked()
 {
-    auto ts = mu::engraving::Factory::makeTimeSig(gpaletteScore->dummy()->segment());
+    auto ts = mu::engraving::Factory::makeTimeSig(paletteScoreProvider()->paletteScore()->dummy()->segment());
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 

@@ -559,7 +559,7 @@ QRect PaletteWidget::rectForCellAt(int idx) const
 
 QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 {
-    qreal _spatium = gpaletteScore->style().spatium();
+    qreal _spatium = paletteScoreProvider()->paletteScore()->style().spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
 
@@ -851,7 +851,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            auto image = std::make_shared<Image>(gpaletteScore->dummy());
+            auto image = std::make_shared<Image>(paletteScoreProvider()->paletteScore()->dummy());
             QString filePath(u.toLocalFile());
             image->loadFromFile(filePath);
             element = image;
@@ -867,11 +867,11 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            auto symbol = std::make_shared<Symbol>(gpaletteScore->dummy());
+            auto symbol = std::make_shared<Symbol>(paletteScoreProvider()->paletteScore()->dummy());
             rw::RWRegister::reader()->readItem(symbol.get(), xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<EngravingItem>(Factory::createItem(type, gpaletteScore->dummy()));
+            element = std::shared_ptr<EngravingItem>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
             if (element) {
                 rw::RWRegister::reader()->readItem(element.get(), xml);
                 element->setTrack(0);
@@ -929,10 +929,11 @@ void PaletteWidget::resizeEvent(QResizeEvent* e)
 
 void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 {
-    qreal _spatium = gpaletteScore->style().spatium();
+    auto paletteScore = paletteScoreProvider()->paletteScore();
+    qreal _spatium = paletteScore->style().spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
-    gpaletteScore->style().setSpatium(gpaletteScore->style().defaultSpatium());
+    paletteScore->style().setSpatium(paletteScore->style().defaultSpatium());
 
     muse::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);

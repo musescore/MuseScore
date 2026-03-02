@@ -36,6 +36,7 @@
 #include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "interactive/iinteractive.h"
+#include "engraving/ipalettescoreprovider.h"
 
 #include "../internal/palette.h"
 #include "../ipaletteconfiguration.h"
@@ -78,6 +79,7 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow  = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     PaletteWidget(QWidget* parent = nullptr);

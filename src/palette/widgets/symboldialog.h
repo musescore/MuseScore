@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "engraving/iengravingfontsprovider.h"
+#include "engraving/ipalettescoreprovider.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::palette {
@@ -41,6 +42,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase, public muse::Contexta
     Q_OBJECT
     muse::GlobalInject<engraving::IEngravingFontsProvider> engravingFonts;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     SymbolDialog(const QString&, QWidget* parent = 0);

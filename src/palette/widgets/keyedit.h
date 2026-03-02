@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "internal/ipaletteprovider.h"
+#include "engraving/ipalettescoreprovider.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -41,6 +42,7 @@ class KeyEditor : public QWidget, Ui::KeyEdit, public muse::Contextable
 
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::ContextInject<IPaletteProvider> paletteProvider = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     KeyEditor(QWidget* parent = 0);

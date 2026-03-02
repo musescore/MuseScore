@@ -250,8 +250,6 @@ private:
 
     bool m_saved = false;
 };
-
-extern MasterScore* gpaletteScore;
 }
 
 #endif // MU_ENGRAVING_MASTERSCORE_H

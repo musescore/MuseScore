@@ -55,7 +55,8 @@ void EngravingItemPreviewPainter::paintPreview(std::shared_ptr<engraving::render
 
     painter->translate(params.xoffset * params.spatium, params.yoffset * params.spatium); // additional offset for element only
 
-    const double sizeRatio = params.spatium / gpaletteScore->style().spatium();
+    const Score* score = element->score()->paletteScore() ? element->score()->paletteScore() : element->score();
+    const double sizeRatio = params.spatium / score->style().spatium();
     painter->scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox

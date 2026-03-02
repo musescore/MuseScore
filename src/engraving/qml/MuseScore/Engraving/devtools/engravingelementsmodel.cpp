@@ -224,7 +224,7 @@ void EngravingElementsModel::reload()
     EngravingObjectSet notpalettes;
 
     for (const mu::engraving::EngravingObject* el : elements) {
-        if (el == mu::engraving::gpaletteScore || el->score() == mu::engraving::gpaletteScore) {
+        if (el->score()->isPaletteScore()) {
             continue;
         }
 
@@ -252,7 +252,7 @@ void EngravingElementsModel::load(const EngravingObjectSet& elements, Item* root
 {
     TRACEFUNC;
     for (const mu::engraving::EngravingObject* el : elements) {
-        if (el == mu::engraving::gpaletteScore) {
+        if (el->score()->isPaletteScore()) {
             continue;
         }
 

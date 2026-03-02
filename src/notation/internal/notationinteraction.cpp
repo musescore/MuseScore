@@ -550,8 +550,8 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
     mu::engraving::SymId symNotehead;
 
     if (inputState.rest()) {
-        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(
-            mu::engraving::gpaletteScore->dummy()->segment(), params.duration.type());
+        Score* s = score()->paletteScore() ? score()->paletteScore() : score();
+        mu::engraving::Rest* rest = mu::engraving::Factory::createRest(s->dummy()->segment(), params.duration.type());
         rest->setTicks(params.duration.fraction());
         symNotehead = rest->getSymbol(params.duration.type(), 0, staff->lines(position.segment->tick()));
         shadowNote.setState(symNotehead, params.duration, true, segmentSkylineTopY, segmentSkylineBottomY, params.position.beyondScore);

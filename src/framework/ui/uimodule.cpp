@@ -89,24 +89,10 @@ void UiModule::registerExports()
 
     globalIoc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
-
-#ifdef MUSE_MULTICONTEXT_WIP
-    globalIoc()->registerExport<INavigationController>(moduleName(), new NavigationController(globalCtx()));
-    globalIoc()->registerExport<IDragController>(moduleName(), new DragController());
-    globalIoc()->registerExport<IWindowsController>(moduleName(), new WindowsController());
-    globalIoc()->registerExport<IUiActionsRegister>(module_name, new UiActionsRegister(nullptr));
-    globalIoc()->registerExport<IMainWindow>(module_name, new MainWindow());
-#endif
 }
 
 void UiModule::resolveImports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
-    auto ar = globalIoc()->resolve<IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<NavigationUiActions>());
-    }
-#endif
 }
 
 void UiModule::registerApi()

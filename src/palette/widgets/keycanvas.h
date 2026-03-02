@@ -29,14 +29,14 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 #include "engraving/rendering/isinglerenderer.h"
-
+#include "engraving/ipalettescoreprovider.h"
 namespace mu::engraving {
 class Accidental;
 class Clef;
 }
 
 namespace mu::palette {
-class KeyCanvas : public QFrame
+class KeyCanvas : public QFrame, public muse::Contextable
 {
     Q_OBJECT
 
@@ -44,6 +44,7 @@ class KeyCanvas : public QFrame
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
     engraving::Accidental* dragElement = nullptr;
     engraving::Accidental* moveElement = nullptr;

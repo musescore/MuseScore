@@ -28,6 +28,7 @@
 #include "ipaletteconfiguration.h"
 #include "internal/ipaletteprovider.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/ipalettescoreprovider.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -42,6 +43,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase, public muse::Contextable
     muse::GlobalInject<IPaletteConfiguration> configuration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
     muse::ContextInject<IPaletteProvider> paletteProvider = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     TimeDialog(QWidget* parent = 0);

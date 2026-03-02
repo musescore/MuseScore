@@ -35,10 +35,6 @@
 using namespace mu::engraving;
 using namespace mu::palette;
 
-namespace mu::engraving {
-extern MasterScore* gpaletteScore;
-}
-
 //---------------------------------------------------------
 //   createSymbolPalette
 //---------------------------------------------------------
@@ -60,11 +56,12 @@ void SymbolDialog::createSymbols()
     // init the font if not done yet
     engravingFonts()->fontByName(f->name());
     m_symbolsWidget->clear();
+    auto paletteScore = paletteScoreProvider()->paletteScore();
     for (SymId symId : Smufl::smuflRanges().at(range)) {
         String symName = SymNames::translatedUserNameForSymId(symId);
         if (search->text().isEmpty()
             || symName.toQString().contains(search->text(), Qt::CaseInsensitive)) {
-            auto s = std::make_shared<Symbol>(gpaletteScore->dummy());
+            auto s = std::make_shared<Symbol>(paletteScore->dummy());
             s->setSym(symId, f);
             m_symbolsWidget->appendElement(s, symName);
         }

@@ -221,8 +221,8 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             visible = e.readBool();
         } else if (s == "Tremolo") {
             compat::TremoloCompat tc;
-            tc.parent = gpaletteScore->dummy()->chord();
-            rw::RWRegister::reader(gpaletteScore->mscVersion())->readTremoloCompat(&tc, e);
+            tc.parent = paletteScoreProvider()->paletteScore()->dummy()->chord();
+            rw::RWRegister::reader(paletteScoreProvider()->paletteScore()->mscVersion())->readTremoloCompat(&tc, e);
             if (tc.single) {
                 element.reset(tc.single);
             } else if (tc.two) {
@@ -235,11 +235,11 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
                 element->styleChanged();
             }
         } else {
-            element.reset(Factory::createItemByName(s, gpaletteScore->dummy()));
+            element.reset(Factory::createItemByName(s, paletteScoreProvider()->paletteScore()->dummy()));
             if (!element) {
                 e.unknown();
             } else {
-                rw::RWRegister::reader(gpaletteScore->mscVersion())->readItem(element.get(), e);
+                rw::RWRegister::reader(paletteScoreProvider()->paletteScore()->mscVersion())->readItem(element.get(), e);
             }
         }
     }
@@ -247,7 +247,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
     setElementTranslated(translateElement);
 
     if (element) {
-        PaletteCompat::migrateOldPaletteCellIfNeeded(this, gpaletteScore);
+        PaletteCompat::migrateOldPaletteCellIfNeeded(this, paletteScoreProvider()->paletteScore());
         element->styleChanged();
 
         if (element->isActionIcon()) {
@@ -325,7 +325,10 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
 {
     PointF dragOffset;
     Fraction duration(1, 4);
-    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, ByteArray::fromQByteArrayNoCopy(data), &dragOffset, &duration));
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { iocCtx };
+    ElementPtr element(EngravingItem::readMimeData(paletteScoreProvider()->paletteScore(),
+                                                   muse::ByteArray::fromQByteArrayNoCopy(data),
+                                                   &dragOffset, &duration));
 
     if (!element) {
         return nullptr;
@@ -336,7 +339,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
     }
 
     if (element->isActionIcon()) {
-        muse::Inject<muse::ui::IUiActionsRegister> aregister = { iocCtx };
+        muse::ContextInject<muse::ui::IUiActionsRegister> aregister = { iocCtx };
         ActionIcon* icon = toActionIcon(element.get());
         const muse::ui::UiAction& action = aregister()->action(icon->actionCode());
         if (action.isValid()) {

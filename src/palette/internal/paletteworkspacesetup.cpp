@@ -59,7 +59,7 @@ PaletteTreePtr PaletteWorkspaceSetup::readPalette(const ByteArray& data, const m
                 // Versioning workspace palette files started in 4.7. All unversioned files should be treated like 4.6 files
                 mscVersion = 460;
             }
-            engraving::gpaletteScore->setMscVersion(mscVersion);
+            paletteScoreProvider()->paletteScore()->setMscVersion(mscVersion);
 
             PaletteTreePtr tree = std::make_shared<PaletteTree>();
             tree->read(reader, false, iocCtx);
@@ -111,8 +111,8 @@ void PaletteWorkspaceSetup::setup()
         }
         paletteProvider()->setUserPaletteTree(tree);
 
-        if (engraving::gpaletteScore->mscVersion() < engraving::Constants::MSC_VERSION) {
-            LOGD() << "Workspace file found with palette file version " << engraving::gpaletteScore->mscVersion() <<
+        if (paletteScoreProvider()->paletteScore()->mscVersion() < engraving::Constants::MSC_VERSION) {
+            LOGD() << "Workspace file found with palette file version " << paletteScoreProvider()->paletteScore()->mscVersion() <<
                 ". Migrating palette file to " << engraving::Constants::MSC_VERSION;
             saveData();
         }

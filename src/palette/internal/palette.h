@@ -26,15 +26,15 @@
 
 #include "palettecell.h"
 
+#include "modularity/ioc.h"
+#include "../ipaletteconfiguration.h"
+#include "interactive/iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/ipalettescoreprovider.h"
 #include "engraving/dom/engravingitem.h"
 
 #include "types/translatablestring.h"
 #include "actions/actiontypes.h"
-
-#include "modularity/ioc.h"
-#include "../ipaletteconfiguration.h"
-#include "interactive/iinteractive.h"
 
 namespace mu::engraving {
 enum class ActionIconType : signed char;
@@ -54,6 +54,7 @@ class Palette : public QObject, public muse::Contextable
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRender;
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     enum class Type {

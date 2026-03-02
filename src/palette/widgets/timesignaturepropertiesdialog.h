@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuiconfiguration.h"
+#include "engraving/ipalettescoreprovider.h"
 
 namespace mu::engraving {
 class TimeSig;
@@ -39,6 +40,7 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);

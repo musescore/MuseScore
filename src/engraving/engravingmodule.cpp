@@ -28,15 +28,11 @@
 #include "draw/internal/ifontsdatabase.h"
 
 #include "infrastructure/smufl.h"
-#include "infrastructure/localfileinfoprovider.h"
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "internal/engravingconfiguration.h"
 #include "internal/engravingfontsprovider.h"
-#endif
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "engraving/accessibility/accessibleitem.h"
+#include "internal/palettescoreprovider.h"
 #endif
 
 #include "engraving/style/defaultstyle.h"
@@ -46,13 +42,10 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
-#include "engraving/dom/fret.h"
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
 #include "rendering/editmode/editmoderenderer.h"
-
-#include "compat/scoreaccess.h"
 
 #ifndef ENGRAVING_NO_API
 #include "global/api/iapiregister.h"
@@ -267,32 +260,6 @@ void EngravingModule::onInit(const IApplication::RunMode&)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)
     MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
 
-    // Palette
-    {
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-        AccessibleItem::enabled = false;
-#endif
-        gpaletteScore = compat::ScoreAccess::createMasterScore(globalCtx());
-        gpaletteScore->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(""));
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-        AccessibleItem::enabled = true;
-#endif
-
-        if (gpaletteScore->elementsProvider()) {
-            gpaletteScore->elementsProvider()->unreg(gpaletteScore);
-        }
-
-#ifndef ENGRAVING_NO_INTERNAL
-        gpaletteScore->setStyle(DefaultStyle::baseStyle());
-        gpaletteScore->style().set(Sid::musicalTextFont, String(u"Leland Text"));
-        IEngravingFontPtr scoreFont = m_engravingfonts->fontByName("Leland");
-        gpaletteScore->setEngravingFont(scoreFont);
-        gpaletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack,
-                                                         gpaletteScore->style().spatium()) / gpaletteScore->style().defaultSpatium());
-#endif
-    }
-
     //! NOTE And some initialization in the `Notation::init()`
 }
 
@@ -303,12 +270,6 @@ void EngravingModule::onDeinit()
 #endif
 }
 
-void EngravingModule::onDestroy()
-{
-    delete gpaletteScore;
-    gpaletteScore = nullptr;
-}
-
 IContextSetup* EngravingModule::newContext(const muse::modularity::ContextPtr& ctx) const
 {
     return new EngravingContext(ctx);
@@ -316,7 +277,23 @@ IContextSetup* EngravingModule::newContext(const muse::modularity::ContextPtr& c
 
 void EngravingContext::registerExports()
 {
-#ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
+#ifndef ENGRAVING_NO_INTERNAL
+    m_paletteScoreProvider = std::make_shared<PaletteScoreProvider>(iocContext());
+    ioc()->registerExport<IPaletteScoreProvider>(mname, m_paletteScoreProvider);
     ioc()->registerExport<IEngravingElementsProvider>(mname, new EngravingElementsProvider());
+#endif
+}
+
+void EngravingContext::onInit(const muse::IApplication::RunMode&)
+{
+#ifndef ENGRAVING_NO_INTERNAL
+    m_paletteScoreProvider->init();
+#endif
+}
+
+void EngravingContext::onDeinit()
+{
+#ifndef ENGRAVING_NO_INTERNAL
+    m_paletteScoreProvider->deinit();
 #endif
 }

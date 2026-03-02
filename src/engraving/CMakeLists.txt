@@ -340,6 +340,8 @@ else()
         internal/engravingfontsprovider.h
         internal/engravingfont.cpp
         internal/engravingfont.h
+        internal/palettescoreprovider.cpp
+        internal/palettescoreprovider.h
         ${API_V1_SRC}
     )
 endif()
