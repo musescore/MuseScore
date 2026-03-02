@@ -32,10 +32,13 @@
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
+#include "global/concurrency/concurrent.h"
+
 #include "defer.h"
 #include "log.h"
 
 #include <QPainter>
+#include <QThread>
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
@@ -110,7 +113,20 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
-    return generatePagedOriginalVideo(notation, muse::io::path_t(filePath), cfg);
+    m_isCompleted = false;
+    m_abort = false;
+    m_writeRet = muse::Ret();
+
+    muse::Concurrent::run([this, notation, filePath, cfg]() {
+        doGenerate(notation, muse::io::path_t(filePath), cfg);
+    });
+
+    while (!m_isCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    return m_writeRet;
 }
 
 muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
@@ -129,12 +145,14 @@ void VideoWriter::abort()
     m_abort = true;
 }
 
-muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
+void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
 {
     VideoEncoder encoder;
     if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
         LOGE() << "failed open encoder";
-        return make_ret(muse::Ret::Code::UnknownError);
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
     }
 
     engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
@@ -162,7 +180,9 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, const m
     PageList pages = notation->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
-        return make_ret(muse::Ret::Code::UnknownError);
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
     }
 
     double CANVAS_DPI = 300;
@@ -237,14 +257,15 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, const m
     PlaybackCursor cursor(iocContext());
     cursor.setNotation(notation);
 
-    m_abort = false;
     m_progress.start();
 
     for (int f = 0; f < frameCount; f++) {
         if (m_abort) {
             encoder.close();
+            m_writeRet = make_ret(muse::Ret::Code::Cancel);
             m_progress.finish(make_ret(muse::Ret::Code::Cancel));
-            return make_ret(muse::Ret::Code::Cancel);
+            m_isCompleted = true;
+            return;
         }
 
         m_progress.progress(f, frameCount);
@@ -287,7 +308,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationPtr notation, const m
 
     encoder.close();
 
+    m_writeRet = muse::make_ok();
     m_progress.finish(muse::make_ok());
-
-    return muse::make_ok();
+    m_isCompleted = true;
 }

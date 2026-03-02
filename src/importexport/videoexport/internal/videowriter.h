@@ -57,10 +57,12 @@ private:
         float trailingSec = 3.;
     };
 
-    muse::Ret generatePagedOriginalVideo(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
+    void doGenerate(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
 
     muse::Progress m_progress;
     bool m_abort = false;
+    bool m_isCompleted = false;
+    muse::Ret m_writeRet;
 };
 }
 
