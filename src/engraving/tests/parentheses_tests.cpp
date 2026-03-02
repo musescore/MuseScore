@@ -73,25 +73,25 @@ protected:
 
     static void checkChordHasNoParens(Chord* chord)
     {
-        EXPECT_TRUE(chord->noteParens().empty());
+        EXPECT_TRUE(chord->noteParentheses().empty());
     }
 
     static void checkChordHasParens(Chord* chord, size_t count)
     {
-        EXPECT_EQ(chord->noteParens().size(), count);
+        EXPECT_EQ(chord->noteParentheses().size(), count);
     }
 
     static void checkAllNotesHaveParenInfo(const std::vector<Note*>& notes)
     {
         for (const Note* note : notes) {
-            EXPECT_TRUE(note->parenInfo());
+            EXPECT_TRUE(note->parenthesisInfo());
         }
     }
 
     static void checkNoNotesHaveParenInfo(const std::vector<Note*>& notes)
     {
         for (const Note* note : notes) {
-            EXPECT_FALSE(note->parenInfo());
+            EXPECT_FALSE(note->parenthesisInfo());
         }
     }
 
@@ -115,9 +115,9 @@ protected:
         Note* n3 = chord->notes().at(3);
         Note* n4 = chord->notes().at(4);
 
-        EXPECT_TRUE(n0->parenInfo() == n1->parenInfo());
-        EXPECT_TRUE(n3->parenInfo() == n4->parenInfo());
-        EXPECT_FALSE(n0->parenInfo() == n4->parenInfo());
+        EXPECT_TRUE(n0->parenthesisInfo() == n1->parenthesisInfo());
+        EXPECT_TRUE(n3->parenthesisInfo() == n4->parenthesisInfo());
+        EXPECT_FALSE(n0->parenthesisInfo() == n4->parenthesisInfo());
     }
 };
 
@@ -139,12 +139,12 @@ TEST_F(Engraving_ParenthesesTests, addParen)
     checkChordHasParens(singleNoteChord, 1);
 
     // Check that paren info has been created
-    EXPECT_TRUE(note->parenInfo());
+    EXPECT_TRUE(note->parenthesisInfo());
 
     undoAndCheckRemoved(score, singleNoteChord);
 
     // Check that paren info has been removed
-    EXPECT_FALSE(note->parenInfo());
+    EXPECT_FALSE(note->parenthesisInfo());
 }
 
 TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
@@ -167,17 +167,17 @@ TEST_F(Engraving_ParenthesesTests, addParenLinkedStaff)
     checkChordHasParens(singleNoteChordStd, 1);
     checkChordHasParens(singleNoteChordTab, 1);
 
-    EXPECT_TRUE(noteStd->parenInfo());
-    EXPECT_TRUE(noteTab->parenInfo());
+    EXPECT_TRUE(noteStd->parenthesisInfo());
+    EXPECT_TRUE(noteTab->parenthesisInfo());
 
-    EXPECT_TRUE(noteStd->parenInfo()->leftParen->isLinked(noteTab->parenInfo()->leftParen));
-    EXPECT_TRUE(noteStd->parenInfo()->rightParen->isLinked(noteTab->parenInfo()->rightParen));
+    EXPECT_TRUE(noteStd->parenthesisInfo()->leftParen()->isLinked(noteTab->parenthesisInfo()->leftParen()));
+    EXPECT_TRUE(noteStd->parenthesisInfo()->rightParen()->isLinked(noteTab->parenthesisInfo()->rightParen()));
 
     undoAndCheckRemovedLinked(score, singleNoteChordStd, singleNoteChordTab);
 
     // Check that paren info has been removed
-    EXPECT_FALSE(noteStd->parenInfo());
-    EXPECT_FALSE(noteTab->parenInfo());
+    EXPECT_FALSE(noteStd->parenthesisInfo());
+    EXPECT_FALSE(noteTab->parenthesisInfo());
 }
 
 TEST_F(Engraving_ParenthesesTests, addParensManyNotes)
@@ -201,6 +201,33 @@ TEST_F(Engraving_ParenthesesTests, addParensManyNotes)
 
     // Check that paren info has been removed
     checkNoNotesHaveParenInfo(chord->notes());
+}
+
+TEST_F(Engraving_ParenthesesTests, removeParensBottomNotes)
+{
+    MasterScore* score = loadScore(u"single_staff.mscx");
+
+    // Find chord in second measure
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    Chord* chord = findChordInMeasure(m2, Fraction(1, 1), 0);
+    checkChordHasNoParens(chord);
+
+    // Toggle parentheses for all notes
+    toggleMultipleNoteParen(score, chord->notes());
+    checkChordHasParens(chord, 1);
+    checkAllNotesHaveParenInfo(chord->notes());
+
+    // Remove parentheses from bottom 2 notes
+    std::vector<Note*> notes = chord->notes();
+    std::vector<EngravingItem*> bottomNotes{ notes.at(notes.size() - 2), notes.at(notes.size() - 1) };
+    score->select(bottomNotes, SelectType::ADD);
+    score->startCmd(TranslatableString::untranslatable("Parentheses tests remove bottom notes"));
+    score->cmdRemoveParenthesesFromNotes();
+    score->endCmd();
+
+    // Assert that these 2 notes have no paren info
+    EXPECT_FALSE(notes.at(notes.size() - 2)->parenthesisInfo());
+    EXPECT_FALSE(notes.at(notes.size() - 1)->parenthesisInfo());
 }
 
 TEST_F(Engraving_ParenthesesTests, addParensManyNotesLinkedStaff)
@@ -251,16 +278,16 @@ TEST_F(Engraving_ParenthesesTests, breakParenGroup)
     toggleSingleNoteParen(score, middleNote);
 
     checkChordHasParens(chord, 2);
-    EXPECT_FALSE(middleNote->parenInfo());
+    EXPECT_FALSE(middleNote->parenthesisInfo());
 
     Note* n0 = chord->notes().at(0);
     Note* n1 = chord->notes().at(1);
     Note* n3 = chord->notes().at(3);
     Note* n4 = chord->notes().at(4);
 
-    EXPECT_TRUE(n0->parenInfo() == n1->parenInfo());
-    EXPECT_TRUE(n3->parenInfo() == n4->parenInfo());
-    EXPECT_FALSE(n0->parenInfo() == n4->parenInfo());
+    EXPECT_TRUE(n0->parenthesisInfo() == n1->parenthesisInfo());
+    EXPECT_TRUE(n3->parenthesisInfo() == n4->parenthesisInfo());
+    EXPECT_FALSE(n0->parenthesisInfo() == n4->parenthesisInfo());
 
     // Undo, should have 1 parenthesis group again
     score->undoRedo(true, 0);
@@ -297,10 +324,10 @@ TEST_F(Engraving_ParenthesesTests, breakParenGroupLinkedStaff)
 
     checkChordHasParens(chordStd, 2);
     checkChordHasParens(chordTab, 2);
-    EXPECT_FALSE(middleNoteStd->parenInfo());
+    EXPECT_FALSE(middleNoteStd->parenthesisInfo());
 
     Note* middleNoteTab = chordTab->notes().at(2);
-    EXPECT_FALSE(middleNoteTab->parenInfo());
+    EXPECT_FALSE(middleNoteTab->parenthesisInfo());
 
     checkParenGroupsSplit(chordStd);
     checkParenGroupsSplit(chordTab);
