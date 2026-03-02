@@ -3129,3 +3129,26 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
     }
     lines->setLines(ll);
 }
+
+void MeasureLayout::updateKeySignatures(const Measure* measure, LayoutContext& ctx)
+{
+    Measure* prevMeasure = measure->prevMeasure();
+    if (!prevMeasure || !prevMeasure->repeatEnd()) {
+        return;
+    }
+    for (const Segment& seg : measure->segments()) {
+        if (!seg.isType(SegmentType::KeySigType)) {
+            continue;
+        }
+
+        for (EngravingItem* el : seg.elist()) {
+            if (!el) {
+                continue;
+            }
+
+            KeySig* ks = toKeySig(el);
+
+            TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());
+        }
+    }
+}
