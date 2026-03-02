@@ -35,7 +35,7 @@ target_sources(iex_videoexport PRIVATE
     internal/ffmpeg.h
 )
 
-target_link_libraries(iex_videoexport PRIVATE engraving)
+target_link_libraries(iex_videoexport PRIVATE Qt::Concurrent engraving)
 
 # FFmpeg
 find_package(FFmpeg REQUIRED)
