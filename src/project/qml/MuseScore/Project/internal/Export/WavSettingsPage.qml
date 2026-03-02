@@ -20,10 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
-import QtQuick.Layouts
 
 import Muse.UiComponents
-import Muse.Ui
 import MuseScore.Project
 
 ExportSettingsPage {
@@ -33,29 +31,6 @@ ExportSettingsPage {
         model: root.model
         navigationPanel: root.navigationPanel
         navigationOrder: root.navigationOrder
-        showBitRateControl: true
-    }
-
-    ExportOptionItem {
-        id: videoResolutionLabel
-        text: qsTrc("project/export", "Video resolution:")
-
-        StyledDropdown {
-            Layout.preferredWidth: 126
-
-            navigation.name: "VideoResolutionDropdown"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 10
-            navigation.accessible.name: videoResolutionLabel.text + " " + currentText
-
-            model: root.model ? root.model.availableVideoResolutions() : []
-
-            currentIndex: root.model ? indexOfValue(root.model.videoResolution) : -1
-
-            onActivated: function(index, value) {
-                root.model.videoResolution = value
-            }
-        }
     }
 
     StyledTextLabel {

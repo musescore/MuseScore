@@ -21,6 +21,23 @@
  */
 import QtQuick
 
-AudioSettingsPage {
-    showSampleRateControl: false
+import Muse.UiComponents
+import MuseScore.Project
+
+ExportSettingsPage {
+    id: root
+
+    AudioSettings {
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationOrder: root.navigationOrder
+        showSampleRateControl: false
+    }
+
+    StyledTextLabel {
+        width: parent.width
+        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
+    }
 }

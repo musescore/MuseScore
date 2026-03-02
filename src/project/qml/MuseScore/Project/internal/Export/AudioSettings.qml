@@ -26,11 +26,19 @@ import Muse.UiComponents
 import Muse.Ui
 import MuseScore.Project
 
-ExportSettingsPage {
+Row {
     id: root
+
+    property ExportDialogModel model
+    property NavigationPanel navigationPanel: null
+    property int navigationOrder: 0
 
     property bool showBitRateControl: false
     property bool showSampleRateControl: true
+
+    width: parent ? parent.width : implicitWidth
+
+    spacing: 12
 
     ExportOptionItem {
         id: sampleRateLabel
@@ -45,11 +53,11 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 1
             navigation.accessible.name: sampleRateLabel.text + " " + currentText
 
-            model: root.model.availableSampleRates().map(function(sampleRate) {
+            model: root.model ? root.model.availableSampleRates().map(function(sampleRate) {
                 return { text: qsTrc("project/export", "%1 Hz").arg(sampleRate), value: sampleRate }
-            })
+            }) : []
 
-            currentIndex: indexOfValue(root.model.sampleRate)
+            currentIndex: root.model ? indexOfValue(root.model.sampleRate) : -1
 
             onActivated: function(index, value) {
                 root.model.sampleRate = value
@@ -70,11 +78,11 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 2
             navigation.accessible.name: bitrateLabel.text + " " + currentText
 
-            model: root.model.availableBitRates().map(function(bitRate) {
+            model: root.model ? root.model.availableBitRates().map(function(bitRate) {
                 return { text: qsTrc("project/export", "%1 kBit/s").arg(bitRate), value: bitRate }
-            })
+            }) : []
 
-            currentIndex: indexOfValue(root.model.bitRate)
+            currentIndex: root.model ? indexOfValue(root.model.bitRate) : -1
 
             onActivated: function(index, value) {
                 root.model.bitRate = value
@@ -84,7 +92,7 @@ ExportSettingsPage {
 
     ExportOptionItem {
         id: sampleFormatLabel
-        visible: root.model.availableSampleFormats.length > 0
+        visible: root.model ? root.model.availableSampleFormats.length > 0 : false
         text: qsTrc("project/export", "Sample format:")
 
         StyledDropdown {
@@ -95,20 +103,13 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 3
             navigation.accessible.name: sampleFormatLabel.text + " " + currentText
 
-            model: root.model.availableSampleFormats
+            model: root.model ? root.model.availableSampleFormats : []
 
-            currentIndex: indexOfValue(root.model.selectedSampleFormat)
+            currentIndex: root.model ? indexOfValue(root.model.selectedSampleFormat) : -1
 
             onActivated: function(index, value) {
                 root.model.selectedSampleFormat = value
             }
         }
-    }
-
-    StyledTextLabel {
-        width: parent.width
-        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
-        horizontalAlignment: Text.AlignLeft
-        wrapMode: Text.WordWrap
     }
 }

@@ -88,7 +88,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "wav" },
                                      muse::qtrc("project/export", "WAV audio"),
                                      muse::qtrc("project/export", "WAV audio files"),
-                                     "AudioSettingsPage.qml"),
+                                     "WavSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "ogg" },
                                      muse::qtrc("project/export", "OGG audio"),
                                      muse::qtrc("project/export", "OGG audio files"),
@@ -96,7 +96,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "flac" },
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
-                                     "AudioSettingsPage.qml"),
+                                     "FlacSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
                                      muse::qtrc("project/export", "MIDI file"),
                                      muse::qtrc("project/export", "MIDI files"),
@@ -558,6 +558,41 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 
     imageExportConfiguration()->setExportSvgWithIllustratorCompat(compat);
     emit svgIllustratorCompatChanged(compat);
+}
+
+QVariantList ExportDialogModel::availableVideoResolutions() const
+{
+    static const QStringList resolutions = { "2160p", "1440p", "1080p", "720p", "480p", "360p" };
+
+    QVariantList result;
+    for (const QString& res : resolutions) {
+        QVariantMap obj;
+        obj["text"] = res;
+        obj["value"] = res;
+        result << obj;
+    }
+    return result;
+}
+
+QString ExportDialogModel::videoResolution() const
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    return QString::fromStdString(videoExportConfiguration()->resolution());
+#else
+    return "1080p";
+#endif
+}
+
+void ExportDialogModel::setVideoResolution(const QString& resolution)
+{
+    if (resolution == videoResolution()) {
+        return;
+    }
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    videoExportConfiguration()->setResolution(resolution.toStdString());
+#endif
+    emit videoResolutionChanged(resolution);
 }
 
 QList<int> ExportDialogModel::availableSampleRates() const
