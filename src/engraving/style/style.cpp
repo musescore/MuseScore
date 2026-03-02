@@ -638,7 +638,12 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         set(Sid::dividerRightAlignToSystemBarline, false);
 
         // Musical symbol size
-        compat::CompatUtils::setMusicSymbolSize470(*this);
+        compat::CompatUtils::setMusicSymbolSize470(this);
+
+        // Make sure new position styles are initially the same as align values
+        // Exclude text styles which had align & position separated in 4.6
+        compat::CompatUtils::setPositionStylesFromAlign(this, { Sid::chordSymbolAAlign, Sid::chordSymbolBAlign, Sid::romanNumeralAlign,
+                                                                Sid::nashvilleNumberAlign, Sid::repeatLeftAlign, Sid::repeatRightAlign });
 
         if (value(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::JAZZ) {
             set(Sid::harmonyParenUseSmuflSym, true);
@@ -652,14 +657,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
                                   || value(Sid::maxFretShiftBelow).value<Spatium>() != 0.0_sp;
         set(Sid::verticallyAlignChordSymbols, verticalChordAlign);
         // Make sure new position styles are initially the same as align values
-        for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
-            Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
-            if (positionSid == Sid::NOSTYLE) {
-                continue;
-            }
-            AlignH val = value(st.sid).value<Align>().horizontal;
-            set(positionSid, val);
-        }
+        compat::CompatUtils::setPositionStylesFromAlign(this);
 
         if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
             set(Sid::measureNumberHPlacement, AlignH::HCENTER);
