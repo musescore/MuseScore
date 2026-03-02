@@ -803,3 +803,104 @@ TEST_F(Engraving_CopyPasteTests, copypasteparts)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_parts.mscx"),
                                             COPYPASTE_DATA_DIR + String("copypaste_parts-ref.mscx")));
 }
+
+// Use "repeat list selection" on the first chord in every measure of this score...
+TEST_F(Engraving_CopyPasteTests, repeatListSelection)
+{
+    //! [GIVEN] A score with a variation of ChordRests at the start of each measure...
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_repeatListSelection.mscx"));
+    EXPECT_TRUE(score);
+
+    //! --
+
+    //! 1.0 [GIVEN] A (single note) chord...
+    Measure* m = score->firstMeasure();
+    ChordRest* cr1 = m ? m->firstChordRest(0) : nullptr;
+    EXPECT_TRUE(cr1 && cr1->isChord());
+
+    //! 1.1 [GIVEN] The parenthesized note...
+    std::vector<Note*> notes = toChord(cr1)->notes();
+
+    //! 1.2 [WHEN] The note is selected and repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
+    //! 2.0 [GIVEN] Chords in two staves...
+    m = m->next() ? toMeasure(m->next()) : nullptr;
+    cr1 = m ? m->firstChordRest(0) : nullptr;
+    ChordRest* cr2 = m ? m->firstChordRest(staff2track(1, 0)) : nullptr; // Staff 2, voice 1
+    EXPECT_TRUE(cr1 && cr1->isChord() && cr2 && cr2->isChord());
+
+    //! 2.1 [GIVEN] All notes from both chords...
+    notes = toChord(cr1)->notes();
+    notes.insert(notes.end(), toChord(cr2)->notes().begin(), toChord(cr2)->notes().end());
+
+    //! 2.2 [WHEN] All notes in both chords are selected and repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
+    //! 3.0 [GIVEN] Chords in two staves...
+    m = m->next() ? toMeasure(m->next()) : nullptr;
+    cr1 = m ? m->firstChordRest(0) : nullptr;
+    EXPECT_TRUE(cr1 && cr1->isChord());
+
+    //! 3.1 [GIVEN] Some (not all) of the notes from one chord...
+    notes.clear();
+    notes.emplace_back(toChord(cr1)->notes().at(0));
+    notes.emplace_back(toChord(cr1)->notes().at(2));
+
+    //! 3.2 [WHEN] The partial selection is repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
+    //! 4.0 [GIVEN] A chord with a mixture of parentheses...
+    m = m->next() ? toMeasure(m->next()) : nullptr;
+    cr1 = m ? m->firstChordRest(0) : nullptr;
+    EXPECT_TRUE(cr1 && cr1->isChord());
+
+    //! 4.1 [GIVEN] Some (not all) of the notes the chord...
+    score->deselectAll();
+    notes.emplace_back(toChord(cr1)->notes().at(0));
+    notes.emplace_back(toChord(cr1)->notes().at(1));
+    notes.emplace_back(toChord(cr1)->notes().at(3));
+    notes.emplace_back(toChord(cr1)->notes().at(5));
+
+    //! 4.2 [WHEN] The partial selection is repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
+    //! 5.0 [GIVEN] Two chords in different voices...
+    m = m->next() ? toMeasure(m->next()) : nullptr;
+    cr1 = m ? m->firstChordRest(0) : nullptr;
+    cr2 = m ? m->firstChordRest(1) : nullptr; // Voice 2
+    EXPECT_TRUE(cr1 && cr1->isChord() && cr2 && cr2->isChord());
+
+    //! 5.1 [GIVEN] All notes from both chords...
+    notes = toChord(cr1)->notes();
+    notes.insert(notes.end(), toChord(cr2)->notes().begin(), toChord(cr2)->notes().end());
+
+    //! 5.2 [WHEN] All notes in both chords are selected and repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
+    //! [THEN] The result matches our expectations...
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_repeatListSelection.mscx"),
+                                            COPYPASTE_DATA_DIR + String("copypaste_repeatListSelection-ref.mscx")));
+
+    delete score;
+}
