@@ -39,6 +39,8 @@ target_sources(muse_accessibility PRIVATE
     internal/accessiblestub.h
     internal/accessibleiteminterface.cpp
     internal/accessibleiteminterface.h
+    internal/accessiblewindowinterface.cpp
+    internal/accessiblewindowinterface.h
     internal/accessibilityconfiguration.cpp
     internal/accessibilityconfiguration.h
     internal/qaccessibleinterfaceregister.cpp
