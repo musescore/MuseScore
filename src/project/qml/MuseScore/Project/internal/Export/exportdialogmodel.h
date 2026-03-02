@@ -41,7 +41,7 @@
 #include "importexport/mnx/imnxconfiguration.h"
 
 #include "iexportprojectscenario.h"
-#include "inotationwritersregister.h"
+#include "types/projecttypes.h"
 #include "iprojectconfiguration.h"
 
 class QItemSelectionModel;
@@ -109,7 +109,6 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<INotationWritersRegister> writers = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
 
 public:
@@ -133,7 +132,7 @@ public:
     QVariantList availableUnitTypes() const;
     int selectedUnitType() const;
     void setUnitType(int unitType);
-    void setUnitType(project::INotationWriter::UnitType unitType);
+    void setUnitType(project::WriteUnitType unitType);
 
     Q_INVOKABLE bool exportScores();
 
@@ -218,7 +217,7 @@ signals:
     void selectionChanged();
 
     void selectedExportTypeChanged(QVariantMap newExportType);
-    void selectedUnitTypeChanged(project::INotationWriter::UnitType newUnitType);
+    void selectedUnitTypeChanged(project::WriteUnitType newUnitType);
 
     void pdfResolutionChanged(int resolution);
     void pdfTransparentBackgroundChanged(bool transparent);
@@ -278,6 +277,6 @@ private:
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
     muse::io::path_t m_exportPath;
-    project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
+    project::WriteUnitType m_selectedUnitType = project::WriteUnitType::PER_PART;
 };
 }

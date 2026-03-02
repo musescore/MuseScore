@@ -23,8 +23,10 @@
 
 #include <QGuiApplication>
 #include <QScreen>
+#include <functional>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/infrastructure/eid.h"
 
 #include "imasternotation.h"
 
@@ -124,6 +126,19 @@ mu::project::INotationProject* Notation::project() const
 IMasterNotationPtr Notation::masterNotation() const
 {
     return m_masterNotation->shared_from_this();
+}
+
+muse::ID Notation::id() const
+{
+    if (!m_score) {
+        return muse::ID();
+    }
+
+    if (!m_score->eid().isValid()) {
+        m_score->assignNewEID();
+    }
+
+    return muse::ID(std::hash<EID>()(m_score->eid()));
 }
 
 void Notation::setScore(Score* score)

@@ -78,8 +78,6 @@ Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::pat
         return prj.ret;
     }
 
-    INotationPtr notation = prj.val->masterNotation()->notation();
-
     bool result = true;
 
     QFile outputFile;
@@ -87,17 +85,15 @@ Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::pat
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    result &= exportScorePngs(notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreSvgs(notation, highlightConfigPath, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, SEGMENTS_POSITIONS_TAG_NAME,
-                                           notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, MEASURES_POSITIONS_TAG_NAME,
-                                           notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScorePdf(notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreMidi(notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreMusicXML(notation, jsonWriter, ADD_SEPARATOR);
-    result &= exportScoreMetaData(notation, jsonWriter, ADD_SEPARATOR);
-    result &= devInfo(notation, jsonWriter);
+    result &= exportScorePngs(prj.val, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreSvgs(prj.val, highlightConfigPath, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(prj.val, SEGMENTS_POSITIONS_WRITER_NAME, SEGMENTS_POSITIONS_TAG_NAME, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(prj.val, MEASURES_POSITIONS_WRITER_NAME, MEASURES_POSITIONS_TAG_NAME, jsonWriter, ADD_SEPARATOR);
+    result &= exportScorePdf(prj.val, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMidi(prj.val, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMusicXML(prj.val, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMetaData(prj.val, jsonWriter, ADD_SEPARATOR);
+    result &= devInfo(prj.val, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -111,14 +107,12 @@ Ret BackendApi::exportScoreMeta(const muse::io::path_t& in, const muse::io::path
         return prj.ret;
     }
 
-    INotationPtr notation = prj.val->masterNotation()->notation();
-
     QFile outputFile;
     openOutputFile(outputFile, out);
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = exportScoreMetaData(notation, jsonWriter);
+    bool result = exportScoreMetaData(prj.val, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -156,7 +150,7 @@ Ret BackendApi::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io:
 
     std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::filename(in, false).toStdString() + ".pdf";
 
-    Ret ret = doExportScorePartsPdfs(prj.val->masterNotation(), outputFile, scoreFileName);
+    Ret ret = doExportScorePartsPdfs(prj.val, prj.val->masterNotation(), outputFile, scoreFileName);
 
     outputFile.close();
 
@@ -185,7 +179,7 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = doExportScoreTranspose(notation, jsonWriter);
+    bool result = doExportScoreTranspose(prj.val, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -284,12 +278,13 @@ QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
     return result;
 }
 
-Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScorePngs(const INotationProjectPtr project, BackendJsonWriter& jsonWriter,
+                                bool addSeparator)
 {
     TRACEFUNC
 
-    auto pngWriter = writers()->writer(PNG_WRITER_NAME);
-    if (!pngWriter) {
+    auto pngProjectWriter = projectRW()->writer(PNG_WRITER_NAME);
+    if (!pngProjectWriter) {
         LOGW() << "Not found writer " << PNG_WRITER_NAME;
         return make_ret(Ret::Code::InternalError);
     }
@@ -297,19 +292,18 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     jsonWriter.addKey("pngs");
     jsonWriter.openArray();
 
-    const PageList& notationPages = notation->elements()->pages();
-
+    const PageList& notationPages = project->masterNotation()->notation()->elements()->pages();
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
         ByteArray pngData;
         auto pngDevice = Buffer::opened(IODevice::ReadWrite, &pngData);
 
-        INotationWriter::Options options = {
-            { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
-            { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) }
-        };
+        WriteOptions options;
+        options[WriteOptionKey::UNIT_TYPE] = Val(static_cast<int>(WriteUnitType::PER_PAGE));
+        options[WriteOptionKey::PAGE_NUMBER] = Val(static_cast<int>(i));
+        options[WriteOptionKey::TRANSPARENT_BACKGROUND] = Val(false);
 
-        Ret writeRet = pngWriter->write(notation, pngDevice, options);
+        Ret writeRet = pngProjectWriter->write(project, pngDevice, options);
         if (!writeRet) {
             LOGW() << writeRet.toString();
             result = false;
@@ -320,17 +314,17 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     }
 
     jsonWriter.closeArray(addSeparator);
-
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
+Ret BackendApi::exportScoreSvgs(const INotationProjectPtr project,
+                                const muse::io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
                                 bool addSeparator)
 {
     TRACEFUNC
 
-    auto svgWriter = writers()->writer(SVG_WRITER_NAME);
-    if (!svgWriter) {
+    auto svgProjectWriter = projectRW()->writer(SVG_WRITER_NAME);
+    if (!svgProjectWriter) {
         LOGW() << "Not found writer " << SVG_WRITER_NAME;
         return make_ret(Ret::Code::InternalError);
     }
@@ -338,21 +332,19 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
     jsonWriter.addKey("svgs");
     jsonWriter.openArray();
 
-    const PageList& notationPages = notation->elements()->pages();
+    const PageList& notationPages = project->masterNotation()->notation()->elements()->pages();
     QVariantMap beatsColors = readBeatsColors(highlightConfigPath);
-
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
         ByteArray svgData;
         auto svgDevice = Buffer::opened(IODevice::ReadWrite, &svgData);
 
-        INotationWriter::Options options {
-            { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
-            { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) },
-            { INotationWriter::OptionKey::BEATS_COLORS, Val::fromQVariant(beatsColors) }
-        };
+        WriteOptions options;
+        options[WriteOptionKey::PAGE_NUMBER] = Val(static_cast<int>(i));
+        options[WriteOptionKey::TRANSPARENT_BACKGROUND] = Val(false);
+        options[WriteOptionKey::BEATS_COLORS] = Val::fromQVariant(beatsColors);
 
-        Ret writeRet = svgWriter->write(notation, svgDevice, options);
+        Ret writeRet = svgProjectWriter->write(project, svgDevice, options);
         if (!writeRet) {
             LOGW() << writeRet.toString();
             result = false;
@@ -363,16 +355,17 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
     }
 
     jsonWriter.closeArray(addSeparator);
-
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
-                                             const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreElementsPositions(const INotationProjectPtr project,
+                                             const std::string& elementsPositionsWriterName,
+                                             const std::string& elementsPositionsTagName,
+                                             BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<QByteArray> writerRetVal = processWriter(elementsPositionsWriterName, notation);
+    RetVal<QByteArray> writerRetVal = processWriter(project, elementsPositionsWriterName);
     if (!writerRetVal.ret) {
         return writerRetVal.ret;
     }
@@ -383,11 +376,11 @@ Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPosition
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScorePdf(const INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<QByteArray> writerRetVal = processWriter(PDF_WRITER_NAME, notation);
+    RetVal<QByteArray> writerRetVal = processWriter(project, PDF_WRITER_NAME);
     if (!writerRetVal.ret) {
         return writerRetVal.ret;
     }
@@ -398,11 +391,11 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& j
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, QIODevice& destinationDevice)
+Ret BackendApi::exportScorePdf(const INotationProjectPtr project, QIODevice& destinationDevice)
 {
     TRACEFUNC
 
-    RetVal<QByteArray> writerRetVal = processWriter(PDF_WRITER_NAME, notation);
+    RetVal<QByteArray> writerRetVal = processWriter(project, PDF_WRITER_NAME);
     if (!writerRetVal.ret) {
         return writerRetVal.ret;
     }
@@ -413,11 +406,11 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, QIODevice& destinati
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreMidi(const INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<QByteArray> writerRetVal = processWriter(MIDI_WRITER_NAME, notation);
+    RetVal<QByteArray> writerRetVal = processWriter(project, MIDI_WRITER_NAME);
     if (!writerRetVal.ret) {
         return writerRetVal.ret;
     }
@@ -428,11 +421,12 @@ Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& 
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreMusicXML(const INotationProjectPtr project,
+                                    BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<QByteArray> writerRetVal = processWriter(MUSICXML_WRITER_NAME, notation);
+    RetVal<QByteArray> writerRetVal = processWriter(project, MUSICXML_WRITER_NAME);
     if (!writerRetVal.ret) {
         return writerRetVal.ret;
     }
@@ -443,11 +437,11 @@ Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWrit
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::exportScoreMetaData(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
-    RetVal<std::string> meta = NotationMeta::metaJson(notation);
+    RetVal<std::string> meta = NotationMeta::metaJson(project->masterNotation()->notation());
     if (!meta.ret) {
         LOGW() << meta.ret.toString();
         return meta.ret;
@@ -459,9 +453,9 @@ Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWrit
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::devInfo(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::devInfo(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
-    UNUSED(notation);
+    UNUSED(project);
 
     TRACEFUNC
 
@@ -475,45 +469,29 @@ Ret BackendApi::devInfo(const notation::INotationPtr notation, BackendJsonWriter
     return make_ret(Ret::Code::Ok);
 }
 
-RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtr notation)
+RetVal<QByteArray> BackendApi::processWriter(const INotationProjectPtr project, const std::string& writerName, bool isMultiPart,
+                                             const muse::IDList& notationsIds)
 {
-    auto writer = writers()->writer(writerName);
-    if (!writer) {
+    auto projectWriter = projectRW()->writer(writerName);
+    if (!projectWriter) {
         LOGW() << "Not found writer " << writerName;
         return make_ret(Ret::Code::InternalError);
     }
 
-    ByteArray data;
-    auto device = Buffer::opened(IODevice::ReadWrite, &data);
+    WriteOptions options;
+    options[WriteOptionKey::UNIT_TYPE] = isMultiPart ? Val(static_cast<int>(WriteUnitType::MULTI_PART))
+                                         : Val(static_cast<int>(WriteUnitType::PER_PART));
 
-    Ret writeRet = writer->write(notation, device);
-    if (!writeRet) {
-        LOGW() << writeRet.toString();
-        return writeRet;
+    ValList notationIdsValList;
+    for (const ID& id : notationsIds) {
+        notationIdsValList.push_back(Val(id.toStdString()));
     }
-
-    RetVal<QByteArray> result;
-    result.ret = make_ret(Ret::Code::Ok);
-    result.val = data.toQByteArrayNoCopy().toBase64();
-
-    device.close();
-
-    return result;
-}
-
-RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtrList notations,
-                                             const INotationWriter::Options& options)
-{
-    auto writer = writers()->writer(writerName);
-    if (!writer) {
-        LOGW() << "Not found writer " << writerName;
-        return make_ret(Ret::Code::InternalError);
-    }
+    options[WriteOptionKey::NOTATIONS] = Val(notationIdsValList);
 
     ByteArray data;
     auto device = Buffer::opened(IODevice::ReadWrite, &data);
 
-    Ret writeRet = writer->writeList(notations, device, options);
+    Ret writeRet = projectWriter->write(project, device, options);
     if (!writeRet) {
         LOGW() << writeRet.toString();
         return writeRet;
@@ -574,13 +552,16 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, QIODevice& destinationDevice,
-                                       const std::string& scoreFileName)
+Ret BackendApi::doExportScorePartsPdfs(const INotationProjectPtr project, const IMasterNotationPtr masterNotation,
+                                       QIODevice& destinationDevice, const std::string& scoreFileName)
 {
     QJsonObject jsonForPdfs;
     jsonForPdfs["score"] = QString::fromStdString(scoreFileName);
-    QByteArray scoreBin = processWriter(PDF_WRITER_NAME, masterNotation->notation()).val;
-    jsonForPdfs["scoreBin"] = QLatin1String(scoreBin);
+    RetVal<QByteArray> scoreRet = processWriter(project, PDF_WRITER_NAME);
+    if (!scoreRet.ret) {
+        return scoreRet.ret;
+    }
+    jsonForPdfs["scoreBin"] = QLatin1String(scoreRet.val);
 
     INotationPtrList notations;
     notations.push_back(masterNotation->notation());
@@ -594,8 +575,11 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
         QJsonValue partNameVal(e->name());
         partsNamesArray.append(partNameVal);
 
-        QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
-        partsArray.append(QLatin1String(partBin));
+        RetVal<QByteArray> partRet = processWriter(project, PDF_WRITER_NAME, false, { e->notation()->id() });
+        if (!partRet.ret) {
+            return partRet.ret;
+        }
+        partsArray.append(QLatin1String(partRet.val));
 
         notations.push_back(e->notation());
     }
@@ -605,12 +589,12 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
 
     jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
 
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) }
-    };
-
-    QByteArray fullScoreData = processWriter(PDF_WRITER_NAME, notations, options).val;
-    jsonForPdfs["scoreFullBin"] = QLatin1String(fullScoreData);
+    IDList notationIds;
+    for (const INotationPtr& n : notations) {
+        notationIds.push_back(n->id());
+    }
+    QByteArray fullScoreData = processWriter(project, PDF_WRITER_NAME, true, notationIds).val;
+    jsonForPdfs["scoreFullBin"] = QLatin1String(fullScoreData.toBase64());
 
     QJsonDocument jsonDoc(jsonForPdfs);
     bool ok = destinationDevice.write(QJsonDocument(jsonDoc).toJson(QJsonDocument::Compact)) != -1;
@@ -618,9 +602,10 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     return ok;
 }
 
-Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
+Ret BackendApi::doExportScoreTranspose(const INotationProjectPtr project,
+                                       BackendJsonWriter& jsonWriter, bool addSeparator)
 {
-    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
 
     jsonWriter.addKey("mscz");
 
@@ -634,7 +619,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
 
     jsonWriter.addValue(scoreJson.val, ADD_SEPARATOR);
 
-    Ret ret = exportScorePdf(notation, jsonWriter, addSeparator);
+    Ret ret = exportScorePdf(project, jsonWriter, addSeparator);
     return ret;
 }
 

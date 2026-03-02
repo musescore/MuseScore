@@ -39,24 +39,24 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-std::vector<IProjectWriter::UnitType> VideoWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> VideoWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool VideoWriter::supportsUnitType(UnitType unitType) const
+bool VideoWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
+muse::Ret VideoWriter::write(INotationProjectPtr, muse::io::IODevice&, const WriteOptions&)
 {
     NOT_SUPPORTED;
     return make_ret(muse::Ret::Code::NotSupported);
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const Options&)
+muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions&)
 {
     Config cfg;
 
@@ -212,7 +212,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     const Color CURSOR_COLOR = Color(0, 0, 255, 50);
 
-    PlaybackCursor cursor(application()->iocContext());
+    PlaybackCursor cursor(iocContext());
     cursor.setNotation(masterNotation->notation());
 
     for (int f = 0; f < frameCount; f++) {

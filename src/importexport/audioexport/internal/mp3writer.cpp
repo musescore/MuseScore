@@ -22,13 +22,11 @@
 
 #include "mp3writer.h"
 
-#include "log.h"
-
-using namespace muse;
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
-Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+muse::Ret Mp3Writer::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                           const project::WriteOptions& /*options*/)
 {
     const SoundTrackFormat format {
         SoundTrackType::MP3,
@@ -41,5 +39,5 @@ Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationD
         configuration()->exportMp3Bitrate()
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(project, destinationDevice, format);
 }

@@ -22,25 +22,31 @@
 
 #pragma once
 
-#include "abstractimagewriter.h"
-
 #include "modularity/ioc.h"
 #include "../iimagesexportconfiguration.h"
 #include "engraving/rendering/iscorerenderer.h"
 
+#include "project/iprojectwriter.h"
+
 namespace mu::iex::imagesexport {
-class SvgWriter : public AbstractImageWriter
+class SvgWriter : public project::IProjectWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
     muse::GlobalInject<engraving::rendering::IScoreRenderer> scoreRenderer;
 
 public:
-    std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
+
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
 private:
     using BeatsColors = QHash<int /* beatIndex */, QColor>;
 
     BeatsColors parseBeatsColors(const QVariant& obj) const;
+
 };
 }

@@ -22,13 +22,11 @@
 
 #include "flacwriter.h"
 
-#include "log.h"
-
 using namespace muse::audio;
 using namespace mu::iex::audioexport;
-using namespace muse::io;
 
-muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options&)
+muse::Ret FlacWriter::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                            const project::WriteOptions& /*options*/)
 {
     const SoundTrackFormat format {
         SoundTrackType::FLAC,
@@ -41,5 +39,5 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
         0 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(project, destinationDevice, format);
 }

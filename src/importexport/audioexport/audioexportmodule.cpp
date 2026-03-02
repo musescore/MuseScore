@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 #include "internal/mp3writer.h"
 #include "internal/wavewriter.h"
 #include "internal/oggwriter.h"
@@ -52,12 +52,12 @@ void AudioExportModule::registerExports()
 
 void AudioExportModule::resolveImports()
 {
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "wav" }, std::make_shared<WaveWriter>(globalCtx()));
-        writers->reg({ "mp3" }, std::make_shared<Mp3Writer>(globalCtx()));
-        writers->reg({ "ogg" }, std::make_shared<OggWriter>(globalCtx()));
-        writers->reg({ "flac" }, std::make_shared<FlacWriter>(globalCtx()));
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "wav" }, std::make_shared<WaveWriter>(globalCtx()));
+        projectRW->regWriter({ "mp3" }, std::make_shared<Mp3Writer>(globalCtx()));
+        projectRW->regWriter({ "ogg" }, std::make_shared<OggWriter>(globalCtx()));
+        projectRW->regWriter({ "flac" }, std::make_shared<FlacWriter>(globalCtx()));
     }
 }
 

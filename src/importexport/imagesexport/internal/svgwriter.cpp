@@ -22,9 +22,13 @@
 
 #include "svgwriter.h"
 
+#include "project/projectutils.h"
+
 #include <QBuffer>
 
 #include "draw/painter.h"
+#include "global/types/id.h"
+#include "global/io/file.h"
 
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
@@ -44,32 +48,46 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::io;
 
-std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> SvgWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PAGE };
+    return { WriteUnitType::PER_PAGE };
 }
 
-Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+bool SvgWriter::supportsUnitType(WriteUnitType unitType) const
+{
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
+    return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
+}
+
+Ret SvgWriter::write(INotationProjectPtr project, muse::io::IODevice& destinationDevice, const WriteOptions& options)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(notation) {
+    WriteUnitType unitType = static_cast<WriteUnitType>(value(options, WriteOptionKey::UNIT_TYPE, Val(static_cast<int>(WriteUnitType::PER_PAGE))).toInt());
+    IF_ASSERT_FAILED(supportsUnitType(unitType)) {
+        return Ret(Ret::Code::NotSupported);
+    }
+
+    notation::INotationPtrList notations = project::resolveNotations(project, options);
+    IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
     }
+
+    INotationPtr notation = notations.front();
 
     mu::engraving::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    score->setPrinting(true); // don’t print page break symbols etc.
+    score->setPrinting(true); // don't print page break symbols etc.
 
     mu::engraving::MScore::pdfPrinting = true;
     mu::engraving::MScore::svgPrinting = true;
 
     const std::vector<mu::engraving::Page*>& pages = score->pages();
 
-    const size_t PAGE_NUMBER = muse::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    const size_t PAGE_NUMBER = value(options, WriteOptionKey::PAGE_NUMBER, Val(0)).toInt();
     if (PAGE_NUMBER >= pages.size()) {
         return false;
     }
@@ -105,8 +123,8 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         painter.translate(-pageRect.topLeft());
     }
 
-    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                    Val(configuration()->exportSvgWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = value(options, WriteOptionKey::TRANSPARENT_BACKGROUND,
+                                                      Val(configuration()->exportSvgWithTransparentBackground())).toBool();
     if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, muse::draw::Color::WHITE);
     }
@@ -198,7 +216,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         }
     }
 
-    BeatsColors beatsColors = parseBeatsColors(muse::value(options, OptionKey::BEATS_COLORS, Val()).toQVariant());
+    BeatsColors beatsColors = parseBeatsColors(value(options, WriteOptionKey::BEATS_COLORS).toQVariant());
 
     // 2nd pass: Set color for elements on beats
     int beatIndex = 0;
@@ -273,6 +291,19 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     mu::engraving::MScore::svgPrinting = false;
 
     return true;
+}
+
+Ret SvgWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+
+    return ret;
 }
 
 SvgWriter::BeatsColors SvgWriter::parseBeatsColors(const QVariant& obj) const

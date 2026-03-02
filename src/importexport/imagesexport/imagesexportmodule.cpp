@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
@@ -48,11 +48,11 @@ void ImagesExportModule::registerExports()
 
 void ImagesExportModule::resolveImports()
 {
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
-        writers->reg({ "svg" }, std::make_shared<SvgWriter>());
-        writers->reg({ "png" }, std::make_shared<PngWriter>());
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "pdf" }, std::make_shared<PdfWriter>());
+        projectRW->regWriter({ "svg" }, std::make_shared<SvgWriter>());
+        projectRW->regWriter({ "png" }, std::make_shared<PngWriter>());
     }
 }
 

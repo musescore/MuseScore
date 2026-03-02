@@ -25,8 +25,8 @@
 
 #ifndef MUSICXML_NO_INTERNAL
 #include "project/inotationreadersregister.h"
+#include "project/iprojectrwregister.h"
 #include "internal/musicxmlreader.h"
-#include "project/inotationwritersregister.h"
 #include "internal/musicxmlwriter.h"
 #include "internal/musicxmlwriter.h"
 #include "internal/mxlwriter.h"
@@ -59,10 +59,10 @@ void MusicXmlModule::resolveImports()
         readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
     }
 
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
-        writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
+        projectRW->regWriter({ "mxl" }, std::make_shared<MxlWriter>());
     }
 #endif
 }

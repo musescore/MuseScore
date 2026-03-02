@@ -22,23 +22,29 @@
 
 #pragma once
 
-#include "abstractimagewriter.h"
-
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
+
+#include "project/iprojectwriter.h"
 
 class QImage;
 
 namespace mu::iex::imagesexport {
-class PngWriter : public AbstractImageWriter
+class PngWriter : public project::IProjectWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
 
 public:
-    std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
+
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
 private:
     void convertImageToGrayscale(QImage& image);
+
 };
 }

@@ -22,27 +22,31 @@
 
 #pragma once
 
-#include "abstractimagewriter.h"
-
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 
+#include "project/iprojectwriter.h"
+
 class QPdfWriter;
 
 namespace mu::iex::imagesexport {
-class PdfWriter : public AbstractImageWriter
+class PdfWriter : public project::IProjectWriter
 {
     muse::GlobalInject<IImagesExportConfiguration> configuration;
     muse::GlobalInject<muse::IApplication> application;
 
 public:
-    std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
-    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
-                        const Options& options = Options()) override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
+
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 
 private:
     void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;
+
 };
 }

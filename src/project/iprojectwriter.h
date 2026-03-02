@@ -24,11 +24,12 @@
 #define MU_PROJECT_IPROJECTWRITER_H
 
 #include "types/ret.h"
-#include "types/val.h"
 
 #include "async/channel.h"
+#include "global/io/iodevice.h"
 #include "global/progress.h"
 #include "inotationproject.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class IProjectWriter
@@ -37,26 +38,16 @@ public:
 
     virtual ~IProjectWriter() = default;
 
-    enum class UnitType {
-        PER_PAGE,
-        PER_PART,
-        MULTI_PART
-    };
+    virtual std::vector<WriteUnitType> supportedUnitTypes() const = 0;
+    virtual bool supportsUnitType(WriteUnitType unitType) const = 0;
 
-    enum class OptionKey {
-        UNIT_TYPE,
-        PAGE_NUMBER,
-        TRANSPARENT_BACKGROUND,
-        NOTES_COLORS
-    };
+    virtual muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& device,
+                            const WriteOptions& options = WriteOptions()) = 0;
+    virtual muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                            const WriteOptions& options = WriteOptions()) = 0;
 
-    using Options = QMap<OptionKey, muse::Val>;
-
-    virtual std::vector<UnitType> supportedUnitTypes() const = 0;
-    virtual bool supportsUnitType(UnitType unitType) const = 0;
-
-    virtual muse::Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) = 0;
-    virtual muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Options& options = Options()) = 0;
+    virtual muse::Progress* progress() { return nullptr; }
+    virtual void abort() {}
 };
 
 using IProjectWriterPtr = std::shared_ptr<IProjectWriter>;

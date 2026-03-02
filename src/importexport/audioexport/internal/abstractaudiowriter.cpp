@@ -21,12 +21,9 @@
  */
 #include "abstractaudiowriter.h"
 
-#include <QCoreApplication>
-#include <QFile>
-#include <QFileInfo>
 #include <QThread>
 
-#include "global/containers.h"
+#include "global/io/file.h"
 
 #include "log.h"
 
@@ -36,45 +33,33 @@ using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::notation;
 
-std::vector<INotationWriter::UnitType> AbstractAudioWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> AbstractAudioWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool AbstractAudioWriter::supportsUnitType(UnitType unitType) const
+bool AbstractAudioWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret AbstractAudioWriter::write(INotationPtr, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::write(INotationProjectPtr, io::IODevice&, const WriteOptions&)
 {
-    IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
-        return Ret(Ret::Code::NotSupported);
-    }
-
-    if (supportsUnitType(muse::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
-        NOT_IMPLEMENTED;
-        return Ret(Ret::Code::NotImplemented);
-    }
-
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
 }
 
-Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
+Ret AbstractAudioWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
 {
-    IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
-        return Ret(Ret::Code::NotSupported);
+    muse::io::File file(filePath);
+    if (!file.open(muse::io::IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
-    if (supportsUnitType(muse::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
-        NOT_IMPLEMENTED;
-        return Ret(Ret::Code::NotImplemented);
-    }
-
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
 }
 
 void AbstractAudioWriter::abort()
@@ -88,10 +73,14 @@ muse::Progress* AbstractAudioWriter::progress()
     return &m_progress;
 }
 
-Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
+Ret AbstractAudioWriter::doWriteAndWait(project::INotationProjectPtr project,
                                         io::IODevice& dstDevice,
                                         const SoundTrackFormat& format)
 {
+    IF_ASSERT_FAILED(project) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
     //! NOTE Waiting for the audio system to start if it is not already running
     while (!startAudioController()->isAudioStarted()) {
         application()->processEvents();
@@ -100,6 +89,8 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
     m_isCompleted = false;
     m_writeRet = muse::Ret();
+
+    INotationPtr notation = project->masterNotation()->notation();
 
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
@@ -165,15 +156,16 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     });
 }
 
-INotationWriter::UnitType AbstractAudioWriter::unitTypeFromOptions(const Options& options) const
+WriteUnitType AbstractAudioWriter::unitTypeFromOptions(const WriteOptions& options) const
 {
-    std::vector<UnitType> supported = supportedUnitTypes();
+    std::vector<WriteUnitType> supported = supportedUnitTypes();
     IF_ASSERT_FAILED(!supported.empty()) {
-        return UnitType::PER_PART;
+        return WriteUnitType::PER_PART;
     }
 
-    UnitType defaultUnitType = supported.front();
-    UnitType unitType = muse::value(options, OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
+    WriteUnitType defaultUnitType = supported.front();
+    WriteUnitType unitType
+        = static_cast<WriteUnitType>(value(options, WriteOptionKey::UNIT_TYPE, Val(static_cast<int>(defaultUnitType))).toInt());
     if (!supportsUnitType(unitType)) {
         return defaultUnitType;
     }

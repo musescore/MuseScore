@@ -23,14 +23,14 @@
 #ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 #define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 
-#include "project/inotationwriter.h"
+#include "project/iprojectwriter.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "imidiconfiguration.h"
 
 namespace mu::iex::midi {
-class NotationMidiWriter : public project::INotationWriter, public muse::Contextable
+class NotationMidiWriter : public project::IProjectWriter, public muse::Contextable
 {
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<IMidiImportExportConfiguration> midiImportExportConfiguration;
@@ -40,12 +40,13 @@ public:
     NotationMidiWriter(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    std::vector<UnitType> supportedUnitTypes() const override;
-    bool supportsUnitType(UnitType unitType) const override;
+    std::vector<project::WriteUnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(project::WriteUnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
-    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
-                        const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& dstDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 };
 }
 

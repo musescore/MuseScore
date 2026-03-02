@@ -23,7 +23,7 @@
 #include "braillemodule.h"
 
 #include "modularity/ioc.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "internal/brailleconfiguration.h"
 #include "internal/brailleconverter.h"
@@ -75,9 +75,9 @@ void BrailleModuleContext::registerExports()
 
 void BrailleModuleContext::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>(mname);
-    if (writers) {
-        writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
+    auto projectRW = ioc()->resolve<IProjectRWRegister>(mname);
+    if (projectRW) {
+        projectRW->regWriter({ "brf" }, std::make_shared<BrailleWriter>());
     }
 }
 

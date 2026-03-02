@@ -22,7 +22,7 @@
 #include "notationmodule.h"
 
 #include "modularity/ioc.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "internal/notationconfiguration.h"
 #include "internal/positionswriter.h"
@@ -89,11 +89,11 @@ IContextSetup* NotationModule::newContext(const ContextPtr& ctx) const
 
 void NotationContext::resolveImports()
 {
-    auto writers = ioc()->resolve<project::INotationWritersRegister>(mname);
-    if (writers) {
-        writers->reg({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT, iocContext()));
-        writers->reg({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE, iocContext()));
-        writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
-        writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
+    auto projectRW = ioc()->resolve<project::IProjectRWRegister>(mname);
+    if (projectRW) {
+        projectRW->regWriter({ "spos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT, iocContext()));
+        projectRW->regWriter({ "mpos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE, iocContext()));
+        projectRW->regWriter({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
+        projectRW->regWriter({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
     }
 }

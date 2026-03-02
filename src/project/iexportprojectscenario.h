@@ -24,7 +24,7 @@
 
 #include "modularity/imoduleinterface.h"
 #include "notation/inotation.h"
-#include "inotationwriter.h"
+#include "iprojectwriter.h"
 #include "internal/exporttype.h"
 #include "types/projecttypes.h"
 
@@ -34,14 +34,14 @@ class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
     INTERFACE_ID(IExportProjectScenario)
 
 public:
-    virtual std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
+    virtual std::vector<WriteUnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
     virtual muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                                         INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                                         WriteUnitType unitType = WriteUnitType::PER_PART,
                                                          muse::io::path_t defaultPath = "") const = 0;
 
     virtual bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
-                              INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                              WriteUnitType unitType = WriteUnitType::PER_PART,
                               bool openDestinationFolderOnExport = false) const = 0;
 
     virtual const ExportInfo& exportInfo() const = 0;

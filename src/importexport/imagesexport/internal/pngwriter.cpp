@@ -22,9 +22,13 @@
 
 #include "pngwriter.h"
 
+#include "project/projectutils.h"
+
 #include <cmath>
 #include <QImage>
 #include <QBuffer>
+
+#include "global/types/id.h"
 
 #include "log.h"
 
@@ -34,21 +38,35 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::io;
 
-std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> PngWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PAGE };
+    return { WriteUnitType::PER_PAGE };
 }
 
-Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+bool PngWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    IF_ASSERT_FAILED(notation) {
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
+    return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
+}
+
+Ret PngWriter::write(INotationProjectPtr project, muse::io::IODevice& destinationDevice, const WriteOptions& options)
+{
+    WriteUnitType unitType = static_cast<WriteUnitType>(value(options, WriteOptionKey::UNIT_TYPE, Val(static_cast<int>(WriteUnitType::PER_PAGE))).toInt());
+    IF_ASSERT_FAILED(supportsUnitType(unitType)) {
+        return Ret(Ret::Code::NotSupported);
+    }
+
+    notation::INotationPtrList notations = project::resolveNotations(project, options);
+    IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
     }
+
+    INotationPtr notation = notations.front();
 
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
 
     INotationPainting::Options opt;
-    opt.fromPage = muse::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    opt.fromPage = value(options, WriteOptionKey::PAGE_NUMBER, Val(0)).toInt();
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
@@ -63,8 +81,8 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
     image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                    Val(configuration()->exportPngWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = value(options, WriteOptionKey::TRANSPARENT_BACKGROUND,
+                                                      Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     muse::draw::Painter painter(&image, "pngwriter");
@@ -85,6 +103,19 @@ Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     destinationDevice.write(data);
 
     return true;
+}
+
+Ret PngWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+
+    return ret;
 }
 
 void PngWriter::convertImageToGrayscale(QImage& image)

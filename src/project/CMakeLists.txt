@@ -32,8 +32,6 @@ target_sources(project PRIVATE
     iprojectcreator.h
     inotationreader.h
     inotationreadersregister.h
-    inotationwriter.h
-    inotationwritersregister.h
     iprojectaudiosettings.h
     iprojectfilescontroller.h
     iprojectconfiguration.h
@@ -42,6 +40,7 @@ target_sources(project PRIVATE
     iprojectautosaver.h
     iprojectrwregister.h
     iprojectwriter.h
+    projectutils.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -55,8 +54,6 @@ target_sources(project PRIVATE
     internal/projectaudiosettings.h
     internal/notationreadersregister.cpp
     internal/notationreadersregister.h
-    internal/notationwritersregister.cpp
-    internal/notationwritersregister.h
     internal/projectautosaver.cpp
     internal/projectautosaver.h
     internal/projectactionscontroller.cpp

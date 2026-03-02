@@ -22,6 +22,8 @@
 
 #include "mxlwriter.h"
 
+#include "global/io/file.h"
+
 #include "export/exportmusicxml.h"
 
 #include "log.h"
@@ -30,18 +32,30 @@ using namespace mu::iex::musicxml;
 using namespace muse;
 using namespace muse::io;
 
-Ret MxlWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret MxlWriter::write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice, const project::WriteOptions& /*options*/)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
-    mu::engraving::Score* score = notation->elements()->msScore();
 
+    mu::engraving::Score* score = project->masterNotation()->notation()->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     Ret ret = saveMxl(score, &destinationDevice);
 
+    return ret;
+}
+
+Ret MxlWriter::write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const project::WriteOptions& options)
+{
+    muse::io::File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
     return ret;
 }

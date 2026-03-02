@@ -32,7 +32,7 @@
 #include "global/iapplication.h"
 #include "io/ifilesystem.h"
 #include "project/iprojectcreator.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 
 #include "converter/convertertypes.h"
 
@@ -47,7 +47,7 @@ class BackendApi
     inline static muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     inline static muse::GlobalInject<muse::IApplication> application;
     inline static muse::GlobalInject<project::IProjectCreator> notationCreator;
-    inline static muse::ContextInject<project::INotationWritersRegister> writers = { nullptr }; // FIXME
+    inline static muse::ContextInject<project::IProjectRWRegister> projectRW = { nullptr };
 
 public:
     static muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
@@ -69,27 +69,29 @@ private:
 
     static QVariantMap readBeatsColors(const muse::io::path_t& filePath);
 
-    static muse::Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScoreSvgs(const notation::INotationPtr notation, const muse::io::path_t& highlightConfigPath,
+    static muse::Ret exportScorePngs(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static muse::Ret exportScoreSvgs(const project::INotationProjectPtr project, const muse::io::path_t& highlightConfigPath,
                                      BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName,
-                                                  const std::string& elementsPositionsTagName, const notation::INotationPtr notation,
-                                                  BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScorePdf(const notation::INotationPtr notation, QIODevice& destinationDevice);
-    static muse::Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
-    static muse::Ret devInfo(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static muse::Ret exportScoreElementsPositions(const project::INotationProjectPtr project,
+                                                  const std::string& elementsPositionsWriterName,
+                                                  const std::string& elementsPositionsTagName, BackendJsonWriter& jsonWriter,
+                                                  bool addSeparator = false);
+    static muse::Ret exportScorePdf(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static muse::Ret exportScorePdf(const project::INotationProjectPtr project, QIODevice& destinationDevice);
+    static muse::Ret exportScoreMidi(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static muse::Ret exportScoreMusicXML(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter,
+                                         bool addSeparator = false);
+    static muse::Ret exportScoreMetaData(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter,
+                                         bool addSeparator = false);
+    static muse::Ret devInfo(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
-    static muse::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtr notation);
-    static muse::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
-                                                  const project::INotationWriter::Options& options);
+    static muse::RetVal<QByteArray> processWriter(const project::INotationProjectPtr project, const std::string& writerName,
+                                                  bool isMultiPart = false, const muse::IDList& notationsIds = {});
 
     static muse::Ret doExportScoreParts(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice);
-    static muse::Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, QIODevice& destinationDevice,
-                                            const std::string& scoreFileName);
-    static muse::Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter,
+    static muse::Ret doExportScorePartsPdfs(const project::INotationProjectPtr project, const notation::IMasterNotationPtr notation,
+                                            QIODevice& destinationDevice, const std::string& scoreFileName);
+    static muse::Ret doExportScoreTranspose(const project::INotationProjectPtr project, BackendJsonWriter& jsonWriter,
                                             bool addSeparator = false);
 
     static muse::Ret doExportScoreElements(const notation::INotationPtr notation, QIODevice& out);

@@ -32,7 +32,8 @@ public:
     FlacWriter(const muse::modularity::ContextPtr& iocCtx)
         : AbstractAudioWriter(iocCtx) {}
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, muse::io::IODevice& destinationDevice,
+                    const project::WriteOptions& options = project::WriteOptions()) override;
 };
 }
 

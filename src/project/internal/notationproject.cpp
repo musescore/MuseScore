@@ -983,21 +983,22 @@ Ret NotationProject::exportProject(const muse::io::path_t& path, const std::stri
 {
     TRACEFUNC;
 
-    Buffer outBuf = Buffer::opened(IODevice::WriteOnly);
-
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
+    auto projectWriter = projectRW()->writer(suffix);
+    if (!projectWriter) {
         LOGE() << "Unknown export format: " << suffix;
-        return false;
+        return muse::make_ret(muse::Ret::Code::UnknownError);
     }
 
-    Ret ret = writer->write(m_masterNotation->notation(), outBuf);
+    WriteOptions options;
+    options[WriteOptionKey::UNIT_TYPE] = muse::Val(static_cast<int>(WriteUnitType::PER_PART));
+    options[WriteOptionKey::NOTATIONS] = muse::Val(muse::ValList { muse::Val(
+                                                                       m_masterNotation->notation()->id().toStdString()) });
+
+    Ret ret = projectWriter->write(shared_from_this(), path, options);
     if (!ret) {
         return ret;
     }
-    outBuf.close();
-
-    return File::writeFile(path, outBuf.data());
+    return muse::make_ok();
 }
 
 IMasterNotationPtr NotationProject::masterNotation() const

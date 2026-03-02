@@ -25,7 +25,7 @@
 
 #include "project/inotationreadersregister.h"
 #include "internal/notationmidireader.h"
-#include "project/inotationwritersregister.h"
+#include "project/iprojectrwregister.h"
 #include "internal/notationmidiwriter.h"
 
 #include "internal/midiconfiguration.h"
@@ -55,9 +55,9 @@ void MidiModule::resolveImports()
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
     }
 
-    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>(globalCtx()));
+    auto projectRW = globalIoc()->resolve<IProjectRWRegister>(moduleName());
+    if (projectRW) {
+        projectRW->regWriter({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>(globalCtx()));
     }
 }
 

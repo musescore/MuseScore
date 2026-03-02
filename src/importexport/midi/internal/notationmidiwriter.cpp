@@ -24,6 +24,8 @@
 
 #include <QBuffer>
 
+#include "global/io/file.h"
+
 #include "midiexport/exportmidi.h"
 
 #include "log.h"
@@ -35,24 +37,24 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-std::vector<INotationWriter::UnitType> NotationMidiWriter::supportedUnitTypes() const
+std::vector<WriteUnitType> NotationMidiWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriteUnitType::PER_PART };
 }
 
-bool NotationMidiWriter::supportsUnitType(UnitType unitType) const
+bool NotationMidiWriter::supportsUnitType(WriteUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriteUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret NotationMidiWriter::write(INotationProjectPtr project, muse::io::IODevice& destinationDevice, const WriteOptions& /*options*/)
 {
-    IF_ASSERT_FAILED(notation) {
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Score* score = notation->elements()->msScore();
+    Score* score = project->masterNotation()->notation()->elements()->msScore();
 
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
@@ -77,8 +79,14 @@ Ret NotationMidiWriter::write(INotationPtr notation, io::IODevice& destinationDe
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret NotationMidiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
+Ret NotationMidiWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const WriteOptions& options)
 {
-    NOT_SUPPORTED;
-    return Ret(Ret::Code::NotSupported);
+    muse::io::File file(filePath);
+    if (!file.open(IODevice::WriteOnly)) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ret ret = write(project, file, options);
+    file.close();
+    return ret;
 }

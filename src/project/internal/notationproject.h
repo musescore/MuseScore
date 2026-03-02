@@ -29,7 +29,7 @@
 #include "io/ifilesystem.h"
 #include "../iprojectconfiguration.h"
 #include "inotationreadersregister.h"
-#include "inotationwritersregister.h"
+#include "iprojectrwregister.h"
 
 #include "engraving/engravingproject.h"
 
@@ -49,14 +49,15 @@ class WriteContext;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject, public muse::Contextable, public muse::async::Asyncable
+class NotationProject : public INotationProject, public muse::Contextable, public muse::async::Asyncable,
+    public std::enable_shared_from_this<NotationProject>
 {
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationReadersRegister> readers;
-    muse::ContextInject<INotationWritersRegister> writers = { this };
+    muse::ContextInject<IProjectRWRegister> projectRW = { this };
     muse::ContextInject<IProjectMigrator> migrator = { this };
 
 public:
