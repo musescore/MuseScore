@@ -291,18 +291,13 @@ RectF TextCursor::cursorRect() const
     double fontCapHeight = fm.capHeight();
     double fontAscent = fm.ascent();
 
-    double cursorCapHeight = fontCapHeight > 0 ? std::min(fontCapHeight, fontAscent) : fontAscent;
+    // Bravura Text returns small values for its cap heights
+    double cursorCapHeight = fontCapHeight > 0 && _font.family().id() != u"Bravura Text"
+                             ? std::min(fontCapHeight, fontAscent) : fontAscent;
     double cursorDescent = cursorCapHeight * .3;
 
-    double minCursorWidth = 4.0;
-    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/3") ? 6.0 : minCursorWidth;
-    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/4") ? 8.0 : minCursorWidth;
-    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/5") ? 10.0 : minCursorWidth;
-    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/6") ? 12.0 : minCursorWidth;
-    minCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/7") ? 14.0 : minCursorWidth;
-    bool fixedCursorWidth = tline.text(0, (int)tline.columns()).contains(u"/w");
     double h = cursorCapHeight + 2 * cursorDescent; // symmetrical cursor
-    double w = minCursorWidth + (fixedCursorWidth ? 0 : fontCapHeight / 40.0);
+    double w = std::max(2.0, cursorCapHeight / 16.0);
     double x = tline.xpos(column(), m_text);
     double y = tline.y() + cursorDescent - h;
     return RectF(x - w / 2, y, w, h);
