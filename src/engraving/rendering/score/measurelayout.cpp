@@ -1238,6 +1238,10 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             ChordLayout::layoutArticulations(chord, ctx);
             ChordLayout::checkStartEndSlurs(chord, ctx);
             ChordLayout::layoutArticulations2(chord, ctx);
+            Ornament* ornament = chord->findOrnament();
+            if (ornament && ornament->showCueNote()) {
+                TLayout::layoutOrnamentCueNote(ornament, ctx);
+            }
             chord->computeKerningExceptions();
         }
 
