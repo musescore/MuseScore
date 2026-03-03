@@ -407,7 +407,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         }
     }
 
-    updateBigTimeSigIfNeeded(system, ctx);
+    updateTimeSigAboveStavesXPos(system, ctx);
 
     // Recompute spacing to account for the last changes (barlines, hidden staves, etc)
     curSysWidth = HorizontalSpacing::computeSpacingForFullSystem(system);
@@ -419,6 +419,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (shouldBeJustified(system, curSysWidth, targetSystemWidth, ctx)) {
         HorizontalSpacing::justifySystem(system, curSysWidth, targetSystemWidth);
     }
+
+    clearBigTimeSigNotShown(system, ctx);
 
     // LAYOUT MEASURES
     bool createBrackets = false;
@@ -765,7 +767,7 @@ bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff
     return true;
 }
 
-void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
+void SystemLayout::updateTimeSigAboveStavesXPos(System* system, LayoutContext& ctx)
 {
     if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::ABOVE_STAVES) {
         return;
@@ -774,7 +776,11 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
     staff_idx_t nstaves = ctx.dom().nstaves();
     bool centerOnBarline = ctx.conf().styleB(Sid::timeSigCenterOnBarline);
 
-    for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* measure = toMeasure(mb);
         for (Segment& seg : measure->segments()) {
             if (!seg.isType(SegmentType::TimeSigType)) {
                 continue;
@@ -864,6 +870,33 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
             }
 
             seg.createShapes();
+        }
+    }
+}
+
+void SystemLayout::clearBigTimeSigNotShown(System* system, LayoutContext& ctx)
+{
+    if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::NORMAL) {
+        return;
+    }
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isType(SegmentType::TimeSigType)) {
+                continue;
+            }
+            for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                TimeSig* ts = toTimeSig(seg.element(staff2track(staffIdx)));
+                if (!ts) {
+                    continue;
+                }
+                if (!ts->showOnThisStaff() || ts->effectiveStaffIdx() == muse::nidx) {
+                    ts->mutldata()->reset(); // Deletes shape
+                }
+            }
         }
     }
 }
@@ -3044,8 +3077,10 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                     TimeSig* nextTimeSig = toTimeSig(segment.element(staff2track(idx)));
                     if (nextTimeSig && nextTimeSig->showOnThisStaff()) {
                         staff_idx_t nextTimeSigStave = nextTimeSig->effectiveStaffIdx();
-                        nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
-                        break;
+                        if (nextTimeSigStave != muse::nidx) {
+                            nextStaffIdx = system->prevVisibleStaff(nextTimeSigStave);
+                            break;
+                        }
                     }
                     if (idx == nstaves - 1) {
                         nextStaffIdx = system->prevVisibleStaff(nstaves);

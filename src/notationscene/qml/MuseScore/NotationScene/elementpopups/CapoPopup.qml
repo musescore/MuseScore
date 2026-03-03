@@ -116,9 +116,9 @@ AbstractElementPopup {
             navigation.accessible.name: titleLabel.text + " " + currentText
 
             model: [
-                { text: qsTrc("notation", "Affects playback only") },
-                { text: qsTrc("notation", "Affects staff notation only") },
-                { text: qsTrc("notation", "Affects tablature fingering only") },
+                { text: qsTrc("notation", "Notation/tab in open position") },
+                { text: qsTrc("notation", "Notation shows sounding pitches") },
+                { text: qsTrc("notation", "No transposition") },
             ]
 
             currentIndex: capoModel.transposeMode
