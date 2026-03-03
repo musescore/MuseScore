@@ -1549,6 +1549,11 @@ void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("guitarBendType", static_cast<int>(item->bendType()));
     xml.tag("bendStartTimeFactor", item->startTimeFactor());
     xml.tag("bendEndTimeFactor", item->endTimeFactor());
+
+    if (item->targetTimeFactor().has_value()) {
+        xml.tag("bendTargetTimeFactor", item->targetTimeFactor().value());
+    }
+
     writeProperty(item, xml, Pid::DIRECTION);
     writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
     if (item->isDive()) {
