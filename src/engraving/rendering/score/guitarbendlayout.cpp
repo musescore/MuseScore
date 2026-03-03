@@ -108,7 +108,7 @@ void GuitarBendLayout::layoutAngularBend(GuitarBendSegment* item, LayoutContext&
     }
 
     if ((bend->bendType() == GuitarBendType::PRE_BEND || bend->bendType() == GuitarBendType::PRE_DIVE)
-        && !startNote->bothParentheses()) {
+        && !startNote->parenthesisInfo()) {
         startNote->setGhost(true);
         startNote->mutldata()->reset();
         TLayout::layoutChord(startNote->chord(), ctx);

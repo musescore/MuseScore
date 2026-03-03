@@ -169,7 +169,7 @@ void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx,
 
 void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    if (!note->ghost() && !note->bothParentheses()) {
+    if (!note->ghost() && !note->parenthesisInfo()) {
         return;
     }
 
