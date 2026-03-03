@@ -48,7 +48,9 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 10
             navigation.accessible.name: videoResolutionLabel.text + " " + currentText
 
-            model: root.model ? root.model.availableVideoResolutions() : []
+            model: root.model ? root.model.availableVideoResolutions().map(function(res) {
+                return { text: res, value: res }
+            }) : []
 
             currentIndex: root.model ? indexOfValue(root.model.videoResolution) : -1
 
