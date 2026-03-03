@@ -32,7 +32,7 @@ using namespace mu::notation;
 static const Segment* findSegmentFrom(const Score* score, const System* system,
                                       const int tickFrom, const staff_idx_t staffIdx)
 {
-    const Segment* segment = score->tick2segmentMM(Fraction::fromTicks(tickFrom), true, SegmentType::ChordRest);
+    const Segment* segment = score->tick2leftSegment(Fraction::fromTicks(tickFrom), /*MM*/ true, SegmentType::ChordRest);
     if (!segment || segment->system() != system) {
         return nullptr;
     }
@@ -58,7 +58,7 @@ static const Segment* findSegmentFrom(const Score* score, const System* system,
 static const Segment* findSegmentTo(const Score* score, const System* system, const Segment* segmentFrom,
                                     const int tickTo, const staff_idx_t staffIdx)
 {
-    const Segment* segment = score->tick2segmentMM(Fraction::fromTicks(tickTo), true, SegmentType::ChordRest);
+    const Segment* segment = score->tick2leftSegment(Fraction::fromTicks(tickTo), /*MM*/ true, SegmentType::ChordRest);
     if (!segment || segment->system() != system) {
         return nullptr;
     }
