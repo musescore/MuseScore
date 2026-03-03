@@ -171,7 +171,7 @@ public:
     bool svgIllustratorCompat() const;
     void setSvgIllustratorCompat(bool compat);
 
-    Q_INVOKABLE QVariantList availableVideoResolutions() const;
+    Q_INVOKABLE QStringList availableVideoResolutions() const;
     QString videoResolution() const;
     void setVideoResolution(const QString& resolution);
 

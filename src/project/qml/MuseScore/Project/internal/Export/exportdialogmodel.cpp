@@ -560,18 +560,18 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
     emit svgIllustratorCompatChanged(compat);
 }
 
-QVariantList ExportDialogModel::availableVideoResolutions() const
+QStringList ExportDialogModel::availableVideoResolutions() const
 {
-    static const QStringList resolutions = { "2160p", "1440p", "1080p", "720p", "480p", "360p" };
-
-    QVariantList result;
-    for (const QString& res : resolutions) {
-        QVariantMap obj;
-        obj["text"] = res;
-        obj["value"] = res;
-        result << obj;
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    const std::vector<std::string>& resolutions = videoExportConfiguration()->availableResolutions();
+    QStringList result;
+    for (const std::string& res : resolutions) {
+        result << QString::fromStdString(res);
     }
     return result;
+#else
+    return { };
+#endif
 }
 
 QString ExportDialogModel::videoResolution() const
@@ -579,7 +579,7 @@ QString ExportDialogModel::videoResolution() const
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     return QString::fromStdString(videoExportConfiguration()->resolution());
 #else
-    return "1080p";
+    return "";
 #endif
 }
 

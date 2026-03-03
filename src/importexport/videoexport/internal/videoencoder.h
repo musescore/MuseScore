@@ -39,9 +39,7 @@ public:
 
     bool encodeImage(const QImage& img);
 
-    static bool muxAudioVideo(const muse::io::path_t& videoPath,
-                              const muse::io::path_t& audioPath,
-                              const muse::io::path_t& outputPath,
+    static bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
                               double audioOffsetSec);
 
 private:
