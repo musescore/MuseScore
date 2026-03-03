@@ -272,7 +272,7 @@ void PaddingTable::createTable(const MStyle& style)
 double ParenPaddingTable::padding(ElementType type1, ElementType type2)
 {
     assert(type1 == ElementType::PARENTHESIS || type2 == ElementType::PARENTHESIS);
-    const PaddingVector<double>& row = type1 == ElementType::PARENTHESIS ? m_parenBefore : m_parenAfter;
+    const PaddingVector<double>& row = type1 == ElementType::PARENTHESIS ? m_parenAfter : m_parenBefore;
     const ElementType& otherType = type1 == ElementType::PARENTHESIS ? type2 : type1;
 
     return row.at(otherType);
