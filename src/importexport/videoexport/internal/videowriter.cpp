@@ -59,17 +59,19 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, const Options&)
+muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, const Options& options)
 {
     std::string filePath = device.meta("file_path");
     IF_ASSERT_FAILED(!filePath.empty()) {
         return make_ret(muse::Ret::Code::InternalError);
     }
 
+    bool withAudio = muse::value(options, OptionKey::WITH_AUDIO, muse::Val(true)).toBool();
+
     Config cfg = makeConfig();
 
     muse::io::path_t finalPath(filePath);
-    muse::io::path_t tempVideoPath = finalPath + ".tmp_video.mp4";
+    muse::io::path_t tempVideoPath = withAudio ? finalPath + ".tmp_video.mp4" : finalPath;
     muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
 
     m_isCompleted = false;
@@ -79,7 +81,13 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     m_audioRet = muse::Ret();
 
     startVideoExport(notation, tempVideoPath, cfg);
-    startAudioExport(notation, tempAudioPath);
+
+    if (withAudio) {
+        startAudioExport(notation, tempAudioPath);
+    } else {
+        m_audioCompleted = true;
+        m_audioRet = muse::make_ok();
+    }
 
     while (!m_isCompleted || !m_audioCompleted) {
         application()->processEvents();
@@ -93,18 +101,20 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
 
     muse::Ret result = m_writeRet;
 
-    if (result && m_audioRet) {
-        if (!VideoEncoder::muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
-            result = make_ret(muse::Ret::Code::UnknownError);
+    if (withAudio) {
+        if (result && m_audioRet) {
+            if (!VideoEncoder::muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
+                result = make_ret(muse::Ret::Code::UnknownError);
+            }
+        } else if (!result) {
+            // keep video error
+        } else {
+            result = m_audioRet;
         }
-    } else if (!result) {
-        // keep video error
-    } else {
-        result = m_audioRet;
-    }
 
-    muse::io::File::remove(tempVideoPath);
-    muse::io::File::remove(tempAudioPath);
+        muse::io::File::remove(tempVideoPath);
+        muse::io::File::remove(tempAudioPath);
+    }
 
     return result;
 }
