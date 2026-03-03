@@ -75,7 +75,11 @@ bool WidgetResizeHandler::isResizing() const
 
 int WidgetResizeHandler::widgetResizeHandlerMargin()
 {
+#ifdef Q_OS_WIN
+    return 8; // pixels
+#else
     return 4; // pixels
+#endif
 }
 
 bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
