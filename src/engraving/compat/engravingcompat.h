@@ -44,6 +44,5 @@ private:
     static void migrateNoteParens(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
-    static bool resetHookHeightSign(MasterScore* masterScore);
 };
 } // namespace mu::engraving::compat

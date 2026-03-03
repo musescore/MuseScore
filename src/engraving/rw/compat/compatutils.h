@@ -49,6 +49,7 @@ public:
     static const std::map<Sid, Sid> ALIGN_VALS_TO_CONVERT;
     static Sid positionStyleFromAlign(Sid align);
     static void setTextLineTextPositionFromAlign(TextLineBase* tl);
+    static void resetHookHeightSign(TextLineBase* tl);
     static void setMusicSymbolSize470(MStyle& style);
     static Spatium convertPre470FrameRadius(double frameRadius);
     static void doMigrateNoteParens(EngravingItem* item);

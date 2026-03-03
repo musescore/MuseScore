@@ -2804,6 +2804,7 @@ void TRead::read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::resetHookHeightSign(c);
     compat::CompatUtils::setTextLineTextPositionFromAlign(c);
 }
 
@@ -2909,6 +2910,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::resetHookHeightSign(h);
     compat::CompatUtils::setTextLineTextPositionFromAlign(h);
 
     h->styleChanged();
@@ -3077,6 +3079,7 @@ void TRead::read(LetRing* r, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::resetHookHeightSign(r);
     compat::CompatUtils::setTextLineTextPositionFromAlign(r);
 }
 
@@ -3406,6 +3409,7 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         readProperties(o, e, ctx);
     }
+    compat::CompatUtils::resetHookHeightSign(o);
     compat::CompatUtils::setTextLineTextPositionFromAlign(o);
     if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
@@ -3461,6 +3465,7 @@ void TRead::read(PalmMute* p, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::resetHookHeightSign(p);
     compat::CompatUtils::setTextLineTextPositionFromAlign(p);
 }
 
@@ -3608,6 +3613,7 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
             p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
         }
     }
+    compat::CompatUtils::resetHookHeightSign(p);
     compat::CompatUtils::setTextLineTextPositionFromAlign(p);
 }
 
@@ -4134,6 +4140,8 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::resetHookHeightSign(b);
     compat::CompatUtils::setTextLineTextPositionFromAlign(b);
 }
 
@@ -4470,6 +4478,7 @@ void TRead::read(Volta* v, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::resetHookHeightSign(v);
     compat::CompatUtils::setTextLineTextPositionFromAlign(v);
 }
 

@@ -982,6 +982,22 @@ void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
     }
 }
 
+void CompatUtils::resetHookHeightSign(TextLineBase* tl)
+{
+    if (!tl->placeBelow()) {
+        return;
+    }
+
+    if (!tl->isStyled(Pid::BEGIN_HOOK_HEIGHT)) {
+        Spatium beginHookHeight = tl->getProperty(Pid::BEGIN_HOOK_HEIGHT).value<Spatium>();
+        tl->setProperty(Pid::BEGIN_HOOK_HEIGHT, -beginHookHeight);
+    }
+    if (!tl->isStyled(Pid::END_HOOK_HEIGHT)) {
+        Spatium endHookHeight = tl->getProperty(Pid::END_HOOK_HEIGHT).value<Spatium>();
+        tl->setProperty(Pid::END_HOOK_HEIGHT, -endHookHeight);
+    }
+}
+
 void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
 {
     // Music symbols have their own point size in 4.7
