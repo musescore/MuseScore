@@ -39,6 +39,7 @@ public:
 private:
     struct BendTimeFactors {
         float startFactor = 0.f;
+        float targetFactor = 1.f;
         float endFactor = 1.f;
     };
 

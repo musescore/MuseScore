@@ -126,6 +126,9 @@ public:
     bool isSlack() const { return m_isSlack; }
     void setIsSlack(bool v) { m_isSlack = v; }
 
+    std::optional<float> targetTimeFactor() const { return m_targetTimeFactor; }
+    void setTargetTimeFactor(float v);
+
     struct LayoutData : public SLine::LayoutData
     {
     public:
@@ -162,6 +165,7 @@ private:
     DirectionV m_diveTabPos = DirectionV::AUTO;
     VibratoType m_dipVibratoType = VibratoType::NONE;
     bool m_isSlack = false;
+    std::optional<float> m_targetTimeFactor;
 };
 
 class GuitarBendText; // forward decl

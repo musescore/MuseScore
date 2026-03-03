@@ -249,20 +249,20 @@ void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const Re
     const BendTimeFactors factors = timeFactors(bend);
 
     // Hold the origin pitch
-    if (!RealIsNull(factors.startFactor)) {
-        dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration * factors.startFactor;
-        result.emplace_back(buildNoteEvent(dipNoteCtx));
-    }
+    dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration * factors.startFactor;
+    result.emplace_back(buildNoteEvent(dipNoteCtx));
 
     // Go down / up
     dipNoteCtx.pitchLevel += pitchOffset(bend);
-    dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration * factors.endFactor;
+    dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration * factors.targetFactor;
     result.emplace_back(buildNoteEvent(dipNoteCtx));
 
     // Go back to the origin pitch
-    dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration;
-    dipNoteCtx.pitchLevel = originPitchLevel;
-    result.emplace_back(buildNoteEvent(dipNoteCtx));
+    if (!RealIsEqual(factors.targetFactor, factors.endFactor)) {
+        dipNoteCtx.timestamp = ctx.nominalTimestamp + ctx.nominalDuration * factors.endFactor;
+        dipNoteCtx.pitchLevel = originPitchLevel;
+        result.emplace_back(buildNoteEvent(dipNoteCtx));
+    }
 }
 
 void BendsRenderer::renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
@@ -294,11 +294,18 @@ BendsRenderer::BendTimeFactors BendsRenderer::timeFactors(const GuitarBend* bend
     const float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
     const float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
 
-    IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
-        return BendTimeFactors { 0.f, 1.f };
+    float targetFactor = endFactor;
+    if (bend->targetTimeFactor().has_value()) {
+        targetFactor = std::clamp(bend->targetTimeFactor().value(), 0.f, 1.f);
     }
 
-    return BendTimeFactors { startFactor, endFactor };
+    IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)
+                     && RealIsEqualOrLess(startFactor, targetFactor)
+                     && RealIsEqualOrLess(targetFactor, endFactor)) {
+        return BendTimeFactors { 0.f, 1.f, 1.f };
+    }
+
+    return BendTimeFactors { startFactor, targetFactor, endFactor };
 }
 
 RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const RenderingContext& initialCtx)

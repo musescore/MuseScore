@@ -2012,9 +2012,10 @@
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>6</guitarBendType>
-                  <bendStartTimeFactor>0.25</bendStartTimeFactor>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>RoaBbjS5wHH_iYQZmjZjTzJ</eid>
+                  <bendTargetTimeFactor>0.25</bendTargetTimeFactor>
+                  <eid>Cwi+FvFQEAE_ZjnqyEuy3yL</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -2059,9 +2060,10 @@
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>6</guitarBendType>
-                  <bendStartTimeFactor>0.25</bendStartTimeFactor>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>wcLrk4ye58D_FbmDKa1EzSG</eid>
+                  <bendTargetTimeFactor>0.25</bendTargetTimeFactor>
+                  <eid>qfdvdyIEoIB_r8FiVIbZOJB</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>

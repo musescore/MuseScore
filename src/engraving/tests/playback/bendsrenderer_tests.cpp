@@ -445,12 +445,11 @@ TEST_F(Engraving_BendsRendererTests, Dip)
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
-    expectedPitchCurve.emplace(800, 0); // Hold A3
-    expectedPitchCurve.emplace(1600, -50); // Go down (-1/2)
-    expectedPitchCurve.emplace(3300, 0); // Go to the origin pitch
-    expectedPitchCurve.emplace(4100, 0); // Hold A3 (tied notes)
-    expectedPitchCurve.emplace(5000, -50); // Go down (-1/2)
-    expectedPitchCurve.emplace(6600, 0); // Go to the origin pitch
+    expectedPitchCurve.emplace(800, -50); // Go down (-1/2)
+    expectedPitchCurve.emplace(1600, 0); // Go to the origin pitch
+    expectedPitchCurve.emplace(3300, 0); // Hold A3 (tied notes)
+    expectedPitchCurve.emplace(4100, -50); // Go down (-1/2)
+    expectedPitchCurve.emplace(5000, 0); // Go to the origin pitch
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
