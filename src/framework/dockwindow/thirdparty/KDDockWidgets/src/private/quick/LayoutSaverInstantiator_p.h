@@ -33,6 +33,8 @@ class DOCKS_EXPORT LayoutSaverInstantiator
       public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
+
 public:
     explicit LayoutSaverInstantiator(QObject *parent = nullptr);
     ~LayoutSaverInstantiator() override;
