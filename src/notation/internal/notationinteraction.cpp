@@ -852,24 +852,77 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
         return;
     }
 
-    EngravingItem* current = selection()->element();
-    if (!current || !(current->isNote() || current->isRest())) {
+    auto removeDuplicates = [](std::vector<EngravingItem*>& elements) {
+        std::sort(elements.begin(), elements.end());
+        auto it = std::unique(elements.begin(), elements.end());
+        elements.erase(it, elements.end());
+    };
+
+    auto& _score = *score();
+    auto& selection = _score.selection();
+    EngravingItem* currentSingle = selection.element();
+    EngravingItem* oldSingle = currentSingle;
+    bool isRange = selection.isRange();
+    std::vector<EngravingItem*> notes;
+
+    // Single traverse:
+    if (currentSingle && (currentSingle->isNote() || currentSingle->isRest())) {
+        EngravingItem* newSingle = _score.moveAlt(currentSingle, d);
+        if (newSingle == currentSingle) {
+            return;
+        }
+        while (newSingle && newSingle->isRest() && toRest(newSingle)->isGap()) {
+            newSingle = _score.moveAlt(newSingle, d);
+            if (newSingle == oldSingle) {
+                break;
+            }
+        }
+        if (newSingle) {
+            select({ newSingle }, SelectType::SINGLE, newSingle->staffIdx());
+            showItem(newSingle);
+        }
         return;
     }
-
-    EngravingItem* chordElem;
-    if (d == MoveDirection::Up) {
-        chordElem = score()->upAlt(current);
-    } else {
-        chordElem = score()->downAlt(current);
+    // Range/List traverse:
+    else {
+        for (auto item : selection.elements()) {
+            if (item->isNote()) {
+                auto selectedNote = toNote(item);
+                if (isRange) {
+                    auto newSelection = (d == MoveDirection::Down)
+                                        ? selectedNote->chord()->downNote()
+                                        : selectedNote->chord()->upNote();
+                    notes.emplace_back(newSelection);
+                } else { // List
+                    auto newSelection = _score.moveAlt(selectedNote, d);
+                    bool keepSelection = !newSelection;
+                    if (newSelection) {
+                        if (newSelection->isNote()) {
+                            auto newNote = toNote(newSelection);
+                            bool sameChord = (newNote->chord() == selectedNote->chord());
+                            if (!sameChord) {
+                                keepSelection = true;
+                            }
+                        } else if (newSelection->isRest()) {
+                            keepSelection = true;
+                        }
+                    }
+                    notes.emplace_back(keepSelection ? selectedNote : newSelection);
+                }
+            }
+            removeDuplicates(notes);
+        }
     }
 
-    if (chordElem == current) {
+    if (!notes.empty()) {
+        selection.clear();
+        for (auto& note : notes) {
+            select({ note }, SelectType::ADD, note->staffIdx());
+            showItem(note);
+        }
+        // score.update();
         return;
     }
-
-    select({ chordElem }, SelectType::SINGLE, chordElem->staffIdx());
-    showItem(chordElem);
 }
 
 void NotationInteraction::moveSegmentSelection(MoveDirection d)
