@@ -38,7 +38,7 @@ public:
     static void computeTextHighResShape(const TextBase* item, TextBase::LayoutData* ldata);
     static void layoutTextBlock(TextBlock* item, const TextBase* t);
 
-    static void substituteMusicSymbolFontWithMusicSymbolText(muse::draw::Font& font, double size);
+    static void substituteMusicFont(muse::draw::Font& font, double size);
 
 private:
     static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata);

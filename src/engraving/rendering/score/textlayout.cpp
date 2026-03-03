@@ -314,7 +314,7 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
         TextFragment& f = *fi;
         f.pos.setX(x);
         Font font = f.font(t);
-        substituteMusicSymbolFontWithMusicSymbolText(font, f.format.fontSize());
+        substituteMusicFont(font, f.calculatedFontSize(t));
         FontMetrics fm(font);
         if (f.format.valign() != VerticalAlignment::AlignNormal) {
             double voffset = fm.xHeight() / SUBSCRIPT_SIZE;   // use original height
@@ -390,14 +390,15 @@ void TextLayout::layoutTextBlock(TextBlock* item, const TextBase* t)
     item->setLineSpacing(lineSpacing);
 }
 
-void TextLayout::substituteMusicSymbolFontWithMusicSymbolText(Font& font, double size)
+void TextLayout::substituteMusicFont(Font& font, double size)
 {
-    if (font.type() != Font::Type::MusicSymbol) {
-        return;
+    if (font.type() == Font::Type::MusicSymbol) {
+        String textFontId(font.family().id() + String(u" Text"));
+        font.setFamily(textFontId, Font::Type::MusicSymbolText);
+        font.setPointSizeF(size);
+    } else if (font.type() == Font::Type::MusicSymbolText) {
+        font.setPointSizeF(size);
     }
-    String textFontId(font.family().id() + String(u" Text"));
-    font.setFamily(textFontId, Font::Type::MusicSymbolText);
-    font.setPointSizeF(size);
 }
 
 double TextLayout::musicSymbolBaseLineAdjust(const TextBlock* block, const TextBase* t, const TextFragment& f,

@@ -284,7 +284,7 @@ RectF TextCursor::cursorRect() const
     Font _font = fragment ? fragment->font(m_text) : m_text->font();
     if (fragment) {
         // Ensure the cursor height matches that of the associated text font
-        TextLayout::substituteMusicSymbolFontWithMusicSymbolText(_font, fragment->calculatedFontSize(m_text));
+        TextLayout::substituteMusicFont(_font, fragment->calculatedFontSize(m_text));
     }
     const FontMetrics fm(_font);
 
