@@ -104,6 +104,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>H_H</eid>
               </HairPin>
             <next>
@@ -732,6 +734,8 @@
             <Spanner type="HairPin">
               <HairPin>
                 <subtype>0</subtype>
+                <beginHookHeight>-1.9</beginHookHeight>
+                <endHookHeight>-1.9</endHookHeight>
                 <eid>5B_5B</eid>
                 </HairPin>
               <next>

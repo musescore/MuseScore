@@ -129,6 +129,8 @@
             <HairPin>
               <subtype>0</subtype>
               <veloChange>10</veloChange>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>R_R</eid>
               </HairPin>
             <next>
