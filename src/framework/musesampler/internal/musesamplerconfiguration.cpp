@@ -33,20 +33,30 @@ void MuseSamplerConfiguration::init()
     settings()->setDefaultValue(USE_LEGACY_AUDITION, Val(false));
 }
 
-#if defined(Q_OS_LINUX)
 muse::io::path_t MuseSamplerConfiguration::libraryPath() const
+{
+    // Used on the backend
+    if (const char* path = std::getenv("MUSESAMPLER_PATH")) {
+        return io::path_t(path);
+    }
+
+    return defaultLibraryPath();
+}
+
+#if defined(Q_OS_LINUX)
+muse::io::path_t MuseSamplerConfiguration::defaultLibraryPath() const
 {
     return globalConfig()->genericDataPath() + "/MuseSampler/lib/libMuseSamplerCoreLib.so";
 }
 
 #elif defined(Q_OS_MAC)
-muse::io::path_t MuseSamplerConfiguration::libraryPath() const
+muse::io::path_t MuseSamplerConfiguration::defaultLibraryPath() const
 {
     return globalConfig()->genericDataPath() + "/MuseSampler/lib/libMuseSamplerCoreLib.dylib";
 }
 
 #else
-muse::io::path_t MuseSamplerConfiguration::libraryPath() const
+muse::io::path_t MuseSamplerConfiguration::defaultLibraryPath() const
 {
     return globalConfig()->genericDataPath() + "/MuseSampler/lib/MuseSamplerCoreLib.dll";
 }
