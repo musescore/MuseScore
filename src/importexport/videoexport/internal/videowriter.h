@@ -28,7 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
-#include "media/ivideoencoder.h"
+#include "media/ivideoencoderresolver.h"
 #include "../ivideoexportconfiguration.h"
 
 #include "project/inotationwriter.h"
@@ -41,7 +41,7 @@ class VideoWriter : public project::INotationWriter, public muse::Contextable, p
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::ContextInject<muse::IApplication> application = { this };
-    muse::ContextInject<muse::media::IVideoEncoder> videoEncoder = { this };
+    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
     muse::ContextInject<project::INotationWritersRegister> writers = { this };
 
 public:

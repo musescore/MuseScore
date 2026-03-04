@@ -103,7 +103,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
 
     if (withAudio) {
         if (result && m_audioRet) {
-            if (!videoEncoder()->muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
+            if (!videoEncodeResolver()->currentVideoEncoder()->muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
                 result = make_ret(muse::Ret::Code::UnknownError);
             }
         } else if (!result) {
@@ -315,7 +315,8 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
 
 void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
 {
-    if (!videoEncoder()->open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
+    if (!videoEncodeResolver()->currentVideoEncoder()->open(filePath, config.width, config.height, config.bitrate, config.fps / 2,
+                                                            config.fps)) {
         LOGE() << "failed open encoder";
         m_writeRet = make_ret(muse::Ret::Code::UnknownError);
         m_isCompleted = true;
@@ -378,7 +379,7 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
     for (int f = 0; f < frameCount; f++) {
         if (m_abort) {
-            videoEncoder()->close();
+            videoEncodeResolver()->currentVideoEncoder()->close();
             m_writeRet = make_ret(muse::Ret::Code::Cancel);
             m_progress.finish(make_ret(muse::Ret::Code::Cancel));
             return;
@@ -419,10 +420,10 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
         painter.fillRect(cursorAbsRect, CURSOR_COLOR);
 
-        videoEncoder()->encodeImage(frame);
+        videoEncodeResolver()->currentVideoEncoder()->encodeImage(frame);
     }
 
-    videoEncoder()->close();
+    videoEncodeResolver()->currentVideoEncoder()->close();
 
     m_writeRet = muse::make_ok();
     m_progress.finish(muse::make_ok());

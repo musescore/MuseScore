@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2025 MuseScore Limited
  *
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
  * published by the Free Software Foundation.
  *
@@ -17,27 +17,26 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleinterface.h"
+
+#include "io/path.h"
+#include "async/channel.h"
 
 namespace muse::media {
-class MediaConfiguration;
-class VideoEncoderResolver;
-
-class MediaModule : public modularity::IModuleSetup
+class IMediaConfiguration : MODULE_GLOBAL_INTERFACE
 {
+    INTERFACE_ID(IMediaConfiguration)
+
 public:
-    std::string moduleName() const override;
+    virtual ~IMediaConfiguration() = default;
 
-    void registerExports() override;
-    void onInit(const IApplication::RunMode& mode) override;
-
-private:
-    std::shared_ptr<MediaConfiguration> m_configuration;
-    std::shared_ptr<VideoEncoderResolver> m_videoEncoderResolver;
+    virtual io::path_t ffmpegLibsDir() const = 0;
+    virtual void setFFmpegLibsDir(const io::path_t& path) = 0;
+    virtual async::Channel<io::path_t> ffmpegLibsDirChanged() const = 0;
 };
 }

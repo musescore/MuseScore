@@ -20,19 +20,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "videoencoderresolver.h"
 
-#include <stdint.h>
+#include "ffmpegloader.h"
+#include "videoencoder.h"
 
-extern "C" {
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libavutil/mathematics.h"
-#include "libavutil/rational.h"
-#include "libavutil/avstring.h"
-#include "libavutil/opt.h"
-#include "libswscale/swscale.h"
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 6, 100)
-#include "libavutil/imgutils.h"
-#endif
+using namespace muse::media;
+
+void VideoEncoderResolver::init()
+{
+    loadFFmpeg(configuration()->ffmpegLibsDir());
+}
+
+void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
+{
+    auto ffmpegLibHandler = FFmpegLoader::load(ffmpegLibsDir);
+    if (!ffmpegLibHandler) {
+        return;
+    }
+
+    std::shared_ptr<VideoEncoder> encoder = std::make_shared<VideoEncoder>(ffmpegLibHandler);
+    setCurrentVideoEncoder(encoder);
+}
+
+IVideoEncoderPtr VideoEncoderResolver::currentVideoEncoder() const
+{
+    return m_encoder;
+}
+
+void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
+{
+    m_encoder = std::move(encoder);
 }

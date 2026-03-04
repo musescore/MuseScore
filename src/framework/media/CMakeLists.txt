@@ -18,20 +18,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_media ALIAS muse::media)
+muse_create_module(muse_media ALIAS muse::media NO_UNITY)
 
 target_sources(muse_media PRIVATE
     mediamodule.cpp
     mediamodule.h
+    imediaconfiguration.h
+
     ivideoencoder.h
+    ivideoencoderresolver.h
+
+    internal/mediaconfiguration.cpp
+    internal/videoencoderresolver.cpp
+    internal/mediaconfiguration.h
+    internal/videoencoderresolver.h
+
+    internal/ffmpegloader.cpp
+    internal/ffmpegloader.h
+    internal/ffmpegutils.h
+
+    internal/ffmpegfunctions.cpp
+    internal/ffmpeglibhandler.cpp
+    internal/ffmpeglibhandler.h
 
     internal/videoencoder.cpp
     internal/videoencoder.h
-    internal/ffmpeg.h
 )
 
-# FFmpeg
-find_package(FFmpeg REQUIRED)
+target_include_directories(muse_media PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v8)
 
-target_include_directories(muse_media PRIVATE ${FFMPEG_INCLUDE_DIRS})
-target_link_libraries(muse_media PRIVATE ${FFMPEG_LIBRARIES})
+set(MODULE_USE_PCH OFF)
+set(MODULE_USE_UNITY OFF)
