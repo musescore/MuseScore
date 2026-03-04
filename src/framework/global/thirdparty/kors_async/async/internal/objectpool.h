@@ -57,6 +57,7 @@ public:
             if constexpr (std::is_pointer_v<T>) {
                 T o = m_objs.at(i);
                 delete o;
+                m_objs[i] = nullptr;
             }
 
             m_objs[i] = T{};
