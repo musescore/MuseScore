@@ -1995,6 +1995,16 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>3cEIlKqgG/E_fij1aWmTgAI</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>8ius4bbJOsI_9XXxPpaIHoK</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -2020,25 +2030,38 @@
                 </Spanner>
               </Note>
             </Chord>
-          <Rest>
-            <eid>cpCKZKwCjqO_JY+0Vr77PDF</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Chord>
-            <eid>shE1GcLsvvG_kbBZahD5UBG</eid>
+            <eid>l/+DuOvPeS_xGl9c/fKT+M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>QTYuu6zZFzJ_12SCXUE6dJK</eid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>4</fret>
+              <eid>SzlcwPt7qZK_xR0+QukbbkF</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>tIomOb3tgbH_dcpGEPui2</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
               <string>2</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
-                  <guitarBendType>7</guitarBendType>
-                  <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
-                  <eid>9u7738nOMPC_ErFck52RPWF</eid>
+                  <guitarBendType>6</guitarBendType>
+                  <bendStartTimeFactor>0.25</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.5</bendEndTimeFactor>
+                  <eid>wcLrk4ye58D_FbmDKa1EzSG</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -2054,14 +2077,65 @@
                 </Spanner>
               </Note>
             </Chord>
+          <Chord>
+            <eid>shE1GcLsvvG_kbBZahD5UBG</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>QTYuu6zZFzJ_12SCXUE6dJK</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Chord>
+            <eid>KfwaYrF3qWM_z8ctzuDJu7B</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>pyac1UWoJnJ_rsVAHE4GA5M</eid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>7</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
+                  <eid>bZBINJ+CtgB_3S5QiArfy5H</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
           <Rest>
-            <eid>4WdLQW6i7WP_zFmgGHsE09I</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <eid>pX5a9yEmKtH_0LqCtviiFsK</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>C+Jh5mr31sK_ThNKD0G46jC</eid>
+            <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>

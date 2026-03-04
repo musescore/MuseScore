@@ -48,6 +48,21 @@ static const Chord* principalChord(const Chord* chord)
     return chord;
 }
 
+static const GuitarBend* currentBend(const Note* currNote)
+{
+    const GuitarBend* diveBack = currNote->diveBack();
+    if (diveBack && diveBack->playSpanner() && diveBack->bendType() == GuitarBendType::SCOOP) {
+        return diveBack;
+    }
+
+    return currNote->bendFor();
+}
+
+static const Note* nextNote(const Note* currNote, const GuitarBend* currBend)
+{
+    return currBend && currBend->endNote() != currNote ? currBend->endNote() : nullptr;
+}
+
 static mpe::pitch_level_t pitchOffset(const GuitarBend* bend)
 {
     return mpe::PITCH_LEVEL_STEP / 2 * bend->bendAmountInQuarterTones();
@@ -55,22 +70,23 @@ static mpe::pitch_level_t pitchOffset(const GuitarBend* bend)
 
 bool BendsRenderer::isMultibendPart(const Note* note)
 {
-    if (note->bendFor() || note->bendBack()) {
-        return true;
+    if (!note->tieFor() && !note->tieBack()) {
+        return note->bendFor() || note->bendBack();
     }
 
-    if (note->tieFor()) {
-        const Note* lastTiedNote = note->lastTiedNote(IGNORE_UNPLAYABLE);
-        if (lastTiedNote && lastTiedNote->bendFor()) {
-            return true;
-        }
-    }
+    const Note* currNote = note->firstTiedNote(IGNORE_UNPLAYABLE);
 
-    if (note->tieBack()) {
-        const Note* firstTiedNote = note->firstTiedNote(IGNORE_UNPLAYABLE);
-        if (firstTiedNote && firstTiedNote->bendBack()) {
+    while (currNote && currNote->play()) {
+        if (currNote->bendFor() || note->bendBack()) {
             return true;
         }
+
+        const Tie* tieFor = currNote->tieFor();
+        if (!tieFor || !tieFor->playSpanner()) {
+            return false;
+        }
+
+        currNote = tieFor->endNote();
     }
 
     return false;
@@ -115,27 +131,21 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
     mpe::PlaybackEventList bendEvents;
     BendTimeFactorMap bendTimeFactorMap;
 
-    auto nextNote = [&currNote, &currBend]() {
-        return currBend && currBend->endNote() != currNote ? currBend->endNote() : nullptr;
-    };
-
     while (currNote) {
         RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
-        renderNote(currNote, currNoteCtx, bendEvents);
-        if (bendEvents.empty()) {
-            break;
+        if (!currNote->tieBack() || !currNote->tieBack()->playSpanner()) {
+            renderNote(currNote, currNoteCtx, bendEvents);
         }
 
-        const GuitarBend* diveBack = currNote->diveBack();
-        if (diveBack && diveBack->bendType() == GuitarBendType::SCOOP) {
-            currBend = diveBack;
-        } else if (currNote->tieFor()) {
-            currBend = currNote->lastTiedNote(IGNORE_UNPLAYABLE)->bendFor();
-        } else {
-            currBend = currNote->bendFor();
+        currBend = currentBend(currNote);
+
+        // No bend on this note, but it's tied to the next one — check that note as well
+        if (!currBend && currNote->tieFor() && currNote->tieFor()->playSpanner()) {
+            currNote = currNote->tieFor()->endNote();
+            continue;
         }
 
-        if (!currBend) {
+        if (!currBend || !currBend->playSpanner() || bendEvents.empty()) {
             break;
         }
 
@@ -146,13 +156,18 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
 
         if (currBend->bendType() == GuitarBendType::DIP) {
             renderDip(currNote, currBend, currNoteCtx, bendEvents);
+
+            if (currNote->tieFor() && currNote->tieFor()->playSpanner()) {
+                currNote = currNote->tieFor()->endNote();
+                continue;
+            }
             break;
         }
 
         if (currBend->bendType() == GuitarBendType::SCOOP) {
             renderScoop(currNote, currBend, currNoteCtx, bendEvents);
             currBend = currNote->bendFor();
-            currNote = nextNote();
+            currNote = nextNote(currNote, currBend);
             continue;
         }
 
@@ -163,7 +178,7 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
             bendTimeFactorMap.insert_or_assign(timestampTo, timeFactors(currBend));
         }
 
-        currNote = nextNote();
+        currNote = nextNote(currNote, currBend);
     }
 
     if (!bendEvents.empty()) {
@@ -308,6 +323,7 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
     const mpe::NoteEvent& startNoteEvent = std::get<mpe::NoteEvent>(bendNoteEvents.front());
     noteCtx.articulations = startNoteEvent.expressionCtx().articulations;
     noteCtx.timestamp = startNoteEvent.arrangementCtx().actualTimestamp;
+    noteCtx.duration = startNoteEvent.arrangementCtx().actualDuration;
 
     PitchOffsets pitchOffsets;
     pitchOffsets.reserve(bendNoteEvents.size());
@@ -378,8 +394,8 @@ mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t noteTimestamp, m
         prevNominalOffsetPrecent = nominalOffsetPercent;
 
         const auto& prevOffset = result.rbegin();
-        result.insert_or_assign(actualOffsetStartPercent, prevOffset->second);
-        result.insert_or_assign(actualOffsetEndPercent, pair.second);
+        result.insert_or_assign(std::min(actualOffsetStartPercent, mpe::HUNDRED_PERCENT), prevOffset->second);
+        result.insert_or_assign(std::min(actualOffsetEndPercent, mpe::HUNDRED_PERCENT), pair.second);
     }
 
     return result;
