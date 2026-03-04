@@ -5355,10 +5355,24 @@ void NotationInteraction::repeatSelection()
         return;
     }
 
+    //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
+    //! fully compatible with list selections right now...
     if (selection.isList()) {
-        //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
-        //! fully compatible with list selections right now...
-        repeatListSelection(selection);
+        const Fraction& firstTick = selection.tickStart();
+        const Fraction& lastTick = selection.tickEnd();
+        // Only "single-tick" list selections are currently supported...
+        if (firstTick != lastTick) {
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            checkAndShowError();
+            return;
+        }
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        if (!score()->cmdRepeatListSelection()) {
+            rollback();
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            return;
+        }
+        apply();
         return;
     }
 
@@ -5400,82 +5414,6 @@ void NotationInteraction::repeatSelection()
         showItem(cr);
         break;
     }
-}
-
-void NotationInteraction::repeatListSelection(const Selection& selection)
-{
-    const Fraction& firstTick = selection.tickStart();
-    const Fraction& lastTick = selection.tickEnd();
-    // Only "single-tick" list selections are currently supported...
-    if (firstTick != lastTick) {
-        MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-        checkAndShowError();
-        return;
-    }
-
-    startEdit(TranslatableString("undoableAction", "Repeat selection"));
-
-    InputState& is = score()->inputState();
-
-    std::vector<Note*> notes = selection.noteList();
-    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
-
-    std::vector<EngravingItem*> toSelect;
-    std::unordered_set<const Chord*> foundChords;
-
-    // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
-    // new notes have been created we can call cmdAddParentheses on each group...
-    using NoteList = std::list<Note*>;
-    std::unordered_map</*leftParen*/ const Parenthesis*, NoteList> parenMap;
-
-    for (Note* n : notes) {
-        if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
-            continue;
-        }
-
-        const Chord* sourceChord = n->chord();
-        is.setTrack(sourceChord->track());
-
-        const bool addFlag = muse::contains(foundChords, sourceChord);
-        if (!addFlag) {
-            // If the note doesn't belong to a chord we've seen before...
-            foundChords.emplace(sourceChord);
-            is.setSegment(sourceChord->segment());
-            is.moveToNextInputPos();
-            is.setDuration(sourceChord->durationType());
-        }
-
-        NoteVal nval = n->noteVal();
-        Note* newNote = score()->addPitch(nval, addFlag);
-        IF_ASSERT_FAILED(newNote) {
-            continue;
-        }
-
-        newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
-        toSelect.push_back(newNote);
-
-        const Parenthesis* leftParen = n->parenInfo() ? n->parenInfo()->leftParen : nullptr;
-        if (!leftParen) {
-            continue;
-        }
-
-        auto search = parenMap.find(leftParen);
-        if (search != parenMap.end()) {
-            NoteList& nl = search->second;
-            nl.emplace_back(newNote);
-            continue;
-        }
-
-        parenMap.emplace(leftParen, NoteList { newNote });
-    }
-
-    for (auto& pair : parenMap) {
-        score()->cmdAddParenthesesToNotes(pair.second);
-    }
-
-    score()->select(toSelect, SelectType::ADD);
-
-    apply();
 }
 
 void NotationInteraction::copyLyrics()
