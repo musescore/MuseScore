@@ -773,6 +773,8 @@ public:
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
 
+    bool cmdRepeatListSelection();
+
     BeatType tick2beatType(const Fraction& tick) const;
 
     int mscVersion() const { return m_mscVersion; }

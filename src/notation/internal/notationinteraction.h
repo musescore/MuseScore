@@ -447,8 +447,6 @@ private:
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
 
-    void repeatListSelection(const engraving::Selection& selection);
-
     void doFinishAddFretboardDiagram();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
