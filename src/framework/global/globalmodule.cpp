@@ -81,7 +81,7 @@ public:
 
     modularity::ContextPtr setupNewContext(const StringList&) override { return nullptr; }
     void destroyContext(const modularity::ContextPtr&) override {}
-    int contextCount() const override { return 0; }
+    size_t contextCount() const override { return 0; }
     std::vector<modularity::ContextPtr> contexts() const override { return {}; }
 };
 

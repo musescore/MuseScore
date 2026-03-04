@@ -36,7 +36,7 @@ public:
     virtual ~IMultiWindowsProvider() = default;
 
     // Windows info
-    virtual int windowCount() const = 0;
+    virtual size_t windowCount() const = 0;
     virtual bool isFirstWindow() const = 0;
 
     // Project opening

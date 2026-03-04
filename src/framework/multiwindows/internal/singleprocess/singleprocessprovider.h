@@ -47,7 +47,7 @@ public:
     void init() {}
 
     // Windows info
-    int windowCount() const override;
+    size_t windowCount() const override;
     bool isFirstWindow() const override;
 
     // Project opening

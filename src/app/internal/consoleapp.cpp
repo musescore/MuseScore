@@ -232,7 +232,7 @@ void ConsoleApp::destroyContext(const modularity::ContextPtr&)
     // Console app has only one context, no-op
 }
 
-int ConsoleApp::contextCount() const
+size_t ConsoleApp::contextCount() const
 {
     return m_context ? 1 : 0;
 }
