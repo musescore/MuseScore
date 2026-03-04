@@ -21,6 +21,7 @@
  */
 #include "languagesconfiguration.h"
 
+#include <QStringList>
 #include <QUrl>
 
 #include "global/configreader.h"
@@ -93,4 +94,14 @@ io::path_t LanguagesConfiguration::builtinLanguageFilePath(const QString& resour
 io::path_t LanguagesConfiguration::userLanguageFilePath(const QString& resourceName, const QString& languageCode) const
 {
     return languagesUserAppDataPath() + QString("/%1_%2.qm").arg(resourceName, languageCode);
+}
+
+QStringList LanguagesConfiguration::languageResourceNames() const
+{
+    const Val& val = m_config.value("resource_names");
+    QStringList result;
+    for (const Val& item : val.toList()) {
+        result.append(item.toQString());
+    }
+    return result;
 }
