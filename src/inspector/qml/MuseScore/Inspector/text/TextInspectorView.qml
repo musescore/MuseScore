@@ -186,12 +186,14 @@ InspectorSectionView {
                 navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
 
                 isModified: root.model ? (root.model.horizontalAlignment.isModified
-                                          || root.model.verticalAlignment.isModified) : false
+                                          || root.model.verticalAlignment.isModified 
+                                          || root.model.horizontalPosition.isModified) : false
 
                 onRequestResetToDefault: {
                     if (root.model) {
                         root.model.horizontalAlignment.resetToDefault()
                         root.model.verticalAlignment.resetToDefault()
+                        root.model.horizontalPosition.resetToDefault()
                     }
                 }
 
@@ -199,6 +201,8 @@ InspectorSectionView {
                     if (root.model) {
                         root.model.horizontalAlignment.applyToStyle()
                         root.model.verticalAlignment.applyToStyle()
+                        root.model.horizontalPosition.applyToStyle()
+
                     }
                 }
 
