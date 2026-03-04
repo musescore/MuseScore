@@ -5262,10 +5262,24 @@ void NotationInteraction::repeatSelection()
         return;
     }
 
+    //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
+    //! fully compatible with list selections right now...
     if (selection.isList()) {
-        //! NOTE: Ideally we would use our copy-paste logic for this case, but this isn't
-        //! fully compatible with list selections right now...
-        repeatListSelection(selection);
+        const Fraction& firstTick = selection.tickStart();
+        const Fraction& lastTick = selection.tickEnd();
+        // Only "single-tick" list selections are currently supported...
+        if (firstTick != lastTick) {
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            checkAndShowError();
+            return;
+        }
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        if (!score()->cmdRepeatListSelection()) {
+            rollback();
+            MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
+            return;
+        }
+        apply();
         return;
     }
 
@@ -5283,77 +5297,26 @@ void NotationInteraction::repeatSelection()
     if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
         endSegment = endSegment->next1(SegmentType::ChordRest);
     }
-    if (endSegment) {
-        for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
-            EngravingItem* e = endSegment->element(track);
-            if (e) {
-                startEdit(TranslatableString("undoableAction", "Repeat selection"));
-                ChordRest* cr = toChordRest(e);
-                if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
-                    rollback();
-                    checkAndShowError();
-                    return;
-                }
-                apply();
-
-                showItem(cr);
-                break;
-            }
-        }
-    }
-}
-
-void NotationInteraction::repeatListSelection(const Selection& selection)
-{
-    const Fraction& firstTick = selection.tickStart();
-    const Fraction& lastTick = selection.tickEnd();
-    // Only "single-tick" list selections are currently supported...
-    if (firstTick != lastTick) {
-        MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
-        checkAndShowError();
+    if (!endSegment) {
         return;
     }
-
-    startEdit(TranslatableString("undoableAction", "Repeat selection"));
-
-    InputState& is = score()->inputState();
-
-    std::vector<Note*> notes = selection.noteList();
-    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
-
-    std::vector<EngravingItem*> toSelect;
-    std::unordered_set<const Chord*> foundChords;
-    for (Note* n : notes) {
-        if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
+    for (track_idx_t track = staff2track(dStaff); track < staff2track(dStaff + 1); ++track) {
+        EngravingItem* e = endSegment->element(track);
+        if (!e) {
             continue;
         }
-
-        const Chord* sourceChord = n->chord();
-        is.setTrack(sourceChord->track());
-
-        const bool addFlag = muse::contains(foundChords, sourceChord);
-        if (!addFlag) {
-            // If the note doesn't belong to a chord we've seen before...
-            foundChords.emplace(sourceChord);
-            is.setSegment(sourceChord->segment());
-            if (score()->inputState().endOfScore()) {
-                continue;
-            }
-            is.moveToNextInputPos();
-            is.setDuration(sourceChord->durationType());
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        ChordRest* cr = toChordRest(e);
+        if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+            rollback();
+            checkAndShowError();
+            return;
         }
+        apply();
 
-        NoteVal nval = n->noteVal();
-        Note* newNote = score()->addPitch(nval, addFlag);
-        IF_ASSERT_FAILED(newNote) {
-            continue;
-        }
-        newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
-        toSelect.push_back(newNote);
+        showItem(cr);
+        break;
     }
-    score()->select(toSelect, SelectType::ADD);
-
-    apply();
 }
 
 void NotationInteraction::copyLyrics()

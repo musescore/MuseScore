@@ -279,6 +279,87 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
     rw::RWRegister::reader()->pasteSymbols(e, dst);
 }
 
+bool Score::cmdRepeatListSelection()
+{
+    InputState& is = inputState();
+
+    std::vector<Note*> notes = m_selection.noteList();
+    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
+
+    std::vector<EngravingItem*> toSelect;
+    std::unordered_set<const Chord*> foundChords;
+
+    // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
+    // new notes have been created we can call cmdAddParentheses on each group...
+    using NoteList = std::list<Note*>;
+    std::unordered_map</*leftParen*/ const Parenthesis*, NoteList> parenMap;
+
+    for (Note* n : notes) {
+        if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
+            continue;
+        }
+
+        const Chord* sourceChord = n->chord();
+        is.setTrack(sourceChord->track());
+
+        const bool addFlag = muse::contains(foundChords, sourceChord);
+        if (!addFlag) {
+            // If the note doesn't belong to a chord we've seen before...
+            foundChords.emplace(sourceChord);
+            is.setSegment(sourceChord->segment());
+            if (inputState().endOfScore()) {
+                continue;
+            }
+            is.moveToNextInputPos();
+            is.setDuration(sourceChord->durationType());
+        }
+
+        NoteVal nval = n->noteVal();
+        Note* newNote = addPitch(nval, addFlag);
+        IF_ASSERT_FAILED(newNote) {
+            continue;
+        }
+
+        newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
+        toSelect.push_back(newNote);
+
+        const Parenthesis* leftParen = n->parenthesisInfo() ? n->parenthesisInfo()->leftParen() : nullptr;
+        if (!leftParen) {
+            continue;
+        }
+
+        NoteList notesForParen;
+        notesForParen.emplace_back(newNote);
+
+        // All tied notes should be parenthesized...
+        Tie* tie = newNote->tieBack();
+        while (tie) {
+            Note* tiedNote = tie->startNote();
+            if (!tiedNote) {
+                break;
+            }
+            notesForParen.emplace_back(tiedNote);
+            tie = tiedNote->tieBack();
+        }
+
+        auto search = parenMap.find(leftParen);
+        if (search != parenMap.end()) {
+            NoteList& nl = search->second;
+            nl.insert(nl.end(), notesForParen.begin(), notesForParen.end());
+            continue;
+        }
+
+        parenMap.emplace(leftParen, notesForParen);
+    }
+
+    for (auto& pair : parenMap) {
+        cmdAddParenthesesToNotes(pair.second);
+    }
+
+    select(toSelect, SelectType::ADD);
+    return !toSelect.empty();
+}
+
 static ChordRest* replaceWithRest(ChordRest* target)
 {
     target->score()->undoRemoveElement(target);
