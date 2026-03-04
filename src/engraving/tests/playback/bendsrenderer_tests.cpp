@@ -422,7 +422,7 @@ TEST_F(Engraving_BendsRendererTests, BendOnTiedNotes)
 }
 
 /*!
- * @details Render a quarter note (A3) with a dip
+ * @details Render 3 tied quarter note (A3) with 2 dips on them (on the 1st and 2nd notes)
  */
 TEST_F(Engraving_BendsRendererTests, Dip)
 {
@@ -445,9 +445,12 @@ TEST_F(Engraving_BendsRendererTests, Dip)
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
-    expectedPitchCurve.emplace(2500, 0); // Hold A3
+    expectedPitchCurve.emplace(800, 0); // Hold A3
+    expectedPitchCurve.emplace(1600, -50); // Go down (-1/2)
+    expectedPitchCurve.emplace(3300, 0); // Go to the origin pitch
+    expectedPitchCurve.emplace(4100, 0); // Hold A3 (tied notes)
     expectedPitchCurve.emplace(5000, -50); // Go down (-1/2)
-    expectedPitchCurve.emplace(10000, 0); // Go to the origin pitch
+    expectedPitchCurve.emplace(6600, 0); // Go to the origin pitch
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
@@ -458,7 +461,7 @@ TEST_F(Engraving_BendsRendererTests, Dip)
 
     const ArticulationMeta& meta = artIt->second.meta;
     EXPECT_EQ(meta.timestamp, timestampFromTicks(s_score, note->tick().ticks()));
-    EXPECT_EQ(meta.overallDuration, QUARTER_NOTE_DURATION);
+    EXPECT_EQ(meta.overallDuration, QUARTER_NOTE_DURATION * 3); // 3 tied quarter notes
 }
 
 /*!
@@ -467,7 +470,7 @@ TEST_F(Engraving_BendsRendererTests, Dip)
 TEST_F(Engraving_BendsRendererTests, Scoop)
 {
     // [GIVEN] Quarter note with a slight bend
-    const Chord* chord = findChord(1440, DIVES_TRACK);
+    const Chord* chord = findChord(1920, DIVES_TRACK);
     ASSERT_TRUE(chord);
     ASSERT_EQ(chord->notes().size(), 1);
     const Note* note = chord->notes().front();
