@@ -69,9 +69,10 @@ private:
         std::thread::id threadId;
         std::vector<std::shared_ptr<Port> > ports;
         std::atomic<bool> locked = false;
+        std::atomic<std::thread::id> lockedBy;
 
-        bool tryLock();
-        void lock();
+        bool tryLock(const std::thread::id& th);
+        void lock(const std::thread::id& th);
         void unlock();
     };
 
