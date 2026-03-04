@@ -29,7 +29,7 @@ class MultiWindowsStubProvider : public IMultiWindowsProvider
 public:
     MultiWindowsStubProvider() = default;
 
-    int windowCount() const override { return 1; }
+    size_t windowCount() const override { return 1; }
     bool isFirstWindow() const override { return true; }
 
     // Project opening

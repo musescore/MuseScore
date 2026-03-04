@@ -33,9 +33,9 @@ using namespace muse::mi;
 
 static const std::string pname = "mi";
 
-int SingleProcessProvider::windowCount() const
+size_t SingleProcessProvider::windowCount() const
 {
-    return std::max(1, application()->contextCount());
+    return std::max(static_cast<size_t>(1), application()->contextCount());
 }
 
 bool SingleProcessProvider::isFirstWindow() const

@@ -424,7 +424,7 @@ async::Channel<std::string> MultiProcessProvider::resourceChanged()
     return m_resourceChanged;
 }
 
-int MultiProcessProvider::windowCount() const
+size_t MultiProcessProvider::windowCount() const
 {
     return m_ipcChannel ? m_ipcChannel->instances().size() : 1;
 }
