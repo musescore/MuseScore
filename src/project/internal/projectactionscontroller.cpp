@@ -30,6 +30,7 @@
 #include <QTimer>
 
 #include "async/async.h"
+#include "async/processevents.h"
 #include "defer.h"
 #include "translation.h"
 
@@ -1330,6 +1331,7 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
         }
     });
 
+    muse::async::processMessages();
     eventLoop.exec();
 
     return ret;
