@@ -24,12 +24,16 @@
 
 #include "../ivideoencoder.h"
 
+#include "ffmpegfunctions.h"
+
+#include "ffmpeglibhandler.h"
+
 namespace muse::media {
 struct FFmpeg;
 class VideoEncoder : public IVideoEncoder
 {
 public:
-    VideoEncoder();
+    explicit VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler);
     ~VideoEncoder() override;
 
     bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
@@ -41,7 +45,9 @@ public:
 
 private:
     bool convertImage_sws(const QImage& img);
+    const FFmpegFunctions* ffmpegFunctions() const;
 
+    std::shared_ptr<FFmpegLibHandler> m_ffmpegHandler = nullptr;
     FFmpeg* m_ffmpeg = nullptr;
 };
 }

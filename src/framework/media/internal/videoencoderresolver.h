@@ -19,34 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "mediamodule.h"
+
+#pragma once
 
 #include "modularity/ioc.h"
-
 #include "imediaconfiguration.h"
-#include "ivideoencoderresolver.h"
-#include "internal/mediaconfiguration.h"
-#include "internal/videoencoderresolver.h"
 
-using namespace muse::media;
-using namespace muse::modularity;
+#include "../ivideoencoderresolver.h"
 
-std::string MediaModule::moduleName() const
+namespace muse::media {
+class VideoEncoderResolver : public IVideoEncoderResolver
 {
-    return "media";
-}
+    GlobalInject<IMediaConfiguration> configuration;
 
-void MediaModule::registerExports()
-{
-    m_configuration = std::make_shared<MediaConfiguration>(iocContext());
-    m_videoEncoderResolver = std::make_shared<VideoEncoderResolver>();
+public:
+    void init();
 
-    ioc()->registerExport<IMediaConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IVideoEncoderResolver>(moduleName(), m_videoEncoderResolver);
-}
+    void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) override;
 
-void MediaModule::onInit(const IApplication::RunMode&)
-{
-    m_configuration->init();
-    m_videoEncoderResolver->init();
+    IVideoEncoderPtr currentVideoEncoder() const override;
+    void setCurrentVideoEncoder(IVideoEncoderPtr encoder) override;
+
+private:
+    IVideoEncoderPtr m_encoder;
+};
 }

@@ -22,25 +22,19 @@
 
 #pragma once
 
-#include <QImage>
-
-#include "io/path.h"
-
 #include "modularity/imoduleinterface.h"
 
+#include "ivideoencoder.h"
+
 namespace muse::media {
-class IVideoEncoder : MODULE_CONTEXT_INTERFACE
+class IVideoEncoderResolver : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(IVideoEncoder)
+    INTERFACE_ID(IVideoEncoderResolver)
 
 public:
-    virtual ~IVideoEncoder() = default;
+    virtual ~IVideoEncoderResolver() = default;
 
-    virtual bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) = 0;
-    virtual void close() = 0;
-    virtual bool encodeImage(const QImage& img) = 0;
-    virtual bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                               double audioOffsetSec) = 0;
+    virtual IVideoEncoderPtr currentVideoEncoder() const = 0;
+    virtual void setCurrentVideoEncoder(IVideoEncoderPtr encoder) = 0;
 };
-using IVideoEncoderPtr = std::shared_ptr<IVideoEncoder>;
 }

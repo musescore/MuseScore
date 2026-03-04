@@ -22,25 +22,24 @@
 
 #pragma once
 
-#include <QImage>
-
-#include "io/path.h"
-
-#include "modularity/imoduleinterface.h"
-
 namespace muse::media {
-class IVideoEncoder : MODULE_CONTEXT_INTERFACE
-{
-    INTERFACE_ID(IVideoEncoder)
+struct FFmpegVersionInfo {
+    int avFormatVersion = -1;
+    int avUtilVersion = -1;
+    int avCodecVersion = -1;
+    int swScaleVersion = -1;
 
-public:
-    virtual ~IVideoEncoder() = default;
-
-    virtual bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) = 0;
-    virtual void close() = 0;
-    virtual bool encodeImage(const QImage& img) = 0;
-    virtual bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                               double audioOffsetSec) = 0;
+    bool isValid() const
+    {
+        return avFormatVersion != -1 && avUtilVersion != -1 && avCodecVersion != -1 && swScaleVersion != -1;
+    }
 };
-using IVideoEncoderPtr = std::shared_ptr<IVideoEncoder>;
+
+static const std::vector<std::pair<int, FFmpegVersionInfo>> FFMPEG_COMPONENTS_VERSIONS = {
+    { 8, { 62, 60, 62, 9 } },
+    { 7, { 61, 59, 61, 8 } },
+    { 6, { 60, 58, 60, 7 } },
+    { 5, { 59, 57, 59, 6 } },
+    { 4, { 58, 56, 58, 5 } },
+};
 }
