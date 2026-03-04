@@ -325,14 +325,28 @@ bool Score::cmdRepeatListSelection()
             continue;
         }
 
+        NoteList notesForParen;
+        notesForParen.emplace_back(newNote);
+
+        // All tied notes should be parenthesized...
+        Tie* tie = newNote->tieBack();
+        while (tie) {
+            Note* tiedNote = tie->startNote();
+            if (!tiedNote) {
+                break;
+            }
+            notesForParen.emplace_back(tiedNote);
+            tie = tiedNote->tieBack();
+        }
+
         auto search = parenMap.find(leftParen);
         if (search != parenMap.end()) {
             NoteList& nl = search->second;
-            nl.emplace_back(newNote);
+            nl.insert(nl.end(), notesForParen.begin(), notesForParen.end());
             continue;
         }
 
-        parenMap.emplace(leftParen, NoteList { newNote });
+        parenMap.emplace(leftParen, notesForParen);
     }
 
     for (auto& pair : parenMap) {

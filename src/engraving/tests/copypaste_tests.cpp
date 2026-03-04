@@ -898,6 +898,25 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
 
     //! --
 
+    //! 6.0 [GIVEN] A parenthesized note that will require ties when repeating over a barline...
+    m = m->next() ? toMeasure(m->next()) : nullptr;
+
+    // Using the second CR in this measure...
+    Segment* seg = m ? m->first(SegmentType::ChordRest) : nullptr;
+    seg = seg ? seg->next(SegmentType::ChordRest) : nullptr;
+    cr1 = seg ? seg->cr(0) : nullptr;
+    EXPECT_TRUE(cr1 && cr1->isChord());
+
+    //! 6.1 [GIVEN] The parenthesized note...
+    notes = toChord(cr1)->notes();
+
+    //! 6.2 [WHEN] The note is selected and repeated...
+    score->deselectAll();
+    score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
+    score->cmdRepeatListSelection();
+
+    //! --
+
     //! [THEN] The result matches our expectations...
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_repeatListSelection.mscx"),
                                             COPYPASTE_DATA_DIR + String("copypaste_repeatListSelection-ref.mscx")));
