@@ -1499,21 +1499,11 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + actualTicks(newLen, nullptr, staff(staffIdx)->timeStretch(tick));
 
-            // Delete annotations that require an anchor to the previous segment
-            Segment* s1 = tick2rightSegment(tick);
-            Segment* s2 = tick2rightSegment(endTick);
-            if (s1 && s2 && (*s2) > (*s1)) {
-                for (Segment* s = s1; s && s != s2; s = s->next1()) {
-                    const auto annotations = s->annotations(); // make a copy since we alter the list
-                    for (EngravingItem* annotation : annotations) {
-                        if (!annotation->systemFlag() && !annotation->allowTimeAnchor() && annotation->track() == track) {
-                            deleteItem(annotation);
-                        }
-                    }
-                }
-            }
-
             SelectionFilter filter;
+            // chord symbols can exist without chord/rest so they should not be removed
+            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+
+            deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
