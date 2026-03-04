@@ -1,3 +1,5 @@
+#include <cstddef>
+
 namespace KDDockWidgets {
 class Config;
 class DockRegistry;
@@ -9,7 +11,7 @@ public:
 
     static ContextData* context(int ctx);
     static void destroyContext(int ctx);
-    static int contextCount();
+    static size_t contextCount();
 
     Config* config = nullptr;
     DockRegistry* reg = nullptr;
