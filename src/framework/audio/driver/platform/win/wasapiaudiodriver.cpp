@@ -243,6 +243,7 @@ std::string WasapiAudioDriver::name() const
 void WasapiAudioDriver::init()
 {
     LOGI() << "begin driver init";
+    CoUninitialize();
     HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr)) {
         LOGE() << "failed CoInitializeEx, error: " << hrToString(hr);
