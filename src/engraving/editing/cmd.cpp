@@ -3510,7 +3510,14 @@ void Score::cmdAddBracket()
 struct NoteComparator {
     bool operator()(const Note* n1, const Note* n2) const
     {
-        return noteIsBefore(n1, n2);
+        if (noteIsBefore(n1, n2)) {
+            return true;
+        }
+        if (noteIsBefore(n2, n1)) {
+            return false;
+        }
+        // tiebreak by pointer address so we can have unison notes in the set
+        return n1 < n2;
     }
 };
 
