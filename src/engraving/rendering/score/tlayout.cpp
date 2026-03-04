@@ -1637,13 +1637,15 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
+        StaffType* stVisibility = item->staff()->staffType(item->tick());
+        bool show = stVisibility->genClef();            // check staff type allows clef display
+
         const bool endOfMeasureClef = clefSeg->rtick() == clefSeg->measure()->ticks();
         const Fraction tick = endOfMeasureClef && !item->isTrailer() ? item->tick() : clefSeg->measure()->tick();
 
         const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
-        bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
         const bool hideClef = st->isTabStaff() ? conf.styleB(Sid::hideTabClefAfterFirst) : !conf.styleB(Sid::genClef);
 
@@ -3400,10 +3402,13 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     ldata->setBbox(RectF());
     ldata->keySymbols.clear();
 
-    const StaffType* st = item->staffType();
-    if (st && !st->genKeysig()) {
+    const Staff* staff = item->staff();
+    const StaffType* stVisibility = staff ? staff->staffType(item->tick()) : nullptr;
+    if (stVisibility && !stVisibility->genKeysig()) {
         return;
     }
+
+    const StaffType* st = item->staffType();
     const Segment* s = item->segment();
     track_idx_t track = item->track();
     double spatium = item->spatium();
@@ -3515,10 +3520,11 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         // AND we're not force hiding naturals (continuous mode)
         // AND key sig is CMaj/Amin OR style says they are on
         const Measure* pm = item->measure() ? item->measure()->prevMeasureMM() : nullptr;
+        const bool isCourtesy = s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero());
+        const bool prevTrailerCourtesy = pm && !pm->sectionBreak() && (!pm->trailer() || !pm->hasCourtesyKeySig());
         if (!item->hideNaturals() && track != muse::nidx
             && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0))
-            && ((s && (s->isType(SegmentType::CourtesyKeySigType) || !s->rtick().isZero()))
-                || (pm && !pm->sectionBreak() && !pm->hasCourtesyKeySig()))) {
+            && (isCourtesy || prevTrailerCourtesy)) {
             KeySigEvent prevKsEvent = item->staff() ? item->staff()->keySigEvent(item->tick() - Fraction::eps()) : KeySigEvent();
             int t2 = int(prevKsEvent.key());
 
@@ -6055,7 +6061,8 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
 
     if (staff) {
         // if staff is without time sig, format as if no text at all
-        if (!staff->staffTypeForElement(item)->genTimesig()) {
+        const StaffType* stVisibility = staff->staffType(item->tick());
+        if (!stVisibility->genTimesig()) {
             // reset position and box sizes to 0
             // LOGD("staff: no time sig");
             ldata->pointLargeLeftParen.rx() = 0.0;

@@ -116,15 +116,22 @@ private:
 //---------------------------------------------------------
 
 struct NoteParenthesisInfo {
-    NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList)
-        : leftParen(lParen), rightParen(rParen), notes(nList) {}
-    NoteParenthesisInfo() {}
-    Parenthesis* leftParen = nullptr;
-    Parenthesis* rightParen = nullptr;
-    std::vector<Note*> notes;
+    NoteParenthesisInfo (Parenthesis* lParen, Parenthesis* rParen, std::vector<Note*> nList);
+    ~NoteParenthesisInfo();
+    Parenthesis* leftParen() const { return m_leftParen; }
+    Parenthesis* rightParen() const { return m_rightParen; }
+    const std::vector<Note*>& notes() const { return m_notes; }
+
+    void insertNote(Note* note);
+    void removeNote(Note* note);
+
+private:
+    Parenthesis* m_leftParen = nullptr;
+    Parenthesis* m_rightParen = nullptr;
+    std::vector<Note*> m_notes;
 };
 
-using NoteParenthesisInfoList = std::vector<NoteParenthesisInfo>;
+using NoteParenthesisInfoList = std::vector<NoteParenthesisInfo*>;
 
 class Chord final : public ChordRest
 {
@@ -170,14 +177,13 @@ public:
     std::vector<Note*>& notes() { return m_notes; }
     const std::vector<Note*>& notes() const { return m_notes; }
 
-    const NoteParenthesisInfoList& noteParens() const { return m_noteParens; }
-    const NoteParenthesisInfo* findNoteParenInfo(const Note* note) const;
-    const NoteParenthesisInfo* findNoteParenInfo(const Parenthesis* paren) const;
-    NoteParenthesisInfo* findNoteParenInfo(const Parenthesis* paren);
-    void addNoteParenInfo(Parenthesis* leftParen, Parenthesis* rightParen, std::vector<Note*> notes);
-    void removeNoteParenInfo(const NoteParenthesisInfo* noteParenInfo);
-    void addNoteToParenInfo(Note* note, const Parenthesis* paren);
-    void removeNoteFromParenInfo(Note* note, const Parenthesis* paren);
+    const NoteParenthesisInfoList& noteParentheses() const { return m_noteParens; }
+    const NoteParenthesisInfo* findNoteParenthesisInfo(const Note* note) const;
+    NoteParenthesisInfo* findNoteParenthesisInfo(const Parenthesis* paren);
+    void addNoteParenthesisInfo(NoteParenthesisInfo* noteParenInfo);
+    void removeNoteParenthesisInfo(const NoteParenthesisInfo* noteParenInfo);
+    void addNoteToParenthesisInfo(Note* note, const Parenthesis* paren);
+    void removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren);
 
     bool isChordPlayable() const;
     void setIsChordPlayable(const bool isPlayable);

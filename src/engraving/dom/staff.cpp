@@ -48,7 +48,7 @@
 #include "editing/transpose.h"
 #include "utils.h"
 #include "capo.h"
-#include "editcapo.h"
+#include "editing/editcapo.h"
 
 // #define DEBUG_CLEFS
 
