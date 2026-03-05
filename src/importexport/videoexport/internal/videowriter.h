@@ -22,13 +22,20 @@
 #ifndef MU_IMPORTEXPORT_VIDEOWRITER_H
 #define MU_IMPORTEXPORT_VIDEOWRITER_H
 
+#include <optional>
+
 #include "async/asyncable.h"
+
+#include "engraving/style/style.h"
+
 #include "modularity/ioc.h"
 #include "../ivideoexportconfiguration.h"
 #include "iapplication.h"
 
 #include "project/inotationwriter.h"
 #include "project/inotationwritersregister.h"
+
+#include "notation/notationtypes.h"
 
 namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
@@ -69,6 +76,22 @@ private:
     void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
 
     void doGenerate(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
+
+    struct ScoreRestoreData
+    {
+        engraving::MStyle style;
+        notation::ViewMode viewMode = notation::ViewMode::PAGE;
+
+        bool showFrames = true;
+        bool showInstrumentNames = true;
+        bool showInvisible = true;
+        bool showPageborders = false;
+        bool showUnprintable = true;
+        bool showVBox = true;
+    };
+
+    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, const Config& config);
+    void restoreScore(notation::INotationPtr notation, const ScoreRestoreData& data);
 
     muse::Progress m_progress;
     bool m_abort = false;

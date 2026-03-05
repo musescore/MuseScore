@@ -48,6 +48,8 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
+double CANVAS_DPI = 300;
+
 std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
@@ -225,29 +227,24 @@ void VideoWriter::abort()
     }
 }
 
-void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
+std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, const Config& config)
 {
-    VideoEncoder encoder;
-    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
-        LOGE() << "failed open encoder";
-        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
-        m_isCompleted = true;
-        return;
-    }
+    ScoreRestoreData result;
+    engraving::Score* score = notation->elements()->msScore();
 
-    engraving::MasterScore* score = notation->elements()->msScore()->masterScore();
+    result.style = score->style();
 
-    notation::ViewMode originalViewMode = notation->viewMode();
-    engraving::MStyle originalStyle = score->style();
+    result.viewMode = notation->viewMode();
 
-    DEFER {
-        score->style() = originalStyle;
-        score->setLayoutAll();
-        score->update();
-        notation->setViewMode(originalViewMode);
-    };
+    result.showFrames = score->showFrames();
+    result.showInstrumentNames = score->showInstrumentNames();
+    result.showInvisible = score->isShowInvisible();
+    result.showPageborders = score->showPageborders();
+    result.showUnprintable = score->showUnprintable();
+    result.showVBox = score->layoutOptions().isShowVBox;
 
     notation->setViewMode(notation::ViewMode::PAGE);
+
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
@@ -260,12 +257,9 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
     PageList pages = notation->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
-        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
-        m_isCompleted = true;
-        return;
+        restoreScore(notation, result);
+        return std::nullopt;
     }
-
-    double CANVAS_DPI = 300;
 
     const Page* page = pages.front();
     if (score->staves().size() > 3) {
@@ -298,6 +292,52 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
     score->setLayoutAll();
     score->update();
+
+    return result;
+}
+
+void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& data)
+{
+    engraving::Score* score = notation->elements()->msScore();
+
+    score->style() = data.style;
+
+    score->setShowFrames(data.showFrames);
+    score->setShowInstrumentNames(data.showInstrumentNames);
+    score->setShowInvisible(data.showInvisible);
+    score->setShowPageborders(data.showPageborders);
+    score->setShowUnprintable(data.showUnprintable);
+    score->setShowVBox(data.showVBox);
+
+    notation->setViewMode(data.viewMode);
+
+    score->setLayoutAll();
+    score->update();
+}
+
+void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
+{
+    VideoEncoder encoder;
+    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
+        LOGE() << "failed open encoder";
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
+    }
+
+    auto restoreData = prepareScore(notation, config);
+    if (!restoreData) {
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
+    }
+
+    DEFER {
+        restoreScore(notation, restoreData.value());
+        m_isCompleted = true;
+    };
+
+    PageList pages = notation->elements()->pages();
 
     // Setup painting
     QImage frame(config.width, config.height, QImage::Format_RGB32);
@@ -344,7 +384,6 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
             encoder.close();
             m_writeRet = make_ret(muse::Ret::Code::Cancel);
             m_progress.finish(make_ret(muse::Ret::Code::Cancel));
-            m_isCompleted = true;
             return;
         }
 
@@ -390,5 +429,4 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
     m_writeRet = muse::make_ok();
     m_progress.finish(muse::make_ok());
-    m_isCompleted = true;
 }
