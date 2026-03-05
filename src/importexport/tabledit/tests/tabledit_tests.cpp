@@ -70,6 +70,10 @@ TEST_F(TablEdit_Tests, tef_dynamic) {
     tefReadTest("dynamic");
 }
 
+TEST_F(TablEdit_Tests, tef_fingerings_1) {
+    tefReadTest("fingerings_1");
+}
+
 TEST_F(TablEdit_Tests, tef_gaps_1) {
     tefReadTest("gaps_1");
 }
@@ -168,6 +172,14 @@ TEST_F(TablEdit_Tests, tef_reading_list_9) {
 
 TEST_F(TablEdit_Tests, tef_reading_list_10) {
     tefReadTest("reading_list_10");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_11) {
+    tefReadTest("reading_list_11");
+}
+
+TEST_F(TablEdit_Tests, tef_reading_list_12) {
+    tefReadTest("reading_list_12");
 }
 
 TEST_F(TablEdit_Tests, tef_rests_dotted) {
