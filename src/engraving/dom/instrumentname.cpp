@@ -60,30 +60,6 @@ InstrumentName::InstrumentName(System* s)
     setInstrumentNameType(InstrumentNameType::LONG);
 }
 
-//---------------------------------------------------------
-//   instrumentNameTypeName
-//---------------------------------------------------------
-
-String InstrumentName::instrumentNameTypeName() const
-{
-    return instrumentNameType() == InstrumentNameType::SHORT ? u"short" : u"long";
-}
-
-//---------------------------------------------------------
-//   setInstrumentNameType
-//---------------------------------------------------------
-
-void InstrumentName::setInstrumentNameType(const String& s)
-{
-    if (s == u"short") {
-        setInstrumentNameType(InstrumentNameType::SHORT);
-    } else if (s == u"long") {
-        setInstrumentNameType(InstrumentNameType::LONG);
-    } else {
-        LOGD("InstrumentName::setSubtype: unknown <%s>", muPrintable(s));
-    }
-}
-
 double InstrumentName::largestStaffSpatium() const
 {
     if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {

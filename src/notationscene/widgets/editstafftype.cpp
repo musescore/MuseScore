@@ -510,7 +510,6 @@ void EditStaffType::tabStemThroughToggled(bool checked)
 
 void EditStaffType::setFromDlg()
 {
-    staffType.setStaffTypeName(name->text());
     staffType.setLines(lines->value());
     staffType.setLineDistance(mu::engraving::Spatium(lineDistance->value()));
     staffType.setGenClef(genClef->isChecked());

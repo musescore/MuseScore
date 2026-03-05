@@ -311,7 +311,7 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
 {
-    StaffType oldStaffType = *staff->staffType(tick);        // TODO
+    StaffType oldStaffType = *staff->staffType(tick);
 
     staff->setStaffType(tick, staffType);
 

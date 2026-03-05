@@ -50,10 +50,8 @@ public:
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
 
-    String instrumentNameTypeName() const;
     InstrumentNameType instrumentNameType() const { return m_instrumentNameType; }
     void setInstrumentNameType(InstrumentNameType v);
-    void setInstrumentNameType(const String& s);
 
     InstrumentNameRole instrumentNameRole() const { return m_instrumentNameRole; }
     void setInstrumentNameRole(InstrumentNameRole v) { m_instrumentNameRole = v; }

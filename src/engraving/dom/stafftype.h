@@ -177,7 +177,6 @@ public:
     StaffTypes type() const;
     const String& staffTypeName() const { return m_staffTypeName; }
     const String& xmlName() const { return m_xmlName; }
-    void setStaffTypeName(const String& val) { m_staffTypeName = val; }
     void setXmlName(const String& val) { m_xmlName = val; }
     String translatedGroupName() const;
 
