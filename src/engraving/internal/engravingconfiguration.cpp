@@ -49,6 +49,8 @@ static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor
 static const Settings::Key SCORE_GREY_COLOR("engraving", "engraving/color/scoreGreyColor");
 static const Settings::Key INVISIBLE_COLOR("engraving", "engraving/colors/invisibleColor");
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
+static const Settings::Key WARNING_COLOR("engraving", "engraving/colors/warningColor");
+static const Settings::Key CRITICAL_COLOR("engraving", "engraving/colors/criticalColor");
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
@@ -140,6 +142,20 @@ void EngravingConfiguration::init()
     settings()->setCanBeManuallyEdited(FORMATTING_COLOR, true);
     settings()->valueChanged(FORMATTING_COLOR).onReceive(nullptr, [this](const Val& val) {
         m_formattingColorChanged.send(Color::fromQColor(val.toQColor()));
+    });
+
+    settings()->setDefaultValue(WARNING_COLOR, Val(Color("#808000").toQColor()));
+    settings()->setDescription(WARNING_COLOR, muse::trc("engraving", "Out of range color (amateur)"));
+    settings()->setCanBeManuallyEdited(WARNING_COLOR, true);
+    settings()->valueChanged(WARNING_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_warningColorChanged.send(Color::fromQColor(val.toQColor()));
+    });
+
+    settings()->setDefaultValue(CRITICAL_COLOR, Val(Color("#FF0000").toQColor()));
+    settings()->setDescription(CRITICAL_COLOR, muse::trc("engraving", "Out of range color (professional)"));
+    settings()->setCanBeManuallyEdited(CRITICAL_COLOR, true);
+    settings()->valueChanged(CRITICAL_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_criticalColorChanged.send(Color::fromQColor(val.toQColor()));
     });
 
     settings()->setDefaultValue(INVISIBLE_COLOR, Val(Color("#808080").toQColor()));
@@ -260,33 +276,6 @@ Color EngravingConfiguration::lassoColor() const
     return "#00323200";
 }
 
-Color EngravingConfiguration::warningColor() const
-{
-    return "#808000";
-}
-
-Color EngravingConfiguration::warningSelectedColor() const
-{
-    const QColor qColor = warningColor().toQColor();
-    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
-}
-
-Color EngravingConfiguration::criticalColor() const
-{
-    return Color::RED;
-}
-
-Color EngravingConfiguration::criticalBackgroundColor() const
-{
-    return Color::RED;
-}
-
-Color EngravingConfiguration::criticalSelectedColor() const
-{
-    const QColor qColor = criticalColor().toQColor();
-    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
-}
-
 Color EngravingConfiguration::thumbnailBackgroundColor() const
 {
     return Color::WHITE;
@@ -383,6 +372,43 @@ Color EngravingConfiguration::formattingColor() const
 muse::async::Channel<Color> EngravingConfiguration::formattingColorChanged() const
 {
     return m_formattingColorChanged;
+}
+
+Color EngravingConfiguration::warningColor() const
+{
+    return Color::fromQColor(settings()->value(WARNING_COLOR).toQColor());
+}
+
+muse::async::Channel<Color> EngravingConfiguration::warningColorChanged() const
+{
+    return m_warningColorChanged;
+}
+
+Color EngravingConfiguration::warningSelectedColor() const
+{
+    const QColor qColor = settings()->value(WARNING_COLOR).toQColor();
+    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
+}
+
+Color EngravingConfiguration::criticalColor() const
+{
+    return Color::fromQColor(settings()->value(CRITICAL_COLOR).toQColor());
+}
+
+muse::async::Channel<Color> EngravingConfiguration::criticalColorChanged() const
+{
+    return m_criticalColorChanged;
+}
+
+Color EngravingConfiguration::criticalBackgroundColor() const
+{
+    return Color::RED;
+}
+
+Color EngravingConfiguration::criticalSelectedColor() const
+{
+    const QColor qColor = settings()->value(CRITICAL_COLOR).toQColor();
+    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
 }
 
 Color EngravingConfiguration::frameColor() const

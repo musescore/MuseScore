@@ -762,6 +762,14 @@ void AbstractNotationPaintView::onNotationSetup()
         scheduleRedraw();
     });
 
+    engravingConfiguration()->warningColorChanged().onReceive(this, [this](const Color&) {
+        scheduleRedraw();
+    });
+
+    engravingConfiguration()->criticalColorChanged().onReceive(this, [this](const Color&) {
+        scheduleRedraw();
+    });
+
     engravingConfiguration()->invisibleColorChanged().onReceive(this, [this](const Color&) {
         scheduleRedraw();
     });
