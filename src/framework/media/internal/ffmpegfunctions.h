@@ -29,7 +29,6 @@ extern "C" {
 }
 
 namespace muse::media {
-
 struct FFmpegFunctions
 {
     // libavutil
@@ -38,37 +37,34 @@ struct FFmpegFunctions
     int64_t (*av_rescale_q)(int64_t a, AVRational bq, AVRational cq) = nullptr;
 
     // libavutil (imgutils)
-    int (*av_image_fill_arrays)(uint8_t* dst_data[4], int dst_linesize[4],
-                               const uint8_t* src, AVPixelFormat pix_fmt,
-                               int width, int height, int align) = nullptr;
+    int (*av_image_fill_arrays)(uint8_t* dst_data[4], int dst_linesize[4], const uint8_t* src, AVPixelFormat pix_fmt, int width, int height,
+                                int align) = nullptr;
     int (*av_image_get_buffer_size)(AVPixelFormat pix_fmt, int width, int height, int align) = nullptr;
 
     // libavutil (opt)
     int (*av_opt_set_int)(void* obj, const char* name, int64_t val, int search_flags) = nullptr;
 
     // libavformat
-    const AVOutputFormat* (*av_guess_format)(const char* short_name, const char* filename,
-                                            const char* mime_type) = nullptr;
-    AVFormatContext* (*avformat_alloc_context)(void) = nullptr;
-    AVStream* (*avformat_new_stream)(AVFormatContext* s, const AVCodec* c) = nullptr;
+    const AVOutputFormat*(*av_guess_format)(const char* short_name, const char* filename, const char* mime_type) = nullptr;
+    AVFormatContext*(*avformat_alloc_context)(void) = nullptr;
+    AVStream*(*avformat_new_stream)(AVFormatContext* s, const AVCodec* c) = nullptr;
     int (*avformat_write_header)(AVFormatContext* s, AVDictionary** options) = nullptr;
     int (*av_write_trailer)(AVFormatContext* s) = nullptr;
     int (*avio_open)(AVIOContext** s, const char* url, int flags) = nullptr;
     int (*avio_close)(AVIOContext* s) = nullptr;
     int (*av_interleaved_write_frame)(AVFormatContext* s, AVPacket* pkt) = nullptr;
 
-    int (*avformat_open_input)(AVFormatContext** ctx, const char* url,
-                               const AVInputFormat* fmt, AVDictionary** options) = nullptr;
+    int (*avformat_open_input)(AVFormatContext** ctx, const char* url, const AVInputFormat* fmt, AVDictionary** options) = nullptr;
     int (*avformat_find_stream_info)(AVFormatContext* ic, AVDictionary** options) = nullptr;
     void (*avformat_close_input)(AVFormatContext** s) = nullptr;
     void (*avformat_free_context)(AVFormatContext* s) = nullptr;
-    int (*avformat_alloc_output_context2)(AVFormatContext** ctx, const AVOutputFormat* oformat,
-                                          const char* format_name, const char* filename) = nullptr;
+    int (*avformat_alloc_output_context2)(AVFormatContext** ctx, const AVOutputFormat* oformat, const char* format_name,
+                                          const char* filename) = nullptr;
     int (*av_read_frame)(AVFormatContext* s, AVPacket* pkt) = nullptr;
 
     // libavcodec
-    AVCodecContext* (*avcodec_alloc_context3)(const AVCodec* codec) = nullptr;
-    const AVCodec* (*avcodec_find_encoder)(AVCodecID id) = nullptr;
+    AVCodecContext*(*avcodec_alloc_context3)(const AVCodec* codec) = nullptr;
+    const AVCodec*(*avcodec_find_encoder)(AVCodecID id) = nullptr;
     void (*avcodec_free_context)(AVCodecContext** avctx) = nullptr;
     int (*avcodec_open2)(AVCodecContext* avctx, const AVCodec* codec, AVDictionary** options) = nullptr;
     int (*avcodec_parameters_from_context)(AVCodecParameters* par, const AVCodecContext* codec) = nullptr;
@@ -77,25 +73,21 @@ struct FFmpegFunctions
     int (*avcodec_receive_packet)(AVCodecContext* avctx, AVPacket* avpkt) = nullptr;
 
     // libavutil (frame)
-    AVFrame* (*av_frame_alloc)(void) = nullptr;
+    AVFrame*(*av_frame_alloc)(void) = nullptr;
 
     // libavcodec (packet)
-    AVPacket* (*av_packet_alloc)(void) = nullptr;
+    AVPacket*(*av_packet_alloc)(void) = nullptr;
     void (*av_packet_free)(AVPacket** pkt) = nullptr;
     void (*av_packet_unref)(AVPacket* pkt) = nullptr;
     void (*av_packet_rescale_ts)(AVPacket* pkt, AVRational tb_src, AVRational tb_dst) = nullptr;
 
     // libswscale
-    SwsContext* (*sws_getCachedContext)(SwsContext* context, int srcW, int srcH,
-                                        AVPixelFormat srcFormat, int dstW, int dstH,
-                                        AVPixelFormat dstFormat, int flags,
-                                        SwsFilter* srcFilter, SwsFilter* dstFilter,
-                                        const double* param) = nullptr;
-    int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[],
-                     const int srcStride[], int srcSliceY, int srcSliceH,
+    SwsContext*(*sws_getCachedContext)(SwsContext* context, int srcW, int srcH, AVPixelFormat srcFormat, int dstW, int dstH,
+                                       AVPixelFormat dstFormat, int flags, SwsFilter* srcFilter, SwsFilter* dstFilter,
+                                       const double* param) = nullptr;
+    int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[], const int srcStride[], int srcSliceY, int srcSliceH,
                      uint8_t* const dst[], const int dstStride[]) = nullptr;
 
     bool isValid() const;
 };
-
 }

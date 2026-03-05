@@ -167,6 +167,7 @@ bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& a
     }
 
     m_version = versionFromAVFormatPath(avFormatPath);
+    m_dir = io::dirpath(avFormatPath);
 
     LOGI() << "FFmpeg loaded: avutil=" << avUtilPath << ", avcodec=" << avCodecPath << ", avformat=" << avFormatPath
            << ", swscale=" << swScalePath;
@@ -183,6 +184,7 @@ void FFmpegLibHandler::unload()
 
     m_functions = FFmpegFunctions();
     m_version = 0;
+    m_dir = io::path_t();
 }
 
 void FFmpegLibHandler::closeLib(void*& lib)

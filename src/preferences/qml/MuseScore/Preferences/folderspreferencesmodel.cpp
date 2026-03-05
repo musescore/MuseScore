@@ -165,6 +165,12 @@ void FoldersPreferencesModel::setupConnections()
     vstConfiguration()->userVstDirectoriesChanged().onReceive(this, [this](const io::paths_t& paths) {
         setFolderPaths(FolderType::VST3, pathsToString(paths));
     });
+
+    videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
+        emit ffmpegDirChanged();
+    });
+
+    emit ffmpegDirChanged();
 }
 
 void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderType folderType, const QString& paths)
@@ -243,4 +249,23 @@ QString FoldersPreferencesModel::pathsToString(const io::paths_t& paths) const
 io::paths_t FoldersPreferencesModel::pathsFromString(const QString& pathsStr) const
 {
     return io::pathsFromString(pathsStr.toStdString());
+}
+
+int FoldersPreferencesModel::ffmpegVersion() const
+{
+    return videoEncoderResolver()->loadedFFmpegVersion();
+}
+
+QString FoldersPreferencesModel::ffmpegDir() const
+{
+    return videoEncoderResolver()->loadedFFmpegDir().toQString();
+}
+
+void FoldersPreferencesModel::setFFmpegDir(const QString& dir)
+{
+    if (mediaConfiguration()->ffmpegLibsDir() == dir) {
+        return;
+    }
+
+    videoEncoderResolver()->loadFFmpeg(dir);
 }

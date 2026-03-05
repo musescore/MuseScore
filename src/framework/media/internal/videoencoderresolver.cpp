@@ -34,6 +34,11 @@ void VideoEncoderResolver::init()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
+    if (m_encoder) {
+        m_currentEncoderFFmpegVersion = -1;
+        configuration()->setFFmpegLibsDir({});
+    }
+
     auto ffmpegLibHandler = FFmpegLoader::load(ffmpegLibsDir);
     if (!ffmpegLibHandler) {
         return;
@@ -41,6 +46,26 @@ void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 
     std::shared_ptr<VideoEncoder> encoder = std::make_shared<VideoEncoder>(ffmpegLibHandler);
     setCurrentVideoEncoder(encoder);
+
+    configuration()->setFFmpegLibsDir(ffmpegLibHandler->dir());
+
+    m_currentEncoderFFmpegVersion = ffmpegLibHandler->version();
+    m_loadedFFmpegChanged.notify();
+}
+
+muse::io::path_t VideoEncoderResolver::loadedFFmpegDir() const
+{
+    return configuration()->ffmpegLibsDir();
+}
+
+int VideoEncoderResolver::loadedFFmpegVersion() const
+{
+    return m_currentEncoderFFmpegVersion;
+}
+
+muse::async::Notification VideoEncoderResolver::loadedFFmpegChanged() const
+{
+    return m_loadedFFmpegChanged;
 }
 
 IVideoEncoderPtr VideoEncoderResolver::currentVideoEncoder() const

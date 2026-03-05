@@ -35,7 +35,7 @@ struct FFmpegVersionInfo {
     }
 };
 
-static const std::vector<std::pair<int, FFmpegVersionInfo>> FFMPEG_COMPONENTS_VERSIONS = {
+static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_VERSIONS = {
     { 8, { 62, 60, 62, 9 } },
     { 7, { 61, 59, 61, 8 } },
     { 6, { 60, 58, 60, 7 } },
