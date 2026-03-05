@@ -104,6 +104,11 @@ public:
         }
     }
 
+    size_t countToSend() const
+    {
+        return m_queue.availableRead() + m_pending.size();
+    }
+
     bool hasPending() const
     {
         return !m_pending.empty();
