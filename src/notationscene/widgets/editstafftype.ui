@@ -1239,6 +1239,16 @@
                     </widget>
                    </item>
                    <item>
+                    <widget class="QRadioButton" name="minimCircledRadio">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="text">
+                      <string>As circled fret</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
                     <spacer name="horizontalSpacer_14">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
@@ -1473,6 +1483,7 @@
   <tabstop>minimNoneRadio</tabstop>
   <tabstop>minimShortRadio</tabstop>
   <tabstop>minimSlashedRadio</tabstop>
+  <tabstop>minimCircledRadio</tabstop>
   <tabstop>showRests</tabstop>
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>

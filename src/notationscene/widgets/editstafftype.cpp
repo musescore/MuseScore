@@ -124,6 +124,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(showLedgerLinesPercussion, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(stemlessPercussion,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
+    connect(noteValuesNone,      &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
     connect(noteValuesSymb,      &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
     connect(noteValuesStems,     &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
     connect(valuesRepeatNever,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
@@ -136,6 +137,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(stemBelowRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(minimShortRadio,     &QRadioButton::toggled, this, &EditStaffType::tabMinimShortToggled);
     connect(minimSlashedRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(minimCircledRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(showRests,           &QRadioButton::toggled, this, &EditStaffType::updatePreview);
 
     connect(textStyleRadioButton, &QRadioButton::toggled, this, &EditStaffType::textStylesToggled);
@@ -365,6 +367,7 @@ void EditStaffType::setValues()
         minimNoneRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::NONE);
         minimShortRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SHORTER);
         minimSlashedRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::SLASHED);
+        minimCircledRadio->setChecked(minimStyle == mu::engraving::TablatureMinimStyle::CIRCLED);
         mu::engraving::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
         valuesRepeatNever->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::NEVER);
         valuesRepeatSystem->setChecked(symRepeat == mu::engraving::TablatureSymbolRepeat::SYSTEM);
@@ -474,9 +477,9 @@ void EditStaffType::presetsToggled(bool checked)
 //    enable / disable all controls related to stems
 //---------------------------------------------------------
 
-void EditStaffType::tabStemsToggled(bool checked)
+void EditStaffType::tabStemsToggled(bool /*checked*/)
 {
-    tabStemsCompatibility(checked);
+    tabStemsCompatibility(noteValuesStems->isChecked());
     updatePreview();
 }
 
@@ -541,9 +544,9 @@ void EditStaffType::setFromDlg()
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
-                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
-                                   TablatureMinimStyle::
-                                   SLASHED));
+                                : minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER
+                                : minimSlashedRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SLASHED
+                                : mu::engraving::TablatureMinimStyle::CIRCLED);
         staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
                                   : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
                                      : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
@@ -617,6 +620,7 @@ void EditStaffType::blockSignals(bool block)
     minimNoneRadio->blockSignals(block);
     minimShortRadio->blockSignals(block);
     minimSlashedRadio->blockSignals(block);
+    minimCircledRadio->blockSignals(block);
 
     valuesRepeatNever->blockSignals(block);
     valuesRepeatSystem->blockSignals(block);
@@ -652,7 +656,9 @@ void EditStaffType::tabStemsCompatibility(bool checked)
     stemThroughRadio->setEnabled(checked && !minimShortRadio->isChecked());
     minimNoneRadio->setEnabled(checked);
     minimShortRadio->setEnabled(checked && !stemThroughRadio->isChecked());
+    // Slashed and circled only meaningful with "Stems and Beams" (not "None" or "Note Symbols")
     minimSlashedRadio->setEnabled(checked);
+    minimCircledRadio->setEnabled(checked);
 }
 
 //---------------------------------------------------------
