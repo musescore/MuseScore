@@ -978,6 +978,8 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
         item->setLongName(readStaffName(e));
     } else if (tag == "shortName") {
         item->setShortName(readStaffName(e));
+    } else if (tag == "number") {
+        item->setNumber(e.readInt());
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {
@@ -3550,10 +3552,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
 }
 
 void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
@@ -3600,8 +3598,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx)
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {

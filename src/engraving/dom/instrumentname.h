@@ -30,7 +30,7 @@ enum class InstrumentNameType : char {
     LONG, SHORT
 };
 enum class InstrumentNameRole : char {
-    STAFF, PART
+    STAFF, PART, GROUP
 };
 
 class System;
@@ -71,11 +71,25 @@ public:
 
     staff_idx_t effectiveStaffIdx() const override;
 
+    staff_idx_t endIdxOfGroup() const { return m_endIdxOfGroup; }
+    void setEndIdxOfGroup(staff_idx_t v) { m_endIdxOfGroup = v; }
+
+    struct LayoutData : public TextBase::LayoutData {
+    public:
+        int column() const { return m_column; }
+        void setColumn(int v) { m_column = v; }
+
+    private:
+        int m_column = 0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(InstrumentName)
+
 private:
 
     InstrumentNameType m_instrumentNameType = InstrumentNameType::LONG;
     InstrumentNameRole m_instrumentNameRole = InstrumentNameRole::PART;
     SysStaff* m_sysStaff = nullptr;
+    staff_idx_t m_endIdxOfGroup = muse::nidx; // one-after last spanned staff (for GROUP types)
 };
 } // namespace mu::engraving
 #endif

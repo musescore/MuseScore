@@ -3291,10 +3291,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
-
     read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
@@ -3391,8 +3387,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideMod
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {

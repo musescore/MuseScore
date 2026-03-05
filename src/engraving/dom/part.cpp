@@ -67,7 +67,6 @@ Part::Part(Score* s)
 
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
-    m_partName = t->instrumentName.longName();
     setInstrument(Instrument::fromTemplate(t));
 }
 
@@ -557,6 +556,16 @@ void Part::setShortNameAll(const String& s)
     }
 }
 
+int Part::number(const Fraction& tick) const
+{
+    return instrument(tick)->number();
+}
+
+void Part::setNumber(int v, const Fraction& tick)
+{
+    instrument(tick)->setNumber(v);
+}
+
 //---------------------------------------------------------
 //   setPlainLongName
 //---------------------------------------------------------
@@ -830,6 +839,19 @@ Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
     }
     --i;
     return Fraction::fromTicks(i->first);
+}
+
+String Part::partName() const
+{
+    const Instrument* i = instrument();
+    String fullName = i->longName();
+
+    int n = number();
+    if (n != 0) {
+        fullName += u" " + String::number(n);
+    }
+
+    return fullName;
 }
 
 bool Part::isVisible() const

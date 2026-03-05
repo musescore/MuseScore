@@ -90,12 +90,11 @@ class ChangePart : public UndoCommand
 
     Part* part = nullptr;
     Instrument* instrument = nullptr;
-    String partName;
 
     void flip(EditData*) override;
 
 public:
-    ChangePart(Part*, Instrument*, const String& name);
+    ChangePart(Part*, Instrument*);
     void cleanup(bool) override;
 
     UNDO_TYPE(CommandType::ChangePart)
@@ -136,6 +135,24 @@ public:
 
     UNDO_TYPE(CommandType::ChangeInstrumentShort)
     UNDO_NAME("ChangeInstrumentShort")
+    UNDO_CHANGED_OBJECTS({ part })
+};
+
+class ChangeInstrumentNumber : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeInstrumentNumber)
+
+    Part* part = nullptr;
+    Fraction tick;
+    int number;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeInstrumentNumber(const Fraction&, Part*, int v);
+
+    UNDO_TYPE(CommandType::ChangeInstrumentNumber)
+    UNDO_NAME("ChangeInstrumentNumber")
     UNDO_CHANGED_OBJECTS({ part })
 };
 
@@ -213,8 +230,7 @@ enum class StaffTypes : signed char;
 class EditPart
 {
 public:
-    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr,
-                                      const String& partName = String());
+    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr);
 
     static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
 

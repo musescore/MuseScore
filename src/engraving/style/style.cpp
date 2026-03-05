@@ -636,6 +636,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
         }
     }
 
+    if (mscVersion < 500) {
+        set(Sid::windsNameByGroup, false);
+        set(Sid::vocalsNameByGroup, false);
+    }
+
     if (mscVersion < 470) {
         set(Sid::dividerLeftAlignToSystemBarline, false);
         set(Sid::dividerRightAlignToSystemBarline, false);

@@ -32,6 +32,10 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignLong READ instrumentNamesAlignLong CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignShort READ instrumentNamesAlignShort CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesStackVertically READ instrumentNamesStackVertically CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * windsNameByGroup READ windsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * vocalsNameByGroup READ vocalsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * stringsNameByGroup READ stringsNameByGroup CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * othersNameByGroup READ othersNameByGroup CONSTANT)
 
     QML_ELEMENT
 
@@ -41,5 +45,9 @@ public:
     StyleItem* instrumentNamesAlignLong() const;
     StyleItem* instrumentNamesAlignShort() const;
     StyleItem* instrumentNamesStackVertically() const;
+    StyleItem* windsNameByGroup() const;
+    StyleItem* vocalsNameByGroup() const;
+    StyleItem* stringsNameByGroup() const;
+    StyleItem* othersNameByGroup() const;
 };
 }

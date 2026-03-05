@@ -580,7 +580,6 @@ void TablEdit::createParts()
         Part* part = new Part(score);
         score->appendPart(part);
         muse::String staffName { muse::String::fromStdString(instrument.name) };
-        part->setPartName(staffName);
         part->setPlainLongName(staffName);
 
         StringData stringData;

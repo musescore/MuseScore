@@ -864,14 +864,36 @@ bool Instrument::isDifferentInstrument(const Instrument& i) const
 
 String Instrument::family() const
 {
-    auto search = searchTemplateIndexForId(m_id);
+    static const String NO_FAMILY = u"-";
 
-    if (!search.instrTemplate) {
-        static String empty;
-        return empty;
+    if (m_familyCache.empty()) {
+        auto search = searchTemplateIndexForId(m_id);
+
+        if (search.instrTemplate) {
+            m_familyCache = search.instrTemplate->familyId();
+        } else {
+            m_familyCache = NO_FAMILY;
+        }
     }
 
-    return search.instrTemplate->familyId();
+    return m_familyCache == NO_FAMILY ? String() : m_familyCache;
+}
+
+String Instrument::group() const
+{
+    static const String NO_GROUP = u"-";
+
+    if (m_groupCache.empty()) {
+        auto search = searchTemplateIndexForId(m_id);
+
+        if (search.instrTemplate) {
+            m_groupCache = search.instrTemplate->groupId;
+        } else {
+            m_groupCache = NO_GROUP;
+        }
+    }
+
+    return m_groupCache == NO_GROUP ? String() : m_groupCache;
 }
 
 //---------------------------------------------------------

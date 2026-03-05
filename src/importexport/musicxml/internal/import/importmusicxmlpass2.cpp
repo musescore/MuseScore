@@ -2236,7 +2236,6 @@ void MusicXmlParserPass2::part()
     String partName = mxmlPart.getName();
     setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments, partName);
     partName = replacePartNameAccidentals(partName);
-    part->setPartName(partName);
     const bool inconsistentVisibility = mxmlPart.getPrintName() != mxmlPart.getPrintAbbr();
     if (!isLikelyIncorrectPartName(partName)) {
         part->setLongNameAll(partName);
@@ -2252,12 +2251,7 @@ void MusicXmlParserPass2::part()
     } else {
         part->setPlainShortNameAll(u"");
     }
-    // set the parts first instrument
-    // try to prevent an empty track name
-    if (part->partName() == "") {
-        String instrId = m_pass1.getInstrList(id).instrument(Fraction(0, 1));
-        part->setPartName(muse::value(instruments, instrId).name);
-    }
+
     if (m_pass1.nparts() == 1 && mxmlPart.getPrintName() && mxmlPart.getPrintAbbr()) {
         m_score->style().set(Sid::hideInstrumentNameIfOneInstrument, false);
     }

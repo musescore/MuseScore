@@ -69,9 +69,14 @@ enum class Sid : short {
     minSystemDistance,
     maxSystemDistance,
     alignSystemToMargin,
+
     instrumentNamesAlignLong,
     instrumentNamesAlignShort,
     instrumentNamesStackVertically,
+    windsNameByGroup,
+    vocalsNameByGroup,
+    stringsNameByGroup,
+    othersNameByGroup,
 
     enableVerticalSpread,
     spreadSystem,

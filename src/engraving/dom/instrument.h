@@ -285,6 +285,7 @@ public:
     const String& soundId() const { return m_soundId; }
     void setSoundId(const String& id) { m_soundId = id; }
     String family() const;
+    String group() const;
     void setId(const String& id) { m_id = id; }
     void setMinPitchP(int v) { m_minPitchP = v; }
     void setMaxPitchP(int v) { m_maxPitchP = v; }
@@ -332,6 +333,9 @@ public:
     const String& longName() const { return m_instrumentName.longName(); }
     const String& shortName() const { return m_instrumentName.shortName(); }
     const StaffName& instrumentName() const { return m_instrumentName; }
+
+    int number() const { return m_instrumentName.number(); }
+    void setNumber(int v) { return m_instrumentName.setNumber(v); }
 
     int minPitchP() const;
     int maxPitchP() const;
@@ -395,6 +399,9 @@ private:
 
     Trait m_trait;
     bool m_isPrimary = false;
+
+    mutable String m_familyCache;
+    mutable String m_groupCache;
 
     GlissandoStyle m_glissandoStyle = GlissandoStyle::CHROMATIC;
 };

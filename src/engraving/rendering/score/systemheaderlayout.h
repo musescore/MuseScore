@@ -51,8 +51,12 @@ private:
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                   std::vector<Bracket*>& bl, Measure* measure);
 
-    static void updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name, InstrumentNameType type,
-                           InstrumentNameRole role);
+    static void updateGroupNames(System* system, LayoutContext& ctx, const Fraction& tick);
+    static InstrumentName* updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name, InstrumentNameType type,
+                                      InstrumentNameRole role);
+    static String instrumentNameForPart(System* system, Part* part, const Fraction& tick);
+    static bool showNames(LayoutContext& ctx);
+
     static bool stackLabelsVertically(System* system);
 };
 }

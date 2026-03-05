@@ -61,6 +61,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(instrumentNamesAlignLong,                   InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesAlignShort,                  InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesStackVertically,             false),
+    styleDef(windsNameByGroup,                           true),
+    styleDef(vocalsNameByGroup,                          true),
+    styleDef(stringsNameByGroup,                         false),
+    styleDef(othersNameByGroup,                          false),
 
     styleDef(enableVerticalSpread,                       true),
     styleDef(spreadSystem,                               2.5),

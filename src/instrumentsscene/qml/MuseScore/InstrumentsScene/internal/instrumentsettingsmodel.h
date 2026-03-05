@@ -39,6 +39,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable, p
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)
+    Q_PROPERTY(int number READ number WRITE setNumber NOTIFY dataChanged)
     Q_PROPERTY(int hideWhenEmpty READ hideWhenEmpty WRITE setHideWhenEmpty NOTIFY hideWhenEmptyChanged)
     Q_PROPERTY(
         bool hideStavesWhenIndividuallyEmpty READ hideStavesWhenIndividuallyEmpty WRITE setHideStavesWhenIndividuallyEmpty NOTIFY hideStavesWhenIndividuallyEmptyChanged)
@@ -57,6 +58,7 @@ public:
 
     QString instrumentName() const;
     QString abbreviature() const;
+    int number() const;
     int hideWhenEmpty() const;
     bool hideStavesWhenIndividuallyEmpty() const;
     bool hasMultipleStaves() const;
@@ -66,6 +68,7 @@ public:
 public slots:
     void setInstrumentName(const QString& name);
     void setAbbreviature(const QString& abbreviature);
+    void setNumber(int v);
     void setHideWhenEmpty(int value);
     void setHideStavesWhenIndividuallyEmpty(bool value);
 
@@ -84,6 +87,7 @@ private:
     notation::InstrumentKey m_instrumentKey;
     QString m_instrumentName;
     QString m_instrumentAbbreviature;
+    int m_number = 0;
     int m_hideWhenEmpty = 0; // AutoOnOff::AUTO
     bool m_hideStavesWhenIndividuallyEmpty = false;
     bool m_hasMultipleStaves = false;

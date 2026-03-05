@@ -50,7 +50,45 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
-            title: qsTrc("notation/editstyle/instrumentnames", "Instrument & staff names alignment")
+            title: qsTrc("notation/editstyle/instrumentnames", "Instrument names")
+
+            ColumnLayout {
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Enable name grouping for")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Winds")
+                        styleItem: instrumentNamesModel.windsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Vocals")
+                        styleItem: instrumentNamesModel.vocalsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Strings")
+                        styleItem: instrumentNamesModel.stringsNameByGroup
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Others")
+                        styleItem: instrumentNamesModel.othersNameByGroup
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Alignment")
 
             ColumnLayout {
                 width: parent.width
