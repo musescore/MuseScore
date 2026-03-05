@@ -21,6 +21,7 @@
  */
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -35,6 +36,7 @@ Item {
     property int count: Boolean(model) ? model.length : 0
     property string textRole: "text"
     property string valueRole: "value"
+    property Component contentItem: null
 
     property int currentIndex: -1
 
@@ -50,9 +52,6 @@ Item {
     property string indeterminateText: "--"
 
     property int popupItemsCount: 18
-
-    property alias dropIcon: mainItem.dropIcon
-    property alias label: mainItem.label
 
     property alias navigation: mainItem.navigation
 
@@ -123,9 +122,6 @@ Item {
         property bool selected: false
         property bool insideDropdownList: false
 
-        property alias label: labelItem
-        property alias dropIcon: dropIconItem
-
         property color hoveredColor: backgroundItem.color
 
         property alias navigation: navCtrl
@@ -136,7 +132,7 @@ Item {
             name: mainItem.objectName != "" ? mainItem.objectName : "Dropdown"
             enabled: mainItem.enabled && mainItem.visible
             accessible.role: MUAccessible.ComboBox
-            accessible.name: labelItem.text
+            accessible.name: root.displayText
 
             onActiveChanged: {
                 if (!mainItem.activeFocus) {
@@ -159,25 +155,50 @@ Item {
             NavigationFocusBorder { navigationCtrl: navCtrl }
         }
 
-        StyledTextLabel {
-            id: labelItem
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: dropIconItem.left
-            anchors.leftMargin: 12
-            anchors.rightMargin: 6
-            horizontalAlignment: Text.AlignLeft
-            text: root.displayText
-        }
+        Loader {
+            id: contentLoader
 
-        StyledIconLabel {
-            id: dropIconItem
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 8
+            anchors.fill: parent
 
-            iconCode: IconCode.SMALL_ARROW_DOWN
+            sourceComponent: root.contentItem ?? defaultContentComponent
+
+            onLoaded: {
+                const item = contentLoader.item
+                if (!item) {
+                    return
+                }
+
+                if (item.text !== undefined) {
+                    item.text = Qt.binding(function() { return root.displayText })
+                }
+            }
+
+            Component {
+                id: defaultContentComponent
+
+                RowLayout {
+                    property alias labelItem: labelItem
+
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 8
+                    spacing: 6
+
+                    StyledTextLabel {
+                        id: labelItem
+
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        text: root.displayText
+                    }
+
+                    StyledIconLabel {
+                        Layout.alignment: Qt.AlignVCenter
+                        iconCode: IconCode.SMALL_ARROW_DOWN
+                    }
+                }
+            }
         }
 
         MouseArea {
@@ -190,12 +211,13 @@ Item {
             onClicked: mainItem.clicked()
 
             onContainsMouseChanged: {
-                if (!labelItem.truncated) {
+                const defaultLabel = contentLoader.item ? contentLoader.item.labelItem : null
+                if (!defaultLabel || !defaultLabel.truncated) {
                     return
                 }
 
                 if (mouseAreaItem.containsMouse) {
-                    ui.tooltip.show(mainItem, labelItem.text)
+                    ui.tooltip.show(mainItem, root.displayText)
                 } else {
                     ui.tooltip.hide(mainItem)
                 }

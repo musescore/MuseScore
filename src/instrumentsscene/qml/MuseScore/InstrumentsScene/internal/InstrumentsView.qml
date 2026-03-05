@@ -149,8 +149,34 @@ Item {
                 width: 86
                 height: 24
 
-                label.anchors.leftMargin: 8
-                dropIcon.anchors.rightMargin: 4
+                contentItem: Item {
+                    property string text: ""
+                    property alias labelItem: labelItem
+
+                    StyledTextLabel {
+                        id: labelItem
+
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: dropIconItem.left
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 6
+
+                        horizontalAlignment: Text.AlignLeft
+                        text: parent.text
+                    }
+
+                    StyledIconLabel {
+                        id: dropIconItem
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.rightMargin: 4
+
+                        iconCode: IconCode.SMALL_ARROW_DOWN
+                    }
+                }
 
                 visible: traitsBox.count > 1
 
