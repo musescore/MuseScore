@@ -75,7 +75,6 @@ Instrument::Instrument(const Instrument& i)
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
     m_instrumentName = i.m_instrumentName;
-    m_staffNames   = i.m_staffNames;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;
@@ -108,7 +107,6 @@ void Instrument::operator=(const Instrument& i)
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
     m_instrumentName = i.m_instrumentName;
-    m_staffNames   = i.m_staffNames;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;

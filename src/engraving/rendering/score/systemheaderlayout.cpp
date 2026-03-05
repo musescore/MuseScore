@@ -268,10 +268,10 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
     return totalBracketsWidth;
 }
 
-bool SystemHeaderLayout::stackVertically(InstrumentName* n)
+bool SystemHeaderLayout::stackLabelsVertically(System* system)
 {
-    const MStyle& style = n->style();
-    bool longName = n->instrumentNameType() == InstrumentNameType::LONG;
+    const MStyle& style = system->style();
+    bool longName = system->ldata()->useLongNames();
     InstrumentNamesAlign align
         = style.styleV(longName ? Sid::instrumentNamesAlignLong : Sid::instrumentNamesAlignShort).value<InstrumentNamesAlign>();
     return align == InstrumentNamesAlign::CENTER_CENTER
@@ -336,6 +336,8 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         }
     }
 
+    bool stackVertically = stackLabelsVertically(system);
+
     for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
         Part* part = ctx.dom().staff(staffIdx)->part();
         if (!part->show() || part->visibleStavesCount() == 0) {
@@ -358,7 +360,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         ldata->setInstrumentNamesWidth(std::max(ldata->instrumentNamesWidth(), name->width()));
         ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), name->width()));
 
-        if (stackVertically(name)) {
+        if (stackVertically) {
             continue;
         }
 
@@ -404,6 +406,8 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         }
     }
 
+    bool stackVertically = stackLabelsVertically(system);
+
     staff_idx_t staffIdx = 0;
     for (const Part* p : ctx.dom().parts()) {
         size_t nstaves = p->nstaves();
@@ -437,7 +441,7 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
                 y1 = midStaff->bbox().top();
                 y2 = midStaff->bbox().bottom();
                 if (InstrumentName* staffName = midStaff->individualStaffName) {
-                    if (stackVertically(t)) {
+                    if (stackVertically) {
                         double lineSpacing = t->fontMetrics().lineSpacing();
                         double instrNameBottom = t->ldata()->blocks.back().y();
                         double centerY = 0.5 * (midStaff->bbox().top() + midStaff->bbox().bottom());
@@ -501,6 +505,8 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
         }
     }
 
+    bool stackVertically = stackLabelsVertically(system);
+
     for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
         const SysStaff* s = system->staff(staffIdx);
         const Part* p = system->score()->staff(staffIdx)->part();
@@ -519,7 +525,7 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
             } else {
                 std::vector<staff_idx_t> visibleStavesForPart = system->visibleStavesOfPart(p);
                 size_t visibleStaveCount = visibleStavesForPart.size();
-                if (visibleStaveCount % 2 && !stackVertically(t)) {
+                if (visibleStaveCount % 2 && !stackVertically) {
                     staff_idx_t centerStaff = visibleStavesForPart[visibleStaveCount / 2];
                     if (InstrumentName* staffName = system->staff(centerStaff)->individualStaffName) {
                         t->mutldata()->setPosX(

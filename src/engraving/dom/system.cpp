@@ -734,23 +734,6 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
         func(i);
     }
 
-    for (staff_idx_t i = 0; i < m_staves.size(); ++i) {
-        SysStaff* st = m_staves[i];
-        if (st->show()) {
-            if (InstrumentName* n = st->instrumentName) {
-                func(n);
-            }
-            if (InstrumentName* n = st->individualStaffName) {
-                func(n);
-            }
-        } else if (InstrumentName* n = st->instrumentName) {
-            SysStaff* effectiveSt = staff(n->effectiveStaffIdx());
-            if (effectiveSt && effectiveSt->show()) {
-                func(n);
-            }
-        }
-    }
-
     for (const SysStaff* st : m_staves) {
         if (st->show()) {
             if (InstrumentName* t = st->instrumentName) {
@@ -759,6 +742,8 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
             if (InstrumentName* n = st->individualStaffName) {
                 func(n);
             }
+        } else if (InstrumentName* n = st->instrumentName; n && n->effectiveStaffIdx() != muse::nidx) {
+            func(n);
         }
     }
 

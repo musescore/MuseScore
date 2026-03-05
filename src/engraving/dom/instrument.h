@@ -370,7 +370,6 @@ public:
 private:
 
     StaffName m_instrumentName;
-    std::vector<StaffName> m_staffNames;
 
     String m_trackName;
     String m_id;

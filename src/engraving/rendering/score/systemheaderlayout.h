@@ -53,6 +53,6 @@ private:
 
     static void updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name, InstrumentNameType type,
                            InstrumentNameRole role);
-    static bool stackVertically(InstrumentName* n);
+    static bool stackLabelsVertically(System* system);
 };
 }

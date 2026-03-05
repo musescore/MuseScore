@@ -44,6 +44,4 @@ private:
     muse::String m_longName;
     muse::String m_shortName;
 };
-
-using StaffNameList = std::vector<StaffName>;
 }
