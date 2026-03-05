@@ -59,6 +59,35 @@ void NoteheadSettingsModel::createProperties()
         }
         updateNotation();
         endCommand();
+        loadProperties();
+    }, [this](const mu::engraving::Sid styleId, const QVariant& newValue) {
+        updateStyleValue(styleId, newValue);
+
+        emit requestReloadPropertyItems();
+    }, [this](const mu::engraving::Pid propertyId) {
+        if (m_elementList.empty()) {
+            return;
+        }
+
+        beginCommand(TranslatableString("undoableAction", "Reset %1").arg(propertyUserName(propertyId)));
+
+        for (mu::engraving::EngravingItem* item : m_elementList) {
+            IF_ASSERT_FAILED(item) {
+                continue;
+            }
+
+            item->undoResetProperty(propertyId);
+        }
+        Score* score = m_elementList.front()->score();
+        bool addParens = m_elementList.front()->parenthesesMode() == ParenthesesMode::BOTH;
+        if (addParens) {
+            score->cmdAddParenthesesToNotes();
+        } else {
+            score->cmdRemoveParenthesesFromNotes();
+        }
+        updateNotation();
+        endCommand();
+        loadProperties();
     });
     m_headDirection = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
