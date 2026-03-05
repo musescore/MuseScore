@@ -6116,7 +6116,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
         xml.startElement("direction-type");
         String attrs = color2xml(jp);
         attrs += ExportMusicXml::positioningAttributes(jp);
-        xml.tagRaw(u"words" + attrs, words);
+        writeWordsAndSymbolsXml(xml, words, attrs);
         xml.endElement();
         if (!sound.empty()) {
             xml.tagRaw(u"sound " + sound);
