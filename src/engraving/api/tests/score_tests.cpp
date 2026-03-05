@@ -369,9 +369,9 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentName)
     score->appendStaff(Factory::createStaff(part));
 
     Instrument initialInstrument;
-    initialInstrument.setLongName(StaffName(u"Original Name"));
+    initialInstrument.setLongName(u"Original Name");
     part->setInstrument(initialInstrument);
-    EXPECT_EQ(part->instrument()->longName().toPlainText(), u"Original Name");
+    EXPECT_EQ(part->instrument()->longName(), u"Original Name");
 
     // [WHEN] We set a new instrument name
     score->startCmd(TranslatableString::untranslatable("Set instrument name test"));
@@ -379,13 +379,13 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentName)
     score->endCmd();
 
     // [THEN] The name should be changed
-    EXPECT_EQ(part->instrument()->longName().toPlainText(), u"New Name");
+    EXPECT_EQ(part->instrument()->longName(), u"New Name");
 
     // [WHEN] We undo
     score->undoRedo(true, nullptr);
 
     // [THEN] The name should be back to original
-    EXPECT_EQ(part->instrument()->longName().toPlainText(), u"Original Name");
+    EXPECT_EQ(part->instrument()->longName(), u"Original Name");
 
     delete score;
 }
@@ -405,9 +405,9 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentAbbreviature)
     score->appendStaff(Factory::createStaff(part));
 
     Instrument initialInstrument;
-    initialInstrument.setShortName(StaffName(u"Orig."));
+    initialInstrument.setShortName(u"Orig.");
     part->setInstrument(initialInstrument);
-    EXPECT_EQ(part->instrument()->shortName().toPlainText(), u"Orig.");
+    EXPECT_EQ(part->instrument()->shortName(), u"Orig.");
 
     // [WHEN] We set a new abbreviature
     score->startCmd(TranslatableString::untranslatable("Set instrument abbreviature test"));
@@ -415,13 +415,13 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentAbbreviature)
     score->endCmd();
 
     // [THEN] The abbreviature should be changed
-    EXPECT_EQ(part->instrument()->shortName().toPlainText(), u"New.");
+    EXPECT_EQ(part->instrument()->shortName(), u"New.");
 
     // [WHEN] We undo
     score->undoRedo(true, nullptr);
 
     // [THEN] The abbreviature should be back to original
-    EXPECT_EQ(part->instrument()->shortName().toPlainText(), u"Orig.");
+    EXPECT_EQ(part->instrument()->shortName(), u"Orig.");
 
     delete score;
 }
@@ -504,7 +504,7 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
     domScore->appendStaff(Factory::createStaff(domPart));
 
     Instrument instr;
-    instr.setLongName(StaffName(u"Piano"));
+    instr.setLongName(u"Piano");
     domPart->setInstrument(instr);
 
     apiv1::Score apiScore(domScore);
@@ -515,7 +515,7 @@ TEST_F(Engraving_ApiScoreTests, setInstrumentNameApi)
     apiScore.setInstrumentName(apiPart, &tick, "Grand Piano");
 
     // [THEN] The long name should be changed
-    EXPECT_EQ(domPart->instrument()->longName().toPlainText(), u"Grand Piano");
+    EXPECT_EQ(domPart->instrument()->longName(), u"Grand Piano");
 
     delete apiPart;
     delete domScore;

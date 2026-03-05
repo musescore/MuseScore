@@ -395,7 +395,7 @@ void EditPart::setInstrumentName(Score* score, Part* part, const Fraction& tick,
         return;
     }
 
-    score->undo(new ChangeInstrumentLong(tick, part, StaffName(name)));
+    score->undo(new ChangeInstrumentLong(tick, part, name));
 }
 
 void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature)
@@ -404,7 +404,7 @@ void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fractio
         return;
     }
 
-    score->undo(new ChangeInstrumentShort(tick, part, StaffName(abbreviature)));
+    score->undo(new ChangeInstrumentShort(tick, part, abbreviature));
 }
 
 void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
