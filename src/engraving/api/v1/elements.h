@@ -2033,19 +2033,32 @@ class Measure : public MeasureBase
 
     /// \brief Measure number, counting from 1.
     /// Number of this measure in the score counting from 1, i.e.
-    /// for the first measure its \p no value will be equal to 1.
+    /// for the first measure its \p measureNumber value will be equal to 1.
     /// User-visible measure number can be calculated as
     /// \code
-    /// measure.no + measure.noOffset
+    /// measure.measureNumber + measure.measureNumberOffset
     /// \endcode
     /// where \p measure is the relevant \ref Measure object.
+    /// \since MuseScore 5.0
+    /// \see Measure::measureNumberOffset
+    Q_PROPERTY(int measureNumber READ measureNumber)
+    /// \brief Compatibility alias for \ref measureNumber. Do not use in new code.
     /// \since MuseScore 4.6
-    /// \see ScoreElement::noOffset
-    Q_PROPERTY(int no READ no)
-    /// The measure number offset of this measureBase.
+    Q_PROPERTY(int no READ measureNumber)
+
+    /// \brief The measure number offset of this measure.
+    /// \since MuseScore 5.0
+    API_PROPERTY_T(int, measureNumberOffset, MEASURE_NUMBER_OFFSET)
+    /// \brief Compatibility alias for \ref measureNumberOffset. Do not use in new code.
+    /// \since MuseScore 4.6
     API_PROPERTY_T(int, noOffset, MEASURE_NUMBER_OFFSET)
-    /// Whether this measure is excluded from measure numbering.
+
+    /// \brief Whether this measure is excluded from measure numbering.
+    /// \since MuseScore 5.0
     API_PROPERTY_T(bool, excludeFromNumbering, EXCLUDE_FROM_NUMBERING)
+    /// \brief Compatibility alias for \ref measureNumberOffset. Do not use in new code.
+    /// \since MuseScore 4.6
+    API_PROPERTY_T(bool, irregular, EXCLUDE_FROM_NUMBERING)
 
     /// Controls whether this measure displays a measure number,
     /// one of PluginAPI::PluginAPI::MeasureNumberMode values.
@@ -2085,7 +2098,7 @@ public:
     mu::engraving::Measure* measure() { return toMeasure(e); }
     const mu::engraving::Measure* measure() const { return toMeasure(e); }
 
-    int no() { return measure()->measureNumber(); }
+    int measureNumber() { return measure()->measureNumber(); }
 
     bool showsMeasureNumberInAutoMode() { return measure()->showMeasureNumberInAutoMode(); }
 
