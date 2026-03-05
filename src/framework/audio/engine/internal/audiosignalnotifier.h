@@ -65,6 +65,7 @@ struct AudioSignalsNotifier
     //! If this is not enough, then we need to make sure that the callback is called in one thread,
     //! or use something else here instead of channels, some kind of queues.
     AudioSignalChanges audioSignalChanges = AudioSignalChanges(async::makeOpt()
+                                                               .name("audio::audioSignalChanges")
                                                                .threads(100)
                                                                .disableWaitPendingsOnSend());
 

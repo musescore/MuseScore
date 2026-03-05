@@ -31,6 +31,7 @@ SOFTWARE.
 #include <algorithm>
 #include <atomic>
 #include <iostream>
+#include <sstream>
 
 #include "../conf.h"
 #include "../asyncable.h"
@@ -223,6 +224,20 @@ private:
             addPending();
         }
 
+        std::string dump() const
+        {
+            std::stringstream s;
+            s << "threadId: " << threadId << '\n';
+            s << "queues: " << queues.size() << '\n';
+            for (size_t i = 0; i < queues.size(); ++i) {
+                s << "  " << i << ": receiveTh: " << queues.at(i)->receiveTh << '\n';
+            }
+            s << "receivers: " << receivers.size() << '\n';
+            s << "pendingToAdd: " << pendingToAdd.size() << '\n';
+            s << "pendingToRemove: " << pendingToRemove.size() << '\n';
+            return s.str();
+        }
+
     private:
 
         inline void addPending()
@@ -307,6 +322,19 @@ private:
     ObjectPool<SharedReceiverCall> m_rcalls;
     std::atomic<int> m_enabledReceiversCount = 0;
     ChannelOpt m_opt;
+    std::mutex m_dumpMutex;
+
+    std::string thDataDump() const
+    {
+        const size_t count = m_thdatas.count();
+        std::stringstream s;
+        s << "use threads: " << count << '\n';
+        for (size_t i = 0; i < count; ++i) {
+            const ThreadData* thdata = m_thdatas.at(i);
+            s << "  " << i << ": " << thdata->dump() << '\n';
+        }
+        return s.str();
+    }
 
     ThreadData& threadData(const std::thread::id& thId)
     {
@@ -319,7 +347,17 @@ private:
             return *thdata;
         }
 
-        assert(false && "thread data pool exhausted");
+        {
+            std::scoped_lock lock(m_dumpMutex);
+            std::cout << "channel: " << (m_opt.chname.empty() ? "no name" : m_opt.chname) << std::endl;
+            std::cout << "thread data pool exhausted!!" << std::endl;
+            std::cout << "required thread: " << thId << std::endl;
+            std::cout << "current state:" << std::endl;
+            std::cout << thDataDump() << std::endl;
+
+            assert(false && "thread data pool exhausted");
+        }
+
         static std::thread::id dummyId;
         static ThreadData dummy(dummyId);
         return dummy;
