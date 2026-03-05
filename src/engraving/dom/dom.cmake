@@ -286,7 +286,7 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/staff.h
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafflines.h
-    ${CMAKE_CURRENT_LIST_DIR}/staffname.h
+    ${CMAKE_CURRENT_LIST_DIR}/stafflabel.h
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffstate.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.cpp

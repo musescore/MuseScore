@@ -286,6 +286,13 @@ enum class InstrumentNamesAlign : unsigned char {
     LEFT_RIGHT,
 };
 
+enum class InstrumentNamesFormat : unsigned char {
+    NAME_IN_TRANSP_NUM,
+    NAME_NUM_IN_TRANSP,
+    TRANSP_NAME_NUM,
+    CUSTOM,
+};
+
 struct Align {
     AlignH horizontal = AlignH::LEFT;
     AlignV vertical = AlignV::TOP;

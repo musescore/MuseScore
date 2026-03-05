@@ -1249,7 +1249,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         } else {
             part->setMidiProgram(cl->sound, 0);
         }
-        part->setPartName(cl->descr);
         part->setPlainLongName(cl->name);
         part->setPlainShortName(cl->abbrev);
 

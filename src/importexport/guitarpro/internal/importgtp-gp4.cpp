@@ -742,7 +742,6 @@ bool GuitarPro4::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
 
         int patch = channelDefaults[midiChannel].patch;

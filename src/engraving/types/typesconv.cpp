@@ -3412,3 +3412,20 @@ InstrumentNamesAlign TConv::fromXml(const AsciiStringView& str, InstrumentNamesA
 {
     return findTypeByXmlTag<InstrumentNamesAlign>(INSTR_LABELS_ALIGN, str, def);
 }
+
+const std::array<Item<InstrumentNamesFormat>, 4> INSTR_NAMES_FORMAT = { {
+    { InstrumentNamesFormat::NAME_IN_TRANSP_NUM, "name-in-transp-num" },
+    { InstrumentNamesFormat::NAME_NUM_IN_TRANSP, "name-num-in-transp" },
+    { InstrumentNamesFormat::TRANSP_NAME_NUM, "transp-name-num" },
+    { InstrumentNamesFormat::CUSTOM, "custom" }
+} };
+
+mu::engraving::AsciiStringView mu::engraving::TConv::toXml(InstrumentNamesFormat v)
+{
+    return findXmlTagByType<InstrumentNamesFormat>(INSTR_NAMES_FORMAT, v);
+}
+
+InstrumentNamesFormat TConv::fromXml(const AsciiStringView& str, InstrumentNamesFormat def)
+{
+    return findTypeByXmlTag<InstrumentNamesFormat>(INSTR_NAMES_FORMAT, str, def);
+}

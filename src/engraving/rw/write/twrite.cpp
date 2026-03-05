@@ -534,10 +534,11 @@ void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::lineBreakToTag(String& str)
+String TWrite::lineBreakToTag(const String& str)
 {
     // Raw newlines appearing next to tags (<font size="10> or <sym>...) get eaten by XML readers.
-    str.replace(u"\n", u"<br/>");
+    String s = str;
+    return s.replace(u"\n", u"<br/>");
 }
 
 void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
@@ -1342,9 +1343,7 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
         writeProperty(item, xml, spp.pid);
     }
     if (writeText) {
-        String xmlStr = item->xmlText();
-        lineBreakToTag(xmlStr);
-        xml.writeXml(u"text", xmlStr);
+        xml.writeXml(u"text", lineBreakToTag(item->xmlText()));
     }
 
     writeProperty(item, xml, Pid::TEXT_LINKED_TO_MASTER);
@@ -1915,7 +1914,9 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         xml.tag("soundId", item->soundId());
     }
 
-    write(item->instrumentName(), xml);
+    if (!item->instrumentLabel().empty()) {
+        write(item->instrumentLabel(), xml);
+    }
 
 //      if (!_trackName.empty())
     xml.tag("trackName", item->trackName());
@@ -2093,18 +2094,96 @@ void TWrite::write(const MidiArticulation* item, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::write(const StaffName& item, XmlWriter& xml)
+void TWrite::write(const StaffLabel& item, XmlWriter& xml)
+{
+    xml.startElement("StaffLabel");
+    writeProperties(item, xml);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const StaffLabel& item, XmlWriter& xml)
 {
     String longName = item.longName();
     if (!longName.empty()) {
-        lineBreakToTag(longName);
-        xml.writeXml(u"longName", longName);
+        xml.writeXml(u"longName", lineBreakToTag(longName));
     }
 
     String shortName = item.shortName();
     if (!shortName.empty()) {
-        lineBreakToTag(shortName);
-        xml.writeXml(u"shortName", shortName);
+        xml.writeXml(u"shortName", lineBreakToTag(shortName));
+    }
+}
+
+void TWrite::write(const InstrumentLabel& item, XmlWriter& xml)
+{
+    xml.startElement("InstrumentLabel");
+    writeProperties(item, xml);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const InstrumentLabel& item, XmlWriter& xml)
+{
+    writeProperties(static_cast<StaffLabel>(item), xml);
+
+    String transposition = item.transposition();
+    if (!transposition.empty()) {
+        xml.writeXml(u"transposition", lineBreakToTag(transposition));
+    }
+
+    if (!item.showTranspositionLong()) {
+        xml.tag("showTranspositionLong", item.showTranspositionLong());
+    }
+
+    if (!item.showTranspositionShort()) {
+        xml.tag("showTranspositionShort", item.showTranspositionShort());
+    }
+
+    if (item.number() != 0) {
+        xml.tag("number", item.number());
+    }
+
+    if (!item.showNumberLong()) {
+        xml.tag("showNumberLong", item.showNumberLong());
+    }
+
+    if (!item.showNumberShort()) {
+        xml.tag("showNumberShort", item.showNumberShort());
+    }
+
+    if (!item.allowGroupName()) {
+        xml.tag("allowGroupName", item.allowGroupName());
+    }
+
+    if (!item.customNameLong().empty()) {
+        xml.writeXml(u"customNameLong", lineBreakToTag(item.customNameLong()));
+    }
+
+    if (!item.customNameShort().empty()) {
+        xml.writeXml(u"customNameShort", lineBreakToTag(item.customNameShort()));
+    }
+
+    if (item.useCustomNameLong()) {
+        xml.tag("useCustomNameLong", item.useCustomNameLong());
+    }
+
+    if (item.useCustomNameShort()) {
+        xml.tag("useCustomNameShort", item.useCustomNameShort());
+    }
+
+    if (!item.customNameLongGroup().empty()) {
+        xml.writeXml(u"customNameLongGroup", item.customNameLongGroup());
+    }
+
+    if (!item.customNameShortGroup().empty()) {
+        xml.writeXml(u"customNameShortGroup", item.customNameShortGroup());
+    }
+
+    if (item.useCustomNameLongGroup()) {
+        xml.tag("useCustomNameLongGroup", item.useCustomNameLongGroup());
+    }
+
+    if (item.useCustomNameShortGroup()) {
+        xml.tag("useCustomNameShortGroup", item.useCustomNameShortGroup());
     }
 }
 
@@ -2504,8 +2583,6 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("soloist", item->soloist());
     }
 
-    xml.tag("trackName", item->partName());
-
     if (item->color() != Part::DEFAULT_COLOR) {
         xml.tag("color", item->color());
     }
@@ -2901,8 +2978,8 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
     if (!item->xmlName().isEmpty()) {
         xml.tag("name", item->xmlName());
     }
-    if (!item->staffName().empty()) {
-        write(item->staffName(), xml);
+    if (!item->staffLabel().empty()) {
+        write(item->staffLabel(), xml);
     }
     if (item->lines() != 5) {
         xml.tag("lines", item->lines());

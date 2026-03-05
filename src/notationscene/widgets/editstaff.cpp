@@ -196,6 +196,23 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(m_instrument.nameAsPlainText());
     shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
+    instrumentNumber->setValue(m_instrument.number());
+
+    const InstrumentLabel& instrLabel = m_instrument.instrumentLabel();
+    showNumberLong->setChecked(instrLabel.showNumberLong());
+    showNumberShort->setChecked(instrLabel.showNumberShort());
+    showTranspositionLong->setChecked(instrLabel.showTranspositionLong());
+    showTranspositionShort->setChecked(instrLabel.showTranspositionShort());
+    transpositionLabel->setText(TextBase::unEscape(instrLabel.transposition()));
+    allowGroupName->setChecked(instrLabel.allowGroupName());
+    useCustomLong->setChecked(instrLabel.useCustomNameLong());
+    useCustomShort->setChecked(instrLabel.useCustomNameShort());
+    customLongName->setPlainText(TextBase::unEscape(instrLabel.customNameLong()));
+    customShortName->setPlainText(TextBase::unEscape(instrLabel.customNameShort()));
+    useCustomGroupLong->setChecked(instrLabel.useCustomNameLongGroup());
+    useCustomGroupShort->setChecked(instrLabel.useCustomNameShortGroup());
+    customLongNameGroup->setPlainText(TextBase::unEscape(instrLabel.customNameLongGroup()));
+    customShortNameGroup->setPlainText(TextBase::unEscape(instrLabel.customNameShortGroup()));
 
     const InstrumentTemplate* templ = mu::engraving::searchTemplate(m_instrument.id());
     if (templ) {
@@ -554,6 +571,23 @@ void EditStaff::applyPartProperties()
 
     m_instrument.setShortName(String::fromQString(sn));
     m_instrument.setLongName(String::fromQString(ln));
+    m_instrument.setNumber(instrumentNumber->value());
+
+    InstrumentLabel& name = m_instrument.instrumentLabel();
+    name.setShowNumberLong(showNumberLong->isChecked());
+    name.setShowNumberShort(showNumberShort->isChecked());
+    name.setShowTranspositionLong(showTranspositionLong->isChecked());
+    name.setShowTranspositionShort(showTranspositionShort->isChecked());
+    name.setTransposition(transpositionLabel->text());
+    name.setAllowGroupName(allowGroupName->isChecked());
+    name.setUseCustomNameLong(useCustomLong->isChecked());
+    name.setUseCustomNameShort(useCustomShort->isChecked());
+    name.setCustomNameLong(customLongName->toPlainText());
+    name.setCustomNameShort(customShortName->toPlainText());
+    name.setUseCustomNameLongGroup(useCustomGroupLong->isChecked());
+    name.setUseCustomNameShortGroup(useCustomGroupShort->isChecked());
+    name.setCustomNameLongGroup(customLongNameGroup->toPlainText());
+    name.setCustomNameShortGroup(customShortNameGroup->toPlainText());
 
     size_t staffIdxInPart = muse::indexOf(part->staves(), m_orgStaff);
     DO_ASSERT(staffIdxInPart != muse::nidx);

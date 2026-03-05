@@ -790,7 +790,6 @@ void PowerTab::addToScore(ptSection& sec)
                 std::string n = "part " + std::to_string(i + 1);
                 staffName = muse::String::fromStdString(n);
             }
-            part->setPartName(staffName);
             part->setPlainLongName(staffName);
 
             std::vector<int> reverseStr;

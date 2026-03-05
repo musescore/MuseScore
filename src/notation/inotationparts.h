@@ -59,6 +59,7 @@ public:
     virtual void setPartSharpFlat(const muse::ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
+    virtual void setInstrumentNumber(const InstrumentKey& instrumentKey, int v) = 0;
     virtual void setStaffType(const muse::ID& staffId, StaffTypeId type) = 0;
     virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) = 0;
 
