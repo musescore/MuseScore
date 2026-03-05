@@ -64,6 +64,8 @@ static VoiceColor VOICE_COLORS[VOICES + 1];
 
 static const Color UNLINKED_ITEM_COLOR = "#FF9300";
 
+static const int LIGHTEN_DARKEN_FACTOR = 135;
+
 void EngravingConfiguration::init()
 {
     static const Color DEFAULT_VOICE_COLORS[VOICES + 1] {
@@ -265,7 +267,8 @@ Color EngravingConfiguration::warningColor() const
 
 Color EngravingConfiguration::warningSelectedColor() const
 {
-    return "#565600";
+    const QColor qColor = warningColor().toQColor();
+    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
 }
 
 Color EngravingConfiguration::criticalColor() const
@@ -280,7 +283,8 @@ Color EngravingConfiguration::criticalBackgroundColor() const
 
 Color EngravingConfiguration::criticalSelectedColor() const
 {
-    return "#8B0000";
+    const QColor qColor = criticalColor().toQColor();
+    return Color::fromQColor(qColor.darker(LIGHTEN_DARKEN_FACTOR));
 }
 
 Color EngravingConfiguration::thumbnailBackgroundColor() const
@@ -337,7 +341,8 @@ muse::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorC
 
 Color EngravingConfiguration::highlightSelectionColor(voice_idx_t voice) const
 {
-    return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
+    const QColor qColor = selectionColor(voice).toQColor();
+    return Color::fromQColor(qColor.lighter(LIGHTEN_DARKEN_FACTOR));
 }
 
 bool EngravingConfiguration::dynamicsApplyToAllVoices() const
