@@ -119,6 +119,34 @@ StyledPopupView {
             }
         }
 
+        Column {
+            width: parent.width
+            spacing: 8
+
+            StyledTextLabel {
+                id: numberLabel
+                width: parent.width
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Number")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            IncrementalPropertyControl {
+                step: 1
+                decimals: 0
+                maxValue: 100
+                minValue: 0
+
+                navigation.panel: root.navigationPanel
+                navigation.row: 3
+                navigation.accessible.name: numberLabel.text + " " + currentText
+
+                currentValue: settingsModel.number
+                onValueEdited: function(newValue) {
+                    settingsModel.number = newValue
+                }
+            }
+        }
+
         SeparatorLine {}
 
         Column {

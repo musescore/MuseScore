@@ -84,7 +84,7 @@ public:
     String id;
     String soundId;
     String trackName;
-    StaffName instrumentName;
+    InstrumentLabel instrumentName;
     String musicXmlId;          ///< used in MusicXML 3.0
     String description;         ///< a longer description of the instrument
 

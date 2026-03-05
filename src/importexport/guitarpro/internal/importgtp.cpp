@@ -1517,7 +1517,6 @@ bool GuitarPro2::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
 
         //
@@ -2266,7 +2265,6 @@ bool GuitarPro3::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
         //
         // determine clef

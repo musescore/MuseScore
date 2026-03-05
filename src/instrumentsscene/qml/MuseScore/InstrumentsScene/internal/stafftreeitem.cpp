@@ -59,7 +59,10 @@ void StaffTreeItem::init(const Staff* masterStaff)
         staff = masterStaff;
     }
 
-    QString staffName = staff->staffName();
+    QString staffName = staff->staffType()->longName();
+    if (staffName.isEmpty()) {
+        staffName = staff->staffName();
+    }
 
     //: Prefix for the display name for a linked staff. Preferably, keep this short.
     QString title = masterStaff->isLinked() ? muse::qtrc("layoutpanel", "[LINK] %1").arg(staffName) : staffName;

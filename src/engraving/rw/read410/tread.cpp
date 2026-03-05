@@ -998,9 +998,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     if (tag == "soundId") {
         item->setSoundId(e.readText());
     } else if (tag == "longName") {
-        item->setLongName(read460::TRead::readStaffName(e));
+        item->setLongName(read460::TRead::readLegacyStaffName(e));
     } else if (tag == "shortName") {
-        item->setShortName(read460::TRead::readStaffName(e));
+        item->setShortName(read460::TRead::readLegacyStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {
@@ -3494,10 +3494,6 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (p->partName().isEmpty()) {
-        p->setPartName(p->instrument()->trackName());
-    }
-
     read400::TRead::read(p, staffHideModes, ctx.style().styleB(Sid::hideEmptyStaves));
 }
 
@@ -3545,8 +3541,6 @@ bool TRead::readProperties(Part* p, XmlReader& e, ReadContext& ctx, StaffHideMod
         p->setColor(e.readInt());
     } else if (tag == "shortName") {
         p->instrument()->setShortName(e.readText());
-    } else if (tag == "trackName") {
-        p->setPartName(e.readText());
     } else if (tag == "show") {
         p->setShow(e.readInt());
     } else if (tag == "soloist") {

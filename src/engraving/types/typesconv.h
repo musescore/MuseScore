@@ -297,5 +297,8 @@ public:
 
     static AsciiStringView toXml(InstrumentNamesAlign v);
     static InstrumentNamesAlign fromXml(const AsciiStringView& str, InstrumentNamesAlign def);
+
+    static AsciiStringView toXml(InstrumentNamesFormat v);
+    static InstrumentNamesFormat fromXml(const AsciiStringView& str, InstrumentNamesFormat def);
 };
 }
