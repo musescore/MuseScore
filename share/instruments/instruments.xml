@@ -2370,8 +2370,8 @@
             <Instrument id="eb-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in E♭</longName>
+                  <shortName>Cl. in E♭</shortName>
                   <traitName type="transposition">E♭</traitName>
                   <description>Sopranino clarinet in E♭.</description>
                   <musicXMLid>wind.reed.clarinet.eflat</musicXMLid>
@@ -2392,8 +2392,8 @@
             <Instrument id="d-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in D</longName>
+                  <shortName>Cl. in D</shortName>
                   <traitName type="transposition">D</traitName>
                   <description>Sopranino clarinet in D.</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
@@ -2411,8 +2411,8 @@
             <Instrument id="c-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in C</longName>
+                  <shortName>Cl. in C</shortName>
                   <traitName type="transposition">C</traitName>
                   <description>Soprano clarinet in C.</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
@@ -2428,8 +2428,8 @@
             <Instrument id="bb-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in B♭</longName>
+                  <shortName>Cl. in B♭</shortName>
                   <traitName type="transposition">*B♭</traitName>
                   <description>Soprano clarinet in B♭. One of the standard orchestral clarinets.</description>
                   <musicXMLid>wind.reed.clarinet.bflat</musicXMLid>
@@ -2467,8 +2467,8 @@
             <Instrument id="a-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in A</longName>
+                  <shortName>Cl. in A</shortName>
                   <traitName type="transposition">A</traitName>
                   <description>Soprano clarinet in A. One of the standard orchestral clarinets.</description>
                   <musicXMLid>wind.reed.clarinet.a</musicXMLid>
@@ -2487,8 +2487,8 @@
             <Instrument id="g-clarinet">
                   <family>clarinets</family>
                   <trackName>Clarinet</trackName>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
+                  <longName>Clarinet in G</longName>
+                  <shortName>Cl. in G</shortName>
                   <traitName type="transposition">G</traitName>
                   <description>Soprano clarinet in G.</description>
                   <musicXMLid>wind.reed.clarinet</musicXMLid>
