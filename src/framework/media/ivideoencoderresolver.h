@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include "io/path.h"
+#include "async/notification.h"
+
 #include "modularity/imoduleinterface.h"
 
 #include "ivideoencoder.h"
@@ -33,6 +36,11 @@ class IVideoEncoderResolver : MODULE_CONTEXT_INTERFACE
 
 public:
     virtual ~IVideoEncoderResolver() = default;
+
+    virtual void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) = 0;
+    virtual io::path_t loadedFFmpegDir() const = 0;
+    virtual int loadedFFmpegVersion() const = 0;
+    virtual async::Notification loadedFFmpegChanged() const = 0;
 
     virtual IVideoEncoderPtr currentVideoEncoder() const = 0;
     virtual void setCurrentVideoEncoder(IVideoEncoderPtr encoder) = 0;

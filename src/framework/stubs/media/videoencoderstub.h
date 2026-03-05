@@ -33,7 +33,6 @@ public:
     bool open(const muse::io::path_t&, unsigned, unsigned, unsigned, unsigned, unsigned) override;
     void close() override;
     bool encodeImage(const QImage&) override;
-    bool muxAudioVideo(const muse::io::path_t&, const muse::io::path_t&, const muse::io::path_t&,
-                      double) override;
+    bool muxAudioVideo(const muse::io::path_t&, const muse::io::path_t&, const muse::io::path_t&, double) override;
 };
 }

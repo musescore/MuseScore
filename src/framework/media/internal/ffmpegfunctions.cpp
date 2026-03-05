@@ -23,7 +23,6 @@
 #include "ffmpegfunctions.h"
 
 namespace muse::media {
-
 bool FFmpegFunctions::isValid() const
 {
     return av_free && av_freep && av_rescale_q
@@ -42,5 +41,4 @@ bool FFmpegFunctions::isValid() const
            && av_packet_alloc && av_packet_free && av_packet_unref && av_packet_rescale_ts
            && sws_getCachedContext && sws_scale;
 }
-
 }

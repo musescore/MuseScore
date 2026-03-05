@@ -23,12 +23,13 @@
 #pragma once
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "imediaconfiguration.h"
 
 #include "../ivideoencoderresolver.h"
 
 namespace muse::media {
-class VideoEncoderResolver : public IVideoEncoderResolver
+class VideoEncoderResolver : public IVideoEncoderResolver, public muse::async::Asyncable
 {
     GlobalInject<IMediaConfiguration> configuration;
 
@@ -36,11 +37,17 @@ public:
     void init();
 
     void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) override;
+    io::path_t loadedFFmpegDir() const override;
+    int loadedFFmpegVersion() const override;
+    async::Notification loadedFFmpegChanged() const override;
 
     IVideoEncoderPtr currentVideoEncoder() const override;
     void setCurrentVideoEncoder(IVideoEncoderPtr encoder) override;
 
 private:
     IVideoEncoderPtr m_encoder;
+    int m_currentEncoderFFmpegVersion = -1;
+
+    async::Notification m_loadedFFmpegChanged;
 };
 }

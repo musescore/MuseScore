@@ -39,6 +39,7 @@ public:
     const FFmpegFunctions* functions() const { return &m_functions; }
 
     int version() const { return m_version; }
+    io::path_t dir() const { return m_dir; }
 
 private:
     void* getSymbol(void* lib, const char* name) const;
@@ -53,5 +54,6 @@ private:
     FFmpegFunctions m_functions;
 
     int m_version = 0;
+    io::path_t m_dir;
 };
 }

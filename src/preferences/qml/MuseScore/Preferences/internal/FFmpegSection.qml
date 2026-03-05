@@ -1,0 +1,91 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2025 MuseScore Limited
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import QtQuick
+import QtQuick.Layouts
+
+import Muse.UiComponents
+
+BaseSection {
+    id: root
+
+    title: qsTrc("preferences", "FFmpeg")
+
+    property var model: null
+
+    visible: model ? model.showFFmpegSection : false
+
+    ColumnLayout {
+        width: parent.width
+        height: 30
+
+        spacing: 20
+
+        StyledTextLabel {
+            id: titleLabel
+            Layout.fillWidth: true
+            text: qsTrc("preferences", "Version:") + " " + (model && model.ffmpegVersion !== -1
+                                                              ? model.ffmpegVersion
+                                                              : qsTrc("preferences", "FFmpeg library not found"))
+            horizontalAlignment: Text.AlignLeft
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            height: 30
+
+            spacing: root.columnSpacing
+
+            FilePicker {
+                id: ffmpegDirPicker
+                Layout.fillWidth: true
+
+                pickerType: FilePicker.PickerType.Directory
+                dialogTitle: qsTrc("preferences", "Choose %1 folder").arg(root.title)
+
+                dir: model ? model.ffmpegDir : ""
+                path: model ? model.ffmpegDir : ""
+
+                navigation: root.navigation
+                pathFieldTitle: titleLabel.text
+
+                onPathEdited: function(newPath) {
+                    if (model) {
+                        model.ffmpegDir = newPath
+                    }
+                }
+            }
+
+            FlatButton {
+                text: qsTrc("preferences", "Download FFmpeg")
+                isNarrow: true
+
+                navigation.panel: root.navigation
+                navigation.row: ffmpegDirPicker.navigationRowOrderStart
+                navigation.column: 100
+
+                onClicked: {
+                    api.launcher.openUrl("https://support.audacityteam.org/basics/installing-ffmpeg") // todo
+                }
+            }
+        }
+    }
+}
