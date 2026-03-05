@@ -64,24 +64,38 @@ StyledFlickable {
                         text: qsTrc("notation/editstyle/instrumentnames", "Long names")
                     }
 
-                    Row {
+                    RowLayout {
                         spacing: 8
 
-                        Repeater {
-                            model: [
-                                { source: "instrumentNamesImages/long-right-right.png", value: 0 },
-                                { source: "instrumentNamesImages/long-center-right.png", value: 1 },
-                                { source: "instrumentNamesImages/long-center-center.png", value: 2 },
-                                { source: "instrumentNamesImages/long-left-right.png", value: 3 },
-                            ]
+                        StyledImage {
+                            Layout.alignment: Qt.AlignTop
+                            forceHeight: 120
+                            source: switch(instrumentNamesModel.instrumentNamesAlignLong.value) {
+                                case 0: "instrumentNamesImages/long-right-right.png"; break;
+                                case 1: "instrumentNamesImages/long-center-right.png"; break;
+                                case 2: "instrumentNamesImages/long-center-center.png"; break;
+                                case 3: "instrumentNamesImages/long-left-right.png"; break;
+                            }
+                        }
 
-                            SelectableStyledImage {
-                                required property var modelData
-                                forceHeight: 120
+                        ColumnLayout {
+                            spacing : 8
+                            Layout.alignment: Qt.AlignTop
 
-                                source: modelData.source
-                                checked: instrumentNamesModel.instrumentNamesAlignLong.value === modelData.value
-                                onClicked: instrumentNamesModel.instrumentNamesAlignLong.value = modelData.value
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: right-align / Staff label: right-align"), value: 0 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: center / Staff label: right-align"), value: 1 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: center / Staff label: center"), value: 2 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: left-align / Staff label: right-align"), value: 3 },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: instrumentNamesModel.instrumentNamesAlignLong.value === modelData.value
+                                    onClicked: instrumentNamesModel.instrumentNamesAlignLong.value = modelData.value
+                                }
                             }
                         }
                     }
@@ -95,24 +109,38 @@ StyledFlickable {
                         text: qsTrc("notation/editstyle/instrumentnames", "Abbreviated names")
                     }
 
-                    Row {
+                    RowLayout {
                         spacing: 8
 
-                        Repeater {
-                            model: [
-                                { source: "instrumentNamesImages/short-right-right.png", value: 0 },
-                                { source: "instrumentNamesImages/short-center-right.png", value: 1 },
-                                { source: "instrumentNamesImages/short-center-center.png", value: 2 },
-                                { source: "instrumentNamesImages/short-left-right.png", value: 3 },
-                            ]
+                        StyledImage {
+                            Layout.alignment: Qt.AlignTop
+                            forceHeight: 120
+                            source: switch(instrumentNamesModel.instrumentNamesAlignShort.value) {
+                                case 0: "instrumentNamesImages/short-right-right.png"; break;
+                                case 1: "instrumentNamesImages/short-center-right.png"; break;
+                                case 2: "instrumentNamesImages/short-center-center.png"; break;
+                                case 3: "instrumentNamesImages/short-left-right.png"; break;
+                            }
+                        }
 
-                            SelectableStyledImage {
-                                required property var modelData
-                                forceHeight: 120
+                        ColumnLayout {
+                            spacing : 8
+                            Layout.alignment: Qt.AlignTop
 
-                                source: modelData.source
-                                checked: instrumentNamesModel.instrumentNamesAlignShort.value === modelData.value
-                                onClicked: instrumentNamesModel.instrumentNamesAlignShort.value = modelData.value
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: right-align / Staff label: right-align"), value: 0 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: center / Staff label: right-align"), value: 1 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: center / Staff label: center"), value: 2 },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Instrument name: left-align / Staff label: right-align"), value: 3 },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: instrumentNamesModel.instrumentNamesAlignShort.value === modelData.value
+                                    onClicked: instrumentNamesModel.instrumentNamesAlignShort.value = modelData.value
+                                }
                             }
                         }
                     }
@@ -127,22 +155,31 @@ StyledFlickable {
                         text: qsTrc("notation/editstyle/instrumentnames", "Overlapping names")
                     }
 
-                    Row {
+                    RowLayout {
                         spacing: 8
 
-                        Repeater {
-                            model: [
-                                { source: "instrumentNamesImages/stack-horizontally.png", value: false },
-                                { source: "instrumentNamesImages/stack-vertically.png", value: true },
-                            ]
+                        StyledImage {
+                            Layout.alignment: Qt.AlignTop
+                            forceHeight: 170
+                            source: instrumentNamesModel.instrumentNamesStackVertically.value === true ? "instrumentNamesImages/stack-vertically.png" : "instrumentNamesImages/stack-horizontally.png"
+                        }
 
-                            SelectableStyledImage {
-                                required property var modelData
-                                forceHeight: 170
+                        ColumnLayout {
+                            spacing : 8
+                            Layout.alignment: Qt.AlignTop
 
-                                source: modelData.source
-                                checked: instrumentNamesModel.instrumentNamesStackVertically.value === modelData.value
-                                onClicked: instrumentNamesModel.instrumentNamesStackVertically.value = modelData.value
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Keep on the same line"), value: false },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Stack vertically"), value: true },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: instrumentNamesModel.instrumentNamesStackVertically.value === modelData.value
+                                    onClicked: instrumentNamesModel.instrumentNamesStackVertically.value = modelData.value
+                                }
                             }
                         }
                     }

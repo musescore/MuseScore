@@ -44,6 +44,18 @@ Column {
         cueSize.navigation.requestActive()
     }
 
+    TextSection {
+        titleText: qsTrc("inspector", "Staff label")
+        propertyItem: root.model ? root.model.staffLongName : null
+    }
+
+    TextSection {
+        titleText: qsTrc("inspector", "Abbreviated staff label")
+        propertyItem: root.model ? root.model.staffShortName : null
+    }
+
+    SeparatorLine { anchors.margins: -12 }
+
     PropertyCheckBox {
         id: cueSize
         text: qsTrc("inspector", "Cue size")
@@ -52,29 +64,6 @@ Column {
         navigation.name: "CueSizeCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-    }
-
-    Item {
-        height: childrenRect.height
-        width: parent.width
-
-        TextSection {
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            titleText: qsTrc("inspector", "Long name")
-            propertyItem: root.model ? root.model.staffLongName : null
-        }
-
-        TextSection {
-            anchors.left: parent.horizontalCenter
-            anchors.right: parent.right
-            anchors.leftMargin: 2
-
-            titleText: qsTrc("inspector", "Short name")
-            propertyItem: root.model ? root.model.staffShortName : null
-        }
     }
 
     Item {

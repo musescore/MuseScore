@@ -71,7 +71,7 @@ StyledPopupView {
 
             StyledTextLabel {
                 width: parent.width
-                text: ("layoutpanel/instrumentsettingspopup", "Full staff name")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Staff label")
                 horizontalAlignment: Text.AlignLeft
             }
 
@@ -90,7 +90,7 @@ StyledPopupView {
 
             StyledTextLabel {
                 width: parent.width
-                text: ("layoutpanel/instrumentsettingspopup", "Abbreviated staff name")
+                text: ("layoutpanel/instrumentsettingspopup", "Abbreviated staff label")
                 horizontalAlignment: Text.AlignLeft
             }
 

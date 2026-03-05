@@ -26,19 +26,38 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.NotationScene
 
-StyledImage {
+Column {
     id: root
+    spacing: 8
+
+    property alias source: image.source
+    property alias forceWidth: image.forceWidth
+    property alias forceHeight: image.forceHeight
+    property alias horizontalPadding: image.horizontalPadding
+    property alias verticalPadding: image.verticalPadding
+    property alias text: label.text
 
     required property bool checked
     signal clicked()
 
-    border.width: checked ? 2 : 1
-    border.color: checked ? ui.theme.accentColor : ui.theme.strokeColor
+    StyledImage {
+        id: image
 
-    MouseArea {
-        id: mouseArea
+        border.width: root.checked ? 2 : 1
+        border.color: root.checked ? ui.theme.accentColor : ui.theme.strokeColor
 
-        anchors.fill: parent
-        onClicked: root.clicked()
+        MouseArea {
+            id: mouseArea
+
+            anchors.fill: parent
+            onClicked: root.clicked()
+        }
+    }
+
+    StyledTextLabel {
+        id: label
+        width: image.width
+        horizontalAlignment: Qt.AlignHCenter
+        wrapMode: Text.WordWrap
     }
 }
