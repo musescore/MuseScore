@@ -1188,7 +1188,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         Measure* measure  = Factory::createMeasure(score->dummy()->system());
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
-        measure->setNo(int(i));
+        measure->setMeasureNumber(int(i));
         score->measures()->append(measure);
 
         // add break to previous measure or vbox

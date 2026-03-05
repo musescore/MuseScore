@@ -1904,22 +1904,7 @@ class MeasureBase : public EngravingItem
     API_PROPERTY_T(bool, repeatStart,     REPEAT_START)
     /// Whether this measureBase contaions a jump.
     API_PROPERTY_T(bool, repeatJump,      REPEAT_JUMP)
-    /// The measure number offset of this measureBase.
-    API_PROPERTY_T(int, noOffset,         NO_OFFSET)
-    /// Whether this measureBase is included in the measure count.
-    API_PROPERTY_T(bool, irregular,       IRREGULAR)
 
-    /// \brief Measure number, counting from 1.
-    /// Number of this measure in the score counting from 1, i.e.
-    /// for the first measure its \p no value will be equal to 1.
-    /// User-visible measure number can be calculated as
-    /// \code
-    /// measure.no + measure.noOffset
-    /// \endcode
-    /// where \p measure is the relevant \ref Measure object.
-    /// \since MuseScore 4.6
-    /// \see ScoreElement::noOffset
-    Q_PROPERTY(int no READ no)
     /// \brief Current tick for this measure
     /// \returns Tick of this measure, i.e. number of ticks from the beginning
     /// of the score to this measure, as a fraction.
@@ -1975,8 +1960,6 @@ public:
 
     mu::engraving::MeasureBase* measureBase() { return toMeasureBase(e); }
     const mu::engraving::MeasureBase* measureBase() const { return toMeasureBase(e); }
-
-    int no() { return measureBase()->no(); }
 
     Fraction* tick() const;
     Fraction* ticks() const;
@@ -2048,6 +2031,22 @@ class Measure : public MeasureBase
     /// The actual time signature / duration of this measure.
     API_PROPERTY(timesigActual,           TIMESIG_ACTUAL)
 
+    /// \brief Measure number, counting from 1.
+    /// Number of this measure in the score counting from 1, i.e.
+    /// for the first measure its \p no value will be equal to 1.
+    /// User-visible measure number can be calculated as
+    /// \code
+    /// measure.no + measure.noOffset
+    /// \endcode
+    /// where \p measure is the relevant \ref Measure object.
+    /// \since MuseScore 4.6
+    /// \see ScoreElement::noOffset
+    Q_PROPERTY(int no READ no)
+    /// The measure number offset of this measureBase.
+    API_PROPERTY_T(int, noOffset, MEASURE_NUMBER_OFFSET)
+    /// Whether this measure is excluded from measure numbering.
+    API_PROPERTY_T(bool, excludeFromNumbering, EXCLUDE_FROM_NUMBERING)
+
     /// Controls whether this measure displays a measure number,
     /// one of PluginAPI::PluginAPI::MeasureNumberMode values.
     /// \since MuseScore 4.6
@@ -2085,6 +2084,8 @@ public:
 
     mu::engraving::Measure* measure() { return toMeasure(e); }
     const mu::engraving::Measure* measure() const { return toMeasure(e); }
+
+    int no() { return measure()->measureNumber(); }
 
     bool showsMeasureNumberInAutoMode() { return measure()->showMeasureNumberInAutoMode(); }
 

@@ -851,7 +851,7 @@ void MnxImporter::importGlobalMeasures()
         /// a measure number.
         int currDisplayNum = mnxMeasure.calcVisibleNumber();
         if (currDisplayNum != lastDisplayNum + 1) {
-            measure->setNoOffset(currDisplayNum - lastDisplayNum - 1);
+            measure->setMeasureNumberOffset(currDisplayNum - lastDisplayNum - 1);
         }
         lastDisplayNum = currDisplayNum;
 

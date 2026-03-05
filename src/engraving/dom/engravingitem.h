@@ -107,7 +107,7 @@ enum class ElementFlag {
     REPEAT_END             = 0x00001000,
     REPEAT_START           = 0x00002000,
     REPEAT_JUMP            = 0x00004000,
-    IRREGULAR              = 0x00008000,
+    EXCLUDE_FROM_NUMBERING = 0x00008000,
     LINE_BREAK             = 0x00010000,
     PAGE_BREAK             = 0x00020000,
     SECTION_BREAK          = 0x00040000,

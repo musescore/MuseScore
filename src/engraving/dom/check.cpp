@@ -85,11 +85,12 @@ void Score::checkScore()
                     Fraction timeStretch = st->timeStretch(lcr->tick());
                     Fraction f = cr->globalTicks() * timeStretch;
                     LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "(" << lcr->typeName() << "+" << f.ticks() << ")-"
-                           << s->tick().ticks() << "(" << cr->typeName() << ") staffIdx " << staffIdx << " measure " << cr->measure()->no()
+                           << s->tick().ticks() << "(" << cr->typeName() << ") staffIdx " << staffIdx
+                           << " measure " << cr->measure()->measureNumber()
                            << " (len = " << (cr->tick() - tick).ticks() << ")";
                 } else {
                     LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "-" << s->tick().ticks() << "(" << cr->typeName() << ") "
-                           << "staffIdx " << staffIdx << " measure " << cr->measure()->no()
+                           << "staffIdx " << staffIdx << " measure " << cr->measure()->measureNumber()
                            << "  (len = " << (cr->tick() - tick).ticks() << ")";
                 }
                 tick = s->tick();
@@ -247,7 +248,7 @@ bool Score::checkKeys()
                 }
             }
             if (staff(i)->key(m->tick()) != k) {
-                LOGD("measure %d (tick %d) : key %d, map %d", m->no(), m->tick().ticks(), int(k),
+                LOGD("measure %d (tick %d) : key %d, map %d", m->measureNumber(), m->tick().ticks(), int(k),
                      int(staff(i)->key(m->tick())));
                 rc = false;
             }

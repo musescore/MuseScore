@@ -2236,7 +2236,7 @@ Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure
     return measureSt;
 }
 
-libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& measureN, bool& wasPreviousIrregular)
+libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastExcludedFromNumbering)
 {
     libmei::Measure meiMeasure;
 
@@ -2245,9 +2245,9 @@ libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& me
         meiMeasure.SetMetcon(libmei::BOOLEAN_false);
     }
     // @n
-    if (!measure->irregular()) {
+    if (!measure->excludeFromNumbering()) {
         measureN++;
-        meiMeasure.SetN(String::number(measure->no() + 1).toStdString());
+        meiMeasure.SetN(String::number(measure->measureNumber() + 1).toStdString());
     }
     // @left
     if (measure->repeatStart()) {
@@ -2263,7 +2263,7 @@ libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& me
     meiMeasure.SetRight(Convert::barlineToMEI(measure->endBarLineType()));
 
     // update the flag for the next measure
-    wasPreviousIrregular = (measure->irregular());
+    isLastExcludedFromNumbering = (measure->excludeFromNumbering());
 
     return meiMeasure;
 }

@@ -2053,11 +2053,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             // Ignore measure stretch pre 4.0
             e.skipCurrentElement();
         } else if (tag == "noOffset") {
-            m->setNoOffset(e.readInt());
+            m->setMeasureNumberOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
             m->setMeasureNumberMode(MeasureNumberMode(e.readInt()));
         } else if (tag == "irregular") {
-            m->setIrregular(true);
+            m->setExcludeFromNumbering(true);
             e.skipCurrentElement();
         } else if (tag == "breakMultiMeasureRest") {
             m->setBreakMultiMeasureRest(e.readBool());

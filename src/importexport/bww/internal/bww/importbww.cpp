@@ -215,7 +215,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     currentMeasure  = Factory::createMeasure(score->dummy()->system());
     currentMeasure->setTick(tick);
     currentMeasure->setTimesig(mu::engraving::Fraction(beats, beat));
-    currentMeasure->setNo(measureNumber);
+    currentMeasure->setMeasureNumber(measureNumber);
     score->measures()->append(currentMeasure);
 
     if (mbf.repeatBegin) {
@@ -223,7 +223,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     }
 
     if (mbf.irregular) {
-        currentMeasure->setIrregular(true);
+        currentMeasure->setExcludeFromNumbering(true);
     }
 
     if (mbf.endingFirst || mbf.endingSecond) {

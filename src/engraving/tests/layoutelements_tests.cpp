@@ -93,9 +93,9 @@ static void isLayoutDone(bool* result, EngravingItem* e)
     if (e->visible() && !e->ldata()->bbox().isValid()) {
         (*result) = false;
         // Print some info about the element to make test more useful...
-        if (Measure* m = toMeasure(e->findMeasure())) {
+        if (Measure* m = e->findMeasure()) {
             LOGD("Layout of %s is not done (page %zu, measure %d)", e->typeName(), m->system()->page()->pageNumber() + 1,
-                 m->no() + 1);
+                 m->measureNumber() + 1);
         } else {
             LOGD("Layout of %s is not done", e->typeName());
         }

@@ -92,7 +92,7 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
 
         score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
         if (!ctx.state().nextMeasure()->prevMeasure()) {
-            ctx.mutState().setMeasureNo(0);
+            ctx.mutState().setMeasureNumber(0);
             ctx.mutState().setTick(Fraction(0, 1));
         } else {
             const MeasureBase* mb = ctx.state().nextMeasure()->prev();
@@ -104,10 +104,10 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
             if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-                ctx.mutState().setMeasureNo(0);
+                ctx.mutState().setMeasureNumber(0);
             } else {
-                ctx.mutState().setMeasureNo(ctx.state().nextMeasure()->prevMeasure()->no()                             // will be adjusted later with respect
-                                            + (ctx.state().nextMeasure()->prevMeasure()->irregular() ? 0 : 1)); // to the user-defined offset.
+                ctx.mutState().setMeasureNumber(ctx.state().nextMeasure()->prevMeasure()->measureNumber()                      // will be adjusted later with respect
+                                                + (ctx.state().nextMeasure()->prevMeasure()->excludeFromNumbering() ? 0 : 1)); // to the user-defined offset.
             }
             ctx.mutState().setTick(ctx.state().nextMeasure()->tick());
         }

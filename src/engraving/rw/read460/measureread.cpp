@@ -118,11 +118,11 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             }
             measure->setUserStretch(val);
         } else if (tag == "noOffset") {
-            measure->setNoOffset(e.readInt());
+            measure->setMeasureNumberOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
             measure->setMeasureNumberMode(MeasureNumberMode(e.readInt()));
         } else if (tag == "irregular") {
-            measure->setIrregular(e.readBool());
+            measure->setExcludeFromNumbering(e.readBool());
         } else if (tag == "breakMultiMeasureRest") {
             measure->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "startRepeat") {

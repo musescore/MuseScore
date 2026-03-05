@@ -3103,11 +3103,11 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             // Ignore measure stretch pre 4.0
             e.skipCurrentElement();
         } else if (tag == "noOffset") {
-            m->setNoOffset(e.readInt());
+            m->setMeasureNumberOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
             m->setMeasureNumberMode(MeasureNumberMode(e.readInt()));
         } else if (tag == "irregular") {
-            m->setIrregular(e.readBool());
+            m->setExcludeFromNumbering(e.readBool());
         } else if (tag == "breakMultiMeasureRest") {
             m->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "sysInitBarLineType") {

@@ -54,6 +54,8 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
+using namespace Qt::StringLiterals;
+
 //---------------------------------------------------------
 //   TRowLabels
 //---------------------------------------------------------
@@ -1035,7 +1037,7 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
                 }
             }
 
-            graphicsRectItem->setToolTip(initialLetter + QString(" ") + QString::number(currMeasure->no() + 1) + QString(", ") + partName);
+            graphicsRectItem->setToolTip(initialLetter + u" "_s + QString::number(currMeasure->measureNumber() + 1) + u", "_s + partName);
             graphicsRectItem->setPen(QPen(activeTheme().backgroundColor));
             graphicsRectItem->setBrush(QBrush(colorBox(graphicsRectItem)));
             graphicsRectItem->setZValue(-3);
@@ -1511,7 +1513,7 @@ void Timeline::measureMeta(Segment*, int*, int pos)
     }
 
     // Add measure number
-    QString measureNumber = (currMeasure->irregular()) ? "( )" : QString::number(currMeasure->no() + 1);
+    QString measureNumber = (currMeasure->excludeFromNumbering()) ? u"( )"_s : QString::number(currMeasure->measureNumber() + 1);
     QGraphicsTextItem* graphicsTextItem = new QGraphicsTextItem(measureNumber);
     graphicsTextItem->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
     graphicsTextItem->setDefaultTextColor(activeTheme().measureMetaColor);
