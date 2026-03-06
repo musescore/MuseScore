@@ -1838,16 +1838,16 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
         if (wordFamily.empty()) {
-            break;   // no need to loop if no font family is specified
+            break; // If no font is specified, use default styles
         }
 
         if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
             || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER
-            || tid == TextStyleType::TAB_FRET_NUMBER) {
+            || tid == TextStyleType::HARMONY_ROMAN || tid == TextStyleType::TAB_FRET_NUMBER) {
             continue;
         }
 
-        bool needUseDefaultSize = configuration()->needUseDefaultFont() || tid == TextStyleType::HARMONY_ROMAN
+        bool needUseDefaultSize = configuration()->needUseDefaultFont()
                                   || tid == TextStyleType::HAMMER_ON_PULL_OFF
                                   || isTitleFrameStyle(tid)
                                   || isHarpPedalStyle(tid);

@@ -27,7 +27,6 @@
       <chordSymbolAFontSize>22</chordSymbolAFontSize>
       <chordSymbolBFontFace>Palatino,serif</chordSymbolBFontFace>
       <chordSymbolBFontSize>22</chordSymbolBFontSize>
-      <romanNumeralFontFace>Palatino,serif</romanNumeralFontFace>
       <nashvilleNumberFontFace>Palatino,serif</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>22</nashvilleNumberFontSize>
       <smallNoteMag>0.75</smallNoteMag>
