@@ -19,18 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_VIDEOWRITER_H
-#define MU_IMPORTEXPORT_VIDEOWRITER_H
 
-#include <optional>
+#pragma once
 
 #include "async/asyncable.h"
 
 #include "engraving/style/style.h"
 
 #include "modularity/ioc.h"
+#include "global/iapplication.h"
+#include "media/ivideoencoder.h"
 #include "../ivideoexportconfiguration.h"
-#include "iapplication.h"
 
 #include "project/inotationwriter.h"
 #include "project/inotationwritersregister.h"
@@ -42,6 +41,7 @@ class VideoWriter : public project::INotationWriter, public muse::Contextable, p
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::ContextInject<muse::IApplication> application = { this };
+    muse::ContextInject<muse::media::IVideoEncoder> videoEncoder = { this };
     muse::ContextInject<project::INotationWritersRegister> writers = { this };
 
 public:
@@ -100,5 +100,3 @@ private:
     muse::Ret m_audioRet;
 };
 }
-
-#endif // MU_IMPORTEXPORT_VIDEOWRITER_H

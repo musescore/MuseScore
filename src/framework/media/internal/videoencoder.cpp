@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,9 +25,9 @@
 
 #include "log.h"
 
-using namespace mu::iex::videoexport;
+using namespace muse::media;
 
-struct mu::iex::videoexport::FFmpeg {
+struct muse::media::FFmpeg {
     int width = 0;
     int height = 0;
     unsigned int ptsCounter = 0;
@@ -78,7 +78,8 @@ VideoEncoder::~VideoEncoder()
     delete m_ffmpeg;
 }
 
-bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)
+bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop,
+                        unsigned fps)
 {
     m_ffmpeg->ptsCounter = 0;
 
@@ -184,8 +185,6 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
 #endif
     }
-
-    //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);
 
     // open_video
 #if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
