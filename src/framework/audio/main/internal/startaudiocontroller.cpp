@@ -65,13 +65,6 @@ StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpc
 #endif
 }
 
-void StartAudioController::registerExports()
-{
-#ifndef Q_OS_WASM
-    m_engineController->registerExports();
-#endif
-}
-
 #ifndef Q_OS_WASM
 void StartAudioController::th_setupEngine()
 {
@@ -314,6 +307,5 @@ void StartAudioController::stopAudioProcessing()
         m_worker->stop();
     }
 
-    m_engineController->unregisterExports();
 #endif
 }

@@ -24,36 +24,28 @@
 #include <memory>
 
 #include "global/modularity/ioc.h"
-
+#include "../iaudioengineconfiguration.h"
 #include "../ienginecontroller.h"
+#include "../isynthresolver.h"
+#include "../iaudioengine.h"
+#include "../iengineplayback.h"
 
 namespace muse::audio::rpc {
 class IRpcChannel;
 }
 
-namespace muse::audio::fx {
-class FxResolver;
-}
-
-namespace muse::audio::synth  {
-class SynthResolver;
-class SoundFontRepository;
-}
-
 namespace muse::audio::engine {
-class AudioEngineConfiguration;
-class AudioEngine;
 class WebAudioChannel;
-class EnginePlayback;
 class EngineRpcController;
 
 class EngineController : public IEngineController, public muse::Contextable
 {
+    muse::GlobalInject<IAudioEngineConfiguration> configuration;
+    muse::GlobalInject<synth::ISynthResolver> synthResolver;
+    muse::ContextInject<IAudioEngine> audioEngine = { this };
+    muse::ContextInject<IEnginePlayback> playback = { this };
 public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel, const muse::modularity::ContextPtr& iocCtx);
-
-    void registerExports() override;
-    void unregisterExports() override;
 
     void onStartRunning() override;
     void init(const OutputSpec& outputSpec, const AudioEngineConfig& conf) override;
@@ -69,13 +61,7 @@ public:
 
 private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
-    std::shared_ptr<AudioEngineConfiguration> m_configuration;
-    std::shared_ptr<AudioEngine> m_audioEngine;
-    std::shared_ptr<EnginePlayback> m_playback;
     std::shared_ptr<EngineRpcController> m_rpcController;
-    std::shared_ptr<fx::FxResolver> m_fxResolver;
-    std::shared_ptr<synth::SynthResolver> m_synthResolver;
-    std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
     std::shared_ptr<WebAudioChannel> m_webAudioChannel;
 };
 }
