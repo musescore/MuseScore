@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>iNVTKizPfeL_Na8NCefMx8J</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <Style>
+      <pageWidth>5.43307</pageWidth>
+      <pageHeight>1.37795</pageHeight>
+      <pagePrintableWidth>5.27559</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787402</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787402</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.0787402</pageOddTopMargin>
+      <pageOddBottomMargin>0.0787402</pageOddBottomMargin>
+      <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
+    </Style>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-03-06</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+      </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+      </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+      </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+      </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+      </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+      </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+      </section>
+    </Order>
+    <Part id="1">
+      <Staff>
+        <eid>P/eFmb9lDvE_PeKX8Pf+TaP</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+        </Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>CK6eXHEQhvI_iAHFpnzKtJK</eid>
+        <voice>
+          <KeySig>
+            <eid>/H6rX+zO+WO_mmLM/3DPzOI</eid>
+            <concertKey>0</concertKey>
+          </KeySig>
+          <TimeSig>
+            <eid>MTO6/QDXbwP_MIAdr9KMeJP</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Rest>
+            <eid>341B9KjWYzP_VysnVxIsvaH</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>FlL/NX00iiJ_byYc3TP9ItL</eid>
+        <Marker>
+          <eid>DpRw8ACICbB_9lki8/zEsnH</eid>
+          <style>repeat_left</style>
+          <text>
+            <sym>coda</sym>
+          </text>
+          <label></label>
+          <markerType>user</markerType>
+        </Marker>
+        <Marker>
+          <eid>wOOzMuebutI_1hisEEAEu3G</eid>
+          <style>repeat_left</style>
+          <placement>below</placement>
+          <text>
+            <sym>coda</sym>
+          </text>
+          <label></label>
+          <markerType>user</markerType>
+        </Marker>
+        <Jump>
+          <eid>dZQ8QVIcx/C_Qqwrns5N2IG</eid>
+          <style>repeat_right</style>
+          <text>D.C.</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+        </Jump>
+        <Jump>
+          <eid>wybpqIlVP7I_3S2bVpnRvlJ</eid>
+          <style>repeat_right</style>
+          <placement>below</placement>
+          <text>D.C.</text>
+          <jumpTo>start</jumpTo>
+          <playUntil>end</playUntil>
+          <continueAt></continueAt>
+        </Jump>
+        <voice>
+          <Rest>
+            <eid>VtoafQB09gO_/4MYhRc0stL</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>iB/GisSI5UE_i3pIjGJeXIB</eid>
+        <voice>
+          <Rest>
+            <eid>P2OzDWehEBG_hA4JYL1Yh/O</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>rGi0bfyQyAM_3wvC+nYbDSO</eid>
+        <voice>
+          <RehearsalMark>
+            <eid>ifYMYFbFm2E_NVV9l+qsFQM</eid>
+            <text>A</text>
+          </RehearsalMark>
+          <Rest>
+            <eid>L2sMnjnO79O_cPYYsD3aJdO</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>FJZ1BoUqwmH_OVhEMUFdBFF</eid>
+        <voice>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <eid>QYL7/BYQcyD_ecJslQgdUgD</eid>
+          </Fermata>
+          <Chord>
+            <eid>DTL1gBUoGFH_fWreEHMlHpN</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>5iQDSuHT6XM_WJ0SUD7R2hH</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+            </Note>
+          </Chord>
+        </voice>
+        <voice>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <eid>XavukKd5dlP_aIKEX2O5MUL</eid>
+          </Fermata>
+          <Chord>
+            <eid>W+f28s9jWtH_xGftPMDUwfE</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>c92wkjxgQ7E_vkrwmdlVxWN</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+            </Note>
+          </Chord>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>9s6OAPCZmVO_3Ntio1/P91H</eid>
+        <voice>
+          <InstrumentChange>
+            <Instrument id="flute">
+              <longName>Flute</longName>
+              <shortName>Fl.</shortName>
+              <trackName>Flute</trackName>
+              <minPitchP>59</minPitchP>
+              <maxPitchP>98</maxPitchP>
+              <minPitchA>60</minPitchA>
+              <maxPitchA>93</maxPitchA>
+              <instrumentId>wind.flutes.flute</instrumentId>
+              <Channel>
+                <program value="73"/>
+                <synti>Fluid</synti>
+              </Channel>
+            </Instrument>
+            <init>1</init>
+            <eid>DANG8TpsSqO_3T3SSYFY8LF</eid>
+            <text>To Flute</text>
+          </InstrumentChange>
+          <Rest>
+            <eid>2ZpdisBybuC_5iPsPSWNiHC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>vt+/7OFQeeO_r95a+EgNblD</eid>
+        <voice>
+          <InstrumentChange>
+            <Instrument id="flute">
+              <longName>Flute</longName>
+              <shortName>Fl.</shortName>
+              <trackName>Flute</trackName>
+              <minPitchP>59</minPitchP>
+              <maxPitchP>98</maxPitchP>
+              <minPitchA>60</minPitchA>
+              <maxPitchA>93</maxPitchA>
+              <instrumentId>wind.flutes.flute</instrumentId>
+              <Channel>
+                <program value="73"/>
+                <synti>Fluid</synti>
+              </Channel>
+            </Instrument>
+            <init>1</init>
+            <eid>XucR7ZsTZYN_QS11uKZvft</eid>
+            <placement>below</placement>
+            <text>To Flute</text>
+          </InstrumentChange>
+          <Rest>
+            <eid>2iS0nUsVusN_mFDVQbTCHcP</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

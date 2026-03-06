@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>iNVTKizPfeL_Na8NCefMx8J</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <Style>
+      <pageWidth>7.87402</pageWidth>
+      <pageHeight>1.37795</pageHeight>
+      <pagePrintableWidth>7.71654</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787402</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787402</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.0787402</pageOddTopMargin>
+      <pageOddBottomMargin>0.0787402</pageOddBottomMargin>
+      <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
+    </Style>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-03-06</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+      </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+      </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+      </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+      </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+      </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+      </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+      </section>
+    </Order>
+    <Part id="1">
+      <Staff>
+        <eid>P/eFmb9lDvE_PeKX8Pf+TaP</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+        </Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>CK6eXHEQhvI_iAHFpnzKtJK</eid>
+        <voice>
+          <KeySig>
+            <eid>/H6rX+zO+WO_mmLM/3DPzOI</eid>
+            <concertKey>0</concertKey>
+          </KeySig>
+          <TimeSig>
+            <eid>MTO6/QDXbwP_MIAdr9KMeJP</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Spanner type="Pedal">
+            <Pedal>
+              <endHookType>1</endHookType>
+              <eid>M3niFYbb/sO_ApJs0jo/kkC</eid>
+            </Pedal>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="Pedal">
+            <Pedal>
+              <endHookType>1</endHookType>
+              <placement>above</placement>
+              <eid>BUmutQ28oON_007vOL+IdFE</eid>
+            </Pedal>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>PnSAbXSLGbD_cpCK3hG+8oC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>FlL/NX00iiJ_byYc3TP9ItL</eid>
+        <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>trill</subtype>
+              <eid>ISmMsEvNMhK_L/XHGc/vk2H</eid>
+              <Ornament>
+                <subtype>ornamentTrill</subtype>
+                <eid>FPxqtw+Qa7K_kiKXMoMUndJ</eid>
+              </Ornament>
+            </Trill>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>HDQ/v4iK7NN_FbqoPIfy0+P</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>iB/GisSI5UE_i3pIjGJeXIB</eid>
+        <voice>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="Volta">
+            <Volta>
+              <endHookType>1</endHookType>
+              <beginText>1.</beginText>
+              <eid>BHHqJZz2ibB_GGo++Q3sMAE</eid>
+              <endings>1</endings>
+            </Volta>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>OkedpkzeBpD_mW237UP3AsC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>rGi0bfyQyAM_3wvC+nYbDSO</eid>
+        <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <eid>fLKwWMJUDiB_+2iDpedWIfG</eid>
+            </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <placement>below</placement>
+              <eid>tFyzvuHq4pC_IK39MawzvCP</eid>
+            </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>Ev+hO6qIAjI_WgSW6UPAJQG</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>FJZ1BoUqwmH_OVhEMUFdBFF</eid>
+        <voice>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="TextLine">
+            <TextLine>
+              <endHookType>1</endHookType>
+              <beginText>Staff</beginText>
+              <eid>SGnN3dFiuMI_4g4PCPpJnqK</eid>
+            </TextLine>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="TextLine">
+            <TextLine>
+              <placement>below</placement>
+              <endHookType>1</endHookType>
+              <beginText>Staff</beginText>
+              <eid>WjkZfPqqYgD_/ytIkcgKdSJ</eid>
+            </TextLine>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>x2AYsBCnVxM_gO5TYKqO7vN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>9s6OAPCZmVO_3Ntio1/P91H</eid>
+        <voice>
+          <Spanner type="TextLine">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="TextLine">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="TextLine">
+            <TextLine system="1">
+              <placement>below</placement>
+              <beginLineArrowHeight>1</beginLineArrowHeight>
+              <beginLineArrowWidth>0.5</beginLineArrowWidth>
+              <beginFilledArrowHeight>1</beginFilledArrowHeight>
+              <beginFilledArrowWidth>0.85</beginFilledArrowWidth>
+              <endHookType>1</endHookType>
+              <endLineArrowHeight>1</endLineArrowHeight>
+              <endLineArrowWidth>0.5</endLineArrowWidth>
+              <endFilledArrowHeight>1</endFilledArrowHeight>
+              <endFilledArrowWidth>0.85</endFilledArrowWidth>
+              <beginText>System</beginText>
+              <beginTextPosition>left</beginTextPosition>
+              <continueTextPosition>left</continueTextPosition>
+              <endTextPosition>left</endTextPosition>
+              <eid>70G6sZwO6X_jpiDgoMPHvM</eid>
+            </TextLine>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="TextLine">
+            <TextLine system="1">
+              <beginLineArrowHeight>1</beginLineArrowHeight>
+              <beginLineArrowWidth>0.5</beginLineArrowWidth>
+              <beginFilledArrowHeight>1</beginFilledArrowHeight>
+              <beginFilledArrowWidth>0.85</beginFilledArrowWidth>
+              <endHookType>1</endHookType>
+              <endLineArrowHeight>1</endLineArrowHeight>
+              <endLineArrowWidth>0.5</endLineArrowWidth>
+              <endFilledArrowHeight>1</endFilledArrowHeight>
+              <endFilledArrowWidth>0.85</endFilledArrowWidth>
+              <beginText>System</beginText>
+              <beginTextPosition>left</beginTextPosition>
+              <continueTextPosition>left</continueTextPosition>
+              <endTextPosition>left</endTextPosition>
+              <eid>fU3G+oejJgK_er62IK3aFYP</eid>
+            </TextLine>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>oi8Z9srnSX_2brpJxzvcWN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>Owjvpd47TbC_7Rou2PL+sDG</eid>
+        <voice>
+          <Spanner type="TextLine">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="TextLine">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="LetRing">
+            <LetRing>
+              <eid>/nwyr7r/sVO_22JwH7dP5xN</eid>
+            </LetRing>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="LetRing">
+            <LetRing>
+              <eid>aHgtcFUgoSI_ISkvbFbTW9G</eid>
+            </LetRing>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>IuOv4VTBTaK_KQZiPIxdIAN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>2PXnTmMX2dB_6k3PrezEOhJ</eid>
+        <voice>
+          <Spanner type="LetRing">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="LetRing">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="PalmMute">
+            <PalmMute>
+              <eid>qZ5xjvRESp_bDc5rEJnoJF</eid>
+            </PalmMute>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="PalmMute">
+            <PalmMute>
+              <eid>ZHgoQYHFO3K_tpMxjzvkU2K</eid>
+            </PalmMute>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>jaDY/DP6DJB_tlNmW5nlDqL</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <Spanner type="PalmMute">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="PalmMute">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="PalmMute">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="PalmMute">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>
