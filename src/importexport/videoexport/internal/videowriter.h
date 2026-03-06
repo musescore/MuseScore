@@ -22,27 +22,41 @@
 #ifndef MU_IMPORTEXPORT_VIDEOWRITER_H
 #define MU_IMPORTEXPORT_VIDEOWRITER_H
 
+#include <optional>
+
+#include "async/asyncable.h"
+
+#include "engraving/style/style.h"
+
 #include "modularity/ioc.h"
 #include "../ivideoexportconfiguration.h"
 #include "iapplication.h"
 
-#include "project/iprojectwriter.h"
+#include "project/inotationwriter.h"
+#include "project/inotationwritersregister.h"
+
+#include "notation/notationtypes.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::IProjectWriter, public muse::Contextable
+class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::ContextInject<muse::IApplication> application = { this };
+    muse::ContextInject<project::INotationWritersRegister> writers = { this };
 
 public:
-    VideoWriter(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
+        : Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) override;
-    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
+                        const Options& options = Options()) override;
+
+    muse::Progress* progress() override;
+    void abort() override;
 
 private:
 
@@ -56,7 +70,37 @@ private:
         float trailingSec = 3.;
     };
 
-    muse::Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config);
+    Config makeConfig() const;
+
+    void startVideoExport(notation::INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg);
+    void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
+
+    void doGenerate(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
+
+    struct ScoreRestoreData
+    {
+        engraving::MStyle style;
+        notation::ViewMode viewMode = notation::ViewMode::PAGE;
+
+        bool showFrames = true;
+        bool showInstrumentNames = true;
+        bool showInvisible = true;
+        bool showPageborders = false;
+        bool showUnprintable = true;
+        bool showVBox = true;
+    };
+
+    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, const Config& config);
+    void restoreScore(notation::INotationPtr notation, const ScoreRestoreData& data);
+
+    muse::Progress m_progress;
+    bool m_abort = false;
+    bool m_isCompleted = false;
+    muse::Ret m_writeRet;
+
+    project::INotationWriterPtr m_audioWriter;
+    bool m_audioCompleted = false;
+    muse::Ret m_audioRet;
 };
 }
 

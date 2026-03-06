@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,28 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick
 
-#include "oggwriter.h"
+import Muse.UiComponents
+import MuseScore.Project
 
-#include "log.h"
+ExportSettingsPage {
+    id: root
 
-using namespace muse::audio;
-using namespace mu::iex::audioexport;
-using namespace muse;
-using namespace muse::io;
+    AudioSettings {
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationOrder: root.navigationOrder
+    }
 
-Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
-{
-    const SoundTrackFormat format {
-        SoundTrackType::OGG,
-        {
-            static_cast<sample_rate_t>(configuration()->exportSampleRate()),
-            configuration()->exportBufferSize(),
-            2 /* audioChannelsNumber */
-        },
-        AudioSampleFormat::Undefined,
-        128 /* bitRate */
-    };
-
-    return doWriteAndWait(notation, destinationDevice, format, options);
+    StyledTextLabel {
+        width: parent.width
+        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
+    }
 }

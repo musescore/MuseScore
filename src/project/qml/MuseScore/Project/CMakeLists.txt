@@ -60,7 +60,7 @@ qt_add_qml_module(project_qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
         ExportDialog.qml
-        internal/Export/AudioSettingsPage.qml
+        internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
         internal/Export/ExportOptionsView.qml
         internal/Export/ExportScoresListView.qml
@@ -70,8 +70,11 @@ qt_add_qml_module(project_qml
         internal/Export/MidiSettingsPage.qml
         internal/Export/MnxSettingsPage.qml
         internal/Export/Mp3SettingsPage.qml
+        internal/Export/Mp4SettingsPage.qml
         internal/Export/MusicXmlSettingsPage.qml
         internal/Export/OggSettingsPage.qml
+        internal/Export/FlacSettingsPage.qml
+        internal/Export/WavSettingsPage.qml
         internal/Export/PdfSettingsPage.qml
         internal/Export/PngSettingsPage.qml
         internal/Export/SvgSettingsPage.qml

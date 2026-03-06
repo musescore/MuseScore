@@ -487,7 +487,8 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
     return make_ok();
 }
 
-Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
+                                             const project::INotationWriter::Options& options) const
 {
     File file(out);
     if (!file.open(File::WriteOnly)) {
@@ -495,7 +496,7 @@ Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotatio
     }
 
     file.setMeta("file_path", out.toStdString());
-    Ret ret = writer->write(notation, file);
+    Ret ret = writer->write(notation, file, options);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
@@ -710,7 +711,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
     }
 
     std::string suffix = io::suffix(out);
-    auto writer = projectRW()->writer(suffix);
+    auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
@@ -721,13 +722,11 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    ret = writer->write(notationProject, out);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
+    const INotationWriter::Options options {
+        { INotationWriter::OptionKey::WITH_AUDIO, Val(false) },
+    };
 
-    return make_ret(Ret::Code::Ok);
+    return convertFullNotation(writer, notationProject->masterNotation()->notation(), out, options);
 }
 
 Ret ConverterController::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)

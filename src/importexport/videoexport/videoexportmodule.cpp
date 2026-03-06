@@ -26,7 +26,7 @@
 #include "internal/videoexportconfiguration.h"
 #include "internal/videowriter.h"
 
-#include "project/iprojectrwregister.h"
+#include "project/inotationwritersregister.h"
 
 #include "log.h"
 
@@ -48,8 +48,8 @@ void VideoExportModule::registerExports()
 
 void VideoExportModule::resolveImports()
 {
-    auto projectRWreg = ioc()->resolve<IProjectRWRegister>(moduleName());
-    if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    if (writers) {
+        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
     }
 }

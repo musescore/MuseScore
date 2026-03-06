@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.UiComponents
+import Muse.Ui
 import MuseScore.Project
 
 ExportSettingsPage {
@@ -31,7 +33,31 @@ ExportSettingsPage {
         model: root.model
         navigationPanel: root.navigationPanel
         navigationOrder: root.navigationOrder
-        showSampleRateControl: false
+        showBitRateControl: true
+    }
+
+    ExportOptionItem {
+        id: videoResolutionLabel
+        text: qsTrc("project/export", "Video resolution:")
+
+        StyledDropdown {
+            Layout.preferredWidth: 126
+
+            navigation.name: "VideoResolutionDropdown"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 10
+            navigation.accessible.name: videoResolutionLabel.text + " " + currentText
+
+            model: root.model ? root.model.availableVideoResolutions().map(function(res) {
+                return { text: res, value: res }
+            }) : []
+
+            currentIndex: root.model ? indexOfValue(root.model.videoResolution) : -1
+
+            onActivated: function(index, value) {
+                root.model.videoResolution = value
+            }
+        }
     }
 
     StyledTextLabel {

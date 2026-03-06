@@ -21,17 +21,26 @@
  */
 #include "videowriter.h"
 
-#include "videoencoder.h"
+#include <QPainter>
+#include <QThread>
+
+#include "global/concurrency/concurrent.h"
+#include "io/buffer.h"
+#include "io/file.h"
 
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/masterscore.h"
 
+#include "notation/imasternotation.h"
+#include "notation/notationtypes.h"
+
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
-#include "log.h"
+#include "videoencoder.h"
 
-#include <QPainter>
+#include "defer.h"
+#include "log.h"
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
@@ -39,7 +48,9 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-std::vector<IProjectWriter::UnitType> VideoWriter::supportedUnitTypes() const
+double CANVAS_DPI = 300;
+
+std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
@@ -50,13 +61,67 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
+muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, const Options& options)
 {
-    NOT_SUPPORTED;
-    return make_ret(muse::Ret::Code::NotSupported);
+    std::string filePath = device.meta("file_path");
+    IF_ASSERT_FAILED(!filePath.empty()) {
+        return make_ret(muse::Ret::Code::InternalError);
+    }
+
+    bool withAudio = muse::value(options, OptionKey::WITH_AUDIO, muse::Val(true)).toBool();
+
+    Config cfg = makeConfig();
+
+    muse::io::path_t finalPath(filePath);
+    muse::io::path_t tempVideoPath = withAudio ? finalPath + ".tmp_video.mp4" : finalPath;
+    muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
+
+    m_isCompleted = false;
+    m_audioCompleted = false;
+    m_abort = false;
+    m_writeRet = muse::Ret();
+    m_audioRet = muse::Ret();
+
+    startVideoExport(notation, tempVideoPath, cfg);
+
+    if (withAudio) {
+        startAudioExport(notation, tempAudioPath);
+    } else {
+        m_audioCompleted = true;
+        m_audioRet = muse::make_ok();
+    }
+
+    while (!m_isCompleted || !m_audioCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    if (m_audioWriter) {
+        m_audioWriter->progress()->finished().disconnect(this);
+        m_audioWriter = nullptr;
+    }
+
+    muse::Ret result = m_writeRet;
+
+    if (withAudio) {
+        if (result && m_audioRet) {
+            if (!VideoEncoder::muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
+                result = make_ret(muse::Ret::Code::UnknownError);
+            }
+        } else if (!result) {
+            // keep video error
+        } else {
+            result = m_audioRet;
+        }
+
+        muse::io::File::remove(tempVideoPath);
+        muse::io::File::remove(tempAudioPath);
+    }
+
+    return result;
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const Options&)
+VideoWriter::Config VideoWriter::makeConfig() const
 {
     Config cfg;
 
@@ -107,26 +172,79 @@ muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
-    muse::Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
-    return ret;
+    return cfg;
 }
 
-muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config)
+void VideoWriter::startVideoExport(INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg)
 {
-    // --score-video -o ./simple5.mp4 ./simple5.mscz
+    muse::Concurrent::run([this, notation, videoPath, cfg]() {
+        doGenerate(notation, videoPath, cfg);
+    });
+}
 
-    VideoEncoder encoder;
-    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
-        LOGE() << "failed open encoder";
-        return make_ret(muse::Ret::Code::UnknownError);
+void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath)
+{
+    m_audioWriter = writers()->writer("mp3");
+    if (!m_audioWriter) {
+        LOGE() << "mp3 writer not found";
+        m_audioRet = make_ret(muse::Ret::Code::InternalError);
+        m_audioCompleted = true;
+        return;
     }
 
-    IMasterNotationPtr masterNotation = project->masterNotation();
+    m_audioWriter->progress()->finished().onReceive(this, [this](const muse::ProgressResult& res) {
+        m_audioRet = res.ret;
+        m_audioCompleted = true;
+    });
 
-    engraving::MasterScore* score = masterNotation->notation()->elements()->msScore()->masterScore();
+    Options audioOpts;
+    audioOpts[OptionKey::WAIT_FOR_COMPLETION] = muse::Val(false);
 
-    // Setup Score view
-    masterNotation->notation()->setViewMode(notation::ViewMode::PAGE);
+    muse::io::Buffer audioDevice;
+    audioDevice.setMeta("file_path", audioPath.toStdString());
+    audioDevice.open(muse::io::IODevice::WriteOnly);
+
+    m_audioWriter->write(notation, audioDevice, audioOpts);
+}
+
+muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
+{
+    NOT_SUPPORTED;
+    return make_ret(muse::Ret::Code::NotSupported);
+}
+
+muse::Progress* VideoWriter::progress()
+{
+    return &m_progress;
+}
+
+void VideoWriter::abort()
+{
+    m_abort = true;
+
+    if (m_audioWriter) {
+        m_audioWriter->abort();
+    }
+}
+
+std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, const Config& config)
+{
+    ScoreRestoreData result;
+    engraving::Score* score = notation->elements()->msScore();
+
+    result.style = score->style();
+
+    result.viewMode = notation->viewMode();
+
+    result.showFrames = score->showFrames();
+    result.showInstrumentNames = score->showInstrumentNames();
+    result.showInvisible = score->isShowInvisible();
+    result.showPageborders = score->showPageborders();
+    result.showUnprintable = score->showUnprintable();
+    result.showVBox = score->layoutOptions().isShowVBox;
+
+    notation->setViewMode(notation::ViewMode::PAGE);
+
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
@@ -136,13 +254,12 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     score->doLayout();
 
-    PageList pages = masterNotation->notation()->elements()->pages();
+    PageList pages = notation->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
-        return make_ret(muse::Ret::Code::UnknownError);
+        restoreScore(notation, result);
+        return std::nullopt;
     }
-
-    double CANVAS_DPI = 300;
 
     const Page* page = pages.front();
     if (score->staves().size() > 3) {
@@ -176,6 +293,52 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
     score->setLayoutAll();
     score->update();
 
+    return result;
+}
+
+void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& data)
+{
+    engraving::Score* score = notation->elements()->msScore();
+
+    score->style() = data.style;
+
+    score->setShowFrames(data.showFrames);
+    score->setShowInstrumentNames(data.showInstrumentNames);
+    score->setShowInvisible(data.showInvisible);
+    score->setShowPageborders(data.showPageborders);
+    score->setShowUnprintable(data.showUnprintable);
+    score->setShowVBox(data.showVBox);
+
+    notation->setViewMode(data.viewMode);
+
+    score->setLayoutAll();
+    score->update();
+}
+
+void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
+{
+    VideoEncoder encoder;
+    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
+        LOGE() << "failed open encoder";
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
+    }
+
+    auto restoreData = prepareScore(notation, config);
+    if (!restoreData) {
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
+    }
+
+    DEFER {
+        restoreScore(notation, restoreData.value());
+        m_isCompleted = true;
+    };
+
+    PageList pages = notation->elements()->pages();
+
     // Setup painting
     QImage frame(config.width, config.height, QImage::Format_RGB32);
     frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
@@ -188,18 +351,17 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     Painter painter(&qp, "video_writer");
 
-    auto painting = masterNotation->notation()->painting();
+    auto painting = notation->painting();
 
     // Setup duration
-    INotationPlaybackPtr playback = masterNotation->playback();
+    INotationPlaybackPtr playback = notation->masterNotation()->playback();
     float totalPlayTimeSec = playback->totalPlayTime();
 
-    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
-
     int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
+    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << frameCount;
 
     //! NOTE: After setting the score above, the number of pages may change - get them again
-    pages = masterNotation->notation()->elements()->pages();
+    pages = notation->elements()->pages();
 
     auto pageByTick = [](const PageList& pages, tick_t tick) -> const Page* {
         for (const Page* p : pages) {
@@ -212,10 +374,21 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     const Color CURSOR_COLOR = Color(0, 0, 255, 50);
 
-    PlaybackCursor cursor(application()->iocContext());
-    cursor.setNotation(masterNotation->notation());
+    PlaybackCursor cursor(iocContext());
+    cursor.setNotation(notation);
+
+    m_progress.start();
 
     for (int f = 0; f < frameCount; f++) {
+        if (m_abort) {
+            encoder.close();
+            m_writeRet = make_ret(muse::Ret::Code::Cancel);
+            m_progress.finish(make_ret(muse::Ret::Code::Cancel));
+            return;
+        }
+
+        m_progress.progress(f, frameCount);
+
         float currentTimeSec = (qreal)f / config.fps;
         currentTimeSec -= config.leadingSec;
         if (currentTimeSec <= 0) {
@@ -254,5 +427,6 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     encoder.close();
 
-    return muse::make_ok();
+    m_writeRet = muse::make_ok();
+    m_progress.finish(muse::make_ok());
 }

@@ -28,7 +28,6 @@
 #include "global/types/ret.h"
 #include "global/types/val.h"
 #include "global/io/iodevice.h"
-#include "global/async/channel.h"
 #include "global/progress.h"
 #include "notation/inotation.h"
 
@@ -49,7 +48,10 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        BEATS_COLORS
+        BEATS_COLORS,
+        WAIT_FOR_COMPLETION,
+
+        WITH_AUDIO, // todo: delete after stabilization of the video export + audio
     };
 
     using Options = std::map<OptionKey, muse::Val>;

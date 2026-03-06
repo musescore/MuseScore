@@ -39,12 +39,11 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
         return {};
     }
 
-    auto writer = writers()->writer(exportType.suffixes.front().toStdString());
-    if (!writer) {
-        return {};
+    if (auto writer = writers()->writer(exportType.suffixes.front().toStdString())) {
+        return writer->supportedUnitTypes();
     }
 
-    return writer->supportedUnitTypes();
+    return {};
 }
 
 RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
