@@ -79,12 +79,6 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "MP3 audio"),
                                      muse::qtrc("project/export", "MP3 audio files"),
                                      "Mp3SettingsPage.qml"),
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
-        ExportType::makeWithSuffixes({ "mp4" },
-                                     muse::qtrc("project/export", "Video mp4"),
-                                     muse::qtrc("project/export", "Video mp4 files"),
-                                     "Mp4SettingsPage.qml"),
-#endif
         ExportType::makeWithSuffixes({ "wav" },
                                      muse::qtrc("project/export", "WAV audio"),
                                      muse::qtrc("project/export", "WAV audio files"),
@@ -122,6 +116,15 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "LRC files"),
                                      "LrcSettingsPage.qml")
     };
+
+    if (application()->unstable()) {
+        m_exportTypeList.push_back(
+            ExportType::makeWithSuffixes({ "mp4" },
+                                         muse::qtrc("project/export", "Video mp4"),
+                                         muse::qtrc("project/export", "Video mp4 files"),
+                                         "Mp4SettingsPage.qml")
+            );
+    }
 }
 
 ExportDialogModel::~ExportDialogModel()
@@ -562,25 +565,17 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 
 QStringList ExportDialogModel::availableVideoResolutions() const
 {
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     const std::vector<std::string>& resolutions = videoExportConfiguration()->availableResolutions();
     QStringList result;
     for (const std::string& res : resolutions) {
         result << QString::fromStdString(res);
     }
     return result;
-#else
-    return { };
-#endif
 }
 
 QString ExportDialogModel::videoResolution() const
 {
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     return QString::fromStdString(videoExportConfiguration()->resolution());
-#else
-    return "";
-#endif
 }
 
 void ExportDialogModel::setVideoResolution(const QString& resolution)
@@ -589,9 +584,7 @@ void ExportDialogModel::setVideoResolution(const QString& resolution)
         return;
     }
 
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     videoExportConfiguration()->setResolution(resolution.toStdString());
-#endif
     emit videoResolutionChanged(resolution);
 }
 

@@ -269,3 +269,8 @@ void FoldersPreferencesModel::setFFmpegDir(const QString& dir)
 
     videoEncoderResolver()->loadFFmpeg(dir);
 }
+
+bool FoldersPreferencesModel::showFFmpegSection() const
+{
+    return appliaction()->unstable();
+}

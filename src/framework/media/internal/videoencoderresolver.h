@@ -45,6 +45,8 @@ public:
     void setCurrentVideoEncoder(IVideoEncoderPtr encoder) override;
 
 private:
+    void resetFFmpegSettings();
+
     IVideoEncoderPtr m_encoder;
     int m_currentEncoderFFmpegVersion = -1;
 
