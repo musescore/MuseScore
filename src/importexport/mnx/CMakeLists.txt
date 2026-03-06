@@ -16,10 +16,15 @@ if(MUE_COMPILE_USE_SYSTEM_MNXDOM)
     target_compile_definitions(iex_mnx PRIVATE MNXDOM_SYSTEM)
     message(STATUS "Using system-installed mnxdom")
 else()
+    set(_mnxdom_patch_script ${CMAKE_CURRENT_LIST_DIR}/cmake/patch_mnxdom_download_timestamp.cmake)
+
     FetchContent_Declare(
         mnxdom
         GIT_REPOSITORY https://github.com/rpatters1/mnxdom.git
         GIT_TAG        1557afd19d47b7935ddda2b69131f5c62efab84c
+        PATCH_COMMAND  ${CMAKE_COMMAND}
+                       -Dmnxdom_SOURCE_DIR=<SOURCE_DIR>
+                       -P ${_mnxdom_patch_script}
     )
     FetchContent_MakeAvailable(mnxdom)
     set(MNXDOM_LIB mnxdom)
