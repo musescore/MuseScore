@@ -118,6 +118,10 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
         return PropertyValue::fromValue(m_staffType->color());
     case Pid::STAFF_YOFFSET:
         return m_staffType->yoffset();
+    case Pid::STAFF_LONG_NAME:
+        return m_staffType->longName();
+    case Pid::STAFF_SHORT_NAME:
+        return m_staffType->shortName();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -187,12 +191,19 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STAFF_YOFFSET:
         m_staffType->setYoffset(v.value<Spatium>());
         break;
+    case Pid::STAFF_LONG_NAME:
+        m_staffType->setLongName(v.value<String>());
+        break;
+    case Pid::STAFF_SHORT_NAME:
+        m_staffType->setShortName(v.value<String>());
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
     }
+
     if (explicitParent()) {
         staff()->staffTypeListChanged(measure()->tick());
     }
@@ -236,6 +247,10 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
         return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::STAFF_YOFFSET:
         return 0.0_sp;
+    case Pid::STAFF_LONG_NAME:
+        return String();
+    case Pid::STAFF_SHORT_NAME:
+        return String();
     default:
         return EngravingItem::propertyDefault(id);
     }

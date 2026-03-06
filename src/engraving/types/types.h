@@ -278,6 +278,14 @@ enum class AlignH : unsigned char {
     JUSTIFY
 };
 
+enum class InstrumentNamesAlign : unsigned char {
+    // Represents possible INSTRUMENT_STAFF alignment combinations
+    RIGHT_RIGHT,
+    CENTER_RIGHT,
+    CENTER_CENTER,
+    LEFT_RIGHT,
+};
+
 struct Align {
     AlignH horizontal = AlignH::LEFT;
     AlignV vertical = AlignV::TOP;

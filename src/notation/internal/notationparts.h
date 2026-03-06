@@ -47,7 +47,7 @@ public:
     const Staff* staff(const muse::ID& staffId) const override;
     bool staffExists(const muse::ID& staffId) const override;
 
-    StaffConfig staffConfig(const muse::ID& staffId) const override;
+    StaffConfig staffConfig(const muse::ID& staffId, Fraction tick = Fraction(0, 1)) const override;
     ScoreOrder scoreOrder() const override;
 
     void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
@@ -59,7 +59,7 @@ public:
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
     void setStaffType(const muse::ID& staffId, StaffTypeId type) override;
-    void setStaffConfig(const muse::ID& staffId, const StaffConfig& config) override;
+    void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) override;
 
     void removeParts(const muse::IDList& partsIds) override;
     void removeStaves(const muse::IDList& stavesIds) override;
@@ -111,7 +111,7 @@ private:
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart, bool createRests=true);
-    void doSetStaffConfig(Staff* staff, const StaffConfig& config);
+    void doSetStaffConfig(Staff* staff, const StaffConfig& config, Fraction tick = Fraction(0, 1));
     void doInsertPart(Part* part, size_t index);
 
     Staff* staffModifiable(const muse::ID& staffId) const;

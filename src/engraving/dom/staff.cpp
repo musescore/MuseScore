@@ -267,6 +267,24 @@ bool Staff::hasSystemObjectsBelowBottomStaff() const
     return isSystemObjectStaff() && isLastOfScore() && style().styleB(Sid::systemObjectsBelowBottomStaff);
 }
 
+String Staff::individualStaffNameLong(const Fraction& tick) const
+{
+    IF_ASSERT_FAILED(m_part) {
+        return String();
+    }
+
+    return staffType(tick)->longName();
+}
+
+String Staff::individualStaffNameShort(const Fraction& tick) const
+{
+    IF_ASSERT_FAILED(m_part) {
+        return String();
+    }
+
+    return staffType(tick)->shortName();
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid

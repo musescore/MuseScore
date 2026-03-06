@@ -51,6 +51,7 @@ public:
     ~SysStaff();
 
     InstrumentName* instrumentName = nullptr;
+    InstrumentName* individualStaffName = nullptr;
 
     const RectF& bbox() const { return m_bbox; }
     RectF& bbox() { return m_bbox; }
@@ -192,6 +193,7 @@ public:
     staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
     staff_idx_t lastSysStaffOfPart(const Part* part) const;
     staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
+    std::vector<staff_idx_t> visibleStavesOfPart(const Part* part) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
@@ -211,6 +213,28 @@ public:
     const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
     void addLockIndicator(SystemLockIndicator* sli);
     void deleteLockIndicators();
+
+    struct LayoutData : public EngravingItem::LayoutData {
+    public:
+        bool useLongNames() const { return m_useLongNames; }
+        void setUseLongNames(bool v) { m_useLongNames = v; }
+        double instrumentNameOffset() const { return m_instrumentNameOffset; }
+        void setInstrumentNameOffset(double v) { m_instrumentNameOffset = v; }
+        double staffNamesWidth() const { return m_staffNamesWidth; }
+        void setStaffNamesWidth(double v) { m_staffNamesWidth = v; }
+        double instrumentNamesWidth() const { return m_instrumentNamesWidth; }
+        void setInstrumentNamesWidth(double v) { m_instrumentNamesWidth = v; }
+        double totalNamesWidth() const { return m_totalNamesWidth; }
+        void setTotalNamesWidth(double v) { m_totalNamesWidth = v; }
+
+    private:
+        bool m_useLongNames = false;
+        double m_instrumentNameOffset = 0.0;
+        double m_staffNamesWidth = 0.0;
+        double m_instrumentNamesWidth = 0.0;
+        double m_totalNamesWidth = 0.0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(System)
 
 private:
     friend class Factory;

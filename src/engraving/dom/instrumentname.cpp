@@ -24,6 +24,7 @@
 
 #include "measure.h"
 #include "part.h"
+#include "score.h"
 #include "staff.h"
 #include "style/style.h"
 #include "system.h"
@@ -57,30 +58,6 @@ InstrumentName::InstrumentName(System* s)
 {
     setFlag(ElementFlag::MOVABLE, false);
     setInstrumentNameType(InstrumentNameType::LONG);
-}
-
-//---------------------------------------------------------
-//   instrumentNameTypeName
-//---------------------------------------------------------
-
-String InstrumentName::instrumentNameTypeName() const
-{
-    return instrumentNameType() == InstrumentNameType::SHORT ? u"short" : u"long";
-}
-
-//---------------------------------------------------------
-//   setInstrumentNameType
-//---------------------------------------------------------
-
-void InstrumentName::setInstrumentNameType(const String& s)
-{
-    if (s == u"short") {
-        setInstrumentNameType(InstrumentNameType::SHORT);
-    } else if (s == u"long") {
-        setInstrumentNameType(InstrumentNameType::LONG);
-    } else {
-        LOGD("InstrumentName::setSubtype: unknown <%s>", muPrintable(s));
-    }
 }
 
 double InstrumentName::largestStaffSpatium() const
@@ -133,5 +110,14 @@ bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
         break;
     }
     return rv;
+}
+
+mu::engraving::staff_idx_t mu::engraving::InstrumentName::effectiveStaffIdx() const
+{
+    if (m_sysStaff->show() || m_instrumentNameRole == InstrumentNameRole::STAFF) {
+        return staffIdx();
+    }
+
+    return system()->firstVisibleSysStaffOfPart(score()->staff(staffIdx())->part());
 }
 }

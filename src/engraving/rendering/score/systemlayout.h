@@ -76,9 +76,6 @@ public:
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, const LayoutContext& ctx);
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
-    static void layoutInstrumentNames(System* system, LayoutContext& ctx);
-
-    static void setInstrumentNames(System* system, LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
 
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
@@ -185,12 +182,6 @@ private:
 
     static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
-    static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);
-    static double totalBracketOffset(LayoutContext& ctx);
-    static double layoutBrackets(System* system, LayoutContext& ctx);
-    static void addBrackets(System* system, Measure* measure, LayoutContext& ctx);
-    static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
-                                  std::vector<Bracket*>& bl, Measure* measure);
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx);
 
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
