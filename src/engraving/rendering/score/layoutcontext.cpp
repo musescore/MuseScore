@@ -212,6 +212,15 @@ size_t DomAccessor::nstaves() const
     return score()->nstaves();
 }
 
+size_t DomAccessor::visibleStaffCount() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+
+    return score()->visibleStavesCount();
+}
+
 const std::vector<Staff*>& DomAccessor::staves() const
 {
     IF_ASSERT_FAILED(score()) {

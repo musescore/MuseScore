@@ -49,6 +49,10 @@ class StaffTypeSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateClefs READ shouldGenerateClefs CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateTimeSignatures READ shouldGenerateTimeSignatures CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * shouldGenerateKeySignatures READ shouldGenerateKeySignatures CONSTANT)
+
+    Q_PROPERTY(mu::inspector::PropertyItem * staffLongName READ staffLongName CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * staffShortName READ staffShortName CONSTANT)
+
 public:
     explicit StaffTypeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
@@ -75,6 +79,9 @@ public:
     PropertyItem* shouldGenerateTimeSignatures() const;
     PropertyItem* shouldGenerateKeySignatures() const;
 
+    PropertyItem* staffLongName() const;
+    PropertyItem* staffShortName() const;
+
 private:
     PropertyItem* m_isSmall = nullptr;
     PropertyItem* m_verticalOffset = nullptr;
@@ -93,5 +100,8 @@ private:
     PropertyItem* m_shouldGenerateClefs = nullptr;
     PropertyItem* m_shouldGenerateTimeSignatures = nullptr;
     PropertyItem* m_shouldGenerateKeySignatures = nullptr;
+
+    PropertyItem* m_staffLongName = nullptr;
+    PropertyItem* m_staffShortName = nullptr;
 };
 }

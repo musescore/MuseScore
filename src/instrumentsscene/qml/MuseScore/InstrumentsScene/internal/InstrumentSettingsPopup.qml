@@ -72,8 +72,7 @@ StyledPopupView {
             StyledTextLabel {
                 id: nameLabel
                 width: parent.width
-                text: settingsModel.isMainScore ? qsTrc("layoutpanel/instrumentsettingspopup", "Name on main score") :
-                                                  qsTrc("layoutpanel/instrumentsettingspopup", "Name on part score")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Instrument name")
                 horizontalAlignment: Text.AlignLeft
             }
 
@@ -101,7 +100,7 @@ StyledPopupView {
             StyledTextLabel {
                 id: abbreviatureLabel
                 width: parent.width
-                text: qsTrc("layoutpanel/instrumentsettingspopup", "Abbreviated name")
+                text: qsTrc("layoutpanel/instrumentsettingspopup", "Abbreviated instrument name")
                 horizontalAlignment: Text.AlignLeft
             }
 

@@ -156,6 +156,7 @@ public:
     const std::vector<System*>& systems() const;
 
     size_t nstaves() const;
+    size_t visibleStaffCount() const;
     const std::vector<Staff*>& staves() const;
     const Staff* staff(staff_idx_t idx) const;
     bool allStavesInvisible() const;

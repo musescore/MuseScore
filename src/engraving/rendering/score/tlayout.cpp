@@ -1082,11 +1082,11 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
             r.unite(font->bbox(SymId::bracketTop, magS).translated(0, ldata->y1));
         } break;
         case BarLineType::END_REPEAT: {
-            double w1 = 0.0;
+            double w1 = font->width(SymId::reversedBracketTop, magS) - w;
             r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, ldata->y1));
         } break;
         case BarLineType::END_START_REPEAT: {
-            double w1 = 0.0;
+            double w1 = font->width(SymId::reversedBracketTop, magS) - w;
             r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, ldata->y1));
             r.unite(font->bbox(SymId::bracketTop, magS).translated(0, ldata->y1));
         } break;
@@ -1213,14 +1213,14 @@ void TLayout::layoutBarLine2(BarLine* item, LayoutContext& ctx)
             break;
         case BarLineType::END_REPEAT:
         {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            double w1 = item->symBbox(SymId::reversedBracketTop).x() - bbox.x();
             bbox.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, ldata->y1));
             bbox.unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, ldata->y2));
             break;
         }
         case BarLineType::END_START_REPEAT:
         {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
+            double w1 = item->symBbox(SymId::reversedBracketTop).x() - bbox.x();
             bbox.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, ldata->y1));
             bbox.unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, ldata->y2));
             bbox.unite(item->symBbox(SymId::bracketTop).translated(0, ldata->y1));

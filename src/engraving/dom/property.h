@@ -317,6 +317,8 @@ enum class Pid : short {
     STAFF_STEMLESS,
     STAFF_INVISIBLE,
     STAFF_COLOR,
+    STAFF_LONG_NAME,
+    STAFF_SHORT_NAME,
 
     HEAD_SCHEME,
     STAFF_GEN_CLEF,

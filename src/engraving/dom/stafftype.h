@@ -27,6 +27,7 @@
 #include "draw/types/font.h"
 
 #include "engravingitem.h"
+#include "staffname.h"
 
 #include "../types/types.h"
 
@@ -174,11 +175,16 @@ public:
     StaffGroup group() const { return m_group; }
     void setGroup(StaffGroup g) { m_group = g; }
     StaffTypes type() const;
-    const String& name() const { return m_name; }
+    const String& staffTypeName() const { return m_staffTypeName; }
     const String& xmlName() const { return m_xmlName; }
-    void setName(const String& val) { m_name = val; }
     void setXmlName(const String& val) { m_xmlName = val; }
     String translatedGroupName() const;
+
+    const StaffName& staffName() const { return m_staffName; }
+    const String& longName() const { return m_staffName.longName(); }
+    const String& shortName() const { return m_staffName.shortName(); }
+    void setLongName(const String& s) { m_staffName.setLongName(s); }
+    void setShortName(const String& s) { m_staffName.setShortName(s); }
 
     void setLines(int val) { m_lines = val; }
     int lines() const { return m_lines; }
@@ -327,7 +333,9 @@ private:
     StaffGroup m_group = StaffGroup::STANDARD;
 
     String m_xmlName;         // the name used to reference this preset in instruments.xml
-    String m_name;            // user visible name
+    String m_staffTypeName;            // user visible name
+
+    StaffName m_staffName;
 
     double m_userMag = 1.0;           // allowed 0.1 - 10.0
     Spatium m_yoffset;

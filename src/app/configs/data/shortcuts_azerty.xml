@@ -1006,6 +1006,10 @@
     <key>make-into-system</key>
     <seq>Alt+S</seq>
     </SC>
+  <SC>
+    <key>beam-selected-range</key>
+    <seq>Alt+=</seq>
+    </SC>
 <!-- TAB specific shortcuts -->
   <SC>
     <key>pad-note-1-TAB</key>

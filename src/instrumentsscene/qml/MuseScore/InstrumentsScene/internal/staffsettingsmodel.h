@@ -40,6 +40,8 @@ class StaffSettingsModel : public QObject, public muse::Contextable
     Q_PROPERTY(int hideWhenEmpty READ hideWhenEmpty WRITE setHideWhenEmpty NOTIFY hideWhenEmptyChanged)
     Q_PROPERTY(
         bool showIfEntireSystemEmpty READ showIfEntireSystemEmpty WRITE setShowIfEntireSystemEmpty NOTIFY showIfEntireSystemEmptyChanged)
+    Q_PROPERTY(QString longName READ longName WRITE setLongName NOTIFY longNameChanged)
+    Q_PROPERTY(QString shortName READ shortName WRITE setShortName NOTIFY shortNameChanged)
 
     Q_PROPERTY(QVariantList voices READ voices NOTIFY voicesChanged)
     Q_PROPERTY(QVariantList allStaffTypes READ allStaffTypes NOTIFY allStaffTypesChanged)
@@ -58,6 +60,8 @@ public:
     bool cutawayEnabled() const;
     int hideWhenEmpty() const;
     bool showIfEntireSystemEmpty() const;
+    QString longName() const;
+    QString shortName() const;
 
     QVariantList voices() const;
     QVariantList allStaffTypes() const;
@@ -75,6 +79,8 @@ public slots:
     void setCutawayEnabled(bool value);
     void setHideWhenEmpty(int value);
     void setShowIfEntireSystemEmpty(bool value);
+    void setLongName(QString value);
+    void setShortName(QString value);
 
 signals:
     void staffTypeChanged();
@@ -85,6 +91,8 @@ signals:
     void hideWhenEmptyChanged();
     void showIfEntireSystemEmptyChanged();
     void allStaffTypesChanged();
+    void longNameChanged();
+    void shortNameChanged();
 
     void isMainScoreChanged(bool isMainScore);
 

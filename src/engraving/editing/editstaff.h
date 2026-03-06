@@ -229,12 +229,13 @@ class ChangeStaffType : public UndoCommand
 
     Staff* staff = nullptr;
     StaffType staffType;
+    Fraction tick;
 
     void flip(EditData*) override;
 
 public:
-    ChangeStaffType(Staff* s, const StaffType& t)
-        : staff(s), staffType(t) {}
+    ChangeStaffType(Staff* s, const StaffType& t, Fraction tick = Fraction(0, 1))
+        : staff(s), staffType(t), tick(tick) {}
 
     UNDO_TYPE(CommandType::ChangeStaffType)
     UNDO_NAME("ChangeStaffType")

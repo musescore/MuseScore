@@ -130,6 +130,8 @@ enum class P_TYPE : unsigned char {
     MEASURE_NUMBER_PLACEMENT,
     CAPO_TRANSPOSE_MODE,
 
+    INSTRUMENT_NAMES_ALIGN,
+
     // Other
     GROUPS,
 };
@@ -361,6 +363,10 @@ public:
 
     PropertyValue(const CapoParams::TransposeMode& v)
         : m_type(P_TYPE::CAPO_TRANSPOSE_MODE), m_data(make_data<CapoParams::TransposeMode>(v)) {}
+
+    PropertyValue(const InstrumentNamesAlign& v)
+        : m_type(P_TYPE::INSTRUMENT_NAMES_ALIGN), m_data(make_data<InstrumentNamesAlign>(v)) {}
+
     bool isValid() const;
 
     P_TYPE type() const;

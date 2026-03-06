@@ -311,6 +311,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_STEMLESS,                      P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "stemless") },
     { Pid::STAFF_INVISIBLE,                     P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "invisible") },
     { Pid::STAFF_COLOR,                         P_TYPE::COLOR,                     PropertyGroup::APPEARANCE, false, "color",                           QT_TRANSLATE_NOOP("engraving/propertyName", "color") },
+    { Pid::STAFF_LONG_NAME,                     P_TYPE::STRING,                    PropertyGroup::APPEARANCE, false, "staffLongName",                   QT_TRANSLATE_NOOP("engraving/propertyName", "staff long name") },
+    { Pid::STAFF_SHORT_NAME,                    P_TYPE::STRING,                    PropertyGroup::APPEARANCE, false, "staffShortName",                  QT_TRANSLATE_NOOP("engraving/propertyName", "staff short name") },
 
     { Pid::HEAD_SCHEME,                         P_TYPE::NOTEHEAD_SCHEME,           PropertyGroup::APPEARANCE, false, "headScheme",                      QT_TRANSLATE_NOOP("engraving/propertyName", "notehead scheme") },
     { Pid::STAFF_GEN_CLEF,                      P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, false, "",                                QT_TRANSLATE_NOOP("engraving/propertyName", "generating clefs") },

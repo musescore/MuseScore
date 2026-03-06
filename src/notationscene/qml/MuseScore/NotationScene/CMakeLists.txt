@@ -133,6 +133,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/glissandosectionmodel.h
         styledialog/hammeronpullofftappingpagemodel.cpp
         styledialog/hammeronpullofftappingpagemodel.h
+        styledialog/instrumentnamespagemodel.cpp
+        styledialog/instrumentnamespagemodel.h
         styledialog/measurenumberspagemodel.cpp
         styledialog/measurenumberspagemodel.h
         styledialog/measurerepeatmodel.cpp
@@ -208,6 +210,7 @@ qt_add_qml_module(notationscene_qml
         styledialog/GlissandoSection.qml
         styledialog/HammerOnPullOffTappingPage.qml
         styledialog/IconAndTextButtonSelector.qml
+        styledialog/InstrumentNamesPage.qml
         styledialog/ItemWithTitle.qml
         styledialog/LaissezVibrSection.qml
         styledialog/LineStyleSection.qml
@@ -218,6 +221,7 @@ qt_add_qml_module(notationscene_qml
         styledialog/RepeatBarlinesSection.qml
         styledialog/RepeatPage.qml
         styledialog/RestOffsetSelector.qml
+        styledialog/SelectableStyledImage.qml
         styledialog/SlursAndTiesPage.qml
         styledialog/SlursSection.qml
         styledialog/StyleControlRowWithReset.qml
@@ -270,6 +274,16 @@ qt_add_qml_module(notationscene_qml
         styledialog/courtesyImages/repeats-on.png
         styledialog/hammerOnPullOffImages/hopoNotShowAll.png
         styledialog/hammerOnPullOffImages/hopoShowAll.png
+        styledialog/instrumentNamesImages/long-right-right.png
+        styledialog/instrumentNamesImages/long-center-right.png
+        styledialog/instrumentNamesImages/long-center-center.png
+        styledialog/instrumentNamesImages/long-left-right.png
+        styledialog/instrumentNamesImages/short-right-right.png
+        styledialog/instrumentNamesImages/short-center-right.png
+        styledialog/instrumentNamesImages/short-center-center.png
+        styledialog/instrumentNamesImages/short-left-right.png
+        styledialog/instrumentNamesImages/stack-horizontally.png
+        styledialog/instrumentNamesImages/stack-vertically.png
         styledialog/timeSigImages/timesig-above_staves.png
         styledialog/timeSigImages/timesig-across_staves.png
         styledialog/timeSigImages/timesig-courtesy-hang.png
