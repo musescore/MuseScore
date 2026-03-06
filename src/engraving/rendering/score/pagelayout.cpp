@@ -59,6 +59,7 @@
 #include "tlayout.h"
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
+#include "systemheaderlayout.h"
 
 #include "log.h"
 
@@ -804,7 +805,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     for (System* system : systems) {
         SystemLayout::setMeasureHeight(system, system->height(), ctx);
         SystemLayout::layoutBracketsVertical(system, ctx);
-        SystemLayout::layoutInstrumentNames(system, ctx);
+        SystemHeaderLayout::setInstrumentNamesVerticalPos(system, ctx);
     }
     vgdl.deleteAll();
 }

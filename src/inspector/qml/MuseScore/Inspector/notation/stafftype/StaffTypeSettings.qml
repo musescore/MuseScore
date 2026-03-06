@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick
+import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
@@ -42,6 +43,18 @@ Column {
     function focusOnFirst() {
         cueSize.navigation.requestActive()
     }
+
+    TextSection {
+        titleText: qsTrc("inspector", "Staff label")
+        propertyItem: root.model ? root.model.staffLongName : null
+    }
+
+    TextSection {
+        titleText: qsTrc("inspector", "Abbreviated staff label")
+        propertyItem: root.model ? root.model.staffShortName : null
+    }
+
+    SeparatorLine { anchors.margins: -12 }
 
     PropertyCheckBox {
         id: cueSize
@@ -95,8 +108,6 @@ Column {
             navigationRowStart: sizeOffset.navigationRowEnd + 1
         }
     }
-
-    SeparatorLine { anchors.margins: -12 }
 
     Item {
         height: childrenRect.height

@@ -79,6 +79,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Instrument names</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Clefs, key &amp; time signatures</string>
        </property>
       </item>
@@ -256,7 +261,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>39</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -291,8 +296,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>654</width>
-                <height>723</height>
+                <width>660</width>
+                <height>740</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -4518,6 +4523,46 @@
            </size>
           </property>
          </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageInstrumentNames">
+       <layout class="QVBoxLayout" name="verticalLayout_55">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="leftMargin">
+         <number>9</number>
+        </property>
+        <property name="topMargin">
+         <number>9</number>
+        </property>
+        <property name="rightMargin">
+         <number>9</number>
+        </property>
+        <property name="bottomMargin">
+         <number>9</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="pageInstrumentNames" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_56">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>

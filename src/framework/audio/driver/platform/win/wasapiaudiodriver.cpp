@@ -243,9 +243,9 @@ std::string WasapiAudioDriver::name() const
 void WasapiAudioDriver::init()
 {
     LOGI() << "begin driver init";
-    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitialize(nullptr);
     if (FAILED(hr)) {
-        LOGE() << "failed CoInitializeEx, error: " << hrToString(hr);
+        LOGE() << "failed CoInitialize, error: " << hrToString(hr);
     }
 
     hr = CoCreateInstance(
@@ -424,6 +424,12 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
 
 void WasapiAudioDriver::th_audioThread()
 {
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    if (FAILED(hr)) {
+        LOGE() << "failed CoInitializeEx, error: " << hrToString(hr);
+        return;
+    }
+
     m_opened = th_audioInitialize();
     m_activeSpecChanged.send(m_activeSpec);
 
@@ -438,6 +444,8 @@ void WasapiAudioDriver::th_audioThread()
             break;
         }
     }
+
+    CoUninitialize();
 }
 
 bool WasapiAudioDriver::th_audioInitialize()

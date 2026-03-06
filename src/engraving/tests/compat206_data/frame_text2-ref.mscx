@@ -80,9 +80,11 @@
       <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
       <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
       <longInstrumentFontSize>11</longInstrumentFontSize>
+      <longInstrumentAlign>right,center</longInstrumentAlign>
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
       <shortInstrumentFontSize>11</shortInstrumentFontSize>
+      <shortInstrumentAlign>right,center</shortInstrumentAlign>
       <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
       <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
       <partInstrumentFramePadding>0</partInstrumentFramePadding>

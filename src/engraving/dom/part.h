@@ -78,6 +78,7 @@ public:
     bool readProperties(XmlReader&);
 
     size_t nstaves() const;
+    size_t visibleStavesCount() const;
     const std::vector<Staff*>& staves() const;
     std::set<staff_idx_t> staveIdxList() const;
     void appendStaff(Staff* staff);

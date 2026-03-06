@@ -80,9 +80,11 @@
       <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
       <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
       <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
+      <longInstrumentAlign>right,center</longInstrumentAlign>
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
       <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
+      <shortInstrumentAlign>right,center</shortInstrumentAlign>
       <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
       <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
       <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>

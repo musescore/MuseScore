@@ -53,6 +53,7 @@
 #include "horizontalspacing.h"
 #include "tremololayout.h"
 #include "slurtielayout.h"
+#include "systemheaderlayout.h"
 
 #include "log.h"
 
@@ -278,7 +279,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     }
 
     System* system = ctx.mutDom().systems().front();
-    SystemLayout::setInstrumentNames(system, ctx, /* longNames */ true);
+    SystemHeaderLayout::setInstrumentNames(system, ctx, /* longNames */ true);
 
     double targetSystemWidth = ctx.dom().nmeasures() * ctx.conf().styleAbsolute(Sid::minMeasureWidth);
     system->setWidth(targetSystemWidth);

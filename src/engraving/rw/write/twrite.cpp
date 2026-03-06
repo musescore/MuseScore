@@ -2896,6 +2896,9 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
     if (!item->xmlName().isEmpty()) {
         xml.tag("name", item->xmlName());
     }
+    if (!item->staffName().empty()) {
+        write(item->staffName(), xml);
+    }
     if (item->lines() != 5) {
         xml.tag("lines", item->lines());
     }

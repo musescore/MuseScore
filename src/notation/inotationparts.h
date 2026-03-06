@@ -48,7 +48,7 @@ public:
     virtual const Staff* staff(const muse::ID& staffId) const = 0;
     virtual bool staffExists(const muse::ID& staffId) const = 0;
 
-    virtual StaffConfig staffConfig(const muse::ID& staffId) const = 0;
+    virtual StaffConfig staffConfig(const muse::ID& staffId, Fraction tick = Fraction(0, 1)) const = 0;
     virtual ScoreOrder scoreOrder() const = 0;
 
     virtual void setParts(const PartInstrumentList& instruments, const ScoreOrder& order) = 0;
@@ -60,7 +60,7 @@ public:
     virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
     virtual void setStaffType(const muse::ID& staffId, StaffTypeId type) = 0;
-    virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config) = 0;
+    virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) = 0;
 
     virtual void removeParts(const muse::IDList& partsIds) = 0;
     virtual void removeStaves(const muse::IDList& stavesIds) = 0;

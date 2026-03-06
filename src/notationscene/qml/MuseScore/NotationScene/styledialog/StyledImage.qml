@@ -36,8 +36,8 @@ Rectangle {
     property real forceHeight: 0
     property alias source: image.source
 
-    width: image.width + 2 * horizontalPadding + border.width * 2
-    height: image.height + 2 * verticalPadding + border.width * 2
+    width: image.width + 2 * horizontalPadding //+ border.width * 2
+    height: image.height + 2 * verticalPadding //+ border.width * 2
 
     color: "#ffffff"
     border.color: ui.theme.strokeColor
