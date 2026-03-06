@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,22 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_FFMPEG_H
-#define MU_IMPORTEXPORT_FFMPEG_H
 
-#include <stdint.h>
+#pragma once
 
-extern "C" {
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libavutil/mathematics.h"
-#include "libavutil/rational.h"
-#include "libavutil/avstring.h"
-#include "libavutil/opt.h"
-#include "libswscale/swscale.h"
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 6, 100)
-#include "libavutil/imgutils.h"
-#endif
+#include <QImage>
+
+#include "io/path.h"
+
+#include "modularity/imoduleinterface.h"
+
+namespace muse::media {
+class IVideoEncoder : MODULE_GLOBAL_INTERFACE
+{
+    INTERFACE_ID(IVideoEncoder)
+
+public:
+    virtual ~IVideoEncoder() = default;
+
+    virtual bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) = 0;
+    virtual void close() = 0;
+    virtual bool encodeImage(const QImage& img) = 0;
+    virtual bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
+                               double audioOffsetSec) = 0;
+};
 }
-
-#endif // MU_IMPORTEXPORT_FFMPEG_H

@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2026 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -16,20 +16,13 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(iex_videoexport)
+muse_create_module(muse_media ALIAS muse::media STUB)
 
-target_sources(iex_videoexport PRIVATE
-    videoexportmodule.cpp
-    videoexportmodule.h
-    videoexporttypes.h
-    ivideoexportconfiguration.h
-
-    internal/videoexportconfiguration.cpp
-    internal/videoexportconfiguration.h
-    internal/videowriter.cpp
-    internal/videowriter.h
+target_sources(muse_media PRIVATE
+    mediastubmodule.cpp
+    mediastubmodule.h
+    videoencoderstub.cpp
+    videoencoderstub.h
 )
-
-target_link_libraries(iex_videoexport PRIVATE Qt::Concurrent muse::media engraving)
