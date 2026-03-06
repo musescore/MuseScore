@@ -2778,9 +2778,14 @@ void Score::cmdResetBeamMode()
     const track_idx_t trackStart = staff2track(selection().staffStart());
     const track_idx_t trackEnd = staff2track(selection().staffEnd());
     const Fraction endTick = selection().tickEnd();
+    const SelectionFilter filter = selectionFilter();
 
     for (Segment* seg = firstCr->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
         for (track_idx_t track = trackStart; track < trackEnd; ++track) {
+            if (!filter.canSelectVoice(track)) {
+                continue;
+            }
+
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
