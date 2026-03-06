@@ -572,6 +572,17 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
+RetVal<bool> InteractiveProvider::isOpened(const QString& objectId) const
+{
+    for (const ObjectInfo& objectInfo: allOpenObjects()) {
+        if (objectInfo.objectId == objectId) {
+            return RetVal<bool>::make_ok(true);
+        }
+    }
+
+    return RetVal<bool>::make_ok(false);
+}
+
 RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q, const QVariantMap& params)
 {
     QmlLaunchData data;
@@ -609,11 +620,21 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     //! NOTE Will be deleted with the dialog
     WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog);
     adapter->onShow([this, objectId, dialog]() {
+        if (isOpened(objectId).val) {
+            LOGE() << "Dialog is already opened: " << objectId << ", ignoring this show event";
+            return;
+        }
+
         async::Async::call(this, [this, objectId, dialog]() {
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
         });
     })
     .onHide([this, objectId, dialog]() {
+        if (!isOpened(objectId).val) {
+            LOGE() << "Dialog is not opened: " << objectId << ", ignoring this hide event";
+            return;
+        }
+
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(dialog->result());
         Ret::Code errorCode = dialogCode == QDialog::Accepted ? Ret::Code::Ok : Ret::Code::Cancel;
 
