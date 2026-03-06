@@ -47,11 +47,11 @@ class EnginePlayback : public IEnginePlayback, public Contextable, public async:
     ContextInject<IAudioEngine> audioEngine = { this };
 
 public:
-    EnginePlayback(const muse::modularity::ContextPtr& iocCtx = nullptr)
+    EnginePlayback(const muse::modularity::ContextPtr& iocCtx)
         : Contextable(iocCtx) {}
 
-    void init();
-    void deinit();
+    void init() override;
+    void deinit() override;
 
     // 1. Add Sequence
     TrackSequenceId addSequence() override;

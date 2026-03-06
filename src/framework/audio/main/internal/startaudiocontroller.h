@@ -48,7 +48,6 @@ class StartAudioController : public IStartAudioController, public muse::Contexta
 public:
     StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel, const muse::modularity::ContextPtr& iocCtx);
 
-    void registerExports();
     void init();
 
     bool isAudioStarted() const override;

@@ -27,6 +27,11 @@
 #include "modularity/imodulesetup.h"
 #include "global/ticker.h"
 
+namespace muse::audio::engine  {
+class EngineGlobalSetup;
+class EngineContextSetup;
+}
+
 namespace muse::audio::rpc  {
 class IRpcChannel;
 }
@@ -46,6 +51,7 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
+    void resolveImports() override;
 
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
@@ -54,6 +60,7 @@ public:
 
 private:
     std::shared_ptr<AudioConfiguration> m_configuration;
+    std::shared_ptr<engine::EngineGlobalSetup> m_engineGlobalSetup;
 };
 
 class AudioContext : public modularity::IContextSetup
@@ -68,6 +75,7 @@ public:
     void onDeinit() override;
 
 private:
+    std::shared_ptr<engine::EngineContextSetup> m_engineContextSetup;
     std::shared_ptr<AudioActionsController> m_actionsController;
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<AudioDriverController> m_audioDriverController;

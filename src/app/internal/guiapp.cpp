@@ -310,7 +310,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     modularity::ContextPtr ctxId = std::make_shared<modularity::Context>();
     ++m_lastId;
 #ifdef MUSE_MULTICONTEXT_WIP
-    ctx->id = m_lastId;
+    ctxId->id = m_lastId;
 #else
     // only global
     ctxId->id = 0;
