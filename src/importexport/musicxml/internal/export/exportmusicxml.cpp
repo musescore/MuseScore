@@ -5849,20 +5849,23 @@ static void writeWordsAndSymbolsXml(mu::engraving::XmlWriter& xml, const mu::eng
         // Text before <sym>
         if (matchPos > lastPos) {
             mu::engraving::String before = mu::engraving::String::fromStdWString(wwords.substr(lastPos, matchPos - lastPos));
-            if (!before.trimmed().isEmpty())
+            if (!before.trimmed().isEmpty()) {
                 xml.tagRaw(u"words" + attrs, before.trimmed());
+            }
         }
         mu::engraving::String symName = mu::engraving::String::fromStdWString((*it)[1].str());
-        if (!symName.trimmed().isEmpty())
+        if (!symName.trimmed().isEmpty()) {
             xml.tagRaw(u"symbol" + attrs, symName.trimmed());
+        }
         lastPos = matchPos + matchLen;
         ++it;
     }
     // Text after last <sym>
     if (foundSym && lastPos < wwords.size()) {
         mu::engraving::String after = mu::engraving::String::fromStdWString(wwords.substr(lastPos));
-        if (!after.trimmed().isEmpty())
+        if (!after.trimmed().isEmpty()) {
             xml.tagRaw(u"words" + attrs, after.trimmed());
+        }
     }
     // If no <sym> found
     if (!foundSym) {
