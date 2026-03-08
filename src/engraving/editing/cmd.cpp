@@ -3248,9 +3248,12 @@ EngravingItem* Score::move(const String& cmd)
         }
         setPlayNote(true);
         if (noteEntryMode()) {
-            // if cursor moved into a gap, selection cannot follow
-            // only select & play el if it was not already selected (does not normally happen)
-            if (m_is.cr() || !el->selected()) {
+            if (m_is.beyondScore()) {
+                // don't select el when cursor is beyond score
+                deselectAll();
+            } else if ((m_is.cr() || !el->selected())) {
+                // if cursor moved into a gap, selection cannot follow
+                // only select & play el if it was not already selected (does not normally happen)
                 select(el, SelectType::SINGLE, 0);
             } else {
                 setPlayNote(false);
