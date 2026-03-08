@@ -1743,6 +1743,7 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                 bool nIsAcc = startsWithAcc(n);
                 bool curModStartsWithSusOrAdd = startsWithSusOrAdd(curMod);
                 bool nIsSusOrAdd = startsWithSusOrAdd(n);
+                bool nIsParen = (n == u"(") || (n == u")");
 
                 if (curModStartsWithSusOrAdd) {                                         // Align sus or add left
                     if (nIsSusOrAdd) {
@@ -1754,7 +1755,7 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                     m_renderList.emplace_back(new RenderActionPush());
                 } else if (curModStartsWithAcc && !nextModStartsWithAcc && !nIsAcc) {   // current line has accidental, next line has no accidental ->  push before degree
                     m_renderList.emplace_back(new RenderActionPush());
-                } else if (!curModStartsWithAcc && nextModStartsWithAcc) {              // current line has no accidental, next line has accidental -> push before degree
+                } else if (!curModStartsWithAcc && nextModStartsWithAcc && !nIsParen) { // current line has no accidental, next line has accidental -> push before degree
                     m_renderList.emplace_back(new RenderActionPush());                  // and move by next line's accidental's width to align
                     String nextAcc = nextMod;
                     static const std::wregex DEGREE_REGEX = std::wregex(L"[0-9]+");
