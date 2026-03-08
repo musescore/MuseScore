@@ -20636,7 +20636,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Guzhengs</source>
-        <translation type="unfinished"/>
+        <translation>Guzhengs</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
