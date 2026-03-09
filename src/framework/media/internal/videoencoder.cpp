@@ -95,7 +95,11 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 #if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 7, 100)
     snprintf(m_ffmpeg->formatCtx->filename, sizeof(m_ffmpeg->formatCtx->filename), "%s", fileName.c_str());
 #else
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
     m_ffmpeg->formatCtx->url = strdup(fileName.c_str());
+#else
+    m_ffmpeg->formatCtx->url = _strdup(fileName.c_str());
+#endif
 #endif
 
     // Add the video stream
