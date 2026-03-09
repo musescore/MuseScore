@@ -62,8 +62,8 @@
             }
         },
         {
-            "name": "linux-base",
-            "description": "Use current Qt with Clang compiler",
+            "name": "ninja-base",
+            "description": "Use current Qt with Ninja",
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
@@ -71,23 +71,36 @@
                 "CMAKE_TOOLCHAIN_FILE": "$env{QT_DIR}/lib/cmake/Qt6/qt.toolchain.cmake",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}/install",
                 "CMAKE_PREFIX_PATH": "$env{QT_DIR}/lib/cmake",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
                 "QT_QML_GENERATE_QMLLS_INI": "ON",
                 "CMAKE_CXX_FLAGS_DEBUG_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG",
                 "CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT": "-DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "clang-base",
+            "displayName": "Qt Clang",
+            "description": "Use current Qt with Clang compiler",
+            "hidden": true,
+            "inherits": "ninja-base",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "Qt-Clang-Debug",
+            "displayName": "Qt Clang Debug",
+            "description": "Use current Qt with Clang compiler (Debug)",
+            "inherits": "clang-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "name": "compile_commands",
             "displayName": "Generate compile_commands",
             "description": "Use current Qt with Clang compiler (Debug)",
-            "inherits": "linux-base",
+            "inherits": "clang-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "MUSE_COMPILE_USE_UNITY": "OFF",
@@ -95,10 +108,26 @@
             }
         },
         {
-            "name": "Qt-Clang-Debug",
-            "displayName": "Qt Clang Debug",
-            "description": "Use current Qt with Clang compiler (Debug)",
-            "inherits": "linux-base",
+            "name": "msvc-base",
+            "displayName": "Qt Msvc",
+            "description": "Use current Qt with Msvc compiler",
+            "hidden": true,
+            "inherits": "ninja-base",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "Qt-Msvc-Debug",
+            "displayName": "Qt Msvc Debug",
+            "description": "Use current Qt with Msvc compiler (Debug)",
+            "inherits": "msvc-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
