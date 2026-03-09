@@ -30,15 +30,6 @@ target_sources(iex_videoexport PRIVATE
     internal/videoexportconfiguration.h
     internal/videowriter.cpp
     internal/videowriter.h
-    internal/videoencoder.cpp
-    internal/videoencoder.h
-    internal/ffmpeg.h
 )
 
-target_link_libraries(iex_videoexport PRIVATE Qt::Concurrent engraving)
-
-# FFmpeg
-find_package(FFmpeg REQUIRED)
-
-target_include_directories(iex_videoexport PRIVATE ${FFMPEG_INCLUDE_DIRS})
-target_link_libraries(iex_videoexport PRIVATE ${FFMPEG_LIBRARIES})
+target_link_libraries(iex_videoexport PRIVATE Qt::Concurrent muse::media engraving)

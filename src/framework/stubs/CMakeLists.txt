@@ -42,6 +42,10 @@ if (NOT MUSE_MODULE_LEARN)
     add_subdirectory(learn)
 endif()
 
+if (NOT MUSE_MODULE_MEDIA)
+    add_subdirectory(media)
+endif()
+
 if (NOT MUSE_MODULE_MIDI)
     add_subdirectory(midi)
 endif()

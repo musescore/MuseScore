@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,35 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_VIDEOENCODER_H
-#define MU_IMPORTEXPORT_VIDEOENCODER_H
 
-#include <QImage>
+#pragma once
 
-#include "io/path.h"
+#include "../ivideoencoder.h"
 
-namespace mu::iex::videoexport {
+#include "ffmpegfunctions.h"
+
+#include "ffmpeglibhandler.h"
+
+namespace muse::media {
 struct FFmpeg;
-class VideoEncoder
+class VideoEncoder : public IVideoEncoder
 {
 public:
-    VideoEncoder();
-    ~VideoEncoder();
+    explicit VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler);
+    ~VideoEncoder() override;
 
-    bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps);
-    void close();
+    bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
+    void close() override;
 
-    bool encodeImage(const QImage& img);
-
-    static bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                              double audioOffsetSec);
+    bool encodeImage(const QImage& img) override;
+    bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
+                       double audioOffsetSec) override;
 
 private:
-
     bool convertImage_sws(const QImage& img);
+    const FFmpegFunctions* ffmpegFunctions() const;
 
+    std::shared_ptr<FFmpegLibHandler> m_ffmpegHandler = nullptr;
     FFmpeg* m_ffmpeg = nullptr;
 };
 }
-
-#endif // MU_IMPORTEXPORT_VIDEOENCODER_H

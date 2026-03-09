@@ -50,6 +50,12 @@
 #include "framework/stubs/learn/learnmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_MEDIA
+#include "framework/media/mediamodule.h"
+#else
+#include "framework/stubs/media/mediastubmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_MIDI
 #include "framework/midi/midimodule.h"
 #else
@@ -321,6 +327,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #endif
     app->addModule(new muse::tours::ToursModule());
     app->addModule(new muse::vst::VSTModule());
+    app->addModule(new muse::media::MediaModule());
 
 // modules
 #ifdef MUE_BUILD_APPSHELL_MODULE
@@ -452,6 +459,8 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
 #ifdef MUSE_MODULE_AUTOBOT
     app->addModule(new muse::autobot::AutobotModule());
 #endif
+
+    app->addModule(new muse::media::MediaModule());
 
     app->addModule(new mu::context::ContextModule());
 
