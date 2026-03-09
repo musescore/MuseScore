@@ -653,6 +653,26 @@ public:
     Q_INVOKABLE void moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff);
 
     /** APIDOC
+     * Creates and appends a new default staff to the given part.
+     * @method
+     * @param {Engraving.Part} destinationPart The Part to append the staff to.
+     * @return {Engraving.Staff} The newly created Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendStaff(apiv1::Part* destinationPart);
+
+    /** APIDOC
+     * Creates a staff linked to a source staff and appends it to the given part.
+     * The linked staff will share content with the source staff.
+     * @method
+     * @param {Engraving.Staff} sourceStaff The Staff to link from.
+     * @param {Engraving.Part} destinationPart The Part to append the linked staff to.
+     * @return {Engraving.Staff} The newly created linked Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendLinkedStaff(apiv1::Staff* sourceStaff, apiv1::Part* destinationPart);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

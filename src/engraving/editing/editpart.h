@@ -233,5 +233,11 @@ public:
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+
+    static Staff* appendStaff(Score* score, Part* destinationPart);
+    static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
+
+private:
+    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };
 }

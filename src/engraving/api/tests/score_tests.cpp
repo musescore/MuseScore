@@ -1008,3 +1008,135 @@ TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
 
     delete domScore;
 }
+
+//---------------------------------------------------------
+//   testAppendStaff
+//   Test appending a new staff to a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a new staff
+    score->startCmd(TranslatableString::untranslatable("Append staff test"));
+    Staff* newStaff = EditPart::appendStaff(score, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(newStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaff
+//   Test appending a linked staff and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* sourceStaff = Factory::createStaff(part);
+    score->appendStaff(sourceStaff);
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a linked staff
+    score->startCmd(TranslatableString::untranslatable("Append linked staff test"));
+    Staff* linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(linkedStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendStaffApi
+//   Test the Plugin API Score::appendStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a staff via API
+    apiv1::Staff* apiStaff = apiScore.appendStaff(apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaffApi
+//   Test the Plugin API Score::appendLinkedStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Staff* apiSourceStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a linked staff via API
+    apiv1::Staff* apiLinkedStaff = apiScore.appendLinkedStaff(apiSourceStaff, apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiLinkedStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiSourceStaff;
+    delete apiPart;
+    delete domScore;
+}

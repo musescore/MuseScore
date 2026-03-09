@@ -344,6 +344,32 @@ void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinati
     mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
 }
 
+Staff* Score::appendStaff(Part* destinationPart)
+{
+    if (!destinationPart) {
+        LOGW("appendStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendStaff(score(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
+Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
+{
+    if (!sourceStaff) {
+        LOGW("appendLinkedStaff: sourceStaff is null");
+        return nullptr;
+    }
+    if (!destinationPart) {
+        LOGW("appendLinkedStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
 //---------------------------------------------------------
 //   Score::firstSegment
 //---------------------------------------------------------

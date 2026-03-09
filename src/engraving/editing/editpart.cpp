@@ -25,6 +25,7 @@
 #include "transpose.h"
 
 #include "../dom/excerpt.h"
+#include "../dom/factory.h"
 #include "../dom/instrchange.h"
 #include "../dom/masterscore.h"
 #include "../dom/mscore.h"
@@ -636,4 +637,52 @@ void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destin
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }
+}
+
+void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
+{
+    if (!score || !staff || !destinationPart) {
+        return;
+    }
+
+    staff_idx_t staffLocalIndex = destinationPart->nstaves();
+    KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
+
+    staff->setScore(score);
+    staff->setPart(destinationPart);
+
+    score->undoInsertStaff(staff, staffLocalIndex, createRests);
+
+    staff_idx_t staffGlobalIndex = staff->idx();
+    score->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
+
+    score->updateBracesAndBarlines(destinationPart, staffLocalIndex);
+
+    destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
+}
+
+Staff* EditPart::appendStaff(Score* score, Part* destinationPart)
+{
+    if (!score || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart);
+    return staff;
+}
+
+Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart)
+{
+    if (!score || !sourceStaff || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart, false);
+
+    staff->setLinks(nullptr);
+    Excerpt::cloneStaff(sourceStaff, staff);
+
+    return staff;
 }
