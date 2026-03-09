@@ -1134,10 +1134,10 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         s->setTrack(note->track());
         read400::TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
-            note->setParenthesesMode(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
+            note->setParenthesesMode(ParenthesesMode::BOTH);
             ctx.score()->deleteLater(s);
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
-            note->setParenthesesMode(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
+            note->setParenthesesMode(ParenthesesMode::BOTH);
             ctx.score()->deleteLater(s);
         } else {
             note->add(s);
