@@ -1414,6 +1414,8 @@ void TRead::read(Image* img, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::convertPre470ImageSize(img);
 }
 
 void TRead::read(Tuplet* t, XmlReader& e, ReadContext& ctx)
