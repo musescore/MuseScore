@@ -51,6 +51,7 @@ public:
     static void setTextLineTextPositionFromAlign(TextLineBase* tl);
     static void setMusicSymbolSize470(MStyle& style);
     static Spatium convertPre470FrameRadius(double frameRadius);
+    static void convertPre470ImageSize(Image* image);
     static void doMigrateNoteParens(EngravingItem* item);
 
 private:

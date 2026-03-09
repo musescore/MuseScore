@@ -27,6 +27,7 @@
 #include "dom/dynamic.h"
 #include "dom/expression.h"
 #include "dom/harmony.h"
+#include "dom/image.h"
 #include "dom/laissezvib.h"
 #include "dom/masterscore.h"
 #include "dom/note.h"
@@ -1041,9 +1042,18 @@ void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item
     EditChord::addChordParentheses(chord, { note });
 }
 
+static constexpr double PRE_470_DPI = 360;
+
 Spatium mu::engraving::compat::CompatUtils::convertPre470FrameRadius(double frameRadius)
 {
     // The frame radius used to be expressed in raster units and divided by 2 at drawing. Since 4.7 it is expressed in spatium.
-    static constexpr int OLD_DPI = 360;
-    return Spatium(frameRadius * (DPI / OLD_DPI) / DefaultStyle::baseStyle().value(Sid::spatium).toDouble()) / 2;
+    return Spatium(frameRadius * (DPI / PRE_470_DPI) / DefaultStyle::baseStyle().value(Sid::spatium).toDouble()) / 2;
+}
+
+void CompatUtils::convertPre470ImageSize(Image* image)
+{
+    if (image->size().isNull() && image->score()->mscVersion() < 470) {
+        image->init();
+        image->setSize(image->size() * (DPI / PRE_470_DPI));
+    }
 }
