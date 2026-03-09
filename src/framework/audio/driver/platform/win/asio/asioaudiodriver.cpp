@@ -551,6 +551,9 @@ void AsioAudioDriver::close()
 
 void AsioAudioDriver::doClose()
 {
+    if (!m_running) {
+        return;
+    }
     m_running = false;
     if (m_thread.joinable()) {
         m_thread.join();
