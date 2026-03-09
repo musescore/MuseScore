@@ -34,6 +34,56 @@ using namespace muse::media;
 using namespace muse;
 
 namespace {
+static int versionFromAVFormatPath(const io::path_t& path)
+{
+    std::string name = io::filename(path, true).toStdString();
+    int avVer = -1;
+#if defined(Q_OS_MAC)
+    // libavformat.60.dylib
+    size_t dot = name.rfind('.');
+    if (dot != std::string::npos && dot > 0) {
+        size_t verStart = name.rfind('.', dot - 1);
+        if (verStart != std::string::npos && verStart + 1 < dot) {
+            try {
+                avVer = std::stoi(name.substr(verStart + 1, dot - verStart - 1));
+            } catch (...) {}
+        }
+    }
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    // libavformat.so.60
+    size_t so = name.rfind(".so.");
+    if (so != std::string::npos && so + 4 < name.size()) {
+        try {
+            avVer = std::stoi(name.substr(so + 4));
+        } catch (...) {}
+    }
+#elif defined(Q_OS_WIN)
+    // avformat-60.dll
+    size_t dash = name.find('-');
+    if (dash != std::string::npos && dash + 1 < name.size()) {
+        size_t dot = name.find('.', dash);
+        if (dot != std::string::npos) {
+            try {
+                avVer = std::stoi(name.substr(dash + 1, dot - dash - 1));
+            } catch (...) {}
+        }
+    }
+#endif
+
+    for (const auto& [ver, componentsVersions] : FFMPEG_COMPONENTS_VERSIONS) {
+        if (componentsVersions.avFormatVersion == avVer) {
+            return ver;
+        }
+    }
+
+    return 0;
+}
+
+static io::path_t dirFromAVFormatPath(const io::path_t& path)
+{
+    return io::dirpath(path);
+}
+
 io::paths_t defaultSearchPaths()
 {
     io::paths_t paths;
@@ -139,13 +189,18 @@ std::shared_ptr<FFmpegLibHandler> FFmpegLoader::load(const io::path_t& ffmpegLib
 {
     const FFmpegLibPaths paths = findLibraryPaths(ffmpegLibsDir);
     if (paths.avFormatPath.empty()) {
+        LOGW() << "FFmpeg libraries not found";
         return nullptr;
     }
 
     std::shared_ptr<FFmpegLibHandler> libHandlerPtr = std::make_shared<FFmpegLibHandler>();
     if (libHandlerPtr->loadLib(paths.avUtilPath, paths.avCodecPath, paths.avFormatPath, paths.swScalePath)
         && libHandlerPtr->loadApi()) {
+        libHandlerPtr->setVersion(versionFromAVFormatPath(paths.avFormatPath));
+        libHandlerPtr->setDir(dirFromAVFormatPath(paths.avFormatPath));
+
         LOGD() << "FFmpeg loaded, version: " << libHandlerPtr->version();
+
         return libHandlerPtr;
     }
 

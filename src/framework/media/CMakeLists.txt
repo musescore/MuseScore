@@ -37,7 +37,6 @@ target_sources(muse_media PRIVATE
     internal/ffmpegloader.h
     internal/ffmpegutils.h
 
-    internal/ffmpegfunctions.cpp
     internal/ffmpeglibhandler.cpp
     internal/ffmpeglibhandler.h
 
