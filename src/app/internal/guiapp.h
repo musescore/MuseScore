@@ -16,6 +16,7 @@
 #include "appshell/internal/istartupscenario.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
+class QQuickWindow;
 namespace mu::appshell {
 class SplashScreen;
 }
@@ -59,6 +60,7 @@ private:
     };
 
     std::vector<Context> m_contexts;
+    QQuickWindow* m_window = nullptr;
 };
 }
 
