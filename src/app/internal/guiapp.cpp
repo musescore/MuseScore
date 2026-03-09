@@ -403,9 +403,9 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
     // otherwise the empty window frame will be visible
     // https://github.com/musescore/MuseScore/issues/29630
     // Transparency will be removed after the page loads.
-    QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-    w->setOpacity(0.01);
-    w->setVisible(true);
+    m_window = dynamic_cast<QQuickWindow*>(obj);
+    m_window->setOpacity(0.01);
+    m_window->setVisible(true);
 
     startupScenario()->runAfterSplashScreen();
 
@@ -414,47 +414,53 @@ muse::modularity::ContextPtr GuiApp::setupNewContext()
 
 void GuiApp::finish()
 {
+    {
+        TRACEFUNC;
+
+        // Wait Thread Poll
+    #ifdef QT_CONCURRENT_SUPPORTED
+        QThreadPool* globalThreadPool = QThreadPool::globalInstance();
+        if (globalThreadPool) {
+            LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
+            globalThreadPool->waitForDone();
+        }
+    #endif
+
+        if (m_window) {
+            m_window->setVisible(false);
+        }
+
+        // Engine quit
+        ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
+
+        // Deinit
+        async::processMessages();
+
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onDeinit();
+        }
+        m_globalModule.onDeinit();
+
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onDestroy();
+        }
+        m_globalModule.onDestroy();
+
+        // Delete contexts
+        for (auto& c : m_contexts) {
+            qDeleteAll(c.setups);
+        }
+
+        // Delete modules
+        qDeleteAll(m_modules);
+        m_modules.clear();
+
+        removeIoC();
+
+        BaseApplication::finish();
+    }
+
     PROFILER_PRINT;
-
-// Wait Thread Poll
-#ifdef QT_CONCURRENT_SUPPORTED
-    QThreadPool* globalThreadPool = QThreadPool::globalInstance();
-    if (globalThreadPool) {
-        LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
-        globalThreadPool->waitForDone();
-    }
-#endif
-
-    // Engine quit
-    ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
-
-    // Deinit
-    async::processMessages();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDeinit();
-    }
-
-    m_globalModule.onDeinit();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDestroy();
-    }
-
-    m_globalModule.onDestroy();
-
-    // Delete contexts
-    for (auto& c : m_contexts) {
-        qDeleteAll(c.setups);
-    }
-
-    // Delete modules
-    qDeleteAll(m_modules);
-    m_modules.clear();
-
-    removeIoC();
-
-    BaseApplication::finish();
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)

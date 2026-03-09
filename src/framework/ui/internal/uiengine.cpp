@@ -29,6 +29,7 @@
 #include <QQmlContext>
 #include <QEventLoop>
 #include <QTimer>
+#include <QQuickWindow>
 
 #include "global/types/color.h"
 #include "graphicsapiprovider.h"
@@ -97,7 +98,7 @@ void UiEngine::quit()
         return;
     }
 
-    emit m_engine->quit();
+    m_engine->exit(0);
     delete m_engine;
     m_engine = nullptr;
 }
