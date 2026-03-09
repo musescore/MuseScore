@@ -39,22 +39,14 @@ struct muse::media::FFmpeg {
     AVFormatContext* formatCtx = nullptr;
     AVStream* videoStream = nullptr;
     AVCodecContext* codecCtx = nullptr;
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
-    AVCodec* codec = nullptr;
-#else
     const AVCodec* codec = nullptr;
-#endif
     // Frame data
     AVFrame* ppicture = nullptr;
     uint8_t* picture_buf = nullptr;
     // Conversion
     SwsContext* img_convert_ctx = nullptr;
     // Packet
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 133, 100)
-    AVPacket pkt;
-#else
     AVPacket* pkt;
-#endif
 
     bool opened = false;
 };
@@ -63,13 +55,6 @@ VideoEncoder::VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler)
     : m_ffmpegHandler(handler)
 {
     m_ffmpeg = new FFmpeg();
-
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 10, 100)
-    avcodec_register_all();
-#endif
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 9, 100)
-    av_register_all();
-#endif
 }
 
 VideoEncoder::~VideoEncoder()
@@ -92,15 +77,7 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
     m_ffmpeg->formatCtx->oformat = m_ffmpeg->outputFormat;
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 7, 100)
-    snprintf(m_ffmpeg->formatCtx->filename, sizeof(m_ffmpeg->formatCtx->filename), "%s", fileName.c_str());
-#else
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
     m_ffmpeg->formatCtx->url = strdup(fileName.c_str());
-#else
-    m_ffmpeg->formatCtx->url = _strdup(fileName.c_str());
-#endif
-#endif
 
     // Add the video stream
     m_ffmpeg->videoStream = m_ffmpegHandler->avformat_new_stream(m_ffmpeg->formatCtx, 0);
@@ -112,11 +89,6 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->videoStream->time_base.den = fps;
     m_ffmpeg->videoStream->time_base.num = 1;
 
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
-    m_ffmpeg->codecCtx = m_ffmpeg->videoStream->codec;
-    m_ffmpeg->codecCtx->codec_id = AV_CODEC_ID_H264;
-    m_ffmpeg->codecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
-#else
     // find the video encoder
     m_ffmpeg->codec = m_ffmpegHandler->avcodec_find_encoder(AV_CODEC_ID_H264);
     if (!m_ffmpeg->codec) {
@@ -128,7 +100,6 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         LOGE() << "failed to allocate AV context";
         return false;
     }
-#endif
 #if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(60, 31, 102)
     m_ffmpeg->codecCtx->profile = FF_PROFILE_H264_HIGH;
 #else
@@ -147,33 +118,17 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->codecCtx->time_base.den = fps;
     m_ffmpeg->codecCtx->time_base.num = 1;
     m_ffmpeg->codecCtx->max_b_frames = 3;
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 25, 100)
-    m_ffmpeg->codecCtx->b_frame_strategy = 1;
-#else
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "b_strategy", 1, 0);
-#endif
 
     m_ffmpeg->codecCtx->me_cmp = 1;
     m_ffmpeg->codecCtx->me_range = 16;
 
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 49, 100)
-    m_ffmpeg->codecCtx->me_method = ME_HEX;
-#else
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "hex", 1, 0);
-#endif
 
     m_ffmpeg->codecCtx->qmin = 10;
     m_ffmpeg->codecCtx->qmax = 51;
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 25, 100)
-    m_ffmpeg->codecCtx->scenechange_threshold = 40;
-#else
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "sc_threshold", 40, 0);
-#endif
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 100)
-    m_ffmpeg->codecCtx->flags |= CODEC_FLAG_LOOP_FILTER;
-#else
     m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
-#endif
     m_ffmpeg->codecCtx->me_subpel_quality = 5;
     m_ffmpeg->codecCtx->i_quant_factor = 0.71f;
     m_ffmpeg->codecCtx->qcompress = 0.6f;
@@ -181,30 +136,17 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 
     // some formats want stream headers to be separate
     if (m_ffmpeg->formatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 100)
-        m_ffmpeg->codecCtx->flags |= CODEC_FLAG_LOOP_FILTER;
-#else
         m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
-#endif
     }
 
     //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);
 
     // open_video
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
-    // find the video encoder
-    m_ffmpeg->codec = m_ffmpegHandler->avcodec_find_encoder(m_ffmpeg->codecCtx->codec_id);
-    if (!m_ffmpeg->codec) {
-        LOGE() << "not found codec";
-        return false;
-    }
-#else
     if (m_ffmpegHandler->avcodec_parameters_from_context(m_ffmpeg->videoStream->codecpar, m_ffmpeg->codecCtx) < 0) {
         m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
         LOGE() << "failed to set AV parameters from context";
         return false;
     }
-#endif
     // open the codec
     if (m_ffmpegHandler->avcodec_open2(m_ffmpeg->codecCtx, m_ffmpeg->codec, 0) < 0) {
         LOGE() << "failed open codec";
@@ -222,12 +164,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->ppicture->height = height;
     m_ffmpeg->ppicture->format = AV_PIX_FMT_YUV420P;
 
-#if LIBAVUTIL_VERSION_INT < AV_VERSION_INT(55, 4, 100)
-    int size = m_ffmpegHandler->avpicture_get_size(m_ffmpeg->codecCtx->pix_fmt, m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height);
-#else
     int size = m_ffmpegHandler->av_image_get_buffer_size(m_ffmpeg->codecCtx->pix_fmt, m_ffmpeg->codecCtx->width,
                                                            m_ffmpeg->codecCtx->height, 1);
-#endif
     m_ffmpeg->picture_buf = new uint8_t[size];
     if (!m_ffmpeg->picture_buf) {
         LOGE() << "failed allocate frame buf";
@@ -236,15 +174,9 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     }
 
     // Setup the planes
-#if LIBAVUTIL_VERSION_INT < AV_VERSION_INT(55, 4, 100)
-    m_ffmpegHandler->avpicture_fill((AVPicture*)m_ffmpeg->ppicture, m_ffmpeg->picture_buf, m_ffmpeg->codecCtx->pix_fmt,
-                                      m_ffmpeg->codecCtx->width,
-                                      m_ffmpeg->codecCtx->height);
-#else
     m_ffmpegHandler->av_image_fill_arrays(m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize, m_ffmpeg->picture_buf,
                                             m_ffmpeg->codecCtx->pix_fmt,
                                             m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height, 1);
-#endif
 
     if (m_ffmpegHandler->avio_open(&m_ffmpeg->formatCtx->pb, fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
         LOGE() << "failed open file: " << fileName;
@@ -275,34 +207,13 @@ void VideoEncoder::close()
     }
 
     while (true) {
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 133, 100)
-        m_ffmpegHandler->av_init_packet(&m_ffmpeg->pkt);
-        int ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, &m_ffmpeg->pkt);
-        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            break;
-        } else if (ret < 0) {
-            LOGE() << "error during encoding";
-            return;
-        }
-
-        m_ffmpeg->pkt.pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                            m_ffmpeg->videoStream->time_base);
-        m_ffmpeg->pkt.dts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                            m_ffmpeg->videoStream->time_base);
-
-        m_ffmpeg->ptsCounter++;
-
-        ret = m_ffmpegHandler->av_interleaved_write_frame(m_ffmpeg->formatCtx, &m_ffmpeg->pkt);
-        if (ret < 0) {
-            return;
-        }
-        m_ffmpegHandler->av_packet_unref(&m_ffmpeg->pkt);
-#else
         m_ffmpeg->pkt = m_ffmpegHandler->av_packet_alloc();
         int ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             break;
         } else if (ret < 0) {
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             LOGE() << "error during encoding";
             return;
         }
@@ -316,21 +227,16 @@ void VideoEncoder::close()
 
         ret = m_ffmpegHandler->av_interleaved_write_frame(m_ffmpeg->formatCtx, m_ffmpeg->pkt);
         if (ret < 0) {
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             return;
         }
-        m_ffmpegHandler->av_packet_unref(m_ffmpeg->pkt);
-#endif
+        m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
     }
 
     m_ffmpegHandler->av_write_trailer(m_ffmpeg->formatCtx);
 
     // close_video
-
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
-    m_ffmpegHandler->avcodec_close(m_ffmpeg->videoStream->codec);
-#else
     m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
-#endif
 
     if (m_ffmpeg->picture_buf) {
         delete[] m_ffmpeg->picture_buf;
@@ -345,9 +251,6 @@ void VideoEncoder::close()
     /* free the streams */
 
     for (unsigned int i = 0; i < m_ffmpeg->formatCtx->nb_streams; i++) {
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(57, 33, 100)
-        m_ffmpegHandler->av_freep(&m_ffmpeg->formatCtx->streams[i]->codec);
-#endif
         m_ffmpegHandler->av_freep(&m_ffmpeg->formatCtx->streams[i]);
     }
 
@@ -380,34 +283,13 @@ bool VideoEncoder::encodeImage(const QImage& img)
     }
 
     while (ret >= 0) {
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 133, 100)
-        m_ffmpegHandler->av_init_packet(&m_ffmpeg->pkt);
-        ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, &m_ffmpeg->pkt);
-        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            return 0;
-        } else if (ret < 0) {
-            LOGE() << "error during encoding";
-            return false;
-        }
-
-        m_ffmpeg->pkt.pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                            m_ffmpeg->videoStream->time_base);
-        m_ffmpeg->pkt.dts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                            m_ffmpeg->videoStream->time_base);
-
-        m_ffmpeg->ptsCounter++;
-
-        ret = m_ffmpegHandler->av_interleaved_write_frame(m_ffmpeg->formatCtx, &m_ffmpeg->pkt);
-        if (ret < 0) {
-            return false;
-        }
-        m_ffmpegHandler->av_packet_unref(&m_ffmpeg->pkt);
-#else
         m_ffmpeg->pkt = m_ffmpegHandler->av_packet_alloc();
         ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            return 0;
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
+            return true;
         } else if (ret < 0) {
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             LOGE() << "error during encoding";
             return false;
         }
@@ -421,10 +303,10 @@ bool VideoEncoder::encodeImage(const QImage& img)
 
         ret = m_ffmpegHandler->av_interleaved_write_frame(m_ffmpeg->formatCtx, m_ffmpeg->pkt);
         if (ret < 0) {
+            m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             return false;
         }
-        m_ffmpegHandler->av_packet_unref(m_ffmpeg->pkt);
-#endif
+        m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
     }
 
     return true;
