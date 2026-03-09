@@ -53,15 +53,12 @@ bool ShadowNote::isValid() const
     return m_noteheadSymbol != SymId::noSym;
 }
 
-void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, double segmentSkylineTopY, double segmentSkylineBottomY,
-                          bool beyondScore,
-                          AccidentalType accidentalType, const std::set<SymId>& articulationIds)
+void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, bool beyondScore, AccidentalType accidentalType,
+                          const std::set<SymId>& articulationIds)
 {
     m_noteheadSymbol = noteSymbol;
     m_duration = duration;
     m_isRest = rest;
-    m_segmentSkylineTopY = segmentSkylineTopY;
-    m_segmentSkylineBottomY = segmentSkylineBottomY;
     m_beyondScore = beyondScore;
     m_accidentalType = accidentalType;
     m_articulationIds = articulationIds;
@@ -96,16 +93,6 @@ AccidentalType ShadowNote::accidentalType() const
 const std::set<SymId>& ShadowNote::articulationIds() const
 {
     return m_articulationIds;
-}
-
-double ShadowNote::segmentSkylineBottomY() const
-{
-    return m_segmentSkylineBottomY;
-}
-
-double ShadowNote::segmentSkylineTopY() const
-{
-    return m_segmentSkylineTopY;
 }
 
 bool ShadowNote::ledgerLinesVisible() const
@@ -179,8 +166,6 @@ void ShadowNote::drawArticulations(Painter* painter) const
     // Adjust bounding box to include the whole of the staff segment,
     // then place articulations not closeToNote
     ms *= .5;
-    // double y1 = -ms * (m_lineIndex) + m_segmentSkylineTopY;
-    // double y2 = -ms * (m_lineIndex) + m_segmentSkylineBottomY;
     double y1 = -m_lineIndex * ms;
     double y2 = (this->staffType()->bottomLine() - m_lineIndex) * ms;
     if (boundRect.y() > y1) {
