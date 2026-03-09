@@ -2274,22 +2274,18 @@ void Score::applyAccidentalToInputNotes(AccidentalType accidentalType)
 void Score::changeAccidental(AccidentalType idx)
 {
     for (EngravingItem* item : selection().elements()) {
-        Accidental* accidental = 0;
-        Note* note = 0;
         switch (item->type()) {
-        case ElementType::ACCIDENTAL:
-            accidental = toAccidental(item);
-
+        case ElementType::ACCIDENTAL: {
+            Accidental* accidental = toAccidental(item);
             if (accidental->accidentalType() == idx) {
                 changeAccidental(accidental->note(), AccidentalType::NONE);
             } else {
                 changeAccidental(accidental->note(), idx);
             }
-
             break;
+        }
         case ElementType::NOTE:
-            note = toNote(item);
-            changeAccidental(note, idx);
+            changeAccidental(toNote(item), idx);
             break;
         default:
             break;
@@ -2375,7 +2371,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
         return;
     }
     Fraction tick = segment->tick();
-    Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
+    Staff* estaff = staff(chord->vStaffIdx());
     if (!estaff) {
         return;
     }
@@ -3251,7 +3247,7 @@ EngravingItem* Score::move(const String& cmd)
             if (m_is.beyondScore()) {
                 // don't select el when cursor is beyond score
                 deselectAll();
-            } else if ((m_is.cr() || !el->selected())) {
+            } else if (m_is.cr() || !el->selected()) {
                 // if cursor moved into a gap, selection cannot follow
                 // only select & play el if it was not already selected (does not normally happen)
                 select(el, SelectType::SINGLE, 0);
