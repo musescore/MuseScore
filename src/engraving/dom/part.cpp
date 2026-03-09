@@ -473,8 +473,11 @@ void Part::addStringTunings(StringTunings* stringTunings)
 
 void Part::removeStringTunings(StringTunings* stringTunings)
 {
-    if (m_stringTunings[stringTunings->segment()->tick().ticks()] == stringTunings) {
-        m_stringTunings.erase(stringTunings->segment()->tick().ticks());
+    int tick = stringTunings->segment()->tick().ticks();
+    auto it = m_stringTunings.find(tick);
+
+    if (it != m_stringTunings.end() && it->second == stringTunings) {
+        m_stringTunings.erase(it);
     }
 }
 
@@ -753,8 +756,11 @@ void Part::addHarpDiagram(HarpPedalDiagram* harpDiagram)
 
 void Part::removeHarpDiagram(HarpPedalDiagram* harpDiagram)
 {
-    if (harpDiagrams[harpDiagram->segment()->tick().ticks()] == harpDiagram) {
-        harpDiagrams.erase(harpDiagram->segment()->tick().ticks());
+    int tick = harpDiagram->segment()->tick().ticks();
+    auto it = harpDiagrams.find(tick);
+
+    if (it != harpDiagrams.end() && it->second == harpDiagram) {
+        harpDiagrams.erase(it);
     }
 }
 
