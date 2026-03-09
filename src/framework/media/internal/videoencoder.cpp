@@ -171,8 +171,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
 #endif
     m_ffmpeg->codecCtx->me_subpel_quality = 5;
-    m_ffmpeg->codecCtx->i_quant_factor = 0.71;
-    m_ffmpeg->codecCtx->qcompress = 0.6;
+    m_ffmpeg->codecCtx->i_quant_factor = 0.71f;
+    m_ffmpeg->codecCtx->qcompress = 0.6f;
     m_ffmpeg->codecCtx->max_qdiff = 4;
 
     // some formats want stream headers to be separate
