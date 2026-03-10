@@ -31,8 +31,7 @@
 
 #include "log.h"
 
-using namespace muse::media;
-
+namespace muse::media::ffmpeg::v8 {
 #define RESOLVE_FROM(lib, name) do { \
         name = reinterpret_cast<decltype(name)>(getSymbol(lib, #name)); \
         if (!name) { LOGW() << "FFmpeg: missing symbol " #name; return false; } \
@@ -216,4 +215,5 @@ void FFmpegLibHandler::clearFunctions()
     av_packet_rescale_ts = nullptr;
     sws_getCachedContext = nullptr;
     sws_scale = nullptr;
+}
 }

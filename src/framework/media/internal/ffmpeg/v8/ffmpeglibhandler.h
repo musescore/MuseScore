@@ -30,7 +30,7 @@ extern "C" {
 
 #include "io/path.h"
 
-namespace muse::media {
+namespace muse::media::ffmpeg::v8 {
 class FFmpegLibHandler
 {
 public:
@@ -52,7 +52,7 @@ public:
     void (*av_freep)(void* ptr) = nullptr;
     int64_t (*av_rescale_q)(int64_t a, AVRational bq, AVRational cq) = nullptr;
     int (*av_image_fill_arrays)(uint8_t* dst_data[4], int dst_linesize[4], const uint8_t* src, AVPixelFormat pix_fmt, int width, int height,
-                               int align) = nullptr;
+                                int align) = nullptr;
     int (*av_image_get_buffer_size)(AVPixelFormat pix_fmt, int width, int height, int align) = nullptr;
     int (*av_opt_set_int)(void* obj, const char* name, int64_t val, int search_flags) = nullptr;
 
@@ -95,8 +95,7 @@ public:
     int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[], const int srcStride[], int srcSliceY, int srcSliceH,
                      uint8_t* const dst[], const int dstStride[]) = nullptr;
 
-private:
-    void* getSymbol(void* lib, const char* name) const;
+private : void* getSymbol(void* lib, const char* name) const;
     bool tryLoadPath(void*& lib, const io::path_t& fullPath);
     void closeLib(void*& lib);
     void clearFunctions();

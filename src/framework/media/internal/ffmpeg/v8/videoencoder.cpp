@@ -25,19 +25,14 @@
 #include "defer.h"
 #include "log.h"
 
-using namespace muse::media;
-
-struct muse::media::FFmpeg {
+namespace muse::media::ffmpeg::v8 {
+struct FFmpeg {
     int width = 0;
     int height = 0;
     unsigned int ptsCounter = 0;
 
     // FFmpeg stuff
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(59, 16, 100)
-    AVOutputFormat* outputFormat = nullptr;
-#else
     const AVOutputFormat* outputFormat = nullptr;
-#endif
     AVFormatContext* formatCtx = nullptr;
     AVStream* videoStream = nullptr;
     AVCodecContext* codecCtx = nullptr;
@@ -102,11 +97,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         LOGE() << "failed to allocate AV context";
         return false;
     }
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(60, 31, 102)
-    m_ffmpeg->codecCtx->profile = FF_PROFILE_H264_HIGH;
-#else
+
     m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
-#endif
 
     m_ffmpeg->codecCtx->bit_rate = bitrate;
     m_ffmpeg->codecCtx->width = width;
@@ -286,13 +278,8 @@ bool VideoEncoder::encodeImage(const QImage& img)
 
     convertImage_sws(img);
 
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(60, 3, 100)
-    m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->codecCtx->frame_number, m_ffmpeg->codecCtx->time_base,
-                                                            m_ffmpeg->videoStream->time_base);
-#else
     m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->codecCtx->frame_num, m_ffmpeg->codecCtx->time_base,
                                                             m_ffmpeg->videoStream->time_base);
-#endif
 
     int ret = m_ffmpegHandler->avcodec_send_frame(m_ffmpeg->codecCtx, m_ffmpeg->ppicture);
     if (ret < 0) {
@@ -520,4 +507,5 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
                                m_ffmpeg->ppicture->linesize);
 
     return true;
+}
 }

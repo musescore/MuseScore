@@ -22,11 +22,11 @@
 
 #pragma once
 
-#include "../ivideoencoder.h"
+#include "media/ivideoencoder.h"
 
 #include "ffmpeglibhandler.h"
 
-namespace muse::media {
+namespace muse::media::ffmpeg::v8 {
 struct FFmpeg;
 class VideoEncoder : public IVideoEncoder
 {
