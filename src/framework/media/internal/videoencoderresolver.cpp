@@ -22,8 +22,11 @@
 
 #include "videoencoderresolver.h"
 
-#include "ffmpegloader.h"
-#include "videoencoder.h"
+#include "internal/ffmpeg/v8/ffmpeglibhandler.h"
+#include "internal/ffmpeg/v8/videoencoder.h"
+
+#include "io/path.h"
+#include "log.h"
 
 using namespace muse::media;
 
@@ -34,18 +37,23 @@ void VideoEncoderResolver::init()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
-    auto ffmpegLibHandler = FFmpegLoader::load(ffmpegLibsDir);
-    if (!ffmpegLibHandler) {
+    const FFmpegLibPaths paths = findLibraryPaths(ffmpegLibsDir);
+    if (paths.avFormatPath.empty()) {
         resetFFmpegSettings();
         return;
     }
 
-    std::shared_ptr<VideoEncoder> encoder = std::make_shared<VideoEncoder>(ffmpegLibHandler);
-    setCurrentVideoEncoder(encoder);
+    EncoderInfo encoderInfo = makeEncoder(paths);
+    if (!encoderInfo.encoder) {
+        resetFFmpegSettings();
+        return;
+    }
 
-    configuration()->setFFmpegLibsDir(ffmpegLibHandler->dir());
+    setCurrentVideoEncoder(encoderInfo.encoder);
 
-    m_currentEncoderFFmpegVersion = ffmpegLibHandler->version();
+    configuration()->setFFmpegLibsDir(encoderInfo.ffmpegLibsDir);
+
+    m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
     m_loadedFFmpegChanged.notify();
 }
 
@@ -78,4 +86,35 @@ void VideoEncoderResolver::resetFFmpegSettings()
 {
     m_currentEncoderFFmpegVersion = -1;
     configuration()->setFFmpegLibsDir({});
+}
+
+VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const
+{
+    EncoderInfo result;
+
+    const FFmpegVersion version = versionFromAVFormatPath(ffmpegLibsPaths.avFormatPath);
+    switch (version) {
+    case FFMPEG_V8: {
+        auto ffmpegLibHandler = std::make_shared<ffmpeg::v8::FFmpegLibHandler>();
+        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
+                                      ffmpegLibsPaths.swScalePath)
+            && ffmpegLibHandler->loadApi()) {
+            ffmpegLibHandler->setVersion(version);
+            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
+
+            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
+
+            result.encoder = std::make_shared<ffmpeg::v8::VideoEncoder>(ffmpegLibHandler);
+            result.ffmpegLibsDir = ffmpegLibHandler->dir();
+            result.ffmpegVersion = ffmpegLibHandler->version();
+        } else {
+            LOGW() << "FFmpeg libraries not found";
+        }
+    }
+    break;
+    default:
+        break;
+    }
+
+    return result;
 }
