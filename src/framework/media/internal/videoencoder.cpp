@@ -95,7 +95,11 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 #if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 7, 100)
     snprintf(m_ffmpeg->formatCtx->filename, sizeof(m_ffmpeg->formatCtx->filename), "%s", fileName.c_str());
 #else
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
     m_ffmpeg->formatCtx->url = strdup(fileName.c_str());
+#else
+    m_ffmpeg->formatCtx->url = _strdup(fileName.c_str());
+#endif
 #endif
 
     // Add the video stream
@@ -171,8 +175,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
 #endif
     m_ffmpeg->codecCtx->me_subpel_quality = 5;
-    m_ffmpeg->codecCtx->i_quant_factor = 0.71;
-    m_ffmpeg->codecCtx->qcompress = 0.6;
+    m_ffmpeg->codecCtx->i_quant_factor = 0.71f;
+    m_ffmpeg->codecCtx->qcompress = 0.6f;
     m_ffmpeg->codecCtx->max_qdiff = 4;
 
     // some formats want stream headers to be separate
@@ -273,7 +277,7 @@ void VideoEncoder::close()
     while (true) {
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 133, 100)
         ffmpegFunctions()->av_init_packet(&m_ffmpeg->pkt);
-        int ret = ffmpegFunctions()->avcodec_receive_packet(m_ffmpeg->codecCtx, &m_ffmpeg->pkt);
+        ret = ffmpegFunctions()->avcodec_receive_packet(m_ffmpeg->codecCtx, &m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             break;
         } else if (ret < 0) {
@@ -295,7 +299,7 @@ void VideoEncoder::close()
         ffmpegFunctions()->av_packet_unref(&m_ffmpeg->pkt);
 #else
         m_ffmpeg->pkt = ffmpegFunctions()->av_packet_alloc();
-        int ret = ffmpegFunctions()->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
+        ret = ffmpegFunctions()->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             break;
         } else if (ret < 0) {
