@@ -36,10 +36,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Violoncello</trackName>
       <Instrument id="violoncello">
-        <longName>Violoncello</longName>
-        <shortName>Vc.</shortName>
+        <InstrumentLabel>
+          <longName>Violoncello</longName>
+          <shortName>Vc.</shortName>
+          </InstrumentLabel>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>

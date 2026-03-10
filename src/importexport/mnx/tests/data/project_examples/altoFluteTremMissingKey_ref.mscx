@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Alto Flute</trackName>
       <Instrument id="piano">
-        <longName>Alto Flute</longName>
-        <shortName>A. Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Flute</longName>
+          <shortName>A. Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Alto Flute</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

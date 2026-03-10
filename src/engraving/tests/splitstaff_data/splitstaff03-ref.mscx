@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -84,10 +85,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Harp</trackName>
       <Instrument id="harp">
-        <longName>Harp</longName>
-        <shortName>Hrp.</shortName>
+        <InstrumentLabel>
+          <longName>Harp</longName>
+          <shortName>Hrp.</shortName>
+          </InstrumentLabel>
         <trackName>Harp</trackName>
         <minPitchP>23</minPitchP>
         <maxPitchP>104</maxPitchP>
@@ -136,10 +138,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Violoncello</trackName>
       <Instrument id="violoncello">
-        <longName>Violoncello</longName>
-        <shortName>Vlc.</shortName>
+        <InstrumentLabel>
+          <longName>Violoncello</longName>
+          <shortName>Vlc.</shortName>
+          </InstrumentLabel>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>90</maxPitchP>

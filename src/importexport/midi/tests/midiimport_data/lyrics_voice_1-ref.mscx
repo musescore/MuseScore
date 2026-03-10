@@ -36,10 +36,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Piano, untitled</trackName>
       <Instrument id="piano">
-        <longName>Piano, untitled</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano, untitled</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

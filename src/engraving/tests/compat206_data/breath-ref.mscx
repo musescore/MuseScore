@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flûte</trackName>
       <Instrument id="flute">
-        <longName>Flûte</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flûte</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flûte</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>

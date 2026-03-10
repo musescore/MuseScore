@@ -24,10 +24,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Gtr 2</trackName>
       <Instrument id="electric-guitar">
-        <longName>Gtr 2</longName>
-        <shortName>E-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Gtr 2</longName>
+          <shortName>E-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>

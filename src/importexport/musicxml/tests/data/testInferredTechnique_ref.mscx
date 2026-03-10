@@ -58,10 +58,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Violin</trackName>
       <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
+        <InstrumentLabel>
+          <longName>Violin</longName>
+          <shortName>Vln.</shortName>
+          </InstrumentLabel>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>

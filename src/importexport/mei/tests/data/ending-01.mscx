@@ -30,10 +30,11 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
+        <InstrumentLabel>
+          <longName>Violin</longName>
+          <shortName>Vln.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.violin</instrumentId>
         <Channel>
@@ -47,10 +48,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violoncello">
-        <longName>Violoncello</longName>
-        <shortName>Vc.</shortName>
+        <InstrumentLabel>
+          <longName>Violoncello</longName>
+          <shortName>Vc.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.cello</instrumentId>
         <Channel>

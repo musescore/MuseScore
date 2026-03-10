@@ -28,11 +28,12 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Horn in D</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="d-horn">
-        <longName>Horn in D</longName>
-        <shortName>D Hn.</shortName>
+        <InstrumentLabel>
+          <longName>Horn in D</longName>
+          <shortName>D Hn.</shortName>
+          </InstrumentLabel>
         <trackName>Horn in D</trackName>
         <minPitchP>32</minPitchP>
         <maxPitchP>74</maxPitchP>

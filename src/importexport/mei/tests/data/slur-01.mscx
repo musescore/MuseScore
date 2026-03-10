@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="oboe">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>

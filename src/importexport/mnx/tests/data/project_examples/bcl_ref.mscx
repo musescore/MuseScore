@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Bass Clarinet</trackName>
       <Instrument id="piano">
-        <longName>Bass Clarinet</longName>
-        <shortName>B. Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Bass Clarinet</longName>
+          <shortName>B. Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Bass Clarinet</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

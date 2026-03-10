@@ -24,9 +24,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E. Guitar 2</trackName>
       <Instrument id="grand-piano">
-        <longName>E. Guitar 2</longName>
+        <InstrumentLabel>
+          <longName>E. Guitar 2</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano.grand</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

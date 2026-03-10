@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Oboe</trackName>
       <Instrument id="piano">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName>Oboe</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

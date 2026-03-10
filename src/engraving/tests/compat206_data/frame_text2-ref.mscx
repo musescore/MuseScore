@@ -181,9 +181,10 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          </InstrumentLabel>
         <trackName>Choir Aahs</trackName>
         <instrumentId>voice.tenor</instrumentId>
         <Channel>

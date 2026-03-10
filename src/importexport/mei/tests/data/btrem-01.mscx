@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
-        <longName>Violine</longName>
-        <shortName>Vl.</shortName>
+        <InstrumentLabel>
+          <longName>Violine</longName>
+          <shortName>Vl.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.violin</instrumentId>
         <Channel>

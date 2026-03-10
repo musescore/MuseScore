@@ -164,9 +164,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>MusicXML Part</trackName>
       <Instrument id="piano">
-        <longName>MusicXML Part</longName>
+        <InstrumentLabel>
+          <longName>MusicXML Part</longName>
+          </InstrumentLabel>
         <trackName>MusicXML Part</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

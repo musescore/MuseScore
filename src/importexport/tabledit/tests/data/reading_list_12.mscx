@@ -55,9 +55,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Guitar Standard</trackName>
       <Instrument id="cavaquinho">
-        <longName>Guitar Standard</longName>
+        <InstrumentLabel>
+          <longName>Guitar Standard</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <StringData>
@@ -109,9 +110,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Bass</trackName>
       <Instrument id="acoustic-bass">
-        <longName>Acoustic Bass</longName>
+        <InstrumentLabel>
+          <longName>Acoustic Bass</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.bass.acoustic</instrumentId>
         <StringData>

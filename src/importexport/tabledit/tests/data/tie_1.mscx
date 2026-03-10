@@ -55,7 +55,6 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="cavaquinho">
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>

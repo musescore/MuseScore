@@ -30,10 +30,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Slit Drum</trackName>
       <Instrument id="slit-drum">
-        <longName>Slit Drum</longName>
-        <shortName>Slt. Dr.</shortName>
+        <InstrumentLabel>
+          <longName>Slit Drum</longName>
+          <shortName>Slt. Dr.</shortName>
+          </InstrumentLabel>
         <trackName>Slit Drum</trackName>
         <instrumentId>drum.slit-drum</instrumentId>
         <useDrumset>1</useDrumset>

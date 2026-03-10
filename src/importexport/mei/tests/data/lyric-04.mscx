@@ -29,7 +29,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>

@@ -38,7 +38,6 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>

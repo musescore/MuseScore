@@ -30,10 +30,11 @@
         <bracket type="0" span="9" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Horn in F</longName>
-        <shortName>Hn. in F</shortName>
+        <InstrumentLabel>
+          <longName>Horn in F</longName>
+          <shortName>Hn. in F</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-4</transposeDiatonic>
         <transposeChromatic>-7</transposeChromatic>
@@ -50,10 +51,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Trumpet in B♭</longName>
-        <shortName>Tpt. in B♭</shortName>
+        <InstrumentLabel>
+          <longName>Trumpet in B♭</longName>
+          <shortName>Tpt. in B♭</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
@@ -70,10 +72,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Bass Trumpet in E♭</longName>
-        <shortName>B. Tpt. in E♭</shortName>
+        <InstrumentLabel>
+          <longName>Bass Trumpet in E♭</longName>
+          <shortName>B. Tpt. in E♭</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
@@ -90,10 +93,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="alto-trombone">
-        <longName>Alto Trombone</longName>
-        <shortName>A. Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Trombone</longName>
+          <shortName>A. Tbn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.trombone.alto</instrumentId>
         <Channel>
@@ -108,10 +112,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="trombone">
-        <longName>Trombone</longName>
-        <shortName>Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.trombone</instrumentId>
         <Channel>
@@ -126,10 +131,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="contrabass-trombone">
-        <longName>Contrabass Trombone</longName>
-        <shortName>Cb. Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Contrabass Trombone</longName>
+          <shortName>Cb. Tbn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.trombone.contrabass</instrumentId>
         <Channel>
@@ -144,10 +150,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="bass-trombone">
-        <longName>Bass Trombone</longName>
-        <shortName>B. Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Bass Trombone</longName>
+          <shortName>B. Tbn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.trombone.bass</instrumentId>
         <Channel>
@@ -162,10 +169,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="tuba">
-        <longName>Tuba</longName>
-        <shortName>Tba.</shortName>
+        <InstrumentLabel>
+          <longName>Tuba</longName>
+          <shortName>Tba.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.tuba</instrumentId>
         <Channel>
@@ -179,10 +187,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="tuba">
-        <longName>B♭ Contrabass Tuba</longName>
-        <shortName>B♭ Cb. Tb.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Contrabass Tuba</longName>
+          <shortName>B♭ Cb. Tb.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.tuba</instrumentId>
         <Channel>
@@ -204,10 +213,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="celesta">
-        <longName>Celesta</longName>
-        <shortName>Cel.</shortName>
+        <InstrumentLabel>
+          <longName>Celesta</longName>
+          <shortName>Cel.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>7</transposeDiatonic>
         <transposeChromatic>12</transposeChromatic>
@@ -225,10 +235,11 @@
         <bracket type="0" span="4" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="strings">
-        <longName>Violins</longName>
-        <shortName>Vlns.</shortName>
+        <InstrumentLabel>
+          <longName>Violins</longName>
+          <shortName>Vlns.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.group</instrumentId>
         <Channel>
@@ -243,10 +254,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="viola">
-        <longName>Viola</longName>
-        <shortName>Vla.</shortName>
+        <InstrumentLabel>
+          <longName>Viola</longName>
+          <shortName>Vla.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.viola</instrumentId>
         <Channel>
@@ -261,10 +273,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violoncello">
-        <longName>Violoncello</longName>
-        <shortName>Vc.</shortName>
+        <InstrumentLabel>
+          <longName>Violoncello</longName>
+          <shortName>Vc.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.cello</instrumentId>
         <Channel>
@@ -278,10 +291,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="contrabass">
-        <longName>Contrabass</longName>
-        <shortName>Cb.</shortName>
+        <InstrumentLabel>
+          <longName>Contrabass</longName>
+          <shortName>Cb.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>

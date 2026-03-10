@@ -26,9 +26,10 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussions</trackName>
       <Instrument id="percussion-synthesizer">
-        <longName>Percussions</longName>
+        <InstrumentLabel>
+          <longName>Percussions</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>

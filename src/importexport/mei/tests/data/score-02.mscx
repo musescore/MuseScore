@@ -29,10 +29,11 @@
           </StaffType>
         <bracket type="0" span="1" col="0" visible="1"/>
         </Staff>
-      <trackName></trackName>
       <Instrument id="soprano">
-        <longName>Soprano</longName>
-        <shortName>S.</shortName>
+        <InstrumentLabel>
+          <longName>Soprano</longName>
+          <shortName>S.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>voice.soprano</instrumentId>
         <Channel>
@@ -56,10 +57,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <Channel>
@@ -89,10 +91,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="organ">
-        <longName>Organ</longName>
-        <shortName>Org.</shortName>
+        <InstrumentLabel>
+          <longName>Organ</longName>
+          <shortName>Org.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.organ</instrumentId>
         <Channel>
@@ -122,10 +125,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="organ">
-        <longName>Organ</longName>
-        <shortName>Org.</shortName>
+        <InstrumentLabel>
+          <longName>Organ</longName>
+          <shortName>Org.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.organ</instrumentId>
         <Channel>
@@ -139,10 +143,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="timpani">
-        <longName>Timpani</longName>
-        <shortName>Timp.</shortName>
+        <InstrumentLabel>
+          <longName>Timpani</longName>
+          <shortName>Timp.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>drum.timpani</instrumentId>
         <Channel>
@@ -157,10 +162,11 @@
           </StaffType>
         <bracket type="0" span="2" col="0" visible="1"/>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
+        <InstrumentLabel>
+          <longName>Violin</longName>
+          <shortName>Vln.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.violin</instrumentId>
         <Channel>
@@ -174,10 +180,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violoncello">
-        <longName>Violoncello</longName>
-        <shortName>Vc.</shortName>
+        <InstrumentLabel>
+          <longName>Violoncello</longName>
+          <shortName>Vc.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.cello</instrumentId>
         <Channel>

@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="piano">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -94,8 +96,10 @@
       <trackName>Cl. B♭ Wrap +5</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="piano">
-        <longName>Cl. B♭ Wrap +5</longName>
-        <shortName>B♭ Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Cl. B♭ Wrap +5</longName>
+          <shortName>B♭ Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Cl. B♭ Wrap +5</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -160,8 +164,10 @@
         </Staff>
       <trackName>Cl. B♭ Wrap +6</trackName>
       <Instrument id="piano">
-        <longName>Cl. B♭ Wrap +6</longName>
-        <shortName>B♭ Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Cl. B♭ Wrap +6</longName>
+          <shortName>B♭ Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Cl. B♭ Wrap +6</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -227,8 +233,10 @@
       <trackName>Cl. A Wrap -5</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="piano">
-        <longName>Cl. A Wrap -5</longName>
-        <shortName>A Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Cl. A Wrap -5</longName>
+          <shortName>A Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Cl. A Wrap -5</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -293,8 +301,10 @@
         </Staff>
       <trackName>Cl. A Wrap -6</trackName>
       <Instrument id="piano">
-        <longName>Cl. A Wrap -6</longName>
-        <shortName>A Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Cl. A Wrap -6</longName>
+          <shortName>A Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Cl. A Wrap -6</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

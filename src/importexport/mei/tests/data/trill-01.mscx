@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piccolo">
-        <longName>Piccolo</longName>
-        <shortName>Picc.</shortName>
+        <InstrumentLabel>
+          <longName>Piccolo</longName>
+          <shortName>Picc.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>7</transposeDiatonic>
         <transposeChromatic>12</transposeChromatic>

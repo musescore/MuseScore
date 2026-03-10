@@ -37,7 +37,6 @@
           </StaffType>
         <distOffset>1.00169</distOffset>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>

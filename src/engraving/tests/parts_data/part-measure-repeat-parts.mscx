@@ -13,6 +13,8 @@
       <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <windsNameByGroup>1</windsNameByGroup>
+      <vocalsNameByGroup>1</vocalsNameByGroup>
       <enableVerticalSpread>1</enableVerticalSpread>
       <lyricsMinBottomDistance>1.5</lyricsMinBottomDistance>
       <lyricsMinDistance>0.25</lyricsMinDistance>
@@ -258,10 +260,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -296,10 +299,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -1100,10 +1104,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto</trackName>
         <Instrument id="alto">
-          <longName>Alto</longName>
-          <shortName>A.</shortName>
+          <InstrumentLabel>
+            <longName>Alto</longName>
+            <shortName>A.</shortName>
+            </InstrumentLabel>
           <trackName>Alto</trackName>
           <minPitchP>55</minPitchP>
           <maxPitchP>77</maxPitchP>
@@ -1584,10 +1589,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Tenor</trackName>
         <Instrument id="tenor">
-          <longName>Tenor</longName>
-          <shortName>T.</shortName>
+          <InstrumentLabel>
+            <longName>Tenor</longName>
+            <shortName>T.</shortName>
+            </InstrumentLabel>
           <trackName>Tenor</trackName>
           <minPitchP>48</minPitchP>
           <maxPitchP>72</maxPitchP>

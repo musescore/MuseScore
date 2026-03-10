@@ -35,7 +35,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Classical Guitar</trackName>
       <Instrument id="guitar-nylon">
         <trackName>Classical Guitar</trackName>
         <minPitchP>40</minPitchP>
