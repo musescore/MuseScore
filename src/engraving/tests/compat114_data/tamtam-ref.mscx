@@ -43,10 +43,11 @@
         <barLineSpanFrom>-4</barLineSpanFrom>
         <barLineSpanTo>4</barLineSpanTo>
         </Staff>
-      <trackName>Tam-tam</trackName>
       <Instrument id="tam-tam">
-        <longName>Tam-tam</longName>
-        <shortName>Tam-tam</shortName>
+        <InstrumentLabel>
+          <longName>Tam-tam</longName>
+          <shortName>Tam-tam</shortName>
+          </InstrumentLabel>
         <trackName>Tam-tam</trackName>
         <instrumentId>metal.tamtam</instrumentId>
         <useDrumset>1</useDrumset>

@@ -57,10 +57,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Clarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
-        <longName>Clarinet in B♭</longName>
-        <shortName>Cl. in B♭</shortName>
+        <InstrumentLabel>
+          <longName>Clarinet in B♭</longName>
+          <shortName>Cl. in B♭</shortName>
+          </InstrumentLabel>
         <trackName>Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>

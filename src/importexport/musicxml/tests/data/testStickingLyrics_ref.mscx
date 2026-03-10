@@ -51,10 +51,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="drumset">
-        <longName>Snare Drum</longName>
-        <shortName>S. D.</shortName>
+        <InstrumentLabel>
+          <longName>Snare Drum</longName>
+          <shortName>S. D.</shortName>
+          </InstrumentLabel>
         <trackName>Marching Snare Drums [5 lines]</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>

@@ -29,10 +29,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -575,10 +576,11 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Piano</trackName>
         <Instrument id="piano">
-          <longName>Piano</longName>
-          <shortName>Pno.</shortName>
+          <InstrumentLabel>
+            <longName>Piano</longName>
+            <shortName>Pno.</shortName>
+            </InstrumentLabel>
           <trackName>Piano</trackName>
           <minPitchP>21</minPitchP>
           <maxPitchP>108</maxPitchP>

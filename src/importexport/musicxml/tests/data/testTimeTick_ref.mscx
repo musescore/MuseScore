@@ -28,9 +28,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>MusicXML Part</trackName>
       <Instrument id="grand-piano">
-        <longName>MusicXML Part</longName>
+        <InstrumentLabel>
+          <longName>MusicXML Part</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano.grand</instrumentId>
         <Articulation>

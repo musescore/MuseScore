@@ -24,9 +24,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Track 1</trackName>
       <Instrument id="electric-bass">
-        <longName>Track 1</longName>
+        <InstrumentLabel>
+          <longName>Track 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.bass.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

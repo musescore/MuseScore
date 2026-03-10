@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Clarinet in B♭</trackName>
       <Instrument id="piano">
-        <longName>Clarinet in B♭</longName>
-        <shortName>B♭ Cl.</shortName>
+        <InstrumentLabel>
+          <longName>Clarinet in B♭</longName>
+          <shortName>B♭ Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Clarinet in B♭</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

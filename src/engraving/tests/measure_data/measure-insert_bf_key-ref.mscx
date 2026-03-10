@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -42,7 +44,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>C Trumpet</trackName>
       <Instrument id="c-trumpet">
         <trackName>C Trumpet</trackName>
         <minPitchP>54</minPitchP>

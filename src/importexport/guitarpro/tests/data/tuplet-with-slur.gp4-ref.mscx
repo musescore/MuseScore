@@ -25,9 +25,10 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Gtr 2</trackName>
       <Instrument id="electric-guitar">
-        <longName>Gtr 2</longName>
+        <InstrumentLabel>
+          <longName>Gtr 2</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

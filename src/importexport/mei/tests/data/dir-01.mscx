@@ -30,10 +30,11 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="oboe">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
@@ -47,10 +48,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="bassoon">
-        <longName>Bassoon</longName>
-        <shortName>Bsn.</shortName>
+        <InstrumentLabel>
+          <longName>Bassoon</longName>
+          <shortName>Bsn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>wind.reed.bassoon</instrumentId>
         <Channel>

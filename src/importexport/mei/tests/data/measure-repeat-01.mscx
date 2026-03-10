@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="guitar-nylon">
-        <longName>Classical Guitar</longName>
-        <shortName>Guit.</shortName>
+        <InstrumentLabel>
+          <longName>Classical Guitar</longName>
+          <shortName>Guit.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <Channel>

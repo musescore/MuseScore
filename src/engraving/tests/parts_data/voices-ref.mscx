@@ -38,10 +38,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -97,10 +98,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
-        <longName>Trombone</longName>
-        <shortName>Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          </InstrumentLabel>
         <trackName>Trombone</trackName>
         <minPitchP>35</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -1116,10 +1118,11 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Piano</trackName>
         <Instrument id="piano">
-          <longName>Piano</longName>
-          <shortName>Pno.</shortName>
+          <InstrumentLabel>
+            <longName>Piano</longName>
+            <shortName>Pno.</shortName>
+            </InstrumentLabel>
           <trackName>Piano</trackName>
           <minPitchP>21</minPitchP>
           <maxPitchP>108</maxPitchP>
@@ -1777,10 +1780,11 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Trombone</trackName>
         <Instrument id="trombone">
-          <longName>Trombone</longName>
-          <shortName>Tbn.</shortName>
+          <InstrumentLabel>
+            <longName>Trombone</longName>
+            <shortName>Tbn.</shortName>
+            </InstrumentLabel>
           <trackName>Trombone</trackName>
           <minPitchP>35</minPitchP>
           <maxPitchP>74</maxPitchP>
@@ -2190,10 +2194,11 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Trombone</trackName>
         <Instrument id="trombone">
-          <longName>Trombone</longName>
-          <shortName>Tbn.</shortName>
+          <InstrumentLabel>
+            <longName>Trombone</longName>
+            <shortName>Tbn.</shortName>
+            </InstrumentLabel>
           <trackName>Trombone</trackName>
           <minPitchP>35</minPitchP>
           <maxPitchP>74</maxPitchP>

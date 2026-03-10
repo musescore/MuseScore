@@ -24,10 +24,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Piano</trackName>
       <Instrument id="piano">
-        <longName>Acoustic Piano</longName>
-        <shortName>A-Piano</shortName>
+        <InstrumentLabel>
+          <longName>Acoustic Piano</longName>
+          <shortName>A-Piano</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

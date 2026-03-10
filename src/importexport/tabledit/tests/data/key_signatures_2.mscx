@@ -55,9 +55,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Guitar Standard</trackName>
       <Instrument id="cavaquinho">
-        <longName>Guitar Standard</longName>
+        <InstrumentLabel>
+          <longName>Guitar Standard</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <StringData>
@@ -109,9 +110,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Guitar (steel)</trackName>
       <Instrument id="cavaquinho">
-        <longName>Acoustic Guitar (steel)</longName>
+        <InstrumentLabel>
+          <longName>Acoustic Guitar (steel)</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <StringData>

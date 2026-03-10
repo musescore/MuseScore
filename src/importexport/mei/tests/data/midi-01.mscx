@@ -36,10 +36,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <Channel>
@@ -62,10 +63,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="harp">
-        <longName>Harp</longName>
-        <shortName>Hp.</shortName>
+        <InstrumentLabel>
+          <longName>Harp</longName>
+          <shortName>Hp.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.harp</instrumentId>
         <Channel>
@@ -80,10 +82,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vl.</shortName>
+        <InstrumentLabel>
+          <longName>Violin</longName>
+          <shortName>Vl.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>strings.violin</instrumentId>
         <Channel>

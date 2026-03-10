@@ -29,10 +29,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
-        <longName>Alto Saxophone</longName>
-        <shortName>A. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Saxophone</longName>
+          <shortName>A. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -83,10 +84,11 @@
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
-      <trackName>Tenor Saxophone</trackName>
       <Instrument id="tenor-saxophone">
-        <longName>Tenor Saxophone</longName>
-        <shortName>T. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor Saxophone</longName>
+          <shortName>T. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>

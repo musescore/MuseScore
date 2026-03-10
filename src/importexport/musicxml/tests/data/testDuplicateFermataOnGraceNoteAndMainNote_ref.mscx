@@ -125,10 +125,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <hideStavesWhenIndividuallyEmpty>1</hideStavesWhenIndividuallyEmpty>
       <Instrument id="piano">
-        <longName>Piano</longName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

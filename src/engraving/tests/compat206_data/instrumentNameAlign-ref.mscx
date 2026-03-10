@@ -42,10 +42,11 @@
           </StaffType>
         <bracket type="0" span="4" col="0" visible="1"/>
         </Staff>
-      <trackName>Soprano</trackName>
       <Instrument id="soprano">
-        <longName>Soprano</longName>
-        <shortName>S.</shortName>
+        <InstrumentLabel>
+          <longName>Soprano</longName>
+          <shortName>S.</shortName>
+          </InstrumentLabel>
         <trackName>Soprano</trackName>
         <minPitchP>60</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -92,10 +93,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -143,10 +145,11 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -195,10 +198,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="bass">
-        <longName>Bass</longName>
-        <shortName>B.</shortName>
+        <InstrumentLabel>
+          <longName>Bass</longName>
+          <shortName>B.</shortName>
+          </InstrumentLabel>
         <trackName>Bass</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>62</maxPitchP>

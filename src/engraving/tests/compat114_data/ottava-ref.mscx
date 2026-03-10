@@ -45,10 +45,11 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName><font size="12"/>Piano</longName>
-        <shortName><font size="12"/>Pno.</shortName>
+        <InstrumentLabel>
+          <longName><font size="12"/>Piano</longName>
+          <shortName><font size="12"/>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

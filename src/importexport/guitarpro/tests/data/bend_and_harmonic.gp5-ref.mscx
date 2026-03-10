@@ -25,9 +25,10 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Dis. Rhy.</trackName>
       <Instrument id="electric-guitar">
-        <longName>Dis. Rhy.</longName>
+        <InstrumentLabel>
+          <longName>Dis. Rhy.</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

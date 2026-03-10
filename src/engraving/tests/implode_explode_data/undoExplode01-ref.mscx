@@ -29,10 +29,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -84,10 +85,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -139,10 +141,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -194,10 +197,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>B♭ Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>B♭ Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>

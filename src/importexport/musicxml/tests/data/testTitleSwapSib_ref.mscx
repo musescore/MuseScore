@@ -150,10 +150,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Soprano/Tenor</trackName>
       <Instrument id="piano">
-        <longName>Soprano/Tenor</longName>
-        <shortName>S./T.</shortName>
+        <InstrumentLabel>
+          <longName>Soprano/Tenor</longName>
+          <shortName>S./T.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -216,10 +217,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="piano">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -282,10 +284,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="piano">
-        <longName>Bass</longName>
-        <shortName>B.</shortName>
+        <InstrumentLabel>
+          <longName>Bass</longName>
+          <shortName>B.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -348,10 +351,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano (2)</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

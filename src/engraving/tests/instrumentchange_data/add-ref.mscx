@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -68,10 +69,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -152,8 +154,10 @@
         <voice>
           <InstrumentChange>
             <Instrument id="flute">
-              <longName>Flute</longName>
-              <shortName>Fl.</shortName>
+              <InstrumentLabel>
+                <longName>Flute</longName>
+                <shortName>Fl.</shortName>
+                </InstrumentLabel>
               <trackName>Flute</trackName>
               <minPitchP>59</minPitchP>
               <maxPitchP>98</maxPitchP>

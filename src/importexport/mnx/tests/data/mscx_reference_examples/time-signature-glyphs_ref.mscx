@@ -29,7 +29,9 @@
         </Staff>
       <trackName>Music</trackName>
       <Instrument id="piano">
-        <longName>Music</longName>
+        <InstrumentLabel>
+          <longName>Music</longName>
+          </InstrumentLabel>
         <trackName>Music</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
