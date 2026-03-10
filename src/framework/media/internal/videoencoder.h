@@ -38,13 +38,15 @@ public:
     void close() override;
 
     bool encodeImage(const QImage& img) override;
-    bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                       double audioOffsetSec) override;
+    void finishEncode() override;
+
+    bool addAudio(const muse::io::path_t& audioPath, double audioOffsetSec) override;
 
 private:
     bool convertImage_sws(const QImage& img);
 
     std::shared_ptr<FFmpegLibHandler> m_ffmpegHandler = nullptr;
     FFmpeg* m_ffmpeg = nullptr;
+    muse::io::path_t m_outputPath;
 };
 }
