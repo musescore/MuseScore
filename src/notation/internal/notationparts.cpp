@@ -468,16 +468,8 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 {
     TRACEFUNC;
 
-    if (!score()->excerpt()) {
-        return false;
-    }
-
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return false;
-    }
-
-    if (!visible && !staff->canDisableVoice()) {
         return false;
     }
 
@@ -487,7 +479,11 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     startEdit(actionName);
 
-    score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
+    bool result = EditPart::setVoiceVisible(score(), staff, voiceIndex, visible);
+    if (!result) {
+        rollback();
+        return false;
+    }
 
     //! HACK: Excerpt::setVoiceVisible recreates the staff,
     //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),

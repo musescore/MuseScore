@@ -370,6 +370,16 @@ Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
     return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
 }
 
+bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+{
+    if (!staff) {
+        LOGW("setVoiceVisible: staff is null");
+        return false;
+    }
+
+    return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
+}
+
 //---------------------------------------------------------
 //   Score::firstSegment
 //---------------------------------------------------------

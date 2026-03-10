@@ -686,3 +686,21 @@ Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* desti
 
     return staff;
 }
+
+bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible)
+{
+    if (!score || !staff) {
+        return false;
+    }
+
+    if (!score->excerpt()) {
+        return false;
+    }
+
+    if (!visible && !staff->canDisableVoice()) {
+        return false;
+    }
+
+    score->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
+    return true;
+}

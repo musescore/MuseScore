@@ -673,6 +673,18 @@ public:
     Q_INVOKABLE apiv1::Staff* appendLinkedStaff(apiv1::Staff* sourceStaff, apiv1::Part* destinationPart);
 
     /** APIDOC
+     * Sets the visibility of a voice on a staff.
+     * This method only works on excerpt (linked part) scores, not on the main score.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} voiceIndex The voice index (0 to 3).
+     * @param {Boolean} visible Whether the voice should be visible.
+     * @return {Boolean} True if successful, false if not an excerpt or voice cannot be disabled.
+     * @since 4.7
+    */
+    Q_INVOKABLE bool setVoiceVisible(apiv1::Staff* staff, int voiceIndex, bool visible);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

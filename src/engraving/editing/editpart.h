@@ -237,6 +237,8 @@ public:
     static Staff* appendStaff(Score* score, Part* destinationPart);
     static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
 
+    static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
+
 private:
     static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };

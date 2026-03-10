@@ -1140,3 +1140,55 @@ TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
     delete apiPart;
     delete domScore;
 }
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleOnMainScore
+//   Test that setVoiceVisible returns false on main score
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    // [WHEN] We try to set voice visible on the main score
+    bool result = EditPart::setVoiceVisible(score, staff, 0, false);
+
+    // [THEN] It should return false (only works on excerpts)
+    EXPECT_FALSE(result);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleApi
+//   Test the Plugin API Score::setVoiceVisible() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We try to set voice visible via API on main score
+    bool result = apiScore.setVoiceVisible(apiStaff, 0, false);
+
+    // [THEN] It should return false
+    EXPECT_FALSE(result);
+
+    delete apiStaff;
+    delete domScore;
+}
