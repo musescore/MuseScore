@@ -37,6 +37,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
+static constexpr double maxMidPointThicknessSpRatio = 0.2;
+
 void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx)
 {
     // Layout parentheses surrounding an engraving item. Handle padding and placement
@@ -267,7 +269,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     const double height = ldata->height;
     const double xPos = ldata->pos().x();
     const double mag = ldata->mag();
-    const double maxMidPointThickness = 0.2 * spatium;
+    const double maxMidPointThickness = maxMidPointThicknessSpRatio * spatium;
     const double midPointThickness = std::min(ldata->midPointThickness.value(), maxMidPointThickness);
 
     const double heightInSpatium = height / spatium;
@@ -433,7 +435,8 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     }
 
     const StaffType* st = chord->staffType();
-    if (st->isTabStaff()) {
+    const bool isTab = st->isTabStaff();
+    if (isTab) {
         ldata->startY = notesShape.top();
         ldata->height = notesShape.bbox().height();
         ldata->midPointThickness.set_value(std::pow(ldata->height, 0.36) * ldata->mag());
@@ -443,6 +446,35 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
         ldata->midPointThickness.set_value(std::pow(ldata->height, 0.33) * ldata->mag());
         ldata->endPointThickness.set_value(0.05);
+    }
+
+    // Only switch to the normalized low-scale variant when the raw thickness
+    // becomes clamp-driven at very small spatium scales, which otherwise
+    // produces disproportionately thick parentheses in custom renderers.
+    const double sp = item->spatium();
+    const double clampLimit = maxMidPointThicknessSpRatio * sp;
+    const double midPointThickness = ldata->midPointThickness.value();
+    if (muse::RealIsEqualOrMore(midPointThickness, clampLimit * 0.95)) {
+        const double sp0 = item->defaultSpatium();
+
+        IF_ASSERT_FAILED(sp > 0.0 && sp0 > 0.0) {
+            LOGE() << "spatium or default spatium is 0";
+            return;
+        }
+
+        const double exponent = isTab ? 0.36 : 0.33;
+        const double exponentComplement = 1.0 - exponent;
+
+        const double normalizedHeight = ldata->height / sp;
+
+        // Scale factor that keeps the normalized formula compatible with the
+        // original formula at the default spatium.
+        const double scaleNormalization = sp / std::pow(sp0, exponentComplement);
+        const double normalizedThickness = std::pow(normalizedHeight, exponent)
+                                           * scaleNormalization
+                                           * ldata->mag();
+
+        ldata->midPointThickness.set_value(normalizedThickness);
     }
 }
 
