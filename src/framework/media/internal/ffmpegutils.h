@@ -36,10 +36,11 @@ struct FFmpegVersionInfo {
 };
 
 static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_VERSIONS = {
-    { 8, { 62, 60, 62, 9 } },
-    { 7, { 61, 59, 61, 8 } },
-    { 6, { 60, 58, 60, 7 } },
-    { 5, { 59, 57, 59, 6 } },
-    { 4, { 58, 56, 58, 5 } },
+    // ffmpeg   avFormat    avUtil      avCodec     swScale
+    { 8,        { 62,       60,         62,         9 } },
+    { 7,        { 61,       59,         61,         8 } },
+    { 6,        { 60,       58,         60,         7 } },
+    { 5,        { 59,       57,         59,         6 } },
+    { 4,        { 58,       56,         58,         5 } },
 };
 }

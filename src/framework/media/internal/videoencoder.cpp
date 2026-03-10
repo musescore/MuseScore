@@ -165,7 +165,7 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->ppicture->format = AV_PIX_FMT_YUV420P;
 
     int size = m_ffmpegHandler->av_image_get_buffer_size(m_ffmpeg->codecCtx->pix_fmt, m_ffmpeg->codecCtx->width,
-                                                           m_ffmpeg->codecCtx->height, 1);
+                                                         m_ffmpeg->codecCtx->height, 1);
     m_ffmpeg->picture_buf = new uint8_t[size];
     if (!m_ffmpeg->picture_buf) {
         LOGE() << "failed allocate frame buf";
@@ -175,8 +175,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 
     // Setup the planes
     m_ffmpegHandler->av_image_fill_arrays(m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize, m_ffmpeg->picture_buf,
-                                            m_ffmpeg->codecCtx->pix_fmt,
-                                            m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height, 1);
+                                          m_ffmpeg->codecCtx->pix_fmt,
+                                          m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height, 1);
 
     if (m_ffmpegHandler->avio_open(&m_ffmpeg->formatCtx->pb, fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
         LOGE() << "failed open file: " << fileName;
@@ -219,9 +219,9 @@ void VideoEncoder::close()
         }
 
         m_ffmpeg->pkt->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                             m_ffmpeg->videoStream->time_base);
+                                                           m_ffmpeg->videoStream->time_base);
         m_ffmpeg->pkt->dts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                             m_ffmpeg->videoStream->time_base);
+                                                           m_ffmpeg->videoStream->time_base);
 
         m_ffmpeg->ptsCounter++;
 
@@ -269,12 +269,12 @@ bool VideoEncoder::encodeImage(const QImage& img)
 
     convertImage_sws(img);
 
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(60, 3, 100)
-    m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->codecCtx->frame_num, m_ffmpeg->codecCtx->time_base,
-                                                              m_ffmpeg->videoStream->time_base);
-#else
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(60, 3, 100)
     m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->codecCtx->frame_number, m_ffmpeg->codecCtx->time_base,
-                                                              m_ffmpeg->videoStream->time_base);
+                                                            m_ffmpeg->videoStream->time_base);
+#else
+    m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->codecCtx->frame_num, m_ffmpeg->codecCtx->time_base,
+                                                            m_ffmpeg->videoStream->time_base);
 #endif
 
     int ret = m_ffmpegHandler->avcodec_send_frame(m_ffmpeg->codecCtx, m_ffmpeg->ppicture);
@@ -295,9 +295,9 @@ bool VideoEncoder::encodeImage(const QImage& img)
         }
 
         m_ffmpeg->pkt->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                             m_ffmpeg->videoStream->time_base);
+                                                           m_ffmpeg->videoStream->time_base);
         m_ffmpeg->pkt->dts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
-                                                             m_ffmpeg->videoStream->time_base);
+                                                           m_ffmpeg->videoStream->time_base);
 
         m_ffmpeg->ptsCounter++;
 
@@ -433,7 +433,7 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
         if (pkt->stream_index == videoInIdx) {
             pkt->stream_index = outVideoIdx;
             m_ffmpegHandler->av_packet_rescale_ts(pkt, videoFmtCtx->streams[videoInIdx]->time_base,
-                                                    outputFmtCtx->streams[outVideoIdx]->time_base);
+                                                  outputFmtCtx->streams[outVideoIdx]->time_base);
             pkt->pos = -1;
             m_ffmpegHandler->av_interleaved_write_frame(outputFmtCtx, pkt);
         }
@@ -444,7 +444,7 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
         if (pkt->stream_index == audioInIdx) {
             pkt->stream_index = outAudioIdx;
             m_ffmpegHandler->av_packet_rescale_ts(pkt, audioFmtCtx->streams[audioInIdx]->time_base,
-                                                    outputFmtCtx->streams[outAudioIdx]->time_base);
+                                                  outputFmtCtx->streams[outAudioIdx]->time_base);
             pkt->pts += audioOffsetPts;
             pkt->dts += audioOffsetPts;
             pkt->pos = -1;
@@ -475,9 +475,9 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
     }
 
     m_ffmpeg->img_convert_ctx = m_ffmpegHandler->sws_getCachedContext(m_ffmpeg->img_convert_ctx, m_ffmpeg->width, m_ffmpeg->height,
-                                                                        AV_PIX_FMT_BGRA,
-                                                                        m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC,
-                                                                        NULL, NULL, NULL);
+                                                                      AV_PIX_FMT_BGRA,
+                                                                      m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC,
+                                                                      NULL, NULL, NULL);
 
     if (!m_ffmpeg->img_convert_ctx) {
         LOGE() << "failed initialize the conversion context";
@@ -495,7 +495,7 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
     srcstride[2 ]= 0;
 
     m_ffmpegHandler->sws_scale(m_ffmpeg->img_convert_ctx, srcplanes, srcstride, 0, m_ffmpeg->height, m_ffmpeg->ppicture->data,
-                                 m_ffmpeg->ppicture->linesize);
+                               m_ffmpeg->ppicture->linesize);
 
     return true;
 }
