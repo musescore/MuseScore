@@ -86,7 +86,7 @@ void GuiApp::setup()
 #ifndef MUSE_MULTICONTEXT_WIP
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
     ctx->id = 0;
-    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+    std::vector<muse::modularity::IContextSetup*>& csetups = context(ctx).setups;
     for (modularity::IContextSetup* s : csetups) {
         s->registerExports();
     }
@@ -248,11 +248,11 @@ void GuiApp::setup()
     }
 }
 
-std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse::modularity::ContextPtr& ctx)
+GuiApp::Context& GuiApp::context(const muse::modularity::ContextPtr& ctx)
 {
     for (Context& c : m_contexts) {
         if (c.ctx->id == ctx->id) {
-            return c.setups;
+            return c;
         }
     }
 
@@ -273,40 +273,7 @@ std::vector<muse::modularity::IContextSetup*>& GuiApp::contextSetups(const muse:
         }
     }
 
-    return ref.setups;
-}
-
-void GuiApp::destroyContext(const modularity::ContextPtr& ctx)
-{
-    if (!ctx) {
-        return;
-    }
-
-    LOGI() << "Destroying context with id: " << ctx->id;
-
-    auto it = std::find_if(m_contexts.begin(), m_contexts.end(),
-                           [&ctx](const Context& c) { return c.ctx->id == ctx->id; });
-    if (it == m_contexts.end()) {
-        LOGW() << "Context not found: " << ctx->id;
-        return;
-    }
-
-    // Engine quit
-    muse::modularity::ioc(ctx)->resolve<muse::ui::IUiEngine>("app")->quit();
-
-    for (modularity::IContextSetup* s : it->setups) {
-        s->onDeinit();
-    }
-
-    qDeleteAll(it->setups);
-    m_contexts.erase(it);
-
-    modularity::removeIoC(ctx);
-}
-
-size_t GuiApp::contextCount() const
-{
-    return m_contexts.size();
+    return ref;
 }
 
 std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
@@ -317,6 +284,11 @@ std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
         ctxs.push_back(c.ctx);
     }
     return ctxs;
+}
+
+size_t GuiApp::contextCount() const
+{
+    return m_contexts.size();
 }
 
 muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
@@ -335,13 +307,13 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     once = true;
 #endif
 
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
+    modularity::ContextPtr ctxId = std::make_shared<modularity::Context>();
     ++m_lastId;
 #ifdef MUSE_MULTICONTEXT_WIP
     ctx->id = m_lastId;
 #else
     // only global
-    ctx->id = 0;
+    ctxId->id = 0;
 #endif
 
     const CmdOptions& options = m_options;
@@ -350,11 +322,11 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
         return nullptr;
     }
 
-    LOGI() << "New context created with id: " << ctx->id;
+    LOGI() << "New context created with id: " << ctxId->id;
 
     // Setup
 #ifdef MUSE_MULTICONTEXT_WIP
-    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
+    std::vector<muse::modularity::IContextSetup*>& csetups = context(ctxId).setups;
 
     for (modularity::IContextSetup* s : csetups) {
         s->registerExports();
@@ -386,7 +358,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     QString platform = "linux";
 #endif
 
-    QQmlApplicationEngine* engine = muse::modularity::ioc(ctx)->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
+    QQmlApplicationEngine* engine = muse::modularity::ioc(ctxId)->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
@@ -406,9 +378,9 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     }
 
     QQmlContext* qmlCtx = new QQmlContext(engine);
-    qmlCtx->setObjectName(QString("QQmlContext: %1").arg(ctx ? ctx->id : 0));
+    qmlCtx->setObjectName(QString("QQmlContext: %1").arg(ctxId ? ctxId->id : 0));
     QmlIoCContext* iocCtx = new QmlIoCContext(qmlCtx);
-    iocCtx->ctx = ctx;
+    iocCtx->ctx = ctxId;
     qmlCtx->setContextProperty("ioc_context", QVariant::fromValue(iocCtx));
 
     QObject* obj = component.create(qmlCtx);
@@ -418,7 +390,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
         return nullptr;
     }
 
-    auto startupScenario = muse::modularity::ioc(ctx)->resolve<IStartupScenario>("app");
+    auto startupScenario = muse::modularity::ioc(ctxId)->resolve<IStartupScenario>("app");
 
     //! NOTE Apply startup options from either:
     //! 1. Direct args (single-process mode: openNewWindow passes args)
@@ -462,71 +434,112 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     startupScenario->setStartupScoreFile(file);
     startupScenario->runOnSplashScreen();
 
-    if (m_splashScreen) {
-        m_splashScreen->close();
-        delete m_splashScreen;
-        m_splashScreen = nullptr;
+    QMetaObject::invokeMethod(qApp, [this, ctxId, obj, startupScenario]() {
+        if (m_splashScreen) {
+            m_splashScreen->close();
+            delete m_splashScreen;
+            m_splashScreen = nullptr;
+        }
+
+        // The main window must be shown at this point so KDDockWidgets can read its size correctly
+        // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
+        // but before that, let's make the window transparent,
+        // otherwise the empty window frame will be visible
+        // https://github.com/musescore/MuseScore/issues/29630
+        // Transparency will be removed after the page loads.
+        Context& ctx = context(ctxId);
+        ctx.window = dynamic_cast<QQuickWindow*>(obj);
+        ctx.window->setOpacity(0.01);
+        ctx.window->setVisible(true);
+
+        startupScenario->runAfterSplashScreen();
+    }, Qt::QueuedConnection);
+
+    return ctxId;
+}
+
+void GuiApp::destroyContext(const modularity::ContextPtr& ctx)
+{
+    TRACEFUNC;
+
+    if (!ctx) {
+        return;
     }
 
-    // The main window must be shown at this point so KDDockWidgets can read its size correctly
-    // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-    // but before that, let's make the window transparent,
-    // otherwise the empty window frame will be visible
-    // https://github.com/musescore/MuseScore/issues/29630
-    // Transparency will be removed after the page loads.
-    QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
-    w->setOpacity(0.01);
-    w->setVisible(true);
+    LOGI() << "Destroying context with id: " << ctx->id;
 
-    startupScenario->runAfterSplashScreen();
+    auto it = std::find_if(m_contexts.begin(), m_contexts.end(),
+                           [&ctx](const Context& c) { return c.ctx->id == ctx->id; });
+    if (it == m_contexts.end()) {
+        LOGW() << "Context not found: " << ctx->id;
+        return;
+    }
 
-    return ctx;
+    if (it->window) {
+        it->window->setVisible(false);
+    }
+
+    // Engine quit
+    muse::modularity::ioc(ctx)->resolve<muse::ui::IUiEngine>("app")->quit();
+
+    for (modularity::IContextSetup* s : it->setups) {
+        s->onDeinit();
+    }
+
+    qDeleteAll(it->setups);
+    m_contexts.erase(it);
+
+    modularity::removeIoC(ctx);
 }
 
 void GuiApp::finish()
 {
-    PROFILER_PRINT;
+    {
+        TRACEFUNC
 
 // Wait Thread Poll
 #ifdef QT_CONCURRENT_SUPPORTED
-    QThreadPool* globalThreadPool = QThreadPool::globalInstance();
-    if (globalThreadPool) {
-        LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
-        globalThreadPool->waitForDone();
-    }
+        QThreadPool* globalThreadPool = QThreadPool::globalInstance();
+        if (globalThreadPool) {
+            LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
+            globalThreadPool->waitForDone();
+        }
 #endif
 
-    // Deinit
-    async::processMessages();
+        // Deinit
+        async::processMessages();
 
-    // Deinit and delete contexts
-    std::vector<muse::modularity::ContextPtr> ctxs = contexts();
-    for (auto& c : ctxs) {
-        destroyContext(c);
+        // Deinit and delete contexts
+        std::vector<muse::modularity::ContextPtr> ctxs = contexts();
+        for (auto& c : ctxs) {
+            destroyContext(c);
+        }
+
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onDeinit();
+        }
+
+        m_globalModule->onDeinit();
+
+        for (modularity::IModuleSetup* m : m_modules) {
+            m->onDestroy();
+        }
+
+        m_globalModule->onDestroy();
+
+        // Delete modules
+        qDeleteAll(m_modules);
+        m_modules.clear();
+
+        delete m_globalModule;
+        m_globalModule = nullptr;
+
+        muse::modularity::resetAll();
+
+        BaseApplication::finish();
     }
 
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDeinit();
-    }
-
-    m_globalModule->onDeinit();
-
-    for (modularity::IModuleSetup* m : m_modules) {
-        m->onDestroy();
-    }
-
-    m_globalModule->onDestroy();
-
-    // Delete modules
-    qDeleteAll(m_modules);
-    m_modules.clear();
-
-    delete m_globalModule;
-    m_globalModule = nullptr;
-
-    muse::modularity::resetAll();
-
-    BaseApplication::finish();
+    PROFILER_PRINT;
 }
 
 void GuiApp::applyCommandLineOptions(const CmdOptions& options)
