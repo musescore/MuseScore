@@ -3164,7 +3164,7 @@ EngravingItem* Score::move(const String& cmd)
         }
         if (noteEntryMode() && m_is.beyondScore()) {
             m_is.setBeyondScore(false);
-            el = lastMeasure()->first()->nextChordRest(0, false);
+            el = lastMeasure()->first()->nextChordRest(m_is.track(), false);
         } else if (cr) {
             el = prevMeasure(cr);
         }
