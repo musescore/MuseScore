@@ -40,6 +40,7 @@ class SequencePlayer : public ISequencePlayer, public Contextable, public async:
 
 public:
     explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
+    ~SequencePlayer() override;
 
     async::Promise<Ret> prepareToPlay() override;
 
@@ -61,7 +62,7 @@ public:
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
-    void seekAllTracks(const msecs_t newPositionMsecs);
+    void seekAllTracks(const msecs_t newPositionMsecs, bool flushSound);
     void flushAllTracks();
 
     using AllTracksReadyCallback = std::function<void ()>;
@@ -71,8 +72,9 @@ private:
     IClockPtr m_clock = nullptr;
 
     bool m_countDownIsSet = false;
-    bool m_flushSoundOnSeek = true;
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
+
+    bool m_tracksFollowClockSeek = true;
 };
 }
 
