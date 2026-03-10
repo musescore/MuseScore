@@ -206,6 +206,15 @@ TEST_F(TablEdit_Tests, tef_tie_2) {
     tefReadTest("tie_2");
 }
 
+TEST_F(TablEdit_Tests, tef_tie_3) {
+    tefReadTest("tie_3");
+}
+
+// generate reference file and enable when issue #32769 has been solved
+TEST_F(TablEdit_Tests, DISABLED_tef_tie_4) {
+    tefReadTest("tie_4");
+}
+
 TEST_F(TablEdit_Tests, tef_time_signatures) {
     tefReadTest("time_signatures");
 }
