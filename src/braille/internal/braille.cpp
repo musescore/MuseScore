@@ -48,6 +48,7 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rest.h"
@@ -315,6 +316,9 @@ namespace mu::engraving {
 #define BRAILLE_LINE_CONT_END_1         QString(">'")
 #define BRAILLE_LINE_CONT_START_2       QString("--")
 #define BRAILLE_LINE_CONT_END_2         QString(">-")
+
+#define BRAILLE_PEDAL_DOWN              QString("<c")
+#define BRAILLE_PEDAL_UP                QString("*c")
 
 // TABLE 24.B. Page 22. Music Braille Code 2015
 #define BRAILLE_DOWN_BOW                QString("<b")
@@ -1064,6 +1068,23 @@ std::vector<Hairpin*> Braille::hairpins(ChordRest* chordRest)
     return result;
 }
 
+std::vector<Pedal*> Braille::pedals(ChordRest* chordRest)
+{
+    std::vector<Pedal*> result;
+    SpannerMap& smap = m_score->spannerMap();
+    auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
+    for (auto interval : spanners) {
+        Spanner* spanner = interval.value;
+        if (spanner && spanner->isPedal()
+            && spanner->track() == chordRest->track()
+            && spanner->effectiveTrack2() == chordRest->track()) {
+            result.push_back(toPedal(spanner));
+        }
+    }
+
+    return result;
+}
+
 int Braille::notesInSlur(Slur* slur)
 {
     int result = 0;
@@ -1290,6 +1311,16 @@ bool Braille::brailleSingleItem(BrailleEngravingItemList* beiz, EngravingItem* e
     } else if (el->isNote()) {
         Note* note = toNote(el);
         beiz->addEngravingItem(el, brailleChordRootNote(note->chord(), note));
+        return true;
+    } else if (el->isPedalSegment()) {
+        PedalSegment* pedalSeg = toPedalSegment(el);
+        QString pedalBraille;
+        if (pedalSeg->isEndType()) {
+            pedalBraille = BRAILLE_PEDAL_UP;
+        } else {
+            pedalBraille = BRAILLE_PEDAL_DOWN;
+        }
+        beiz->addEngravingItem(el, pedalBraille);
         return true;
     }
     return false;
@@ -1780,6 +1811,10 @@ QString Braille::brailleChord(Chord* chord)
     std::vector<Hairpin*> chordHairpins = hairpins(chord);
     QString hairpinBrailleBefore = brailleHairpinBefore(chord, chordHairpins);
 
+    std::vector<Pedal*> chordPedals = pedals(chord);
+    QString pedalBrailleBefore = braillePedalBefore(chord, chordPedals);
+    QString pedalBrailleAfter = braillePedalAfter(chord, chordPedals);
+
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
     // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
@@ -1834,6 +1869,7 @@ QString Braille::brailleChord(Chord* chord)
 
     // In Braille the order of elements is clearly defined
     QString result = QString();
+    result += pedalBrailleBefore;
     result += hairpinBrailleBefore;
     result += graceNotesBefore;
     result += graceNoteMarking;
@@ -1851,6 +1887,7 @@ QString Braille::brailleChord(Chord* chord)
      * MBC 2015, doesn't mention them, so tentatively putting them here. */
     result += graceNotesAfter;
     result += hairpinBrailleAfter;
+    result += pedalBrailleAfter;
     result += fermata;
 
     return result;
@@ -2653,16 +2690,21 @@ QString Braille::brailleRest(Rest* rest)
     std::vector<Hairpin*> restHairpins = hairpins(rest);
     QString hairpinBrailleBefore = brailleHairpinBefore(rest, restHairpins);
     QString hairpinBrailleAfter = brailleHairpinAfter(rest, restHairpins);
+    std::vector<Pedal*> restPedals = pedals(rest);
+    QString pedalBrailleBefore = braillePedalBefore(rest, restPedals);
+    QString pedalBrailleAfter = braillePedalAfter(rest, restPedals);
 
     QString tupletBraille = brailleTuplet(rest->tuplet(), rest);
 
     QString result = QString();
+    result += pedalBrailleBefore;
     result += hairpinBrailleBefore;
     result += slurBrailleBefore;
     result += tupletBraille;
     result += restBraille;
     result += slurBrailleAfter;
     result += hairpinBrailleAfter;
+    result += pedalBrailleAfter;
     result += fermata;
 
     return result;
@@ -3019,5 +3061,35 @@ QString Braille::brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>
     // TODO Implement 13.6 - 13.10.  Page 98. Music Braille Code 2015.
 
     return shortSlurBraille + longSlurBraille;
+}
+
+QString Braille::braillePedalBefore(ChordRest* chordRest, const std::vector<Pedal*>& pedalList)
+{
+    if (!chordRest) {
+        return QString();
+    }
+    QString result;
+    for (Pedal* pedal : pedalList) {
+        if (!pedal || pedal->startCR() != chordRest) {
+            continue;
+        }
+        result += BRAILLE_PEDAL_DOWN;
+    }
+    return result;
+}
+
+QString Braille::braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal*>& pedalList)
+{
+    if (!chordRest) {
+        return QString();
+    }
+    QString result;
+    for (Pedal* pedal : pedalList) {
+        if (!pedal || chordRest->tick() + chordRest->actualTicks() != pedal->tick2()) {
+            continue;
+        }
+        result += BRAILLE_PEDAL_UP;
+    }
+    return result;
 }
 }
