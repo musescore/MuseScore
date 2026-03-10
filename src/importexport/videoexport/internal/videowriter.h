@@ -72,10 +72,10 @@ private:
 
     Config makeConfig() const;
 
-    void startVideoExport(notation::INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg);
+    void startVideoExport(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& cfg);
     void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
 
-    void doGenerate(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
+    void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& config);
 
     struct ScoreRestoreData
     {

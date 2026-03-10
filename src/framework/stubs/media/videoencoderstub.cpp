@@ -37,8 +37,11 @@ bool VideoEncoderStub::encodeImage(const QImage&)
     return false;
 }
 
-bool VideoEncoderStub::muxAudioVideo(const muse::io::path_t&, const muse::io::path_t&,
-                                     const muse::io::path_t&, double)
+void VideoEncoderStub::finishEncode()
+{
+}
+
+bool VideoEncoderStub::addAudio(const muse::io::path_t&, double)
 {
     return false;
 }

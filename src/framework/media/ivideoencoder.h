@@ -38,9 +38,11 @@ public:
 
     virtual bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) = 0;
     virtual void close() = 0;
+
     virtual bool encodeImage(const QImage& img) = 0;
-    virtual bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                               double audioOffsetSec) = 0;
+    virtual void finishEncode() = 0;
+
+    virtual bool addAudio(const muse::io::path_t& audioPath, double audioOffsetSec) = 0;
 };
 using IVideoEncoderPtr = std::shared_ptr<IVideoEncoder>;
 }

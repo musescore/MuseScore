@@ -21,6 +21,8 @@
  */
 #include "videoencoder.h"
 
+#include "io/file.h"
+#include "defer.h"
 #include "log.h"
 
 using namespace muse::media;
@@ -190,11 +192,12 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     }
 
     m_ffmpeg->opened = true;
+    m_outputPath = fileName;
 
     return true;
 }
 
-void VideoEncoder::close()
+void VideoEncoder::finishEncode()
 {
     if (!m_ffmpeg->opened) {
         return;
@@ -234,6 +237,15 @@ void VideoEncoder::close()
     }
 
     m_ffmpegHandler->av_write_trailer(m_ffmpeg->formatCtx);
+    m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
+    m_ffmpeg->formatCtx->pb = nullptr;
+}
+
+void VideoEncoder::close()
+{
+    if (!m_ffmpeg->opened) {
+        return;
+    }
 
     // close_video
     m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
@@ -256,9 +268,14 @@ void VideoEncoder::close()
 
     // Close file
     m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
+    m_ffmpeg->formatCtx->pb = nullptr;
 
     // Free the stream
     m_ffmpegHandler->av_free(m_ffmpeg->formatCtx);
+    m_ffmpeg->formatCtx = nullptr;
+    m_ffmpeg->opened = false;
+
+    m_outputPath = io::path_t();
 }
 
 bool VideoEncoder::encodeImage(const QImage& img)
@@ -312,13 +329,19 @@ bool VideoEncoder::encodeImage(const QImage& img)
     return true;
 }
 
-bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& audioPath, const io::path_t& outputPath,
-                                 double audioOffsetSec)
+bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
 {
+    if (m_outputPath.empty()) {
+        LOGE() << "addAudio: encoder was not opened or path not set";
+        return false;
+    }
+
+    const io::path_t videoPath = m_outputPath;
+    const io::path_t tmpPath = m_outputPath + ".tmp";
+
     AVFormatContext* videoFmtCtx = nullptr;
     AVFormatContext* audioFmtCtx = nullptr;
     AVFormatContext* outputFmtCtx = nullptr;
-    bool ok = false;
 
     auto cleanup = [&]() {
         if (videoFmtCtx) {
@@ -335,31 +358,30 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
         }
     };
 
-    if (m_ffmpegHandler->avformat_open_input(&videoFmtCtx, videoPath.c_str(), nullptr, nullptr) < 0) {
-        LOGE() << "mux: failed to open video input: " << videoPath;
+    DEFER {
         cleanup();
+    };
+
+    if (m_ffmpegHandler->avformat_open_input(&videoFmtCtx, videoPath.c_str(), nullptr, nullptr) < 0) {
+        LOGE() << "addAudio: failed to open video input: " << videoPath;
         return false;
     }
     if (m_ffmpegHandler->avformat_find_stream_info(videoFmtCtx, nullptr) < 0) {
-        LOGE() << "mux: failed to find video stream info";
-        cleanup();
+        LOGE() << "addAudio: failed to find video stream info";
         return false;
     }
 
     if (m_ffmpegHandler->avformat_open_input(&audioFmtCtx, audioPath.c_str(), nullptr, nullptr) < 0) {
-        LOGE() << "mux: failed to open audio input: " << audioPath;
-        cleanup();
+        LOGE() << "addAudio: failed to open audio input: " << audioPath;
         return false;
     }
     if (m_ffmpegHandler->avformat_find_stream_info(audioFmtCtx, nullptr) < 0) {
-        LOGE() << "mux: failed to find audio stream info";
-        cleanup();
+        LOGE() << "addAudio: failed to find audio stream info";
         return false;
     }
 
-    if (m_ffmpegHandler->avformat_alloc_output_context2(&outputFmtCtx, nullptr, "mp4", outputPath.c_str()) < 0 || !outputFmtCtx) {
-        LOGE() << "mux: failed to allocate output context";
-        cleanup();
+    if (m_ffmpegHandler->avformat_alloc_output_context2(&outputFmtCtx, nullptr, "mp4", tmpPath.c_str()) < 0 || !outputFmtCtx) {
+        LOGE() << "addAudio: failed to allocate output context";
         return false;
     }
 
@@ -373,8 +395,7 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
             videoInIdx = static_cast<int>(i);
             AVStream* outStream = m_ffmpegHandler->avformat_new_stream(outputFmtCtx, nullptr);
             if (!outStream) {
-                LOGE() << "mux: failed to create output video stream";
-                cleanup();
+                LOGE() << "addAudio: failed to create output video stream";
                 return false;
             }
             m_ffmpegHandler->avcodec_parameters_copy(outStream->codecpar, videoFmtCtx->streams[i]->codecpar);
@@ -390,8 +411,7 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
             audioInIdx = static_cast<int>(i);
             AVStream* outStream = m_ffmpegHandler->avformat_new_stream(outputFmtCtx, nullptr);
             if (!outStream) {
-                LOGE() << "mux: failed to create output audio stream";
-                cleanup();
+                LOGE() << "addAudio: failed to create output audio stream";
                 return false;
             }
             m_ffmpegHandler->avcodec_parameters_copy(outStream->codecpar, audioFmtCtx->streams[i]->codecpar);
@@ -403,20 +423,17 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
     }
 
     if (videoInIdx < 0 || audioInIdx < 0) {
-        LOGE() << "mux: could not find video or audio stream";
-        cleanup();
+        LOGE() << "addAudio: could not find video or audio stream";
         return false;
     }
 
-    if (m_ffmpegHandler->avio_open(&outputFmtCtx->pb, outputPath.c_str(), AVIO_FLAG_WRITE) < 0) {
-        LOGE() << "mux: failed to open output file: " << outputPath;
-        cleanup();
+    if (m_ffmpegHandler->avio_open(&outputFmtCtx->pb, tmpPath.c_str(), AVIO_FLAG_WRITE) < 0) {
+        LOGE() << "addAudio: failed to open output file: " << tmpPath;
         return false;
     }
 
     if (m_ffmpegHandler->avformat_write_header(outputFmtCtx, nullptr) < 0) {
-        LOGE() << "mux: failed to write header";
-        cleanup();
+        LOGE() << "addAudio: failed to write header";
         return false;
     }
 
@@ -456,9 +473,14 @@ bool VideoEncoder::muxAudioVideo(const io::path_t& videoPath, const io::path_t& 
     m_ffmpegHandler->av_packet_free(&pkt);
     m_ffmpegHandler->av_write_trailer(outputFmtCtx);
 
-    ok = true;
-    cleanup();
-    return ok;
+    if (!io::File::copy(tmpPath, videoPath, true)) {
+        LOGE() << "addAudio: failed to replace with muxed file";
+        return false;
+    }
+
+    io::File::remove(tmpPath);
+
+    return true;
 }
 
 bool VideoEncoder::convertImage_sws(const QImage& img)
