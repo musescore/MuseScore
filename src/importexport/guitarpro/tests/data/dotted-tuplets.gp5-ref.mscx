@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bells</trackName>
       <Instrument id="xylomarimba">
         <longName>Bells</longName>
         <trackName></trackName>

@@ -27,7 +27,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Violins</trackName>
       <Instrument id="violins">
         <longName>Violins</longName>
         <shortName>Vlns.</shortName>
@@ -109,7 +108,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>Trumpet</longName>
         <shortName>Tpt.</shortName>
@@ -182,7 +180,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>

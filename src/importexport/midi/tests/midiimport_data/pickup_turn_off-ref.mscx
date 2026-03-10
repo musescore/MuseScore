@@ -27,7 +27,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Soprano, Staff</trackName>
       <Instrument id="soprano">
         <longName>Soprano, Staff</longName>
         <shortName>S.</shortName>

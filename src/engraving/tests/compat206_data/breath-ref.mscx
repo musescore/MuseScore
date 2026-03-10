@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flûte</trackName>
       <Instrument id="flute">
         <longName>Flûte</longName>
         <shortName>Fl.</shortName>

@@ -25,7 +25,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Steel Guitar</trackName>
       <Instrument id="cavaquinho">
         <longName>Steel Guitar</longName>
         <trackName></trackName>

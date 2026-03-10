@@ -29,7 +29,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet</longName>
         <shortName>B♭ Cl.</shortName>

@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <shortName>jz.guit.</shortName>
@@ -57,7 +56,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <shortName>jz.guit.</shortName>

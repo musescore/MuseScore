@@ -64,7 +64,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -127,7 +126,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
@@ -192,7 +190,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Horn in F</trackName>
       <Instrument id="horn">
         <longName>Horn in F</longName>
         <shortName>Hn. in F</shortName>
@@ -260,7 +257,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
@@ -336,7 +332,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -402,7 +397,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violin</trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
@@ -472,7 +466,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Viola</trackName>
       <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>

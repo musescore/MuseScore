@@ -164,7 +164,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>MusicXML Part</trackName>
       <Instrument id="piano">
         <longName>MusicXML Part</longName>
         <trackName>MusicXML Part</trackName>

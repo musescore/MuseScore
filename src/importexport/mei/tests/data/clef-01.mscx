@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="organ">
         <longName>Orgel</longName>
         <shortName>Org.</shortName>

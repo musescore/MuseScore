@@ -28,7 +28,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Acoustic Guitar</trackName>
       <Instrument id="guitar-steel">
         <longName>Acoustic Guitar</longName>
         <shortName>Guit.</shortName>

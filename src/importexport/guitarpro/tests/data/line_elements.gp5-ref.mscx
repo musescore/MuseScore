@@ -25,7 +25,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
         <longName>Nylon Guitar</longName>
         <trackName></trackName>
@@ -57,7 +56,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <trackName></trackName>
@@ -88,7 +86,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Piano (Staff 1)</trackName>
       <Instrument id="piano">
         <longName>Acoustic Piano (Staff 1)</longName>
         <trackName></trackName>
@@ -119,7 +116,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Piano (Staff 2)</trackName>
       <Instrument id="piano">
         <longName>Acoustic Piano (Staff 2)</longName>
         <trackName></trackName>
@@ -151,7 +147,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <trackName></trackName>

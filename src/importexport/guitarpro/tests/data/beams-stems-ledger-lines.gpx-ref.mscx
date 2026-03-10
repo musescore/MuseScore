@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic (DADGAD)</trackName>
       <Instrument id="cavaquinho">
         <longName>Acoustic (DADGAD)</longName>
         <shortName>S-Gt</shortName>

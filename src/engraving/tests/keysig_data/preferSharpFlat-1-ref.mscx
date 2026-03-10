@@ -30,7 +30,6 @@
         <defaultConcertClef>G8va</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
-      <trackName>D♭ Piccolo</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="db-piccolo">
         <longName>D♭ Piccolo</longName>

@@ -165,7 +165,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>A</trackName>
       <Instrument id="violin">
         <longName>A</longName>
         <shortName>A</shortName>
@@ -242,7 +241,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B</trackName>
       <Instrument id="violin">
         <longName>B</longName>
         <shortName>B</shortName>
@@ -321,7 +319,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>A</trackName>
       <Instrument id="viola">
         <longName>A</longName>
         <shortName>A</shortName>
@@ -399,7 +396,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B</trackName>
       <Instrument id="viola">
         <longName>B</longName>
         <shortName>B</shortName>
@@ -479,7 +475,6 @@
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>A</trackName>
       <Instrument id="viola">
         <longName>A</longName>
         <shortName>A</shortName>
@@ -558,7 +553,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Cello  B</trackName>
       <Instrument id="violoncello">
         <longName>Cello  B</longName>
         <shortName>Cello  B</shortName>
@@ -636,7 +630,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>C</trackName>
       <Instrument id="viola">
         <longName>C</longName>
         <shortName>C</shortName>
@@ -716,7 +709,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>A</trackName>
       <Instrument id="bass">
         <longName>A</longName>
         <shortName>A</shortName>
@@ -784,7 +776,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>C</trackName>
       <Instrument id="bass">
         <longName>C</longName>
         <shortName>C</shortName>
@@ -852,7 +843,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Piano</shortName>

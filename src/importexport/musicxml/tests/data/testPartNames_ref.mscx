@@ -65,7 +65,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -128,7 +127,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <longName>Voice</longName>
         <trackName>Voice</trackName>
@@ -191,7 +189,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>P3</trackName>
       <Instrument id="bass">
         <trackName>Bass</trackName>
         <minPitchP>38</minPitchP>

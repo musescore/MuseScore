@@ -30,7 +30,6 @@
         <bracket type="0" span="4" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
@@ -49,7 +48,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
         <longName>Violin 2</longName>
         <shortName>Vln. 2</shortName>
@@ -68,7 +66,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
@@ -86,7 +83,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>

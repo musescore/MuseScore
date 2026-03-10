@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Horn in D</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
       <Instrument id="d-horn">
         <longName>Horn in D</longName>

@@ -33,7 +33,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Guitar</trackName>
       <Instrument id="guitar-nylon-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>

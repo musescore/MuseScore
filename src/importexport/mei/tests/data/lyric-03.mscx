@@ -29,7 +29,6 @@
           </StaffType>
         <bracket type="0" span="2" col="0" visible="1"/>
         </Staff>
-      <trackName></trackName>
       <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
@@ -47,7 +46,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="bass">
         <longName>Bass</longName>
         <shortName>B.</shortName>

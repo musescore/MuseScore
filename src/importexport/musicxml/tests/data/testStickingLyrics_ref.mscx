@@ -51,7 +51,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="drumset">
         <longName>Snare Drum</longName>
         <shortName>S. D.</shortName>

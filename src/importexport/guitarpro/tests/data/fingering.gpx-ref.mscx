@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Track 1</trackName>
       <Instrument id="cavaquinho">
         <longName>Track 1</longName>
         <shortName>S-Gt</shortName>

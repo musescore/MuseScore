@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
         <longName>Nylon Guitar</longName>
         <shortName>n.guit.</shortName>
@@ -57,7 +56,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <shortName>jz.guit.</shortName>
@@ -99,7 +97,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Acoustic Piano</trackName>
       <Instrument id="piano">
         <longName>Acoustic Piano</longName>
         <shortName>pno.</shortName>
@@ -130,7 +127,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <shortName>od.guit.</shortName>

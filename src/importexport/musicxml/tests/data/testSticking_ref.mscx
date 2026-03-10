@@ -59,7 +59,6 @@
           <keysig>0</keysig>
           </StaffType>
         </Staff>
-      <trackName>Percussion</trackName>
       <Instrument id="percussion">
         <longName>Percussion</longName>
         <shortName>Perc.</shortName>

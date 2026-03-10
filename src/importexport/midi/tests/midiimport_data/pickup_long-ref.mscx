@@ -27,7 +27,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Horn</trackName>
       <Instrument id="horn">
         <longName>Horn</longName>
         <shortName>Hn.</shortName>

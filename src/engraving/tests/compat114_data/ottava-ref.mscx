@@ -45,7 +45,6 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName><font size="12"/>Piano</longName>
         <shortName><font size="12"/>Pno.</shortName>

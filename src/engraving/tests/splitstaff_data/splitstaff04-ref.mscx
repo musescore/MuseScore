@@ -34,7 +34,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
         <longName>Voice</longName>
         <shortName>Vo.</shortName>

@@ -82,7 +82,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="snare-drum">
         <longName>Snare Drum</longName>
         <shortName>SD</shortName>

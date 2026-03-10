@@ -33,7 +33,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>right hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -48,7 +47,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>left hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>

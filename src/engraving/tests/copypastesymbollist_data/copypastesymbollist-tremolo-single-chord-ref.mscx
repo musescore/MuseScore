@@ -78,7 +78,6 @@
         <bracket type="1" span="2" col="2" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>

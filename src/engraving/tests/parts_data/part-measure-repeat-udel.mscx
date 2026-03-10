@@ -258,7 +258,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
@@ -296,7 +295,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
@@ -1101,7 +1099,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto</trackName>
         <Instrument id="alto">
           <longName>Alto</longName>
           <shortName>A.</shortName>
@@ -1586,7 +1583,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Tenor</trackName>
         <Instrument id="tenor">
           <longName>Tenor</longName>
           <shortName>T.</shortName>

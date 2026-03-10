@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Guitar 1</trackName>
       <Instrument id="cavaquinho">
         <longName>Acoustic Guitar 1</longName>
         <shortName>S-Gt</shortName>

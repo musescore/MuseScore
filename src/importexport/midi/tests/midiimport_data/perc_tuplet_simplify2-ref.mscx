@@ -30,7 +30,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Slit Drum</trackName>
       <Instrument id="slit-drum">
         <longName>Slit Drum</longName>
         <shortName>Slt. Dr.</shortName>

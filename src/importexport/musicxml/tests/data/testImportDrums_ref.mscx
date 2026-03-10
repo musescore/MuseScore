@@ -40,7 +40,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Drums</trackName>
       <Instrument id="drumset">
         <longName>Drums</longName>
         <shortName>Dr.</shortName>

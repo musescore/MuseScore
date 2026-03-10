@@ -30,7 +30,6 @@
         <bracket type="0" span="9" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <longName>Horn in F</longName>
         <shortName>Hn. in F</shortName>
@@ -50,7 +49,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <longName>Trumpet in B♭</longName>
         <shortName>Tpt. in B♭</shortName>
@@ -70,7 +68,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <longName>Bass Trumpet in E♭</longName>
         <shortName>B. Tpt. in E♭</shortName>
@@ -90,7 +87,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="alto-trombone">
         <longName>Alto Trombone</longName>
         <shortName>A. Tbn.</shortName>
@@ -108,7 +104,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
@@ -126,7 +121,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="contrabass-trombone">
         <longName>Contrabass Trombone</longName>
         <shortName>Cb. Tbn.</shortName>
@@ -144,7 +138,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="bass-trombone">
         <longName>Bass Trombone</longName>
         <shortName>B. Tbn.</shortName>
@@ -162,7 +155,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="tuba">
         <longName>Tuba</longName>
         <shortName>Tba.</shortName>
@@ -179,7 +171,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="tuba">
         <longName>B♭ Contrabass Tuba</longName>
         <shortName>B♭ Cb. Tb.</shortName>
@@ -204,7 +195,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="celesta">
         <longName>Celesta</longName>
         <shortName>Cel.</shortName>
@@ -225,7 +215,6 @@
         <bracket type="0" span="4" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="strings">
         <longName>Violins</longName>
         <shortName>Vlns.</shortName>
@@ -243,7 +232,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
@@ -261,7 +249,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
@@ -278,7 +265,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="contrabass">
         <longName>Contrabass</longName>
         <shortName>Cb.</shortName>

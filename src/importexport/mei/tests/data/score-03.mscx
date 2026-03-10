@@ -29,7 +29,6 @@
           <mag>0.7</mag>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
@@ -57,7 +56,6 @@
           <color r="51" g="255" b="0" a="255"/>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>

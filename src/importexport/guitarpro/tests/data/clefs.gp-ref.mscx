@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Acoustic Piano</trackName>
       <Instrument id="piano">
         <longName>Acoustic Piano</longName>
         <shortName>A-Piano</shortName>

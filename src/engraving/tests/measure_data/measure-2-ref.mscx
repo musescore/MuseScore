@@ -36,7 +36,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -74,7 +73,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -382,7 +380,6 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Piano</trackName>
         <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
@@ -649,7 +646,6 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Flute</trackName>
         <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>

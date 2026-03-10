@@ -106,7 +106,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>[Unnamed (treble staff)]</trackName>
       <Instrument id="grand-piano">
         <longName>[Unnamed (treble staff)]</longName>
         <trackName></trackName>

@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <spatium>1.74978</spatium>
@@ -29,7 +31,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
@@ -73,7 +74,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
@@ -1138,7 +1138,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto</trackName>
         <Instrument id="alto">
           <longName>Alto</longName>
           <shortName>A.</shortName>
@@ -1889,7 +1888,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Tenor</trackName>
         <Instrument id="tenor">
           <longName>Tenor</longName>
           <shortName>T.</shortName>

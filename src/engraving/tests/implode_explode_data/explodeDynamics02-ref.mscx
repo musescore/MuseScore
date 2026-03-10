@@ -30,7 +30,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
@@ -85,7 +84,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
@@ -140,7 +138,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
@@ -195,7 +192,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>

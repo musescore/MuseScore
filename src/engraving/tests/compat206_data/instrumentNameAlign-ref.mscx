@@ -42,7 +42,6 @@
           </StaffType>
         <bracket type="0" span="4" col="0" visible="1"/>
         </Staff>
-      <trackName>Soprano</trackName>
       <Instrument id="soprano">
         <longName>Soprano</longName>
         <shortName>S.</shortName>
@@ -92,7 +91,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
@@ -143,7 +141,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
@@ -195,7 +192,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="bass">
         <longName>Bass</longName>
         <shortName>B.</shortName>
