@@ -1240,6 +1240,7 @@
                     <small>1</small>
                     <Note>
                       <eid>tC_tC</eid>
+                      <parentheses>both</parentheses>
                       <Accidental>
                         <subtype>accidentalSharp</subtype>
                         <eid>uC_uC</eid>
@@ -1623,6 +1624,7 @@
                     <small>1</small>
                     <Note>
                       <eid>hD_hD</eid>
+                      <parentheses>both</parentheses>
                       <Accidental>
                         <subtype>accidentalSharp</subtype>
                         <eid>iD_iD</eid>

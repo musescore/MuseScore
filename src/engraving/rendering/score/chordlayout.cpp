@@ -3419,7 +3419,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         if (leftParen && leftParen->addToSkyline()) {
             shape.add(leftParen->shape().translate(leftParen->pos()));
         }
-        if (rightParen && leftParen->addToSkyline()) {
+        if (rightParen && rightParen->addToSkyline()) {
             shape.add(rightParen->shape().translate(rightParen->pos()));
         }
     }

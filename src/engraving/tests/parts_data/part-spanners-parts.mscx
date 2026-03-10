@@ -961,6 +961,7 @@
               <Note>
                 <eid>zB_zB</eid>
                 <linkedTo>g_g</linkedTo>
+                <parentheses>both</parentheses>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
                 <string>0</string>
@@ -1332,6 +1333,7 @@
               <Note>
                 <eid>dC_dC</eid>
                 <linkedTo>EB_EB</linkedTo>
+                <parentheses>both</parentheses>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
                 <string>0</string>
