@@ -82,11 +82,14 @@ void UiEngine::init()
 
 void UiEngine::quit()
 {
+    TRACEFUNC;
+
     if (!m_engine) {
         return;
     }
 
-    emit m_engine->quit();
+    m_engine->exit(0);
+
     delete m_engine;
     m_engine = nullptr;
 }

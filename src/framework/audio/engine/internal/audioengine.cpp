@@ -90,10 +90,10 @@ void AudioEngine::deinit()
 {
     ONLY_AUDIO_ENGINE_THREAD;
     if (m_inited) {
+        m_inited = false;
         m_buffer->setSource(nullptr);
         m_buffer = nullptr;
         m_mixer = nullptr;
-        m_inited = false;
     }
 }
 
