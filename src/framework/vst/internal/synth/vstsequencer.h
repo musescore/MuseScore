@@ -50,6 +50,8 @@ private:
     void addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta);
     void addSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);
 
+    void sortNoteOnEventsByPitch(EventSequenceMap& destination);
+
     VstEvent buildEvent(const Steinberg::Vst::Event::EventTypes type, const int32_t noteIdx, const float velocityFraction,
                         const float tuning) const;
 
