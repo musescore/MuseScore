@@ -705,7 +705,7 @@ int Transpose::transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepA
 
 Key Transpose::transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
 {
-    Key newKey = Key(transposeTpc(int(key), interval, false));
+    Key newKey = Key(transposeTpc(int(key) + 14, interval, false) - 14);
 
     // ignore prefer for octave transposing instruments
     if (interval.chromatic % PITCH_DELTA_OCTAVE == 0 && interval.diatonic % STEP_DELTA_OCTAVE == 0) {
