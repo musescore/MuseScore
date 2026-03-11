@@ -2371,12 +2371,26 @@ void EditStyle::textStyleChanged(int row)
 
         case TextStylePropertyType::TextAlign:
             textStyleAlign->setAlign(styleValue(a.sid).value<Align>());
-            resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            resetTextStyleAlign->setEnabled(
+                styleValue(a.sid) != defaultStyleValue(a.sid)
+                || [&ts, this]()->bool {    // OR Position is modified
+                const auto& b = std::find_if(ts->begin(), ts->end(), [](const auto& s){
+                    return s.type == TextStylePropertyType::Position;
+                });
+                return b != ts->end() && styleValue(b->sid) != defaultStyleValue(b->sid);
+            }());
             break;
 
         case TextStylePropertyType::Position:
             textStyleAlign->setPosition(styleValue(a.sid).value<AlignH>());
-            resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            resetTextStyleAlign->setEnabled(
+                styleValue(a.sid) != defaultStyleValue(a.sid)
+                || [&ts, this]()->bool { // OR TextAlign is modified
+                const auto& b = std::find_if(ts->begin(), ts->end(), [](const auto& s){
+                    return s.type == TextStylePropertyType::TextAlign;
+                });
+                return b != ts->end() && styleValue(b->sid) != defaultStyleValue(b->sid);
+            }());
             break;
 
         case TextStylePropertyType::Offset:
