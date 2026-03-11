@@ -51,6 +51,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
+class Drumset;
 class Lyrics;
 class Spanner;
 
@@ -683,6 +684,17 @@ public:
      * @since 4.7
     */
     Q_INVOKABLE bool setVoiceVisible(apiv1::Staff* staff, int voiceIndex, bool visible);
+
+    /** APIDOC
+     * Replaces the drumset of a part's percussion instrument.
+     * Use Instrument.cloneDrumset() to get a modifiable copy, then call Drumset.setDrum()
+     * to modify entries, and finally pass the modified drumset to this method.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Engraving.Drumset} drumset The new Drumset to apply.
+     * @since 4.7
+    */
+    Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Drumset* drumset);
 
     /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score

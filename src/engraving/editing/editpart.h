@@ -239,6 +239,8 @@ public:
 
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
+    static void replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset);
+
 private:
     static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };

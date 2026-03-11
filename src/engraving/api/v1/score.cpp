@@ -41,6 +41,7 @@
 #include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
+#include "instrument.h"
 #include "apitypes.h"
 
 using namespace mu::engraving::apiv1;
@@ -378,6 +379,35 @@ bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     }
 
     return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
+}
+
+void Score::replaceDrumset(Part* part, Drumset* drumset)
+{
+    if (!part) {
+        LOGW("replaceDrumset: part is null");
+        return;
+    }
+    if (!drumset) {
+        LOGW("replaceDrumset: drumset is null");
+        return;
+    }
+
+    // Find the instrumentId from the part's first instrument that has a drumset
+    mu::engraving::String instrumentId;
+    for (auto pair : part->part()->instruments()) {
+        mu::engraving::Instrument* instr = pair.second;
+        if (instr && instr->drumset()) {
+            instrumentId = instr->id();
+            break;
+        }
+    }
+
+    if (instrumentId.isEmpty()) {
+        LOGW("replaceDrumset: no percussion instrument found in part");
+        return;
+    }
+
+    mu::engraving::EditPart::replaceDrumset(score(), part->part(), instrumentId, *drumset->drumset());
 }
 
 //---------------------------------------------------------

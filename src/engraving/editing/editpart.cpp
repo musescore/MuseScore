@@ -704,3 +704,17 @@ bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool 
     score->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
     return true;
 }
+
+void EditPart::replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    for (auto pair : part->instruments()) {
+        Instrument* instrument = pair.second;
+        if (instrument && instrument->drumset() && instrument->id() == instrumentId) {
+            score->undo(new ChangeDrumset(instrument, newDrumset, part));
+        }
+    }
+}

@@ -718,15 +718,9 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    // Update all identical drumsets in the part...
     if (undoable) {
         startEdit(TranslatableString("undoableAction", "Edit drumset"));
-        for (auto pair : part->instruments()) {
-            Instrument* instrument = pair.second;
-            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
-                score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
-            }
-        }
+        EditPart::replaceDrumset(score(), part, instrumentKey.instrumentId, newDrumset);
         apply();
     } else {
         for (auto pair : part->instruments()) {

@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
@@ -35,6 +36,7 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/part.h"
 #include "engraving/api/v1/elements.h"
+#include "engraving/api/v1/instrument.h"
 #include "engraving/api/v1/apistructs.h"
 
 using namespace mu::engraving;
@@ -1190,5 +1192,100 @@ TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
     EXPECT_FALSE(result);
 
     delete apiStaff;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumset
+//   Test replacing a drumset and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumset)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    part->setInstrument(percInstrument);
+
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    // [WHEN] We replace the drumset with modified values
+    Drumset newDs(ds);
+    newDs.drum(36).name = u"Kick Drum";
+
+    score->startCmd(TranslatableString::untranslatable("Replace drumset test"));
+    EditPart::replaceDrumset(score, part, u"drumset", newDs);
+    score->endCmd();
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Kick Drum");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The drumset should be back to original
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumsetApi
+//   Test the Plugin API replaceDrumset workflow
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    domPart->setInstrument(percInstrument);
+
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Bass Drum");
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We clone the drumset via API, modify it, and replace
+    apiv1::Instrument apiInstr(domPart->instrument(), domPart);
+    apiv1::Drumset* cloned = apiInstr.cloneDrumset();
+    ASSERT_NE(cloned, nullptr);
+
+    cloned->setName(36, "Kick Drum");
+    apiScore.replaceDrumset(apiPart, cloned);
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Kick Drum");
+
+    delete cloned;
+    delete apiPart;
     delete domScore;
 }
