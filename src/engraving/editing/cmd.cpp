@@ -2274,22 +2274,18 @@ void Score::applyAccidentalToInputNotes(AccidentalType accidentalType)
 void Score::changeAccidental(AccidentalType idx)
 {
     for (EngravingItem* item : selection().elements()) {
-        Accidental* accidental = 0;
-        Note* note = 0;
         switch (item->type()) {
-        case ElementType::ACCIDENTAL:
-            accidental = toAccidental(item);
-
+        case ElementType::ACCIDENTAL: {
+            Accidental* accidental = toAccidental(item);
             if (accidental->accidentalType() == idx) {
                 changeAccidental(accidental->note(), AccidentalType::NONE);
             } else {
                 changeAccidental(accidental->note(), idx);
             }
-
             break;
+        }
         case ElementType::NOTE:
-            note = toNote(item);
-            changeAccidental(note, idx);
+            changeAccidental(toNote(item), idx);
             break;
         default:
             break;
@@ -2375,7 +2371,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
         return;
     }
     Fraction tick = segment->tick();
-    Staff* estaff = staff(chord->staffIdx() + chord->staffMove());
+    Staff* estaff = staff(chord->vStaffIdx());
     if (!estaff) {
         return;
     }
@@ -3152,7 +3148,12 @@ EngravingItem* Score::move(const String& cmd)
             el = box->nextMeasure()->first()->nextChordRest(0, false);
         }
         if (cr) {
-            el = nextMeasure(cr);
+            if (noteEntryMode() && cr->measure() == lastMeasure()) {
+                m_is.setBeyondScore(true);
+                el = lastMeasure()->lastChordRest(cr->track());
+            } else {
+                el = nextMeasure(cr);
+            }
         }
         if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
@@ -3161,18 +3162,29 @@ EngravingItem* Score::move(const String& cmd)
         if (box && box->prevMeasure() && box->prevMeasure()->first()) {
             el = box->prevMeasure()->first()->nextChordRest(0, false);
         }
-        if (cr) {
+        if (noteEntryMode() && m_is.beyondScore()) {
+            m_is.setBeyondScore(false);
+            el = lastMeasure()->first()->nextChordRest(m_is.track(), false);
+        } else if (cr) {
             el = prevMeasure(cr);
         }
         if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
         }
     } else if (cmd == u"next-system" && cr) {
-        el = cmdNextPrevSystem(cr, true);
-        if (noteEntryMode()) {
+        if (noteEntryMode() && cr->measure()->system()->endTick() == endTick()) {
+            m_is.setBeyondScore(true);
+            el = lastMeasure()->lastChordRest(cr->track());
+        } else {
+            el = cmdNextPrevSystem(cr, true);
+        }
+        if (el && noteEntryMode()) {
             m_is.moveInputPos(el);
         }
     } else if (cmd == u"prev-system" && cr) {
+        if (noteEntryMode() && m_is.beyondScore()) {
+            m_is.setBeyondScore(false);
+        }
         el = cmdNextPrevSystem(cr, false);
         if (noteEntryMode()) {
             m_is.moveInputPos(el);
@@ -3232,9 +3244,12 @@ EngravingItem* Score::move(const String& cmd)
         }
         setPlayNote(true);
         if (noteEntryMode()) {
-            // if cursor moved into a gap, selection cannot follow
-            // only select & play el if it was not already selected (does not normally happen)
-            if (m_is.cr() || !el->selected()) {
+            if (m_is.beyondScore()) {
+                // don't select el when cursor is beyond score
+                deselectAll();
+            } else if (m_is.cr() || !el->selected()) {
+                // if cursor moved into a gap, selection cannot follow
+                // only select & play el if it was not already selected (does not normally happen)
                 select(el, SelectType::SINGLE, 0);
             } else {
                 setPlayNote(false);

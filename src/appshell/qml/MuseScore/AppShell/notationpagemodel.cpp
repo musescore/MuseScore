@@ -317,6 +317,15 @@ void NotationPageModel::doUpdatePercussionPanelVisibility()
     }
 
     const mu::engraving::Score* score = notation->elements()->msScore();
+    if (score) {
+        const mu::engraving::InputState& inputState = score->inputState();
+        const mu::engraving::Staff* staff = inputState.staff();
+        if (inputState.noteEntryMode() && staff && staff->isDrumStaff(inputState.tick())) {
+            setPercussionPanelOpen(true);
+            return;
+        }
+    }
+
     const INotationSelectionPtr selection = notation->interaction()->selection();
     if (!score || !selection || selection->isNone()) {
         if (autoClose) {
