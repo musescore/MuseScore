@@ -34,6 +34,7 @@ std::vector<Interpolation::Point> Interpolation::quadraticBezierCurve(const Poin
     }
 
     std::vector<Point> interpolatedPoints;
+    interpolatedPoints.reserve(N);
 
     for (size_t i = 0; i <= N; ++i) {
         double t = static_cast<double>(i) / N;
