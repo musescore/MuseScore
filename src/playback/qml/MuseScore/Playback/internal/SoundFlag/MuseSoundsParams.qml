@@ -105,9 +105,14 @@ Item {
     StyledTextLabel {
         id: noOptionsLabel
 
+        width: parent.width
+
         text: qsTrc("playback", "Sound flag options are not available for this sound.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.Wrap
+        maximumLineCount: 2
+
+        displayTruncatedTextOnHover: true
 
         visible: root.noOptions
     }
