@@ -53,7 +53,6 @@ Text {
 
         sourceComponent: MouseArea {
             anchors.fill: parent
-            acceptedButtons: Qt.NoButton
             cursorShape: root.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
             hoverEnabled: true
 
