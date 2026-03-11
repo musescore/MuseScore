@@ -28,8 +28,8 @@
 namespace mu::engraving {
 struct Constants
 {
-    static constexpr int MSC_VERSION = 470;
-    static constexpr const char* MSC_VERSION_STR = "4.70";
+    static constexpr int MSC_VERSION = 500;
+    static constexpr const char* MSC_VERSION_STR = "5.00";
 
 // History:
 //    1.3   added staff->_barLineSpan
