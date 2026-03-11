@@ -40,6 +40,11 @@ target_sources(muse_media PRIVATE
     internal/ffmpeg/v8/ffmpeglibhandler.h
     internal/ffmpeg/v8/videoencoder.cpp
     internal/ffmpeg/v8/videoencoder.h
+
+    internal/ffmpeg/v7/ffmpeglibhandler.cpp
+    internal/ffmpeg/v7/ffmpeglibhandler.h
+    internal/ffmpeg/v7/videoencoder.cpp
+    internal/ffmpeg/v7/videoencoder.h
 )
 
 target_include_directories(muse_media PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg)

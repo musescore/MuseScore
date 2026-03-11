@@ -25,6 +25,9 @@
 #include "internal/ffmpeg/v8/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v8/videoencoder.h"
 
+#include "internal/ffmpeg/v7/ffmpeglibhandler.h"
+#include "internal/ffmpeg/v7/videoencoder.h"
+
 #include "io/path.h"
 #include "log.h"
 
@@ -110,8 +113,24 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
         } else {
             LOGW() << "FFmpeg libraries not found";
         }
-    }
-    break;
+    } break;
+    case FFMPEG_V7: {
+        auto ffmpegLibHandler = std::make_shared<ffmpeg::v7::FFmpegLibHandler>();
+        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
+                                      ffmpegLibsPaths.swScalePath)
+            && ffmpegLibHandler->loadApi()) {
+            ffmpegLibHandler->setVersion(version);
+            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
+
+            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
+
+            result.encoder = std::make_shared<ffmpeg::v7::VideoEncoder>(ffmpegLibHandler);
+            result.ffmpegLibsDir = ffmpegLibHandler->dir();
+            result.ffmpegVersion = ffmpegLibHandler->version();
+        } else {
+            LOGW() << "FFmpeg libraries not found";
+        }
+    } break;
     default:
         break;
     }
