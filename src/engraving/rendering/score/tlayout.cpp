@@ -4627,31 +4627,60 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
     }
 
     // Layout articulations
-    double articulationsTop = -_spatium * .5 * lineIdx + item->segmentSkylineTopY();
-    RectF rectWithArticulations = RectF(PointF(newBbox.x(), articulationsTop), newBbox.bottomRight());
+    bool distantArticulations = false;
+    double minDist = 0.4 * _spatium;
+    if ((!up && lineIdx > 1) || (up && lineIdx < item->staffType()->bottomLine() - 1)) {
+        minDist = _spatium;
+    }
 
+    // Extend bounding box for nearby articulations
     for (const SymId& artic: item->articulationIds()) {
-        bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
-        bool isLv = artic == SymId::articLaissezVibrerAbove || artic == SymId::articLaissezVibrerBelow;
-        double symH = item->symHeight(artic);
-
-        if (!up || isMarcato) {
-            double topY = rectWithArticulations.y();
-            if (topY > 0.0) {
-                topY = 0.0;
+        String articName = Articulation::symId2ArticulationName(artic);
+        const double symH = item->symHeight(artic);
+        if (articName == u"staccato" || articName == u"tenuto") {
+            if (!up) {
+                newBbox.setTop(newBbox.y() - minDist - symH);
+            } else {
+                newBbox.setBottom(newBbox.bottom() + minDist + symH);
             }
-
-            rectWithArticulations.setTop(topY - symH - _spatium);
         } else {
-            rectWithArticulations.setHeight(rectWithArticulations.height() + symH + _spatium);
-        }
-        if (isLv) {
-            const double width = item->symWidth(artic) - item->symWidth(item->noteheadSymbol()) / 2;
-            rectWithArticulations.setWidth(rectWithArticulations.width() + width);
+            distantArticulations = true;
         }
     }
 
-    newBbox.unite(rectWithArticulations);
+    // If there are any other articulations, extend bounding box to include whole staff
+    // And extend further to include those articulations
+    if (distantArticulations) {
+        minDist = 0.4 * _spatium;
+        const double staffTop = -_spatium * .5 * lineIdx;
+        const double staffBottom = -_spatium * .5 * (item->staffType()->bottomLine() - lineIdx);
+        if (newBbox.y() > staffTop) {
+            newBbox.setTop(staffTop);
+        }
+        if (newBbox.bottom() < staffBottom) {
+            newBbox.setBottom(staffBottom);
+        }
+
+        for (const SymId& artic: item->articulationIds()) {
+            String articName = Articulation::symId2ArticulationName(artic);
+            const double symH = item->symHeight(artic);
+            bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
+            bool isLv = artic == SymId::articLaissezVibrerAbove || artic == SymId::articLaissezVibrerBelow;
+            if (articName == u"staccato" || articName == u"tenuto") {
+                continue;
+            } else {
+                if (!up || isMarcato) {
+                    newBbox.setTop(newBbox.y() - minDist - symH);
+                } else {
+                    newBbox.setBottom(newBbox.bottom() + minDist + symH);
+                }
+            }
+            if (isLv) {
+                const double width = item->symWidth(artic) - item->symWidth(item->noteheadSymbol()) / 2;
+                newBbox.setWidth(newBbox.width() + width);
+            }
+        }
+    }
 
     item->setbbox(newBbox);
 }
