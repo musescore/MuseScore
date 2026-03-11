@@ -19,7 +19,6 @@
       <lyricsEvenFontSize>11</lyricsEvenFontSize>
       <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
       <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
-      <romanNumeralFontFace>FreeSerif</romanNumeralFontFace>
       <nashvilleNumberFontFace>FreeSerif</nashvilleNumberFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
