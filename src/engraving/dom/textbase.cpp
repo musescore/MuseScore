@@ -281,17 +281,26 @@ RectF TextCursor::cursorRect() const
     const TextBlock& tline       = curLine();
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
-    Font _font  = fragment ? fragment->font(m_text) : m_text->font();
+    Font _font = fragment ? fragment->font(m_text) : m_text->font();
     if (fragment) {
         // Ensure the cursor height matches that of the associated text font
-        TextLayout::substituteMusicSymbolFontWithMusicSymbolText(_font, fragment->format.fontSize());
+        TextLayout::substituteMusicFont(_font, fragment->calculatedFontSize(m_text));
     }
+    const FontMetrics fm(_font);
 
-    double ascent = FontMetrics::ascent(_font);
-    double h = ascent;
+    double fontCapHeight = fm.capHeight();
+    double fontAscent = fm.ascent();
+
+    // Bravura Text returns small values for its cap heights
+    double cursorCapHeight = fontCapHeight > 0 && _font.family().id() != u"Bravura Text"
+                             ? std::min(fontCapHeight, fontAscent) : fontAscent;
+    double cursorDescent = cursorCapHeight * .3;
+
+    double h = cursorCapHeight + 2 * cursorDescent; // symmetrical cursor
+    double w = std::max(2.0, cursorCapHeight / 16.0);
     double x = tline.xpos(column(), m_text);
-    double y = tline.y() - ascent * .9;
-    return RectF(x, y, 4.0, h);
+    double y = tline.y() + cursorDescent - h;
+    return RectF(x - w / 2, y, w, h);
 }
 
 RectF TextCursor::cursorCanvasRect() const
@@ -867,21 +876,7 @@ Font TextFragment::font(const TextBase* t) const
 {
     Font font;
 
-    double m = format.fontSize();
-    double spatiumScaling = 0.0;
-
-    if (t->isInstrumentName()) {
-        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / t->defaultSpatium();
-    } else {
-        spatiumScaling = t->spatium() / t->defaultSpatium();
-    }
-
-    if (t->sizeIsSpatiumDependent()) {
-        m *= spatiumScaling;
-    }
-    if (format.valign() != VerticalAlignment::AlignNormal) {
-        m *= SUBSCRIPT_SIZE;
-    }
+    double m = calculatedFontSize(t);
 
     String family;
     Font::Type fontType = Font::Type::Unknown;
@@ -894,7 +889,7 @@ Font TextFragment::font(const TextBase* t) const
             m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
             m *= t->getProperty(Pid::MUSICAL_SYMBOLS_SCALE).toDouble();
             if (t->sizeIsSpatiumDependent()) {
-                m *= spatiumScaling;
+                m *= t->spatiumScaling();
             }
 
             if (t->style().styleB(Sid::dynamicsOverrideFont)) {
@@ -905,13 +900,16 @@ Font TextFragment::font(const TextBase* t) const
             // We use a default font size of 10pt for historical reasons,
             // but SMuFL standard is 20pt so multiply x2 here.
             m *= 2;
+
+            m *= t->mag();
         } else if (t->hasSymbolSize()) {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
             m = t->getProperty(Pid::MUSIC_SYMBOL_SIZE).toDouble();
             if (t->sizeIsSpatiumDependent()) {
-                m *= spatiumScaling;
+                m *= t->spatiumScaling();
             }
+            m *= t->mag();
         }
         // check if all symbols are available
         font.setFamily(family, fontType);
@@ -931,8 +929,27 @@ Font TextFragment::font(const TextBase* t) const
     font.setFamily(family, fontType);
     assert(m > 0.0);
 
-    font.setPointSizeF(m * t->mag());
+    font.setPointSizeF(m);
     return font;
+}
+
+//---------------------------------------------------------
+//   calculatedFontSize
+//---------------------------------------------------------
+
+double TextFragment::calculatedFontSize(const TextBase* t) const
+{
+    double size = format.fontSize();
+
+    if (t->sizeIsSpatiumDependent()) {
+        size *= t->spatiumScaling();
+    }
+    if (format.valign() != VerticalAlignment::AlignNormal) {
+        size *= SUBSCRIPT_SIZE;
+    }
+
+    assert(size > 0.0);
+    return size * t->mag();
 }
 
 void TextFragment::resolveFallback(muse::draw::Font::Type fontType, const muse::draw::FontMetrics& fm,
@@ -3432,5 +3449,18 @@ bool mu::engraving::TextBase::hasSymbolScale() const
                           || (parent() && parent()->isPedalSegment());
 
     return hasSymbolScale;
+}
+
+double TextBase::spatiumScaling() const
+{
+    double spatiumScaling;
+
+    if (isInstrumentName()) {
+        spatiumScaling = toInstrumentName(this)->largestStaffSpatium() / defaultSpatium();
+    } else {
+        spatiumScaling = spatium() / defaultSpatium();
+    }
+
+    return spatiumScaling;
 }
 }

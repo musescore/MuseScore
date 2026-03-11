@@ -241,6 +241,7 @@ public:
 
     TextFragment split(int column);
     muse::draw::Font font(const TextBase*) const;
+    double calculatedFontSize(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
 
@@ -514,6 +515,8 @@ public:
 
     bool hasSymbolScale() const;
     bool hasSymbolSize() const { return !hasSymbolScale(); }
+
+    double spatiumScaling() const;
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
