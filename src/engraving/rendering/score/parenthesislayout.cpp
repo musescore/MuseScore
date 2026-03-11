@@ -37,7 +37,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-static constexpr double maxMidPointThicknessSpRatio = 0.2;
+static constexpr Spatium MAX_MID_THICKNESS = 0.2_sp;
 
 void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx)
 {
@@ -267,7 +267,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     const double height = ldata->height;
     const double xPos = ldata->pos().x();
     const double mag = ldata->mag();
-    const double maxMidPointThickness = maxMidPointThicknessSpRatio * spatium;
+    const double maxMidPointThickness = MAX_MID_THICKNESS.toAbsolute(spatium);
     const double midPointThickness = std::min(ldata->midPointThickness.value(), maxMidPointThickness);
 
     const double heightInSpatium = height / spatium;
@@ -434,30 +434,14 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
 
     const StaffType* st = chord->staffType();
     const bool isTab = st->isTabStaff();
-    if (isTab) {
-        ldata->startY = notesShape.top();
-        ldata->height = notesShape.bbox().height();
-        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.36) * ldata->mag());
-        ldata->endPointThickness.set_value(0.05);
-    } else {
-        ldata->startY = notesShape.top() - 0.25 * item->spatium();
-        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
-        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.33) * ldata->mag());
-        ldata->endPointThickness.set_value(0.05);
-    }
 
-    // Only switch to the normalized low-scale variant when the raw thickness
-    // becomes clamp-driven at very small spatium scales, which otherwise
-    // produces disproportionately thick parentheses in custom renderers.
-    const double sp = item->spatium();
-    const double clampLimit = maxMidPointThicknessSpRatio * sp;
-    const double midPointThickness = ldata->midPointThickness.value();
-    if (muse::RealIsEqualOrMore(midPointThickness, clampLimit * 0.95)) {
+    auto calculateMidPointThickness = [item, ldata, isTab]() -> double {
+        const double sp = item->spatium();
         const double sp0 = item->defaultSpatium();
 
         IF_ASSERT_FAILED(sp > 0.0 && sp0 > 0.0) {
             LOGE() << "spatium or default spatium is 0";
-            return;
+            return 0.0;
         }
 
         const double exponent = isTab ? 0.36 : 0.33;
@@ -472,8 +456,18 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
                                            * scaleNormalization
                                            * ldata->mag();
 
-        ldata->midPointThickness.set_value(normalizedThickness);
+        return normalizedThickness;
+    };
+
+    if (isTab) {
+        ldata->startY = notesShape.top();
+        ldata->height = notesShape.bbox().height();
+    } else {
+        ldata->startY = notesShape.top() - 0.25 * item->spatium();
+        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
     }
+    ldata->midPointThickness.set_value(calculateMidPointThickness());
+    ldata->endPointThickness.set_value(0.05);
 }
 
 void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
