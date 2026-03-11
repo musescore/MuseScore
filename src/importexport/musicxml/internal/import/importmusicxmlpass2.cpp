@@ -6615,22 +6615,8 @@ static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
  Set the notehead parameters.
  */
 
-static void setNoteHead(Note* note, const Color noteheadColor, const bool noteheadParentheses, const String& noteheadFilled)
+static void setNoteHead(Note* note, const String& noteheadFilled)
 {
-    Score* const score = note->score();
-
-    colorItem(note, noteheadColor);
-    if (noteheadParentheses) {
-        Symbol* s = new Symbol(note);
-        s->setSym(SymId::noteheadParenthesisLeft);
-        s->setParent(note);
-        score->addElement(s);
-        s = new Symbol(note);
-        s->setSym(SymId::noteheadParenthesisRight);
-        s->setParent(note);
-        score->addElement(s);
-    }
-
     if (noteheadFilled == u"no") {
         note->setHeadType(NoteHeadType::HEAD_HALF);
     } else if (noteheadFilled == u"yes") {
@@ -7260,7 +7246,11 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
             c->add(stem);
         }
-        setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+        setNoteHead(note, noteheadFilled);
+        if (noteheadParentheses) {
+            note->setParenthesesMode(ParenthesesMode::BOTH);
+        }
+        colorItem(note, noteheadColor);
         note->setVisible(hasHead && printObject);
         stem->setVisible(printObject);
 
