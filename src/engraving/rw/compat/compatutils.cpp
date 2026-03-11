@@ -966,6 +966,22 @@ Sid CompatUtils::positionStyleFromAlign(Sid align)
     return muse::value(ALIGN_VALS_TO_CONVERT, align, Sid::NOSTYLE);
 }
 
+void CompatUtils::setPositionStylesFromAlign(MStyle* style, std::vector<Sid> ignoreSids)
+{
+    // Make sure new position styles are initially the same as align values
+    for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
+        if (muse::contains(ignoreSids, st.sid)) {
+            continue;
+        }
+        Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
+        if (positionSid == Sid::NOSTYLE) {
+            continue;
+        }
+        AlignH val = style->value(st.sid).value<Align>().horizontal;
+        style->set(positionSid, val);
+    }
+}
+
 void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
 {
     tl->setBeginTextPosition(tl->beginTextAlign().horizontal);
@@ -982,7 +998,7 @@ void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
     }
 }
 
-void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
+void compat::CompatUtils::setMusicSymbolSize470(MStyle* style)
 {
     // Music symbols have their own point size in 4.7
     // Initialize this to the text type's default font size
@@ -1009,12 +1025,12 @@ void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
             continue;
         }
 
-        double size = style.value(fontSizeSid).toDouble();
+        double size = style->value(fontSizeSid).toDouble();
         if (textStyleType == TextStyleType::TEMPO) {
             size *= TempoText::DEFAULT_SYM_SIZE_RATIO;
         }
 
-        style.set(musicSymbolSizeSid, size);
+        style->set(musicSymbolSizeSid, size);
     }
 }
 

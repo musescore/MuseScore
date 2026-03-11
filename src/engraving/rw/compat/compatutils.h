@@ -47,13 +47,14 @@ public:
     static void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s);
     static const std::set<SymId> ORNAMENT_IDS;
     static const std::map<Sid, Sid> ALIGN_VALS_TO_CONVERT;
-    static Sid positionStyleFromAlign(Sid align);
+    static void setPositionStylesFromAlign(MStyle* style, std::vector<Sid> ignoreSids = {});
     static void setTextLineTextPositionFromAlign(TextLineBase* tl);
-    static void setMusicSymbolSize470(MStyle& style);
+    static void setMusicSymbolSize470(MStyle* style);
     static Spatium convertPre470FrameRadius(double frameRadius);
     static void doMigrateNoteParens(EngravingItem* item);
 
 private:
+    static Sid positionStyleFromAlign(Sid align);
     static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);
     static void replaceOldWithNewOrnaments(MasterScore* score);
     static void replaceOldWithNewExpressions(MasterScore* score);
