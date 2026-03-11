@@ -334,6 +334,8 @@ PropertyValue GuitarBend::getProperty(Pid id) const
         return static_cast<int>(showHoldLine());
     case Pid::BEND_START_TIME_FACTOR:
         return startTimeFactor();
+    case Pid::BEND_TARGET_TIME_FACTOR:
+        return m_targetTimeFactor.has_value() ? m_targetTimeFactor.value() : PropertyValue();
     case Pid::BEND_END_TIME_FACTOR:
         return endTimeFactor();
     case Pid::GUITAR_DIVE_TAB_POS:
@@ -360,6 +362,13 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::BEND_START_TIME_FACTOR:
         setStartTimeFactor(v.toReal());
+        break;
+    case Pid::BEND_TARGET_TIME_FACTOR:
+        if (v.isValid()) {
+            setTargetTimeFactor(v.toReal());
+        } else {
+            m_targetTimeFactor = std::nullopt;
+        }
         break;
     case Pid::BEND_END_TIME_FACTOR:
         setEndTimeFactor(v.toReal());
@@ -405,16 +414,21 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
     case Pid::BEND_SHOW_HOLD_LINE:
         return static_cast<int>(GuitarBendShowHoldLine::AUTO);
     case Pid::BEND_START_TIME_FACTOR:
-        if (m_bendType == GuitarBendType::DIP) {
-            return DIP_DEFAULT_START_TIME_FACTOR;
-        }
         return 0.f;
+    case Pid::BEND_TARGET_TIME_FACTOR:
+        if (m_bendType == GuitarBendType::DIP) {
+            return 0.25f;
+        }
+        return {};
     case Pid::BEND_END_TIME_FACTOR:
         if (m_bendType == GuitarBendType::GRACE_NOTE_BEND) {
-            return GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR;
+            return 0.25f;
+        }
+        if (m_bendType == GuitarBendType::SCOOP) {
+            return 0.25f;
         }
         if (m_bendType == GuitarBendType::DIP) {
-            return DIP_DEFAULT_END_TIME_FACTOR;
+            return 0.5f;
         }
         return 1.f;
     case Pid::GUITAR_DIVE_TAB_POS:
@@ -786,7 +800,7 @@ void GuitarBend::updateHoldLine()
         Chord* guessedEndChord = startOfHold->chord()->next();
         if (guessedEndChord) {
             for (Note* note : guessedEndChord->notes()) {
-                if (note->isPreBendStart()) {
+                if (note->isPreBendOrDiveStart()) {
                     endOfHold = note;
                     break;
                 }
@@ -1070,6 +1084,16 @@ void GuitarBend::setBendType(GuitarBendType t)
     resetProperty(Pid::GUITAR_BEND_AMOUNT);
     resetProperty(Pid::BEND_START_TIME_FACTOR);
     resetProperty(Pid::BEND_END_TIME_FACTOR);
+    resetProperty(Pid::BEND_TARGET_TIME_FACTOR);
+}
+
+void GuitarBend::setTargetTimeFactor(float f)
+{
+    IF_ASSERT_FAILED(muse::RealIsEqualOrLess(f, endTimeFactor())) {
+        return;
+    }
+
+    m_targetTimeFactor = f;
 }
 
 /****************************************

@@ -350,7 +350,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (articulations.contains(ArticulationType::Multibend)) {
+    if (!noteEvent.pitchCtx().pitchCurve.empty() && articulations.contains(ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId, track);
     }
 
@@ -447,30 +447,38 @@ void MuseSamplerSequencer::addSyllableEvent(const mpe::SyllableEvent& event, lon
 
 void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
-    const duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    auto addPitchBendEvent = [this, noteEventId, track](long long startUs, long long durationUs, pitch_level_t pitchOffset) {
+        ms_PitchBendInfo pitchBend;
+        pitchBend.event_id = noteEventId;
+        pitchBend._start_us = startUs;
+        pitchBend._duration_us = durationUs;
+        pitchBend._offset_cents = pitchLevelToCents(pitchOffset);
+        pitchBend._type = PitchBend_Bezier;
+        m_samplerLib->addPitchBend(m_sampler, track, pitchBend);
+    };
+
     const PitchCurve& pitchCurve = noteEvent.pitchCtx().pitchCurve;
+    const duration_t noteDuration = noteEvent.arrangementCtx().actualDuration;
+    const pitch_level_t startPitchOffset = muse::value(pitchCurve, 0, 0);
+    long long startOffsetUs = 0;
+
+    if (startPitchOffset != 0) {
+        startOffsetUs = 1000; // 1ms
+        addPitchBendEvent(0, startOffsetUs, startPitchOffset);
+    }
 
     for (auto it = pitchCurve.begin(); it != pitchCurve.end(); ++it) {
         auto nextIt = std::next(it);
-        if (nextIt == pitchCurve.end()) {
+        if (nextIt == pitchCurve.end() || nextIt->second == it->second) {
             continue;
         }
 
-        if (nextIt->second == it->second) {
-            continue;
-        }
+        const long long currOffsetStartUs = noteDuration * percentageToFactor(it->first);
+        const long long nextOffsetStartUs = noteDuration * percentageToFactor(nextIt->first);
+        const long long startUs = currOffsetStartUs + startOffsetUs;
+        const long long durationUs = nextOffsetStartUs - currOffsetStartUs - startOffsetUs;
 
-        const long long currOffsetStart = duration * percentageToFactor(it->first);
-        const long long nextOffsetStart = duration * percentageToFactor(nextIt->first);
-
-        ms_PitchBendInfo pitchBend;
-        pitchBend.event_id = noteEventId;
-        pitchBend._start_us = currOffsetStart;
-        pitchBend._duration_us = nextOffsetStart - currOffsetStart;
-        pitchBend._offset_cents = pitchLevelToCents(nextIt->second);
-        pitchBend._type = PitchBend_Bezier;
-
-        m_samplerLib->addPitchBend(m_sampler, track, pitchBend);
+        addPitchBendEvent(startUs, durationUs, nextIt->second);
     }
 }
 

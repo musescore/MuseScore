@@ -59,10 +59,6 @@ class GuitarBend final : public SLine
     M_PROPERTY2(float, endTimeFactor, setEndTimeFactor, 1.f)
 
 public:
-    static constexpr float GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR = 0.25f;
-    static constexpr float DIP_DEFAULT_START_TIME_FACTOR = 0.25;
-    static constexpr float DIP_DEFAULT_END_TIME_FACTOR = 0.5;
-
     GuitarBend(EngravingItem* parent);
     GuitarBend(const GuitarBend&);
     ~GuitarBend() override;
@@ -130,6 +126,9 @@ public:
     bool isSlack() const { return m_isSlack; }
     void setIsSlack(bool v) { m_isSlack = v; }
 
+    std::optional<float> targetTimeFactor() const { return m_targetTimeFactor; }
+    void setTargetTimeFactor(float v);
+
     struct LayoutData : public SLine::LayoutData
     {
     public:
@@ -166,6 +165,7 @@ private:
     DirectionV m_diveTabPos = DirectionV::AUTO;
     VibratoType m_dipVibratoType = VibratoType::NONE;
     bool m_isSlack = false;
+    std::optional<float> m_targetTimeFactor;
 };
 
 class GuitarBendText; // forward decl
