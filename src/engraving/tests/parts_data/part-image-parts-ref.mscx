@@ -148,6 +148,7 @@
                   <eid>M_M</eid>
                   <z>9399</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                  <size w="32.12" h="32.16"/>
                   </Image>
                 <eid>N_N</eid>
                 <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
@@ -926,6 +927,7 @@
                     <eid>FC_FC</eid>
                     <z>9399</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
+                    <size w="32.12" h="32.16"/>
                     </Image>
                   <eid>GC_GC</eid>
                   <linkedTo>N_N</linkedTo>
