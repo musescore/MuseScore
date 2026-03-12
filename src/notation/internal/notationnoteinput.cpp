@@ -766,7 +766,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     }
 
     const mu::engraving::track_idx_t track = inputState.track() == muse::nidx ? 0 : inputState.track();
-    const mu::engraving::staff_idx_t staffIdx = track2staff(track);
+    const mu::engraving::staff_idx_t staffIdx = mu::engraving::track2staff(track);
 
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
@@ -784,7 +784,7 @@ muse::RectF NotationNoteInput::cursorRect() const
     const RectF segmentContentRect = ::segmentContentRect(segment, track);
     double x = segmentContentRect.x() + segment->pagePos().x();
 
-    const mu::engraving::Millimetre barNoteDist = score()->style().styleMM(Sid::barNoteDistance);
+    const mu::engraving::Millimetre barNoteDist = score()->style().styleMM(mu::engraving::Sid::barNoteDistance);
     if (segment->x() < barNoteDist) {
         x += barNoteDist - segment->x();
     }
