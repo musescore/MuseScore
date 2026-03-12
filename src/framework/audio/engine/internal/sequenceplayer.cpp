@@ -37,9 +37,21 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextP
     : Contextable(iocCtx), m_getTracks(getTracks), m_clock(std::make_shared<Clock>())
 {
     m_clock->setOnAction([this](const IClock::ActionType type, const msecs_t time) {
-        ONLY_AUDIO_PROC_THREAD;
+        ONLY_AUDIO_RPC_OR_PROC_THREAD;
 
         switch (type) {
+            case IClock::ActionType::StatusChanged: {
+                const bool active = m_clock->status() == PlaybackStatus::Running;
+
+                if (!m_countDownIsSet) {
+                    audioEngine()->mixer()->setIsActive(active);
+                } else if (!active) {
+                    flushAllTracks();
+                }
+
+                m_playbackStatusChanged.send(m_clock->status());
+                break;
+            }
             case IClock::ActionType::Seek: {
                 if (m_tracksFollowClockSeek) {
                     seekAllTracks(time);
@@ -53,16 +65,6 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextP
                 m_countDownIsSet = false;
                 audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
                 break;
-        }
-    });
-
-    m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
-        const bool active = status == PlaybackStatus::Running;
-
-        if (!m_countDownIsSet) {
-            audioEngine()->mixer()->setIsActive(active);
-        } else if (!active) {
-            flushAllTracks();
         }
     });
 
@@ -200,7 +202,7 @@ Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->statusChanged();
+    return m_playbackStatusChanged;
 }
 
 void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs, bool flushSound)
