@@ -51,7 +51,7 @@ void Clock::forward(const msecs_t nextMsecs)
         return;
     } else if (m_countDown != 0) {
         m_countDown = 0;
-        m_countDownEnded.notify();
+        onAction(ActionType::CountDownEnded, m_currentTime);
     }
 
     msecs_t newTime = m_currentTime + nextMsecs;
@@ -151,11 +151,6 @@ void Clock::resetTimeLoop()
 void Clock::setCountDown(const msecs_t duration)
 {
     m_countDown = duration;
-}
-
-async::Notification Clock::countDownEnded() const
-{
-    return m_countDownEnded;
 }
 
 bool Clock::isRunning() const

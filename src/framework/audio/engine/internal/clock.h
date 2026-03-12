@@ -52,7 +52,6 @@ public:
     void resetTimeLoop() override;
 
     void setCountDown(const msecs_t duration) override;
-    async::Notification countDownEnded() const override;
 
     msecs_t currentTime() const override;
     async::Channel<secs_t> timeChanged() const override;
@@ -71,7 +70,6 @@ private:
     msecs_t m_countDown = 0;
 
     async::Channel<secs_t> m_timeChangedInSecs;
-    async::Notification m_countDownEnded;
 
     OnActionFunc m_onActionFunc;
 };
