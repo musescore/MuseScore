@@ -1289,3 +1289,163 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
     delete apiPart;
     delete domScore;
 }
+
+//---------------------------------------------------------
+//   testInsertPart
+//   Test inserting a part at a given index and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part1 = new Part(score);
+    score->appendPart(part1);
+    score->appendStaff(Factory::createStaff(part1));
+
+    Instrument instr1;
+    instr1.setId(u"test.first");
+    part1->setInstrument(instr1);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    // Load instrument templates so searchTemplate works
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We insert a part at index 0
+    score->startCmd(TranslatableString::untranslatable("Insert part test"));
+    EditPart::insertPart(score, violinTempl, 0);
+    score->endCmd();
+
+    // [THEN] Two parts should exist, the new one at index 0
+    EXPECT_EQ(score->parts().size(), 2);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to one part
+    EXPECT_EQ(score->parts().size(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplacePart
+//   Test replacing a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    part->setInstrument(instr);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We replace the part
+    score->startCmd(TranslatableString::untranslatable("Replace part test"));
+    EditPart::replacePart(score, part, violinTempl);
+    score->endCmd();
+
+    // [THEN] The part should be replaced with violin
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to the original part
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"test.original");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testInsertPartApi
+//   Test the Plugin API Score::insertPart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We insert a part via API
+    apiScore.insertPart("violin", 0);
+
+    // [THEN] Two parts should exist
+    EXPECT_EQ(domScore->parts().size(), 2);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplacePartApi
+//   Test the Plugin API Score::replacePart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    domPart->setInstrument(instr);
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We replace the part via API
+    apiScore.replacePart(apiPart, "violin");
+
+    // [THEN] The part should be replaced
+    EXPECT_EQ(domScore->parts().size(), 1);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete apiPart;
+    delete domScore;
+}

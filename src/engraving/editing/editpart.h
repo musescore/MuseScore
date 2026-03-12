@@ -205,6 +205,7 @@ public:
     UNDO_NAME("SetUserBankController")
 };
 
+class InstrumentTemplate;
 class Staff;
 class StaffType;
 enum class PreferSharpFlat : char;
@@ -240,6 +241,9 @@ public:
     static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
 
     static void replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset);
+
+    static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
+    static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
 
 private:
     static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);

@@ -410,6 +410,33 @@ void Score::replaceDrumset(Part* part, Drumset* drumset)
     mu::engraving::EditPart::replaceDrumset(score(), part->part(), instrumentId, *drumset->drumset());
 }
 
+void Score::insertPart(const QString& instrumentId, int index)
+{
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("insertPart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::insertPart(score(), t, static_cast<size_t>(index));
+}
+
+void Score::replacePart(Part* part, const QString& instrumentId)
+{
+    if (!part) {
+        LOGW("replacePart: part is null");
+        return;
+    }
+
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("replacePart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::replacePart(score(), part->part(), t);
+}
+
 //---------------------------------------------------------
 //   Score::firstSegment
 //---------------------------------------------------------

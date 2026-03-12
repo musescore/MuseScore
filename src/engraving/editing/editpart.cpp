@@ -27,6 +27,7 @@
 #include "../dom/excerpt.h"
 #include "../dom/factory.h"
 #include "../dom/instrchange.h"
+#include "../dom/instrtemplate.h"
 #include "../dom/masterscore.h"
 #include "../dom/mscore.h"
 #include "../dom/part.h"
@@ -703,6 +704,38 @@ bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool 
 
     score->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
     return true;
+}
+
+void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t index)
+{
+    if (!score || !templ) {
+        return;
+    }
+
+    Part* part = new Part(score);
+    part->initFromInstrTemplate(templ);
+
+    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
+        Staff* staff = Factory::createStaff(part);
+        StaffType* stt = staff->staffType(Fraction(0, 1));
+        staff->init(templ, stt, int(i));
+        score->undoInsertStaff(staff, i);
+    }
+
+    score->undoInsertPart(part, index);
+    score->setUpTempoMapLater();
+    score->masterScore()->rebuildMidiMapping();
+}
+
+void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ)
+{
+    if (!score || !oldPart || !templ) {
+        return;
+    }
+
+    size_t partIndex = muse::indexOf(score->parts(), oldPart);
+    score->cmdRemovePart(oldPart);
+    insertPart(score, templ, partIndex);
 }
 
 void EditPart::replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset)

@@ -697,6 +697,27 @@ public:
     Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Drumset* drumset);
 
     /** APIDOC
+     * Inserts a part with the instrument defined by `instrumentId` at the given index.
+     * @method
+     * @param {String} instrumentId ID of the instrument to be added,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @param {Number} index The position to insert the part at (0 = first).
+     * @since 4.7
+    */
+    Q_INVOKABLE void insertPart(const QString& instrumentId, int index);
+
+    /** APIDOC
+     * Replaces a part with a new instrument, keeping the same position.
+     * This removes the old part and inserts a new one with the given instrument.
+     * @method
+     * @param {Engraving.Part} part The Part to replace.
+     * @param {String} instrumentId ID of the new instrument,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @since 4.7
+    */
+    Q_INVOKABLE void replacePart(apiv1::Part* part, const QString& instrumentId);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor
