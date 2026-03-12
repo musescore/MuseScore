@@ -2420,7 +2420,6 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
     Color penColor = item->curColor(opt);
 
     Pen pen(penColor);
-    double mag = item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
 
     if (item->ldata()->symId != SymId::noSym) {
         painter->setPen(pen);
@@ -2431,7 +2430,7 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const Pa
     painter->setBrush(Brush(pen.color()));
     pen.setCapStyle(PenCapStyle::RoundCap);
     pen.setJoinStyle(PenJoinStyle::RoundJoin);
-    pen.setWidthF(item->ldata()->endPointThickness * item->spatium() * mag);
+    pen.setWidthF(item->ldata()->endPointThickness * item->spatium() * item->ldata()->intrinsicMag());
 
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());

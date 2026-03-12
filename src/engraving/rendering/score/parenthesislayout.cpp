@@ -418,6 +418,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     Chord* chord = toChord(item->parentItem());
 
     ldata->setMag(chord->mag());
+    ldata->intrinsicMag = chord->intrinsicMag();
 
     Shape notesShape;
 
@@ -457,7 +458,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         const double scaleNormalization = sp / std::pow(sp0, exponentComplement);
         const double normalizedThickness = std::pow(normalizedHeight, exponent)
                                            * scaleNormalization
-                                           * ldata->mag();
+                                           * ldata->intrinsicMag;
 
         return normalizedThickness;
     };
