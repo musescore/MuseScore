@@ -61,7 +61,7 @@ public:
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
-    void seekAllTracks(const msecs_t newPositionMsecs, bool flushSound);
+    void seekAllTracks(const msecs_t newPositionMsecs, bool flushSound = true);
     void flushAllTracks();
 
     using AllTracksReadyCallback = std::function<void ()>;
@@ -74,5 +74,6 @@ private:
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
 
     bool m_tracksFollowClockSeek = true;
+    msecs_t m_loopStart = 0;
 };
 }

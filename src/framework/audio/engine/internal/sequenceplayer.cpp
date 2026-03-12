@@ -36,16 +36,19 @@ using namespace muse::async;
 SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextPtr& iocCtx)
     : Contextable(iocCtx), m_getTracks(getTracks), m_clock(std::make_shared<Clock>())
 {
-    m_clock->setOnAction([this](const IClock::ActionType type, const msecs_t) {
+    m_clock->setOnAction([this](const IClock::ActionType type, const msecs_t time) {
         ONLY_AUDIO_PROC_THREAD;
 
-        if (type != IClock::ActionType::Seek && type != IClock::ActionType::LoopEndReached) {
-            return;
-        }
-
-        if (m_tracksFollowClockSeek) {
-            const bool flushSound = type == IClock::ActionType::Seek;
-            seekAllTracks(m_clock->currentTime(), flushSound);
+        switch (type) {
+            case IClock::ActionType::Seek: {
+                if (m_tracksFollowClockSeek) {
+                    seekAllTracks(time);
+                }
+                break;
+            }
+            case IClock::ActionType::LoopEndReached:
+                m_clock->seek(m_loopStart);
+                break;
         }
     });
 
@@ -157,7 +160,12 @@ Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->setTimeLoop(fromMsec * 1000, toMsec * 1000);
+    Ret ret = m_clock->setTimeLoop(m_loopStart, toMsec * 1000);
+    if (ret) {
+        m_loopStart = fromMsec * 1000;
+    }
+
+    return ret;
 }
 
 void SequencePlayer::resetLoop()
@@ -165,6 +173,7 @@ void SequencePlayer::resetLoop()
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock->resetTimeLoop();
+    m_loopStart = 0;
 }
 
 secs_t SequencePlayer::playbackPosition() const
