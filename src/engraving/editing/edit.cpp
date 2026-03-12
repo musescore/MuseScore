@@ -6172,7 +6172,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange, Clef* clefToRelink)
+void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, int forInstrumentChange, Clef* clefToRelink)
 {
     IF_ASSERT_FAILED(ostaff && e) {
         return;
@@ -6210,6 +6210,14 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
     Fraction tick = e->tick();
     Fraction rtick = e->rtick();
     bool isSmall = (st == SegmentType::Clef);
+    bool isIC = (forInstrumentChange >= 1000);
+    ClefType cp = ct; 
+    ClefType tp = ct; 
+    if (isIC) {
+        int val = forInstrumentChange - 1000;
+        cp = static_cast<ClefType>(static_cast<unsigned char>(val & 0xFF));
+        tp = static_cast<ClefType>(static_cast<unsigned char>((val >> 8) & 0xFF));
+    }
     for (Staff* staff : ostaff->staffList()) {
         if (clefToRelink && ostaff == staff) {
             continue;
@@ -6239,7 +6247,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
+        if (ClefInfo::staffGroup(ct) != staffGroup && !isIC) {
             continue;
         }
 
@@ -6249,8 +6257,8 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             // clef type for concertPitch
             //
             Instrument* i = staff->part()->instrument(tick);
-            ClefType cp, tp;
-            if (i->transpose().isZero()) {
+            if (!isIC) {
+                if (i->transpose().isZero()) {
                 cp = ct;
                 tp = ct;
             } else {
@@ -6260,8 +6268,10 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 } else {
                     cp = clef->concertClef();
                     tp = ct;
+
                 }
             }
+        }
             clef->setGenerated(false);
             score->undo(new ChangeClefType(clef, cp, tp));
             Clef* oClef = clef->otherClef();
@@ -6285,7 +6295,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 clef->setScore(score);
             } else {
                 clef = Factory::createClef(score->dummy()->segment());
-                clef->setClefType(ct);
+    if (isIC) { 
+        clef->setTransposingClef(tp);
+        clef->setConcertClef(cp);
+                } else{
+                    clef->setClefType(ct);
+                }
                 gclef = clef;
             }
             clef->setTrack(track);
@@ -6293,7 +6308,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             clef->setIsHeader(st == SegmentType::HeaderClef);
             score->doUndoAddElement(clef);
         }
-        if (forInstrumentChange) {
+        if (isIC) {
             clef->setForInstrumentChange(true);
         }
         clef->setSmall(isSmall);
