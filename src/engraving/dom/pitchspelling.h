@@ -59,6 +59,7 @@ static constexpr int STEP_DELTA_OCTAVE    = 7;    // the number of steps in an o
 static constexpr int TPCS_PER_STEP        = (Tpc::TPC_MAX - Tpc::TPC_MIN + 1) / STEP_DELTA_OCTAVE;
 static constexpr int MIN_STEP             = MIN_PITCH * STEP_DELTA_OCTAVE / PITCH_DELTA_OCTAVE;
 static constexpr int MAX_STEP             = MAX_PITCH * STEP_DELTA_OCTAVE / PITCH_DELTA_OCTAVE;
+static constexpr int KEY_TO_TPC_OFFSET = (int)Tpc::TPC_C - (int)Key::C;
 
 //---------------------------------------------------------
 //   pitch2tpc
@@ -106,6 +107,8 @@ extern int clampEnharmonic(int tpc, bool useDoubleSharpsFlats = true);
 extern int clampPitch(int pitch, bool octaved = false);
 extern Key clampKey(Key key, PreferSharpFlat prefer = PreferSharpFlat::NONE);
 extern int bestEnharmonicFit(const std::vector<int> tpcs, Key key);
+extern int key2Tpc(Key key);
+extern Key tpc2Key(int tpc);
 
 //---------------------------------------------------------
 //   tpc2alter
