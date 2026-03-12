@@ -253,8 +253,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::REPEAT_COUNT,                        P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "repeatCount",                     QT_TRANSLATE_NOOP("engraving/propertyName", "repeat count") },
 
     { Pid::USER_STRETCH,                        P_TYPE::REAL,                      PropertyGroup::NONE,       false, "stretch",                         QT_TRANSLATE_NOOP("engraving/propertyName", "stretch") },
-    { Pid::NO_OFFSET,                           P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "noOffset",                        QT_TRANSLATE_NOOP("engraving/propertyName", "numbering offset") },
-    { Pid::IRREGULAR,                           P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "irregular",                       QT_TRANSLATE_NOOP("engraving/propertyName", "irregular") },
+    { Pid::MEASURE_NUMBER_OFFSET,               P_TYPE::INT,                       PropertyGroup::APPEARANCE, true,  "noOffset",                        QT_TRANSLATE_NOOP("engraving/propertyName", "measure number offset") },
+    { Pid::EXCLUDE_FROM_NUMBERING,              P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "irregular",                       QT_TRANSLATE_NOOP("engraving/propertyName", "exclude from numbering") },
     { Pid::ANCHOR,                              P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "anchor",                          QT_TRANSLATE_NOOP("engraving/propertyName", "anchor") },
     { Pid::SLUR_UOFF1,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o1",                              QT_TRANSLATE_NOOP("engraving/propertyName", "start offset") },
     { Pid::SLUR_UOFF2,                          P_TYPE::POINT,                     PropertyGroup::POSITION,   false, "o2",                              QT_TRANSLATE_NOOP("engraving/propertyName", "left shoulder offset") },

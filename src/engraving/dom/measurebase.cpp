@@ -42,7 +42,6 @@ using namespace mu::engraving;
 MeasureBase::MeasureBase(const ElementType& type, System* system)
     : EngravingItem(type, system)
 {
-    setIrregular(true);
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
@@ -51,8 +50,6 @@ MeasureBase::MeasureBase(const MeasureBase& m)
     m_next     = m.m_next;
     m_prev     = m.m_prev;
     m_tick     = m.m_tick;
-    m_no       = m.m_no;
-    m_noOffset = m.m_noOffset;
 
     for (EngravingItem* e : m.m_el) {
         add(e->clone());
@@ -425,82 +422,6 @@ MeasureBase* Score::first() const
 MeasureBase* Score::last()  const
 {
     return m_measures.last();
-}
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-PropertyValue MeasureBase::getProperty(Pid id) const
-{
-    switch (id) {
-    case Pid::REPEAT_END:
-        return repeatEnd();
-    case Pid::REPEAT_START:
-        return repeatStart();
-    case Pid::REPEAT_JUMP:
-        return repeatJump();
-    case Pid::NO_OFFSET:
-        return noOffset();
-    case Pid::IRREGULAR:
-        return irregular();
-    default:
-        return EngravingItem::getProperty(id);
-    }
-}
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
-{
-    switch (id) {
-    case Pid::REPEAT_END:
-        setRepeatEnd(value.toBool());
-        break;
-    case Pid::REPEAT_START:
-        setRepeatStart(value.toBool());
-        break;
-    case Pid::REPEAT_JUMP:
-        setRepeatJump(value.toBool());
-        break;
-    case Pid::NO_OFFSET:
-        setNoOffset(value.toInt());
-        break;
-    case Pid::IRREGULAR:
-        setIrregular(value.toBool());
-        break;
-    default:
-        if (!EngravingItem::setProperty(id, value)) {
-            return false;
-        }
-        break;
-    }
-    if (id == Pid::IRREGULAR || id == Pid::NO_OFFSET) {
-        triggerLayoutAll();
-    } else {
-        triggerLayout();
-    }
-    score()->setPlaylistDirty();
-    return true;
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-PropertyValue MeasureBase::propertyDefault(Pid propertyId) const
-{
-    switch (propertyId) {
-    case Pid::REPEAT_END:
-    case Pid::REPEAT_START:
-    case Pid::REPEAT_JUMP:
-        return false;
-    default:
-        break;
-    }
-    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------

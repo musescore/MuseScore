@@ -2521,11 +2521,11 @@ EngravingItem::BarBeat EngravingItem::barbeat() const
         ticksB = ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
         measure = segment->findMeasure();
         if (measure) {
-            displayedBar = measure->no();
+            displayedBar = measure->measureNumber();
         }
     } else if (parent->isMeasure()) {
         measure = toMeasure(parent);
-        bar = measure->no();
+        bar = measure->measureNumber();
         displayedBar = bar;
         beat = -1;
         ticks = 0;

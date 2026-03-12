@@ -175,7 +175,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(muse::qtrc("notation/measureproperties", "Properties for measure %1").arg(m_measure->no() + 1));
+    setWindowTitle(muse::qtrc("notation/measureproperties", "Properties for measure %1").arg(m_measure->measureNumber() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
@@ -188,7 +188,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nominalZ->setNum(m_measure->timesig().numerator());
     nominalN->setNum(m_measure->timesig().denominator());
 
-    irregular->setChecked(m_measure->irregular());
+    excludeFromNumbering->setChecked(m_measure->excludeFromNumbering());
     breakMultiMeasureRest->setChecked(m_measure->breakMultiMeasureRest());
     int n  = m_measure->repeatCount();
     count->setValue(n);
@@ -198,7 +198,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     labelCount->setVisible(enableCount);
     layoutStretch->setValue(m_measure->userStretch());
     measureNumberMode->setCurrentIndex(int(m_measure->measureNumberMode()));
-    measureNumberOffset->setValue(m_measure->noOffset());
+    measureNumberOffset->setValue(m_measure->measureNumberOffset());
 
     mu::engraving::Score* score = m_measure->score();
     size_t rows = score->nstaves();
@@ -284,15 +284,6 @@ mu::engraving::Fraction MeasurePropertiesDialog::len() const
 }
 
 //---------------------------------------------------------
-//   isIrregular
-//---------------------------------------------------------
-
-bool MeasurePropertiesDialog::isIrregular() const
-{
-    return irregular->isChecked();
-}
-
-//---------------------------------------------------------
 //   repeatCount
 //---------------------------------------------------------
 
@@ -328,8 +319,8 @@ void MeasurePropertiesDialog::apply()
     m_measure->undoChangeProperty(mu::engraving::Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
     m_measure->undoChangeProperty(mu::engraving::Pid::USER_STRETCH, layoutStretch->value());
     m_measure->undoChangeProperty(mu::engraving::Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-    m_measure->undoChangeProperty(mu::engraving::Pid::NO_OFFSET, measureNumberOffset->value());
-    m_measure->undoChangeProperty(mu::engraving::Pid::IRREGULAR, isIrregular());
+    m_measure->undoChangeProperty(mu::engraving::Pid::MEASURE_NUMBER_OFFSET, measureNumberOffset->value());
+    m_measure->undoChangeProperty(mu::engraving::Pid::EXCLUDE_FROM_NUMBERING, excludeFromNumbering->isChecked());
 
     if (m_measure->ticks() != len()) {
         mu::engraving::ScoreRange range;

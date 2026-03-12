@@ -49,7 +49,7 @@ void addElementToTuplet(int voice,
 
 #ifdef QT_DEBUG
     if (foundTuplets.size() > 1) {
-        LOGD() << "Measure number (from 1):" << el->measure()->no() + 1
+        LOGD() << "Measure number (from 1):" << el->measure()->measureNumber() + 1
                << ", staff index (from 0):" << el->staff()->idx();
 
         Q_ASSERT_X(false, "MidiTuplet::addElementToTuplet",
@@ -120,7 +120,7 @@ bool haveTupletsEnoughElements(const Staff* staff)
                 const Tuplet* tuplet = cr->tuplet();
                 if (tuplet) {
                     if (tuplet->elements().size() <= 1) {
-                        printInvalidTupletLocation(seg->measure()->no(), staff->idx());
+                        printInvalidTupletLocation(seg->measure()->measureNumber(), staff->idx());
                         return false;
                     }
                     int chordCount = 0;
@@ -131,7 +131,7 @@ bool haveTupletsEnoughElements(const Staff* staff)
                         }
                     }
                     if (chordCount == 0) {
-                        printInvalidTupletLocation(seg->measure()->no(), staff->idx());
+                        printInvalidTupletLocation(seg->measure()->measureNumber(), staff->idx());
                         return false;
                     }
                 }

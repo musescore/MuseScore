@@ -39,7 +39,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
                                 bool forceTimeSig)
 {
     if (MScore::debugMode) {
-        const int mno = measure->no() + 1;
+        const int mno = measure->measureNumber() + 1;
         xml.comment(String(u"Measure %1").arg(mno));
     }
     if (measure->ticks() != measure->timesig()) {
@@ -63,10 +63,10 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         if (measure->repeatEnd()) {
             xml.tag("endRepeat", measure->repeatCount());
         }
-        TWrite::writeProperty(measure, xml, Pid::IRREGULAR);
+        TWrite::writeProperty(measure, xml, Pid::EXCLUDE_FROM_NUMBERING);
         TWrite::writeProperty(measure, xml, Pid::BREAK_MMR);
         TWrite::writeProperty(measure, xml, Pid::USER_STRETCH);
-        TWrite::writeProperty(measure, xml, Pid::NO_OFFSET);
+        TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_OFFSET);
         TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
     MStaff* mstaff = measure->mstaves()[staff];

@@ -103,7 +103,7 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
         state.setNextMeasure(nextMeasure);
 
         if (!state.nextMeasure()->prevMeasure()) {
-            state.setMeasureNo(0);
+            state.setMeasureNumber(0);
             state.setTick(Fraction(0, 1));
         } else {
             const MeasureBase* mb = state.nextMeasure()->prev();
@@ -115,10 +115,10 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
             if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-                state.setMeasureNo(0);
+                state.setMeasureNumber(0);
             } else {
-                state.setMeasureNo(state.nextMeasure()->prevMeasure()->no()                             // will be adjusted later with respect
-                                   + (state.nextMeasure()->prevMeasure()->irregular() ? 0 : 1));          // to the user-defined offset.
+                state.setMeasureNumber(state.nextMeasure()->prevMeasure()->measureNumber()                      // will be adjusted later with respect
+                                       + (state.nextMeasure()->prevMeasure()->excludeFromNumbering() ? 0 : 1)); // to the user-defined offset.
             }
             state.setTick(ctx.state().nextMeasure()->tick());
         }

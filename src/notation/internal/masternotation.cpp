@@ -235,7 +235,7 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
 
         // Special handling for first measure (apply pickups, timesigs, and keysigs)...
 
-        measure->setIrregular(scoreOptions.withPickupMeasure);
+        measure->setExcludeFromNumbering(scoreOptions.withPickupMeasure);
         measure->adjustToLen(scoreOptions.withPickupMeasure ? scoreOptions.pickupTimesig : scoreOptions.globalTimesig);
 
         // Add timesigs...

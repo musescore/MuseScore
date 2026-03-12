@@ -417,7 +417,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     const Color color = engravingConfiguration()->invisibleColor();
 
     // Draw measure number
-    m_cachedMeasureNumberText->setXmlText(String(u"#%1").arg(currentMeasure->no() + 1));
+    m_cachedMeasureNumberText->setXmlText(String(u"#%1").arg(currentMeasure->measureNumber() + 1));
     m_cachedMeasureNumberText->setColor(color);
     m_cachedMeasureNumberText->mutldata()->reset();
     m_cachedMeasureNumberText->renderer()->layoutText1(m_cachedMeasureNumberText);

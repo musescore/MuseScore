@@ -162,7 +162,7 @@ void InsertRemoveMeasures::insertMeasures()
                 }
 
                 if (!stIcon) {
-                    LOGD() << "StaffTypeChange icon is missing in measure " << measure->no();
+                    LOGD() << "StaffTypeChange icon is missing in measure " << measure->measureNumber();
                 }
 
                 stRange = staff->staffTypeRange(tick);
@@ -281,7 +281,7 @@ void InsertRemoveMeasures::removeMeasures()
                 }
 
                 if (!stIcon) {
-                    LOGD() << "StaffTypeChange icon is missing in measure " << measure->no();
+                    LOGD() << "StaffTypeChange icon is missing in measure " << measure->measureNumber();
                 }
 
                 stRange = staff->staffTypeRange(tick);
