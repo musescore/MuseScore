@@ -100,7 +100,7 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     case FFMPEG_V8: {
         auto ffmpegLibHandler = std::make_shared<ffmpeg::v8::FFmpegLibHandler>();
         if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath)
+                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
             && ffmpegLibHandler->loadApi()) {
             ffmpegLibHandler->setVersion(version);
             ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
@@ -117,7 +117,7 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     case FFMPEG_V7: {
         auto ffmpegLibHandler = std::make_shared<ffmpeg::v7::FFmpegLibHandler>();
         if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath)
+                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
             && ffmpegLibHandler->loadApi()) {
             ffmpegLibHandler->setVersion(version);
             ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));

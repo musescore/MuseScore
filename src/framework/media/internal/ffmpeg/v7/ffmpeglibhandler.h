@@ -37,7 +37,7 @@ public:
     FFmpegLibHandler() = default;
 
     bool loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath,
-                 const io::path_t& swScalePath);
+                 const io::path_t& swScalePath, const io::path_t& swResamplePath);
     bool loadApi();
     void unload();
 
@@ -107,6 +107,7 @@ private : void* getSymbol(void* lib, const char* name) const;
     void* m_avCodecLibrary = nullptr;
     void* m_avFormatLibrary = nullptr;
     void* m_swsScaleLibrary = nullptr;
+    void* m_swResampleLibrary = nullptr;
 
     int m_version = 0;
     io::path_t m_dir;
