@@ -57,6 +57,7 @@ public:
         ld_field<double> midPointThickness = { "[Parenthesis] midPointThickness", 0.0 };
         ld_field<double> endPointThickness = { "[Parenthesis] endPointThickness", PARENTHESIS_END_WIDTH };
         ld_field<double> shoulderWidth = { "[Parenthesis] endPointThickness", 0.0 };
+        ld_field<double> intrinsicMag = { "[Parenthesis] intrinsicMag", 1.0 };      // Mag separate from staff scale
         ld_field<SymId> symId = { "[Parenthesis] symId", SymId::noSym };
         ld_field<double> symScale = { "[Parenthesis] symScale", 1.0 };
     };
