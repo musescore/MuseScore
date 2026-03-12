@@ -57,13 +57,13 @@ public:
     virtual void resetTimeLoop() = 0;
 
     virtual void setCountDown(const msecs_t duration) = 0;
-    virtual async::Notification countDownEnded() const = 0;
 
     virtual async::Channel<secs_t> timeChanged() const = 0;
 
     enum ActionType {
         Seek,
         LoopEndReached,
+        CountDownEnded,
     };
 
     using OnActionFunc = std::function<void (ActionType type, msecs_t time)>;

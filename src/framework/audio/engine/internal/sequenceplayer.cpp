@@ -49,6 +49,10 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextP
             case IClock::ActionType::LoopEndReached:
                 m_clock->seek(m_loopStart);
                 break;
+            case IClock::ActionType::CountDownEnded:
+                m_countDownIsSet = false;
+                audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
+                break;
         }
     });
 
@@ -60,11 +64,6 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextP
         } else if (!active) {
             flushAllTracks();
         }
-    });
-
-    m_clock->countDownEnded().onNotify(this, [this]() {
-        m_countDownIsSet = false;
-        audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
     });
 
     audioEngine()->mixer()->addClock(m_clock);
