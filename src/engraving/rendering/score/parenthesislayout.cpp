@@ -137,7 +137,7 @@ void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* r
     // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
     const double itemWidth = parentWidth;
     double parenPadding = ctx.dom().paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
-    parenPadding *= leftParen->ldata()->mag();
+    parenPadding *= (leftParen->ldata()->mag() + rightParen->ldata()->mag()) / 2;
 
     if (itemWidth >= parenPadding) {
         return;
@@ -211,7 +211,7 @@ double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem*
 {
     bool parenFirst = item1->isParenthesis();
     const EngravingItem* other = item1->isParenthesis() ? item2 : item1;
-    const double spatium = item1->spatium();
+    const double spatium = item1->style().spatium();
     double padding = 0.0;
 
     switch (other->type()) {
