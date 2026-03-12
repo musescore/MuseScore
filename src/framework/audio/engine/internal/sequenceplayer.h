@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SEQUENCEPLAYER_H
-#define MUSE_AUDIO_SEQUENCEPLAYER_H
+#pragma once
 
 #include "global/async/asyncable.h"
 
@@ -39,7 +38,7 @@ class SequencePlayer : public ISequencePlayer, public Contextable, public async:
     ContextInject<engine::IAudioEngine> audioEngine = { this };
 
 public:
-    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
+    explicit SequencePlayer(IGetTracks* getTracks, const modularity::ContextPtr& iocCtx);
     ~SequencePlayer() override;
 
     async::Promise<Ret> prepareToPlay() override;
@@ -77,5 +76,3 @@ private:
     bool m_tracksFollowClockSeek = true;
 };
 }
-
-#endif // MUSE_AUDIO_SEQUENCEPLAYER_H
