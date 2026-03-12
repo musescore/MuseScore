@@ -57,11 +57,7 @@ void Clock::forward(const msecs_t nextMsecs)
     msecs_t newTime = m_currentTime + nextMsecs;
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
-        setCurrentTime(m_timeLoopStart);
         onAction(ActionType::LoopEndReached, newTime);
-
-        //!Note No matter of the time loop boundaries, the current frame still should be handled
-        setCurrentTime(m_timeLoopStart + nextMsecs);
         return;
     }
 
