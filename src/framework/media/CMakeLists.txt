@@ -47,7 +47,7 @@ target_sources(muse_media PRIVATE
     internal/ffmpeg/v7/videoencoder.h
 )
 
-target_include_directories(muse_media PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg)
+target_include_directories(muse_media PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v8)
 
 set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)

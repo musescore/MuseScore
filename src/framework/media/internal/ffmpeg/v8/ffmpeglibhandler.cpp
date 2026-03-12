@@ -110,11 +110,11 @@ bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& a
 {
     unload();
 
-    // Load avutil first, then avcodec, swscale, swresample, avformat (dependency order)
+    // Load avutil first, then swresample, swscale, avcodec, avformat (dependency order)
     if (!tryLoadPath(m_avUtilLibrary, avUtilPath)
-        || !tryLoadPath(m_avCodecLibrary, avCodecPath)
-        || !tryLoadPath(m_swsScaleLibrary, swScalePath)
         || !tryLoadPath(m_swResampleLibrary, swResamplePath)
+        || !tryLoadPath(m_swsScaleLibrary, swScalePath)
+        || !tryLoadPath(m_avCodecLibrary, avCodecPath)
         || !tryLoadPath(m_avFormatLibrary, avFormatPath)) {
         return false;
     }
