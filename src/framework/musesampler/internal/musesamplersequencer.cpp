@@ -107,6 +107,7 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation2> ARTICULA
     { ArticulationType::SingingVibrate, ms_NoteArticulation2_SingingVibrate },
     { ArticulationType::Swing, ms_NoteArticulation2_HandbellSwing },
     { ArticulationType::Echo, ms_NoteArticulation2_Echo },
+    { ArticulationType::Breath, ms_NoteArticulation2_BreathMark },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {

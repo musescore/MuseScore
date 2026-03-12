@@ -23,6 +23,7 @@
 #include "chordarticulationsparser.h"
 
 #include "dom/arpeggio.h"
+#include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/chordline.h"
 #include "dom/score.h"
@@ -88,6 +89,7 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     parseChordLine(chord, ctx, result);
     parseArticulationSymbols(chord, ctx, result);
     parseTapping(chord, ctx, result);
+    parseBreath(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -230,4 +232,21 @@ void ChordArticulationsParser::parseTapping(const Chord* chord, const RenderingC
     }
 
     appendArticulationData(mpe::ArticulationMeta(type, pattern, ctx.nominalTimestamp, ctx.nominalDuration), result);
+}
+
+void ChordArticulationsParser::parseBreath(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(ArticulationType::Breath);
+    if (pattern.empty()) {
+        return;
+    }
+
+    const Breath* breath = chord->hasBreathMark();
+    if (!breath) {
+        return;
+    }
+
+    const mpe::timestamp_t timestamp = timestampFromTicks(ctx.score, breath->tick().ticks() + ctx.positionTickOffset);
+    const mpe::duration_t duration = breath->pause() * 1000000;
+    appendArticulationData(mpe::ArticulationMeta(ArticulationType::Breath, pattern, timestamp, duration), result);
 }

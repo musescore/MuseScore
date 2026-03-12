@@ -294,6 +294,8 @@ enum class ArticulationType : signed char {
 
     ContinuousGlissando,
 
+    Breath,
+
     // Handbells
     MalletBellOnTable,
     MalletBellSuspended,
