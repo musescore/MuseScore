@@ -24,6 +24,8 @@
 
 #include "audio/common/audiosanitizer.h"
 
+#include "clock.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -31,8 +33,8 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::async;
 
-SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx)
-    : Contextable(iocCtx), m_getTracks(getTracks), m_clock(clock)
+SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextPtr& iocCtx)
+    : Contextable(iocCtx), m_getTracks(getTracks), m_clock(std::make_shared<Clock>())
 {
     m_clock->setOnAction([this](const IClock::ActionType type, const msecs_t) {
         ONLY_AUDIO_PROC_THREAD;
@@ -61,11 +63,14 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
         m_countDownIsSet = false;
         audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
     });
+
+    audioEngine()->mixer()->addClock(m_clock);
 }
 
 SequencePlayer::~SequencePlayer()
 {
     m_clock->setOnAction(nullptr);
+    audioEngine()->mixer()->removeClock(m_clock);
 }
 
 async::Promise<Ret> SequencePlayer::prepareToPlay()
