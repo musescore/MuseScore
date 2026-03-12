@@ -53,7 +53,7 @@ if [ ! -d "$FFMPEG_DIR" ]; then
   echo "Cloning FFmpeg (sparse checkout)..."
   git clone --depth 1 --filter=blob:none --sparse https://github.com/FFmpeg/FFmpeg.git "$FFMPEG_DIR"
   cd "$FFMPEG_DIR"
-  git sparse-checkout set libavcodec libavformat libavutil libswscale
+  git sparse-checkout set libavcodec libavformat libavutil libswscale libswresample
   cd - > /dev/null
 else
   echo "Using existing FFmpeg clone: $FFMPEG_DIR"
@@ -71,7 +71,7 @@ for ver_spec in "${VERSIONS[@]}"; do
 
   git fetch --depth 1 origin tag "$tag" 2>/dev/null || true
   git checkout "$tag"
-  git sparse-checkout set libavcodec libavformat libavutil libswscale
+  git sparse-checkout set libavcodec libavformat libavutil libswscale libswresample
 
   mkdir -p "$target"
 

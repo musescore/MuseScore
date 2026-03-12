@@ -12,7 +12,8 @@ libavutil/avstring.h
 libavutil/opt.h
 libavutil/mem.h
 libswscale/swscale.h
-libavutil/imgutils.h"
+libavutil/imgutils.h
+libswresample/swresample.h"
 
 NL='
 '
