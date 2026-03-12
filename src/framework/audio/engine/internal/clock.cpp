@@ -32,7 +32,6 @@ Clock::Clock()
                           .name("audio::clock::timeChangedInSecs")
                           .disableWaitPendingsOnSend())
 {
-    m_status.set(PlaybackStatus::Stopped);
 }
 
 msecs_t Clock::currentTime() const
@@ -82,7 +81,8 @@ void Clock::setCurrentTime(msecs_t time)
 
 void Clock::start()
 {
-    m_status.set(PlaybackStatus::Running);
+    m_status = PlaybackStatus::Running;
+    onAction(ActionType::StatusChanged, m_currentTime);
 }
 
 void Clock::reset()
@@ -94,19 +94,22 @@ void Clock::reset()
 
 void Clock::stop()
 {
-    m_status.set(PlaybackStatus::Stopped);
+    m_status = PlaybackStatus::Stopped;
+    onAction(ActionType::StatusChanged, m_currentTime);
     seek(0);
     m_countDown = 0;
 }
 
 void Clock::pause()
 {
-    m_status.set(PlaybackStatus::Paused);
+    m_status = PlaybackStatus::Paused;
+    onAction(ActionType::StatusChanged, m_currentTime);
 }
 
 void Clock::resume()
 {
-    m_status.set(PlaybackStatus::Running);
+    m_status = PlaybackStatus::Running;
+    onAction(ActionType::StatusChanged, m_currentTime);
     seek(m_currentTime);
 }
 
@@ -155,7 +158,7 @@ void Clock::setCountDown(const msecs_t duration)
 
 bool Clock::isRunning() const
 {
-    return m_status.val == PlaybackStatus::Running;
+    return m_status == PlaybackStatus::Running;
 }
 
 async::Channel<secs_t> Clock::timeChanged() const
@@ -165,12 +168,7 @@ async::Channel<secs_t> Clock::timeChanged() const
 
 PlaybackStatus Clock::status() const
 {
-    return m_status.val;
-}
-
-async::Channel<PlaybackStatus> Clock::statusChanged() const
-{
-    return m_status.ch;
+    return m_status;
 }
 
 void Clock::setOnAction(OnActionFunc func)

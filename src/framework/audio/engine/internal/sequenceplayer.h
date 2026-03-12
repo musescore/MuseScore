@@ -70,6 +70,8 @@ private:
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;
 
+    async::Channel<PlaybackStatus> m_playbackStatusChanged;
+
     bool m_countDownIsSet = false;
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
 

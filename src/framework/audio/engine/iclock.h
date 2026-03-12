@@ -49,7 +49,6 @@ public:
     virtual bool isRunning() const = 0;
 
     virtual PlaybackStatus status() const = 0;
-    virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
 
     virtual msecs_t timeDuration() const = 0;
     virtual void setTimeDuration(const msecs_t duration) = 0;
@@ -61,6 +60,7 @@ public:
     virtual async::Channel<secs_t> timeChanged() const = 0;
 
     enum ActionType {
+        StatusChanged,
         Seek,
         LoopEndReached,
         CountDownEnded,

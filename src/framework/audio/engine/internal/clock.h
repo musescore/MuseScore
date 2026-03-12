@@ -44,7 +44,6 @@ public:
     bool isRunning() const override;
 
     PlaybackStatus status() const override;
-    async::Channel<PlaybackStatus> statusChanged() const override;
 
     msecs_t timeDuration() const override;
     void setTimeDuration(const msecs_t duration) override;
@@ -62,7 +61,7 @@ private:
     void setCurrentTime(msecs_t time);
     void onAction(ActionType type, msecs_t time);
 
-    ValCh<PlaybackStatus> m_status;
+    PlaybackStatus m_status = PlaybackStatus::Stopped;
     msecs_t m_currentTime = 0;
     msecs_t m_timeDuration = 0;
     msecs_t m_timeLoopStart = 0;
