@@ -35,6 +35,11 @@ namespace mu::engraving {
 //   SystemDivider
 //---------------------------------------------------------
 
+static const ElementStyle dividerStyle {
+    { Sid::dividerLeftSize, Pid::SYMBOLS_SIZE }, // left or right is decided later
+    { Sid::musicalSymbolFont, Pid::SCORE_FONT }
+};
+
 SystemDivider::SystemDivider(System* parent)
     : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::MOVABLE)
 {
@@ -62,17 +67,36 @@ void SystemDivider::setDividerType(SystemDividerType v)
     m_dividerType = v;
 
     if (v == SystemDividerType::LEFT) {
-        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)), score()->engravingFont());
-        m_symbolsSize = style().styleD(Sid::dividerLeftSize);
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)));
     } else {
-        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerRightSym)), score()->engravingFont());
-        m_symbolsSize = style().styleD(Sid::dividerRightSize);
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerRightSym)));
     }
+
+    initElementStyle(&dividerStyle);
 }
 
 void SystemDivider::styleChanged()
 {
-    setDividerType(m_dividerType);
+    if (m_dividerType == SystemDividerType::LEFT) {
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)));
+    } else {
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerRightSym)));
+    }
+
+    if (isStyled(Pid::SYMBOLS_SIZE)) {
+        m_symbolsSize = style().styleD(getPropertyStyle(Pid::SYMBOLS_SIZE));
+    }
+
+    Symbol::styleChanged();
+}
+
+Sid SystemDivider::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::SYMBOLS_SIZE) {
+        return m_dividerType == SystemDividerType::LEFT ? Sid::dividerLeftSize : Sid::dividerRightSize;
+    }
+
+    return Symbol::getPropertyStyle(id);
 }
 
 std::vector<LineF> SystemDivider::dragAnchorLines() const
