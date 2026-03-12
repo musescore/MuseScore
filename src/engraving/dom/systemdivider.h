@@ -55,6 +55,7 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     void styleChanged() override;
+    Sid getPropertyStyle(Pid id) const override;
 
     std::vector<LineF> dragAnchorLines() const override;
 
