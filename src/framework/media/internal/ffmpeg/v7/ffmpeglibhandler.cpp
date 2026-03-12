@@ -53,7 +53,7 @@ void* FFmpegLibHandler::getSymbol(void* lib, const char* name) const
 
 bool FFmpegLibHandler::loadApi()
 {
-    if (!m_avUtilLibrary || !m_avCodecLibrary || !m_avFormatLibrary || !m_swsScaleLibrary) {
+    if (!m_avUtilLibrary || !m_avCodecLibrary || !m_avFormatLibrary || !m_swsScaleLibrary || !m_swResampleLibrary) {
         return false;
     }
 
@@ -108,20 +108,21 @@ bool FFmpegLibHandler::loadApi()
 }
 
 bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath,
-                               const io::path_t& swScalePath)
+                               const io::path_t& swScalePath, const io::path_t& swResamplePath)
 {
     unload();
 
-    // Load avutil first, then avcodec, swscale, avformat (dependency order)
+    // Load avutil first, then avcodec, swscale, swresample, avformat (dependency order)
     if (!tryLoadPath(m_avUtilLibrary, avUtilPath)
         || !tryLoadPath(m_avCodecLibrary, avCodecPath)
         || !tryLoadPath(m_swsScaleLibrary, swScalePath)
+        || !tryLoadPath(m_swResampleLibrary, swResamplePath)
         || !tryLoadPath(m_avFormatLibrary, avFormatPath)) {
         return false;
     }
 
     LOGI() << "FFmpeg loaded: avutil=" << avUtilPath << ", avcodec=" << avCodecPath << ", avformat=" << avFormatPath
-           << ", swscale=" << swScalePath;
+           << ", swscale=" << swScalePath << ", swresample=" << swResamplePath;
 
     return true;
 }
@@ -129,6 +130,7 @@ bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& a
 void FFmpegLibHandler::unload()
 {
     closeLib(m_avFormatLibrary);
+    closeLib(m_swResampleLibrary);
     closeLib(m_swsScaleLibrary);
     closeLib(m_avCodecLibrary);
     closeLib(m_avUtilLibrary);

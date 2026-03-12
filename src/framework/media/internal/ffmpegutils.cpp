@@ -61,22 +61,25 @@ static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& s
         return {};
     }
 
-    io::path_t avutilName, avcodecName, avformatName, swscaleName;
+    io::path_t avutilName, avcodecName, avformatName, swscaleName, swresampleName;
 #if defined(Q_OS_MAC)
     avutilName = io::path_t("libavutil." + std::to_string(ffmpegVersionInfo.avUtilVersion) + ".dylib");
     avcodecName = io::path_t("libavcodec." + std::to_string(ffmpegVersionInfo.avCodecVersion) + ".dylib");
     avformatName = io::path_t("libavformat." + std::to_string(ffmpegVersionInfo.avFormatVersion) + ".dylib");
     swscaleName = io::path_t("libswscale." + std::to_string(ffmpegVersionInfo.swScaleVersion) + ".dylib");
+    swresampleName = io::path_t("libswresample." + std::to_string(ffmpegVersionInfo.swResampleVersion) + ".dylib");
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     avutilName = io::path_t("libavutil.so." + std::to_string(ffmpegVersionInfo.avUtilVersion));
     avcodecName = io::path_t("libavcodec.so." + std::to_string(ffmpegVersionInfo.avCodecVersion));
     avformatName = io::path_t("libavformat.so." + verStr);
     swscaleName = io::path_t("libswscale.so." + std::to_string(ffmpegVersionInfo.swScaleVersion));
+    swresampleName = io::path_t("libswresample.so." + std::to_string(ffmpegVersionInfo.swResampleVersion));
 #elif defined(Q_OS_WIN)
     avutilName = io::path_t("avutil-" + std::to_string(ffmpegVersionInfo.avUtilVersion) + ".dll");
     avcodecName = io::path_t("avcodec-" + std::to_string(ffmpegVersionInfo.avCodecVersion) + ".dll");
     avformatName = io::path_t("avformat-" + std::to_string(ffmpegVersionInfo.avFormatVersion) + ".dll");
     swscaleName = io::path_t("swscale-" + std::to_string(ffmpegVersionInfo.swScaleVersion) + ".dll");
+    swresampleName = io::path_t("swresample-" + std::to_string(ffmpegVersionInfo.swResampleVersion) + ".dll");
 #endif
 
     FFmpegLibPaths result;
@@ -85,12 +88,15 @@ static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& s
         io::path_t avcodecPath = dir.appendingComponent(avcodecName);
         io::path_t avformatPath = dir.appendingComponent(avformatName);
         io::path_t swscalePath = dir.appendingComponent(swscaleName);
+        io::path_t swresamplePath = dir.appendingComponent(swresampleName);
         if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
-            && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)) {
+            && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)
+            && io::FileInfo::exists(swresamplePath)) {
             result.avUtilPath = avutilPath;
             result.avCodecPath = avcodecPath;
             result.avFormatPath = avformatPath;
             result.swScalePath = swscalePath;
+            result.swResamplePath = swresamplePath;
             return result;
         }
     }

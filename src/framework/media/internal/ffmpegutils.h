@@ -40,20 +40,21 @@ struct FFmpegVersionInfo {
     int avUtilVersion = -1;
     int avCodecVersion = -1;
     int swScaleVersion = -1;
+    int swResampleVersion = -1;
 
     bool isValid() const
     {
-        return avFormatVersion != -1 && avUtilVersion != -1 && avCodecVersion != -1 && swScaleVersion != -1;
+        return avFormatVersion != -1 && avUtilVersion != -1 && avCodecVersion != -1 && swScaleVersion != -1 && swResampleVersion != -1;
     }
 };
 
 static const std::vector<std::pair<int, FFmpegVersionInfo> > FFMPEG_COMPONENTS_VERSIONS = {
-    // ffmpeg           avFormat    avUtil      avCodec     swScale
-    { FFMPEG_V8,        { 62,       60,         62,         9 } },
-    { FFMPEG_V7,        { 61,       59,         61,         8 } },
-    { FFMPEG_V6,        { 60,       58,         60,         7 } },
-    { FFMPEG_V5,        { 59,       57,         59,         6 } },
-    { FFMPEG_V4,        { 58,       56,         58,         5 } },
+    // ffmpeg           avFormat    avUtil      avCodec     swScale    swResample
+    { FFMPEG_V8,        { 62,       60,         62,         9,         6 } },
+    { FFMPEG_V7,        { 61,       59,         61,         8,         5 } },
+    { FFMPEG_V6,        { 60,       58,         60,         7,         4 } },
+    { FFMPEG_V5,        { 59,       57,         59,         6,         4 } },
+    { FFMPEG_V4,        { 58,       56,         58,         5,         3 } },
 };
 
 struct FFmpegLibPaths {
@@ -61,6 +62,7 @@ struct FFmpegLibPaths {
     io::path_t avCodecPath;
     io::path_t avFormatPath;
     io::path_t swScalePath;
+    io::path_t swResamplePath;
 };
 
 FFmpegLibPaths findLibraryPaths(const io::path_t& ffmpegLibsDir);
