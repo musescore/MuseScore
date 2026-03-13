@@ -36,8 +36,8 @@ class FFmpegLibHandler
 public:
     FFmpegLibHandler() = default;
 
-    bool loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath,
-                 const io::path_t& swScalePath, const io::path_t& swResamplePath);
+    bool loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath, const io::path_t& swScalePath,
+                 const io::path_t& swResamplePath);
     bool loadApi();
     void unload();
 
@@ -81,10 +81,12 @@ public:
     void (*avcodec_free_context)(AVCodecContext** avctx) = nullptr;
     int (*avcodec_open2)(AVCodecContext* avctx, const AVCodec* codec, AVDictionary** options) = nullptr;
     int (*avcodec_parameters_from_context)(AVCodecParameters* par, const AVCodecContext* codec) = nullptr;
+    int (*avcodec_parameters_to_context)(AVCodecContext* codec, const AVCodecParameters* par) = nullptr;
     int (*avcodec_parameters_copy)(AVCodecParameters* dst, const AVCodecParameters* src) = nullptr;
     int (*avcodec_send_frame)(AVCodecContext* avctx, const AVFrame* frame) = nullptr;
     int (*avcodec_receive_packet)(AVCodecContext* avctx, AVPacket* avpkt) = nullptr;
     AVFrame*(*av_frame_alloc)(void) = nullptr;
+    void (*av_frame_free)(AVFrame** frame) = nullptr;
     AVPacket*(*av_packet_alloc)(void) = nullptr;
     void (*av_packet_free)(AVPacket** pkt) = nullptr;
     void (*av_packet_unref)(AVPacket* pkt) = nullptr;

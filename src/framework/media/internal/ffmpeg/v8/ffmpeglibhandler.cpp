@@ -67,6 +67,7 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avUtilLibrary, av_image_get_buffer_size);
     RESOLVE_FROM(m_avUtilLibrary, av_opt_set_int);
     RESOLVE_FROM(m_avUtilLibrary, av_frame_alloc);
+    RESOLVE_FROM(m_avUtilLibrary, av_frame_free);
 
     // libavformat
     RESOLVE_FROM(m_avFormatLibrary, av_guess_format);
@@ -94,6 +95,7 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avCodecLibrary, avcodec_free_context);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_open2);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_from_context);
+    RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_to_context);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_copy);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_send_frame);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_receive_packet);
@@ -173,9 +175,9 @@ bool FFmpegLibHandler::functionsValid() const
            && avformat_close_input && avformat_free_context
            && avformat_alloc_output_context2 && av_read_frame
            && avcodec_alloc_context3 && avcodec_find_encoder && avcodec_free_context
-           && avcodec_open2 && avcodec_parameters_from_context && avcodec_parameters_copy
+           && avcodec_open2 && avcodec_parameters_from_context && avcodec_parameters_to_context && avcodec_parameters_copy
            && avcodec_send_frame && avcodec_receive_packet
-           && av_frame_alloc
+           && av_frame_alloc && av_frame_free
            && av_packet_alloc && av_packet_free && av_packet_unref && av_packet_rescale_ts
            && sws_getCachedContext && sws_scale;
 }
@@ -207,10 +209,12 @@ void FFmpegLibHandler::clearFunctions()
     avcodec_free_context = nullptr;
     avcodec_open2 = nullptr;
     avcodec_parameters_from_context = nullptr;
+    avcodec_parameters_to_context = nullptr;
     avcodec_parameters_copy = nullptr;
     avcodec_send_frame = nullptr;
     avcodec_receive_packet = nullptr;
     av_frame_alloc = nullptr;
+    av_frame_free = nullptr;
     av_packet_alloc = nullptr;
     av_packet_free = nullptr;
     av_packet_unref = nullptr;
