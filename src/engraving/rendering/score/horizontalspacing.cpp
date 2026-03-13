@@ -1440,7 +1440,7 @@ double HorizontalSpacing::minLeft(const Segment* seg, const Shape& ls)
 
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
-    if (item1->isParenthesis() != item2->isParenthesis()) {
+    if (item1->isParenthesis() || item2->isParenthesis()) {
         return ParenthesisLayout::computeParenthesisPadding(item1, item2);
     }
     const PaddingTable& paddingTable = item1->score()->paddingTable();
