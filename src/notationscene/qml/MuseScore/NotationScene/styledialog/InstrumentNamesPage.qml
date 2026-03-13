@@ -50,7 +50,7 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
-            title: qsTrc("notation/editstyle/instrumentnames", "Instrument names")
+            title: qsTrc("notation/editstyle/instrumentnames", "Names with transposition")
 
             ColumnLayout {
                 spacing: 12
@@ -59,7 +59,137 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/instrumentnames", "Enable name grouping for")
+                        text: qsTrc("notation/editstyle/instrumentnames", "Show transposition")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On long names")
+                        styleItem: instrumentNamesModel.instrumentNamesShowTranspositionLong
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On abbreviated names")
+                        styleItem: instrumentNamesModel.instrumentNamesShowTranspositionShort
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    enabled: instrumentNamesModel.instrumentNamesShowTranspositionLong.value === true
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Long name format:")
+                    }
+
+                    ColumnLayout {
+                        spacing : 8
+                        Layout.alignment: Qt.AlignTop
+
+                        Repeater {
+                            model: [
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Horn in F 1"), value: 0 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Horn 1 in F"), value: 1 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "F Horn 1"), value: 2 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Custom:"), value: 3 },
+                            ]
+
+                            RoundedRadioButton {
+                                required property var modelData
+                                text: modelData.text
+                                checked: instrumentNamesModel.instrumentNamesFormatLong.value === modelData.value
+                                onClicked: instrumentNamesModel.instrumentNamesFormatLong.value = modelData.value
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        id: customFormatLong
+                        spacing: 8
+
+                        enabled: instrumentNamesModel.instrumentNamesFormatLong.value === 3
+
+                        TextInputField {
+                            Layout.preferredWidth: 220
+                            currentText: instrumentNamesModel.instrumentNamesCustomFormatLong.value
+                            onTextEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNamesCustomFormatLong.value = newValue
+                            }
+                        }
+
+                        StyleResetButton {
+                            styleItem: instrumentNamesModel.instrumentNamesCustomFormatLong
+                            enabled: !styleItem.isDefault && customFormatLong.enabled
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    enabled: instrumentNamesModel.instrumentNamesShowTranspositionShort.value === true
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Short name format:")
+                    }
+
+                    ColumnLayout {
+                        spacing : 8
+                        Layout.alignment: Qt.AlignTop
+
+                        Repeater {
+                            model: [
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Hn. in F 1"), value: 0 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Hn. 1 in F"), value: 1 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "F Hn. 1"), value: 2 },
+                                { text: qsTrc("notation/editstyle/instrumentnames", "Custom:"), value: 3 },
+                            ]
+
+                            RoundedRadioButton {
+                                required property var modelData
+                                text: modelData.text
+                                checked: instrumentNamesModel.instrumentNamesFormatShort.value === modelData.value
+                                onClicked: instrumentNamesModel.instrumentNamesFormatShort.value = modelData.value
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        id: customFormatShort
+                        spacing: 8
+
+                        enabled: instrumentNamesModel.instrumentNamesFormatShort.value === 3
+
+                        TextInputField {
+                            Layout.preferredWidth: 220
+                            currentText: instrumentNamesModel.instrumentNamesCustomFormatShort.value
+                            onTextEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNamesCustomFormatShort.value = newValue
+                            }
+                        }
+
+                        StyleResetButton {
+                            styleItem: instrumentNamesModel.instrumentNamesCustomFormatShort
+                            enabled: !styleItem.isDefault && customFormatShort.enabled
+                        }
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Group names")
+
+            ColumnLayout {
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Enable group names for")
                     }
 
                     StyleToggle {

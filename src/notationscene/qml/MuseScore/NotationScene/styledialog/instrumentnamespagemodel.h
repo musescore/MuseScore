@@ -37,6 +37,13 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * stringsNameByGroup READ stringsNameByGroup CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * othersNameByGroup READ othersNameByGroup CONSTANT)
 
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesShowTranspositionLong READ instrumentNamesShowTranspositionLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesShowTranspositionShort READ instrumentNamesShowTranspositionShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesFormatLong READ instrumentNamesFormatLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatLong READ instrumentNamesCustomFormatLong CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesFormatShort READ instrumentNamesFormatShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatShort READ instrumentNamesCustomFormatShort CONSTANT)
+
     QML_ELEMENT
 
 public:
@@ -49,5 +56,12 @@ public:
     StyleItem* vocalsNameByGroup() const;
     StyleItem* stringsNameByGroup() const;
     StyleItem* othersNameByGroup() const;
+
+    StyleItem* instrumentNamesShowTranspositionLong() const;
+    StyleItem* instrumentNamesShowTranspositionShort() const;
+    StyleItem* instrumentNamesFormatLong() const;
+    StyleItem* instrumentNamesCustomFormatLong() const;
+    StyleItem* instrumentNamesFormatShort() const;
+    StyleItem* instrumentNamesCustomFormatShort() const;
 };
 }

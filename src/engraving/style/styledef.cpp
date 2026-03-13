@@ -58,6 +58,14 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minSystemDistance,                          8.5_sp),
     styleDef(maxSystemDistance,                          15.0_sp),
     styleDef(alignSystemToMargin,                        true),
+
+    styleDef(instrumentNamesShowTranspositionLong,       true),
+    styleDef(instrumentNamesShowTranspositionShort,      true),
+    styleDef(instrumentNamesFormatLong,                  InstrumentNamesFormat::NAME_IN_TRANSP_NUM),
+    styleDef(instrumentNamesCustomFormatLong,            String(u"$name in $transposition $number")),
+    styleDef(instrumentNamesFormatShort,                 InstrumentNamesFormat::NAME_IN_TRANSP_NUM),
+    styleDef(instrumentNamesCustomFormatShort,           String(u"$name in $transposition $number")),
+
     styleDef(instrumentNamesAlignLong,                   InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesAlignShort,                  InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesStackVertically,             false),

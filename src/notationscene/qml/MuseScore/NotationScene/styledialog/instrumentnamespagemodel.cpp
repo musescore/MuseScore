@@ -33,6 +33,13 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
     StyleId::vocalsNameByGroup,
     StyleId::stringsNameByGroup,
     StyleId::othersNameByGroup,
+
+    StyleId::instrumentNamesShowTranspositionLong,
+    StyleId::instrumentNamesShowTranspositionShort,
+    StyleId::instrumentNamesFormatLong,
+    StyleId::instrumentNamesCustomFormatLong,
+    StyleId::instrumentNamesFormatShort,
+    StyleId::instrumentNamesCustomFormatShort,
 })
 {
 }
@@ -70,4 +77,34 @@ StyleItem* InstrumentNamesPageModel::stringsNameByGroup() const
 StyleItem* InstrumentNamesPageModel::othersNameByGroup() const
 {
     return styleItem(StyleId::othersNameByGroup);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesShowTranspositionLong() const
+{
+    return styleItem(StyleId::instrumentNamesShowTranspositionLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesShowTranspositionShort() const
+{
+    return styleItem(StyleId::instrumentNamesShowTranspositionShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesFormatLong() const
+{
+    return styleItem(StyleId::instrumentNamesFormatLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatLong() const
+{
+    return styleItem(StyleId::instrumentNamesCustomFormatLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesFormatShort() const
+{
+    return styleItem(StyleId::instrumentNamesFormatShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatShort() const
+{
+    return styleItem(StyleId::instrumentNamesCustomFormatShort);
 }

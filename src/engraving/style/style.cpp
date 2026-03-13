@@ -238,6 +238,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::INSTRUMENT_NAMES_ALIGN:
                 set(idx, TConv::fromXml(e.readAsciiText(), InstrumentNamesAlign::RIGHT_RIGHT));
                 break;
+            case P_TYPE::INSTRUMENT_NAMES_FORMAT:
+                set(idx, TConv::fromXml(e.readAsciiText(), InstrumentNamesFormat::NAME_IN_TRANSP_NUM));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -779,6 +782,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<MeasureNumberPlacement>()));
         } else if (P_TYPE::INSTRUMENT_NAMES_ALIGN == type) {
             xml.tag(st.xmlName, TConv::toXml(value(idx).value<InstrumentNamesAlign>()));
+        } else if (P_TYPE::INSTRUMENT_NAMES_FORMAT == type) {
+            xml.tag(st.xmlName, TConv::toXml(value(idx).value<InstrumentNamesFormat>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

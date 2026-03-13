@@ -70,6 +70,12 @@ enum class Sid : short {
     maxSystemDistance,
     alignSystemToMargin,
 
+    instrumentNamesShowTranspositionLong,
+    instrumentNamesShowTranspositionShort,
+    instrumentNamesFormatLong,
+    instrumentNamesCustomFormatLong,
+    instrumentNamesFormatShort,
+    instrumentNamesCustomFormatShort,
     instrumentNamesAlignLong,
     instrumentNamesAlignShort,
     instrumentNamesStackVertically,

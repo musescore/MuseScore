@@ -794,40 +794,107 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
 
 String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, const Fraction& tick)
 {
-    String instrName;
-
-    if (!muse::contains(system->ldata()->partsWithGroupName(), part)) {
-        instrName += (system->ldata()->useLongNames() ? part->longName(tick) : part->shortName(tick));
-
-        String transposition = part->transposition(tick);
-        if (!transposition.empty()) {
-            instrName += u" " + muse::qtrc("notation", "in") + u" " + transposition;
-        }
+    if (muse::contains(system->ldata()->partsWithGroupName(), part)) {
+        int number = part->number(tick);
+        return number > 0 ? String::number(number) : String();
     }
 
-    int number = part->number(tick);
-    if (number > 0) {
-        if (!instrName.empty()) {
-            instrName += u" ";
+    const MStyle& style = system->style();
+
+    bool longNames = system->ldata()->useLongNames();
+    Instrument* instr = part->instrument(tick);
+
+    String instrName = longNames ? instr->longName() : instr->shortName();
+
+    String number = instr->number() > 0 ? String::number(instr->number()) : String();
+
+    bool showTranspo = style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
+    String transposition = showTranspo ? instr->transposition() : String();
+
+    if (transposition.empty()) {
+        String result = instrName;
+        if (!number.empty()) {
+            result += u" " + number;
         }
-        instrName += String::number(number);
+        return result;
     }
 
-    return instrName;
+    InstrumentNamesFormat nameFormat
+        = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
+
+    String in = TranslatableString("notation", "in").translated();
+
+    switch (nameFormat) {
+    case InstrumentNamesFormat::NAME_IN_TRANSP_NUM:
+        return instrName + u" " + in + u" " + transposition + (number.empty() ? String() : u" " + number);
+    case InstrumentNamesFormat::NAME_NUM_IN_TRANSP:
+        return instrName + (number.empty() ? String() : u" " + number) + u" " + in + u" " + transposition;
+    case InstrumentNamesFormat::TRANSP_NAME_NUM:
+        return transposition + u" " + instrName + (number.empty() ? String() : u" " + number);
+    default:
+    {
+        String result = style.styleSt(longNames ? Sid::instrumentNamesCustomFormatLong : Sid::instrumentNamesCustomFormatShort);
+        result.replace(u"$name", instrName);
+        result.replace(u"$transposition", transposition);
+        if (!number.empty()) {
+            result.replace(u"$number", number);
+        } else {
+            if (result.contains(u" $number")) {
+                result.remove(u" $number");
+            } else if (result.contains(u"$number ")) {
+                result.remove(u"$number ");
+            } else if (result.contains(u"$number")) {
+                result.remove(u"$number");
+            }
+        }
+        return result;
+    }
+    }
 }
 
 String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const Fraction& tick)
 {
-    String name;
+    const MStyle& style = system->style();
 
-    name += (system->ldata()->useLongNames() ? part->longName(tick) : part->shortName(tick));
+    bool longNames = system->ldata()->useLongNames();
+    Instrument* instr = part->instrument(tick);
 
-    String transposition = part->transposition(tick);
-    if (!transposition.empty()) {
-        name += u" " + muse::qtrc("notation", "in") + u" " + transposition;
+    String instrName = longNames ? instr->longName() : instr->shortName();
+
+    bool showTranspo = style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
+    String transposition = showTranspo ? instr->transposition() : String();
+
+    if (transposition.empty()) {
+        return instrName;
     }
 
-    return name;
+    InstrumentNamesFormat nameFormat
+        = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
+
+    String in = TranslatableString("notation", "in").translated();
+
+    switch (nameFormat) {
+    case InstrumentNamesFormat::NAME_IN_TRANSP_NUM:
+        return instrName + u" " + in + u" " + transposition;
+    case InstrumentNamesFormat::NAME_NUM_IN_TRANSP:
+        return instrName + u" " + in + u" " + transposition;
+    case InstrumentNamesFormat::TRANSP_NAME_NUM:
+        return transposition + u" " + instrName;
+    default:
+    {
+        String result = style.styleSt(longNames ? Sid::instrumentNamesCustomFormatLong : Sid::instrumentNamesCustomFormatShort);
+        result.replace(u"$name", instrName);
+        result.replace(u"$transposition", transposition);
+        if (result.contains(u" $number")) {
+            result.remove(u" $number");
+        } else if (result.contains(u"$number ")) {
+            result.remove(u"$number ");
+        } else if (result.contains(u"$number")) {
+            result.remove(u"$number");
+        }
+        return result;
+    }
+    }
 }
 
 bool SystemHeaderLayout::showNames(LayoutContext& ctx)
