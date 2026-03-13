@@ -337,6 +337,9 @@ public:
     int number() const { return m_instrumentName.number(); }
     void setNumber(int v) { return m_instrumentName.setNumber(v); }
 
+    const String& transposition() const { return m_instrumentName.transposition(); }
+    void setTransposition(const String& s) { m_instrumentName.setTransposition(s); }
+
     int minPitchP() const;
     int maxPitchP() const;
     int minPitchA() const;

@@ -792,12 +792,17 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
     return iname;
 }
 
-String SystemHeaderLayout::instrumentNameForPart(System* system, Part* part, const Fraction& tick)
+String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, const Fraction& tick)
 {
     String instrName;
 
     if (!muse::contains(system->ldata()->partsWithGroupName(), part)) {
         instrName += (system->ldata()->useLongNames() ? part->longName(tick) : part->shortName(tick));
+
+        String transposition = part->transposition(tick);
+        if (!transposition.empty()) {
+            instrName += u" " + muse::qtrc("notation", "in") + u" " + transposition;
+        }
     }
 
     int number = part->number(tick);
@@ -809,6 +814,20 @@ String SystemHeaderLayout::instrumentNameForPart(System* system, Part* part, con
     }
 
     return instrName;
+}
+
+String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const Fraction& tick)
+{
+    String name;
+
+    name += (system->ldata()->useLongNames() ? part->longName(tick) : part->shortName(tick));
+
+    String transposition = part->transposition(tick);
+    if (!transposition.empty()) {
+        name += u" " + muse::qtrc("notation", "in") + u" " + transposition;
+    }
+
+    return name;
 }
 
 bool SystemHeaderLayout::showNames(LayoutContext& ctx)
@@ -866,7 +885,7 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx, 
 
             String instrumentName;
             if (idxInPart == 0 && part->show() && visibleStavesCount > 0) {
-                instrumentName = instrumentNameForPart(system, part, tick);
+                instrumentName = formattedInstrumentName(system, part, tick);
             }
             updateName(system, globalIdx, ctx, instrumentName, type, InstrumentNameRole::PART);
 
@@ -931,7 +950,7 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
         }
 
         if (partsInThisGroup.size() > 1 && useGroupNames(curInstrument->group())) {
-            String name = system->ldata()->useLongNames() ? curPart->longName(tick) : curPart->shortName(tick);
+            String name = formattedGroupName(system, curPart, tick);
             InstrumentName* groupName = updateName(system, startOfGroup, ctx, name, type, InstrumentNameRole::GROUP);
 
             if (groupName) {

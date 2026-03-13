@@ -2107,6 +2107,12 @@ void TWrite::write(const StaffName& item, XmlWriter& xml)
         xml.writeXml(u"shortName", shortName);
     }
 
+    String transposition = item.transposition();
+    if (!transposition.empty()) {
+        lineBreakToTag(transposition);
+        xml.writeXml(u"transposition", transposition);
+    }
+
     if (item.number() != 0) {
         xml.tag("number", item.number());
     }

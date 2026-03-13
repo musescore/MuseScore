@@ -1146,15 +1146,16 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         const String& longN = instrument.longName();
         const String& shortN = instrument.shortName();
 
+        InstrumentTrait trait = instrument.trait();
+        const String& transp = trait.type == TraitType::Transposition && !trait.isHiddenOnScore ? trait.name : String();
+
         Part* part = new Part(score());
         part->setSoloist(pi.isSoloist);
         part->setInstrument(instrument);
 
-        String formattedLongName = formatInstrumentTitleOnScore(longN, instrument.trait());
-        String formattedShortName = formatInstrumentTitleOnScore(shortN, instrument.trait());
-
-        part->setLongName(formattedLongName);
-        part->setShortName(formattedShortName);
+        part->setLongName(muse::qtrc("notation", longN));
+        part->setShortName(muse::qtrc("notation", shortN));
+        part->setTransposition(muse::qtrc("notation", transp));
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
         part->setNumber(instrumentNumber);

@@ -980,6 +980,8 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
         item->setShortName(readStaffName(e));
     } else if (tag == "number") {
         item->setNumber(e.readInt());
+    } else if (tag == "transposition") {
+        item->setTransposition(readStaffName(e));
     } else if (tag == "trackName") {
         item->setTrackName(e.readText());
     } else if (tag == "minPitchA") {

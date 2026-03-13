@@ -566,6 +566,16 @@ void Part::setNumber(int v, const Fraction& tick)
     instrument(tick)->setNumber(v);
 }
 
+String Part::transposition(const Fraction& tick) const
+{
+    return instrument(tick)->transposition();
+}
+
+void Part::setTransposition(const String& s, const Fraction& tick)
+{
+    instrument(tick)->setTransposition(s);
+}
+
 //---------------------------------------------------------
 //   setPlainLongName
 //---------------------------------------------------------
@@ -845,6 +855,11 @@ String Part::partName() const
 {
     const Instrument* i = instrument();
     String fullName = i->longName();
+
+    const String& transp = i->transposition();
+    if (!transp.empty()) {
+        fullName += u" " + muse::qtrc("notation", "in") + u" " + transp;
+    }
 
     int n = number();
     if (n != 0) {

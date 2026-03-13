@@ -106,6 +106,9 @@ public:
     int number(const Fraction& tick = { -1, 1 }) const;
     void setNumber(int v, const Fraction& tick = { -1, 1 });
 
+    String transposition(const Fraction& tick = { -1, 1 }) const;
+    void setTransposition(const String& s, const Fraction& tick = { -1, 1 });
+
     void setPlainLongName(const String& s);
     void setPlainShortName(const String& s);
     void setPlainLongNameAll(const String& s);
