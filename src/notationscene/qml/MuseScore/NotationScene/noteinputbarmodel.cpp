@@ -586,6 +586,7 @@ MenuItemList NoteInputBarModel::makeTupletItems()
         makeMenuItem("septuplet"),
         makeMenuItem("octuplet"),
         makeMenuItem("nonuplet"),
+        makeMenuItem("remove-tuplet"),
         makeMenuItem("tuplet-dialog")
     };
 
