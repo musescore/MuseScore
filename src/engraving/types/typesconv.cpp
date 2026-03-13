@@ -1120,6 +1120,8 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_PITCHNAME_GERMAN,    "name-pitch-german", muse::TranslatableString("engraving/noteheadscheme", "German pitch names") },
     { NoteHeadScheme::HEAD_SOLFEGE,             "solfege-movable",   muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge movable Do") },  // &egrave;
     { NoteHeadScheme::HEAD_SOLFEGE_FIXED,       "solfege-fixed",     muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge fixed Do") },    // &egrave;
+    { NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE,
+        "solfege-fixed-full-rounded-square", muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge fixed do (Full syllables, rounded square)") }, // &egrave;
     { NoteHeadScheme::HEAD_SHAPE_NOTE_4,        "shape-4",           muse::TranslatableString("engraving/noteheadscheme", "4-shape (Walker)") },
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,  "shape-7-aikin",     muse::TranslatableString("engraving/noteheadscheme", "7-shape (Aikin)") },
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,   "shape-7-funk",      muse::TranslatableString("engraving/noteheadscheme", "7-shape (Funk)") },
