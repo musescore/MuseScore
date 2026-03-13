@@ -100,14 +100,16 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
     bool concPitch = style().styleB(Sid::concertPitch);
 
     for (size_t i = 0; i < part->nstaves(); i++) {
-        ClefTypeList ctl = instrument->clefType(i);
-        int cp = (unsigned char)ctl.concertClef;
-        int tp = (unsigned char)ctl.transposingClef;
-        int packedData = 1000 + cp + (tp << 8);
-        EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
-        score()->undoChangeClef(part->staff(i), element, ctl.concertClef, packedData);
+        ClefTypeList oldClefTypeList = part->instrument(tickStart)->clefType(i);
+        ClefTypeList newClefTypeList = instrument->clefType(i);
+        if (ClefInfo::symId(oldClefTypeList.concertClef) != ClefInfo::symId(newClefTypeList.concertClef) || ClefInfo::symId(oldClefTypeList.transposingClef) != ClefInfo::symId(newClefTypeList.transposingClef)) {
+            int cp = (unsigned char)newClefTypeList.concertClef;
+            int tp = (unsigned char)newClefTypeList.transposingClef;
+            int packedData = 1000 + cp + (tp << 8);
+            EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
+            score()->undoChangeClef(part->staff(i), element, newClefTypeList.concertClef, packedData);
+        }
     }
-
     // Change key signature if necessary. CAUTION: not necessary in case of octave-transposing!
     if ((v.chromatic - oldV.chromatic) % 12) {
         for (size_t i = 0; i < part->nstaves(); i++) {
