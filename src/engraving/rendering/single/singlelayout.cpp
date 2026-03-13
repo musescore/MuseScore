@@ -640,6 +640,8 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
                 + ctx.style().styleAbsolute(Sid::endBarDistance);
             break;
         case BarLineType::BROKEN:
+            w = ctx.style().styleAbsolute(Sid::dashBarWidth);
+            break;
         case BarLineType::NORMAL:
         case BarLineType::DOTTED:
             w = ctx.style().styleAbsolute(Sid::barWidth);
