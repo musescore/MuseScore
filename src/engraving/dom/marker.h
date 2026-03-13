@@ -95,8 +95,8 @@ public:
     String symbolString() const;
 
 private:
-    MarkerType m_markerType = MarkerType::SEGNO;
-    String m_label;                 ///< referenced from Jump() element
+    MarkerType m_markerType = MarkerType::FINE;
+    String m_label = u"fine";                 ///< referenced from Jump() element
 
     bool m_centerOnSymbol = true;
 };
