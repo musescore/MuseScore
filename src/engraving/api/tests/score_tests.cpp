@@ -27,6 +27,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/scoreorder.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
@@ -1447,5 +1448,77 @@ TEST_F(Engraving_ApiScoreTests, replacePartApi)
     EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
 
     delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrder
+//   Test setting the score order and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrder)
+{
+    // [GIVEN] A score
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Create a custom score order
+    ScoreOrder testOrder;
+    testOrder.id = u"test-order";
+    testOrder.name = TranslatableString::untranslatable("Test Order");
+
+    String originalOrderId = score->scoreOrder().id;
+
+    // [WHEN] We set the score order
+    score->startCmd(TranslatableString::untranslatable("Set score order test"));
+    EditPart::setScoreOrder(score, testOrder);
+    score->endCmd();
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(score->scoreOrder().id, u"test-order");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The score order should be back to original
+    EXPECT_EQ(score->scoreOrder().id, originalOrderId);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrderApi
+//   Test the Plugin API Score::setScoreOrder() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
+{
+    // [GIVEN] A score and an orchestral order available
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Add a test order to the global list for API lookup
+    ScoreOrder testOrder;
+    testOrder.id = u"test-api-order";
+    testOrder.name = TranslatableString::untranslatable("Test API Order");
+    instrumentOrders.push_back(testOrder);
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We set the score order via API
+    apiScore.setScoreOrder("test-api-order");
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(domScore->scoreOrder().id, u"test-api-order");
+
+    // Clean up the added test order
+    instrumentOrders.pop_back();
+
     delete domScore;
 }

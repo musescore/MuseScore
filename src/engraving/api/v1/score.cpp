@@ -26,6 +26,7 @@
 #include "dom/factory.h"
 #include "dom/instrtemplate.h"
 #include "dom/measure.h"
+#include "dom/scoreorder.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
@@ -435,6 +436,20 @@ void Score::replacePart(Part* part, const QString& instrumentId)
     }
 
     mu::engraving::EditPart::replacePart(score(), part->part(), t);
+}
+
+void Score::setScoreOrder(const QString& orderId)
+{
+    muse::String id = muse::String::fromQString(orderId);
+
+    for (const mu::engraving::ScoreOrder& order : mu::engraving::instrumentOrders) {
+        if (order.id == id) {
+            mu::engraving::EditPart::setScoreOrder(score(), order);
+            return;
+        }
+    }
+
+    LOGW("setScoreOrder: <%s> not found", qPrintable(orderId));
 }
 
 //---------------------------------------------------------

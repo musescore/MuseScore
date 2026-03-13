@@ -718,6 +718,15 @@ public:
     Q_INVOKABLE void replacePart(apiv1::Part* part, const QString& instrumentId);
 
     /** APIDOC
+     * Sets the score order (e.g. "orchestral", "marching-band").
+     * Score orders define the standard ordering of instruments and bracket/barline groupings.
+     * @method
+     * @param {String} orderId The ID of the score order (e.g. "orchestral", "marching-band", "jazz-combo").
+     * @since 4.7
+    */
+    Q_INVOKABLE void setScoreOrder(const QString& orderId);
+
+    /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
      * @method
      * @returns {Cursor} cursor

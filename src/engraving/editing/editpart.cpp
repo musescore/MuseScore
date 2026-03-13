@@ -21,6 +21,7 @@
  */
 
 #include "editpart.h"
+#include "editscoreproperties.h"
 #include "editstaff.h"
 #include "transpose.h"
 
@@ -28,6 +29,7 @@
 #include "../dom/factory.h"
 #include "../dom/instrchange.h"
 #include "../dom/instrtemplate.h"
+#include "../dom/scoreorder.h"
 #include "../dom/masterscore.h"
 #include "../dom/mscore.h"
 #include "../dom/part.h"
@@ -750,4 +752,15 @@ void EditPart::replaceDrumset(Score* score, Part* part, const String& instrument
             score->undo(new ChangeDrumset(instrument, newDrumset, part));
         }
     }
+}
+
+void EditPart::setScoreOrder(Score* score, const ScoreOrder& order)
+{
+    if (!score) {
+        return;
+    }
+
+    score->undo(new ChangeScoreOrder(score, order));
+    ScoreOrder mutableOrder = order;
+    mutableOrder.setBracketsAndBarlines(score);
 }

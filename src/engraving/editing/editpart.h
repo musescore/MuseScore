@@ -206,6 +206,7 @@ public:
 };
 
 class InstrumentTemplate;
+struct ScoreOrder;
 class Staff;
 class StaffType;
 enum class PreferSharpFlat : char;
@@ -244,6 +245,8 @@ public:
 
     static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
     static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
+
+    static void setScoreOrder(Score* score, const ScoreOrder& order);
 
 private:
     static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);

@@ -404,7 +404,7 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
 {
-    score()->undo(new mu::engraving::ChangeScoreOrder(score(), order));
+    EditPart::setScoreOrder(score(), order);
 
     m_scoreOrderChanged.notify();
 }
