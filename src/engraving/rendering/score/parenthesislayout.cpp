@@ -282,7 +282,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     double shoulderX = !muse::RealIsNull(ldata->shoulderWidth()) ? ldata->shoulderWidth() : 0.2
                        * std::pow(height, 0.95) * std::pow(mag, 0.1);
 
-    const double minShoulderX = 0.25 * spatium;
+    const double minShoulderX = 0.25 * spatium * ldata->intrinsicMag();
     shoulderX = std::max(shoulderX, minShoulderX);
 
     PointF start = PointF(xPos, startY);
@@ -415,7 +415,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     Chord* chord = toChord(item->parentItem());
 
     ldata->setMag(chord->mag());
-    ldata->intrinsicMag = chord->intrinsicMag();
+    ldata->intrinsicMag = chord->intrinsicMag();    // Scaling information not linked to staff size. item->spatium is NOT scaled by this
 
     Shape notesShape;
 
@@ -455,7 +455,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         const double scaleNormalization = sp / std::pow(sp0, exponentComplement);
         const double normalizedThickness = std::pow(normalizedHeight, exponent)
                                            * scaleNormalization
-                                           * ldata->intrinsicMag;
+                                           * ldata->intrinsicMag();
 
         return normalizedThickness;
     };
@@ -464,8 +464,8 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
         ldata->startY = notesShape.top();
         ldata->height = notesShape.bbox().height();
     } else {
-        ldata->startY = notesShape.top() - 0.25 * item->spatium();
-        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
+        ldata->startY = notesShape.top() - 0.25 * item->spatium() * ldata->intrinsicMag();
+        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium() * ldata->intrinsicMag();
     }
     ldata->midPointThickness.set_value(calculateMidPointThickness());
     ldata->endPointThickness.set_value(0.05);
