@@ -45,12 +45,18 @@ target_sources(muse_media PRIVATE
     internal/ffmpeg/v7/ffmpeglibhandler.h
     internal/ffmpeg/v7/videoencoder.cpp
     internal/ffmpeg/v7/videoencoder.h
+
+    internal/ffmpeg/v6/ffmpeglibhandler.cpp
+    internal/ffmpeg/v6/ffmpeglibhandler.h
+    internal/ffmpeg/v6/videoencoder.cpp
+    internal/ffmpeg/v6/videoencoder.h
 )
 
 target_include_directories(muse_media
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v8
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v7
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v6
 )
 
 set(MODULE_USE_PCH OFF)
