@@ -359,6 +359,10 @@ void Mixer::setIsActive(bool arg)
             aux.channel->setIsActive(arg);
         }
     }
+
+    for (IFxProcessorPtr& fx : m_masterFxProcessors) {
+        fx->setPlaying(arg);
+    }
 }
 
 void Mixer::addClock(IClockPtr clock)

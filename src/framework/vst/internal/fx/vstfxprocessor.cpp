@@ -100,6 +100,11 @@ void VstFxProcessor::setActive(bool active)
     m_params.active = active;
 }
 
+void VstFxProcessor::setPlaying(bool playing)
+{
+    m_vstAudioClient->setIsPlaying(playing);
+}
+
 bool VstFxProcessor::shouldProcessDuringSilence() const
 {
     return m_params.active && muse::contains(m_params.categories, AudioFxCategory::FxGenerator);

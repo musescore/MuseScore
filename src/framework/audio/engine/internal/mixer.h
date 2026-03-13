@@ -74,8 +74,10 @@ public:
     // IAudioSource
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
-    samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
+
     void setIsActive(bool arg) override;
+
+    samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
 
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
