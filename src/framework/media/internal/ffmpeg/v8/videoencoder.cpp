@@ -32,7 +32,6 @@ struct FFmpeg {
     unsigned int ptsCounter = 0;
 
     // FFmpeg stuff
-    const AVOutputFormat* outputFormat = nullptr;
     AVFormatContext* formatCtx = nullptr;
     AVStream* videoStream = nullptr;
     AVCodecContext* codecCtx = nullptr;
@@ -46,6 +45,7 @@ struct FFmpeg {
     AVPacket* pkt;
 
     bool opened = false;
+    bool finished = false;
 };
 
 VideoEncoder::VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler)
@@ -66,18 +66,14 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->width = width;
     m_ffmpeg->height = height;
 
-    m_ffmpeg->outputFormat = m_ffmpegHandler->av_guess_format("mp4", NULL, NULL);
-
-    m_ffmpeg->formatCtx = m_ffmpegHandler->avformat_alloc_context();
-    if (!m_ffmpeg->formatCtx) {
-        LOGE() << "failed allocate format context";
+    if (m_ffmpegHandler->avformat_alloc_output_context2(&m_ffmpeg->formatCtx, nullptr, "mp4", fileName.c_str()) < 0
+        || !m_ffmpeg->formatCtx) {
+        LOGE() << "failed to allocate output context";
         return false;
     }
-    m_ffmpeg->formatCtx->oformat = m_ffmpeg->outputFormat;
-    m_ffmpeg->formatCtx->url = strdup(fileName.c_str());
 
     // Add the video stream
-    m_ffmpeg->videoStream = m_ffmpegHandler->avformat_new_stream(m_ffmpeg->formatCtx, 0);
+    m_ffmpeg->videoStream = m_ffmpegHandler->avformat_new_stream(m_ffmpeg->formatCtx, nullptr);
     if (!m_ffmpeg->videoStream) {
         LOGE() << "failed allocate stream";
         return false;
@@ -98,25 +94,29 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
 
+    m_ffmpeg->videoStream->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+    m_ffmpeg->videoStream->codecpar->codec_id = AV_CODEC_ID_H264;
+    m_ffmpeg->videoStream->codecpar->width = width;
+    m_ffmpeg->videoStream->codecpar->height = height;
+    m_ffmpeg->videoStream->codecpar->format = AV_PIX_FMT_YUV420P;
+    m_ffmpeg->videoStream->codecpar->bit_rate = bitrate;
+
+    if (m_ffmpegHandler->avcodec_parameters_to_context(m_ffmpeg->codecCtx, m_ffmpeg->videoStream->codecpar) < 0) {
+        m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
+        LOGE() << "failed to set codec parameters from stream";
+        return false;
+    }
+
     m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
-
-    m_ffmpeg->codecCtx->bit_rate = bitrate;
-    m_ffmpeg->codecCtx->width = width;
-    m_ffmpeg->codecCtx->height = height;
-
-    // Avoid bug with missing frames
-    m_ffmpeg->codecCtx->gop_size = gop;
-    m_ffmpeg->codecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
-    m_ffmpeg->codecCtx->thread_count = 10;
-
     m_ffmpeg->codecCtx->time_base.den = fps;
     m_ffmpeg->codecCtx->time_base.num = 1;
+    m_ffmpeg->codecCtx->gop_size = gop;
+    m_ffmpeg->codecCtx->thread_count = 10;
     m_ffmpeg->codecCtx->max_b_frames = 3;
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "b_strategy", 1, 0);
 
     m_ffmpeg->codecCtx->me_cmp = 1;
     m_ffmpeg->codecCtx->me_range = 16;
-
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "hex", 1, 0);
 
     m_ffmpeg->codecCtx->qmin = 10;
@@ -128,22 +128,19 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->codecCtx->qcompress = 0.6;
     m_ffmpeg->codecCtx->max_qdiff = 4;
 
-    // some formats want stream headers to be separate
     if (m_ffmpeg->formatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
-        m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
+        m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     }
 
-    //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);
-
-    // open_video
-    if (m_ffmpegHandler->avcodec_parameters_from_context(m_ffmpeg->videoStream->codecpar, m_ffmpeg->codecCtx) < 0) {
-        m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
-        LOGE() << "failed to set AV parameters from context";
+    if (m_ffmpegHandler->avcodec_open2(m_ffmpeg->codecCtx, m_ffmpeg->codec, nullptr) < 0) {
+        LOGE() << "failed open codec";
         return false;
     }
-    // open the codec
-    if (m_ffmpegHandler->avcodec_open2(m_ffmpeg->codecCtx, m_ffmpeg->codec, 0) < 0) {
-        LOGE() << "failed open codec";
+
+    // Copy codec params to stream AFTER open - codec adds extradata (SPS/PPS) during open
+    if (m_ffmpegHandler->avcodec_parameters_from_context(m_ffmpeg->videoStream->codecpar, m_ffmpeg->codecCtx) < 0) {
+        m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
+        LOGE() << "failed to copy codec parameters to stream";
         return false;
     }
 
@@ -158,19 +155,17 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     m_ffmpeg->ppicture->height = height;
     m_ffmpeg->ppicture->format = AV_PIX_FMT_YUV420P;
 
-    int size = m_ffmpegHandler->av_image_get_buffer_size(m_ffmpeg->codecCtx->pix_fmt, m_ffmpeg->codecCtx->width,
-                                                         m_ffmpeg->codecCtx->height, 1);
+    int size = m_ffmpegHandler->av_image_get_buffer_size(AV_PIX_FMT_YUV420P, m_ffmpeg->width, m_ffmpeg->height, 1);
     m_ffmpeg->picture_buf = new uint8_t[size];
     if (!m_ffmpeg->picture_buf) {
         LOGE() << "failed allocate frame buf";
-        m_ffmpegHandler->av_free(m_ffmpeg->ppicture);
+        m_ffmpegHandler->av_frame_free(&m_ffmpeg->ppicture);
         return false;
     }
 
     // Setup the planes
     m_ffmpegHandler->av_image_fill_arrays(m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize, m_ffmpeg->picture_buf,
-                                          m_ffmpeg->codecCtx->pix_fmt,
-                                          m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height, 1);
+                                          AV_PIX_FMT_YUV420P, m_ffmpeg->width, m_ffmpeg->height, 1);
 
     if (m_ffmpegHandler->avio_open(&m_ffmpeg->formatCtx->pb, fileName.c_str(), AVIO_FLAG_WRITE) < 0) {
         LOGE() << "failed open file: " << fileName;
@@ -183,6 +178,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
 
+    //av_dump_format(m_ffmpeg->formatCtx, 0, fileName.c_str(), 1);
+
     m_ffmpeg->opened = true;
     m_outputPath = fileName;
 
@@ -191,7 +188,7 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 
 void VideoEncoder::finishEncode()
 {
-    if (!m_ffmpeg->opened) {
+    if (!m_ffmpeg->opened || m_ffmpeg->finished) {
         return;
     }
 
@@ -229,8 +226,13 @@ void VideoEncoder::finishEncode()
     }
 
     m_ffmpegHandler->av_write_trailer(m_ffmpeg->formatCtx);
-    m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
-    m_ffmpeg->formatCtx->pb = nullptr;
+
+    if (m_ffmpeg->formatCtx->pb) {
+        m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
+        m_ffmpeg->formatCtx->pb = nullptr;
+    }
+
+    m_ffmpeg->finished = true;
 }
 
 void VideoEncoder::close()
@@ -239,7 +241,10 @@ void VideoEncoder::close()
         return;
     }
 
-    // close_video
+    if (!m_ffmpeg->finished) {
+        finishEncode();
+    }
+
     m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
 
     if (m_ffmpeg->picture_buf) {
@@ -248,24 +253,20 @@ void VideoEncoder::close()
     }
 
     if (m_ffmpeg->ppicture) {
-        m_ffmpegHandler->av_free(m_ffmpeg->ppicture);
+        m_ffmpegHandler->av_frame_free(&m_ffmpeg->ppicture);
         m_ffmpeg->ppicture = 0;
     }
 
-    /* free the streams */
-
-    for (unsigned int i = 0; i < m_ffmpeg->formatCtx->nb_streams; i++) {
-        m_ffmpegHandler->av_freep(&m_ffmpeg->formatCtx->streams[i]);
+    if (m_ffmpeg->formatCtx) {
+        if (m_ffmpeg->formatCtx->pb) {
+            m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
+            m_ffmpeg->formatCtx->pb = nullptr;
+        }
+        m_ffmpegHandler->avformat_free_context(m_ffmpeg->formatCtx);
+        m_ffmpeg->formatCtx = nullptr;
     }
-
-    // Close file
-    m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
-    m_ffmpeg->formatCtx->pb = nullptr;
-
-    // Free the stream
-    m_ffmpegHandler->av_free(m_ffmpeg->formatCtx);
-    m_ffmpeg->formatCtx = nullptr;
     m_ffmpeg->opened = false;
+    m_ffmpeg->finished = false;
 
     m_outputPath = io::path_t();
 }
