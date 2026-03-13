@@ -106,6 +106,10 @@ void NoteInputPreferencesModel::load()
     engravingConfiguration()->autoUpdateFretboardDiagramsChanged().onReceive(this, [this](bool value) {
         emit autoUpdateFretboardDiagramsChanged(value);
     });
+
+    notationConfiguration()->lyricsFormMelismaAtSlurTiesChanged().onNotify(this, [this]() {
+        emit lyricsFormMelismaAtSlurTiesChanged(lyricsFormMelismaAtSlurTies());
+    });
 }
 
 QVariantList NoteInputPreferencesModel::noteInputMethods() const
@@ -396,4 +400,18 @@ void NoteInputPreferencesModel::setAutoUpdateFretboardDiagrams(bool value)
     }
 
     engravingConfiguration()->setAutoUpdateFretboardDiagrams(value);
+}
+
+bool NoteInputPreferencesModel::lyricsFormMelismaAtSlurTies() const
+{
+    return notationConfiguration()->lyricsFormMelismaAtSlurTies();
+}
+
+void NoteInputPreferencesModel::setLyricsFormMelismaAtSlurTies(bool value)
+{
+    if (value == lyricsFormMelismaAtSlurTies()) {
+        return;
+    }
+
+    notationConfiguration()->setLyricsFormMelismaAtSlurTies(value);
 }
