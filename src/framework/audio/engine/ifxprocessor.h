@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_IAUDIOPROCESSOR_H
-#define MUSE_AUDIO_IAUDIOPROCESSOR_H
+
+#pragma once
 
 #include <memory>
 
@@ -33,8 +33,10 @@ public:
     virtual ~IFxProcessor() = default;
 
     virtual AudioFxType type() const = 0;
+
     virtual const AudioFxParams& params() const = 0;
     virtual async::Channel<audio::AudioFxParams> paramsChanged() const = 0;
+
     virtual void setOutputSpec(const OutputSpec& spec) = 0;
 
     virtual bool active() const = 0;
@@ -45,5 +47,3 @@ public:
 
 using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;
 }
-
-#endif // MUSE_AUDIO_IAUDIOPROCESSOR_H
