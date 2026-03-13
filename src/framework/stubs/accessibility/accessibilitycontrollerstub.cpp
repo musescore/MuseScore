@@ -31,6 +31,11 @@ void AccessibilityControllerStub::unreg(IAccessible*)
 {
 }
 
+bool AccessibilityControllerStub::isReg(IAccessible*) const
+{
+    return false;
+}
+
 void AccessibilityControllerStub::announce(const QString&)
 {
 }

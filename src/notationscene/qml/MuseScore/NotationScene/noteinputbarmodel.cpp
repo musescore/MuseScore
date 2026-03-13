@@ -187,6 +187,16 @@ void NoteInputBarModel::updateItemStateChecked(MenuItem& item, bool checked)
     item.setState(state);
 }
 
+void NoteInputBarModel::updateItemsStateChecked(const ActionCode& actionCode, bool checked)
+{
+    // Multiple items can have this action code: one in the toolbar itself
+    // and another in the menu of the "Add" toolbutton.
+    MenuItemList items = findItems(actionCode);
+    for (MenuItem* item : items) {
+        updateItemStateChecked(*item, checked);
+    }
+}
+
 void NoteInputBarModel::updateState()
 {
     for (int i = 0; i < rowCount(); ++i) {
@@ -243,7 +253,7 @@ void NoteInputBarModel::updateNoteDotState()
     int durationDots = noteInputState().duration().dots();
 
     for (const ActionCode& actionCode: dotActions) {
-        updateItemStateChecked(findItem(actionCode), durationDots == NotationUiActions::actionDotCount(actionCode));
+        updateItemsStateChecked(actionCode, durationDots == NotationUiActions::actionDotCount(actionCode));
     }
 }
 
@@ -267,7 +277,7 @@ void NoteInputBarModel::updateNoteDurationState()
 
     DurationType durationType = resolveCurrentDurationType();
     for (const ActionCode& actionCode: noteActions) {
-        updateItemStateChecked(findItem(actionCode), durationType == NotationUiActions::actionDurationType(actionCode));
+        updateItemsStateChecked(actionCode, durationType == NotationUiActions::actionDurationType(actionCode));
     }
 }
 
@@ -284,7 +294,7 @@ void NoteInputBarModel::updateNoteAccidentalState()
     AccidentalType accidentalType = noteInputState().accidentalType();
 
     for (const ActionCode& actionCode: accidentalActions) {
-        updateItemStateChecked(findItem(actionCode), accidentalType == NotationUiActions::actionAccidentalType(actionCode));
+        updateItemsStateChecked(actionCode, accidentalType == NotationUiActions::actionAccidentalType(actionCode));
     }
 }
 
@@ -308,7 +318,7 @@ void NoteInputBarModel::updateTieState()
         }
     }
 
-    updateItemStateChecked(findItem(codeFromQString("tie")), checked); // todo
+    updateItemsStateChecked(codeFromQString("tie"), checked); // todo
 }
 
 void NoteInputBarModel::updateLvState()
@@ -327,13 +337,13 @@ void NoteInputBarModel::updateLvState()
         }
     }
 
-    updateItemStateChecked(findItem(codeFromQString("lv")), checked);
+    updateItemsStateChecked(codeFromQString("lv"), checked);
 }
 
 void NoteInputBarModel::updateSlurState()
 {
     bool checked = m_notation ? m_notation->elements()->msScore()->inputState().slur() != nullptr : false;
-    updateItemStateChecked(findItem(codeFromQString("add-slur")), checked);
+    updateItemsStateChecked(codeFromQString("add-slur"), checked);
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -348,7 +358,7 @@ void NoteInputBarModel::updateVoicesState()
     int currentVoice = resolveCurrentVoiceIndex();
 
     for (const ActionCode& actionCode: voiceActions) {
-        updateItemStateChecked(findItem(actionCode), currentVoice == NotationUiActions::actionVoice(actionCode));
+        updateItemsStateChecked(actionCode, currentVoice == NotationUiActions::actionVoice(actionCode));
     }
 }
 
@@ -369,13 +379,13 @@ void NoteInputBarModel::updateArticulationsState()
     };
 
     for (const ActionCode& actionCode: articulationActions) {
-        updateItemStateChecked(findItem(actionCode), isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
+        updateItemsStateChecked(actionCode, isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
     }
 }
 
 void NoteInputBarModel::updateRestState()
 {
-    updateItemStateChecked(findItem(ActionCode("pad-rest")), resolveRestSelected());
+    updateItemsStateChecked(ActionCode("pad-rest"), resolveRestSelected());
 }
 
 void NoteInputBarModel::updateAddState()
