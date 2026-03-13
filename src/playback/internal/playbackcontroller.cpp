@@ -1625,6 +1625,18 @@ Notification PlaybackController::totalPlayTimeChanged() const
     return m_totalPlayTimeChanged;
 }
 
+secs_t PlaybackController::selectionDuration() const
+{
+    const INotationSelectionRangePtr range = selectionRange();
+    IF_ASSERT_FAILED(range) {
+        return 0;
+    }
+
+    const muse::midi::tick_t startTick = notationPlayback()->playPositionTickByRawTick(range->startTick().ticks()).val;
+    const muse::midi::tick_t endTick = notationPlayback()->playPositionTickByRawTick(range->endTick().ticks()).val;
+    return notationPlayback()->playedTickToSec(endTick - startTick);
+}
+
 const Tempo& PlaybackController::currentTempo() const
 {
     return m_currentTempo;
@@ -1811,6 +1823,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
 
     m_isExportingAudio = exporting;
     updateSoloMuteStates();
+    seekRangeSelection();
 
     if (exporting && notationPlayback()) {
         notationPlayback()->sendEventsForChangedTracks();

@@ -121,7 +121,8 @@ public:
     RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     RetVal<AudioSignalChanges> masterSignalChanges() const override;
 
-    async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format) override;
+    async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format,
+                                       const secs_t startPosition = 0, const secs_t duration = 0) override;
     void abortSavingAllSoundTracks() override;
     SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
 
@@ -136,7 +137,7 @@ private:
     void listenInputProcessing(ITrackSequencePtr s, std::function<void(const Ret&)> completed);
     size_t tracksBeingProcessedCount(const ITrackSequencePtr s) const;
 
-    Ret doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format);
+    Ret doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format, const secs_t duration);
 
     async::Channel<TrackSequenceId, TrackId> m_trackAdded;
     async::Channel<TrackSequenceId, TrackId> m_trackRemoved;

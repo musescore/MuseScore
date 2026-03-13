@@ -101,6 +101,8 @@ public:
     virtual muse::secs_t totalPlayTime() const = 0;
     virtual muse::async::Notification totalPlayTimeChanged() const = 0;
 
+    virtual muse::audio::secs_t selectionDuration() const = 0;
+
     virtual const notation::Tempo& currentTempo() const = 0;
     virtual muse::async::Notification currentTempoChanged() const = 0;
 

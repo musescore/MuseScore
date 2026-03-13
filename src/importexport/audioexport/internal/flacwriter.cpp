@@ -41,5 +41,5 @@ muse::Ret FlacWriter::write(notation::INotationPtr notation, muse::io::IODevice&
         0 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, configuration()->selectionOnly());
 }
