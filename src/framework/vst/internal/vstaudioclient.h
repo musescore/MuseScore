@@ -30,13 +30,14 @@ namespace muse::vst {
 class VstAudioClient
 {
 public:
-    VstAudioClient() = default;
+    VstAudioClient();
     ~VstAudioClient();
 
     void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance);
     void loadSupportedParams();
 
     void setIsActive(const bool isActive);
+    void setIsPlaying(const bool isPlaying);
     void setOutputSpec(const audio::OutputSpec& spec);
     void setProcessMode(VstProcessMode mode);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);

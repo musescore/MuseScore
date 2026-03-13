@@ -333,6 +333,10 @@ void ReverbProcessor::setActive(bool active)
     m_params.active = active;
 }
 
+void ReverbProcessor::setPlaying(bool)
+{
+}
+
 bool ReverbProcessor::shouldProcessDuringSilence() const
 {
     return false;
