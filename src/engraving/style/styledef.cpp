@@ -161,6 +161,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(doubleBarWidth,                             0.18_sp),
 
     styleDef(endBarWidth,                                0.55_sp),
+    styleDef(dashBarWidth,                               0.11_sp),
+    styleDef(dashBarDash,                                0.6_sp),
+    styleDef(dashBarGap,                                 0.4_sp),
     styleDef(doubleBarDistance,                          0.37_sp),
     styleDef(endBarDistance,                             0.37_sp),
     styleDef(repeatBarlineDotSeparation,                 0.37_sp),
