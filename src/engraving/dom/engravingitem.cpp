@@ -436,6 +436,12 @@ bool EngravingItem::onTabStaff() const
     return stt ? stt->isTabStaff() : false;
 }
 
+bool EngravingItem::isJianpuStaff() const
+{
+    const Staff* st = staff();
+    return st ? st->isJianpuStaff(tick()) : false;
+}
+
 bool EngravingItem::hasGrips() const
 {
     return gripsCount() > 0;

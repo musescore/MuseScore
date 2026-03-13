@@ -297,7 +297,7 @@ public:
     static void layoutNoteLine(NoteLine* item, LayoutContext& ctx);
     static void layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx);
 
-    static void layoutOctaveDot(OctaveDot* item);
+    static void layoutOctaveDot(OctaveDot* item, LayoutContext& ctx);
     static void layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 

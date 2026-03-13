@@ -1843,7 +1843,8 @@ static void updateStyles(Score* score,
 
         if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
             || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER
-            || tid == TextStyleType::HARMONY_ROMAN || tid == TextStyleType::TAB_FRET_NUMBER) {
+            || tid == TextStyleType::HARMONY_ROMAN || tid == TextStyleType::TAB_FRET_NUMBER
+            || tid == TextStyleType::JIANPU_NUMBER) {
             continue;
         }
 

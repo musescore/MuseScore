@@ -56,9 +56,6 @@ public:
     double len() const { return m_len; }
     void setLen(double v) { m_len = v; }
 
-    void setHalving(bool v) { m_halving = v; }
-    bool halving() const { return m_halving; }
-
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     struct LayoutData : public EngravingItem::LayoutData {
@@ -69,7 +66,6 @@ public:
 private:
 
     double m_len = 0.0;
-    bool m_halving = true;
 };
 } // namespace mu::engraving
 #endif
