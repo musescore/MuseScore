@@ -47,6 +47,7 @@ class Marker;
 class Measure;
 class MeasureRepeat;
 class Note;
+class Pedal;
 class Rest;
 class Score;
 class Slur;
@@ -182,6 +183,7 @@ private:
     int computeInterval(Note* rootNote, Note* note, bool ignoreOctaves);
     std::vector<Slur*> slurs(ChordRest* chordRest);
     std::vector<Hairpin*> hairpins(ChordRest* chordRest);
+    std::vector<Pedal*> pedals(ChordRest* chordRest);
     int notesInSlur(Slur* slur);
     bool isShortSlur(Slur* slur);
     bool isLongSlur(Slur* slur);
@@ -234,5 +236,7 @@ private:
     QString brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hairpin*>& hairpin);
     QString brailleSlurBefore(ChordRest* chordRest, const std::vector<Slur*>& slur);
     QString brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& slur);
+    QString braillePedalBefore(ChordRest* chordRest, const std::vector<Pedal*>& pedalList);
+    QString braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal*>& pedalList);
 };
 }
