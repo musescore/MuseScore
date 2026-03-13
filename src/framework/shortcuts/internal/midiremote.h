@@ -33,6 +33,8 @@
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
 
+#include "midi/mmc.h"
+
 namespace muse {
 class XmlStreamReader;
 class XmlStreamWriter;
@@ -77,9 +79,13 @@ private:
 
     RemoteEvent remoteEvent(const std::string& action) const;
 
+    void processMMC(const midi::MMCMessage& msg);
+
     bool m_isSettingMode = false;
 
     MidiMappingList m_midiMappings;
     async::Notification m_midiMappingsChanged;
+
+    midi::MMCParser m_mmcParser;
 };
 }

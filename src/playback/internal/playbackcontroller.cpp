@@ -51,6 +51,7 @@ using namespace mu::playback;
 
 static const ActionCode PLAY_CODE("play");
 static const ActionCode PLAY_FROM_SELECTION("play-from-selection");
+static const ActionCode PAUSE_CODE("pause");
 static const ActionCode STOP_CODE("stop");
 static const ActionCode PAUSE_AND_SELECT_CODE("pause-and-select");
 static const ActionCode REWIND_CODE("rewind");
@@ -107,8 +108,9 @@ void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, [this]() { PlaybackController::togglePlay(); });
     dispatcher()->reg(this, PLAY_FROM_SELECTION, [this]() { PlaybackController::playFromSelection(); });
-    dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
+    dispatcher()->reg(this, PAUSE_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
     dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
+    dispatcher()->reg(this, STOP_CODE, this, &PlaybackController::stop);
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
     dispatcher()->reg(this, LOOP_CODE, this, &PlaybackController::toggleLoopPlayback);
     dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });
@@ -1834,8 +1836,9 @@ bool PlaybackController::canReceiveAction(const ActionCode& code) const
 
     static const std::unordered_set<ActionCode> REQUIRES_MEASURES {
         PLAY_CODE,
-        STOP_CODE,
+        PAUSE_CODE,
         PAUSE_AND_SELECT_CODE,
+        STOP_CODE,
         REWIND_CODE,
         LOOP_CODE,
         LOOP_IN_CODE,

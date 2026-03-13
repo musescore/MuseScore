@@ -22,6 +22,7 @@
 
 #include "midiremote.h"
 
+#include "global/types/secs.h"
 #include "global/io/buffer.h"
 #include "global/serialization/xmlstreamreader.h"
 #include "global/serialization/xmlstreamwriter.h"
@@ -112,6 +113,15 @@ Ret MidiRemote::process(const Event& ev)
 {
     if (needIgnoreEvent(ev)) {
         return Ret(Ret::Code::Undefined);
+    }
+
+    if (ev.messageType() == Event::MessageType::SystemExclusiveData) {
+        const std::optional<midi::MMCMessage> msg = m_mmcParser.process(ev);
+        if (msg.has_value()) {
+            processMMC(msg.value());
+        }
+
+        return make_ret(Ret::Code::Ok);
     }
 
     RemoteEvent event = remoteEventFromMidiEvent(ev);
@@ -234,17 +244,19 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
         return true;
     }
 
-    if (event.opcode() != Event::Opcode::NoteOn && event.opcode() != Event::Opcode::NoteOff
-        && event.opcode() != Event::Opcode::ControlChange) {
+    if (event.messageType() == Event::MessageType::SystemExclusiveData) {
+        return false;
+    }
+
+    const Event::Opcode opcode = event.opcode();
+    if (opcode != Event::Opcode::NoteOn
+        && opcode != Event::Opcode::NoteOff
+        && opcode != Event::Opcode::ControlChange) {
         return true;
     }
 
-    static const QList<Event::Opcode> releaseOps {
-        Event::Opcode::NoteOff
-    };
-
-    bool release = releaseOps.contains(event.opcode())
-                   || (event.opcode() == Event::Opcode::ControlChange && event.data() == 0);
+    bool release = opcode == Event::Opcode::NoteOff
+                   || (opcode == Event::Opcode::ControlChange && event.data() == 0);
 
     if (release) {
         bool advanceToNextNoteOnKeyRelease = configuration()->advanceToNextNoteOnKeyRelease();
@@ -271,4 +283,26 @@ RemoteEvent MidiRemote::remoteEvent(const std::string& action) const
     }
 
     return RemoteEvent();
+}
+
+void MidiRemote::processMMC(const MMCMessage& msg)
+{
+    switch (msg.command) {
+    case MMCCommand::Play:
+        dispatcher()->dispatch("play");
+        break;
+    case MMCCommand::Pause:
+        dispatcher()->dispatch("pause");
+        break;
+    case MMCCommand::Stop:
+        dispatcher()->dispatch("stop");
+        break;
+    case MMCCommand::Locate: {
+        const std::optional<double> pos = midi::MMCParser::locateToSeconds(msg);
+        if (pos.has_value()) {
+            dispatcher()->dispatch("rewind", ActionData::make_arg1<secs_t>(pos.value()));
+        }
+    } break;
+    default: break;
+    }
 }
