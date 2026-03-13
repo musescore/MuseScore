@@ -54,7 +54,7 @@ void Engraving_RepeatTests::repeat(const char* path, const String& ref)
         int endTick   = rs->endTick();
 
         for (const Measure* m = score->tick2measure(Fraction::fromTicks(startTick)); m; m = m->nextMeasure()) {
-            sl.append(String::number(m->no() + 1));
+            sl.append(String::number(m->measureNumber() + 1));
 
             if (m->endTick().ticks() >= endTick) {
                 break;

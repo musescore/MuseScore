@@ -254,7 +254,7 @@ public:
     static libmei::RepeatMark markerToMEI(const engraving::Marker* marker, muse::String& text);
 
     static MeasureStruct measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
-    static libmei::Measure measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastIrregular);
+    static libmei::Measure measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastExcludedFromNumbering);
 
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::ScoreDef& meiScoreDef, bool& warning);
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);

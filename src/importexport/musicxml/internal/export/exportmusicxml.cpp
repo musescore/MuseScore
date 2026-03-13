@@ -291,11 +291,11 @@ public:
     bool isFirstActualMeasure() const;
 private:
     void init();
-    int m_measureNo = 0;                             // number of next regular measure
-    int m_measureNoOffset = 0;                       // measure number offset
-    int m_irregularMeasureNo = 0;                    // number of next irregular measure
-    int m_pickupMeasureNo = 0;                       // number of next pickup measure
-    String m_cachedAttributes;                  // attributes calculated by updateForMeasure()
+    int m_measureNumber = 0;          // number of next regular measure
+    int m_measureNumberOffset = 0;    // measure number offset
+    int m_irregularMeasureNumber = 0; // number of next irregular measure
+    int m_pickupMeasureNumber = 0;    // number of next pickup measure
+    String m_cachedAttributes;        // attributes calculated by updateForMeasure()
 };
 
 //---------------------------------------------------------
@@ -8080,10 +8080,10 @@ MeasureNumberStateHandler::MeasureNumberStateHandler()
 
 void MeasureNumberStateHandler::init()
 {
-    m_measureNo = 1;
-    m_measureNoOffset = 0;
-    m_irregularMeasureNo = 1;
-    m_pickupMeasureNo = 1;
+    m_measureNumber = 1;
+    m_measureNumberOffset = 0;
+    m_irregularMeasureNumber = 1;
+    m_pickupMeasureNumber = 1;
 }
 
 void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
@@ -8103,16 +8103,16 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
     }
 
     // update measure numbers and cache result
-    m_measureNoOffset = m->noOffset();
-    m_measureNo += m_measureNoOffset;
+    m_measureNumberOffset = m->measureNumberOffset();
+    m_measureNumber += m_measureNumberOffset;
     m_cachedAttributes = u" number=";
-    if ((m_irregularMeasureNo + m_measureNo) == 2 && m->irregular()) {
+    if ((m_irregularMeasureNumber + m_measureNumber) == 2 && m->excludeFromNumbering()) {
         m_cachedAttributes += u"\"0\" implicit=\"yes\"";
-        m_pickupMeasureNo++;
-    } else if (m->irregular()) {
-        m_cachedAttributes += String(u"\"X%1\" implicit=\"yes\"").arg(m_irregularMeasureNo++);
+        m_pickupMeasureNumber++;
+    } else if (m->excludeFromNumbering()) {
+        m_cachedAttributes += String(u"\"X%1\" implicit=\"yes\"").arg(m_irregularMeasureNumber++);
     } else {
-        m_cachedAttributes += String(u"\"%1\"").arg(m_measureNo++);
+        m_cachedAttributes += String(u"\"%1\"").arg(m_measureNumber++);
     }
 }
 
@@ -8123,7 +8123,7 @@ String MeasureNumberStateHandler::measureNumber() const
 
 bool MeasureNumberStateHandler::isFirstActualMeasure() const
 {
-    return (m_irregularMeasureNo + (m_measureNo - m_measureNoOffset) + m_pickupMeasureNo) == 4;
+    return (m_irregularMeasureNumber + (m_measureNumber - m_measureNumberOffset) + m_pickupMeasureNumber) == 4;
 }
 
 //---------------------------------------------------------

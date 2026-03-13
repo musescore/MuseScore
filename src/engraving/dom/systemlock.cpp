@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "measure.h"
 #include "measurebase.h"
 #include "page.h"
 #include "score.h"
@@ -132,7 +133,10 @@ void SystemLocks::dump()
 {
     for (auto& pair : m_systemLocks) {
         const SystemLock* sl = pair.second;
-        LOGD() << "SystemLock --- Start measure: " << sl->startMB()->no() << ", End Measure: " << sl->endMB()->no();
+        const Measure* startMeasure = sl->startMB()->isMeasure() ? toMeasure(sl->startMB()) : sl->startMB()->prevMeasure();
+        const Measure* endMeasure = sl->endMB()->isMeasure() ? toMeasure(sl->endMB()) : sl->endMB()->prevMeasure();
+        LOGD() << "SystemLock --- Start measure: " << (startMeasure ? startMeasure->measureNumber() : -1)
+               << ", End Measure: " << (endMeasure ? endMeasure->measureNumber() : -1);
     }
 }
 
@@ -150,8 +154,12 @@ void SystemLockIndicator::setSelected(bool v)
 
 String SystemLockIndicator::formatBarsAndBeats() const
 {
-    int startMeas = systemLock()->startMB()->no() + 1;
-    int endMeas = systemLock()->endMB()->no() + 1;
-    return muse::mtrc("engraving", "Start measure: %1; End measure: %2").arg(startMeas).arg(endMeas);
+    const MeasureBase* startMB = m_systemLock->startMB();
+    const MeasureBase* endMB = m_systemLock->endMB();
+    const Measure* startMeasure = startMB->isMeasure() ? toMeasure(startMB) : toMeasure(startMB->prevMeasure());
+    const Measure* endMeasure = endMB->isMeasure() ? toMeasure(endMB) : toMeasure(endMB->prevMeasure());
+    const int startMeasureNum = startMeasure ? startMeasure->measureNumber() : -1;
+    const int endMeasureNum = endMeasure ? endMeasure->measureNumber() : -1;
+    return muse::mtrc("engraving", "Start measure: %1; End measure: %2").arg(startMeasureNum).arg(endMeasureNum);
 }
 } // namespace mu::engraving

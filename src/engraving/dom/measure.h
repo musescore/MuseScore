@@ -193,16 +193,44 @@ public:
 
     void createStaves(staff_idx_t);
 
-    MeasureNumberMode measureNumberMode() const { return m_measureNumberMode; }
-    void setMeasureNumberMode(MeasureNumberMode v) { m_measureNumberMode = v; }
-
     Fraction timesig() const { return m_timesig; }
     void setTimesig(const Fraction& f) { m_timesig = f; }
 
     Fraction stretchedLen(const Staff*) const;
     bool isIrregular() const { return m_timesig != m_len; }
 
-    int size() const { return m_segments.size(); }
+    int measureNumber() const { return m_measureNumber; }
+    void setMeasureNumber(int n) { m_measureNumber = n; }
+    int measureNumberOffset() const { return m_measureNumberOffset; }
+    void setMeasureNumberOffset(int n) { m_measureNumberOffset = n; }
+
+    bool excludeFromNumbering() const { return flag(ElementFlag::EXCLUDE_FROM_NUMBERING); }
+    void setExcludeFromNumbering(bool v) { setFlag(ElementFlag::EXCLUDE_FROM_NUMBERING, v); }
+
+    MeasureNumberMode measureNumberMode() const { return m_measureNumberMode; }
+    void setMeasureNumberMode(MeasureNumberMode v) { m_measureNumberMode = v; }
+
+    bool repeatEnd() const { return flag(ElementFlag::REPEAT_END); }
+    void setRepeatEnd(bool v) { setFlag(ElementFlag::REPEAT_END, v); }
+
+    bool repeatStart() const { return flag(ElementFlag::REPEAT_START); }
+    void setRepeatStart(bool v) { setFlag(ElementFlag::REPEAT_START, v); }
+
+    bool repeatJump() const { return flag(ElementFlag::REPEAT_JUMP); }
+    void setRepeatJump(bool v) { setFlag(ElementFlag::REPEAT_JUMP, v); }
+
+    bool hasCourtesyKeySig() const { return flag(ElementFlag::COURTESY_KEYSIG); }
+    void setHasCourtesyKeySig(bool v) { setFlag(ElementFlag::COURTESY_KEYSIG, v); }
+
+    bool hasCourtesyTimeSig() const { return flag(ElementFlag::COURTESY_TIMESIG); }
+    void setHasCourtesyTimeSig(bool v) const { setFlag(ElementFlag::COURTESY_TIMESIG, v); }
+
+    bool hasCourtesyClef() const { return flag(ElementFlag::COURTESY_CLEF); }
+    void setHasCourtesyClef(bool v) const { setFlag(ElementFlag::COURTESY_CLEF, v); }
+
+    bool endOfMeasureChange() const { return flag(ElementFlag::END_OF_MEASURE_CHANGE); }
+    void setEndOfMeasureChange(bool val) const { setFlag(ElementFlag::END_OF_MEASURE_CHANGE, val); }
+
     Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
@@ -400,6 +428,8 @@ private:
 
     int m_repeatCount = 0;      // end repeat marker and repeat count
 
+    int m_measureNumber = 0;    // counting from zero
+    int m_measureNumberOffset = 0;
     MeasureNumberMode m_measureNumberMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
 };

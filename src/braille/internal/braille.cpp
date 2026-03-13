@@ -822,7 +822,7 @@ bool Braille::write(QIODevice& device)
         // we write the measure number
         if (currentLineLength == 0) {
             TextToUEBBraille textToBraille;
-            QString measureNumber = textToBraille.braille(QString::number(m->no() + 1)).remove(0, 1) + " ";
+            QString measureNumber = textToBraille.braille(QString::number(m->measureNumber() + 1)).remove(0, 1) + " ";
             int measureNumberLen = measureNumber.size();
             line[0] += measureNumber;
             for (size_t i = 1; i < nrStaves; i++) {
@@ -836,7 +836,7 @@ bool Braille::write(QIODevice& device)
         }
 
         for (size_t i = 0; i < nrStaves; ++i) {
-            BRAILLE_TRACE() << "Measure " << mb->no() + 1 << " Staff " << i;
+            BRAILLE_TRACE() << "Measure " << m->measureNumber() + 1 << " Staff " << i;
 
             measureBraille[i] = brailleMeasure(m, static_cast<int>(i)).toUtf8();
 

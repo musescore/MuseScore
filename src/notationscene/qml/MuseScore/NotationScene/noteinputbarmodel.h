@@ -71,6 +71,7 @@ private:
     void load() override;
 
     void updateItemStateChecked(muse::uicomponents::MenuItem& item, bool checked);
+    void updateItemsStateChecked(const muse::actions::ActionCode& actionCode, bool checked);
 
     void updateState();
     void updateNoteInputState();

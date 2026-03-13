@@ -37,6 +37,18 @@ class IAudioEngine : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
+    struct RenderConstraints {
+        samples_t minSamplesToReserveWhenIdle = 0;
+        samples_t minSamplesToReserveInRealtime = 0;
+
+        // mixer
+        size_t desiredAudioThreadNumber = 0;
+        size_t minTrackCountForMultithreading = 0;
+    };
+
+    virtual Ret init(const OutputSpec& outputSpec, const RenderConstraints& consts) = 0;
+    virtual void deinit() = 0;
+
     virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
     virtual OutputSpec outputSpec() const = 0;
     virtual async::Channel<OutputSpec> outputSpecChanged() const = 0;

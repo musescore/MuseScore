@@ -328,7 +328,7 @@ void OveToMScore::createStructure()
         Measure* measure  = Factory::createMeasure(m_score->dummy()->system());
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
-        measure->setNo(i);
+        measure->setMeasureNumber(i);
         m_score->measures()->append(measure);
     }
 }
@@ -771,8 +771,8 @@ void OveToMScore::convertLineBreak()
 
         for (int i = 0; i < m_ove->getLineCount(); ++i) {
             ovebase::Line* line = m_ove->getLine(i);
-            if (measure->no() > 0) {
-                if ((int)line->getBeginBar() + (int)line->getBarCount() - 1 == measure->no()) {
+            if (measure->measureNumber() > 0) {
+                if ((int)line->getBeginBar() + (int)line->getBarCount() - 1 == measure->measureNumber()) {
                     LayoutBreak* lb = Factory::createLayoutBreak(measure);
                     lb->setTrack(0);
                     lb->setLayoutBreakType(LayoutBreakType::LINE);
@@ -1232,7 +1232,7 @@ void OveToMScore::convertMeasure(Measure* measure)
         int partStaffCount = m_ove->getStaffCount(i);
 
         for (int j = 0; j < partStaffCount; ++j) {
-            int measureID = measure->no();
+            int measureID = measure->measureNumber();
 
             if (measureID >= 0 && measureID < measureCount) {
                 int trackIndex = (staffCount + j) * VOICES;
@@ -1260,7 +1260,7 @@ void OveToMScore::convertLines(Measure* measure)
         int partStaffCount = m_ove->getStaffCount(i);
 
         for (int j = 0; j < partStaffCount; ++j) {
-            int measureID = measure->no();
+            int measureID = measure->measureNumber();
 
             if (measureID >= 0 && measureID < measureCount) {
                 int trackIndex = (staffCount + j) * VOICES;
@@ -1277,15 +1277,15 @@ void OveToMScore::convertLines(Measure* measure)
 
 void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int track)
 {
-    ovebase::Measure* measurePtr = m_ove->getMeasure(measure->no());
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::Measure* measurePtr = m_ove->getMeasure(measure->measureNumber());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measurePtr == 0 || measureData == 0) {
         return;
     }
 
     // pickup
     if (measurePtr->getIsPickup()) {
-        measure->setIrregular(true);
+        measure->setExcludeFromNumbering(true);
     }
 
     // multiple measure rest
@@ -1352,7 +1352,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         ovebase::Text* textPtr = static_cast<ovebase::Text*>(texts[i]);
         if (textPtr->getTextType() == ovebase::Text::Type::Rehearsal) {
             Segment* s = measure->getSegment(SegmentType::ChordRest,
-                                             Fraction::fromTicks(m_mtt->getTick(measure->no(), 0)));
+                                             Fraction::fromTicks(m_mtt->getTick(measure->measureNumber(), 0)));
             RehearsalMark* text = Factory::createRehearsalMark(s);
             text->setPlainText(textPtr->getText());
             text->setTrack(track);
@@ -1364,7 +1364,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
     QList<ovebase::MusicData*> tempos = measureData->getMusicDatas(ovebase::MusicDataType::Tempo);
     for (i = 0; i < tempos.size(); ++i) {
         ovebase::Tempo* tempoPtr = static_cast<ovebase::Tempo*>(tempos[i]);
-        int absTick = m_mtt->getTick(measure->no(), tempoPtr->getTick());
+        int absTick = m_mtt->getTick(measure->measureNumber(), tempoPtr->getTick());
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         TempoText* t = new TempoText(s);
         double tpo = (tempoPtr->getQuarterTempo()) / 60.0;
@@ -1507,7 +1507,7 @@ Drumset* getDrumset(Score* score, int part)
 void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
 {
     int j;
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     QList<ovebase::NoteContainer*> containers = measureData->getNoteContainers();
     QList<ovebase::MusicData*> tuplets = measureData->getCrossMeasureElements(ovebase::MusicDataType::Tuplet,
                                                                               ovebase::MeasureData::PairType::Start);
@@ -1518,7 +1518,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
     int partStaffCount = m_ove->getStaffCount(part);
 
     if (containers.empty()) {
-        int absTick = m_mtt->getTick(measure->no(), 0);
+        int absTick = m_mtt->getTick(measure->measureNumber(), 0);
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         cr = Factory::createRest(s);
         cr->setTicks(measure->ticks());
@@ -1529,7 +1529,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
     QList<mu::engraving::Chord*> graceNotes;
     for (int i = 0; i < containers.size(); ++i) {
         ovebase::NoteContainer* container = containers[i];
-        int tick = m_mtt->getTick(measure->no(), container->getTick());
+        int tick = m_mtt->getTick(measure->measureNumber(), container->getTick());
         int noteTrack = track + container->getVoice();
 
         if (container->getIsRest()) {
@@ -2063,7 +2063,7 @@ void OveToMScore::convertArticulation(
 
 void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2072,7 +2072,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
 
     for (int i = 0; i < lyrics.size(); ++i) {
         ovebase::Lyric* oveLyric = static_cast<ovebase::Lyric*>(lyrics[i]);
-        int tick = m_mtt->getTick(measure->no(), oveLyric->getTick());
+        int tick = m_mtt->getTick(measure->measureNumber(), oveLyric->getTick());
 
         Lyrics* lyric = Factory::createLyrics(m_score->dummy()->chord());
         lyric->setVerse(oveLyric->getVerse());
@@ -2100,7 +2100,7 @@ static const ChordDescription* harmonyFromXml(Harmony* h, const muse::String& ki
 
 void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2109,7 +2109,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
 
     for (int i = 0; i < harmonies.size(); ++i) {
         ovebase::Harmony* harmonyPtr = static_cast<ovebase::Harmony*>(harmonies[i]);
-        int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
+        int absTick = m_mtt->getTick(measure->measureNumber(), harmonyPtr->getTick());
 
         Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
         HarmonyInfo* info = new HarmonyInfo(measure->score());
@@ -2193,7 +2193,7 @@ ovebase::NoteContainer* OveToMScore::getContainerByPos(int part, int staff, cons
 
 void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2275,8 +2275,8 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
     for (i = 0; i < endings.size(); ++i) {
         ovebase::NumericEnding* ending = static_cast<ovebase::NumericEnding*>(endings[i]);
-        int absTick1 = m_mtt->getTick(measure->no(), 0);
-        int absTick2 = m_mtt->getTick(measure->no() + ending->stop()->getMeasure(), 0);
+        int absTick1 = m_mtt->getTick(measure->measureNumber(), 0);
+        int absTick2 = m_mtt->getTick(measure->measureNumber() + ending->stop()->getMeasure(), 0);
 
         if (absTick1 < absTick2) {
             Volta* volta = Factory::createVolta(m_score->dummy());
@@ -2298,7 +2298,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
 
 void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2394,7 +2394,7 @@ QString OveDynamics_To_Dynamics(ovebase::DynamicsType type)
 
 void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2403,7 +2403,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
 
     for (int i = 0; i < dynamics.size(); ++i) {
         ovebase::Dynamics* dynamicPtr = static_cast<ovebase::Dynamics*>(dynamics[i]);
-        int absTick = m_mtt->getTick(measure->no(), dynamicPtr->getTick());
+        int absTick = m_mtt->getTick(measure->measureNumber(), dynamicPtr->getTick());
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         Dynamic* dynamic = Factory::createDynamic(s);
 
@@ -2416,7 +2416,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
 
 void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2425,7 +2425,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 
     for (int i = 0; i < expressions.size(); ++i) {
         ovebase::Expressions* expressionPtr = static_cast<ovebase::Expressions*>(expressions[i]);
-        int absTick = m_mtt->getTick(measure->no(), expressionPtr->getTick());
+        int absTick = m_mtt->getTick(measure->measureNumber(), expressionPtr->getTick());
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         Text* t = Factory::createText(s, TextStyleType::EXPRESSION);
         t->setPlainText(expressionPtr->getText());
@@ -2437,7 +2437,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
 
 void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2454,7 +2454,7 @@ void OveToMScore::convertGlissandos(Measure* measure, int part, int staff, int t
             glissandoPtr->stop()->shiftMeasure(glissandoPtr->start()->getMeasure()));
 
         if (startContainer != 0 && endContainer != 0) {
-            int absTick = m_mtt->getTick(measure->no(), glissandoPtr->getTick());
+            int absTick = m_mtt->getTick(measure->measureNumber(), glissandoPtr->getTick());
             ChordRest* cr = measure->findChordRest(Fraction::fromTicks(absTick), track);
             if (cr != 0) {
                 Glissando* g = Factory::createGlissando(cr);
@@ -2499,7 +2499,7 @@ static HairpinType OveWedgeType_To_Type(ovebase::WedgeType type)
 
 void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track)
 {
-    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
+    ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->measureNumber());
     if (measureData == 0) {
         return;
     }
@@ -2510,10 +2510,10 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
     for (int i = 0; i < wedges.size(); ++i) {
         ovebase::Wedge* wedgePtr = static_cast<ovebase::Wedge*>(wedges[i]);
         int absTick = m_mtt->getTick(
-            measure->no(),
+            measure->measureNumber(),
             MeasureToTick::unitToTick(wedgePtr->start()->getOffset(), m_ove->getQuarter()));
         int absTick2 = m_mtt->getTick(
-            measure->no() + wedgePtr->stop()->getMeasure(),
+            measure->measureNumber() + wedgePtr->stop()->getMeasure(),
             MeasureToTick::unitToTick(wedgePtr->stop()->getOffset(), m_ove->getQuarter()));
 
         if (absTick2 > absTick) {

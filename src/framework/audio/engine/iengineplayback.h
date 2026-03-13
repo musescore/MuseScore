@@ -38,6 +38,9 @@ class IEnginePlayback : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IEnginePlayback() = default;
 
+    virtual void init() = 0;
+    virtual void deinit() = 0;
+
     // 1. Add Sequence
     virtual TrackSequenceId addSequence() = 0;
     virtual void removeSequence(const TrackSequenceId id) = 0;

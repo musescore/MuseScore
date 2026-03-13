@@ -242,7 +242,7 @@ public:
     const MeasureBase* nextMeasure() const { return m_nextMeasure; }
     const MeasureBase* systemOldMeasure() const { return m_systemOldMeasure; }
     const MeasureBase* pageOldMeasure() const { return m_pageOldMeasure; }
-    int measureNo() const { return m_measureNo; }
+    int measureNumber() const { return m_measureNumber; }
 
     bool rangeDone() const { return m_rangeDone; }
 
@@ -277,7 +277,7 @@ public:
     void setNextMeasure(MeasureBase* m) { m_nextMeasure = m; }
     void setSystemOldMeasure(MeasureBase* m) { m_systemOldMeasure = m; }
     void setPageOldMeasure(MeasureBase* m) { m_pageOldMeasure = m; }
-    void setMeasureNo(int no) { m_measureNo = no; }
+    void setMeasureNumber(int n) { m_measureNumber = n; }
 
     std::set<Spanner*>& processedSpanners() { return m_processedSpanners; }
 
@@ -308,7 +308,7 @@ private:
     MeasureBase* m_nextMeasure = nullptr;
     MeasureBase* m_systemOldMeasure = nullptr;
     MeasureBase* m_pageOldMeasure = nullptr;
-    int m_measureNo = 0;
+    int m_measureNumber = 0;
 
     std::set<Spanner*> m_processedSpanners;
 

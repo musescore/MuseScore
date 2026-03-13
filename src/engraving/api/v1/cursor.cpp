@@ -534,7 +534,7 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
     if (tupletTick + fDuration > tupletMeasure->endTick()) {
         LOGW(
             "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
-            tupletMeasure->no() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
+            tupletMeasure->measureNumber() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
 
         return;
     }

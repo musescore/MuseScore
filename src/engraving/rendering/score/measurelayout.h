@@ -87,7 +87,7 @@ private:
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
     static void cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mmrSeg, LayoutContext& ctx);
 
-    static int adjustMeasureNo(MeasureBase* m, int measureNo);
+    static int adjustMeasureNumber(Measure* m, int measureNumber);
 
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
@@ -97,7 +97,7 @@ private:
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
-    static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
+    static void createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutContext& ctx);
     static void removeMMRestElements(Measure* mmRestMeasure);
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);

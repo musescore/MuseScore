@@ -25,7 +25,6 @@
 #include <QDialog>
 
 #include "ui_measureproperties.h"
-#include "engraving/dom/sig.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotation.h"
@@ -56,7 +55,6 @@ private:
 
     void apply();
     mu::engraving::Fraction len() const;
-    bool isIrregular() const;
     int repeatCount() const;
     bool visible(int staffIdx);
     bool stemless(int staffIdx);

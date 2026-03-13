@@ -32,6 +32,9 @@ if (WEBENGINE_FACADE_MODE)
 else()
     # Real engine
     target_sources(muse_audio_engine PRIVATE
+        enginesetup.cpp
+        enginesetup.h
+        
         iaudioengineconfiguration.h
         ienginecontroller.h
         iengineplayback.h

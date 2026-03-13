@@ -147,7 +147,7 @@ TEST_F(Engraving_SelectionRangeTests, selRangeAndSpanners)
         for (const Spanner* spanner : spannersInMeasure) {
             EXPECT_EQ(spanner->selected(), shouldBeSelected);
             if (spanner->selected() != shouldBeSelected) {
-                LOGD() << "INCORRECT SPANNER SELECTION STATE IN MEASURE " << measure->no() + 1;
+                LOGD() << "INCORRECT SPANNER SELECTION STATE IN MEASURE " << measure->measureNumber() + 1;
             }
         }
     }
@@ -296,7 +296,7 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
     ASSERT_TRUE(score);
 
     for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        SCOPED_TRACE("Measure no " + std::to_string(measure->no()));
+        SCOPED_TRACE("Measure no " + std::to_string(measure->measureNumber()));
 
         score->deselectAll();
 
