@@ -2077,7 +2077,7 @@ void Note::setDotRelativeLine(int dotMove)
             return;
         }
     }
-    y *= spatium() * staff()->lineDistance(tick());
+    y *= staff()->lineDistance(tick()).toAbsolute(spatium());
 
     // apply to dots
 

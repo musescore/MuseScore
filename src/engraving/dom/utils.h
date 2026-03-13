@@ -50,8 +50,6 @@ struct NoteVal;
 
 enum class Key : signed char;
 
-extern RectF handleRect(const PointF& pos);
-
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);

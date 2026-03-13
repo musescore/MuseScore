@@ -908,7 +908,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             readInstrument206(i, part, e, ctx);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
-            int lld = s ? std::round(s->lineDistance(Fraction(0, 1))) : 1;
+            int lld = s ? std::round(s->lineDistance(Fraction(0, 1)).val()) : 1;
             if (ds && s && lld > 1) {
                 for (int j = 0; j < DRUM_INSTRUMENTS; ++j) {
                     ds->drum(j).line /= lld;
