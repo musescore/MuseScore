@@ -30,6 +30,8 @@
 #include "dom/score.h"
 #include "dom/masterscore.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
+#include "dom/stafftype.h"
 #include "dom/text.h"
 #include "editing/editpart.h"
 #include "editing/editsystemlocks.h"
@@ -174,6 +176,172 @@ void Score::replaceInstrument(apiv1::Part* part, const QString& instrumentId)
 
     mu::engraving::Instrument newInstrument = mu::engraving::Instrument::fromTemplate(t);
     mu::engraving::EditPart::replacePartInstrument(score(), part->part(), newInstrument);
+}
+
+void Score::setPartVisible(apiv1::Part* part, bool visible)
+{
+    if (!part) {
+        LOGW("setPartVisible: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setPartVisible(score(), part->part(), visible);
+}
+
+void Score::setPartSharpFlat(apiv1::Part* part, int sharpFlat)
+{
+    if (!part) {
+        LOGW("setPartSharpFlat: part is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setPartSharpFlat(score(), part->part(), mu::engraving::PreferSharpFlat(sharpFlat));
+}
+
+void Score::setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name)
+{
+    if (!part) {
+        LOGW("setInstrumentName: part is null");
+        return;
+    }
+    if (!tick) {
+        LOGW("setInstrumentName: tick is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setInstrumentName(score(), part->part(), tick->fraction(), name);
+}
+
+void Score::setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature)
+{
+    if (!part) {
+        LOGW("setInstrumentAbbreviature: part is null");
+        return;
+    }
+    if (!tick) {
+        LOGW("setInstrumentAbbreviature: tick is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setInstrumentAbbreviature(score(), part->part(), tick->fraction(), abbreviature);
+}
+
+void Score::setStaffType(apiv1::Staff* staff, int staffTypeId)
+{
+    if (!staff) {
+        LOGW("setStaffType: staff is null");
+        return;
+    }
+
+    mu::engraving::EditPart::setStaffType(score(), staff->staff(), mu::engraving::StaffTypes(staffTypeId));
+}
+
+void Score::removeParts(QList<apiv1::Part*> parts)
+{
+    std::vector<mu::engraving::Part*> domParts;
+    for (apiv1::Part* p : parts) {
+        if (!p) {
+            LOGW("removeParts: null part in list");
+            continue;
+        }
+        domParts.push_back(p->part());
+    }
+
+    mu::engraving::EditPart::removeParts(score(), domParts);
+}
+
+void Score::removeStaves(QList<apiv1::Staff*> staves)
+{
+    std::vector<mu::engraving::Staff*> domStaves;
+    for (apiv1::Staff* s : staves) {
+        if (!s) {
+            LOGW("removeStaves: null staff in list");
+            continue;
+        }
+        domStaves.push_back(s->staff());
+    }
+
+    mu::engraving::EditPart::removeStaves(score(), domStaves);
+}
+
+void Score::moveParts(QList<apiv1::Part*> sourceParts, apiv1::Part* destinationPart, int insertMode)
+{
+    if (!destinationPart) {
+        LOGW("moveParts: destinationPart is null");
+        return;
+    }
+
+    std::vector<mu::engraving::Part*> domParts;
+    for (apiv1::Part* p : sourceParts) {
+        if (!p) {
+            LOGW("moveParts: null part in list");
+            continue;
+        }
+        domParts.push_back(p->part());
+    }
+
+    mu::engraving::EditPart::moveParts(score(), domParts, destinationPart->part(), insertMode == 1);
+}
+
+void Score::moveStaves(QList<apiv1::Staff*> sourceStaves, apiv1::Staff* destinationStaff, int insertMode)
+{
+    if (!destinationStaff) {
+        LOGW("moveStaves: destinationStaff is null");
+        return;
+    }
+
+    std::vector<mu::engraving::Staff*> domStaves;
+    for (apiv1::Staff* s : sourceStaves) {
+        if (!s) {
+            LOGW("moveStaves: null staff in list");
+            continue;
+        }
+        domStaves.push_back(s->staff());
+    }
+
+    mu::engraving::EditPart::moveStaves(score(), domStaves, destinationStaff->staff(), insertMode == 1);
+}
+
+void Score::addSystemObjects(QList<apiv1::Staff*> staves)
+{
+    std::vector<mu::engraving::Staff*> domStaves;
+    for (apiv1::Staff* s : staves) {
+        if (!s) {
+            LOGW("addSystemObjects: null staff in list");
+            continue;
+        }
+        domStaves.push_back(s->staff());
+    }
+
+    mu::engraving::EditPart::addSystemObjects(score(), domStaves);
+}
+
+void Score::removeSystemObjects(QList<apiv1::Staff*> staves)
+{
+    std::vector<mu::engraving::Staff*> domStaves;
+    for (apiv1::Staff* s : staves) {
+        if (!s) {
+            LOGW("removeSystemObjects: null staff in list");
+            continue;
+        }
+        domStaves.push_back(s->staff());
+    }
+
+    mu::engraving::EditPart::removeSystemObjects(score(), domStaves);
+}
+
+void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff)
+{
+    if (!sourceStaff) {
+        LOGW("moveSystemObjects: sourceStaff is null");
+        return;
+    }
+    if (!destinationStaff) {
+        LOGW("moveSystemObjects: destinationStaff is null");
+        return;
+    }
+
+    mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
 }
 
 //---------------------------------------------------------
