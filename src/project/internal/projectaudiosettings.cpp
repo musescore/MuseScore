@@ -380,6 +380,7 @@ AudioFxParams ProjectAudioSettings::fxParamsFromJson(const QJsonObject& object) 
     result.chainOrder = static_cast<AudioFxChainOrder>(object.value("chainOrder").toInt());
     result.resourceMeta = resourceMetaFromJson(object.value("resourceMeta").toObject());
     result.configuration = unitConfigFromJson(object.value("unitConfiguration").toObject());
+    result.categories = audioFxCategoriesFromString(result.resourceMeta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
 
     return result;
 }
