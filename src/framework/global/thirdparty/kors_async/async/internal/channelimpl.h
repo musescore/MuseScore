@@ -129,6 +129,7 @@ private:
                 }
                 r->callback = f;
                 pendingToAdd.push_back(r);
+                rcount += 1;
                 needIncrement = true;
             }
             return needIncrement;
@@ -161,6 +162,7 @@ private:
                 r->enabled = false;
                 r->receiver = nullptr; // already disconnected
                 needDecrement = true;
+                rcount -= 1;
                 pendingToRemove.push_back(r);
             }
             return needDecrement;
@@ -168,7 +170,7 @@ private:
 
         inline size_t receiverCount() const
         {
-            return receivers.size() + pendingToAdd.size();
+            return rcount;
         }
 
         inline void receiversCall(const T&... args)
@@ -262,13 +264,14 @@ private:
         {
             std::stringstream s;
             s << "threadId: " << threadId << '\n';
+            s << "receivers: " << receiverCount() << '\n';
             s << "queues: " << queues.size() << '\n';
             for (size_t i = 0; i < queues.size(); ++i) {
-                s << "  " << i << ": receiveTh: " << queues.at(i)->receiveTh << '\n';
+                const QueueData* qd = queues.at(i);
+                s << "  " << i << ": receiveTh: " << qd->receiveTh << '\n';
+                s << "    countToSend: " << qd->queue.port1()->countToSend() << '\n';
             }
-            s << "receivers: " << receivers.size() << '\n';
-            s << "pendingToAdd: " << pendingToAdd.size() << '\n';
-            s << "pendingToRemove: " << pendingToRemove.size() << '\n';
+
             return s.str();
         }
 
@@ -314,6 +317,7 @@ private:
         std::vector<Receiver*> receivers;
         std::vector<Receiver*> pendingToAdd;
         std::vector<Receiver*> pendingToRemove;
+        std::atomic<size_t> rcount = 0;
     };
 
     struct ReceiverCall : public ICallable
@@ -410,8 +414,8 @@ private:
 
         {
             std::scoped_lock lock(m_mutex);
+            std::cout << "[async::channel] [error] thread data pool exhausted!!" << std::endl;
             std::cout << "channel: " << (m_opt.chname.empty() ? "no name" : m_opt.chname) << std::endl;
-            std::cout << "thread data pool exhausted!!" << std::endl;
             std::cout << "required thread: " << thId << std::endl;
             std::cout << "current state:" << std::endl;
             std::cout << thDataDump() << std::endl;
@@ -495,6 +499,11 @@ private:
                 continue;
             }
 
+            if (receiveThdata->receiverCount() == 0) {
+                // skip if it has no receivers
+                continue;
+            }
+
             auto rcall = lockedReceiverCall();
             rcall->setArgs(args ...);
 
@@ -515,6 +524,11 @@ private:
             assert(receiveThdata);
             if (!receiveThdata) {
                 break;
+            }
+
+            if (receiveThdata->receiverCount() == 0) {
+                // skip if it has no receivers
+                continue;
             }
 
             auto rcall = lockedReceiverCall();
@@ -551,6 +565,8 @@ public:
 
         m_thdatas.clear();
     }
+
+    const ChannelOpt& opt() const { return m_opt; }
 
     size_t maxThreads() const { return m_thdatas.capacity(); }
 
@@ -596,7 +612,7 @@ public:
             bool ok = waitSendPendingMessages();
             if (m_opt.isWarnOnPendingsSendTimeout && !ok) {
                 std::cout << "[async::channel] [warning] not all pending messages were sent, channel: "
-                          << (m_opt.chname.empty() ? "name not set" : m_opt.chname);
+                          << (m_opt.chname.empty() ? "no name" : m_opt.chname) << std::endl;
             }
         }
     }
