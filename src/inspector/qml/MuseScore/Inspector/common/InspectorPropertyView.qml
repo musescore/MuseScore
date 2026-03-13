@@ -112,6 +112,7 @@ Column {
 
                     wrapMode: Text.Wrap
                     maximumLineCount: 2
+                    displayTruncatedTextOnHover: true
                 }
             }
         }

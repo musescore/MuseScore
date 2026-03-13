@@ -190,6 +190,8 @@ FlatButton {
                 text: qsTrc("project/newscore", "Hint: You can also add & delete measures after you have created your score")
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
+
+                displayTruncatedTextOnHover: true
             }
         }
     }

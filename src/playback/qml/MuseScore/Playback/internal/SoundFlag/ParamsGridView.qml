@@ -142,6 +142,14 @@ Column {
 
                         text: button.text
                         font: ui.theme.bodyFont
+
+                        Component.onCompleted: {
+                            button.toolTipTitle = truncated ? button.text : ""
+                        }
+
+                        onTruncatedChanged: {
+                            button.toolTipTitle = truncated ? button.text : ""
+                        }
                     }
                 }
             }
