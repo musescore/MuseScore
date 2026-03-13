@@ -68,12 +68,7 @@ private:
     struct ThreadData {
         std::thread::id threadId;
         std::vector<std::shared_ptr<Port> > ports;
-        std::atomic<bool> locked = false;
-        std::atomic<std::thread::id> lockedBy;
-
-        bool tryLock(const std::thread::id& th);
-        void lock(const std::thread::id& th);
-        void unlock();
+        std::atomic<bool> hasPorts = false;
     };
 
     ThreadData* threadData(const std::thread::id& threadId, bool create);
