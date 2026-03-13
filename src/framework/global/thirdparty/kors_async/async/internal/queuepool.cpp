@@ -75,11 +75,11 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
 
             if (thdata->ports.empty()) {
                 thdata->threadId = threadId;
-                thdata->unlock();
+                thdata->unlock(threadId);
                 return thdata;
             }
 
-            thdata->unlock();
+            thdata->unlock(threadId);
         }
 
         // we didn't find ThreadData, let's try found a empty slot
@@ -106,15 +106,20 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
     return nullptr;
 }
 
+namespace {
+thread_local int s_recursionCount = 0;
+}
+
 bool QueuePool::ThreadData::tryLock(const std::thread::id& th)
 {
-    if (lockedBy == th) {
+    if (locked == th) {
+        ++s_recursionCount;
         return true;
     }
 
-    bool expected = false;
-    if (locked.compare_exchange_weak(expected, true)) {
-        lockedBy = th;
+    std::thread::id expected;
+    if (locked.compare_exchange_weak(expected, th)) {
+        s_recursionCount = 1;
         return true;
     }
     return false;
@@ -122,21 +127,28 @@ bool QueuePool::ThreadData::tryLock(const std::thread::id& th)
 
 void QueuePool::ThreadData::lock(const std::thread::id& th)
 {
-    if (lockedBy == th) {
+    if (locked == th) {
+        ++s_recursionCount;
         return;
     }
 
-    bool expected = false;
-    while (!locked.compare_exchange_weak(expected, true)) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    std::thread::id expected = std::thread::id();
+    while (!locked.compare_exchange_weak(expected, th)) {
+        expected = std::thread::id();
+        std::this_thread::yield();
     }
-    lockedBy = th;
+    s_recursionCount = 1;
 }
 
-void QueuePool::ThreadData::unlock()
+void QueuePool::ThreadData::unlock(const std::thread::id& th)
 {
-    locked.store(false);
-    lockedBy.store(std::thread::id());
+    if (locked != th) {
+        assert(locked == th);
+        return;
+    }
+    if (--s_recursionCount == 0) {
+        locked = std::thread::id();
+    }
 }
 
 void QueuePool::regPort(const std::thread::id& th, const std::shared_ptr<Port>& port)
@@ -175,7 +187,7 @@ void QueuePool::regPort(const std::thread::id& th, const std::shared_ptr<Port>& 
     thdata->ports.push_back(port);
 
     // unlock
-    thdata->unlock();
+    thdata->unlock(th);
 }
 
 void QueuePool::unregPort(const std::thread::id& th, const std::shared_ptr<Port>& port)
@@ -198,7 +210,7 @@ void QueuePool::unregPort(const std::thread::id& th, const std::shared_ptr<Port>
     ports.erase(std::remove(ports.begin(), ports.end(), port), ports.end());
 
     // unlock
-    thdata->unlock();
+    thdata->unlock(th);
 }
 
 void QueuePool::processMessages()
@@ -228,6 +240,6 @@ void QueuePool::processMessages(const std::thread::id& th)
     }
 
     // unlock
-    thdata->unlock();
+    thdata->unlock(th);
 }
 } // kors::async
