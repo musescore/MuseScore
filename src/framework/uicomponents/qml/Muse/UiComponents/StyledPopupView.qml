@@ -59,6 +59,15 @@ PopupView {
         if (!(openPolicies & PopupView.NoActivateFocus) && content.navigationSection) {
             content.navigationSection.requestActive()
         }
+        Qt.callLater(root.repositionWindowIfNeed)
+    }
+
+    onWidthChanged: {
+        Qt.callLater(root.repositionWindowIfNeed)
+    }
+
+    onHeightChanged: {
+        Qt.callLater(root.repositionWindowIfNeed)
     }
 
     onClosed: {
