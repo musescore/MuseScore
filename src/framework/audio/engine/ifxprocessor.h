@@ -42,6 +42,8 @@ public:
     virtual bool active() const = 0;
     virtual void setActive(bool active) = 0;
 
+    virtual bool shouldProcessDuringSilence() const = 0;
+
     virtual void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) = 0;
 };
 

@@ -100,6 +100,11 @@ void VstFxProcessor::setActive(bool active)
     m_params.active = active;
 }
 
+bool VstFxProcessor::shouldProcessDuringSilence() const
+{
+    return m_params.active && muse::contains(m_params.categories, AudioFxCategory::FxGenerator);
+}
+
 void VstFxProcessor::process(float* buffer, unsigned int sampleCount, msecs_t playbackPosition)
 {
     if (!buffer || !m_inited) {
