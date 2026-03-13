@@ -378,7 +378,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::OCTAVE_DOT:       layoutOctaveDot(item_cast<OctaveDot*>(item));
+    case ElementType::OCTAVE_DOT:       layoutOctaveDot(item_cast<OctaveDot*>(item), ctx);
         break;
     case ElementType::OTTAVA:           layoutOttava(item_cast<Ottava*>(item), ctx);
         break;
@@ -1815,7 +1815,7 @@ void TLayout::layoutDurationLine(DurationLine* item, const LayoutContext& ctx)
     double mag = item->mag();
     DurationLine::LayoutData* ldata = item->mutldata();
     ldata->setMag(mag);
-    ldata->lineWidth = ctx.conf().styleAbsolute(Sid::staffLineWidth) * mag;
+    ldata->lineWidth = ctx.conf().styleAbsolute(Sid::jianpuDurationLineThickness) * mag;
     if (item->staff()) {
         const_cast<DurationLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
     }
@@ -4212,12 +4212,14 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
     ldata->setBbox(item->symBbox(SymId::augmentationDot));
 }
 
-void TLayout::layoutOctaveDot(OctaveDot* item)
+void TLayout::layoutOctaveDot(OctaveDot* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     OctaveDot::LayoutData* ldata = item->mutldata();
-    ldata->setMag(item->note()->mag());
-    ldata->radius = item->defaultSpatium() * .1; // TODO: style
+
+    double mag = item->note()->mag();
+    ldata->setMag(mag);
+    ldata->radius = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDiameter) * mag;
 
     double diameter = ldata->radius * 2;
     ldata->setBbox(0, -ldata->radius, item->len(), diameter);
@@ -4715,23 +4717,24 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
                 }
             }
         }
-        double distance = _spatium * .3;
-        jianpuBbox.setHeight(st->jianpuBoxH() * mag + distance);
+        double dotDistance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * mag;
+        double lineDistance = ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * mag;
+        jianpuBbox.setHeight(st->jianpuBoxH() * mag + dotDistance);
         if (!up) {
             jianpuBbox.setY(noteheadBbox.y() - jianpuBbox.height()); // Jianpu is above the head note
         } else {
             jianpuBbox.setY(newBbox.y() + newBbox.height()); // Jianpu is under the head note
         }
 
-        // jianpu duration line
+        // jianpu diminution line
         int lines = item->duration().diminutionLines();
-        item->setJianpuDurationLine(lines);
+        item->setJianpuDiminutionLines(lines);
 
         // jianpu octave dots
-        item->setJianpuOctaveDot(dots);
+        item->setJianpuOctaveDots(dots);
 
         // Always has one extra distance
-        double extraHeight = (1 + abs(dots) + lines) * distance;
+        double extraHeight = (1 + abs(dots)) * dotDistance + lines * lineDistance;
 
         jianpuBbox.setHeight(jianpuBbox.height() + extraHeight);
         if (!up) {

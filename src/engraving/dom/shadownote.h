@@ -84,12 +84,11 @@ public:
     String jianpuDigit() const { return m_jianpuDigit; }
     void setJianpuDigit(const String& s) { m_jianpuDigit = s; }
 
-    int jianpuDurationLine() const { return m_jianpuDurationLine; }
-    void setJianpuDurationLine(int lines) { m_jianpuDurationLine = lines; }
+    int jianpuDiminutionLines() const { return m_jianpuDiminutionLines; }
+    void setJianpuDiminutionLines(int lines) { m_jianpuDiminutionLines = lines; }
 
-    int jianpuOctaveDot() const { return m_jianpuOctaveDot; }
-    void setJianpuOctaveDot(int dots) { m_jianpuOctaveDot = dots; }
-
+    int jianpuOctaveDots() const { return m_jianpuOctaveDots; }
+    void setJianpuOctaveDots(int dots) { m_jianpuOctaveDots = dots; }
 private:
 
     Fraction m_tick;
@@ -101,7 +100,7 @@ private:
     std::set<SymId> m_articulationIds;
     bool m_beyondScore = false;
     String m_jianpuDigit;
-    int m_jianpuDurationLine = 0;
-    int m_jianpuOctaveDot = 0;
+    int m_jianpuDiminutionLines = 0;
+    int m_jianpuOctaveDots = 0;
 };
 } // namespace mu::engraving

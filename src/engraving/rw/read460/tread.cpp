@@ -3988,6 +3988,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
             t->setFretUseTextStyle(e.readBool());
         } else if (tag == "fretTextStyle") {
             t->setFretTextStyle(TextStyleType(TConv::fromXml(e.readAsciiText(), TextStyleType::TAB_FRET_NUMBER)));
+        } else if (tag == "jianpuTextStyle") {
+            t->setJianpuTextStyle(TextStyleType(TConv::fromXml(e.readAsciiText(), TextStyleType::JIANPU_NUMBER)));
         } else if (tag == "symbolRepeat") {
             t->setSymbolRepeat((TablatureSymbolRepeat)e.readInt());
         } else if (tag == "linesThrough") {

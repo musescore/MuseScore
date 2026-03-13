@@ -81,6 +81,7 @@ StaffType::StaffType()
     m_symRepeat = TablatureSymbolRepeat::NEVER;
     setDurationFontName(m_durationFonts[0].displayName);
     setFretPresetIdx(0);
+    setJianpuTextStyle(TextStyleType::JIANPU_NUMBER);
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -99,10 +100,7 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     m_genTimesig(genTimeSig),
     m_genKeysig(genKeySig)
 {
-    // Jianpu temporarly uses TAB fret font
-    if (xml == u"stdJianpu") {
-        setFretTextStyle(TextStyleType::TAB_FRET_NUMBER);
-    }
+    setJianpuTextStyle(TextStyleType::JIANPU_NUMBER);
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -229,7 +227,10 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretUseTextStyle == st.m_fretUseTextStyle);
     equal &= (m_fretTextStyle == st.m_fretTextStyle);
     equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
-
+    equal &= (m_jianpuTextStyle == st.m_jianpuTextStyle);
+    equal &= (m_jianpuFont == st.m_jianpuFont);
+    equal &= (m_jianpuFontSize == st.m_jianpuFontSize);
+    equal &= (m_jianpuBoxH == st.m_jianpuBoxH);
     return equal;
 }
 
@@ -328,6 +329,8 @@ bool StaffType::isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) con
 
 void StaffType::styleChanged()
 {
+    setJianpuTextStyle(m_jianpuTextStyle);
+
     if (!m_fretUseTextStyle) {
         return;
     }
@@ -349,6 +352,37 @@ void StaffType::setUseNumbers(bool val)
 {
     m_useNumbers = val;
     setFretMetrics();
+}
+
+void StaffType::setJianpuTextStyle(const TextStyleType& val)
+{
+    m_jianpuTextStyle = val;
+    m_jianpuFont = Font();
+
+    const TextStyle* ts = textStyle(m_jianpuTextStyle);
+    for (const TextStyleProperty property : *ts) {
+        switch (property.type) {
+        case TextStylePropertyType::FontFace: {
+            String fontName = style().styleSt(property.sid);
+            m_jianpuFont.setFamily(fontName, Font::Type::Tablature);
+        } break;
+        case TextStylePropertyType::FontSize: {
+            double fontSize = style().styleD(property.sid);
+            setJianpuFontSize(fontSize);
+        } break;
+        case TextStylePropertyType::FontStyle: {
+            FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
+            m_jianpuFont.setBold(fStyle & FontStyle::Bold);
+            m_jianpuFont.setItalic(fStyle & FontStyle::Italic);
+            m_jianpuFont.setUnderline(fStyle & FontStyle::Underline);
+            m_jianpuFont.setStrike(fStyle & FontStyle::Strike);
+        } break;
+        default:
+            continue;
+        }
+    }
+
+    setJianpuMetrics();
 }
 
 void StaffType::setFretTextStyle(const TextStyleType& val)
@@ -497,6 +531,17 @@ void StaffType::setFretMetrics()
     m_deadFretBoxY = deadBb.y() + m_deadFretYOffset;
 }
 
+void StaffType::setJianpuMetrics()
+{
+    FontMetrics fm(jianpuFont());
+
+    // compute total height of used characters
+    String txt = u"01234567";
+    RectF bb = fm.tightBoundingRect(txt);
+
+    m_jianpuBoxH = bb.height();
+}
+
 //---------------------------------------------------------
 //   setDurationFontName
 //---------------------------------------------------------
@@ -588,6 +633,13 @@ void StaffType::setFretFontSize(double val)
     m_fretFontSize = val;
     m_fretFont.setPointSizeF(val);
     setFretMetrics();
+}
+
+void StaffType::setJianpuFontSize(double val)
+{
+    m_jianpuFontSize = val;
+    m_jianpuFont.setPointSizeF(val);
+    setJianpuMetrics();
 }
 
 //---------------------------------------------------------

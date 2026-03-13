@@ -140,14 +140,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         });
     }
 
-    double jianpuOffsetY = upnote ? -upnote->spatium() * .5 : 0.0;
+    // Jianpu Y origin is at the center of the number.
+    // It always starts half a spatium above, aligned with the middle of the measure line.
+    double jianpuOffsetY = upnote ? -upnote->spatium() * .5 * mag_ : 0.0;
     for (Note* note : notes) {
         Note::LayoutData* ldata = note->mutldata();
         TLayout::layoutNote(note, ldata);
 
         if (isJianpuStaff) {
             std::vector<OctaveDot*> dots = note->octaveDots();
-            double dotDistance = note->spatium() * .3; // TODO: jianpu style setting for distance of octave dots
+            double dotDistance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * mag_;
 
             // Move the current note down if it is has octave dots above it
             if (note != upnote && !dots.empty() && dots.back()->above()) {
@@ -163,14 +165,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             }
 
             if (note == upnote) {
-                auto& durationLines = item->durationLines();
-                if (!durationLines.empty() && durationLines.back()->halving()) {
-                    jianpuOffsetY += durationLines.size() * dotDistance;
+                Beam* beam = item->beam();
+                if (beam) {
+                    jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * mag_;
+                    jianpuOffsetY -= ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * mag_;
+                    jianpuOffsetY += beam->ldata()->bbox().height();
                 }
             }
 
             jianpuOffsetY += ldata->bbox().height();
-            jianpuOffsetY += note->spatium() * .5; // TODO: jianpu style setting for distance of notes
+            jianpuOffsetY += ctx.conf().styleAbsolute(Sid::jianpuNumberVerticalDistance) * mag_;
         }
 
         double x1 = note->pos().x() + chordX;
@@ -1701,70 +1705,30 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
         return;
     }
 
-    int augmentationLines = item->durationType().augmentationLines();
-    int diminutionLines = item->durationType().diminutionLines();
-    if (augmentationLines == 0 && diminutionLines == 0) {
+    int lines = item->durationType().augmentationLines();
+    if (lines == 0) {
         muse::DeleteAll(item->durationLines());
         item->durationLines().clear();
         return;
     }
 
-    if (const Note* note = item->upNote(); note) {
-        double hw = note->headWidth();
-        double hx = note->pos().x() + note->bboxXShift();
-        double maxX = hx + hw;
+    item->resizeDurationLinesTo(lines);
 
-        size_t prevLines = 0; // Number of duration lines in the previous chord
-        double prevOffsetX = .0; // Offset of the previous chord
-        bool first = true;
-        if (item->isChordRest()) {
-            Beam* beam = toChordRest(item)->beam();
-            if (beam) {
-                ChordRest* cr = beam->elements().front();
-                first = (cr && cr->isChord() && toChord(cr) == item);
-            }
-        }
+    const Note* note = item->upNote();
+    if (!note) {
+        return;
+    }
 
-        if (Chord* prev = item->prev(); prev&& !first) {
-            if (prev->durationLines().size() > 0 && prev->durationLines().back()->halving()) {
-                prevLines = prev->durationLines().size();
-                auto currX = item->pagePos().x();
-                auto prevX = prev->pagePos().x();
-                if (currX > prevX) {
-                    prevOffsetX = currX - prevX - hw; // Offset to join to previous duration line
-                }
-            }
-        }
-
-        double distance = item->spatium() * .3;
-        const StaffType* st = staff->staffTypeForElement(item);
-        double height = st->jianpuBoxH() * item->magS();
-        double diminutionY =  height * .5 - item->spatium() * .5;
-        item->resizeDurationLinesTo(std::max(augmentationLines, diminutionLines));
-        for (int i = 0; i < diminutionLines; ++i) {
-            DurationLine* dl = item->durationLines()[i];
-            dl->setParent(item);
-            dl->setTrack(track);
-            dl->setVisible(staffVisible);
-            if (i >= static_cast<int>(prevLines)) {
-                prevOffsetX = 0.0; // Do not join to duration line in previous chord
-            }
-            double minX = hx - prevOffsetX; // Extend to join to previous duration line
-            dl->setLen(maxX - minX);
-            dl->setPos(minX, diminutionY + (i + 1) * distance);
-            dl->setHalving(true); // Halving duration
-        }
-
-        double lengtheningY = -item->spatium() * .5;
-        for (int i = 0; i < augmentationLines; ++i) {
-            DurationLine* dl = item->durationLines()[i];
-            dl->setParent(item);
-            dl->setTrack(track);
-            dl->setVisible(staffVisible);
-            dl->setLen(hw);
-            dl->setPos(hx + hw * 1.2 * (i + 1), lengtheningY);
-            dl->setHalving(false); // Lengthening duration
-        }
+    double hw = note->headWidth();
+    double hx = note->pos().x() + note->bboxXShift();
+    double lengtheningY = -item->spatium() * .5;
+    for (int i = 0; i < lines; ++i) {
+        DurationLine* dl = item->durationLines()[i];
+        dl->setParent(item);
+        dl->setTrack(track);
+        dl->setVisible(staffVisible);
+        dl->setLen(hw);
+        dl->setPos(hx + hw * 1.2 * (i + 1), lengtheningY);
     }
 
     for (DurationLine* dl : item->durationLines()) {
@@ -1795,7 +1759,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
     for (Note* note : item->notes()) {
         int dots = 0;
         double offsetY = 0;
-        double distance = item->spatium() * .3;
+        double distance = ctx.conf().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
         int octave = note->octave();
         if (octave > baseOctave) {
             dots = octave - baseOctave;
@@ -1804,10 +1768,12 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
             dots = baseOctave - octave;
             offsetY = height * .5 + distance;
             if (note == item->upNote()) {
-                // The octave dot should be under the halving lines
-                auto lines = item->durationLines();
-                if (lines.size() > 0 && lines.back()->halving()) {
-                    offsetY += lines.size() * distance;
+                // The octave dot should be under the jianpu beam
+                Beam* beam = item->beam();
+                if (beam) {
+                    offsetY += ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->magS();
+                    offsetY -= ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->magS();
+                    offsetY += beam->ldata()->bbox().height();
                 }
             }
         } else {
@@ -1831,7 +1797,7 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
         }
 
         for (OctaveDot* od : note->octaveDots()) {
-            TLayout::layoutOctaveDot(od);
+            TLayout::layoutOctaveDot(od, ctx);
         }
     }
 }

@@ -1076,6 +1076,21 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(articulationOffset,                            PointF()),
     styleDef(articulationPosition,                          AlignH::LEFT),
 
+    styleDef(jianpuNumberFontFace,                      "FreeSans"),
+    styleDef(jianpuNumberFontSize,                      9.0),
+    styleDef(jianpuNumberLineSpacing,                   1.0),
+    styleDef(jianpuNumberFontSpatiumDependent,          true),
+    styleDef(jianpuNumberFontStyle,                     int(FontStyle::Normal)),
+    styleDef(jianpuNumberColor,                         PropertyValue::fromValue(Color::BLACK)),
+    styleDef(jianpuNumberAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(jianpuNumberOffset,                        PointF()),
+    styleDef(jianpuNumberFrameType,                     int(FrameType::NO_FRAME)),
+    styleDef(jianpuNumberFramePadding,                  0.2),
+    styleDef(jianpuNumberFrameWidth,                    0.1),
+    styleDef(jianpuNumberFrameRound,                    0),
+    styleDef(jianpuNumberFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
+    styleDef(jianpuNumberFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
+
     styleDef(longInstrumentFontFace,                     "Edwin"),
     styleDef(longInstrumentFontSize,                     10.0),
     styleDef(longInstrumentLineSpacing,                  1.0),
@@ -2182,6 +2197,13 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
     styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
     styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
+
+    styleDef(jianpuNumberVerticalDistance,               0.5_sp),
+    styleDef(jianpuOctaveDotDiameter,                    0.1_sp),
+    styleDef(jianpuOctaveDotDistance,                    0.3_sp),
+    styleDef(jianpuDiminutionBeamThickness,              0.1_sp),
+    styleDef(jianpuDiminutionBeamDistance,               0.3_sp),
+    styleDef(jianpuDurationLineThickness,                0.1_sp),
 } };
 
 #undef styleDef
