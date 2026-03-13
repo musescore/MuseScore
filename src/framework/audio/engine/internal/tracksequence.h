@@ -29,7 +29,6 @@
 #include "audio/common/audiotypes.h"
 
 #include "../itracksequence.h"
-#include "../iclock.h"
 
 #include "track.h"
 #include "igettracks.h"
@@ -83,8 +82,6 @@ private:
 
     ISequencePlayerPtr m_player = nullptr;
     ISequenceIOPtr m_audioIO = nullptr;
-
-    IClockPtr m_clock = nullptr;
 
     async::Channel<TrackId> m_trackAdded;
     async::Channel<TrackId> m_trackRemoved;

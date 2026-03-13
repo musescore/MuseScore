@@ -29,8 +29,6 @@
 #include "sequenceplayer.h"
 #include "sequenceio.h"
 
-#include "clock.h"
-
 #include "log.h"
 
 using namespace muse;
@@ -43,22 +41,17 @@ TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::Context
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_clock = std::make_shared<Clock>();
-    m_player = std::make_shared<SequencePlayer>(this, m_clock, iocCtx);
+    m_player = std::make_shared<SequencePlayer>(this, iocCtx);
     m_audioIO = std::make_shared<SequenceIO>(this);
 
     audioEngine()->modeChanged().onReceive(this, [this](RenderMode) {
         m_prevActiveTrackId = INVALID_TRACK_ID;
     });
-
-    mixer()->addClock(m_clock);
 }
 
 TrackSequence::~TrackSequence()
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    mixer()->removeClock(m_clock);
 
     removeAllTracks();
 }

@@ -24,6 +24,8 @@
 
 #include "audio/common/audiosanitizer.h"
 
+#include "clock.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -31,27 +33,48 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::async;
 
-SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx)
-    : Contextable(iocCtx), m_getTracks(getTracks), m_clock(clock)
+SequencePlayer::SequencePlayer(IGetTracks* getTracks, const modularity::ContextPtr& iocCtx)
+    : Contextable(iocCtx), m_getTracks(getTracks), m_clock(std::make_shared<Clock>())
 {
-    m_clock->seekOccurred().onNotify(this, [this]() {
-        seekAllTracks(m_clock->currentTime());
-    });
+    m_clock->setOnAction([this](const IClock::ActionType type, const msecs_t time) {
+        ONLY_AUDIO_RPC_OR_PROC_THREAD;
 
-    m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
-        const bool active = status == PlaybackStatus::Running;
+        switch (type) {
+            case IClock::ActionType::StatusChanged: {
+                const bool active = m_clock->status() == PlaybackStatus::Running;
 
-        if (!m_countDownIsSet) {
-            audioEngine()->mixer()->setIsActive(active);
-        } else if (!active) {
-            flushAllTracks();
+                if (!m_countDownIsSet) {
+                    audioEngine()->mixer()->setIsActive(active);
+                } else if (!active) {
+                    flushAllTracks();
+                }
+
+                m_playbackStatusChanged.send(m_clock->status());
+                break;
+            }
+            case IClock::ActionType::Seek: {
+                if (m_tracksFollowClockSeek) {
+                    seekAllTracks(time);
+                }
+                break;
+            }
+            case IClock::ActionType::LoopEndReached:
+                m_clock->seek(m_loopStart);
+                break;
+            case IClock::ActionType::CountDownEnded:
+                m_countDownIsSet = false;
+                audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
+                break;
         }
     });
 
-    m_clock->countDownEnded().onNotify(this, [this]() {
-        m_countDownIsSet = false;
-        audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
-    });
+    audioEngine()->mixer()->addClock(m_clock);
+}
+
+SequencePlayer::~SequencePlayer()
+{
+    m_clock->setOnAction(nullptr);
+    audioEngine()->mixer()->removeClock(m_clock);
 }
 
 async::Promise<Ret> SequencePlayer::prepareToPlay()
@@ -81,11 +104,11 @@ void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_flushSoundOnSeek = flushSound;
     msecs_t newPos = secsToMicrosecs(newPosition);
+    m_tracksFollowClockSeek = false;
     m_clock->seek(newPos);
-    seekAllTracks(newPos);
-    m_flushSoundOnSeek = true;
+    m_tracksFollowClockSeek = true;
+    seekAllTracks(newPos, flushSound);
 }
 
 void SequencePlayer::stop()
@@ -138,7 +161,9 @@ Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->setTimeLoop(fromMsec * 1000, toMsec * 1000);
+    m_loopStart = fromMsec * 1000;
+
+    return m_clock->setTimeLoop(m_loopStart, toMsec * 1000);
 }
 
 void SequencePlayer::resetLoop()
@@ -146,6 +171,7 @@ void SequencePlayer::resetLoop()
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock->resetTimeLoop();
+    m_loopStart = 0;
 }
 
 secs_t SequencePlayer::playbackPosition() const
@@ -173,10 +199,10 @@ Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->statusChanged();
+    return m_playbackStatusChanged;
 }
 
-void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
+void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs, bool flushSound)
 {
     IF_ASSERT_FAILED(m_getTracks) {
         return;
@@ -184,7 +210,7 @@ void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
 
     for (const auto& pair : m_getTracks->allTracks()) {
         if (pair.second->inputHandler) {
-            pair.second->inputHandler->seek(newPositionMsecs, m_flushSoundOnSeek);
+            pair.second->inputHandler->seek(newPositionMsecs, flushSound);
         }
     }
 }
