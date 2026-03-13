@@ -44,6 +44,15 @@ void Equaliser::setActive(bool active)
     m_active = active;
 }
 
+void Equaliser::setPlaying(bool)
+{
+}
+
+bool Equaliser::shouldProcessDuringSilence() const
+{
+    return false;
+}
+
 void Equaliser::process(float* buffer, unsigned int sampleCount, msecs_t)
 {
     for (unsigned int i = 0; i < sampleCount; ++i) {

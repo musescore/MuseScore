@@ -47,6 +47,8 @@ public:
     bool active() const override;
     void setActive(bool active) override;
 
+    bool shouldProcessDuringSilence() const override;
+
     void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
 
 private:

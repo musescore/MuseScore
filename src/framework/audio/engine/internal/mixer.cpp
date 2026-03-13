@@ -220,7 +220,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     size_t outBufferSize = samplesPerChannel * m_outputSpec.audioChannelCount;
     std::fill(outBuffer, outBuffer + outBufferSize, 0.f);
 
-    if (m_isIdle && m_tracksToProcessWhenIdle.empty() && m_isSilence) {
+    if (m_isIdle && m_tracksToProcessWhenIdle.empty() && (m_isSilence && !m_shouldProcessMasterFxDuringSilence)) {
         notifyNoAudioSignal();
         return 0;
     }
@@ -248,20 +248,15 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         writeTrackToAuxBuffers(trackBuffer.data(), channel->outputParams().auxSends, samplesPerChannel);
     }
 
-    if (m_masterParams.muted || samplesPerChannel == 0 || m_isSilence) {
+    if (m_masterParams.muted || samplesPerChannel == 0 || (m_isSilence && !m_shouldProcessMasterFxDuringSilence)) {
         notifyNoAudioSignal();
         return 0;
     }
 
     processAuxChannels(outBuffer, samplesPerChannel);
-
-    for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
-        if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel, playbackPosition());
-        }
-    }
-
+    processMasterFx(outBuffer, samplesPerChannel);
     completeOutput(outBuffer, samplesPerChannel);
+
     notifyAboutAudioSignalChanges();
 
     return samplesPerChannel;
@@ -400,6 +395,8 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
         fx->setOutputSpec(m_outputSpec);
+        fx->setPlaying(m_isActive);
+
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
             m_masterOutputParamsChanged.send(m_masterParams);
@@ -430,6 +427,11 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
             it = resultParams.fxChain.erase(it);
         }
     }
+
+    m_shouldProcessMasterFxDuringSilence = std::any_of(m_masterFxProcessors.cbegin(), m_masterFxProcessors.cend(),
+                                                       [](const IFxProcessorPtr& fx) {
+        return fx->shouldProcessDuringSilence();
+    });
 
     m_masterParams = resultParams;
     m_masterOutputParamsChanged.send(resultParams);
@@ -552,6 +554,15 @@ void Mixer::processAuxChannels(float* buffer, samples_t samplesPerChannel)
 
         if (!aux.channel->isSilent()) {
             mixOutputFromChannel(buffer, auxBuffer, samplesPerChannel);
+        }
+    }
+}
+
+void Mixer::processMasterFx(float* buffer, samples_t samplesPerChannel)
+{
+    for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
+        if (fxProcessor->active()) {
+            fxProcessor->process(buffer, samplesPerChannel, playbackPosition());
         }
     }
 }

@@ -87,6 +87,7 @@ private:
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
+    void processMasterFx(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
 
     bool useMultithreading() const;
@@ -119,6 +120,7 @@ private:
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 
     bool m_isSilence = false;
+    bool m_shouldProcessMasterFxDuringSilence = false;
     bool m_isIdle = false;
 };
 
