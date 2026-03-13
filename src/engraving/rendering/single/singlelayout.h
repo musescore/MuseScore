@@ -41,6 +41,7 @@ class Articulation;
 class BagpipeEmbellishment;
 class BarLine;
 class Bend;
+class Box;
 class Bracket;
 class Breath;
 
@@ -166,6 +167,7 @@ public:
     static void layout(BagpipeEmbellishment* item, const Context& ctx);
     static void layout(BarLine* item, const Context& ctx);
     static void layout(Bend* item, const Context& ctx);
+    static void layout(Box* item, const Context& ctx); // Boxes share layout method
     static void layout(Bracket* item, const Context& ctx);
     static void layout(Breath* item, const Context&);
 

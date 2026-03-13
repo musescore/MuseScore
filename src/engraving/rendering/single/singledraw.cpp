@@ -38,6 +38,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
+#include "dom/box.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
 
@@ -194,6 +195,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter, opt);
         break;
 
+    case ElementType::FBOX:         draw(item_cast<const Box*>(item), painter, opt);
+        break;
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter, opt);
         break;
     case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter, opt);
@@ -225,6 +228,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::HARMONIC_MARK_SEGMENT: draw(item_cast<const HarmonicMarkSegment*>(item), painter, opt);
         break;
     case ElementType::HARMONY:      draw(item_cast<const Harmony*>(item), painter, opt);
+        break;
+    case ElementType::HBOX:         draw(item_cast<const Box*>(item), painter, opt);
         break;
     case ElementType::HOOK:         draw(item_cast<const Hook*>(item), painter, opt);
         break;
@@ -321,6 +326,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
 
     case ElementType::TAPPING:              draw(item_cast<const Tapping*>(item), painter, opt);
         break;
+    case ElementType::TBOX:                 draw(item_cast<const Box*>(item), painter, opt);
+        break;
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter, opt);
         break;
     case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter, opt);
@@ -344,6 +351,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
     case ElementType::TUPLET:               draw(item_cast<const Tuplet*>(item), painter, opt);
         break;
 
+    case ElementType::VBOX:                 draw(item_cast<const Box*>(item), painter, opt);
+        break;
     case ElementType::VIBRATO_SEGMENT:      draw(item_cast<const VibratoSegment*>(item), painter, opt);
         break;
     case ElementType::VOLTA_SEGMENT:        draw(item_cast<const VoltaSegment*>(item), painter, opt);
@@ -975,6 +984,14 @@ void SingleDraw::draw(const Bend* item, Painter* painter, const PaintOptions& op
         x = x2;
         y = y2;
     }
+}
+
+void SingleDraw::draw(const Box* item, Painter* painter, const PaintOptions&)
+{
+    TRACE_DRAW_ITEM;
+    const Box::LayoutData* ldata = item->ldata();
+    painter->setFont(item->iconFont());
+    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
 }
 
 void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
