@@ -34,12 +34,14 @@ class OttavaSettingsModel : public TextLineSettingsModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * ottavaType READ ottavaType CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * showNumbersOnly READ showNumbersOnly CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * playbackPasses READ playbackPasses CONSTANT)
 
 public:
     explicit OttavaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
 
     PropertyItem* ottavaType() const;
     PropertyItem* showNumbersOnly() const;
+    PropertyItem* playbackPasses() const;
 
     Q_INVOKABLE QVariantList possibleOttavaTypes() const;
 
@@ -53,5 +55,6 @@ private:
 
     PropertyItem* m_ottavaType = nullptr;
     PropertyItem* m_showNumbersOnly = nullptr;
+    PropertyItem* m_playbackPasses = nullptr;
 };
 }

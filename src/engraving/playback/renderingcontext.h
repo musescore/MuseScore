@@ -21,11 +21,18 @@
  */
 #pragma once
 
+#include <limits>
+
 #include "mpe/events.h"
 
 #include "../dom/chord.h"
 #include "../dom/note.h"
+#include "../dom/ottava.h"
+#include "../dom/staff.h"
 #include "../dom/sig.h"
+#include "../dom/spannermap.h"
+
+#include "utils/repeatpassutils.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/pitchutils.h"
@@ -62,6 +69,49 @@ struct RenderingContext {
                && nominalDurationTicks > 0;
     }
 };
+
+inline int ottavaPitchShiftForPass(const Note* note, const RenderingContext& ctx)
+{
+    if (!note || !ctx.score) {
+        return 0;
+    }
+
+    const int noteTick = note->tick().ticks();
+    const int utick = ctx.nominalPositionStartTick + ctx.positionTickOffset;
+    const int pass = repeatPassForUtick(ctx.score, utick);
+
+    const SpannerMap::IntervalList& spanners = ctx.score->spannerMap().findOverlapping(noteTick, noteTick);
+    int bestStartTick = std::numeric_limits<int>::min();
+    int resultShift = 0;
+
+    for (const auto& spannerInterval : spanners) {
+        const Spanner* spanner = spannerInterval.value;
+        if (!spanner || !spanner->isOttava() || !spanner->playSpanner()) {
+            continue;
+        }
+
+        if (spanner->staffIdx() != note->staffIdx()) {
+            continue;
+        }
+
+        const int startTick = spanner->tick().ticks();
+        const int endTick = spanner->tick2().ticks();
+        if (noteTick < startTick || noteTick >= endTick) {
+            continue;
+        }
+
+        if (!shouldApplyOnPass(spanner->playOnPasses(), pass)) {
+            continue;
+        }
+
+        if (startTick >= bestStartTick) {
+            bestStartTick = startTick;
+            resultShift = toOttava(spanner)->pitchShift();
+        }
+    }
+
+    return resultShift;
+}
 
 inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPositionOffset,
                                           const muse::mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
@@ -123,6 +173,13 @@ struct NominalNoteCtx {
         chordCtx(ctx),
         articulations(ctx.commonArticulations)
     {
+        const Staff* staff = note->staff();
+        const int baseOttavaShift = staff ? staff->pitchOffset(note->tick()) : 0;
+        const int passOttavaShift = ottavaPitchShiftForPass(note, ctx);
+        const int shiftDelta = passOttavaShift - baseOttavaShift;
+        if (shiftDelta != 0) {
+            pitchLevel += shiftDelta * muse::mpe::PITCH_LEVEL_STEP;
+        }
     }
 };
 

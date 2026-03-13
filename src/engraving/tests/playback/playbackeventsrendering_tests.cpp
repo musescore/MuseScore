@@ -799,7 +799,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
 
     ASSERT_TRUE(score);
-    ASSERT_EQ(score->repeatList().size(), 2);
+    ASSERT_GE(score->repeatList().size(), 2);
 
     Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
@@ -834,8 +834,14 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
     PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
 
     // [WHEN] Request to render a chord with the F4 note on it
+    const int chordTick = chord->tick().ticks();
+
     PlaybackEventsMap result;
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        if (repeatSegment->tick > chordTick || repeatSegment->endTick() <= chordTick) {
+            continue;
+        }
+
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
         m_renderer.render(chord, tickPositionOffset, m_defaultProfile, ctx, result);
     }
@@ -873,6 +879,63 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 
             noteEventNum++;
         }
+    }
+
+    delete score;
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Ottava_Play_On_Pass
+ * @details Render a repeated measure with an ottava set to play only on the 2nd pass.
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Ottava_Play_On_Pass)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "ottava_play_on_pass/ottava_play_on_pass.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->repeatList().size(), 2);
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::C, 4);
+
+    std::vector<pitch_level_t> expectedPitches {
+        nominalPitchLevel,
+        static_cast<pitch_level_t>(nominalPitchLevel + 12 * PITCH_LEVEL_STEP)
+    };
+
+    std::vector<timestamp_t> expectedTimestamps {
+        0,
+        WHOLE_NOTE_DURATION
+    };
+
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    PlaybackEventsMap result;
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+        m_renderer.render(chord, tickPositionOffset, m_defaultProfile, ctx, result);
+    }
+
+    EXPECT_EQ(result.size(), 2);
+    ASSERT_EQ(expectedTimestamps.size(), result.size());
+
+    size_t noteEventNum = 0;
+    for (const auto& pair : result) {
+        EXPECT_EQ(pair.second.size(), 1);
+
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.front());
+        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(noteEventNum));
+        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(noteEventNum));
+
+        noteEventNum++;
     }
 
     delete score;

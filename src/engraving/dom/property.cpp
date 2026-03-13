@@ -111,6 +111,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::GHOST,                               P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "ghost",                           QT_TRANSLATE_NOOP("engraving/propertyName", "ghost") },
     { Pid::DEAD,                                P_TYPE::BOOL,                      PropertyGroup::APPEARANCE, true,  "dead",                            QT_TRANSLATE_NOOP("engraving/propertyName", "dead") },
     { Pid::PLAY,                                P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "play",                            QT_TRANSLATE_NOOP("engraving/propertyName", "played") },
+    { Pid::PLAY_ON_PASSES,                      P_TYPE::INT_VEC,                   PropertyGroup::APPEARANCE, false, "playOnPasses",                    QT_TRANSLATE_NOOP("engraving/propertyName", "play on passes") },
     { Pid::TIMESIG_NOMINAL,                     P_TYPE::FRACTION,                  PropertyGroup::APPEARANCE, false, "timesigNominal",                  QT_TRANSLATE_NOOP("engraving/propertyName", "nominal time signature") },
     { Pid::TIMESIG_ACTUAL,                      P_TYPE::FRACTION,                  PropertyGroup::APPEARANCE, true,  "timesigActual",                   QT_TRANSLATE_NOOP("engraving/propertyName", "actual time signature") },
     { Pid::NUMBER_TYPE,                         P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "numberType",                      QT_TRANSLATE_NOOP("engraving/propertyName", "number type") },
