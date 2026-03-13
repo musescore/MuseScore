@@ -257,7 +257,26 @@ enum class AudioFxCategory {
     FxRestoration,
     FxReverb,
     FxSurround,
-    FxTools
+    FxTools,
+    FxOther,
+};
+
+inline const std::unordered_map<AudioFxCategory, String> AUDIO_FX_CATEGORY_TO_STRING_MAP {
+    { AudioFxCategory::FxEqualizer, u"EQ" },
+    { AudioFxCategory::FxAnalyzer, u"Analyzer" },
+    { AudioFxCategory::FxDelay, u"Delay" },
+    { AudioFxCategory::FxDistortion, u"Distortion" },
+    { AudioFxCategory::FxDynamics, u"Dynamics" },
+    { AudioFxCategory::FxFilter, u"Filter" },
+    { AudioFxCategory::FxGenerator, u"Generator" },
+    { AudioFxCategory::FxMastering, u"Mastering" },
+    { AudioFxCategory::FxModulation, u"Modulation" },
+    { AudioFxCategory::FxPitchShift, u"Pitch Shift" },
+    { AudioFxCategory::FxRestoration, u"Restoration" },
+    { AudioFxCategory::FxReverb, u"Reverb" },
+    { AudioFxCategory::FxSurround, u"Surround" },
+    { AudioFxCategory::FxTools, u"Tools" },
+    { AudioFxCategory::FxOther, u"Fx" },
 };
 
 using AudioFxCategories = std::set<AudioFxCategory>;

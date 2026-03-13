@@ -34,6 +34,7 @@ class AbstractFxResolver : public IFxResolver::IResolver
 public:
     std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
     std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
+
     void refresh() override;
     void clearAllFx() override;
 
