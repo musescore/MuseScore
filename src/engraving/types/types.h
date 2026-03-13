@@ -215,6 +215,8 @@ enum class ElementType : unsigned char {
     TAPPING_HALF_SLUR,
     TAPPING_HALF_SLUR_SEGMENT,
     TAPPING_TEXT,
+    OCTAVE_DOT,
+    DURATION_LINE,
 
     ROOT_ITEM,
     DUMMY,
@@ -876,6 +878,7 @@ enum class TextStyleType : unsigned char {
     FRET_DIAGRAM_FRET_NUMBER,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
+    JIANPU_NUMBER,
 
     // Line-oriented styles
     TEXTLINE,
