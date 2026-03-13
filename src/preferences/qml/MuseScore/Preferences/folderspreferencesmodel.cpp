@@ -167,9 +167,11 @@ void FoldersPreferencesModel::setupConnections()
     });
 
     videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
+        emit ffmpegVersionChanged();
         emit ffmpegDirChanged();
     });
 
+    emit ffmpegVersionChanged();
     emit ffmpegDirChanged();
 }
 

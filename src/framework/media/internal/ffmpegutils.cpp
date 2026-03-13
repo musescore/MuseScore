@@ -45,7 +45,7 @@ static io::paths_t defaultSearchPaths()
     return paths;
 }
 
-static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& searchPaths)
+static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::path_t& searchDir)
 {
     const std::string verStr = std::to_string(ffmpegVer);
 
@@ -83,22 +83,20 @@ static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& s
 #endif
 
     FFmpegLibPaths result;
-    for (const io::path_t& dir : searchPaths) {
-        io::path_t avutilPath = dir.appendingComponent(avutilName);
-        io::path_t avcodecPath = dir.appendingComponent(avcodecName);
-        io::path_t avformatPath = dir.appendingComponent(avformatName);
-        io::path_t swscalePath = dir.appendingComponent(swscaleName);
-        io::path_t swresamplePath = dir.appendingComponent(swresampleName);
-        if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
-            && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)
-            && io::FileInfo::exists(swresamplePath)) {
-            result.avUtilPath = avutilPath;
-            result.avCodecPath = avcodecPath;
-            result.avFormatPath = avformatPath;
-            result.swScalePath = swscalePath;
-            result.swResamplePath = swresamplePath;
-            return result;
-        }
+    io::path_t avutilPath = searchDir.appendingComponent(avutilName);
+    io::path_t avcodecPath = searchDir.appendingComponent(avcodecName);
+    io::path_t avformatPath = searchDir.appendingComponent(avformatName);
+    io::path_t swscalePath = searchDir.appendingComponent(swscaleName);
+    io::path_t swresamplePath = searchDir.appendingComponent(swresampleName);
+    if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
+        && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)
+        && io::FileInfo::exists(swresamplePath)) {
+        result.avUtilPath = avutilPath;
+        result.avCodecPath = avcodecPath;
+        result.avFormatPath = avformatPath;
+        result.swScalePath = swscalePath;
+        result.swResamplePath = swresamplePath;
+        return result;
     }
 
     return result;
@@ -163,10 +161,12 @@ FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)
         searchPaths.push_back(p);
     }
 
-    for (const auto& [ffmpegVer, _] : FFMPEG_COMPONENTS_VERSIONS) {
-        result = libraryPathsForVersion(ffmpegVer, searchPaths);
-        if (!result.avFormatPath.empty()) {
-            return result;
+    for (const io::path_t& path : searchPaths) {
+        for (const auto& [ffmpegVer, _] : FFMPEG_COMPONENTS_VERSIONS) {
+            result = libraryPathsForVersion(ffmpegVer, path);
+            if (!result.avFormatPath.empty()) {
+                return result;
+            }
         }
     }
 
