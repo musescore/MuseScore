@@ -29,6 +29,8 @@ target_sources(muse_midi PRIVATE
     midievent.h
     miditypes.h
     midierrors.h
+    mmc.cpp
+    mmc.h
 
     internal/midiconfiguration.cpp
     internal/midiconfiguration.h
@@ -72,4 +74,8 @@ elseif (OS_IS_LIN OR OS_IS_FBSD)
     find_package(ALSA REQUIRED)
     target_include_directories(muse_midi PRIVATE ${ALSA_INCLUDE_DIRS})
     target_link_libraries(muse_midi PRIVATE ${ALSA_LIBRARIES} pthread)
+endif()
+
+if (MUSE_MODULE_MIDI_TESTS)
+    add_subdirectory(tests)
 endif()
