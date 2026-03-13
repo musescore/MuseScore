@@ -919,9 +919,9 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         nm->setRepeatEnd(m->repeatEnd());
         nm->setRepeatJump(m->repeatJump());
 
-        nm->setIrregular(m->irregular());
-        nm->setNo(m->no());
-        nm->setNoOffset(m->noOffset());
+        nm->setExcludeFromNumbering(m->excludeFromNumbering());
+        nm->setMeasureNumber(m->measureNumber());
+        nm->setMeasureNumberOffset(m->measureNumberOffset());
         nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
 
         for (staff_idx_t dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {

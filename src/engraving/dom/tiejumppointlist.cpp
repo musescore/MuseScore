@@ -68,7 +68,7 @@ void TieJumpPoint::undoSetActive(bool v)
 TranslatableString TieJumpPoint::menuTitle() const
 {
     const Measure* measure = m_note->findMeasure();
-    const int measureNo = measure ? measure->no() + 1 : 0;
+    const int measureNo = measure ? measure->measureNumber() + 1 : 0;
 
     //: %1 represents the preceding jump item eg. coda. %2 represents the measure number
     return TranslatableString("engraving", "Tie to %1 (m. %2)").arg(precedingJumpItemName(), String::number(measureNo));

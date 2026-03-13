@@ -926,13 +926,19 @@ void TextBase::paste(EditData& ed, const String& txt)
                     sym += c;
                 } else {
                     deleteSelectedText(ed);
-                    static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
+                    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
+                    TextCursor* cursor = ted->cursor();
+                    cursor->setFormat(format);
                     if (c.isHighSurrogate()) {
                         Char highSurrogate = c;
                         assert(i + 1 < txt.size());
                         i++;
                         Char lowSurrogate = txt.at(i);
                         insertText(ed, String::fromUcs4(Char::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                    } else if (c == '\r') {
+                        continue;
+                    } else if (c == '\n') {
+                        score()->undo(new SplitText(cursor), &ed);
                     } else {
                         insertText(ed, String(c));
                     }

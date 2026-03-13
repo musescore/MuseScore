@@ -835,8 +835,8 @@ void tryCreatePickupMeasure(
     if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
         Measure* pickup = Factory::createMeasure(score->dummy()->system());
         pickup->setTick(Fraction::fromTicks(firstBarTick));
-        pickup->setNo(0);
-        pickup->setIrregular(true);
+        pickup->setMeasureNumber(0);
+        pickup->setExcludeFromNumbering(true);
         pickup->setTimesig(secondTimeSig);           // nominal time signature
         pickup->setTicks(firstTimeSig);                // actual length
         score->measures()->append(pickup);
@@ -851,14 +851,14 @@ void tryCreatePickupMeasure(
 
         Measure* firstBar = Factory::createMeasure(score->dummy()->system());
         firstBar->setTick(Fraction::fromTicks(firstBarTick));
-        firstBar->setNo(0);
+        firstBar->setMeasureNumber(0);
         firstBar->setTimesig(secondTimeSig);
         firstBar->setTicks(secondTimeSig);
         score->measures()->append(firstBar);
 
         Measure* secondBar = Factory::createMeasure(score->dummy()->system());
         secondBar->setTick(Fraction::fromTicks(firstBarTick + secondTimeSig.ticks()));
-        secondBar->setNo(1);
+        secondBar->setMeasureNumber(1);
         secondBar->setTimesig(secondTimeSig);
         secondBar->setTicks(secondTimeSig);
         score->measures()->append(secondBar);
@@ -892,7 +892,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
         Measure* m = Factory::createMeasure(score->dummy()->system());
         const int t = score->sigmap()->bar2tick(i, 0);
         m->setTick(Fraction::fromTicks(tick));
-        m->setNo(i);
+        m->setMeasureNumber(i);
         const Fraction timeSig = score->sigmap()->timesig(t).timesig();
         m->setTimesig(timeSig);
         m->setTicks(timeSig);

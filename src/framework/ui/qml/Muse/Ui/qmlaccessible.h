@@ -231,7 +231,6 @@ private:
 
     QQuickItem* resolveVisualItem() const;
 
-    bool m_registred = false;
     AccessibleItem* m_accessibleParent = nullptr;
     QList<AccessibleItem*> m_children;
     MUAccessible::Role m_role = MUAccessible::NoRole;

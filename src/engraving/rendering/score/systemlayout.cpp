@@ -212,7 +212,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             ctx.mutState().curMeasure()->setParent(oldSystem);
             while (ctx.state().prevMeasure() && ctx.state().prevMeasure()->noBreak() && system->measures().size() > 1) {
                 ctx.mutState().setTick(ctx.state().tick() - ctx.state().curMeasure()->ticks());
-                ctx.mutState().setMeasureNo(ctx.state().curMeasure()->no());
+                if (ctx.state().curMeasure()->isMeasure()) {
+                    ctx.mutState().setMeasureNumber(toMeasure(ctx.state().curMeasure())->measureNumber());
+                }
 
                 ctx.mutState().setNextMeasure(ctx.mutState().curMeasure());
                 ctx.mutState().setCurMeasure(ctx.mutState().prevMeasure());

@@ -1441,11 +1441,11 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
         // The offset might be positive or negative
         // For example, two measure 9a and 9b, with the second with a -1 offset
         if (measureSt.n != m_lastMeasureN) {
-            measure->setNoOffset(measureSt.n - m_lastMeasureN);
+            measure->setMeasureNumberOffset(measureSt.n - m_lastMeasureN);
             m_lastMeasureN = measureSt.n;
         }
     }
-    measure->setIrregular(measureSt.irregular);
+    measure->setExcludeFromNumbering(measureSt.irregular);
 
     Fraction measureTicks(0, 1);
     success = success & this->readStaves(measureNode, measure, measureTicks);

@@ -275,12 +275,12 @@
            <number>6</number>
           </property>
           <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="irregular">
+           <widget class="QCheckBox" name="excludeFromNumbering">
             <property name="toolTip">
              <string>Do not count</string>
             </property>
             <property name="text">
-             <string>Exclude from measure count</string>
+             <string>Exclude from measure numbering</string>
             </property>
            </widget>
           </item>

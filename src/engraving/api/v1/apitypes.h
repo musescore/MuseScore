@@ -1431,6 +1431,45 @@ enum class StaffGroup {
 };
 Q_ENUM_NS(StaffGroup);
 
+/** APIDOC
+ * Staff type presets.
+ * @enum StaffTypes
+ * @memberof Engraving
+ * @since 4.7
+ */
+enum class StaffTypes {
+    STANDARD       = int(mu::engraving::StaffTypes::STANDARD),
+    PERC_1LINE     = int(mu::engraving::StaffTypes::PERC_1LINE),
+    PERC_2LINE     = int(mu::engraving::StaffTypes::PERC_2LINE),
+    PERC_3LINE     = int(mu::engraving::StaffTypes::PERC_3LINE),
+    PERC_5LINE     = int(mu::engraving::StaffTypes::PERC_5LINE),
+    TAB_6SIMPLE    = int(mu::engraving::StaffTypes::TAB_6SIMPLE),
+    TAB_6COMMON    = int(mu::engraving::StaffTypes::TAB_6COMMON),
+    TAB_6FULL      = int(mu::engraving::StaffTypes::TAB_6FULL),
+    TAB_4SIMPLE    = int(mu::engraving::StaffTypes::TAB_4SIMPLE),
+    TAB_4COMMON    = int(mu::engraving::StaffTypes::TAB_4COMMON),
+    TAB_4FULL      = int(mu::engraving::StaffTypes::TAB_4FULL),
+    TAB_5SIMPLE    = int(mu::engraving::StaffTypes::TAB_5SIMPLE),
+    TAB_5COMMON    = int(mu::engraving::StaffTypes::TAB_5COMMON),
+    TAB_5FULL      = int(mu::engraving::StaffTypes::TAB_5FULL),
+    TAB_UKULELE    = int(mu::engraving::StaffTypes::TAB_UKULELE),
+    TAB_BALALAJKA  = int(mu::engraving::StaffTypes::TAB_BALALAJKA),
+    TAB_DULCIMER   = int(mu::engraving::StaffTypes::TAB_DULCIMER),
+    TAB_ITALIAN    = int(mu::engraving::StaffTypes::TAB_ITALIAN),
+    TAB_FRENCH     = int(mu::engraving::StaffTypes::TAB_FRENCH),
+    TAB_7COMMON    = int(mu::engraving::StaffTypes::TAB_7COMMON),
+    TAB_8COMMON    = int(mu::engraving::StaffTypes::TAB_8COMMON),
+    TAB_9COMMON    = int(mu::engraving::StaffTypes::TAB_9COMMON),
+    TAB_10COMMON   = int(mu::engraving::StaffTypes::TAB_10COMMON),
+    TAB_7SIMPLE    = int(mu::engraving::StaffTypes::TAB_7SIMPLE),
+    TAB_8SIMPLE    = int(mu::engraving::StaffTypes::TAB_8SIMPLE),
+    TAB_9SIMPLE    = int(mu::engraving::StaffTypes::TAB_9SIMPLE),
+    TAB_10SIMPLE   = int(mu::engraving::StaffTypes::TAB_10SIMPLE),
+    PERC_DEFAULT   = int(mu::engraving::StaffTypes::PERC_DEFAULT),
+    TAB_DEFAULT    = int(mu::engraving::StaffTypes::TAB_DEFAULT),
+};
+Q_ENUM_NS(StaffTypes);
+
 enum class OttavaType {
     OTTAVA_8VA  = int(mu::engraving::OttavaType::OTTAVA_8VA),
     OTTAVA_8VB  = int(mu::engraving::OttavaType::OTTAVA_8VB),
@@ -1655,6 +1694,18 @@ enum class MeasureNumberPlacement {
     ON_ALL_STAVES           = int(mu::engraving::MeasureNumberPlacement::ON_ALL_STAVES),
 };
 Q_ENUM_NS(MeasureNumberPlacement);
+
+/** APIDOC
+ * Determines whether to insert before or after the destination element.
+ * @enum InsertMode
+ * @memberof Engraving
+ * @since 4.7
+ */
+enum class InsertMode {
+    BEFORE = 0,
+    AFTER  = 1,
+};
+Q_ENUM_NS(InsertMode);
 
 enum class SymId {
     noSym = int(mu::engraving::SymId::noSym),
@@ -4730,6 +4781,7 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::JumpType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MarkerType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MeasureNumberMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffGroup);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffTypes);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TrillType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VibratoType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ArticulationTextType);

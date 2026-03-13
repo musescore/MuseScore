@@ -640,7 +640,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
         // prevMeasure() doesn't return MM rest so we don't handle it here
 
         if (pm && (!mTicks.identical(pm->ticks()) || !m->timesig().identical(pm->timesig()))) {
-            sigmap()->add(m->tick().ticks(), SigEvent(mTicks, m->timesig(), m->no()));
+            sigmap()->add(m->tick().ticks(), SigEvent(mTicks, m->timesig(), m->measureNumber()));
         }
     }
 }
@@ -5240,9 +5240,9 @@ String Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* curr
         int n = previousText.toInt(&ok);
         if (!ok) {
             return fallback;
-        } else if (current && n == previous->segment()->measure()->no() + 1) {
+        } else if (current && n == previous->segment()->measure()->measureNumber() + 1) {
             // use measure number
-            n = current->segment()->measure()->no() + 1;
+            n = current->segment()->measure()->measureNumber() + 1;
             return String::number(n);
         } else {
             // use number sequence

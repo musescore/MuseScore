@@ -162,6 +162,9 @@
 #else
 #include "stubs/importexport/midi/midimodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_MLSCORE_MODULE
+#include "importexport/mlscore/mlscoremodule.h"
+#endif
 #ifdef MUE_BUILD_IMPEXP_MNX_MODULE
 #include "importexport/mnx/mnxmodule.h"
 #else
@@ -359,6 +362,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
     app->addModule(new mu::iex::midi::MidiModule());
+#ifdef MUE_BUILD_IMPEXP_MLSCORE_MODULE
+    app->addModule(new mu::iex::mlscore::MlScoreModule());
+#endif
     app->addModule(new mu::iex::mnxio::MnxModule());
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
@@ -478,6 +484,9 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
     app->addModule(new mu::iex::capella::CapellaModule());
 #endif
     app->addModule(new mu::iex::midi::MidiModule());
+#ifdef MUE_BUILD_IMPEXP_MLSCORE_MODULE
+    app->addModule(new mu::iex::mlscore::MlScoreModule());
+#endif
     app->addModule(new mu::iex::mnxio::MnxModule());
 #ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());

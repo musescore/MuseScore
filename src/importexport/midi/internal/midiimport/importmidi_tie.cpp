@@ -124,19 +124,19 @@ bool areTiesConsistent(const Staff* staff)
                 ChordRest* cr = toChordRest(seg->element(strack + voice));
 
                 if (cr && cr->isRest() && isTie) {
-                    printInconsistentTieLocation(seg->measure()->no(), staff->idx());
+                    printInconsistentTieLocation(seg->measure()->measureNumber(), staff->idx());
                     return false;
                 }
                 if (isTiedBack(seg, strack, voice)) {
                     if (!isTie) {
-                        printInconsistentTieLocation(seg->measure()->no(), staff->idx());
+                        printInconsistentTieLocation(seg->measure()->measureNumber(), staff->idx());
                         return false;
                     }
                     isTie = false;
                 }
                 if (isTiedFor(seg, strack, voice)) {
                     if (isTie) {
-                        printInconsistentTieLocation(seg->measure()->no(), staff->idx());
+                        printInconsistentTieLocation(seg->measure()->measureNumber(), staff->idx());
                         return false;
                     }
                     isTie = true;

@@ -2732,7 +2732,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
 
     if (m_e.asciiAttribute("implicit") == "yes") {
         // Implicit measure: expect measure number to be unchanged.
-        measure->setIrregular(true);
+        measure->setExcludeFromNumbering(true);
     } else {
         // Normal measure: expect number to have increased by one.
         ++m_measureNumber;
@@ -2740,7 +2740,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
 
     if (isNumericMeasureNumber) {
         // Actual measure number may differ from expected value.
-        measure->setNoOffset(parsedMeasureNumber - m_measureNumber);
+        measure->setMeasureNumberOffset(parsedMeasureNumber - m_measureNumber);
         m_measureNumber = parsedMeasureNumber;
     }
 

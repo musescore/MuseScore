@@ -56,8 +56,8 @@ public:
 private:
     void init()
     {
-        m_measureNo = 1;
-        m_measureNoOffset = 0;
+        m_measureNumber = 1;
+        m_measureNumberOffset = 0;
         m_displayNumber = 1;
     }
 
@@ -74,19 +74,19 @@ private:
             }
         }
 
-        m_measureNoOffset = measure->noOffset();
-        m_measureNo += m_measureNoOffset;
+        m_measureNumberOffset = measure->measureNumberOffset();
+        m_measureNumber += m_measureNumberOffset;
 
         if (measure->isAnacrusis()) {
             m_displayNumber = 0;
             return;
         }
 
-        m_displayNumber = m_measureNo++;
+        m_displayNumber = m_measureNumber++;
     }
 
-    int m_measureNo = 1;
-    int m_measureNoOffset = 0;
+    int m_measureNumber = 1;
+    int m_measureNumberOffset = 0;
     int m_displayNumber = 1;
 };
 } // namespace

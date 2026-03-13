@@ -683,7 +683,7 @@ std::vector<EngravingItem*> NotationInteraction::hitElements(const PointF& pos, 
 
     PointF posOnPage = pos - page->pos();
 
-    if (isTextEditingStarted()) {
+    if (isTextEditingStarted() && page == m_editData.element->findAncestor(ElementType::PAGE)) {
         auto editW = width * 2;
         RectF editHitRect(posOnPage.x() - editW, posOnPage.y() - editW, 2.0 * editW, 2.0 * editW);
         if (m_editData.element->intersects(editHitRect)) {
