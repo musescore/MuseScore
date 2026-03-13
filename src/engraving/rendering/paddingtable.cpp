@@ -224,8 +224,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::BAR_LINE] = 0.35 * spatium;
 
-    table[ElementType::PARENTHESIS][ElementType::PARENTHESIS] = 1.0 * spatium;
-
     // Measure repeat set same values as note
     table[ElementType::MEASURE_REPEAT] = table[ElementType::NOTE];
     for (auto& elem : table) {
@@ -331,6 +329,7 @@ void NoteParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::REST] = 0.45 * spatium;
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.8 * spatium;
+    m_parenBefore[ElementType::PARENTHESIS] = style.styleMM(Sid::minNoteDistance) * 0.5;
 
     m_parenAfter[ElementType::ACCIDENTAL] = std::max(style.styleMM(Sid::accidentalNoteDistance).val(), 0.35 * spatium);
     m_parenAfter[ElementType::ARPEGGIO] = 0.6 * spatium;
@@ -342,6 +341,7 @@ void NoteParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::REST] = style.styleMM(Sid::minNoteDistance);
     m_parenAfter[ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
     m_parenAfter[ElementType::TIMESIG] = 0.75 * spatium;
+    m_parenAfter[ElementType::PARENTHESIS] = style.styleMM(Sid::minNoteDistance) * 0.5;
 }
 
 void KeySigParenPaddingTable::createTable(const MStyle& style)
@@ -357,6 +357,7 @@ void KeySigParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
+    m_parenBefore[ElementType::PARENTHESIS] = 1.0 * spatium;
 
     m_parenAfter[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenAfter[ElementType::CLEF] = 0.2 * spatium;
@@ -367,6 +368,7 @@ void KeySigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.25 * spatium;
+    m_parenAfter[ElementType::PARENTHESIS] = 1.0 * spatium;
 }
 
 void TimeSigParenPaddingTable::createTable(const MStyle& style)
@@ -382,6 +384,7 @@ void TimeSigParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
+    m_parenBefore[ElementType::PARENTHESIS] = 1.0 * spatium;
 
     m_parenAfter[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenAfter[ElementType::CLEF] = 0.2 * spatium;
@@ -392,6 +395,7 @@ void TimeSigParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.25 * spatium;
+    m_parenAfter[ElementType::PARENTHESIS] = 1.0 * spatium;
 }
 
 void ClefParenPaddingTable::createTable(const MStyle& style)
@@ -407,6 +411,7 @@ void ClefParenPaddingTable::createTable(const MStyle& style)
     m_parenBefore[ElementType::REST] = m_parenBefore[ElementType::NOTE];
     m_parenBefore[ElementType::STEM] = 0.35 * spatium;
     m_parenBefore[ElementType::TIMESIG] = 0.25 * spatium;
+    m_parenBefore[ElementType::PARENTHESIS] = 1.0 * spatium;
 
     m_parenAfter[ElementType::BAR_LINE] = 0.5 * spatium;
     m_parenAfter[ElementType::CLEF] = 0.25 * spatium;
@@ -417,4 +422,5 @@ void ClefParenPaddingTable::createTable(const MStyle& style)
     m_parenAfter[ElementType::REST] = m_parenAfter[ElementType::NOTE];
     m_parenAfter[ElementType::STEM] = 0.35 * spatium;
     m_parenAfter[ElementType::TIMESIG] = 0.2 * spatium;
+    m_parenAfter[ElementType::PARENTHESIS] = 1.0 * spatium;
 }
