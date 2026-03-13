@@ -65,6 +65,7 @@ RadioButtonGroup {
 
         toolTipTitle: modelData.title ?? ""
         toolTipDescription: modelData.description ?? ""
+        toolTipShortcut: modelData.shortcuts ?? ""
 
         navigation.name: "FlatRadioButtonList_" + (Boolean(text) ? text : modelData.title)
         navigation.panel: root.navigationPanel
