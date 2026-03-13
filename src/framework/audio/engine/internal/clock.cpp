@@ -57,7 +57,8 @@ void Clock::forward(const msecs_t nextMsecs)
     msecs_t newTime = m_currentTime + nextMsecs;
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
-        seek(m_timeLoopStart);
+        setCurrentTime(m_timeLoopStart);
+        onAction(ActionType::LoopEndReached, newTime);
 
         //!Note No matter of the time loop boundaries, the current frame still should be handled
         setCurrentTime(m_timeLoopStart + nextMsecs);
@@ -120,7 +121,7 @@ void Clock::seek(const msecs_t msecs)
     }
 
     setCurrentTime(msecs);
-    m_seekOccurred.notify();
+    onAction(ActionType::Seek, m_currentTime);
 }
 
 msecs_t Clock::timeDuration() const
@@ -171,11 +172,6 @@ async::Channel<secs_t> Clock::timeChanged() const
     return m_timeChangedInSecs;
 }
 
-async::Notification Clock::seekOccurred() const
-{
-    return m_seekOccurred;
-}
-
 PlaybackStatus Clock::status() const
 {
     return m_status.val;
@@ -184,4 +180,16 @@ PlaybackStatus Clock::status() const
 async::Channel<PlaybackStatus> Clock::statusChanged() const
 {
     return m_status.ch;
+}
+
+void Clock::setOnAction(OnActionFunc func)
+{
+    m_onActionFunc = func;
+}
+
+void Clock::onAction(ActionType type, msecs_t time)
+{
+    if (m_onActionFunc) {
+        m_onActionFunc(type, time);
+    }
 }
