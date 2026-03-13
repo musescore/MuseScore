@@ -3094,11 +3094,11 @@ void TWrite::write(const System* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item, { { "type", (item->dividerType() == SystemDividerType::LEFT ? "left" : "right") } });
-    if (item->scoreFont()) {
-        xml.tag("font", item->scoreFont()->name());
-        writeProperty(item, xml, Pid::SYMBOLS_SIZE);
-        writeProperty(item, xml, Pid::SYMBOL_ANGLE);
-    }
+
+    writeProperty(item, xml, Pid::SCORE_FONT);
+    writeProperty(item, xml, Pid::SYMBOLS_SIZE);
+    writeProperty(item, xml, Pid::SYMBOL_ANGLE);
+
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
 }
