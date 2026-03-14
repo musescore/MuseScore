@@ -194,10 +194,6 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
         const String vendorName = String::fromUtf8(m_libHandler->getInstrumentVendorName(instrument));
         const bool isOnline = m_libHandler->isOnlineInstrument(instrument);
 
-        if (instrumentSoundId.empty()) {
-            LOGE() << "MISSING INSTRUMENT ID for: " << internalName;
-        }
-
         String instrumentPackName = String::fromUtf8(m_libHandler->getInstrumentPackName(instrument));
         if (instrumentPackName.empty()) {
             instrumentPackName = internalCategory;
