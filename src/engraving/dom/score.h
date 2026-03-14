@@ -354,8 +354,6 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
-    void dumpScoreTree();  // for debugging purposes
-
     RootItem* rootItem() const { return m_rootItem; }
     compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
 
@@ -638,7 +636,6 @@ public:
                                                StaffAccepted staffAccepted = StaffAccepted()) const;
 
     void appendPart(const InstrumentTemplate*);
-    void updateStaffIndex();
     void sortSystemObjects(std::vector<staff_idx_t>& dst);
     void sortStaves(std::vector<staff_idx_t>& dst);
 
@@ -1110,10 +1107,6 @@ private:
     ChordRest* findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, bool forceVoice,
                                                             voice_idx_t voice) const;
 
-    void addTempo();
-    void addMetronome();
-
-    void checkSlurs();
     void checkScore();
 
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
