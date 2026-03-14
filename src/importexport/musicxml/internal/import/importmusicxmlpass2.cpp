@@ -7799,6 +7799,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     Key key = staff ? staff->key(sTime) : Key::INVALID;
 
     const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
+    const String fontFamily = m_e.attribute("font-family");
     const String placement = m_e.attribute("placement");
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
 
@@ -7993,6 +7994,10 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         ha->resetProperty(Pid::OFFSET);
     }
     colorItem(ha, color);
+    if (!fontFamily.empty()) {
+        ha->setFamily(fontFamily);
+        ha->setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+    }
 
     const HarmonyDesc newHarmonyDesc(track, ha, fd);
     bool insert = true;

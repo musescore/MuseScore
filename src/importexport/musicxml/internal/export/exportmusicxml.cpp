@@ -8954,6 +8954,12 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.emplace_back(std::make_pair("placement", TConv::toXml(h->placement())));
     }
+    if (!h->isStyled(Pid::FONT_FACE)) {
+        harmonyAttrs.emplace_back(std::make_pair("font-family", h->getProperty(Pid::FONT_FACE).value<String>()));
+    }
+    if (!h->isStyled(Pid::FONT_SIZE)) {
+        harmonyAttrs.emplace_back(std::make_pair("font-size", h->getProperty(Pid::FONT_SIZE).toReal()));
+    }
     harmonyAttrs.emplace_back(std::make_pair("print-frame", h->hasFrame() ? "yes" : "no"));     // .append(relative));
     if (!h->visible()) {
         harmonyAttrs.emplace_back(std::make_pair("print-object", "no"));
