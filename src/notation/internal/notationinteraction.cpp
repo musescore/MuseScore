@@ -7787,9 +7787,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         }
     } else {
         // add new text if no existing element to edit
-        // TODO: for tempo text, mscore->addTempo() could be called
-        // but it pre-fills the text
-        // would be better to create empty tempo element
+        // TODO: for tempo text, would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
             addTextToItem(textStyleType, el);
         }
