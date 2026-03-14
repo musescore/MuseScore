@@ -1113,7 +1113,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 } else if (tok2L == "2") {
                     m_xmlKind = u"suspended-second";
                 }
-                m_xmlText = tok1 + tok2;
+                m_xmlText = tok1L + tok2;
                 if (m_extension == "7" || m_extension == "9" || m_extension == "11" || m_extension == "13") {
                     m_xmlDegrees << ((m_quality == u"major") ? u"add#7" : u"add7");
                     // hack for programs that cannot assemble names well
