@@ -410,11 +410,15 @@ void Convert::articFromMEI(engraving::ChordLine* chordline, const libmei::Artic&
     // @artic
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 1)) {
         switch (meiArtic.GetArtic().at(0)) {
-        case (libmei::ARTICULATION_doit): chordline->setChordLineType(engraving::ChordLineType::DOIT); break;
-        case (libmei::ARTICULATION_scoop): chordline->setChordLineType(engraving::ChordLineType::SCOOP); break;
+        case (libmei::ARTICULATION_doit): chordline->setChordLineType(engraving::ChordLineType::DOIT);
+            break;
+        case (libmei::ARTICULATION_scoop): chordline->setChordLineType(engraving::ChordLineType::SCOOP);
+            break;
         case (libmei::ARTICULATION_rip): break;
-        case (libmei::ARTICULATION_plop): chordline->setChordLineType(engraving::ChordLineType::PLOP); break;
-        case (libmei::ARTICULATION_fall): chordline->setChordLineType(engraving::ChordLineType::FALL); break;
+        case (libmei::ARTICULATION_plop): chordline->setChordLineType(engraving::ChordLineType::PLOP);
+            break;
+        case (libmei::ARTICULATION_fall): chordline->setChordLineType(engraving::ChordLineType::FALL);
+            break;
         case (libmei::ARTICULATION_longfall): break;
         case (libmei::ARTICULATION_bend): break;
         case (libmei::ARTICULATION_flip): break;

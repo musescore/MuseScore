@@ -1739,11 +1739,11 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Note* note)
     Chord* chord = note->chord();
     ChordLine* chordLine = nullptr;
 
-    if (meiArtic.HasArtic() && (meiArtic.GetArtic().at(0) >= libmei::ARTICULATION_doit &&
-                                meiArtic.GetArtic().at(0) < libmei::ARTICULATION_longfall)) {
+    if (meiArtic.HasArtic()
+        && (meiArtic.GetArtic().at(0) >= libmei::ARTICULATION_doit && meiArtic.GetArtic().at(0) < libmei::ARTICULATION_longfall)) {
         chordLine = Factory::createChordLine(chord);
     }
-    
+
     if (!chordLine) {
         // Warning message given in MeiImporter::addToChordRest
         return true;
@@ -1754,7 +1754,7 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Note* note)
     chordLine->setTrack(note->track());
     chord->add(chordLine);
     chordLine->setNote(note);
- 
+
     return true;
 }
 
