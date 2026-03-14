@@ -36,7 +36,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Violoncello</trackName>
       <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>

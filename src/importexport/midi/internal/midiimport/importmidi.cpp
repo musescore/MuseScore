@@ -924,7 +924,6 @@ void setTrackInfo(MTrack& mt)
     if (mt.staff->isTop()) {
         Part* part  = mt.staff->part();
         part->setLongName(XmlWriter::xmlString(MidiInstr::concatenateWithComma(trackInstrName, mt.name)));
-        part->setPartName(part->longName());
         part->setMidiChannel(mt.mtrack->outChannel());
         int bank = 0;
         if (mt.mtrack->drumTrack()) {

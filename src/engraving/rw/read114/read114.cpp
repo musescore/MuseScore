@@ -2577,16 +2577,11 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
             readText114(e, ctx, t, t);
             part->instrument()->setShortName(t->xmlText());
             delete t;
-        } else if (tag == "trackName") {
-            part->setPartName(e.readText());
         } else if (tag == "show") {
             part->setShow(e.readInt());
         } else {
             e.unknown();
         }
-    }
-    if (part->partName().isEmpty()) {
-        part->setPartName(part->instrument()->trackName());
     }
 
     if (part->instrument()->useDrumset()) {

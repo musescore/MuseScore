@@ -29,7 +29,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Drum Kit, drum</trackName>
       <Instrument id="drumset">
         <longName>Drum Kit, drum</longName>
         <shortName>D. Kit</shortName>

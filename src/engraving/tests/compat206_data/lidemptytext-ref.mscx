@@ -31,7 +31,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Lead</trackName>
       <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
@@ -81,7 +80,6 @@
         <defaultClef>F8vb</defaultClef>
         </Staff>
       <show>0</show>
-      <trackName>Bass</trackName>
       <Instrument id="contrabass">
         <trackName>Contrabass</trackName>
         <minPitchP>28</minPitchP>
@@ -251,6 +249,7 @@
     <Score>
       <eid>a_a</eid>
       <name>Bass</name>
+      <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
         <pedalPosBelow x="0" y="0"/>
@@ -274,7 +273,6 @@
             </StaffType>
           <defaultClef>F8vb</defaultClef>
           </Staff>
-        <trackName>Contrabass</trackName>
         <Instrument id="contrabass">
           <trackName>Contrabass</trackName>
           <minPitchP>28</minPitchP>

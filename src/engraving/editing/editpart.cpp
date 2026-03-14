@@ -122,19 +122,16 @@ void SetSoloist::redo(EditData*)
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, Instrument* i, const String& s)
+ChangePart::ChangePart(Part* _part, Instrument* i)
 {
     instrument = i;
     part       = _part;
-    partName   = s;
 }
 
 void ChangePart::flip(EditData*)
 {
     Instrument* oi = part->instrument(); //tick?
-    String s      = part->partName();
     part->setInstrument(instrument);
-    part->setPartName(partName);
 
     part->updateHarmonyChannels(false);
 
@@ -148,7 +145,6 @@ void ChangePart::flip(EditData*)
 
     score->setLayoutAll();
 
-    partName   = s;
     instrument = oi;
 }
 
@@ -189,6 +185,19 @@ void ChangeInstrumentShort::flip(EditData*)
     String s = part->shortName(tick);
     part->setShortName(shortName, tick);
     shortName = s;
+    part->score()->setLayoutAll();
+}
+
+ChangeInstrumentNumber::ChangeInstrumentNumber(const Fraction& _tick, Part* p, int v)
+    : part(p), tick(_tick), number(v)
+{
+}
+
+void ChangeInstrumentNumber::flip(EditData*)
+{
+    int v = part->number(tick);
+    part->setNumber(number, tick);
+    number = v;
     part->score()->setLayoutAll();
 }
 
@@ -300,15 +309,13 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
 }
 
 void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
-                                     const StaffType* newStaffType, const String& partName)
+                                     const StaffType* newStaffType)
 {
     if (!score || !part) {
         return;
     }
 
-    // Change the part's instrument and name
-    String newPartName = partName.isEmpty() ? newInstrument.trackName() : partName;
-    score->undo(new ChangePart(part, new Instrument(newInstrument), newPartName));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
 
     // Update clefs and staff type for all staves in the part
     for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {

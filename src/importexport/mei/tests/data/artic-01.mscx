@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>

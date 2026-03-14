@@ -31,7 +31,6 @@
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>

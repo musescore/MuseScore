@@ -29,7 +29,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Algorithm</longName>
         <shortName>Algorithm</shortName>
@@ -80,7 +79,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Desired</longName>
         <shortName>Desired</shortName>

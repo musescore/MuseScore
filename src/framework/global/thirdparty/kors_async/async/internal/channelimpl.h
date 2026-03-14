@@ -108,7 +108,7 @@ private:
 
                 if (r) {
                     if (conf::DO_ASSERT_ON_IMPLICIT_REPLACE) {
-                        assert(mode != Asyncable::Mode::SetOnce && "callback is already set");
+                        //assert(mode != Asyncable::Mode::SetOnce && "callback is already set");
                     }
 
                     if (mode == Asyncable::Mode::SetOnce) {

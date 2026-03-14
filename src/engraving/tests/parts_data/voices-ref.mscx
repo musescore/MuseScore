@@ -38,7 +38,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -97,7 +96,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
@@ -1114,7 +1112,6 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Piano</trackName>
         <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
@@ -1775,7 +1772,6 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Trombone</trackName>
         <Instrument id="trombone">
           <longName>Trombone</longName>
           <shortName>Tbn.</shortName>
@@ -2188,7 +2184,6 @@
             </StaffType>
           <defaultClef>F</defaultClef>
           </Staff>
-        <trackName>Trombone</trackName>
         <Instrument id="trombone">
           <longName>Trombone</longName>
           <shortName>Tbn.</shortName>

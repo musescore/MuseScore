@@ -39,7 +39,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Flute Oboe</shortName>
@@ -104,7 +103,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
@@ -169,7 +167,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bassoon</trackName>
       <Instrument id="bassoon">
         <longName>Bassoon</longName>
         <shortName>Bsn.</shortName>
@@ -235,7 +232,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet</longName>
         <shortName>B¯ Clarinet B¯ Bass Clar.</shortName>
@@ -300,7 +296,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
         <longName>E♭ Alto Clarinet</longName>
         <shortName>Alto Cl.</shortName>
@@ -365,7 +360,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
         <longName>B♭ Bass Clarinet</longName>
         <shortName>B. Cl.</shortName>
@@ -432,7 +426,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Alto Sax.</trackName>
       <Instrument id="alto-saxophone">
         <longName>E♭ Alto Sax.</longName>
         <shortName>E¯ Alto Sax. E¯ Bar. Sax.</shortName>
@@ -497,7 +490,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName> B♭ Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
         <longName> B♭ Tenor Sax.</longName>
         <shortName>Ten. Sax.</shortName>
@@ -564,7 +556,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Baritone Sax.</trackName>
       <Instrument id="baritone-saxophone">
         <longName>E♭ Baritone Sax.</longName>
         <shortName>Bari. Sax.</shortName>
@@ -631,7 +622,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>Tpt.</shortName>
@@ -701,7 +691,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>F Horn</trackName>
       <Instrument id="horn">
         <longName>F Horn</longName>
         <shortName>Hn.</shortName>
@@ -771,7 +760,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
@@ -843,7 +831,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Baritone (B.C.)</trackName>
       <Instrument id="f-trumpet">
         <longName>Baritone (B.C.)</longName>
         <shortName>Bar. Hn.</shortName>
@@ -913,7 +900,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Baritone (T.C.)</trackName>
       <Instrument id="f-trumpet">
         <longName>Baritone (T.C.)</longName>
         <shortName>Bar.</shortName>
@@ -983,7 +969,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Tuba</trackName>
       <Instrument id="tuba">
         <longName>Tuba</longName>
         <shortName>Tba.</shortName>
@@ -1049,7 +1034,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Bass</trackName>
       <Instrument id="electric-bass">
         <longName>Electric Bass</longName>
         <shortName>E. Bass</shortName>
@@ -1134,7 +1118,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Percussion</trackName>
       <Instrument id="percussion">
         <longName>Percussion</longName>
         <shortName>Perc.</shortName>
@@ -1598,7 +1581,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Keyboard Percussion</trackName>
       <Instrument id="glockenspiel">
         <longName>Keyboard Percussion</longName>
         <shortName>Glock.</shortName>

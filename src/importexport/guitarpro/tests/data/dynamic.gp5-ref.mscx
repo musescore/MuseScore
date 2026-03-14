@@ -25,7 +25,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Track 1</trackName>
       <Instrument id="cavaquinho">
         <longName>Track 1</longName>
         <trackName></trackName>
@@ -57,7 +56,6 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric Guitar</longName>
         <trackName></trackName>

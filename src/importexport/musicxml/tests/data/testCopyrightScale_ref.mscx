@@ -61,7 +61,6 @@ copyright copyright</metaTag>
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>

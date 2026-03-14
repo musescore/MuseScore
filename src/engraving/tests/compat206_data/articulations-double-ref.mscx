@@ -38,7 +38,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -1890,7 +1889,6 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Piano</trackName>
         <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>

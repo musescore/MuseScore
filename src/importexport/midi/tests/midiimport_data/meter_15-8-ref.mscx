@@ -29,7 +29,6 @@
         <defaultConcertClef>F8vb</defaultConcertClef>
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
-      <trackName>Electric Bass</trackName>
       <Instrument id="electric-bass">
         <longName>Electric Bass</longName>
         <shortName>El. B.</shortName>

@@ -125,7 +125,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <hideStavesWhenIndividuallyEmpty>1</hideStavesWhenIndividuallyEmpty>
       <Instrument id="piano">
         <longName>Piano</longName>

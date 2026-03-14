@@ -28,6 +28,7 @@
 */
 
 #include "engravingitem.h"
+#include "staffname.h"
 
 namespace mu::engraving {
 class Box;
@@ -50,6 +51,7 @@ public:
     SysStaff() {}
     ~SysStaff();
 
+    InstrumentName* groupName = nullptr;
     InstrumentName* instrumentName = nullptr;
     InstrumentName* individualStaffName = nullptr;
 
@@ -191,9 +193,11 @@ public:
 
     staff_idx_t firstSysStaffOfPart(const Part* part) const;
     staff_idx_t firstVisibleSysStaffOfPart(const Part* part) const;
+    staff_idx_t firstVisibleSysStaffWithInstrument(const String& instrumentId, staff_idx_t startFrom);
     staff_idx_t lastSysStaffOfPart(const Part* part) const;
     staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
     std::vector<staff_idx_t> visibleStavesOfPart(const Part* part) const;
+    std::vector<Part*> visiblePartsOfGroup(staff_idx_t start, staff_idx_t end) const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
@@ -220,19 +224,27 @@ public:
         void setUseLongNames(bool v) { m_useLongNames = v; }
         double instrumentNameOffset() const { return m_instrumentNameOffset; }
         void setInstrumentNameOffset(double v) { m_instrumentNameOffset = v; }
-        double staffNamesWidth() const { return m_staffNamesWidth; }
-        void setStaffNamesWidth(double v) { m_staffNamesWidth = v; }
-        double instrumentNamesWidth() const { return m_instrumentNamesWidth; }
-        void setInstrumentNamesWidth(double v) { m_instrumentNamesWidth = v; }
+
+        double firstColumnWidth() const { return m_firstColumnWidth; }
+        void setFirstColumnWidth(double v) { m_firstColumnWidth = v; }
+        double secondColumnWidth() const { return m_secondColumnWidth; }
+        void setSecondColumnWidth(double v) { m_secondColumnWidth = v; }
         double totalNamesWidth() const { return m_totalNamesWidth; }
         void setTotalNamesWidth(double v) { m_totalNamesWidth = v; }
+
+        const std::unordered_map<Part*, InstrumentName*>& partsWithGroupName() const { return m_partsWithGroupName; }
+        void addPartWithGroupNames(Part* p, InstrumentName* n) { m_partsWithGroupName.emplace(p, n); }
+        void clearPartsWithGroupNames() { m_partsWithGroupName.clear(); }
 
     private:
         bool m_useLongNames = false;
         double m_instrumentNameOffset = 0.0;
-        double m_staffNamesWidth = 0.0;
-        double m_instrumentNamesWidth = 0.0;
+
+        double m_firstColumnWidth = 0.0;
+        double m_secondColumnWidth = 0.0;
         double m_totalNamesWidth = 0.0;
+
+        std::unordered_map<Part*, InstrumentName*> m_partsWithGroupName;
     };
     DECLARE_LAYOUTDATA_METHODS(System)
 

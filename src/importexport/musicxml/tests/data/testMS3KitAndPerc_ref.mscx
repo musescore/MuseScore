@@ -60,7 +60,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Drumset</trackName>
       <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>D. Set</shortName>
@@ -301,7 +300,6 @@
           <keysig>0</keysig>
           </StaffType>
         </Staff>
-      <trackName>Percussion</trackName>
       <Instrument id="percussion">
         <longName>Percussion</longName>
         <shortName>Perc.</shortName>

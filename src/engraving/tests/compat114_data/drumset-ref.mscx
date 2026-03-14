@@ -40,7 +40,6 @@
           <keysig>0</keysig>
           </StaffType>
         </Staff>
-      <trackName>Drumset 5 lines</trackName>
       <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>Drs.</shortName>

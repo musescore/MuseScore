@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E. Guitar 2</trackName>
       <Instrument id="grand-piano">
         <longName>E. Guitar 2</longName>
         <shortName>S-Gt</shortName>

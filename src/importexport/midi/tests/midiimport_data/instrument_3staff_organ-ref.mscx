@@ -43,7 +43,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Organ, Manual</trackName>
       <Instrument id="organ">
         <longName>Organ, Manual</longName>
         <shortName>Org.</shortName>

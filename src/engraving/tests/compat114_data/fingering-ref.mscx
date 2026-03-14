@@ -38,7 +38,6 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Guitar</trackName>
       <Instrument id="guitar-steel">
         <longName><font size="12"/>Guitar</longName>
         <shortName><font size="12"/>Guit.</shortName>

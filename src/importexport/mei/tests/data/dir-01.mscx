@@ -30,7 +30,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
@@ -47,7 +46,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="bassoon">
         <longName>Bassoon</longName>
         <shortName>Bsn.</shortName>

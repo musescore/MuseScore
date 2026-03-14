@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>788</width>
-    <height>712</height>
+    <height>713</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -118,6 +118,16 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Number:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="instrumentNumber"/>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -183,7 +193,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>0</height>
            </size>
           </property>
           <property name="tabChangesFocus">
@@ -196,7 +206,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>0</height>
            </size>
           </property>
           <property name="tabChangesFocus">

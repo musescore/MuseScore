@@ -1077,7 +1077,6 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
     part->setPlainShortName(tR->shortName());
-    part->setPartName(tR->name());
     part->setId(idx);
 
     _score->appendPart(part);

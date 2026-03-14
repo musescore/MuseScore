@@ -35,7 +35,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
@@ -71,7 +70,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
@@ -352,7 +350,6 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Flute</trackName>
         <Instrument id="flute">
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
@@ -565,7 +562,6 @@
             <name>stdNormal</name>
             </StaffType>
           </Staff>
-        <trackName>Oboe</trackName>
         <Instrument id="oboe">
           <shortName>Ob.</shortName>
           <trackName>Oboe</trackName>

@@ -30,7 +30,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Tambourine</trackName>
       <Instrument id="tambourine">
         <longName>Tambourine</longName>
         <shortName>Tamb.</shortName>
@@ -105,7 +104,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Drum Kit</trackName>
       <Instrument id="drumset">
         <longName>Drum Kit</longName>
         <shortName>D. Kit</shortName>

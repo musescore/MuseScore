@@ -196,6 +196,7 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(m_instrument.nameAsPlainText());
     shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
+    instrumentNumber->setValue(m_instrument.number());
 
     const InstrumentTemplate* templ = mu::engraving::searchTemplate(m_instrument.id());
     if (templ) {
@@ -554,6 +555,7 @@ void EditStaff::applyPartProperties()
 
     m_instrument.setShortName(String::fromQString(sn));
     m_instrument.setLongName(String::fromQString(ln));
+    m_instrument.setNumber(instrumentNumber->value());
 
     size_t staffIdxInPart = muse::indexOf(part->staves(), m_orgStaff);
     DO_ASSERT(staffIdxInPart != muse::nidx);

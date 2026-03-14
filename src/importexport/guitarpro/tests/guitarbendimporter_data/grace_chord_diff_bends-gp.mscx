@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Lead Guitar 1 (Clean)</trackName>
       <Instrument id="electric-guitar">
         <longName>Lead Guitar 1 (Clean)</longName>
         <shortName>E-Gt</shortName>

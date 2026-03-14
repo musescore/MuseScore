@@ -57,7 +57,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -120,7 +119,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Timpani</trackName>
       <Instrument id="timpani">
         <longName>Timpani</longName>
         <shortName>Timp.</shortName>

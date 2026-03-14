@@ -28,8 +28,6 @@
           </StaffType>
         <bracket type="0" span="1" col="0" visible="1"/>
         </Staff>
-      <trackName>Backing
-Vocals</trackName>
       <Instrument id="voice">
         <longName>Backing<br/>Vocals</longName>
         <shortName>B. Vx.</shortName>
@@ -122,8 +120,6 @@ Vocals</trackName>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Electric
-Guitar 1</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric<br/>Guitar 1</longName>
         <shortName>Elec.<br/>Gtr. 1</shortName>
@@ -250,8 +246,6 @@ Guitar 1</trackName>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Electric
-Guitar 2</trackName>
       <Instrument id="electric-guitar">
         <longName>Electric<br/>Guitar 2</longName>
         <shortName>Elec.<br/>Gtr. 2</shortName>
@@ -377,8 +371,6 @@ Guitar 2</trackName>
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Acoustic
-Guitar</trackName>
       <Instrument id="guitar-steel">
         <longName>Acoustic<br/>Guitar</longName>
         <shortName>Ac.<br/>Gtr.</shortName>
@@ -473,7 +465,6 @@ Guitar</trackName>
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano 2</trackName>
       <Instrument id="piano">
         <longName>Piano 2</longName>
         <shortName>Pno.<br/>2</shortName>

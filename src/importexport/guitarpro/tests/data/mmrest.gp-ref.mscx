@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
         <longName>Nylon Guitar</longName>
         <shortName>n.guit.</shortName>

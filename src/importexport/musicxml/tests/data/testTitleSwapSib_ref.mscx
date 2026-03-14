@@ -150,7 +150,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Soprano/Tenor</trackName>
       <Instrument id="piano">
         <longName>Soprano/Tenor</longName>
         <shortName>S./T.</shortName>
@@ -216,7 +215,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="piano">
         <longName>Alto</longName>
         <shortName>A.</shortName>
@@ -282,7 +280,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="piano">
         <longName>Bass</longName>
         <shortName>B.</shortName>
@@ -348,7 +345,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>

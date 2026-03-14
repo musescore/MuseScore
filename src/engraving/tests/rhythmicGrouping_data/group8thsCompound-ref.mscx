@@ -29,7 +29,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
@@ -78,7 +77,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>

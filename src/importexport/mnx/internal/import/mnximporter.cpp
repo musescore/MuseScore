@@ -404,7 +404,6 @@ void MnxImporter::importParts()
         if (it) {
             part->initFromInstrTemplate(it);
         }
-        part->setPartName(String::fromStdString(mnxPart.name_or("Part " + mnxPart.id_or(std::to_string((partNum))))));
         part->setLongName(String::fromStdString(mnxPart.name_or("")));
         part->setShortName(String::fromStdString(mnxPart.shortName_or("")));
         loadInstrument(mnxDocument(), part, mnxPart, part->instrument(), m_mnxKitComponentToMidi);

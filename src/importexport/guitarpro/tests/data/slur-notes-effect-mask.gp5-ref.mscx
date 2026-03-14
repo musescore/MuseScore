@@ -25,7 +25,6 @@
           </StaffType>
         <defaultClef>F8vb</defaultClef>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="bass">
         <longName>Bass</longName>
         <trackName></trackName>

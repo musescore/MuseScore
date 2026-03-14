@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>MusicXML Part</trackName>
       <Instrument id="grand-piano">
         <longName>MusicXML Part</longName>
         <trackName></trackName>

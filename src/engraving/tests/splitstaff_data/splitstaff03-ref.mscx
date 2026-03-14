@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -84,7 +83,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Harp</trackName>
       <Instrument id="harp">
         <longName>Harp</longName>
         <shortName>Hrp.</shortName>
@@ -136,7 +134,6 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Violoncello</trackName>
       <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vlc.</shortName>

@@ -2106,6 +2106,16 @@ void TWrite::write(const StaffName& item, XmlWriter& xml)
         lineBreakToTag(shortName);
         xml.writeXml(u"shortName", shortName);
     }
+
+    String transposition = item.transposition();
+    if (!transposition.empty()) {
+        lineBreakToTag(transposition);
+        xml.writeXml(u"transposition", transposition);
+    }
+
+    if (item.number() != 0) {
+        xml.tag("number", item.number());
+    }
 }
 
 void TWrite::write(const NamedEventList* item, XmlWriter& xml, const AsciiStringView& n)
@@ -2503,8 +2513,6 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
     if (item->soloist()) {
         xml.tag("soloist", item->soloist());
     }
-
-    xml.tag("trackName", item->partName());
 
     if (item->color() != Part::DEFAULT_COLOR) {
         xml.tag("color", item->color());

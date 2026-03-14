@@ -36,7 +36,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -62,7 +61,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="harp">
         <longName>Harp</longName>
         <shortName>Hp.</shortName>
@@ -80,7 +78,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vl.</shortName>

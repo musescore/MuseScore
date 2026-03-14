@@ -31,17 +31,28 @@ public:
     StaffName(const muse::String& longName, const muse::String& shortName)
         : m_longName(longName), m_shortName(shortName) {}
 
-    bool operator==(const StaffName& i) const { return m_longName == i.m_longName && m_shortName == i.m_shortName; }
+    bool operator==(const StaffName& i) const
+    {
+        return m_longName == i.m_longName && m_shortName == i.m_shortName && m_number == i.m_number && m_transposition == i.m_transposition;
+    }
 
     const muse::String& longName() const { return m_longName; }
     const muse::String& shortName() const { return m_shortName; }
     void setLongName(const muse::String& s) { m_longName = s; }
     void setShortName(const muse::String& s) { m_shortName = s; }
 
+    int number() const { return m_number; }
+    void setNumber(int v) { m_number = v; }
+
+    const muse::String& transposition() const { return m_transposition; }
+    void setTransposition(const muse::String& s) { m_transposition = s; }
+
     bool empty() const { return m_longName.empty() && m_shortName.empty(); }
 
 private:
     muse::String m_longName;
     muse::String m_shortName;
+    muse::String m_transposition;
+    int m_number = 0;
 };
 }

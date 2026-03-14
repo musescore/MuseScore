@@ -28,7 +28,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -66,7 +65,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
         <shortName>A. Sax.</shortName>
@@ -228,7 +226,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Flute</trackName>
         <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
@@ -343,7 +340,6 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto Saxophone</trackName>
         <Instrument id="alto-saxophone">
           <longName>Alto Saxophone</longName>
           <shortName>A. Sax.</shortName>

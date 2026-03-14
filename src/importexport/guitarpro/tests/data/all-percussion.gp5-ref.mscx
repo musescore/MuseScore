@@ -26,7 +26,6 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Percussions</trackName>
       <Instrument id="percussion-synthesizer">
         <longName>Percussions</longName>
         <trackName></trackName>

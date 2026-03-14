@@ -29,7 +29,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
         <shortName>A. Sax.</shortName>
@@ -83,7 +82,6 @@
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
-      <trackName>Tenor Saxophone</trackName>
       <Instrument id="tenor-saxophone">
         <longName>Tenor Saxophone</longName>
         <shortName>T. Sax.</shortName>

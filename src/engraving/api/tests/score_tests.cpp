@@ -78,7 +78,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentAtDomLevel)
     newInstrument.setTrackName(u"Replaced Instrument");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"Replaced Part"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     // [THEN] The part's instrument should be changed
@@ -116,7 +116,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentUndo)
     newInstrument.setTrackName(u"New Instrument");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"New Part"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     // Verify it changed
@@ -155,7 +155,7 @@ TEST_F(Engraving_ApiScoreTests, replaceInstrumentRedo)
     newInstrument.setId(u"test.replaced");
 
     score->startCmd(TranslatableString::untranslatable("Replace instrument test"));
-    score->undo(new ChangePart(part, new Instrument(newInstrument), u"Replaced"));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
     score->endCmd();
 
     EXPECT_EQ(part->instrumentId(), u"test.replaced");

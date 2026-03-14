@@ -82,7 +82,6 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -103,7 +102,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>

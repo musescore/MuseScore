@@ -24,7 +24,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Dis. Rhy.</trackName>
       <Instrument id="electric-guitar">
         <longName>Dis. Rhy.</longName>
         <shortName>dist.guit.</shortName>

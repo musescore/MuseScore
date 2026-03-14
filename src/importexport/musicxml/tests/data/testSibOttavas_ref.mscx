@@ -168,7 +168,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="grand-piano">
         <trackName></trackName>
         <instrumentId>keyboard.piano.grand</instrumentId>

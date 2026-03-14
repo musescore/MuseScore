@@ -62,7 +62,6 @@
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
@@ -126,7 +125,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
@@ -189,7 +187,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Clarinet in B♭</trackName>
       <Instrument id="bb-clarinet">
         <longName>Clarinet in B♭</longName>
         <shortName>Cl. in B♭</shortName>
@@ -262,7 +259,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>

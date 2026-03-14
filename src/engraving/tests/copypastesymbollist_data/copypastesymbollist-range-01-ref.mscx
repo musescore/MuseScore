@@ -30,7 +30,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Violin</trackName>
       <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
@@ -81,7 +80,6 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Viola</trackName>
       <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
