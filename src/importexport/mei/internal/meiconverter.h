@@ -24,6 +24,7 @@
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
@@ -80,6 +81,8 @@ enum ElisionType {
 #define MARKER_TYPE "mscore-marker-"
 // The @type attribute prefix for tempo inferring type in <tempo>
 #define TEMPO_INFER_FROM_TEXT "mscore-infer-from-text"
+// The @type attribute prefix for chordline type in <artic>
+#define CHORDLINE_TYPE "mscore-"
 // The @type attribute prefixes for ornament interval (above/below)
 #define INTERVAL_ABOVE "mscore-above-"
 #define INTERVAL_BELOW "mscore-below-"
@@ -158,7 +161,9 @@ public:
     static libmei::Arpeg arpegToMEI(const engraving::Arpeggio* arpeggio);
 
     static void articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning);
+    static void articFromMEI(engraving::ChordLine* chordline, const libmei::Artic& meiArtic, bool& warning);
     static libmei::Artic articToMEI(const engraving::Articulation* articulation);
+    static libmei::Artic articToMEI(const engraving::ChordLine* chordline);
 
     static engraving::BarLineType barlineFromMEI(const libmei::data_BARRENDITION meiBarline, bool& warning);
     static libmei::data_BARRENDITION barlineToMEI(engraving::BarLineType barline);
