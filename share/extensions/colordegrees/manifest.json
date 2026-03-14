@@ -1,0 +1,13 @@
+{
+    "uri": "musescore://extensions/colordegrees",
+    "type": "macros",
+    "title": "Color Degrees",
+    "description": "Colors notes by harmonic root (scale degree I-vii°) using the Weighted Third-Stacking algorithm. With no selection, processes the whole score measure by measure. With a selection ≤ 1 measure, uses the selection as the harmonic window. With a longer selection, processes measure by measure within the selection. Single-note selection toggles degree color on/off.",
+    "category": "color-notes",
+    "thumbnail": "color_degrees.png",
+    "version": "1.0",
+    "apiversion": 1,
+    "actions": [
+        { "path": "main.js" }
+    ]
+}
