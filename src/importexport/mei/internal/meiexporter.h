@@ -39,6 +39,7 @@ namespace mu::engraving {
 class Articulation;
 class Beam;
 class Chord;
+class ChordLine;
 class ChordRest;
 class Clef;
 class EngravingItem;
@@ -106,6 +107,7 @@ private:
      */
     bool writeArtics(const engraving::Chord* chord);
     bool writeArtic(const engraving::Articulation* articulation);
+    bool writeArtic(const engraving::ChordLine* chordline);
     bool writeBeamAndTuplet(const engraving::ChordRest* chordRest, bool& closingBeam, bool& closingTuplet, bool& closingBeamInTuplet);
     bool writeBeamAndTupletEnd(bool closingBeam, bool closingTuplet, bool closingBeamInTuplet);
     bool writeBeam(const engraving::Beam* beam, const engraving::ChordRest* chordRest, bool& closing);
