@@ -1710,7 +1710,7 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
 
     Articulation* articulation = toArticulation(this->addToChordRest(meiArtic, nullptr, chord));
     if (!articulation) {
-        // Warning message given in MeiImporter::addSpanner
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
