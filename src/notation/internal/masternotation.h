@@ -47,7 +47,7 @@ public:
     muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
     void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
     engraving::MasterScore* masterScore() const override;
-    void setMasterScore(engraving::MasterScore* masterScore) override;
+    void setMasterScore(engraving::MasterScore* masterScore, bool disablePlayback = false) override;
 
     INotationPtr notation() override;
     int mscVersion() const override;
@@ -78,7 +78,7 @@ private:
     friend class project::NotationProject;
     explicit MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx);
 
-    void initAfterSettingScore(const engraving::MasterScore* score);
+    void initAfterSettingScore(const engraving::MasterScore* score, bool disablePlayback = false);
 
     void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);

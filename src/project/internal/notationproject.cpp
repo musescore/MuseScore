@@ -239,7 +239,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     }
 
     // Set current if all success
-    m_masterNotation->setMasterScore(masterScore);
+    m_masterNotation->setMasterScore(masterScore, openParams.disablePlayback);
 
     // Load view settings & solo-mute states (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
@@ -333,7 +333,7 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const OpenParams& op
     }
 
     // Set current if all success
-    m_masterNotation->setMasterScore(score);
+    m_masterNotation->setMasterScore(score, openParams.disablePlayback);
     setPath(path);
     setNeedSave(false);
     score->setMetaTag(u"originalFormat", QString::fromStdString(suffix));
