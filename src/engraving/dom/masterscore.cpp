@@ -242,6 +242,16 @@ void MasterScore::addExcerpt(Excerpt* ex, size_t index)
 }
 
 //---------------------------------------------------------
+//   addLightweightExcerpt
+//---------------------------------------------------------
+
+void MasterScore::addLightweightExcerpt(Excerpt* ex, size_t index)
+{
+    excerpts().insert(excerpts().begin() + (index == muse::nidx ? excerpts().size() : index), ex);
+    setExcerptsChanged(true);
+}
+
+//---------------------------------------------------------
 //   removeExcerpt
 //---------------------------------------------------------
 

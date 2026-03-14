@@ -34,6 +34,7 @@ public:
     ~ExcerptNotation() override;
 
     void init();
+    void deinit();
     void reinit(engraving::Excerpt* newExcerpt);
 
     engraving::Excerpt* excerpt() const;
