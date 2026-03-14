@@ -248,43 +248,55 @@ function main() {
 
     var cursor = curScore.newCursor();
     cursor.track = 0;
-    cursor.rewind(0);
-    cursor.rewind(1);
-    if (!cursor.segment) return;
 
     var startTick, endTick, startTrack, endTrack, singleWindow;
 
     if (sel && sel.isRange) {
         // Range selection: use selection bounds
-        startTick = sel.startSegment ? sel.startSegment.tick : cursor.tick;
+        startTick = sel.startSegment ? sel.startSegment.tick : 0;
         endTick = sel.endSegment ? sel.endSegment.tick : (curScore.lastSegment ? curScore.lastSegment.tick + 1 : 999999);
         startTrack = (sel.startStaff || 0) * 4;
         endTrack = (sel.endStaff || curScore.nstaves) * 4;
         if (endTrack > ntracks) endTrack = ntracks;
 
-        // Check if selection is within one measure
-        cursor.rewind(1);
-        var measureEndTick = cursor.tick;
-        if (cursor.nextMeasure()) measureEndTick = cursor.tick;
-        singleWindow = (endTick <= measureEndTick);
-        cursor.rewind(1);
+        // Check if selection length is ≤ one measure (even if it crosses a barline)
+        cursor.rewind(0);
+        var firstMeasureStart = cursor.tick;
+        var measureTicks = 1920;  // default for 4/4
+        if (cursor.nextMeasure()) {
+            measureTicks = cursor.tick - firstMeasureStart;
+        }
+        var selectionLength = endTick - startTick;
+        singleWindow = (selectionLength <= measureTicks);
     } else {
         // No selection: whole score
-        startTick = cursor.tick;
+        startTick = 0;
         endTick = curScore.lastSegment ? curScore.lastSegment.tick + 1 : 999999;
         startTrack = 0;
         endTrack = ntracks;
         singleWindow = false;
+        cursor.rewind(0);
+        var firstMeasureStart = cursor.tick;
+        var measureTicks = 1920;
+        if (cursor.nextMeasure()) {
+            measureTicks = cursor.tick - firstMeasureStart;
+        }
     }
+
+    // For single-window: must start from score beginning to include chords that
+    // start before the selection but extend into it (e.g. half note at tick 0).
+    // For selection-aligned windows (upbeat songs): same, to include overlapping chords.
+    cursor.rewind(0);
+    if (!cursor.segment) return;
 
     curScore.startCmd();
 
     var noteInfos = [];
     var segment = cursor.segment;
-    var measureStartTick = segment.tick;
-    if (!singleWindow) cursor.nextMeasure();
-    var measureTicks = (!singleWindow && cursor.tick > measureStartTick) ? (cursor.tick - measureStartTick) : 1920;
-    var inLastMeasure = false;
+    // Selection-aligned windows: 1.8->2.8->3.8 for upbeat songs (not measure boundaries)
+    var windowStartTick = startTick;
+    var windowEndTick = Math.min(startTick + measureTicks, endTick);
+    var inLastWindow = (windowStartTick >= endTick);
     var crCount = 0;
     var totalChords = 0;
     var totalNotes = 0;
@@ -295,8 +307,30 @@ function main() {
             continue;
         }
         if (segment.tick < startTick) {
-            segment = segment.next;
-            continue;
+            // Include segments whose chords overlap the selection/window
+            // (e.g. chord at tick 0 extending to 960 overlaps selection starting at 960)
+            var overlaps = false;
+            if (singleWindow) {
+                for (var t = startTrack; t < endTrack; t++) {
+                    var el = segment.elementAt(t);
+                    if (el && el.notes && el.notes.length > 0 && el.duration) {
+                        var dur = (el.duration && el.duration.ticks !== undefined) ? el.duration.ticks : 480;
+                        if (segment.tick + dur > startTick) { overlaps = true; break; }
+                    }
+                }
+            } else {
+                for (var t = startTrack; t < endTrack; t++) {
+                    var el = segment.elementAt(t);
+                    if (el && el.notes && el.notes.length > 0 && el.duration) {
+                        var dur = (el.duration && el.duration.ticks !== undefined) ? el.duration.ticks : 480;
+                        if (segment.tick + dur > windowStartTick && segment.tick < windowEndTick) { overlaps = true; break; }
+                    }
+                }
+            }
+            if (!overlaps) {
+                segment = segment.next;
+                continue;
+            }
         }
         crCount++;
 
@@ -329,13 +363,13 @@ function main() {
                 }
             }
         } else {
-            // Measure by measure
-            if (!inLastMeasure && segment.tick >= cursor.tick) {
-                processMeasureNotes(noteInfos, measureTicks, measureStartTick, keysig);
+            // Selection-aligned windows (1.8->2.8->3.8 for upbeat songs)
+            while (!inLastWindow && segment.tick >= windowEndTick) {
+                processMeasureNotes(noteInfos, windowEndTick - windowStartTick, windowStartTick, keysig);
                 noteInfos = [];
-                measureStartTick = segment.tick;
-                measureTicks = cursor.tick > measureStartTick ? (cursor.tick - measureStartTick) : 1920;
-                if (!cursor.nextMeasure()) inLastMeasure = true;
+                windowStartTick = windowEndTick;
+                windowEndTick = Math.min(windowStartTick + measureTicks, endTick);
+                if (windowStartTick >= endTick) inLastWindow = true;
             }
 
             for (var track = startTrack; track < endTrack; track++) {
@@ -373,7 +407,7 @@ function main() {
         var windowTicks = Math.max(endTick - startTick, 480);
         processMeasureNotes(noteInfos, windowTicks, startTick, keysig);
     } else {
-        processMeasureNotes(noteInfos, measureTicks, measureStartTick, keysig);
+        processMeasureNotes(noteInfos, windowEndTick - windowStartTick, windowStartTick, keysig);
     }
 
     log("colordegrees: singleWindow=" + singleWindow + " crSegments=" + crCount + " chords=" + totalChords + " notes=" + totalNotes);
