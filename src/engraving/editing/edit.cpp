@@ -2593,15 +2593,15 @@ void Score::cmdFlip()
             flipOnce(artic, [artic]() {
                 ArticulationAnchor articAnchor = artic->anchor();
                 switch (articAnchor) {
-                    case ArticulationAnchor::TOP:
-                        articAnchor = ArticulationAnchor::BOTTOM;
-                        break;
-                    case ArticulationAnchor::BOTTOM:
-                        articAnchor = ArticulationAnchor::TOP;
-                        break;
-                    case ArticulationAnchor::AUTO:
-                        articAnchor = artic->up() ? ArticulationAnchor::BOTTOM : ArticulationAnchor::TOP;
-                        break;
+                case ArticulationAnchor::TOP:
+                    articAnchor = ArticulationAnchor::BOTTOM;
+                    break;
+                case ArticulationAnchor::BOTTOM:
+                    articAnchor = ArticulationAnchor::TOP;
+                    break;
+                case ArticulationAnchor::AUTO:
+                    articAnchor = artic->up() ? ArticulationAnchor::BOTTOM : ArticulationAnchor::TOP;
+                    break;
                 }
                 PropertyFlags pf = artic->propertyFlags(Pid::ARTICULATION_ANCHOR);
                 if (pf == PropertyFlags::STYLED) {
@@ -2640,15 +2640,15 @@ void Score::cmdFlip()
                 ArticulationAnchor articAnchor = ArticulationAnchor(ornament->getProperty(Pid::ARTICULATION_ANCHOR).toInt());
 
                 switch (articAnchor) {
-                    case ArticulationAnchor::TOP:
-                        articAnchor = ArticulationAnchor::BOTTOM;
-                        break;
-                    case ArticulationAnchor::BOTTOM:
-                        articAnchor = ArticulationAnchor::TOP;
-                        break;
-                    case ArticulationAnchor::AUTO:
-                        articAnchor = ornament->up() ? ArticulationAnchor::BOTTOM : ArticulationAnchor::TOP;
-                        break;
+                case ArticulationAnchor::TOP:
+                    articAnchor = ArticulationAnchor::BOTTOM;
+                    break;
+                case ArticulationAnchor::BOTTOM:
+                    articAnchor = ArticulationAnchor::TOP;
+                    break;
+                case ArticulationAnchor::AUTO:
+                    articAnchor = ornament->up() ? ArticulationAnchor::BOTTOM : ArticulationAnchor::TOP;
+                    break;
                 }
                 PropertyFlags pf = ornament->propertyFlags(Pid::ARTICULATION_ANCHOR);
                 if (pf == PropertyFlags::STYLED) {
@@ -6172,7 +6172,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange, Clef* clefToRelink)
+void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, int forInstrumentChange, Clef* clefToRelink)
 {
     IF_ASSERT_FAILED(ostaff && e) {
         return;
@@ -6210,6 +6210,14 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
     Fraction tick = e->tick();
     Fraction rtick = e->rtick();
     bool isSmall = (st == SegmentType::Clef);
+    bool isIC = (forInstrumentChange >= 1000);
+    ClefType cp = ct;
+    ClefType tp = ct;
+    if (isIC) {
+        int val = forInstrumentChange - 1000;
+        cp = static_cast<ClefType>(static_cast<unsigned char>(val & 0xFF));
+        tp = static_cast<ClefType>(static_cast<unsigned char>((val >> 8) & 0xFF));
+    }
     for (Staff* staff : ostaff->staffList()) {
         if (clefToRelink && ostaff == staff) {
             continue;
@@ -6239,7 +6247,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
-        if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
+        if (ClefInfo::staffGroup(ct) != staffGroup && !isIC) {
             continue;
         }
 
@@ -6249,17 +6257,18 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             // clef type for concertPitch
             //
             Instrument* i = staff->part()->instrument(tick);
-            ClefType cp, tp;
-            if (i->transpose().isZero()) {
-                cp = ct;
-                tp = ct;
-            } else {
-                if (concertPitch) {
+            if (!isIC) {
+                if (i->transpose().isZero()) {
                     cp = ct;
-                    tp = clef->transposingClef();
-                } else {
-                    cp = clef->concertClef();
                     tp = ct;
+                } else {
+                    if (concertPitch) {
+                        cp = ct;
+                        tp = clef->transposingClef();
+                    } else {
+                        cp = clef->concertClef();
+                        tp = ct;
+                    }
                 }
             }
             clef->setGenerated(false);
@@ -6285,7 +6294,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 clef->setScore(score);
             } else {
                 clef = Factory::createClef(score->dummy()->segment());
-                clef->setClefType(ct);
+                if (isIC) {
+                    clef->setTransposingClef(tp);
+                    clef->setConcertClef(cp);
+                } else {
+                    clef->setClefType(ct);
+                }
                 gclef = clef;
             }
             clef->setTrack(track);
@@ -6293,7 +6307,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             clef->setIsHeader(st == SegmentType::HeaderClef);
             score->doUndoAddElement(clef);
         }
-        if (forInstrumentChange) {
+        if (isIC) {
             clef->setForInstrumentChange(true);
         }
         clef->setSmall(isSmall);
