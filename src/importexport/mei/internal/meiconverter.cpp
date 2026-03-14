@@ -366,17 +366,6 @@ void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::
         case (libmei::ARTICULATION_stroke): symId = engraving::SymId::articStaccatissimoStrokeAbove;
             break;
         default: break;
-
-            // the following cases would be chordLines:
-            // case (libmei::ARTICULATION_doit): break;
-            // case (libmei::ARTICULATION_scoop): break;
-            // case (libmei::ARTICULATION_rip): break;
-            // case (libmei::ARTICULATION_plop): break;
-            // case (libmei::ARTICULATION_fall): break;
-            // case (libmei::ARTICULATION_longfall): break;
-            // case (libmei::ARTICULATION_bend): break;
-            // case (libmei::ARTICULATION_flip): break;
-            // case (libmei::ARTICULATION_smear): break;
         }
     }
     if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 2)) {
@@ -414,6 +403,41 @@ void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::
 
     // @color
     Convert::colorFromMEI(articulation, meiArtic);
+}
+
+void Convert::articFromMEI(engraving::ChordLine* chordline, const libmei::Artic& meiArtic, bool& warning)
+{
+    // @artic
+    if (meiArtic.HasArtic() && (meiArtic.GetArtic().size() == 1)) {
+        switch (meiArtic.GetArtic().at(0)) {
+        case (libmei::ARTICULATION_doit): chordline->setChordLineType(engraving::ChordLineType::DOIT); break;
+        case (libmei::ARTICULATION_scoop): chordline->setChordLineType(engraving::ChordLineType::SCOOP); break;
+        case (libmei::ARTICULATION_rip): break;
+        case (libmei::ARTICULATION_plop): chordline->setChordLineType(engraving::ChordLineType::PLOP); break;
+        case (libmei::ARTICULATION_fall): chordline->setChordLineType(engraving::ChordLineType::FALL); break;
+        case (libmei::ARTICULATION_longfall): break;
+        case (libmei::ARTICULATION_bend): break;
+        case (libmei::ARTICULATION_flip): break;
+        case (libmei::ARTICULATION_smear): break;
+        default: break;
+        }
+    }
+
+    // @type
+    if (Convert::hasTypeValue(meiArtic.GetType(), std::string(CHORDLINE_TYPE) + "straight")) {
+        chordline->setStraight(true);
+    } else if (Convert::hasTypeValue(meiArtic.GetType(), std::string(CHORDLINE_TYPE) + "wavy")) {
+        chordline->setWavy(true);
+    }
+
+    // @place
+    if (meiArtic.HasPlace()) {
+        bool placeWarning = true;
+        warning = (warning || placeWarning);
+    }
+
+    // @color
+    Convert::colorFromMEI(chordline, meiArtic);
 }
 
 libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
@@ -508,6 +532,37 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
 
     // @color
     Convert::colorToMEI(articulation, meiArtic);
+
+    return meiArtic;
+}
+
+libmei::Artic Convert::articToMEI(const engraving::ChordLine* chordline)
+{
+    libmei::Artic meiArtic;
+
+    // @artic
+    switch (chordline->chordLineType()) {
+    case engraving::ChordLineType::FALL: meiArtic.SetArtic({ libmei::ARTICULATION_fall });
+        break;
+    case engraving::ChordLineType::DOIT: meiArtic.SetArtic({ libmei::ARTICULATION_doit });
+        break;
+    case engraving::ChordLineType::PLOP: meiArtic.SetArtic({ libmei::ARTICULATION_plop });
+        break;
+    case engraving::ChordLineType::SCOOP: meiArtic.SetArtic({ libmei::ARTICULATION_scoop });
+        break;
+    case engraving::ChordLineType::NOTYPE: meiArtic.SetArtic({ libmei::ARTICULATION_NONE });
+        break;
+    }
+
+    // @type
+    if (chordline->isWavy()) {
+        meiArtic.SetType(std::string(CHORDLINE_TYPE) + "wavy");
+    } else if (chordline->isStraight()) {
+        meiArtic.SetType(std::string(CHORDLINE_TYPE) + "straight");
+    }
+
+    // @color
+    Convert::colorToMEI(chordline, meiArtic);
 
     return meiArtic;
 }
