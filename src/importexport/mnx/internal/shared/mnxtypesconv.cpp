@@ -89,6 +89,7 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
     switch (clefType) {
     case ClefType::G:
     case ClefType::G_1:
+    case ClefType::G_R:
         sign = ClefSign::GClef;
         break;
     case ClefType::G8_VB:
@@ -115,6 +116,7 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
     case ClefType::F_C:
     case ClefType::F_F18C:
     case ClefType::F_19C:
+    case ClefType::F_R:
         sign = ClefSign::FClef;
         break;
     case ClefType::F8_VB:
@@ -145,6 +147,11 @@ std::optional<mnx::part::Clef::Required> toMnxClef(ClefType clefType)
     case ClefType::C1_F20C:
     case ClefType::C3_F20C:
     case ClefType::C4_F20C:
+    case ClefType::C1_R:
+    case ClefType::C2_R:
+    case ClefType::C3_R:
+    case ClefType::C4_R:
+    case ClefType::C5_R:
         sign = ClefSign::CClef;
         break;
     case ClefType::C4_8VB:
