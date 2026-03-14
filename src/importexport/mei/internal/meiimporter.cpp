@@ -1710,11 +1710,17 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
 
     Articulation* articulation = toArticulation(this->addToChordRest(meiArtic, nullptr, chord));
     if (!articulation) {
-        // Warning message given in MeiImporter::addSpanner
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
     Convert::articFromMEI(articulation, meiArtic, warning);
+
+    if (articulation->symId() == SymId::noSym) {
+        // remove the articulation if it has no symbol
+        chord->remove(articulation);
+        delete articulation;
+    }
 
     return true;
 }
