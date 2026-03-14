@@ -145,7 +145,7 @@
         <root>
           <root-step>G</root-step>
           </root>
-        <kind text="2">suspended-second</kind>
+        <kind text="sus2">suspended-second</kind>
         </harmony>
       <note>
         <pitch>
@@ -169,7 +169,7 @@
         <root>
           <root-step>A</root-step>
           </root>
-        <kind text="2">suspended-second</kind>
+        <kind text="sus2">suspended-second</kind>
         </harmony>
       <note>
         <pitch>
