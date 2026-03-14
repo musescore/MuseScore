@@ -80,6 +80,7 @@ public:
     Q_INVOKABLE void raise();
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
+    Q_INVOKABLE void repositionWindowIfNeed() override;
 
 signals:
     void titleChanged(QString title);
