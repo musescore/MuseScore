@@ -26156,7 +26156,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="766"/>
         <source>Left-align text box to barline</source>
-        <translation>Aligner la zone de texte à gauche de la barre de mesure</translation>
+        <translation>Aligner le texte à gauche de la zone de texte à la barre de mesure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="780"/>
@@ -26186,7 +26186,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="802"/>
         <source>Right-align text box to barline</source>
-        <translation>Aligner la zone de texte à droite de la barre de mesure</translation>
+        <translation>Aligner le texte à droite de la zone de texte à la barre de mesure</translation>
     </message>
 </context>
 <context>

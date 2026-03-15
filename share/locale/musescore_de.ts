@@ -9099,7 +9099,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2493"/>
         <source>Voice 1</source>
-        <translation>1. Stimme</translation>
+        <translation>Stimme 1</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2494"/>
@@ -9109,7 +9109,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2500"/>
         <source>Voice 2</source>
-        <translation>2. Stimme</translation>
+        <translation>Stimme 2</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2501"/>
@@ -9119,7 +9119,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2507"/>
         <source>Voice 3</source>
-        <translation>3. Stimme</translation>
+        <translation>Stimme 3</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2508"/>
@@ -9129,7 +9129,7 @@ niemals linksbündig ausrichten</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2514"/>
         <source>Voice 4</source>
-        <translation>4. Stimme</translation>
+        <translation>Stimme 4</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2515"/>

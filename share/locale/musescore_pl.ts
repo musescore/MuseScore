@@ -2659,7 +2659,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5528"/>
         <source>Cap width after:</source>
-        <translation>Szerokość po:</translation>
+        <translation>Szerokość pauzy po:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5542"/>
@@ -2669,7 +2669,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5549"/>
         <source>measure(s)</source>
-        <translation>takt(y/ów)</translation>
+        <translation>taktach</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5559"/>
@@ -26503,7 +26503,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="104"/>
         <source>Abbreviated name</source>
-        <translation>Nazwa skrócona</translation>
+        <translation>Skrócona nazwa</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="132"/>
@@ -29163,12 +29163,12 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="341"/>
         <source>Diagonal</source>
-        <translation>Ukośnik</translation>
+        <translation>Ukośnie</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="342"/>
         <source>Level</source>
-        <translation>Poziom</translation>
+        <translation>Poziomo</translation>
     </message>
 </context>
 <context>
@@ -38089,7 +38089,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="462"/>
         <source>Set abbreviated instrument name</source>
-        <translation>Ustaw nazwę skróconą instrumentu</translation>
+        <translation>Ustaw skróconą nazwę instrumentu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="489"/>
