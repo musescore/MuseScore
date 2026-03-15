@@ -22336,7 +22336,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="207"/>
         <source>C7</source>
-        <translation>C7</translation>
+        <translation>c⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="208"/>
@@ -22351,7 +22351,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="210"/>
         <source>D7</source>
-        <translation>D7</translation>
+        <translation>d⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="211"/>
@@ -22366,7 +22366,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="213"/>
         <source>E7</source>
-        <translation>E7</translation>
+        <translation>e⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="214"/>
@@ -22381,7 +22381,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="216"/>
         <source>F7</source>
-        <translation>F7</translation>
+        <translation>f⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="217"/>
@@ -22396,7 +22396,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="219"/>
         <source>G7</source>
-        <translation>G7</translation>
+        <translation>g⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="220"/>
@@ -22411,7 +22411,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="222"/>
         <source>A7</source>
-        <translation>A7</translation>
+        <translation>a⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="223"/>
@@ -22426,7 +22426,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="225"/>
         <source>B7</source>
-        <translation>H7</translation>
+        <translation>h⁴</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="226"/>

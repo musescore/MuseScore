@@ -1168,7 +1168,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="147"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7688"/>
         <source>Ottavas</source>
-        <translation>Ottavas</translation>
+        <translation>Ottava&apos;s</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="152"/>
@@ -12213,12 +12213,12 @@ Fret %1 op snaren %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
         <source>harp pedal diagram(s)</source>
-        <translation><numerusform>harppedaaldiagram</numerusform><numerusform>harppedaaldiagrammen</numerusform></translation>
+        <translation><numerusform>harppedaal diagram</numerusform><numerusform>harppedaal diagrammen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="381"/>
         <source>Harp pedal diagram(s)</source>
-        <translation><numerusform>Harppedaaldiagram</numerusform><numerusform>Harppedaaldiagrammen</numerusform></translation>
+        <translation><numerusform>Harppedaal diagram</numerusform><numerusform>Harppedaal diagrammen</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="383"/>
@@ -28645,7 +28645,7 @@ Daarnaast biedt Mastering MuseScore een ondersteunende gemeenschap van muzikante
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="75"/>
         <source>Ottavas</source>
-        <translation>Ottavas</translation>
+        <translation>Ottava&apos;s</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="77"/>
@@ -33840,7 +33840,7 @@ mislukt: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation>Controleer op nieuwe vertalingen</translation>
+        <translation>Controleer op taalupdates</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/LanguagesSection.qml" line="92"/>

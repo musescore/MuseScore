@@ -4298,7 +4298,7 @@
         <source>Saxophone in E♭ (an octave above the alto).</source>
         <comment>sopranino-saxophone description</comment>
         <extracomment>description for Sopranino Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofone em Mi♭ (uma oitava abaixo do Alto).</translation>
+        <translation>Saxofone em Mi♭ (uma oitava abaixo do alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1577"/>
@@ -4382,7 +4382,7 @@
         <source>Saxophone in F (a tone above the alto).</source>
         <comment>mezzo-soprano-saxophone description</comment>
         <extracomment>description for Mezzo-Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxofone em Fá (um tom abaixo do Alto).</translation>
+        <translation>Saxofone em Fá (um tom abaixo do alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1604"/>

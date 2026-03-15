@@ -10057,7 +10057,7 @@ saat uusia versioita ja lisätietoja.</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="119"/>
         <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
-        <translation>Hanki &lt;a href=&quot;%1&quot;&gt;apua&lt;/a&gt; ohjelmaan tai &lt;a href=&quot;%2&quot;&gt;osallistu&lt;/a&gt; sen kehittämiseen.</translation>
+        <translation>Hae &lt;a href=&quot;%1&quot;&gt;apua&lt;/a&gt; ohjelmaan tai &lt;a href=&quot;%2&quot;&gt;osallistu&lt;/a&gt; sen kehittämiseen.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="132"/>
@@ -10170,14 +10170,14 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation>Video-opetusohjelmat</translation>
+        <translation>Opetusvideot</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
         <translation>Tämän valintaikkunan takana on Opettelu-osio, josta löydät opetusohjelmia, joiden avulla pääset alkuun 
-(Video-opetusohjelmat vaativat Internet-yhteyden)</translation>
+(Opetusvideot vaativat Internet-yhteyden)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="76"/>
@@ -10376,7 +10376,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="483"/>
         <source>&amp;Help</source>
-        <translation>&amp;Apua</translation>
+        <translation>&amp;Ohje</translation>
     </message>
 </context>
 <context>
@@ -30432,7 +30432,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/widgets/timeline.cpp" line="3048"/>
         <source>Context menu</source>
-        <translation>Kontekstivalikko</translation>
+        <translation>Pikavalikko</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/timeline.cpp" line="3050"/>
@@ -33927,7 +33927,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="60"/>
         <source>Import system and page breaks</source>
-        <translation>Tuo viivastoryhmän- ja sivunvaihdot</translation>
+        <translation>Tuo viivastoryhmä- ja sivunvaihdot</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="75"/>
@@ -35318,7 +35318,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
         <source>Include page and system breaks</source>
-        <translation>Sisällytä sivu- ja viivastoryhmien vaihdot</translation>
+        <translation>Sisällytä sivu- ja viivastoryhmävaihdot</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="45"/>
@@ -35652,7 +35652,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="724"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Viivastoryhmän- ja sivuvaihdot</translation>
+        <translation>Viivastoryhmä- ja sivuvaihdot</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="726"/>
@@ -36502,7 +36502,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="652"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="659"/>
         <source>Please try again later, or get help for this problem on Audio.com.</source>
-        <translation>Yritä myöhemmin uudelleen tai hanki apua tähän ongelmaan palvelusta Audio.com.</translation>
+        <translation>Yritä myöhemmin uudelleen tai hae apua tähän ongelmaan palvelusta Audio.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="655"/>

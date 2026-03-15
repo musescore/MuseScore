@@ -10485,7 +10485,7 @@
         <source>Timple</source>
         <comment>timple-canario longName</comment>
         <extracomment>longName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation> 蒂普尔琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6294"/>
@@ -10506,7 +10506,7 @@
         <source>Timple</source>
         <comment>timple-canario-tablature longName</comment>
         <extracomment>longName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation> 蒂普尔琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3523"/>
@@ -20261,7 +20261,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="111"/>
         <source>Xaphoons</source>
-        <translation>魔笛</translation>
+        <translation> 萨风管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="112"/>
@@ -20676,7 +20676,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Timples</source>
-        <translation type="unfinished"/>
+        <translation> 蒂普尔琴</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
