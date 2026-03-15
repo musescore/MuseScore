@@ -44,6 +44,8 @@ qt_add_qml_module(muse_uicomponents_qml
         filteredflyoutmodel.h
         filtervalue.cpp
         filtervalue.h
+        fuzzysortfilterproxymodel.cpp
+        fuzzysortfilterproxymodel.h
         iconview.cpp
         iconview.h
         internal/focuslistener.cpp

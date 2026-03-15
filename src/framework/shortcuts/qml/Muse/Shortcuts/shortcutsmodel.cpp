@@ -108,6 +108,9 @@ void ShortcutsModel::load()
         if (action.scCtx == CTX_DISABLED) {
             continue;
         }
+        if (action.description.isEmpty() && action.title.isEmpty()) {
+            continue;
+        }
 
         Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
         if (!shortcut.isValid()) {
