@@ -88,8 +88,7 @@ public:
     int musicalTextFontSize() const override;
     async::Notification musicalTextFontChanged() const override;
 
-    std::string defaultFontFamily() const override;
-    int defaultFontSize() const override;
+    QFont defaultFont() const override;
 
     void resetFonts() override;
 

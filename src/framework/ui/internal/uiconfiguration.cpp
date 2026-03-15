@@ -93,13 +93,13 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_CUSTOM_COLORS_KEY, Val(readLegacyCustomColors()));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
-    settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
-    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(defaultFontSize()));
+    settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFont().family()));
+    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(24));
     settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_FAMILY_KEY, Val("Leland Text"));
-    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_SIZE_KEY, Val(defaultFontSize()));
+    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_THEMES_KEY, Val(""));
 
     settings()->valueChanged(UI_THEMES_KEY).onReceive(this, [this](const Val&) {
@@ -175,7 +175,7 @@ void UiConfiguration::correctUserFontIfNeeded()
 {
     QString userFontFamily = QString::fromStdString(fontFamily());
     if (!QFontDatabase::hasFamily(userFontFamily)) {
-        std::string fallbackFontFamily = defaultFontFamily();
+        std::string fallbackFontFamily = defaultFont().family().toStdString();
         LOGI() << "The user font " << userFontFamily << " is missing, we will use the fallback font " << fallbackFontFamily;
 
         setFontFamily(fallbackFontFamily);
@@ -639,14 +639,9 @@ Notification UiConfiguration::musicalTextFontChanged() const
     return m_musicalTextFontChanged;
 }
 
-std::string UiConfiguration::defaultFontFamily() const
+QFont UiConfiguration::defaultFont() const
 {
-    return QFontDatabase::systemFont(QFontDatabase::GeneralFont).family().toStdString();
-}
-
-int UiConfiguration::defaultFontSize() const
-{
-    return 12;
+    return QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void UiConfiguration::resetFonts()
