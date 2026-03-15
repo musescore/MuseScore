@@ -4695,7 +4695,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="10" column="2">
+               <item row="13" column="2">
                 <widget class="QToolButton" name="resetRepeatBarlineDotSeparation">
                  <property name="toolTip">
                   <string>Reset to default</string>
@@ -4816,7 +4816,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="10" column="0">
+               <item row="13" column="0">
                 <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
                  <property name="text">
                   <string>Repeat barline to dots distance:</string>
@@ -4869,7 +4869,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="10" column="1">
+               <item row="13" column="1">
                 <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
                  <property name="keyboardTracking">
                   <bool>false</bool>
@@ -4937,6 +4937,114 @@
                </item>
                <item row="4" column="2">
                 <widget class="QToolButton" name="resetMaskBarlines">
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0">
+                <widget class="QLabel" name="label_226">
+                 <property name="text">
+                  <string>Dashed barline thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>dashBarWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="1">
+                <widget class="QDoubleSpinBox" name="dashBarWidth">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="2">
+                <widget class="QToolButton" name="resetDashBarWidth">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Dashed barline thickness' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="0">
+                <widget class="QLabel" name="label_227">
+                 <property name="text">
+                  <string>Dashed barline dash length:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>dashBarDash</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="1">
+                <widget class="QDoubleSpinBox" name="dashBarDash">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="2">
+                <widget class="QToolButton" name="resetDashBarDash">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Dashed barline dash length' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="0">
+                <widget class="QLabel" name="label_228">
+                 <property name="text">
+                  <string>Dashed barline gap length:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>dashBarGap</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="1">
+                <widget class="QDoubleSpinBox" name="dashBarGap">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="2">
+                <widget class="QToolButton" name="resetDashBarGap">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Dashed barline gap length' value</string>
+                 </property>
                  <property name="text">
                   <string notr="true"/>
                  </property>
@@ -13419,6 +13527,12 @@ followed by dashes</string>
   <tabstop>resetBarWidth</tabstop>
   <tabstop>endBarWidth</tabstop>
   <tabstop>resetEndBarWidth</tabstop>
+  <tabstop>dashBarWidth</tabstop>
+  <tabstop>resetDashBarWidth</tabstop>
+  <tabstop>dashBarDash</tabstop>
+  <tabstop>resetDashBarDash</tabstop>
+  <tabstop>dashBarGap</tabstop>
+  <tabstop>resetDashBarGap</tabstop>
   <tabstop>endBarDistance</tabstop>
   <tabstop>resetEndBarDistance</tabstop>
   <tabstop>doubleBarWidth</tabstop>
