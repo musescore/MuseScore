@@ -5694,7 +5694,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         }
         directionTag(m_xml, m_attr, tl);
         writeHairpinText(m_xml, tl, isStart);
-        directionETag(m_xml, staff);
+        directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tl->tick(), tick, m_div));
         return;
     }
 
