@@ -31,6 +31,9 @@
 #include "internal/ffmpeg/v6/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v6/videoencoder.h"
 
+#include "internal/ffmpeg/v5/ffmpeglibhandler.h"
+#include "internal/ffmpeg/v5/videoencoder.h"
+
 #include "io/path.h"
 #include "log.h"
 
@@ -145,6 +148,23 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
             LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
 
             result.encoder = std::make_shared<ffmpeg::v6::VideoEncoder>(ffmpegLibHandler);
+            result.ffmpegLibsDir = ffmpegLibHandler->dir();
+            result.ffmpegVersion = ffmpegLibHandler->version();
+        } else {
+            LOGW() << "FFmpeg libraries not found";
+        }
+    } break;
+    case FFMPEG_V5: {
+        auto ffmpegLibHandler = std::make_shared<ffmpeg::v5::FFmpegLibHandler>();
+        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
+                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
+            && ffmpegLibHandler->loadApi()) {
+            ffmpegLibHandler->setVersion(version);
+            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
+
+            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
+
+            result.encoder = std::make_shared<ffmpeg::v5::VideoEncoder>(ffmpegLibHandler);
             result.ffmpegLibsDir = ffmpegLibHandler->dir();
             result.ffmpegVersion = ffmpegLibHandler->version();
         } else {
