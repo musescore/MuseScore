@@ -80,6 +80,8 @@ public:
 
     String accessibleInfo() const override;
 
+    Sid offsetSid() const override;
+
 protected:
     void added() override;
     void removed() override;
