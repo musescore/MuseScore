@@ -117,6 +117,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      "LrcSettingsPage.qml")
     };
 
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     if (application()->unstable()) {
         m_exportTypeList.push_back(
             ExportType::makeWithSuffixes({ "mp4" },
@@ -125,6 +126,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                          "Mp4SettingsPage.qml")
             );
     }
+#endif
 }
 
 ExportDialogModel::~ExportDialogModel()
