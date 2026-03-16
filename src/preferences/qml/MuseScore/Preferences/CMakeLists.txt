@@ -56,8 +56,6 @@ qt_add_qml_module(preferences_qml
         saveandpublishpreferencesmodel.h
         scorepreferencesmodel.cpp
         scorepreferencesmodel.h
-        updatepreferencesmodel.cpp
-        updatepreferencesmodel.h
         videopreferencesmodel.cpp
         videopreferencesmodel.h
     QML_FILES
@@ -79,7 +77,6 @@ qt_add_qml_module(preferences_qml
         ScorePreferencesPage.qml
         ShortcutsPreferencesPage.qml
         ThemeSamplesList.qml
-        UpdatePreferencesPage.qml
         VideoPreferencesPage.qml
 
         internal/AccentColorsSection.qml
