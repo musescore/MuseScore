@@ -27,11 +27,9 @@ import Muse.UiComponents
 BaseSection {
     id: root
 
-    title: qsTrc("preferences", "FFmpeg")
+    title: qsTrc("preferences", "Video converter")
 
     property var model: null
-
-    visible: model ? model.showFFmpegSection : false
 
     ColumnLayout {
         width: parent.width
@@ -42,9 +40,9 @@ BaseSection {
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: qsTrc("preferences", "Version:") + " " + (model && model.ffmpegVersion !== -1
-                                                              ? model.ffmpegVersion
-                                                              : qsTrc("preferences", "FFmpeg library not found"))
+            text: qsTrc("preferences", "FFmpeg library version:") + " " + (model && model.ffmpegVersion !== -1
+                                                                          ? model.ffmpegVersion
+                                                                          : qsTrc("preferences", "FFmpeg library not found"))
             horizontalAlignment: Text.AlignLeft
         }
 
@@ -60,6 +58,9 @@ BaseSection {
 
                 pickerType: FilePicker.PickerType.Directory
                 dialogTitle: qsTrc("preferences", "Choose %1 folder").arg(root.title)
+
+                buttonType: FlatButton.TextOnly
+                buttonText: qsTrc("preferences", "Locate existing installation")
 
                 dir: model ? model.ffmpegDir : ""
                 path: model ? model.ffmpegDir : ""
