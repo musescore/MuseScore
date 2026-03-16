@@ -55,6 +55,11 @@ target_sources(muse_media PRIVATE
     internal/ffmpeg/v5/ffmpeglibhandler.h
     internal/ffmpeg/v5/videoencoder.cpp
     internal/ffmpeg/v5/videoencoder.h
+
+    internal/ffmpeg/v4/ffmpeglibhandler.cpp
+    internal/ffmpeg/v4/ffmpeglibhandler.h
+    internal/ffmpeg/v4/videoencoder.cpp
+    internal/ffmpeg/v4/videoencoder.h
 )
 
 set_source_files_properties(
@@ -79,6 +84,12 @@ set_source_files_properties(
     internal/ffmpeg/v5/ffmpeglibhandler.cpp
     internal/ffmpeg/v5/videoencoder.cpp
     PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v5"
+)
+
+set_source_files_properties(
+    internal/ffmpeg/v4/ffmpeglibhandler.cpp
+    internal/ffmpeg/v4/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v4"
 )
 
 set(MODULE_USE_PCH OFF)
