@@ -69,7 +69,7 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
         assert(count <= m_threads.size());
         for (size_t i = 0; i < count; ++i) {
             ThreadData* thdata = m_threads.at(i);
-            if (!thdata->tryLock(threadId)) {
+            if (!thdata->tryLock()) {
                 continue;
             }
 
@@ -106,37 +106,26 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
     return nullptr;
 }
 
-bool QueuePool::ThreadData::tryLock(const std::thread::id& th)
+bool QueuePool::ThreadData::tryLock()
 {
-    if (lockedBy == th) {
-        return true;
-    }
-
     bool expected = false;
     if (locked.compare_exchange_weak(expected, true)) {
-        lockedBy = th;
         return true;
     }
     return false;
 }
 
-void QueuePool::ThreadData::lock(const std::thread::id& th)
+void QueuePool::ThreadData::lock()
 {
-    if (lockedBy == th) {
-        return;
-    }
-
     bool expected = false;
     while (!locked.compare_exchange_weak(expected, true)) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
-    lockedBy = th;
 }
 
 void QueuePool::ThreadData::unlock()
 {
     locked.store(false);
-    lockedBy.store(std::thread::id());
 }
 
 void QueuePool::regPort(const std::thread::id& th, const std::shared_ptr<Port>& port)
@@ -170,7 +159,7 @@ void QueuePool::regPort(const std::thread::id& th, const std::shared_ptr<Port>& 
     }
 
     // lock
-    thdata->lock(th);
+    thdata->lock();
 
     thdata->ports.push_back(port);
 
@@ -192,7 +181,7 @@ void QueuePool::unregPort(const std::thread::id& th, const std::shared_ptr<Port>
     }
 
     // lock
-    thdata->lock(th);
+    thdata->lock();
 
     auto& ports = thdata->ports;
     ports.erase(std::remove(ports.begin(), ports.end(), port), ports.end());
@@ -217,7 +206,7 @@ void QueuePool::processMessages(const std::thread::id& th)
     }
 
     // try lock
-    if (!thdata->tryLock(th)) {
+    if (!thdata->tryLock()) {
         // if we couldn't lock it, we just skip it
         return;
     }
