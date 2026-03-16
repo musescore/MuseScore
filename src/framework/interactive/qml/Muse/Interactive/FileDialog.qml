@@ -42,7 +42,12 @@ QtPlatform.FileDialog {
     }
 
     onAccepted: {
-        root.ret = { "errcode": 0, "value":  root.currentFile.toString() }
+        if (root.fileMode === FileDialog.OpenFiles) {
+            const selectedUrls = root.fileUrls || []
+            root.ret = { "errcode": 0, "value": selectedUrls }
+        } else {
+            root.ret = { "errcode": 0, "value": root.currentFile.toString() }
+        }
         root.close()
         root.closed()
     }
