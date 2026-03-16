@@ -76,6 +76,7 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
             thdata->threadId = threadId;
             m_threads[count] = thdata;
             ++m_count;
+            return thdata;
         }
 
         // There are no empty slots, let's try
