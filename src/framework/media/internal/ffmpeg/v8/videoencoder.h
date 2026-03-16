@@ -24,15 +24,18 @@
 
 #include "media/ivideoencoder.h"
 
-#include "ffmpeglibhandler.h"
+#include "internal/ffmpegutils.h"
 
 namespace muse::media::ffmpeg::v8 {
+class FFmpegLibHandler;
 struct FFmpeg;
 class VideoEncoder : public IVideoEncoder
 {
 public:
-    explicit VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler);
+    VideoEncoder();
     ~VideoEncoder() override;
+
+    bool load(const FFmpegLibPaths& paths, int version);
 
     bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
     void close() override;

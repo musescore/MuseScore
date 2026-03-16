@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "videoencoder.h"
+#include "ffmpeglibhandler.h"
 
 #include "io/file.h"
+#include "io/path.h"
 #include "defer.h"
 #include "log.h"
 
@@ -48,8 +50,7 @@ struct FFmpeg {
     bool finished = false;
 };
 
-VideoEncoder::VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler)
-    : m_ffmpegHandler(handler)
+VideoEncoder::VideoEncoder()
 {
     m_ffmpeg = new FFmpeg();
 }
@@ -57,6 +58,22 @@ VideoEncoder::VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler)
 VideoEncoder::~VideoEncoder()
 {
     delete m_ffmpeg;
+}
+
+bool VideoEncoder::load(const FFmpegLibPaths& paths, int version)
+{
+    auto handler = std::make_shared<FFmpegLibHandler>();
+    if (!handler->loadLib(paths.avUtilPath, paths.avCodecPath, paths.avFormatPath,
+                          paths.swScalePath, paths.swResamplePath)
+        || !handler->loadApi()) {
+        LOGW() << "FFmpeg libraries not found";
+        return false;
+    }
+    handler->setVersion(version);
+    handler->setDir(io::dirpath(paths.avFormatPath));
+    m_ffmpegHandler = std::move(handler);
+    LOGD() << "FFmpeg loaded, version: " << m_ffmpegHandler->version();
+    return true;
 }
 
 bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)

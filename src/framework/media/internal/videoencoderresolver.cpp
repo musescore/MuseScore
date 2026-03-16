@@ -22,19 +22,10 @@
 
 #include "videoencoderresolver.h"
 
-#include "internal/ffmpeg/v8/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v8/videoencoder.h"
-
-#include "internal/ffmpeg/v7/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v7/videoencoder.h"
-
-#include "internal/ffmpeg/v6/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v6/videoencoder.h"
-
-#include "internal/ffmpeg/v5/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v5/videoencoder.h"
-
-#include "internal/ffmpeg/v4/ffmpeglibhandler.h"
 #include "internal/ffmpeg/v4/videoencoder.h"
 
 #include "io/path.h"
@@ -100,99 +91,44 @@ void VideoEncoderResolver::resetFFmpegSettings()
     configuration()->setFFmpegLibsDir({});
 }
 
+template<typename Encoder>
+static IVideoEncoderPtr tryCreateEncoder(const FFmpegLibPaths& paths, int version)
+{
+    auto encoder = std::make_shared<Encoder>();
+    if (encoder->load(paths, version)) {
+        return encoder;
+    }
+    return nullptr;
+}
+
 VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const
 {
     EncoderInfo result;
 
     const FFmpegVersion version = versionFromAVFormatPath(ffmpegLibsPaths.avFormatPath);
     switch (version) {
-    case FFMPEG_V8: {
-        auto ffmpegLibHandler = std::make_shared<ffmpeg::v8::FFmpegLibHandler>();
-        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
-            && ffmpegLibHandler->loadApi()) {
-            ffmpegLibHandler->setVersion(version);
-            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
-
-            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
-
-            result.encoder = std::make_shared<ffmpeg::v8::VideoEncoder>(ffmpegLibHandler);
-            result.ffmpegLibsDir = ffmpegLibHandler->dir();
-            result.ffmpegVersion = ffmpegLibHandler->version();
-        } else {
-            LOGW() << "FFmpeg libraries not found";
-        }
-    } break;
-    case FFMPEG_V7: {
-        auto ffmpegLibHandler = std::make_shared<ffmpeg::v7::FFmpegLibHandler>();
-        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
-            && ffmpegLibHandler->loadApi()) {
-            ffmpegLibHandler->setVersion(version);
-            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
-
-            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
-
-            result.encoder = std::make_shared<ffmpeg::v7::VideoEncoder>(ffmpegLibHandler);
-            result.ffmpegLibsDir = ffmpegLibHandler->dir();
-            result.ffmpegVersion = ffmpegLibHandler->version();
-        } else {
-            LOGW() << "FFmpeg libraries not found";
-        }
-    } break;
-    case FFMPEG_V6: {
-        auto ffmpegLibHandler = std::make_shared<ffmpeg::v6::FFmpegLibHandler>();
-        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
-            && ffmpegLibHandler->loadApi()) {
-            ffmpegLibHandler->setVersion(version);
-            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
-
-            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
-
-            result.encoder = std::make_shared<ffmpeg::v6::VideoEncoder>(ffmpegLibHandler);
-            result.ffmpegLibsDir = ffmpegLibHandler->dir();
-            result.ffmpegVersion = ffmpegLibHandler->version();
-        } else {
-            LOGW() << "FFmpeg libraries not found";
-        }
-    } break;
-    case FFMPEG_V5: {
-        auto ffmpegLibHandler = std::make_shared<ffmpeg::v5::FFmpegLibHandler>();
-        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
-            && ffmpegLibHandler->loadApi()) {
-            ffmpegLibHandler->setVersion(version);
-            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
-
-            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
-
-            result.encoder = std::make_shared<ffmpeg::v5::VideoEncoder>(ffmpegLibHandler);
-            result.ffmpegLibsDir = ffmpegLibHandler->dir();
-            result.ffmpegVersion = ffmpegLibHandler->version();
-        } else {
-            LOGW() << "FFmpeg libraries not found";
-        }
-    } break;
-    case FFMPEG_V4: {
-        auto ffmpegLibHandler = std::make_shared<ffmpeg::v4::FFmpegLibHandler>();
-        if (ffmpegLibHandler->loadLib(ffmpegLibsPaths.avUtilPath, ffmpegLibsPaths.avCodecPath, ffmpegLibsPaths.avFormatPath,
-                                      ffmpegLibsPaths.swScalePath, ffmpegLibsPaths.swResamplePath)
-            && ffmpegLibHandler->loadApi()) {
-            ffmpegLibHandler->setVersion(version);
-            ffmpegLibHandler->setDir(io::dirpath(ffmpegLibsPaths.avFormatPath));
-
-            LOGD() << "FFmpeg loaded, version: " << ffmpegLibHandler->version();
-
-            result.encoder = std::make_shared<ffmpeg::v4::VideoEncoder>(ffmpegLibHandler);
-            result.ffmpegLibsDir = ffmpegLibHandler->dir();
-            result.ffmpegVersion = ffmpegLibHandler->version();
-        } else {
-            LOGW() << "FFmpeg libraries not found";
-        }
-    } break;
+    case FFMPEG_V8:
+        result.encoder = tryCreateEncoder<ffmpeg::v8::VideoEncoder>(ffmpegLibsPaths, version);
+        break;
+    case FFMPEG_V7:
+        result.encoder = tryCreateEncoder<ffmpeg::v7::VideoEncoder>(ffmpegLibsPaths, version);
+        break;
+    case FFMPEG_V6:
+        result.encoder = tryCreateEncoder<ffmpeg::v6::VideoEncoder>(ffmpegLibsPaths, version);
+        break;
+    case FFMPEG_V5:
+        result.encoder = tryCreateEncoder<ffmpeg::v5::VideoEncoder>(ffmpegLibsPaths, version);
+        break;
+    case FFMPEG_V4:
+        result.encoder = tryCreateEncoder<ffmpeg::v4::VideoEncoder>(ffmpegLibsPaths, version);
+        break;
     default:
         break;
+    }
+
+    if (result.encoder) {
+        result.ffmpegLibsDir = io::dirpath(ffmpegLibsPaths.avFormatPath);
+        result.ffmpegVersion = version;
     }
 
     return result;

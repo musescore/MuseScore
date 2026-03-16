@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_media ALIAS muse::media)
+muse_create_module(muse_media ALIAS muse::media NO_PCH NO_UNITY)
 
 target_sources(muse_media PRIVATE
     mediamodule.cpp
@@ -91,6 +91,3 @@ set_source_files_properties(
     internal/ffmpeg/v4/videoencoder.cpp
     PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v4"
 )
-
-set(MODULE_USE_PCH OFF)
-set(MODULE_USE_UNITY OFF)
