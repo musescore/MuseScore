@@ -162,6 +162,29 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 }
 
 //---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Spacer::triggerLayout() const
+{
+    if (!explicitParent()) {
+        return;
+    }
+
+    Score* s = score();
+    if (!s) {
+        return;
+    }
+
+    if (s->nstaves() == 0) {
+        EngravingItem::triggerLayout();
+        return;
+    }
+
+    s->setLayout(tick(), s->endTick(), 0, s->nstaves() - 1, this);
+}
+
+//---------------------------------------------------------
 //   subtypeUserName
 //---------------------------------------------------------
 
