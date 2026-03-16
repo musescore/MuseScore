@@ -4708,10 +4708,10 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
 //   directionETag
 //---------------------------------------------------------
 
-static void directionETag(XmlWriter& xml, staff_idx_t staff, int offs = 0)
+static void directionETag(XmlWriter& xml, staff_idx_t staff, const int offset = 0)
 {
-    if (offs) {
-        xml.tag("offset", offs);
+    if (offset) {
+        xml.tag("offset", offset);
     }
     if (staff) {
         xml.tag("staff", static_cast<int>(staff));
@@ -4967,7 +4967,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     }
 
     if (offset) {
-        xml.tag("offset", offset);
+        xml.tag("offset", { { "sound", "yes" } }, offset);
     }
 }
 
