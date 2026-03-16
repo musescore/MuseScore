@@ -89,6 +89,7 @@ void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutC
 void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape, bool itemAddToSkyline,
                                           const LayoutContext& ctx)
 {
+    UNUSED(ctx);
     if (!leftParen || !rightParen) {
         // 1 parenthesis
         Parenthesis* paren = leftParen ? leftParen : rightParen;
