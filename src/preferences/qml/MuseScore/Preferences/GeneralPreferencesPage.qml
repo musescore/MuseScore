@@ -119,5 +119,20 @@ PreferencesPage {
                 preferencesModel.oscPort = port
             }
         }*/
+
+        SeparatorLine { }
+
+        AutomaticUpdateSection {
+            isAppUpdatable: preferencesModel.isAppUpdatable()
+            needCheckForNewAppVersion: preferencesModel.needCheckForNewAppVersion
+            museScorePrivacyPolicyUrl: preferencesModel.museScorePrivacyPolicyUrl()
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onNeedCheckForNewAppVersionChangeRequested: function(check) {
+                preferencesModel.needCheckForNewAppVersion = check
+            }
+        }
     }
 }

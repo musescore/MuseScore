@@ -188,9 +188,6 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("shortcuts", QT_TRANSLATE_NOOP("preferences", "Shortcuts"), IconCode::Code::SHORTCUTS,
                  "Preferences/ShortcutsPreferencesPage.qml"),
 
-        makeItem("update", QT_TRANSLATE_NOOP("preferences", "Update"), IconCode::Code::UPDATE,
-                 "Preferences/UpdatePreferencesPage.qml"),
-
         makeItem("general-folders", QT_TRANSLATE_NOOP("preferences", "Folders"), IconCode::Code::OPEN_FILE,
                  "Preferences/FoldersPreferencesPage.qml"),
 
