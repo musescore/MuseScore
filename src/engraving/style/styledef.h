@@ -164,7 +164,7 @@ enum class Sid : short {
     frameSystemDistance,
     paddingToNotationAbove,
     paddingToNotationBelow,
-    minMeasureWidth,    
+    minMeasureWidth,
 
     barWidth,
     doubleBarWidth,
