@@ -1988,7 +1988,6 @@ void Chord::setSlash(bool flag, bool stemless)
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head
         if (!staffType->isDrumStaff()) {
-            // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
             mutldata()->moveY(y);
         } else {
             head = NoteHeadGroup::HEAD_NORMAL;

@@ -37,8 +37,6 @@ class PalmMuteSegment final : public TextLineBaseSegment
     OBJECT_ALLOCATOR(engraving, PalmMuteSegment)
     DECLARE_CLASSOF(ElementType::PALM_MUTE_SEGMENT)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     PalmMuteSegment(PalmMute* sp, System* parent);
 
@@ -57,8 +55,6 @@ class PalmMute final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, PalmMute)
     DECLARE_CLASSOF(ElementType::PALM_MUTE)
-
-    Sid getPropertyStyle(Pid) const override;
 
 public:
     PalmMute(EngravingItem* parent);

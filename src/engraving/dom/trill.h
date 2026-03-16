@@ -62,8 +62,6 @@ protected:
     void rebaseAnchors(EditData& ed, Grip grip) override;
 
 private:
-    Sid getPropertyStyle(Pid) const override;
-
     SymIdList m_symbols;
 };
 
@@ -120,9 +118,6 @@ protected:
     void doComputeEndElement() override;
 
 private:
-
-    Sid getPropertyStyle(Pid) const override;
-
     TrillType m_trillType = TrillType::TRILL_LINE;
     Accidental* m_accidental = nullptr;
     Chord* m_cueNoteChord = nullptr;

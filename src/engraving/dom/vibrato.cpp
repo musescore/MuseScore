@@ -106,7 +106,6 @@ EngravingObject* VibratoSegment::propertyDelegate(Pid pid) const
 
 static const ElementStyle vibratoStyle {
     { Sid::vibratoPlacement,      Pid::PLACEMENT },
-    { Sid::vibratoPosAbove,       Pid::OFFSET },
 };
 
 //---------------------------------------------------------
@@ -125,7 +124,6 @@ Vibrato::~Vibrato()
 }
 
 static const ElementStyle vibratoSegmentStyle {
-    { Sid::vibratoPosAbove,       Pid::OFFSET },
     { Sid::vibratoMinDistance,    Pid::MIN_DISTANCE },
 };
 
@@ -163,26 +161,6 @@ String Vibrato::vibratoTypeUserName() const
 muse::TranslatableString Vibrato::subtypeUserName() const
 {
     return TConv::userName(vibratoType());
-}
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid VibratoSegment::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return spanner()->placeAbove() ? Sid::vibratoPosAbove : Sid::vibratoPosBelow;
-    }
-    return LineSegment::getPropertyStyle(pid);
-}
-
-Sid Vibrato::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return placeAbove() ? Sid::vibratoPosAbove : Sid::vibratoPosBelow;
-    }
-    return SLine::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------

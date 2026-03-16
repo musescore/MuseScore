@@ -2986,12 +2986,6 @@ void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const 
 
 Sid TextBase::getPropertyStyle(Pid id) const
 {
-    if (id == Pid::OFFSET) {
-        Sid sid = offsetSid();
-        if (sid != Sid::NOSTYLE) {
-            return sid;
-        }
-    }
     for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return p.sid;

@@ -47,10 +47,6 @@ public:
     virtual EngravingObject* propertyDelegate(Pid) const override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
-
-private:
-    Sid getTextLinePos(bool above) const;
-    Sid getPropertyStyle(Pid) const override;
 };
 
 //---------------------------------------------------------
@@ -61,9 +57,6 @@ class TextLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, TextLine)
     DECLARE_CLASSOF(ElementType::TEXTLINE)
-
-    Sid getTextLinePos(bool above) const;
-    Sid getPropertyStyle(Pid) const override;
 
 public:
     TextLine(EngravingItem* parent, bool system=false);

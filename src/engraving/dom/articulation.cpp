@@ -49,7 +49,6 @@ using namespace muse::draw;
 
 static const ElementStyle articulationStyle {
     { Sid::articulationMinDistance, Pid::MIN_DISTANCE },
-//      { Sid::articulationOffset, Pid::OFFSET },
     { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
 };
 

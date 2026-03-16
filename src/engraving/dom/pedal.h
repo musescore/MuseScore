@@ -37,8 +37,6 @@ class PedalSegment final : public TextLineBaseSegment
     OBJECT_ALLOCATOR(engraving, PedalSegment)
     DECLARE_CLASSOF(ElementType::PEDAL_SEGMENT)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     PedalSegment(Pedal* sp, System* parent);
 

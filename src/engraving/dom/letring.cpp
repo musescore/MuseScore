@@ -57,7 +57,6 @@ static const ElementStyle letRingStyle {
     { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::letRingPlacement,                     Pid::PLACEMENT },
-    //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
     { Sid::letRingMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::letRingMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::letRingMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
@@ -92,7 +91,6 @@ LetRing::LetRing(EngravingItem* parent)
 }
 
 static const ElementStyle letRingSegmentStyle {
-    //{ Sid::letRingPosBelow,       Pid::OFFSET       },
     { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
 };
 

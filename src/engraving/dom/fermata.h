@@ -89,8 +89,6 @@ private:
     friend class Factory;
     Fermata(EngravingItem* parent);
 
-    Sid getPropertyStyle(Pid) const override;
-
     SymId m_symId = SymId::noSym;
     double m_timeStretch = -1.0;
     bool m_play = true;
