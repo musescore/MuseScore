@@ -348,7 +348,12 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
     AVFormatContext* audioFmtCtx = nullptr;
     AVFormatContext* outputFmtCtx = nullptr;
 
+    bool cleaned = false;
     auto cleanup = [&]() {
+        if (cleaned) {
+            return;
+        }
+
         if (videoFmtCtx) {
             m_ffmpegHandler->avformat_close_input(&videoFmtCtx);
         }
@@ -361,6 +366,8 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
             }
             m_ffmpegHandler->avformat_free_context(outputFmtCtx);
         }
+
+        cleaned = true;
     };
 
     DEFER {
@@ -477,6 +484,8 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
 
     m_ffmpegHandler->av_packet_free(&pkt);
     m_ffmpegHandler->av_write_trailer(outputFmtCtx);
+
+    cleanup();
 
     if (!io::File::copy(tmpPath, videoPath, true)) {
         LOGE() << "addAudio: failed to replace with muxed file";
