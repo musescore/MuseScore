@@ -99,7 +99,7 @@
         <direction-type>
           <words font-weight="bold" font-size="12">Andante</words>
           </direction-type>
-        <offset>-3</offset>
+        <offset sound="yes">-3</offset>
         <sound tempo="92"/>
         </direction>
       </measure>
