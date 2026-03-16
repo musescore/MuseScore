@@ -251,7 +251,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
                     dist += footerExtension;
                 }
             } else if (!ctx.state().prevSystem()->hasFixedDownDistance()) {
-                double margin = std::max(ctx.state().curSystem()->minBottom(), ctx.state().curSystem()->spacerDistance(false));
+                // Down spacers define distance to the following system, not to the page footer.
+                // Using them here can visually pin/stretch the current system to page edge.
+                double margin = ctx.state().curSystem()->minBottom();
                 // ensure it doesn't collide with footer
                 if (footerExtension > 0) {
                     margin += footerExtension + headerFooterPadding;
@@ -261,7 +263,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
             isPageBreak = (y + dist) >= endY && breakPages;
         }
         if (isPageBreak) {
-            double dist = std::max(ctx.state().prevSystem()->minBottom(), ctx.state().prevSystem()->spacerDistance(false));
+            // Reserve only natural bottom clearance against footer on page end.
+            // Spacer down is applied between systems (SystemLayout::minDistance).
+            double dist = ctx.state().prevSystem()->minBottom();
             double footerPadding = 0.0;
             // ensure it doesn't collide with footer
             if (footerExtension > 0) {
