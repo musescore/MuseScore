@@ -93,7 +93,18 @@ void PedalSettingsModel::createProperties()
 
     m_lineType = buildPropertyItem(mu::engraving::Pid::END, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setLineType(newValue.toInt());
+    }, [this](const mu::engraving::Sid styleId, const QVariant& newValue) {
+        updateStyleValue(styleId, newValue);
+        emit requestReloadPropertyItems();
+    }, [this](const mu::engraving::Pid propertyId) {
+        resetPropertyValue(m_elementList, propertyId);
+        resetPropertyValue(m_elementList, mu::engraving::Pid::END_HOOK_TYPE);
+        resetPropertyValue(m_elementList, mu::engraving::Pid::END_TEXT);
+        resetPropertyValue(m_elementList, mu::engraving::Pid::LINE_VISIBLE);
+        loadProperties();
     });
+
+    connect(endHookType(), &PropertyItem::isModifiedChanged, m_lineType, &PropertyItem::setIsModified);
 
     isLineVisible()->setIsVisible(false);
     allowDiagonal()->setIsVisible(false);
