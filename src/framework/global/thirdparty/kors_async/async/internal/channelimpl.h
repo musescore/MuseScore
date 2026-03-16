@@ -631,7 +631,10 @@ public:
     {
         assert(a);
         if (a) {
-            disconnect(a, a->async_connectThread(this));
+            const Asyncable::ConnectData& connectData = a->async_connectData(this);
+            if (connectData.connection) {
+                disconnect(a, connectData.threadId);
+            }
         }
     }
 
@@ -641,6 +644,8 @@ public:
         if (!a) {
             return;
         }
+
+        assert(connectThId != std::thread::id());
 
         const_cast<Asyncable*>(a)->async_disconnect(this);
 
