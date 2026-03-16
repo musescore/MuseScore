@@ -29,6 +29,7 @@
 #include <QFileOpenEvent>
 #include <QWindow>
 #include <QMimeData>
+#include <QTimer>
 
 #include "async/async.h"
 #include "audio/common/soundfonttypes.h"
@@ -51,7 +52,10 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "quit", [this](const ActionData& args) {
         bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
         muse::io::path_t installatorPath = args.count() > 1 ? args.arg<muse::io::path_t>(1) : "";
-        quit(isAllInstances, installatorPath);
+
+        QTimer::singleShot(0, [this, isAllInstances, installatorPath]() {
+            quit(isAllInstances, installatorPath);
+        });
     });
 
     dispatcher()->reg(this, "restart", [this]() {
