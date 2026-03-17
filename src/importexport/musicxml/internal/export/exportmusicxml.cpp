@@ -4711,7 +4711,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
 static void directionETag(XmlWriter& xml, staff_idx_t staff, const int offset = 0)
 {
     if (offset) {
-        xml.tag("offset", offset);
+        xml.tag("offset", { { "sound", "yes" } }, offset);
     }
     if (staff) {
         xml.tag("staff", static_cast<int>(staff));

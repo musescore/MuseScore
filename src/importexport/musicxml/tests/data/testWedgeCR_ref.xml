@@ -206,14 +206,14 @@
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
-        <offset>-3</offset>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
-        <offset>-1</offset>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
       <backup>
@@ -265,14 +265,14 @@
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
-        <offset>-3</offset>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
-        <offset>-1</offset>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
       <backup>
@@ -302,14 +302,14 @@
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
-        <offset>-3</offset>
+        <offset sound="yes">-3</offset>
         <staff>1</staff>
         </direction>
       <direction placement="above">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
-        <offset>-1</offset>
+        <offset sound="yes">-1</offset>
         <staff>1</staff>
         </direction>
       <backup>

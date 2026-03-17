@@ -67,7 +67,7 @@
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         <staff>1</staff>
         </direction>
       <backup>
@@ -105,7 +105,7 @@
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         <staff>1</staff>
         </direction>
       <backup>
@@ -125,7 +125,7 @@
         <direction-type>
           <pedal type="resume" line="yes" sign="yes"/>
           </direction-type>
-        <offset>-3</offset>
+        <offset sound="yes">-3</offset>
         <staff>2</staff>
         </direction>
       </measure>
@@ -150,7 +150,7 @@
         <direction-type>
           <wedge type="diminuendo" number="1"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         <staff>1</staff>
         </direction>
       <backup>
@@ -170,7 +170,7 @@
         <direction-type>
           <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         <staff>2</staff>
         </direction>
       </measure>
@@ -189,7 +189,7 @@
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         <staff>1</staff>
         </direction>
       <backup>
