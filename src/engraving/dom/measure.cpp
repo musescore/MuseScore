@@ -826,16 +826,17 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                if (seg->isType(SegmentType::BarLineType)) {
-                    // Barline segments are regenerated every layout
-                    // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
-                    m_segments.remove(s);
-                    s = s->next();
-                    continue;
+                if (seg == s) {
+                    // Same segment object already in this measure - nothing to do
+                    return;
                 }
-                /// HACK: REMOVED to prevent crash in 4.4.3.
-                /// Adding multiple identical segments may cause problems, so we should resolve this properly
-                // return;
+                // Remove the existing duplicate segment so the undo system's segment
+                // becomes the authoritative one. This prevents duplicates accumulating
+                // (see #32162) while keeping the segment in the measure so that a
+                // subsequent undo remove does not crash (see #25257).
+                m_segments.remove(s);
+                s = s->next();
+                continue;
             }
             if (seg->goesBefore(s)) {
                 break;
