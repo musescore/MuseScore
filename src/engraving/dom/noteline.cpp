@@ -221,4 +221,9 @@ void NoteLine::reset()
     undoResetProperty(Pid::NOTELINE_PLACEMENT);
     TextLineBase::reset();
 }
+
+Sid NoteLine::offsetSid() const
+{
+    return Sid::NOSTYLE;
+}
 } // namespace mu::engraving

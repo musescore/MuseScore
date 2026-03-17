@@ -320,4 +320,12 @@ void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, Pro
     }
     TextLineBase::undoChangeProperty(id, v, ps);
 }
+
+Sid TextLine::offsetSid() const
+{
+    if (systemFlag()) {
+        return placeAbove() ? Sid::systemTextLinePosAbove : Sid::systemTextLinePosBelow;
+    }
+    return placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+}
 } // namespace mu::engraving

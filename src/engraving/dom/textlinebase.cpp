@@ -104,6 +104,11 @@ bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
     return LineSegment::setProperty(id, v);
 }
 
+PointF TextLineBaseSegment::defaultOffset() const
+{
+    return textLineBase()->defaultOffset();
+}
+
 //---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
@@ -188,6 +193,19 @@ void TextLineBase::reset()
     if (!endStyled) {
         undoChangeProperty(Pid::END_TEXT, endText, PropertyFlags::UNSTYLED);
     }
+}
+
+PointF TextLineBase::defaultOffset() const
+{
+    Sid styleId = offsetSid();
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
 }
 
 //---------------------------------------------------------

@@ -58,6 +58,7 @@ class Pedal final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 protected:
+    Sid offsetSid() const override;
     PointF linePos(Grip, System**) const override;
 
 public:

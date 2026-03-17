@@ -197,4 +197,9 @@ Sid LetRing::getPropertyStyle(Pid id) const
     }
     return TextLineBase::getPropertyStyle(id);
 }
+
+Sid LetRing::offsetSid() const
+{
+    return placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow;
+}
 }

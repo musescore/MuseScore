@@ -359,6 +359,11 @@ void GradualTempoChange::removed()
     requestToRebuildTempo();
 }
 
+Sid GradualTempoChange::offsetSid() const
+{
+    return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
+}
+
 void GradualTempoChange::requestToRebuildTempo()
 {
     IF_ASSERT_FAILED(score()) {

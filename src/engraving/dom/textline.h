@@ -76,6 +76,9 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid id, const PropertyValue&) override;
     PropertyValue getProperty(Pid id) const override;
+
+protected:
+    Sid offsetSid() const override;
 };
 } // namespace mu::engraving
 #endif

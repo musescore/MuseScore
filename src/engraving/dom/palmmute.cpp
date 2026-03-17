@@ -187,4 +187,9 @@ void PalmMute::setChannel()
         staff()->insertIntoChannelList(voice(), endCR->endTick(), 0);
     }
 }
+
+Sid PalmMute::offsetSid() const
+{
+    return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
+}
 }

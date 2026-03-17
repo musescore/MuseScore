@@ -65,6 +65,8 @@ protected:
     void added() override;
     void removed() override;
 
+    Sid offsetSid() const override;
+
 private:
     void requestToRebuildTempo();
 

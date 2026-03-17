@@ -61,11 +61,13 @@ public:
 
     LetRing* clone() const override { return new LetRing(*this); }
 
-//      virtual void write(XmlWriter& xml) const override;
     LineSegment* createLineSegment(System* parent) override;
 
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
+
+protected:
+    Sid offsetSid() const override;
 };
 } // namespace mu::engraving
 #endif

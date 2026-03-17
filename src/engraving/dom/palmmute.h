@@ -68,6 +68,9 @@ public:
 
     void setChannel();
 
+protected:
+    Sid offsetSid() const override;
+
     friend class PalmMuteLine;
 };
 } // namespace mu::engraving

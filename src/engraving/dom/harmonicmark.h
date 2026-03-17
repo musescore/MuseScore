@@ -67,6 +67,9 @@ public:
     Sid getPropertyStyle(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue& value) override;
 
+protected:
+    Sid offsetSid() const override;
+
 private:
 
     String m_text;

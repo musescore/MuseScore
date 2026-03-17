@@ -2992,6 +2992,10 @@ Sid TextBase::offsetSid() const
 
 PointF TextBase::defaultOffset() const
 {
+    if (parent()->isTextLineBaseSegment()) {
+        return PointF();
+    }
+
     Sid styleId = offsetSid();
     PointF offsetPos = style().value(styleId).value<PointF>();
     if (offsetIsSpatiumDependent()) {

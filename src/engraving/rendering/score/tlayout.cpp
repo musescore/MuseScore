@@ -2854,6 +2854,7 @@ void TLayout::manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutC
 void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
+    ldata->setPosY(0.0);
 
     auto extendLineToSnappedItemAfter = [item](EngravingItem* itemAfter) {
         assert(itemAfter->isGradualTempoChangeSegment() || itemAfter->isTempoText());
@@ -5927,6 +5928,9 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(item->text()->size() * item->defaultSpatium() / item->spatium());
         item->endText()->setSize(item->endText()->size() * item->defaultSpatium() / item->spatium());
     }
+
+    PointF offsetPos = tl->defaultOffset();
+    ldata->move(offsetPos);
 
     PointF pp1;
     PointF pp2(item->pos2());

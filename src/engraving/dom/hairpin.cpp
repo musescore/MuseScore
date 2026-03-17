@@ -835,4 +835,12 @@ muse::TranslatableString Hairpin::subtypeUserName() const
         return TranslatableString("engraving/hairpintype", "Custom");
     }
 }
+
+Sid Hairpin::offsetSid() const
+{
+    if (isLineType()) {
+        return placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
+    }
+    return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+}
 }

@@ -302,4 +302,9 @@ PointF Pedal::linePos(Grip grip, System** sys) const
 
     return PointF(x, 0.0);
 }
+
+Sid Pedal::offsetSid() const
+{
+    return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+}
 }

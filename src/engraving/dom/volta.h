@@ -100,6 +100,9 @@ public:
 
     PointF linePos(Grip grip, System** system) const override;
 
+protected:
+    Sid offsetSid() const override;
+
 private:
     std::vector<int> m_endings;
 };
