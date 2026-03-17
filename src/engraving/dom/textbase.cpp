@@ -2836,10 +2836,6 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 
 Sid TextBase::offsetSid() const
 {
-    TextStyleType defaultTid = propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>();
-    if (textStyleType() != defaultTid) {
-        return Sid::NOSTYLE;
-    }
     bool above = placeAbove();
     switch (textStyleType()) {
     case TextStyleType::DYNAMICS:
@@ -2865,10 +2861,146 @@ Sid TextBase::offsetSid() const
         return above ? Sid::measureNumberAlternatePosAbove : Sid::measureNumberAlternatePosBelow;
     case TextStyleType::MMREST_RANGE:
         return above ? Sid::mmRestRangePosAbove : Sid::mmRestRangePosBelow;
-    default:
+    case TextStyleType::TEMPO_CHANGE:
+        return above ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
+    case TextStyleType::REPEAT_PLAY_COUNT:
+        return above ? Sid::repeatPlayCountPosAbove : Sid::repeatPlayCountPosBelow;
+    case TextStyleType::REPEAT_LEFT:
+        return Sid::markerPosAbove;
+    case TextStyleType::REPEAT_RIGHT:
+        return Sid::jumpPosAbove;
+    case TextStyleType::HARMONY_A:
+        return above ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
+    case TextStyleType::HARMONY_B:
+        return above ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
+    case TextStyleType::HARMONY_ROMAN:
+        return above ? Sid::romanNumeralPosAbove : Sid::romanNumeralPosBelow;
+    case TextStyleType::HARMONY_NASHVILLE:
+        return above ? Sid::nashvilleNumberPosAbove : Sid::nashvilleNumberPosBelow;
+    case TextStyleType::OTTAVA:
+        return above ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
+    case TextStyleType::DEFAULT:
+        return Sid::defaultOffset;
+    case TextStyleType::TITLE:
+        return Sid::titleOffset;
+    case TextStyleType::SUBTITLE:
+        return Sid::subTitleOffset;
+    case TextStyleType::COMPOSER:
+        return Sid::composerOffset;
+    case TextStyleType::LYRICIST:
+        return Sid::lyricistOffset;
+    case TextStyleType::TRANSLATOR:
+        return Sid::translatorOffset;
+    case TextStyleType::FRAME:
+        return Sid::frameOffset;
+    case TextStyleType::INSTRUMENT_EXCERPT:
+        return Sid::partInstrumentOffset;
+    case TextStyleType::INSTRUMENT_LONG:
+        return Sid::longInstrumentOffset;
+    case TextStyleType::INSTRUMENT_SHORT:
+        return Sid::shortInstrumentOffset;
+    case TextStyleType::INSTRUMENT_CHANGE:
+        return Sid::instrumentChangeOffset;
+    case TextStyleType::HEADER:
+        return Sid::headerOffset;
+    case TextStyleType::FOOTER:
+        return Sid::footerOffset;
+    case TextStyleType::COPYRIGHT:
+        return Sid::copyrightOffset;
+    case TextStyleType::PAGE_NUMBER:
+        return Sid::pageNumberOffset;
+    case TextStyleType::METRONOME:
+        return Sid::metronomeOffset;
+    case TextStyleType::HAIRPIN:
+        return Sid::hairpinOffset;
+    case TextStyleType::TUPLET:
+        return Sid::tupletOffset;
+    case TextStyleType::ARTICULATION:
+        return Sid::articulationOffset;
+    case TextStyleType::FINGERING:
+        return Sid::fingeringOffset;
+    case TextStyleType::TAB_FRET_NUMBER:
+        return Sid::tabFretNumberOffset;
+    case TextStyleType::LH_GUITAR_FINGERING:
+        return Sid::lhGuitarFingeringOffset;
+    case TextStyleType::RH_GUITAR_FINGERING:
+        return Sid::rhGuitarFingeringOffset;
+    case TextStyleType::HAMMER_ON_PULL_OFF:
+        return Sid::hammerOnPullOffTappingOffset;
+    case TextStyleType::STRING_NUMBER:
+        return Sid::stringNumberOffset;
+    case TextStyleType::STRING_TUNINGS:
+        return Sid::staffTextPosAbove;
+    case TextStyleType::FRET_DIAGRAM_FINGERING:
+        return Sid::fretDiagramFingeringPosAbove;
+    case TextStyleType::FRET_DIAGRAM_FRET_NUMBER:
+        return Sid::fretDiagramFretNumberPosAbove;
+    case TextStyleType::HARP_PEDAL_DIAGRAM:
+        return Sid::harpPedalDiagramOffset;
+    case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM:
+        return Sid::harpPedalTextDiagramOffset;
+    case TextStyleType::TEXTLINE:
+        return Sid::textLinePosAbove;
+    case TextStyleType::SYSTEM_TEXTLINE:
+        return Sid::systemTextLinePosAbove;
+    case TextStyleType::NOTELINE:
+        return Sid::noteLineOffset;
+    case TextStyleType::VOLTA:
+        return Sid::voltaOffset;
+    case TextStyleType::GLISSANDO:
+        return Sid::glissandoOffset;
+    case TextStyleType::PEDAL:
+        return Sid::pedalOffset;
+    case TextStyleType::BEND:
+        return Sid::bendOffset;
+    case TextStyleType::LET_RING:
+        return Sid::letRingOffset;
+    case TextStyleType::WHAMMY_BAR:
+        return Sid::whammyBarOffset;
+    case TextStyleType::PALM_MUTE:
+        return Sid::palmMuteOffset;
+    case TextStyleType::USER1:
+        return Sid::user1Offset;
+    case TextStyleType::USER2:
+        return Sid::user2Offset;
+    case TextStyleType::USER3:
+        return Sid::user3Offset;
+    case TextStyleType::USER4:
+        return Sid::user4Offset;
+    case TextStyleType::USER5:
+        return Sid::user5Offset;
+    case TextStyleType::USER6:
+        return Sid::user6Offset;
+    case TextStyleType::USER7:
+        return Sid::user7Offset;
+    case TextStyleType::USER8:
+        return Sid::user8Offset;
+    case TextStyleType::USER9:
+        return Sid::user9Offset;
+    case TextStyleType::USER10:
+        return Sid::user10Offset;
+    case TextStyleType::USER11:
+        return Sid::user11Offset;
+    case TextStyleType::USER12:
+        return Sid::user12Offset;
+    case TextStyleType::TEXT_TYPES:
+    case TextStyleType::IGNORED_TYPES:
         break;
     }
     return Sid::NOSTYLE;
+}
+
+PointF TextBase::defaultOffset() const
+{
+    Sid styleId = offsetSid();
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
 }
 
 //---------------------------------------------------------

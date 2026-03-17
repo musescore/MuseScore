@@ -91,6 +91,10 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
         ldata->moveX(-itemBBox.right());
     }
 
+    PointF offsetPos = item->defaultOffset();
+
+    ldata->move(offsetPos);
+
     checkBarlineCollisions(item, barlineSeg, hPlacement, ldata);
 }
 
@@ -114,6 +118,10 @@ void MeasureNumberLayout::layoutMMRestRange(MMRestRange* item, MMRestRange::Layo
     } else {
         ldata->setPosX(measureStartEnd.x1 - itemBBox.left());
     }
+
+    PointF offsetPos = item->defaultOffset();
+
+    ldata->move(offsetPos);
 }
 
 void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)

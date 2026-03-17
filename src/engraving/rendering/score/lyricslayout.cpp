@@ -589,6 +589,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = -(maxVerseAbove - verse) * lyrics->lineSpacing() * lyricsLineHeightFactor;
+            PointF offsetPos = lyrics->defaultOffset();
+            y += offsetPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -602,6 +604,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = staffHeight + verse * lyrics->lineSpacing() * lyricsLineHeightFactor;
+            PointF offsetPos = lyrics->defaultOffset();
+            y += offsetPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -842,7 +846,8 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         if (nextLyrics) {
-            ldata->setPosY(nextLyrics->offset().y());
+            PointF nextLyricsOffsetPos = nextLyrics->defaultOffset();
+            ldata->setPosY(nextLyrics->offset().y() + nextLyricsOffsetPos.y());
         } else {
             PointF lyricsOffset = item->styleValue(Pid::OFFSET,
                                                    item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
@@ -852,15 +857,22 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     }
 
     if (item->isSingleBeginType()) {
-        ldata->setPosY(startLyrics->offset().y());
+        PointF startLyricsOffsetPos = startLyrics->defaultOffset();
+        ldata->setPosY(startLyrics->offset().y() + startLyricsOffsetPos.y());
         return;
     }
 
     if (melisma || !endLyrics) {
-        Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
-        ldata->setPosY(nextLyrics ? nextLyrics->offset().y() : startLyrics->offset().y());
+        const Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
+
+        const Lyrics* refLyrics = nextLyrics ? nextLyrics : startLyrics;
+        PointF refLyricsOffsetPos = refLyrics->defaultOffset();
+
+        ldata->setPosY(refLyrics->offset().y() + refLyricsOffsetPos.y());
         return;
     }
 
-    ldata->setPosY(endLyrics->offset().y());
+    PointF endLyricsOffsetPos = endLyrics->defaultOffset();
+
+    ldata->setPosY(endLyrics->offset().y() + endLyricsOffsetPos.y());
 }
