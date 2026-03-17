@@ -125,8 +125,6 @@ public:
         }
     }
 
-private:
-
     struct ConnectData {
         std::thread::id threadId;
         IConnectable* connection = nullptr;
@@ -151,6 +149,8 @@ private:
         static ConnectData dummy;
         return dummy;
     }
+
+private:
 
     mutable std::mutex m_async_mutex;
     std::set<ConnectData> m_async_connects;
