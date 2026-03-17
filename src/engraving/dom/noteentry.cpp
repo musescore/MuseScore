@@ -294,7 +294,7 @@ Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalIn
             return false;
         }
         Note* n = ch->notes().at(0);
-        return n->tieFor() || n->tieBack();
+        return (n->tieFor() && !n->tieFor()->isLaissezVib()) || n->tieBack();
     };
 
     Note* note = nullptr;
@@ -446,7 +446,8 @@ Ret Score::putNote(const Position& p, bool replace)
             return false;
         }
         auto ch = toChord(cr);
-        return !ch->notes().empty() && !ch->notes()[0]->tieBack() && ch->notes()[0]->tieFor();
+        return (!ch->notes().empty() && !ch->notes()[0]->tieBack())
+               && (ch->notes()[0]->tieFor() && !ch->notes()[0]->tieFor()->isLaissezVib());
     };
 
     bool addToChord = false;

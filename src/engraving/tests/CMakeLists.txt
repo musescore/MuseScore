@@ -101,6 +101,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/automation/automation_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/lv_tests.cpp
 )
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
