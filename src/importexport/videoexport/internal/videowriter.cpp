@@ -74,7 +74,16 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
 
     auto encoder = videoEncodeResolver()->currentVideoEncoder();
-    if (!encoder->open(finalPath, cfg.width, cfg.height, cfg.bitrate, cfg.fps / 2, cfg.fps)) {
+
+    muse::media::IVideoEncoder::Options encoderOptions;
+    encoderOptions.format = "mp4";
+    encoderOptions.width = cfg.width;
+    encoderOptions.height = cfg.height;
+    encoderOptions.bitrate = cfg.bitrate;
+    encoderOptions.gop = cfg.fps / 2;
+    encoderOptions.fps = cfg.fps;
+
+    if (!encoder->open(finalPath, encoderOptions)) {
         LOGE() << "failed to open video encoder";
         return make_ret(muse::Ret::Code::UnknownError);
     }

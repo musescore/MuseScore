@@ -23,7 +23,7 @@
 
 using namespace muse::media;
 
-bool VideoEncoderStub::open(const muse::io::path_t&, unsigned, unsigned, unsigned, unsigned, unsigned)
+bool VideoEncoderStub::open(const muse::io::path_t&, const IVideoEncoder::Options&)
 {
     return false;
 }

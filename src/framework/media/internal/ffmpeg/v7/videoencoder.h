@@ -37,7 +37,7 @@ public:
 
     bool load(const FFmpegLibPaths& paths);
 
-    bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
+    bool open(const muse::io::path_t& fileName, const Options& options) override;
     void close() override;
 
     bool encodeImage(const QImage& img) override;
