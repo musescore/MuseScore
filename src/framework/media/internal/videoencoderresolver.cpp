@@ -92,10 +92,10 @@ void VideoEncoderResolver::resetFFmpegSettings()
 }
 
 template<typename Encoder>
-static IVideoEncoderPtr tryCreateEncoder(const FFmpegLibPaths& paths, int version)
+static IVideoEncoderPtr tryCreateEncoder(const FFmpegLibPaths& paths)
 {
     auto encoder = std::make_shared<Encoder>();
-    if (encoder->load(paths, version)) {
+    if (encoder->load(paths)) {
         return encoder;
     }
     return nullptr;
@@ -108,19 +108,19 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     const FFmpegVersion version = versionFromAVFormatPath(ffmpegLibsPaths.avFormatPath);
     switch (version) {
     case FFMPEG_V8:
-        result.encoder = tryCreateEncoder<ffmpeg::v8::VideoEncoder>(ffmpegLibsPaths, version);
+        result.encoder = tryCreateEncoder<ffmpeg::v8::VideoEncoder>(ffmpegLibsPaths);
         break;
     case FFMPEG_V7:
-        result.encoder = tryCreateEncoder<ffmpeg::v7::VideoEncoder>(ffmpegLibsPaths, version);
+        result.encoder = tryCreateEncoder<ffmpeg::v7::VideoEncoder>(ffmpegLibsPaths);
         break;
     case FFMPEG_V6:
-        result.encoder = tryCreateEncoder<ffmpeg::v6::VideoEncoder>(ffmpegLibsPaths, version);
+        result.encoder = tryCreateEncoder<ffmpeg::v6::VideoEncoder>(ffmpegLibsPaths);
         break;
     case FFMPEG_V5:
-        result.encoder = tryCreateEncoder<ffmpeg::v5::VideoEncoder>(ffmpegLibsPaths, version);
+        result.encoder = tryCreateEncoder<ffmpeg::v5::VideoEncoder>(ffmpegLibsPaths);
         break;
     case FFMPEG_V4:
-        result.encoder = tryCreateEncoder<ffmpeg::v4::VideoEncoder>(ffmpegLibsPaths, version);
+        result.encoder = tryCreateEncoder<ffmpeg::v4::VideoEncoder>(ffmpegLibsPaths);
         break;
     default:
         break;
@@ -129,6 +129,8 @@ VideoEncoderResolver::EncoderInfo VideoEncoderResolver::makeEncoder(const FFmpeg
     if (result.encoder) {
         result.ffmpegLibsDir = io::dirpath(ffmpegLibsPaths.avFormatPath);
         result.ffmpegVersion = version;
+
+        LOGD() << "FFmpeg loaded, version: " << version;
     }
 
     return result;

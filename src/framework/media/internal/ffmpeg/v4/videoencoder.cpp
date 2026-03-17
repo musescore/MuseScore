@@ -60,7 +60,7 @@ VideoEncoder::~VideoEncoder()
     delete m_ffmpeg;
 }
 
-bool VideoEncoder::load(const FFmpegLibPaths& paths, int version)
+bool VideoEncoder::load(const FFmpegLibPaths& paths)
 {
     auto handler = std::make_shared<FFmpegLibHandler>();
     if (!handler->loadLib(paths.avUtilPath, paths.avCodecPath, paths.avFormatPath,
@@ -69,10 +69,7 @@ bool VideoEncoder::load(const FFmpegLibPaths& paths, int version)
         LOGW() << "FFmpeg libraries not found";
         return false;
     }
-    handler->setVersion(version);
-    handler->setDir(io::dirpath(paths.avFormatPath));
     m_ffmpegHandler = std::move(handler);
-    LOGD() << "FFmpeg loaded, version: " << m_ffmpegHandler->version();
     return true;
 }
 

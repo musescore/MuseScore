@@ -136,8 +136,6 @@ void FFmpegLibHandler::unload()
     closeLib(m_avUtilLibrary);
 
     clearFunctions();
-    m_version = 0;
-    m_dir = io::path_t();
 }
 
 void FFmpegLibHandler::closeLib(void*& lib)

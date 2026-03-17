@@ -35,7 +35,7 @@ public:
     VideoEncoder();
     ~VideoEncoder() override;
 
-    bool load(const FFmpegLibPaths& paths, int version);
+    bool load(const FFmpegLibPaths& paths);
 
     bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
     void close() override;
