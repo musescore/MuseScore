@@ -214,7 +214,7 @@ void VideoEncoder::finishEncode()
 
     while (true) {
         m_ffmpeg->pkt = m_ffmpegHandler->av_packet_alloc();
-        int ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
+        ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             break;
