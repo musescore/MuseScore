@@ -33,7 +33,6 @@
 #include "async/asyncable.h"
 
 #include "iinteractive.h"
-#include "iapplication.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -115,7 +114,6 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<INotationWritersRegister> writers = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
