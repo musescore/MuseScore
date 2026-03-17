@@ -78,17 +78,12 @@
           <wedge type="stop" number="1"/>
           </direction-type>
         </direction>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
+        <offset>-2</offset>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
         </barline>

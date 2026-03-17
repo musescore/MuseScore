@@ -63,18 +63,13 @@
         <type>whole</type>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
+        <offset>-2</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
@@ -106,18 +101,13 @@
         <type>whole</type>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
+        <offset>-2</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
@@ -131,18 +121,13 @@
         <type>whole</type>
         <staff>2</staff>
         </note>
-      <backup>
-        <duration>3</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <pedal type="resume" line="yes" sign="yes"/>
           </direction-type>
+        <offset>-3</offset>
         <staff>2</staff>
         </direction>
-      <forward>
-        <duration>3</duration>
-        </forward>
       </measure>
     <measure number="3">
       <note>
@@ -161,18 +146,13 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <wedge type="diminuendo" number="1"/>
           </direction-type>
+        <offset>-2</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
@@ -186,18 +166,13 @@
         <type>whole</type>
         <staff>2</staff>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
+        <offset>-2</offset>
         <staff>2</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       </measure>
     <measure number="4">
       <note>
@@ -210,18 +185,13 @@
         <type>whole</type>
         <staff>1</staff>
         </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
       <direction placement="below">
         <direction-type>
           <wedge type="stop" number="1"/>
           </direction-type>
+        <offset>-2</offset>
         <staff>1</staff>
         </direction>
-      <forward>
-        <duration>2</duration>
-        </forward>
       <backup>
         <duration>4</duration>
         </backup>
