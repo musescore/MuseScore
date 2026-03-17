@@ -4189,24 +4189,26 @@ bool TRead::readProperties(InstrumentLabel& item, XmlReader& xml)
         item.setShowNumberLong(xml.readBool());
     } else if (tag == "showNumberShort") {
         item.setShowNumberLong(xml.readBool());
-    } else if (tag == "allowGroupName") {
-        item.setAllowGroupName(xml.readBool());
+    } else if (tag == "useCustomName") {
+        item.setUseCustomName(xml.readBool());
     } else if (tag == "customNameLong") {
         item.setCustomNameLong(lineBreakFromTag(xml.readXml()));
     } else if (tag == "customNameShort") {
         item.setCustomNameShort(lineBreakFromTag(xml.readXml()));
-    } else if (tag == "useCustomNameLong") {
-        item.setUseCustomNameLong(xml.readBool());
-    } else if (tag == "useCustomNameShort") {
-        item.setUseCustomNameShort(xml.readBool());
+    } else if (tag == "allowGroupName") {
+        item.setAllowGroupName(xml.readBool());
     } else if (tag == "customNameLongGroup") {
         item.setCustomNameLongGroup(lineBreakFromTag(xml.readXml()));
     } else if (tag == "customNameShortGroup") {
         item.setCustomNameShortGroup(lineBreakFromTag(xml.readXml()));
-    } else if (tag == "useCustomNameLongGroup") {
-        item.setUseCustomNameLongGroup(xml.readBool());
-    } else if (tag == "useCustomNameShortGroup") {
-        item.setUseCustomNameShortGroup(xml.readBool());
+    } else if (tag == "useCustomGroupName") {
+        item.setUseCustomGroupName(xml.readBool());
+    } else if (tag == "customNameLongIndividual") {
+        item.setCustomNameLongIndividual(lineBreakFromTag(xml.readXml()));
+    } else if (tag == "customNameShortIndividual") {
+        item.setCustomNameShortIndividual(lineBreakFromTag(xml.readXml()));
+    } else if (tag == "useCustomIndividualName") {
+        item.setUseCustomIndividualName(xml.readBool());
     } else {
         return false;
     }

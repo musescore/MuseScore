@@ -794,24 +794,24 @@ InstrumentName* SystemHeaderLayout::updateName(System* system, staff_idx_t staff
 
 String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, const Fraction& tick)
 {
-    if (muse::contains(system->ldata()->partsWithGroupName(), part)) {
-        int number = part->number(tick);
-        return number > 0 ? String::number(number) : String();
-    }
-
-    const MStyle& style = system->style();
-
     bool longNames = system->ldata()->useLongNames();
     Instrument* instr = part->instrument(tick);
     const InstrumentLabel& label = instr->instrumentLabel();
 
-    if (longNames && label.useCustomNameLong()) {
-        return label.customNameLong();
+    if (muse::contains(system->ldata()->partsWithGroupName(), part)) {
+        if (label.useCustomIndividualName()) {
+            return longNames ? label.customNameLongIndividual() : label.customNameShortIndividual();
+        }
+
+        int number = part->number(tick);
+        return number > 0 ? String::number(number) : String();
     }
 
-    if (!longNames && label.useCustomNameShort()) {
-        return label.customNameShort();
+    if (label.useCustomName()) {
+        return longNames ? label.customNameLong() : label.customNameShort();
     }
+
+    const MStyle& style = system->style();
 
     String instrName = longNames ? instr->longName() : instr->shortName();
 
@@ -858,12 +858,8 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     Instrument* instr = part->instrument(tick);
     const InstrumentLabel& label = instr->instrumentLabel();
 
-    if (longNames && label.useCustomNameLongGroup()) {
-        return label.customNameLongGroup();
-    }
-
-    if (!longNames && label.useCustomNameShortGroup()) {
-        return label.customNameShortGroup();
+    if (label.useCustomGroupName()) {
+        return longNames ? label.customNameLongGroup() : label.customNameShortGroup();
     }
 
     String instrName = longNames ? instr->longName() : instr->shortName();
@@ -1014,6 +1010,7 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
     for (staff_idx_t startOfGroup = 0; startOfGroup < system->staves().size();) {
         Part* curPart = ctx.dom().staff(startOfGroup)->part();
         const Instrument* curInstrument = curPart->instrument(tick);
+        const InstrumentLabel& curLabel = curInstrument->instrumentLabel();
         if (!curInstrument->instrumentLabel().allowGroupName()) {
             ++startOfGroup;
             continue;
@@ -1025,8 +1022,8 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
         while (endOfGroup < system->staves().size()) {
             Part* nextPart = ctx.dom().staff(endOfGroup)->part();
             Instrument* nextInstrument = nextPart->instrument(tick);
-            if (nextPart != curPart
-                && (nextInstrument->id() != curInstrument->id() || !nextInstrument->instrumentLabel().allowGroupName())) {
+            InstrumentLabel& nextLabel = nextInstrument->instrumentLabel();
+            if (nextPart != curPart && (nextInstrument->id() != curInstrument->id() || !nextLabel.allowGroupName())) {
                 break;
             }
 
@@ -1039,6 +1036,9 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
 
             if (nextPart->show() && nextPart->visibleStavesCount() > 0) {
                 partsInThisGroup.push_back(nextPart);
+                nextLabel.setUseCustomGroupName(curLabel.useCustomGroupName());
+                nextLabel.setCustomNameLongGroup(curLabel.customNameLongGroup());
+                nextLabel.setCustomNameShortGroup(curLabel.customNameShortGroup());
             }
 
             endOfGroup += nextPart->nstaves();

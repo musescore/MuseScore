@@ -188,6 +188,35 @@ void ChangeInstrumentShort::flip(EditData*)
     part->score()->setLayoutAll();
 }
 
+//---------------------------------------------------------
+//   ChangeInstrumentLong
+//---------------------------------------------------------
+
+ChangeInstrumentGroupOptions::ChangeInstrumentGroupOptions(const Fraction& _tick, Part* p, bool useCustom, const String& longName,
+                                                           const String& shortName)
+    : part(p), tick(_tick), useCustom(useCustom), longName(longName), shortName(shortName)
+{
+}
+
+void ChangeInstrumentGroupOptions::flip(EditData*)
+{
+    InstrumentLabel& label = part->instrument(tick)->instrumentLabel();
+
+    bool curUseCustom = label.useCustomGroupName();
+    const String& curLong = label.customNameLongGroup();
+    const String& curShort = label.customNameShortGroup();
+
+    label.setUseCustomGroupName(useCustom);
+    label.setCustomNameLongGroup(longName);
+    label.setCustomNameShortGroup(shortName);
+
+    useCustom = curUseCustom;
+    longName = curLong;
+    shortName = curShort;
+
+    part->score()->setLayoutAll();
+}
+
 ChangeInstrumentNumber::ChangeInstrumentNumber(const Fraction& _tick, Part* p, int v)
     : part(p), tick(_tick), number(v)
 {
@@ -412,6 +441,16 @@ void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fractio
     }
 
     score->undo(new ChangeInstrumentShort(tick, part, abbreviature));
+}
+
+void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+                                             const String& shortName)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentGroupOptions(tick, part, useCustom, longName, shortName));
 }
 
 void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)

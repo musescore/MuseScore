@@ -68,8 +68,8 @@ public:
     bool showTranspositionShort() const { return m_showTranspositionShort; }
     void setShowTranspositionShort(bool v) { m_showTranspositionShort = v; }
 
-    bool allowGroupName() const { return m_allowGroupName; }
-    void setAllowGroupName(bool v) { m_allowGroupName = v; }
+    bool useCustomName() const { return m_useCustomName; }
+    void setUseCustomName(bool v) { m_useCustomName = v; }
 
     muse::String customNameLong() const { return m_customNameLong; }
     void setCustomNameLong(const muse::String& v) { m_customNameLong = v; }
@@ -77,11 +77,8 @@ public:
     muse::String customNameShort() const { return m_customNameShort; }
     void setCustomNameShort(const muse::String& v) { m_customNameShort = v; }
 
-    bool useCustomNameLong() const { return m_useCustomNameLong; }
-    void setUseCustomNameLong(bool v) { m_useCustomNameLong = v; }
-
-    bool useCustomNameShort() const { return m_useCustomNameShort; }
-    void setUseCustomNameShort(bool v) { m_useCustomNameShort = v; }
+    bool allowGroupName() const { return m_allowGroupName; }
+    void setAllowGroupName(bool v) { m_allowGroupName = v; }
 
     muse::String customNameLongGroup() const { return m_customNameLongGroup; }
     void setCustomNameLongGroup(const muse::String& v) { m_customNameLongGroup = v; }
@@ -89,11 +86,17 @@ public:
     muse::String customNameShortGroup() const { return m_customNameShortGroup; }
     void setCustomNameShortGroup(const muse::String& v) { m_customNameShortGroup = v; }
 
-    bool useCustomNameLongGroup() const { return m_useCustomNameLongGroup; }
-    void setUseCustomNameLongGroup(bool v) { m_useCustomNameLongGroup = v; }
+    bool useCustomGroupName() const { return m_useCustomGroupName; }
+    void setUseCustomGroupName(bool v) { m_useCustomGroupName = v; }
 
-    bool useCustomNameShortGroup() const { return m_useCustomNameShortGroup; }
-    void setUseCustomNameShortGroup(bool v) { m_useCustomNameShortGroup = v; }
+    muse::String customNameLongIndividual() const { return m_customNameLongIndividual; }
+    void setCustomNameLongIndividual(const muse::String& v) { m_customNameLongIndividual = v; }
+
+    muse::String customNameShortIndividual() const { return m_customNameShortIndividual; }
+    void setCustomNameShortIndividual(const muse::String& v) { m_customNameShortIndividual = v; }
+
+    bool useCustomIndividualName() const { return m_useCustomIndividualName; }
+    void setUseCustomIndividualName(bool v) { m_useCustomIndividualName = v; }
 
     bool empty() const;
 
@@ -106,17 +109,19 @@ private:
     bool m_showTranspositionLong = true;
     bool m_showTranspositionShort = true;
 
+    bool m_useCustomName = false;
     muse::String m_customNameLong;
     muse::String m_customNameShort;
-    bool m_useCustomNameLong = false;
-    bool m_useCustomNameShort = false;
 
     bool m_allowGroupName = true;
 
     muse::String m_customNameLongGroup;
     muse::String m_customNameShortGroup;
-    bool m_useCustomNameLongGroup = false;
-    bool m_useCustomNameShortGroup = false;
+    bool m_useCustomGroupName = false;
+
+    muse::String m_customNameLongIndividual;
+    muse::String m_customNameShortIndividual;
+    bool m_useCustomIndividualName = false;
 };
 
 inline bool InstrumentLabel::operator==(const InstrumentLabel& i) const
@@ -126,17 +131,18 @@ inline bool InstrumentLabel::operator==(const InstrumentLabel& i) const
            && m_transposition == i.m_transposition
            && m_showNumberLong == i.m_showNumberLong
            && m_showNumberShort == i.m_showNumberShort
+           && m_useCustomName == i.m_useCustomName
+           && m_customNameLong == i.m_customNameLong
+           && m_customNameShort == i.m_customNameShort
            && m_showTranspositionLong == i.m_showTranspositionLong
            && m_showTranspositionShort == i.m_showTranspositionShort
            && m_allowGroupName == i.m_allowGroupName
-           && m_customNameLong == i.m_customNameLong
-           && m_customNameShort == i.m_customNameShort
-           && m_useCustomNameLong == i.m_useCustomNameLong
-           && m_useCustomNameShort == i.m_useCustomNameShort
            && m_customNameLongGroup == i.m_customNameLongGroup
            && m_customNameShortGroup == i.m_customNameShortGroup
-           && m_useCustomNameLongGroup == i.m_useCustomNameLongGroup
-           && m_useCustomNameShortGroup == i.m_useCustomNameShortGroup;
+           && m_useCustomGroupName == i.m_useCustomGroupName
+           && m_customNameLongIndividual == i.m_customNameLongIndividual
+           && m_customNameShortIndividual == i.m_customNameShortIndividual
+           && m_useCustomIndividualName == i.m_useCustomIndividualName;
 }
 
 inline bool InstrumentLabel::empty() const

@@ -138,6 +138,26 @@ public:
     UNDO_CHANGED_OBJECTS({ part })
 };
 
+class ChangeInstrumentGroupOptions : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeInstrumentGroupOptions)
+
+    Part* part = nullptr;
+    Fraction tick;
+    bool useCustom;
+    String longName;
+    String shortName;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeInstrumentGroupOptions(const Fraction&, Part*, bool, const String&, const String&);
+
+    UNDO_TYPE(CommandType::ChangeInstrumentGroupOptions)
+    UNDO_NAME("ChangeInstrumentGroupOptions")
+    UNDO_CHANGED_OBJECTS({ part })
+};
+
 class ChangeInstrumentNumber : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeInstrumentNumber)
@@ -239,6 +259,9 @@ public:
     static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
     static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
     static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
+    static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+                                              const String& shortName);
+    static void setInstrumentCustomGroupAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
 
     static void removeParts(Score* score, const std::vector<Part*>& parts);
