@@ -71,8 +71,22 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     Config cfg = makeConfig();
 
     muse::io::path_t finalPath(filePath);
-    muse::io::path_t tempVideoPath = withAudio ? finalPath + ".tmp_video.mp4" : finalPath;
     muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
+
+    auto encoder = videoEncodeResolver()->currentVideoEncoder();
+
+    muse::media::IVideoEncoder::Options encoderOptions;
+    encoderOptions.format = "mp4";
+    encoderOptions.width = cfg.width;
+    encoderOptions.height = cfg.height;
+    encoderOptions.bitrate = cfg.bitrate;
+    encoderOptions.gop = cfg.fps / 2;
+    encoderOptions.fps = cfg.fps;
+
+    if (!encoder->open(finalPath, encoderOptions)) {
+        LOGE() << "failed to open video encoder";
+        return make_ret(muse::Ret::Code::UnknownError);
+    }
 
     m_isCompleted = false;
     m_audioCompleted = false;
@@ -80,7 +94,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     m_writeRet = muse::Ret();
     m_audioRet = muse::Ret();
 
-    startVideoExport(notation, tempVideoPath, cfg);
+    startVideoExport(encoder, notation, cfg);
 
     if (withAudio) {
         startAudioExport(notation, tempAudioPath);
@@ -101,9 +115,11 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
 
     muse::Ret result = m_writeRet;
 
+    encoder->finishEncode();
+
     if (withAudio) {
         if (result && m_audioRet) {
-            if (!videoEncodeResolver()->currentVideoEncoder()->muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
+            if (!encoder->addAudio(tempAudioPath, cfg.leadingSec)) {
                 result = make_ret(muse::Ret::Code::UnknownError);
             }
         } else if (!result) {
@@ -112,9 +128,10 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
             result = m_audioRet;
         }
 
-        muse::io::File::remove(tempVideoPath);
         muse::io::File::remove(tempAudioPath);
     }
+
+    encoder->close();
 
     return result;
 }
@@ -173,10 +190,10 @@ VideoWriter::Config VideoWriter::makeConfig() const
     return cfg;
 }
 
-void VideoWriter::startVideoExport(INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg)
+void VideoWriter::startVideoExport(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& cfg)
 {
-    muse::Concurrent::run([this, notation, videoPath, cfg]() {
-        doGenerate(notation, videoPath, cfg);
+    muse::Concurrent::run([this, encoder, notation, cfg]() {
+        doGenerate(encoder, notation, cfg);
     });
 }
 
@@ -313,16 +330,8 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
     score->update();
 }
 
-void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)
+void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& config)
 {
-    if (!videoEncodeResolver()->currentVideoEncoder()->open(filePath, config.width, config.height, config.bitrate, config.fps / 2,
-                                                            config.fps)) {
-        LOGE() << "failed open encoder";
-        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
-        m_isCompleted = true;
-        return;
-    }
-
     auto restoreData = prepareScore(notation, config);
     if (!restoreData) {
         m_writeRet = make_ret(muse::Ret::Code::UnknownError);
@@ -379,7 +388,6 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
     for (int f = 0; f < frameCount; f++) {
         if (m_abort) {
-            videoEncodeResolver()->currentVideoEncoder()->close();
             m_writeRet = make_ret(muse::Ret::Code::Cancel);
             m_progress.finish(make_ret(muse::Ret::Code::Cancel));
             return;
@@ -420,10 +428,8 @@ void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& file
 
         painter.fillRect(cursorAbsRect, CURSOR_COLOR);
 
-        videoEncodeResolver()->currentVideoEncoder()->encodeImage(frame);
+        encoder->encodeImage(frame);
     }
-
-    videoEncodeResolver()->currentVideoEncoder()->close();
 
     m_writeRet = muse::make_ok();
     m_progress.finish(muse::make_ok());

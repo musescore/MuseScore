@@ -23,37 +23,38 @@
 #pragma once
 
 extern "C" {
-#include "thirdparty/ffmpeg/v8/libavcodec/avcodec.h"
-#include "thirdparty/ffmpeg/v8/libavformat/avformat.h"
-#include "thirdparty/ffmpeg/v8/libswscale/swscale.h"
+#include "thirdparty/ffmpeg/v6/libavcodec/avcodec.h"
+#include "thirdparty/ffmpeg/v6/libavformat/avformat.h"
+#include "thirdparty/ffmpeg/v6/libswscale/swscale.h"
 }
 
-namespace muse::media {
-struct FFmpegFunctions
-{
-    // libavutil
-    void (*av_free)(void* ptr) = nullptr;
-    void (*av_freep)(void* ptr) = nullptr;
-    int64_t (*av_rescale_q)(int64_t a, AVRational bq, AVRational cq) = nullptr;
+#include "io/path.h"
 
-    // libavutil (imgutils)
+namespace muse::media::ffmpeg::v6 {
+class FFmpegLibHandler
+{
+public:
+    FFmpegLibHandler() = default;
+
+    bool loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath, const io::path_t& swScalePath,
+                 const io::path_t& swResamplePath);
+    bool loadApi();
+    void unload();
+
+    // libavutil
+    int64_t (*av_rescale_q)(int64_t a, AVRational bq, AVRational cq) = nullptr;
     int (*av_image_fill_arrays)(uint8_t* dst_data[4], int dst_linesize[4], const uint8_t* src, AVPixelFormat pix_fmt, int width, int height,
                                 int align) = nullptr;
     int (*av_image_get_buffer_size)(AVPixelFormat pix_fmt, int width, int height, int align) = nullptr;
-
-    // libavutil (opt)
     int (*av_opt_set_int)(void* obj, const char* name, int64_t val, int search_flags) = nullptr;
 
     // libavformat
-    const AVOutputFormat*(*av_guess_format)(const char* short_name, const char* filename, const char* mime_type) = nullptr;
-    AVFormatContext*(*avformat_alloc_context)(void) = nullptr;
     AVStream*(*avformat_new_stream)(AVFormatContext* s, const AVCodec* c) = nullptr;
     int (*avformat_write_header)(AVFormatContext* s, AVDictionary** options) = nullptr;
     int (*av_write_trailer)(AVFormatContext* s) = nullptr;
     int (*avio_open)(AVIOContext** s, const char* url, int flags) = nullptr;
     int (*avio_close)(AVIOContext* s) = nullptr;
     int (*av_interleaved_write_frame)(AVFormatContext* s, AVPacket* pkt) = nullptr;
-
     int (*avformat_open_input)(AVFormatContext** ctx, const char* url, const AVInputFormat* fmt, AVDictionary** options) = nullptr;
     int (*avformat_find_stream_info)(AVFormatContext* ic, AVDictionary** options) = nullptr;
     void (*avformat_close_input)(AVFormatContext** s) = nullptr;
@@ -68,14 +69,12 @@ struct FFmpegFunctions
     void (*avcodec_free_context)(AVCodecContext** avctx) = nullptr;
     int (*avcodec_open2)(AVCodecContext* avctx, const AVCodec* codec, AVDictionary** options) = nullptr;
     int (*avcodec_parameters_from_context)(AVCodecParameters* par, const AVCodecContext* codec) = nullptr;
+    int (*avcodec_parameters_to_context)(AVCodecContext* codec, const AVCodecParameters* par) = nullptr;
     int (*avcodec_parameters_copy)(AVCodecParameters* dst, const AVCodecParameters* src) = nullptr;
     int (*avcodec_send_frame)(AVCodecContext* avctx, const AVFrame* frame) = nullptr;
     int (*avcodec_receive_packet)(AVCodecContext* avctx, AVPacket* avpkt) = nullptr;
-
-    // libavutil (frame)
     AVFrame*(*av_frame_alloc)(void) = nullptr;
-
-    // libavcodec (packet)
+    void (*av_frame_free)(AVFrame** frame) = nullptr;
     AVPacket*(*av_packet_alloc)(void) = nullptr;
     void (*av_packet_free)(AVPacket** pkt) = nullptr;
     void (*av_packet_unref)(AVPacket* pkt) = nullptr;
@@ -88,6 +87,16 @@ struct FFmpegFunctions
     int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[], const int srcStride[], int srcSliceY, int srcSliceH,
                      uint8_t* const dst[], const int dstStride[]) = nullptr;
 
-    bool isValid() const;
+private : void* getSymbol(void* lib, const char* name) const;
+    bool tryLoadPath(void*& lib, const io::path_t& fullPath);
+    void closeLib(void*& lib);
+    void clearFunctions();
+    bool functionsValid() const;
+
+    void* m_avUtilLibrary = nullptr;
+    void* m_avCodecLibrary = nullptr;
+    void* m_avFormatLibrary = nullptr;
+    void* m_swsScaleLibrary = nullptr;
+    void* m_swResampleLibrary = nullptr;
 };
 }

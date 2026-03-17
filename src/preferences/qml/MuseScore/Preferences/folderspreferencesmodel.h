@@ -28,15 +28,12 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iapplication.h"
 #include "iglobalconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "audio/main/iaudioconfiguration.h"
 #include "vst/ivstconfiguration.h"
-#include "media/imediaconfiguration.h"
-#include "media/ivideoencoderresolver.h"
 
 namespace mu::preferences {
 class FoldersPreferencesModel : public QAbstractListModel, public muse::Contextable, public muse::async::Asyncable
@@ -50,13 +47,6 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Contexta
     muse::GlobalInject<muse::extensions::IExtensionsConfiguration> extensionsConfiguration;
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
-    muse::GlobalInject<muse::media::IMediaConfiguration> mediaConfiguration;
-    muse::ContextInject<muse::IApplication> appliaction = { this };
-    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
-
-    Q_PROPERTY(bool showFFmpegSection READ showFFmpegSection CONSTANT FINAL)
-    Q_PROPERTY(int ffmpegVersion READ ffmpegVersion NOTIFY ffmpegVersionChanged FINAL)
-    Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged FINAL)
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -67,17 +57,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-
-    int ffmpegVersion() const;
-
-    QString ffmpegDir() const;
-    void setFFmpegDir(const QString& dir);
-
-    bool showFFmpegSection() const;
-
-signals:
-    void ffmpegVersionChanged();
-    void ffmpegDirChanged();
 
 private:
     void setupConnections();

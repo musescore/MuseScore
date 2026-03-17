@@ -57,6 +57,10 @@ void GeneralPreferencesModel::load()
     configuration()->welcomeDialogShowOnStartupChanged().onNotify(this, [this]() {
         emit showWelcomeDialogChanged();
     });
+
+    updateConfiguration()->needCheckForUpdateChanged().onNotify(this, [this]() {
+        emit needCheckForNewAppVersionChanged(needCheckForNewAppVersion());
+    });
 }
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
@@ -257,4 +261,29 @@ void GeneralPreferencesModel::setShowWelcomeDialog(bool show)
     }
 
     configuration()->setWelcomeDialogShowOnStartup(show);
+}
+
+bool GeneralPreferencesModel::isAppUpdatable() const
+{
+    return updateConfiguration()->isAppUpdatable();
+}
+
+bool GeneralPreferencesModel::needCheckForNewAppVersion() const
+{
+    return updateConfiguration()->needCheckForUpdate();
+}
+
+void GeneralPreferencesModel::setNeedCheckForNewAppVersion(bool value)
+{
+    if (value == needCheckForNewAppVersion()) {
+        return;
+    }
+
+    updateConfiguration()->setNeedCheckForUpdate(value);
+    emit needCheckForNewAppVersionChanged(value);
+}
+
+QString GeneralPreferencesModel::museScorePrivacyPolicyUrl() const
+{
+    return QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl());
 }

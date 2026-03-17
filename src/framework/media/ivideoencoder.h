@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <string>
+
 #include <QImage>
 
 #include "io/path.h"
@@ -36,11 +38,22 @@ class IVideoEncoder : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IVideoEncoder() = default;
 
-    virtual bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) = 0;
+    struct Options {
+        std::string format = "";
+        unsigned width = -1;
+        unsigned height = -1;
+        unsigned bitrate = -1;
+        unsigned gop = -1;
+        unsigned fps = -1;
+    };
+
+    virtual bool open(const muse::io::path_t& fileName, const Options& options) = 0;
     virtual void close() = 0;
+
     virtual bool encodeImage(const QImage& img) = 0;
-    virtual bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                               double audioOffsetSec) = 0;
+    virtual void finishEncode() = 0;
+
+    virtual bool addAudio(const muse::io::path_t& audioPath, double audioOffsetSec) = 0;
 };
 using IVideoEncoderPtr = std::shared_ptr<IVideoEncoder>;
 }

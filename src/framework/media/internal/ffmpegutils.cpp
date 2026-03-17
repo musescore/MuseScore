@@ -17,24 +17,19 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ffmpegloader.h"
+#include "ffmpegutils.h"
 
 #include "io/fileinfo.h"
 #include "io/path.h"
 
-#include "ffmpegutils.h"
-#include "internal/ffmpeglibhandler.h"
-
-#include "log.h"
-
 using namespace muse::media;
 using namespace muse;
 
-namespace {
-io::paths_t defaultSearchPaths()
+namespace muse::media {
+static io::paths_t defaultSearchPaths()
 {
     io::paths_t paths;
 #if defined(Q_OS_MAC)
@@ -50,17 +45,8 @@ io::paths_t defaultSearchPaths()
     return paths;
 }
 
-struct FFmpegLibPaths {
-    io::path_t avUtilPath;
-    io::path_t avCodecPath;
-    io::path_t avFormatPath;
-    io::path_t swScalePath;
-};
-
-FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& searchPaths)
+static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::path_t& searchDir)
 {
-    const std::string verStr = std::to_string(ffmpegVer);
-
     FFmpegVersionInfo ffmpegVersionInfo;
     for (const auto& [ffmpegVersion, componentsVersions] : FFMPEG_COMPONENTS_VERSIONS) {
         if (ffmpegVersion == ffmpegVer) {
@@ -73,41 +59,90 @@ FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::paths_t& searchPa
         return {};
     }
 
-    io::path_t avutilName, avcodecName, avformatName, swscaleName;
+    io::path_t avutilName, avcodecName, avformatName, swscaleName, swresampleName;
 #if defined(Q_OS_MAC)
     avutilName = io::path_t("libavutil." + std::to_string(ffmpegVersionInfo.avUtilVersion) + ".dylib");
     avcodecName = io::path_t("libavcodec." + std::to_string(ffmpegVersionInfo.avCodecVersion) + ".dylib");
     avformatName = io::path_t("libavformat." + std::to_string(ffmpegVersionInfo.avFormatVersion) + ".dylib");
     swscaleName = io::path_t("libswscale." + std::to_string(ffmpegVersionInfo.swScaleVersion) + ".dylib");
+    swresampleName = io::path_t("libswresample." + std::to_string(ffmpegVersionInfo.swResampleVersion) + ".dylib");
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     avutilName = io::path_t("libavutil.so." + std::to_string(ffmpegVersionInfo.avUtilVersion));
     avcodecName = io::path_t("libavcodec.so." + std::to_string(ffmpegVersionInfo.avCodecVersion));
-    avformatName = io::path_t("libavformat.so." + verStr);
+    avformatName = io::path_t("libavformat.so." + std::to_string(ffmpegVersionInfo.avFormatVersion));
     swscaleName = io::path_t("libswscale.so." + std::to_string(ffmpegVersionInfo.swScaleVersion));
+    swresampleName = io::path_t("libswresample.so." + std::to_string(ffmpegVersionInfo.swResampleVersion));
 #elif defined(Q_OS_WIN)
     avutilName = io::path_t("avutil-" + std::to_string(ffmpegVersionInfo.avUtilVersion) + ".dll");
     avcodecName = io::path_t("avcodec-" + std::to_string(ffmpegVersionInfo.avCodecVersion) + ".dll");
     avformatName = io::path_t("avformat-" + std::to_string(ffmpegVersionInfo.avFormatVersion) + ".dll");
     swscaleName = io::path_t("swscale-" + std::to_string(ffmpegVersionInfo.swScaleVersion) + ".dll");
+    swresampleName = io::path_t("swresample-" + std::to_string(ffmpegVersionInfo.swResampleVersion) + ".dll");
 #endif
 
     FFmpegLibPaths result;
-    for (const io::path_t& dir : searchPaths) {
-        io::path_t avutilPath = dir.appendingComponent(avutilName);
-        io::path_t avcodecPath = dir.appendingComponent(avcodecName);
-        io::path_t avformatPath = dir.appendingComponent(avformatName);
-        io::path_t swscalePath = dir.appendingComponent(swscaleName);
-        if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
-            && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)) {
-            result.avUtilPath = avutilPath;
-            result.avCodecPath = avcodecPath;
-            result.avFormatPath = avformatPath;
-            result.swScalePath = swscalePath;
-            return result;
-        }
+    io::path_t avutilPath = searchDir.appendingComponent(avutilName);
+    io::path_t avcodecPath = searchDir.appendingComponent(avcodecName);
+    io::path_t avformatPath = searchDir.appendingComponent(avformatName);
+    io::path_t swscalePath = searchDir.appendingComponent(swscaleName);
+    io::path_t swresamplePath = searchDir.appendingComponent(swresampleName);
+    if (io::FileInfo::exists(avutilPath) && io::FileInfo::exists(avcodecPath)
+        && io::FileInfo::exists(avformatPath) && io::FileInfo::exists(swscalePath)
+        && io::FileInfo::exists(swresamplePath)) {
+        result.avUtilPath = avutilPath;
+        result.avCodecPath = avcodecPath;
+        result.avFormatPath = avformatPath;
+        result.swScalePath = swscalePath;
+        result.swResamplePath = swresamplePath;
+        return result;
     }
 
     return result;
+}
+
+FFmpegVersion versionFromAVFormatPath(const io::path_t& path)
+{
+    std::string name = io::filename(path, true).toStdString();
+    int avVer = -1;
+#if defined(Q_OS_MAC)
+    // libavformat.60.dylib
+    size_t dot = name.rfind('.');
+    if (dot != std::string::npos && dot > 0) {
+        size_t verStart = name.rfind('.', dot - 1);
+        if (verStart != std::string::npos && verStart + 1 < dot) {
+            try {
+                avVer = std::stoi(name.substr(verStart + 1, dot - verStart - 1));
+            } catch (...) {}
+        }
+    }
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    // libavformat.so.60
+    size_t so = name.rfind(".so.");
+    if (so != std::string::npos && so + 4 < name.size()) {
+        try {
+            avVer = std::stoi(name.substr(so + 4));
+        } catch (...) {}
+    }
+#elif defined(Q_OS_WIN)
+    // avformat-60.dll
+    size_t dash = name.find('-');
+    if (dash != std::string::npos && dash + 1 < name.size()) {
+        size_t dot = name.find('.', dash);
+        if (dot != std::string::npos) {
+            try {
+                avVer = std::stoi(name.substr(dash + 1, dot - dash - 1));
+            } catch (...) {}
+        }
+    }
+#endif
+
+    for (const auto& [ver, componentsVersions] : FFMPEG_COMPONENTS_VERSIONS) {
+        if (componentsVersions.avFormatVersion == avVer) {
+            return ver;
+        }
+    }
+
+    return FFMPEG_INVALID_VERION;
 }
 
 FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)
@@ -124,31 +159,15 @@ FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)
         searchPaths.push_back(p);
     }
 
-    for (const auto& [ffmpegVer, _] : FFMPEG_COMPONENTS_VERSIONS) {
-        result = libraryPathsForVersion(ffmpegVer, searchPaths);
-        if (!result.avFormatPath.empty()) {
-            return result;
+    for (const io::path_t& path : searchPaths) {
+        for (const auto& [ffmpegVer, _] : FFMPEG_COMPONENTS_VERSIONS) {
+            result = libraryPathsForVersion(ffmpegVer, path);
+            if (!result.avFormatPath.empty()) {
+                return result;
+            }
         }
     }
 
     return result;
 }
-}
-
-std::shared_ptr<FFmpegLibHandler> FFmpegLoader::load(const io::path_t& ffmpegLibsDir)
-{
-    const FFmpegLibPaths paths = findLibraryPaths(ffmpegLibsDir);
-    if (paths.avFormatPath.empty()) {
-        return nullptr;
-    }
-
-    std::shared_ptr<FFmpegLibHandler> libHandlerPtr = std::make_shared<FFmpegLibHandler>();
-    if (libHandlerPtr->loadLib(paths.avUtilPath, paths.avCodecPath, paths.avFormatPath, paths.swScalePath)
-        && libHandlerPtr->loadApi()) {
-        LOGD() << "FFmpeg loaded, version: " << libHandlerPtr->version();
-        return libHandlerPtr;
-    }
-
-    LOGW() << "FFmpeg libraries not found";
-    return nullptr;
 }

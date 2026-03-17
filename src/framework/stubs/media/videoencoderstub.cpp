@@ -23,7 +23,7 @@
 
 using namespace muse::media;
 
-bool VideoEncoderStub::open(const muse::io::path_t&, unsigned, unsigned, unsigned, unsigned, unsigned)
+bool VideoEncoderStub::open(const muse::io::path_t&, const IVideoEncoder::Options&)
 {
     return false;
 }
@@ -37,8 +37,11 @@ bool VideoEncoderStub::encodeImage(const QImage&)
     return false;
 }
 
-bool VideoEncoderStub::muxAudioVideo(const muse::io::path_t&, const muse::io::path_t&,
-                                     const muse::io::path_t&, double)
+void VideoEncoderStub::finishEncode()
+{
+}
+
+bool VideoEncoderStub::addAudio(const muse::io::path_t&, double)
 {
     return false;
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,34 +26,33 @@
 #include <QObject>
 
 #include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "update/iupdateconfiguration.h"
+#include "media/ivideoencoderresolver.h"
 
 namespace mu::preferences {
-class UpdatePreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
+class VideoPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
 {
     Q_OBJECT
     QML_ELEMENT;
 
-    Q_PROPERTY(
-        bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
+    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
 
-    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
+    Q_PROPERTY(int ffmpegVersion READ ffmpegVersion NOTIFY ffmpegVersionChanged FINAL)
+    Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged FINAL)
 
 public:
-    explicit UpdatePreferencesModel(QObject* parent = nullptr);
+    explicit VideoPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
 
-    bool needCheckForNewAppVersion() const;
+    int ffmpegVersion() const;
 
-    Q_INVOKABLE bool isAppUpdatable() const;
-    Q_INVOKABLE QString museScorePrivacyPolicyUrl() const;
-
-public slots:
-    void setNeedCheckForNewAppVersion(bool value);
+    QString ffmpegDir() const;
+    void setFFmpegDir(const QString& dir);
 
 signals:
-    void needCheckForNewAppVersionChanged(bool value);
+    void ffmpegVersionChanged();
+    void ffmpegDirChanged();
 };
 }

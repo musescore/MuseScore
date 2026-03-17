@@ -26,6 +26,8 @@
 #include "async/asyncable.h"
 #include "imediaconfiguration.h"
 
+#include "ffmpegutils.h"
+
 #include "../ivideoencoderresolver.h"
 
 namespace muse::media {
@@ -46,6 +48,14 @@ public:
 
 private:
     void resetFFmpegSettings();
+
+    struct EncoderInfo {
+        IVideoEncoderPtr encoder;
+        FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERION;
+        io::path_t ffmpegLibsDir;
+    };
+
+    EncoderInfo makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const;
 
     IVideoEncoderPtr m_encoder;
     int m_currentEncoderFFmpegVersion = -1;

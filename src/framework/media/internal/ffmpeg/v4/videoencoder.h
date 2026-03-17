@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2025 MuseScore Limited
  *
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
  * published by the Free Software Foundation.
  *
@@ -22,32 +22,34 @@
 
 #pragma once
 
-#include "../ivideoencoder.h"
+#include "internal/ffmpegutils.h"
 
-#include "ffmpegfunctions.h"
+#include "media/ivideoencoder.h"
 
-#include "ffmpeglibhandler.h"
-
-namespace muse::media {
+namespace muse::media::ffmpeg::v4 {
+class FFmpegLibHandler;
 struct FFmpeg;
 class VideoEncoder : public IVideoEncoder
 {
 public:
-    explicit VideoEncoder(const std::shared_ptr<FFmpegLibHandler>& handler);
+    VideoEncoder();
     ~VideoEncoder() override;
 
-    bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps) override;
+    bool load(const FFmpegLibPaths& paths);
+
+    bool open(const muse::io::path_t& fileName, const Options& options) override;
     void close() override;
 
     bool encodeImage(const QImage& img) override;
-    bool muxAudioVideo(const muse::io::path_t& videoPath, const muse::io::path_t& audioPath, const muse::io::path_t& outputPath,
-                       double audioOffsetSec) override;
+    void finishEncode() override;
+
+    bool addAudio(const muse::io::path_t& audioPath, double audioOffsetSec) override;
 
 private:
     bool convertImage_sws(const QImage& img);
-    const FFmpegFunctions* ffmpegFunctions() const;
 
     std::shared_ptr<FFmpegLibHandler> m_ffmpegHandler = nullptr;
     FFmpeg* m_ffmpeg = nullptr;
+    muse::io::path_t m_outputPath;
 };
 }

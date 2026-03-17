@@ -30,9 +30,12 @@ class VideoEncoderStub : public IVideoEncoder
 public:
     VideoEncoderStub() = default;
 
-    bool open(const muse::io::path_t&, unsigned, unsigned, unsigned, unsigned, unsigned) override;
+    bool open(const muse::io::path_t&, const Options&) override;
     void close() override;
+
     bool encodeImage(const QImage&) override;
-    bool muxAudioVideo(const muse::io::path_t&, const muse::io::path_t&, const muse::io::path_t&, double) override;
+    void finishEncode() override;
+
+    bool addAudio(const muse::io::path_t&, double) override;
 };
 }

@@ -43,21 +43,10 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         FoldersSection {
-            id: generalFoldersSection
-
             model: foldersPreferencesModel
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
-        }
-
-        FFmpegSection {
-            id: ffmpegSection
-
-            model: foldersPreferencesModel
-
-            navigation.section: root.navigationSection
-            navigation.order: generalFoldersSection.navigation.order + 1
         }
     }
 }

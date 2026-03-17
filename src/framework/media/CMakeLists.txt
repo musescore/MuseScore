@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_media ALIAS muse::media NO_UNITY)
+muse_create_module(muse_media ALIAS muse::media NO_PCH NO_UNITY)
 
 target_sources(muse_media PRIVATE
     mediamodule.cpp
@@ -33,19 +33,61 @@ target_sources(muse_media PRIVATE
     internal/mediaconfiguration.h
     internal/videoencoderresolver.h
 
-    internal/ffmpegloader.cpp
-    internal/ffmpegloader.h
+    internal/ffmpegutils.cpp
     internal/ffmpegutils.h
 
-    internal/ffmpegfunctions.cpp
-    internal/ffmpeglibhandler.cpp
-    internal/ffmpeglibhandler.h
+    internal/ffmpeg/v8/ffmpeglibhandler.cpp
+    internal/ffmpeg/v8/ffmpeglibhandler.h
+    internal/ffmpeg/v8/videoencoder.cpp
+    internal/ffmpeg/v8/videoencoder.h
 
-    internal/videoencoder.cpp
-    internal/videoencoder.h
+    internal/ffmpeg/v7/ffmpeglibhandler.cpp
+    internal/ffmpeg/v7/ffmpeglibhandler.h
+    internal/ffmpeg/v7/videoencoder.cpp
+    internal/ffmpeg/v7/videoencoder.h
+
+    internal/ffmpeg/v6/ffmpeglibhandler.cpp
+    internal/ffmpeg/v6/ffmpeglibhandler.h
+    internal/ffmpeg/v6/videoencoder.cpp
+    internal/ffmpeg/v6/videoencoder.h
+
+    internal/ffmpeg/v5/ffmpeglibhandler.cpp
+    internal/ffmpeg/v5/ffmpeglibhandler.h
+    internal/ffmpeg/v5/videoencoder.cpp
+    internal/ffmpeg/v5/videoencoder.h
+
+    internal/ffmpeg/v4/ffmpeglibhandler.cpp
+    internal/ffmpeg/v4/ffmpeglibhandler.h
+    internal/ffmpeg/v4/videoencoder.cpp
+    internal/ffmpeg/v4/videoencoder.h
 )
 
-target_include_directories(muse_media PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v8)
+set_source_files_properties(
+    internal/ffmpeg/v8/ffmpeglibhandler.cpp
+    internal/ffmpeg/v8/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v8"
+)
 
-set(MODULE_USE_PCH OFF)
-set(MODULE_USE_UNITY OFF)
+set_source_files_properties(
+    internal/ffmpeg/v7/ffmpeglibhandler.cpp
+    internal/ffmpeg/v7/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v7"
+)
+
+set_source_files_properties(
+    internal/ffmpeg/v6/ffmpeglibhandler.cpp
+    internal/ffmpeg/v6/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v6"
+)
+
+set_source_files_properties(
+    internal/ffmpeg/v5/ffmpeglibhandler.cpp
+    internal/ffmpeg/v5/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v5"
+)
+
+set_source_files_properties(
+    internal/ffmpeg/v4/ffmpeglibhandler.cpp
+    internal/ffmpeg/v4/videoencoder.cpp
+    PROPERTIES INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ffmpeg/v4"
+)

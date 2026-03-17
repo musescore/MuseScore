@@ -29,60 +29,12 @@
 #include "io/fileinfo.h"
 #include "global/dlib.h"
 
-#include "internal/ffmpegutils.h"
-
 #include "log.h"
 
-using namespace muse::media;
-
-static int versionFromAVFormatPath(const muse::io::path_t& path)
-{
-    std::string name = muse::io::filename(path, true).toStdString();
-    int avVer = -1;
-#if defined(Q_OS_MAC)
-    // libavformat.60.dylib
-    size_t dot = name.rfind('.');
-    if (dot != std::string::npos && dot > 0) {
-        size_t verStart = name.rfind('.', dot - 1);
-        if (verStart != std::string::npos && verStart + 1 < dot) {
-            try {
-                avVer = std::stoi(name.substr(verStart + 1, dot - verStart - 1));
-            } catch (...) {}
-        }
-    }
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    // libavformat.so.60
-    size_t so = name.rfind(".so.");
-    if (so != std::string::npos && so + 4 < name.size()) {
-        try {
-            avVer = std::stoi(name.substr(so + 4));
-        } catch (...) {}
-    }
-#elif defined(Q_OS_WIN)
-    // avformat-60.dll
-    size_t dash = name.find('-');
-    if (dash != std::string::npos && dash + 1 < name.size()) {
-        size_t dot = name.find('.', dash);
-        if (dot != std::string::npos) {
-            try {
-                avVer = std::stoi(name.substr(dash + 1, dot - dash - 1));
-            } catch (...) {}
-        }
-    }
-#endif
-
-    for (const auto& [ver, componentsVersions]: FFMPEG_COMPONENTS_VERSIONS) {
-        if (componentsVersions.avFormatVersion == avVer) {
-            return ver;
-        }
-    }
-
-    return 0;
-}
-
+namespace muse::media::ffmpeg::v8 {
 #define RESOLVE_FROM(lib, name) do { \
-        m_functions.name = reinterpret_cast<decltype(m_functions.name)>(getSymbol(lib, #name)); \
-        if (!m_functions.name) { LOGW() << "FFmpeg: missing symbol " #name; return false; } \
+        name = reinterpret_cast<decltype(name)>(getSymbol(lib, #name)); \
+        if (!name) { LOGW() << "FFmpeg: missing symbol " #name; return false; } \
 } while (0)
 
 void* FFmpegLibHandler::getSymbol(void* lib, const char* name) const
@@ -101,29 +53,26 @@ void* FFmpegLibHandler::getSymbol(void* lib, const char* name) const
 
 bool FFmpegLibHandler::loadApi()
 {
-    if (!m_avUtilLibrary || !m_avCodecLibrary || !m_avFormatLibrary || !m_swsScaleLibrary) {
+    if (!m_avUtilLibrary || !m_avCodecLibrary || !m_avFormatLibrary || !m_swsScaleLibrary || !m_swResampleLibrary) {
         return false;
     }
 
-    m_functions = FFmpegFunctions();
+    clearFunctions();
 
     // libavutil
-    RESOLVE_FROM(m_avUtilLibrary, av_free);
-    RESOLVE_FROM(m_avUtilLibrary, av_freep);
     RESOLVE_FROM(m_avUtilLibrary, av_rescale_q);
     RESOLVE_FROM(m_avUtilLibrary, av_image_fill_arrays);
     RESOLVE_FROM(m_avUtilLibrary, av_image_get_buffer_size);
     RESOLVE_FROM(m_avUtilLibrary, av_opt_set_int);
     RESOLVE_FROM(m_avUtilLibrary, av_frame_alloc);
+    RESOLVE_FROM(m_avUtilLibrary, av_frame_free);
 
     // libavformat
-    RESOLVE_FROM(m_avFormatLibrary, av_guess_format);
     RESOLVE_FROM(m_avFormatLibrary, av_write_trailer);
     RESOLVE_FROM(m_avFormatLibrary, av_interleaved_write_frame);
     RESOLVE_FROM(m_avFormatLibrary, av_read_frame);
     RESOLVE_FROM(m_avFormatLibrary, avio_open);
     RESOLVE_FROM(m_avFormatLibrary, avio_close);
-    RESOLVE_FROM(m_avFormatLibrary, avformat_alloc_context);
     RESOLVE_FROM(m_avFormatLibrary, avformat_new_stream);
     RESOLVE_FROM(m_avFormatLibrary, avformat_write_header);
     RESOLVE_FROM(m_avFormatLibrary, avformat_open_input);
@@ -142,6 +91,7 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avCodecLibrary, avcodec_free_context);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_open2);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_from_context);
+    RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_to_context);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_copy);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_send_frame);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_receive_packet);
@@ -150,27 +100,25 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_swsScaleLibrary, sws_getCachedContext);
     RESOLVE_FROM(m_swsScaleLibrary, sws_scale);
 
-    return m_functions.isValid();
+    return functionsValid();
 }
 
 bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& avCodecPath, const io::path_t& avFormatPath,
-                               const io::path_t& swScalePath)
+                               const io::path_t& swScalePath, const io::path_t& swResamplePath)
 {
     unload();
 
-    // Load avutil first, then avcodec, swscale, avformat (dependency order)
+    // Load avutil first, then swresample, swscale, avcodec, avformat (dependency order)
     if (!tryLoadPath(m_avUtilLibrary, avUtilPath)
-        || !tryLoadPath(m_avCodecLibrary, avCodecPath)
+        || !tryLoadPath(m_swResampleLibrary, swResamplePath)
         || !tryLoadPath(m_swsScaleLibrary, swScalePath)
+        || !tryLoadPath(m_avCodecLibrary, avCodecPath)
         || !tryLoadPath(m_avFormatLibrary, avFormatPath)) {
         return false;
     }
 
-    m_version = versionFromAVFormatPath(avFormatPath);
-    m_dir = io::dirpath(avFormatPath);
-
     LOGI() << "FFmpeg loaded: avutil=" << avUtilPath << ", avcodec=" << avCodecPath << ", avformat=" << avFormatPath
-           << ", swscale=" << swScalePath;
+           << ", swscale=" << swScalePath << ", swresample=" << swResamplePath;
 
     return true;
 }
@@ -178,13 +126,12 @@ bool FFmpegLibHandler::loadLib(const io::path_t& avUtilPath, const io::path_t& a
 void FFmpegLibHandler::unload()
 {
     closeLib(m_avFormatLibrary);
+    closeLib(m_swResampleLibrary);
     closeLib(m_swsScaleLibrary);
     closeLib(m_avCodecLibrary);
     closeLib(m_avUtilLibrary);
 
-    m_functions = FFmpegFunctions();
-    m_version = 0;
-    m_dir = io::path_t();
+    clearFunctions();
 }
 
 void FFmpegLibHandler::closeLib(void*& lib)
@@ -208,4 +155,61 @@ bool FFmpegLibHandler::tryLoadPath(void*& lib, const io::path_t& fullPath)
     }
 
     return false;
+}
+
+bool FFmpegLibHandler::functionsValid() const
+{
+    return av_rescale_q
+           && av_image_fill_arrays && av_image_get_buffer_size
+           && av_opt_set_int
+           && avformat_new_stream
+           && avformat_write_header && av_write_trailer
+           && avio_open && avio_close && av_interleaved_write_frame
+           && avformat_open_input && avformat_find_stream_info
+           && avformat_close_input && avformat_free_context
+           && avformat_alloc_output_context2 && av_read_frame
+           && avcodec_alloc_context3 && avcodec_find_encoder && avcodec_free_context
+           && avcodec_open2 && avcodec_parameters_from_context && avcodec_parameters_to_context && avcodec_parameters_copy
+           && avcodec_send_frame && avcodec_receive_packet
+           && av_frame_alloc && av_frame_free
+           && av_packet_alloc && av_packet_free && av_packet_unref && av_packet_rescale_ts
+           && sws_getCachedContext && sws_scale;
+}
+
+void FFmpegLibHandler::clearFunctions()
+{
+    av_rescale_q = nullptr;
+    av_image_fill_arrays = nullptr;
+    av_image_get_buffer_size = nullptr;
+    av_opt_set_int = nullptr;
+    avformat_new_stream = nullptr;
+    avformat_write_header = nullptr;
+    av_write_trailer = nullptr;
+    avio_open = nullptr;
+    avio_close = nullptr;
+    av_interleaved_write_frame = nullptr;
+    avformat_open_input = nullptr;
+    avformat_find_stream_info = nullptr;
+    avformat_close_input = nullptr;
+    avformat_free_context = nullptr;
+    avformat_alloc_output_context2 = nullptr;
+    av_read_frame = nullptr;
+    avcodec_alloc_context3 = nullptr;
+    avcodec_find_encoder = nullptr;
+    avcodec_free_context = nullptr;
+    avcodec_open2 = nullptr;
+    avcodec_parameters_from_context = nullptr;
+    avcodec_parameters_to_context = nullptr;
+    avcodec_parameters_copy = nullptr;
+    avcodec_send_frame = nullptr;
+    avcodec_receive_packet = nullptr;
+    av_frame_alloc = nullptr;
+    av_frame_free = nullptr;
+    av_packet_alloc = nullptr;
+    av_packet_free = nullptr;
+    av_packet_unref = nullptr;
+    av_packet_rescale_ts = nullptr;
+    sws_getCachedContext = nullptr;
+    sws_scale = nullptr;
+}
 }
