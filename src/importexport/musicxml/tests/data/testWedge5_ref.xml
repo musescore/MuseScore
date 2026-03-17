@@ -82,7 +82,7 @@
         <direction-type>
           <wedge type="crescendo" number="1"/>
           </direction-type>
-        <offset>-2</offset>
+        <offset sound="yes">-2</offset>
         </direction>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
