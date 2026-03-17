@@ -42,8 +42,6 @@ public:
     void unload();
 
     // libavutil
-    void (*av_free)(void* ptr) = nullptr;
-    void (*av_freep)(void* ptr) = nullptr;
     int64_t (*av_rescale_q)(int64_t a, AVRational bq, AVRational cq) = nullptr;
     int (*av_image_fill_arrays)(uint8_t* dst_data[4], int dst_linesize[4], const uint8_t* src, AVPixelFormat pix_fmt, int width, int height,
                                 int align) = nullptr;
@@ -51,8 +49,6 @@ public:
     int (*av_opt_set_int)(void* obj, const char* name, int64_t val, int search_flags) = nullptr;
 
     // libavformat
-    const AVOutputFormat*(*av_guess_format)(const char* short_name, const char* filename, const char* mime_type) = nullptr;
-    AVFormatContext*(*avformat_alloc_context)(void) = nullptr;
     AVStream*(*avformat_new_stream)(AVFormatContext* s, const AVCodec* c) = nullptr;
     int (*avformat_write_header)(AVFormatContext* s, AVDictionary** options) = nullptr;
     int (*av_write_trailer)(AVFormatContext* s) = nullptr;
@@ -102,6 +98,5 @@ private : void* getSymbol(void* lib, const char* name) const;
     void* m_avFormatLibrary = nullptr;
     void* m_swsScaleLibrary = nullptr;
     void* m_swResampleLibrary = nullptr;
-
 };
 }

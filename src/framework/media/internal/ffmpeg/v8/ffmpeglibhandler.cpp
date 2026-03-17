@@ -60,8 +60,6 @@ bool FFmpegLibHandler::loadApi()
     clearFunctions();
 
     // libavutil
-    RESOLVE_FROM(m_avUtilLibrary, av_free);
-    RESOLVE_FROM(m_avUtilLibrary, av_freep);
     RESOLVE_FROM(m_avUtilLibrary, av_rescale_q);
     RESOLVE_FROM(m_avUtilLibrary, av_image_fill_arrays);
     RESOLVE_FROM(m_avUtilLibrary, av_image_get_buffer_size);
@@ -70,13 +68,11 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avUtilLibrary, av_frame_free);
 
     // libavformat
-    RESOLVE_FROM(m_avFormatLibrary, av_guess_format);
     RESOLVE_FROM(m_avFormatLibrary, av_write_trailer);
     RESOLVE_FROM(m_avFormatLibrary, av_interleaved_write_frame);
     RESOLVE_FROM(m_avFormatLibrary, av_read_frame);
     RESOLVE_FROM(m_avFormatLibrary, avio_open);
     RESOLVE_FROM(m_avFormatLibrary, avio_close);
-    RESOLVE_FROM(m_avFormatLibrary, avformat_alloc_context);
     RESOLVE_FROM(m_avFormatLibrary, avformat_new_stream);
     RESOLVE_FROM(m_avFormatLibrary, avformat_write_header);
     RESOLVE_FROM(m_avFormatLibrary, avformat_open_input);
@@ -163,10 +159,10 @@ bool FFmpegLibHandler::tryLoadPath(void*& lib, const io::path_t& fullPath)
 
 bool FFmpegLibHandler::functionsValid() const
 {
-    return av_free && av_freep && av_rescale_q
+    return av_rescale_q
            && av_image_fill_arrays && av_image_get_buffer_size
            && av_opt_set_int
-           && av_guess_format && avformat_alloc_context && avformat_new_stream
+           && avformat_new_stream
            && avformat_write_header && av_write_trailer
            && avio_open && avio_close && av_interleaved_write_frame
            && avformat_open_input && avformat_find_stream_info
@@ -182,14 +178,10 @@ bool FFmpegLibHandler::functionsValid() const
 
 void FFmpegLibHandler::clearFunctions()
 {
-    av_free = nullptr;
-    av_freep = nullptr;
     av_rescale_q = nullptr;
     av_image_fill_arrays = nullptr;
     av_image_get_buffer_size = nullptr;
     av_opt_set_int = nullptr;
-    av_guess_format = nullptr;
-    avformat_alloc_context = nullptr;
     avformat_new_stream = nullptr;
     avformat_write_header = nullptr;
     av_write_trailer = nullptr;
