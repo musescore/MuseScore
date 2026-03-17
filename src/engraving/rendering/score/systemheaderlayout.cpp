@@ -845,20 +845,7 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
     default:
     {
         String result = style.styleSt(longNames ? Sid::instrumentNamesCustomFormatLong : Sid::instrumentNamesCustomFormatShort);
-        result.replace(u"$name", instrName);
-        result.replace(u"$transposition", transposition);
-        if (!number.empty()) {
-            result.replace(u"$number", number);
-        } else {
-            if (result.contains(u" $number")) {
-                result.remove(u" $number");
-            } else if (result.contains(u"$number ")) {
-                result.remove(u"$number ");
-            } else if (result.contains(u"$number")) {
-                result.remove(u"$number");
-            }
-        }
-        return result;
+        return resolveTokens(result, instrName, transposition, number);
     }
     }
 }
@@ -905,18 +892,31 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     default:
     {
         String result = style.styleSt(longNames ? Sid::instrumentNamesCustomFormatLong : Sid::instrumentNamesCustomFormatShort);
-        result.replace(u"$name", instrName);
-        result.replace(u"$transposition", transposition);
-        if (result.contains(u" $number")) {
-            result.remove(u" $number");
-        } else if (result.contains(u"$number ")) {
-            result.remove(u"$number ");
-        } else if (result.contains(u"$number")) {
-            result.remove(u"$number");
-        }
-        return result;
+        return resolveTokens(result, instrName, transposition, /*number*/ String());
     }
     }
+}
+
+String& SystemHeaderLayout::resolveTokens(String& str, const String& name, const String& transposition, const String& number)
+{
+    static const String NAME = u"$name";
+    static const String TRANSP = u"$transposition";
+    static const String NUMBER = u"$number";
+
+    str.replace(NAME, name);
+    str.replace(TRANSP, transposition);
+
+    if (!number.empty()) {
+        str.replace(NUMBER, number);
+    } else if (str.contains(u" $number")) {
+        str.remove(u" $number");
+    } else if (str.contains(u"$number ")) {
+        str.remove(u"$number ");
+    } else if (str.contains(u"$number")) {
+        str.remove(u"$number");
+    }
+
+    return str;
 }
 
 bool SystemHeaderLayout::showNames(LayoutContext& ctx)

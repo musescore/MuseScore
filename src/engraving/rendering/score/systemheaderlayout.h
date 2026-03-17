@@ -56,6 +56,7 @@ private:
                                       InstrumentNameRole role);
     static String formattedInstrumentName(System* system, Part* part, const Fraction& tick);
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
+    static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);
     static bool showNames(LayoutContext& ctx);
 
     static bool stackLabelsVertically(System* system);
