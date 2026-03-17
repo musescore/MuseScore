@@ -144,7 +144,7 @@ void StartupScenario::registerAudioPlugins()
     qApp->setQuitLockEnabled(true);
 }
 
-void StartupScenario::runAfterSplashScreen()
+void StartupScenario::runAfterSplashScreen(std::function<void()> startupPageOpenedCallback)
 {
     TRACEFUNC;
 
@@ -183,13 +183,14 @@ void StartupScenario::runAfterSplashScreen()
     }
 
     muse::async::Channel<Uri> opened = interactive()->opened();
-    opened.onReceive(this, [this, opened, modeType](const Uri&) {
+    opened.onReceive(this, [this, opened, modeType, startupPageOpenedCallback](const Uri&) {
         static bool once = false;
         if (once) {
             return;
         }
         once = true;
 
+        startupPageOpenedCallback();
         onStartupPageOpened(modeType);
 
         async::Async::call(this, [this, opened]() {

@@ -42,7 +42,7 @@ public:
     virtual void setStartupScoreFile(const std::optional<project::ProjectFile>& file) = 0;
 
     virtual void runOnSplashScreen() = 0;
-    virtual void runAfterSplashScreen() = 0;
+    virtual void runAfterSplashScreen(std::function<void()> startupPageOpenedCallback) = 0;
     virtual bool startupCompleted() const = 0;
 };
 }

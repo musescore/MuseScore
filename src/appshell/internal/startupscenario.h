@@ -65,7 +65,7 @@ public:
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void runOnSplashScreen() override;
-    void runAfterSplashScreen() override;
+    void runAfterSplashScreen(std::function<void()> startupPageOpenedCallback) override;
     bool startupCompleted() const override;
 
 private:
