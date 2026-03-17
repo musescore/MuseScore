@@ -442,6 +442,44 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     notifyAboutPartChanged(part);
 }
 
+void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKey>& instruments, bool useCustom, const QString& name,
+                                                  const QString& shortName)
+{
+    TRACEFUNC;
+
+    startEdit(TranslatableString("undoableAction", "Set instrument custom group name"));
+
+    std::vector<Part*> changedParts;
+
+    for (const InstrumentKey& key : instruments) {
+        Part* part = partModifiable(key.partId);
+        if (!part) {
+            continue;
+        }
+
+        const mu::engraving::Instrument* instrument = part->instrument(key.tick);
+        if (!instrument) {
+            continue;
+        }
+
+        const InstrumentLabel& instrLabel = instrument->instrumentLabel();
+        if (instrLabel.useCustomGroupName() == useCustom && instrLabel.customNameLongGroup() == name
+            && instrLabel.customNameShortGroup() == shortName) {
+            continue;
+        }
+
+        mu::engraving::EditPart::setInstrumentGroupNameOptions(score(), part, key.tick, useCustom, name, shortName);
+
+        changedParts.push_back(part);
+    }
+
+    apply();
+
+    for (Part* p : changedParts) {
+        notifyAboutPartChanged(p);
+    }
+}
+
 void NotationParts::setInstrumentNumber(const InstrumentKey& instrumentKey, int v)
 {
     TRACEFUNC;

@@ -2150,24 +2150,20 @@ void TWrite::writeProperties(const InstrumentLabel& item, XmlWriter& xml)
         xml.tag("showNumberShort", item.showNumberShort());
     }
 
-    if (!item.allowGroupName()) {
-        xml.tag("allowGroupName", item.allowGroupName());
+    if (item.useCustomName()) {
+        xml.tag("useCustomName", item.useCustomName());
     }
 
     if (!item.customNameLong().empty()) {
-        xml.writeXml(u"customNameLong", lineBreakToTag(item.customNameLong()));
+        xml.writeXml(u"customNameLong", item.customNameLong());
     }
 
     if (!item.customNameShort().empty()) {
-        xml.writeXml(u"customNameShort", lineBreakToTag(item.customNameShort()));
+        xml.writeXml(u"customNameShort", item.customNameShort());
     }
 
-    if (item.useCustomNameLong()) {
-        xml.tag("useCustomNameLong", item.useCustomNameLong());
-    }
-
-    if (item.useCustomNameShort()) {
-        xml.tag("useCustomNameShort", item.useCustomNameShort());
+    if (!item.allowGroupName()) {
+        xml.tag("allowGroupName", item.allowGroupName());
     }
 
     if (!item.customNameLongGroup().empty()) {
@@ -2178,12 +2174,20 @@ void TWrite::writeProperties(const InstrumentLabel& item, XmlWriter& xml)
         xml.writeXml(u"customNameShortGroup", item.customNameShortGroup());
     }
 
-    if (item.useCustomNameLongGroup()) {
-        xml.tag("useCustomNameLongGroup", item.useCustomNameLongGroup());
+    if (item.useCustomGroupName()) {
+        xml.tag("useCustomGroupName", item.useCustomGroupName());
     }
 
-    if (item.useCustomNameShortGroup()) {
-        xml.tag("useCustomNameShortGroup", item.useCustomNameShortGroup());
+    if (!item.customNameLongIndividual().empty()) {
+        xml.writeXml(u"customNameLongIndividual", item.customNameLongIndividual());
+    }
+
+    if (!item.customNameShortIndividual().empty()) {
+        xml.writeXml(u"customNameShortIndividual", item.customNameShortIndividual());
+    }
+
+    if (item.useCustomIndividualName()) {
+        xml.tag("useCustomIndividualName", item.useCustomIndividualName());
     }
 }
 
