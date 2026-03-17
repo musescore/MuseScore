@@ -1104,6 +1104,23 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     Tuplet* tuplet = cr ? cr->tuplet() : nullptr;
     Measure* measure = nullptr;
     bool targetIsRest = cr && cr->isRest();
+
+    // preserve lyrics before the ChordRest is removed or replaced
+    std::vector<Lyrics*> lyricsToPreserve;
+    bool shouldPreserveLyrics = false;
+    if (!isRest && cr) {
+        auto& existingLyrics = cr->lyrics();
+        lyricsToPreserve.reserve(existingLyrics.size());
+        for (Lyrics* lyric : existingLyrics) {
+            if (!lyric) {
+                continue;
+            }
+            lyricsToPreserve.push_back(Factory::copyLyrics(*lyric));
+        }
+        shouldPreserveLyrics = !lyricsToPreserve.empty();
+    }
+    bool lyricsPreserved = false;
+
     for (;;) {
         if (track % VOICES) {
             expandVoice(segment, track);
@@ -1186,6 +1203,18 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             }
             tuplet = 0;
             undoAddCR(ncr, measure, tick);
+
+            if (shouldPreserveLyrics && !lyricsPreserved) {
+                // reattach the preserved lyrics to the first replacement ChordRest
+                // to ensure they are not duplicated during subsequent operations
+                lyricsPreserved = true;
+                for (Lyrics* lyric : lyricsToPreserve) {
+                    lyric->setParent(ncr);
+                    lyric->setTrack(ncr->track());
+                    undoAddElement(lyric);
+                }
+            }
+
             if (addTie) {
                 undoAddElement(addTie);
             }
@@ -1238,6 +1267,9 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     }
     if (tie) {
         connectTies();
+    }
+    if (!lyricsPreserved) {
+        muse::DeleteAll(lyricsToPreserve);
     }
     if (nr) {
         if (is.slur() && nr->isNote()) {
