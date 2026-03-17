@@ -47,8 +47,6 @@ static io::paths_t defaultSearchPaths()
 
 static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::path_t& searchDir)
 {
-    const std::string verStr = std::to_string(ffmpegVer);
-
     FFmpegVersionInfo ffmpegVersionInfo;
     for (const auto& [ffmpegVersion, componentsVersions] : FFMPEG_COMPONENTS_VERSIONS) {
         if (ffmpegVersion == ffmpegVer) {
@@ -71,7 +69,7 @@ static FFmpegLibPaths libraryPathsForVersion(int ffmpegVer, const io::path_t& se
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     avutilName = io::path_t("libavutil.so." + std::to_string(ffmpegVersionInfo.avUtilVersion));
     avcodecName = io::path_t("libavcodec.so." + std::to_string(ffmpegVersionInfo.avCodecVersion));
-    avformatName = io::path_t("libavformat.so." + verStr);
+    avformatName = io::path_t("libavformat.so." + std::to_string(ffmpegVersionInfo.avFormatVersion));
     swscaleName = io::path_t("libswscale.so." + std::to_string(ffmpegVersionInfo.swScaleVersion));
     swresampleName = io::path_t("libswresample.so." + std::to_string(ffmpegVersionInfo.swResampleVersion));
 #elif defined(Q_OS_WIN)
