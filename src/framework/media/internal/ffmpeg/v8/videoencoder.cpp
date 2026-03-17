@@ -73,14 +73,14 @@ bool VideoEncoder::load(const FFmpegLibPaths& paths)
     return true;
 }
 
-bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)
+bool VideoEncoder::open(const muse::io::path_t& fileName, const Options& options)
 {
     m_ffmpeg->ptsCounter = 0;
 
-    m_ffmpeg->width = width;
-    m_ffmpeg->height = height;
+    m_ffmpeg->width = options.width;
+    m_ffmpeg->height = options.height;
 
-    if (m_ffmpegHandler->avformat_alloc_output_context2(&m_ffmpeg->formatCtx, nullptr, "mp4", fileName.c_str()) < 0
+    if (m_ffmpegHandler->avformat_alloc_output_context2(&m_ffmpeg->formatCtx, nullptr, options.format.c_str(), fileName.c_str()) < 0
         || !m_ffmpeg->formatCtx) {
         LOGE() << "failed to allocate output context";
         return false;
@@ -93,7 +93,7 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
 
-    m_ffmpeg->videoStream->time_base.den = fps;
+    m_ffmpeg->videoStream->time_base.den = options.fps;
     m_ffmpeg->videoStream->time_base.num = 1;
 
     // find the video encoder
@@ -110,10 +110,10 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
 
     m_ffmpeg->videoStream->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
     m_ffmpeg->videoStream->codecpar->codec_id = AV_CODEC_ID_H264;
-    m_ffmpeg->videoStream->codecpar->width = width;
-    m_ffmpeg->videoStream->codecpar->height = height;
+    m_ffmpeg->videoStream->codecpar->width = options.width;
+    m_ffmpeg->videoStream->codecpar->height = options.height;
     m_ffmpeg->videoStream->codecpar->format = AV_PIX_FMT_YUV420P;
-    m_ffmpeg->videoStream->codecpar->bit_rate = bitrate;
+    m_ffmpeg->videoStream->codecpar->bit_rate = options.bitrate;
 
     if (m_ffmpegHandler->avcodec_parameters_to_context(m_ffmpeg->codecCtx, m_ffmpeg->videoStream->codecpar) < 0) {
         m_ffmpegHandler->avcodec_free_context(&m_ffmpeg->codecCtx);
@@ -122,9 +122,9 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     }
 
     m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
-    m_ffmpeg->codecCtx->time_base.den = fps;
+    m_ffmpeg->codecCtx->time_base.den = options.fps;
     m_ffmpeg->codecCtx->time_base.num = 1;
-    m_ffmpeg->codecCtx->gop_size = gop;
+    m_ffmpeg->codecCtx->gop_size = options.gop;
     m_ffmpeg->codecCtx->thread_count = 10;
     m_ffmpeg->codecCtx->max_b_frames = 3;
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "b_strategy", 1, 0);
@@ -165,8 +165,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
         return false;
     }
 
-    m_ffmpeg->ppicture->width = width;
-    m_ffmpeg->ppicture->height = height;
+    m_ffmpeg->ppicture->width = options.width;
+    m_ffmpeg->ppicture->height = options.height;
     m_ffmpeg->ppicture->format = AV_PIX_FMT_YUV420P;
 
     int size = m_ffmpegHandler->av_image_get_buffer_size(AV_PIX_FMT_YUV420P, m_ffmpeg->width, m_ffmpeg->height, 1);
