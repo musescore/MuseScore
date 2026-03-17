@@ -36,6 +36,12 @@
 
 #include "notation/notationtypes.h"
 
+class QImage;
+
+namespace muse::draw {
+class Painter;
+}
+
 namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
@@ -76,6 +82,12 @@ private:
     void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
 
     void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& config);
+
+    bool generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, muse::draw::Painter& painter,
+                               QImage& frame, const Config& config, int totalFrameCount);
+
+    bool generateScoreFrames(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, muse::draw::Painter& painter,
+                             QImage& frame, const Config& config, float totalPlayTimeSec, int leadingFrameCount, int totalFrameCount);
 
     struct ScoreRestoreData
     {
