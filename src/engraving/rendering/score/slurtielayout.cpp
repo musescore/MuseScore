@@ -2640,6 +2640,9 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 {
     const PointF tieStart = tieSeg->ups(Grip::START).p + tieSeg->ups(Grip::START).off;
     const PointF tieEnd = tieSeg->ups(Grip::END).p + tieSeg->ups(Grip::END).off;
+    IF_ASSERT_FAILED(muse::RealIsEqualOrMore(tieEnd.x(), tieStart.x())) {
+        return;
+    }
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
     if (muse::RealIsNull(tieEndNormalized.x())) {
