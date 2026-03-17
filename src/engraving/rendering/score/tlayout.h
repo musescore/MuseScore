@@ -397,5 +397,7 @@ private:
     static void doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
 
     static void alignTabGraceNotesToMainStave(GraceNotesGroup* graceNotes, const Staff* notationStaff);
+
+    static void layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
 };
 }

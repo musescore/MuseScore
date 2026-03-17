@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_BRACKET_ITEM_H
 
 #include "engravingitem.h"
+#include "stafflabel.h"
 
 #include "../types/types.h"
 
@@ -54,6 +55,17 @@ public:
     size_t column() const { return m_column; }
     void setColumn(size_t v) { m_column = v; }
 
+    StaffLabel& label() { return m_name; }
+    const StaffLabel& label() const { return m_name; }
+    const String& longName() const { return m_name.longName(); }
+    const String& shortName() const { return m_name.shortName(); }
+
+    bool showText() const { return m_showText; }
+    bool showBracket() const { return m_showBracket; }
+
+    bool intersects(const BracketItem* other) const;
+    bool intersects(staff_idx_t first, staff_idx_t last) const;
+
 private:
 
     friend class Factory;
@@ -65,6 +77,10 @@ private:
     size_t m_column = 0;
     size_t m_bracketSpan = 0;
     Staff* m_staff = nullptr;
+
+    StaffLabel m_name = StaffLabel(muse::mtrc("systemBrackets", "GROUP"), muse::mtrc("systemBrackets", "GR.", "Short for GROUP"));
+    bool m_showText = true;
+    bool m_showBracket = true;
 };
 }
 #endif

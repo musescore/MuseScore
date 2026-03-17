@@ -327,6 +327,10 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BRACKET_COLUMN,                      P_TYPE::SIZE_T,                    PropertyGroup::APPEARANCE, false, "level",                           QT_TRANSLATE_NOOP("engraving/propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,               P_TYPE::INT,                       PropertyGroup::APPEARANCE, false, "layoutPosition",                  QT_TRANSLATE_NOOP("engraving/propertyName", "layout position") },
+
+    { Pid::GROUP_BRACKET_SHOW_TEXT,             P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "groupBracketShowText",            QT_TRANSLATE_NOOP("engraving/propertyName", "group bracket show text") },
+    { Pid::GROUP_BRACKET_SHOW_BRACKET,          P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "groupBracketShowBracket",         QT_TRANSLATE_NOOP("engraving/propertyName", "group bracket show bracket") },
+
     { Pid::TEXT_STYLE,                          P_TYPE::TEXT_STYLE,                PropertyGroup::TEXT,       false, "style",                           QT_TRANSLATE_NOOP("engraving/propertyName", "style") },
     { Pid::FONT_FACE,                           P_TYPE::STRING,                    PropertyGroup::TEXT,       false, "family",                          QT_TRANSLATE_NOOP("engraving/propertyName", "family") },
     { Pid::FONT_SIZE,                           P_TYPE::REAL,                      PropertyGroup::TEXT,       false, "size",                            QT_TRANSLATE_NOOP("engraving/propertyName", "size") },
@@ -496,6 +500,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SCORE_FONT,                          P_TYPE::STRING,                    PropertyGroup::APPEARANCE, true,  "scoreFont",                       QT_TRANSLATE_NOOP("engraving/propertyName", "score font") },
     { Pid::SYMBOLS_SIZE,                        P_TYPE::REAL,                      PropertyGroup::APPEARANCE, false, "symbolsSize",                     QT_TRANSLATE_NOOP("engraving/propertyName", "symbols size") },
     { Pid::SYMBOL_ANGLE,                        P_TYPE::REAL,                      PropertyGroup::APPEARANCE, false, "symbolAngle",                     QT_TRANSLATE_NOOP("engraving/propertyName", "symbol angle") },
+    { Pid::TEXT_ANGLE,                          P_TYPE::REAL,                      PropertyGroup::APPEARANCE, false, "textAngle",                       QT_TRANSLATE_NOOP("engraving/propertyName", "text angle") },
 
     { Pid::APPLY_TO_ALL_STAVES,                 P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "applyToAllStaves",                QT_TRANSLATE_NOOP("engraving/propertyName", "apply to all staves") },
     { Pid::IS_COURTESY,                         P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "isCourtesy",                      QT_TRANSLATE_NOOP("engraving/propertyName", "is courtesy") },

@@ -266,6 +266,8 @@ private:
     static void layoutLine(SLine* item, const Context& ctx);
     static void layoutLineSegment(LineSegment* item, const Context& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx);
+
+    static void layoutGroupBracket(Bracket* item, const Context& ctx);
 };
 }
 

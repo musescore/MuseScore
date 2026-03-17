@@ -1092,6 +1092,9 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         return;
     }
 
+    painter->save();
+    setMask(item, painter);
+
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         if (ldata->braceSymbol == SymId::noSym) {
@@ -1125,7 +1128,8 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
         double bracketWidth = ldata->bracketWidth - lineW / 2;
@@ -1145,9 +1149,23 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
+    case BracketType::GROUP:
+    {
+        double h = ldata->bracketHeight;
+        double lineW = item->style().styleAbsolute(Sid::groupBracketLineWidth);
+        double hookLen = item->style().styleAbsolute(Sid::groupBracketHookLen);
+        Pen pen(item->curColor(opt), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
+        painter->drawLine(LineF(0.0, 0.0, hookLen, 0.0));
+        painter->drawLine(LineF(0.0, h, hookLen, h));
+    }
+    break;
     case BracketType::NO_BRACKET:
         break;
     }
+
+    painter->restore();
 }
 
 void TDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)
@@ -1701,6 +1719,10 @@ void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter, const Pain
 void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOptions& opt)
 {
     TRACE_DRAW_ITEM;
+
+    painter->save();
+    painter->rotate(item->textAngle());
+
     const TextBase::LayoutData* ldata = item->ldata();
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
@@ -1727,6 +1749,8 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOpti
     for (const TextBlock& t : ldata->blocks) {
         draw(t, item, painter);
     }
+
+    painter->restore();
 }
 
 void TDraw::draw(const TextBlock& textBlock, const TextBase* item, Painter* painter)

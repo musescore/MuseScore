@@ -836,6 +836,7 @@ enum class TextStyleType : unsigned char {
     INSTRUMENT_LONG,
     INSTRUMENT_SHORT,
     INSTRUMENT_CHANGE,
+    GROUP_BRACKET,
     HEADER,
     FOOTER,
     COPYRIGHT,
@@ -1131,7 +1132,7 @@ enum class TremoloChordType : unsigned char {
 };
 
 enum class BracketType : signed char {
-    NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
+    NORMAL, BRACE, SQUARE, LINE, GROUP, NO_BRACKET = -1
 };
 
 using InstrumentTrackIdList = std::vector<InstrumentTrackId>;

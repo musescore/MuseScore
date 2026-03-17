@@ -45,6 +45,8 @@ public:
 
     Bracket* clone() const override { return new Bracket(*this); }
 
+    void scanElements(std::function<void(EngravingItem*)> func) override;
+
     void setBracketItem(BracketItem* i) { m_bi = i; }
     BracketItem* bracketItem() const { return m_bi; }
 
@@ -100,6 +102,12 @@ public:
 
     void setSelected(bool f) override;
 
+    Text* text() const { return m_text; }
+    void setText(Text* t) { m_text = t; }
+
+    bool intersects(const Bracket* other) const;
+    bool contains(staff_idx_t staffIdx) const;
+
     struct LayoutData : public EngravingItem::LayoutData {
         SymId braceSymbol = SymId::noSym;
         PainterPath path;
@@ -128,5 +136,7 @@ private:
     // because layout needs width of brace before knowing height of system...
     double m_magx = 0.0;
     Measure* m_measure = nullptr;
+
+    Text* m_text = nullptr;
 };
 }

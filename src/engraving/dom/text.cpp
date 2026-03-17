@@ -60,6 +60,8 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
+
+    setSelectable(!parent->isBracket());
 }
 
 EngravingObject* Text::propertyDelegate(Pid id) const
@@ -125,10 +127,15 @@ bool mu::engraving::Text::collectForDrawing() const
 
 bool Text::positionRelativeToNoteheadRest() const
 {
-    if (parent()->isBox() || parent()->isTuplet() || parent()->isSpannerSegment()) {
+    if (parent()->isBox() || parent()->isTuplet() || parent()->isSpannerSegment() || parent()->isBracket()) {
         return false;
     }
 
     return true;
+}
+
+bool Text::isEditable() const
+{
+    return !parent()->isBracket();
 }
 }

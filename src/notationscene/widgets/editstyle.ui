@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>962</width>
-    <height>832</height>
+    <height>952</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -261,7 +261,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -296,8 +296,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>660</width>
-                <height>740</height>
+                <width>654</width>
+                <height>723</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -3844,6 +3844,84 @@
            <string>System brackets</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_44">
+           <item row="0" column="6">
+            <widget class="QToolButton" name="resetBraceThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Brace thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QDoubleSpinBox" name="akkoladeWidth">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_52">
+             <property name="text">
+              <string comment="System bracket">Bracket distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>bracketDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="braceThicknessLabel">
+             <property name="text">
+              <string>Brace thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>akkoladeWidth</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetBracketThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string comment="System bracket">Reset 'Bracket thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="braceDistanceLabel">
+             <property name="text">
+              <string>Brace distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>akkoladeBarDistance</cstring>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="bracketWidth">
              <property name="keyboardTracking">
@@ -3866,13 +3944,29 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_52">
-             <property name="text">
-              <string comment="System bracket">Bracket distance:</string>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetBracketDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
              </property>
-             <property name="buddy">
-              <cstring>bracketDistance</cstring>
+             <property name="accessibleName">
+              <string>Reset 'Bracket distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QToolButton" name="resetBraceDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Brace distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -3904,16 +3998,13 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetBracketDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Bracket distance' value</string>
-             </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_91">
              <property name="text">
-              <string notr="true"/>
+              <string comment="System bracket">Bracket thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>bracketWidth</cstring>
              </property>
             </widget>
            </item>
@@ -3936,97 +4027,6 @@
              </property>
              <property name="suffix">
               <string>sp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QLabel" name="braceThicknessLabel">
-             <property name="text">
-              <string>Brace thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>akkoladeWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="5">
-            <widget class="QDoubleSpinBox" name="akkoladeWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="6">
-            <widget class="QToolButton" name="resetBraceThickness">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Brace thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QLabel" name="braceDistanceLabel">
-             <property name="text">
-              <string>Brace distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>akkoladeBarDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QToolButton" name="resetBraceDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Brace distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_91">
-             <property name="text">
-              <string comment="System bracket">Bracket thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>bracketWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetBracketThickness">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string comment="System bracket">Reset 'Bracket thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -4055,6 +4055,303 @@
               </size>
              </property>
             </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Group brackets</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_38">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_60">
+             <property name="text">
+              <string>Line thickness:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" colspan="8">
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <item>
+              <widget class="QRadioButton" name="groupBracketHangIntoMargin">
+               <property name="text">
+                <string>Hang into page pargin</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="groupBracketKeepInMargin">
+               <property name="text">
+                <string>Keep within page margin</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_25">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="5">
+            <widget class="QDoubleSpinBox" name="groupBracketDistanceToBrackets">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="groupBracketLineThickReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="0" colspan="8">
+            <widget class="QLabel" name="label_79">
+             <property name="text">
+              <string>Text alignment relative to bracket:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="groupBracketHookLen">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_64">
+             <property name="text">
+              <string>Hook length:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="groupBracketHookLenReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="8">
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QRadioButton" name="groupBracketTextLeft">
+               <property name="text">
+                <string>Outside</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="groupBracketTextCenter">
+               <property name="text">
+                <string>Overlap</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="groupBracketTextRight">
+               <property name="text">
+                <string>Inside</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_19">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="5">
+            <widget class="QDoubleSpinBox" name="groupBracketDistanceToNames">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="label_93">
+             <property name="text">
+              <string>Distance to instrument names:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="8">
+            <widget class="QLabel" name="label_118">
+             <property name="text">
+              <string>Text orientation:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="label_104">
+             <property name="text">
+              <string>Distance to other group brackets:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="groupBracketLineThick">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="7">
+            <spacer name="horizontalSpacer_49">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="0" colspan="8">
+            <widget class="QLabel" name="label_90">
+             <property name="text">
+              <string>Text position:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="8">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="editGroupBracketTextStyleLink">
+               <property name="text">
+                <string>Edit text style</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_43">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0" colspan="8">
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QRadioButton" name="groupBracketTextVertical">
+               <property name="text">
+                <string>Vertical</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="groupBracketTextHorizontal">
+               <property name="text">
+                <string>Horizontal</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_46">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="6">
+            <widget class="QToolButton" name="groupBracketDistanceToNamesReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QToolButton" name="groupBracketDistanceToBracketsReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -12547,7 +12844,7 @@ followed by dashes</string>
                  <x>0</x>
                  <y>0</y>
                  <width>413</width>
-                 <height>724</height>
+                 <height>663</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_30">
@@ -13204,15 +13501,15 @@ followed by dashes</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>muse::uicomponents::RadioButtonGroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>uicomponents/view/widgets/radiobuttongroupbox.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Awl::ColorLabel</class>
    <extends>QPushButton</extends>
    <header>notationscene/widgets/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>muse::uicomponents::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>uicomponents/view/widgets/radiobuttongroupbox.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

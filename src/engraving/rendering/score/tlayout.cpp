@@ -1379,6 +1379,10 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
     }
 
     const_cast<Bracket*>(item)->setVisible(item->bi()->visible());
+    if (item->bracketType() == BracketType::GROUP) {
+        const_cast<Bracket*>(item)->setVisible(item->visible() && item->bi()->showBracket());
+    }
+
     ldata->braceSymbol = item->braceSymbol();
 
     switch (item->bracketType()) {
@@ -1442,12 +1446,13 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         ldata->bracketWidth = conf.styleAbsolute(Sid::bracketWidth) + conf.styleAbsolute(Sid::bracketDistance);
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double w = conf.styleAbsolute(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
         double h = (ldata->bracketHeight * 0.5 + w) * 2;
-        w += (.5 * item->spatium() + 3 * w);
+        w += (.5 * item->spatium() + 2 * w);
         ldata->setBbox(RectF(x, y, w, h));
         ldata->shape.add(ldata->bbox());
 
@@ -1467,9 +1472,78 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         ldata->bracketWidth = 0.67 * conf.styleAbsolute(Sid::bracketWidth) + conf.styleAbsolute(Sid::bracketDistance);
     }
     break;
+    case BracketType::GROUP:
+        layoutGroupBracket(item, ldata, conf);
+        break;
     case BracketType::NO_BRACKET:
         break;
     }
+}
+
+void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    double w = conf.styleAbsolute(Sid::groupBracketLineWidth) * 0.5;
+    double x = 0.0;
+    double y = -w;
+    double h = (ldata->bracketHeight * 0.5 + w) * 2;
+    double width = conf.styleAbsolute(Sid::groupBracketHookLen);
+
+    ldata->bracketWidth = std::max(width, 2 * w);
+
+    Shape shape;
+    shape.add(RectF(x, y, width, h), item);
+    ldata->setShape(shape);
+
+    if (!item->text()) {
+        const_cast<Bracket*>(item)->setText(new Text(const_cast<Bracket*>(item), TextStyleType::GROUP_BRACKET));
+        item->text()->setParent(const_cast<Bracket*>(item));
+    }
+
+    Text* text = item->text();
+    text->setVisible(item->bracketItem()->visible() && item->bracketItem()->showText());
+    text->setAlign(Align(text->align().horizontal, AlignV::VCENTER));
+    text->setPosition(AlignH::HCENTER);
+
+    Orientation textOrientation = conf.styleV(Sid::groupBracketTextOrientation).value<Orientation>();
+    text->setTextAngle(textOrientation == Orientation::VERTICAL ? -90.0 : 0.0);
+
+    double textPadding = 0.5 * item->spatium();
+    double bracketHeight = item->ldata()->bbox().height();
+    double minHeight = bracketHeight - 6 * textPadding;
+
+    if (textOrientation == Orientation::HORIZONTAL) {
+        text->setXmlText(item->system()->ldata()->useLongNames() ? item->bracketItem()->longName() : item->bracketItem()->shortName());
+        layoutText(text, text->mutldata());
+    } else {
+        text->setXmlText(item->bracketItem()->longName());
+        layoutText(text, text->mutldata());
+        if (text->ldata()->bbox().height() > minHeight) {
+            text->setXmlText(item->bracketItem()->shortName());
+            layoutText(text, text->mutldata());
+        }
+    }
+
+    text->mutldata()->setPosY(bracketHeight / 2);
+
+    switch (conf.styleV(Sid::groupBracketTextAlign).value<DirectionH>()) {
+    case DirectionH::AUTO:
+    {
+        text->mutldata()->setPosX(0.0);
+        if (text->visible()) {
+            RectF mask = text->ldata()->bbox().translated(text->pos()).padded(textPadding);
+            ldata->setMask(mask);
+        }
+        break;
+    }
+    case DirectionH::LEFT:
+        text->mutldata()->setPosX(-text->mutldata()->bbox().right() - textPadding);
+        break;
+    case DirectionH::RIGHT:
+        text->mutldata()->setPosX(-text->mutldata()->bbox().left() + textPadding);
+    }
+
+    shape.add(text->ldata()->shape().translated(text->pos()));
+    ldata->setShape(shape);
 }
 
 void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf)

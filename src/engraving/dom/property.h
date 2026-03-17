@@ -334,6 +334,9 @@ enum class Pid : short {
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
 
+    GROUP_BRACKET_SHOW_TEXT,
+    GROUP_BRACKET_SHOW_BRACKET,
+
     TEXT_STYLE,
 
     FONT_FACE,
@@ -503,6 +506,7 @@ enum class Pid : short {
     SCORE_FONT,
     SYMBOLS_SIZE,
     SYMBOL_ANGLE,
+    TEXT_ANGLE,
 
     APPLY_TO_ALL_STAVES,
 

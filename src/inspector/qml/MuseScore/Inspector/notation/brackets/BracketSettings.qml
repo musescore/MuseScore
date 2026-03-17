@@ -69,6 +69,7 @@ Column {
         }
 
         SpinBoxPropertyView {
+            id: spanSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -84,6 +85,50 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: columnSection.navigationRowEnd + 1
+        }
+    }
+
+    Column {
+        spacing: 12
+        width: parent.width
+
+        visible: root.model ? root.model.isGroupBracket : false
+        enabled: root.model ? root.model.areSettingsAvailable : false
+
+        PropertyCheckBox {
+            text: qsTrc("inspector", "Show text")
+            propertyItem: root.model ? root.model.showText : null
+        }
+
+        PropertyCheckBox {
+            text: qsTrc("inspector", "Show bracket")
+            propertyItem: root.model ? root.model.showBracket : null
+        }
+
+        StyledTextLabel {
+            text: qsTrc("inspector", "Long name")
+        }
+
+        TextInputArea {
+            initialHeight: 0
+            resizeVerticallyWithText: true
+            currentText: root.model ? root.model.longName.value : ""
+            onTextEditingFinished: function(newText) {
+                root.model.longName.value = newText
+            }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("inspector", "Abbreviated name")
+        }
+
+        TextInputArea {
+            initialHeight: 0
+            resizeVerticallyWithText: true
+            currentText: root.model ? root.model.shortName.value : ""
+            onTextEditingFinished: function(newText) {
+                root.model.shortName.value = newText
+            }
         }
     }
 

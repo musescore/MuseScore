@@ -53,6 +53,8 @@ public:
     bool collectForDrawing() const override;
 
     bool positionRelativeToNoteheadRest() const override;
+
+    bool isEditable() const override;
 };
 } // namespace mu::engraving
 
