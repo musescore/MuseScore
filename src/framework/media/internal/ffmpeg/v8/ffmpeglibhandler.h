@@ -41,12 +41,6 @@ public:
     bool loadApi();
     void unload();
 
-    int version() const { return m_version; }
-    void setVersion(int version) { m_version = version; }
-
-    io::path_t dir() const { return m_dir; }
-    void setDir(const io::path_t& dir) { m_dir = dir; }
-
     // libavutil
     void (*av_free)(void* ptr) = nullptr;
     void (*av_freep)(void* ptr) = nullptr;
@@ -109,7 +103,5 @@ private : void* getSymbol(void* lib, const char* name) const;
     void* m_swsScaleLibrary = nullptr;
     void* m_swResampleLibrary = nullptr;
 
-    int m_version = 0;
-    io::path_t m_dir;
 };
 }
