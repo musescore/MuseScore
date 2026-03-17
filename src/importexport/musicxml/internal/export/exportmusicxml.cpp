@@ -5690,9 +5690,6 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     const bool isDashes = tl->lineStyle() == LineType::DASHED && (tl->beginHookType() == HookType::NONE)
                           && (tl->endHookType() == HookType::NONE);
 
-    const Measure* measure = tl->startElement() ? tl->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
-
     if (isDashes) {
         n = findDashes(tl);
         if (n >= 0) {
@@ -5779,10 +5776,6 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     rest += color2xml(tl);
     rest += positioningAttributes(tl, tl->tick() == tick);
 
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? tl->tick() : tl->tick2();
-    moveToTickIfNeed(tickToWrite, tl->track(), measureStart);
-
     directionTag(m_xml, m_attr, tl);
 
     if (!tl->beginText().isEmpty() && tl->tick() == tick) {
@@ -5807,12 +5800,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         m_xml.endElement();
     }
 
-    /*
-    if (offs)
-          xml.tag("offset", offs);
-    */
-
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? tl->tick() : tl->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
