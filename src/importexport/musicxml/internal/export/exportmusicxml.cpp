@@ -5610,13 +5610,6 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     }
     bool isStart = pd->tick() == tick;
 
-    const Measure* measure = pd->startElement() ? pd->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
-
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? pd->tick() : pd->tick2();
-    moveToTickIfNeed(tickToWrite, pd->track(), measureStart);
-
     directionTag(m_xml, m_attr, pd);
     m_xml.startElement("direction-type");
     String pedalType;
@@ -5655,7 +5648,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     pedalXml += positioningAttributes(pd, pd->tick() == tick);
     m_xml.tagRaw(pedalXml);
     m_xml.endElement();
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? pd->tick() : pd->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
