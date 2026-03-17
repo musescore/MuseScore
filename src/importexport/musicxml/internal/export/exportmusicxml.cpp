@@ -5034,8 +5034,7 @@ void ExportMusicXml::swingSound(StaffTextBase const* const text, const bool offs
     }
     m_xml.endElement();
     if (offset) {
-        const int offset = calculateTimeDeltaInDivisions(text->tick(), tick(), m_div);
-        m_xml.tag("offset", offset);
+        m_xml.tag("offset", calculateTimeDeltaInDivisions(text->tick(), tick(), m_div));
     }
     m_xml.endElement();
 }
@@ -5385,20 +5384,15 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
 {
     const bool isLineType = hp->isLineType();
     const bool isStart = hp->tick() == tick;
-    const Measure* measure = hp->startElement() ? hp->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
     int n;
     if (isLineType) {
         if (!hp->lineVisible()) {
             if ((isStart && hp->beginText().isEmpty()) || (!isStart && hp->endText().isEmpty())) {
                 return;
             }
-            // generate backup or forward to the start time of the element
-            const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-            moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
             directionTag(m_xml, m_attr, hp);
             writeHairpinText(m_xml, hp, isStart);
-            directionETag(m_xml, staff);
+            directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tick, m_tick, m_div));
             return;
         }
         n = findDashes(hp);
@@ -5427,10 +5421,6 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
         }
     }
-
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-    moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
 
     directionTag(m_xml, m_attr, hp);
     if (isStart) {
@@ -5500,7 +5490,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     if (!isStart) {
         writeHairpinText(m_xml, hp, isStart);
     }
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? hp->tick() : hp->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
@@ -5685,7 +5675,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         }
         directionTag(m_xml, m_attr, tl);
         writeHairpinText(m_xml, tl, isStart);
-        directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tl->tick(), tick, m_div));
+        directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tick, m_tick, m_div));
         return;
     }
 
