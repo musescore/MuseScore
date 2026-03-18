@@ -604,9 +604,9 @@ RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
 }
 
 async::Promise<Ret> EnginePlayback::saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice,
-                                                   const SoundTrackFormat& format)
+                                                   const SoundTrackFormat& format, const secs_t startPosition, const secs_t duration)
 {
-    return async::make_promise<Ret>([this, sequenceId, &dstDevice, format](auto resolve, auto) {
+    return async::make_promise<Ret>([this, sequenceId, &dstDevice, format, startPosition, duration](auto resolve, auto) {
         ONLY_AUDIO_ENGINE_THREAD;
 
         IF_ASSERT_FAILED(mixer()) {
@@ -620,14 +620,15 @@ async::Promise<Ret> EnginePlayback::saveSoundTrack(const TrackSequenceId sequenc
 
 #ifdef MUSE_MODULE_AUDIO_EXPORT
         s->player()->stop();
-        s->player()->seek(0);
+        s->player()->seek(startPosition);
 
+        const msecs_t totalDuration = duration.is_zero() ? s->player()->duration() : secsToMicrosecs(duration);
         const bool lazyProcessingWasEnabled = configuration()->isLazyProcessingOfOnlineSoundsEnabled();
         configuration()->setIsLazyProcessingOfOnlineSoundsEnabled(false);
 
-        listenInputProcessing(s, [this, sequenceId, &dstDevice, format, lazyProcessingWasEnabled, resolve](Ret ret) {
+        listenInputProcessing(s, [this, sequenceId, &dstDevice, format, totalDuration, lazyProcessingWasEnabled, resolve](Ret ret) {
             if (ret) {
-                ret = doSaveSoundTrack(sequenceId, dstDevice, format);
+                ret = doSaveSoundTrack(sequenceId, dstDevice, format, totalDuration);
             }
 
             configuration()->setIsLazyProcessingOfOnlineSoundsEnabled(lazyProcessingWasEnabled);
@@ -741,7 +742,8 @@ size_t EnginePlayback::tracksBeingProcessedCount(const ITrackSequencePtr s) cons
     return count;
 }
 
-Ret EnginePlayback::doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format)
+Ret EnginePlayback::doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format,
+                                     const secs_t duration)
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
     ITrackSequencePtr s = sequence(sequenceId);
@@ -749,8 +751,7 @@ Ret EnginePlayback::doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODev
         return make_ret(Err::InvalidSequenceId, "invalid sequence id");
     }
 
-    const msecs_t totalDuration = s->player()->duration();
-    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, mixer(), iocContext());
+    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, duration, mixer(), iocContext());
     SaveSoundTrackProgressData progressData = m_saveSoundTracksProgressMap[s->id()];
 
     writer->progress().progressChanged().onReceive(this, [progressData](int64_t current, int64_t total, std::string /*title*/) {

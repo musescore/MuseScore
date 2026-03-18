@@ -42,5 +42,5 @@ Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         128 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, configuration()->selectionOnly());
 }

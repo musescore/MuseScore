@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLAYBACK_PLAYBACKCONTROLLERMOCK_H
-#define MU_PLAYBACK_PLAYBACKCONTROLLERMOCK_H
+
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -77,6 +77,8 @@ public:
     MOCK_METHOD(muse::secs_t, totalPlayTime, (), (const, override));
     MOCK_METHOD(muse::async::Notification, totalPlayTimeChanged, (), (const, override));
 
+    MOCK_METHOD(muse::audio::secs_t, selectionDuration, (), (const, override));
+
     MOCK_METHOD(const notation::Tempo&, currentTempo, (), (const, override));
     MOCK_METHOD(muse::async::Notification, currentTempoChanged, (), (const, override));
 
@@ -98,5 +100,3 @@ public:
     MOCK_METHOD(muse::Progress, onlineSoundsProcessingProgress, (), (const, override));
 };
 }
-
-#endif // MU_PLAYBACK_PLAYBACKCONTROLLERMOCK_H
