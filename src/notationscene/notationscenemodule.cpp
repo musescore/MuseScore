@@ -57,7 +57,7 @@ std::string NotationSceneModule::moduleName() const
 
 void NotationSceneModule::registerExports()
 {
-    m_configuration = std::make_shared<NotationSceneConfiguration>(globalCtx());
+    m_configuration = std::make_shared<NotationSceneConfiguration>();
 
     globalIoc()->registerExport<INotationSceneConfiguration>(mname, m_configuration);
 }
