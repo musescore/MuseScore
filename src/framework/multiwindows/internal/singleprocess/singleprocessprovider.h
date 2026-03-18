@@ -74,7 +74,8 @@ public:
 
     // Quit for all
     void notifyAboutWindowWasQuited() override {}
-    void quitForAll() override {}
+    void quitForAll() override;
+    void quitWindow(const modularity::ContextPtr& ctx) override;
     void quitAllAndRestartLast() override {}
     void quitAllAndRunInstallation(const muse::io::path_t&) override {}
 

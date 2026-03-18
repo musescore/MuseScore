@@ -11,10 +11,7 @@ static std::map<int, ContextData*> s_data = {};
 
 ContextData* ContextData::context(int ctx)
 {
-    //! FIXME Temporary for compatibility
-    ctx = 0;
-
-    //qDebug() << "ctx: " << ctx;
+    //   qDebug() << Q_FUNC_INFO << " context id: " << ctx;
 
     auto it = s_data.find(ctx);
     if (it != s_data.end()) {

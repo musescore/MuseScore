@@ -21,7 +21,7 @@
  */
 #include "uiactionsregister.h"
 
-#include <QTimer>
+#include "global/async/async.h"
 
 #include "muse_framework_config.h"
 
@@ -30,9 +30,6 @@
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
-
-//! NOTE Prevents repeated updates when it is requested multiple times in a row
-constexpr int REQUEST_UPDATE_TIMEOUT = 16; // msec
 
 void UiActionsRegister::init()
 {
@@ -240,7 +237,7 @@ void UiActionsRegister::requestUpdateEnabledAll()
     }
 
     m_isUpdateEnabledAllRequested = true;
-    QTimer::singleShot(REQUEST_UPDATE_TIMEOUT, [this]() {
+    muse::async::Async::call(this, [this]() {
         updateEnabledAll();
         m_isUpdateEnabledAllRequested = false;
     });

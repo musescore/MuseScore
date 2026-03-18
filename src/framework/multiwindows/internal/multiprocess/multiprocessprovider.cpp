@@ -478,6 +478,14 @@ void MultiProcessProvider::quitForAll()
     }
 
     m_ipcChannel->broadcast(METHOD_QUIT);
+
+    // current
+    quitWindow(nullptr);
+}
+
+void MultiProcessProvider::quitWindow(const modularity::ContextPtr&)
+{
+    QCoreApplication::exit();
 }
 
 void MultiProcessProvider::quitAllAndRestartLast()

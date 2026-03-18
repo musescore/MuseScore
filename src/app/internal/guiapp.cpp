@@ -5,13 +5,14 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QQmlContext>
-#include <QTimer>
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "thirdparty/kors_logger/src/log_base.h"
 #include "ui/iuiengine.h"
 #include "ui/graphicsapiprovider.h"
+
+#include "appshell/internal/istartupscenario.h"
 
 #include "async/processevents.h"
 
@@ -194,12 +195,15 @@ void GuiApp::setup()
     // ====================================================
     // Setup modules: onDelayedInit
     // ====================================================
-    QTimer::singleShot(5000, [this]() {
+    m_delayedInitTimer.setSingleShot(true);
+    m_delayedInitTimer.setInterval(5000);
+    QObject::connect(&m_delayedInitTimer, &QTimer::timeout, [this]() {
         m_globalModule->onDelayedInit();
         for (modularity::IModuleSetup* m : m_modules) {
             m->onDelayedInit();
         }
     });
+    m_delayedInitTimer.start();
 
     // ====================================================
     // Run
@@ -496,6 +500,8 @@ void GuiApp::finish()
 {
     {
         TRACEFUNC
+
+        m_delayedInitTimer.stop();
 
 // Wait Thread Poll
 #ifdef QT_CONCURRENT_SUPPORTED
