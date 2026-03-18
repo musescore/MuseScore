@@ -704,7 +704,8 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
     return BackendApi::exportScoreElements(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams,
+                                          bool withAudio)
 {
     TRACEFUNC;
 
@@ -725,8 +726,14 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
+    globalContext()->setCurrentProject(notationProject);
+
+    DEFER {
+        globalContext()->setCurrentProject(nullptr);
+    };
+
     const INotationWriter::Options options {
-        { INotationWriter::OptionKey::WITH_AUDIO, Val(false) },
+        { INotationWriter::OptionKey::WITH_AUDIO, Val(withAudio) },
     };
 
     return convertFullNotation(writer, notationProject->masterNotation()->notation(), out, options);
