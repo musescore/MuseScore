@@ -22,11 +22,20 @@
 
 #pragma once
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(push)
+#pragma warning(disable: 4244)
+#endif
+
 extern "C" {
 #include "thirdparty/ffmpeg/v4/libavcodec/avcodec.h"
 #include "thirdparty/ffmpeg/v4/libavformat/avformat.h"
 #include "thirdparty/ffmpeg/v4/libswscale/swscale.h"
 }
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(pop)
+#endif
 
 #include "io/path.h"
 
