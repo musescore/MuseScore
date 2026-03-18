@@ -108,6 +108,9 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         QThread::yieldCurrentThread();
     }
 
+    //! NOTE: we have to do it in main thread
+    notation->notationChanged().notify();
+
     if (m_audioWriter) {
         m_audioWriter->progress()->finished().disconnect(this);
         m_audioWriter = nullptr;
