@@ -157,7 +157,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         return;
     }
 
-    if (item->isMarker()) {
+    if (item->isMarker() && paletteScore->mscVersion() < 470) {
         Marker* marker = toMarker(item);
 
         if (marker->markerType() == MarkerType::TOCODASYM) {
