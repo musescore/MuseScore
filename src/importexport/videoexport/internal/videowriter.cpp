@@ -360,19 +360,25 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     float totalPlayTimeSec = playback->totalPlayTime();
 
     int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
-    int scoreFrameCount = static_cast<int>((totalPlayTimeSec + config.trailingSec) * config.fps);
-    int totalFrameCount = leadingFrameCount + scoreFrameCount;
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
+    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    int totalFrameCount = leadingFrameCount + scoreFrameCount + trailingFrameCount;
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << totalFrameCount;
 
     m_progress.start();
 
-    bool ok = generateLeadingFrames(encoder, notation, painter, frame, config, totalFrameCount);
-    if (!ok) {
+    // Add score title
+    if (!generateLeadingFrames(encoder, notation, painter, frame, config, totalFrameCount)) {
         return;
     }
 
-    ok = generateScoreFrames(encoder, notation, painter, frame, config, totalPlayTimeSec, leadingFrameCount, totalFrameCount);
-    if (!ok) {
+    // Add score frames
+    if (!generateScoreFrames(encoder, notation, painter, frame, config, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
+        return;
+    }
+
+    // Add "Made with MuseScore"
+    if (!generateTrailingFrames(encoder, config)) {
         return;
     }
 
@@ -419,12 +425,34 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
     return true;
 }
 
+bool VideoWriter::generateTrailingFrames(muse::media::IVideoEncoderPtr encoder, const Config& config)
+{
+    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    if (trailingFrameCount <= 0) {
+        return true;
+    }
+
+    static const muse::io::path_t RESOURCE_PATH = ":/videoexport/internal/resources/video_made_with.mp4";
+
+    muse::io::File resource(RESOURCE_PATH);
+    if (!resource.open(muse::io::File::ReadOnly)) {
+        return true;
+    }
+
+    muse::ByteArray videoData = resource.readAll();
+    resource.close();
+
+    encoder->encodeVideo(videoData, trailingFrameCount);
+
+    return true;
+}
+
 bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INotationPtr notation,
                                       Painter& painter, QImage& frame,
                                       const Config& config, float totalPlayTimeSec,
                                       int leadingFrameCount, int totalFrameCount)
 {
-    int scoreFrameCount = static_cast<int>((totalPlayTimeSec + config.trailingSec) * config.fps);
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
     if (scoreFrameCount <= 0) {
         return true;
     }

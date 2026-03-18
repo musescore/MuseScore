@@ -26,6 +26,7 @@
 
 #include <QImage>
 
+#include "global/types/bytearray.h"
 #include "io/path.h"
 
 #include "modularity/imoduleinterface.h"
@@ -52,6 +53,8 @@ public:
 
     virtual bool encodeImage(const QImage& img) = 0;
     virtual void finishEncode() = 0;
+
+    virtual bool encodeVideo(const muse::ByteArray& videoData, int maxFrames = -1) = 0;
 
     virtual bool addAudio(const muse::io::path_t& audioPath, double audioOffsetSec) = 0;
 };

@@ -66,6 +66,7 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avUtilLibrary, av_opt_set_int);
     RESOLVE_FROM(m_avUtilLibrary, av_frame_alloc);
     RESOLVE_FROM(m_avUtilLibrary, av_frame_free);
+    RESOLVE_FROM(m_avUtilLibrary, av_malloc);
 
     // libavformat
     RESOLVE_FROM(m_avFormatLibrary, av_write_trailer);
@@ -80,6 +81,9 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avFormatLibrary, avformat_close_input);
     RESOLVE_FROM(m_avFormatLibrary, avformat_free_context);
     RESOLVE_FROM(m_avFormatLibrary, avformat_alloc_output_context2);
+    RESOLVE_FROM(m_avFormatLibrary, avformat_alloc_context);
+    RESOLVE_FROM(m_avFormatLibrary, avio_alloc_context);
+    RESOLVE_FROM(m_avFormatLibrary, avio_context_free);
 
     // libavcodec
     RESOLVE_FROM(m_avCodecLibrary, av_packet_alloc);
@@ -88,6 +92,7 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avCodecLibrary, av_packet_rescale_ts);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_alloc_context3);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_find_encoder);
+    RESOLVE_FROM(m_avCodecLibrary, avcodec_find_decoder);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_free_context);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_open2);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_from_context);
@@ -95,6 +100,8 @@ bool FFmpegLibHandler::loadApi()
     RESOLVE_FROM(m_avCodecLibrary, avcodec_parameters_copy);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_send_frame);
     RESOLVE_FROM(m_avCodecLibrary, avcodec_receive_packet);
+    RESOLVE_FROM(m_avCodecLibrary, avcodec_send_packet);
+    RESOLVE_FROM(m_avCodecLibrary, avcodec_receive_frame);
 
     // libswscale
     RESOLVE_FROM(m_swsScaleLibrary, sws_getCachedContext);
@@ -168,11 +175,13 @@ bool FFmpegLibHandler::functionsValid() const
            && avformat_open_input && avformat_find_stream_info
            && avformat_close_input && avformat_free_context
            && avformat_alloc_output_context2 && av_read_frame
-           && avcodec_alloc_context3 && avcodec_find_encoder && avcodec_free_context
+           && avformat_alloc_context && avio_alloc_context && avio_context_free
+           && avcodec_alloc_context3 && avcodec_find_encoder && avcodec_find_decoder && avcodec_free_context
            && avcodec_open2 && avcodec_parameters_from_context && avcodec_parameters_to_context && avcodec_parameters_copy
-           && avcodec_send_frame && avcodec_receive_packet
+           && avcodec_send_frame && avcodec_receive_packet && avcodec_send_packet && avcodec_receive_frame
            && av_frame_alloc && av_frame_free
            && av_packet_alloc && av_packet_free && av_packet_unref && av_packet_rescale_ts
+           && av_malloc
            && sws_getCachedContext && sws_scale;
 }
 
@@ -182,6 +191,7 @@ void FFmpegLibHandler::clearFunctions()
     av_image_fill_arrays = nullptr;
     av_image_get_buffer_size = nullptr;
     av_opt_set_int = nullptr;
+    av_malloc = nullptr;
     avformat_new_stream = nullptr;
     avformat_write_header = nullptr;
     av_write_trailer = nullptr;
@@ -194,8 +204,12 @@ void FFmpegLibHandler::clearFunctions()
     avformat_free_context = nullptr;
     avformat_alloc_output_context2 = nullptr;
     av_read_frame = nullptr;
+    avformat_alloc_context = nullptr;
+    avio_alloc_context = nullptr;
+    avio_context_free = nullptr;
     avcodec_alloc_context3 = nullptr;
     avcodec_find_encoder = nullptr;
+    avcodec_find_decoder = nullptr;
     avcodec_free_context = nullptr;
     avcodec_open2 = nullptr;
     avcodec_parameters_from_context = nullptr;
@@ -203,6 +217,8 @@ void FFmpegLibHandler::clearFunctions()
     avcodec_parameters_copy = nullptr;
     avcodec_send_frame = nullptr;
     avcodec_receive_packet = nullptr;
+    avcodec_send_packet = nullptr;
+    avcodec_receive_frame = nullptr;
     av_frame_alloc = nullptr;
     av_frame_free = nullptr;
     av_packet_alloc = nullptr;

@@ -47,6 +47,7 @@ public:
                                 int align) = nullptr;
     int (*av_image_get_buffer_size)(AVPixelFormat pix_fmt, int width, int height, int align) = nullptr;
     int (*av_opt_set_int)(void* obj, const char* name, int64_t val, int search_flags) = nullptr;
+    void*(*av_malloc)(size_t size) = nullptr;
 
     // libavformat
     AVStream*(*avformat_new_stream)(AVFormatContext* s, const AVCodec* c) = nullptr;
@@ -62,10 +63,17 @@ public:
     int (*avformat_alloc_output_context2)(AVFormatContext** ctx, const AVOutputFormat* oformat, const char* format_name,
                                           const char* filename) = nullptr;
     int (*av_read_frame)(AVFormatContext* s, AVPacket* pkt) = nullptr;
+    AVFormatContext*(*avformat_alloc_context)(void) = nullptr;
+    AVIOContext*(*avio_alloc_context)(unsigned char* buffer, int buffer_size, int write_flag, void* opaque,
+                                      int (*read_packet)(void* opaque, uint8_t* buf, int buf_size),
+                                      int (*write_packet)(void* opaque, const uint8_t* buf, int buf_size),
+                                      int64_t (*seek)(void* opaque, int64_t offset, int whence)) = nullptr;
+    void (*avio_context_free)(AVIOContext** s) = nullptr;
 
     // libavcodec
     AVCodecContext*(*avcodec_alloc_context3)(const AVCodec* codec) = nullptr;
     const AVCodec*(*avcodec_find_encoder)(AVCodecID id) = nullptr;
+    const AVCodec*(*avcodec_find_decoder)(AVCodecID id) = nullptr;
     void (*avcodec_free_context)(AVCodecContext** avctx) = nullptr;
     int (*avcodec_open2)(AVCodecContext* avctx, const AVCodec* codec, AVDictionary** options) = nullptr;
     int (*avcodec_parameters_from_context)(AVCodecParameters* par, const AVCodecContext* codec) = nullptr;
@@ -73,6 +81,8 @@ public:
     int (*avcodec_parameters_copy)(AVCodecParameters* dst, const AVCodecParameters* src) = nullptr;
     int (*avcodec_send_frame)(AVCodecContext* avctx, const AVFrame* frame) = nullptr;
     int (*avcodec_receive_packet)(AVCodecContext* avctx, AVPacket* avpkt) = nullptr;
+    int (*avcodec_send_packet)(AVCodecContext* avctx, const AVPacket* avpkt) = nullptr;
+    int (*avcodec_receive_frame)(AVCodecContext* avctx, AVFrame* frame) = nullptr;
     AVFrame*(*av_frame_alloc)(void) = nullptr;
     void (*av_frame_free)(AVFrame** frame) = nullptr;
     AVPacket*(*av_packet_alloc)(void) = nullptr;
@@ -87,7 +97,7 @@ public:
     int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[], const int srcStride[], int srcSliceY, int srcSliceH,
                      uint8_t* const dst[], const int dstStride[]) = nullptr;
 
-private : void* getSymbol(void* lib, const char* name) const;
+private: void* getSymbol(void* lib, const char* name) const;
     bool tryLoadPath(void*& lib, const io::path_t& fullPath);
     void closeLib(void*& lib);
     void clearFunctions();
