@@ -136,8 +136,7 @@ void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* r
     // is larger than the width of the item the parentheses surrounds. In this case, the result is visually unbalanced.  Move both parens
     // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
     const double itemWidth = parentWidth;
-    double parenPadding = ctx.dom().paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
-    parenPadding *= (leftParen->ldata()->mag() + rightParen->ldata()->mag()) / 2;
+    double parenPadding = computeInternalParenthesisPadding(leftParen, rightParen);
 
     if (itemWidth >= parenPadding) {
         return;
@@ -247,6 +246,9 @@ double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem*
         break;
     case ElementType::HARMONY:
         padding = 0.2 * spatium;
+        break;
+    case ElementType::PARENTHESIS:
+        padding = spatium;
         break;
     default:
         padding = 0.1 * spatium;

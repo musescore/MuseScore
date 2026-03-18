@@ -967,6 +967,22 @@ Sid CompatUtils::positionStyleFromAlign(Sid align)
     return muse::value(ALIGN_VALS_TO_CONVERT, align, Sid::NOSTYLE);
 }
 
+void CompatUtils::setPositionStylesFromAlign(MStyle* style, std::vector<Sid> ignoreSids)
+{
+    // Make sure new position styles are initially the same as align values
+    for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
+        if (muse::contains(ignoreSids, st.sid)) {
+            continue;
+        }
+        Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
+        if (positionSid == Sid::NOSTYLE) {
+            continue;
+        }
+        AlignH val = style->value(st.sid).value<Align>().horizontal;
+        style->set(positionSid, val);
+    }
+}
+
 void CompatUtils::setTextLineTextPositionFromAlign(TextLineBase* tl)
 {
     tl->setBeginTextPosition(tl->beginTextAlign().horizontal);

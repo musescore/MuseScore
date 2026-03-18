@@ -498,7 +498,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
     return true;
 }
 
-mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
+PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
@@ -518,6 +518,45 @@ mu::engraving::PropertyValue TextLineBase::propertyDefault(Pid propertyId) const
 
     default:
         return SLine::propertyDefault(propertyId);
+    }
+}
+
+void TextLineBase::setPropertyFlags(Pid id, PropertyFlags f)
+{
+    switch (id) {
+    case Pid::ALIGN: {
+        setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, f);
+        setPropertyFlags(Pid::CONTINUE_TEXT_ALIGN, f);
+        setPropertyFlags(Pid::END_TEXT_ALIGN, f);
+        break;
+    }
+    case Pid::POSITION: {
+        setPropertyFlags(Pid::BEGIN_TEXT_POSITION, f);
+        setPropertyFlags(Pid::CONTINUE_TEXT_POSITION, f);
+        setPropertyFlags(Pid::END_TEXT_POSITION, f);
+        break;
+    }
+    case Pid::FONT_FACE: {
+        setPropertyFlags(Pid::BEGIN_FONT_FACE, f);
+        setPropertyFlags(Pid::CONTINUE_FONT_FACE, f);
+        setPropertyFlags(Pid::END_FONT_FACE, f);
+        break;
+    }
+    case Pid::FONT_SIZE: {
+        setPropertyFlags(Pid::BEGIN_FONT_SIZE, f);
+        setPropertyFlags(Pid::CONTINUE_FONT_SIZE, f);
+        setPropertyFlags(Pid::END_FONT_SIZE, f);
+        break;
+    }
+    case Pid::FONT_STYLE: {
+        setPropertyFlags(Pid::BEGIN_FONT_STYLE, f);
+        setPropertyFlags(Pid::CONTINUE_FONT_STYLE, f);
+        setPropertyFlags(Pid::END_FONT_STYLE, f);
+        break;
+    }
+
+    default:
+        SLine::setPropertyFlags(id, f);
     }
 }
 }
