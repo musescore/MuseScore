@@ -24,6 +24,7 @@
 #include <string>
 
 #include "modularity/imoduleinterface.h"
+#include "modularity/ioc.h"
 #include "io/path.h"
 #include "async/channel.h"
 #include "types/val.h"
@@ -61,9 +62,10 @@ public:
     virtual void notifyAboutResourceChanged(const std::string& name) = 0;
     virtual async::Channel<std::string> resourceChanged() = 0;
 
-    // Quit for all
+    // Quit
     virtual void notifyAboutWindowWasQuited() = 0;
     virtual void quitForAll() = 0;
+    virtual void quitWindow(const modularity::ContextPtr& ctx) = 0;
     virtual void quitAllAndRestartLast() = 0;
     virtual void quitAllAndRunInstallation(const io::path_t& installerPath) = 0;
 };

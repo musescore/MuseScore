@@ -152,3 +152,17 @@ bool SingleProcessProvider::openNewWindow(const QStringList& args)
 
     return true;
 }
+
+void SingleProcessProvider::quitForAll()
+{
+    QCoreApplication::exit();
+}
+
+void SingleProcessProvider::quitWindow(const modularity::ContextPtr& ctx)
+{
+    if (application()->contextCount() <= 1) {
+        QCoreApplication::exit();
+    } else {
+        application()->destroyContext(ctx);
+    }
+}

@@ -40,7 +40,9 @@ NavigationSection::~NavigationSection()
         return;
     }
 
-    navigationController()->unreg(this);
+    if (navigationController()) {
+        navigationController()->unreg(this);
+    }
 }
 
 void NavigationSection::componentComplete()

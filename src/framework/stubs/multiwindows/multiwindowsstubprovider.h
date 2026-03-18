@@ -54,9 +54,10 @@ public:
     void notifyAboutResourceChanged(const std::string& name) override;
     async::Channel<std::string> resourceChanged() override;
 
-    // Quit for all
+    // Quit
     void notifyAboutWindowWasQuited() override;
     void quitForAll() override;
+    void quitWindow(const modularity::ContextPtr& ctx) override;
     void quitAllAndRestartLast() override;
     void quitAllAndRunInstallation(const io::path_t& installerPath) override;
 };

@@ -234,10 +234,6 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         return false;
     }
 
-    if (isAllInstances) {
-        multiwindowsProvider()->quitForAll();
-    }
-
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
 #if defined(Q_OS_LINUX)
         interactive()->revealInFileBrowser(installerPath);
@@ -250,7 +246,12 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         multiwindowsProvider()->notifyAboutWindowWasQuited();
     }
 
-    QCoreApplication::exit();
+    if (isAllInstances) {
+        multiwindowsProvider()->quitForAll();
+    } else {
+        multiwindowsProvider()->quitWindow(iocContext());
+    }
+
     return true;
 }
 
