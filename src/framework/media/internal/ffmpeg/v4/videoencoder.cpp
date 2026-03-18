@@ -22,12 +22,55 @@
 #include "videoencoder.h"
 #include "ffmpeglibhandler.h"
 
+#include <algorithm>
+
 #include "io/file.h"
 #include "io/path.h"
 #include "defer.h"
 #include "log.h"
 
 namespace muse::media::ffmpeg::v4 {
+struct MemoryReadContext {
+    const uint8_t* data = nullptr;
+    int64_t size = 0;
+    int64_t pos = 0;
+};
+
+static int memReadPacket(void* opaque, uint8_t* buf, int buf_size)
+{
+    auto* ctx = static_cast<MemoryReadContext*>(opaque);
+    int64_t remaining = ctx->size - ctx->pos;
+    int toRead = static_cast<int>(std::min(static_cast<int64_t>(buf_size), remaining));
+    if (toRead <= 0) {
+        return AVERROR_EOF;
+    }
+    memcpy(buf, ctx->data + ctx->pos, toRead);
+    ctx->pos += toRead;
+    return toRead;
+}
+
+static int64_t memSeek(void* opaque, int64_t offset, int whence)
+{
+    auto* ctx = static_cast<MemoryReadContext*>(opaque);
+    switch (whence) {
+    case SEEK_SET: ctx->pos = offset;
+        break;
+    case SEEK_CUR: ctx->pos += offset;
+        break;
+    case SEEK_END: ctx->pos = ctx->size + offset;
+        break;
+    case AVSEEK_SIZE: return ctx->size;
+    default: return -1;
+    }
+    if (ctx->pos < 0) {
+        ctx->pos = 0;
+    }
+    if (ctx->pos > ctx->size) {
+        ctx->pos = ctx->size;
+    }
+    return ctx->pos;
+}
+
 struct FFmpeg {
     int width = 0;
     int height = 0;
@@ -328,6 +371,210 @@ bool VideoEncoder::encodeImage(const QImage& img)
         m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
     }
 
+    return true;
+}
+
+bool VideoEncoder::encodeVideo(const ByteArray& videoData, int maxFrames)
+{
+    if (!m_ffmpeg->opened) {
+        LOGE() << "encodeVideo: encoder not opened";
+        return false;
+    }
+
+    MemoryReadContext memCtx;
+    memCtx.data = videoData.constData();
+    memCtx.size = static_cast<int64_t>(videoData.size());
+    memCtx.pos = 0;
+
+    static constexpr int AVIO_BUF_SIZE = 4096;
+    unsigned char* avioBuf = static_cast<unsigned char*>(m_ffmpegHandler->av_malloc(AVIO_BUF_SIZE));
+    if (!avioBuf) {
+        LOGE() << "encodeVideo: failed to allocate avio buffer";
+        return false;
+    }
+
+    AVIOContext* avioCtx = m_ffmpegHandler->avio_alloc_context(
+        avioBuf, AVIO_BUF_SIZE, 0, &memCtx, memReadPacket, nullptr, memSeek);
+    if (!avioCtx) {
+        LOGE() << "encodeVideo: failed to allocate AVIOContext";
+        return false;
+    }
+
+    AVFormatContext* inputFmtCtx = m_ffmpegHandler->avformat_alloc_context();
+    if (!inputFmtCtx) {
+        m_ffmpegHandler->avio_context_free(&avioCtx);
+        LOGE() << "encodeVideo: failed to allocate format context";
+        return false;
+    }
+    inputFmtCtx->pb = avioCtx;
+
+    AVCodecContext* decodeCtx = nullptr;
+    AVFrame* decodedFrame = nullptr;
+    AVPacket* packet = nullptr;
+
+    DEFER {
+        if (inputFmtCtx) {
+            m_ffmpegHandler->avformat_close_input(&inputFmtCtx);
+        }
+        if (avioCtx) {
+            m_ffmpegHandler->avio_context_free(&avioCtx);
+        }
+        if (decodeCtx) {
+            m_ffmpegHandler->avcodec_free_context(&decodeCtx);
+        }
+        if (decodedFrame) {
+            m_ffmpegHandler->av_frame_free(&decodedFrame);
+        }
+        if (packet) {
+            m_ffmpegHandler->av_packet_free(&packet);
+        }
+    };
+
+    if (m_ffmpegHandler->avformat_open_input(&inputFmtCtx, nullptr, nullptr, nullptr) < 0) {
+        LOGE() << "encodeVideo: failed to open input from memory";
+        return false;
+    }
+
+    if (m_ffmpegHandler->avformat_find_stream_info(inputFmtCtx, nullptr) < 0) {
+        LOGE() << "encodeVideo: failed to find stream info";
+        return false;
+    }
+
+    int videoStreamIdx = -1;
+    for (unsigned i = 0; i < inputFmtCtx->nb_streams; i++) {
+        if (inputFmtCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+            videoStreamIdx = static_cast<int>(i);
+            break;
+        }
+    }
+
+    if (videoStreamIdx < 0) {
+        LOGE() << "encodeVideo: no video stream found";
+        return false;
+    }
+
+    AVCodecParameters* codecPar = inputFmtCtx->streams[videoStreamIdx]->codecpar;
+
+    const AVCodec* decoder = m_ffmpegHandler->avcodec_find_decoder(codecPar->codec_id);
+    if (!decoder) {
+        LOGE() << "encodeVideo: decoder not found for codec_id " << codecPar->codec_id;
+        return false;
+    }
+
+    decodeCtx = m_ffmpegHandler->avcodec_alloc_context3(decoder);
+    if (!decodeCtx) {
+        LOGE() << "encodeVideo: failed to allocate decoder context";
+        return false;
+    }
+
+    m_ffmpegHandler->avcodec_parameters_to_context(decodeCtx, codecPar);
+
+    if (m_ffmpegHandler->avcodec_open2(decodeCtx, decoder, nullptr) < 0) {
+        LOGE() << "encodeVideo: failed to open decoder";
+        return false;
+    }
+
+    SwsContext* decSwsCtx = m_ffmpegHandler->sws_getCachedContext(
+        nullptr,
+        decodeCtx->width, decodeCtx->height, decodeCtx->pix_fmt,
+        m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P,
+        SWS_BICUBIC, nullptr, nullptr, nullptr);
+
+    if (!decSwsCtx) {
+        LOGE() << "encodeVideo: failed to create sws context";
+        return false;
+    }
+
+    decodedFrame = m_ffmpegHandler->av_frame_alloc();
+    packet = m_ffmpegHandler->av_packet_alloc();
+
+    int framesEncoded = 0;
+    bool done = false;
+
+    auto encodeDecodedFrame = [&]() -> bool {
+        m_ffmpegHandler->sws_scale(decSwsCtx,
+                                   decodedFrame->data, decodedFrame->linesize,
+                                   0, decodedFrame->height,
+                                   m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize);
+
+        m_ffmpeg->ppicture->pts = m_ffmpegHandler->av_rescale_q(
+            m_ffmpeg->codecCtx->frame_number, m_ffmpeg->codecCtx->time_base, m_ffmpeg->videoStream->time_base);
+
+        int ret = m_ffmpegHandler->avcodec_send_frame(m_ffmpeg->codecCtx, m_ffmpeg->ppicture);
+        if (ret < 0) {
+            return false;
+        }
+
+        while (ret >= 0) {
+            AVPacket* outPkt = m_ffmpegHandler->av_packet_alloc();
+            ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, outPkt);
+            if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+                m_ffmpegHandler->av_packet_free(&outPkt);
+                break;
+            }
+            if (ret < 0) {
+                m_ffmpegHandler->av_packet_free(&outPkt);
+                return false;
+            }
+
+            outPkt->pts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
+                                                        m_ffmpeg->videoStream->time_base);
+            outPkt->dts = m_ffmpegHandler->av_rescale_q(m_ffmpeg->ptsCounter, m_ffmpeg->codecCtx->time_base,
+                                                        m_ffmpeg->videoStream->time_base);
+            m_ffmpeg->ptsCounter++;
+
+            m_ffmpegHandler->av_interleaved_write_frame(m_ffmpeg->formatCtx, outPkt);
+            m_ffmpegHandler->av_packet_free(&outPkt);
+        }
+
+        framesEncoded++;
+        if (maxFrames > 0 && framesEncoded >= maxFrames) {
+            done = true;
+        }
+
+        return true;
+    };
+
+    while (!done && m_ffmpegHandler->av_read_frame(inputFmtCtx, packet) >= 0) {
+        if (packet->stream_index != videoStreamIdx) {
+            m_ffmpegHandler->av_packet_unref(packet);
+            continue;
+        }
+
+        int ret = m_ffmpegHandler->avcodec_send_packet(decodeCtx, packet);
+        m_ffmpegHandler->av_packet_unref(packet);
+
+        while (!done && ret >= 0) {
+            ret = m_ffmpegHandler->avcodec_receive_frame(decodeCtx, decodedFrame);
+            if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+                break;
+            }
+            if (ret < 0) {
+                LOGE() << "encodeVideo: error receiving decoded frame";
+                return false;
+            }
+
+            if (!encodeDecodedFrame()) {
+                LOGE() << "encodeVideo: error encoding frame";
+                return false;
+            }
+        }
+    }
+
+    if (!done) {
+        m_ffmpegHandler->avcodec_send_packet(decodeCtx, nullptr);
+        while (true) {
+            int ret = m_ffmpegHandler->avcodec_receive_frame(decodeCtx, decodedFrame);
+            if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+                break;
+            }
+            if (ret < 0 || !encodeDecodedFrame() || done) {
+                break;
+            }
+        }
+    }
+
+    LOGI() << "encodeVideo: encoded " << framesEncoded << " frames from memory buffer";
     return true;
 }
 
