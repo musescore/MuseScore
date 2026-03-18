@@ -62,6 +62,12 @@ public:
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& mode) = 0;
 
+    // Style dialog
+    virtual int styleDialogLastPageIndex() const = 0;
+    virtual void setStyleDialogLastPageIndex(int value) = 0;
+    virtual int styleDialogLastSubPageIndex() const = 0;
+    virtual void setStyleDialogLastSubPageIndex(int value) = 0;
+
     virtual muse::async::Notification stateChanged() const = 0;
 
     virtual void makeDefault() = 0;

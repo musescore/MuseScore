@@ -22,6 +22,8 @@
 
 #include "notationsceneconfiguration.h"
 
+#include "global/translation.h"
+
 #include "muse_framework_config.h"
 
 #include "settings.h"
@@ -45,8 +47,7 @@ static const Settings::Key AUTO_CLOSE_PERCUSSION_PANEL_KEY(module_name, "ui/auto
 static const Settings::Key SHOW_PERCUSSION_PANEL_SWAP_DIALOG(module_name,  "ui/showPercussionPanelPadSwapDialog");
 static const Settings::Key PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS(module_name,  "ui/percussionPanelMoveMidiNotesAndShortcuts");
 
-NotationSceneConfiguration::NotationSceneConfiguration(const muse::modularity::ContextPtr& ctx)
-    : Contextable(ctx)
+NotationSceneConfiguration::NotationSceneConfiguration()
 {
 }
 
@@ -99,13 +100,6 @@ void NotationSceneConfiguration::init()
     settings()->valueChanged(PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS).onReceive(this, [this](const Val&) {
         m_percussionPanelMoveMidiNotesAndShortcutsChanged.notify();
     });
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    // FIXME: configuration is global, and does not have the access to per-context injections
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        resetStyleDialogPageIndices();
-    });
-#endif
 }
 
 bool NotationSceneConfiguration::isSmoothPanning() const
@@ -236,30 +230,4 @@ void NotationSceneConfiguration::setPercussionPanelMoveMidiNotesAndShortcuts(boo
 Notification NotationSceneConfiguration::percussionPanelMoveMidiNotesAndShortcutsChanged() const
 {
     return m_percussionPanelMoveMidiNotesAndShortcutsChanged;
-}
-
-int NotationSceneConfiguration::styleDialogLastPageIndex() const
-{
-    return m_styleDialogLastPageIndex;
-}
-
-void NotationSceneConfiguration::setStyleDialogLastPageIndex(int value)
-{
-    m_styleDialogLastPageIndex = value;
-}
-
-int NotationSceneConfiguration::styleDialogLastSubPageIndex() const
-{
-    return m_styleDialogLastSubPageIndex;
-}
-
-void NotationSceneConfiguration::setStyleDialogLastSubPageIndex(int value)
-{
-    m_styleDialogLastSubPageIndex = value;
-}
-
-void NotationSceneConfiguration::resetStyleDialogPageIndices()
-{
-    setStyleDialogLastPageIndex(0);
-    setStyleDialogLastSubPageIndex(0);
 }

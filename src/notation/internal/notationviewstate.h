@@ -54,6 +54,12 @@ public:
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& mode) override;
 
+    // Style dialog
+    int styleDialogLastPageIndex() const override;
+    void setStyleDialogLastPageIndex(int value) override;
+    int styleDialogLastSubPageIndex() const override;
+    void setStyleDialogLastSubPageIndex(int value) override;
+
     muse::async::Notification stateChanged() const override;
 
     void makeDefault() override;
@@ -66,6 +72,9 @@ private:
     muse::ValCh<ZoomType> m_zoomType;
 
     notation::ViewMode m_viewMode = notation::ViewMode::PAGE;
+
+    int m_styleDialogLastPageIndex = 0;
+    int m_styleDialogLastSubPageIndex = 0;
 
     muse::async::Notification m_stateChanged;
 };

@@ -174,9 +174,40 @@ void NotationViewState::setViewMode(const ViewMode& mode)
     m_stateChanged.notify();
 }
 
+int NotationViewState::styleDialogLastPageIndex() const
+{
+    return m_styleDialogLastPageIndex;
+}
+
+void NotationViewState::setStyleDialogLastPageIndex(int value)
+{
+    if (m_styleDialogLastPageIndex == value) {
+        return;
+    }
+    m_styleDialogLastPageIndex = value;
+    m_stateChanged.notify();
+}
+
+int NotationViewState::styleDialogLastSubPageIndex() const
+{
+    return m_styleDialogLastSubPageIndex;
+}
+
+void NotationViewState::setStyleDialogLastSubPageIndex(int value)
+{
+    if (m_styleDialogLastSubPageIndex == value) {
+        return;
+    }
+    m_styleDialogLastSubPageIndex = value;
+    m_stateChanged.notify();
+}
+
 void NotationViewState::makeDefault()
 {
     m_viewMode = ViewMode::PAGE;
+    m_styleDialogLastPageIndex = 0;
+    m_styleDialogLastSubPageIndex = 0;
+    m_stateChanged.notify();
 }
 
 muse::async::Notification NotationViewState::stateChanged() const
