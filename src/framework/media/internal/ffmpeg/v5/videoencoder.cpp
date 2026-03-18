@@ -138,8 +138,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, const Options& options
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "sc_threshold", 40, 0);
     m_ffmpeg->codecCtx->flags |= AV_CODEC_FLAG_LOOP_FILTER;
     m_ffmpeg->codecCtx->me_subpel_quality = 5;
-    m_ffmpeg->codecCtx->i_quant_factor = 0.71;
-    m_ffmpeg->codecCtx->qcompress = 0.6;
+    m_ffmpeg->codecCtx->i_quant_factor = 0.71f;
+    m_ffmpeg->codecCtx->qcompress = 0.6f;
     m_ffmpeg->codecCtx->max_qdiff = 4;
 
     if (m_ffmpeg->formatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
@@ -214,7 +214,7 @@ void VideoEncoder::finishEncode()
 
     while (true) {
         m_ffmpeg->pkt = m_ffmpegHandler->av_packet_alloc();
-        int ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
+        ret = m_ffmpegHandler->avcodec_receive_packet(m_ffmpeg->codecCtx, m_ffmpeg->pkt);
         if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
             m_ffmpegHandler->av_packet_free(&m_ffmpeg->pkt);
             break;

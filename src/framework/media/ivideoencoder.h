@@ -40,11 +40,11 @@ public:
 
     struct Options {
         std::string format = "";
-        unsigned width = -1;
-        unsigned height = -1;
-        unsigned bitrate = -1;
-        unsigned gop = -1;
-        unsigned fps = -1;
+        unsigned width = static_cast<unsigned>(-1);
+        unsigned height = static_cast<unsigned>(-1);
+        unsigned bitrate = static_cast<unsigned>(-1);
+        unsigned gop = static_cast<unsigned>(-1);
+        unsigned fps = static_cast<unsigned>(-1);
     };
 
     virtual bool open(const muse::io::path_t& fileName, const Options& options) = 0;
