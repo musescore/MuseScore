@@ -425,6 +425,10 @@
     <seq>Alt+Up</seq>
     </SC>
   <SC>
+    <key>notation-backspace</key>
+    <seq>Backspace</seq>
+    </SC>
+  <SC>
     <key>top-chord</key>
     <seq>Ctrl+Alt+Up</seq>
     </SC>

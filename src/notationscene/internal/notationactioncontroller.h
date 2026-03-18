@@ -96,6 +96,7 @@ private:
     void doubleNoteInputDuration();
     void halveNoteInputDuration();
     void realtimeAdvance();
+    void deleteAndSelectPrev();
 
     void toggleAccidental(AccidentalType type);
     void toggleArticulation(SymbolId articulationSymbolId);

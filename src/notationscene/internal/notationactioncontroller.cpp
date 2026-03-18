@@ -233,6 +233,7 @@ void NotationActionController::init()
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
     registerAction("action://notation/delete", &Interaction::deleteSelection, &Controller::hasSelection);
+    registerAction("notation-backspace", &Controller::deleteAndSelectPrev, &Controller::hasSelection);
 
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
     registerAction("flip-horizontally", &Interaction::flipSelectionHorizontally, &Controller::hasSelection);
@@ -900,6 +901,19 @@ void NotationActionController::putNote(const ActionData& args)
     Ret ret = noteInput->putNote(pos, replace, insert);
     if (ret) {
         seekAndPlaySelectedElement();
+    }
+}
+
+void NotationActionController::deleteAndSelectPrev()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+    interaction->deleteSelection();
+    auto selected = interaction->selection();
+    if (selected && selected->elementsSelected(engraving::ElementTypeSet { ElementType::REST })) {
+        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Chord);
     }
 }
 
