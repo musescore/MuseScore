@@ -29,6 +29,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/expression.h"
@@ -1725,6 +1726,38 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
     return true;
 }
 
+bool MeiImporter::readArtic(pugi::xml_node articNode, Note* note)
+{
+    IF_ASSERT_FAILED(note) {
+        return false;
+    }
+
+    bool warning = false;
+    libmei::Artic meiArtic;
+    meiArtic.Read(articNode);
+
+    Chord* chord = note->chord();
+    ChordLine* chordLine = nullptr;
+
+    if (meiArtic.HasArtic() && (meiArtic.GetArtic().at(0) >= libmei::ARTICULATION_doit
+                                && meiArtic.GetArtic().at(0) < libmei::ARTICULATION_longfall)) {
+        chordLine = Factory::createChordLine(chord);
+    }
+
+    if (!chordLine) {
+        // Warning message given in MeiImporter::addToChordRest
+        return true;
+    }
+
+    this->readXmlId(chordLine, meiArtic.m_xmlId);
+    Convert::articFromMEI(chordLine, meiArtic, warning);
+    chordLine->setTrack(note->track());
+    chord->add(chordLine);
+    chordLine->setNote(note);
+
+    return true;
+}
+
 /**
  * Read a beam.
  * Set MuseScore flags based on custom `@type` values.
@@ -2038,6 +2071,12 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
 
     note->setTrack(track);
     chord->add(note);
+
+    // read chord lines
+    pugi::xpath_node_set elements = noteNode.select_nodes("./artic");
+    for (pugi::xpath_node xpathNode : elements) {
+        this->readArtic(xpathNode.node(), note);
+    }
 
     return true;
 }

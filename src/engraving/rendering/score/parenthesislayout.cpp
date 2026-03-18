@@ -37,6 +37,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
+static constexpr double maxMidPointThicknessSpRatio = 0.2;
+
 void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx)
 {
     // Layout parentheses surrounding an engraving item. Handle padding and placement
@@ -136,6 +138,7 @@ void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* r
     // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
     const double itemWidth = parentWidth;
     double parenPadding = computeInternalParenthesisPadding(leftParen, rightParen);
+    parenPadding *= (leftParen->ldata()->mag() + rightParen->ldata()->mag()) / 2;
 
     if (itemWidth >= parenPadding) {
         return;
@@ -209,7 +212,7 @@ double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem*
 {
     bool parenFirst = item1->isParenthesis();
     const EngravingItem* other = item1->isParenthesis() ? item2 : item1;
-    const double spatium = item1->spatium();
+    const double spatium = item1->style().spatium();
     double padding = 0.0;
 
     switch (other->type()) {
@@ -268,7 +271,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     const double height = ldata->height;
     const double xPos = ldata->pos().x();
     const double mag = ldata->mag();
-    const double maxMidPointThickness = 0.2 * spatium;
+    const double maxMidPointThickness = maxMidPointThicknessSpRatio * spatium;
     const double midPointThickness = std::min(ldata->midPointThickness.value(), maxMidPointThickness);
 
     const double heightInSpatium = height / spatium;
@@ -283,7 +286,7 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
     double shoulderX = !muse::RealIsNull(ldata->shoulderWidth()) ? ldata->shoulderWidth() : 0.2
                        * std::pow(height, 0.95) * std::pow(mag, 0.1);
 
-    const double minShoulderX = 0.25 * spatium;
+    const double minShoulderX = 0.25 * spatium * ldata->intrinsicMag();
     shoulderX = std::max(shoulderX, minShoulderX);
 
     PointF start = PointF(xPos, startY);
@@ -416,6 +419,7 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     Chord* chord = toChord(item->parentItem());
 
     ldata->setMag(chord->mag());
+    ldata->intrinsicMag = chord->intrinsicMag();    // Scaling information not linked to staff size. item->spatium is NOT scaled by this
 
     Shape notesShape;
 
@@ -434,17 +438,41 @@ void ParenthesisLayout::setChordValues(Parenthesis* item, Parenthesis::LayoutDat
     }
 
     const StaffType* st = chord->staffType();
-    if (st->isTabStaff()) {
+    const bool isTab = st->isTabStaff();
+
+    auto calculateMidPointThickness = [item, ldata, isTab]() -> double {
+        const double sp = item->spatium();
+        const double sp0 = item->defaultSpatium();
+
+        IF_ASSERT_FAILED(sp > 0.0 && sp0 > 0.0) {
+            LOGE() << "spatium or default spatium is 0";
+            return 0.0;
+        }
+
+        const double exponent = isTab ? 0.36 : 0.33;
+        const double exponentComplement = 1.0 - exponent;
+
+        const double normalizedHeight = ldata->height / sp;
+
+        // Scale factor that keeps the normalized formula compatible with the
+        // original formula at the default spatium.
+        const double scaleNormalization = sp / std::pow(sp0, exponentComplement);
+        const double normalizedThickness = std::pow(normalizedHeight, exponent)
+                                           * scaleNormalization
+                                           * ldata->intrinsicMag();
+
+        return normalizedThickness;
+    };
+
+    if (isTab) {
         ldata->startY = notesShape.top();
         ldata->height = notesShape.bbox().height();
-        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.36) * ldata->mag());
-        ldata->endPointThickness.set_value(0.05);
     } else {
-        ldata->startY = notesShape.top() - 0.25 * item->spatium();
-        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium();
-        ldata->midPointThickness.set_value(std::pow(ldata->height, 0.33) * ldata->mag());
-        ldata->endPointThickness.set_value(0.05);
+        ldata->startY = notesShape.top() - 0.25 * item->spatium() * ldata->intrinsicMag();
+        ldata->height = notesShape.bbox().height() + 0.5 * item->spatium() * ldata->intrinsicMag();
     }
+    ldata->midPointThickness.set_value(calculateMidPointThickness());
+    ldata->endPointThickness.set_value(0.05);
 }
 
 void ParenthesisLayout::setHarmonyValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)

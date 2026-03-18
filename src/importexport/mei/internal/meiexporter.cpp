@@ -35,6 +35,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/fermata.h"
@@ -1064,6 +1065,19 @@ bool MeiExporter::writeArtic(const Articulation* articulation)
     return true;
 }
 
+bool MeiExporter::writeArtic(const ChordLine* chordline)
+{
+    IF_ASSERT_FAILED(chordline) {
+        return false;
+    }
+
+    pugi::xml_node articNode = m_currentNode.append_child();
+    libmei::Artic meiArtic = Convert::articToMEI(chordline);
+    meiArtic.Write(articNode, this->getXmlIdFor(chordline, 'a'));
+
+    return true;
+}
+
 /**
  * Open and close beam and tuplet elements for a ChordRest.
  * When both a beam and a tuplet is opening and closing, check which is the appropriate nesting order.
@@ -1344,6 +1358,13 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeStemAtt(chord, meiNote);
         this->writeArtics(chord);
         this->writeVerses(chord);
+    }
+    for (const EngravingItem* item : chord->el()) {
+        // add chordlines always to notes
+        if (item->isChordLine() && toChordLine(item)->note() && toChordLine(item)->note() == note) {
+            const ChordLine* chordline = toChordLine(item);
+            this->writeArtic(chordline);
+        }
     }
     const int velocity = note->userVelocity();
     if (velocity != 0) {

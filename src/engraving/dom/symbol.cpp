@@ -63,6 +63,15 @@ Symbol::Symbol(const Symbol& s)
     m_symAngle    = s.m_symAngle;
 }
 
+void Symbol::setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf)
+{
+    m_sym  = s;
+
+    if (sf.get()) {
+        m_scoreFont = sf;
+    }
+}
+
 //---------------------------------------------------------
 //   symName
 //---------------------------------------------------------
