@@ -91,7 +91,7 @@ QueuePool::ThreadData* QueuePool::threadData(const std::thread::id& threadId, bo
                 continue;
             }
 
-            std::scoped_lock lock(thdata->mutex);
+            std::scoped_lock innerLock(thdata->mutex);
             if (!thdata->ports.empty()) {
                 continue;
             }
