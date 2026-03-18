@@ -45,6 +45,7 @@ struct CmdOptions {
         ExtensionUri,
         PageNumber,
         ScoreRegion,
+        NoAudio,
     };
 
     muse::IApplication::RunMode runMode = muse::IApplication::RunMode::GuiApp;

@@ -108,6 +108,9 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         QThread::yieldCurrentThread();
     }
 
+    //! NOTE: we have to do it in main thread
+    notation->notationChanged().notify();
+
     if (m_audioWriter) {
         m_audioWriter->progress()->finished().disconnect(this);
         m_audioWriter = nullptr;
@@ -344,8 +347,6 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
         m_isCompleted = true;
     };
 
-    PageList pages = notation->elements()->pages();
-
     // Setup painting
     QImage frame(config.width, config.height, QImage::Format_RGB32);
     frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
@@ -354,21 +355,115 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     QPainter qp(&frame);
     qp.setRenderHint(QPainter::Antialiasing, true);
     qp.setRenderHint(QPainter::TextAntialiasing, true);
-    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
 
     Painter painter(&qp, "video_writer");
-
-    auto painting = notation->painting();
 
     // Setup duration
     INotationPlaybackPtr playback = notation->masterNotation()->playback();
     float totalPlayTimeSec = playback->totalPlayTime();
 
-    int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
-    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << frameCount;
+    int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
+    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    int totalFrameCount = leadingFrameCount + scoreFrameCount + trailingFrameCount;
+    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << totalFrameCount;
 
-    //! NOTE: After setting the score above, the number of pages may change - get them again
-    pages = notation->elements()->pages();
+    m_progress.start();
+
+    // Add score title
+    if (!generateLeadingFrames(encoder, notation, painter, frame, config, totalFrameCount)) {
+        return;
+    }
+
+    // Add score frames
+    if (!generateScoreFrames(encoder, notation, painter, frame, config, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
+        return;
+    }
+
+    // Add "Made with MuseScore"
+    if (!generateTrailingFrames(encoder, config)) {
+        return;
+    }
+
+    m_writeRet = muse::make_ok();
+    m_progress.finish(muse::make_ok());
+}
+
+bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, INotationPtr notation,
+                                        Painter& painter, QImage& frame,
+                                        const Config& config, int totalFrameCount)
+{
+    int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
+    if (leadingFrameCount <= 0) {
+        return true;
+    }
+
+    engraving::Score* score = notation->elements()->msScore();
+    muse::String title = score->metaTag(u"workTitle");
+
+    Font font(Font::FontFamily(u"Edwin"), Font::Type::Text);
+
+    double desiredPixelSize = 128.0 * config.height / 1080.0;
+    font.setPointSizeF(desiredPixelSize * 72.0 / engraving::DPI);
+
+    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
+
+    for (int f = 0; f < leadingFrameCount; f++) {
+        if (m_abort) {
+            m_writeRet = make_ret(muse::Ret::Code::Cancel);
+            m_progress.finish(m_writeRet);
+            return false;
+        }
+
+        m_progress.progress(f, totalFrameCount);
+
+        painter.fillRect(frameRect, Color::BLACK);
+        painter.setPen(Color::WHITE);
+        painter.setFont(font);
+        painter.drawText(frameRect, AlignCenter, title);
+
+        encoder->encodeImage(frame);
+    }
+
+    return true;
+}
+
+bool VideoWriter::generateTrailingFrames(muse::media::IVideoEncoderPtr encoder, const Config& config)
+{
+    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    if (trailingFrameCount <= 0) {
+        return true;
+    }
+
+    static const muse::io::path_t RESOURCE_PATH = ":/videoexport/internal/resources/video_made_with.mp4";
+
+    muse::io::File resource(RESOURCE_PATH);
+    if (!resource.open(muse::io::File::ReadOnly)) {
+        return true;
+    }
+
+    muse::ByteArray videoData = resource.readAll();
+    resource.close();
+
+    encoder->encodeVideo(videoData, trailingFrameCount);
+
+    return true;
+}
+
+bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INotationPtr notation,
+                                      Painter& painter, QImage& frame,
+                                      const Config& config, float totalPlayTimeSec,
+                                      int leadingFrameCount, int totalFrameCount)
+{
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
+    if (scoreFrameCount <= 0) {
+        return true;
+    }
+
+    PageList pages = notation->elements()->pages();
+    auto painting = notation->painting();
+    INotationPlaybackPtr playback = notation->masterNotation()->playback();
+    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
 
     auto pageByTick = [](const PageList& pages, tick_t tick) -> const Page* {
         for (const Page* p : pages) {
@@ -384,22 +479,16 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     PlaybackCursor cursor(iocContext());
     cursor.setNotation(notation);
 
-    m_progress.start();
-
-    for (int f = 0; f < frameCount; f++) {
+    for (int f = 0; f < scoreFrameCount; f++) {
         if (m_abort) {
             m_writeRet = make_ret(muse::Ret::Code::Cancel);
-            m_progress.finish(make_ret(muse::Ret::Code::Cancel));
-            return;
+            m_progress.finish(m_writeRet);
+            return false;
         }
 
-        m_progress.progress(f, frameCount);
+        m_progress.progress(leadingFrameCount + f, totalFrameCount);
 
-        float currentTimeSec = (qreal)f / config.fps;
-        currentTimeSec -= config.leadingSec;
-        if (currentTimeSec <= 0) {
-            currentTimeSec = 0;
-        }
+        float currentTimeSec = static_cast<float>(f) / config.fps;
         if (currentTimeSec > totalPlayTimeSec) {
             currentTimeSec = totalPlayTimeSec;
         }
@@ -431,6 +520,5 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
         encoder->encodeImage(frame);
     }
 
-    m_writeRet = muse::make_ok();
-    m_progress.finish(muse::make_ok());
+    return true;
 }
