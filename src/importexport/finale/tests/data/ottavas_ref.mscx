@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.5</pageWidth>
+      <pageHeight>11</pageHeight>
+      <pagePrintableWidth>7.5</pagePrintableWidth>
+      <pageEvenLeftMargin>0.5</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.5</pageOddLeftMargin>
+      <pageEvenTopMargin>0.625</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.625</pageEvenBottomMargin>
+      <pageOddTopMargin>0.625</pageOddTopMargin>
+      <pageTwosided>0</pageTwosided>
+      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
+      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
+      <minMeasureWidth>0</minMeasureWidth>
+      <barWidth>0.0748698</barWidth>
+      <doubleBarWidth>0.0748698</doubleBarWidth>
+      <endBarWidth>0.5</endBarWidth>
+      <doubleBarDistance>0.42513</doubleBarDistance>
+      <endBarDistance>0.5</endBarDistance>
+      <repeatBarlineDotSeparation>0.291971</repeatBarlineDotSeparation>
+      <bracketWidth>0.5</bracketWidth>
+      <bracketDistance>0.25</bracketDistance>
+      <akkoladeBarDistance>0.5</akkoladeBarDistance>
+      <clefLeftMargin>1</clefLeftMargin>
+      <keysigLeftMargin>1</keysigLeftMargin>
+      <timesigLeftMargin>1</timesigLeftMargin>
+      <clefKeyDistance>1</clefKeyDistance>
+      <keyTimesigDistance>1.5</keyTimesigDistance>
+      <keyBarlineDistance>0.5</keyBarlineDistance>
+      <clefBarlineDistance>0.333333</clefBarlineDistance>
+      <stemWidth>0.0748698</stemWidth>
+      <minNoteDistance>0.5</minNoteDistance>
+      <barNoteDistance>1.33333</barNoteDistance>
+      <barAccidentalDistance>1.33333</barAccidentalDistance>
+      <noteBarDistance>0.5</noteBarDistance>
+      <measureSpacing>1.618</measureSpacing>
+      <measureRepeatNumberPos>-1</measureRepeatNumberPos>
+      <staffLineWidth>0.0748698</staffLineWidth>
+      <ledgerLineWidth>0.0748698</ledgerLineWidth>
+      <ledgerLineLength>0.25</ledgerLineLength>
+      <stemSlashThickness>0.0748698</stemSlashThickness>
+      <accidentalDistance>0.333333</accidentalDistance>
+      <accidentalNoteDistance>0.333333</accidentalNoteDistance>
+      <keysigAccidentalDistance>0.166667</keysigAccidentalDistance>
+      <keysigNaturalDistance>0.25</keysigNaturalDistance>
+      <beamMinLen>0.875</beamMinLen>
+      <dotNoteDistance>0.333333</dotNoteDistance>
+      <dotRestDistance>0.333333</dotRestDistance>
+      <dotDotDistance>0.708333</dotDotDistance>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <hairpinHeight>1.125</hairpinHeight>
+      <hairpinLineWidth>0.0748698</hairpinLineWidth>
+      <hairpinFontFace>Times New Roman</hairpinFontFace>
+      <hairpinDashLineLen>10.0174</hairpinDashLineLen>
+      <hairpinDashGapLen>10.0174</hairpinDashGapLen>
+      <hairpinLineDashLineLen>10.0174</hairpinLineDashLineLen>
+      <hairpinLineDashGapLen>10.0174</hairpinLineDashGapLen>
+      <pedalLineWidth>0.0748698</pedalLineWidth>
+      <pedalDashLineLen>10.0174</pedalDashLineLen>
+      <pedalDashGapLen>10.0174</pedalDashGapLen>
+      <pedalHookHeight>0.5</pedalHookHeight>
+      <pedalFontFace>Times New Roman</pedalFontFace>
+      <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
+      <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
+      <chordSymbolBFontStyle>0</chordSymbolBFontStyle>
+      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
+      <romanNumeralFontSize>10</romanNumeralFontSize>
+      <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
+      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <barreAppearanceSlur>1</barreAppearanceSlur>
+      <measureNumberInterval>0</measureNumberInterval>
+      <measureNumberPlacementMode>on-all-staves</measureNumberPlacementMode>
+      <graceNoteMag>0.6</graceNoteMag>
+      <graceToMainNoteDist>0.5</graceToMainNoteDist>
+      <graceToGraceNoteDist>0.5</graceToGraceNoteDist>
+      <smallClefMag>0.75</smallClefMag>
+      <keySigCourtesyBarlineMode>1</keySigCourtesyBarlineMode>
+      <barlineBeforeSigChange>1</barlineBeforeSigChange>
+      <doubleBarlineBeforeKeySig>1</doubleBarlineBeforeKeySig>
+      <multiVoiceRestTwoSpaceOffset>1</multiVoiceRestTwoSpaceOffset>
+      <mergeMatchingRests>1</mergeMatchingRests>
+      <minEmptyMeasures>2</minEmptyMeasures>
+      <minMMRestWidth>15</minMMRestWidth>
+      <mmRestNumberPos>-0.333333</mmRestNumberPos>
+      <mmRestOldStyleMaxMeasures>8</mmRestOldStyleMaxMeasures>
+      <mmRestOldStyleSpacing>2</mmRestOldStyleSpacing>
+      <firstSystemIndentationValue>6.19881</firstSystemIndentationValue>
+      <slurEndWidth>0.01</slurEndWidth>
+      <slurMidWidth>0.125</slurMidWidth>
+      <slurDottedWidth>0.0748698</slurDottedWidth>
+      <tieEndWidth>0.0416667</tieEndWidth>
+      <tieMidWidth>0.125</tieMidWidth>
+      <tieDottedWidth>0.0748698</tieDottedWidth>
+      <minTieLength>1.83333</minTieLength>
+      <musicalSymbolFont>Finale Maestro</musicalSymbolFont>
+      <musicalTextFont>Finale Maestro Text</musicalTextFont>
+      <showHeader>0</showHeader>
+      <showFooter>0</showFooter>
+      <voltaPosAbove x="0" y="-4"/>
+      <voltaHook>3</voltaHook>
+      <voltaLineWidth>0.0748698</voltaLineWidth>
+      <voltaFontFace>Times New Roman</voltaFontFace>
+      <voltaFontSize>8.33333</voltaFontSize>
+      <voltaFontStyle>0</voltaFontStyle>
+      <voltaOffset x="1.5" y="1.5"/>
+      <ottavaPosAbove x="0" y="-3.76761"/>
+      <ottavaHookAbove>0.5</ottavaHookAbove>
+      <ottavaHookBelow>0.5</ottavaHookBelow>
+      <ottavaLineWidth>0.0748698</ottavaLineWidth>
+      <ottavaDashLineLen>10.0174</ottavaDashLineLen>
+      <ottavaDashGapLen>10.0174</ottavaDashGapLen>
+      <ottavaNumbersOnly>0</ottavaNumbersOnly>
+      <ottavaFontFace>Times New Roman</ottavaFontFace>
+      <tremoloStyle>1</tremoloStyle>
+      <keySigNaturals>1</keySigNaturals>
+      <keySigShowNaturalsChangingSharpsFlats>0</keySigShowNaturalsChangingSharpsFlats>
+      <tupletStemLeftDistance>0</tupletStemLeftDistance>
+      <tupletStemRightDistance>0</tupletStemRightDistance>
+      <tupletBracketWidth>0.0748698</tupletBracketWidth>
+      <tupletFontFace>Times New Roman</tupletFontFace>
+      <tupletFontSize>8.33333</tupletFontSize>
+      <tupletFontStyle>3</tupletFontStyle>
+      <tupletBracketHookHeight>0.5</tupletBracketHookHeight>
+      <dynamicsFont>Finale Maestro</dynamicsFont>
+      <textLineLineWidth>0.0748698</textLineLineWidth>
+      <textLineDashLineLen>10.0174</textLineDashLineLen>
+      <textLineDashGapLen>10.0174</textLineDashGapLen>
+      <textLineHookHeight>0.5</textLineHookHeight>
+      <systemTextLineLineWidth>0.0748698</systemTextLineLineWidth>
+      <systemTextLineDashLineLen>10.0174</systemTextLineDashLineLen>
+      <systemTextLineDashGapLen>10.0174</systemTextLineDashGapLen>
+      <systemTextLineHookHeight>0.5</systemTextLineHookHeight>
+      <defaultFontFace>Times New Roman</defaultFontFace>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <composerFontFace>Times New Roman</composerFontFace>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <fingeringFontFace>Times New Roman</fingeringFontFace>
+      <fingeringFontSize>10</fingeringFontSize>
+      <tabFretNumberFontFace>Arial</tabFretNumberFontFace>
+      <tabFretNumberFontSize>9.16667</tabFretNumberFontSize>
+      <tabFretNumberFontStyle>1</tabFretNumberFontStyle>
+      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
+      <longInstrumentFontSize>11.6667</longInstrumentFontSize>
+      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
+      <shortInstrumentFontSize>11.6667</shortInstrumentFontSize>
+      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <partInstrumentFontSize>11.6667</partInstrumentFontSize>
+      <partInstrumentFontSpatiumDependent>1</partInstrumentFontSpatiumDependent>
+      <dynamicsFontFace>Times New Roman</dynamicsFontFace>
+      <expressionFontFace>Times New Roman</expressionFontFace>
+      <tempoFontFace>Times New Roman</tempoFontFace>
+      <tempoFontSize>11.6667</tempoFontSize>
+      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
+      <tempoChangeFontSize>10</tempoChangeFontSize>
+      <tempoChangeFontStyle>2</tempoChangeFontStyle>
+      <tempoChangeLineWidth>0.0748698</tempoChangeLineWidth>
+      <tempoChangeDashLineLen>10.0174</tempoChangeDashLineLen>
+      <tempoChangeDashGapLen>10.0174</tempoChangeDashGapLen>
+      <metronomeFontFace>Times New Roman</metronomeFontFace>
+      <metronomeFontSize>11.6667</metronomeFontSize>
+      <metronomeFontSpatiumDependent>1</metronomeFontSpatiumDependent>
+      <metronomeFontStyle>1</metronomeFontStyle>
+      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <measureNumberFontSize>8.33333</measureNumberFontSize>
+      <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>
+      <measureNumberPosAbove x="0.25" y="-1.83333"/>
+      <measureNumberPosBelow x="0.25" y="0"/>
+      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>8.33333</measureNumberAlternateFontSize>
+      <measureNumberAlternateFontSpatiumDependent>1</measureNumberAlternateFontSpatiumDependent>
+      <measureNumberAlternateFontStyle>2</measureNumberAlternateFontStyle>
+      <measureNumberAlternatePosAbove x="0.25" y="-1.83333"/>
+      <measureNumberAlternatePosBelow x="0.25" y="0"/>
+      <measureNumberAlternateFrameType>0</measureNumberAlternateFrameType>
+      <mmRestRangeBracketType>2</mmRestRangeBracketType>
+      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
+      <mmRestRangeFontSize>8.33333</mmRestRangeFontSize>
+      <mmRestRangeFontSpatiumDependent>1</mmRestRangeFontSpatiumDependent>
+      <mmRestRangePosAbove x="0" y="0"/>
+      <mmRestRangePosBelow x="0" y="1.55447"/>
+      <translatorFontFace>Times New Roman</translatorFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <systemTextFontStyle>2</systemTextFontStyle>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>11.6667</rehearsalMarkFontSize>
+      <repeatPlayCountFontFace>Times New Roman</repeatPlayCountFontFace>
+      <repeatPlayCountFontSize>11.6667</repeatPlayCountFontSize>
+      <repeatPlayCountFontStyle>1</repeatPlayCountFontStyle>
+      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
+      <repeatLeftFontSize>11.6667</repeatLeftFontSize>
+      <repeatLeftFontStyle>1</repeatLeftFontStyle>
+      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
+      <repeatRightFontSize>11.6667</repeatRightFontSize>
+      <repeatRightFontStyle>1</repeatRightFontStyle>
+      <frameFontFace>Times New Roman</frameFontFace>
+      <frameFontSpatiumDependent>1</frameFontSpatiumDependent>
+      <textLineFontFace>Times New Roman</textLineFontFace>
+      <systemTextLineFontFace>Times New Roman</systemTextLineFontFace>
+      <noteLineFontFace>Times New Roman</noteLineFontFace>
+      <noteLineDashLineLen>10.0174</noteLineDashLineLen>
+      <noteLineDashGapLen>10.0174</noteLineDashGapLen>
+      <glissandoFontFace>Times New Roman</glissandoFontFace>
+      <glissandoFontSize>10</glissandoFontSize>
+      <glissandoFontStyle>0</glissandoFontStyle>
+      <glissandoLineWidth>0.0748698</glissandoLineWidth>
+      <glissandoDashLineLen>10.0174</glissandoDashLineLen>
+      <glissandoDashGapLen>10.0174</glissandoDashGapLen>
+      <bendFontFace>Times New Roman</bendFontFace>
+      <bendFontSize>10</bendFontSize>
+      <bendLineWidth>0.0748698</bendLineWidth>
+      <guitarBendLineWidth>0.0748698</guitarBendLineWidth>
+      <guitarBendLineWidthTab>0.0748698</guitarBendLineWidthTab>
+      <guitarBendUseFull>1</guitarBendUseFull>
+      <showFretOnFullBendRelease>0</showFretOnFullBendRelease>
+      <headerFontFace>Times New Roman</headerFontFace>
+      <headerFontSize>10</headerFontSize>
+      <headerFontSpatiumDependent>1</headerFontSpatiumDependent>
+      <footerFontFace>Times New Roman</footerFontFace>
+      <footerFontSize>10</footerFontSize>
+      <footerFontSpatiumDependent>1</footerFontSpatiumDependent>
+      <copyrightFontFace>Times New Roman</copyrightFontFace>
+      <copyrightFontSize>10</copyrightFontSize>
+      <copyrightFontSpatiumDependent>1</copyrightFontSpatiumDependent>
+      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <pageNumberFontSpatiumDependent>1</pageNumberFontSpatiumDependent>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
+      <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
+      <instrumentChangeFontStyle>0</instrumentChangeFontStyle>
+      <stickingFontFace>Times New Roman</stickingFontFace>
+      <user1FontFace>Times New Roman</user1FontFace>
+      <user2FontFace>Times New Roman</user2FontFace>
+      <user3FontFace>Times New Roman</user3FontFace>
+      <user4FontFace>Times New Roman</user4FontFace>
+      <user5FontFace>Times New Roman</user5FontFace>
+      <user6FontFace>Times New Roman</user6FontFace>
+      <user7FontFace>Times New Roman</user7FontFace>
+      <user8FontFace>Times New Roman</user8FontFace>
+      <user9FontFace>Times New Roman</user9FontFace>
+      <user10FontFace>Times New Roman</user10FontFace>
+      <user11FontFace>Times New Roman</user11FontFace>
+      <user12FontFace>Times New Roman</user12FontFace>
+      <letRingFontFace>Times New Roman</letRingFontFace>
+      <letRingHookHeight>0.5</letRingHookHeight>
+      <letRingLineWidth>0.0748698</letRingLineWidth>
+      <letRingDashLineLen>10.0174</letRingDashLineLen>
+      <letRingDashGapLen>10.0174</letRingDashGapLen>
+      <palmMuteFontFace>Times New Roman</palmMuteFontFace>
+      <palmMuteHookHeight>0.5</palmMuteHookHeight>
+      <palmMuteLineWidth>0.0748698</palmMuteLineWidth>
+      <palmMuteDashLineLen>10.0174</palmMuteDashLineLen>
+      <palmMuteDashGapLen>10.0174</palmMuteDashGapLen>
+      <placeClefsBeforeRepeats>1</placeClefsBeforeRepeats>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
+      <repeatPlayCountShow>0</repeatPlayCountShow>
+      <spatium>1.80799</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="3">
+      <Staff>
+        <eid>E_E</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="4">
+      <Staff>
+        <eid>F_F</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <hideWhenEmpty>off</hideWhenEmpty>
+      <Instrument>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>G_G</eid>
+        <vspacerUp>17.4227</vspacerUp>
+        <vspacerFixed>7.20833</vspacerFixed>
+        <voice>
+          <KeySig>
+            <eid>H_H</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>I_I</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Rest>
+            <eid>J_J</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>K_K</eid>
+        <voice>
+          <Rest>
+            <eid>L_L</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>M_M</eid>
+        <voice>
+          <Rest>
+            <eid>N_N</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>O_O</eid>
+        <vspacerFixed>7.20833</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>P_P</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Q_Q</eid>
+        <voice>
+          <Rest>
+            <eid>R_R</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <vspacerFixed>7.66667</vspacerFixed>
+        <voice>
+          <KeySig>
+            <eid>S_S</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>T_T</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Rest>
+            <eid>U_U</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>V_V</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>W_W</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <vspacerFixed>7.66667</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>X_X</eid>
+            <durationType>half</durationType>
+            </Rest>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <beginTextOffset x="0" y="-1.11722"/>
+              <continueTextOffset x="0" y="-1.11722"/>
+              <endTextOffset x="0" y="-1.11722"/>
+              <eid>Y_Y</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="-0.666667" y="-5.26761"/>
+                <off2 x="-0.480418" y="0"/>
+                <eid>Z_Z</eid>
+                <autoplace>0</autoplace>
+                </Segment>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>a_a</eid>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>b_b</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>c_c</eid>
+                  <up>up</up>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>d_d</eid>
+            <durationType>whole</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>e_e</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <vspacerFixed>8.875</vspacerFixed>
+        <voice>
+          <KeySig>
+            <eid>f_f</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>g_g</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Rest>
+            <eid>h_h</eid>
+            <durationType>half</durationType>
+            </Rest>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <beginTextOffset x="0" y="-1.11722"/>
+              <continueTextOffset x="0" y="-1.11722"/>
+              <endTextOffset x="0" y="-1.11722"/>
+              <eid>i_i</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0" y="-3.76761"/>
+                <off2 x="-2.23474" y="0"/>
+                <eid>j_j</eid>
+                <autoplace>0</autoplace>
+                </Segment>
+              </Ottava>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>k_k</eid>
+            <durationType>half</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>l_l</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>m_m</eid>
+                  <up>up</up>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>n_n</eid>
+            <durationType>whole</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>o_o</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>p_p</eid>
+                  <up>up</up>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>q_q</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>r_r</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>s_s</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>t_t</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <eid>u_u</eid>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>v_v</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>w_w</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <vspacerFixed>8.875</vspacerFixed>
+        <voice>
+          <Rest>
+            <eid>x_x</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>y_y</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <vspacerFixed>9.67198</vspacerFixed>
+        <voice>
+          <KeySig>
+            <eid>z_z</eid>
+            <concertKey>0</concertKey>
+            <mode>major</mode>
+            </KeySig>
+          <TimeSig>
+            <eid>0_0</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <Groups>
+              <Node pos="8" action="272"/>
+              <Node pos="16" action="273"/>
+              <Node pos="24" action="272"/>
+              </Groups>
+            </TimeSig>
+          <Rest>
+            <eid>1_1</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>2_2</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>3_3</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>4_4</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>5_5</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <SystemLocks>
+      <systemLock>
+        <startMeasure>G_G</startMeasure>
+        <endMeasure>M_M</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>O_O</startMeasure>
+        <endMeasure>Q_Q</endMeasure>
+        </systemLock>
+      </SystemLocks>
+    </Score>
+  </museScore>
