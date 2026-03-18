@@ -314,6 +314,11 @@ void VideoEncoder::close()
         m_ffmpeg->ppicture = 0;
     }
 
+    if (m_ffmpeg->img_convert_ctx) {
+        m_ffmpegHandler->sws_freeContext(m_ffmpeg->img_convert_ctx);
+        m_ffmpeg->img_convert_ctx = nullptr;
+    }
+
     if (m_ffmpeg->formatCtx) {
         if (m_ffmpeg->formatCtx->pb) {
             m_ffmpegHandler->avio_close(m_ffmpeg->formatCtx->pb);
@@ -412,7 +417,12 @@ bool VideoEncoder::encodeVideo(const ByteArray& videoData, int maxFrames)
     AVFrame* decodedFrame = nullptr;
     AVPacket* packet = nullptr;
 
+    SwsContext* decSwsCtx = nullptr;
+
     DEFER {
+        if (decSwsCtx) {
+            m_ffmpegHandler->sws_freeContext(decSwsCtx);
+        }
         if (inputFmtCtx) {
             m_ffmpegHandler->avformat_close_input(&inputFmtCtx);
         }
@@ -474,7 +484,7 @@ bool VideoEncoder::encodeVideo(const ByteArray& videoData, int maxFrames)
         return false;
     }
 
-    SwsContext* decSwsCtx = m_ffmpegHandler->sws_getCachedContext(
+    decSwsCtx = m_ffmpegHandler->sws_getCachedContext(
         nullptr,
         decodeCtx->width, decodeCtx->height, decodeCtx->pix_fmt,
         m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P,
