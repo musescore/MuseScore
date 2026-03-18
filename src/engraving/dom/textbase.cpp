@@ -1571,6 +1571,7 @@ TextBase::TextBase(const TextBase& st)
     m_frameRound                  = st.m_frameRound;
     m_position                    = st.m_position;
     m_symbolSize                  = st.m_symbolSize;
+    m_symbolScale                 = st.m_symbolScale;
 
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
