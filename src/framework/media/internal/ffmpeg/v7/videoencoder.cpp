@@ -164,12 +164,12 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, const Options& options
         return false;
     }
 
-    m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
+    m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_MAIN;
     m_ffmpeg->codecCtx->time_base.den = options.fps;
     m_ffmpeg->codecCtx->time_base.num = 1;
     m_ffmpeg->codecCtx->gop_size = options.gop;
     m_ffmpeg->codecCtx->thread_count = 10;
-    m_ffmpeg->codecCtx->max_b_frames = 3;
+    m_ffmpeg->codecCtx->max_b_frames = 0;
     m_ffmpegHandler->av_opt_set_int(m_ffmpeg->codecCtx, "b_strategy", 1, 0);
 
     m_ffmpeg->codecCtx->me_cmp = 1;
