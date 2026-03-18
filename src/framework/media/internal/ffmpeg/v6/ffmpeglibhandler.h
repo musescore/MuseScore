@@ -96,6 +96,7 @@ public:
                                        const double* param) = nullptr;
     int (*sws_scale)(struct SwsContext* c, const uint8_t* const srcSlice[], const int srcStride[], int srcSliceY, int srcSliceH,
                      uint8_t* const dst[], const int dstStride[]) = nullptr;
+    void (*sws_freeContext)(SwsContext* swsContext) = nullptr;
 
 private: void* getSymbol(void* lib, const char* name) const;
     bool tryLoadPath(void*& lib, const io::path_t& fullPath);

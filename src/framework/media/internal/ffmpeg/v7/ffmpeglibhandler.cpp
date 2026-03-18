@@ -106,6 +106,7 @@ bool FFmpegLibHandler::loadApi()
     // libswscale
     RESOLVE_FROM(m_swsScaleLibrary, sws_getCachedContext);
     RESOLVE_FROM(m_swsScaleLibrary, sws_scale);
+    RESOLVE_FROM(m_swsScaleLibrary, sws_freeContext);
 
     return functionsValid();
 }
@@ -182,7 +183,7 @@ bool FFmpegLibHandler::functionsValid() const
            && av_frame_alloc && av_frame_free
            && av_packet_alloc && av_packet_free && av_packet_unref && av_packet_rescale_ts
            && av_malloc
-           && sws_getCachedContext && sws_scale;
+           && sws_getCachedContext && sws_scale && sws_freeContext;
 }
 
 void FFmpegLibHandler::clearFunctions()
@@ -227,5 +228,6 @@ void FFmpegLibHandler::clearFunctions()
     av_packet_rescale_ts = nullptr;
     sws_getCachedContext = nullptr;
     sws_scale = nullptr;
+    sws_freeContext = nullptr;
 }
 }
