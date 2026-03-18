@@ -1089,3 +1089,20 @@ void CompatUtils::convertPre470ImageSize(Image* image)
         image->setSize(image->size() * (DPI / PRE_470_DPI));
     }
 }
+
+void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
+{
+    if (!item->isTextBase() && !item->isTextLineBase() && !item->isTextLineBaseSegment()) {
+        return;
+    }
+    PointF defaultOffset;
+    if (item->isTextBase()) {
+        defaultOffset = toTextBase(item)->defaultOffset();
+    } else if (item->isTextLineBase()) {
+        defaultOffset = toTextLineBase(item)->defaultOffset();
+    } else if (item->isTextLineBaseSegment()) {
+        defaultOffset = toTextLineBaseSegment(item)->defaultOffset();
+    }
+
+    offset = offset.value<PointF>() - defaultOffset;
+}
