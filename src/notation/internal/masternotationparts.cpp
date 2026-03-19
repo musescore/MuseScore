@@ -103,6 +103,7 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
 
+    endInteractionWithScore();
     startGlobalEdit(TranslatableString("undoableAction", "Remove instruments"));
 
     NotationParts::removeParts(partsIds);
@@ -118,6 +119,7 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
+    endInteractionWithScore();
     startGlobalEdit(TranslatableString("undoableAction", "Remove staves"));
 
     NotationParts::removeStaves(stavesIds);
