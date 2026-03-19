@@ -6408,6 +6408,9 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     const double yOff = item->staffOffsetY();
     ldata->moveY(yOff);
 
+    PointF offsetPos = item->defaultOffset();
+    ldata->move(offsetPos);
+
     bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
     Ornament* ornament = trill->ornament();
     if (ornament) {
@@ -6468,10 +6471,6 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
                              SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
         }
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = trill->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());

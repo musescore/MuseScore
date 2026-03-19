@@ -433,6 +433,11 @@ String Trill::accessibleInfo() const
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 
+Sid Trill::offsetSid() const
+{
+    return placeAbove() ? Sid::trillPosAbove : Sid::trillPosBelow;
+}
+
 void Trill::doComputeEndElement()
 {
     setEndElement(score()->findChordRestEndingBeforeTickInStaffAndVoice(tick2(), track2staff(track2()), voice()));
