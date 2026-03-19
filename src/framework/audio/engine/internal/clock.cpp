@@ -32,7 +32,6 @@ Clock::Clock()
                           .name("audio::clock::timeChangedInSecs")
                           .disableWaitPendingsOnSend())
 {
-    m_status.set(PlaybackStatus::Stopped);
 }
 
 msecs_t Clock::currentTime() const
@@ -51,16 +50,13 @@ void Clock::forward(const msecs_t nextMsecs)
         return;
     } else if (m_countDown != 0) {
         m_countDown = 0;
-        m_countDownEnded.notify();
+        onAction(ActionType::CountDownEnded, m_currentTime);
     }
 
     msecs_t newTime = m_currentTime + nextMsecs;
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
-        seek(m_timeLoopStart);
-
-        //!Note No matter of the time loop boundaries, the current frame still should be handled
-        setCurrentTime(m_timeLoopStart + nextMsecs);
+        onAction(ActionType::LoopEndReached, newTime);
         return;
     }
 
@@ -85,7 +81,8 @@ void Clock::setCurrentTime(msecs_t time)
 
 void Clock::start()
 {
-    m_status.set(PlaybackStatus::Running);
+    m_status = PlaybackStatus::Running;
+    onAction(ActionType::StatusChanged, m_currentTime);
 }
 
 void Clock::reset()
@@ -97,19 +94,22 @@ void Clock::reset()
 
 void Clock::stop()
 {
-    m_status.set(PlaybackStatus::Stopped);
+    m_status = PlaybackStatus::Stopped;
+    onAction(ActionType::StatusChanged, m_currentTime);
     seek(0);
     m_countDown = 0;
 }
 
 void Clock::pause()
 {
-    m_status.set(PlaybackStatus::Paused);
+    m_status = PlaybackStatus::Paused;
+    onAction(ActionType::StatusChanged, m_currentTime);
 }
 
 void Clock::resume()
 {
-    m_status.set(PlaybackStatus::Running);
+    m_status = PlaybackStatus::Running;
+    onAction(ActionType::StatusChanged, m_currentTime);
     seek(m_currentTime);
 }
 
@@ -120,7 +120,7 @@ void Clock::seek(const msecs_t msecs)
     }
 
     setCurrentTime(msecs);
-    m_seekOccurred.notify();
+    onAction(ActionType::Seek, m_currentTime);
 }
 
 msecs_t Clock::timeDuration() const
@@ -156,14 +156,9 @@ void Clock::setCountDown(const msecs_t duration)
     m_countDown = duration;
 }
 
-async::Notification Clock::countDownEnded() const
-{
-    return m_countDownEnded;
-}
-
 bool Clock::isRunning() const
 {
-    return m_status.val == PlaybackStatus::Running;
+    return m_status == PlaybackStatus::Running;
 }
 
 async::Channel<secs_t> Clock::timeChanged() const
@@ -171,17 +166,19 @@ async::Channel<secs_t> Clock::timeChanged() const
     return m_timeChangedInSecs;
 }
 
-async::Notification Clock::seekOccurred() const
-{
-    return m_seekOccurred;
-}
-
 PlaybackStatus Clock::status() const
 {
-    return m_status.val;
+    return m_status;
 }
 
-async::Channel<PlaybackStatus> Clock::statusChanged() const
+void Clock::setOnAction(OnActionFunc func)
 {
-    return m_status.ch;
+    m_onActionFunc = func;
+}
+
+void Clock::onAction(ActionType type, msecs_t time)
+{
+    if (m_onActionFunc) {
+        m_onActionFunc(type, time);
+    }
 }

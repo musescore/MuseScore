@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SEQUENCEPLAYER_H
-#define MUSE_AUDIO_SEQUENCEPLAYER_H
+#pragma once
 
 #include "global/async/asyncable.h"
 
@@ -39,7 +38,8 @@ class SequencePlayer : public ISequencePlayer, public Contextable, public async:
     ContextInject<engine::IAudioEngine> audioEngine = { this };
 
 public:
-    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
+    explicit SequencePlayer(IGetTracks* getTracks, const modularity::ContextPtr& iocCtx);
+    ~SequencePlayer() override;
 
     async::Promise<Ret> prepareToPlay() override;
 
@@ -61,7 +61,7 @@ public:
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
-    void seekAllTracks(const msecs_t newPositionMsecs);
+    void seekAllTracks(const msecs_t newPositionMsecs, bool flushSound = true);
     void flushAllTracks();
 
     using AllTracksReadyCallback = std::function<void ()>;
@@ -70,10 +70,12 @@ private:
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;
 
+    async::Channel<PlaybackStatus> m_playbackStatusChanged;
+
     bool m_countDownIsSet = false;
-    bool m_flushSoundOnSeek = true;
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
+
+    bool m_tracksFollowClockSeek = true;
+    msecs_t m_loopStart = 0;
 };
 }
-
-#endif // MUSE_AUDIO_SEQUENCEPLAYER_H

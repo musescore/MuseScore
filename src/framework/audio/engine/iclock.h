@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ICLOCK_H
-#define MUSE_AUDIO_ICLOCK_H
+#pragma once
 
 #include <memory>
 
@@ -47,11 +46,9 @@ public:
     virtual void pause() = 0;
     virtual void resume() = 0;
     virtual void seek(const msecs_t msecs) = 0;
-    virtual async::Notification seekOccurred() const = 0;
     virtual bool isRunning() const = 0;
 
     virtual PlaybackStatus status() const = 0;
-    virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
 
     virtual msecs_t timeDuration() const = 0;
     virtual void setTimeDuration(const msecs_t duration) = 0;
@@ -59,12 +56,19 @@ public:
     virtual void resetTimeLoop() = 0;
 
     virtual void setCountDown(const msecs_t duration) = 0;
-    virtual async::Notification countDownEnded() const = 0;
 
     virtual async::Channel<secs_t> timeChanged() const = 0;
+
+    enum ActionType {
+        StatusChanged,
+        Seek,
+        LoopEndReached,
+        CountDownEnded,
+    };
+
+    using OnActionFunc = std::function<void (ActionType type, msecs_t time)>;
+    virtual void setOnAction(OnActionFunc func) = 0;
 };
 
 using IClockPtr = std::shared_ptr<IClock>;
 }
-
-#endif // MUSE_AUDIO_ICLOCK_H

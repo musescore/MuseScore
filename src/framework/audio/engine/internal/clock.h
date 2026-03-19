@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_CLOCK_H
-#define MUSE_AUDIO_CLOCK_H
+
+#pragma once
 
 #include "global/types/retval.h"
 #include "global/async/asyncable.h"
@@ -41,11 +41,9 @@ public:
     void pause() override;
     void resume() override;
     void seek(const msecs_t msecs) override;
-    async::Notification seekOccurred() const override;
     bool isRunning() const override;
 
     PlaybackStatus status() const override;
-    async::Channel<PlaybackStatus> statusChanged() const override;
 
     msecs_t timeDuration() const override;
     void setTimeDuration(const msecs_t duration) override;
@@ -53,15 +51,17 @@ public:
     void resetTimeLoop() override;
 
     void setCountDown(const msecs_t duration) override;
-    async::Notification countDownEnded() const override;
 
     msecs_t currentTime() const override;
     async::Channel<secs_t> timeChanged() const override;
 
+    void setOnAction(OnActionFunc func) override;
+
 private:
     void setCurrentTime(msecs_t time);
+    void onAction(ActionType type, msecs_t time);
 
-    ValCh<PlaybackStatus> m_status;
+    PlaybackStatus m_status = PlaybackStatus::Stopped;
     msecs_t m_currentTime = 0;
     msecs_t m_timeDuration = 0;
     msecs_t m_timeLoopStart = 0;
@@ -69,9 +69,7 @@ private:
     msecs_t m_countDown = 0;
 
     async::Channel<secs_t> m_timeChangedInSecs;
-    async::Notification m_seekOccurred;
-    async::Notification m_countDownEnded;
+
+    OnActionFunc m_onActionFunc;
 };
 }
-
-#endif // MUSE_AUDIO_CLOCK_H
