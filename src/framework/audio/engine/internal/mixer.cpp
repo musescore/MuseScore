@@ -408,7 +408,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
             m_masterOutputParamsChanged.send(m_masterParams);
-        });
+        }, async::Asyncable::Mode::SetReplace);
 
         if (!m_shouldProcessMasterFxDuringSilence && fx->shouldProcessDuringSilence()) {
             m_shouldProcessMasterFxDuringSilence = true;
