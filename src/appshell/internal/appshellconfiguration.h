@@ -90,10 +90,6 @@ public:
     std::string museScoreVersion() const override;
     std::string museScoreRevision() const override;
 
-    bool isNotationNavigatorVisible() const override;
-    void setIsNotationNavigatorVisible(bool visible) const override;
-    muse::async::Notification isNotationNavigatorVisibleChanged() const override;
-
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
 

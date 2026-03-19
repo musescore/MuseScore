@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
-#include "ui/iuiconfiguration.h"
+#include "ui/iuistate.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public QQmlParserStatus
@@ -41,7 +41,7 @@ class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel, public Q
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::ContextInject<muse::ui::IUiState> uiState = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 

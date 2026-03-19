@@ -33,13 +33,15 @@
 
 #include "dockwindow/idockwindowprovider.h"
 
+#include "iappshellstate.h"
+
 namespace mu::appshell {
 class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Contextable, public muse::async::Asyncable
 {
-    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<notation::INotationSceneConfiguration> notationSceneConfiguration;
+    muse::ContextInject<IAppShellState> appShellState = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
 

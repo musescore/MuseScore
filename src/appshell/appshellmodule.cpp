@@ -33,6 +33,7 @@
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
+#include "internal/appshellstate.h"
 #include "internal/startupscenario.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/sessionsmanager.h"
@@ -100,10 +101,12 @@ muse::modularity::IContextSetup* AppShellModule::newContext(const muse::modulari
 
 void AppShellContext::registerExports()
 {
+    m_appshellState = std::make_shared<AppShellState>(iocContext());
     m_applicationActionController = std::make_shared<ApplicationActionController>(iocContext());
     m_applicationUiActions = std::make_shared<ApplicationUiActions>(m_applicationActionController, iocContext());
     m_sessionsManager = std::make_shared<SessionsManager>(iocContext());
 
+    ioc()->registerExport<IAppShellState>(mname, m_appshellState);
     ioc()->registerExport<IStartupScenario>(mname, new StartupScenario(iocContext()));
     ioc()->registerExport<ISessionsManager>(mname, m_sessionsManager);
 

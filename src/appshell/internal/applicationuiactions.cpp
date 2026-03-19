@@ -296,7 +296,7 @@ void ApplicationUiActions::init()
         m_actionCheckedChanged.send({ FULL_SCREEN_CODE });
     });
 
-    configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
+    appShellState()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
         m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
     });
 
@@ -364,7 +364,7 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
     }
 
     if (dockName == NOTATION_NAVIGATOR_PANEL_NAME) {
-        return configuration()->isNotationNavigatorVisible();
+        return appShellState()->isNotationNavigatorVisible();
     }
 
     if (dockName == NOTATION_BRAILLE_PANEL_NAME) {

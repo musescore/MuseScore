@@ -29,6 +29,7 @@
 #include "internal/uiengine.h"
 #include "internal/mainwindow.h"
 #include "internal/uiconfiguration.h"
+#include "internal/uistate.h"
 #include "internal/uiactionsregister.h"
 #include "internal/navigationcontroller.h"
 #include "internal/navigationuiactions.h"
@@ -132,11 +133,6 @@ void UiModule::onAllInited(const IApplication::RunMode& mode)
         return;
     }
 
-    //! NOTE Some of the settings are taken from the workspace,
-    //! we need to be sure that the workspaces are initialized.
-    //! So, we loads these settings on onStartApp
-    m_configuration->load();
-
     m_theme->init();
 }
 
@@ -154,6 +150,7 @@ IContextSetup* UiModule::newContext(const muse::modularity::ContextPtr& ctx) con
 
 void UiModuleContext::registerExports()
 {
+    m_uistate = std::make_shared<UiState>(iocContext());
     m_uiengine = std::make_shared<UiEngine>(iocContext());
     m_uiactionsRegister = std::make_shared<UiActionsRegister>(iocContext());
     m_keyNavigationController = std::make_shared<NavigationController>(iocContext());
@@ -168,6 +165,7 @@ void UiModuleContext::registerExports()
     m_windowsController = std::make_shared<WindowsController>();
     #endif
 
+    ioc()->registerExport<IUiState>(module_name, m_uistate);
     ioc()->registerExport<IUiEngine>(module_name, m_uiengine);
     ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(module_name, m_keyNavigationController);
@@ -195,6 +193,11 @@ void UiModuleContext::onInit(const IApplication::RunMode& mode)
 
 void UiModuleContext::onAllInited(const IApplication::RunMode&)
 {
+    //! NOTE Some of the settings are taken from the workspace,
+    //! we need to be sure that the workspaces are initialized.
+    //! So, we loads these settings on onStartApp
+    m_uistate->init();
+
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp

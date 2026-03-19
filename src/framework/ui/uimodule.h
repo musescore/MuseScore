@@ -30,12 +30,7 @@ class ThemeApi;
 }
 
 namespace muse::ui {
-class UiEngine;
 class UiConfiguration;
-class UiActionsRegister;
-class NavigationController;
-class NavigationUiActions;
-class WindowsController;
 #ifdef Q_OS_MAC
 class MacOSPlatformTheme;
 #elif defined(Q_OS_WIN)
@@ -76,6 +71,12 @@ private:
     #endif
 };
 
+class UiState;
+class UiEngine;
+class UiActionsRegister;
+class NavigationController;
+class NavigationUiActions;
+class WindowsController;
 class UiModuleContext : public modularity::IContextSetup
 {
 public:
@@ -89,6 +90,7 @@ public:
     void onAllInited(const IApplication::RunMode& mode) override;
 
 private:
+    std::shared_ptr<UiState> m_uistate;
     std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
     std::shared_ptr<NavigationController> m_keyNavigationController;

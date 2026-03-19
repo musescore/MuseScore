@@ -33,7 +33,6 @@
 #include "global/async/notification.h"
 
 #include "uitypes.h"
-#include "uiaction.h"
 
 class QByteArray;
 class QWindow;
@@ -100,29 +99,10 @@ public:
     //! NOTE Maybe set from command line
     virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;
 
-    virtual ValNt<QByteArray> pageState(const QString& pageName) const = 0;
-    virtual void setPageState(const QString& pageName, const QByteArray& state) = 0;
-
-    virtual QByteArray windowGeometry() const = 0;
-    virtual void setWindowGeometry(const QByteArray& state) = 0;
-    virtual async::Notification windowGeometryChanged() const = 0;
-
     virtual bool isGlobalMenuAvailable() const = 0;
     virtual bool isSystemDragSupported() const = 0;
 
     virtual void applyPlatformStyle(QWindow* window) = 0;
-
-    virtual bool isVisible(const QString& key, bool def = true) const = 0;
-    virtual void setIsVisible(const QString& key, bool val) = 0;
-    virtual async::Notification isVisibleChanged(const QString& key) const = 0;
-
-    virtual QString uiItemState(const QString& itemName) const = 0;
-    virtual void setUiItemState(const QString& itemName, const QString& value) = 0;
-    virtual async::Notification uiItemStateChanged(const QString& itemName) const = 0;
-
-    virtual ToolConfig toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const = 0;
-    virtual void setToolConfig(const QString& toolName, const ToolConfig& config) = 0;
-    virtual async::Notification toolConfigChanged(const QString& toolName) const = 0;
 
     virtual int flickableMaxVelocity() const = 0;
 

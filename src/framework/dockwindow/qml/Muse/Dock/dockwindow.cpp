@@ -210,7 +210,7 @@ void DockWindow::init()
 
     dockWindowProvider()->init(this);
 
-    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
+    uiState()->windowGeometryChanged().onNotify(this, [this]() {
         reloadCurrentPage();
     });
 
@@ -236,7 +236,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     if (!isFirstOpening) {
         const QString pageName = m_currentPage->objectName();
-        uiConfiguration()->pageState(pageName).notification.disconnect(this);
+        uiState()->pageState(pageName).notification.disconnect(this);
         savePageState(pageName);
         clearRegistry(m_ctx);
         m_currentPage->setVisible(false);
@@ -340,10 +340,10 @@ void DockWindow::restoreDefaultLayout()
 
     m_reloadCurrentPageAllowed = false;
     for (const DockPageView* page : m_pages.list()) {
-        uiConfiguration()->setPageState(page->objectName(), QByteArray());
+        uiState()->setPageState(page->objectName(), QByteArray());
     }
 
-    uiConfiguration()->setWindowGeometry(QByteArray());
+    uiState()->setWindowGeometry(QByteArray());
     m_reloadCurrentPageAllowed = true;
 
     reloadCurrentPage();
@@ -591,18 +591,18 @@ void DockWindow::saveWindowGeometry()
     /// NOTE: The state of all dock widgets is also saved here,
     /// since the library does not provide the ability to save
     /// and restore only the application geometry.
-    uiConfiguration()->setWindowGeometry(windowState());
+    uiState()->setWindowGeometry(windowState());
 }
 
 void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    if (uiConfiguration()->windowGeometry().isEmpty()) {
+    if (uiState()->windowGeometry().isEmpty()) {
         return;
     }
 
-    if (restoreLayout(uiConfiguration()->windowGeometry())) {
+    if (restoreLayout(uiState()->windowGeometry())) {
         m_hasGeometryBeenRestored = true;
     } else {
         LOGE() << "Could not restore the window geometry!";
@@ -618,7 +618,7 @@ void DockWindow::savePageState(const QString& pageName)
     }
 
     m_reloadCurrentPageAllowed = false;
-    uiConfiguration()->setPageState(pageName, windowState());
+    uiState()->setPageState(pageName, windowState());
     m_reloadCurrentPageAllowed = true;
 }
 
@@ -628,7 +628,7 @@ void DockWindow::restorePageState(const DockPageView* page)
 
     const QString& pageName = page->objectName();
 
-    ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+    ValNt<QByteArray> pageStateValNt = uiState()->pageState(pageName);
     const bool layoutIsEmpty = pageStateValNt.val.isEmpty();
 
     QSet<DockBase*> unknownDocks;

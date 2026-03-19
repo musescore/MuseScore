@@ -47,6 +47,8 @@ target_sources(muse_ui PRIVATE
     api/keyboardapi.cpp
     api/keyboardapi.h
 
+    internal/uistate.cpp
+    internal/uistate.h
     internal/uiengine.cpp
     internal/uiengine.h
     internal/mainwindow.cpp

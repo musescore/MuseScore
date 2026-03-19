@@ -39,7 +39,7 @@ NotationPageModel::NotationPageModel(QObject* parent)
 
 bool NotationPageModel::isNavigatorVisible() const
 {
-    return configuration()->isNotationNavigatorVisible();
+    return appShellState()->isNotationNavigatorVisible();
 }
 
 bool NotationPageModel::isBraillePanelVisible() const
@@ -197,7 +197,7 @@ void NotationPageModel::onNotationChanged()
 void NotationPageModel::toggleDock(const QString& name)
 {
     if (name == NOTATION_NAVIGATOR_PANEL_NAME) {
-        configuration()->setIsNotationNavigatorVisible(!isNavigatorVisible());
+        appShellState()->setIsNotationNavigatorVisible(!isNavigatorVisible());
         emit isNavigatorVisibleChanged();
         return;
     }
