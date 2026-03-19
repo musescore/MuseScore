@@ -68,12 +68,18 @@ struct AacEncoderHandler
 
         CHANNEL_MODE mode = MODE_1;
         switch (channels) {
-        case 1: mode = MODE_1; break;
-        case 2: mode = MODE_2; break;
-        case 3: mode = MODE_1_2; break;
-        case 4: mode = MODE_1_2_1; break;
-        case 5: mode = MODE_1_2_2; break;
-        case 6: mode = MODE_1_2_2_1; break;
+        case 1: mode = MODE_1;
+            break;
+        case 2: mode = MODE_2;
+            break;
+        case 3: mode = MODE_1_2;
+            break;
+        case 4: mode = MODE_1_2_1;
+            break;
+        case 5: mode = MODE_1_2_2;
+            break;
+        case 6: mode = MODE_1_2_2_1;
+            break;
         default:
             LOGE() << "Unsupported channel count:" << channels;
             return false;
@@ -121,11 +127,6 @@ struct AacEncoderHandler
         return true;
     }
 };
-
-AacEncoder::~AacEncoder()
-{
-    closeDestination();
-}
 
 bool AacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
 {
