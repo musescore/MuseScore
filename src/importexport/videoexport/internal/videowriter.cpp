@@ -71,7 +71,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     Config cfg = makeConfig();
 
     muse::io::path_t finalPath(filePath);
-    muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
+    muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.aac";
 
     auto encoder = videoEncodeResolver()->currentVideoEncoder();
 
@@ -202,9 +202,9 @@ void VideoWriter::startVideoExport(muse::media::IVideoEncoderPtr encoder, INotat
 
 void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath)
 {
-    m_audioWriter = writers()->writer("mp3");
+    m_audioWriter = writers()->writer("aac");
     if (!m_audioWriter) {
-        LOGE() << "mp3 writer not found";
+        LOGE() << "aac writer not found";
         m_audioRet = make_ret(muse::Ret::Code::InternalError);
         m_audioCompleted = true;
         return;
