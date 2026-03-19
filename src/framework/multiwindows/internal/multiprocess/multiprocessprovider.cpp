@@ -60,14 +60,8 @@ MultiProcessProvider::~MultiProcessProvider()
     delete m_ipcChannel;
 }
 
-void MultiProcessProvider::init()
+void MultiProcessProvider::initOnGlobal()
 {
-    dispatcher()->reg(this, "multiwindows-dev-show-info", [this]() {
-        if (!interactive()->isOpened(DEV_SHOW_INFO_URI.uri()).val) {
-            interactive()->open(DEV_SHOW_INFO_URI);
-        }
-    });
-
     m_ipcChannel = new IpcChannel();
     m_selfID = m_ipcChannel->selfID().toStdString();
     LOGI() << "our instance id is: " << m_selfID;
@@ -76,6 +70,15 @@ void MultiProcessProvider::init()
     m_ipcChannel->instancesChanged().onNotify(this, [this]() { m_instancesChanged.notify(); });
 
     m_ipcChannel->connect();
+}
+
+void MultiProcessProvider::initOnContext()
+{
+    dispatcher()->reg(this, "multiwindows-dev-show-info", [this]() {
+        if (!interactive()->isOpened(DEV_SHOW_INFO_URI.uri()).val) {
+            interactive()->open(DEV_SHOW_INFO_URI);
+        }
+    });
 }
 
 bool MultiProcessProvider::isInited() const
