@@ -2887,12 +2887,10 @@ namespace mu::engraving {
 
 		if (tuplet->ratio().numerator() == 3)   // Special handling for triplets
 		{
-			return QString("\uAF6");   // ⠆ (U+2806)
+			return QString(u"\uAF6");   // ⠆ (U+2806)
 		}
-		else
-		{
-			return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");
-		}
+		
+		return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");
 	}
 
 	QString Braille::brailleVolta(Measure* measure, Volta* volta, int staffCount)
