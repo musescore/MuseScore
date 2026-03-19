@@ -1048,7 +1048,7 @@ static void adjustPlacement(EngravingItem* e)
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
     double normalize;
-    if (defaultPlacement == PlacementV::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+    if (defaultPlacement == PlacementV::BELOW && ee->offset().isNull()) {
         normalize = staffHeight;
     } else {
         normalize = 0.0;
@@ -1073,7 +1073,7 @@ static void adjustPlacement(EngravingItem* e)
         for (auto a : spanner->spannerSegments()) {
             // spanner segments share the placement setting of the spanner
             // just adjust offset
-            if (defaultPlacement == PlacementV::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+            if (defaultPlacement == PlacementV::BELOW && a->offset().isNull()) {
                 normalize = staffHeight;
             } else {
                 normalize = 0.0;
@@ -1509,6 +1509,7 @@ static void readText206(XmlReader& e, ReadContext& ctx, TextBase* t, EngravingIt
             tctx.reader().unknown();
         }
     }
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1537,6 +1538,8 @@ static void readTempoText(TempoText* t, XmlReader& e, ReadContext& ctx)
         t->setXmlText(t->xmlText().replace(u"<sym>unicode", u"<sym>met"));
     }
 
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
+
     t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
@@ -1561,6 +1564,8 @@ static void readMarker(Marker* m, XmlReader& e, ReadContext& ctx)
         }
     }
     m->setMarkerType(mt);
+
+    CompatUtils::migrateOffsetPre302(m, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1589,6 +1594,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
     if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
         d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
     }
+    CompatUtils::migrateOffsetPre302(d, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -1658,7 +1664,8 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
         delete _verseNumber;
     }
     lyrics->setAutoplace(true);
-    if (!lyrics->isStyled(Pid::OFFSET) && !ctx.pasteMode()) {
+
+    if (!lyrics->offset().isNull() && !ctx.pasteMode()) {
         // fix offset for pre-3.1 scores
         // 2.x and earlier: y offset was relative to staff; x offset was relative to center of notehead
         lyrics->rxoffset() -= lyrics->symWidth(SymId::noteheadBlack) * 0.5;
@@ -1668,6 +1675,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, ReadContext& ctx)
         lyrics->setPlacement(PlacementV::ABOVE);
         adjustPlacement(lyrics);
     }
+    CompatUtils::migrateOffsetPre302(lyrics, ctx.mscVersion());
 }
 
 bool Read206::readDurationProperties206(XmlReader& e, ReadContext& ctx, DurationElement* de)
@@ -2220,6 +2228,7 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
     }
     CompatUtils::resetHookHeightSign(volta);
     adjustPlacement(volta);
+    CompatUtils::migrateOffsetPre302(volta, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -2266,6 +2275,7 @@ static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 
     CompatUtils::resetHookHeightSign(pedal);
     adjustPlacement(pedal);
+    CompatUtils::migrateOffsetPre302(pedal, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -2301,6 +2311,7 @@ static void readOttava(XmlReader& e, ReadContext& ctx, Ottava* ottava)
     ottava->styleChanged();
     CompatUtils::resetHookHeightSign(ottava);
     adjustPlacement(ottava);
+    CompatUtils::migrateOffsetPre302(ottava, ctx.mscVersion());
 }
 
 void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
@@ -2344,6 +2355,7 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
     }
     CompatUtils::resetHookHeightSign(h);
     adjustPlacement(h);
+    CompatUtils::migrateOffsetPre302(h, ctx.mscVersion());
 }
 
 void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
@@ -2369,6 +2381,7 @@ void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
         }
     }
     adjustPlacement(t);
+    CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
@@ -2380,6 +2393,7 @@ void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
     }
     CompatUtils::resetHookHeightSign(tlb);
     adjustPlacement(tlb);
+    CompatUtils::migrateOffsetPre302(tlb, ctx.mscVersion());
 }
 
 //---------------------------------------------------------
@@ -3025,6 +3039,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                     tctx.reader().unknown();
                 }
             }
+            CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
             if (t->empty()) {
                 if (t->links()) {
                     if (t->links()->size() == 1) {
@@ -3067,6 +3082,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
                 adjustPlacement(el);
             }
+            CompatUtils::migrateOffsetPre302(el, ctx.mscVersion());
 
             segment->add(el);
         } else if (tag == "Tempo") {

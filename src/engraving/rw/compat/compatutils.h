@@ -55,6 +55,7 @@ public:
     static void convertPre470ImageSize(Image* image);
     static void doMigrateNoteParens(EngravingItem* item);
     static void migrateOffset500(EngravingItem* item, PropertyValue& offset);
+    static void migrateOffsetPre302(EngravingItem* item, int mscVersion);
 
 private:
     static Sid positionStyleFromAlign(Sid align);

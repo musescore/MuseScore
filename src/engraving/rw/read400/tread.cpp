@@ -327,7 +327,7 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
-    if (pid == Pid::OFFSET) {
+    if (pid == Pid::OFFSET && ctx.mscVersion() >= 302) {    // in 301 files "pos" is written before placement. Migrate offset after both have been read
         compat::CompatUtils::migrateOffset500(item, v);
     }
 
@@ -454,6 +454,8 @@ void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
@@ -475,6 +477,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
         t->setVisible(false);
     }
 
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
+
     t->resetProperty(Pid::MUSIC_SYMBOL_SIZE);
 }
 
@@ -492,6 +496,7 @@ void TRead::read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
@@ -593,6 +598,8 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(d, ctx.mscVersion());
 }
 
 void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
@@ -605,6 +612,8 @@ void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(expr, ctx.mscVersion());
 }
 
 void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
@@ -761,6 +770,7 @@ void TRead::read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(a, ctx.mscVersion());
 }
 
 void TRead::read(RehearsalMark* m, XmlReader& xml, ReadContext& ctx)
@@ -1062,6 +1072,8 @@ void TRead::read(InstrumentChange* c, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::migrateOffsetPre302(c, ctx.mscVersion());
+
     if (c->score()->mscVersion() < 206) {
         // previous versions did not honor transposition of instrument change
         // except in ways that it should not have
@@ -1313,6 +1325,8 @@ void TRead::read(FiguredBass* b, XmlReader& e, ReadContext& ctx)
     if (b->items().size() > 0) {
         b->setXmlText(normalizedText);          // this is the text to show while editing
     }
+
+    compat::CompatUtils::migrateOffsetPre302(b, ctx.mscVersion());
 }
 
 void TRead::read(FiguredBassItem* i, XmlReader& e, ReadContext& ctx)
@@ -1638,6 +1652,8 @@ void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
         }
     }
     m->setMarkerType(mt);
+
+    compat::CompatUtils::migrateOffsetPre302(m, ctx.mscVersion());
 }
 
 void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
@@ -1656,6 +1672,8 @@ void TRead::read(Jump* j, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(j, ctx.mscVersion());
 }
 
 void TRead::read(MeasureNumber* n, XmlReader& xml, ReadContext& ctx)
@@ -1670,6 +1688,8 @@ void TRead::read(MeasureNumberBase* b, XmlReader& xml, ReadContext& ctx)
             xml.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(b, ctx.mscVersion());
 }
 
 bool TRead::readProperties(MeasureNumberBase* n, XmlReader& xml, ReadContext& ctx)
@@ -2594,6 +2614,7 @@ void TRead::read(Fingering* f, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(f, ctx.mscVersion());
 }
 
 void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
@@ -2780,6 +2801,8 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    compat::CompatUtils::migrateOffsetPre302(h, ctx.mscVersion());
+
     h->addChord(info);
 
     h->afterRead();
@@ -2921,6 +2944,8 @@ void TRead::read(Lyrics* l, XmlReader& e, ReadContext& ctx)
             l->ryoffset() = off.y();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(l, ctx.mscVersion());
 }
 
 void TRead::read(LineSegment* l, XmlReader& e, ReadContext& ctx)
@@ -2930,6 +2955,8 @@ void TRead::read(LineSegment* l, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    compat::CompatUtils::migrateOffsetPre302(l, ctx.mscVersion());
 }
 
 bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
@@ -3971,6 +3998,7 @@ void TRead::read(Text* t, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+    compat::CompatUtils::migrateOffsetPre302(t, ctx.mscVersion());
 }
 
 void TRead::read(TextLine* l, XmlReader& e, ReadContext& ctx)
