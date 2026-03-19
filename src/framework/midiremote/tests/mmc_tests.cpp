@@ -22,10 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "midi/mmc.h"
+#include "midiremote/mmc.h"
 #include "midi/midievent.h"
 
 using namespace muse::midi;
+using namespace muse::midiremote;
 
 static constexpr double LOCATE_ERROR(0.000001);
 

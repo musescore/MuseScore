@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,20 +17,29 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include "shortcuts/ishortcutsconfiguration.h"
+#include <memory>
 
-namespace muse::shortcuts {
-class ShortcutsConfigurationStub : public IShortcutsConfiguration
+#include "modularity/imodulesetup.h"
+
+namespace muse::midiremote {
+class MidiRemoteConfiguration;
+class MidiRemote;
+
+class MidiRemoteModule : public modularity::IModuleSetup
 {
 public:
-    QString currentKeyboardLayout() const override;
-    void setCurrentKeyboardLayout(const QString& layout) override;
+    std::string moduleName() const override;
 
-    io::path_t shortcutsUserAppDataPath() const override;
-    io::path_t shortcutsAppDataPath() const override;
+    void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<MidiRemoteConfiguration> m_configuration;
+    std::shared_ptr<MidiRemote> m_midiRemote;
 };
 }

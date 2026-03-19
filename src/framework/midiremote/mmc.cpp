@@ -24,10 +24,11 @@
 
 #include "mmc.h"
 
-#include "midievent.h"
+#include "midi/midievent.h"
 #include "log.h"
 
 using namespace muse::midi;
+using namespace muse::midiremote;
 
 inline std::optional<MMCMessage> fastParseMMC(const Event& event)
 {

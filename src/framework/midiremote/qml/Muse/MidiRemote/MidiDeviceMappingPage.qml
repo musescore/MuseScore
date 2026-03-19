@@ -24,7 +24,7 @@ import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.Shortcuts
+import Muse.MidiRemote
 
 import "internal"
 

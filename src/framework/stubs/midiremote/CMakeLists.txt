@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,19 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_shortcuts ALIAS muse::shortcuts STUB)
+muse_create_module(muse_midiremote ALIAS muse::midiremote STUB)
 
-target_sources(muse_shortcuts PRIVATE
-    shortcutsstubmodule.cpp
-    shortcutsstubmodule.h
-    shortcutsregisterstub.cpp
-    shortcutsregisterstub.h
-    shortcutscontrollerstub.cpp
-    shortcutscontrollerstub.h
-    shortcutsconfigurationstub.cpp
-    shortcutsconfigurationstub.h
+target_sources(muse_midiremote PRIVATE
+    midiremotestubmodule.cpp
+    midiremotestubmodule.h
+    midiremoteconfigurationstub.cpp
+    midiremoteconfigurationstub.h
+    midiremotestub.cpp
+    midiremotestub.h
 )
-
-if (MUSE_MODULE_SHORTCUTS_QML)
-    add_subdirectory(qml/Muse/Shortcuts)
-endif()

@@ -27,7 +27,9 @@
 
 namespace muse::midi {
 struct Event;
+}
 
+namespace muse::midiremote {
 enum class MMCCommand : uint8_t
 {
     Stop               = 0x01,
@@ -61,7 +63,7 @@ public:
     MMCParser();
     ~MMCParser();
 
-    std::optional<MMCMessage> process(const Event& event);
+    std::optional<MMCMessage> process(const midi::Event& event);
 
     static std::optional<double> locateToSeconds(const MMCMessage& msg);
 

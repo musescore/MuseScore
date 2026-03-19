@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "shortcutsstubmodule.h"
 
-#include "modularity/ioc.h"
+#pragma once
 
-#include "shortcutsregisterstub.h"
-#include "shortcutscontrollerstub.h"
-#include "shortcutsconfigurationstub.h"
+#include "modularity/imoduleinterface.h"
+#include "io/path.h"
+#include "types/retval.h"
 
-using namespace muse::shortcuts;
-using namespace muse::modularity;
-
-std::string ShortcutsModule::moduleName() const
+namespace muse::midiremote {
+class IMidiRemoteConfiguration : MODULE_GLOBAL_INTERFACE
 {
-    return "shortcuts_stub";
-}
+    INTERFACE_ID(IMidiRemoteConfiguration)
 
-void ShortcutsModule::registerExports()
-{
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
-    ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
+public:
+    virtual ~IMidiRemoteConfiguration() = default;
+
+    virtual io::path_t midiMappingUserAppDataPath() const = 0;
+
+    virtual bool advanceToNextNoteOnKeyRelease() const = 0;
+    virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
+    virtual muse::async::Channel<bool> advanceToNextNoteOnKeyReleaseChanged() const = 0;
+};
 }

@@ -21,33 +21,33 @@
  */
 #pragma once
 
+#include "midiremote/imidiremoteconfiguration.h"
 #include "async/asyncable.h"
-
 #include "modularity/ioc.h"
+
 #include "iglobalconfiguration.h"
-
-#include "ishortcutsconfiguration.h"
-
 #include "global/types/config.h"
 
-namespace muse::shortcuts {
-class ShortcutsConfiguration : public IShortcutsConfiguration, public Contextable, public async::Asyncable
+namespace muse::midiremote {
+class MidiRemoteConfiguration : public IMidiRemoteConfiguration, public Contextable, public async::Asyncable
 {
     GlobalInject<IGlobalConfiguration> globalConfiguration;
 
 public:
-    ShortcutsConfiguration(const modularity::ContextPtr& iocCtx)
+    MidiRemoteConfiguration(const modularity::ContextPtr& iocCtx)
         : Contextable(iocCtx) {}
 
     void init();
 
-    QString currentKeyboardLayout() const override;
-    void setCurrentKeyboardLayout(const QString& layout) override;
+    io::path_t midiMappingUserAppDataPath() const override;
 
-    io::path_t shortcutsUserAppDataPath() const override;
-    io::path_t shortcutsAppDataPath() const override;
+    bool advanceToNextNoteOnKeyRelease() const override;
+    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+    muse::async::Channel<bool> advanceToNextNoteOnKeyReleaseChanged() const override;
 
 private:
     Config m_config;
+
+    muse::async::Channel<bool> m_advanceToNextNoteOnKeyReleaseChanged;
 };
 }
