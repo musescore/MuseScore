@@ -1645,7 +1645,8 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
     for (auto tokIt = m_tokenList.begin(); tokIt != m_tokenList.end(); tokIt++) {
         const ChordToken& tok = *tokIt;
         const String n = tok.names.front();
-        if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
+        if ((n == u"/" || n == u"," || n == u"\\" || n == u" ")
+            && (stackSusOrAdd || (stackModifiersEnabled && tok.tokenClass == ChordTokenClass::MODIFIER))) {
             continue;
         }
 
