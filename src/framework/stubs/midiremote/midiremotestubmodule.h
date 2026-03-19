@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "shortcutsstubmodule.h"
 
-#include "modularity/ioc.h"
+#pragma once
 
-#include "shortcutsregisterstub.h"
-#include "shortcutscontrollerstub.h"
-#include "shortcutsconfigurationstub.h"
+#include "modularity/imodulesetup.h"
 
-using namespace muse::shortcuts;
-using namespace muse::modularity;
-
-std::string ShortcutsModule::moduleName() const
+namespace muse::midiremote {
+class MidiRemoteModule : public modularity::IModuleSetup
 {
-    return "shortcuts_stub";
-}
-
-void ShortcutsModule::registerExports()
-{
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
-    ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
+public:
+    std::string moduleName() const override;
+    void registerExports() override;
+};
 }

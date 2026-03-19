@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "engraving/iengravingconfiguration.h"
-#include "shortcuts/ishortcutsconfiguration.h"
+#include "midiremote/imidiremoteconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "ui/iuiactionsregister.h"
@@ -79,7 +79,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Contextable, publ
     Q_PROPERTY(
         bool autoUpdateFretboardDiagrams READ autoUpdateFretboardDiagrams WRITE setAutoUpdateFretboardDiagrams NOTIFY autoUpdateFretboardDiagramsChanged FINAL)
 
-    muse::GlobalInject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration;
+    muse::GlobalInject<muse::midiremote::IMidiRemoteConfiguration> midiRemoteConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;

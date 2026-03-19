@@ -19,17 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSTYPES_H
-#define MUSE_SHORTCUTS_SHORTCUTSTYPES_H
 
+#pragma once
+
+#include <set>
 #include <string>
+#include <string_view>
 #include <list>
+#include <utility>
+#include <vector>
+
 #include <QKeySequence>
 
-#include "global/utils.h"
 #include "global/stringutils.h"
-#include "global/translation.h"
-#include "midi/midievent.h"
 
 namespace muse::shortcuts {
 struct Shortcut
@@ -79,90 +81,6 @@ struct Shortcut
 };
 
 using ShortcutList = std::list<Shortcut>;
-
-enum RemoteEventType {
-    Undefined = 0,
-    Note,
-    Controller
-};
-
-struct RemoteEvent {
-    RemoteEventType type = RemoteEventType::Undefined;
-    int value = -1;
-
-    RemoteEvent() = default;
-    RemoteEvent(RemoteEventType type, int value)
-        : type(type), value(value) {}
-
-    bool isValid() const
-    {
-        return type != RemoteEventType::Undefined && value != -1;
-    }
-
-    String name() const
-    {
-        if (this->type == RemoteEventType::Note) {
-            //: A MIDI remote event, namely a note event
-            return muse::mtrc("shortcuts", "Note %1")
-                   .arg(String::fromStdString(muse::pitchToString(this->value)));
-        } else if (this->type == RemoteEventType::Controller) {
-            //: A MIDI remote event, namely a MIDI controller event
-            return muse::mtrc("shortcuts", "CC %1").arg(String::number(this->value));
-        }
-
-        //: No MIDI remote event
-        return muse::mtrc("shortcuts", "None");
-    }
-
-    bool operator ==(const RemoteEvent& other) const
-    {
-        return type == other.type && value == other.value;
-    }
-
-    bool operator !=(const RemoteEvent& other) const
-    {
-        return !operator==(other);
-    }
-};
-
-struct MidiControlsMapping {
-    std::string action;
-    RemoteEvent event;
-
-    MidiControlsMapping() = default;
-    MidiControlsMapping(const std::string& action)
-        : action(action) {}
-
-    bool isValid() const
-    {
-        return !action.empty() && event.isValid();
-    }
-
-    bool operator ==(const MidiControlsMapping& other) const
-    {
-        return action == other.action && other.event == event;
-    }
-};
-
-using MidiMappingList = std::list<MidiControlsMapping>;
-
-inline RemoteEvent remoteEventFromMidiEvent(const muse::midi::Event& midiEvent)
-{
-    using namespace muse;
-
-    RemoteEvent event;
-    bool isNote = midiEvent.isOpcodeIn({ midi::Event::Opcode::NoteOff, midi::Event::Opcode::NoteOn });
-    bool isController = midiEvent.isOpcodeIn({ midi::Event::Opcode::ControlChange });
-    if (isNote) {
-        event.type = RemoteEventType::Note;
-        event.value = midiEvent.note();
-    } else if (isController) {
-        event.type = RemoteEventType::Controller;
-        event.value = midiEvent.index();
-    }
-
-    return event;
-}
 
 inline bool needIgnoreKey(Qt::Key key)
 {
@@ -219,5 +137,3 @@ inline bool areContextPrioritiesEqual(const std::string& shortcutCtx1, const std
     return shortcutCtx1 == shortcutCtx2;
 }
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSTYPES_H

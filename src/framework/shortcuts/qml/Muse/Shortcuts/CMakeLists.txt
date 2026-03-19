@@ -4,25 +4,17 @@ qt_add_qml_module(muse_shortcuts_qml
     URI Muse.Shortcuts
     VERSION 1.0
     SOURCES
-        editmidimappingmodel.cpp
-        editmidimappingmodel.h
         editshortcutmodel.cpp
         editshortcutmodel.h
-        mididevicemappingmodel.cpp
-        mididevicemappingmodel.h
         shortcutsinstancemodel.cpp
         shortcutsinstancemodel.h
         shortcutsmodel.cpp
         shortcutsmodel.h
     QML_FILES
-        EditMidiMappingDialog.qml
         EditShortcutDialogContent.qml
-        internal/MidiMappingBottomPanel.qml
-        internal/MidiMappingTopPanel.qml
         internal/ShortcutsBottomPanel.qml
         internal/ShortcutsList.qml
         internal/ShortcutsTopPanel.qml
-        MidiDeviceMappingPage.qml
         Shortcuts.qml
         ShortcutsPage.qml
         StandardEditShortcutDialog.qml

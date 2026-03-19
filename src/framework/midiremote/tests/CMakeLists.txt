@@ -4,7 +4,7 @@
 # MuseScore
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited and others
+# Copyright (C) 2026 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,19 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_shortcuts ALIAS muse::shortcuts STUB)
+set(MODULE_TEST muse_midiremote_test)
 
-target_sources(muse_shortcuts PRIVATE
-    shortcutsstubmodule.cpp
-    shortcutsstubmodule.h
-    shortcutsregisterstub.cpp
-    shortcutsregisterstub.h
-    shortcutscontrollerstub.cpp
-    shortcutscontrollerstub.h
-    shortcutsconfigurationstub.cpp
-    shortcutsconfigurationstub.h
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mmc_tests.cpp
+    )
+
+set(MODULE_TEST_LINK
+    muse_midi
+    muse_midiremote
 )
 
-if (MUSE_MODULE_SHORTCUTS_QML)
-    add_subdirectory(qml/Muse/Shortcuts)
-endif()
+include(SetupGTest)

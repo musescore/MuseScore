@@ -28,9 +28,9 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "midi/imidiinport.h"
-#include "imidiremote.h"
+#include "midiremote/imidiremote.h"
 
-namespace muse::shortcuts {
+namespace muse::midiremote {
 class EditMidiMappingModel : public QObject, public Contextable, public async::Asyncable
 {
     Q_OBJECT
@@ -40,11 +40,11 @@ class EditMidiMappingModel : public QObject, public Contextable, public async::A
     QML_ELEMENT
 
     ContextInject<IMidiRemote> midiRemote = { this };
-    ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
+    ContextInject<midi::IMidiInPort> midiInPort = { this };
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);
-    ~EditMidiMappingModel();
+    ~EditMidiMappingModel() override;
 
     QString mappingTitle() const;
 
@@ -55,7 +55,7 @@ signals:
     void mappingTitleChanged(const QString& title);
 
 private:
-    QString deviceName(const muse::midi::MidiDeviceID& deviceId) const;
+    QString deviceName(const midi::MidiDeviceID& deviceId) const;
 
     RemoteEvent m_event;
 };

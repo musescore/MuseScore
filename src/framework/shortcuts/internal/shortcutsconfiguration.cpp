@@ -31,18 +31,9 @@
 using namespace muse;
 using namespace muse::shortcuts;
 
-static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
-
-static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE("shortcuts", "io/midi/advanceOnRelease");
-
 void ShortcutsConfiguration::init()
 {
     m_config = ConfigReader::read(":/configs/shortcuts.cfg");
-
-    settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
-    settings()->valueChanged(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).onReceive(this, [this](const Val& val) {
-        m_advanceToNextNoteOnKeyReleaseChanged.send(val.toBool());
-    });
 }
 
 QString ShortcutsConfiguration::currentKeyboardLayout() const
@@ -70,24 +61,4 @@ io::path_t ShortcutsConfiguration::shortcutsAppDataPath() const
 #endif
 
     return m_config.value("shortcuts").toPath();
-}
-
-io::path_t ShortcutsConfiguration::midiMappingUserAppDataPath() const
-{
-    return globalConfiguration()->userAppDataPath() + MIDIMAPPINGS_FILE_NAME;
-}
-
-bool ShortcutsConfiguration::advanceToNextNoteOnKeyRelease() const
-{
-    return settings()->value(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).toBool();
-}
-
-void ShortcutsConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
-{
-    settings()->setSharedValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
-}
-
-muse::async::Channel<bool> ShortcutsConfiguration::advanceToNextNoteOnKeyReleaseChanged() const
-{
-    return m_advanceToNextNoteOnKeyReleaseChanged;
 }
