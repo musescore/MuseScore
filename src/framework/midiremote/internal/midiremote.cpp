@@ -29,11 +29,13 @@
 
 #include "multiwindows/resourcelockguard.h"
 
+#include "actions/actiontypes.h"
+
 #include "log.h"
 
 using namespace muse;
-using namespace muse::shortcuts;
 using namespace muse::midi;
+using namespace muse::midiremote;
 
 static constexpr std::string_view MIDIMAPPING_TAG("MidiMapping");
 static constexpr std::string_view EVENT_TAG("Event");
@@ -116,7 +118,7 @@ Ret MidiRemote::process(const Event& ev)
     }
 
     if (ev.messageType() == Event::MessageType::SystemExclusiveData) {
-        const std::optional<midi::MMCMessage> msg = m_mmcParser.process(ev);
+        const std::optional<MMCMessage> msg = m_mmcParser.process(ev);
         if (msg.has_value()) {
             processMMC(msg.value());
         }
@@ -294,9 +296,9 @@ void MidiRemote::processMMC(const MMCMessage& msg)
         dispatcher()->dispatch("stop");
         break;
     case MMCCommand::Locate: {
-        const std::optional<double> pos = midi::MMCParser::locateToSeconds(msg);
+        const std::optional<double> pos = MMCParser::locateToSeconds(msg);
         if (pos.has_value()) {
-            dispatcher()->dispatch("rewind", ActionData::make_arg1<secs_t>(pos.value()));
+            dispatcher()->dispatch("rewind", actions::ActionData::make_arg1<secs_t>(pos.value()));
         }
     } break;
     default: break;

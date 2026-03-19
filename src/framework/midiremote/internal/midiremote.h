@@ -22,30 +22,28 @@
 
 #pragma once
 
+#include "midiremote/imidiremote.h"
 #include "async/asyncable.h"
-
 #include "modularity/ioc.h"
+
+#include "midiremote/imidiremoteconfiguration.h"
 #include "io/ifilesystem.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
-#include "ishortcutsconfiguration.h"
 
-#include "shortcutstypes.h"
-#include "../imidiremote.h"
-
-#include "midi/mmc.h"
+#include "midiremote/mmc.h"
 
 namespace muse {
 class XmlStreamReader;
 class XmlStreamWriter;
 }
 
-namespace muse::shortcuts {
+namespace muse::midiremote {
 class MidiRemote : public IMidiRemote, public Contextable, public async::Asyncable
 {
+    GlobalInject<IMidiRemoteConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
-    GlobalInject<IShortcutsConfiguration> configuration;
     ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
@@ -79,13 +77,13 @@ private:
 
     RemoteEvent remoteEvent(const std::string& action) const;
 
-    void processMMC(const midi::MMCMessage& msg);
+    void processMMC(const MMCMessage& msg);
 
     bool m_isSettingMode = false;
 
     MidiMappingList m_midiMappings;
     async::Notification m_midiMappingsChanged;
 
-    midi::MMCParser m_mmcParser;
+    midiremote::MMCParser m_mmcParser;
 };
 }

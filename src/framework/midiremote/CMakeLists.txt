@@ -18,32 +18,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_shortcuts ALIAS muse::shortcuts)
+muse_create_module(muse_midiremote ALIAS muse::midiremote)
 
-set(MODULE_QRC shortcuts.qrc)
+target_sources(muse_midiremote PRIVATE
+    midiremotemodule.cpp
+    midiremotemodule.h
+    mmc.cpp
+    mmc.h
+    midiremotetypes.h
+    imidiremoteconfiguration.h
+    imidiremote.h
 
-target_sources(muse_shortcuts PRIVATE
-    shortcutsmodule.cpp
-    shortcutsmodule.h
-    shortcutstypes.h
-    shortcutcontext.h
-    ishortcutsregister.h
-    ishortcutscontroller.h
-    ishortcutsconfiguration.h
-
-    api/shortcutsapi.cpp
-    api/shortcutsapi.h
-
-    internal/shortcutsregister.cpp
-    internal/shortcutsregister.h
-    internal/shortcutscontroller.cpp
-    internal/shortcutscontroller.h
-    internal/shortcutsconfiguration.cpp
-    internal/shortcutsconfiguration.h
+    internal/midiremoteconfiguration.cpp
+    internal/midiremoteconfiguration.h
+    internal/midiremote.cpp
+    internal/midiremote.h
 )
 
-target_link_libraries(muse_shortcuts PRIVATE Qt::Gui)
+if (MUSE_MODULE_MIDIREMOTE_QML)
+    add_subdirectory(qml/Muse/MidiRemote)
+endif()
 
-if (MUSE_MODULE_SHORTCUTS_QML)
-    add_subdirectory(qml/Muse/Shortcuts)
+if (MUSE_MODULE_MIDIREMOTE_TESTS)
+    add_subdirectory(tests)
 endif()

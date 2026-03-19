@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "shortcutsconfigurationstub.h"
+
+#include "midiremoteconfigurationstub.h"
 
 using namespace muse;
-using namespace muse::shortcuts;
+using namespace muse::midiremote;
 
-QString ShortcutsConfigurationStub::currentKeyboardLayout() const
-{
-    return QString();
-}
-
-void ShortcutsConfigurationStub::setCurrentKeyboardLayout(const QString&)
-{
-}
-
-io::path_t ShortcutsConfigurationStub::shortcutsUserAppDataPath() const
+io::path_t MidiRemoteConfigurationStub::midiMappingUserAppDataPath() const
 {
     return io::path_t();
 }
 
-io::path_t ShortcutsConfigurationStub::shortcutsAppDataPath() const
+bool MidiRemoteConfigurationStub::advanceToNextNoteOnKeyRelease() const
 {
-    return io::path_t();
+    return false;
+}
+
+void MidiRemoteConfigurationStub::setAdvanceToNextNoteOnKeyRelease(bool)
+{
+}
+
+async::Channel<bool> MidiRemoteConfigurationStub::advanceToNextNoteOnKeyReleaseChanged() const
+{
+    static async::Channel<bool> ch;
+    return ch;
 }

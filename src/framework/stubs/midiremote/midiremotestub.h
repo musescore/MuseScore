@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_MIDIREMOTESTUB_H
-#define MUSE_SHORTCUTS_MIDIREMOTESTUB_H
 
-#include "shortcuts/imidiremote.h"
+#pragma once
 
-namespace muse::shortcuts {
+#include "midiremote/imidiremote.h"
+
+namespace muse::midiremote {
 class MidiRemoteStub : public IMidiRemote
 {
 public:
@@ -43,5 +43,3 @@ public:
     Ret process(const muse::midi::Event& ev) override;
 };
 }
-
-#endif // MUSE_SHORTCUTS_MIDIREMOTESTUB_H

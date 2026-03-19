@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,41 +22,24 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-
 #include "modularity/imodulesetup.h"
 
-namespace muse::shortcuts {
-class ShortcutsController;
-class ShortcutsRegister;
-class ShortcutsConfiguration;
-class ShortcutsModule : public modularity::IModuleSetup
+namespace muse::midiremote {
+class MidiRemoteModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerApi() override;
-    void onInit(const IApplication::RunMode& mode) override;
 
-    modularity::IContextSetup* newContext(const modularity::ContextPtr& ctx) const override;
-
-private:
-    std::shared_ptr<ShortcutsConfiguration> m_configuration;
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 };
 
-class ShortcutsContext : public modularity::IContextSetup
+class MidiRemoteContext : public modularity::IContextSetup
 {
 public:
-    ShortcutsContext(const modularity::ContextPtr& ctx)
+    MidiRemoteContext(const muse::modularity::ContextPtr& ctx)
         : modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
-    void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
-
-private:
-    std::shared_ptr<ShortcutsController> m_shortcutsController;
-    std::shared_ptr<ShortcutsRegister> m_shortcutsRegister;
 };
 }

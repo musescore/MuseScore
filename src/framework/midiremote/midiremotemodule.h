@@ -1,11 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-only
- * MuseScore-CLA-applies
+ * MuseScore-Studio-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -17,46 +17,41 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include "modularity/imodulesetup.h"
 
-namespace muse::shortcuts {
-class ShortcutsController;
-class ShortcutsRegister;
-class ShortcutsConfiguration;
-class ShortcutsModule : public modularity::IModuleSetup
+namespace muse::midiremote {
+class MidiRemoteConfiguration;
+class MidiRemoteModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
-    void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
 
     modularity::IContextSetup* newContext(const modularity::ContextPtr& ctx) const override;
 
 private:
-    std::shared_ptr<ShortcutsConfiguration> m_configuration;
+    std::shared_ptr<MidiRemoteConfiguration> m_configuration;
 };
 
-class ShortcutsContext : public modularity::IContextSetup
+class MidiRemote;
+class MidiRemoteContext : public modularity::IContextSetup
 {
 public:
-    ShortcutsContext(const modularity::ContextPtr& ctx)
+    MidiRemoteContext(const modularity::ContextPtr& ctx)
         : modularity::IContextSetup(ctx) {}
 
     void registerExports() override;
     void onInit(const IApplication::RunMode& mode) override;
-    void onAllInited(const IApplication::RunMode& mode) override;
 
 private:
-    std::shared_ptr<ShortcutsController> m_shortcutsController;
-    std::shared_ptr<ShortcutsRegister> m_shortcutsRegister;
+    std::shared_ptr<MidiRemote> m_midiRemote;
 };
 }

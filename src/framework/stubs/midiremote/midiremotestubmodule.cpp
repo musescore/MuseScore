@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,36 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "shortcutsstubmodule.h"
+#include "midiremotestubmodule.h"
 
 #include "modularity/ioc.h"
 
-#include "shortcutsregisterstub.h"
-#include "shortcutscontrollerstub.h"
-#include "shortcutsconfigurationstub.h"
+#include "midiremotestub.h"
+#include "midiremoteconfigurationstub.h"
 
-using namespace muse::shortcuts;
+using namespace muse::midiremote;
 using namespace muse::modularity;
 
-static const std::string mname("shortcuts_stub");
+static const std::string mname("midiremote_stub");
 
-std::string ShortcutsModule::moduleName() const
+std::string MidiRemoteModule::moduleName() const
 {
     return mname;
 }
 
-void ShortcutsModule::registerExports()
+void MidiRemoteModule::registerExports()
 {
-    globalIoc()->registerExport<IShortcutsConfiguration>(mname, new ShortcutsConfigurationStub());
+    globalIoc()->registerExport<IMidiRemoteConfiguration>(mname, std::make_shared<MidiRemoteConfigurationStub>());
 }
 
-IContextSetup* ShortcutsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+IContextSetup* MidiRemoteModule::newContext(const ContextPtr& ctx) const
 {
-    return new ShortcutsContext(ctx);
+    return new MidiRemoteContext(ctx);
 }
 
-void ShortcutsContext::registerExports()
+void MidiRemoteContext::registerExports()
 {
-    ioc()->registerExport<IShortcutsRegister>(mname, new ShortcutsRegisterStub());
-    ioc()->registerExport<IShortcutsController>(mname, new ShortcutsControllerStub());
+    ioc()->registerExport<IMidiRemote>(mname, std::make_shared<MidiRemoteStub>());
 }
