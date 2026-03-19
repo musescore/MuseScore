@@ -1738,8 +1738,14 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                 };
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
                 // Make sure degrees are aligned when there are accidentals
-                const String& nextMod = modIdx != finalModIdx ? m_modifierList.at(modIdx + 1) : u"";
-                bool nextModStartsWithAcc = startsWithAcc(nextMod);
+                // -- nextMod now searches to the end of modifierList to support stacks of 3+ modifiers
+                auto it = std::find_if(
+                    m_modifierList.begin() + (modIdx + 1),
+                    m_modifierList.end(),
+                    [&startsWithAcc](const String& s) { return startsWithAcc(s); }
+                    );
+                const String& nextMod = (it != m_modifierList.end()) ? *it : u"";
+                bool nextModStartsWithAcc = (it != m_modifierList.end());
                 bool curModStartsWithAcc = startsWithAcc(curMod);
                 bool nIsAcc = startsWithAcc(n);
                 bool curModStartsWithSusOrAdd = startsWithSusOrAdd(curMod);
