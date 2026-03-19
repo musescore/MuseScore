@@ -2119,7 +2119,7 @@ void TDraw::draw(const Lasso* item, Painter* painter, const PaintOptions&)
     const Lasso::LayoutData* ldata = item->ldata();
     painter->setBrush(Brush(item->configuration()->lassoColor()));
     // always 2 pixel width
-    double w = 2.0 / painter->worldTransform().m11() * item->configuration()->guiScaling();
+    double w = 2.0 / painter->worldTransform().m11() * item->configuration()->guiScaling(item->iocContext());
     painter->setPen(Pen(item->configuration()->selectionColor(), w));
     painter->drawRect(ldata->bbox());
 }

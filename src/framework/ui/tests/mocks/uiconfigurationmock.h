@@ -76,35 +76,16 @@ public:
 
     MOCK_METHOD(void, resetFonts, (), (override));
 
-    MOCK_METHOD(double, guiScaling, (), (const, override));
-    MOCK_METHOD(double, physicalDpi, (), (const, override));
-    MOCK_METHOD(double, logicalDpi, (), (const, override));
+    MOCK_METHOD(double, guiScaling, (const muse::modularity::ContextPtr& ctx), (const, override));
+    MOCK_METHOD(double, physicalDpi, (const muse::modularity::ContextPtr& ctx), (const, override));
+    MOCK_METHOD(double, logicalDpi, (const muse::modularity::ContextPtr& ctx), (const, override));
 
     MOCK_METHOD(void, setPhysicalDotsPerInch, (std::optional<double>), (override));
-
-    MOCK_METHOD(ValNt<QByteArray>, pageState, (const QString&), (const, override));
-    MOCK_METHOD(void, setPageState, (const QString&, const QByteArray&), (override));
-
-    MOCK_METHOD(QByteArray, windowGeometry, (), (const, override));
-    MOCK_METHOD(void, setWindowGeometry, (const QByteArray&), (override));
-    MOCK_METHOD(async::Notification, windowGeometryChanged, (), (const, override));
 
     MOCK_METHOD(bool, isGlobalMenuAvailable, (), (const, override));
     MOCK_METHOD(bool, isSystemDragSupported, (), (const, override));
 
     MOCK_METHOD(void, applyPlatformStyle, (QWindow*), (override));
-
-    MOCK_METHOD(bool, isVisible, (const QString&, bool), (const, override));
-    MOCK_METHOD(void, setIsVisible, (const QString&, bool), (override));
-    MOCK_METHOD(async::Notification, isVisibleChanged, (const QString&), (const, override));
-
-    MOCK_METHOD(QString, uiItemState, (const QString&), (const, override));
-    MOCK_METHOD(void, setUiItemState, (const QString&, const QString&), (override));
-    MOCK_METHOD(async::Notification, uiItemStateChanged, (const QString&), (const, override));
-
-    MOCK_METHOD(ToolConfig, toolConfig, (const QString&, const ToolConfig&), (const, override));
-    MOCK_METHOD(void, setToolConfig, (const QString&, const ToolConfig&), (override));
-    MOCK_METHOD(async::Notification, toolConfigChanged, (const QString&), (const, override));
 
     MOCK_METHOD(int, flickableMaxVelocity, (), (const, override));
 

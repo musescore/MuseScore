@@ -25,6 +25,7 @@
 #include "types/string.h"
 #include "io/path.h"
 #include "modularity/imoduleinterface.h"
+#include "modularity/ioc.h"
 #include "async/channel.h"
 #include "async/notification.h"
 #include "engraving/types/types.h"
@@ -64,7 +65,7 @@ public:
     virtual Color fontPrimaryColor() const = 0;
     virtual Color voiceColor(voice_idx_t voiceIdx) const = 0;
 
-    virtual double guiScaling() const = 0;
+    virtual double guiScaling(const muse::modularity::ContextPtr& ctx) const = 0;
 
     virtual Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, Color color) = 0;

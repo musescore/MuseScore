@@ -117,8 +117,8 @@ public:
     void setDefaultZoom(int zoomPercentage) override;
     muse::async::Notification defaultZoomChanged() const override;
 
-    qreal scalingFromZoomPercentage(int zoomPercentage) const override;
-    int zoomPercentageFromScaling(qreal scaling) const override;
+    qreal scalingFromZoomPercentage(int zoomPercentage, const muse::modularity::ContextPtr& ctx) const override;
+    int zoomPercentageFromScaling(qreal scaling, const muse::modularity::ContextPtr& ctx) const override;
 
     QList<int> possibleZoomPercentageList() const override;
 
@@ -188,8 +188,8 @@ public:
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
 
-    double guiScaling() const override;
-    double notationScaling() const override;
+    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
+    double notationScaling(const muse::modularity::ContextPtr& ctx) const override;
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;

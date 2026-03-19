@@ -30,7 +30,6 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace muse::workspace;
 using namespace muse::ui;
 using namespace muse::uicomponents;
 using namespace muse::actions;

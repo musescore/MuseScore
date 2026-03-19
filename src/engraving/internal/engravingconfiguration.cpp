@@ -305,9 +305,9 @@ Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
     return VOICE_COLORS[voiceIdx].color;
 }
 
-double EngravingConfiguration::guiScaling() const
+double EngravingConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
 {
-    return uiConfiguration() ? uiConfiguration()->guiScaling() : 1.0;
+    return uiConfiguration() ? uiConfiguration()->guiScaling(ctx) : 1.0;
 }
 
 Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const

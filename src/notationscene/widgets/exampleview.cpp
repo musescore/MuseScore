@@ -56,8 +56,6 @@ ExampleView::ExampleView(QWidget* parent)
             LOGD("no valid pixmap %s", qPrintable(wallpaperPath));
         }
     }
-
-    m_defaultScaling = 0.9 * notationConfiguration()->notationScaling();
 }
 
 ExampleView::~ExampleView()
@@ -97,6 +95,8 @@ void ExampleView::setScore(Score* s)
     m_score = s;
     m_score->addViewer(this);
     m_score->setLayoutMode(LayoutMode::LINE);
+
+    m_defaultScaling = 0.9 * notationConfiguration()->notationScaling(s->iocContext());
 
     ScoreLoad sl;
     m_score->doLayout();
