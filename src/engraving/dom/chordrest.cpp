@@ -556,9 +556,6 @@ void ChordRest::add(EngravingItem* e)
         LOGD("ChordRest::add: unknown element %s", e->typeName());
         break;
     case ElementType::LYRICS:
-        if (e->isStyled(Pid::OFFSET)) {
-            e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-        }
         m_lyrics.push_back(toLyrics(e));
         e->added();
         break;

@@ -2876,10 +2876,6 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
 
     layoutTextLineBaseSegment(item, ctx);
 
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
@@ -3082,10 +3078,6 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         item->setPos(PointF());
         item->roffset() = PointF();
         return;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->hairpin()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     // rebase vertical offset on drag
@@ -4385,9 +4377,6 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
     PedalSegment::LayoutData* ldata = item->mutldata();
 
     layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
 
     Text* endText = item->endText();
     if (endText && !endText->empty() && ldata->npoints > 0) { // Rosette
@@ -5734,9 +5723,6 @@ void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     TextLineSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
@@ -6557,10 +6543,6 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         break;
     default:
         break;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());

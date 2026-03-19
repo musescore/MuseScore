@@ -2720,7 +2720,7 @@ void Score::cmdFlip()
                 if (ee->isSpanner()) {
                     Spanner* spanner = toSpanner(ee);
                     for (SpannerSegment* ss : spanner->spannerSegments()) {
-                        if (!ss->isStyled(Pid::OFFSET)) {
+                        if (!ss->offset().isNull()) {
                             PointF off = ss->getProperty(Pid::OFFSET).value<PointF>();
                             double oldY = off.y() - oldDefaultY;
                             off.ry() = newDefaultY - oldY;
@@ -2728,7 +2728,7 @@ void Score::cmdFlip()
                             ss->setOffsetChanged(false);
                         }
                     }
-                } else if (!ee->isStyled(Pid::OFFSET)) {
+                } else if (!ee->offset().isNull()) {
                     PointF off = ee->getProperty(Pid::OFFSET).value<PointF>();
                     double oldY = off.y() - oldDefaultY;
                     off.ry() = newDefaultY - oldY;

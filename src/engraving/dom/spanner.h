@@ -207,7 +207,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
-    virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     virtual void computeStartElement();
     void computeEndElement();

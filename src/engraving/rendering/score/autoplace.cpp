@@ -201,10 +201,6 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata, double sp)
 {
-    if (item->isStyled(Pid::OFFSET)) {
-        const_cast<SpannerSegment*>(item)->setOffset(item->spanner()->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-
     if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
         return;
     }

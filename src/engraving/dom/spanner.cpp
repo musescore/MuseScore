@@ -396,7 +396,7 @@ bool SpannerSegment::isUserModified() const
     bool modified = !autoplace() || !visible()
                     || (propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
                         || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
-                    || (!isStyled(Pid::OFFSET) && (!offset().isNull() || !userOff2().isNull()));
+                    || (!offset().isNull() || !userOff2().isNull());
 
     return modified;
 }
@@ -1630,27 +1630,6 @@ String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 
     result += u"; " + muse::mtrc("engraving", "End beat: %1").arg(barbeat.beat);
     return result;
-}
-
-//---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
-
-void Spanner::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
-{
-    if (id == Pid::PLACEMENT) {
-        EngravingObject::undoChangeProperty(id, v, ps);
-        // change offset of all segments if styled
-
-        for (SpannerSegment* s : m_segments) {
-            if (s->isStyled(Pid::OFFSET)) {
-                s->setOffset(s->propertyDefault(Pid::OFFSET).value<PointF>());
-                s->triggerLayout();
-            }
-        }
-        return;
-    }
-    EngravingItem::undoChangeProperty(id, v, ps);
 }
 
 bool SpannerSegment::collectForDrawing() const
