@@ -1,0 +1,62 @@
+2.0.3
+ - Minor upstream updates
+ - Fixed one case of a failed assert in SBR encoding
+ - Added build support for s390x
+
+2.0.2
+ - Minor upstream updates
+ - Lots of upstream and local fuzzing fixes
+ - Added CMake project files
+ - Removed the MSVC specific makefile
+
+2.0.1
+ - Minor release with a number of crash/fuzz fixes, primarily for the decoder
+
+2.0.0
+ - Major update in the upstream source base, with support for new
+   profiles and features, and numerous crash/fuzz fixes. The new
+   upstream version is referred to as FDKv2, thus skipping the
+   major version 1 and syncing the fdk-aac major version number to 2.
+
+0.1.6
+ - Lots of minor assorted crash/fuzz fixes, mostly for the decoder but
+   also some for the encoder
+
+0.1.5
+ - Updated upstream sources
+ - Fixed building with GCC 3.3 and 3.4
+ - Fixed building with GCC 6
+ - AArch64 optimizations
+ - Makefiles for building with MSVC
+ - Support building the code in C++11 mode
+
+0.1.4
+ - Updated upstream sources, with minor changes to the decoder API
+   breaking the ABI. (Calling code using AUDIO_CHANNEL_TYPE may need to
+   be updated. A new option AAC_PCM_LIMITER_ENABLE has been added, enabled
+   by default, which incurs extra decoding delay.)
+ - PowerPC optimizations, fixes for building on AIX
+ - Support for reading streamed wav files in the encoder example
+ - Fix VBR encoding of sample rates over 64 kHz
+
+0.1.3
+ - Updated upstream sources, with a number of crash fixes and new features
+   (including support for encoding 7.1)
+
+0.1.2
+ - Fix a few more crashes
+ - Include dependency libs (such as -lm) in the pkg-config file
+
+0.1.1
+ - Updated to a new upstream version from Android 4.2, fixing a lot of crashes
+ - Cleanup of autotools usage
+ - Make sure the shared library links to libm if necessary
+ - Performance improvements on x86
+ - Added support for WG4/DVD audio channel mappings
+ - Minimized the differences to upstream
+ - Added an example encoder tool
+
+0.1.0
+ - Initial release of fdk-aac
+ - autotools based build system
+ - Enable setting VBR bitrate modes
