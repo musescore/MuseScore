@@ -115,44 +115,50 @@ QVariantList StringData::stringList() const
 
 void Drumset::setName(int pitch, const QString& name)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).name = name;
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).name = name;
 }
 
 void Drumset::setNoteHead(int pitch, int noteHead)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).notehead = mu::engraving::NoteHeadGroup(noteHead);
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).notehead = mu::engraving::NoteHeadGroup(noteHead);
 }
 
 void Drumset::setLine(int pitch, int line)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).line = line;
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).line = line;
 }
 
 void Drumset::setVoice(int pitch, int voice)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).voice = voice;
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).voice = voice;
 }
 
 void Drumset::setStemDirection(int pitch, int stemDirection)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).stemDirection = mu::engraving::DirectionV(stemDirection);
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).stemDirection = mu::engraving::DirectionV(stemDirection);
 }
 
 void Drumset::setShortcut(int pitch, const QString& shortcut)
 {
-    if (pitch >= 0 && pitch <= 127) {
-        m_drumset->drum(pitch).shortcut = shortcut;
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
     }
+    m_drumset->drum(pitch).shortcut = shortcut;
 }
 
 //---------------------------------------------------------
