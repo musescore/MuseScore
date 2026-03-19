@@ -31,8 +31,6 @@ class NoteLineSegment final : public TextLineBaseSegment
     OBJECT_ALLOCATOR(engraving, NoteLineSegment)
     DECLARE_CLASSOF(ElementType::NOTELINE_SEGMENT)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     NoteLineSegment(Spanner* sp, System* parent);
 
@@ -47,8 +45,6 @@ class NoteLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, NoteLine)
     DECLARE_CLASSOF(ElementType::NOTELINE)
-
-    Sid getPropertyStyle(Pid) const override;
 
 public:
     NoteLine(EngravingItem* parent);

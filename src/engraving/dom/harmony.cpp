@@ -1609,13 +1609,6 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::OFFSET: {
-        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-        if (fd && fd->visible()) {
-            v = PropertyValue::fromValue(PointF(0.0, 0.0));
-            break;
-        }
-    }
     // fall-through
     default:
         v = TextBase::propertyDefault(id);

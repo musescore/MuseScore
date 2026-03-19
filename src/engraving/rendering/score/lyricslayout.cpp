@@ -116,11 +116,9 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         }
     }
 
-    PointF o(item->propertyDefault(Pid::OFFSET).value<PointF>());
-
     // Negate ChordRest offset
     ChordRest* cr = item->chordRest();
-    double x = o.x() - cr->x();
+    double x = -cr->x();
 
     TextLayout::layoutBaseTextBase1(item, ctx);
     TextLayout::computeTextHighResShape(item, ldata);

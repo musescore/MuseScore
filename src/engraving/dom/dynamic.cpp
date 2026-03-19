@@ -415,7 +415,7 @@ void Dynamic::reset()
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextBase::reset();
     Expression* snappedExp = snappedExpression();
-    if (snappedExp && snappedExp->getProperty(Pid::OFFSET) != snappedExp->propertyDefault(Pid::OFFSET)) {
+    if (snappedExp && !snappedExp->offset().isNull()) {
         snappedExp->reset();
     }
 }

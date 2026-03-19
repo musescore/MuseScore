@@ -1603,10 +1603,6 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        PropertyValue v = EngravingObject::propertyDefault(pid);
-        if (v.isValid()) {        // if it's a styled property
-            return v;
-        }
         return PropertyValue::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
