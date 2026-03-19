@@ -1095,14 +1095,18 @@ void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
     if (!item->isTextBase() && !item->isTextLineBase() && !item->isTextLineBaseSegment()) {
         return;
     }
-    PointF defaultOffset;
-    if (item->isTextBase()) {
-        defaultOffset = toTextBase(item)->defaultOffset();
-    } else if (item->isTextLineBase()) {
-        defaultOffset = toTextLineBase(item)->defaultOffset();
-    } else if (item->isTextLineBaseSegment()) {
-        defaultOffset = toTextLineBaseSegment(item)->defaultOffset();
+
+    PointF defaultOffset = item->defaultOffset();
+    offset = offset.value<PointF>() - defaultOffset;
+}
+
+void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
+{
+    if (mscVersion > 301 || item->offset().isNull()) {
+        return;
     }
 
-    offset = offset.value<PointF>() - defaultOffset;
+    PropertyValue offset = item->getProperty(Pid::OFFSET);
+    compat::CompatUtils::migrateOffset500(item, offset);
+    item->setProperty(Pid::OFFSET, offset);
 }

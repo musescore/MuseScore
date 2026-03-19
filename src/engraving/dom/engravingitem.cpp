@@ -291,6 +291,29 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
+Sid EngravingItem::offsetSid() const
+{
+    return Sid::NOSTYLE;
+}
+
+PointF EngravingItem::defaultOffset() const
+{
+    Sid styleId = offsetSid();
+
+    if (styleId == Sid::NOSTYLE) {
+        return PointF();
+    }
+
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
+}
+
 PlacementV EngravingItem::placement() const
 {
     return flag(ElementFlag::PLACE_ABOVE) && !isSystemObjectBelowBottomStaff() ? PlacementV::ABOVE : PlacementV::BELOW;

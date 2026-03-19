@@ -207,6 +207,11 @@ PropertyValue SpannerSegment::propertyDefault(Pid pid) const
     }
 }
 
+PointF SpannerSegment::defaultOffset() const
+{
+    return spanner()->defaultOffset();
+}
+
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------

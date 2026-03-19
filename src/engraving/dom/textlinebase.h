@@ -62,8 +62,6 @@ public:
     Text* text() const { return m_text; }
     Text* endText() const { return m_endText; }
 
-    PointF defaultOffset() const;
-
     struct LayoutData : public EngravingItem::LayoutData {
         std::array<PointF, 6> points;
         PolygonF joinedHairpin = PolygonF();
@@ -155,11 +153,8 @@ public:
 
     void reset() override;
 
-    PointF defaultOffset() const;
-
 protected:
     friend class TextLineBaseSegment;
-    virtual Sid offsetSid() const = 0;
 };
 
 inline bool isSystemTextLine(const EngravingItem* element)

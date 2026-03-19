@@ -2996,15 +2996,7 @@ PointF TextBase::defaultOffset() const
         return PointF();
     }
 
-    Sid styleId = offsetSid();
-    PointF offsetPos = style().value(styleId).value<PointF>();
-    if (offsetIsSpatiumDependent()) {
-        offsetPos *= spatium();
-    } else {
-        offsetPos *= DPMM;
-    }
-
-    return offsetPos;
+    return EngravingItem::defaultOffset();
 }
 
 //---------------------------------------------------------
