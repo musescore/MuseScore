@@ -58,7 +58,7 @@ public:
     MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
     MOCK_METHOD(Color, voiceColor, (voice_idx_t), (const, override));
 
-    MOCK_METHOD(double, guiScaling, (), (const, override));
+    MOCK_METHOD(double, guiScaling, (const muse::modularity::ContextPtr&), (const, override));
 
     MOCK_METHOD(Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, Color), (override));

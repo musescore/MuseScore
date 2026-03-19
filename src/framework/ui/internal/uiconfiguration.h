@@ -27,7 +27,6 @@
 #include "iglobalconfiguration.h"
 #include "global/types/config.h"
 #include "modularity/ioc.h"
-#include "imainwindow.h"
 #include "internal/iplatformtheme.h"
 #include "io/filewatcher.h"
 
@@ -35,16 +34,14 @@
 #include "async/asyncable.h"
 
 namespace muse::ui {
-class UiConfiguration : public IUiConfiguration, public Contextable, public async::Asyncable
+class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
     GlobalInject<IPlatformTheme> platformTheme;
     GlobalInject<IGlobalConfiguration> globalConfiguration;
-    ContextInject<IMainWindow> mainWindow = { this };
 
 public:
 
-    UiConfiguration(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    UiConfiguration() = default;
 
     void init();
     void deinit();
@@ -96,9 +93,9 @@ public:
 
     void resetFonts() override;
 
-    double guiScaling() const override;
-    double physicalDpi() const override;
-    double logicalDpi() const override;
+    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
+    double physicalDpi(const muse::modularity::ContextPtr& ctx) const override;
+    double logicalDpi(const muse::modularity::ContextPtr& ctx) const override;
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 
@@ -134,6 +131,8 @@ private:
 
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
+
+    QScreen* screen(const muse::modularity::ContextPtr& ctx) const;
 
     async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;

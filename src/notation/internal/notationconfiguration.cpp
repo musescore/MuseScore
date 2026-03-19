@@ -659,14 +659,14 @@ Notification NotationConfiguration::defaultZoomChanged() const
     return m_defaultZoomChanged;
 }
 
-qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage) const
+qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage, const muse::modularity::ContextPtr& ctx) const
 {
-    return zoomPercentage / 100.0 * notationScaling();
+    return zoomPercentage / 100.0 * notationScaling(ctx);
 }
 
-int NotationConfiguration::zoomPercentageFromScaling(qreal scaling) const
+int NotationConfiguration::zoomPercentageFromScaling(qreal scaling, const muse::modularity::ContextPtr& ctx) const
 {
-    return std::round(scaling * 100.0 / notationScaling());
+    return std::round(scaling * 100.0 / notationScaling(ctx));
 }
 
 QList<int> NotationConfiguration::possibleZoomPercentageList() const
@@ -924,14 +924,14 @@ void NotationConfiguration::setIsCountInEnabled(bool enabled)
     settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
 }
 
-double NotationConfiguration::guiScaling() const
+double NotationConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
 {
-    return uiConfiguration() ? uiConfiguration()->guiScaling() : 1.0;
+    return uiConfiguration() ? uiConfiguration()->guiScaling(ctx) : 1.0;
 }
 
-double NotationConfiguration::notationScaling() const
+double NotationConfiguration::notationScaling(const muse::modularity::ContextPtr& ctx) const
 {
-    return uiConfiguration() ? uiConfiguration()->physicalDpi() / mu::engraving::DPI : 1.0;
+    return uiConfiguration() ? uiConfiguration()->physicalDpi(ctx) / mu::engraving::DPI : 1.0;
 }
 
 ValCh<muse::Orientation> NotationConfiguration::canvasOrientation() const

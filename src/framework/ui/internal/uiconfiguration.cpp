@@ -19,15 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "uiconfiguration.h"
-#include "global/configreader.h"
-
-#include "async/async.h"
-#include "internal/baseapplication.h"
-#include "io/path.h"
-#include "io/fileinfo.h"
-#include "settings.h"
-#include "themeconverter.h"
 
 #include <QFontDatabase>
 #include <QJsonArray>
@@ -35,6 +26,18 @@
 #include <QJsonObject>
 #include <QScreen>
 #include <QSettings>
+#include <QApplication>
+
+#include "uiconfiguration.h"
+#include "global/configreader.h"
+
+#include "internal/baseapplication.h"
+#include "io/path.h"
+#include "io/fileinfo.h"
+#include "settings.h"
+#include "themeconverter.h"
+
+#include "imainwindow.h"
 
 #ifdef Q_OS_WIN
 #include <QOperatingSystemVersion>
@@ -663,10 +666,18 @@ void UiConfiguration::resetFonts()
     settings()->setSharedValue(UI_MUSICAL_FONT_SIZE_KEY, settings()->defaultValue(UI_MUSICAL_FONT_SIZE_KEY));
 }
 
-double UiConfiguration::guiScaling() const
+QScreen* UiConfiguration::screen(const muse::modularity::ContextPtr& ctx) const
 {
-    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
-    return screen ? screen->devicePixelRatio() : 1;
+    IF_ASSERT_FAILED(ctx) {
+        return QApplication::primaryScreen();
+    }
+    return modularity::ioc(ctx)->resolve<IMainWindow>("ui")->screen();
+}
+
+double UiConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
+{
+    const QScreen* s = screen(ctx);
+    return s ? s->devicePixelRatio() : 1;
 }
 
 void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
@@ -674,14 +685,14 @@ void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
     m_customDPI = dpi;
 }
 
-double UiConfiguration::physicalDpi() const
+double UiConfiguration::physicalDpi(const muse::modularity::ContextPtr& ctx) const
 {
     if (m_customDPI) {
         return m_customDPI.value();
     }
 
     constexpr double DEFAULT_DPI = 96;
-    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
+    const QScreen* screen = this->screen(ctx);
     if (!screen) {
         return DEFAULT_DPI;
     }
@@ -702,9 +713,9 @@ double UiConfiguration::physicalDpi() const
     return screen->physicalDotsPerInch();
 }
 
-double UiConfiguration::logicalDpi() const
+double UiConfiguration::logicalDpi(const muse::modularity::ContextPtr& ctx) const
 {
-    const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
+    const QScreen* screen = this->screen(ctx);
     if (!screen) {
         constexpr double DEFAULT_DPI = 96;
         return DEFAULT_DPI;

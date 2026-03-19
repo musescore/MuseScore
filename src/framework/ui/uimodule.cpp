@@ -71,7 +71,7 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    m_configuration = std::make_shared<UiConfiguration>(globalCtx());
+    m_configuration = std::make_shared<UiConfiguration>();
 
     //! NOTE At the moment, UiTheme is also QProxyStyle
     //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.

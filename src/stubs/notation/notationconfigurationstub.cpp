@@ -529,12 +529,12 @@ void NotationConfigurationStub::setIsCountInEnabled(bool)
 {
 }
 
-double NotationConfigurationStub::guiScaling() const
+double NotationConfigurationStub::guiScaling(const muse::modularity::ContextPtr&) const
 {
     return 1.0;
 }
 
-double NotationConfigurationStub::notationScaling() const
+double NotationConfigurationStub::notationScaling(const muse::modularity::ContextPtr&) const
 {
     return 1.0;
 }

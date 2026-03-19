@@ -189,7 +189,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     opt.isSetViewport = false;
     opt.isMultiPage = true;
     opt.frameRect = frameRect;
-    opt.deviceDpi = uiConfiguration()->logicalDpi();
+    opt.deviceDpi = uiConfiguration()->logicalDpi(m_notation->iocContext());
     opt.isPrinting = isPrinting;
     opt.invertColors = configuration()->shouldInvertScore();
 

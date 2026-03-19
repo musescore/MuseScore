@@ -179,8 +179,8 @@ public:
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled)  override;
 
-    double guiScaling() const override;
-    double notationScaling() const override;
+    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
+    double notationScaling(const muse::modularity::ContextPtr& ctx) const override;
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation)  override;

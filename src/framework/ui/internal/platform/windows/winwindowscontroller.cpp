@@ -268,7 +268,7 @@ bool WinWindowsController::processMouseMove(HWND hWnd, LPARAM lParam, qintptr* r
     long x = GET_X_LPARAM(lParam);
     long y = GET_Y_LPARAM(lParam);
 
-    double scaleFactor = uiConfiguration()->guiScaling();
+    double scaleFactor = uiConfiguration()->guiScaling(iocContext());
     QRect moveAreaRect = mainWindowTitleBarMoveArea();
     int moveAreaHeight = static_cast<int>(moveAreaRect.height() * scaleFactor);
     int moveAreaWidth = static_cast<int>(moveAreaRect.width() * scaleFactor);

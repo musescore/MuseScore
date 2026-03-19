@@ -124,7 +124,7 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
 
         // Draw bbox
         if (isDiagnosticSelected || item->configuration()->debuggingOptions().showElementBoundingRects) {
-            double scaling = painter.worldTransform().m11() / item->configuration()->guiScaling();
+            double scaling = painter.worldTransform().m11() / item->configuration()->guiScaling(item->iocContext());
             Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, (item->selected() ? 2.0 : 1.0) / scaling);
 
             painter.setPen(borderPen);
@@ -157,7 +157,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         return;
     }
 
-    double scaling = painter.worldTransform().m11() / items.front()->configuration()->guiScaling();
+    double scaling = painter.worldTransform().m11() / items.front()->configuration()->guiScaling(items.front()->iocContext());
 
     painter.save();
 
