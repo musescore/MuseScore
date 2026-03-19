@@ -171,17 +171,13 @@ void Spacer::triggerLayout() const
         return;
     }
 
-    Score* s = score();
-    if (!s) {
-        return;
-    }
-
-    if (s->nstaves() == 0) {
+    Measure* m = measure();
+    if (!m) {
         EngravingItem::triggerLayout();
         return;
     }
 
-    s->setLayout(tick(), s->endTick(), 0, s->nstaves() - 1, this);
+    m->triggerLayout();
 }
 
 //---------------------------------------------------------
