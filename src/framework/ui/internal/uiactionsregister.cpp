@@ -48,20 +48,12 @@ void UiActionsRegister::init()
 void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 {
     const UiActionList& alist = module->actionsList();
-    ActionCodeList newActionCodeList;
     for (const UiAction& action : alist) {
         Info info;
         info.module = module;
         info.action = action;
         m_actions[action.code] = std::move(info);
-
-        newActionCodeList.push_back(action.code);
     }
-
-#ifdef MUSE_MULTICONTEXT_WIP
-    updateEnabled(newActionCodeList);
-    updateChecked(newActionCodeList);
-#endif
 
     module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
         updateActions(actions);

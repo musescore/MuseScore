@@ -30,7 +30,7 @@
 
 #include "muse_framework_config.h"
 
-#ifdef MUSE_MULTICONTEXT_WIP
+#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
 #include "internal/singleprocess/singleprocessprovider.h"
 #else
 #include "internal/multiprocess/multiprocessprovider.h"
@@ -48,7 +48,7 @@ std::string MultiWindowsModule::moduleName() const
 
 void MultiWindowsModule::registerExports()
 {
-#ifdef MUSE_MULTICONTEXT_WIP
+#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
     m_windowsProvider = std::make_shared<SingleProcessProvider>();
 #else
     m_windowsProvider = std::make_shared<MultiProcessProvider>(globalCtx());

@@ -29,7 +29,7 @@
 #include "muse_framework_config.h"
 
 namespace muse::mi {
-#ifdef MUSE_MULTICONTEXT_WIP
+#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
 class SingleProcessProvider;
 #else
 class MultiProcessProvider;
@@ -46,7 +46,7 @@ public:
     modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
 
 private:
-#ifdef MUSE_MULTICONTEXT_WIP
+#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
     std::shared_ptr<SingleProcessProvider> m_windowsProvider;
 #else
     std::shared_ptr<MultiProcessProvider> m_windowsProvider;
