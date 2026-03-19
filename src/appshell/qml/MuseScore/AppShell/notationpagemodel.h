@@ -35,7 +35,7 @@
 #include "notation/inotationconfiguration.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
-#include "iappshellconfiguration.h"
+#include "iappshellstate.h"
 
 namespace mu::appshell {
 class NotationPageModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
@@ -50,8 +50,8 @@ class NotationPageModel : public QObject, public muse::Contextable, public muse:
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<notation::INotationSceneConfiguration> notationSceneConfiguration;
     muse::GlobalInject<braille::IBrailleConfiguration> brailleConfiguration;
-    muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
+    muse::ContextInject<IAppShellState> appShellState = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };

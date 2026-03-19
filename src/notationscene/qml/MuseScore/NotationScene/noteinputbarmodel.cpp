@@ -88,7 +88,7 @@ void NoteInputBarModel::init()
 {
     subscribeOnChanges();
 
-    uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
+    uiState()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
         load();
     });
 
@@ -108,7 +108,7 @@ void NoteInputBarModel::load()
 {
     MenuItemList items;
 
-    ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
+    ToolConfig noteInputConfig = uiState()->toolConfig(TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
 
     int section = 0;
     for (const ToolConfig::Item& citem : noteInputConfig.items) {

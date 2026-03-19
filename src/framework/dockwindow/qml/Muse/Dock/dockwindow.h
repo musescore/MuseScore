@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
 #include "workspace/iworkspacemanager.h"
-#include "ui/iuiconfiguration.h"
+#include "ui/iuistate.h"
 #include "idockwindowprovider.h"
 
 #include "idockwindow.h"
@@ -62,7 +62,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Contextab
 
     QML_ELEMENT
 
-    GlobalInject<ui::IUiConfiguration> uiConfiguration;
+    ContextInject<ui::IUiState> uiState = { this };
     ContextInject<IInteractive> interactive = { this };
     ContextInject<workspace::IWorkspaceManager> workspaceManager = { this };
     ContextInject<IDockWindowProvider> dockWindowProvider = { this };

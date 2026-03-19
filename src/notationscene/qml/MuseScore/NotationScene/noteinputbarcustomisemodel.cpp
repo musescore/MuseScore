@@ -48,7 +48,7 @@ void NoteInputBarCustomiseModel::load()
 
     QList<Item*> items;
 
-    ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
+    ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
         const UiAction& action = actionsRegister()->action(item.action);
@@ -253,5 +253,5 @@ void NoteInputBarCustomiseModel::saveActions()
         config.items.append(citem);
     }
 
-    uiConfiguration()->setToolConfig(NOTE_INPUT_TOOLBAR_NAME, config);
+    uiState()->setToolConfig(NOTE_INPUT_TOOLBAR_NAME, config);
 }
