@@ -62,6 +62,11 @@ public:
 
     Contextable& operator=(const Contextable& i) = default;
 
+    void setContext(const ContextPtr& ctx)
+    {
+        m_ctx = ctx;
+    }
+
     const modularity::ContextPtr& iocContext() const
     {
         if (m_ctx) {

@@ -62,5 +62,6 @@ public:
     }
 
     void resolveImports() override;
+    void onInit(const IApplication::RunMode& mode) override;
 };
 }

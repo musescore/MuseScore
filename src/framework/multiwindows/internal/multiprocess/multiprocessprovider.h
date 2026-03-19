@@ -51,14 +51,15 @@ class MultiProcessProvider : public IMultiWindowsProvider, public IMultiProcessP
     ContextInject<IProjectProvider> projectProvider = { this };
 
 public:
-    MultiProcessProvider(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx)
+    MultiProcessProvider()
+        : Contextable(nullptr)
     {
     }
 
     ~MultiProcessProvider();
 
-    void init();
+    void initOnGlobal();
+    void initOnContext();
 
     // Contexts info
     size_t windowCount() const override;
