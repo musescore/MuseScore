@@ -147,8 +147,10 @@ void StartupScenario::registerAudioPlugins()
 void StartupScenario::runAfterSplashScreen()
 {
     TRACEFUNC;
+    //! TODO We need to recognize this and refactor it.
+    //! This is a temporary solution for now.
 
-#ifdef MUSE_MULTICONTEXT_WIP
+#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
     if (m_startupScoreFile.isValid()) {
         muse::async::Channel<Uri> opened = interactive()->opened();
         opened.onReceive(this, [this, opened](const Uri&) {
@@ -170,8 +172,8 @@ void StartupScenario::runAfterSplashScreen()
     } else {
         interactive()->open(HOME_URI);
     }
-    return;
-#endif
+
+#else // MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
 
     if (m_startupCompleted) {
         return;
@@ -201,6 +203,8 @@ void StartupScenario::runAfterSplashScreen()
 
     const Uri& startupUri = startupPageUri(modeType);
     interactive()->open(startupUri);
+
+#endif // MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
 }
 
 bool StartupScenario::startupCompleted() const
