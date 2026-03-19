@@ -1767,7 +1767,19 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
                     String nextAcc = nextMod;
                     static const std::wregex DEGREE_REGEX = std::wregex(L"[0-9]+");
                     nextAcc.replace(DEGREE_REGEX, u"");
-                    m_renderList.emplace_back(new RenderActionMoveTextWidth(nextAcc));
+                    // Apply scaling and use renderList to match the behavior of standard accidental rendering
+                    m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
+                    const ChordToken accTok = cl->token(nextAcc, ChordTokenClass::MODIFIER);
+                    if (accTok.isValid()) {
+                        for (const RenderActionPtr& a : accTok.renderList) {
+                            if (a->actionType() == RenderAction::RenderActionType::SET) {
+                                m_renderList.emplace_back(new RenderActionMoveTextWidth(u"s" + nextAcc));
+                            } else {
+                                m_renderList.emplace_back(a);
+                            }
+                        }
+                    }
+                    m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
                 }
 
                 // Set scale
