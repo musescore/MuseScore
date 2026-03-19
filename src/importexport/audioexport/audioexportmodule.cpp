@@ -28,6 +28,7 @@
 #include "internal/wavewriter.h"
 #include "internal/oggwriter.h"
 #include "internal/flacwriter.h"
+#include "internal/aacwriter.h"
 
 #include "internal/audioexportconfiguration.h"
 
@@ -58,6 +59,7 @@ void AudioExportModule::resolveImports()
         writers->reg({ "mp3" }, std::make_shared<Mp3Writer>(iocContext()));
         writers->reg({ "ogg" }, std::make_shared<OggWriter>(iocContext()));
         writers->reg({ "flac" }, std::make_shared<FlacWriter>(iocContext()));
+        writers->reg({ "aac" }, std::make_shared<AacWriter>(iocContext()));
     }
 }
 

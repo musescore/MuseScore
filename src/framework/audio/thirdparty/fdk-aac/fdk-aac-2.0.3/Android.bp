@@ -1,0 +1,101 @@
+// *** THIS PACKAGE HAS SPECIAL LICENSING CONDITIONS.  PLEASE
+//     CONSULT THE OWNERS AND opensource-licensing@google.com BEFORE
+//     DEPENDING ON IT IN YOUR PROJECT. ***
+package {
+    default_applicable_licenses: ["external_aac_license"],
+}
+
+// Added automatically by a large-scale-change that took the approach of
+// 'apply every license found to every target'. While this makes sure we respect
+// every license restriction, it may not be entirely correct.
+//
+// e.g. GPL in an MIT project might only apply to the contrib/ directory.
+//
+// Please consider splitting the single license below into multiple licenses,
+// taking care not to lose any license_kind information, and overriding the
+// default license using the 'licenses: [...]' property on targets as needed.
+//
+// For unused files, consider creating a 'fileGroup' with "//visibility:private"
+// to attach the license to, and including a comment whether the files may be
+// used in the current project.
+// See: http://go/android-license-faq
+license {
+    name: "external_aac_license",
+    visibility: [":__subpackages__"],
+    license_kinds: [
+        "SPDX-license-identifier-Apache-2.0",
+        "legacy_by_exception_only", // by exception only
+    ],
+    license_text: [
+        "NOTICE",
+    ],
+}
+
+cc_library_static {
+    name: "libFraunhoferAAC",
+    vendor_available: true,
+    host_supported: true,
+    srcs: [
+        "libAACdec/src/*.cpp",
+        "libAACenc/src/*.cpp",
+        "libPCMutils/src/*.cpp",
+        "libFDK/src/*.cpp",
+        "libSYS/src/*.cpp",
+        "libMpegTPDec/src/*.cpp",
+        "libMpegTPEnc/src/*.cpp",
+        "libSBRdec/src/*.cpp",
+        "libSBRenc/src/*.cpp",
+        "libArithCoding/src/*.cpp",
+        "libDRCdec/src/*.cpp",
+        "libSACdec/src/*.cpp",
+        "libSACenc/src/*.cpp",
+    ],
+    cflags: [
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-Wno-#warnings",
+        "-Wuninitialized",
+        "-Wno-self-assign",
+        "-Wno-implicit-fallthrough",
+        "-DSUPPRESS_BUILD_DATE_INFO",
+    ],
+    sanitize: {
+        misc_undefined: [
+            "unsigned-integer-overflow",
+            "signed-integer-overflow",
+            "bounds",
+        ],
+        cfi: true,
+    },
+    shared_libs: [
+        "liblog",
+    ],
+    export_include_dirs: [
+        "libAACdec/include",
+        "libAACenc/include",
+        "libPCMutils/include",
+        "libFDK/include",
+        "libSYS/include",
+        "libMpegTPDec/include",
+        "libMpegTPEnc/include",
+        "libSBRdec/include",
+        "libSBRenc/include",
+        "libArithCoding/include",
+        "libDRCdec/include",
+        "libSACdec/include",
+        "libSACenc/include",
+    ],
+
+    target: {
+        darwin: {
+            enabled: false,
+        },
+    },
+
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.btservices",
+        "com.android.media.swcodec",
+    ],
+    min_sdk_version: "29",
+}

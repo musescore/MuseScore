@@ -1,0 +1,4 @@
+BasedOnStyle: Google
+SortIncludes: false
+# Do not reformat the Doxygen-style comments in the code
+CommentPragmas : "^ * \\\\"

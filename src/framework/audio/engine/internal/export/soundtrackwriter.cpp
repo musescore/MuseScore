@@ -31,6 +31,7 @@
 #include "oggencoder.h"
 #include "flacencoder.h"
 #include "wavencoder.h"
+#include "aacencoder.h"
 
 #include "log.h"
 
@@ -49,6 +50,7 @@ static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
     case SoundTrackType::OGG: return std::make_unique<encode::OggEncoder>();
     case SoundTrackType::FLAC: return std::make_unique<encode::FlacEncoder>();
     case SoundTrackType::WAV: return std::make_unique<encode::WavEncoder>();
+    case SoundTrackType::AAC: return std::make_unique<encode::AacEncoder>();
     case SoundTrackType::Undefined: break;
     }
 
