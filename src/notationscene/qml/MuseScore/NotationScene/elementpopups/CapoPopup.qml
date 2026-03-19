@@ -112,7 +112,7 @@ AbstractElementPopup {
 
             navigation.name: "TransposeOptions"
             navigation.panel: capoSettingsNavPanel
-            navigation.row: 1
+            navigation.row: capoOnOffButtons.navigationRowEnd + 1
             navigation.accessible.name: titleLabel.text + " " + currentText
 
             model: [
@@ -148,7 +148,7 @@ AbstractElementPopup {
 
             navigation.name: "FretControl"
             navigation.panel: capoSettingsNavPanel
-            navigation.row: capoOnOffButtons.navigationRowEnd + 1
+            navigation.row: transposeOptions.navigation.row + 1
             navigation.accessible.name: fretLabel.text + " " + fretControl.currentValue
 
             currentValue: capoModel.fretPosition
