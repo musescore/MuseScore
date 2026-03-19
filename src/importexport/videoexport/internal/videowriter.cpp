@@ -501,7 +501,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         }
 
         INotationPainting::Options opt;
-        opt.fromPage = page->pageNumber();
+        opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
         opt.deviceDpi = CANVAS_DPI;
 
