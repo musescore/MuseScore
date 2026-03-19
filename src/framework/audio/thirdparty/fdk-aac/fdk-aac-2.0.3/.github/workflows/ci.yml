@@ -1,0 +1,215 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  linux-autotools:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          ./autogen.sh
+          ./configure --enable-example
+          make -j$(nproc) CFLAGS="-g -O2 -Werror" CXXFLAGS="-g -O2 -Werror"
+      - name: Run tests
+        run: |
+          sudo apt-get update && sudo apt-get install --no-install-recommends ffmpeg
+          ./test/run-test.sh
+
+  linux-cmake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror -Wno-stringop-overflow"
+          cmake --build build
+      - name: Run tests
+        run: |
+          sudo apt-get update && sudo apt-get install --no-install-recommends ffmpeg
+          cd build
+          ../test/run-test.sh
+
+  linux-sanitizers-gcc-autotools:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          ./autogen.sh
+          FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize=shift-base -DDEBUG -fno-sanitize-recover=all"
+          CC="gcc $FLAGS" CXX="g++ $FLAGS" ./configure --enable-example
+          make -j$(nproc)
+      - name: Run tests
+        run: |
+          sudo apt-get update && sudo apt-get install --no-install-recommends ffmpeg
+          ./test/run-test.sh
+
+  linux-sanitizers-clang-cmake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize=shift-base -DDEBUG -fno-sanitize-recover=all -fno-sanitize=vptr -fno-sanitize=function"
+          cmake . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS="$FLAGS" -DCMAKE_CXX_FLAGS="$FLAGS"
+          cmake --build build
+      - name: Run tests
+        run: |
+          sudo apt-get update && sudo apt-get install --no-install-recommends ffmpeg
+          cd build
+          ../test/run-test.sh
+
+  macos-autotools:
+    runs-on: macos-latest
+    steps:
+      - name: Install autotools
+        run: |
+          brew install automake
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          ./autogen.sh
+          ./configure --enable-example
+          make -j$(sysctl -n hw.ncpu) CFLAGS="-g -O2 -Werror" CXXFLAGS="-g -O2 -Werror -Wno-deprecated-declarations"
+
+  macos-cmake:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror -Wno-deprecated-declarations"
+          cmake --build build
+
+  mingw-cross-autotools:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cross compiler
+        run: |
+          sudo apt-get update && sudo apt-get install g++-mingw-w64-x86-64
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          ./autogen.sh
+          ./configure --enable-example --host=x86_64-w64-mingw32
+          make -j$(nproc) CFLAGS="-g -O2 -Werror" CXXFLAGS="-g -O2 -Werror"
+
+  mingw-cross-cmake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cross compiler
+        run: |
+          sudo apt-get update && sudo apt-get install g++-mingw-w64-x86-64
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++ -DCMAKE_CROSSCOMPILING=TRUE -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror -Wno-stringop-overflow"
+          cmake --build build
+
+  msys-cmake:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES
+          cmake --build build
+
+  msvc-cmake:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -B build -DBUILD_PROGRAMS=YES
+          cmake --build build --config Release
+
+  msvc-cmake-ninja-arm:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Set up the environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_arm
+      - name: Build
+        run: |
+          cmake . -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_PROGRAMS=YES
+          cmake --build build
+
+  msvc-cmake-arm64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build
+        run: |
+          cmake . -B build -DBUILD_PROGRAMS=YES -A ARM64
+          cmake --build build --config Release
+
+  llvm-mingw:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install llvm-mingw
+        run: |
+          wget https://github.com/mstorsjo/llvm-mingw/releases/download/20231003/llvm-mingw-20231003-ucrt-ubuntu-20.04-x86_64.tar.xz
+          tar -Jxvf llvm-mingw-*-ucrt-ubuntu-*-x86_64.tar.xz
+          rm llvm-mingw-*.tar.xz
+          sudo mv llvm-mingw-* /opt/llvm-mingw
+          echo /opt/llvm-mingw/bin >> $GITHUB_PATH
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build fdk-aac
+        run: |
+          ./autogen.sh
+          ./configure --host=aarch64-w64-mingw32 --enable-example
+          make -j$(nproc) CFLAGS="-g -O2 -Werror" CXXFLAGS="-g -O2 -Werror"
+
+  linux-ffmpeg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Build fdk-aac
+        run: |
+          ./autogen.sh
+          mkdir build
+          cd build
+          ../configure --enable-example --prefix=$(pwd)/../prefix
+          make -j$(nproc)
+          make -j$(nproc) install
+      - name: Checkout FFmpeg
+        uses: actions/checkout@v4
+        with:
+          repository: ffmpeg/ffmpeg
+          path: ffmpeg
+      - name: Build FFmpeg
+        run: |
+          sudo apt-get update && sudo apt-get install -y nasm
+          cd ffmpeg
+          PKG_CONFIG_PATH=$(pwd)/../prefix/lib/pkgconfig ./configure --enable-libfdk-aac --enable-nonfree
+          make -j$(nproc)

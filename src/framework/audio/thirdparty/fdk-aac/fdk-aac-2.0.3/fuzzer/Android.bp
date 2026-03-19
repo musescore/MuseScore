@@ -1,0 +1,90 @@
+/******************************************************************************
+ *
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *****************************************************************************
+ * Originally developed and contributed by Ittiam Systems Pvt. Ltd, Bangalore
+ */
+
+package {
+    // See: http://go/android-license-faq
+    // A large-scale-change added 'default_applicable_licenses' to import
+    // all of the 'license_kinds' from "external_aac_license"
+    // to get the below license kinds:
+    //   SPDX-license-identifier-Apache-2.0
+    default_applicable_licenses: ["external_aac_license"],
+}
+
+cc_defaults {
+    name: "aac_fuzz_defaults",
+    host_supported: true,
+
+    static_libs: [
+        "libFraunhoferAAC",
+    ],
+
+    target: {
+        darwin: {
+            enabled: false,
+        },
+    },
+
+    fuzz_config: {
+        cc: [
+            "android-media-fuzzing-reports@google.com",
+        ],
+        componentid: 155276,
+        hotlists: [
+            "4593311",
+        ],
+        description: "The fuzzer targets the APIs of libFraunhoferAAC",
+        vector: "remote",
+        service_privilege: "privileged",
+        users: "multi_user",
+        fuzzed_code_usage: "shipped",
+    },
+}
+
+cc_fuzz {
+    name: "aac_dec_fuzzer",
+
+    srcs: [
+        "aac_dec_fuzzer.cpp",
+    ],
+
+    static_libs: [
+        "liblog",
+    ],
+
+    defaults: [
+        "aac_fuzz_defaults"
+    ],
+}
+
+cc_fuzz {
+    name: "aac_enc_fuzzer",
+
+    srcs: [
+        "aac_enc_fuzzer.cpp",
+    ],
+
+    defaults: [
+        "aac_fuzz_defaults"
+    ],
+
+    include_dirs: [
+        "external/aac/libAACenc/"
+    ],
+}
