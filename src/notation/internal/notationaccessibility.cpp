@@ -185,17 +185,20 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     if (element->hasStaff()) {
-        QString staff = muse::qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
+        const Staff* s = element->staff();
+        if (s) {
+            QString staff = muse::qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
-        QString staffName = element->staff()->part()->longName(element->tick());
-        if (staffName.isEmpty()) {
-            staffName = element->staff()->partName();
-        }
+            QString staffName = s->part()->longName(element->tick());
+            if (staffName.isEmpty()) {
+                staffName = s->partName();
+            }
 
-        if (staffName.isEmpty()) {
-            accessibilityInfo = QString("%1; %2").arg(accessibilityInfo).arg(staff);
-        } else {
-            accessibilityInfo = QString("%1; %2 (%3)").arg(accessibilityInfo).arg(staff).arg(staffName);
+            if (staffName.isEmpty()) {
+                accessibilityInfo = QString("%1; %2").arg(accessibilityInfo).arg(staff);
+            } else {
+                accessibilityInfo = QString("%1; %2 (%3)").arg(accessibilityInfo).arg(staff).arg(staffName);
+            }
         }
     }
 
