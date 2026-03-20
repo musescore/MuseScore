@@ -2924,7 +2924,7 @@ QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hai
     // This needs to be accounted when using examples from MBC2015 for tests
     QString result = QString();
     for (Hairpin* hairpin : hairpins) {
-        if (!hairpin || chordRest->tick() + chordRest->actualTicks() != hairpin->tick2()) {
+        if (!hairpin || chordRest->endTick() != hairpin->tick2()) {
             continue;
         }
         switch (hairpin->hairpinType()) {
