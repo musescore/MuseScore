@@ -48,6 +48,29 @@ using namespace muse::midi;
 
 double CANVAS_DPI = 300;
 
+static muse::String notationTitle(const INotationPtr notation)
+{
+    muse::String title;
+    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* masterScore = notation->masterNotation()->masterScore();
+
+    if (const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::TITLE)) {
+        title = text->plainText();
+    }
+
+    if (title.isEmpty()) {
+        if (const mu::engraving::Text* text = masterScore->getText(mu::engraving::TextStyleType::TITLE)) {
+            title = text->plainText();
+        }
+    }
+
+    if (title.isEmpty()) {
+        title = masterScore->metaTag(u"workTitle");
+    }
+
+    return title;
+}
+
 std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
@@ -398,8 +421,7 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return true;
     }
 
-    engraving::Score* score = notation->elements()->msScore();
-    muse::String title = score->metaTag(u"workTitle");
+    muse::String title = notationTitle(notation);
 
     Font font(Font::FontFamily(u"Edwin"), Font::Type::Text);
 
