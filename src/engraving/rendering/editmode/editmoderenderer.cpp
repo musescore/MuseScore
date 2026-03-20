@@ -240,7 +240,6 @@ void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* p
         TextBase::sort(r1, c1, r2, c2);
         size_t row = 0;
         for (const TextBlock& t : ldata->blocks) {
-            draw(t, item, painter);
             if (row >= r1 && row <= r2) {
                 RectF br;
                 if (row == r1 && r1 == r2) {
