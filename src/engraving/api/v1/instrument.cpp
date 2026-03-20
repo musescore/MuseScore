@@ -105,6 +105,63 @@ QVariantList StringData::stringList() const
 }
 
 //---------------------------------------------------------
+//   Drumset setters
+//   These allow modifying a cloned drumset before passing
+//   it to Score::replaceDrumset(). The Drumset obtained
+//   from an Instrument is read-only; Instrument::cloneDrumset()
+//   returns a writable copy that can be modified with these
+//   setters and then applied to the score.
+//---------------------------------------------------------
+
+void Drumset::setName(int pitch, const QString& name)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).name = name;
+}
+
+void Drumset::setNoteHead(int pitch, int noteHead)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).notehead = mu::engraving::NoteHeadGroup(noteHead);
+}
+
+void Drumset::setLine(int pitch, int line)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).line = line;
+}
+
+void Drumset::setVoice(int pitch, int voice)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).voice = voice;
+}
+
+void Drumset::setStemDirection(int pitch, int stemDirection)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).stemDirection = mu::engraving::DirectionV(stemDirection);
+}
+
+void Drumset::setShortcut(int pitch, const QString& shortcut)
+{
+    IF_ASSERT_FAILED(pitch >= 0 && pitch < DRUM_INSTRUMENTS) {
+        return;
+    }
+    m_drumset->drum(pitch).shortcut = shortcut;
+}
+
+//---------------------------------------------------------
 //   Drumset::variants
 //---------------------------------------------------------
 
@@ -175,6 +232,16 @@ QString Instrument::shortName() const
 //---------------------------------------------------------
 //   Instrument::channels
 //---------------------------------------------------------
+
+Drumset* Instrument::cloneDrumset()
+{
+    const mu::engraving::Drumset* ds = instrument()->drumset();
+    if (!ds) {
+        return nullptr;
+    }
+
+    return new Drumset(new mu::engraving::Drumset(*ds), true, this);
+}
 
 ChannelListProperty Instrument::channels()
 {

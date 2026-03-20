@@ -404,7 +404,7 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
 {
-    score()->undo(new mu::engraving::ChangeScoreOrder(score(), order));
+    EditPart::setScoreOrder(score(), order);
 
     m_scoreOrderChanged.notify();
 }
@@ -468,16 +468,8 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 {
     TRACEFUNC;
 
-    if (!score()->excerpt()) {
-        return false;
-    }
-
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return false;
-    }
-
-    if (!visible && !staff->canDisableVoice()) {
         return false;
     }
 
@@ -487,7 +479,11 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     startEdit(actionName);
 
-    score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
+    bool result = EditPart::setVoiceVisible(score(), staff, voiceIndex, visible);
+    if (!result) {
+        rollback();
+        return false;
+    }
 
     //! HACK: Excerpt::setVoiceVisible recreates the staff,
     //! so later in listenUndoStackChanges() we will call notifyAboutStaffRemoved() and notifyAboutStaffAdded(),
@@ -722,15 +718,9 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    // Update all identical drumsets in the part...
     if (undoable) {
         startEdit(TranslatableString("undoableAction", "Edit drumset"));
-        for (auto pair : part->instruments()) {
-            Instrument* instrument = pair.second;
-            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
-                score()->undo(new mu::engraving::ChangeDrumset(instrument, newDrumset, part));
-            }
-        }
+        EditPart::replaceDrumset(score(), part, instrumentKey.instrumentId, newDrumset);
         apply();
     } else {
         for (auto pair : part->instruments()) {
