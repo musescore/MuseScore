@@ -184,7 +184,7 @@ Item {
 
         // Fixed width prevents items from jumping around; but we
         // scale it according to the font size to prevent clipping
-        readonly property real tempoViewWidth: 60 * (ui.theme.bodyFont.pixelSize / ui.theme.defaultFont.pixelSize)
+        readonly property real tempoViewWidth: 5 * ui.theme.bodyFont.pixelSize
 
         sourceComponent: root.floating ? tempoViewComponent : tempoButtonComponent
 

@@ -24,6 +24,7 @@
 
 #include <QAbstractItemView>
 #include <QApplication>
+#include <QFontDatabase>
 #include <QGroupBox>
 #include <QMenu>
 #include <QPalette>
@@ -420,8 +421,7 @@ void ThemeApi::setupUiFonts()
         font->setWeight(fontConfig.weight);
     }
 
-    m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
-    m_defaultFont.setPixelSize(configuration()->defaultFontSize());
+    m_defaultFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void ThemeApi::setupIconsFont()
