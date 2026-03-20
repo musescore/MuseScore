@@ -93,6 +93,9 @@ void NotationStyle::applyToAllParts()
     mu::engraving::MStyle style = m_getScore->score()->style();
 
     for (mu::engraving::Excerpt* excerpt : score()->masterScore()->excerpts()) {
+        if (!excerpt->excerptScore()) {
+            continue;
+        }
         excerpt->excerptScore()->undo(new mu::engraving::ChangeStyle(excerpt->excerptScore(), style));
         excerpt->excerptScore()->update();
     }

@@ -152,6 +152,9 @@ int MasterScore::getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels)
 void MasterScore::rebuildExcerptsMidiMapping()
 {
     for (Excerpt* ex : excerpts()) {
+        if (!ex->excerptScore()) {
+            continue;
+        }
         for (Part* p : ex->excerptScore()->parts()) {
             const Part* masterPart = p->masterPart();
             if (!masterPart->score()->isMaster()) {
