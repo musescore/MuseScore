@@ -112,6 +112,12 @@ io::path_t AutobotInteractive::selectOpeningFileSync(const std::string& title, c
     return m_real->selectOpeningFileSync(title, dir, filter, options);
 }
 
+io::paths_t AutobotInteractive::selectOpeningFilesSync(const std::string& title, const io::path_t& dir,
+                                                       const std::vector<std::string>& filter, const int options)
+{
+    return m_real->selectOpeningFilesSync(title, dir, filter, options);
+}
+
 io::path_t AutobotInteractive::selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                                     bool confirmOverwrite)
 {
