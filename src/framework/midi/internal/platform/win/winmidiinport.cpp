@@ -37,6 +37,8 @@
 struct muse::midi::WinMidiInPort::Win {
     HMIDIIN midiIn;
     int deviceID = -1;
+    MIDIHDR header;
+    std::vector<uint8_t> buffer;
 };
 
 using namespace muse;
@@ -125,9 +127,8 @@ async::Notification WinMidiInPort::availableDevicesChanged() const
 
 static void CALLBACK process(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
-    UNUSED(hMidiIn);
-
     WinMidiInPort* self = reinterpret_cast<WinMidiInPort*>(dwInstance);
+
     switch (wMsg) {
     case MIM_OPEN:
     case MIM_CLOSE:
@@ -135,16 +136,30 @@ static void CALLBACK process(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, D
     case MIM_DATA:
         self->doProcess(static_cast<uint32_t>(dwParam1), static_cast<tick_t>(dwParam2));
         break;
+    case MIM_LONGDATA: {
+        MIDIHDR* hdr = reinterpret_cast<MIDIHDR*>(dwParam1);
+        uint8_t* data = reinterpret_cast<uint8_t*>(hdr->lpData);
+        self->doProcessLongData(data, hdr->dwBytesRecorded, static_cast<tick_t>(dwParam2));
+        midiInAddBuffer(hMidiIn, hdr, sizeof(MIDIHDR));
+    } break;
     default:
         NOT_IMPLEMENTED << wMsg;
     }
 }
 
-void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
+void WinMidiInPort::doProcess(uint32_t message, tick_t tick)
 {
     auto e = Event::fromMidi10Package(message).toMIDI20();
     if (e) {
-        m_eventReceived.send(timing, e);
+        m_eventReceived.send(tick, e);
+    }
+}
+
+void WinMidiInPort::doProcessLongData(uint8_t* data, size_t size, tick_t tick)
+{
+    std::vector<Event> events = Event::fromMidi10SysExBytes(data, size);
+    for (const Event& e : events) {
+        m_eventReceived.send(tick, e);
     }
 }
 
@@ -238,7 +253,15 @@ Ret WinMidiInPort::run()
         return true;
     }
 
+    m_win->buffer.clear();
+    m_win->buffer.resize(1024, 0);
+    m_win->header.lpData = reinterpret_cast<LPSTR>(m_win->buffer.data());
+    m_win->header.dwBufferLength = static_cast<DWORD>(m_win->buffer.size());
+
+    midiInPrepareHeader(m_win->midiIn, &m_win->header, sizeof(MIDIHDR));
+    midiInAddBuffer(m_win->midiIn, &m_win->header, sizeof(MIDIHDR));
     midiInStart(m_win->midiIn);
+
     m_running = true;
 
     return Ret(true);

@@ -158,6 +158,10 @@ void MixerChannel::setIsActive(bool arg)
     if (m_audioSource) {
         m_audioSource->setIsActive(arg);
     }
+
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
+        fx->setPlaying(arg);
+    }
 }
 
 void MixerChannel::setOutputSpec(const OutputSpec& spec)

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_AUDIOUTILS_H
-#define MUSE_AUDIO_AUDIOUTILS_H
+#pragma once
 
 #include "audiotypes.h"
 #include "soundfonttypes.h"
@@ -92,6 +91,18 @@ inline String audioSourceCategoryName(const AudioInputParams& params)
     return String::fromStdString(params.resourceMeta.id);
 }
 
+inline AudioFxCategories audioFxCategoriesFromString(const String& str)
+{
+    StringList list = str.split('|');
+
+    AudioFxCategories result;
+    for (const String& name : list) {
+        result.insert(muse::key(AUDIO_FX_CATEGORY_TO_STRING_MAP, name, AudioFxCategory::FxOther));
+    }
+
+    return result;
+}
+
 inline bool isOnlineAudioResource(const AudioResourceMeta& meta)
 {
     const String& attr = meta.attributeVal(u"isOnline");
@@ -119,5 +130,3 @@ inline samples_t minSamplesToReserve(RenderMode mode)
     return 1024;
 }
 }
-
-#endif // MUSE_AUDIO_AUDIOUTILS_H

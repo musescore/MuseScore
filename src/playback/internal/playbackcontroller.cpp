@@ -72,6 +72,7 @@ static AudioOutputParams makeReverbOutputParams()
 {
     AudioFxParams reverbParams;
     reverbParams.resourceMeta = makeReverbMeta();
+    reverbParams.categories.insert(AudioFxCategory::FxReverb);
     reverbParams.chainOrder = 0;
     reverbParams.active = true;
 

@@ -25,7 +25,6 @@
 
 #include "shortcutsregisterstub.h"
 #include "shortcutscontrollerstub.h"
-#include "midiremotestub.h"
 #include "shortcutsconfigurationstub.h"
 
 using namespace muse::shortcuts;
@@ -40,6 +39,5 @@ void ShortcutsModule::registerExports()
 {
     ioc()->registerExport<IShortcutsRegister>(moduleName(), new ShortcutsRegisterStub());
     ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsControllerStub());
-    ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemoteStub());
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfigurationStub());
 }

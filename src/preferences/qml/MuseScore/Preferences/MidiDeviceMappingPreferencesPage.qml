@@ -22,7 +22,7 @@
 import QtQuick
 
 import MuseScore.Preferences
-import Muse.Shortcuts
+import Muse.MidiRemote
 
 PreferencesPage {
     id: root

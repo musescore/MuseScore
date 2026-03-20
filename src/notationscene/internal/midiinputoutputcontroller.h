@@ -27,9 +27,9 @@
 #include "midi/imidiconfiguration.h"
 #include "midi/imidiinport.h"
 #include "midi/imidioutport.h"
+#include "midiremote/imidiremote.h"
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "shortcuts/imidiremote.h"
 
 namespace mu::notation {
 class MidiInputOutputController : public muse::async::Asyncable, public muse::Contextable
@@ -38,8 +38,8 @@ class MidiInputOutputController : public muse::async::Asyncable, public muse::Co
     muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
     muse::ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
     muse::ContextInject<muse::midi::IMidiOutPort> midiOutPort = { this };
+    muse::ContextInject<muse::midiremote::IMidiRemote> midiRemote  = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::shortcuts::IMidiRemote> midiRemote  = { this };
 
 public:
 

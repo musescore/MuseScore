@@ -333,6 +333,15 @@ void ReverbProcessor::setActive(bool active)
     m_params.active = active;
 }
 
+void ReverbProcessor::setPlaying(bool)
+{
+}
+
+bool ReverbProcessor::shouldProcessDuringSilence() const
+{
+    return false;
+}
+
 void ReverbProcessor::process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t)
 {
     if (m_processor._blockSize != static_cast<int>(sampleCount)) {

@@ -27,7 +27,7 @@ using namespace muse::vst;
 using namespace muse::audio;
 using namespace muse::audioplugins;
 
-VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr&& instance, const AudioFxParams& params)
+VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr instance, const AudioFxParams& params)
     : m_pluginPtr(instance),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
     m_params(params)
@@ -98,6 +98,16 @@ bool VstFxProcessor::active() const
 void VstFxProcessor::setActive(bool active)
 {
     m_params.active = active;
+}
+
+void VstFxProcessor::setPlaying(bool playing)
+{
+    m_vstAudioClient->setIsPlaying(playing);
+}
+
+bool VstFxProcessor::shouldProcessDuringSilence() const
+{
+    return m_params.active && muse::contains(m_params.categories, AudioFxCategory::FxGenerator);
 }
 
 void VstFxProcessor::process(float* buffer, unsigned int sampleCount, msecs_t playbackPosition)

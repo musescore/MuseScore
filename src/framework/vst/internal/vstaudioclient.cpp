@@ -36,6 +36,11 @@ static size_t noteEventKey(int pitch, int channel)
     return h1 ^ (h2 << 1);
 }
 
+VstAudioClient::VstAudioClient()
+{
+    m_processContext.state = 0;
+}
+
 VstAudioClient::~VstAudioClient()
 {
     if (!m_pluginComponent) {
@@ -69,7 +74,8 @@ void VstAudioClient::loadSupportedParams()
         return;
     }
 
-    int paramCount = controller->getParameterCount();
+    const int paramCount = controller->getParameterCount();
+    m_pluginParamInfoMap.reserve(static_cast<size_t>(paramCount));
 
     for (int i = 0; i < paramCount; ++i) {
         PluginParamInfo info;
@@ -86,6 +92,15 @@ void VstAudioClient::setIsActive(const bool isActive)
         ensureActivity();
     } else {
         disableActivity();
+    }
+}
+
+void VstAudioClient::setIsPlaying(const bool isPlaying)
+{
+    if (isPlaying) {
+        m_processContext.state |= static_cast<uint32_t>(VstProcessContext::kPlaying);
+    } else {
+        m_processContext.state &= ~static_cast<uint32_t>(VstProcessContext::kPlaying);
     }
 }
 
