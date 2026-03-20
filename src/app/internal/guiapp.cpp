@@ -45,8 +45,8 @@ using namespace mu::appshell;
 
 static int m_lastId = 0;
 
-GuiApp::GuiApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
-    : muse::BaseApplication(ctx), m_options(options)
+GuiApp::GuiApp(const CmdOptions& options)
+    : muse::BaseApplication(), m_options(options)
 {
 }
 
@@ -108,6 +108,10 @@ void GuiApp::setup()
     // Process all pending events (see IpcSocket::onReadyRead())
     // so that we can use isFirstWindow() as early as possible
     muse::async::processMessages();
+
+//! FIXME
+//! The launch scenario is contextual, but there is no context here.
+#undef MUE_ENABLE_SPLASHSCREEN
 
 #ifdef MUE_ENABLE_SPLASHSCREEN
     if (multiwindowsProvider()->isFirstWindow()) {

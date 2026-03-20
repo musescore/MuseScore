@@ -31,7 +31,7 @@ class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
-    GuiApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
+    GuiApp(const CmdOptions& options);
 
     void addModule(muse::modularity::IModuleSetup* module);
 

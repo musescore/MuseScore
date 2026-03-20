@@ -36,7 +36,7 @@ class ConverterApi : public muse::api::ApiObject, public muse::async::Asyncable
     Q_OBJECT
 
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
-    muse::GlobalInject<IConverterController> converter;
+    muse::ContextInject<IConverterController> converter = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

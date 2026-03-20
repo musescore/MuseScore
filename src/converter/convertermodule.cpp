@@ -30,22 +30,29 @@
 using namespace muse::modularity;
 using namespace mu::converter;
 
+static const std::string mname("converter");
+
 std::string ConverterModule::moduleName() const
 {
-    return "converter";
-}
-
-void ConverterModule::registerExports()
-{
-    globalIoc()->registerExport<IConverterController>(moduleName(), new ConverterController(globalCtx()));
+    return mname;
 }
 
 void ConverterModule::registerApi()
 {
     using namespace muse::api;
 
-    auto api = globalIoc()->resolve<IApiRegister>(moduleName());
+    auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(moduleName(), "MuseApi.Converter", new ApiCreator<api::ConverterApi>());
+        api->regApiCreator(mname, "MuseApi.Converter", new ApiCreator<api::ConverterApi>());
     }
+}
+
+muse::modularity::IContextSetup* ConverterModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new ConverterModuleContext(ctx);
+}
+
+void ConverterModuleContext::registerExports()
+{
+    ioc()->registerExport<IConverterController>(mname, new ConverterController(iocContext()));
 }
