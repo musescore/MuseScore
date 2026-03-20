@@ -83,7 +83,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     encoderOptions.gop = cfg.fps / 2;
     encoderOptions.fps = cfg.fps;
 
-    if (!encoder->open(finalPath, encoderOptions)) {
+    if (!encoder || !encoder->open(finalPath, encoderOptions)) {
         LOGE() << "failed to open video encoder";
         return make_ret(muse::Ret::Code::UnknownError);
     }
