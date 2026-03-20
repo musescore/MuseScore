@@ -203,7 +203,7 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
     Fraction tick = segment->tick();
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
-    double lineDistance = staff->lineDistance(tick) * spatium;
+    double lineDistance = staff->lineDistance(tick).toAbsolute(spatium);
 
     for (Rest* rest : rests) {
         if (!rest->visible() || !rest->autoplace()) {
@@ -288,7 +288,7 @@ void RestLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff
 
     Fraction tick = segment->tick();
     double spatium = staff->spatium(tick);
-    double lineDistance = staff->lineDistance(tick) * spatium;
+    double lineDistance = staff->lineDistance(tick).toAbsolute(spatium);
     int lines = staff->lines(tick);
     const double minRestToRestClearance = 0.55 * spatium;
 
@@ -423,7 +423,7 @@ void RestLayout::alignRests(const System* system, LayoutContext& ctx)
 
         Rest* firstRest = group.front();
         const bool alignUpwards = firstRest->voice() == 0;
-        const double lineDist = firstRest->staff()->lineDistance(firstRest->tick()) * firstRest->spatium();
+        const double lineDist = firstRest->staff()->lineDistance(firstRest->tick()).toAbsolute(firstRest->spatium());
 
         double yOuterRest = alignUpwards ? DBL_MAX : -DBL_MAX;
         for (Rest* rest : group) {
@@ -630,7 +630,7 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
             }
 
             const double spatium = fullMeasureRest->spatium();
-            const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
+            const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()).toAbsolute(spatium);
             const double minHorizontalDistance = 4 * spatium;
             const double minVertClearance = 0.75 * spatium;
 
@@ -783,7 +783,7 @@ void RestLayout::updateSymbol(const Rest* item, Rest::LayoutData* ldata)
 {
     Fraction t = item->tick();
     Staff* st = item->staff();
-    double lineDistance = st->lineDistance(t) * item->spatium();
+    double lineDistance = st->lineDistance(t).toAbsolute(item->spatium());
     int lines = st->lines(t);
 
     double y = item->pos().y();
