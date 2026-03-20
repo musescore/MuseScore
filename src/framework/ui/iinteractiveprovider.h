@@ -53,9 +53,9 @@ public:
 
     virtual void raise(const UriQuery& uri) = 0;
 
-    virtual void close(const Uri& uri) = 0;
-    virtual void close(const UriQuery& uri) = 0;
-    virtual void closeAllDialogs() = 0;
+    virtual async::Promise<Ret> close(const Uri& uri) = 0;
+    virtual async::Promise<Ret> close(const UriQuery& uri) = 0;
+    virtual Ret closeAllDialogsSync() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
     virtual RetVal<bool> isCurrentUriDialog() const = 0;
