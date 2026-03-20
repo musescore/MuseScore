@@ -26,6 +26,7 @@
 #include "rehearsalmark.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "system.h"
 #include "tempotext.h"
 #include "text.h"
@@ -299,12 +300,14 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
     if (!rehearsalMark) {
         return false;
     }
-    RectF thisBbox = ldata()->bbox().translated(pos());
+
+    double staffHeight = staff() && placeBelow() ? staff()->staffHeight(tick()) : 0.0;
+    double tempoChangePos = staffHeight + defaultOffset().y() + (autoplace() ? absoluteFromSpatium(minDistance()) : 0.0);
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     const bool sameSide = placeAbove() == rehearsalMark->placeAbove();
-    const bool collision = placeAbove() ? muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), thisBbox.top()) : muse::RealIsEqualOrLess(
-        rehearsalMarkBbox.top(), thisBbox.bottom());
+    const bool collision = muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), tempoChangePos) && muse::RealIsEqualOrLess(
+        rehearsalMarkBbox.top(), tempoChangePos);
 
     return sameSide && collision;
 }
