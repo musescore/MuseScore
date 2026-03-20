@@ -62,7 +62,7 @@ ExportSettingsPage {
 
     StyledTextLabel {
         width: parent.width
-        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
+        text: qsTrc("project/export", "Each selected part will be exported as a separate video file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
     }

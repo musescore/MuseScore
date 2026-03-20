@@ -37,6 +37,8 @@
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
+#include "draw/fontmetrics.h"
+
 #include "defer.h"
 #include "log.h"
 
@@ -47,6 +49,38 @@ using namespace muse::draw;
 using namespace muse::midi;
 
 double CANVAS_DPI = 300;
+
+static muse::String notationTitle(const INotationPtr notation)
+{
+    muse::String title;
+    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* masterScore = notation->masterNotation()->masterScore();
+
+    if (const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::TITLE)) {
+        title = text->plainText();
+    }
+
+    if (title.isEmpty()) {
+        if (const mu::engraving::Text* text = masterScore->getText(mu::engraving::TextStyleType::TITLE)) {
+            title = text->plainText();
+        }
+    }
+
+    if (title.isEmpty()) {
+        title = masterScore->metaTag(u"workTitle");
+    }
+
+    return title;
+}
+
+static muse::String notationSubtitle(const INotationPtr notation)
+{
+    if (notation->isMaster()) {
+        return muse::String();
+    }
+
+    return notation->name();
+}
 
 std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
@@ -398,15 +432,31 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return true;
     }
 
-    engraving::Score* score = notation->elements()->msScore();
-    muse::String title = score->metaTag(u"workTitle");
+    muse::String title = notationTitle(notation);
+    muse::String subtitle = notationSubtitle(notation);
 
-    Font font(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    auto scaledFontPointSize = [&config](double basePixelSize) {
+        double pixelSize = basePixelSize * config.height / 1080.0;
+        return pixelSize * 72.0 / engraving::DPI;
+    };
 
-    double desiredPixelSize = 128.0 * config.height / 1080.0;
-    font.setPointSizeF(desiredPixelSize * 72.0 / engraving::DPI);
+    Font titleFont(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    titleFont.setPointSizeF(scaledFontPointSize(128.0));
+
+    Font subFont(titleFont);
+    subFont.setPointSizeF(scaledFontPointSize(48.0));
 
     muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
+
+    FontMetrics titleFontMetrics(titleFont);
+    muse::RectF titleBBox = titleFontMetrics.boundingRect(title);
+
+    double centerY = frameRect.center().y();
+    double titleBottom = centerY + titleBBox.height() / 2.0;
+
+    const double subtitleOffset = config.height / 20.0;
+    double subtitleTop = titleBottom + subtitleOffset;
+    muse::RectF subtitleRect(0.0, subtitleTop, frameRect.width(), 80.0);
 
     for (int f = 0; f < leadingFrameCount; f++) {
         if (m_abort) {
@@ -419,8 +469,13 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
 
         painter.fillRect(frameRect, Color::BLACK);
         painter.setPen(Color::WHITE);
-        painter.setFont(font);
+        painter.setFont(titleFont);
         painter.drawText(frameRect, AlignCenter, title);
+
+        if (!subtitle.isEmpty()) {
+            painter.setFont(subFont);
+            painter.drawText(subtitleRect, AlignCenter, subtitle);
+        }
 
         encoder->encodeImage(frame);
     }
@@ -474,7 +529,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         return nullptr;
     };
 
-    const Color CURSOR_COLOR = Color(0, 0, 255, 50);
+    const Color CURSOR_COLOR = Color(2, 109, 203, 127);
 
     PlaybackCursor cursor(iocContext());
     cursor.setNotation(notation);
