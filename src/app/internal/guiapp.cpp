@@ -84,15 +84,6 @@ void GuiApp::setup()
         m->registerExports();
     }
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ctx->id = 0;
-    std::vector<muse::modularity::IContextSetup*>& csetups = context(ctx).setups;
-    for (modularity::IContextSetup* s : csetups) {
-        s->registerExports();
-    }
-#endif
-
     m_globalModule->resolveImports();
     m_globalModule->registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
@@ -100,12 +91,6 @@ void GuiApp::setup()
         m->resolveImports();
         m->registerApi();
     }
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->resolveImports();
-    }
-#endif
 
     // ====================================================
     // Setup modules: apply the command line options
@@ -119,12 +104,6 @@ void GuiApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onPreInit(runMode);
-    }
-#endif
 
     // Process all pending events (see IpcSocket::onReadyRead())
     // so that we can use isFirstWindow() as early as possible
@@ -162,12 +141,6 @@ void GuiApp::setup()
         m->onInit(runMode);
     }
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onInit(runMode);
-    }
-#endif
-
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
@@ -175,12 +148,6 @@ void GuiApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onAllInited(runMode);
-    }
-#endif
 
     // ====================================================
     // Setup modules: onStartApp (on next event loop)
@@ -297,13 +264,7 @@ size_t GuiApp::contextCount() const
 
 muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
 {
-    //! NOTE
-    //! We're currently in a transitional state from a single global context to multiple contexts.
-    //! Therefore, this code will be improved; not everything is yet complete,
-    //! for example, there's no way to delete (close) a specific context.
-    //! Probably the context initialization needs to be moved to the base class of the app.
-
-#ifndef MUSE_MULTICONTEXT_WIP
+#ifndef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
     static bool once = false;
     IF_ASSERT_FAILED(!once) {
         return nullptr;
@@ -313,12 +274,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
 
     modularity::ContextPtr ctxId = std::make_shared<modularity::Context>();
     ++m_lastId;
-#ifdef MUSE_MULTICONTEXT_WIP
     ctxId->id = m_lastId;
-#else
-    // only global
-    ctxId->id = 0;
-#endif
 
     const CmdOptions& options = m_options;
     IApplication::RunMode runMode = options.runMode;
@@ -329,7 +285,6 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     LOGI() << "New context created with id: " << ctxId->id;
 
     // Setup
-#ifdef MUSE_MULTICONTEXT_WIP
     std::vector<muse::modularity::IContextSetup*>& csetups = context(ctxId).setups;
 
     for (modularity::IContextSetup* s : csetups) {
@@ -351,7 +306,6 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
     }
-#endif
 
     // Load main window
 #if defined(Q_OS_MAC)
