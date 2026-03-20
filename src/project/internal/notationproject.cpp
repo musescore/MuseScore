@@ -49,6 +49,8 @@
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
 
+#include "global/concurrency/concurrent.h"
+
 #include "defer.h"
 #include "log.h"
 
@@ -700,6 +702,35 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         }
 
         if (maybeOutBuf) {
+#ifdef MUSE_THREADS_SUPPORT
+            if (isAutosave) {
+                // For autosave, write to disk on a background thread to avoid stuttering.
+                // The buffer is fully serialized at this point so it's safe to move off the main thread.
+                muse::ByteArray data = maybeOutBuf->data();
+                QString savePathCopy = savePath;
+                QString targetContainerPathCopy = targetContainerPath;
+                muse::io::path_t targetMainFilePathCopy = targetMainFilePath;
+                auto fs = fileSystem();
+                Concurrent::run([fs, savePathCopy, targetContainerPathCopy, targetMainFilePathCopy, data]() {
+                    Ret writeRet = fs->writeFile(savePathCopy, data);
+                    if (!writeRet) {
+                        LOGE() << "Autosave: failed to write project file: " << writeRet.toString();
+                        return;
+                    }
+                    Ret copyRet = fs->copy(savePathCopy, targetContainerPathCopy, true);
+                    if (!copyRet) {
+                        LOGE() << "Autosave: failed to copy to target: " << copyRet.toString();
+                        return;
+                    }
+                    fs->remove(savePathCopy);
+                    QFile::setPermissions(targetMainFilePathCopy.toQString(),
+                                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+                    LOGD() << "Autosave: background write complete: " << targetContainerPathCopy;
+                });
+                return make_ret(Ret::Code::Ok);
+            }
+#endif
+
             ret = fileSystem()->writeFile(savePath, maybeOutBuf->data());
             if (!ret) {
                 LOGE() << "Failed to write project file";
