@@ -263,9 +263,10 @@ void PageLayout::collectPage(LayoutContext& ctx)
             isPageBreak = (y + dist) >= endY && breakPages;
         }
         if (isPageBreak) {
-            // Reserve only natural bottom clearance against footer on page end.
-            // Spacer down is applied between systems (SystemLayout::minDistance).
             double dist = ctx.state().prevSystem()->minBottom();
+            if (!ctx.conf().isVerticalSpreadEnabled()) {
+                dist = std::max(dist, ctx.state().prevSystem()->spacerDistance(false));
+            }
             double footerPadding = 0.0;
             // ensure it doesn't collide with footer
             if (footerExtension > 0) {
