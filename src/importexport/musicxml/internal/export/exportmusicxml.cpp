@@ -3873,20 +3873,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         noteheadTagname += color2xml(note);
         noteheadValue = "normal";
     }
-    bool leftParenthesis = false, rightParenthesis = false;
-    for (EngravingItem* elem : note->el()) {
-        if (elem->isSymbol()) {
-            Symbol* s = toSymbol(elem);
-            if (s->sym() == SymId::noteheadParenthesisLeft) {
-                leftParenthesis = true;
-                noteheadValue = "normal";
-            } else if (s->sym() == SymId::noteheadParenthesisRight) {
-                rightParenthesis = true;
-                noteheadValue = "normal";
-            }
-        }
-    }
-    if (rightParenthesis && leftParenthesis) {
+    if (note->getProperty(Pid::HAS_PARENTHESES).value<ParenthesesMode>() != ParenthesesMode::NONE) {
         noteheadTagname += u" parentheses=\"yes\"";
         noteheadValue = "normal";
     }
