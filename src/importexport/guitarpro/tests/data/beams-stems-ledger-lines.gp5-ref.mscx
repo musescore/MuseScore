@@ -25,9 +25,10 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Acoustic (DADGAD)</trackName>
       <Instrument id="cavaquinho">
-        <longName>Acoustic (DADGAD)</longName>
+        <InstrumentLabel>
+          <longName>Acoustic (DADGAD)</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

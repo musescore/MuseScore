@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -43,10 +45,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
-        <longName>Alto Saxophone</longName>
-        <shortName>A. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Saxophone</longName>
+          <shortName>A. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>

@@ -27,10 +27,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Horn</trackName>
       <Instrument id="horn">
-        <longName>Horn</longName>
-        <shortName>Hn.</shortName>
+        <InstrumentLabel>
+          <longName>Horn</longName>
+          <shortName>Hn.</shortName>
+          </InstrumentLabel>
         <trackName>Horn</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>

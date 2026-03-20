@@ -28,10 +28,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -66,10 +67,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Saxophone</trackName>
       <Instrument id="alto-saxophone">
-        <longName>Alto Saxophone</longName>
-        <shortName>A. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>Alto Saxophone</longName>
+          <shortName>A. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Alto Saxophone</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -228,10 +230,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Flute</trackName>
         <Instrument id="flute">
-          <longName>Flute</longName>
-          <shortName>Fl.</shortName>
+          <InstrumentLabel>
+            <longName>Flute</longName>
+            <shortName>Fl.</shortName>
+            </InstrumentLabel>
           <trackName>Flute</trackName>
           <minPitchP>59</minPitchP>
           <maxPitchP>98</maxPitchP>
@@ -343,10 +346,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto Saxophone</trackName>
         <Instrument id="alto-saxophone">
-          <longName>Alto Saxophone</longName>
-          <shortName>A. Sax.</shortName>
+          <InstrumentLabel>
+            <longName>Alto Saxophone</longName>
+            <shortName>A. Sax.</shortName>
+            </InstrumentLabel>
           <trackName>Alto Saxophone</trackName>
           <minPitchP>49</minPitchP>
           <maxPitchP>87</maxPitchP>

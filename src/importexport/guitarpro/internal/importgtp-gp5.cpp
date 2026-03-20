@@ -592,7 +592,6 @@ bool GuitarPro5::readTracks()
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
         stringDatas.insert_or_assign(part->id().toUint64(), stringData);
 

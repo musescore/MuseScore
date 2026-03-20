@@ -24,9 +24,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Guitar 1</trackName>
       <Instrument id="electric-guitar">
-        <longName>Guitar 1</longName>
+        <InstrumentLabel>
+          <longName>Guitar 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar.electric</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

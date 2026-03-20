@@ -29,7 +29,9 @@
         </Staff>
       <trackName>Melody</trackName>
       <Instrument id="piano">
-        <longName>Melody</longName>
+        <InstrumentLabel>
+          <longName>Melody</longName>
+          </InstrumentLabel>
         <trackName>Melody</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -92,7 +94,9 @@
         </Staff>
       <trackName>Harmony</trackName>
       <Instrument id="piano">
-        <longName>Harmony</longName>
+        <InstrumentLabel>
+          <longName>Harmony</longName>
+          </InstrumentLabel>
         <trackName>Harmony</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

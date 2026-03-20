@@ -33,10 +33,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument>
-        <longName>Guitar</longName>
-        <shortName>Gtr.</shortName>
+        <InstrumentLabel>
+          <longName>Guitar</longName>
+          <shortName>Gtr.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <Channel>
           <program value="24"/>

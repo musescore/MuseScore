@@ -39,10 +39,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Flute Oboe</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Flute Oboe</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -104,10 +105,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>96</maxPitchP>
@@ -169,10 +171,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bassoon</trackName>
       <Instrument id="bassoon">
-        <longName>Bassoon</longName>
-        <shortName>Bsn.</shortName>
+        <InstrumentLabel>
+          <longName>Bassoon</longName>
+          <shortName>Bsn.</shortName>
+          </InstrumentLabel>
         <trackName>Bassoon</trackName>
         <minPitchP>34</minPitchP>
         <maxPitchP>76</maxPitchP>
@@ -235,10 +238,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet</longName>
-        <shortName>B¯ Clarinet B¯ Bass Clar.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Clarinet</longName>
+          <shortName>B¯ Clarinet B¯ Bass Clar.</shortName>
+          </InstrumentLabel>
         <trackName>Bb Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>
@@ -300,10 +304,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Alto Clarinet</trackName>
       <Instrument id="alto-clarinet">
-        <longName>E♭ Alto Clarinet</longName>
-        <shortName>Alto Cl.</shortName>
+        <InstrumentLabel>
+          <longName>E♭ Alto Clarinet</longName>
+          <shortName>Alto Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Eb Alto Clarinet</trackName>
         <minPitchP>43</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -365,10 +370,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Bass Clarinet</trackName>
       <Instrument id="bb-bass-clarinet">
-        <longName>B♭ Bass Clarinet</longName>
-        <shortName>B. Cl.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Bass Clarinet</longName>
+          <shortName>B. Cl.</shortName>
+          </InstrumentLabel>
         <trackName>Bb Bass Clarinet</trackName>
         <minPitchP>34</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -432,10 +438,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Alto Sax.</trackName>
       <Instrument id="alto-saxophone">
-        <longName>E♭ Alto Sax.</longName>
-        <shortName>E¯ Alto Sax. E¯ Bar. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>E♭ Alto Sax.</longName>
+          <shortName>E¯ Alto Sax. E¯ Bar. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Eb Alto Sax.</trackName>
         <minPitchP>49</minPitchP>
         <maxPitchP>92</maxPitchP>
@@ -497,10 +504,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName> B♭ Tenor Sax.</trackName>
       <Instrument id="tenor-saxophone">
-        <longName> B♭ Tenor Sax.</longName>
-        <shortName>Ten. Sax.</shortName>
+        <InstrumentLabel>
+          <longName> B♭ Tenor Sax.</longName>
+          <shortName>Ten. Sax.</shortName>
+          </InstrumentLabel>
         <trackName> Bb Tenor Sax.</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>87</maxPitchP>
@@ -564,10 +572,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>E♭ Baritone Sax.</trackName>
       <Instrument id="baritone-saxophone">
-        <longName>E♭ Baritone Sax.</longName>
-        <shortName>Bari. Sax.</shortName>
+        <InstrumentLabel>
+          <longName>E♭ Baritone Sax.</longName>
+          <shortName>Bari. Sax.</shortName>
+          </InstrumentLabel>
         <trackName>Eb Baritone Sax.</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>80</maxPitchP>
@@ -631,10 +640,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>B♭ Trumpet</longName>
-        <shortName>Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Trumpet</longName>
+          <shortName>Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>Bb Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -701,10 +711,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>F Horn</trackName>
       <Instrument id="horn">
-        <longName>F Horn</longName>
-        <shortName>Hn.</shortName>
+        <InstrumentLabel>
+          <longName>F Horn</longName>
+          <shortName>Hn.</shortName>
+          </InstrumentLabel>
         <trackName>F Horn</trackName>
         <minPitchP>31</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -771,10 +782,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
-        <longName>Trombone</longName>
-        <shortName>Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          </InstrumentLabel>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -843,10 +855,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Baritone (B.C.)</trackName>
       <Instrument id="f-trumpet">
-        <longName>Baritone (B.C.)</longName>
-        <shortName>Bar. Hn.</shortName>
+        <InstrumentLabel>
+          <longName>Baritone (B.C.)</longName>
+          <shortName>Bar. Hn.</shortName>
+          </InstrumentLabel>
         <trackName>Baritone (B.C.)</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>91</maxPitchP>
@@ -913,10 +926,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Baritone (T.C.)</trackName>
       <Instrument id="f-trumpet">
-        <longName>Baritone (T.C.)</longName>
-        <shortName>Bar.</shortName>
+        <InstrumentLabel>
+          <longName>Baritone (T.C.)</longName>
+          <shortName>Bar.</shortName>
+          </InstrumentLabel>
         <trackName>Baritone (T.C.)</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>91</maxPitchP>
@@ -983,10 +997,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Tuba</trackName>
       <Instrument id="tuba">
-        <longName>Tuba</longName>
-        <shortName>Tba.</shortName>
+        <InstrumentLabel>
+          <longName>Tuba</longName>
+          <shortName>Tba.</shortName>
+          </InstrumentLabel>
         <trackName>Tuba</trackName>
         <minPitchP>22</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -1049,10 +1064,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Bass</trackName>
       <Instrument id="electric-bass">
-        <longName>Electric Bass</longName>
-        <shortName>E. Bass</shortName>
+        <InstrumentLabel>
+          <longName>Electric Bass</longName>
+          <shortName>E. Bass</shortName>
+          </InstrumentLabel>
         <trackName>Electric Bass</trackName>
         <minPitchP>28</minPitchP>
         <maxPitchP>67</maxPitchP>
@@ -1134,10 +1150,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Percussion</trackName>
       <Instrument id="percussion">
-        <longName>Percussion</longName>
-        <shortName>Perc.</shortName>
+        <InstrumentLabel>
+          <longName>Percussion</longName>
+          <shortName>Perc.</shortName>
+          </InstrumentLabel>
         <trackName>Percussion</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
@@ -1598,10 +1615,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Keyboard Percussion</trackName>
       <Instrument id="glockenspiel">
-        <longName>Keyboard Percussion</longName>
-        <shortName>Glock.</shortName>
+        <InstrumentLabel>
+          <longName>Keyboard Percussion</longName>
+          <shortName>Glock.</shortName>
+          </InstrumentLabel>
         <trackName>Keyboard Percussion</trackName>
         <minPitchP>76</minPitchP>
         <maxPitchP>108</maxPitchP>

@@ -24,10 +24,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bells</trackName>
       <Instrument id="xylomarimba">
-        <longName>Bells</longName>
-        <shortName>S-Gt</shortName>
+        <InstrumentLabel>
+          <longName>Bells</longName>
+          <shortName>S-Gt</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>

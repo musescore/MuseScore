@@ -74,7 +74,7 @@ Instrument::Instrument(const Instrument& i)
 {
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
-    m_instrumentName = i.m_instrumentName;
+    m_instrumentLabel = i.m_instrumentLabel;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;
@@ -106,7 +106,7 @@ void Instrument::operator=(const Instrument& i)
 
     m_id           = i.m_id;
     m_soundId      = i.m_soundId;
-    m_instrumentName = i.m_instrumentName;
+    m_instrumentLabel = i.m_instrumentLabel;
     m_trackName    = i.m_trackName;
     m_minPitchA    = i.m_minPitchA;
     m_maxPitchA    = i.m_maxPitchA;
@@ -152,8 +152,8 @@ String Instrument::recognizeMusicXmlId() const
     nameList.reserve(3);
 
     nameList.push_back(m_trackName);
-    nameList.push_back(m_instrumentName.longName());
-    nameList.push_back(m_instrumentName.shortName());
+    nameList.push_back(m_instrumentLabel.longName());
+    nameList.push_back(m_instrumentLabel.shortName());
 
     const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, m_useDrumset);
 
@@ -805,7 +805,7 @@ void Instrument::setGlissandoStyle(GlissandoStyle style)
 
 bool Instrument::operator==(const Instrument& i) const
 {
-    bool equal = i.m_instrumentName == m_instrumentName;
+    bool equal = i.m_instrumentLabel == m_instrumentLabel;
     equal &= i.m_trackName == m_trackName;
     equal &= i.m_id == m_id;
     equal &= i.m_soundId == m_soundId;
@@ -864,14 +864,36 @@ bool Instrument::isDifferentInstrument(const Instrument& i) const
 
 String Instrument::family() const
 {
-    auto search = searchTemplateIndexForId(m_id);
+    static const String NO_FAMILY = u"-";
 
-    if (!search.instrTemplate) {
-        static String empty;
-        return empty;
+    if (m_familyCache.empty()) {
+        auto search = searchTemplateIndexForId(m_id);
+
+        if (search.instrTemplate) {
+            m_familyCache = search.instrTemplate->familyId();
+        } else {
+            m_familyCache = NO_FAMILY;
+        }
     }
 
-    return search.instrTemplate->familyId();
+    return m_familyCache == NO_FAMILY ? String() : m_familyCache;
+}
+
+String Instrument::group() const
+{
+    static const String NO_GROUP = u"-";
+
+    if (m_groupCache.empty()) {
+        auto search = searchTemplateIndexForId(m_id);
+
+        if (search.instrTemplate) {
+            m_groupCache = search.instrTemplate->groupId;
+        } else {
+            m_groupCache = NO_GROUP;
+        }
+    }
+
+    return m_groupCache == NO_GROUP ? String() : m_groupCache;
 }
 
 //---------------------------------------------------------
@@ -1051,22 +1073,22 @@ void Instrument::setTrackName(const String& s)
 
 String Instrument::nameAsXmlText() const
 {
-    return m_instrumentName.longName();
+    return m_instrumentLabel.longName();
 }
 
 String Instrument::nameAsPlainText() const
 {
-    return TextBase::unEscape(m_instrumentName.longName());
+    return TextBase::unEscape(m_instrumentLabel.longName());
 }
 
 String Instrument::abbreviatureAsXmlText() const
 {
-    return m_instrumentName.shortName();
+    return m_instrumentLabel.shortName();
 }
 
 String Instrument::abbreviatureAsPlainText() const
 {
-    return TextBase::unEscape(m_instrumentName.shortName());
+    return TextBase::unEscape(m_instrumentLabel.shortName());
 }
 
 Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)

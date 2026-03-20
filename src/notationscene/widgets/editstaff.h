@@ -81,6 +81,10 @@ private slots:
     void longNameChanged();
     void shortNameChanged();
 
+    void useCustomNameChanged(bool useCustom);
+    void useCustomGroupNameChanged(bool useCustomGroup);
+    void useCustomIndividualNameChanged(bool useCustomIndividual);
+
 signals:
     void instrumentChanged();
 
@@ -94,6 +98,8 @@ private:
 
     Staff* staff(int staffIndex) const;
     Instrument instrument() const;
+
+    std::vector<InstrumentKey> otherInstrumentsInSameGroup() const;
 
     void applyStaffProperties();
     void applyPartProperties();

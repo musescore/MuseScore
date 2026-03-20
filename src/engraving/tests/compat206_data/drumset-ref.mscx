@@ -30,10 +30,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Drumset</trackName>
       <Instrument id="drumset">
-        <longName>Drumset</longName>
-        <shortName>Drs.</shortName>
+        <InstrumentLabel>
+          <longName>Drumset</longName>
+          <shortName>Drs.</shortName>
+          </InstrumentLabel>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
@@ -266,10 +267,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="snare-drum">
-        <longName>Snare Drum</longName>
-        <shortName>SD</shortName>
+        <InstrumentLabel>
+          <longName>Snare Drum</longName>
+          <shortName>SD</shortName>
+          </InstrumentLabel>
         <trackName>Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
@@ -400,10 +402,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Tenor Drums</trackName>
       <Instrument id="marching-tenor-drums">
-        <longName>Tenor Drums</longName>
-        <shortName>TD</shortName>
+        <InstrumentLabel>
+          <longName>Tenor Drums</longName>
+          <shortName>TD</shortName>
+          </InstrumentLabel>
         <trackName>Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
@@ -611,10 +614,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Bass Drums</trackName>
       <Instrument id="bass-drum">
-        <longName>Bass Drums</longName>
-        <shortName>BD</shortName>
+        <InstrumentLabel>
+          <longName>Bass Drums</longName>
+          <shortName>BD</shortName>
+          </InstrumentLabel>
         <trackName>Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>

@@ -50,9 +50,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>[Unnamed (treble staff)]</trackName>
       <Instrument id="grand-piano">
-        <longName>[Unnamed (treble staff)]</longName>
+        <InstrumentLabel>
+          <longName>[Unnamed (treble staff)]</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

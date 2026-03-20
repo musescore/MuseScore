@@ -43,10 +43,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Organ, Manual</trackName>
       <Instrument id="organ">
-        <longName>Organ, Manual</longName>
-        <shortName>Org.</shortName>
+        <InstrumentLabel>
+          <longName>Organ, Manual</longName>
+          <shortName>Org.</shortName>
+          </InstrumentLabel>
         <trackName>Organ</trackName>
         <instrumentId>keyboard.organ</instrumentId>
         <clef staff="2">F</clef>

@@ -103,6 +103,12 @@ public:
     void setLongNameAll(const String& s);  // For all instruments in _instruments
     void setShortNameAll(const String& s); // For all instruments in _instruments
 
+    int number(const Fraction& tick = { -1, 1 }) const;
+    void setNumber(int v, const Fraction& tick = { -1, 1 });
+
+    String transposition(const Fraction& tick = { -1, 1 }) const;
+    void setTransposition(const String& s, const Fraction& tick = { -1, 1 });
+
     void setPlainLongName(const String& s);
     void setPlainShortName(const String& s);
     void setPlainLongNameAll(const String& s);
@@ -153,8 +159,8 @@ public:
     HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
     Fraction currentHarpDiagramTick(const Fraction&) const;
 
-    String partName() const { return m_partName; }
-    void setPartName(const String& s) { m_partName = s; }
+    String partName() const;
+
     int color() const { return m_color; }
     void setColor(int value) { m_color = value; }
 
@@ -196,7 +202,6 @@ public:
 private:
     friend class read206::Read206;
 
-    String m_partName;                ///< used in tracklist (mixer)
     InstrumentList m_instruments;
     std::vector<Staff*> m_staves;
     muse::ID m_id = INVALID_ID;       ///< used for MusicXML import

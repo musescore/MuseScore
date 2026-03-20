@@ -57,10 +57,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>
@@ -120,10 +121,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Timpani</trackName>
       <Instrument id="timpani">
-        <longName>Timpani</longName>
-        <shortName>Timp.</shortName>
+        <InstrumentLabel>
+          <longName>Timpani</longName>
+          <shortName>Timp.</shortName>
+          </InstrumentLabel>
         <trackName>Timpani</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>62</maxPitchP>

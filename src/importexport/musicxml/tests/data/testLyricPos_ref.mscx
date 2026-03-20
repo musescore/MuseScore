@@ -58,10 +58,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>

@@ -30,7 +30,9 @@
         </Staff>
       <trackName>Part A</trackName>
       <Instrument id="piano">
-        <longName>Part A</longName>
+        <InstrumentLabel>
+          <longName>Part A</longName>
+          </InstrumentLabel>
         <trackName>Part A</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -103,7 +105,9 @@
         </Staff>
       <trackName>Part B</trackName>
       <Instrument id="piano">
-        <longName>Part B</longName>
+        <InstrumentLabel>
+          <longName>Part B</longName>
+          </InstrumentLabel>
         <trackName>Part B</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -166,7 +170,9 @@
         </Staff>
       <trackName>Part C</trackName>
       <Instrument id="piano">
-        <longName>Part C</longName>
+        <InstrumentLabel>
+          <longName>Part C</longName>
+          </InstrumentLabel>
         <trackName>Part C</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

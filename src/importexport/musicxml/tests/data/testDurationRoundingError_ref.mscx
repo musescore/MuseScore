@@ -33,10 +33,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Guitar</trackName>
       <Instrument id="guitar-nylon-treble-clef">
-        <longName>Guitar</longName>
-        <shortName>Guit.</shortName>
+        <InstrumentLabel>
+          <longName>Guitar</longName>
+          <shortName>Guit.</shortName>
+          </InstrumentLabel>
         <trackName>Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>

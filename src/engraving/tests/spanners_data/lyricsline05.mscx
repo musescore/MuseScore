@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -39,10 +41,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
-        <longName>Voice</longName>
-        <shortName>Vo.</shortName>
+        <InstrumentLabel>
+          <longName>Voice</longName>
+          <shortName>Vo.</shortName>
+          </InstrumentLabel>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
