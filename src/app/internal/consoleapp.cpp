@@ -97,25 +97,10 @@ void ConsoleApp::setup()
         m->registerExports();
     }
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
-    ctx->id = 0;
-    std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
-    for (modularity::IContextSetup* s : csetups) {
-        s->registerExports();
-    }
-#endif
-
     m_globalModule->resolveImports();
     for (modularity::IModuleSetup* m : m_modules) {
         m->resolveImports();
     }
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->resolveImports();
-    }
-#endif
 
     m_globalModule->registerApi();
     for (modularity::IModuleSetup* m : m_modules) {
@@ -135,11 +120,6 @@ void ConsoleApp::setup()
         m->onPreInit(runMode);
     }
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onPreInit(runMode);
-    }
-#endif
     // ====================================================
     // Setup modules: onInit
     // ====================================================
@@ -148,11 +128,6 @@ void ConsoleApp::setup()
         m->onInit(runMode);
     }
 
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onInit(runMode);
-    }
-#endif
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
@@ -160,12 +135,6 @@ void ConsoleApp::setup()
     for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
-
-#ifndef MUSE_MULTICONTEXT_WIP
-    for (modularity::IContextSetup* s : csetups) {
-        s->onAllInited(runMode);
-    }
-#endif
 
     // ====================================================
     // Setup modules: onStartApp (on next event loop)
@@ -273,16 +242,17 @@ std::vector<muse::modularity::IContextSetup*>& ConsoleApp::contextSetups(
 
 muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
 {
-    //! NOTE
-    //! We're currently in a transitional state from a single global context to multiple contexts.
-    //! Therefore, this code will be improved; not everything is yet complete,
-    //! for example, there's no way to delete (close) a specific context.
-    //! Probably the context initialization needs to be moved to the base class of the app.
+    //! NOTE Only one context is allowed for console app
+    static bool once = false;
+    IF_ASSERT_FAILED(!once) {
+        return nullptr;
+    }
+    once = true;
 
     m_context = std::make_shared<modularity::Context>();
     auto& ctx = m_context;
-    // only global
-    ctx->id = 0;
+    // only one
+    ctx->id = 1;
 
     const CmdOptions& options = m_options;
     IApplication::RunMode runMode = options.runMode;
@@ -297,7 +267,6 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
     LOGI() << "New context created with id: " << ctx->id;
 
     // Setup
-#ifdef MUSE_MULTICONTEXT_WIP
     std::vector<muse::modularity::IContextSetup*>& csetups = contextSetups(ctx);
 
     for (modularity::IContextSetup* s : csetups) {
@@ -319,8 +288,6 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
     for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
     }
-
-#endif
 
     return ctx;
 }
