@@ -166,7 +166,12 @@ void SelectableItemListModel::removeSelection()
 void SelectableItemListModel::clearSelection()
 {
     m_selection->clearSelection();
+
+    if (rowCount() > 0) {
+        emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
+    }
 }
+
 
 bool SelectableItemListModel::moveRows(const QModelIndex& sourceParent,
                                        int sourceRow,
