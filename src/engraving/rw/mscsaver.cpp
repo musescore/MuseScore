@@ -22,6 +22,11 @@
 #include "mscsaver.h"
 
 #include "global/io/buffer.h"
+#include "muse_framework_config.h"
+
+#ifdef MUSE_THREADS_SUPPORT
+#include <future>
+#endif
 
 #include "dom/masterscore.h"
 #include "dom/excerpt.h"
@@ -81,36 +86,62 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
         if (!ctx || !ctx->shouldWriteRange()) {
             const std::vector<Excerpt*>& excerpts = score->excerpts();
 
-            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
-                Excerpt* excerpt = excerpts.at(excerptIndex);
+            struct ExcerptData {
+                String fileName;
+                ByteArray styleData;
+                ByteArray scoreData;
+            };
 
+            auto serializeExcerpt = [masterWriteOutData, score](Excerpt* excerpt, size_t excerptIndex) -> ExcerptData {
                 Score* partScore = excerpt->excerptScore();
                 IF_ASSERT_FAILED(partScore && partScore != score) {
-                    continue;
+                    return ExcerptData();
                 }
 
                 excerpt->updateFileName(excerptIndex);
 
-                // Write excerpt style
-                {
-                    ByteArray excerptStyleData;
-                    auto styleStyleBuf = Buffer::opened(IODevice::WriteOnly, &excerptStyleData);
-                    partScore->style().write(&styleStyleBuf);
+                ExcerptData data;
+                data.fileName = excerpt->fileName();
 
-                    mscWriter.addExcerptStyleFile(excerpt->fileName(), excerptStyleData);
-                }
+                auto styleBuf = Buffer::opened(IODevice::WriteOnly, &data.styleData);
+                partScore->style().write(&styleBuf);
 
-                // Write excerpt
-                {
-                    ByteArray excerptData;
-                    auto excerptBuf = Buffer::opened(IODevice::ReadWrite, &excerptData);
+                WriteInOutData writeOutData = masterWriteOutData;
+                auto scoreBuf = Buffer::opened(IODevice::ReadWrite, &data.scoreData);
+                RWRegister::writer()->writeScore(partScore, &scoreBuf, &writeOutData);
 
-                    RWRegister::writer()->writeScore(
-                        excerpt->excerptScore(), &excerptBuf, &masterWriteOutData);
+                return data;
+            };
 
-                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
-                }
+#ifdef MUSE_THREADS_SUPPORT
+            // Parallelize excerpt serialization (CPU-bound, independent per excerpt)
+            std::vector<std::future<ExcerptData> > futures;
+            futures.reserve(excerpts.size());
+
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                Excerpt* excerpt = excerpts.at(excerptIndex);
+
+                futures.push_back(std::async(std::launch::async, [serializeExcerpt, excerpt, excerptIndex]() {
+                    return serializeExcerpt(excerpt, excerptIndex);
+                }));
             }
+
+            // Wait for all serializations to complete, then write to mscWriter sequentially
+            // (MscWriter is not thread-safe)
+            for (auto& future : futures) {
+                ExcerptData data = future.get();
+                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
+                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+            }
+#else
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                Excerpt* excerpt = excerpts.at(excerptIndex);
+
+                ExcerptData data = serializeExcerpt(excerpt, excerptIndex);
+                mscWriter.addExcerptStyleFile(data.fileName, data.styleData);
+                mscWriter.addExcerptFile(data.fileName, data.scoreData);
+            }
+#endif
         }
     }
 
