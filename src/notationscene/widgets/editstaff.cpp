@@ -580,6 +580,7 @@ void EditStaff::showReplaceInstrumentDialog()
 
         m_instrument = Instrument::fromTemplate(&val);
         m_staff->setStaffType(Fraction(0, 1), *staffType);
+        m_staff->setDefaultClefType(m_instrument.clefType(0));
 
         updateInstrument();
         updateStaffType(*staffType);
