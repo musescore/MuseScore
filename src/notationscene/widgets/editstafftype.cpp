@@ -50,6 +50,7 @@ mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
     mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,
     mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+    mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED_FULL_ROUNDED_SQUARE,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
     mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
