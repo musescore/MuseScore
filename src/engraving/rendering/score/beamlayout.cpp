@@ -306,23 +306,26 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     TRACEFUNC;
 
     BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
-    Chord* startChord = nullptr;
-    Chord* endChord = nullptr;
+    ChordRest* startCr = nullptr;
+    ChordRest* endCr = nullptr;
     if (chordRests.empty()) {
         return;
     }
     for (ChordRest* chordRest : chordRests) {
-        if (chordRest->isChord()) {
-            if (!startChord) {
-                startChord = toChord(chordRest);
-                endChord = startChord;
+        if (chordRest->isChord() || chordRest->isJianpuStaff()) {
+            if (!startCr) {
+                startCr = chordRest;
+                endCr = startCr;
             } else {
-                endChord = toChord(chordRest);
+                endCr = chordRest;
             }
-            ChordLayout::layoutStem(toChord(chordRest), ctx);
+
+            if (chordRest->isChord()) {
+                ChordLayout::layoutStem(toChord(chordRest), ctx);
+            }
         }
     }
-    if (!startChord) {
+    if (!startCr) {
         // we were passed a vector of only rests. we don't support beams across only rests
         // this beam will be deleted in LayoutBeams
         return;
@@ -332,8 +335,8 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     item->setBeamDist((item->beamSpacing() / 4.0) * item->spatium() * item->mag());
     item->setBeamWidth(item->absoluteFromSpatium(ctx.conf().styleS(Sid::beamWidth)) * item->mag());
 
-    item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), startChord, ChordBeamAnchorType::Start));
-    item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), endChord, ChordBeamAnchorType::End));
+    item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), startCr, ChordBeamAnchorType::Start));
+    item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), endCr, ChordBeamAnchorType::End));
 
     if (item->isGrace()) {
         item->setBeamDist(item->beamDist() * ctx.conf().styleD(Sid::graceNoteMag));
@@ -364,7 +367,15 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     // anchor represents the middle of the beam, not the tip of the stem
     // location depends on _isBesideTabStaff
 
-    if (!item->isBesideTabStaff()) {
+    if (item->isJianpuStaff()) {
+        BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
+        BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notePositions());
+        item->setStartAnchor(item->ldata()->startAnchor);
+        item->setEndAnchor(item->ldata()->endAnchor);
+        item->setSlope(0.0);
+        item->setBeamWidth(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->mag());
+        item->setBeamDist(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag());
+    } else if (!item->isBesideTabStaff()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notePositions());
         item->setStartAnchor(item->ldata()->startAnchor);
@@ -724,6 +735,10 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
             }
 
             bm = Groups::actualBeamMode(cr, prev, &beatSubdivision);
+            if (cr->isRest() && bm == BeamMode::NONE && cr->isJianpuStaff()) {
+                // Jianpu rest can be beamed
+                bm = BeamMode::AUTO;
+            }
 
             prev = cr;
 
@@ -836,9 +851,11 @@ void BeamLayout::layoutNonCrossBeams(ChordRest* cr, LayoutContext& ctx)
         }
     }
 
-    for (ChordRest* beamCR : beam->elements()) {
-        if (beamCR->isRest() && beamCR->vStaffIdx() == beam->staffIdx()) {
-            verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
+    if (!cr->isJianpuStaff()) {
+        for (ChordRest* beamCR : beam->elements()) {
+            if (beamCR->isRest() && beamCR->vStaffIdx() == beam->staffIdx()) {
+                verticalAdjustBeamedRests(toRest(beamCR), beam, ctx);
+            }
         }
     }
 }
@@ -966,7 +983,8 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
             ChordRest* chordRest = chordRests[i];
             ChordRest* prevChordRest = i < 1 ? nullptr : chordRests[i - 1];
 
-            if (level < chordRest->beams() && !chordRest->isRest()) {
+            // Jianpu rest can be beamed like normal chords
+            if (level < chordRest->beams() && (!chordRest->isRest() || item->isJianpuStaff())) {
                 levelHasBeam = true;
             }
             bool isBroken16 = false;
@@ -1227,7 +1245,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             ++(beam->above ? beamsAbove : beamsBelow);
         }
 
-        const int upValue = overallUp ? -1 : 1;
+        const int upValue = (overallUp || item->isJianpuStaff()) ? -1 : 1;
         const int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
         const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
@@ -1341,7 +1359,7 @@ void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, Chor
         }
     }
 
-    const int upValue = cr->up() ? -1 : 1;
+    const int upValue = (cr->up() || item->isJianpuStaff()) ? -1 : 1;
     const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
     if (muse::RealIsEqual(item->growLeft(), item->growRight())) {
