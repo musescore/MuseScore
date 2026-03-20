@@ -451,19 +451,19 @@ void Interactive::raise(const UriQuery& uri)
     provider()->raise(uri);
 }
 
-void Interactive::close(const UriQuery& uri)
+async::Promise<Ret> Interactive::close(const UriQuery& uri)
 {
-    provider()->close(uri);
+    return provider()->close(uri);
 }
 
-void Interactive::close(const Uri& uri)
+async::Promise<Ret> Interactive::close(const Uri& uri)
 {
-    provider()->close(uri);
+    return provider()->close(uri);
 }
 
-void Interactive::closeAllDialogs()
+Ret Interactive::closeAllDialogsSync()
 {
-    provider()->closeAllDialogs();
+    return provider()->closeAllDialogsSync();
 }
 
 ValCh<Uri> Interactive::currentUri() const

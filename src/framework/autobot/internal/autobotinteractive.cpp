@@ -178,19 +178,19 @@ void AutobotInteractive::raise(const UriQuery& uri)
     m_real->raise(uri);
 }
 
-void AutobotInteractive::close(const UriQuery& uri)
+async::Promise<Ret> AutobotInteractive::close(const UriQuery& uri)
 {
-    m_real->close(uri);
+    return m_real->close(uri);
 }
 
-void AutobotInteractive::close(const Uri& uri)
+async::Promise<Ret> AutobotInteractive::close(const Uri& uri)
 {
-    m_real->close(uri);
+    return m_real->close(uri);
 }
 
-void AutobotInteractive::closeAllDialogs()
+Ret AutobotInteractive::closeAllDialogsSync()
 {
-    m_real->closeAllDialogs();
+    return m_real->closeAllDialogsSync();
 }
 
 ValCh<Uri> AutobotInteractive::currentUri() const
