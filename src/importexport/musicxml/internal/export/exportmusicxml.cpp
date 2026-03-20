@@ -355,7 +355,7 @@ public:
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
     void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
-    void swingSound(StaffTextBase const* const text);
+    void swingSound(StaffTextBase const* const text, const bool offset = false);
     void tempoSound(TempoText const* const text);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
     Score* score() const { return m_score; }
@@ -4721,10 +4721,10 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
 //   directionETag
 //---------------------------------------------------------
 
-static void directionETag(XmlWriter& xml, staff_idx_t staff, int offs = 0)
+static void directionETag(XmlWriter& xml, staff_idx_t staff, const int offset = 0)
 {
-    if (offs) {
-        xml.tag("offset", offs);
+    if (offset) {
+        xml.tag("offset", { { "sound", "yes" } }, offset);
     }
     if (staff) {
         xml.tag("staff", static_cast<int>(staff));
@@ -4980,7 +4980,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     }
 
     if (offset) {
-        xml.tag("offset", offset);
+        xml.tag("offset", { { "sound", "yes" } }, offset);
     }
 }
 
@@ -5028,7 +5028,7 @@ void ExportMusicXml::tempoSound(TempoText const* const text)
     m_xml.tag("sound", { { "tempo", bpmRounded } });
 }
 
-void ExportMusicXml::swingSound(StaffTextBase const* const text)
+void ExportMusicXml::swingSound(StaffTextBase const* const text, const bool offset)
 {
     m_xml.startElement("sound");
     m_xml.startElement("swing");
@@ -5046,6 +5046,9 @@ void ExportMusicXml::swingSound(StaffTextBase const* const text)
         }
     }
     m_xml.endElement();
+    if (offset) {
+        m_xml.tag("offset", calculateTimeDeltaInDivisions(text->tick(), tick(), m_div));
+    }
     m_xml.endElement();
 }
 
@@ -5394,20 +5397,15 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
 {
     const bool isLineType = hp->isLineType();
     const bool isStart = hp->tick() == tick;
-    const Measure* measure = hp->startElement() ? hp->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
     int n;
     if (isLineType) {
         if (!hp->lineVisible()) {
             if ((isStart && hp->beginText().isEmpty()) || (!isStart && hp->endText().isEmpty())) {
                 return;
             }
-            // generate backup or forward to the start time of the element
-            const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-            moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
             directionTag(m_xml, m_attr, hp);
             writeHairpinText(m_xml, hp, isStart);
-            directionETag(m_xml, staff);
+            directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tick, m_tick, m_div));
             return;
         }
         n = findDashes(hp);
@@ -5436,10 +5434,6 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
         }
     }
-
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
-    moveToTickIfNeed(tickToWrite, hp->track(), measureStart);
 
     directionTag(m_xml, m_attr, hp);
     if (isStart) {
@@ -5509,7 +5503,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     if (!isStart) {
         writeHairpinText(m_xml, hp, isStart);
     }
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? hp->tick() : hp->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
@@ -5616,13 +5610,6 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     }
     bool isStart = pd->tick() == tick;
 
-    const Measure* measure = pd->startElement() ? pd->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
-
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? pd->tick() : pd->tick2();
-    moveToTickIfNeed(tickToWrite, pd->track(), measureStart);
-
     directionTag(m_xml, m_attr, pd);
     m_xml.startElement("direction-type");
     String pedalType;
@@ -5661,7 +5648,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     pedalXml += positioningAttributes(pd, pd->tick() == tick);
     m_xml.tagRaw(pedalXml);
     m_xml.endElement();
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? pd->tick() : pd->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
@@ -5694,7 +5681,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         }
         directionTag(m_xml, m_attr, tl);
         writeHairpinText(m_xml, tl, isStart);
-        directionETag(m_xml, staff);
+        directionETag(m_xml, staff, calculateTimeDeltaInDivisions(tick, m_tick, m_div));
         return;
     }
 
@@ -5702,9 +5689,6 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     // special case: a dashed line w/o hooks is written as dashes
     const bool isDashes = tl->lineStyle() == LineType::DASHED && (tl->beginHookType() == HookType::NONE)
                           && (tl->endHookType() == HookType::NONE);
-
-    const Measure* measure = tl->startElement() ? tl->startElement()->findMeasure() : nullptr;
-    const Fraction measureStart = measure ? measure->tick() : Fraction(0, 1);
 
     if (isDashes) {
         n = findDashes(tl);
@@ -5792,10 +5776,6 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     rest += color2xml(tl);
     rest += positioningAttributes(tl, tl->tick() == tick);
 
-    // generate backup or forward to the start time of the element
-    const Fraction tickToWrite = isStart ? tl->tick() : tl->tick2();
-    moveToTickIfNeed(tickToWrite, tl->track(), measureStart);
-
     directionTag(m_xml, m_attr, tl);
 
     if (!tl->beginText().isEmpty() && tl->tick() == tick) {
@@ -5820,12 +5800,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         m_xml.endElement();
     }
 
-    /*
-    if (offs)
-          xml.tag("offset", offs);
-    */
-
-    directionETag(m_xml, staff);
+    directionETag(m_xml, staff, calculateTimeDeltaInDivisions(isStart ? tl->tick() : tl->tick2(), m_tick, m_div));
 }
 
 //---------------------------------------------------------
@@ -6521,7 +6496,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         } else if (e->isSystemText()) {
             const StaffTextBase* text = toStaffTextBase(e);
             if (text->swing()) {
-                exp->swingSound(text);
+                exp->swingSound(text, true);
             }
         }
         return false;
