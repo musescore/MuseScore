@@ -114,11 +114,6 @@ String BaseApplication::appRevision()
 #endif
 }
 
-BaseApplication::BaseApplication(const modularity::ContextPtr& ctx)
-    : muse::Contextable(ctx), m_iocContext(ctx)
-{
-}
-
 void BaseApplication::setRunMode(const RunMode& mode)
 {
     m_runMode = mode;

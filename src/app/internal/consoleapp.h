@@ -64,13 +64,10 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
     muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
-    muse::GlobalInject<converter::IConverterController> converter;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
-    muse::ContextInject<muse::autobot::IAutobot> autobot = { this };
-    muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { this };
 
 public:
-    ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
+    ConsoleApp(const CmdOptions& options);
 
     void addModule(muse::modularity::IModuleSetup* module);
 
@@ -84,10 +81,10 @@ public:
 
 private:
     void applyCommandLineOptions(const CmdOptions& options, muse::IApplication::RunMode runMode);
-    int processConverter(const CmdOptions::ConverterTask& task);
-    int processDiagnostic(const CmdOptions::Diagnostic& task);
-    int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task);
-    void processAutobot(const CmdOptions::Autobot& task);
+    int processConverter(const CmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
+    int processDiagnostic(const CmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
+    int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
+    void processAutobot(const CmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx);
 
     std::vector<muse::modularity::IContextSetup*>& contextSetups(const muse::modularity::ContextPtr& ctx);
 

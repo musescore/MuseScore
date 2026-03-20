@@ -74,7 +74,7 @@ class ApplicationStub : public BaseApplication
 public:
 
     ApplicationStub()
-        : BaseApplication(std::make_shared<modularity::Context>()) {}
+        : BaseApplication() {}
 
     void setup() override {}
     void finish() override {}

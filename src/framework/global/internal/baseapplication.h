@@ -28,12 +28,12 @@
 #include "global/itickerprovider.h"
 
 namespace muse {
-class BaseApplication : public IApplication, public muse::Contextable
+class BaseApplication : public IApplication
 {
     GlobalInject<ITickerProvider> tickerProvider;
 public:
 
-    BaseApplication(const modularity::ContextPtr& ctx);
+    BaseApplication() = default;
 
     static String appName();
     static String appTitle();
@@ -74,7 +74,6 @@ protected:
 private:
     RunMode m_runMode = RunMode::GuiApp;
     FinishMode m_finishMode = FinishMode::Default;
-    modularity::ContextPtr m_iocContext;
 };
 }
 

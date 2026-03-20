@@ -63,8 +63,8 @@ static std::optional<ConvertTarget> parseTarget(const QMap<CmdOptions::ParamKey,
     return num;
 }
 
-ConsoleApp::ConsoleApp(const CmdOptions& options, const modularity::ContextPtr& ctx)
-    : muse::BaseApplication(ctx), m_options(options)
+ConsoleApp::ConsoleApp(const CmdOptions& options)
+    : muse::BaseApplication(), m_options(options)
 {
 }
 
@@ -145,55 +145,6 @@ void ConsoleApp::setup()
             m->onStartApp();
         }
     }, Qt::QueuedConnection);
-
-    // ====================================================
-    // Run
-    // ====================================================
-
-    switch (runMode) {
-    case IApplication::RunMode::ConsoleApp: {
-        // ====================================================
-        // Process Autobot
-        // ====================================================
-        CmdOptions::Autobot autobotOptions = options.autobot;
-        if (!autobotOptions.testCaseNameOrFile.isEmpty()) {
-            QMetaObject::invokeMethod(qApp, [this, autobotOptions]() {
-                    processAutobot(autobotOptions);
-                }, Qt::QueuedConnection);
-        } else {
-            // ====================================================
-            // Process Diagnostic
-            // ====================================================
-            CmdOptions::Diagnostic diagnostic = options.diagnostic;
-            if (diagnostic.type != DiagnosticType::Undefined) {
-                QMetaObject::invokeMethod(qApp, [this, diagnostic]() {
-                        int code = processDiagnostic(diagnostic);
-                        qApp->exit(code);
-                    }, Qt::QueuedConnection);
-            } else {
-                // ====================================================
-                // Process Converter
-                // ====================================================
-                CmdOptions::ConverterTask task = options.converterTask;
-                QMetaObject::invokeMethod(qApp, [this, task]() {
-                        int code = processConverter(task);
-                        qApp->exit(code);
-                    }, Qt::QueuedConnection);
-            }
-        }
-    } break;
-    case IApplication::RunMode::AudioPluginRegistration: {
-        CmdOptions::AudioPluginRegistration pluginRegistration = options.audioPluginRegistration;
-
-        QMetaObject::invokeMethod(qApp, [this, pluginRegistration]() {
-                int code = processAudioPluginRegistration(pluginRegistration);
-                qApp->exit(code);
-            }, Qt::QueuedConnection);
-    } break;
-    default: {
-        UNREACHABLE;
-    }
-    }
 }
 
 void ConsoleApp::destroyContext(const modularity::ContextPtr&)
@@ -287,6 +238,55 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
 
     for (modularity::IContextSetup* s : csetups) {
         s->onAllInited(runMode);
+    }
+
+    // ====================================================
+    // Run
+    // ====================================================
+
+    switch (runMode) {
+    case IApplication::RunMode::ConsoleApp: {
+        // ====================================================
+        // Process Autobot
+        // ====================================================
+        CmdOptions::Autobot autobotOptions = options.autobot;
+        if (!autobotOptions.testCaseNameOrFile.isEmpty()) {
+            QMetaObject::invokeMethod(qApp, [this, autobotOptions, ctx]() {
+                    processAutobot(autobotOptions, ctx);
+                }, Qt::QueuedConnection);
+        } else {
+            // ====================================================
+            // Process Diagnostic
+            // ====================================================
+            CmdOptions::Diagnostic diagnostic = options.diagnostic;
+            if (diagnostic.type != DiagnosticType::Undefined) {
+                QMetaObject::invokeMethod(qApp, [this, diagnostic, ctx]() {
+                        int code = processDiagnostic(diagnostic, ctx);
+                        qApp->exit(code);
+                    }, Qt::QueuedConnection);
+            } else {
+                // ====================================================
+                // Process Converter
+                // ====================================================
+                CmdOptions::ConverterTask task = options.converterTask;
+                QMetaObject::invokeMethod(qApp, [this, task, ctx]() {
+                        int code = processConverter(task, ctx);
+                        qApp->exit(code);
+                    }, Qt::QueuedConnection);
+            }
+        }
+    } break;
+    case IApplication::RunMode::AudioPluginRegistration: {
+        CmdOptions::AudioPluginRegistration pluginRegistration = options.audioPluginRegistration;
+
+        QMetaObject::invokeMethod(qApp, [this, pluginRegistration, ctx]() {
+                int code = processAudioPluginRegistration(pluginRegistration, ctx);
+                qApp->exit(code);
+            }, Qt::QueuedConnection);
+    } break;
+    default: {
+        UNREACHABLE;
+    }
     }
 
     return ctx;
@@ -402,8 +402,11 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     }
 }
 
-int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
+int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx)
 {
+    muse::ContextInject<converter::IConverterController> converter = { ctx };
+    muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { ctx };
+
     Ret ret = make_ret(Ret::Code::Ok);
     String soundProfile = task.params[CmdOptions::ParamKey::SoundProfile].toString();
     UriQuery extensionUri = UriQuery(task.params[CmdOptions::ParamKey::ExtensionUri].toString().toStdString());
@@ -468,7 +471,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     return ret.code();
 }
 
-int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task)
+int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task, const muse::modularity::ContextPtr&)
 {
     if (!diagnosticDrawProvider()) {
         return make_ret(Ret::Code::NotSupported);
@@ -523,7 +526,7 @@ int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task)
     return ret.code();
 }
 
-int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task)
+int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr&)
 {
     Ret ret = make_ret(Ret::Code::Ok);
 
@@ -540,9 +543,11 @@ int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegi
     return ret.code();
 }
 
-void ConsoleApp::processAutobot(const CmdOptions::Autobot& task)
+void ConsoleApp::processAutobot(const CmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx)
 {
     using namespace muse::autobot;
+    muse::ContextInject<IAutobot> autobot = { ctx };
+
     muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
     stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret){
         if (!ret) {
