@@ -2385,6 +2385,11 @@ void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
 
     system->setHeight(system->systemHeight());
     SystemLayout::setMeasureHeight(system, system->systemHeight(), ctx);
+
+    // Reused systems can move across pages during partial relayout.
+    // Refresh geometry derived from SysStaff vertical positions.
+    SystemLayout::layoutBracketsVertical(system, ctx);
+    SystemHeaderLayout::setInstrumentNamesVerticalPos(system, ctx);
 }
 
 void SystemLayout::setMeasureHeight(System* system, double height, const LayoutContext& ctx)
