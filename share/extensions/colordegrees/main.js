@@ -31,7 +31,8 @@ const DEGREE_COLORS = [
     "#ffa500"   // 7 - Leading tone (vii°), Orange (between yellow and red-orange)
 ];
 const BLACK = "#000000";
-const TRIAD_GREY = "#808080";  // Grey for 3rd and 5th (triad members, not root)
+const THIRD_GREY = "#505050";  // Darker grey for 3rd (m3/M3)
+const FIFTH_GREY = "#808080";   // Lighter grey for 5th (P5)
 
 // keysig (-7 to +7) -> tonic pitch class (0-11)
 const TONIC_CHROMA = {
@@ -190,8 +191,10 @@ function processMeasureNotes(noteInfos, measureTicks, measureStartTick, keysig) 
         var noteColor;
         if (semitonesFromRoot === 0) {
             noteColor = color;  // Root: chord degree color
-        } else if (semitonesFromRoot === 3 || semitonesFromRoot === 4 || semitonesFromRoot === 7) {
-            noteColor = TRIAD_GREY;  // 3rd (m3/M3) or 5th (P5): grey
+        } else if (semitonesFromRoot === 3 || semitonesFromRoot === 4) {
+            noteColor = THIRD_GREY;   // 3rd (m3/M3): darker grey
+        } else if (semitonesFromRoot === 7) {
+            noteColor = FIFTH_GREY;   // 5th (P5): lighter grey
         } else {
             // Other notes: color by their scale degree in the key
             var noteDegree = pitchToDegree(noteInfos[i].pitch, keysig);
