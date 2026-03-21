@@ -55,3 +55,19 @@ void ChangeInstrument::flip(EditData*)
     // remember original instrument
     instrument = oi;
 }
+
+//---------------------------------------------------------
+//   ChangeInstrument::cleanup
+//---------------------------------------------------------
+
+void ChangeInstrument::cleanup(bool undo)
+{
+    // Delete the instrument pointer that is not currently in use
+    // After undo/redo, one of the instruments is no longer referenced
+    // The 'instrument' member holds the "other" instrument after flip
+    // We need to delete it when the undo command is being cleaned up
+    if (instrument) {
+        delete instrument;
+        instrument = nullptr;
+    }
+}

@@ -48,7 +48,14 @@ public:
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
     Instrument* instrument() const { return m_instrument; }
-    void setInstrument(Instrument* i) { m_instrument = i; }
+    void setInstrument(Instrument* i)
+    {
+        if (m_instrument != i) {
+            delete m_instrument;
+            m_instrument = i;
+        }
+    }
+
     void setInstrument(Instrument&& i) { *m_instrument = i; }
     void setInstrument(const Instrument& i);
     void setupInstrument(const Instrument* instrument);

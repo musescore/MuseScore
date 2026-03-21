@@ -36,6 +36,7 @@ class ChangeInstrument : public UndoCommand
     Instrument* instrument = nullptr;
 
     void flip(EditData*) override;
+    void cleanup(bool undo) override;
 
 public:
     ChangeInstrument(InstrumentChange* _is, Instrument* i)
