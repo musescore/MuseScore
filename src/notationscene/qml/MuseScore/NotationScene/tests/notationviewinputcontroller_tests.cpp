@@ -21,6 +21,7 @@
  */
 #include <gmock/gmock.h>
 
+#include "mocks/actionsdispatchermock.h"
 #include "mocks/controlledviewmock.h"
 #include "notation/tests/mocks/notationconfigurationmock.h"
 #include "notation/tests/mocks/notationinteractionmock.h"
@@ -28,6 +29,7 @@
 #include "notation/tests/mocks/notationselectionrangemock.h"
 #include "playback/tests/mocks/playbackcontrollermock.h"
 
+#include "engraving/dom/shadownote.h"
 #include "engraving/tests/utils/scorerw.h"
 
 #include "notationscene/qml/MuseScore/NotationScene/notationviewinputcontroller.h"
@@ -75,6 +77,9 @@ public:
         m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
+        m_dispatcher = std::make_shared<NiceMock<muse::actions::ActionsDispatcherMock> >();
+        m_controller->dispatcher.set(m_dispatcher);
+
         setNoWaylandForLinux();
     }
 
@@ -91,6 +96,7 @@ public:
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
     std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
+    std::shared_ptr<muse::actions::ActionsDispatcherMock> m_dispatcher;
     playback::IPlaybackController::PlayParams m_playParams;
 
     mutable QList<QInputEvent*> m_events;
@@ -942,4 +948,69 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Shadow_Note_Invisible
+ * @details In note input mode, left click should not dispatch put-note when shadow note is not visible
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Shadow_Note_Invisible)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
+    .Times(2)
+    .WillRepeatedly(Return(PointF(100, 100)));
+
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    //! [GIVEN] Shadow note exists but is not visible
+    engraving::ShadowNote* shadowNote = score->shadowNote();
+    shadowNote->setVisible(false);
+    EXPECT_CALL(*m_interaction, shadowNote())
+    .WillOnce(Return(shadowNote));
+
+    //! [THEN] No note insertion action should be dispatched
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _))
+    .Times(0);
+
+    //! [WHEN] User left-clicks in note input mode
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Shadow_Note_Visible
+ * @details In note input mode, left click should dispatch put-note when shadow note is visible
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Shadow_Note_Visible)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
+    .Times(2)
+    .WillRepeatedly(Return(PointF(100, 100)));
+
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    //! [GIVEN] Shadow note is visible
+    engraving::ShadowNote* shadowNote = score->shadowNote();
+    shadowNote->setVisible(true);
+    EXPECT_CALL(*m_interaction, shadowNote())
+    .WillOnce(Return(shadowNote));
+
+    //! [THEN] put-note should be dispatched exactly once
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _))
+    .Times(1)
+    .WillOnce([](const muse::actions::ActionCode& actionCode, const muse::actions::ActionData&) {
+        EXPECT_EQ(actionCode, muse::actions::ActionCode("put-note"));
+    });
+
+    //! [WHEN] User left-clicks in note input mode
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
