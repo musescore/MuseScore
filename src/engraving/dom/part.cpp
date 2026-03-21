@@ -62,6 +62,18 @@ Part::Part(Score* s)
 }
 
 //---------------------------------------------------------
+//   ~Part
+//---------------------------------------------------------
+
+Part::~Part()
+{
+    // Delete all instruments owned by this Part
+    for (auto it = m_instruments.begin(); it != m_instruments.end(); ++it) {
+        delete it->second;
+    }
+}
+
+//---------------------------------------------------------
 //   initFromInstrTemplate
 //---------------------------------------------------------
 
@@ -350,6 +362,10 @@ void Part::setInstrument(const Instrument& i, Fraction tick)
 
 void Part::setInstruments(const InstrumentList& instruments)
 {
+    // Delete all old instruments before clearing
+    for (auto it = m_instruments.begin(); it != m_instruments.end(); ++it) {
+        delete it->second;
+    }
     m_instruments.clear();
 
     for (auto it = instruments.begin(); it != instruments.end(); ++it) {
@@ -368,6 +384,7 @@ void Part::removeInstrument(const Fraction& tick)
         LOGD("Part::removeInstrument: not found at tick %d", tick.ticks());
         return;
     }
+    delete i->second;  // Delete the instrument before erasing
     m_instruments.erase(i);
 }
 
@@ -380,6 +397,7 @@ void Part::removeNonPrimaryInstruments()
     auto it = m_instruments.begin();
     while (it != m_instruments.end()) {
         if (it->first != -1) {
+            delete it->second;  // Delete the instrument before erasing
             it = m_instruments.erase(it);
             continue;
         }
