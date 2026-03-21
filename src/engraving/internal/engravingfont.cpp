@@ -796,9 +796,9 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         { "tieMidpointThickness",       { { Sid::tieMidWidth } } },
         { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
         { "thickBarlineThickness",      { { Sid::endBarWidth } } },
-        // "dashedBarlineThickness" not supported
-        // "dashedBarlineDashLength" not supported
-        // "dashedBarlineGapLength" not supported
+        { "dashedBarlineThickness",     { { Sid::dashBarWidth } } },
+        { "dashedBarlineDashLength",    { { Sid::dashBarDash } } },
+        { "dashedBarlineGapLength",     { { Sid::dashBarGap } } },
         { "barlineSeparation",          { { Sid::doubleBarDistance }, { "thinThickBarlineSeparation" } } },
         { "thinThickBarlineSeparation", { { Sid::endBarDistance } } },
         { "repeatBarlineDotSeparation", { { Sid::repeatBarlineDotSeparation } } },
