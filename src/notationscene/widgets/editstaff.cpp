@@ -361,10 +361,10 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
-    size_t index = m_staff->score()->undoStack()->currentIndex();
+    size_t index = m_orgStaff->score()->undoStack()->currentIndex();
     applyStaffProperties();
     applyPartProperties();
-    m_staff->score()->undoStack()->mergeCommands(index);
+    m_orgStaff->score()->undoStack()->mergeCommands(index);
 }
 
 void EditStaff::minPitchAClicked()
