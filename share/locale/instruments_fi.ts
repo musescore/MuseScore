@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Puhallinosa nuotinnettu pianoviivastolle.</translation>
+        <translation>Puhallinsektio nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
@@ -5865,7 +5865,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vaskiosa nuotinnettu pianoviivastolle.</translation>
+        <translation>Vaskisektio nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2084"/>
@@ -19096,7 +19096,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Jousiosa, nuotinnettu pianoviivastolle.</translation>
+        <translation>Jousisektio, nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6306"/>
@@ -19222,14 +19222,14 @@
         <source>Violin section.</source>
         <comment>violins description</comment>
         <extracomment>description for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viuluosa.</translation>
+        <translation>Viulusektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6345"/>
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viulut (osa)</translation>
+        <translation>Viulut (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6347"/>
@@ -19320,14 +19320,14 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alttoviuluosa.</translation>
+        <translation>Alttoviulusektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6375"/>
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alttoviulut (osa)</translation>
+        <translation>Alttoviulut (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6377"/>
@@ -19418,14 +19418,14 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sello-osa.</translation>
+        <translation>Sellosektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6405"/>
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sellot (osa)</translation>
+        <translation>Sellot (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6407"/>
@@ -19516,14 +19516,14 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasso (tuplabasso) osa.</translation>
+        <translation>Kontrabasso (tuplabasso) sektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6435"/>
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabassot (osa)</translation>
+        <translation>Kontrabassot (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6437"/>
