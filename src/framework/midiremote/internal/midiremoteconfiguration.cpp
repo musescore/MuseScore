@@ -28,7 +28,7 @@
 using namespace muse;
 using namespace muse::midiremote;
 
-static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE("shortcuts", "io/midi/advanceOnRelease");
+static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE("midiremote", "io/midi/advanceOnRelease");
 
 static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
 

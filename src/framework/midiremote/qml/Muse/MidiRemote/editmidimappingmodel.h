@@ -55,7 +55,7 @@ signals:
     void mappingTitleChanged(const QString& title);
 
 private:
-    QString deviceName(const MidiDeviceID& deviceId) const;
+    QString deviceName(const midi::MidiDeviceID& deviceId) const;
 
     bool m_loaded = false;
     RemoteEvent m_event;

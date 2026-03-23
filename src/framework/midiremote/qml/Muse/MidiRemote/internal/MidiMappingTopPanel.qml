@@ -37,7 +37,7 @@ RowLayout {
         name: "MidiMappingTopPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("shortcuts", "MIDI mapping top panel")
+        accessible.name: qsTrc("midiremote", "MIDI mapping top panel")
 
         onActiveChanged: function(active) {
             if (active) {
@@ -48,7 +48,7 @@ RowLayout {
 
     CheckBox {
         id: remoteControlCheckBox
-        text: qsTrc("shortcuts", "MIDI remote control")
+        text: qsTrc("midiremote", "MIDI remote control")
         font: ui.theme.bodyBoldFont
 
         navigation.name: "RemoteControlCheckBox"

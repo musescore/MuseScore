@@ -60,7 +60,7 @@ QString EditMidiMappingModel::mappingTitle() const
 {
     MidiDeviceID currentMidiInDeviceId = midiInPort()->deviceID();
     if (currentMidiInDeviceId.empty() || !m_event.isValid()) {
-        return muse::qtrc("shortcuts", "Waiting…");
+        return muse::qtrc("global", "Waiting…");
     }
 
     return deviceName(currentMidiInDeviceId) + " > " + m_event.name().toQString();
