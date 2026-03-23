@@ -65,7 +65,9 @@ void VstViewDialog::deinit()
 {
     if (m_view) {
         m_view->setFrame(nullptr);
+#ifndef Q_OS_MAC
         m_view->removed();
+#endif
         m_view = nullptr;
     }
 
