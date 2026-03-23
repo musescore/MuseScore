@@ -26,7 +26,6 @@
 
 namespace muse::musesampler {
 class MuseSamplerConfiguration;
-class MuseSamplerActionController;
 class MuseSamplerResolver;
 class MuseSamplerModule : public modularity::IModuleSetup
 {
@@ -41,16 +40,21 @@ public:
 
 private:
     std::shared_ptr<MuseSamplerConfiguration> m_configuration;
-    std::shared_ptr<MuseSamplerActionController> m_actionController;
     std::shared_ptr<MuseSamplerResolver> m_resolver;
 };
 
+class MuseSamplerActionController;
 class MuseSamplerContext : public modularity::IContextSetup
 {
 public:
     MuseSamplerContext(const modularity::ContextPtr& ctx)
         : modularity::IContextSetup(ctx) {}
 
+    void registerExports() override;
     void resolveImports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<MuseSamplerActionController> m_actionController;
 };
 }
