@@ -132,7 +132,7 @@ void InputResourceItem::handleMenuItem(const QString& menuItemId)
     if (menuItemId == GET_MORE_SOUNDS_ID) {
         const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
         const QString urlParams("muse-sounds?utm_source=mss-mixer&utm_medium=mh&utm_campaign=mss-mixer-ms-mainpage");
-        interactive()->openUrl(url + urlParams);
+        platformInteractive()->openUrl(url + urlParams);
         return;
     }
 

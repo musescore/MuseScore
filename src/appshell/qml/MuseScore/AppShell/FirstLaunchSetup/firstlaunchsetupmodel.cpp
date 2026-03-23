@@ -140,7 +140,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     IInteractive::Result result = interactive()->warningSync(title, text, buttons, int(IInteractive::Button::Cancel));
 
     if (result.isButton(visitMuseHubBtnId)) {
-        interactive()->openUrl(configuration()->museHubFreeMuseSoundsUrl());
+        platformInteractive()->openUrl(configuration()->museHubFreeMuseSoundsUrl());
         return true;
     }
 

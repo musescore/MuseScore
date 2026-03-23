@@ -130,5 +130,5 @@ QString InteractiveApi::question(const QString& contentTitle, const QString& tex
  */
 void InteractiveApi::openUrl(const QString& url)
 {
-    interactive()->openUrl(QUrl(url));
+    platformInteractive()->openUrl(QUrl(url));
 }

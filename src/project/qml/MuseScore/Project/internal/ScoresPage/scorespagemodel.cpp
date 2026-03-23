@@ -51,7 +51,7 @@ void ScoresPageModel::openScore(const QString& scorePath, const QString& display
 
 void ScoresPageModel::openScoreManager()
 {
-    interactive()->openUrl(museScoreComService()->scoreManagerUrl());
+    platformInteractive()->openUrl(museScoreComService()->scoreManagerUrl());
 }
 
 int ScoresPageModel::tabIndex() const

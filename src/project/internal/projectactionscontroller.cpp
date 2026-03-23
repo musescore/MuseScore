@@ -1374,7 +1374,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     closeUploadProgressDialog();
 
     if (!urlToOpen.isEmpty()) {
-        interactive()->openUrl(urlToOpen);
+        platformInteractive()->openUrl(urlToOpen);
         return;
     }
 
@@ -1402,7 +1402,7 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
                         static_cast<int>(IInteractive::Button::Ok))
     .onResolve(this, [this, viewOnlineBtn, scoreManagerUrl](const IInteractive::Result& res) {
         if (res.isButton(viewOnlineBtn.btn)) {
-            interactive()->openUrl(scoreManagerUrl);
+            platformInteractive()->openUrl(scoreManagerUrl);
         }
     });
 }
@@ -1450,7 +1450,7 @@ void ProjectActionsController::onAudioSuccessfullyUploaded(const QUrl& urlToOpen
 
     closeUploadProgressDialog();
 
-    interactive()->openUrl(urlToOpen);
+    platformInteractive()->openUrl(urlToOpen);
 }
 
 void ProjectActionsController::onAudioUploadFailed(const Ret& ret)
@@ -1627,7 +1627,7 @@ void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLoca
         interactive()->buttonData(IInteractive::Button::Ok)
     }).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
         if (res.isButton(getHelpBtn.btn)) {
-            interactive()->openUrl(configuration()->supportForumUrl());
+            platformInteractive()->openUrl(configuration()->supportForumUrl());
         }
     });
 }
@@ -1815,7 +1815,7 @@ void ProjectActionsController::warnProjectCriticallyCorrupted(const String& proj
         getHelpBtn
     }, getHelpBtn.btn).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
         if (res.isButton(getHelpBtn.btn)) {
-            interactive()->openUrl(configuration()->supportForumUrl());
+            platformInteractive()->openUrl(configuration()->supportForumUrl());
         }
     });
 }
@@ -1846,7 +1846,7 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const m
 
 void ProjectActionsController::importPdf()
 {
-    interactive()->openUrl("https://musescore.com/import");
+    platformInteractive()->openUrl("https://musescore.com/import");
 }
 
 void ProjectActionsController::clearRecentScores()

@@ -27,7 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "idiagnosticspathsregister.h"
-#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace muse::diagnostics {
 class DiagnosticsPathsModel : public QAbstractListModel, public Contextable
@@ -37,7 +37,7 @@ class DiagnosticsPathsModel : public QAbstractListModel, public Contextable
     QML_ELEMENT
 
     GlobalInject<IDiagnosticsPathsRegister> pathsRegister;
-    ContextInject<muse::IInteractive> interactive = { this };
+    GlobalInject<muse::IPlatformInteractive> platformInteractive;
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);

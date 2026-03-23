@@ -27,11 +27,13 @@
 #include "modularity/ioc.h"
 #include "idiagnosticsconfiguration.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace muse::diagnostics {
 class SaveDiagnosticFilesScenario : public ISaveDiagnosticFilesScenario, public Contextable
 {
     GlobalInject<diagnostics::IDiagnosticsConfiguration> configuration;
+    GlobalInject<muse::IPlatformInteractive> platformInteractive;
     ContextInject<muse::IInteractive> interactive = { this };
 
 public:

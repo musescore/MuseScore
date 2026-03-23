@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -71,6 +72,7 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario;
     muse::GlobalInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };

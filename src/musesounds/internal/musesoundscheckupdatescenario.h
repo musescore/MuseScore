@@ -30,12 +30,14 @@
 #include "musesounds/imusesoundsconfiguration.h"
 
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<IMuseSoundsCheckUpdateService> service;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

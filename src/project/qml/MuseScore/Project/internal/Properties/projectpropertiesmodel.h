@@ -29,7 +29,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::project {
@@ -45,8 +45,8 @@ class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatu
 
     QML_ELEMENT
 
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);

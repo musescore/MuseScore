@@ -460,7 +460,7 @@ void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 
 void ExportProjectScenario::openFolder(const muse::io::path_t& path) const
 {
-    Ret ret = interactive()->revealInFileBrowser(path.toQString());
+    Ret ret = platformInteractive()->revealInFileBrowser(path.toQString());
 
     if (!ret) {
         LOGE() << "Could not open folder: " << path.toQString();

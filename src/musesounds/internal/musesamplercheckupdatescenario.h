@@ -31,6 +31,7 @@
 #include "global/iglobalconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
 namespace mu::musesounds {
@@ -40,6 +41,7 @@ class MuseSamplerCheckUpdateScenario : public IMuseSamplerCheckUpdateScenario, p
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IProcess> process;
     muse::GlobalInject<IMuseSamplerCheckUpdateService> service;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 

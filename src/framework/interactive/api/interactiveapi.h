@@ -26,12 +26,14 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace muse::interactive {
 class InteractiveApi : public api::ApiObject
 {
     Q_OBJECT
 
+    GlobalInject<IPlatformInteractive> platformInteractive;
     ContextInject<IInteractive> interactive = { this };
 
 public:

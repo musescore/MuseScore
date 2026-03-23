@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 namespace mu::appshell {
 class FirstLaunchSetupModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -47,6 +48,7 @@ class FirstLaunchSetupModel : public QObject, public muse::Contextable, public m
     QML_ELEMENT
 
     muse::GlobalInject<IAppShellConfiguration> configuration;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

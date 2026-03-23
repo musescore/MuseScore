@@ -28,6 +28,7 @@
 #include "iprojectconfiguration.h"
 #include "iprojectfilescontroller.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
@@ -38,6 +39,7 @@ class OpenSaveProjectScenario : public IOpenSaveProjectScenario, public muse::Co
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
     muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<IProjectFilesController> projectFilesController = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 

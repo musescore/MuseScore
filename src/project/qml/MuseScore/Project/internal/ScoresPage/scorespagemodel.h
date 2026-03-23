@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
-#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 class QString;
@@ -45,8 +45,8 @@ class ScoresPageModel : public QObject, public muse::Contextable
 
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::cloud::IMuseScoreComService> museScoreComService;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);

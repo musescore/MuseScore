@@ -397,7 +397,7 @@ void MuseSoundsDevToolsModel::openUpdateDialog()
 
     std::string actionCode = rv.val.toString();
     if (actionCode == "openMuseHub" && !m_ctaLink.isEmpty()) {
-        interactive()->openUrl(m_ctaLink.toStdString());
+        platformInteractive()->openUrl(m_ctaLink.toStdString());
     }
 }
 

@@ -69,7 +69,7 @@ Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
         return ret;
     }
 
-    interactive()->revealInFileBrowser(path);
+    platformInteractive()->revealInFileBrowser(path);
 
     return muse::make_ok();
 }
