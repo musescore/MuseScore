@@ -91,6 +91,12 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "FlacSettingsPage.qml"),
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+        ExportType::makeWithSuffixes({ "mp4" },
+                                     muse::qtrc("project/export", "MP4 video"),
+                                     muse::qtrc("project/export", "MP4 video"),
+                                     "Mp4SettingsPage.qml"),
+#endif
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
                                      muse::qtrc("project/export", "MIDI file"),
                                      muse::qtrc("project/export", "MIDI files"),
@@ -116,17 +122,6 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "LRC files"),
                                      "LrcSettingsPage.qml")
     };
-
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
-    if (application()->unstable()) {
-        m_exportTypeList.push_back(
-            ExportType::makeWithSuffixes({ "mp4" },
-                                         muse::qtrc("project/export", "Video mp4"),
-                                         muse::qtrc("project/export", "Video mp4 files"),
-                                         "Mp4SettingsPage.qml")
-            );
-    }
-#endif
 }
 
 ExportDialogModel::~ExportDialogModel()

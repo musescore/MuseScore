@@ -33,7 +33,6 @@
 #include "async/asyncable.h"
 
 #include "interactive/iinteractive.h"
-#include "iapplication.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
