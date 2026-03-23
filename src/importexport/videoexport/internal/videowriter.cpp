@@ -109,7 +109,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     }
 
     //! NOTE: we have to do it in main thread
-    notation->notationChanged().notify();
+    notation->notationChanged().send(muse::RectF());
 
     if (m_audioWriter) {
         m_audioWriter->progress()->finished().disconnect(this);

@@ -46,11 +46,14 @@ namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
-    muse::ContextInject<muse::IApplication> application = { this };
+    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalInject<project::INotationWritersRegister> writers;
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
-    muse::ContextInject<project::INotationWritersRegister> writers = { this };
 
 public:
+    VideoWriter(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx) {}
+
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 

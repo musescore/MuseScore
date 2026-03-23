@@ -46,8 +46,8 @@ void VideoExportModule::registerExports()
 
 void VideoExportModule::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(globalCtx()));
     }
 }
