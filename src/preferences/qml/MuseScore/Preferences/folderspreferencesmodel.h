@@ -25,8 +25,10 @@
 
 #include <QAbstractListModel>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "iapplication.h"
 #include "iglobalconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -49,8 +51,10 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Contexta
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
     muse::GlobalInject<muse::media::IMediaConfiguration> mediaConfiguration;
+    muse::ContextInject<muse::IApplication> appliaction = { this };
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
 
+    Q_PROPERTY(bool showFFmpegSection READ showFFmpegSection CONSTANT FINAL)
     Q_PROPERTY(int ffmpegVersion READ ffmpegVersion NOTIFY ffmpegVersionChanged FINAL)
     Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged FINAL)
 
@@ -68,6 +72,8 @@ public:
 
     QString ffmpegDir() const;
     void setFFmpegDir(const QString& dir);
+
+    bool showFFmpegSection() const;
 
 signals:
     void ffmpegVersionChanged();

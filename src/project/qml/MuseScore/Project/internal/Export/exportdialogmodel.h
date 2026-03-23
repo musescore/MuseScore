@@ -33,14 +33,13 @@
 #include "async/asyncable.h"
 
 #include "interactive/iinteractive.h"
+#include "iapplication.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/ivideoexportconfiguration.h"
-#endif
 #include "importexport/mei/imeiconfiguration.h"
 #include "importexport/lyricsexport/ilyricsexportconfiguration.h"
 #include "importexport/mnx/imnxconfiguration.h"
@@ -113,12 +112,11 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
     muse::GlobalInject<iex::mnxio::IMnxConfiguration> mnxConfiguration;
     muse::GlobalInject<IProjectConfiguration> configuration;
-#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
-#endif
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::GlobalInject<INotationWritersRegister> writers;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
 

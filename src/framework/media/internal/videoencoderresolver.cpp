@@ -34,13 +34,9 @@ void VideoEncoderResolver::init()
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 {
-    if (m_encoder) {
-        m_currentEncoderFFmpegVersion = -1;
-        configuration()->setFFmpegLibsDir({});
-    }
-
     auto ffmpegLibHandler = FFmpegLoader::load(ffmpegLibsDir);
     if (!ffmpegLibHandler) {
+        resetFFmpegSettings();
         return;
     }
 
@@ -76,4 +72,10 @@ IVideoEncoderPtr VideoEncoderResolver::currentVideoEncoder() const
 void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
 {
     m_encoder = std::move(encoder);
+}
+
+void VideoEncoderResolver::resetFFmpegSettings()
+{
+    m_currentEncoderFFmpegVersion = -1;
+    configuration()->setFFmpegLibsDir({});
 }
