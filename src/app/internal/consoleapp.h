@@ -38,7 +38,6 @@
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
-#include "audioplugins/iregisteraudiopluginsscenario.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -63,7 +62,6 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
-    muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
 
 public:

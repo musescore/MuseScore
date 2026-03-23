@@ -47,9 +47,11 @@ using namespace muse::audio::fx;
 using namespace muse::audio;
 using namespace muse::audioplugins;
 
+static const std::string mname("vst");
+
 std::string VSTModule::moduleName() const
 {
-    return "vst";
+    return mname;
 }
 
 void VSTModule::registerExports()
@@ -57,7 +59,6 @@ void VSTModule::registerExports()
     m_configuration = std::make_shared<VstConfiguration>();
     m_pluginModulesRepo = std::make_shared<VstModulesRepository>();
     m_pluginInstancesRegister = std::make_shared<VstInstancesRegister>();
-    m_actionsController = std::make_shared<VstActionsController>(globalCtx());
 
     globalIoc()->registerExport<IVstConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IVstModulesRepository>(moduleName(), m_pluginModulesRepo);
@@ -66,21 +67,6 @@ void VSTModule::registerExports()
 
 void VSTModule::resolveImports()
 {
-    //! NOTE Now we can switch which view to use in runtime.
-    //! switches the action controller, so registration is there now.
-    //! as soon as the new view is stabilized, we need to remove the old one and do as usual
-
-    // auto ir = globalIoc()->resolve<IInteractiveUriRegister>(moduleName());
-    // if (ir) {
-    //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
-    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse.Vst", "VstEditorDialog");
-    // }
-
-    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<VstUiActions>(m_actionsController));
-    }
-
     auto synthResolver = globalIoc()->resolve<ISynthResolver>(moduleName());
     if (synthResolver) {
         synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>());
@@ -102,18 +88,49 @@ void VSTModule::resolveImports()
     }
 }
 
-void VSTModule::onInit(const IApplication::RunMode& mode)
+void VSTModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_pluginModulesRepo->init();
-
-    if (mode == IApplication::RunMode::GuiApp) {
-        m_actionsController->init();
-        m_actionsController->setupUsedView();
-    }
 }
 
 void VSTModule::onDeinit()
 {
     m_pluginModulesRepo->deInit();
+}
+
+muse::modularity::IContextSetup* VSTModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new VSTContext(ctx);
+}
+
+void VSTContext::registerExports()
+{
+    //! NOTE Now we can switch which view to use in runtime.
+    //! switches the action controller, so registration is there now.
+    //! as soon as the new view is stabilized, we need to remove the old one and do as usual
+
+    // auto ir = globalIoc()->resolve<IInteractiveUriRegister>(mname);
+    // if (ir) {
+    //     ir->registerWidgetUri<VstViewDialog>(Uri("muse://vst/editor"));
+    //     ir->registerQmlUri(Uri("muse://vst/editor"), "Muse.Vst", "VstEditorDialog");
+    // }
+
+    m_actionsController = std::make_shared<VstActionsController>(iocContext());
+}
+
+void VSTContext::resolveImports()
+{
+    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(mname);
+    if (ar) {
+        ar->reg(std::make_shared<VstUiActions>(m_actionsController));
+    }
+}
+
+void VSTContext::onInit(const IApplication::RunMode& mode)
+{
+    if (mode == IApplication::RunMode::GuiApp) {
+        m_actionsController->init();
+        m_actionsController->setupUsedView();
+    }
 }

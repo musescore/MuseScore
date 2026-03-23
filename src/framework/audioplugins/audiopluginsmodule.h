@@ -28,22 +28,31 @@
 namespace muse::audioplugins {
 class AudioPluginsConfiguration;
 class KnownAudioPluginsRegister;
-class RegisterAudioPluginsScenario;
 class AudioPluginsModule : public modularity::IModuleSetup
 {
 public:
-    AudioPluginsModule();
-
     std::string moduleName() const override;
-
     void registerExports() override;
     void resolveImports() override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
+private:
+    std::shared_ptr<AudioPluginsConfiguration> m_configuration;
+    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
+};
+
+class RegisterAudioPluginsScenario;
+class AudioPluginsContext : public modularity::IContextSetup
+{
+public:
+    AudioPluginsContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
     void onInit(const IApplication::RunMode& mode) override;
 
 private:
-
-    std::shared_ptr<AudioPluginsConfiguration> m_configuration;
-    std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
     std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 };
 }

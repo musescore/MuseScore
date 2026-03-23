@@ -44,7 +44,6 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
 {
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
     muse::GlobalInject<IAppShellConfiguration> configuration;
-    muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
     muse::GlobalInject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario;
     muse::GlobalInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckForUpdateScenario;
     muse::ContextInject<muse::IInteractive> interactive = { this };
@@ -52,6 +51,7 @@ class StartupScenario : public IStartupScenario, public muse::Contextable, publi
     muse::ContextInject<ISessionsManager> sessionsManager = { this };
     muse::ContextInject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<muse::update::IAppUpdateScenario> appUpdateScenario = { this };
+    muse::ContextInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
 
 public:
     StartupScenario(const muse::modularity::ContextPtr& iocCtx)
