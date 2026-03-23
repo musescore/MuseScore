@@ -2059,6 +2059,7 @@ enum class Sid : short {
     noteLineMusicalSymbolSize,
     ottavaMusicalSymbolSize,
     pageNumberMusicalSymbolSize,
+    whammyBarMusicalSymbolSize,
     palmMuteMusicalSymbolSize,
     partInstrumentMusicalSymbolSize,
     pedalMusicalSymbolSize,

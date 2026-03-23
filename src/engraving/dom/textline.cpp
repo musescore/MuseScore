@@ -87,6 +87,9 @@ static const ElementStyle textLineStyle {
     { Sid::textLineMusicalSymbolSize,          Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::textLineMusicalSymbolSize,          Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::textLineMusicalSymbolSize,          Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 //---------------------------------------------------------
@@ -117,6 +120,9 @@ static const ElementStyle systemTextLineStyle {
     { Sid::systemTextLineMusicalSymbolSize,    Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::systemTextLineMusicalSymbolSize,    Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::systemTextLineMusicalSymbolSize,    Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 //---------------------------------------------------------
