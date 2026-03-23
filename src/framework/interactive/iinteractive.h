@@ -244,9 +244,9 @@ public:
 
     virtual void raise(const UriQuery& uri) = 0;
 
-    virtual void close(const UriQuery& uri) = 0;
-    virtual void close(const Uri& uri) = 0;
-    virtual void closeAllDialogs() = 0;
+    virtual async::Promise<Ret> close(const UriQuery& uri) = 0;
+    virtual async::Promise<Ret> close(const Uri& uri) = 0;
+    virtual Ret closeAllDialogsSync() = 0;
 
     // state
     virtual ValCh<Uri> currentUri() const = 0;

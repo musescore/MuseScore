@@ -98,9 +98,9 @@ public:
 
     void raise(const UriQuery& uri) override;
 
-    void close(const UriQuery& uri) override;
-    void close(const Uri& uri) override;
-    void closeAllDialogs() override;
+    async::Promise<Ret> close(const UriQuery& uri) override;
+    async::Promise<Ret> close(const Uri& uri) override;
+    Ret closeAllDialogsSync() override;
 
     // state
     ValCh<Uri> currentUri() const override;

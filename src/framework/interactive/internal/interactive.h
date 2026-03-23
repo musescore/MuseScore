@@ -117,9 +117,9 @@ public:
 
     void raise(const UriQuery& uri) override;
 
-    void close(const UriQuery& uri) override;
-    void close(const Uri& uri) override;
-    void closeAllDialogs() override;
+    async::Promise<Ret> close(const UriQuery& uri) override;
+    async::Promise<Ret> close(const Uri& uri) override;
+    Ret closeAllDialogsSync() override;
 
     // state
     ValCh<Uri> currentUri() const override;
@@ -174,7 +174,7 @@ private:
     RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
     RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
 
-    void closeObject(const ObjectInfo& obj);
+    async::Promise<Ret> closeObjects(const std::vector<ObjectInfo>& objs);
 
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
@@ -208,6 +208,8 @@ private:
     async::Channel<QmlLaunchData*> m_openRequested;
     async::Channel<QVariant> m_closeRequested;
     async::Channel<QVariant> m_raiseRequested;
+
+    std::map<QString /*objectId*/, std::function<void(const Ret&)> > m_onClosedFuncs;
 
     bool m_isSelectColorOpened = false;
 };
