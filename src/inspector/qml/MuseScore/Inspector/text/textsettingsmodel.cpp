@@ -683,6 +683,11 @@ void TextSettingsModel::updateIsSymbolSizeAvailable()
 {
     bool available = false;
     for (EngravingItem* item : m_elementList) {
+        if (item->isTextLineBase() && !(item->isOttava() || item->isPedal())) {
+            available = true;
+            break;
+        }
+
         if (!item->isTextBase()) {
             continue;
         }
