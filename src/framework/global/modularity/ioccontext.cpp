@@ -65,8 +65,7 @@ muse::modularity::ContextPtr muse::iocCtxForQmlContext(const QQmlContext* ctx)
 
 muse::modularity::ContextPtr muse::iocCtxForQWidget(const QWidget*)
 {
-    //! TODO
-    return modularity::ContextPtr();
+    return muse::modularity::globalCtx();
 }
 
 #endif
