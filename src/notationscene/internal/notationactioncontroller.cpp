@@ -232,6 +232,7 @@ void NotationActionController::init()
     registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
     registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
     registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
+    registerAction("action://notation/backspace", &Controller::backspace, &Controller::isNotationPage);
     registerAction("action://notation/delete", &Interaction::deleteSelection, &Controller::hasSelection);
 
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
@@ -1299,6 +1300,35 @@ void NotationActionController::cutSelection()
     }
     interaction->copySelection();
     interaction->deleteSelection();
+}
+
+void NotationActionController::backspace()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput || !noteInput->isNoteInputMode()) {
+        if (!interaction->selection()->isNone()) {
+            interaction->deleteSelection();
+        }
+        return;
+    }
+
+    if (interaction->selection()->isNone()) {
+        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Chord);
+    }
+
+    if (!interaction->selection()->isNone()) {
+        interaction->deleteSelection();
+    }
+
+    interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Chord);
+    seekSelectedElement();
 }
 
 void NotationActionController::repeatSelection()

@@ -119,6 +119,7 @@ private:
     void doGlobalUndo();
     void doGlobalRedo();
     void doGlobalDelete();
+    void doGlobalBackspace();
     void doGlobalCancel();
 
     bool m_quiting = false;

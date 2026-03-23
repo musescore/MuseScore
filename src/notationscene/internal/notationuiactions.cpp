@@ -110,6 +110,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Delete"),
              IconCode::Code::DELETE_TANK
              ),
+    UiAction("action://notation/backspace",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_DISABLED,
+             TranslatableString("action", "Backspace"),
+             TranslatableString("action", "Backspace")
+             ),
     UiAction("action://notation/cancel",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_DISABLED

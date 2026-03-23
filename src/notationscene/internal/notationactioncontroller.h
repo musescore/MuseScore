@@ -115,6 +115,7 @@ private:
     void changeVoice(voice_idx_t voiceIndex);
 
     void cutSelection();
+    void backspace();
     void repeatSelection();
     void addTie();
     void chordTie();

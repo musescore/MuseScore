@@ -109,6 +109,9 @@
     <SC>
         <key>action://delete</key>
         <seq>Del</seq>
+    </SC>
+    <SC>
+        <key>action://backspace</key>
         <seq>Backspace</seq>
     </SC>
     <SC>

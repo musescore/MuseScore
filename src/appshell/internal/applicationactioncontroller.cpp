@@ -81,6 +81,7 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "action://undo", this, &ApplicationActionController::doGlobalUndo);
     dispatcher()->reg(this, "action://redo", this, &ApplicationActionController::doGlobalRedo);
     dispatcher()->reg(this, "action://delete", this, &ApplicationActionController::doGlobalDelete);
+    dispatcher()->reg(this, "action://backspace", this, &ApplicationActionController::doGlobalBackspace);
     dispatcher()->reg(this, "action://cancel", this, &ApplicationActionController::doGlobalCancel);
 }
 
@@ -435,6 +436,15 @@ void ApplicationActionController::doGlobalDelete()
 {
     if (hasProjectAndIsFocused()) {
         dispatcher()->dispatch("action://notation/delete");
+    } else {
+        // resolve other actions
+    }
+}
+
+void ApplicationActionController::doGlobalBackspace()
+{
+    if (hasProjectAndIsFocused()) {
+        dispatcher()->dispatch("action://notation/backspace");
     } else {
         // resolve other actions
     }
