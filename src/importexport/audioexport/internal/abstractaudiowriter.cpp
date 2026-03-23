@@ -90,7 +90,7 @@ muse::Progress* AbstractAudioWriter::progress()
 }
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
-                                        io::IODevice& destinationDevice,
+                                        io::IODevice& dstDevice,
                                         const SoundTrackFormat& format,
                                         const Options& options)
 {
@@ -158,9 +158,9 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
                 sendProgress(current, total, stage);
             });
 
-            playback()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
-            .onResolve(this, [this, path, sequenceId, restoreState](const bool /*result*/) {
-                LOGI() << "Successfully saved sound track by path: " << path;
+            playback()->saveSoundTrack(sequenceId, std::move(format), dstDevice)
+            .onResolve(this, [this, sequenceId, restoreState](const bool /*result*/) {
+                LOGI() << "Successfully saved sound track";
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
                 m_progress.finish(muse::make_ok());
