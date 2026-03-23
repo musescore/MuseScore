@@ -490,12 +490,13 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
     return make_ok();
 }
 
-Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
+                                             const project::INotationWriter::Options& options) const
 {
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
 
     outBuf.setMeta("file_path", out.toStdString());
-    Ret ret = writer->write(notation, outBuf);
+    Ret ret = writer->write(notation, outBuf, options);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
@@ -724,7 +725,11 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    return convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
+    const INotationWriter::Options options {
+        { INotationWriter::OptionKey::WITH_AUDIO, Val(false) },
+    };
+
+    return convertFullNotation(writer, notationProject->masterNotation()->notation(), out, options);
 }
 
 Ret ConverterController::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)

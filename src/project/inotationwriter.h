@@ -49,7 +49,9 @@ public:
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
         BEATS_COLORS,
-        WAIT_FOR_COMPLETION
+        WAIT_FOR_COMPLETION,
+
+        WITH_AUDIO, // todo: delete after stabilization of the video export + audio
     };
 
     using Options = std::map<OptionKey, muse::Val>;
