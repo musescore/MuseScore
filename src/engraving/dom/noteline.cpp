@@ -55,6 +55,12 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
     { Sid::noteLineBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::noteLineBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::noteLineMusicalSymbolSize,          Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::noteLineMusicalSymbolSize,          Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::noteLineMusicalSymbolSize,          Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
