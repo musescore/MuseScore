@@ -115,8 +115,8 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<muse::IInteractive> interactive = { this };
-    muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
 

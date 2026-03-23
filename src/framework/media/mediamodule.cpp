@@ -31,18 +31,20 @@
 using namespace muse::media;
 using namespace muse::modularity;
 
+static const std::string mname("media");
+
 std::string MediaModule::moduleName() const
 {
-    return "media";
+    return mname;
 }
 
 void MediaModule::registerExports()
 {
-    m_configuration = std::make_shared<MediaConfiguration>(iocContext());
+    m_configuration = std::make_shared<MediaConfiguration>(globalCtx());
     m_videoEncoderResolver = std::make_shared<VideoEncoderResolver>();
 
-    ioc()->registerExport<IMediaConfiguration>(moduleName(), m_configuration);
-    ioc()->registerExport<IVideoEncoderResolver>(moduleName(), m_videoEncoderResolver);
+    globalIoc()->registerExport<IMediaConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IVideoEncoderResolver>(mname, m_videoEncoderResolver);
 }
 
 void MediaModule::onInit(const IApplication::RunMode&)

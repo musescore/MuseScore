@@ -51,7 +51,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public muse::Contexta
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::vst::IVstConfiguration> vstConfiguration;
     muse::GlobalInject<muse::media::IMediaConfiguration> mediaConfiguration;
-    muse::ContextInject<muse::IApplication> appliaction = { this };
+    muse::GlobalInject<muse::IApplication> appliaction;
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
 
     Q_PROPERTY(bool showFFmpegSection READ showFFmpegSection CONSTANT FINAL)
