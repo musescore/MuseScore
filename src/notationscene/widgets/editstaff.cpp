@@ -64,8 +64,6 @@ EditStaff::EditStaff(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
 
-    initStaff();
-
     editStaffTypeDialog = new EditStaffType(this);
     editStaffTypeDialog->setWindowModality(Qt::WindowModal);
 
@@ -166,6 +164,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
 void EditStaff::showEvent(QShowEvent* event)
 {
+    initStaff();
     WidgetStateStore::restoreGeometry(this);
     QDialog::showEvent(event);
 }
@@ -443,6 +442,10 @@ INotationPartsPtr EditStaff::masterNotationParts() const
 
 void EditStaff::initStaff()
 {
+    if (!globalContext()) {
+        return;
+    }
+
     const INotationPtr notation = this->notation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     auto context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
@@ -522,8 +525,10 @@ void EditStaff::applyPartProperties()
     String _lsn = longStaffName->toPlainText();
     if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)
         || !mu::engraving::Text::validateText(_ssn) || !mu::engraving::Text::validateText(_lsn)) {
-        interactive()->warning(muse::trc("notation/staffpartproperties", "Invalid instrument name"),
-                               muse::trc("notation/staffpartproperties", "The instrument name is invalid."));
+        if (interactive()) {
+            interactive()->warning(muse::trc("notation/staffpartproperties", "Invalid instrument name"),
+                                   muse::trc("notation/staffpartproperties", "The instrument name is invalid."));
+        }
         return;
     }
     QString sn = _sn;
@@ -577,6 +582,10 @@ void EditStaff::applyPartProperties()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
+    if (!selectInstrumentsScenario()) {
+        return;
+    }
+
     async::Promise<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
     templ.onResolve(this, [this](const InstrumentTemplate& val) {
         const StaffType* staffType = val.staffTypePreset;
