@@ -128,35 +128,29 @@ struct AacEncoderHandler
     }
 };
 
-bool AacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
+AacEncoder::AacEncoder(const SoundTrackFormat& format, io::IODevice& dstDevice)
+    : AbstractAudioEncoder(format), m_handler{std::make_unique<AacEncoderHandler>()}, m_dstDevice{&dstDevice}
 {
-    if (!format.isValid()) {
+    DO_ASSERT(m_dstDevice);
+}
+
+AacEncoder::~AacEncoder() noexcept = default;
+
+bool AacEncoder::begin(const samples_t totalSamplesNumber)
+{
+    m_outputBuffer.resize(totalSamplesNumber);
+
+    if (!m_handler->init(m_format)) {
+        m_handler.reset();
         return false;
     }
-
-    m_format = format;
-    m_handler = new AacEncoderHandler();
-
-    if (!m_handler->init(format)) {
-        delete m_handler;
-        m_handler = nullptr;
-        return false;
-    }
-
-    if (!openDestination(path)) {
-        delete m_handler;
-        m_handler = nullptr;
-        return false;
-    }
-
-    prepareOutputBuffer(totalSamplesNumber);
 
     return true;
 }
 
 size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    IF_ASSERT_FAILED(m_handler && m_fileStream) {
+    IF_ASSERT_FAILED(m_handler) {
         return 0;
     }
 
@@ -215,7 +209,7 @@ size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
         }
 
         if (outArgs.numOutBytes > 0) {
-            size_t written = std::fwrite(m_handler->outputBuffer.data(), 1, outArgs.numOutBytes, m_fileStream);
+            const size_t written = m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(outArgs.numOutBytes));
             totalBytesWritten += written;
         }
 
@@ -229,9 +223,9 @@ size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
     return totalBytesWritten;
 }
 
-size_t AacEncoder::flush()
+size_t AacEncoder::end()
 {
-    IF_ASSERT_FAILED(m_handler && m_fileStream) {
+    IF_ASSERT_FAILED(m_handler) {
         return 0;
     }
 
@@ -277,42 +271,10 @@ size_t AacEncoder::flush()
         }
 
         if (outArgs.numOutBytes > 0) {
-            size_t written = std::fwrite(m_handler->outputBuffer.data(), 1, outArgs.numOutBytes, m_fileStream);
+            const size_t written = m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(outArgs.numOutBytes));
             totalBytesWritten += written;
         }
     }
 
     return totalBytesWritten;
-}
-
-size_t AacEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
-{
-    return totalSamplesNumber;
-}
-
-bool AacEncoder::openDestination(const io::path_t& path)
-{
-    prepareWriting();
-    m_fileStream = std::fopen(path.c_str(), "wb");
-
-    if (!m_fileStream) {
-        return false;
-    }
-
-    return true;
-}
-
-void AacEncoder::closeDestination()
-{
-    if (m_fileStream) {
-        std::fclose(m_fileStream);
-        m_fileStream = nullptr;
-    }
-
-    if (m_handler) {
-        delete m_handler;
-        m_handler = nullptr;
-    }
-
-    completeWriting();
 }

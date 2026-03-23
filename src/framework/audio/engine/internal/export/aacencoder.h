@@ -24,23 +24,29 @@
 
 #include "abstractaudioencoder.h"
 
+#include <memory>
+
 struct AacEncoderHandler;
+
+namespace muse::io {
+class IODevice;
+}
 
 namespace muse::audio::encode {
 class AacEncoder : public AbstractAudioEncoder
 {
 public:
-    bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
+    AacEncoder(const SoundTrackFormat&, io::IODevice&);
 
+    ~AacEncoder() noexcept override;
+
+    bool begin(samples_t samplesPerChannel) override;
     size_t encode(samples_t samplesPerChannel, const float* input) override;
-    size_t flush() override;
-
-protected:
-    size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
-    bool openDestination(const io::path_t& path) override;
-    void closeDestination() override;
+    size_t end() override;
 
 private:
-    AacEncoderHandler* m_handler = nullptr;
+    std::vector<std::uint8_t> m_outputBuffer;
+    std::unique_ptr<AacEncoderHandler> m_handler;
+    io::IODevice* m_dstDevice = nullptr;
 };
 }
