@@ -43,7 +43,9 @@ Item {
     property alias dir: filePickerModel.dir
 
     property int buttonType: FlatButton.IconOnly
-    property int orientation: Qt.Vertical
+    property string buttonText: qsTrc("ui", "Browse")
+    property int buttonOrientation: Qt.Vertical
+    property alias buttonWidth: button.implicitWidth
 
     property NavigationPanel navigation: null
     property int navigationRowOrderStart: 0
@@ -52,7 +54,6 @@ Item {
     property string pathFieldTitle: qsTrc("ui", "Current path:")
     property alias pathFieldWidth: pathField.implicitWidth
 
-    property alias buttonWidth: button.implicitWidth
 
     property alias spacing: row.spacing
 
@@ -120,9 +121,9 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             icon: IconCode.OPEN_FILE
 
-            text: qsTrc("ui", "Browse")
+            text: root.buttonText
             buttonType: root.buttonType
-            orientation: root.orientation
+            orientation: root.buttonOrientation
 
             navigation.name: "FilePickerButton"
             navigation.panel: root.navigation

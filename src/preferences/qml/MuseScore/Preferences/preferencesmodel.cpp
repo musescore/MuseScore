@@ -176,6 +176,9 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
+        makeItem("video", QT_TRANSLATE_NOOP("preferences", "Video"), IconCode::Code::VIDEO,
+                 "Preferences/VideoPreferencesPage.qml"),
+
         makeItem("percussion", QT_TRANSLATE_NOOP("preferences", "Percussion"), IconCode::Code::PERCUSSION,
                  "Preferences/PercussionPreferencesPage.qml"),
 
