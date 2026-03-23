@@ -26,10 +26,10 @@
 #include "../ivideoexportconfiguration.h"
 #include "iapplication.h"
 
-#include "project/iprojectwriter.h"
+#include "project/inotationwriter.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::IProjectWriter
+class VideoWriter : public project::INotationWriter, public muse::Contextable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::GlobalInject<muse::IApplication> application;
@@ -38,8 +38,12 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) override;
-    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
+                        const Options& options = Options()) override;
+
+    muse::Progress* progress() override;
+    void abort() override;
 
 private:
 
@@ -53,7 +57,10 @@ private:
         float trailingSec = 3.;
     };
 
-    muse::Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config);
+    muse::Ret generatePagedOriginalVideo(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
+
+    muse::Progress m_progress;
+    bool m_abort = false;
 };
 }
 
