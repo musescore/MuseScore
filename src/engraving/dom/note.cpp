@@ -1768,7 +1768,7 @@ EngravingItem* Note::drop(EditData& data)
         return e;
 
     case ElementType::ACCIDENTAL:
-        EditNote::changeAccidental(score(), this, toAccidental(e)->accidentalType());
+        EditNote::changeAccidental(score(), this, toAccidental(e)->accidentalType(), toAccidental(e)->bracket());
         break;
 
     case ElementType::BEND:
