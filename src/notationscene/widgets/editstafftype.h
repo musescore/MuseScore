@@ -69,7 +69,7 @@ private slots:
     void addToTemplatesClicked();
 
 public:
-    EditStaffType(QWidget* parent = nullptr);
+    EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* parent = nullptr);
     ~EditStaffType() {}
     void setStaffType(const mu::engraving::StaffType* staffType);
     mu::engraving::StaffType getStaffType() const { return staffType; }

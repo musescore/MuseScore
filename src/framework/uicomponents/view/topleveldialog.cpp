@@ -27,7 +27,7 @@
 using namespace muse::uicomponents;
 
 TopLevelDialog::TopLevelDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 

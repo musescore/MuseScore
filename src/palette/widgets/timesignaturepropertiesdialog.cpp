@@ -45,11 +45,19 @@ using namespace mu::engraving;
 //---------------------------------------------------------
 
 TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME);
     setupUi(this);
+}
 
+TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
+{
+    delete m_editedTimeSig;
+}
+
+void TimeSignaturePropertiesDialog::componentComplete()
+{
     QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
     int musicalFontSize = uiConfiguration()->musicalFontSize();
 
@@ -155,11 +163,6 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         g = Groups::endings(m_editedTimeSig->sig()); // initialize with default
     }
     groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
-}
-
-TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
-{
-    delete m_editedTimeSig;
 }
 
 void TimeSignaturePropertiesDialog::showEvent(QShowEvent* event)

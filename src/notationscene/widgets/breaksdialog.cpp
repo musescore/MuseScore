@@ -31,7 +31,7 @@ static constexpr int DEFAULT_INTERVAL = 4;
 //---------------------------------------------------------
 
 BreaksDialog::BreaksDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -51,6 +51,10 @@ BreaksDialog::BreaksDialog(QWidget* parent)
     QString part2 = pieces[1].trimmed();
     intervalButton->setText(part1);
     intervalLabel2->setText(part2);
+}
+
+void BreaksDialog::componentComplete()
+{
 }
 
 //---------------------------------------------------------

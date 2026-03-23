@@ -73,6 +73,8 @@ else()
     endif()
 endif()
 
+target_link_libraries(muse_interactive PRIVATE muse::ui)
+
 if (MUSE_QT_SUPPORT)
     target_link_libraries(muse_interactive PUBLIC Qt::Core Qt::Gui Qt::Quick Qt::Widgets)
 endif()

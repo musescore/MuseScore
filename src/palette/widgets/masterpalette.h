@@ -42,6 +42,8 @@ class MasterPalette : public muse::uicomponents::TopLevelDialog, Ui::MasterPalet
 public:
     explicit MasterPalette(QWidget* parent = nullptr);
 
+    void componentComplete() override;
+
     QString selectedPaletteName() const;
 
 public slots:

@@ -36,11 +36,19 @@ using namespace mu::engraving;
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
 StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName(STAFF_TEXT_PROPERTIES_DIALOG_NAME);
     setupUi(this);
+}
 
+StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
+{
+    delete m_staffText;
+}
+
+void StaffTextPropertiesDialog::componentComplete()
+{
     const INotationPtr notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
@@ -83,11 +91,6 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     connect(swingSixteenth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
 
     connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
-}
-
-StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
-{
-    delete m_staffText;
 }
 
 void StaffTextPropertiesDialog::showEvent(QShowEvent* event)

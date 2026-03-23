@@ -45,12 +45,17 @@ using namespace muse::ui;
 static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("MeasureProperties");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    qApp->installEventFilter(this);
+}
+
+void MeasurePropertiesDialog::componentComplete()
+{
     m_notation = context()->currentNotation();
     initMeasure();
 
@@ -73,8 +78,6 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
-
-    qApp->installEventFilter(this);
 }
 
 void MeasurePropertiesDialog::initMeasure()

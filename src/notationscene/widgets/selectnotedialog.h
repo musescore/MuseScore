@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_selectnotedialog.h"
 
 #include "modularity/ioc.h"
@@ -32,7 +34,7 @@ class Note;
 }
 
 namespace mu::notation {
-class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog, public muse::Contextable
+class SelectNoteDialog : public muse::ui::WidgetDialog, private Ui::SelectNoteDialog
 {
     Q_OBJECT
 
@@ -40,6 +42,8 @@ class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog, public muse::Cont
 
 public:
     SelectNoteDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
     bool doReplace() const;
     bool doAdd() const;

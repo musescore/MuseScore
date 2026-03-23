@@ -23,6 +23,8 @@
 #ifndef __REALIZEHARMONYDIALOG_H__
 #define __REALIZEHARMONYDIALOG_H__
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_realizeharmonydialog.h"
 
 #include "modularity/ioc.h"
@@ -33,7 +35,7 @@ class Harmony;
 }
 
 namespace mu::notation {
-class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase, public muse::Contextable
+class RealizeHarmonyDialog : public muse::ui::WidgetDialog, private Ui::RealizeHarmonyDialogBase
 {
     Q_OBJECT
 
@@ -41,6 +43,8 @@ class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase, publi
 
 public:
     RealizeHarmonyDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
 private slots:
     INotationInteractionPtr interaction() const;

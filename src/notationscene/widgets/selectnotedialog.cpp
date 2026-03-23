@@ -51,12 +51,15 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 SelectNoteDialog::SelectNoteDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("SelectNoteDialog");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
 
+void SelectNoteDialog::componentComplete()
+{
     const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
     IF_ASSERT_FAILED(interaction) {
         return;

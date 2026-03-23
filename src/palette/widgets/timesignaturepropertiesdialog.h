@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_timesignaturepropertiesdialog.h"
 
 #include "modularity/ioc.h"
@@ -34,7 +36,7 @@ class TimeSig;
 }
 
 namespace mu::palette {
-class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties, public muse::Contextable
+class TimeSignaturePropertiesDialog : public muse::ui::WidgetDialog, public Ui::TimeSigProperties
 {
     Q_OBJECT
 
@@ -45,6 +47,8 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
     ~TimeSignaturePropertiesDialog() override;
+
+    void componentComplete() override;
 
 private slots:
     void accept() override;

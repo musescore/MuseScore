@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_editstyle.h"
 
 #include "modularity/ioc.h"
@@ -38,7 +40,7 @@
 class QQuickView;
 
 namespace mu::notation {
-class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contextable
+class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
 
@@ -56,12 +58,14 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Contex
 public:
     EditStyle(QWidget* = nullptr);
 
+    void classBegin() override;
+
     QString currentPageCode() const;
     QString currentSubPageCode() const;
 
 public slots:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
@@ -73,10 +77,10 @@ signals:
     void currentSubPageChanged();
 
 private:
-    void showEvent(QShowEvent*);
-    void hideEvent(QHideEvent*);
-    void changeEvent(QEvent*);
-    void keyPressEvent(QKeyEvent* event);
+    void showEvent(QShowEvent*) override;
+    void hideEvent(QHideEvent*) override;
+    void changeEvent(QEvent*) override;
+    void keyPressEvent(QKeyEvent* event) override;
 
     void retranslate();
     void setHeaderFooterMacroInfoText();

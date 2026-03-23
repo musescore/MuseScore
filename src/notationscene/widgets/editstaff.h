@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <QDialog>
+#include "ui/view/widgetdialog.h"
 
 #include "ui_editstaff.h"
 #include "engraving/dom/stafftype.h"
@@ -37,7 +37,7 @@
 namespace mu::notation {
 class EditStaffType;
 
-class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Contextable, public muse::async::Asyncable
+class EditStaff : public muse::ui::WidgetDialog, private Ui::EditStaffBase, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -49,6 +49,7 @@ public:
     EditStaff(QWidget* parent = nullptr);
 
 private:
+    void componentComplete() override;
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
     void apply();

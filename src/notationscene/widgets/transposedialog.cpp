@@ -35,7 +35,7 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 TransposeDialog::TransposeDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("TransposeDialog");
     setupUi(this);
@@ -45,7 +45,10 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     connect(transposeByInterval, &QGroupBox::clicked, this, &TransposeDialog::transposeByIntervalToggled);
     connect(chromaticBox,        &QGroupBox::clicked, this, &TransposeDialog::chromaticBoxToggled);
     connect(diatonicBox,         &QGroupBox::clicked, this, &TransposeDialog::diatonicBoxToggled);
+}
 
+void TransposeDialog::componentComplete()
+{
     if (selection()->isNone()) {
         interaction()->selectAll();
         m_allSelected = true;

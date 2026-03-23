@@ -57,17 +57,12 @@ static const QChar GO_DOWN_ICON = iconCodeToChar(IconCode::Code::ARROW_DOWN);
 static const QChar EDIT_ICON = iconCodeToChar(IconCode::Code::EDIT);
 
 EditStaff::EditStaff(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("EditStaff");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
-
-    initStaff();
-
-    editStaffTypeDialog = new EditStaffType(this);
-    editStaffTypeDialog->setWindowModality(Qt::WindowModal);
 
     connect(buttonBox,        &QDialogButtonBox::clicked, this, &EditStaff::bboxClicked);
     connect(changeInstrument, &QPushButton::clicked, this, &EditStaff::showReplaceInstrumentDialog);
@@ -106,6 +101,14 @@ EditStaff::EditStaff(QWidget* parent)
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
+}
+
+void EditStaff::componentComplete()
+{
+    editStaffTypeDialog = new EditStaffType(iocContext(), this);
+    editStaffTypeDialog->setWindowModality(Qt::WindowModal);
+
+    initStaff();
 }
 
 void EditStaff::setStaff(Staff* s, const Fraction& tick)
