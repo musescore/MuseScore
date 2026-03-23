@@ -23,7 +23,6 @@
 #include "interactive.h"
 
 #include <QColorDialog>
-#include <QDesktopServices>
 #include <QDialog>
 #include <QFileDialog>
 #include <QGuiApplication>
@@ -32,14 +31,6 @@
 #include <QUrl>
 #include <QWidget>
 #include <QWindow>
-
-#ifdef Q_OS_MAC
-#include "platform/macos/macosinteractivehelper.h"
-#elif defined(Q_OS_WIN)
-#include <QDir>
-#include <QProcess>
-#include "platform/win/wininteractivehelper.h"
-#endif
 
 #include "async/async.h"
 #include "io/path.h"
@@ -1194,67 +1185,4 @@ void Interactive::notifyAboutCurrentUriChanged()
 void Interactive::notifyAboutCurrentUriWillBeChanged()
 {
     m_currentUriAboutToBeChanged.notify();
-}
-
-Ret Interactive::openUrl(const std::string& url) const
-{
-    return openUrl(QUrl(QString::fromStdString(url)));
-}
-
-Ret Interactive::openUrl(const QUrl& url) const
-{
-    return QDesktopServices::openUrl(url);
-}
-
-Ret Interactive::isAppExists(const std::string& appIdentifier) const
-{
-#ifdef Q_OS_MACOS
-    return MacOSInteractiveHelper::isAppExists(appIdentifier);
-#else
-    NOT_IMPLEMENTED;
-    UNUSED(appIdentifier);
-    return false;
-#endif
-}
-
-Ret Interactive::canOpenApp(const UriQuery& uri) const
-{
-#ifdef Q_OS_MACOS
-    return MacOSInteractiveHelper::canOpenApp(uri);
-#else
-    NOT_IMPLEMENTED;
-    UNUSED(uri);
-    return false;
-#endif
-}
-
-async::Promise<Ret> Interactive::openApp(const UriQuery& uri) const
-{
-#ifdef Q_OS_MACOS
-    return MacOSInteractiveHelper::openApp(uri);
-#elif defined(Q_OS_WIN)
-    return WinInteractiveHelper::openApp(uri);
-#else
-    UNUSED(uri);
-    return async::Promise<Ret>([](auto, auto reject) {
-        Ret ret = make_ret(Ret::Code::NotImplemented);
-        return reject(ret.code(), ret.text());
-    });
-#endif
-}
-
-Ret Interactive::revealInFileBrowser(const io::path_t& filePath) const
-{
-#ifdef Q_OS_MACOS
-    if (MacOSInteractiveHelper::revealInFinder(filePath)) {
-        return true;
-    }
-#elif defined(Q_OS_WIN)
-    QString command = QLatin1String("explorer /select,%1").arg(QDir::toNativeSeparators(filePath.toQString()));
-    if (QProcess::startDetached(command, QStringList())) {
-        return true;
-    }
-#endif
-    io::path_t dirPath = io::dirpath(filePath);
-    return openUrl(QUrl::fromLocalFile(dirPath.toQString()));
 }

@@ -176,11 +176,11 @@ void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const
     LOGI() << "try open: " << action;
 
     if (muse::strings::startsWith(action, "http")) { // or https
-        interactive()->openUrl(action);
+        platformInteractive()->openUrl(action);
         return;
     }
 
-    interactive()->openApp(muse::UriQuery(action)).onReject(this, [this, actions](int, const std::string&) {
+    platformInteractive()->openApp(muse::UriQuery(action)).onReject(this, [this, actions](int, const std::string&) {
         tryOpenMuseHub(actions);
     });
 }

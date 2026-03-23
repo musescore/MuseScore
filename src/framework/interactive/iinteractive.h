@@ -255,18 +255,6 @@ public:
     virtual QWindow* topWindow() const = 0;
     virtual bool topWindowIsWidget() const = 0;
 
-    // external
-    virtual Ret openUrl(const std::string& url) const = 0;
-    virtual Ret openUrl(const QUrl& url) const = 0;
-
-    virtual Ret isAppExists(const std::string& appIdentifier) const = 0;
-    virtual Ret canOpenApp(const UriQuery& uri) const = 0;
-    virtual async::Promise<Ret> openApp(const UriQuery& uri) const = 0;
-
-    /// Opens a file browser at the parent directory of filePath,
-    /// and selects the file at filePath on OSs that support it
-    virtual Ret revealInFileBrowser(const io::path_t& filePath) const = 0;
-
     //! =================================
     //! NOTE Please don't use this
     //! =================================

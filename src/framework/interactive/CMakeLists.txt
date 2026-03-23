@@ -26,6 +26,7 @@ target_sources(muse_interactive PRIVATE
     iinteractive.h
     iinteractiveuriregister.h
     interactivetypes.h
+    iplatforminteractive.h
 
     api/interactiveapi.cpp
     api/interactiveapi.h
@@ -41,6 +42,8 @@ target_sources(muse_interactive PRIVATE
     internal/interactiveuriregister.h
     internal/widgetdialogadapter.cpp
     internal/widgetdialogadapter.h
+    internal/platforminteractive.cpp
+    internal/platforminteractive.h
 )
 
 if (OS_IS_WASM)

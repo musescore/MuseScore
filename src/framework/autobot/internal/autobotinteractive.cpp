@@ -223,36 +223,6 @@ bool AutobotInteractive::topWindowIsWidget() const
     return m_real->topWindowIsWidget();
 }
 
-Ret AutobotInteractive::openUrl(const std::string& url) const
-{
-    return m_real->openUrl(url);
-}
-
-Ret AutobotInteractive::openUrl(const QUrl& url) const
-{
-    return m_real->openUrl(url);
-}
-
-Ret AutobotInteractive::isAppExists(const std::string& appIdentifier) const
-{
-    return m_real->isAppExists(appIdentifier);
-}
-
-Ret AutobotInteractive::canOpenApp(const UriQuery& uri) const
-{
-    return m_real->canOpenApp(uri);
-}
-
-async::Promise<Ret> AutobotInteractive::openApp(const UriQuery& uri) const
-{
-    return m_real->openApp(uri);
-}
-
-Ret AutobotInteractive::revealInFileBrowser(const io::path_t& filePath) const
-{
-    return m_real->revealInFileBrowser(filePath);
-}
-
 io::path_t AutobotInteractive::selectedFilePath() const
 {
     return m_selectedFilePath;

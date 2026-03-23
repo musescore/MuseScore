@@ -236,9 +236,9 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 
     if (multiwindowsProvider()->isFirstWindow() && !installerPath.empty()) {
 #if defined(Q_OS_LINUX)
-        interactive()->revealInFileBrowser(installerPath);
+        platformInteractive()->revealInFileBrowser(installerPath);
 #else
-        interactive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
+        platformInteractive()->openUrl(QUrl::fromLocalFile(installerPath.toQString()));
 #endif
     }
 
@@ -291,19 +291,19 @@ void ApplicationActionController::openAboutMusicXMLDialog()
 void ApplicationActionController::openOnlineHandbookPage()
 {
     std::string handbookUrl = configuration()->handbookUrl();
-    interactive()->openUrl(handbookUrl);
+    platformInteractive()->openUrl(handbookUrl);
 }
 
 void ApplicationActionController::openAskForHelpPage()
 {
     std::string askForHelpUrl = configuration()->askForHelpUrl();
-    interactive()->openUrl(askForHelpUrl);
+    platformInteractive()->openUrl(askForHelpUrl);
 }
 
 void ApplicationActionController::openAccessibilityStatementPage()
 {
     std::string accessibilityStatementUrl = configuration()->accessibilityStatementUrl();
-    interactive()->openUrl(accessibilityStatementUrl);
+    platformInteractive()->openUrl(accessibilityStatementUrl);
 }
 
 void ApplicationActionController::openPreferencesDialog()

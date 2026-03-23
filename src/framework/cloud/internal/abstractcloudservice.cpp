@@ -482,7 +482,7 @@ void AbstractCloudService::setRefreshToken(const QString& token)
 
 void AbstractCloudService::openUrl(const QUrl& url)
 {
-    Ret ret = interactive()->openUrl(url);
+    Ret ret = platformInteractive()->openUrl(url);
     if (!ret) {
         LOGE() << ret.toString();
     }

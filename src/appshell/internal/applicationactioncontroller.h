@@ -32,6 +32,7 @@
 #include "ui/imainwindow.h"
 #include "languages/ilanguagesservice.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"
@@ -55,6 +56,7 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::GlobalInject<muse::IApplication> application;
     muse::GlobalInject<muse::extensions::IExtensionInstaller> extensionInstaller;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };

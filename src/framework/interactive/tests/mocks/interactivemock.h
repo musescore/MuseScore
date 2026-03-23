@@ -87,14 +87,5 @@ public:
 
     MOCK_METHOD(QWindow*, topWindow, (), (const, override));
     MOCK_METHOD(bool, topWindowIsWidget, (), (const, override));
-
-    MOCK_METHOD(Ret, openUrl, (const std::string&), (const, override));
-    MOCK_METHOD(Ret, openUrl, (const QUrl&), (const, override));
-
-    MOCK_METHOD(Ret, isAppExists, (const std::string&), (const, override));
-    MOCK_METHOD(Ret, canOpenApp, (const UriQuery&), (const, override));
-    MOCK_METHOD(async::Promise<Ret>, openApp, (const UriQuery&), (const, override));
-
-    MOCK_METHOD(Ret, revealInFileBrowser, (const io::path_t&), (const, override));
 };
 }
