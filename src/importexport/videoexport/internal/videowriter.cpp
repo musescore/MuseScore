@@ -21,7 +21,12 @@
  */
 #include "videowriter.h"
 
-#include "videoencoder.h"
+#include <QPainter>
+#include <QThread>
+
+#include "global/concurrency/concurrent.h"
+#include "io/buffer.h"
+#include "io/file.h"
 
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
@@ -32,13 +37,10 @@
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
-#include "global/concurrency/concurrent.h"
+#include "videoencoder.h"
 
 #include "defer.h"
 #include "log.h"
-
-#include <QPainter>
-#include <QThread>
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
@@ -64,6 +66,51 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         return make_ret(muse::Ret::Code::InternalError);
     }
 
+    Config cfg = makeConfig();
+
+    muse::io::path_t finalPath(filePath);
+    muse::io::path_t tempVideoPath = finalPath + ".tmp_video.mp4";
+    muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.mp3";
+
+    m_isCompleted = false;
+    m_audioCompleted = false;
+    m_abort = false;
+    m_writeRet = muse::Ret();
+    m_audioRet = muse::Ret();
+
+    startVideoExport(notation, tempVideoPath, cfg);
+    startAudioExport(notation, tempAudioPath);
+
+    while (!m_isCompleted || !m_audioCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    if (m_audioWriter) {
+        m_audioWriter->progress()->finished().disconnect(this);
+        m_audioWriter = nullptr;
+    }
+
+    muse::Ret result = m_writeRet;
+
+    if (result && m_audioRet) {
+        if (!VideoEncoder::muxAudioVideo(tempVideoPath, tempAudioPath, finalPath, cfg.leadingSec)) {
+            result = make_ret(muse::Ret::Code::UnknownError);
+        }
+    } else if (!result) {
+        // keep video error
+    } else {
+        result = m_audioRet;
+    }
+
+    muse::io::File::remove(tempVideoPath);
+    muse::io::File::remove(tempAudioPath);
+
+    return result;
+}
+
+VideoWriter::Config VideoWriter::makeConfig() const
+{
     Config cfg;
 
     cfg.fps = configuration()->fps();
@@ -113,20 +160,39 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
-    m_isCompleted = false;
-    m_abort = false;
-    m_writeRet = muse::Ret();
+    return cfg;
+}
 
-    muse::Concurrent::run([this, notation, filePath, cfg]() {
-        doGenerate(notation, muse::io::path_t(filePath), cfg);
+void VideoWriter::startVideoExport(INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg)
+{
+    muse::Concurrent::run([this, notation, videoPath, cfg]() {
+        doGenerate(notation, videoPath, cfg);
     });
+}
 
-    while (!m_isCompleted) {
-        application()->processEvents();
-        QThread::yieldCurrentThread();
+void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath)
+{
+    m_audioWriter = writers()->writer("mp3");
+    if (!m_audioWriter) {
+        LOGE() << "mp3 writer not found";
+        m_audioRet = make_ret(muse::Ret::Code::InternalError);
+        m_audioCompleted = true;
+        return;
     }
 
-    return m_writeRet;
+    m_audioWriter->progress()->finished().onReceive(this, [this](const muse::ProgressResult& res) {
+        m_audioRet = res.ret;
+        m_audioCompleted = true;
+    });
+
+    Options audioOpts;
+    audioOpts[OptionKey::WAIT_FOR_COMPLETION] = muse::Val(false);
+
+    muse::io::Buffer audioDevice;
+    audioDevice.setMeta("file_path", audioPath.toStdString());
+    audioDevice.open(muse::io::IODevice::WriteOnly);
+
+    m_audioWriter->write(notation, audioDevice, audioOpts);
 }
 
 muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
@@ -143,6 +209,10 @@ muse::Progress* VideoWriter::progress()
 void VideoWriter::abort()
 {
     m_abort = true;
+
+    if (m_audioWriter) {
+        m_audioWriter->abort();
+    }
 }
 
 void VideoWriter::doGenerate(INotationPtr notation, const muse::io::path_t& filePath, const Config& config)

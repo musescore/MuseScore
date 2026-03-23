@@ -90,8 +90,9 @@ muse::Progress* AbstractAudioWriter::progress()
 }
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
-                                        io::IODevice& dstDevice,
-                                        const SoundTrackFormat& format)
+                                        io::IODevice& destinationDevice,
+                                        const SoundTrackFormat& format,
+                                        const Options& options)
 {
     //! NOTE Temporary fix for the context injection
     m_iocContext = notation->iocContext();
@@ -114,13 +115,13 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
     doWrite(dstDevice, format);
 
-    while (!m_isCompleted) {
-        application()->processEvents();
-        QThread::yieldCurrentThread();
+    bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
+    if (waitForCompletion) {
+        while (!m_isCompleted) {
+            application()->processEvents();
+            QThread::yieldCurrentThread();
+        }
     }
-
-    playbackController()->setIsExportingAudio(false);
-    playbackController()->setNotation(globalContext()->currentNotation());
 
     return m_writeRet;
 }
@@ -129,6 +130,11 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
 {
     muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
+
+    auto restoreState = [this]() {
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(globalContext()->currentNotation());
+    };
 
     auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
         switch (stage) {
@@ -143,7 +149,7 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     };
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, playback, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, playback, &dstDevice, format, sendProgress, restoreState](const TrackSequenceIdList& sequenceIdList) {
         m_progress.start();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
@@ -152,27 +158,33 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
                 sendProgress(current, total, stage);
             });
 
-            playback()->saveSoundTrack(sequenceId, std::move(format), dstDevice)
-            .onResolve(this, [this, sequenceId](const bool /*result*/) {
-                LOGI() << "Successfully saved sound track";
+            playback()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
+            .onResolve(this, [this, path, sequenceId, restoreState](const bool /*result*/) {
+                LOGI() << "Successfully saved sound track by path: " << path;
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
                 m_progress.finish(muse::make_ok());
                 muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
                 playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
+
+                restoreState();
             })
-            .onReject(this, [this, sequenceId](int errorCode, const std::string& msg) {
+            .onReject(this, [this, sequenceId, restoreState](int errorCode, const std::string& msg) {
                 m_writeRet = Ret(errorCode, msg);
                 m_isCompleted = true;
                 m_progress.finish(make_ret(errorCode, msg));
                 muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
                 playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
+
+                restoreState();
             });
         }
     })
-    .onReject(this, [this](int errorCode, const std::string& msg) {
+    .onReject(this, [this, restoreState](int errorCode, const std::string& msg) {
         LOGE() << "errorCode: " << errorCode << ", " << msg;
         m_isCompleted = true;
+
+        restoreState();
     });
 }
 

@@ -22,17 +22,20 @@
 #ifndef MU_IMPORTEXPORT_VIDEOWRITER_H
 #define MU_IMPORTEXPORT_VIDEOWRITER_H
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../ivideoexportconfiguration.h"
 #include "iapplication.h"
 
 #include "project/inotationwriter.h"
+#include "project/inotationwritersregister.h"
 
 namespace mu::iex::videoexport {
-class VideoWriter : public project::INotationWriter, public muse::Contextable
+class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
-    muse::GlobalInject<muse::IApplication> application;
+    muse::ContextInject<muse::IApplication> application = { this };
+    muse::ContextInject<project::INotationWritersRegister> writers = { this };
 
 public:
     std::vector<UnitType> supportedUnitTypes() const override;
@@ -57,12 +60,21 @@ private:
         float trailingSec = 3.;
     };
 
+    Config makeConfig() const;
+
+    void startVideoExport(notation::INotationPtr notation, const muse::io::path_t& videoPath, const Config& cfg);
+    void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
+
     void doGenerate(notation::INotationPtr notation, const muse::io::path_t& filePath, const Config& config);
 
     muse::Progress m_progress;
     bool m_abort = false;
     bool m_isCompleted = false;
     muse::Ret m_writeRet;
+
+    project::INotationWriterPtr m_audioWriter;
+    bool m_audioCompleted = false;
+    muse::Ret m_audioRet;
 };
 }
 

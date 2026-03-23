@@ -416,6 +416,160 @@ bool VideoEncoder::encodeImage(const QImage& img)
     return true;
 }
 
+bool VideoEncoder::muxAudioVideo(const muse::io::path_t& videoPath,
+                                 const muse::io::path_t& audioPath,
+                                 const muse::io::path_t& outputPath,
+                                 double audioOffsetSec)
+{
+    AVFormatContext* videoFmtCtx = nullptr;
+    AVFormatContext* audioFmtCtx = nullptr;
+    AVFormatContext* outputFmtCtx = nullptr;
+    bool ok = false;
+
+    auto cleanup = [&]() {
+        if (videoFmtCtx) {
+            avformat_close_input(&videoFmtCtx);
+        }
+        if (audioFmtCtx) {
+            avformat_close_input(&audioFmtCtx);
+        }
+        if (outputFmtCtx) {
+            if (outputFmtCtx->pb) {
+                avio_close(outputFmtCtx->pb);
+            }
+            avformat_free_context(outputFmtCtx);
+        }
+    };
+
+    if (avformat_open_input(&videoFmtCtx, videoPath.c_str(), nullptr, nullptr) < 0) {
+        LOGE() << "mux: failed to open video input: " << videoPath;
+        cleanup();
+        return false;
+    }
+    if (avformat_find_stream_info(videoFmtCtx, nullptr) < 0) {
+        LOGE() << "mux: failed to find video stream info";
+        cleanup();
+        return false;
+    }
+
+    if (avformat_open_input(&audioFmtCtx, audioPath.c_str(), nullptr, nullptr) < 0) {
+        LOGE() << "mux: failed to open audio input: " << audioPath;
+        cleanup();
+        return false;
+    }
+    if (avformat_find_stream_info(audioFmtCtx, nullptr) < 0) {
+        LOGE() << "mux: failed to find audio stream info";
+        cleanup();
+        return false;
+    }
+
+    avformat_alloc_output_context2(&outputFmtCtx, nullptr, "mp4", outputPath.c_str());
+    if (!outputFmtCtx) {
+        LOGE() << "mux: failed to allocate output context";
+        cleanup();
+        return false;
+    }
+
+    int videoInIdx = -1;
+    int audioInIdx = -1;
+    int outVideoIdx = -1;
+    int outAudioIdx = -1;
+
+    for (unsigned i = 0; i < videoFmtCtx->nb_streams; i++) {
+        if (videoFmtCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+            videoInIdx = static_cast<int>(i);
+            AVStream* outStream = avformat_new_stream(outputFmtCtx, nullptr);
+            if (!outStream) {
+                LOGE() << "mux: failed to create output video stream";
+                cleanup();
+                return false;
+            }
+            avcodec_parameters_copy(outStream->codecpar, videoFmtCtx->streams[i]->codecpar);
+            outStream->codecpar->codec_tag = 0;
+            outStream->time_base = videoFmtCtx->streams[i]->time_base;
+            outVideoIdx = outStream->index;
+            break;
+        }
+    }
+
+    for (unsigned i = 0; i < audioFmtCtx->nb_streams; i++) {
+        if (audioFmtCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+            audioInIdx = static_cast<int>(i);
+            AVStream* outStream = avformat_new_stream(outputFmtCtx, nullptr);
+            if (!outStream) {
+                LOGE() << "mux: failed to create output audio stream";
+                cleanup();
+                return false;
+            }
+            avcodec_parameters_copy(outStream->codecpar, audioFmtCtx->streams[i]->codecpar);
+            outStream->codecpar->codec_tag = 0;
+            outStream->time_base = audioFmtCtx->streams[i]->time_base;
+            outAudioIdx = outStream->index;
+            break;
+        }
+    }
+
+    if (videoInIdx < 0 || audioInIdx < 0) {
+        LOGE() << "mux: could not find video or audio stream";
+        cleanup();
+        return false;
+    }
+
+    if (avio_open(&outputFmtCtx->pb, outputPath.c_str(), AVIO_FLAG_WRITE) < 0) {
+        LOGE() << "mux: failed to open output file: " << outputPath;
+        cleanup();
+        return false;
+    }
+
+    if (avformat_write_header(outputFmtCtx, nullptr) < 0) {
+        LOGE() << "mux: failed to write header";
+        cleanup();
+        return false;
+    }
+
+    int64_t audioOffsetPts = 0;
+    {
+        AVStream* audioOutStream = outputFmtCtx->streams[outAudioIdx];
+        audioOffsetPts = static_cast<int64_t>(audioOffsetSec * audioOutStream->time_base.den / audioOutStream->time_base.num);
+    }
+
+    AVPacket* pkt = av_packet_alloc();
+
+    // Copy video packets
+    while (av_read_frame(videoFmtCtx, pkt) >= 0) {
+        if (pkt->stream_index == videoInIdx) {
+            pkt->stream_index = outVideoIdx;
+            av_packet_rescale_ts(pkt, videoFmtCtx->streams[videoInIdx]->time_base,
+                                 outputFmtCtx->streams[outVideoIdx]->time_base);
+            pkt->pos = -1;
+            av_interleaved_write_frame(outputFmtCtx, pkt);
+        }
+        av_packet_unref(pkt);
+    }
+
+    // Copy audio packets with offset
+    while (av_read_frame(audioFmtCtx, pkt) >= 0) {
+        if (pkt->stream_index == audioInIdx) {
+            pkt->stream_index = outAudioIdx;
+            av_packet_rescale_ts(pkt, audioFmtCtx->streams[audioInIdx]->time_base,
+                                 outputFmtCtx->streams[outAudioIdx]->time_base);
+            pkt->pts += audioOffsetPts;
+            pkt->dts += audioOffsetPts;
+            pkt->pos = -1;
+            av_interleaved_write_frame(outputFmtCtx, pkt);
+        }
+        av_packet_unref(pkt);
+    }
+
+    av_packet_free(&pkt);
+
+    av_write_trailer(outputFmtCtx);
+
+    ok = true;
+    cleanup();
+    return ok;
+}
+
 bool VideoEncoder::convertImage_sws(const QImage& img)
 {
     // Check if the image matches the size
