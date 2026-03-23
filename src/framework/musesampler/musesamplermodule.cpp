@@ -50,7 +50,6 @@ std::string MuseSamplerModule::moduleName() const
 void MuseSamplerModule::registerExports()
 {
     m_configuration = std::make_shared<MuseSamplerConfiguration>(globalCtx());
-    m_actionController = std::make_shared<MuseSamplerActionController>(globalCtx());
     m_resolver = std::make_shared<MuseSamplerResolver>();
 
     globalIoc()->registerExport<IMuseSamplerConfiguration>(mname, m_configuration);
@@ -70,7 +69,6 @@ void MuseSamplerModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_resolver->init();
-    m_actionController->init(m_resolver);
 
     auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
@@ -88,10 +86,30 @@ IContextSetup* MuseSamplerModule::newContext(const muse::modularity::ContextPtr&
     return new MuseSamplerContext(ctx);
 }
 
+void MuseSamplerContext::registerExports()
+{
+    m_actionController = std::make_shared<MuseSamplerActionController>(iocContext());
+}
+
 void MuseSamplerContext::resolveImports()
 {
     auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<MuseSamplerUiActions>());
     }
+}
+
+void MuseSamplerContext::onInit(const IApplication::RunMode&)
+{
+    auto iresolver = globalIoc()->resolve<IMuseSamplerInfo>(mname);
+    IF_ASSERT_FAILED(iresolver) {
+        return;
+    }
+
+    auto resolver = std::dynamic_pointer_cast<MuseSamplerResolver>(iresolver);
+    IF_ASSERT_FAILED(resolver) {
+        return;
+    }
+
+    m_actionController->init(resolver);
 }
