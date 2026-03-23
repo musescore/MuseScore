@@ -150,8 +150,9 @@ endfunction()
 
 # - Creates a target and sets up common properties for Muse thirdparty modules
 function(muse_create_thirdparty_module target_name)
+    set(options INTERFACE)
     set(oneValueArgs ALIAS)
-    cmake_parse_arguments(PARSE_ARGV 1 arg "" "${oneValueArgs}" "")
+    cmake_parse_arguments(PARSE_ARGV 1 arg "${options}" "${oneValueArgs}" "")
 
     # Status message
     set(message "Configuring ${target_name}")
@@ -162,7 +163,15 @@ function(muse_create_thirdparty_module target_name)
 
     # Create target
     # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
-    add_library(${target_name})
+
+    if (arg_INTERFACE)
+        add_library(${target_name} INTERFACE)
+        if (arg_UNPARSED_ARGUMENTS)
+            target_link_libraries(${target_name} INTERFACE ${arg_UNPARSED_ARGUMENTS})
+        endif()
+    else()
+        add_library(${target_name})
+    endif()
 
     set_target_properties(${target_name} PROPERTIES
         AUTOMOC OFF

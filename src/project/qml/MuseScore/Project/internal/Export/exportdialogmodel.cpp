@@ -91,6 +91,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "FlacSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "aac" },
+                                     muse::qtrc("project/export", "AAC audio"),
+                                     muse::qtrc("project/export", "AAC audio files"),
+                                     "AacSettingsPage.qml"),
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
         ExportType::makeWithSuffixes({ "mp4" },
                                      muse::qtrc("project/export", "MP4 video"),
