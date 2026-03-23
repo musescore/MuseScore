@@ -30,6 +30,8 @@
 #include "modularity/ioc.h"
 #include "async/processevents.h"
 
+#include "audioplugins/iregisteraudiopluginsscenario.h"
+
 #include "muse_framework_config.h"
 #include "app_config.h"
 
@@ -207,11 +209,9 @@ muse::modularity::ContextPtr ConsoleApp::setupNewContext(const StringList&)
 
     const CmdOptions& options = m_options;
     IApplication::RunMode runMode = options.runMode;
-    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
-        return nullptr;
-    }
 
-    IF_ASSERT_FAILED(runMode == IApplication::RunMode::ConsoleApp) {
+    IF_ASSERT_FAILED(runMode == IApplication::RunMode::ConsoleApp
+                     || runMode == IApplication::RunMode::AudioPluginRegistration) {
         return nullptr;
     }
 
@@ -526,9 +526,11 @@ int ConsoleApp::processDiagnostic(const CmdOptions::Diagnostic& task, const muse
     return ret.code();
 }
 
-int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr&)
+int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx)
 {
     Ret ret = make_ret(Ret::Code::Ok);
+
+    muse::ContextInject<audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { ctx };
 
     if (task.failedPlugin) {
         ret = registerAudioPluginsScenario()->registerFailedPlugin(task.pluginPath, task.failCode);
@@ -549,7 +551,7 @@ void ConsoleApp::processAutobot(const CmdOptions::Autobot& task, const muse::mod
     muse::ContextInject<IAutobot> autobot = { ctx };
 
     muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
-    stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret){
+    stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret) {
         if (!ret) {
             LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
             qApp->exit(ret.code());
@@ -559,7 +561,7 @@ void ConsoleApp::processAutobot(const CmdOptions::Autobot& task, const muse::mod
     });
 
     muse::async::Channel<muse::io::path_t, IAutobot::Status> statusCh = autobot()->statusChanged();
-    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, IAutobot::Status st){
+    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, IAutobot::Status st) {
         if (st == IAutobot::Status::Finished) {
             LOGI() << "success finished, path: " << path;
             qApp->exit(0);
