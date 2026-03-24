@@ -27,9 +27,11 @@
 #include "engraving/style/style.h"
 
 #include "modularity/ioc.h"
+#include "io/ifilesystem.h"
 #include "global/iapplication.h"
 #include "media/ivideoencoderresolver.h"
 #include "../ivideoexportconfiguration.h"
+#include "context/iglobalcontext.h"
 
 #include "project/inotationwriter.h"
 #include "project/inotationwritersregister.h"
@@ -49,6 +51,8 @@ class VideoWriter : public project::INotationWriter, public muse::Contextable, p
     muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
     muse::ContextInject<project::INotationWritersRegister> writers = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
@@ -74,6 +78,7 @@ private:
         int bitrate = 800000;
         float leadingSec = 3.;
         float trailingSec = 3.;
+        double canvasDpi = 300.0;
     };
 
     Config makeConfig() const;
@@ -81,7 +86,7 @@ private:
     void startVideoExport(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& cfg);
     void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
 
-    void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& config);
+    void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, Config config);
 
     bool generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, muse::draw::Painter& painter,
                                QImage& frame, const Config& config, int totalFrameCount);
@@ -104,7 +109,7 @@ private:
         bool showVBox = true;
     };
 
-    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, const Config& config);
+    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, Config& config);
     void restoreScore(notation::INotationPtr notation, const ScoreRestoreData& data);
 
     muse::Progress m_progress;

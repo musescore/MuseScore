@@ -48,8 +48,6 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-double CANVAS_DPI = 300;
-
 static muse::String notationTitle(const INotationPtr notation)
 {
     muse::String title;
@@ -279,7 +277,7 @@ void VideoWriter::abort()
     }
 }
 
-std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, const Config& config)
+std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, Config& config)
 {
     ScoreRestoreData result;
     engraving::Score* score = notation->elements()->msScore();
@@ -320,11 +318,11 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
         double margin = 100.0;
         double ttboxHeight = ttbox.height() + margin * 2;
         double scale = config.height / ttboxHeight;
-        CANVAS_DPI = scale * engraving::DPI;
+        config.canvasDpi = scale * engraving::DPI;
     }
 
-    score->style().set(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
-    score->style().set(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
+    score->style().set(engraving::Sid::pageHeight, config.height / config.canvasDpi);
+    score->style().set(engraving::Sid::pageWidth, config.width / config.canvasDpi);
     score->style().set(engraving::Sid::pagePrintableWidth, score->style().styleD(engraving::Sid::pageWidth)
                        - score->style().styleD(engraving::Sid::pageOddLeftMargin)
                        - score->style().styleD(engraving::Sid::pageEvenLeftMargin));
@@ -343,6 +341,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
+    score->doLayout();
     score->update();
 
     return result;
@@ -367,7 +366,7 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
     score->update();
 }
 
-void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& config)
+void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, Config config)
 {
     auto restoreData = prepareScore(notation, config);
     if (!restoreData) {
@@ -383,8 +382,8 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
 
     // Setup painting
     QImage frame(config.width, config.height, QImage::Format_RGB32);
-    frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
-    frame.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
+    frame.setDotsPerMeterX(std::lrint((config.canvasDpi * 1000) / engraving::INCH));
+    frame.setDotsPerMeterY(std::lrint((config.canvasDpi * 1000) / engraving::INCH));
 
     QPainter qp(&frame);
     qp.setRenderHint(QPainter::Antialiasing, true);
@@ -558,7 +557,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         INotationPainting::Options opt;
         opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
-        opt.deviceDpi = CANVAS_DPI;
+        opt.deviceDpi = config.canvasDpi;
 
         painter.fillRect(frameRect, Color::WHITE);
 
