@@ -93,11 +93,8 @@ public:
 
     void resetFonts() override;
 
-    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
-    double physicalDpi(const muse::modularity::ContextPtr& ctx) const override;
-    double logicalDpi(const muse::modularity::ContextPtr& ctx) const override;
-
-    void setPhysicalDotsPerInch(std::optional<double> dpi) override;
+    void setCustomPhysicalDotsPerInch(std::optional<double> dpi) override;
+    std::optional<double> customPhysicalDotsPerInch() const override;
 
     bool isGlobalMenuAvailable() const override;
     bool isSystemDragSupported() const override;
@@ -131,8 +128,6 @@ private:
 
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
-
-    QScreen* screen(const muse::modularity::ContextPtr& ctx) const;
 
     async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;

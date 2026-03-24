@@ -305,11 +305,6 @@ Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
     return VOICE_COLORS[voiceIdx].color;
 }
 
-double EngravingConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
-{
-    return uiConfiguration() ? uiConfiguration()->guiScaling(ctx) : 1.0;
-}
-
 Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
 {
     Color color = itemIsUnlinkedFromScore ? unlinkedColor() : VOICE_COLORS[voice].color;
@@ -428,11 +423,6 @@ void EngravingConfiguration::setDebuggingOptions(const DebuggingOptions& options
 muse::async::Notification EngravingConfiguration::debuggingOptionsChanged() const
 {
     return m_debuggingOptions.notification;
-}
-
-bool EngravingConfiguration::isAccessibleEnabled() const
-{
-    return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
 }
 
 bool EngravingConfiguration::doNotSaveEIDsForBackCompat() const

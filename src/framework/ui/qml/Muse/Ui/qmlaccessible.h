@@ -114,6 +114,7 @@ public:
     STATE_PROPERTY(checked, State::Checked)
 
     AccessibleItem(QObject* parent = nullptr);
+    explicit AccessibleItem(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
     ~AccessibleItem();
 
     // IAccessible

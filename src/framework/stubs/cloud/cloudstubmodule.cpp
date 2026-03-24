@@ -29,12 +29,23 @@ using namespace muse;
 using namespace muse::cloud;
 using namespace muse::modularity;
 
+static const std::string mname("cloud_stub");
+
 std::string CloudModule::moduleName() const
 {
-    return "cloud_stub";
+    return mname;
 }
 
 void CloudModule::registerExports()
 {
-    globalIoc()->registerExport<IAuthorizationService>(moduleName(), new AuthorizationServiceStub());
+}
+
+IContextSetup* CloudModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new CloudContext(ctx);
+}
+
+void CloudContext::registerExports()
+{
+    ioc()->registerExport<IAuthorizationService>(mname, new AuthorizationServiceStub());
 }

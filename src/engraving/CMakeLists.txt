@@ -69,6 +69,7 @@ target_sources(engraving PRIVATE
     engravingproject.h
     iengravingpluginapihelper.h
     iengravingconfiguration.h
+    iengravingcontextconfiguration.h
     iengravingfont.h
     iengravingfontsprovider.h
 
@@ -336,6 +337,8 @@ else()
     target_sources(engraving PRIVATE
         internal/engravingconfiguration.cpp
         internal/engravingconfiguration.h
+        internal/engravingcontextconfiguration.cpp
+        internal/engravingcontextconfiguration.h
         internal/qmimedataadapter.cpp
         internal/qmimedataadapter.h
         internal/engravingfontsprovider.cpp

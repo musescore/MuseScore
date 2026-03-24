@@ -32,6 +32,17 @@ public:
 
     std::string moduleName() const override;
     void registerExports() override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class AccessibilityContext : public muse::modularity::IContextSetup
+{
+public:
+    AccessibilityContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }
 

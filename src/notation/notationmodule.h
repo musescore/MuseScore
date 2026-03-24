@@ -51,5 +51,7 @@ class NotationContext : public muse::modularity::IContextSetup
 public:
     NotationContext(const muse::modularity::ContextPtr& ctx)
         : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

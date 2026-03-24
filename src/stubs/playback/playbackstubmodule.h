@@ -30,5 +30,16 @@ class PlaybackModule : public muse::modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
+
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class PlaybackContext : public muse::modularity::IContextSetup
+{
+public:
+    PlaybackContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

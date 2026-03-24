@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "../iengravingconfiguration.h"
+#include "../iengravingcontextconfiguration.h"
 #include "../rendering/iscorerenderer.h"
 #include "../rendering/paintoptions.h"
 
@@ -169,8 +170,9 @@ public:
     EngravingItem* parentItem(bool explicitParent = true) const;
     EngravingItemList childrenItems(bool all = false) const;
 
-    const muse::modularity::ContextPtr& iocContext() const;
     const std::shared_ptr<IEngravingConfiguration>& configuration() const;
+    const muse::modularity::ContextPtr& iocContext() const;
+    const std::shared_ptr<IEngravingContextConfiguration>& contextConfiguration() const;
     const std::shared_ptr<rendering::IScoreRenderer>& renderer() const;
 
     EngravingItem* findAncestor(ElementType t);

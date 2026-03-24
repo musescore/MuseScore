@@ -28,7 +28,7 @@
 #include "../inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
 #include "engraving/rendering/iscorerenderer.h"
-#include "ui/iuiconfiguration.h"
+#include "ui/iuicontextconfiguration.h"
 
 namespace mu::engraving {
 class Score;
@@ -37,12 +37,12 @@ class Page;
 
 namespace mu::notation {
 class Notation;
-class NotationPainting : public INotationPainting
+class NotationPainting : public INotationPainting, public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<engraving::rendering::IScoreRenderer> scoreRenderer;
+    muse::ContextInject<muse::ui::IUiContextConfiguration> uiConfiguration = { this };
 
 public:
     NotationPainting(Notation* notation);

@@ -28,12 +28,23 @@
 using namespace mu::instrumentsscene;
 using namespace muse::modularity;
 
+static const std::string mname("instrumentsscene_stub");
+
 std::string InstrumentsSceneModule::moduleName() const
 {
-    return "instrumentsscene";
+    return mname;
 }
 
 void InstrumentsSceneModule::registerExports()
 {
-    globalIoc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenarioStub());
+}
+
+IContextSetup* InstrumentsSceneModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new InstrumentsSceneContext(ctx);
+}
+
+void InstrumentsSceneContext::registerExports()
+{
+    ioc()->registerExport<notation::ISelectInstrumentsScenario>(mname, new SelectInstrumentsScenarioStub());
 }

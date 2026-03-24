@@ -47,6 +47,7 @@ public:
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
+    explicit NavigationSection(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
     ~NavigationSection() override;
 
     //! NOTE Please sync with INavigationSection::Type

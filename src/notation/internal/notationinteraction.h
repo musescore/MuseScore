@@ -34,6 +34,7 @@
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
+#include "../inotationcontextconfiguration.h"
 #include "notationscene/iselectinstrumentscenario.h"
 #include "inotationundostack.h"
 
@@ -61,6 +62,7 @@ class NotationInteraction : public INotationInteraction, public muse::Contextabl
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::rendering::ISingleRenderer> engravingRenderer;
     muse::GlobalInject<engraving::rendering::IEditModeRenderer> editModeRenderer;
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
 

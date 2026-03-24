@@ -417,7 +417,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
 
 void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool arg)
 {
-    if (!configuration()->enabled()) {
+    if (!configuration()->isAccessibleEnabled()) {
         return;
     }
 
@@ -500,7 +500,7 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 
 void AccessibilityController::cancelPreviousReading()
 {
-    if (!configuration()->active()) {
+    if (!configuration()->isAccessibleActive()) {
         return;
     }
 
@@ -569,7 +569,7 @@ bool AccessibilityController::needsRevoicing(const QAccessibleInterface& iface, 
 
 void AccessibilityController::triggerRevoicing(const Item& current)
 {
-    if (current.item != m_lastFocused || !configuration()->active()) {
+    if (current.item != m_lastFocused || !configuration()->isAccessibleActive()) {
         return;
     }
 

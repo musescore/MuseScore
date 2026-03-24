@@ -132,8 +132,6 @@ public:
 
     virtual muse::io::path_t newProjectTemporaryPath() const = 0;
 
-    virtual bool isAccessibleEnabled() const = 0;
-
     virtual bool shouldDestinationFolderBeOpenedOnExport() const = 0;
     virtual void setShouldDestinationFolderBeOpenedOnExport(bool shouldDestinationFolderBeOpenedOnExport) = 0;
 

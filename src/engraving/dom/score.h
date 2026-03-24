@@ -40,6 +40,7 @@
 #include "global/iapplication.h"
 #include "../iengravingfontsprovider.h"
 #include "../ipalettescoreprovider.h"
+#include "../iengravingcontextconfiguration.h"
 
 #include "../types/constants.h"
 
@@ -333,6 +334,7 @@ class Score : public EngravingObject, public muse::Contextable
     muse::GlobalInject<IEngravingConfiguration> configuration;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
     muse::GlobalInject<muse::IApplication> application;
+    muse::ContextInject<IEngravingContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
     muse::ContextInject<IPaletteScoreProvider> paletteScoreProvider = { this };
     // internal

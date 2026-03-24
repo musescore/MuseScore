@@ -109,8 +109,6 @@ public:
 
     MOCK_METHOD(muse::io::path_t, newProjectTemporaryPath, (), (const, override));
 
-    MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
-
     MOCK_METHOD(bool, shouldDestinationFolderBeOpenedOnExport, (), (const, override));
     MOCK_METHOD(void, setShouldDestinationFolderBeOpenedOnExport, (bool), (override));
 

@@ -30,6 +30,8 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/system.h"
 
+#include "notation/inotationcontextconfiguration.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -96,7 +98,10 @@ void ExampleView::setScore(Score* s)
     m_score->addViewer(this);
     m_score->setLayoutMode(LayoutMode::LINE);
 
-    m_defaultScaling = 0.9 * notationConfiguration()->notationScaling(s->iocContext());
+    //! HACK
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { s->iocContext() };
+
+    m_defaultScaling = 0.9 * contextConfiguration()->notationScaling();
 
     ScoreLoad sl;
     m_score->doLayout();

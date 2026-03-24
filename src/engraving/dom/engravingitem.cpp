@@ -192,14 +192,19 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     return list;
 }
 
+const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+{
+    return score()->configuration.get();
+}
+
 const muse::modularity::ContextPtr& EngravingItem::iocContext() const
 {
     return score()->iocContext();
 }
 
-const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+const std::shared_ptr<IEngravingContextConfiguration>& EngravingItem::contextConfiguration() const
 {
-    return score()->configuration.get();
+    return score()->contextConfiguration.get();
 }
 
 const std::shared_ptr<rendering::IScoreRenderer>& EngravingItem::renderer() const
@@ -2598,7 +2603,7 @@ void EngravingItem::setVisible(bool f)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-    if (!configuration()->isAccessibleEnabled()) {
+    if (!contextConfiguration() || !contextConfiguration()->isAccessibleEnabled()) {
         return;
     }
 

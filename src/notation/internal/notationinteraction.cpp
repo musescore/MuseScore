@@ -3449,7 +3449,7 @@ double NotationInteraction::getVRaster() const
 
 double NotationInteraction::currentScaling(Painter* painter) const
 {
-    qreal guiScaling = configuration()->guiScaling(iocContext());
+    qreal guiScaling = contextConfiguration()->guiScaling();
     return painter->worldTransform().m11() / guiScaling;
 }
 

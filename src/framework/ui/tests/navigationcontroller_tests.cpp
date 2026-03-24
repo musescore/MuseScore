@@ -43,6 +43,8 @@ using ::testing::Return;
 using namespace muse;
 using namespace muse::ui;
 
+static const modularity::ContextPtr iocCtx = std::make_shared<modularity::Context>(1);
+
 class Ui_NavigationControllerTests : public ::testing::Test
 {
 public:
@@ -112,7 +114,7 @@ public:
     Control* make_control(INavigation::Index& idx)
     {
         Control* c = new Control();
-        NavigationControl* navCtrl = new NavigationControl();
+        NavigationControl* navCtrl = new NavigationControl(iocCtx);
         navCtrl->setRow(idx.row);
         navCtrl->setColumn(idx.column);
         navCtrl->setOrder(idx.order());
@@ -132,7 +134,7 @@ public:
     {
         Panel* p = new Panel();
 
-        NavigationPanel* navPanel = new NavigationPanel();
+        NavigationPanel* navPanel = new NavigationPanel(iocCtx);
 
         for (size_t ci = 0; ci < controlsCount; ++ci) {
             INavigation::Index& idx = make_idx();
@@ -168,7 +170,7 @@ public:
     {
         Section* s = new Section();
 
-        NavigationSection* navSection = new NavigationSection();
+        NavigationSection* navSection = new NavigationSection(iocCtx);
 
         for (size_t pi = 0; pi < panelsCount; ++pi) {
             Panel* p = make_panel(static_cast<int>(pi), controlsCount);

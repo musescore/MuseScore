@@ -345,7 +345,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
         return;
     }
 
-    uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
+    uiConfiguration()->setCustomPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
 
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);

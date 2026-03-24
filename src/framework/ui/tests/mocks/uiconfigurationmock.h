@@ -76,11 +76,8 @@ public:
 
     MOCK_METHOD(void, resetFonts, (), (override));
 
-    MOCK_METHOD(double, guiScaling, (const muse::modularity::ContextPtr& ctx), (const, override));
-    MOCK_METHOD(double, physicalDpi, (const muse::modularity::ContextPtr& ctx), (const, override));
-    MOCK_METHOD(double, logicalDpi, (const muse::modularity::ContextPtr& ctx), (const, override));
-
-    MOCK_METHOD(void, setPhysicalDotsPerInch, (std::optional<double>), (override));
+    MOCK_METHOD(void, setCustomPhysicalDotsPerInch, (std::optional<double>), (override));
+    MOCK_METHOD(std::optional<double>, customPhysicalDotsPerInch, (), (const, override));
 
     MOCK_METHOD(bool, isGlobalMenuAvailable, (), (const, override));
     MOCK_METHOD(bool, isSystemDragSupported, (), (const, override));

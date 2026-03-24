@@ -27,7 +27,6 @@
 #include <QColor>
 
 #include "modularity/imoduleinterface.h"
-#include "modularity/ioc.h"
 
 #include "global/types/retval.h"
 #include "global/types/val.h"
@@ -93,12 +92,9 @@ public:
 
     virtual void resetFonts() = 0;
 
-    virtual double guiScaling(const muse::modularity::ContextPtr& ctx) const = 0;
-    virtual double physicalDpi(const muse::modularity::ContextPtr& ctx) const = 0;
-    virtual double logicalDpi(const muse::modularity::ContextPtr& ctx) const = 0;
-
     //! NOTE Maybe set from command line
-    virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;
+    virtual void setCustomPhysicalDotsPerInch(std::optional<double> dpi) = 0;
+    virtual std::optional<double> customPhysicalDotsPerInch() const = 0;
 
     virtual bool isGlobalMenuAvailable() const = 0;
     virtual bool isSystemDragSupported() const = 0;
