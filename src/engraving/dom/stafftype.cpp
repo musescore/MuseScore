@@ -365,10 +365,6 @@ void StaffType::setFretTextStyle(const TextStyleType& val)
             double fontSize = style().styleD(property.sid);
             setFretFontSize(fontSize);
         } break;
-        case TextStylePropertyType::Offset: {
-            PointF offset = style().styleV(property.sid).value<PointF>();
-            setFretFontUserY(offset.y());
-        } break;
         case TextStylePropertyType::FontStyle: {
             FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
             m_fretFont.setBold(fStyle & FontStyle::Bold);
@@ -380,6 +376,9 @@ void StaffType::setFretTextStyle(const TextStyleType& val)
             continue;
         }
     }
+
+    PointF offset = style().styleV(ts->offsetSids.above).value<PointF>();
+    setFretFontUserY(offset.y());
 
     setFretMetrics();
 }

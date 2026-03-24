@@ -2449,11 +2449,6 @@ void EditStyle::textStyleChanged(int row)
             resetTextStyleAlign->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case TextStylePropertyType::Offset:
-            textStyleOffset->setOffset(styleValue(a.sid).value<PointF>());
-            resetTextStyleOffset->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            break;
-
         case TextStylePropertyType::SizeSpatiumDependent: {
             PropertyValue val = styleValue(a.sid);
             textStyleSpatiumDependent->setChecked(val.toBool());
@@ -2503,6 +2498,9 @@ void EditStyle::textStyleChanged(int row)
         }
     }
 
+    textStyleOffset->setOffset(styleValue(ts->offsetSids.above).value<PointF>());
+    resetTextStyleOffset->setEnabled(styleValue(ts->offsetSids.above) != defaultStyleValue(ts->offsetSids.above));
+
     INotationPtr notation = globalContext()->currentNotation();
     IF_ASSERT_FAILED(notation) {
         return;
@@ -2531,14 +2529,18 @@ void EditStyle::textStyleValueChanged(TextStylePropertyType type, const Property
     TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
-    for (const auto& a : *ts) {
-        if (a.type == type) {
-            if (type == TextStylePropertyType::MusicalSymbolsScale) {
-                setStyleValue(a.sid, value.toDouble() / 100);
-            } else {
-                setStyleValue(a.sid, value);
+    if (type == TextStylePropertyType::Offset) {
+        setStyleValue(ts->offsetSids.above, value);
+    } else {
+        for (const auto& a : *ts) {
+            if (a.type == type) {
+                if (type == TextStylePropertyType::MusicalSymbolsScale) {
+                    setStyleValue(a.sid, value.toDouble() / 100);
+                } else {
+                    setStyleValue(a.sid, value);
+                }
+                break;
             }
-            break;
         }
     }
     textStyleChanged(textStyles->currentRow()); // update GUI (reset buttons)
@@ -2553,12 +2555,17 @@ void EditStyle::resetTextStyle(TextStylePropertyType type)
     TextStyleType tid = TextStyleType(textStyles->currentItem()->data(Qt::UserRole).toInt());
     const TextStyle* ts = textStyle(tid);
 
-    for (const auto& a : *ts) {
-        if (a.type == type) {
-            setStyleValue(a.sid, defaultStyleValue(a.sid));
-            break;
+    if (type == TextStylePropertyType::Offset) {
+        setStyleValue(ts->offsetSids.above, defaultStyleValue(ts->offsetSids.above));
+    } else {
+        for (const auto& a : *ts) {
+            if (a.type == type) {
+                setStyleValue(a.sid, defaultStyleValue(a.sid));
+                break;
+            }
         }
     }
+
     textStyleChanged(textStyles->currentRow()); // update GUI
 }
 

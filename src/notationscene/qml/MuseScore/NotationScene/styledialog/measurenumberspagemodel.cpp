@@ -54,8 +54,8 @@ MeasureNumbersPageModel::MeasureNumbersPageModel(QObject* parent)
 {
     for (TextStyleType textStyleType : allTextStyles()) {
         const TextStyle* style = textStyle(textStyleType);
-        int offsetPropertyIdx = static_cast<int>(TextStylePropertyType::Offset) - 1;
-        addStyleId(style->at(offsetPropertyIdx).sid);
+        addStyleId(style->offsetSids.above);
+        addStyleId(style->offsetSids.below);
     }
 }
 
@@ -71,16 +71,14 @@ StyleItem* MeasureNumbersPageModel::measureNumberPosAbove() const
 {
     TextStyleType textStyleType = styleItem(StyleId::measureNumberTextStyle)->value().value<TextStyleType>();
     const TextStyle* ts = textStyle(textStyleType);
-    int offsetPropertyIdx = static_cast<int>(TextStylePropertyType::Offset) - 1;
-    return styleItem(ts->at(offsetPropertyIdx).sid);
+    return styleItem(ts->offsetSids.above);
 }
 
 StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const
 {
     TextStyleType textStyleType = styleItem(StyleId::measureNumberTextStyle)->value().value<TextStyleType>();
-    return textStyleType == TextStyleType::MEASURE_NUMBER_ALTERNATE
-           ? styleItem(StyleId::measureNumberAlternatePosBelow)
-           : styleItem(StyleId::measureNumberPosBelow);
+    const TextStyle* ts = textStyle(textStyleType);
+    return styleItem(ts->offsetSids.below);
 }
 
 StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
@@ -101,7 +99,10 @@ StyleItem* MeasureNumbersPageModel::buildStyleItem(StyleId id) const
     StyleItem* item = AbstractStyleDialogModel::buildStyleItem(id);
 
     if (id == StyleId::measureNumberTextStyle) {
-        connect(item, &StyleItem::valueChanged, this, [this]() { emit measureNumberPosAboveChanged(); });
+        connect(item, &StyleItem::valueChanged, this, [this]() {
+            emit measureNumberPosAboveChanged();
+            emit measureNumberPosBelowChanged();
+        });
     }
 
     return item;
