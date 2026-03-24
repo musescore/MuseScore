@@ -36,10 +36,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="harp">
-        <longName>Harp</longName>
-        <shortName>Hrp.</shortName>
+        <InstrumentLabel>
+          <longName>Harp</longName>
+          <shortName>Hrp.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.harp</instrumentId>
         <Channel>

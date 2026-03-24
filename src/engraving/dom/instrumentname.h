@@ -30,7 +30,7 @@ enum class InstrumentNameType : char {
     LONG, SHORT
 };
 enum class InstrumentNameRole : char {
-    STAFF, PART
+    STAFF, PART, GROUP
 };
 
 class System;
@@ -70,6 +70,19 @@ public:
     bool positionRelativeToNoteheadRest() const override { return false; }
 
     staff_idx_t effectiveStaffIdx() const override;
+
+    struct LayoutData : public TextBase::LayoutData {
+    public:
+        int column() const { return m_column; }
+        void setColumn(int v) { m_column = v; }
+        staff_idx_t endIdxOfGroup() const { return m_endIdxOfGroup; }
+        void setEndIdxOfGroup(staff_idx_t v) { m_endIdxOfGroup = v; }
+
+    private:
+        int m_column = 0;
+        staff_idx_t m_endIdxOfGroup = muse::nidx; // one-after last spanned staff (for GROUP types)
+    };
+    DECLARE_LAYOUTDATA_METHODS(InstrumentName)
 
 private:
 

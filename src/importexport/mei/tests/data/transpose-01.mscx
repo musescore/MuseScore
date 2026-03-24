@@ -30,10 +30,11 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>wind.flutes.flute</instrumentId>
         <Channel>
@@ -47,10 +48,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Clarinet in B♭</longName>
-        <shortName>Cl. in B♭</shortName>
+        <InstrumentLabel>
+          <longName>Clarinet in B♭</longName>
+          <shortName>Cl. in B♭</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
@@ -68,10 +70,11 @@
         <bracket type="0" span="3" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Horn in F</longName>
-        <shortName>Hn. in F</shortName>
+        <InstrumentLabel>
+          <longName>Horn in F</longName>
+          <shortName>Hn. in F</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-4</transposeDiatonic>
         <transposeChromatic>-7</transposeChromatic>
@@ -88,10 +91,11 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Cornet in B♭</longName>
-        <shortName>Cnt. in B♭</shortName>
+        <InstrumentLabel>
+          <longName>Cornet in B♭</longName>
+          <shortName>Cnt. in B♭</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
@@ -107,10 +111,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="trombone">
-        <longName>Trombone</longName>
-        <shortName>Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>brass.trombone</instrumentId>
         <Channel>

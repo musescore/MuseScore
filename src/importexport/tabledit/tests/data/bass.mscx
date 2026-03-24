@@ -55,9 +55,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="bass">
-        <longName>Bass</longName>
+        <InstrumentLabel>
+          <longName>Bass</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>voice.bass</instrumentId>
         <StringData>

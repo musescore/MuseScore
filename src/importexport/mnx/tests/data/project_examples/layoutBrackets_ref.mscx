@@ -30,7 +30,9 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument id="piano">
-        <longName>Flute</longName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -101,7 +103,9 @@
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

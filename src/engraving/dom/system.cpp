@@ -70,6 +70,7 @@ namespace mu::engraving {
 
 SysStaff::~SysStaff()
 {
+    delete groupName;
     delete instrumentName;
     delete individualStaffName;
 }
@@ -476,15 +477,19 @@ void System::add(EngravingItem* el)
 
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
-// LOGD("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
-        if (toInstrumentName(el)->instrumentNameRole() == InstrumentNameRole::PART) {
-            m_staves[el->staffIdx()]->instrumentName = toInstrumentName(el);
+    {
+        InstrumentName* n = toInstrumentName(el);
+        SysStaff* sysStaff = m_staves[n->staffIdx()];
+        if (n->instrumentNameRole() == InstrumentNameRole::GROUP) {
+            sysStaff->groupName = n;
+        } else if (n->instrumentNameRole() == InstrumentNameRole::PART) {
+            sysStaff->instrumentName = n;
         } else {
-            m_staves[el->staffIdx()]->individualStaffName = toInstrumentName(el);
+            sysStaff->individualStaffName = n;
         }
-        toInstrumentName(el)->setSysStaff(m_staves[el->staffIdx()]);
+        n->setSysStaff(sysStaff);
         break;
-
+    }
     case ElementType::BEAM:
         score()->addElement(el);
         break;
@@ -566,14 +571,20 @@ void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
+    {
         // TODO: I'm pretty sure that this gets leadked. Needs fixing.
-        if (toInstrumentName(el)->instrumentNameRole() == InstrumentNameRole::PART) {
-            m_staves[el->staffIdx()]->instrumentName = nullptr;
+        InstrumentName* n = toInstrumentName(el);
+        SysStaff* sysStaff = m_staves[n->staffIdx()];
+        if (n->instrumentNameRole() == InstrumentNameRole::GROUP) {
+            sysStaff->groupName = nullptr;
+        } else if (n->instrumentNameRole() == InstrumentNameRole::PART) {
+            sysStaff->instrumentName = nullptr;
         } else {
-            m_staves[el->staffIdx()]->individualStaffName = nullptr;
+            sysStaff->individualStaffName = nullptr;
         }
-        toInstrumentName(el)->setSysStaff(0);
+        n->setSysStaff(nullptr);
         break;
+    }
     case ElementType::BEAM:
         score()->removeElement(el);
         break;
@@ -736,14 +747,22 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     for (const SysStaff* st : m_staves) {
         if (st->show()) {
+            if (InstrumentName* n = st->groupName) {
+                func(n);
+            }
             if (InstrumentName* t = st->instrumentName) {
                 func(t);
             }
             if (InstrumentName* n = st->individualStaffName) {
                 func(n);
             }
-        } else if (InstrumentName* n = st->instrumentName; n && n->effectiveStaffIdx() != muse::nidx) {
-            func(n);
+        } else {
+            if (InstrumentName* n = st->groupName; n && n->effectiveStaffIdx() != muse::nidx) {
+                func(n);
+            }
+            if (InstrumentName* n = st->instrumentName; n && n->effectiveStaffIdx() != muse::nidx) {
+                func(n);
+            }
         }
     }
 
@@ -1169,6 +1188,22 @@ staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
     return muse::nidx; // No visible staves on this part.
 }
 
+staff_idx_t System::firstVisibleSysStaffWithInstrument(const String& instrumentId, staff_idx_t startFrom)
+{
+    Fraction tick = first()->tick();
+    for (staff_idx_t idx = startFrom; idx < m_staves.size(); ++idx) {
+        Part* part = score()->staff(idx)->part();
+        if (part->instrument(tick)->id() == instrumentId) {
+            staff_idx_t firstVisOfPart = firstVisibleSysStaffOfPart(part);
+            if (firstVisOfPart != muse::nidx) {
+                return firstVisOfPart;
+            }
+        }
+    }
+
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   lastSysStaffOfPart
 //---------------------------------------------------------
@@ -1211,6 +1246,21 @@ std::vector<staff_idx_t> System::visibleStavesOfPart(const Part* part) const
         if (staff(staffIdx)->show()) {
             result.push_back(staffIdx);
         }
+    }
+
+    return result;
+}
+
+std::vector<Part*> System::visiblePartsOfGroup(staff_idx_t start, staff_idx_t end) const
+{
+    std::vector<Part*> result;
+
+    for (staff_idx_t idx = start; idx < end;) {
+        Part* part = score()->staff(idx)->part();
+        if (visibleStavesOfPart(part).size() > 0) {
+            result.push_back(part);
+        }
+        idx += part->nstaves();
     }
 
     return result;

@@ -29,10 +29,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>B♭ Clarinet</trackName>
       <Instrument id="bb-clarinet">
-        <longName>B♭ Clarinet</longName>
-        <shortName>B♭ Cl.</shortName>
+        <InstrumentLabel>
+          <longName>B♭ Clarinet</longName>
+          <shortName>B♭ Cl.</shortName>
+          </InstrumentLabel>
         <trackName>B♭ Clarinet</trackName>
         <minPitchP>50</minPitchP>
         <maxPitchP>94</maxPitchP>

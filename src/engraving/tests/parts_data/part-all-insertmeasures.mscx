@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <spatium>1.74978</spatium>
@@ -29,10 +31,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A.</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>77</maxPitchP>
@@ -73,10 +76,11 @@
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T.</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>72</maxPitchP>
@@ -1138,10 +1142,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Alto</trackName>
         <Instrument id="alto">
-          <longName>Alto</longName>
-          <shortName>A.</shortName>
+          <InstrumentLabel>
+            <longName>Alto</longName>
+            <shortName>A.</shortName>
+            </InstrumentLabel>
           <trackName>Alto</trackName>
           <minPitchP>55</minPitchP>
           <maxPitchP>77</maxPitchP>
@@ -1889,10 +1894,11 @@
             <name>Standard</name>
             </StaffType>
           </Staff>
-        <trackName>Tenor</trackName>
         <Instrument id="tenor">
-          <longName>Tenor</longName>
-          <shortName>T.</shortName>
+          <InstrumentLabel>
+            <longName>Tenor</longName>
+            <shortName>T.</shortName>
+            </InstrumentLabel>
           <trackName>Tenor</trackName>
           <minPitchP>48</minPitchP>
           <maxPitchP>72</maxPitchP>

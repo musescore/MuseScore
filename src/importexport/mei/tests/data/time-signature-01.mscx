@@ -28,9 +28,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="piano">
-        <longName>Staff 1</longName>
+        <InstrumentLabel>
+          <longName>Staff 1</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <Channel>

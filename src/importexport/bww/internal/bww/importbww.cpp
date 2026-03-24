@@ -457,7 +457,6 @@ void MsScWriter::header(const QString title, const QString type,
 
     mu::engraving::Part* part = score->staff(0)->part();
     part->setPlainLongName(instrumentName());
-    part->setPartName(instrumentName());
     part->instrument()->setTrackName(instrumentName());
     part->setMidiProgram(midiProgram() - 1);
 }

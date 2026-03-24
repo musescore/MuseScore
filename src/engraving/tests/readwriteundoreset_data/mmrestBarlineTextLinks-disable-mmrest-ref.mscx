@@ -7,6 +7,8 @@
       <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -42,10 +44,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

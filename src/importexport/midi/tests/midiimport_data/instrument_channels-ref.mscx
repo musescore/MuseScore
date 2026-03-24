@@ -27,10 +27,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Violins</trackName>
       <Instrument id="violins">
-        <longName>Violins</longName>
-        <shortName>Vlns.</shortName>
+        <InstrumentLabel>
+          <longName>Violins</longName>
+          <shortName>Vlns.</shortName>
+          </InstrumentLabel>
         <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -109,10 +110,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trumpet</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet</longName>
-        <shortName>Tpt.</shortName>
+        <InstrumentLabel>
+          <longName>Trumpet</longName>
+          <shortName>Tpt.</shortName>
+          </InstrumentLabel>
         <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -182,10 +184,11 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Trombone</trackName>
       <Instrument id="trombone">
-        <longName>Trombone</longName>
-        <shortName>Tbn.</shortName>
+        <InstrumentLabel>
+          <longName>Trombone</longName>
+          <shortName>Tbn.</shortName>
+          </InstrumentLabel>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>

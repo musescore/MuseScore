@@ -28,10 +28,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName></trackName>
       <Instrument id="wagner-tuba">
-        <longName>Trompete</longName>
-        <shortName>Trp.</shortName>
+        <InstrumentLabel>
+          <longName>Trompete</longName>
+          <shortName>Trp.</shortName>
+          </InstrumentLabel>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>

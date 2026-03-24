@@ -922,17 +922,11 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
             part->instrument()->setLongName(e.readText());
         } else if (tag == "shortName") {
             part->instrument()->setShortName(e.readText());
-        } else if (tag == "trackName") {
-            part->setPartName(e.readText());
         } else if (tag == "show") {
             part->setShow(e.readInt());
         } else {
             e.unknown();
         }
-    }
-
-    if (part->partName().isEmpty()) {
-        part->setPartName(part->instrument()->trackName());
     }
 }
 

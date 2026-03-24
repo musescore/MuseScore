@@ -131,6 +131,7 @@ enum class P_TYPE : unsigned char {
     CAPO_TRANSPOSE_MODE,
 
     INSTRUMENT_NAMES_ALIGN,
+    INSTRUMENT_NAMES_FORMAT,
 
     // Other
     GROUPS,
@@ -366,6 +367,9 @@ public:
 
     PropertyValue(const InstrumentNamesAlign& v)
         : m_type(P_TYPE::INSTRUMENT_NAMES_ALIGN), m_data(make_data<InstrumentNamesAlign>(v)) {}
+
+    PropertyValue(const InstrumentNamesFormat& v)
+        : m_type(P_TYPE::INSTRUMENT_NAMES_FORMAT), m_data(make_data<InstrumentNamesFormat>(v)) {}
 
     bool isValid() const;
 

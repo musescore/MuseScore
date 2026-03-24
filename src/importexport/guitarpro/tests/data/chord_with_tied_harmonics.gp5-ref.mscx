@@ -25,9 +25,10 @@
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <trackName>Nylon Guitar</trackName>
       <Instrument id="cavaquinho">
-        <longName>Nylon Guitar</longName>
+        <InstrumentLabel>
+          <longName>Nylon Guitar</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

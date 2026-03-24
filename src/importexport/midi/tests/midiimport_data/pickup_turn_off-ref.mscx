@@ -27,10 +27,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Soprano, Staff</trackName>
       <Instrument id="soprano">
-        <longName>Soprano, Staff</longName>
-        <shortName>S.</shortName>
+        <InstrumentLabel>
+          <longName>Soprano, Staff</longName>
+          <shortName>S.</shortName>
+          </InstrumentLabel>
         <trackName>Soprano</trackName>
         <minPitchP>60</minPitchP>
         <maxPitchP>84</maxPitchP>

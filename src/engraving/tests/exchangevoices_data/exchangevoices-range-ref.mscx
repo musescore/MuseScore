@@ -4,6 +4,8 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <spatium>1.74978</spatium>
@@ -81,10 +83,11 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Oboe</trackName>
       <Instrument id="oboe">
-        <longName>Oboe</longName>
-        <shortName>Ob.</shortName>
+        <InstrumentLabel>
+          <longName>Oboe</longName>
+          <shortName>Ob.</shortName>
+          </InstrumentLabel>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
         <maxPitchP>96</maxPitchP>

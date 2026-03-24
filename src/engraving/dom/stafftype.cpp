@@ -177,7 +177,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_group == st.m_group);
     equal &= (m_xmlName == st.m_xmlName);
     equal &= (m_staffTypeName == st.m_staffTypeName);
-    equal &= (m_staffName == st.m_staffName);
+    equal &= (m_staffLabel == st.m_staffLabel);
     equal &= (m_userMag == st.m_userMag);
     equal &= (m_yoffset == st.m_yoffset);
     equal &= (m_small == st.m_small);

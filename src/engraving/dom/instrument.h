@@ -29,7 +29,7 @@
 #include "clef.h"
 #include "interval.h"
 #include "notifier.h"
-#include "staffname.h"
+#include "stafflabel.h"
 #include "stringdata.h"
 
 #include "../compat/midi/midicoreevent.h"
@@ -285,6 +285,7 @@ public:
     const String& soundId() const { return m_soundId; }
     void setSoundId(const String& id) { m_soundId = id; }
     String family() const;
+    String group() const;
     void setId(const String& id) { m_id = id; }
     void setMinPitchP(int v) { m_minPitchP = v; }
     void setMaxPitchP(int v) { m_maxPitchP = v; }
@@ -326,12 +327,19 @@ public:
     void setStringData(const StringData& d) { m_stringData.set(d); }
     bool hasStrings() const { return m_stringData.strings() > 0; }
 
-    void setLongName(const String& f) { m_instrumentName.setLongName(f); }
-    void setShortName(const String& f) { m_instrumentName.setShortName(f); }
-    void setInstrumentName(const StaffName& n) { m_instrumentName = n; }
-    const String& longName() const { return m_instrumentName.longName(); }
-    const String& shortName() const { return m_instrumentName.shortName(); }
-    const StaffName& instrumentName() const { return m_instrumentName; }
+    void setLongName(const String& f) { m_instrumentLabel.setLongName(f); }
+    void setShortName(const String& f) { m_instrumentLabel.setShortName(f); }
+    void setInstrumentName(const InstrumentLabel& n) { m_instrumentLabel = n; }
+    const String& longName() const { return m_instrumentLabel.longName(); }
+    const String& shortName() const { return m_instrumentLabel.shortName(); }
+    const InstrumentLabel& instrumentLabel() const { return m_instrumentLabel; }
+    InstrumentLabel& instrumentLabel() { return m_instrumentLabel; }
+
+    int number() const { return m_instrumentLabel.number(); }
+    void setNumber(int v) { return m_instrumentLabel.setNumber(v); }
+
+    const String& transposition() const { return m_instrumentLabel.transposition(); }
+    void setTransposition(const String& s) { m_instrumentLabel.setTransposition(s); }
 
     int minPitchP() const;
     int maxPitchP() const;
@@ -369,7 +377,7 @@ public:
 
 private:
 
-    StaffName m_instrumentName;
+    InstrumentLabel m_instrumentLabel;
 
     String m_trackName;
     String m_id;
@@ -395,6 +403,9 @@ private:
 
     Trait m_trait;
     bool m_isPrimary = false;
+
+    mutable String m_familyCache;
+    mutable String m_groupCache;
 
     GlissandoStyle m_glissandoStyle = GlissandoStyle::CHROMATIC;
 };

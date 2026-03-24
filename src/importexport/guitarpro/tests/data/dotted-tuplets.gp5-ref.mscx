@@ -24,9 +24,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Bells</trackName>
       <Instrument id="xylomarimba">
-        <longName>Bells</longName>
+        <InstrumentLabel>
+          <longName>Bells</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pitched-percussion.xylomarimba</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>

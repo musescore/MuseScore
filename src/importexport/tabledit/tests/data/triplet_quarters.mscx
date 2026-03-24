@@ -54,9 +54,10 @@
           <useNumbers>1</useNumbers>
           </StaffType>
         </Staff>
-      <trackName>Guitar Standard</trackName>
       <Instrument id="cavaquinho">
-        <longName>Guitar Standard</longName>
+        <InstrumentLabel>
+          <longName>Guitar Standard</longName>
+          </InstrumentLabel>
         <trackName></trackName>
         <instrumentId>pluck.guitar</instrumentId>
         <StringData>

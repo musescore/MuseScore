@@ -82,10 +82,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Snare Drum</trackName>
       <Instrument id="snare-drum">
-        <longName>Snare Drum</longName>
-        <shortName>SD</shortName>
+        <InstrumentLabel>
+          <longName>Snare Drum</longName>
+          <shortName>SD</shortName>
+          </InstrumentLabel>
         <trackName>Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>

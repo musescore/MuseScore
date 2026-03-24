@@ -30,8 +30,10 @@
         </Staff>
       <trackName>Soprano</trackName>
       <Instrument id="piano">
-        <longName>Soprano</longName>
-        <shortName>S</shortName>
+        <InstrumentLabel>
+          <longName>Soprano</longName>
+          <shortName>S</shortName>
+          </InstrumentLabel>
         <trackName>Soprano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -94,8 +96,10 @@
         </Staff>
       <trackName>Alto</trackName>
       <Instrument id="piano">
-        <longName>Alto</longName>
-        <shortName>A</shortName>
+        <InstrumentLabel>
+          <longName>Alto</longName>
+          <shortName>A</shortName>
+          </InstrumentLabel>
         <trackName>Alto</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -158,8 +162,10 @@
         </Staff>
       <trackName>Tenor</trackName>
       <Instrument id="piano">
-        <longName>Tenor</longName>
-        <shortName>T</shortName>
+        <InstrumentLabel>
+          <longName>Tenor</longName>
+          <shortName>T</shortName>
+          </InstrumentLabel>
         <trackName>Tenor</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -222,8 +228,10 @@
         </Staff>
       <trackName>Bass</trackName>
       <Instrument id="piano">
-        <longName>Bass</longName>
-        <shortName>B</shortName>
+        <InstrumentLabel>
+          <longName>Bass</longName>
+          <shortName>B</shortName>
+          </InstrumentLabel>
         <trackName>Bass</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>

@@ -65,6 +65,8 @@ enum class CommandType : signed char {
     // Instruments
     ChangeInstrumentShort,
     ChangeInstrumentLong,
+    ChangeInstrumentGroupOptions,
+    ChangeInstrumentNumber,
     ChangeInstrument,
     ChangeDrumset,
 

@@ -50,7 +50,6 @@
         <StaffType group="pitched">
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <trackName>Piano</trackName>
         <instrumentId>keyboard.piano</instrumentId>

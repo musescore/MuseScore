@@ -80,6 +80,27 @@ EditStaff::EditStaff(QWidget* parent)
     connect(showBarlines,     &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
     connect(invisible,        &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
 
+    connect(useDefaultName, &QRadioButton::clicked, this, [&]() {
+        useCustomNameChanged(!useDefaultName->isChecked());
+    });
+    connect(useCustomName, &QRadioButton::clicked, this, [&]() {
+        useCustomNameChanged(useCustomName->isChecked());
+    });
+
+    connect(useDefaultGroupName, &QRadioButton::clicked, this, [&]() {
+        useCustomGroupNameChanged(!useDefaultGroupName->isChecked());
+    });
+    connect(useCustomGroupName, &QRadioButton::clicked, this, [&]() {
+        useCustomGroupNameChanged(useCustomGroupName->isChecked());
+    });
+
+    connect(useDefaultIndividualName, &QRadioButton::clicked, this, [&]() {
+        useCustomIndividualNameChanged(!useDefaultIndividualName->isChecked());
+    });
+    connect(useCustomIndividualName, &QRadioButton::clicked, this, [&]() {
+        useCustomIndividualNameChanged(useCustomIndividualName->isChecked());
+    });
+
     connect(color, &Awl::ColorLabel::colorChanged, this, &EditStaff::colorChanged);
 
     connect(mag, &QDoubleSpinBox::valueChanged, this, &EditStaff::magChanged);
@@ -199,6 +220,33 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(m_instrument.nameAsPlainText());
     shortName->setPlainText(m_instrument.abbreviatureAsPlainText());
+    instrumentNumber->setValue(m_instrument.number());
+
+    const InstrumentLabel& instrLabel = m_instrument.instrumentLabel();
+    showNumberLong->setChecked(instrLabel.showNumberLong());
+    showNumberShort->setChecked(instrLabel.showNumberShort());
+    showTranspositionLong->setChecked(instrLabel.showTranspositionLong());
+    showTranspositionShort->setChecked(instrLabel.showTranspositionShort());
+    transpositionLabel->setText(TextBase::unEscape(instrLabel.transposition()));
+
+    useDefaultName->setChecked(!instrLabel.useCustomName());
+    useCustomName->setChecked(instrLabel.useCustomName());
+    customNameGroupbox->setEnabled(instrLabel.useCustomName());
+    customLongName->setText(TextBase::unEscape(instrLabel.customNameLong()));
+    customShortName->setText(TextBase::unEscape(instrLabel.customNameShort()));
+
+    allowGroupName->setChecked(instrLabel.allowGroupName());
+    useDefaultGroupName->setChecked(!instrLabel.useCustomGroupName());
+    useCustomGroupName->setChecked(instrLabel.useCustomGroupName());
+    customGroupNameGroupbox->setEnabled(instrLabel.useCustomGroupName());
+    customLongNameGroup->setPlainText(TextBase::unEscape(instrLabel.customNameLongGroup()));
+    customShortNameGroup->setPlainText(TextBase::unEscape(instrLabel.customNameShortGroup()));
+
+    useDefaultIndividualName->setChecked(!instrLabel.useCustomIndividualName());
+    useCustomIndividualName->setChecked(instrLabel.useCustomIndividualName());
+    customIndividualNameGroupbox->setEnabled(instrLabel.useCustomIndividualName());
+    customLongNameIndividual->setPlainText(TextBase::unEscape(instrLabel.customNameLongIndividual()));
+    customShortNameIndividual->setPlainText(TextBase::unEscape(instrLabel.customNameShortIndividual()));
 
     const InstrumentTemplate* templ = mu::engraving::searchTemplate(m_instrument.id());
     if (templ) {
@@ -424,6 +472,27 @@ void EditStaff::shortNameChanged()
     m_staff->staffType(m_tick)->setShortName(shortStaffName->toPlainText());
 }
 
+void EditStaff::useCustomNameChanged(bool useCustom)
+{
+    useDefaultName->setChecked(!useCustom);
+    useCustomName->setChecked(useCustom);
+    customNameGroupbox->setEnabled(useCustom);
+}
+
+void EditStaff::useCustomGroupNameChanged(bool useCustomGroup)
+{
+    useDefaultGroupName->setChecked(!useCustomGroup);
+    useCustomGroupName->setChecked(useCustomGroup);
+    customGroupNameGroupbox->setEnabled(useCustomGroup);
+}
+
+void EditStaff::useCustomIndividualNameChanged(bool useCustomIndividual)
+{
+    useDefaultIndividualName->setChecked(!useCustomIndividual);
+    useCustomIndividualName->setChecked(useCustomIndividual);
+    customIndividualNameGroupbox->setEnabled(useCustomIndividual);
+}
+
 INotationPtr EditStaff::notation() const
 {
     return globalContext()->currentNotation();
@@ -500,6 +569,49 @@ Instrument EditStaff::instrument() const
     return part ? *part->instrument(m_instrumentKey.tick) : Instrument();
 }
 
+std::vector<InstrumentKey> EditStaff::otherInstrumentsInSameGroup() const
+{
+    Part* part = m_orgStaff->part();
+    Score* score = m_orgStaff->score();
+
+    Measure* measure = score->tick2measure(m_tick);
+    IF_ASSERT_FAILED(measure) {
+        return {};
+    }
+
+    System* system = measure->system();
+    IF_ASSERT_FAILED(system) {
+        return {};
+    }
+
+    const std::unordered_map<Part*, InstrumentName*>& partsWithGroupName = system->ldata()->partsWithGroupName();
+    if (!muse::contains(partsWithGroupName, part)) {
+        return {};
+    }
+
+    InstrumentName* groupName = partsWithGroupName.at(part);
+
+    std::vector<InstrumentKey> result;
+    for (const auto& pair : partsWithGroupName) {
+        Part* p = pair.first;
+        if (p == part) {
+            continue;
+        }
+
+        InstrumentName* n = pair.second;
+        if (n == groupName) {
+            Instrument* instrument = p->instrument(m_tick);
+            InstrumentKey key;
+            key.instrumentId = instrument->id();
+            key.partId = p->id();
+            key.tick = Fraction::fromTicks(muse::findLessOrEqual(p->instruments(), m_tick.ticks())->first);
+            result.push_back(key);
+        }
+    }
+
+    return result;
+}
+
 void EditStaff::applyStaffProperties()
 {
     StaffConfig config;
@@ -529,6 +641,7 @@ void EditStaff::applyPartProperties()
                                muse::trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
+
     QString sn = _sn;
     QString ln = _ln;
     QString ssn = _ssn;
@@ -549,6 +662,8 @@ void EditStaff::applyPartProperties()
         interval.flip();
     }
 
+    Instrument prevInstrument = m_instrument;
+
     m_instrument.setTranspose(interval);
     m_instrument.setMinPitchA(m_minPitchA);
     m_instrument.setMaxPitchA(m_maxPitchA);
@@ -557,13 +672,45 @@ void EditStaff::applyPartProperties()
 
     m_instrument.setShortName(String::fromQString(sn));
     m_instrument.setLongName(String::fromQString(ln));
+    m_instrument.setNumber(instrumentNumber->value());
+
+    InstrumentLabel& name = m_instrument.instrumentLabel();
+    name.setShowNumberLong(showNumberLong->isChecked());
+    name.setShowNumberShort(showNumberShort->isChecked());
+    name.setShowTranspositionLong(showTranspositionLong->isChecked());
+    name.setShowTranspositionShort(showTranspositionShort->isChecked());
+    name.setTransposition(transpositionLabel->text());
+    name.setUseCustomName(useCustomName->isChecked());
+    name.setCustomNameLong(customLongName->toPlainText());
+    name.setCustomNameShort(customShortName->toPlainText());
+    name.setAllowGroupName(allowGroupName->isChecked());
+    name.setUseCustomGroupName(useCustomGroupName->isChecked());
+    name.setCustomNameLongGroup(customLongNameGroup->toPlainText());
+    name.setCustomNameShortGroup(customShortNameGroup->toPlainText());
+    name.setUseCustomIndividualName(useCustomIndividualName->isChecked());
+    name.setCustomNameLongIndividual(customLongNameIndividual->toPlainText());
+    name.setCustomNameShortIndividual(customShortNameIndividual->toPlainText());
+
+    if (name.useCustomGroupName() && (name.customNameLongGroup().empty() || name.customNameShortGroup().empty())) {
+        interactive()->warning(muse::trc("notation/staffpartproperties", "Invalid group name"),
+                               muse::trc("notation/staffpartproperties", "Custom group names cannot be empty."));
+        return;
+    }
 
     size_t staffIdxInPart = muse::indexOf(part->staves(), m_orgStaff);
     DO_ASSERT(staffIdxInPart != muse::nidx);
 
-    if (m_instrument.id() != m_orgInstrument.id()) {
+    if (m_instrument.id() != prevInstrument.id()) {
         masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);
-    } else if (m_instrument != m_orgInstrument) {
+    } else if (m_instrument != prevInstrument) {
+        bool groupNameChanged = name.useCustomGroupName() != prevInstrument.instrumentLabel().useCustomGroupName()
+                                || name.customNameLongGroup() != prevInstrument.instrumentLabel().customNameLongGroup()
+                                || name.customNameShortGroup() != prevInstrument.instrumentLabel().customNameShortGroup();
+        if (groupNameChanged) {
+            notationParts()->setInstrumentGroupNameOptions(otherInstrumentsInSameGroup(),
+                                                           name.useCustomGroupName(), name.customNameLongGroup(),
+                                                           name.customNameShortGroup());
+        }
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
     }
 

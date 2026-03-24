@@ -29,8 +29,10 @@
         </Staff>
       <trackName>Drumset</trackName>
       <Instrument id="drumset">
-        <longName>Drumset</longName>
-        <shortName>Drs.</shortName>
+        <InstrumentLabel>
+          <longName>Drumset</longName>
+          <shortName>Drs.</shortName>
+          </InstrumentLabel>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>

@@ -28,7 +28,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Electric Guitar</trackName>
       <Instrument id="electric-guitar">
         <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>

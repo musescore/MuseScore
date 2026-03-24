@@ -53,7 +53,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     setId(part->id());
 
-    const String instName = part->instrument()->nameAsPlainText();
+    const String instName = part->partName();
     setTitle(instName.simplified()); // Collapse whitespace...
 
     setIsVisible(visible);
@@ -77,7 +77,7 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
         return;
     }
 
-    const String instName = m_part->instrument()->nameAsPlainText();
+    const String instName = m_part->partName();
     setTitle(instName.simplified()); // Collapse whitespace...
 
     m_ignoreVisibilityChange = true;

@@ -65,9 +65,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -128,9 +129,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Voice</trackName>
       <Instrument id="voice">
-        <longName>Voice</longName>
+        <InstrumentLabel>
+          <longName>Voice</longName>
+          </InstrumentLabel>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>84</maxPitchP>
@@ -191,7 +193,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>P3</trackName>
       <Instrument id="bass">
         <trackName>Bass</trackName>
         <minPitchP>38</minPitchP>
