@@ -22,6 +22,8 @@
 
 #include "instrument.h"
 
+#include "translation.h"
+
 #include "drumset.h"
 #include "instrtemplate.h"
 #include "masterscore.h"
@@ -1063,6 +1065,14 @@ bool InstrumentList::contains(const String& instrumentId) const
 
 String Instrument::trackName() const
 {
+    return m_trackName;
+}
+
+String Instrument::trackNameWithTrait() const
+{
+    if (m_trait.type == TraitType::Transposition && !m_trait.isHiddenOnScore) {
+        return muse::mtrc("engraving", "%1 in %2").arg(m_trackName, m_trait.name);
+    }
     return m_trackName;
 }
 

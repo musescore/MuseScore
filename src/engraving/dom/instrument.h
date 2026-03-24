@@ -348,6 +348,7 @@ public:
     String musicXmlId() const;
 
     String trackName() const;
+    String trackNameWithTrait() const;
     void setTrackName(const String& s);
     String nameAsXmlText() const;
     String nameAsPlainText() const;
