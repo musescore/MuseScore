@@ -858,6 +858,7 @@ String Part::partName() const
 
     const String& transp = i->transposition();
     if (!transp.empty()) {
+        //: For instrument transposition, e.g. Horn in F
         fullName += u" " + muse::mtrc("notation", "in") + u" " + transp;
     }
 

@@ -334,7 +334,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
 
             groupNames.push_back(groupName);
             groupName->mutldata()->setColumn(1);
-            for (staff_idx_t groupIdx = groupName->staffIdx(); groupIdx < groupName->endIdxOfGroup(); ++groupIdx) {
+            for (staff_idx_t groupIdx = groupName->staffIdx(); groupIdx < groupName->ldata()->endIdxOfGroup(); ++groupIdx) {
                 partsWithGroupNames.insert(ctx.dom().staff(groupIdx)->part());
             }
             ldata->setSecondColumnWidth(std::max(ldata->secondColumnWidth(), groupName->width()));
@@ -416,7 +416,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
 
     for (InstrumentName* groupName : groupNames) {
         staff_idx_t startStaff = groupName->staffIdx();
-        staff_idx_t endStaff = groupName->endIdxOfGroup();
+        staff_idx_t endStaff = groupName->ldata()->endIdxOfGroup();
         if (ldata->useLongNames() && system->visiblePartsOfGroup(startStaff, endStaff).size() % 2 == 0) {
             continue;
         }
@@ -536,7 +536,7 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         const RectF& bbox = groupName->ldata()->bbox();
         double yCenter = 0.5 * (bbox.bottom() + bbox.top());
 
-        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(staffIdx, groupName->endIdxOfGroup());
+        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(staffIdx, groupName->ldata()->endIdxOfGroup());
         size_t visiblePartsCount = visibleParts.size();
         DO_ASSERT(visiblePartsCount > 0);
 
@@ -712,7 +712,7 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
             return;
         }
 
-        std::vector<Part*> visiblePartsOfGroup = system->visiblePartsOfGroup(staffIdx, name->endIdxOfGroup());
+        std::vector<Part*> visiblePartsOfGroup = system->visiblePartsOfGroup(staffIdx, name->ldata()->endIdxOfGroup());
         size_t visiblePartsCount = visiblePartsOfGroup.size();
         if (visiblePartsCount % 2 == 0) {
             name->mutldata()->setPosX(totalNamesWidth - bbox.right());
@@ -833,6 +833,7 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
     InstrumentNamesFormat nameFormat
         = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
 
+    //: For instrument transposition, e.g. Horn in F
     String in = TranslatableString("notation", "in").translated();
 
     switch (nameFormat) {
@@ -876,6 +877,7 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     InstrumentNamesFormat nameFormat
         = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
 
+    //: For instrument transposition, e.g. Horn in F
     String in = TranslatableString("notation", "in").translated();
 
     switch (nameFormat) {
@@ -1049,7 +1051,7 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
             InstrumentName* groupName = updateName(system, startOfGroup, ctx, name, type, InstrumentNameRole::GROUP);
 
             if (groupName) {
-                groupName->setEndIdxOfGroup(endOfGroup);
+                groupName->mutldata()->setEndIdxOfGroup(endOfGroup);
 
                 for (Part* p : partsInThisGroup) {
                     ldata->addPartWithGroupNames(p, groupName);

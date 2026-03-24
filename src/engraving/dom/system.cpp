@@ -582,7 +582,7 @@ void System::remove(EngravingItem* el)
         } else {
             sysStaff->individualStaffName = nullptr;
         }
-        n->setSysStaff(0);
+        n->setSysStaff(nullptr);
         break;
     }
     case ElementType::BEAM:
@@ -1251,7 +1251,7 @@ std::vector<staff_idx_t> System::visibleStavesOfPart(const Part* part) const
     return result;
 }
 
-std::vector<mu::engraving::Part*> mu::engraving::System::visiblePartsOfGroup(staff_idx_t start, staff_idx_t end) const
+std::vector<Part*> System::visiblePartsOfGroup(staff_idx_t start, staff_idx_t end) const
 {
     std::vector<Part*> result;
 
