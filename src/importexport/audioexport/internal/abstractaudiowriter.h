@@ -38,10 +38,6 @@ class AbstractAudioWriter : public project::INotationWriter, public muse::Contex
 {
 public:
     muse::GlobalInject<IAudioExportConfiguration> configuration;
-    muse::ContextInject<muse::audio::IPlayback> playback = { this };
-    muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::ContextInject<muse::audio::IStartAudioController> startAudioController = { this };
-    muse::ContextInject<playback::IPlaybackController> playbackController  = { this };
     muse::GlobalInject<muse::IApplication> application;
 
 public:
@@ -66,6 +62,7 @@ private:
 
     UnitType unitTypeFromOptions(const Options& options) const;
 
+    muse::modularity::ContextPtr m_iocContext;
     muse::Progress m_progress;
     bool m_isCompleted = false;
     muse::Ret m_writeRet;

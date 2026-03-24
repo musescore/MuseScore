@@ -116,6 +116,11 @@ Notation::~Notation()
     m_score = nullptr;
 }
 
+const muse::modularity::ContextPtr& Notation::iocContext() const
+{
+    return muse::Contextable::iocContext();
+}
+
 mu::project::INotationProject* Notation::project() const
 {
     return m_masterNotation ? m_masterNotation->project() : nullptr;

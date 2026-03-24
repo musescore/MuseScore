@@ -45,6 +45,8 @@ public:
     explicit Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
     ~Notation() override;
 
+    const muse::modularity::ContextPtr& iocContext() const override;
+
     project::INotationProject* project() const override;
     IMasterNotationPtr masterNotation() const override;
 

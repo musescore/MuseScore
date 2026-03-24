@@ -55,6 +55,8 @@ class INotation
 public:
     virtual ~INotation() = default;
 
+    virtual const muse::modularity::ContextPtr& iocContext() const = 0;
+
     virtual project::INotationProject* project() const = 0;
     virtual IMasterNotationPtr masterNotation() const = 0;
 
