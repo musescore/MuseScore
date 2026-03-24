@@ -57,6 +57,7 @@ signals:
 private:
     QString deviceName(const muse::midi::MidiDeviceID& deviceId) const;
 
+    bool m_loaded = false;
     RemoteEvent m_event;
 };
 }
