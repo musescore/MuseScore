@@ -188,11 +188,14 @@ fixup_qml_module_dependencies(muse_uicomponents_qml)
 
 if (OS_IS_MAC)
     target_sources(muse_uicomponents_qml PRIVATE
+        internal/platform/macos/macoschildwindowcontroller.mm
+        internal/platform/macos/macoschildwindowcontroller.h
         internal/platform/macos/macospopupviewclosecontroller.mm
         internal/platform/macos/macospopupviewclosecontroller.h
         )
 
     set_source_files_properties(
+        internal/platform/macos/macoschildwindowcontroller.mm
         internal/platform/macos/macospopupviewclosecontroller.mm
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON

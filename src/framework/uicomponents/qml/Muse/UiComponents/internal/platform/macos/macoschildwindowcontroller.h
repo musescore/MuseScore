@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
-import Muse.Ui
-import Muse.UiComponents
+#pragma once
 
-StyledDialogView {
-    id: root
+class QWindow;
 
-    property alias instanceId: editor.instanceId
-
-    title: editor.title
-
-    contentHeight: editor.implicitHeight
-    contentWidth: editor.implicitWidth
-
-    nativeChildWindow: true
-
-    VstEditor {
-        id: editor
-        anchors.fill: parent
-    }
+namespace muse::uicomponents {
+class MacOSChildWindowController
+{
+public:
+    static void attachWindow(QWindow* childWindow, QWindow* parentWindow);
+    static void detachWindow(QWindow* childWindow);
+};
 }

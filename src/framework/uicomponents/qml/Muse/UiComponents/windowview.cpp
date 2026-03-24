@@ -197,6 +197,7 @@ void WindowView::showView()
     });
 
     m_view->show();
+    afterShow();
 
     const QQuickItem* item = m_view->rootObject();
     if (item) {
