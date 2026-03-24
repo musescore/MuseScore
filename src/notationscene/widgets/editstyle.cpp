@@ -228,7 +228,11 @@ static void fillDynamicHairpinComboBox(QComboBox* comboBox)
 //---------------------------------------------------------
 
 EditStyle::EditStyle(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
+{
+}
+
+void EditStyle::classBegin()
 {
     //! NOTE: suppress all accessibility events causing a long delay when opening the dialog (massive spam from setupUi)
     accessibilityController()->setIgnoreQtAccessibilityEvents(true);
@@ -1017,8 +1021,8 @@ EditStyle::EditStyle(QWidget* parent)
     // Signal Mappers
     // ====================================================
 
-    QSignalMapper* setSignalMapper = new QSignalMapper(this); // value change signals
-    QSignalMapper* resetSignalMapper = new QSignalMapper(this); // reset style signals
+    QSignalMapper* setSignalMapper = new QSignalMapper(this);     // value change signals
+    QSignalMapper* resetSignalMapper = new QSignalMapper(this);     // reset style signals
 
     const auto mapFunction = QOverload<>::of(&QSignalMapper::map);
 

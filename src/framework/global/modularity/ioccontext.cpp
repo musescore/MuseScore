@@ -63,9 +63,26 @@ muse::modularity::ContextPtr muse::iocCtxForQmlContext(const QQmlContext* ctx)
     return qmlIoc->ctx;
 }
 
-muse::modularity::ContextPtr muse::iocCtxForQWidget(const QWidget*)
+muse::Contextable::GetContext muse::iocCtxForQWidget(const QWidget* w)
 {
-    return muse::modularity::globalCtx();
+    return [w]() {
+        IF_ASSERT_FAILED(w) {
+            return modularity::ContextPtr();
+        }
+
+        const QObject* obj = w;
+        while (obj) {
+            bool ok = false;
+            int ctxId = obj->property("ioc_context").toInt(&ok);
+            if (ok) {
+                return std::make_shared<modularity::Context>(ctxId);
+            }
+            obj = obj->parent();
+        }
+
+        UNREACHABLE;
+        return modularity::ContextPtr();
+    };
 }
 
 #endif

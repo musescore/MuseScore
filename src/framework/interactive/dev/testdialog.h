@@ -22,14 +22,14 @@
 
 #pragma once
 
-#include <QDialog>
+#include "ui/view/widgetdialog.h"
 
 namespace Ui {
 class TestDialog;
 }
 
 namespace muse::interactive {
-class TestDialog : public QDialog
+class TestDialog : public muse::ui::WidgetDialog
 {
     Q_OBJECT
 
@@ -38,6 +38,8 @@ class TestDialog : public QDialog
 public:
     explicit TestDialog(QWidget* parent = nullptr);
     ~TestDialog() override;
+
+    void componentComplete() override {}
 
     QString title() const;
 

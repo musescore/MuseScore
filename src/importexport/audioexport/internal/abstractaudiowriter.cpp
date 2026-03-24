@@ -143,8 +143,10 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     };
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, playback, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
         m_progress.start();
+
+        muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
             playback()->saveSoundTrackProgressChanged(sequenceId)

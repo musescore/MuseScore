@@ -37,13 +37,16 @@ using namespace muse::ui;
 using namespace mu::engraving;
 
 PageSettings::PageSettings(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("PageSettings");
     setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
+}
 
+void PageSettings::componentComplete()
+{
     mmUnit = configuration()->metricUnit();
     _changeFlag = false;
 

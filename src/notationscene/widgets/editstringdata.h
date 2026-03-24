@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <QDialog>
+#include "ui/view/widgetdialog.h"
 
 #include "ui_editstringdata.h"
 #include "engraving/dom/stringdata.h"
@@ -34,7 +34,7 @@ namespace mu::notation {
 //   EditStringData
 //---------------------------------------------------------
 
-class EditStringData : public QDialog, private Ui::EditStringDataBase, public muse::Contextable
+class EditStringData : public muse::ui::WidgetDialog, private Ui::EditStringDataBase
 {
     Q_OBJECT
 
@@ -42,6 +42,8 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase, public mu
 
 public:
     EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);
+
+    void componentComplete() override;
 
     std::vector<mu::engraving::instrString> strings() const;
     int frets() const;

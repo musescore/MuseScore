@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_transposedialog.h"
 
 #include "modularity/ioc.h"
@@ -46,7 +48,7 @@ struct TransposeDialogState {
     int needTransposeDoubleSharpsFlatsIdx = 1;
 };
 
-class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Contextable
+class TransposeDialog : public muse::ui::WidgetDialog, private Ui::TransposeDialogBase
 {
     Q_OBJECT
 
@@ -55,6 +57,8 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase, public muse::Co
 public:
 
     TransposeDialog(QWidget* parent = 0);
+
+    void componentComplete() override;
 
 private slots:
     void transposeByKeyToggled(bool);

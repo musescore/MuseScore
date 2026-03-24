@@ -143,16 +143,9 @@ struct SymbolIcon {
 };
 
 CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName(QStringLiteral("CustomizeKitDialog"));
-
-    m_notation = globalContext()->currentNotation();
-    if (!m_notation) {
-        return;
-    }
-
-    initDrumsetAndKey();
 
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -276,6 +269,16 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
+}
+
+void CustomizeKitDialog::componentComplete()
+{
+    m_notation = globalContext()->currentNotation();
+    if (!m_notation) {
+        return;
+    }
+
+    initDrumsetAndKey();
 }
 
 //---------------------------------------------------------

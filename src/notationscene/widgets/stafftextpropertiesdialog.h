@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_stafftextpropertiesdialog.h"
 
 #include "modularity/ioc.h"
@@ -31,7 +33,7 @@ class StaffTextBase;
 }
 
 namespace mu::notation {
-class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextPropertiesDialog, public muse::Contextable
+class StaffTextPropertiesDialog : public muse::ui::WidgetDialog, private Ui::StaffTextPropertiesDialog
 {
     Q_OBJECT
 
@@ -40,6 +42,8 @@ class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextProperties
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);
     ~StaffTextPropertiesDialog() override;
+
+    void componentComplete() override;
 
 private slots:
     void saveValues();

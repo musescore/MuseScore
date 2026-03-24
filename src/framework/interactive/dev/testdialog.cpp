@@ -25,7 +25,7 @@
 using namespace muse::interactive;
 
 TestDialog::TestDialog(QWidget* parent)
-    : QDialog(parent),
+    : muse::ui::WidgetDialog(parent),
     ui(new Ui::TestDialog)
 {
     ui->setupUi(this);

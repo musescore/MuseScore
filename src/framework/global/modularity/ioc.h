@@ -93,6 +93,6 @@ public:
 
 Contextable::GetContext iocCtxForQmlObject(const QObject* o);
 modularity::ContextPtr iocCtxForQmlContext(const QQmlContext* c);
-modularity::ContextPtr iocCtxForQWidget(const QWidget* o);
+muse::Contextable::GetContext iocCtxForQWidget(const QWidget* o);
 #endif
 }

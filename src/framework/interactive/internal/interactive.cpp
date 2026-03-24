@@ -39,6 +39,7 @@
 #include "diagnostics/diagnosticutils.h"
 
 #include "widgetdialogadapter.h"
+#include "ui/view/widgetdialog.h"
 
 #include "muse_framework_config.h"
 
@@ -1008,14 +1009,20 @@ RetVal<Interactive::OpenData> Interactive::openWidgetDialog(const Uri& uri, cons
     QString objectId = QString("%1_%2").arg(widgetMetaTypeId).arg(++count);
 
     QMetaType metaType = QMetaType(widgetMetaTypeId);
-    QDialog* dialog = static_cast<QDialog*>(metaType.create());
+    ui::WidgetDialog* dialog = static_cast<ui::WidgetDialog*>(metaType.create());
 
     if (!dialog) {
         result.ret = make_ret(Ret::Code::UnknownError);
         return result;
     }
 
+    dialog->setProperty("ioc_context", iocContext()->id);
+
+    dialog->classBegin();
+
     fillData(dialog, params);
+
+    dialog->componentComplete();
 
     //! NOTE Will be deleted with the dialog
     WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog);

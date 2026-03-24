@@ -38,12 +38,15 @@ using namespace muse::ui;
 //---------------------------------------------------------
 
 SelectDialog::SelectDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("SelectDialog");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
 
+void SelectDialog::componentComplete()
+{
     const INotationInteractionPtr interaction = globalContext()->currentNotation()->interaction();
     IF_ASSERT_FAILED(interaction) {
         return;

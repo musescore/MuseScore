@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <QDialog>
+#include "ui/view/widgetdialog.h"
 
 #include "ui_measureproperties.h"
 #include "modularity/ioc.h"
@@ -34,7 +34,7 @@ class Measure;
 }
 
 namespace mu::notation {
-class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBase, public muse::Contextable
+class MeasurePropertiesDialog : public muse::ui::WidgetDialog, private Ui::MeasurePropertiesBase
 {
     Q_OBJECT
 
@@ -42,6 +42,8 @@ class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBas
 
 public:
     MeasurePropertiesDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
 private slots:
     void bboxClicked(QAbstractButton* button);

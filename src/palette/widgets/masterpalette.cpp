@@ -88,6 +88,11 @@ MasterPalette::MasterPalette(QWidget* parent)
 
     setObjectName("MasterPalette");
     setupUi(this);
+}
+
+void MasterPalette::componentComplete()
+{
+    TopLevelDialog::componentComplete();
 
     treeWidget->clear();
 

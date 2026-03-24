@@ -30,11 +30,14 @@
 using namespace mu::notation;
 
 RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : muse::ui::WidgetDialog(parent)
 {
     setObjectName("RealizeHarmonyDialog");
     setupUi(this);
+}
 
+void RealizeHarmonyDialog::componentComplete()
+{
     chordTable->setVisible(false);
     connect(showButton, SIGNAL(clicked()), SLOT(toggleChordTable()));
 
