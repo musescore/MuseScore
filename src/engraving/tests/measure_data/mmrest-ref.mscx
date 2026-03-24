@@ -159,7 +159,7 @@
               <eid>N_N</eid>
               <Segment>
                 <subtype>0</subtype>
-                <offset x="0" y="-1"/>
+                <offset x="0" y="0"/>
                 <off2 x="0.106397" y="0"/>
                 <eid>O_O</eid>
                 </Segment>

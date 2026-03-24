@@ -157,7 +157,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>O_O</eid>
-            <offset x="1.66488" y="-2.29189"/>
+            <offset x="1.66488" y="0.20811"/>
             </Harmony>
           <Chord>
             <eid>P_P</eid>
@@ -396,7 +396,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>4_4</eid>
-            <offset x="-1.66488" y="-2.5"/>
+            <offset x="-1.66488" y="0"/>
             </Harmony>
           <Chord>
             <eid>5_5</eid>
@@ -844,7 +844,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>JC_JC</eid>
-            <offset x="-2.70543" y="-2.60405"/>
+            <offset x="-2.70543" y="-0.10405"/>
             </Harmony>
           <Chord>
             <eid>KC_KC</eid>

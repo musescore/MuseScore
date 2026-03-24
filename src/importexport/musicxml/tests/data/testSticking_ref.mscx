@@ -334,6 +334,7 @@
             </Chord>
           <Sticking>
             <eid>R_R</eid>
+            <offset x="-2" y="0"/>
             <text>L</text>
             </Sticking>
           <Chord>

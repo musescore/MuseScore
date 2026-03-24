@@ -1354,6 +1354,7 @@
                 </harmonyInfo>
               <eid>QD_QD</eid>
               <linkedTo>f_f</linkedTo>
+              <offset x="0" y="-3.22581"/>
               </Harmony>
             <Chord>
               <eid>RD_RD</eid>

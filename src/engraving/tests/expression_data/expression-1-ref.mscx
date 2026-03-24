@@ -126,7 +126,6 @@
         <voice>
           <Expression>
             <eid>K_K</eid>
-            <snapToDynamics>0</snapToDynamics>
             <text>expr text</text>
             </Expression>
           <Chord>
@@ -145,8 +144,8 @@
         <voice>
           <Expression>
             <eid>O_O</eid>
+            <offset x="0" y="2.61718"/>
             <snapToDynamics>0</snapToDynamics>
-            <offset x="0" y="5.11718"/>
             <text>expr <b>text</b></text>
             </Expression>
           <Chord>
@@ -165,8 +164,8 @@
         <voice>
           <Expression>
             <eid>S_S</eid>
+            <offset x="0" y="-3.22943"/>
             <snapToDynamics>0</snapToDynamics>
-            <offset x="0" y="-4.72943"/>
             <text><i>expr </i><u>text</u></text>
             </Expression>
           <Chord>
