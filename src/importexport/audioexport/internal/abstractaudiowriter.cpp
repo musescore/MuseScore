@@ -79,6 +79,7 @@ Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const
 
 void AbstractAudioWriter::abort()
 {
+    muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     playback()->abortSavingAllSoundTracks();
     m_isCompleted = true;
 }
@@ -92,6 +93,13 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                                         io::IODevice& dstDevice,
                                         const SoundTrackFormat& format)
 {
+    //! NOTE Temporary fix for the context injection
+    m_iocContext = notation->iocContext();
+
+    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
+    muse::ContextInject<muse::audio::IStartAudioController> startAudioController = { m_iocContext };
+    muse::ContextInject<playback::IPlaybackController> playbackController  = { m_iocContext };
+
     //! NOTE Waiting for the audio system to start if it is not already running
     while (!startAudioController()->isAudioStarted()) {
         application()->processEvents();
@@ -119,6 +127,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
 void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format)
 {
+    muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
 
     auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
@@ -134,7 +143,7 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     };
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, playback, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
         m_progress.start();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
@@ -149,12 +158,14 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
                 m_progress.finish(muse::make_ok());
+                muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
                 playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
             })
             .onReject(this, [this, sequenceId](int errorCode, const std::string& msg) {
                 m_writeRet = Ret(errorCode, msg);
                 m_isCompleted = true;
                 m_progress.finish(make_ret(errorCode, msg));
+                muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
                 playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
             });
         }
