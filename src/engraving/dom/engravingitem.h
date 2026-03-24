@@ -518,6 +518,8 @@ public:
             m_mask.reset();
             //! NOTE Temporary removed, have problems, need investigation
             //m_pos.reset();
+            autoplace.offsetChanged = OffsetChange::NONE;
+            autoplace.changedPos = PointF();
         }
 
         virtual bool isValid() const { return m_shape.has_value() && m_shape.value().bbox().isValid(); }
