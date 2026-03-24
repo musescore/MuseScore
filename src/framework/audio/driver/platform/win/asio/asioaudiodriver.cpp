@@ -616,7 +616,7 @@ std::vector<samples_t> AsioAudioDriver::availableOutputDeviceBufferSizes() const
     std::vector<samples_t> result;
 
     samples_t n = s_adata.deviceMetrics.maxSize;
-    samples_t min = s_adata.deviceMetrics.minSize;
+    samples_t min = std::max(s_adata.deviceMetrics.minSize, (long)64);
 
     while (n >= min) {
         result.push_back(n);
