@@ -480,12 +480,12 @@ void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
 
 qreal NotationViewInputController::scalingFromZoomPercentage(int zoomPercentage) const
 {
-    return configuration()->scalingFromZoomPercentage(zoomPercentage, iocContext());
+    return contextConfiguration()->scalingFromZoomPercentage(zoomPercentage);
 }
 
 int NotationViewInputController::zoomPercentageFromScaling(qreal scaling) const
 {
-    return configuration()->zoomPercentageFromScaling(scaling, iocContext());
+    return contextConfiguration()->zoomPercentageFromScaling(scaling);
 }
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)

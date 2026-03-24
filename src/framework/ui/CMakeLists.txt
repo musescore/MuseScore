@@ -25,6 +25,7 @@ target_sources(muse_ui PRIVATE
     uimodule.h
     iuiengine.h
     iuiconfiguration.h
+    iuicontextconfiguration.h
     uierrors.h
     uitypes.h
     uiaction.h
@@ -55,6 +56,8 @@ target_sources(muse_ui PRIVATE
     internal/mainwindow.h
     internal/uiconfiguration.cpp
     internal/uiconfiguration.h
+    internal/uicontextconfiguration.cpp
+    internal/uicontextconfiguration.h
     internal/themeconverter.cpp
     internal/themeconverter.h
     internal/iplatformtheme.h

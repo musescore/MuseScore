@@ -136,7 +136,7 @@ void NotationViewState::setMatrix(const Transform& matrix, NotationPaintView* se
     m_matrix = matrix;
     m_matrixChanged.send(matrix, sender);
 
-    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11(), iocContext());
+    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11());
     if (m_zoomPercentage.val != newZoomPercentage) {
         m_zoomPercentage.set(newZoomPercentage);
     }

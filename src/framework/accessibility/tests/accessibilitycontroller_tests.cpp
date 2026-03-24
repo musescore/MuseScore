@@ -35,12 +35,11 @@
 #include "accessibility/iaccessible.h"
 #include "accessibility/internal/accessibilitycontroller.h"
 #include "global/tests/mocks/applicationmock.h"
-#include "mocks/accessibilityconfigurationmock.h"
 
 #include "modularity/ioc.h"
 #include "ui/tests/mocks/mainwindowmock.h"
 #include "global/tests/mocks/applicationmock.h"
-#include "mocks/accessibilityconfigurationmock.h"
+#include "mocks/accessibilitycontextconfigurationmock.h"
 
 class QEvent;
 
@@ -53,13 +52,15 @@ using ::testing::SaveArg;
 using namespace muse;
 using namespace muse::accessibility;
 
+static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+
 class Accessibility_ControllerTests : public ::testing::Test
 {
 public:
 
     void SetUp() override
     {
-        m_controller = std::make_shared<AccessibilityController>(muse::modularity::globalCtx());
+        m_controller = std::make_shared<AccessibilityController>(utestCtx);
 
         m_controller->setAccessibilityEnabled(true);
 
@@ -69,7 +70,7 @@ public:
         m_application = std::make_shared<NiceMock<ApplicationMock> >();
         m_controller->application.set(m_application);
 
-        m_configuration = std::make_shared<NiceMock<AccessibilityConfigurationMock> >();
+        m_configuration = std::make_shared<NiceMock<AccessibilityContextConfigurationMock> >();
         m_controller->configuration.set(m_configuration);
     }
 
@@ -172,17 +173,17 @@ public:
 
     std::shared_ptr<AccessibilityController> m_controller;
     std::shared_ptr<muse::ui::MainWindowMock> m_mainWindow;
-    std::shared_ptr<AccessibilityConfigurationMock> m_configuration;
+    std::shared_ptr<AccessibilityContextConfigurationMock> m_configuration;
     std::shared_ptr<ApplicationMock> m_application;
 };
 
 TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
 {
     //! [GIVEN] Accessibility is enabled
-    ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
+    ON_CALL(*m_configuration, isAccessibleEnabled()).WillByDefault(Return(true));
 
     //! [GIVEN] Accessibility is active
-    ON_CALL(*m_configuration, active()).WillByDefault(Return(true));
+    ON_CALL(*m_configuration, isAccessibleActive()).WillByDefault(Return(true));
 
     //! [GIVEN] Two items
     AccessibleItem* item1 = makeItemWithRegisteredParent();
@@ -216,10 +217,10 @@ TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
 TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
 {
     //! [GIVEN] Accessibility is enabled
-    ON_CALL(*m_configuration, enabled()).WillByDefault(Return(true));
+    ON_CALL(*m_configuration, isAccessibleEnabled()).WillByDefault(Return(true));
 
     //! [GIVEN] Accessibility is not active
-    ON_CALL(*m_configuration, active()).WillByDefault(Return(false));
+    ON_CALL(*m_configuration, isAccessibleActive()).WillByDefault(Return(false));
 
     //! [GIVEN] Two items
     AccessibleItem* item1 = makeItemWithRegisteredParent();

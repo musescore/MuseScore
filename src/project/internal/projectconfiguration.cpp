@@ -621,11 +621,6 @@ muse::io::path_t ProjectConfiguration::newProjectTemporaryPath() const
     return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
 }
 
-bool ProjectConfiguration::isAccessibleEnabled() const
-{
-    return accessibilityConfiguration()->enabled();
-}
-
 bool ProjectConfiguration::shouldDestinationFolderBeOpenedOnExport() const
 {
     return settings()->value(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT).toBool();

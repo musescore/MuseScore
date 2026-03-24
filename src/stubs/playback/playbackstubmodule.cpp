@@ -30,13 +30,24 @@
 using namespace mu::playback;
 using namespace muse::modularity;
 
+static const std::string mname("playback_stub");
+
 std::string PlaybackModule::moduleName() const
 {
-    return "playback_stub";
+    return mname;
 }
 
 void PlaybackModule::registerExports()
 {
-    globalIoc()->registerExport<IPlaybackController>(moduleName(), new PlaybackControllerStub());
     globalIoc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfigurationStub());
+}
+
+IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new PlaybackContext(ctx);
+}
+
+void PlaybackContext::registerExports()
+{
+    ioc()->registerExport<IPlaybackController>(mname, new PlaybackControllerStub());
 }

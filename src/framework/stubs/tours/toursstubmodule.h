@@ -30,5 +30,16 @@ class ToursModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class ToursContext : public modularity::IContextSetup
+{
+public:
+    ToursContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

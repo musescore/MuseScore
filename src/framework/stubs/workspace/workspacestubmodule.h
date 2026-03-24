@@ -31,6 +31,17 @@ public:
     std::string moduleName() const override;
 
     void registerExports() override;
+
+    modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+};
+
+class WorkspaceContext : public modularity::IContextSetup
+{
+public:
+    WorkspaceContext(const muse::modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }
 

@@ -34,6 +34,11 @@ NavigationControl::NavigationControl(QObject* parent)
 {
 }
 
+NavigationControl::NavigationControl(const muse::modularity::ContextPtr& iocCtx, QObject* parent)
+    : AbstractNavigation(iocCtx, parent)
+{
+}
+
 NavigationControl::~NavigationControl()
 {
     if (m_panel) {

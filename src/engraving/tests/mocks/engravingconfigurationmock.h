@@ -58,8 +58,6 @@ public:
     MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
     MOCK_METHOD(Color, voiceColor, (voice_idx_t), (const, override));
 
-    MOCK_METHOD(double, guiScaling, (const muse::modularity::ContextPtr&), (const, override));
-
     MOCK_METHOD(Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, Color), (override));
     MOCK_METHOD((muse::async::Channel<engraving::voice_idx_t, Color>), selectionColorChanged, (), (const, override));
@@ -91,8 +89,6 @@ public:
     MOCK_METHOD(const DebuggingOptions&, debuggingOptions, (), (const, override));
     MOCK_METHOD(void, setDebuggingOptions, (const DebuggingOptions&), (override));
     MOCK_METHOD(muse::async::Notification, debuggingOptionsChanged, (), (const, override));
-
-    MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 
     MOCK_METHOD(bool, doNotSaveEIDsForBackCompat, (), (const, override));
     MOCK_METHOD(void, setDoNotSaveEIDsForBackCompat, (bool), (override));

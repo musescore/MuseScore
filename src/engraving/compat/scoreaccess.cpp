@@ -26,22 +26,28 @@
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
+static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+
 MasterScore* ScoreAccess::createMasterScore(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore(iocCtx);
+    const muse::modularity::ContextPtr iocCtx_ = iocCtx ? iocCtx : utestCtx;
+    return new MasterScore(iocCtx_);
 }
 
 MasterScore* ScoreAccess::createMasterScoreWithBaseStyle(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore(iocCtx, DefaultStyle::baseStyle());
+    const muse::modularity::ContextPtr iocCtx_ = iocCtx ? iocCtx : utestCtx;
+    return new MasterScore(iocCtx_, DefaultStyle::baseStyle());
 }
 
 MasterScore* ScoreAccess::createMasterScoreWithDefaultStyle(const muse::modularity::ContextPtr& iocCtx)
 {
-    return new MasterScore(iocCtx, DefaultStyle::defaultStyle());
+    const muse::modularity::ContextPtr iocCtx_ = iocCtx ? iocCtx : utestCtx;
+    return new MasterScore(iocCtx_, DefaultStyle::defaultStyle());
 }
 
 MasterScore* ScoreAccess::createMasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle& style)
 {
-    return new MasterScore(iocCtx, style);
+    const muse::modularity::ContextPtr iocCtx_ = iocCtx ? iocCtx : utestCtx;
+    return new MasterScore(iocCtx_, style);
 }

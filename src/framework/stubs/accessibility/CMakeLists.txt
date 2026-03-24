@@ -23,7 +23,6 @@ muse_create_module(muse_accessibility ALIAS muse::accessibility STUB)
 target_sources(muse_accessibility PRIVATE
     accessibilitystubmodule.cpp
     accessibilitystubmodule.h
-    accessibilityconfigurationstub.cpp
     accessibilityconfigurationstub.h
     accessibilitycontrollerstub.cpp
     accessibilitycontrollerstub.h

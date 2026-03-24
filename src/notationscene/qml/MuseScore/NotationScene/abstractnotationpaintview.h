@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -72,6 +73,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };

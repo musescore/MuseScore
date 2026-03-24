@@ -35,18 +35,19 @@ target_sources(notation PRIVATE
     inotationselectionfilter.h
     inotationautomation.h
     inotationinteraction.h
-    internal/inotationundostack.h
     inotationstyle.h
     inotationaccessibility.h
     inotationmidiinput.h
     notationtypes.h
     inotationconfiguration.h
+    inotationcontextconfiguration.h
     notationerrors.h
     inotationplayback.h
     inotationelements.h
     inotationparts.h
     iinstrumentsrepository.h
 
+    internal/inotationundostack.h
     internal/excerptnotation.cpp
     internal/excerptnotation.h
     internal/igetscore.h
@@ -66,6 +67,8 @@ target_sources(notation PRIVATE
     internal/notationaccessibility.cpp
     internal/notationconfiguration.cpp
     internal/notationconfiguration.h
+    internal/notationcontextconfiguration.cpp
+    internal/notationcontextconfiguration.h
     internal/notationautomation.cpp
     internal/notationautomation.h
     internal/notationelements.cpp

@@ -121,7 +121,7 @@ void VSTContext::registerExports()
 
 void VSTContext::resolveImports()
 {
-    auto ar = globalIoc()->resolve<ui::IUiActionsRegister>(mname);
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(mname);
     if (ar) {
         ar->reg(std::make_shared<VstUiActions>(m_actionsController));
     }

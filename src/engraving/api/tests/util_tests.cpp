@@ -30,6 +30,8 @@
 #include "engraving/api/v1/util.h"
 #include "global/modularity/ioc.h"
 
+static const muse::modularity::ContextPtr utestCtx = std::make_shared<muse::modularity::Context>(1);
+
 using namespace mu::engraving::apiv1;
 
 class Extensions_UtilTests : public ::testing::Test
@@ -75,7 +77,7 @@ TEST_F(Extensions_UtilTests, pathTraversalResolution)
 
 TEST_F(Extensions_UtilTests, allowedPaths)
 {
-    FileIO fileIO;
+    FileIO fileIO(utestCtx);
 
     // Test temp directory is allowed
     QString tempFile = tempDir.filePath("test.txt");
@@ -94,7 +96,7 @@ TEST_F(Extensions_UtilTests, allowedPaths)
 
 TEST_F(Extensions_UtilTests, blockedSystemPaths)
 {
-    FileIO fileIO;
+    FileIO fileIO(utestCtx);
 
     // Test system directories are blocked
     QStringList blockedPaths = {
@@ -117,7 +119,7 @@ TEST_F(Extensions_UtilTests, blockedSystemPaths)
 
 TEST_F(Extensions_UtilTests, pathTraversalBlocked)
 {
-    FileIO fileIO;
+    FileIO fileIO(utestCtx);
 
     // Test various path traversal patterns
     QStringList traversalPaths = {
@@ -140,7 +142,7 @@ TEST_F(Extensions_UtilTests, pathTraversalBlocked)
 
 TEST_F(Extensions_UtilTests, relativePathResolution)
 {
-    FileIO fileIO;
+    FileIO fileIO(utestCtx);
 
     // Test straightforward path within temp directory
     QString testPath = tempDir.path() + "/test.txt";

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,16 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibilityconfigurationstub.h"
+
+#include "accessibilitycontextconfiguration.h"
 
 using namespace muse::accessibility;
 
-bool AccessibilityConfigurationStub::enabled() const
+bool AccessibilityContextConfiguration::isAccessibleActive() const
 {
-    return false;
+    return configuration()->isAccessibleActive();
 }
 
-bool AccessibilityConfigurationStub::active() const
+bool AccessibilityContextConfiguration::isAccessibleEnabled() const
 {
-    return false;
+    if (!configuration()->isAccessibleActive()) {
+        return false;
+    }
+
+    if (!navigationController()) {
+        return false;
+    }
+
+    //! NOTE Accessibility available if navigation is used
+    return navigationController()->activeSection() != nullptr;
 }

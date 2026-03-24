@@ -29,6 +29,7 @@
 #include "internal/uiengine.h"
 #include "internal/mainwindow.h"
 #include "internal/uiconfiguration.h"
+#include "internal/uicontextconfiguration.h"
 #include "internal/uistate.h"
 #include "internal/uiactionsregister.h"
 #include "internal/navigationcontroller.h"
@@ -165,6 +166,7 @@ void UiModuleContext::registerExports()
     m_windowsController = std::make_shared<WindowsController>();
     #endif
 
+    ioc()->registerExport<IUiContextConfiguration>(module_name, new UiContextConfiguration(iocContext()));
     ioc()->registerExport<IUiState>(module_name, m_uistate);
     ioc()->registerExport<IUiEngine>(module_name, m_uiengine);
     ioc()->registerExport<IUiActionsRegister>(module_name, m_uiactionsRegister);

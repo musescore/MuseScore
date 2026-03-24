@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_ACCESSIBILITY_IACCESSIBILITYCONFIGURATION_H
-#define MUSE_ACCESSIBILITY_IACCESSIBILITYCONFIGURATION_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -31,9 +30,6 @@ class IAccessibilityConfiguration : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IAccessibilityConfiguration() = default;
 
-    virtual bool enabled() const = 0;
-    virtual bool active() const = 0;
+    virtual bool isAccessibleActive() const = 0;
 };
 }
-
-#endif // MUSE_ACCESSIBILITY_IACCESSIBILITYCONFIGURATION_H

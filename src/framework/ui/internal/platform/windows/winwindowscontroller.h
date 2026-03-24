@@ -31,6 +31,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "ui/iuicontextconfiguration.h"
 #include "ui/imainwindow.h"
 
 #include "internal/windowscontroller.h"
@@ -39,6 +40,7 @@ namespace muse::ui {
 class WinWindowsController : public QObject, public WindowsController, public async::Asyncable, public Contextable
 {
     GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    ContextInject<muse::ui::IUiContextConfiguration> uiContextConfiguration = { this };
     ContextInject<muse::ui::IMainWindow> mainWindow  ={ this };
 
 public:

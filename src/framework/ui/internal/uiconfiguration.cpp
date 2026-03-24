@@ -658,62 +658,14 @@ void UiConfiguration::resetFonts()
     settings()->setSharedValue(UI_MUSICAL_FONT_SIZE_KEY, settings()->defaultValue(UI_MUSICAL_FONT_SIZE_KEY));
 }
 
-QScreen* UiConfiguration::screen(const muse::modularity::ContextPtr& ctx) const
-{
-    IF_ASSERT_FAILED(ctx) {
-        return QApplication::primaryScreen();
-    }
-    return modularity::ioc(ctx)->resolve<IMainWindow>("ui")->screen();
-}
-
-double UiConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
-{
-    const QScreen* s = screen(ctx);
-    return s ? s->devicePixelRatio() : 1;
-}
-
-void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
+void UiConfiguration::setCustomPhysicalDotsPerInch(std::optional<double> dpi)
 {
     m_customDPI = dpi;
 }
 
-double UiConfiguration::physicalDpi(const muse::modularity::ContextPtr& ctx) const
+std::optional<double> UiConfiguration::customPhysicalDotsPerInch() const
 {
-    if (m_customDPI) {
-        return m_customDPI.value();
-    }
-
-    constexpr double DEFAULT_DPI = 96;
-    const QScreen* screen = this->screen(ctx);
-    if (!screen) {
-        return DEFAULT_DPI;
-    }
-
-    auto physicalSize = screen->physicalSize();
-    // Work around xrandr reporting a 1x1mm size if
-    // the screen doesn't have a valid physical size
-    if (physicalSize.height() <= 1 && physicalSize.width() <= 1) {
-        return DEFAULT_DPI;
-    }
-
-#ifdef Q_OS_WIN
-    //! NOTE: copied from MU3, `MuseScore::MuseScore()`
-    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 7)) {
-        return screen->logicalDotsPerInch() * screen->devicePixelRatio();
-    }
-#endif
-    return screen->physicalDotsPerInch();
-}
-
-double UiConfiguration::logicalDpi(const muse::modularity::ContextPtr& ctx) const
-{
-    const QScreen* screen = this->screen(ctx);
-    if (!screen) {
-        constexpr double DEFAULT_DPI = 96;
-        return DEFAULT_DPI;
-    }
-
-    return screen->logicalDotsPerInch();
+    return m_customDPI;
 }
 
 bool UiConfiguration::isGlobalMenuAvailable() const

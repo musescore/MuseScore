@@ -105,9 +105,6 @@ public:
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
 
-    MOCK_METHOD(qreal, scalingFromZoomPercentage, (int, const muse::modularity::ContextPtr&), (const, override));
-    MOCK_METHOD(int, zoomPercentageFromScaling, (qreal, const muse::modularity::ContextPtr&), (const, override));
-
     MOCK_METHOD(int, mouseZoomPrecision, (), (const, override));
     MOCK_METHOD(void, setMouseZoomPrecision, (int), (override));
     MOCK_METHOD(muse::async::Notification, mouseZoomPrecisionChanged, (), (const, override));
@@ -173,9 +170,6 @@ public:
 
     MOCK_METHOD(bool, isCountInEnabled, (), (const, override));
     MOCK_METHOD(void, setIsCountInEnabled, (bool), (override));
-
-    MOCK_METHOD(double, guiScaling, (const muse::modularity::ContextPtr&), (const, override));
-    MOCK_METHOD(double, notationScaling, (const muse::modularity::ContextPtr&), (const, override));
 
     MOCK_METHOD(muse::ValCh<muse::Orientation>, canvasOrientation, (), (const, override));
     MOCK_METHOD(void, setCanvasOrientation, (muse::Orientation), (override));

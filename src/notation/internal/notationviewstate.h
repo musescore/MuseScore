@@ -25,13 +25,13 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "../inotationconfiguration.h"
+#include "../inotationcontextconfiguration.h"
 
 namespace mu::notation {
 class Notation;
 class NotationViewState : public INotationViewState, public muse::async::Asyncable, public muse::Contextable
 {
-    muse::GlobalInject<INotationConfiguration> configuration;
+    muse::ContextInject<INotationContextConfiguration> configuration = { this };
 
 public:
     explicit NotationViewState(Notation* notation, const muse::modularity::ContextPtr& ctx);

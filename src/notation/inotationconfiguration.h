@@ -115,9 +115,6 @@ public:
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
-    virtual qreal scalingFromZoomPercentage(int zoomPercentage, const muse::modularity::ContextPtr& ctx) const = 0;
-    virtual int zoomPercentageFromScaling(qreal scaling, const muse::modularity::ContextPtr& ctx) const = 0;
-
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
     virtual muse::async::Notification mouseZoomPrecisionChanged() const = 0;
@@ -183,9 +180,6 @@ public:
 
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
-
-    virtual double guiScaling(const muse::modularity::ContextPtr& ctx) const = 0;
-    virtual double notationScaling(const muse::modularity::ContextPtr& ctx) const = 0;
 
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;
