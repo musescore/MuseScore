@@ -28,6 +28,7 @@
 
 #include "internal/interactive.h"
 #include "internal/interactiveuriregister.h"
+#include "internal/platforminteractive.h"
 #include "types/uri.h"
 
 #ifdef Q_OS_WASM
@@ -51,6 +52,7 @@ std::string InteractiveModule::moduleName() const
 void InteractiveModule::registerExports()
 {
     globalIoc()->registerExport<IInteractiveUriRegister>(mname, new InteractiveUriRegister());
+    globalIoc()->registerExport<IPlatformInteractive>(mname, new PlatformInteractive());
 }
 
 void InteractiveModule::registerApi()
