@@ -50,7 +50,7 @@ public:
     void fxEditor(const actions::ActionQuery& actionQuery);
     void instEditor(const actions::ActionQuery& actionQuery);
 
-    void editorOperation(const std::string& operation, int instanceId);
+    void editorOperation(const std::string& operation, int instanceId, bool sync);
 
     void setupUsedView();
     void useView(bool isNew);

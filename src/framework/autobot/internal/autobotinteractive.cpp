@@ -194,6 +194,11 @@ async::Promise<Ret> AutobotInteractive::close(const Uri& uri)
     return m_real->close(uri);
 }
 
+Ret AutobotInteractive::closeSync(const UriQuery& uri)
+{
+    return m_real->closeSync(uri);
+}
+
 Ret AutobotInteractive::closeAllDialogsSync()
 {
     return m_real->closeAllDialogsSync();

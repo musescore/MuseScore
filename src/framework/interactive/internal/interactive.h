@@ -119,6 +119,7 @@ public:
 
     async::Promise<Ret> close(const UriQuery& uri) override;
     async::Promise<Ret> close(const Uri& uri) override;
+    Ret closeSync(const UriQuery& uri) override;
     Ret closeAllDialogsSync() override;
 
     // state
@@ -175,11 +176,13 @@ private:
     RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
 
     async::Promise<Ret> closeObjects(const std::vector<ObjectInfo>& objs);
+    Ret closeObjectsSync(const std::vector<ObjectInfo>& objs);
 
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
 
     std::vector<ObjectInfo> allOpenObjects() const;
+    std::vector<ObjectInfo> collectOpenObjects(std::function<bool(const ObjectInfo&)> accepted) const;
 
     void notifyAboutCurrentUriChanged();
     void notifyAboutCurrentUriWillBeChanged();
