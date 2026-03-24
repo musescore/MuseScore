@@ -44,7 +44,7 @@ class SingleProcessProvider : public IMultiWindowsProvider
 
 public:
 
-    void init() {}
+    void initOnGlobal() {}
 
     // Windows info
     size_t windowCount() const override;
