@@ -66,6 +66,10 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
             undoStaffTextExcludeFromPart(score);
         }
     }
+
+    if (mscVersion < 500) {
+        migrateOffset500(score);
+    }
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -287,6 +291,35 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
 {
     for (Score* score : masterScore->scoreList()) {
         score->scanElements(CompatUtils::doMigrateNoteParens);
+    }
+}
+
+static void doMigrateOffset500(EngravingItem* item)
+{
+    if (item->offset().isNull()
+        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) || !item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    PointF defaultOffset = item->defaultOffset();
+    item->setOffset(item->offset() - defaultOffset);
+}
+
+void EngravingCompat::migrateOffset500(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->spannerList()) {
+            if (!sp->hasVoiceAssignmentProperties()) {
+                continue;
+            }
+            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+            doMigrateOffset500(sp);
+            for (SpannerSegment* seg : sp->spannerSegments()) {
+                doMigrateOffset500(seg);
+            }
+        }
+
+        score->scanElements(doMigrateOffset500);
     }
 }
 

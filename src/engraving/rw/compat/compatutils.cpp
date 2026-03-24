@@ -1092,7 +1092,13 @@ void CompatUtils::convertPre470ImageSize(Image* image)
 
 void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
 {
-    if (!item->isTextBase() && !item->isTextLineBase() && !item->isTextLineBaseSegment()) {
+    if (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) {
+        return;
+    }
+
+    // We need additional context for items with voice assignment properties
+    // Migrate in EngravingCompat before layout
+    if (item->hasVoiceAssignmentProperties()) {
         return;
     }
 
