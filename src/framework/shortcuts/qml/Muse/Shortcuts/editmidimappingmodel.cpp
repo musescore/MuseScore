@@ -34,7 +34,9 @@ EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
 
 EditMidiMappingModel::~EditMidiMappingModel()
 {
-    midiRemote()->setIsSettingMode(false);
+    if (m_loaded) {
+        midiRemote()->setIsSettingMode(false);
+    }
 }
 
 void EditMidiMappingModel::load(int originType, int originValue)
@@ -50,6 +52,8 @@ void EditMidiMappingModel::load(int originType, int originValue)
 
     m_event = RemoteEvent(static_cast<RemoteEventType>(originType), originValue);
     emit mappingTitleChanged(mappingTitle());
+
+    m_loaded = true;
 }
 
 QString EditMidiMappingModel::mappingTitle() const
