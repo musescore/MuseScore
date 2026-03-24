@@ -242,6 +242,7 @@ public:
 
     virtual async::Promise<Ret> close(const UriQuery& uri) = 0;
     virtual async::Promise<Ret> close(const Uri& uri) = 0;
+    virtual Ret closeSync(const UriQuery& uri) = 0;
     virtual Ret closeAllDialogsSync() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;

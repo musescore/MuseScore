@@ -98,6 +98,7 @@ public:
 
     async::Promise<Ret> close(const UriQuery& uri) override;
     async::Promise<Ret> close(const Uri& uri) override;
+    Ret closeSync(const UriQuery& uri) override;
     Ret closeAllDialogsSync() override;
 
     ValCh<Uri> currentUri() const override;

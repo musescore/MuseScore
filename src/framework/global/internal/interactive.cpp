@@ -461,6 +461,11 @@ async::Promise<Ret> Interactive::close(const Uri& uri)
     return provider()->close(uri);
 }
 
+Ret Interactive::closeSync(const UriQuery& uri)
+{
+    return provider()->closeSync(uri);
+}
+
 Ret Interactive::closeAllDialogsSync()
 {
     return provider()->closeAllDialogsSync();
