@@ -826,16 +826,16 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                if (seg->isType(SegmentType::BarLineType)) {
-                    // Barline segments are regenerated every layout
-                    // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
+                if (seg->isType(SegmentType::BarLineType | SegmentType::Clef | SegmentType::HeaderClef)) {
+                    // Barline segments are regenerated every layout.
+                    // Clef segments collide when the undo system and layout
+                    // independently create them (see #32162, #25257).
+                    // Remove the layout-generated duplicate so the undo system's
+                    // segment becomes authoritative.
                     m_segments.remove(s);
                     s = s->next();
                     continue;
                 }
-                /// HACK: REMOVED to prevent crash in 4.4.3.
-                /// Adding multiple identical segments may cause problems, so we should resolve this properly
-                // return;
             }
             if (seg->goesBefore(s)) {
                 break;
