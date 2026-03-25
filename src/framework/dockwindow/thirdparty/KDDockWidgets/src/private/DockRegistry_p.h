@@ -247,7 +247,6 @@ private:
     explicit DockRegistry(int ctx, QObject *parent = nullptr);
     bool onDockWidgetPressed(DockWidgetBase *dw, QMouseEvent *);
     void onFocusObjectChanged(QObject *obj);
-    void maybeDelete();
     void setFocusedDockWidget(DockWidgetBase *);
 
     const int m_ctx = 0;
