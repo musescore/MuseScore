@@ -196,6 +196,31 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
     }
 }
 
+bool Pedal::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    // Update style flag for text
+    if (propertyId == Pid::BEGIN_HOOK_TYPE) {
+        setBeginHookType(v.value<HookType>());
+
+        PropertyFlags beginTextStyleFlag = beginText() == propertyDefault(Pid::BEGIN_TEXT).value<String>()
+                                           ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::BEGIN_TEXT, beginTextStyleFlag);
+        PropertyFlags continueTextStyleFlag = continueText() == propertyDefault(Pid::CONTINUE_TEXT).value<String>()
+                                              ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::CONTINUE_TEXT, continueTextStyleFlag);
+    } else if (propertyId == Pid::LINE_VISIBLE) {
+        setLineVisible(v.toBool());
+        PropertyFlags endTextStyleFlag = endText() == propertyDefault(Pid::END_TEXT).value<String>()
+                                         ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::END_TEXT, endTextStyleFlag);
+    } else {
+        return TextLineBase::setProperty(propertyId, v);
+    }
+
+    triggerLayout();
+    return true;
+}
+
 Pedal* Pedal::findNextInStaff() const
 {
     Fraction endTick = tick2();
