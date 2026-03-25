@@ -230,7 +230,9 @@ StyledPopupView {
                                 )
                     width: parent.contentWidth
 
-                    ScrollBar.vertical: StyledScrollBar {}
+                    ScrollBar.vertical: StyledScrollBar {
+                        z : 100
+                    }
 
                     // TODO: change settings to "hidden" model?
                     cellSize: root.cellSize
