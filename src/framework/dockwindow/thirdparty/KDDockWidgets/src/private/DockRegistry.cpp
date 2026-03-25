@@ -78,12 +78,6 @@ DockRegistry::~DockRegistry()
 {
 }
 
-void DockRegistry::maybeDelete()
-{
-    if (isEmpty())
-        delete this;
-}
-
 void DockRegistry::onFocusObjectChanged(QObject *obj)
 {
     auto p = qobject_cast<WidgetType *>(obj);
@@ -313,7 +307,6 @@ void DockRegistry::unregisterDockWidget(DockWidgetBase *dock)
         m_focusedDockWidget = nullptr;
 
     m_dockWidgets.removeOne(dock);
-    maybeDelete();
 }
 
 void DockRegistry::registerMainWindow(MainWindowBase *mainWindow)
@@ -330,7 +323,6 @@ void DockRegistry::registerMainWindow(MainWindowBase *mainWindow)
 void DockRegistry::unregisterMainWindow(MainWindowBase *mainWindow)
 {
     m_mainWindows.removeOne(mainWindow);
-    maybeDelete();
 }
 
 void DockRegistry::registerFloatingWindow(FloatingWindow *window)
@@ -341,7 +333,6 @@ void DockRegistry::registerFloatingWindow(FloatingWindow *window)
 void DockRegistry::unregisterFloatingWindow(FloatingWindow *window)
 {
     m_floatingWindows.removeOne(window);
-    maybeDelete();
 }
 
 void DockRegistry::registerLayout(LayoutWidget *layout)
