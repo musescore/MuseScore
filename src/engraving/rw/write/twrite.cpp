@@ -1441,7 +1441,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
 
-    static const std::array<Pid, 10> pids { {
+    static const std::array<Pid, 9> pids { {
         Pid::MIN_DISTANCE,
         Pid::FRET_OFFSET,
         Pid::FRET_FRETS,
@@ -1450,7 +1450,6 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::MAG,
         Pid::ORIENTATION,
         Pid::FRET_SHOW_FINGERINGS,
-        Pid::FRET_FINGERING,
         Pid::EXCLUDE_VERTICAL_ALIGN
     } };
 
@@ -1458,6 +1457,19 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     for (Pid p : pids) {
         writeProperty(item, xml, p);
     }
+
+    const std::vector<int>& fullFingering = item->fingering();
+    std::vector<int> legacyFingering = fullFingering;
+
+    for (int& v: legacyFingering){
+        if(v == 6 || v == 7){
+            v = 0;
+        }
+    }
+
+    xml.tag("fretFingering", TConv::toXml(legacyFingering));
+    xml.tag("fretFingeringEx", TConv::toXml(fullFingering));
+
     writeItemProperties(item, xml, ctx);
 
     if (item->harmony()) {

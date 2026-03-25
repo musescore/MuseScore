@@ -57,7 +57,7 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QVariant fretDiagram READ fretDiagram NOTIFY fretDiagramChanged)
     Q_PROPERTY(mu::inspector::PropertyItem * showFingerings READ showFingerings CONSTANT)
     Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
-    Q_PROPERTY(QStringList displayFingerings READ displayFingerings NOTIFY fretDiagramChanged)
+    Q_PROPERTY(QStringList displayFingerings READ displayFingerings NOTIFY fingeringsChanged)
 
 public:
     explicit FretDiagramSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
