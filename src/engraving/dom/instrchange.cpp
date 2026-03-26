@@ -71,12 +71,27 @@ InstrumentChange::InstrumentChange(const InstrumentChange& is)
     : TextBase(is)
 {
     m_instrument = new Instrument(*is.m_instrument);
+    m_ownsInstrument = true;  // Copy always owns its instrument
     m_init = is.m_init;
 }
 
 InstrumentChange::~InstrumentChange()
 {
-    delete m_instrument;
+    if (m_ownsInstrument) {
+        delete m_instrument;
+    }
+    m_instrument = nullptr;
+}
+
+void InstrumentChange::setInstrument(Instrument* i)
+{
+    if (m_instrument != i) {
+        if (m_ownsInstrument) {
+            delete m_instrument;
+        }
+        m_instrument = i;
+        m_ownsInstrument = true;
+    }
 }
 
 void InstrumentChange::setInstrument(const Instrument& i)
@@ -134,7 +149,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
     // change instrument in all linked scores
     for (EngravingObject* se : linkList()) {
         InstrumentChange* lic = static_cast<InstrumentChange*>(se);
-        Instrument* newInstrument = new Instrument(*instrument);
+        Instrument newInstrument(*instrument);
         lic->score()->undo(new ChangeInstrument(lic, newInstrument));
     }
 

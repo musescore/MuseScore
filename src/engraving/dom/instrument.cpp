@@ -1041,8 +1041,14 @@ Instrument* InstrumentList::instrument(int tick)
 
 void InstrumentList::setInstrument(Instrument* instr, int tick)
 {
-    if (!insert({ tick, instr }).second) {
-        (*this)[tick] = instr;
+    auto result = insert({ tick, instr });
+    if (!result.second) {
+        // Key already exists, delete old instrument and replace
+        Instrument* oldInstr = (*this)[tick];
+        if (oldInstr != instr) {
+            delete oldInstr;
+            (*this)[tick] = instr;
+        }
     }
 }
 

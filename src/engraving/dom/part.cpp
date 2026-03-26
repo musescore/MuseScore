@@ -62,6 +62,18 @@ Part::Part(Score* s)
 }
 
 //---------------------------------------------------------
+//   ~Part
+//---------------------------------------------------------
+
+Part::~Part()
+{
+    // Delete all instruments owned by this Part
+    for (auto it = m_instruments.begin(); it != m_instruments.end(); ++it) {
+        delete it->second;
+    }
+}
+
+//---------------------------------------------------------
 //   initFromInstrTemplate
 //---------------------------------------------------------
 
@@ -349,10 +361,18 @@ void Part::setInstrument(const Instrument& i, Fraction tick)
 
 void Part::setInstruments(const InstrumentList& instruments)
 {
+    // Delete old instruments only if they won't appear in the new list.
+    // Callers may shallow-copy the map before calling setInstruments({}),
+    // so we must not delete when the new list is empty.
+    if (!instruments.empty()) {
+        for (auto it = m_instruments.begin(); it != m_instruments.end(); ++it) {
+            delete it->second;
+        }
+    }
     m_instruments.clear();
 
     for (auto it = instruments.begin(); it != instruments.end(); ++it) {
-        m_instruments.setInstrument(it->second, it->first);
+        m_instruments.setInstrument(new Instrument(*it->second), it->first);
     }
 }
 
@@ -367,6 +387,7 @@ void Part::removeInstrument(const Fraction& tick)
         LOGD("Part::removeInstrument: not found at tick %d", tick.ticks());
         return;
     }
+    delete i->second;  // Delete the instrument before erasing
     m_instruments.erase(i);
 }
 
@@ -379,6 +400,7 @@ void Part::removeNonPrimaryInstruments()
     auto it = m_instruments.begin();
     while (it != m_instruments.end()) {
         if (it->first != -1) {
+            delete it->second;  // Delete the instrument before erasing
             it = m_instruments.erase(it);
             continue;
         }

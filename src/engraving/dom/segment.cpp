@@ -742,7 +742,7 @@ void Segment::add(EngravingItem* el)
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
             StaffState* ss = toStaffState(el);
             Part* part = el->part();
-            part->setInstrument(ss->instrument(), tick());
+            part->setInstrument(*ss->instrument(), tick());
         }
         m_annotations.push_back(el);
         break;
@@ -751,6 +751,7 @@ void Segment::add(EngravingItem* el)
         InstrumentChange* is = toInstrumentChange(el);
         Part* part = is->part();
         part->setInstrument(is->instrument(), tick());
+        is->setNonOwning();
         m_annotations.push_back(el);
         break;
     }
@@ -950,6 +951,10 @@ void Segment::remove(EngravingItem* el)
         if (!isMMRestSegment()) {
             InstrumentChange* is = toInstrumentChange(el);
             Part* part = is->part();
+            // Reclaim ownership before Part deletes the shared instrument
+            if (!is->ownsInstrument()) {
+                is->setInstrument(new Instrument(*is->instrument()));
+            }
             part->removeInstrument(tick());
         }
     }

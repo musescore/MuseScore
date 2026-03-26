@@ -89,13 +89,12 @@ class ChangePart : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ChangePart)
 
     Part* part = nullptr;
-    Instrument* instrument = nullptr;
+    Instrument instrument;
 
     void flip(EditData*) override;
 
 public:
-    ChangePart(Part*, Instrument*);
-    void cleanup(bool) override;
+    ChangePart(Part*, const Instrument&);
 
     UNDO_TYPE(CommandType::ChangePart)
     UNDO_NAME("ChangePart")

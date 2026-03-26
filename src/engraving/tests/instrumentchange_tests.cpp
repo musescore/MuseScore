@@ -98,10 +98,9 @@ TEST_F(Engraving_InstrumentChangeTests, testChange)
     Segment* s           = m->first(SegmentType::ChordRest);
     InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
     Instrument* ni       = score->staff(1)->part()->instrument();
-    ic->setInstrument(new Instrument(*ni));
     score->startCmd(TranslatableString::untranslatable("Instrument change tests"));
     ic->setXmlText("Instrument Oboe");
-    score->undo(new ChangeInstrument(ic, ic->instrument()));
+    score->undo(new ChangeInstrument(ic, *ni));
     score->endCmd();
     score->doLayout();
     test_post(score, u"change");

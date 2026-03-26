@@ -116,7 +116,9 @@ void InsertRemoveMeasures::insertMeasures()
         for (Segment* s = fs; s && s != ls; s = s->next1()) {
             for (EngravingItem* e : s->annotations()) {
                 if (e->isInstrumentChange()) {
-                    e->part()->setInstrument(toInstrumentChange(e)->instrument(), s->tick());
+                    InstrumentChange* ic = toInstrumentChange(e);
+                    e->part()->setInstrument(ic->instrument(), s->tick());
+                    ic->setNonOwning();
                 }
             }
         }

@@ -41,10 +41,25 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
         return;
     }
 
+    // Check for idempotent registration (same item, same EID)
+    auto it = m_itemToEid.find(const_cast<EngravingObject*>(item));
+    if (it != m_itemToEid.end() && it->second == eid) {
+        return;
+    }
+
     bool inserted = m_eidToItem.emplace(eid, const_cast<EngravingObject*>(item)).second;
     assert(inserted);
 
-    inserted = m_itemToEid.emplace(const_cast<EngravingObject*>(item), eid).second;
+    // If the pointer is already registered with a different EID, the previous
+    // object at this address was deleted and the memory reused.
+    // Clean up the stale EID entry.
+    if (it != m_itemToEid.end()) {
+        m_eidToItem.erase(it->second);
+        it->second = eid;
+        inserted = true;
+    } else {
+        inserted = m_itemToEid.emplace(const_cast<EngravingObject*>(item), eid).second;
+    }
     assert(inserted);
 
     if (MScore::testMode) {

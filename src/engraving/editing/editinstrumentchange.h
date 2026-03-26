@@ -33,12 +33,12 @@ class ChangeInstrument : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ChangeInstrument)
 
     InstrumentChange* is = nullptr;
-    Instrument* instrument = nullptr;
+    Instrument instrument;  // Value copy: stores old instrument for undo/redo
 
     void flip(EditData*) override;
 
 public:
-    ChangeInstrument(InstrumentChange* _is, Instrument* i)
+    ChangeInstrument(InstrumentChange* _is, const Instrument& i)
         : is(_is), instrument(i) {}
 
     UNDO_TYPE(CommandType::ChangeInstrument)

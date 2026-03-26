@@ -38,20 +38,22 @@ using namespace mu::engraving;
 
 void ChangeInstrument::flip(EditData*)
 {
-    Part* part = is->staff()->part();
-    Fraction tickStart = is->segment()->tick();
-    Instrument* oi = is->instrument();    //new Instrument(*is->instrument());
+    Instrument curInstrument = *is->instrument();
 
-    // set instrument in both part and instrument change element
-    is->setInstrument(instrument);        //*instrument
-    part->setInstrument(instrument, tickStart);
+    // Modify the shared instrument in-place. Since IC is non-owning,
+    // its pointer is the same as Part's InstrumentList entry, so both
+    // are updated by this single call. No need to call part->setInstrument
+    // which would create a redundant copy and orphan the shared pointer.
+    is->setInstrument(instrument);
 
-    // update score
-    is->masterScore()->rebuildMidiMapping();
-    is->masterScore()->updateChannel();
+    // Only rebuild MIDI mapping from master score to avoid race conditions
+    // when excerpts are processed in parallel (e.g., during save)
+    if (is->score()->isMaster()) {
+        is->masterScore()->rebuildMidiMapping();
+        is->masterScore()->updateChannel();
+    }
     is->score()->setInstrumentsChanged(true);
     is->triggerLayoutAll();
 
-    // remember original instrument
-    instrument = oi;
+    instrument = std::move(curInstrument);
 }

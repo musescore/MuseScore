@@ -126,15 +126,14 @@ void SetSoloist::redo(EditData*)
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, Instrument* i)
+ChangePart::ChangePart(Part* _part, const Instrument& i)
+    : part(_part), instrument(i)
 {
-    instrument = i;
-    part       = _part;
 }
 
 void ChangePart::flip(EditData*)
 {
-    Instrument* oi = part->instrument(); //tick?
+    Instrument curInstrument = *part->instrument();
     part->setInstrument(instrument);
 
     part->updateHarmonyChannels(false);
@@ -144,18 +143,9 @@ void ChangePart::flip(EditData*)
     score->setInstrumentsChanged(true);
     score->setPlaylistDirty();
 
-    // check if notes need to be updated
-    // true if changing into or away from TAB or from one TAB type to another
-
     score->setLayoutAll();
 
-    instrument = oi;
-}
-
-void ChangePart::cleanup(bool)
-{
-    delete instrument;
-    instrument = nullptr;
+    instrument = std::move(curInstrument);
 }
 
 //---------------------------------------------------------
@@ -348,7 +338,7 @@ void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument&
         return;
     }
 
-    score->undo(new ChangePart(part, new Instrument(newInstrument)));
+    score->undo(new ChangePart(part, newInstrument));
 
     // Update clefs and staff type for all staves in the part
     for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {

@@ -48,10 +48,12 @@ public:
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
     Instrument* instrument() const { return m_instrument; }
-    void setInstrument(Instrument* i) { m_instrument = i; }
+    void setInstrument(Instrument* i);
     void setInstrument(Instrument&& i) { *m_instrument = i; }
     void setInstrument(const Instrument& i);
     void setupInstrument(const Instrument* instrument);
+    void setNonOwning() { m_ownsInstrument = false; }
+    bool ownsInstrument() const { return m_ownsInstrument; }
 
     std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;
@@ -69,7 +71,8 @@ public:
 
 private:
 
-    Instrument* m_instrument = nullptr;     // Staff holds ownership if part of score
+    Instrument* m_instrument = nullptr;     // Instrument pointer (shared with Part when non-owning)
+    bool m_ownsInstrument = true;           // False when pointer is shared with Part's InstrumentList
     bool m_init = false;                    // Set if the instrument has been set by the user, as there is no other way to tell.
 };
 } // namespace mu::engraving

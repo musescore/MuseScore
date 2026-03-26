@@ -1469,6 +1469,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
+        ic->setNonOwning();
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
         cmdState().instrumentsChanged = true;
     }

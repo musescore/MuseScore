@@ -67,6 +67,7 @@ public:
     static const int DEFAULT_COLOR = 0x3399ff;
 
     Part(Score* score = nullptr);
+    ~Part();
     void initFromInstrTemplate(const InstrumentTemplate*);
 
     const muse::ID& id() const;
