@@ -65,7 +65,7 @@ muse::io::path_t VideoEncoderResolver::loadedFFmpegDir() const
     return configuration()->ffmpegLibsDir();
 }
 
-int VideoEncoderResolver::loadedFFmpegVersion() const
+FFmpegVersion VideoEncoderResolver::loadedFFmpegVersion() const
 {
     return m_currentEncoderFFmpegVersion;
 }

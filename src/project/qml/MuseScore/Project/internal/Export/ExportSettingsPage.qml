@@ -32,4 +32,6 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationOrder: 3
+
+    property bool isExportAvailable: true
 }

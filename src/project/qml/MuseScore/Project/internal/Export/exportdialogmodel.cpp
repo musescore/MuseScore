@@ -26,6 +26,8 @@
 #include <QItemSelectionModel>
 #include <QTimer>
 
+#include "media/mediatypes.h"
+
 #include "app_config.h"
 
 #include "async/async.h"
@@ -178,6 +180,15 @@ void ExportDialogModel::init()
 
     selectCurrentNotation();
     selectSavedNotations();
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
+        emit isFFmpegAvailableChanged();
+        emit ffmpegDirChanged();
+    });
+    emit isFFmpegAvailableChanged();
+    emit ffmpegDirChanged();
+#endif
 }
 
 QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
@@ -592,6 +603,37 @@ void ExportDialogModel::setVideoResolution(const QString& resolution)
 
     videoExportConfiguration()->setResolution(resolution.toStdString());
     emit videoResolutionChanged(resolution);
+}
+
+bool ExportDialogModel::isFFmpegAvailable() const
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    return videoEncoderResolver()->loadedFFmpegVersion() != muse::media::FFMPEG_INVALID_VERION;
+#else
+    return true;
+#endif
+}
+
+QString ExportDialogModel::ffmpegDir() const
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    return videoEncoderResolver()->loadedFFmpegDir().toQString();
+#else
+    return QString();
+#endif
+}
+
+void ExportDialogModel::setFFmpegDir(const QString& dir)
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    if (ffmpegDir() == dir) {
+        return;
+    }
+
+    videoEncoderResolver()->loadFFmpeg(dir);
+#else
+    Q_UNUSED(dir);
+#endif
 }
 
 QList<int> ExportDialogModel::availableSampleRates() const

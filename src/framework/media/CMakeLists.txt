@@ -23,6 +23,7 @@ muse_create_module(muse_media ALIAS muse::media NO_PCH NO_UNITY)
 target_sources(muse_media PRIVATE
     mediamodule.cpp
     mediamodule.h
+    mediatypes.h
     imediaconfiguration.h
 
     ivideoencoder.h

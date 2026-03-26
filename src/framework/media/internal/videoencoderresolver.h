@@ -40,7 +40,7 @@ public:
 
     void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) override;
     io::path_t loadedFFmpegDir() const override;
-    int loadedFFmpegVersion() const override;
+    FFmpegVersion loadedFFmpegVersion() const override;
     async::Notification loadedFFmpegChanged() const override;
 
     IVideoEncoderPtr currentVideoEncoder() const override;
@@ -58,7 +58,7 @@ private:
     EncoderInfo makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const;
 
     IVideoEncoderPtr m_encoder;
-    int m_currentEncoderFFmpegVersion = -1;
+    FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERION;
 
     async::Notification m_loadedFFmpegChanged;
 };

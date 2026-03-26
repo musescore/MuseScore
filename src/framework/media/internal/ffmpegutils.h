@@ -26,14 +26,14 @@
 
 #include "io/path.h"
 
+#include "../mediatypes.h"
+
 namespace muse::media {
-using FFmpegVersion = int;
-static const int FFMPEG_V8 = 8;
-static const int FFMPEG_V7 = 7;
-static const int FFMPEG_V6 = 6;
-static const int FFMPEG_V5 = 5;
-static const int FFMPEG_V4 = 4;
-static const int FFMPEG_INVALID_VERION = -1;
+static const FFmpegVersion FFMPEG_V8 = 8;
+static const FFmpegVersion FFMPEG_V7 = 7;
+static const FFmpegVersion FFMPEG_V6 = 6;
+static const FFmpegVersion FFMPEG_V5 = 5;
+static const FFmpegVersion FFMPEG_V4 = 4;
 
 struct FFmpegVersionInfo {
     int avFormatVersion = -1;

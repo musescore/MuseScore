@@ -31,7 +31,8 @@ Row {
 
     property ExportDialogModel model
     property NavigationPanel navigationPanel: null
-    property int navigationOrder: 0
+    property int navigationOrderStart: 0
+    property alias navigationOrderEnd: sampleFormatsDropdown.navigation.row
 
     property bool showBitRateControl: false
     property bool showSampleRateControl: true
@@ -50,7 +51,7 @@ Row {
 
             navigation.name: "SampleRatesDropdown"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 1
+            navigation.row: root.navigationOrderStart + 1
             navigation.accessible.name: sampleRateLabel.text + " " + currentText
 
             model: root.model ? root.model.availableSampleRates().map(function(sampleRate) {
@@ -75,7 +76,7 @@ Row {
 
             navigation.name: "BitratesDropdown"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 2
+            navigation.row: root.navigationOrderStart + 2
             navigation.accessible.name: bitrateLabel.text + " " + currentText
 
             model: root.model ? root.model.availableBitRates().map(function(bitRate) {
@@ -96,11 +97,13 @@ Row {
         text: qsTrc("project/export", "Sample format:")
 
         StyledDropdown {
+            id: sampleFormatsDropdown
+
             Layout.preferredWidth: 126
 
             navigation.name: "SampleFormatsDropdown"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationOrder + 3
+            navigation.row: root.navigationOrderStart + 3
             navigation.accessible.name: sampleFormatLabel.text + " " + currentText
 
             model: root.model ? root.model.availableSampleFormats : []
