@@ -99,7 +99,7 @@ void MasterPalette::componentComplete()
     PaletteCreator creator(iocContext());
 
     addPalette(creator.newClefsPalette());
-    m_keyEditor = new KeyEditor;
+    m_keyEditor = new KeyEditor(this);
 
     m_keyItem = new QTreeWidgetItem();
     m_keyItem->setData(0, Qt::UserRole, stack->count());
@@ -108,7 +108,7 @@ void MasterPalette::componentComplete()
 
     m_timeItem = new QTreeWidgetItem();
     m_timeItem->setData(0, Qt::UserRole, stack->count());
-    m_timeDialog = new TimeDialog;
+    m_timeDialog = new TimeDialog(this);
     stack->addWidget(m_timeDialog);
     treeWidget->addTopLevelItem(m_timeItem);
 
@@ -139,7 +139,7 @@ void MasterPalette::componentComplete()
     m_symbolItem->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
     treeWidget->addTopLevelItem(m_symbolItem);
-    stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS));
+    stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS, this));
 
     // Add "All symbols" entry to be first in the list of categories
     QTreeWidgetItem* child = new QTreeWidgetItem({ Smufl::SMUFL_ALL_SYMBOLS });
