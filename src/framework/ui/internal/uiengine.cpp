@@ -52,12 +52,15 @@ UiEngine::~UiEngine()
 
 void UiEngine::init()
 {
-    m_engine->rootContext()->setContextProperty("ui", this);
-    m_engine->rootContext()->setContextProperty("api", m_api);
-
     QmlIoCContext* qmlIoc = new QmlIoCContext(this);
     qmlIoc->ctx = iocContext();
-    m_engine->rootContext()->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
+
+    QQmlContext* rootContext = m_engine->rootContext();
+    rootContext->setObjectName(QString("Root QQmlContext: %1").arg(qmlIoc->ctx->id));
+    rootContext->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
+
+    rootContext->setContextProperty("ui", this);
+    rootContext->setContextProperty("api", m_api);
 
     QJSValue translator = m_engine->newQObject(m_translation);
     QJSValue translateFn = translator.property("translate");
