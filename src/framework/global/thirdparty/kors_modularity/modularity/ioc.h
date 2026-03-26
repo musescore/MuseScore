@@ -73,7 +73,9 @@ public:
                 doResolve(globalIoc());
             } else {
 #ifdef IOC_CHECK_INTERFACE_TYPE
-                doResolve(ioc(iocContext()));
+                if (iocContext()) {
+                    doResolve(ioc(iocContext()));
+                }
 #else
                 if (iocContext()) {
                     doResolve(ioc(iocContext()));
