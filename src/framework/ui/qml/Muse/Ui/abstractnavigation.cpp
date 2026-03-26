@@ -259,9 +259,12 @@ QQuickItem* AbstractNavigation::visualItem() const
 AccessibleItem* AbstractNavigation::accessible() const
 {
     if (!m_accessible) {
+        const modularity::ContextPtr& ctx = iocContext();
+        IF_ASSERT_FAILED(ctx) {
+            return nullptr;
+        }
         AbstractNavigation* self = const_cast<AbstractNavigation*>(this);
-        m_accessible = new AccessibleItem(iocContext(), self);
-        m_accessible->componentComplete();
+        m_accessible = new AccessibleItem(ctx, self);
     }
     return m_accessible;
 }
