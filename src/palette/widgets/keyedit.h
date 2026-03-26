@@ -23,6 +23,8 @@
 #ifndef __KEYEDIT_H__
 #define __KEYEDIT_H__
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_keyedit.h"
 
 #include "modularity/ioc.h"
@@ -45,7 +47,7 @@ class KeyEditor : public QWidget, Ui::KeyEdit, public muse::Contextable
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
-    KeyEditor(QWidget* parent = 0);
+    KeyEditor(QWidget* parent = nullptr);
 
     bool dirty() const { return m_dirty; }
     void save();
@@ -69,6 +71,16 @@ private:
 };
 
 static const int KEYEDIT_ACC_ZERO_POINT = 3;
+
+class KeyEditorDialog : public muse::ui::WidgetDialog
+{
+    Q_OBJECT
+
+public:
+    KeyEditorDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
+};
 }
 
 #endif

@@ -25,6 +25,7 @@
 #include <QMouseEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QVBoxLayout>
 
 #include "keyedit.h"
 
@@ -311,12 +312,9 @@ void KeyCanvas::snap(Accidental* a)
 //---------------------------------------------------------
 
 KeyEditor::KeyEditor(QWidget* parent)
-    : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window)), muse::Contextable(muse::iocCtxForQWidget(this))
+    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
-    setWindowTitle(muse::qtrc("palette", "Key signatures"));
-
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -451,4 +449,19 @@ void KeyEditor::save()
 bool KeyEditor::showKeyPalette() const
 {
     return m_keySigArea->isVisible();
+}
+
+KeyEditorDialog::KeyEditorDialog(QWidget* parent)
+    : muse::ui::WidgetDialog(parent)
+{
+    setWindowTitle(muse::qtrc("palette", "Key signatures"));
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+}
+
+void KeyEditorDialog::componentComplete()
+{
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
+    layout->addWidget(new KeyEditor(this));
 }
