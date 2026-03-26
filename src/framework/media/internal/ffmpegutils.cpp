@@ -29,7 +29,7 @@ using namespace muse::media;
 using namespace muse;
 
 namespace muse::media {
-static io::paths_t defaultSearchPaths()
+io::paths_t defaultSearchPaths()
 {
     io::paths_t paths;
 #if defined(Q_OS_MAC)

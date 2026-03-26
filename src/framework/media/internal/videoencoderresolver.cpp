@@ -22,20 +22,45 @@
 
 #include "videoencoderresolver.h"
 
+#include "global/timer.h"
+#include "io/path.h"
+#include "log.h"
+
 #include "internal/ffmpeg/v8/videoencoder.h"
 #include "internal/ffmpeg/v7/videoencoder.h"
 #include "internal/ffmpeg/v6/videoencoder.h"
 #include "internal/ffmpeg/v5/videoencoder.h"
 #include "internal/ffmpeg/v4/videoencoder.h"
 
-#include "io/path.h"
-#include "log.h"
+#include "mediatypes.h"
 
 using namespace muse::media;
 
 void VideoEncoderResolver::init()
 {
     loadFFmpeg(configuration()->ffmpegLibsDir());
+
+    m_reloadFfmpegTimer = std::make_shared<Timer>(std::chrono::seconds(1));
+    m_reloadFfmpegTimer->onTimeout(this, [this](){
+        loadFFmpeg(configuration()->ffmpegLibsDir());
+
+        m_reloadFfmpegTimer->stop();
+    });
+
+    m_ffmpegLibWatcher.directoryChanged().onReceive(this, [this](const std::string&) {
+        if (m_reloadFfmpegTimer->isActive()) {
+            return;
+        }
+
+        m_reloadFfmpegTimer->start();
+    });
+}
+
+void VideoEncoderResolver::deinit()
+{
+    m_ffmpegLibWatcher.stopWatching();
+    m_reloadFfmpegTimer->stop();
+    m_reloadFfmpegTimer.reset();
 }
 
 void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
@@ -58,6 +83,29 @@ void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 
     m_currentEncoderFFmpegVersion = encoderInfo.ffmpegVersion;
     m_loadedFFmpegChanged.notify();
+}
+
+void VideoEncoderResolver::setIsSettingMode(bool arg)
+{
+    if (arg) {
+        if (m_currentEncoderFFmpegVersion == FFMPEG_INVALID_VERION) {
+            startWatchingFfmpegsDirs();
+        }
+    } else {
+        m_ffmpegLibWatcher.stopWatching();
+    }
+}
+
+void VideoEncoderResolver::startWatchingFfmpegsDirs()
+{
+    m_ffmpegLibWatcher.stopWatching();
+
+    io::paths_t paths = defaultSearchPaths();
+    paths.emplace_back(configuration()->ffmpegLibsDir());
+
+    for (const io::path_t& p : paths) {
+        m_ffmpegLibWatcher.startWatching(p.toStdString());
+    }
 }
 
 muse::io::path_t VideoEncoderResolver::loadedFFmpegDir() const
@@ -87,8 +135,10 @@ void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
 
 void VideoEncoderResolver::resetFFmpegSettings()
 {
-    m_currentEncoderFFmpegVersion = -1;
+    m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERION;
     configuration()->setFFmpegLibsDir({});
+
+    m_loadedFFmpegChanged.notify();
 }
 
 template<typename Encoder>

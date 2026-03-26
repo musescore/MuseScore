@@ -24,11 +24,16 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "io/filesystemwatcher.h"
 #include "imediaconfiguration.h"
 
 #include "ffmpegutils.h"
 
 #include "../ivideoencoderresolver.h"
+
+namespace muse {
+class Timer;
+}
 
 namespace muse::media {
 class VideoEncoderResolver : public IVideoEncoderResolver, public muse::async::Asyncable
@@ -37,6 +42,7 @@ class VideoEncoderResolver : public IVideoEncoderResolver, public muse::async::A
 
 public:
     void init();
+    void deinit();
 
     void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) override;
     io::path_t loadedFFmpegDir() const override;
@@ -46,8 +52,11 @@ public:
     IVideoEncoderPtr currentVideoEncoder() const override;
     void setCurrentVideoEncoder(IVideoEncoderPtr encoder) override;
 
+    void setIsSettingMode(bool arg) override;
+
 private:
     void resetFFmpegSettings();
+    void startWatchingFfmpegsDirs();
 
     struct EncoderInfo {
         IVideoEncoderPtr encoder;
@@ -61,5 +70,8 @@ private:
     FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERION;
 
     async::Notification m_loadedFFmpegChanged;
+
+    muse::io::FileSystemWatcher m_ffmpegLibWatcher;
+    std::shared_ptr<Timer> m_reloadFfmpegTimer;
 };
 }

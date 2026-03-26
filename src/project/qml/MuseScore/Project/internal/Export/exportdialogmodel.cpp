@@ -133,6 +133,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
 
 ExportDialogModel::~ExportDialogModel()
 {
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    disableVideoExportSettingMode();
+#endif
+
     m_selectionModel->deleteLater();
 }
 
@@ -312,6 +316,10 @@ void ExportDialogModel::setExportType(const ExportType& type)
     emit selectedExportTypeChanged(type.toMap());
     emit availableSampleFormatsChanged();
     emit selectedSampleFormatChanged();
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    updateVideoExportSettingMode();
+#endif
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
@@ -923,3 +931,16 @@ void ExportDialogModel::setSelectedSampleFormat(int format)
     audioExportConfiguration()->setExportSampleFormat(m_selectedExportType.suffixes[0], audioFormat);
     emit selectedSampleFormatChanged();
 }
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+void ExportDialogModel::updateVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(m_selectedExportType.id == QLatin1String("mp4"));
+}
+
+void ExportDialogModel::disableVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(false);
+}
+
+#endif

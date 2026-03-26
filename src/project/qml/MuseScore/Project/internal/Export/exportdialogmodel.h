@@ -296,6 +296,11 @@ private:
 
     void selectSavedNotations();
 
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    void disableVideoExportSettingMode();
+    void updateVideoExportSettingMode();
+#endif
+
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;
 

@@ -43,6 +43,7 @@ class VideoPreferencesModel : public QObject, public muse::Contextable, public m
 
 public:
     explicit VideoPreferencesModel(QObject* parent = nullptr);
+    ~VideoPreferencesModel();
 
     Q_INVOKABLE void load();
 
@@ -54,5 +55,9 @@ public:
 signals:
     void ffmpegVersionChanged();
     void ffmpegDirChanged();
+
+private:
+    void enableVideoExportSettingMode();
+    void disableVideoExportSettingMode();
 };
 }

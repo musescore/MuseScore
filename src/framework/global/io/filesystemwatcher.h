@@ -29,20 +29,23 @@
 class QFileSystemWatcher;
 
 namespace muse::io {
-class FileWatcher final
+class FileSystemWatcher final
 {
 public:
-    FileWatcher();
-    ~FileWatcher();
+    FileSystemWatcher();
+    ~FileSystemWatcher();
 
     void startWatching(const std::string& path);
     void stopWatching(const std::string& path = "");
+
     muse::async::Channel<std::string> fileChanged() const;
+    muse::async::Channel<std::string> directoryChanged() const;
 
 private:
 #ifndef NO_QT_SUPPORT
     std::unique_ptr<QFileSystemWatcher> m_watcher;
 #endif
-    muse::async::Channel<std::string> m_channel;
+    muse::async::Channel<std::string> m_fileChannel;
+    muse::async::Channel<std::string> m_directoryChannel;
 };
 }

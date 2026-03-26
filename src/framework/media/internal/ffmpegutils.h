@@ -65,6 +65,8 @@ struct FFmpegLibPaths {
     io::path_t swResamplePath;
 };
 
+io::paths_t defaultSearchPaths();
+
 FFmpegLibPaths findLibraryPaths(const io::path_t& ffmpegLibsDir);
 FFmpegVersion versionFromAVFormatPath(const io::path_t& path);
 }

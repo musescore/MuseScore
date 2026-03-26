@@ -50,3 +50,8 @@ void MediaModule::onInit(const IApplication::RunMode&)
     m_configuration->init();
     m_videoEncoderResolver->init();
 }
+
+void MediaModule::onDeinit()
+{
+    m_videoEncoderResolver->deinit();
+}

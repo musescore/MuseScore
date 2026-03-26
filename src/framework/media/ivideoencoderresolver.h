@@ -27,6 +27,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "mediatypes.h"
+
 #include "ivideoencoder.h"
 
 namespace muse::media {
@@ -39,10 +41,12 @@ public:
 
     virtual void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) = 0;
     virtual io::path_t loadedFFmpegDir() const = 0;
-    virtual int loadedFFmpegVersion() const = 0;
+    virtual FFmpegVersion loadedFFmpegVersion() const = 0;
     virtual async::Notification loadedFFmpegChanged() const = 0;
 
     virtual IVideoEncoderPtr currentVideoEncoder() const = 0;
     virtual void setCurrentVideoEncoder(IVideoEncoderPtr encoder) = 0;
+
+    virtual void setIsSettingMode(bool arg) = 0;
 };
 }
