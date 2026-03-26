@@ -27,6 +27,7 @@
 #include "translation.h"
 
 #include "../editing/editspanner.h"
+#include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "rendering/score/tlayout.h"
 
@@ -673,6 +674,30 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 }
 
 //---------------------------------------------------------
+//   updateNotesAfterInstrumentChange
+//   Update TPC2 for notes already in segment when instrument changes
+//---------------------------------------------------------
+
+void Segment::updateNotesAfterInstrumentChange(Part* part, const Interval& oldTranspose, const Interval& newTranspose)
+{
+    if (oldTranspose.chromatic == newTranspose.chromatic) {
+        return;
+    }
+
+    for (staff_idx_t staffIdx = part->startTrack() / VOICES; staffIdx < part->endTrack() / VOICES; ++staffIdx) {
+        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+            track_idx_t track = staffIdx * VOICES + voice;
+            EngravingItem* e = element(track);
+            if (e && e->isChord()) {
+                for (Note* note : toChord(e)->notes()) {
+                    note->setTpc2(Transpose::transposeTpc(note->tpc1(), newTranspose, true));
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -742,7 +767,13 @@ void Segment::add(EngravingItem* el)
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {
             StaffState* ss = toStaffState(el);
             Part* part = el->part();
+            const Instrument* oldInstr = part->instrument(tick());
+            Interval oldTranspose = oldInstr->transpose();
+
             part->setInstrument(ss->instrument(), tick());
+
+            const Instrument* newInstr = part->instrument(tick());
+            updateNotesAfterInstrumentChange(part, oldTranspose, newInstr->transpose());
         }
         m_annotations.push_back(el);
         break;
@@ -750,7 +781,14 @@ void Segment::add(EngravingItem* el)
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* is = toInstrumentChange(el);
         Part* part = is->part();
+        const Instrument* oldInstr = part->instrument(tick());
+        Interval oldTranspose = oldInstr->transpose();
+
         part->setInstrument(is->instrument(), tick());
+
+        const Instrument* newInstr = part->instrument(tick());
+        updateNotesAfterInstrumentChange(part, oldTranspose, newInstr->transpose());
+
         m_annotations.push_back(el);
         break;
     }

@@ -31,6 +31,7 @@ class Segment;
 class ChordRest;
 class Spanner;
 class System;
+struct Interval;
 
 //-------------------------------------------------------------------
 //   SegmentType
@@ -359,6 +360,7 @@ private:
 
     void init();
     void checkElement(EngravingItem*, track_idx_t track);
+    void updateNotesAfterInstrumentChange(Part* part, const Interval& oldTranspose, const Interval& newTranspose);
     void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
 
     SegmentType m_segmentType = SegmentType::Invalid;
