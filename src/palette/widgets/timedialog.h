@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_timedialog.h"
 
 #include "modularity/ioc.h"
@@ -34,7 +36,7 @@ namespace mu::palette {
 class PaletteWidget;
 class PaletteScrollArea;
 
-class TimeDialog : public QWidget, Ui::TimeDialogBase, public muse::Contextable
+class TimeEditor : public QWidget, Ui::TimeDialogBase, public muse::Contextable
 {
     Q_OBJECT
 
@@ -46,11 +48,14 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase, public muse::Contextable
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
-    TimeDialog(QWidget* parent = 0);
+    TimeEditor(QWidget* parent = 0);
 
     bool dirty() const;
     bool showTimePalette() const;
     void save();
+
+public slots:
+    void setShowTimePalette(bool val);
 
 private slots:
     void addClicked();
@@ -59,7 +64,6 @@ private slots:
     void paletteChanged(int idx);
     void textChanged();
     void setDirty();
-    void setShowTimePalette(bool val);
 
 private:
     int denominator() const;
@@ -68,5 +72,23 @@ private:
     PaletteScrollArea* _timePalette = nullptr;
     PaletteWidget* sp = nullptr;
     bool _dirty = false;
+};
+
+class TimeEditorDialog : public muse::ui::WidgetDialog
+{
+    Q_OBJECT
+
+    Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
+
+public:
+    TimeEditorDialog(QWidget* parent = nullptr);
+
+    void classBegin() override;
+
+    bool showTimePalette() const;
+    void setShowTimePalette(bool showTimePalette);
+
+private:
+    TimeEditor* m_timeEditor = nullptr;
 };
 }

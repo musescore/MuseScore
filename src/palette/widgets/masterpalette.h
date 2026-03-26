@@ -29,7 +29,7 @@
 #include "uicomponents/view/topleveldialog.h"
 
 namespace mu::palette {
-class TimeDialog;
+class TimeEditor;
 class KeyEditor;
 class SymbolDialog;
 
@@ -64,7 +64,7 @@ private:
     void addPalette(PalettePtr palette);
     void retranslate(bool firstTime = false);
 
-    TimeDialog* m_timeDialog = nullptr;
+    TimeEditor* m_timeEditor = nullptr;
     KeyEditor* m_keyEditor = nullptr;
     QTreeWidgetItem* m_keyItem = nullptr;
     QTreeWidgetItem* m_timeItem = nullptr;

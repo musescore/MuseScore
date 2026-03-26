@@ -76,10 +76,18 @@ class KeyEditorDialog : public muse::ui::WidgetDialog
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
+
 public:
     KeyEditorDialog(QWidget* parent = nullptr);
 
-    void componentComplete() override;
+    void classBegin() override;
+
+    bool showKeyPalette() const;
+    void setShowKeyPalette(bool showKeyPalette);
+
+private:
+    KeyEditor* m_keyEditor = nullptr;
 };
 }
 

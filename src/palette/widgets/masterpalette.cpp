@@ -108,8 +108,8 @@ void MasterPalette::componentComplete()
 
     m_timeItem = new QTreeWidgetItem();
     m_timeItem->setData(0, Qt::UserRole, stack->count());
-    m_timeDialog = new TimeDialog(this);
-    stack->addWidget(m_timeDialog);
+    m_timeEditor = new TimeEditor(this);
+    stack->addWidget(m_timeEditor);
     treeWidget->addTopLevelItem(m_timeItem);
 
     addPalette(creator.newBracketsPalette());
@@ -232,8 +232,8 @@ void MasterPalette::showEvent(QShowEvent* event)
 void MasterPalette::closeEvent(QCloseEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
-    if (m_timeDialog->dirty()) {
-        m_timeDialog->save();
+    if (m_timeEditor->dirty()) {
+        m_timeEditor->save();
     }
     if (m_keyEditor->dirty()) {
         m_keyEditor->save();
