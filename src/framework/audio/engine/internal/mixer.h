@@ -71,7 +71,7 @@ public:
     AudioSignalChanges masterAudioSignalChanges() const;
 
     void setIsIdle(bool idle);
-    void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
+    void setTracksToProcessWhenIdle(const std::unordered_set<TrackId>& trackIds);
 
     // IAudioSource
     void setOutputSpec(const OutputSpec& spec) override;
