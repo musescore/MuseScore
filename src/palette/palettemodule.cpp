@@ -68,9 +68,8 @@ void PaletteModule::resolveImports()
         ir->registerWidgetUri<SpecialCharactersDialog>(Uri("musescore://palette/specialcharacters"));
         ir->registerWidgetUri<TimeSignaturePropertiesDialog>(Uri("musescore://palette/timesignatureproperties"));
         ir->registerWidgetUri<CustomizeKitDialog>(Uri("musescore://palette/customizekit"));
-        //! FIXME This is not a widget dialog
         ir->registerWidgetUri<KeyEditorDialog>(Uri("musescore://notation/keysignatures"));
-        //ir->registerWidgetUri<TimeDialog>(Uri("musescore://notation/timesignatures"));
+        ir->registerWidgetUri<TimeEditorDialog>(Uri("musescore://notation/timesignatures"));
 
         ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
         ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");

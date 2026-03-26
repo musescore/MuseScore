@@ -138,7 +138,7 @@ void PaletteElementEditor::open()
 
         paletteProvider()->addCustomItemRequested().onReceive(this, [this](ElementPtr item) {
             onElementAdded(item);
-        });
+        }, async::Asyncable::Mode::SetReplace);
 
         if (interactive()->isOpened(uri).val) {
             interactive()->raise(uri);

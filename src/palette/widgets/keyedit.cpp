@@ -458,10 +458,21 @@ KeyEditorDialog::KeyEditorDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
-void KeyEditorDialog::componentComplete()
+void KeyEditorDialog::classBegin()
 {
+    m_keyEditor = new KeyEditor(this);
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSizeConstraint(QLayout::SetFixedSize);
-    layout->addWidget(new KeyEditor(this));
+    layout->addWidget(m_keyEditor);
+}
+
+bool KeyEditorDialog::showKeyPalette() const
+{
+    return m_keyEditor->showKeyPalette();
+}
+
+void KeyEditorDialog::setShowKeyPalette(bool showKeyPalette)
+{
+    m_keyEditor->setShowKeyPalette(showKeyPalette);
 }
