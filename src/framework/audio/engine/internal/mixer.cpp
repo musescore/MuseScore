@@ -460,19 +460,14 @@ void Mixer::setIsIdle(bool idle)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (m_isIdle == idle) {
-        return;
-    }
-
     m_isIdle = idle;
-    m_tracksToProcessWhenIdle.clear();
 }
 
-void Mixer::setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds)
+void Mixer::setTracksToProcessWhenIdle(const std::unordered_set<TrackId>& trackIds)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_tracksToProcessWhenIdle = std::move(trackIds);
+    m_tracksToProcessWhenIdle = trackIds;
 }
 
 void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const
