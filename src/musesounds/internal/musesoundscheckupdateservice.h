@@ -29,22 +29,19 @@
 #include "network/inetworkmanagercreator.h"
 #include "global/iglobalconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "interactive/iinteractive.h"
 #include "interactive/iplatforminteractive.h"
 
 namespace mu::musesounds {
-class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::Contextable, public muse::async::Asyncable
+class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
     muse::GlobalInject<muse::network::INetworkManagerCreator> networkManagerCreator;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
-    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
-    MuseSoundsCheckUpdateService(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx) {}
+    MuseSoundsCheckUpdateService() = default;
 
     muse::Ret needCheckForUpdate() const override;
 
