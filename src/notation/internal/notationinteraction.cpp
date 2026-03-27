@@ -492,11 +492,6 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     const mu::engraving::Instrument* instr = staff->part()->instrument(tick);
 
-    // in any empty measure, pos will be right next to barline
-    // so pad this by barNoteDistance
-    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
-
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = params.duration.headType();
 
@@ -562,6 +557,22 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
         shadowNote.setState(symNotehead, params.duration, false, params.position.beyondScore, params.accidentalType,
                             params.articulationIds);
     }
+
+    // if upscaled, note appears by default a distance away from the segment start,
+    // as described in ChordLayout::centreChords
+    if (mag > 1.0) {
+        qreal xOffset = (mag - 1.0) * 0.5 * shadowNote.symWidth(symNotehead);
+        if (shadowNote.computeUp()) {
+            position.pos.rx() += xOffset;
+        } else {
+            position.pos.rx() -= xOffset;
+        }
+    }
+
+    // in any empty measure, pos will be right next to barline
+    // so pad this by barNoteDistance
+    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
+    position.pos.rx() -= qMin(relX - score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance), 0.0);
 
     score()->renderer()->layoutItem(&shadowNote);
 
