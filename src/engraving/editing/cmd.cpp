@@ -4172,6 +4172,20 @@ bool Score::cmdImplode()
     // if single staff selected, combine voices
     // otherwise combine staves
     if (dstStaff == endStaff - 1) {
+        // find first voice with actual notes to use as destination
+        track_idx_t actualDstTrack = dstTrack;
+        for (voice_idx_t v = 0; v < VOICES; ++v) {
+            track_idx_t testTrack = dstStaff * VOICES + v;
+            for (Measure* m = startMeasure; m && m->tick() < endTick; m = m->nextMeasure()) {
+                if (m->hasVoice(testTrack) && !m->isOnlyRests(testTrack)) {
+                    actualDstTrack = testTrack;
+                    goto found_voice;
+                }
+            }
+        }
+found_voice:
+        dstTrack = actualDstTrack;
+
         // loop through segments adding notes to chord on top staff
         for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
             if (!s->isChordRestType()) {
@@ -4190,7 +4204,10 @@ bool Score::cmdImplode()
                 }
                 // loop through each subsequent staff (or track within staff)
                 // looking for notes to add
-                for (track_idx_t srcTrack = startTrack + 1; srcTrack < endTrack; srcTrack++) {
+                for (track_idx_t srcTrack = startTrack; srcTrack < endTrack; srcTrack++) {
+                    if (srcTrack == dstTrack) {
+                        continue;
+                    }
                     EngravingItem* src = s->element(srcTrack);
                     if (src && src->isChord()) {
                         Chord* srcChord = toChord(src);
@@ -4231,22 +4248,66 @@ bool Score::cmdImplode()
                         undoRemoveElement(src);
                     }
                 }
-            }
-            // TODO - use first voice that actually has a note and implode remaining voices on it?
-            // see https://musescore.org/en/node/174111
-            else if (dst) {
-                // destination track has something, but it isn't a chord
-                // remove rests from other voices if in "voice mode"
-                for (voice_idx_t i = 1; i < VOICES; ++i) {
-                    EngravingItem* e = s->element(dstTrack + i);
-                    if (e && e->isRest()) {
-                        undoRemoveElement(e);
+            } else {
+                // destination track has rest or nothing - find first chord in other voices and move it to dstTrack
+                Chord* firstChord = nullptr;
+                track_idx_t firstChordTrack = muse::nidx;
+                for (track_idx_t track = startTrack; track < endTrack; track++) {
+                    EngravingItem* e = s->element(track);
+                    if (e && e->isChord()) {
+                        firstChord = toChord(e);
+                        firstChordTrack = track;
+                        break;
+                    }
+                }
+
+                if (firstChord) {
+                    // move first chord to dstTrack and merge others into it
+                    if (firstChordTrack != dstTrack) {
+                        firstChord->undoChangeProperty(Pid::TRACK, dstTrack);
+                    }
+
+                    for (track_idx_t srcTrack = startTrack; srcTrack < endTrack; srcTrack++) {
+                        if (srcTrack == firstChordTrack) {
+                            continue;
+                        }
+                        EngravingItem* src = s->element(srcTrack);
+                        if (src && src->isChord()) {
+                            Chord* srcChord = toChord(src);
+                            if (srcChord->ticks() != firstChord->ticks()) {
+                                continue;
+                            }
+                            for (Note* n : srcChord->notes()) {
+                                NoteVal nv(n->pitch());
+                                nv.tpc1 = n->tpc1();
+                                if (firstChord->findNote(nv.pitch)) {
+                                    continue;
+                                }
+                                bool forceAccidental = n->accidental() && n->accidental()->role() == AccidentalRole::USER;
+                                addNote(firstChord, nv, forceAccidental);
+                            }
+                        }
+                        if (src && src->voice()) {
+                            undoRemoveElement(src);
+                        }
+                    }
+
+                    // remove rest from dstTrack if present
+                    if (dst && dst->isRest()) {
+                        undoRemoveElement(dst);
                     }
                 }
             }
         }
         // delete orphaned spanners (TODO: figure out solution to reconnect orphaned spanners to their cloned notes)
         checkSpanner(startTick, endTick);
+
+        // if destination is not voice 1, swap it to voice 1
+        if (dstTrack != startTrack) {
+            for (Measure* m = startMeasure; m && m->tick() < endTick; m = m->nextMeasure()) {
+                undo(new ExchangeVoice(m, startTrack, dstTrack, dstStaff));
+            }
+        }
     } else {
         track_idx_t tracks[VOICES];
         for (voice_idx_t i = 0; i < VOICES; i++) {

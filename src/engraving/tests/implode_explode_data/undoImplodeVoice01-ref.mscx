@@ -269,12 +269,15 @@
             </Chord>
           <Chord>
             <eid>o_o</eid>
+            <track>0</track>
             <durationType>quarter</durationType>
             <Note>
               <eid>p_p</eid>
+              <track>0</track>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 <eid>q_q</eid>
+                <track>0</track>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>10</tpc>
@@ -320,38 +323,74 @@
             <durationType>half</durationType>
             </Rest>
           </voice>
-        </Measure>
-      <Measure>
-        <eid>w_w</eid>
         <voice>
-          <Chord>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Rest>
+            <eid>w_w</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        <voice>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Rest>
             <eid>x_x</eid>
             <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>y_y</eid>
+        <voice>
+          <Chord>
+            <eid>z_z</eid>
+            <durationType>half</durationType>
             <Note>
-              <eid>y_y</eid>
+              <eid>0_0</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
-              <eid>z_z</eid>
+              <eid>1_1</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
-              <eid>0_0</eid>
+              <eid>2_2</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>1_1</eid>
+            <eid>3_3</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>2_2</eid>
+            <eid>4_4</eid>
             </BarLine>
+          </voice>
+        <voice>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Rest>
+            <eid>5_5</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        <voice>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Rest>
+            <eid>6_6</eid>
+            <durationType>half</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
