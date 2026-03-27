@@ -1467,8 +1467,10 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    xml.tag("fretFingering", TConv::toXml(legacyFingering));
-    xml.tag("fretFingeringEx", TConv::toXml(fullFingering));
+    const PropertyValue fingeringDefault = item->propertyDefault(Pid::FRET_FINGERING);
+
+    xml.tagProperty("fretFingering", PropertyValue(legacyFingering), fingeringDefault);
+    xml.tagProperty("fretFingeringEx", PropertyValue(fullFingering), fingeringDefault);
 
     writeItemProperties(item, xml, ctx);
 
