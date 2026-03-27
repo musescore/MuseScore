@@ -28,39 +28,42 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 
 Clock::Clock()
-    : m_timeChangedInSecs(async::makeOpt()
-                          .name("audio::clock::timeChangedInSecs")
-                          .disableWaitPendingsOnSend())
+    : m_timeChanged(async::makeOpt()
+                    .name("audio::clock::timeChanged")
+                    .disableWaitPendingsOnSend())
 {
     m_status.set(PlaybackStatus::Stopped);
 }
 
-msecs_t Clock::currentTime() const
+secs_t Clock::currentTime() const
 {
     return m_currentTime;
 }
 
-void Clock::forward(const msecs_t nextMsecs)
+void Clock::forward(const secs_t secs)
 {
     if (!isRunning()) {
         return;
     }
 
-    if (m_countDown > nextMsecs) {
-        m_countDown -= nextMsecs;
-        return;
-    } else if (m_countDown != 0) {
-        m_countDown = 0;
+    if (!m_countDown.is_zero()) {
+        m_countDown -= secs;
+
+        if (m_countDown > 0.) {
+            return;
+        }
+
+        m_countDown = 0.;
         m_countDownEnded.notify();
     }
 
-    msecs_t newTime = m_currentTime + nextMsecs;
+    secs_t newTime = m_currentTime + secs;
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
         seek(m_timeLoopStart);
 
         //!Note No matter of the time loop boundaries, the current frame still should be handled
-        setCurrentTime(m_timeLoopStart + nextMsecs);
+        setCurrentTime(m_timeLoopStart + secs);
         return;
     }
 
@@ -73,14 +76,14 @@ void Clock::forward(const msecs_t nextMsecs)
     setCurrentTime(newTime);
 }
 
-void Clock::setCurrentTime(msecs_t time)
+void Clock::setCurrentTime(secs_t time)
 {
     if (m_currentTime == time) {
         return;
     }
 
     m_currentTime = time;
-    m_timeChangedInSecs.send(microsecsToSecs(m_currentTime));
+    m_timeChanged.send(m_currentTime);
 }
 
 void Clock::start()
@@ -90,16 +93,16 @@ void Clock::start()
 
 void Clock::reset()
 {
-    seek(0);
+    seek(0.);
     resetTimeLoop();
-    m_countDown = 0;
+    m_countDown = 0.;
 }
 
 void Clock::stop()
 {
     m_status.set(PlaybackStatus::Stopped);
-    seek(0);
-    m_countDown = 0;
+    seek(0.);
+    m_countDown = 0.;
 }
 
 void Clock::pause()
@@ -113,34 +116,34 @@ void Clock::resume()
     seek(m_currentTime);
 }
 
-void Clock::seek(const msecs_t msecs)
+void Clock::seek(const secs_t newPosition)
 {
-    if (m_currentTime == msecs) {
+    if (m_currentTime == newPosition) {
         return;
     }
 
-    setCurrentTime(msecs);
+    setCurrentTime(newPosition);
     m_seekOccurred.notify();
 }
 
-msecs_t Clock::timeDuration() const
+secs_t Clock::timeDuration() const
 {
     return m_timeDuration;
 }
 
-void Clock::setTimeDuration(const msecs_t duration)
+void Clock::setTimeDuration(const secs_t duration)
 {
     m_timeDuration = duration;
 }
 
-Ret Clock::setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec)
+Ret Clock::setTimeLoop(const secs_t from, const secs_t to)
 {
-    if (fromMsec >= toMsec) {
+    if (from >= to) {
         return make_ret(Err::InvalidTimeLoop);
     }
 
-    m_timeLoopStart = fromMsec;
-    m_timeLoopEnd = toMsec;
+    m_timeLoopStart = from;
+    m_timeLoopEnd = to;
 
     return Ret(Ret::Code::Ok);
 }
@@ -151,7 +154,7 @@ void Clock::resetTimeLoop()
     m_timeLoopEnd = 0;
 }
 
-void Clock::setCountDown(const msecs_t duration)
+void Clock::setCountDown(const secs_t duration)
 {
     m_countDown = duration;
 }
@@ -168,7 +171,7 @@ bool Clock::isRunning() const
 
 async::Channel<secs_t> Clock::timeChanged() const
 {
-    return m_timeChangedInSecs;
+    return m_timeChanged;
 }
 
 async::Notification Clock::seekOccurred() const

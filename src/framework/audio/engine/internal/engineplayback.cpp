@@ -422,16 +422,16 @@ void EnginePlayback::resume(const secs_t delay)
     m_player->resume(delay);
 }
 
-void EnginePlayback::setDuration(const msecs_t durationMsec)
+void EnginePlayback::setDuration(const secs_t duration)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_player->setDuration(durationMsec);
+    m_player->setDuration(duration);
 }
 
-Ret EnginePlayback::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
+Ret EnginePlayback::setLoop(const secs_t from, const secs_t to)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    return m_player->setLoop(fromMsec, toMsec);
+    return m_player->setLoop(from, to);
 }
 
 void EnginePlayback::resetLoop()
@@ -690,7 +690,7 @@ size_t EnginePlayback::tracksBeingProcessedCount() const
 Ret EnginePlayback::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format)
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
-    const msecs_t totalDuration = m_player->duration();
+    const secs_t totalDuration = m_player->duration();
     SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, mixer());
 
     writer->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string /*title*/) {

@@ -111,7 +111,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
         if (source) {
             source->setIsActive(isActive());
-            source->seek(playbackPosition());
+            source->seek(secsToMicrosecs(playbackPosition()));
         }
     });
 
@@ -199,10 +199,10 @@ unsigned int Mixer::audioChannelsCount() const
     return m_outputSpec.audioChannelCount;
 }
 
-msecs_t Mixer::playbackPosition() const
+secs_t Mixer::playbackPosition() const
 {
     if (m_clocks.empty()) {
-        return 0;
+        return 0.;
     }
 
     const IClockPtr clock = *m_clocks.begin();
@@ -211,8 +211,8 @@ msecs_t Mixer::playbackPosition() const
 
 samples_t Mixer::playbackPositionSamples() const
 {
-    const msecs_t pos = playbackPosition();
-    return pos / 1000000. * m_outputSpec.sampleRate;
+    const secs_t pos = playbackPosition();
+    return std::llround(pos.raw() * m_outputSpec.sampleRate);
 }
 
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
@@ -220,7 +220,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     ONLY_AUDIO_ENGINE_THREAD;
 
     for (const IClockPtr& clock : m_clocks) {
-        clock->forward((samplesPerChannel * 1000000) / m_outputSpec.sampleRate);
+        clock->forward(static_cast<double>(samplesPerChannel) / m_outputSpec.sampleRate);
     }
 
     size_t outBufferSize = samplesPerChannel * m_outputSpec.audioChannelCount;

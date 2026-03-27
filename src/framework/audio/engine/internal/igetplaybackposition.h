@@ -30,7 +30,7 @@ class IGetPlaybackPosition
 public:
     virtual ~IGetPlaybackPosition() = default;
 
-    virtual msecs_t playbackPosition() const = 0;
+    virtual secs_t playbackPosition() const = 0;
     virtual samples_t playbackPositionSamples() const = 0;
 };
 }

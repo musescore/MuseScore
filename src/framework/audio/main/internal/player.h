@@ -51,8 +51,8 @@ public:
     PlaybackStatus playbackStatus() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
-    void setDuration(const msecs_t durationMsec) override;
-    async::Promise<bool> setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    void setDuration(const secs_t duration) override;
+    async::Promise<bool> setLoop(const secs_t from, const secs_t to) override;
     void resetLoop() override;
 
     secs_t playbackPosition() const override;

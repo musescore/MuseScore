@@ -71,7 +71,7 @@ void EnginePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_clock->setCountDown(secsToMicrosecs(delay));
+    m_clock->setCountDown(delay);
     m_countDownIsSet = !delay.is_zero();
     audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->start();
@@ -82,9 +82,8 @@ void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_flushSoundOnSeek = flushSound;
-    msecs_t newPos = secsToMicrosecs(newPosition);
-    m_clock->seek(newPos);
-    seekAllTracks(newPos);
+    m_clock->seek(newPosition);
+    seekAllTracks(newPosition);
     m_flushSoundOnSeek = true;
 }
 
@@ -110,35 +109,31 @@ void EnginePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_clock->setCountDown(secsToMicrosecs(delay));
+    m_clock->setCountDown(delay);
     m_countDownIsSet = !delay.is_zero();
     audioEngine()->setMode(RenderMode::RealTimeMode);
     m_clock->resume();
 }
 
-msecs_t EnginePlayer::duration() const
+secs_t EnginePlayer::duration() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (!m_clock) {
-        return 0;
-    }
-
-    return m_clock->timeDuration();
+    return m_clock ? m_clock->timeDuration() : secs_t { 0. };
 }
 
-void EnginePlayer::setDuration(const msecs_t duration)
+void EnginePlayer::setDuration(const secs_t duration)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_clock->setTimeDuration(duration * 1000);
+    m_clock->setTimeDuration(duration);
 }
 
-Ret EnginePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
+Ret EnginePlayer::setLoop(const secs_t from, const secs_t to)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->setTimeLoop(fromMsec * 1000, toMsec * 1000);
+    return m_clock->setTimeLoop(from, to);
 }
 
 void EnginePlayer::resetLoop()
@@ -152,7 +147,7 @@ secs_t EnginePlayer::playbackPosition() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return microsecsToSecs(m_clock->currentTime());
+    return m_clock->currentTime();
 }
 
 Channel<secs_t> EnginePlayer::playbackPositionChanged() const
@@ -176,7 +171,7 @@ Channel<PlaybackStatus> EnginePlayer::playbackStatusChanged() const
     return m_clock->statusChanged();
 }
 
-void EnginePlayer::seekAllTracks(const msecs_t newPositionMsecs)
+void EnginePlayer::seekAllTracks(const secs_t newPosition)
 {
     IF_ASSERT_FAILED(m_getTracks) {
         return;
@@ -184,7 +179,7 @@ void EnginePlayer::seekAllTracks(const msecs_t newPositionMsecs)
 
     for (const auto& pair : m_getTracks->allTracks()) {
         if (pair.second->inputHandler) {
-            pair.second->inputHandler->seek(newPositionMsecs, m_flushSoundOnSeek);
+            pair.second->inputHandler->seek(secsToMicrosecs(newPosition), m_flushSoundOnSeek);
         }
     }
 }
