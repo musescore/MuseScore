@@ -67,8 +67,8 @@ public:
 
 private:
     mu::engraving::Score* score() const;
-    EngravingItem* m_lastElementHit;
 
+    EngravingItem* m_lastElementHit = nullptr;
     IGetScore* m_getScore = nullptr;
     INotationSelectionRangePtr m_range;
 };
