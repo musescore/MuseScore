@@ -1,12 +1,32 @@
 /*
-* Audacity: A Digital Audio Editor
-*/
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2026 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <QColor>
 #include <QPointF>
 #include <QQuickPaintedItem>
 #include <QVector>
+#include <qqmlintegration.h>
 
 #include "actions/actionable.h"
 #include "async/asyncable.h"
@@ -17,6 +37,7 @@
 
 // NOTE: all of fooN() function are normalized, returning 0..1 values
 
+namespace muse::uicomponents {
 struct GhostPoint {
     QPointF point;
     qreal distToSegment = 1e18;
@@ -58,6 +79,8 @@ class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public
     Q_PROPERTY(qreal activePointX READ activePointX NOTIFY activePointChanged)
     Q_PROPERTY(qreal activePointY READ activePointY NOTIFY activePointChanged)
     Q_PROPERTY(qreal activePointValue READ activePointValue NOTIFY activePointChanged)
+
+    QML_ELEMENT
 
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
@@ -247,3 +270,4 @@ private:
     QPointF m_activePointPx;
     qreal m_activePointValue = 0.0;
 };
+}
