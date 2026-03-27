@@ -31,11 +31,11 @@
 namespace muse::extensions {
 class ExtensionsUiActions : public ui::IUiActionsModule, public Contextable, public async::Asyncable
 {
-    GlobalInject<extensions::IExtensionsProvider> provider;
+    ContextInject<extensions::IExtensionsProvider> provider = { this };
 
 public:
-    ExtensionsUiActions(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    ExtensionsUiActions(const modularity::ContextPtr& ctx)
+        : Contextable(ctx) {}
 
     const ui::UiActionList& actionsList() const override;
 

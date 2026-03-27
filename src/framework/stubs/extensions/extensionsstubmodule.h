@@ -29,5 +29,16 @@ class ExtensionsModule : public modularity::IModuleSetup
 public:
     std::string moduleName() const override;
     void registerExports() override;
+
+    modularity::IContextSetup* newContext(const modularity::ContextPtr& ctx) const override;
+};
+
+class ExtensionsContext : public modularity::IContextSetup
+{
+public:
+    ExtensionsContext(const modularity::ContextPtr& ctx)
+        : modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

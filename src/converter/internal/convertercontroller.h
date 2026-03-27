@@ -38,10 +38,10 @@ namespace mu::converter {
 class ConverterController : public IConverterController, public muse::Contextable
 {
     muse::GlobalInject<project::IProjectCreator> notationCreator;
-    muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
     muse::GlobalInject<project::INotationWritersRegister> writers;
     muse::GlobalInject<project::IProjectRWRegister> projectRW;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
+    muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
     ConverterController(const muse::modularity::ContextPtr& iocCtx)

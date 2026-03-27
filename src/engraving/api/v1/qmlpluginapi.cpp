@@ -239,6 +239,12 @@ PluginAPI::PluginAPI(QQuickItem* parent)
     setRequiresScore(true); // by default plugins require a score to work
 }
 
+PluginAPI::PluginAPI(const muse::modularity::ContextPtr& ctx)
+    : muse::Contextable(ctx)
+{
+    setRequiresScore(true); // by default plugins require a score to work
+}
+
 apiv1::Score* PluginAPI::curScore() const
 {
     if (currentScore()) {

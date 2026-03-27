@@ -52,12 +52,9 @@ std::string ExtensionsModule::moduleName() const
 void ExtensionsModule::registerExports()
 {
     m_configuration = std::make_shared<ExtensionsConfiguration>(globalCtx());
-    m_provider = std::make_shared<ExtensionsProvider>(globalCtx());
     m_execPointsRegister = std::make_shared<ExtensionsExecPointsRegister>();
 
-    globalIoc()->registerExport<IExtensionsProvider>(mname, m_provider);
     globalIoc()->registerExport<IExtensionsConfiguration>(mname, m_configuration);
-    globalIoc()->registerExport<IExtensionInstaller>(mname, new ExtensionInstaller(globalCtx()));
     globalIoc()->registerExport<IExtensionsExecPointsRegister>(mname, m_execPointsRegister);
 }
 
@@ -81,7 +78,6 @@ void ExtensionsModule::registerApi()
 void ExtensionsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_provider->reloadExtensions();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
@@ -103,10 +99,15 @@ IContextSetup* ExtensionsModule::newContext(const muse::modularity::ContextPtr& 
 void ExtensionsContext::registerExports()
 {
     m_actionController = std::make_shared<ExtensionsActionController>(iocContext());
+    m_provider = std::make_shared<ExtensionsProvider>(iocContext());
+
     ioc()->registerExport<IExtensionsUiEngine>(mname, new ExtensionsUiEngine(iocContext()));
+    ioc()->registerExport<IExtensionsProvider>(mname, m_provider);
+    ioc()->registerExport<IExtensionInstaller>(mname, new ExtensionInstaller(iocContext()));
 }
 
 void ExtensionsContext::onInit(const IApplication::RunMode&)
 {
     m_actionController->init();
+    m_provider->reloadExtensions();
 }

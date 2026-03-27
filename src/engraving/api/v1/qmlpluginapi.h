@@ -514,6 +514,7 @@ signals:
 public:
     /// \cond MS_INTERNAL
     PluginAPI(QQuickItem* parent = 0);
+    PluginAPI(const muse::modularity::ContextPtr& ctx);
 
     static void registerQmlTypes();
 

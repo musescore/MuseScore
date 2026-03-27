@@ -36,7 +36,7 @@ class DevExtensionsListModel : public QObject, public Contextable
 
     QML_ELEMENT
 
-    GlobalInject<IExtensionsProvider> provider;
+    ContextInject<IExtensionsProvider> provider = { this };
     ContextInject<IInteractive> interactive = { this };
 
 public:
