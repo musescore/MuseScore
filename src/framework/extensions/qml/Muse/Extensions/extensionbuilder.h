@@ -43,7 +43,7 @@ class ExtensionBuilder : public QObject, public Contextable, public async::Async
 
     QML_ELEMENT
 
-    GlobalInject<IExtensionsProvider> provider;
+    ContextInject<IExtensionsProvider> provider = { this };
     ContextInject<IExtensionsUiEngine> engine = { this };
 
 public:

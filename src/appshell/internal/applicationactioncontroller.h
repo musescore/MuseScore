@@ -55,8 +55,8 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::GlobalInject<IAppShellConfiguration> configuration;
     muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
     muse::GlobalInject<muse::IApplication> application;
-    muse::GlobalInject<muse::extensions::IExtensionInstaller> extensionInstaller;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
+    muse::ContextInject<muse::extensions::IExtensionInstaller> extensionInstaller = { this };
     muse::ContextInject<muse::ui::IUiActionsRegister> actionsRegister = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };

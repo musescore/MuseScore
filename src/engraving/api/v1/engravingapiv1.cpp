@@ -89,7 +89,7 @@ void EngravingApiV1::setApi(PluginAPI* api)
 PluginAPI* EngravingApiV1::api() const
 {
     if (!m_api) {
-        m_api = new PluginAPI();
+        m_api = new PluginAPI(iocContext());
         m_selfApi = true;
     }
 

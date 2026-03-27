@@ -28,12 +28,23 @@ using namespace muse;
 using namespace muse::extensions;
 using namespace muse::modularity;
 
+static const std::string mname("extensions_stub");
+
 std::string ExtensionsModule::moduleName() const
 {
-    return "extensions_stub";
+    return mname;
 }
 
 void ExtensionsModule::registerExports()
 {
-    globalIoc()->registerExport<IExtensionsProvider>(moduleName(), new ExtensionsProviderStub());
+}
+
+IContextSetup* ExtensionsModule::newContext(const ContextPtr& ctx) const
+{
+    return new ExtensionsContext(ctx);
+}
+
+void ExtensionsContext::registerExports()
+{
+    ioc()->registerExport<IExtensionsProvider>(mname, new ExtensionsProviderStub());
 }

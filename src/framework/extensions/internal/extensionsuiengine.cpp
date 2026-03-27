@@ -43,11 +43,19 @@ ExtensionsUiEngine::~ExtensionsUiEngine()
 
 void ExtensionsUiEngine::setup()
 {
+    QmlIoCContext* qmlIoc = new QmlIoCContext(this);
+    qmlIoc->ctx = iocContext();
+
+    QQmlContext* rootContext = m_engine->rootContext();
+    rootContext->setObjectName(QString("Root QQmlContext: %1").arg(qmlIoc->ctx->id));
+    rootContext->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
+    m_engine->setProperty("ioc_context", QVariant::fromValue(qmlIoc));
+
     m_engine->setProperty("apiversion", 2);
 
     //! NOTE Needed for UI components, should not be used directly in extensions
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
-    m_engine->rootContext()->setContextProperty("ui", ui);
+    rootContext->setContextProperty("ui", ui);
 
     m_apiEngine = new muse::api::JsApiEngine(m_engine, iocContext());
     QJSValue globalObject = m_engine->globalObject();
@@ -92,11 +100,19 @@ QQmlEngine* ExtensionsUiEngine::engineV1()
 
 void ExtensionsUiEngine::setupV1()
 {
+    QmlIoCContext* qmlIoc = new QmlIoCContext(this);
+    qmlIoc->ctx = iocContext();
+
+    QQmlContext* rootContext = m_engine->rootContext();
+    rootContext->setObjectName(QString("Root QQmlContext: %1").arg(qmlIoc->ctx->id));
+    rootContext->setContextProperty("ioc_context", QVariant::fromValue(qmlIoc));
+    m_engineV1->setProperty("ioc_context", QVariant::fromValue(qmlIoc));
+
     m_engineV1->setProperty("apiversion", 1);
 
     //! NOTE Needed for UI components, should not be used directly in extensions
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
-    m_engineV1->rootContext()->setContextProperty("ui", ui);
+    rootContext->setContextProperty("ui", ui);
 
     m_apiEngineV1 = new muse::api::JsApiEngine(m_engineV1, iocContext());
     m_apiV1 = new apiv1::ExtApiV1(m_apiEngineV1, m_engineV1);
