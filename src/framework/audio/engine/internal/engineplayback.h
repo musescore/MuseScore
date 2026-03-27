@@ -94,8 +94,8 @@ public:
     void pause() override;
     void resume(const secs_t delay = 0.0) override;
 
-    void setDuration(const msecs_t durationMsec) override;
-    Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    void setDuration(const secs_t duration) override;
+    Ret setLoop(const secs_t from, const secs_t to) override;
     void resetLoop() override;
 
     PlaybackStatus playbackStatus() const override;

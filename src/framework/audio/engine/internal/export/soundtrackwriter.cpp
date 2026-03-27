@@ -56,7 +56,7 @@ static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackFormat& for
 }
 
 SoundTrackWriter::SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format,
-                                   const msecs_t totalDuration, IAudioSourcePtr source)
+                                   const secs_t totalDuration, IAudioSourcePtr source)
     : m_source(std::move(source))
 {
     if (!m_source) {
@@ -67,8 +67,8 @@ SoundTrackWriter::SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackForm
     }
 
     const OutputSpec& outputSpec = format.outputSpec;
-    const uint64_t totalUs = static_cast<uint64_t>(std::max<int64_t>(0, totalDuration));
-    m_totalSamplesPerChannel = static_cast<samples_t>((totalUs * static_cast<uint64_t>(outputSpec.sampleRate)) / 1000000ULL);
+    const double totalSec = std::max(0.0, totalDuration.raw());
+    m_totalSamplesPerChannel = static_cast<samples_t>(std::llround(totalSec * static_cast<double>(outputSpec.sampleRate)));
 
     const samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
     m_intermBuffer.resize(intermediateSamplesNumber);

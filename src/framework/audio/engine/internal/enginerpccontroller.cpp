@@ -384,21 +384,21 @@ void EngineRpcController::init()
 
     onQuickMethod(Method::SetDuration, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
-        msecs_t durationMsec = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, durationMsec)) {
+        secs_t duration = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, duration)) {
             return;
         }
-        playback()->setDuration(durationMsec);
+        playback()->setDuration(duration);
     });
 
     onQuickMethod(Method::SetLoop, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
-        msecs_t fromMsec = 0;
-        msecs_t toMsec = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, fromMsec, toMsec)) {
+        secs_t from = 0;
+        secs_t to = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, from, to)) {
             return;
         }
-        Ret ret = playback()->setLoop(fromMsec, toMsec);
+        Ret ret = playback()->setLoop(from, to);
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 

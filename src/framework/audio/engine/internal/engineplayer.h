@@ -52,16 +52,16 @@ public:
     PlaybackStatus playbackStatus() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
-    msecs_t duration() const override;
-    void setDuration(const msecs_t duration) override;
-    Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    secs_t duration() const override;
+    void setDuration(const secs_t duration) override;
+    Ret setLoop(const secs_t from, const secs_t to) override;
     void resetLoop() override;
 
     secs_t playbackPosition() const override;
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
-    void seekAllTracks(const msecs_t newPositionMsecs);
+    void seekAllTracks(const secs_t newPosition);
     void flushAllTracks();
 
     using AllTracksReadyCallback = std::function<void ()>;

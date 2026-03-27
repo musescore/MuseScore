@@ -999,7 +999,7 @@ void PlaybackController::updateLoop()
 
     secs_t fromSecs = playedTickToSecs(playbackTickFrom.val);
     secs_t toSecs = playedTickToSecs(playbackTickTo.val);
-    currentPlayer()->setLoop(secsToMilisecs(fromSecs), secsToMilisecs(toSecs));
+    currentPlayer()->setLoop(fromSecs, toSecs);
 
     enableLoop();
 
@@ -1508,10 +1508,10 @@ void PlaybackController::setupPlayer()
         onPlaybackStatusChanged();
     });
 
-    currentPlayer()->setDuration(secsToMilisecs(notationPlayback()->totalPlayTime()));
+    currentPlayer()->setDuration(notationPlayback()->totalPlayTime());
 
     notationPlayback()->totalPlayTimeChanged().onReceive(this, [this](const audio::secs_t totalPlaybackTime) {
-        currentPlayer()->setDuration(secsToMilisecs(totalPlaybackTime));
+        currentPlayer()->setDuration(totalPlaybackTime);
         m_totalPlayTimeChanged.notify();
     });
 }

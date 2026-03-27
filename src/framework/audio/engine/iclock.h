@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ICLOCK_H
-#define MUSE_AUDIO_ICLOCK_H
+#pragma once
 
 #include <memory>
 
@@ -37,28 +36,30 @@ class IClock
 public:
     virtual ~IClock() = default;
 
-    virtual msecs_t currentTime() const = 0;
+    virtual secs_t currentTime() const = 0;
 
-    virtual void forward(const msecs_t nextMsecs) = 0;
+    virtual void forward(const secs_t secs) = 0;
 
     virtual void start() = 0;
     virtual void reset() = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume() = 0;
-    virtual void seek(const msecs_t msecs) = 0;
+
+    virtual void seek(const secs_t newPosition) = 0;
     virtual async::Notification seekOccurred() const = 0;
+
     virtual bool isRunning() const = 0;
 
     virtual PlaybackStatus status() const = 0;
     virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
 
-    virtual msecs_t timeDuration() const = 0;
-    virtual void setTimeDuration(const msecs_t duration) = 0;
-    virtual Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
+    virtual secs_t timeDuration() const = 0;
+    virtual void setTimeDuration(const secs_t duration) = 0;
+    virtual Ret setTimeLoop(const secs_t fromSec, const secs_t toSec) = 0;
     virtual void resetTimeLoop() = 0;
 
-    virtual void setCountDown(const msecs_t duration) = 0;
+    virtual void setCountDown(const secs_t duration) = 0;
     virtual async::Notification countDownEnded() const = 0;
 
     virtual async::Channel<secs_t> timeChanged() const = 0;
@@ -66,5 +67,3 @@ public:
 
 using IClockPtr = std::shared_ptr<IClock>;
 }
-
-#endif // MUSE_AUDIO_ICLOCK_H

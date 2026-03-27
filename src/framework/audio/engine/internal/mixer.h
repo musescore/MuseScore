@@ -82,7 +82,7 @@ public:
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
-    msecs_t playbackPosition() const override;
+    secs_t playbackPosition() const override;
     samples_t playbackPositionSamples() const override;
 
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);

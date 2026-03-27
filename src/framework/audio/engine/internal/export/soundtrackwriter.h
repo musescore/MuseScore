@@ -46,7 +46,7 @@ class SoundTrackWriter : public async::Asyncable
     muse::GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
-    SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format, const msecs_t totalDuration, engine::IAudioSourcePtr source);
+    SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format, const secs_t totalDuration, engine::IAudioSourcePtr source);
 
     Ret write();
     void abort();

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_CLOCK_H
-#define MUSE_AUDIO_CLOCK_H
+
+#pragma once
 
 #include "global/types/retval.h"
 #include "global/async/asyncable.h"
@@ -33,45 +33,45 @@ class Clock : public IClock, public async::Asyncable
 public:
     Clock();
 
-    void forward(const msecs_t nextMsecs) override;
+    void forward(const secs_t secs) override;
 
     void start() override;
     void reset() override;
     void stop() override;
     void pause() override;
     void resume() override;
-    void seek(const msecs_t msecs) override;
+
+    void seek(const secs_t newPosition) override;
     async::Notification seekOccurred() const override;
+
     bool isRunning() const override;
 
     PlaybackStatus status() const override;
     async::Channel<PlaybackStatus> statusChanged() const override;
 
-    msecs_t timeDuration() const override;
-    void setTimeDuration(const msecs_t duration) override;
-    Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    secs_t timeDuration() const override;
+    void setTimeDuration(const secs_t duration) override;
+    Ret setTimeLoop(const secs_t from, const secs_t to) override;
     void resetTimeLoop() override;
 
-    void setCountDown(const msecs_t duration) override;
+    void setCountDown(const secs_t duration) override;
     async::Notification countDownEnded() const override;
 
-    msecs_t currentTime() const override;
+    secs_t currentTime() const override;
     async::Channel<secs_t> timeChanged() const override;
 
 private:
-    void setCurrentTime(msecs_t time);
+    void setCurrentTime(secs_t time);
 
     ValCh<PlaybackStatus> m_status;
-    msecs_t m_currentTime = 0;
-    msecs_t m_timeDuration = 0;
-    msecs_t m_timeLoopStart = 0;
-    msecs_t m_timeLoopEnd = 0;
-    msecs_t m_countDown = 0;
+    secs_t m_currentTime = 0.;
+    secs_t m_timeDuration = 0.;
+    secs_t m_timeLoopStart = 0.;
+    secs_t m_timeLoopEnd = 0.;
+    secs_t m_countDown = 0.;
 
-    async::Channel<secs_t> m_timeChangedInSecs;
+    async::Channel<secs_t> m_timeChanged;
     async::Notification m_seekOccurred;
     async::Notification m_countDownEnded;
 };
 }
-
-#endif // MUSE_AUDIO_CLOCK_H
