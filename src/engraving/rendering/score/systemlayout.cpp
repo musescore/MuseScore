@@ -587,7 +587,7 @@ static StaffHideMode computeHideMode(const System* system, const Staff* staff, c
     AutoOnOff partHideMode = staff->part()->hideWhenEmpty();
     switch (partHideMode) {
     case AutoOnOff::ON:
-        break;
+        return StaffHideMode::HIDE_WHEN_STAFF_EMPTY;
     case AutoOnOff::OFF:
         return StaffHideMode::ALWAYS_SHOW;
     case AutoOnOff::AUTO:
