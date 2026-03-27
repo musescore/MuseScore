@@ -87,3 +87,8 @@ target_link_libraries(palette PRIVATE
 if (MUE_BUILD_PALETTE_QML)
     add_subdirectory(qml/MuseScore/Palette)
 endif()
+
+if(MUE_BUILD_PALETTE_TESTS)
+    add_subdirectory(tests)
+endif()
+

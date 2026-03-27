@@ -648,15 +648,26 @@ void CustomizeKitDialog::load()
 //   save
 //---------------------------------------------------------
 
+muse::io::path_t CustomizeKitDialog::ensureDrmSuffix(const muse::io::path_t& path)
+{
+    if (!path.hasSuffix("drm")) {
+        return path.appendingSuffix("drm");
+    }
+    return path;
+}
+
 void CustomizeKitDialog::save()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
-    muse::io::path_t fname = interactive()->selectSavingFileSync(muse::trc("palette", "Save drumset"), dir, filter);
+    muse::io::path_t defaultPath = dir.appendingComponent("drumset.drm");
+    muse::io::path_t fname = interactive()->selectSavingFileSync(muse::trc("palette", "Save drumset"), defaultPath, filter);
 
     if (fname.empty()) {
         return;
     }
+
+    fname = ensureDrmSuffix(fname);
 
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
     valueChanged();    //save last changes in name
@@ -706,3 +717,4 @@ void CustomizeKitDialog::defineShortcut()
 
     valueChanged();
 }
+

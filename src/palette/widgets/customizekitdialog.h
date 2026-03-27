@@ -69,7 +69,7 @@ private slots:
 
 private:
     void initDrumsetAndKey();
-
+    muse::io::path_t ensureDrmSuffix(const muse::io::path_t& path);
     void apply();
     void cancel();
 
