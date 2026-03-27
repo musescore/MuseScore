@@ -717,4 +717,3 @@ void CustomizeKitDialog::defineShortcut()
 
     valueChanged();
 }
-
