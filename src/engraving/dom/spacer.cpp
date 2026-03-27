@@ -27,6 +27,7 @@
 
 #include "measure.h"
 #include "score.h"
+#include "system.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -159,6 +160,62 @@ PropertyValue Spacer::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
+}
+
+//---------------------------------------------------------
+//   triggerLayout
+//---------------------------------------------------------
+
+void Spacer::triggerLayout() const
+{
+    if (!explicitParent()) {
+        return;
+    }
+
+    Measure* m = measure();
+    if (!m) {
+        EngravingItem::triggerLayout();
+        return;
+    }
+
+    Score* s = score();
+    System* system = m->system();
+    if (!s || !system || s->nstaves() == 0) {
+        m->triggerLayout();
+        return;
+    }
+
+    // Most spacer edits can stay local to the measure and are much cheaper.
+    // Escalate only for down/fixed spacers on the last non-vbox system of the page,
+    // where edits can repaginate and affect page-end spacing.
+    if (spacerType() == SpacerType::UP) {
+        m->triggerLayout();
+        return;
+    }
+
+    System* nextSystem = m->nextNonVBoxSystem();
+    if (nextSystem && nextSystem->page() == system->page()) {
+        m->triggerLayout();
+        return;
+    }
+
+    // For the last notation system on a page, include the next system boundary
+    // so page-end spacing can be recomputed without relaying out the whole score.
+    Measure* firstMeasure = system->firstMeasure();
+    if (!firstMeasure) {
+        m->triggerLayout();
+        return;
+    }
+
+    Fraction startTick = firstMeasure->tick();
+    Fraction endTick = s->endTick();
+    if (nextSystem) {
+        if (Measure* nextFirstMeasure = nextSystem->firstMeasure()) {
+            endTick = nextFirstMeasure->tick();
+        }
+    }
+
+    s->setLayout(startTick, endTick, 0, s->nstaves() - 1, this);
 }
 
 //---------------------------------------------------------
