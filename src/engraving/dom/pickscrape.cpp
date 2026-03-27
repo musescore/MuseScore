@@ -54,7 +54,13 @@ static const ElementStyle pickScrapeStyle {
     { Sid::palmMuteFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH },
-    { Sid::palmMutePlacement,                     Pid::PLACEMENT }
+    { Sid::palmMutePlacement,                     Pid::PLACEMENT },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)

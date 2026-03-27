@@ -58,6 +58,12 @@ static const ElementStyle letRingStyle {
     { Sid::letRingLineWidth,                     Pid::LINE_WIDTH },
     { Sid::letRingPlacement,                     Pid::PLACEMENT },
     //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
+    { Sid::letRingMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::letRingMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::letRingMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,             Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 LetRingSegment::LetRingSegment(LetRing* sp, System* parent)

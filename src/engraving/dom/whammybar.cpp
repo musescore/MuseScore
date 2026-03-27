@@ -55,6 +55,13 @@ static const ElementStyle whammyBarStyle {
     { Sid::whammyBarEndHookType,                   Pid::END_HOOK_TYPE },
     { Sid::whammyBarLineWidth,                     Pid::LINE_WIDTH },
     { Sid::whammyBarText,                          Pid::BEGIN_TEXT },
+
+    { Sid::whammyBarMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::whammyBarMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::whammyBarMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,               Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,               Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,               Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)

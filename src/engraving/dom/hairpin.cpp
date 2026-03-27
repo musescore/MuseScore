@@ -81,6 +81,12 @@ static const ElementStyle hairpinStyle {
     { Sid::hairpinEndFilledArrowWidth,         Pid::END_FILLED_ARROW_WIDTH },
     { Sid::hairpinBeginFilledArrowHeight,      Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::hairpinBeginFilledArrowWidth,       Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::hairpinMusicalSymbolSize,           Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::hairpinMusicalSymbolSize,           Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::hairpinMusicalSymbolSize,           Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 //---------------------------------------------------------

@@ -80,10 +80,16 @@ static const ElementStyle textLineStyle {
     { Sid::textLineEndLineArrowWidth,          Pid::END_LINE_ARROW_WIDTH },
     { Sid::textLineBeginLineArrowHeight,       Pid::BEGIN_LINE_ARROW_HEIGHT },
     { Sid::textLineBeginLineArrowWidth,        Pid::BEGIN_LINE_ARROW_WIDTH },
-    { Sid::textLineEndFilledArrowHeight,         Pid::END_FILLED_ARROW_HEIGHT },
-    { Sid::textLineEndFilledArrowWidth,          Pid::END_FILLED_ARROW_WIDTH },
-    { Sid::textLineBeginFilledArrowHeight,       Pid::BEGIN_FILLED_ARROW_HEIGHT },
-    { Sid::textLineBeginFilledArrowWidth,        Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::textLineEndFilledArrowHeight,       Pid::END_FILLED_ARROW_HEIGHT },
+    { Sid::textLineEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
+    { Sid::textLineBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
+    { Sid::textLineBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::textLineMusicalSymbolSize,          Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::textLineMusicalSymbolSize,          Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::textLineMusicalSymbolSize,          Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 //---------------------------------------------------------
@@ -111,6 +117,12 @@ static const ElementStyle systemTextLineStyle {
     { Sid::systemTextLinePlacement,            Pid::PLACEMENT },
     { Sid::systemTextLineLineStyle,            Pid::LINE_STYLE },
     { Sid::systemTextLinePosAbove,             Pid::OFFSET },
+    { Sid::systemTextLineMusicalSymbolSize,    Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::systemTextLineMusicalSymbolSize,    Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::systemTextLineMusicalSymbolSize,    Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 //---------------------------------------------------------

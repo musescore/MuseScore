@@ -71,6 +71,12 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMuteEndFilledArrowWidth,           Pid::END_FILLED_ARROW_WIDTH },
     { Sid::palmMuteBeginFilledArrowHeight,        Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::palmMuteBeginFilledArrowWidth,         Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::palmMuteMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,              Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
 PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
