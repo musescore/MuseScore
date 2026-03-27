@@ -3078,6 +3078,33 @@ QString Braille::braillePedalBefore(ChordRest* chordRest, const std::vector<Peda
     return result;
 }
 
+bool Braille::hasImmediatePedalDownOnNextCR(ChordRest* chordRest)
+{
+    if (!chordRest || !chordRest->segment() || !chordRest->segment()->next1()) {
+        return false;
+    }
+
+    ChordRest* nextCR = chordRest->segment()->next1()->nextChordRest(chordRest->track());
+    if (!nextCR) {
+        return false;
+    }
+
+    // Check if the next ChordRest is directly adjacent in time
+    if (nextCR->tick() != chordRest->tick() + chordRest->actualTicks()) {
+        return false;
+    }
+
+    // Check if there's a pedal starting on the next ChordRest
+    std::vector<Pedal*> nextCRPedals = pedals(nextCR);
+    for (Pedal* pedal : nextCRPedals) {
+        if (pedal && pedal->startCR() == nextCR) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QString Braille::braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal*>& pedalList)
 {
     if (!chordRest) {
@@ -3086,6 +3113,11 @@ QString Braille::braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal
     QString result;
     for (Pedal* pedal : pedalList) {
         if (!pedal || chordRest->tick() + chordRest->actualTicks() != pedal->tick2()) {
+            continue;
+        }
+        // Omit pedal up if immediately followed by pedal down on the next note
+        // (implied release is redundant in Braille music notation)
+        if (hasImmediatePedalDownOnNextCR(chordRest)) {
             continue;
         }
         result += BRAILLE_PEDAL_UP;

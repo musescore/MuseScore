@@ -238,5 +238,6 @@ private:
     QString brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& slur);
     QString braillePedalBefore(ChordRest* chordRest, const std::vector<Pedal*>& pedalList);
     QString braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal*>& pedalList);
+    bool hasImmediatePedalDownOnNextCR(ChordRest* chordRest);
 };
 }
