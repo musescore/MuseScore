@@ -23,5 +23,3 @@ TEST_F(DrumsetFileSaveTests, ensureDrumsetFileExtension)
     EXPECT_EQ(withSuffix.toStdString(), "MyKit.drm");
     EXPECT_EQ(withoutSuffix.toStdString(), "MyKit.drm");
 }
-
-
