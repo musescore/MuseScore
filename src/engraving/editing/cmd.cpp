@@ -4145,7 +4145,6 @@ bool Score::cmdImplode()
     staff_idx_t dstStaff   = selection().staffStart();
     staff_idx_t endStaff   = selection().staffEnd();
     track_idx_t dstTrack   = dstStaff * VOICES;
-    track_idx_t startTrack = dstStaff * VOICES;
     track_idx_t endTrack   = endStaff * VOICES;
     Segment* startSegment = selection().startSegment();
     Segment* endSegment = selection().endSegment();
@@ -4169,7 +4168,6 @@ bool Score::cmdImplode()
             }
         }
     }
-
     // if single staff selected, combine voices
     // otherwise combine staves
     if (dstStaff == endStaff - 1) {
@@ -4178,9 +4176,18 @@ bool Score::cmdImplode()
             if (!s->isChordRestType()) {
                 continue;
             }
-            EngravingItem* dst = s->element(dstTrack);
-            if (dst && dst->isChord()) {
-                Chord* dstChord = toChord(dst);
+            // Fix #174111: find first chord across all voices, not just voice 1
+            EngravingItem* first = s->element(0);
+            EngravingItem* dst = nullptr;
+            Chord* dstChord = nullptr;
+            for (dstTrack = 0; dstTrack < VOICES; ++dstTrack) {
+                dst = s->element(dstTrack);
+                if (dst && dst->isChord()) {
+                    dstChord = toChord(dst);
+                    break;
+                }
+            }
+            if (dstChord) {
                 // see if we are tying in to this chord
                 Chord* tied = 0;
                 for (Note* n : dstChord->notes()) {
@@ -4191,7 +4198,7 @@ bool Score::cmdImplode()
                 }
                 // loop through each subsequent staff (or track within staff)
                 // looking for notes to add
-                for (track_idx_t srcTrack = startTrack + 1; srcTrack < endTrack; srcTrack++) {
+                for (track_idx_t srcTrack = dstTrack + 1; srcTrack < endTrack; srcTrack++) {
                     EngravingItem* src = s->element(srcTrack);
                     if (src && src->isChord()) {
                         Chord* srcChord = toChord(src);
@@ -4227,19 +4234,16 @@ bool Score::cmdImplode()
                             }
                         }
                     }
-                    // delete chordrest from source track if possible
-                    if (src && src->voice()) {
+                    // delete chordrest from source track
+                    if (src) {
                         undoRemoveElement(src);
                     }
                 }
-            }
-            // TODO - use first voice that actually has a note and implode remaining voices on it?
-            // see https://musescore.org/en/node/174111
-            else if (dst) {
+            } else if (first) {
                 // destination track has something, but it isn't a chord
                 // remove rests from other voices if in "voice mode"
                 for (voice_idx_t i = 1; i < VOICES; ++i) {
-                    EngravingItem* e = s->element(dstTrack + i);
+                    EngravingItem* e = s->element(i);
                     if (e && e->isRest()) {
                         undoRemoveElement(e);
                     }
@@ -4257,7 +4261,7 @@ bool Score::cmdImplode()
 
         // identify tracks to combine, storing the source track numbers in tracks[]
         // first four non-empty tracks to win
-        for (track_idx_t track = startTrack; track < endTrack && full < VOICES; ++track) {
+        for (track_idx_t track = dstTrack; track < endTrack && full < VOICES; ++track) {
             Measure* m = startMeasure;
             do {
                 if (m->hasVoice(track) && !m->isOnlyRests(track)) {
