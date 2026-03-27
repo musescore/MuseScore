@@ -36,8 +36,8 @@ namespace mu::musesounds {
 class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
-    muse::GlobalInject<IMuseSoundsCheckUpdateService> service;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
+    muse::GlobalInject<IMuseSoundsCheckUpdateService> service;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

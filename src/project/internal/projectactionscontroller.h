@@ -70,9 +70,9 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::GlobalInject<muse::cloud::IAudioComService> audioComService;
     muse::GlobalInject<muse::extensions::IExtensionsProvider> extensionsProvider;
     muse::GlobalInject<INotationReadersRegister> readers;
-    muse::GlobalInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario;
-    muse::GlobalInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
+    muse::ContextInject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::ContextInject<musesounds::IMuseSamplerCheckUpdateScenario> museSamplerCheckUpdateScenario = { this };
     muse::ContextInject<IRecentFilesController> recentFilesController = { this };
     muse::ContextInject<IProjectAutoSaver> projectAutoSaver = { this };
     muse::ContextInject<IOpenSaveProjectScenario> openSaveProjectScenario = { this };

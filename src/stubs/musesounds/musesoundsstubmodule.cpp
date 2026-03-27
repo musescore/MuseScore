@@ -32,15 +32,26 @@
 using namespace mu::musesounds;
 using namespace muse::modularity;
 
+static const std::string mname("musesounds_stub");
+
 std::string MuseSoundsModule::moduleName() const
 {
-    return "musesounds_stub";
+    return mname;
 }
 
 void MuseSoundsModule::registerExports()
 {
-    globalIoc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), new MuseSoundsCheckUpdateScenarioStub());
-    globalIoc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), new MuseSoundsCheckUpdateServiceStub());
-    globalIoc()->registerExport<IMuseSamplerCheckUpdateScenario>(moduleName(), new MuseSamplerCheckUpdateScenarioStub());
-    globalIoc()->registerExport<IMuseSamplerCheckUpdateService>(moduleName(), new MuseSamplerCheckUpdateServiceStub());
+    globalIoc()->registerExport<IMuseSoundsCheckUpdateService>(mname, new MuseSoundsCheckUpdateServiceStub());
+    globalIoc()->registerExport<IMuseSamplerCheckUpdateService>(mname, new MuseSamplerCheckUpdateServiceStub());
+}
+
+IContextSetup* MuseSoundsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new MuseSoundsContext(ctx);
+}
+
+void MuseSoundsContext::registerExports()
+{
+    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(mname, new MuseSoundsCheckUpdateScenarioStub());
+    ioc()->registerExport<IMuseSamplerCheckUpdateScenario>(mname, new MuseSamplerCheckUpdateScenarioStub());
 }

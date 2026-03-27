@@ -29,10 +29,6 @@
 namespace mu::musesounds {
 class MuseSoundsConfiguration;
 class MuseSoundsRepository;
-class MuseSoundsCheckUpdateScenario;
-class MuseSoundsCheckUpdateService;
-class MuseSamplerCheckUpdateService;
-class MuseSamplerCheckUpdateScenario;
 class MuseSoundsModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -42,12 +38,19 @@ public:
     void resolveImports() override;
     void onInit(const muse::IApplication::RunMode& mode) override;
 
+    muse::modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
+
 private:
     std::shared_ptr<MuseSoundsConfiguration> m_configuration;
     std::shared_ptr<MuseSoundsRepository> m_repository;
-    std::shared_ptr<MuseSoundsCheckUpdateScenario> m_museSoundsCheckUpdateScenario;
-    std::shared_ptr<MuseSoundsCheckUpdateService> m_museSoundsCheckUpdateService;
-    std::shared_ptr<MuseSamplerCheckUpdateService> m_museSamplerCheckUpdateService;
-    std::shared_ptr<MuseSamplerCheckUpdateScenario> m_museSamplerCheckUpdateScenario;
+};
+
+class MuseSoundsModuleContext : public muse::modularity::IContextSetup
+{
+public:
+    MuseSoundsModuleContext(const muse::modularity::ContextPtr& ctx)
+        : muse::modularity::IContextSetup(ctx) {}
+
+    void registerExports() override;
 };
 }

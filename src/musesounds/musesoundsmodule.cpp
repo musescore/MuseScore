@@ -36,34 +36,27 @@ using namespace mu::musesounds;
 using namespace muse;
 using namespace muse::modularity;
 
+static const std::string mname("musesounds");
+
 std::string MuseSoundsModule::moduleName() const
 {
-    return "musesounds";
+    return mname;
 }
 
 void MuseSoundsModule::registerExports()
 {
-    m_configuration = std::make_shared<MuseSoundsConfiguration>(globalCtx());
-    m_repository = std::make_shared<MuseSoundsRepository>(globalCtx());
+    m_configuration = std::make_shared<MuseSoundsConfiguration>();
+    m_repository = std::make_shared<MuseSoundsRepository>();
 
-    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(globalCtx());
-    m_museSoundsCheckUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(globalCtx());
-    m_museSamplerCheckUpdateService = std::make_shared<MuseSamplerCheckUpdateService>();
-    m_museSamplerCheckUpdateScenario = std::make_shared<MuseSamplerCheckUpdateScenario>(globalCtx());
-
-    globalIoc()->registerExport<IMuseSoundsConfiguration>(moduleName(), m_configuration);
-    globalIoc()->registerExport<IMuseSoundsRepository>(moduleName(), m_repository);
-
-    globalIoc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), m_museSoundsCheckUpdateScenario);
-    globalIoc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), m_museSoundsCheckUpdateService);
-
-    globalIoc()->registerExport<IMuseSamplerCheckUpdateService>(moduleName(), m_museSamplerCheckUpdateService);
-    globalIoc()->registerExport<IMuseSamplerCheckUpdateScenario>(moduleName(), m_museSamplerCheckUpdateScenario);
+    globalIoc()->registerExport<IMuseSoundsConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IMuseSoundsRepository>(mname, m_repository);
+    globalIoc()->registerExport<IMuseSamplerCheckUpdateService>(mname, new MuseSamplerCheckUpdateService());
+    globalIoc()->registerExport<IMuseSoundsCheckUpdateService>(mname, new MuseSoundsCheckUpdateService());
 }
 
 void MuseSoundsModule::resolveImports()
 {
-    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(moduleName());
+    auto ir = globalIoc()->resolve<interactive::IInteractiveUriRegister>(mname);
     if (ir) {
         ir->registerQmlUri(Uri("musescore://musesounds/musesoundsreleaseinfo"), "MuseScore.MuseSounds", "MuseSoundsReleaseInfoDialog");
     }
@@ -73,4 +66,15 @@ void MuseSoundsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_repository->init();
+}
+
+IContextSetup* MuseSoundsModule::newContext(const muse::modularity::ContextPtr& ctx) const
+{
+    return new MuseSoundsModuleContext(ctx);
+}
+
+void MuseSoundsModuleContext::registerExports()
+{
+    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(mname, new MuseSoundsCheckUpdateScenario(iocContext()));
+    ioc()->registerExport<IMuseSamplerCheckUpdateScenario>(mname, new MuseSamplerCheckUpdateScenario(iocContext()));
 }
