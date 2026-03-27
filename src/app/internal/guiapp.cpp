@@ -19,18 +19,6 @@
 #include "muse_framework_config.h"
 #include "app_config.h"
 
-#ifdef MUE_ENABLE_SPLASHSCREEN
-#include "appshell/widgets/splashscreen/splashscreen.h"
-#else
-namespace mu::appshell {
-class SplashScreen
-{
-public:
-    void close() {}
-};
-}
-#endif
-
 #ifdef QT_CONCURRENT_SUPPORTED
 #include <QThreadPool>
 #endif
@@ -53,6 +41,45 @@ GuiApp::GuiApp(const CmdOptions& options)
 void GuiApp::addModule(muse::modularity::IModuleSetup* module)
 {
     m_modules.push_back(module);
+}
+
+GuiApp::SplashConfig GuiApp::splashConfig(const CmdOptions& options) const
+{
+    SplashConfig cfg;
+    cfg.type = SplashScreen::Default;
+
+    if (options.startup.type.has_value()) {
+        if (options.startup.type.value() == "start-with-new") {
+            cfg.type = SplashScreen::ForNewInstance;
+            cfg.forNewScore = true;
+        } else if (options.startup.scoreUrl.has_value()) {
+            project::ProjectFile file { options.startup.scoreUrl.value() };
+
+            if (options.startup.scoreDisplayNameOverride.has_value()) {
+                file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
+            }
+
+            cfg.type = SplashScreen::ForNewInstance;
+            cfg.forNewScore = false;
+            if (file.hasDisplayName()) {
+                cfg.openingFileName = file.displayName(true /* includingExtension */);
+            }
+        } else {
+            cfg.type = SplashScreen::Default;
+        }
+    }
+
+    return cfg;
+}
+
+void GuiApp::showSplash()
+{
+#ifdef MUE_ENABLE_SPLASHSCREEN
+    if (splashConfig(m_options).type == SplashScreen::Default) {
+        m_splashScreen = new SplashScreen(SplashScreen::Default);
+        m_splashScreen->show();
+    }
+#endif
 }
 
 void GuiApp::setup()
@@ -105,38 +132,6 @@ void GuiApp::setup()
         m->onPreInit(runMode);
     }
 
-    // Process all pending events (see IpcSocket::onReadyRead())
-    // so that we can use isFirstWindow() as early as possible
-    muse::async::processMessages();
-
-//! FIXME
-//! The launch scenario is contextual, but there is no context here.
-#undef MUE_ENABLE_SPLASHSCREEN
-
-#ifdef MUE_ENABLE_SPLASHSCREEN
-    if (multiwindowsProvider()->isFirstWindow()) {
-        m_splashScreen = new SplashScreen(SplashScreen::Default);
-    } else {
-        auto startupScenario = muse::modularity::ioc(iocContext())->resolve<IStartupScenario>("app");
-        const project::ProjectFile& file = startupScenario->startupScoreFile();
-        if (file.isValid()) {
-            if (file.hasDisplayName()) {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
-            } else {
-                m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
-            }
-        } else if (startupScenario->isStartWithNewFileAsSecondaryInstance()) {
-            m_splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
-        } else {
-            m_splashScreen = new SplashScreen(SplashScreen::Default);
-        }
-    }
-
-    if (m_splashScreen) {
-        m_splashScreen->show();
-    }
-#endif
-
     // ====================================================
     // Setup modules: onInit
     // ====================================================
@@ -177,11 +172,7 @@ void GuiApp::setup()
     m_delayedInitTimer.start();
 
     // ====================================================
-    // Run
-    // ====================================================
-
-    // ====================================================
-    // Setup Qml Engine
+    // Setup Graphics Api check
     // ====================================================
     //! Needs to be set because we use transparent windows for PopupView.
     //! Needs to be called before any QQuickWindows are shown.
@@ -264,6 +255,17 @@ std::vector<muse::modularity::ContextPtr> GuiApp::contexts() const
 size_t GuiApp::contextCount() const
 {
     return m_contexts.size();
+}
+
+void GuiApp::showContextSplash()
+{
+#ifdef MUE_ENABLE_SPLASHSCREEN
+    SplashConfig cfg = splashConfig(m_options);
+    if (cfg.type == SplashScreen::ForNewInstance) {
+        m_splashScreen = new SplashScreen(cfg.type, cfg.forNewScore, cfg.openingFileName);
+        m_splashScreen->show();
+    }
+#endif
 }
 
 muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
@@ -397,11 +399,13 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
     startupScenario->runOnSplashScreen();
 
     QMetaObject::invokeMethod(qApp, [this, ctxId, obj, startupScenario]() {
+#ifdef MUE_ENABLE_SPLASHSCREEN
         if (m_splashScreen) {
             m_splashScreen->close();
             delete m_splashScreen;
             m_splashScreen = nullptr;
         }
+#endif
 
         // The main window must be shown at this point so KDDockWidgets can read its size correctly
         // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
