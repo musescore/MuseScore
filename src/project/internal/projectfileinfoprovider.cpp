@@ -32,6 +32,11 @@ ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
 {
 }
 
+bool ProjectFileInfoProvider::saved() const
+{
+    return !m_project->needSave().val;
+}
+
 //! TODO: maybe implement this class further for Cloud Projects
 muse::io::path_t ProjectFileInfoProvider::path() const
 {
