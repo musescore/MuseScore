@@ -450,7 +450,7 @@ braille_code Braille_FigureExtension = braille_code("FigureExtension", "1");
 braille_code Braille_FirstValueRange = braille_code("FirstValueRange", "45-126-2");
 //#16th-128th notes range
 braille_code Braille_SecondValueRange = braille_code("SecondValueRange", "6-126-2");
-//#256th notes and and further range
+//#256th notes and further range
 braille_code Braille_ThirdValueRange = braille_code("ThirdValueRange", "56-126-2");
 
 braille_code* Braille_ValueRanges[] = { &Braille_FirstValueRange, &Braille_SecondValueRange, &Braille_ThirdValueRange };

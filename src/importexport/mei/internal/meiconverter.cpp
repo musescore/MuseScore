@@ -3468,7 +3468,7 @@ void Convert::textToMEI(textWithSmufl& textBlocks, const String& text)
         }
         // SMuFL
         else {
-            // Changing to smufl, add the current plain text block if something in in
+            // Changing to smufl, add the current plain text block if something is in it
             if (!isSmufl && textBlock.size() > 0) {
                 textBlocks.push_back(std::make_pair(false, textBlock));
                 textBlock.clear();

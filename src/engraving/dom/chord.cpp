@@ -1855,7 +1855,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
     // newArtics now contains the articulations in the correct direction
     if (updateMode == ArticulationsUpdateMode::Remove) {
-        // remove articulations from _articulations that are found in in newArtics
+        // remove articulations from _articulations that are found in newArtics
         for (const SymId& id : newArtics) {
             switch (id) {
             case SymId::articAccentAbove:

@@ -37,7 +37,7 @@ struct Constants
 //    1.5   save xoff/yoff in mm instead of pixel
 //    1.6   save harmony base/root as tpc value
 //    1.7   invert semantic of page fill limit
-//    1.8   slur id, slur anchor in in Note
+//    1.8   slur id, slur anchor in Note
 //    1.9   image size stored in mm instead of pixel (Versions 0.9.2 -0.9.3)
 //    1.10  TextLine properties changed (Version 0.9.4)
 //    1.11  Instrument name in part saved as TextC (Version 0.9.5)

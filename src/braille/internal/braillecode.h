@@ -350,7 +350,7 @@ extern braille_code Braille_FigureExtension;
 extern braille_code Braille_FirstValueRange;
 //#16th-128th notes range
 extern braille_code Braille_SecondValueRange;
-//#256th notes and and further range
+//#256th notes and further range
 extern braille_code Braille_ThirdValueRange;
 
 extern braille_code* Braille_ValueRanges[];
