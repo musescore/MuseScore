@@ -69,6 +69,7 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
+    void showSplash() override;
     void setup() override;
     void finish() override;
 

@@ -158,12 +158,29 @@ int main(int argc, char** argv)
     opt.runMode = IApplication::RunMode::GuiApp;
 #endif
 
-    AppFactory f;
-    std::shared_ptr<muse::IApplication> app = f.newApp(opt);
+    // ====================================================
+    // Setup application
+    // ====================================================
 
-    app->setup();
+    //! NOTE: We immediately launch the application's event loop
+    // to be able to show a splash screen (on Linux, splash screen won't show without event loop).
+    // All subsequent initialization steps will be executed as events in the event loop.
 
-    app->setupNewContext();
+    std::shared_ptr<muse::IApplication> app;
+    QMetaObject::invokeMethod(qapp, [qapp, &app, &opt]() {
+        AppFactory f;
+        app = f.newApp(opt);
+        app->showSplash();
+        QMetaObject::invokeMethod(qapp, [qapp, &app]() {
+            app->setup();
+            QMetaObject::invokeMethod(qapp, [qapp, &app]() {
+                app->showContextSplash();
+                QMetaObject::invokeMethod(qapp, [&app]() {
+                    app->setupNewContext();
+                }, Qt::QueuedConnection);
+            }, Qt::QueuedConnection);
+        }, Qt::QueuedConnection);
+    }, Qt::QueuedConnection);
 
     // ====================================================
     // Run main loop
@@ -174,7 +191,9 @@ int main(int argc, char** argv)
     // Quit
     // ====================================================
 
-    app->finish();
+    if (app) {
+        app->finish();
+    }
 
     delete qapp;
 

@@ -17,11 +17,9 @@
 #include "appshell/iappshellconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
-class QQuickWindow;
+#include "appshell/widgets/splashscreen/splashscreen.h"
 
-namespace mu::appshell {
-class SplashScreen;
-}
+class QQuickWindow;
 
 namespace mu::app {
 class GuiApp : public muse::BaseApplication, public std::enable_shared_from_this<GuiApp>
@@ -35,15 +33,26 @@ public:
 
     void addModule(muse::modularity::IModuleSetup* module);
 
+    void showSplash() override;
     void setup() override;
     void finish() override;
 
+    void showContextSplash() override;
     muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
     void destroyContext(const muse::modularity::ContextPtr& ctx) override;
     size_t contextCount() const override;
     std::vector<muse::modularity::ContextPtr> contexts() const override;
 
 private:
+
+    struct SplashConfig {
+        appshell::SplashScreen::SplashScreenType type = appshell::SplashScreen::SplashScreenType::Default;
+        bool forNewScore = false;
+        QString openingFileName;
+    };
+
+    SplashConfig splashConfig(const CmdOptions& options) const;
+
     void applyCommandLineOptions(const CmdOptions& options);
 
     struct Context {
