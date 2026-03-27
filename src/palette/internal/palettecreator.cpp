@@ -78,6 +78,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"
+#include "engraving/dom/tapping.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"

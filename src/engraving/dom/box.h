@@ -132,7 +132,6 @@ public:
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
 private:
-
     bool m_createSystemHeader = true;
 };
 
@@ -147,7 +146,6 @@ class VBox : public Box
     DECLARE_CLASSOF(ElementType::VBOX)
 
 public:
-    VBox(const ElementType& type, System* parent);
     VBox(System* parent);
 
     VBox* clone() const override { return new VBox(*this); }
@@ -165,6 +163,9 @@ public:
 
     Spatium paddingToNotationAbove() const { return m_paddingToNotationAbove; }
     Spatium paddingToNotationBelow() const { return m_paddingToNotationBelow; }
+
+protected:
+    VBox(const ElementType& type, System* parent);
 
 private:
     Spatium m_paddingToNotationAbove;
