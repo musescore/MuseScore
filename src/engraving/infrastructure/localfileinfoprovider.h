@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LocalFILEINFOPROVIDER_H
-#define MU_ENGRAVING_LocalFILEINFOPROVIDER_H
+
+#pragma once
 
 #include "ifileinfoprovider.h"
 
@@ -35,6 +35,8 @@ class LocalFileInfoProvider : public IFileInfoProvider
 public:
     explicit LocalFileInfoProvider(const muse::io::path_t& filePath);
 
+    bool saved() const override;
+
     muse::io::path_t path() const override;
     muse::io::path_t fileName(bool includingExtension = true) const override;
     muse::io::path_t absoluteDirPath() const override;
@@ -48,5 +50,3 @@ private:
     muse::io::path_t m_path;
 };
 }
-
-#endif // MU_ENGRAVING_LocalFILEINFOPROVIDER_H

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "localfileinfoprovider.h"
 
 using namespace muse;
@@ -28,6 +29,11 @@ using namespace mu::engraving;
 LocalFileInfoProvider::LocalFileInfoProvider(const muse::io::path_t& path)
     : m_path(path)
 {
+}
+
+bool LocalFileInfoProvider::saved() const
+{
+    return false;
 }
 
 muse::io::path_t LocalFileInfoProvider::path() const

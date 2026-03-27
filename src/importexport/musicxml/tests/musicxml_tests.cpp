@@ -84,7 +84,6 @@ static void fixupScore(MasterScore* score)
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
-    score->setSaved(false);
 }
 
 void MusicXml_Tests::setValue(const std::string& key, const Val& value)

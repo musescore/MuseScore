@@ -149,6 +149,7 @@ private:
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;
+    bool m_needSave = false;
     bool m_needAutoSave = false;
     bool m_hasNonUndoStackChanges = false;
 };
