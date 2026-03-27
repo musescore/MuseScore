@@ -57,6 +57,7 @@
 #include "tie.h"
 #include "timesig.h"
 #include "tuplet.h"
+#include "tremolosinglechord.h"
 #include "utils.h"
 
 #include "log.h"
@@ -320,7 +321,18 @@ bool Score::cmdRepeatListSelection()
             continue;
         }
 
-        newNote->chord()->updateArticulations(sourceChord->articulationSymbolIds());
+        Chord* newChord = newNote->chord();
+
+        newChord->updateArticulations(sourceChord->articulationSymbolIds());
+
+        const TremoloSingleChord* oldTsc = sourceChord->tremoloSingleChord();
+        if (!newChord->tremoloSingleChord() && oldTsc) {
+            TremoloSingleChord* newTsc = oldTsc->clone();
+            newTsc->setParent(newChord);
+            newTsc->setTrack(newChord->track());
+            score()->doUndoAddElement(newTsc);
+        }
+
         toSelect.push_back(newNote);
 
         const Parenthesis* leftParen = n->parenthesisInfo() ? n->parenthesisInfo()->leftParen() : nullptr;
