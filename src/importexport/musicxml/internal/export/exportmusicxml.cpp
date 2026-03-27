@@ -6574,7 +6574,7 @@ static void segmentHarmonies(ExportMusicXml* exp, track_idx_t track, Segment* se
  * and fretboard diagrams.
  *
  * In MuseScore, the Harmony element is now a child of FretboardDiagram BUT in previous versions,
- * both elements were independant siblings so we have to handle both cases.
+ * both elements were independent siblings so we have to handle both cases.
  * In MusicXML, fretboard diagram is always contained in a harmony element.
  *
  * In MuseScore, Harmony elements are not always linked to notes, and each Harmony will be contained

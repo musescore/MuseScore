@@ -228,7 +228,7 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
 
         TLayout::layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
 
-        //! reset the skip wich was added above
+        //! reset the skip which was added above
         fretDiagram->mutldata()->setIsSkipDraw(false);
         harmony->mutldata()->setIsSkipDraw(false);
 
