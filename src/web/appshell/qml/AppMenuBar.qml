@@ -130,11 +130,11 @@ Item {
 
                     text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
                     textFormat: Text.RichText
-                    font: ui.theme.defaultFont
+                    font: ui.theme.bodyFont
 
             text: appMenuModel.isNavigationStarted ? radioButtonDelegate.titleWithMnemonicUnderline : radioButtonDelegate.title
             textFormat: Text.RichText
-            font: ui.theme.defaultFont
+            font: ui.theme.bodyFont
         }
 
                     color: radioButtonDelegate.normalColor

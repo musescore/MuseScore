@@ -87,7 +87,7 @@ Rectangle {
 
             text: titleTextmetrics.elidedText
             textFormat: Text.RichText
-            font: ui.theme.defaultFont
+            font: ui.theme.bodyFont
 
             visible: root.windowVisibility !== Window.FullScreen
 
