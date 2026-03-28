@@ -5977,6 +5977,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     renderer()->layoutScore(this, start, end);
+    m_needsLayout = false;
 
     if (m_resetAutoplace) {
         m_resetAutoplace = false;

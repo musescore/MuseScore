@@ -594,7 +594,10 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     excerptNotation->setIsOpen(open);
 
     if (open) {
-        excerptNotation->elements()->msScore()->doLayout();
+        Score* score = excerptNotation->elements()->msScore();
+        if (score->needsLayout()) {
+            score->doLayout();
+        }
     }
 }
 

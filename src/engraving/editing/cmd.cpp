@@ -482,6 +482,7 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         if (cs.layoutRange()) {
             for (Score* s : ms->scoreList()) {
                 if (s != this && !s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
+                    s->m_needsLayout = true;
                     continue;
                 }
                 s->doLayoutRange(cs.startTick(), cs.endTick());

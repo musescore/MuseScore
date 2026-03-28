@@ -381,6 +381,7 @@ public:
     void linkMeasures(Score* score);
     void setResetAutoplace() { m_resetAutoplace = true; }
     void setResetCrossBeams() { m_resetCrossBeams = true; }
+    bool needsLayout() const { return m_needsLayout; }
 
     Excerpt* excerpt() { return m_excerpt; }
     void setExcerpt(Excerpt* e) { m_excerpt = e; }
@@ -1220,6 +1221,7 @@ private:
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
+    bool m_needsLayout = true;
     bool m_needSetUpTempoMap = true;
 
     std::map<String, String> m_metaTags;
