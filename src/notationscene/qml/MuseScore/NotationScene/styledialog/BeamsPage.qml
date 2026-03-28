@@ -34,7 +34,6 @@ StyledFlickable {
 
     contentWidth: Math.max(column.implicitWidth, root.width)
     contentHeight: column.implicitHeight
-    clip: true
 
     BeamsPageModel {
         id: beamsPageModel
@@ -47,11 +46,11 @@ StyledFlickable {
 
         ItemWithTitle {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
             title: qsTrc("notation", "Beam distance")
 
             RadioButtonGroup {
                 Layout.preferredHeight: 70
+                Layout.minimumWidth: 300
                 spacing: 12
 
                 model: [
@@ -95,7 +94,6 @@ StyledFlickable {
 
         ItemWithTitle {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
             title: qsTrc("notation", "Beam thickness")
 
             IncrementalPropertyControl {
@@ -117,7 +115,6 @@ StyledFlickable {
 
         ItemWithTitle {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
             title: qsTrc("notation", "Broken beam minimum length")
 
             IncrementalPropertyControl {
@@ -139,7 +136,6 @@ StyledFlickable {
 
         CheckBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
             text: qsTrc("notation", "Flatten all beams")
             checked: beamsPageModel.beamNoSlope.value
             onClicked: {
@@ -149,7 +145,6 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            Layout.minimumWidth: 500
             height: Math.max(120, implicitHeight)
 
             title: qsTrc("notation", "Beam style")
