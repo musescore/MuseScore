@@ -4120,6 +4120,12 @@ bool Score::cmdExplode()
             track_idx_t strack = sTracks[j % VOICES];
             track_idx_t dtrack = dTracks[j % VOICES];
             if (strack != muse::nidx && strack != dtrack && dtrack != muse::nidx) {
+                for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
+                    EngravingItem* el = seg->element(dtrack);
+                    if (el && el->isChordRest()) {
+                        undoRemoveElement(el);
+                    }
+                }
                 undo(new CloneVoice(startSegment, lTick, startSegment, strack, dtrack, muse::nidx, false));
             }
         }
