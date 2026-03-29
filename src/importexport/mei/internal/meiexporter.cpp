@@ -1319,7 +1319,8 @@ bool MeiExporter::writeFTrem(const TremoloTwoChord* tremolo)
     }
 
     m_currentNode = m_currentNode.append_child();
-    libmei::FTrem meiFTrem = Convert::fTremToMEI(tremolo);
+    libmei::FTrem meiFTrem;
+    meiFTrem.SetUnitdur(Convert::unitdurToMEI(tremolo));
     meiFTrem.Write(m_currentNode, this->getXmlIdFor(tremolo, 'f'));
 
     return true;
