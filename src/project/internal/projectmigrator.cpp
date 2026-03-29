@@ -158,10 +158,6 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         MdlMigrator(score).remapPercussion();
     }
 
-    if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
-        score->undo(new mu::engraving::ChangeMetaText(score, u"mscVersion", String::fromAscii(mu::engraving::Constants::MSC_VERSION_STR)));
-    }
-
     score->endCmd();
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
