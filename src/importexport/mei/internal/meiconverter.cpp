@@ -1698,33 +1698,22 @@ libmei::Fing Convert::fingToMEI(const engraving::Fingering* fing, StringList& me
 engraving::TremoloType Convert::unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning)
 {
     warning = false;
-
-    // @dur
-    libmei::data_DURATION dur = meiFTrem.GetDur();
-
-    // @unitdur
-    const libmei::data_DURATION unitdur = meiFTrem.GetUnitdur();
-
-    switch (unitdur) {
+    switch (meiFTrem.GetUnitdur()) {
     case (libmei::DURATION_8): return engraving::TremoloType::C8;
     case (libmei::DURATION_16): return engraving::TremoloType::C16;
     case (libmei::DURATION_32): return engraving::TremoloType::C32;
     case (libmei::DURATION_64): return engraving::TremoloType::C64;
     default:
+        warning = true;
         return (engraving::TremoloType::INVALID_TREMOLO);
     }
 }
 
-libmei::FTrem Convert::fTremToMEI(const engraving::TremoloTwoChord* tremolo)
+libmei::data_DURATION Convert::unitdurToMEI(const engraving::TremoloTwoChord* tremolo)
 {
     libmei::FTrem meiFTrem;
 
-    // @dur
     const libmei::data_DURATION dur = Convert::durToMEI(tremolo->durationType().type());
-    meiFTrem.SetDur(dur);
-    meiFTrem.SetDots(tremolo->durationType().dots());
-
-    // @unitdur
     int unitdur = 0;
     if (dur > libmei::DURATION_4) {
         unitdur = dur - libmei::DURATION_4;
@@ -1737,9 +1726,8 @@ libmei::FTrem Convert::fTremToMEI(const engraving::TremoloTwoChord* tremolo)
     default:
         unitdur = libmei::DURATION_NONE;
     }
-    meiFTrem.SetUnitdur(static_cast<libmei::data_DURATION>(unitdur));
 
-    return meiFTrem;
+    return static_cast<libmei::data_DURATION>(unitdur);
 }
 
 void Convert::glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning)

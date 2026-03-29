@@ -204,6 +204,9 @@ public:
     static engraving::DurationType durFromMEI(const libmei::data_DURATION meiDuration, bool& warning);
     static libmei::data_DURATION durToMEI(const engraving::DurationType duration);
 
+    static engraving::TremoloType unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning);
+    static libmei::data_DURATION unitdurToMEI(const engraving::TremoloTwoChord* tremolo);
+
     static void dynamFromMEI(engraving::Dynamic* dynamic, const muse::StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning);
     static libmei::Dynam dynamToMEI(const engraving::Dynamic* dynamic, muse::StringList& meiLines);
 
@@ -222,9 +225,6 @@ public:
 
     static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
     static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
-
-    static engraving::TremoloType unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning);
-    static libmei::FTrem fTremToMEI(const engraving::TremoloTwoChord* tremolo);
 
     static void glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning);
     static libmei::Gliss glissToMEI(const engraving::Glissando* gliss);

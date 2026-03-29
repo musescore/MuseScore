@@ -1906,8 +1906,6 @@ bool MeiImporter::readFTrem(pugi::xml_node fTremNode, Measure* measure, int trac
     meiFTrem.Read(fTremNode);
     m_tremoloId = meiFTrem.m_xmlId;
 
-    libmei::data_DURATION firstNoteDur = meiFTrem.AttDurationLog::StrToDuration(fTremNode.first_child().attribute("dur").as_string());
-
     bool warning = false;
     m_tremoloType = Convert::unitdurFromMEI(meiFTrem, warning);
 
