@@ -3695,8 +3695,6 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    compat::CompatUtils::doCompatibilityConversions(score->masterScore());
-
     return make_ok();
 }
 
