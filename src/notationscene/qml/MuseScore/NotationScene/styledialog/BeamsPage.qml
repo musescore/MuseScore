@@ -50,7 +50,6 @@ StyledFlickable {
 
             RadioButtonGroup {
                 Layout.preferredHeight: 70
-                Layout.minimumWidth: 300
                 spacing: 12
 
                 model: [
@@ -155,6 +154,7 @@ StyledFlickable {
 
                 RadioButtonGroup {
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 300
 
                     spacing: 12
                     orientation: ListView.Vertical
