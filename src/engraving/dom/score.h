@@ -948,7 +948,7 @@ public:
     PlayMode playMode() const { return m_playMode; }
     void setPlayMode(PlayMode v) { m_playMode = v; }
 
-    std::list<Score*> scoreList();
+    std::vector<Score*> scoreList();
 
     void appendMeasures(int numMeasures);
 
