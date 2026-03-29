@@ -112,7 +112,6 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
-    m_masterScore->createPaddingTable();
     m_masterScore->connectTies();
     m_masterScore->undoRemoveStaleTieJumpPoints(false);
 
@@ -121,10 +120,10 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
     }
 
     m_masterScore->rebuildMidiMapping();
+    m_masterScore->setPlaylistDirty();
+    m_masterScore->setLayoutAll();
 
     for (Score* s : m_masterScore->scoreList()) {
-        s->setPlaylistDirty();
-        s->setLayoutAll();
         s->createPaddingTable();
     }
 
