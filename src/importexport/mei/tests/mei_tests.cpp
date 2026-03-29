@@ -174,6 +174,10 @@ TEST_F(Mei_Tests, mei_fingering_01) {
     meiReadTest("fingering-01");
 }
 
+TEST_F(Mei_Tests, mei_ftrem_01) {
+    meiReadTest("ftrem-01");
+}
+
 TEST_F(Mei_Tests, mei_glisss_01) {
     meiReadTest("gliss-01");
 }
