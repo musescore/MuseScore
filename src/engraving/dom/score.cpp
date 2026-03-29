@@ -5977,16 +5977,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     renderer()->layoutScore(this, start, end);
-
-    if (m_resetAutoplace) {
-        m_resetAutoplace = false;
-        resetAutoplace();
-    }
-
-    if (m_resetCrossBeams) {
-        m_resetCrossBeams = false;
-        resetCrossBeams();
-    }
 }
 
 void Score::createPaddingTable()

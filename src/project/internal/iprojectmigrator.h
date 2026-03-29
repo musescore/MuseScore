@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTMIGRATOR_H
-#define MU_PROJECT_IPROJECTMIGRATOR_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "types/ret.h"
@@ -37,5 +37,3 @@ public:
     virtual muse::Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
 };
 }
-
-#endif // MU_PROJECT_IPROJECTMIGRATOR_H

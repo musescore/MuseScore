@@ -35,28 +35,6 @@ class Engraving_ReadWriteUndoResetTests : public ::testing::Test
 {
 };
 
-TEST_F(Engraving_ReadWriteUndoResetTests, testReadWriteResetPositions)
-{
-    std::vector<const char16_t*> files = {
-        u"barlines",
-        u"slurs",
-        u"mmrestBarlineTextLinks" // see issue #296426
-    };
-
-    for (const char16_t* file : files) {
-        String readFile(RWUNDORESET_DATA_DIR + file + u".mscx");
-        String writeFile(String(file) + u"-undoreset-test.mscx");
-
-        MasterScore* score = ScoreRW::readScore(readFile);
-        EXPECT_TRUE(score);
-        score->cmdResetAllPositions();
-        score->undoRedo(/* undo */ true, nullptr);
-        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, readFile));
-
-        delete score;
-    }
-}
-
 //---------------------------------------------------------
 //   testMMRestLinksRecreateMMRest
 ///   For barlines links with MM rests a separate test is

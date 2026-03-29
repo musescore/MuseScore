@@ -161,6 +161,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 
     // TODO: collect all compatibility conversions here
     if (masterScore->mscVersion() < 400) {
+        migrateStyleForPre400(masterScore);
         replaceStaffTextWithPlayTechniqueAnnotation(masterScore);
     }
     if (masterScore->mscVersion() < 410) {
@@ -185,6 +186,25 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         convertTextLineToNoteAnchoredLine(masterScore);
         convertLaissezVibArticToTie(masterScore);
     }
+}
+
+void CompatUtils::migrateStyleForPre400(MasterScore* score)
+{
+    // TODO: move to style compat reader when it is implemented
+    MStyle& style = score->style();
+    const double sp = style.spatium();
+    style.set(Sid::dynamicsFontSize, 10.0);
+    double doubleBarDistance = style.styleAbsolute(Sid::doubleBarDistance);
+    doubleBarDistance -= style.styleAbsolute(Sid::doubleBarWidth);
+    style.set(Sid::doubleBarDistance, doubleBarDistance / sp);
+    double endBarDistance = style.styleAbsolute(Sid::endBarDistance);
+    endBarDistance -= (style.styleAbsolute(Sid::barWidth) + style.styleAbsolute(Sid::endBarWidth)) / 2;
+    style.set(Sid::endBarDistance, endBarDistance / sp);
+    double repeatBarlineDotSeparation = style.styleAbsolute(Sid::repeatBarlineDotSeparation);
+    double dotWidth = score->engravingFont()->width(SymId::repeatDot, 1.0);
+    repeatBarlineDotSeparation -= (style.styleAbsolute(Sid::barWidth) + dotWidth) / 2;
+    style.set(Sid::repeatBarlineDotSeparation, repeatBarlineDotSeparation / sp);
+    style.set(Sid::measureSpacing, DefaultStyle::defaultStyle().value(Sid::measureSpacing));
 }
 
 void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score)

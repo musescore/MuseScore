@@ -57,6 +57,7 @@ public:
 
 private:
     static Sid positionStyleFromAlign(Sid align);
+    static void migrateStyleForPre400(MasterScore* score);
     static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);
     static void replaceOldWithNewOrnaments(MasterScore* score);
     static void replaceOldWithNewExpressions(MasterScore* score);
