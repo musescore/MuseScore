@@ -167,7 +167,7 @@
         <source>Notched, end-blown vertical bamboo flute used in Korean folk music.</source>
         <comment>danso description</comment>
         <extracomment>description for Danso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Koreański flet prosty bambusowy, używany w koreańskiej muzyce ludowej.</translation>
+        <translation>Koreański bambusowy flet prosty używany w koreańskiej muzyce ludowej.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="261"/>
@@ -223,7 +223,7 @@
         <source>6-hole simple-system wooden transverse flute.</source>
         <comment>irish-flute description</comment>
         <extracomment>description for Irish Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flet poprzeczny drewniany z 6 otwartymi otworami palcowymi.</translation>
+        <translation>Drewniany flet poprzeczny z sześcioma otwartymi otworami palcowymi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
@@ -251,7 +251,7 @@
         <source>Baroque wooden transverse flute.</source>
         <comment>traverso description</comment>
         <extracomment>description for Traverso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Barokowy flet poprzeczny drewniany.</translation>
+        <translation>Barokowy drewniany flet poprzeczny.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="288"/>
@@ -503,7 +503,7 @@
         <source>Chinese bamboo transverse flute, pitched in A.</source>
         <comment>a-dizi description</comment>
         <extracomment>description for Dizi; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju A.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju A.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="369"/>
@@ -538,7 +538,7 @@
         <source>Chinese bamboo transverse flute, pitched in G. The most common variant.</source>
         <comment>g-dizi description</comment>
         <extracomment>description for Dizi; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju G. Najpopularniejsza odmiana.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju G. Najpopularniejsza odmiana.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="380"/>
@@ -573,7 +573,7 @@
         <source>Chinese bamboo transverse flute, pitched in F.</source>
         <comment>f-dizi description</comment>
         <extracomment>description for Dizi; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju F.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju F.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="391"/>
@@ -608,7 +608,7 @@
         <source>Chinese bamboo transverse flute, pitched in E.</source>
         <comment>e-dizi description</comment>
         <extracomment>description for Dizi; tuning: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju E.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju E.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="402"/>
@@ -643,7 +643,7 @@
         <source>Chinese bamboo transverse flute, pitched in D.</source>
         <comment>d-dizi description</comment>
         <extracomment>description for Dizi; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju D.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="413"/>
@@ -678,7 +678,7 @@
         <source>Chinese bamboo transverse flute, pitched in C.</source>
         <comment>c-dizi description</comment>
         <extracomment>description for Dizi; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chiński flet poprzeczny bambusowy, w stroju C.</translation>
+        <translation>Chiński bambusowy flet poprzeczny, w stroju C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="424"/>
@@ -713,7 +713,7 @@
         <source>Japanese bamboo end-blown flute.</source>
         <comment>shakuhachi description</comment>
         <extracomment>description for Shakuhachi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Japoński flet prosty bambusowy.</translation>
+        <translation>Japoński bambusowy flet prosty.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="435"/>
@@ -4409,7 +4409,7 @@
         <source>Rare wooden instrument with a wide conical bore, akin to a saxophone.</source>
         <comment>heckelphone-clarinet description</comment>
         <extracomment>description for Heckelphone-clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rzadki instrument jednostroikowy z szerokim otworem stożkowym, podobny do saksofonu.</translation>
+        <translation>Rzadki drewniany instrument jednostroikowy z szerokim otworem stożkowym, podobny do saksofonu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1613"/>
@@ -11941,7 +11941,7 @@
         <source>Peruvian wooden box drum.</source>
         <comment>cajon description</comment>
         <extracomment>description for Cajón; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Peruwiański bęben drewniany.</translation>
+        <translation>Peruwiański drewniany bęben.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3987"/>
@@ -13061,7 +13061,7 @@
         <source>Metal castanets.</source>
         <comment>metal-castanets description</comment>
         <extracomment>description for Metal Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kastaniety metalowe.</translation>
+        <translation>Metalowe kastaniety.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4347"/>
@@ -13089,7 +13089,7 @@
         <source>Metal wind chimes.</source>
         <comment>metal-wind-chimes description</comment>
         <extracomment>description for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dzwonki wietrzne metalowe.</translation>
+        <translation>Metalowe dzwonki wietrzne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4356"/>
@@ -13313,7 +13313,7 @@
         <source>Bamboo wind chimes.</source>
         <comment>bamboo-wind-chimes description</comment>
         <extracomment>description for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dzwonki wietrzne bambusowe.</translation>
+        <translation>Bambusowe dzwonki wietrzne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4428"/>
@@ -13565,7 +13565,7 @@
         <source>Wooden wind chimes.</source>
         <comment>wooden-wind-chimes description</comment>
         <extracomment>description for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dzwonki wietrzne drewniane.</translation>
+        <translation>Drewniane dzwonki wietrzne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4509"/>
@@ -13621,7 +13621,7 @@
         <source>Glass wind chimes.</source>
         <comment>glass-wind-chimes description</comment>
         <extracomment>description for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dzwonki wietrzne szklane.</translation>
+        <translation>Szklane dzwonki wietrzne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4527"/>
@@ -13817,7 +13817,7 @@
         <source>Shell wind chimes.</source>
         <comment>shell-wind-chimes description</comment>
         <extracomment>description for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dzwonki wietrzne z muszli.</translation>
+        <translation>Dzwonki wietrzne wykonane z muszli.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4590"/>

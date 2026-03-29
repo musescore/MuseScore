@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="57"/>
         <source>Spacing</source>
-        <translation type="unfinished"/>
+        <translation>Spasiëring</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="62"/>
@@ -1202,7 +1202,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="177"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="8761"/>
         <source>Text lines</source>
-        <translation>Tekslinne</translation>
+        <translation>Tekslynne</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="182"/>
@@ -1753,7 +1753,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="969"/>
         <source>Vertical spacing</source>
-        <translation type="unfinished"/>
+        <translation>Vertikale spasiëring</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="998"/>
@@ -1922,7 +1922,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2023"/>
         <source>Horizontal spacing</source>
-        <translation type="unfinished"/>
+        <translation>Horisontale spasiëring</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2041"/>
@@ -2132,7 +2132,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2889"/>
         <source>Spacing ratio:</source>
-        <translation>Spasiëringsratio</translation>
+        <translation>Spasiëringverhouding</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2899"/>
@@ -2350,7 +2350,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4177"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4401"/>
         <source>Symbol size:</source>
-        <translation type="unfinished"/>
+        <translation>Simboolgrootte:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4187"/>
@@ -2733,7 +2733,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5783"/>
         <source>Spacing of symbols:</source>
-        <translation>Spasiering van simbole:</translation>
+        <translation>Spasiëring van simbole:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5806"/>
@@ -3484,7 +3484,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10665"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>Lynhoogte (% van teksgrootte)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10736"/>
@@ -3857,7 +3857,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12851"/>
         <source>Line spacing:</source>
-        <translation>Lynspasiëring</translation>
+        <translation>Lynspasiëring:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12742"/>
@@ -3897,7 +3897,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12621"/>
         <source>Text font size:</source>
-        <translation type="unfinished"/>
+        <translation>Teksgrootte:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12647"/>
@@ -5523,13 +5523,13 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="157"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Geskiedenis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="93"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>Wys/versteek ontdoengeskiedenis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
@@ -5918,17 +5918,17 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Edit workspaces…</source>
-        <translation type="unfinished"/>
+        <translation>Wysig werkruimtes...</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Edit workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Wysig werkruimtes</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="49"/>
         <source>Create new workspace</source>
-        <translation>kep nuwe werkruimte</translation>
+        <translation>Skep nuwe werkruimte</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -6601,12 +6601,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="482"/>
         <source>&amp;Optimize enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Optimeer enharmoniese spelling</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="483"/>
         <source>Optimize enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>Optimeer enharmoniese spelling</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="488"/>
@@ -9720,7 +9720,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project propert&amp;ies…</source>
-        <translation>Projeke&amp;ienskapp…</translation>
+        <translation>Projeke&amp;ienskappe…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="118"/>
@@ -10335,7 +10335,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation type="unfinished"/>
+        <translation>S&amp;toor anders</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="209"/>
@@ -10859,25 +10859,25 @@ Riggel %1 op snare %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
         <source>Dotted %1</source>
         <translation>Gepunteerde %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="532"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
         <translation>Dubbelgepunteerde %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="535"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
         <translation>Driedubbel-gepunteerde %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="538"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
         <translation>Vierdubbel-gepunteerde %1</translation>
     </message>
@@ -11349,13 +11349,13 @@ Riggel %1 op snare %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 noot = %2 noot</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="478"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="476"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 noot = %2</translation>
@@ -15105,7 +15105,7 @@ Riggel %1 op snare %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2989"/>
         <source>Splash Cymbal</source>
-        <translation>Spash-simbaal</translation>
+        <translation>Splash-simbaal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2990"/>
@@ -33383,7 +33383,7 @@ oop te maak, het misluk: %2</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackSpeedSlider.qml" line="64"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml" line="223"/>
         <source>Speed</source>
-        <translation type="unfinished"/>
+        <translation>Spoed</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="57"/>
@@ -33567,7 +33567,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="684"/>
         <source>Are you sure you want to change this sound?</source>
-        <translation>Is jy seker jy wil die klank verander?</translation>
+        <translation>Wil u definitief dié klank verander?</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="685"/>
@@ -33637,7 +33637,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>Pas seleksie toe op alle notebalke</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="393"/>
@@ -33652,7 +33652,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="164"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation>Is u seker u wil klanke verander</translation>
+        <translation>Wil u definitief klanke verander?</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="165"/>
@@ -33686,7 +33686,7 @@ oop te maak, het misluk: %2</translation>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AccentColorsSection.qml" line="61"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color</source>
-        <translation type="unfinished"/>
+        <translation>Aksentkleur</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -33727,7 +33727,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>Kontroleer of ’n nuwe weergawe van MuseScore Studio beskikbaar is</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
@@ -35335,6 +35335,7 @@ oop te maak, het misluk: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="65"/>
@@ -35486,52 +35487,52 @@ oop te maak, het misluk: %2</translation>
         <translation>Partye</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="358"/>
         <source>File already exists</source>
         <translation>Lêer bestaan reeds</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>&apos;n Lêer met die naam %1 bestaan reeds. Wil jy dit vervang?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
         <source>Replace</source>
         <translation>Vervang</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace all</source>
         <translation>Vervang almal</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Skip</source>
         <translation>Slaan oor</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip all</source>
         <translation>Slaan almal oor</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="390"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="387"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>&apos;n Fout het voorgekom terwyl probeer skryf na lêer %1. Wil jy herprobeer?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting audio…</source>
         <translation>Oudio word uitgestuur…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting…</source>
         <translation>Besig om uit te voer…</translation>
     </message>
@@ -35624,102 +35625,112 @@ oop te maak, het misluk: %2</translation>
         <translation>FLAC-oudiolêers</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <source>AAC audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
+        <source>AAC audio files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
         <source>MP4 video</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
         <source>MIDI file</source>
         <translation>MIDI-lêer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
         <source>MIDI files</source>
         <translation>MIDI-lêers</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Braille (basiese maat-oor-maat)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
         <source>Braille files</source>
         <translation>Braille-lêers</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>MEI files</source>
         <translation>MEI-lêers</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
         <source>MNX (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
         <source>MNX files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
         <source>LRC file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
         <source>LRC files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="337"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="341"/>
         <source>Each page to a separate file</source>
         <translation>Elke bladsy na &apos;n aparte lêer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="338"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
         <source>Each part to a separate file</source>
         <translation>Ekle party na &apos;n aparte lêer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="339"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
         <source>All parts combined in one file</source>
         <translation>Alle partye gekombineer in een lêer</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="755"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Alle uitleg</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="757"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Stelsel- en bladsybreuke</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="763"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Slegs handmatig bygevoegde stelsel- en bladsybreuke</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="765"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Geen stelsel- of bladsybreuke</translation>
@@ -37898,7 +37909,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6477"/>
         <source>Optimize enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>Optimeer enharmoniese spelling</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6484"/>

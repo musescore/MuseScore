@@ -6620,7 +6620,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="489"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonizar con sostenidos</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="494"/>
@@ -6630,7 +6630,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="495"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonizar con bemoles</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="500"/>
@@ -10867,25 +10867,25 @@ Traste %1 en cuerdas %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
         <source>Dotted %1</source>
         <translation>%1 con puntillo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="532"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
         <translation>%1 con doble puntillo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="535"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
         <translation>%1 con triple puntillo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="538"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
         <translation>Cuádruple puntillo %1</translation>
     </message>
@@ -11357,13 +11357,13 @@ Traste %1 en cuerdas %2</translation>
         <translation>Mano derecha</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 = %2 </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="478"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="476"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 = %2</translation>
@@ -35344,6 +35344,7 @@ fallo: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="65"/>
@@ -35454,7 +35455,7 @@ fallo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="76"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <source>Grayscale</source>
-        <translation type="unfinished"/>
+        <translation>Escala de grises</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="89"/>
@@ -35495,52 +35496,52 @@ fallo: %2</translation>
         <translation>Partes</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="358"/>
         <source>File already exists</source>
         <translation>El archivo ya existe</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>Ya existe un archivo con el nombre %1. ¿Reemplazarlo?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
         <source>Replace</source>
         <translation>Sustituir</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace all</source>
         <translation>Sustituir todo</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Skip</source>
         <translation>Saltar</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip all</source>
         <translation>Omitir todo</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="390"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="387"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>Ocurrió un error al escribir el archivo %1. ¿Reintentar?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting audio…</source>
         <translation>Exportando audio...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting…</source>
         <translation>Exportando…</translation>
     </message>
@@ -35633,102 +35634,112 @@ fallo: %2</translation>
         <translation>Archivos de audio FLAC</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <source>AAC audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
+        <source>AAC audio files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
         <source>MP4 video</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
         <source>MIDI file</source>
         <translation>Archivo MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
         <source>MIDI files</source>
         <translation>Archivos MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Braille (barra sobre barra básica)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
         <source>Braille files</source>
         <translation>Archivos Braille</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>MEI files</source>
         <translation>archivos MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
         <source>MNX (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
         <source>MNX files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
         <source>LRC file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
         <source>LRC files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="337"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="341"/>
         <source>Each page to a separate file</source>
         <translation>Cada página a un archivo distinto</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="338"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
         <source>Each part to a separate file</source>
         <translation>Cada parte a un archivo independiente</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="339"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
         <source>All parts combined in one file</source>
         <translation>Todas las partes combinadas en un archivo</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="755"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Todo el diseño</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="757"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Saltos de sistema y de página</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="763"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Sólo saltos de sistema y de página añadidos manualmente</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="765"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Ningún salto de sistema ni de página</translation>
@@ -36284,12 +36295,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="48"/>
         <source>Share this score and its audio on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Compartir esta partitura y su audio en MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/publishtoolbarmodel.cpp" line="49"/>
         <source>Share the audio from this score on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Compartir el audio de esta partitura en Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/cloudsmodel.cpp" line="162"/>
@@ -37379,12 +37390,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
         <source>Add notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Añadir paréntesis de cabeza de nota</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
         <source>Remove notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar paréntesis de cabeza de nota</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/stemsettingsmodel.cpp" line="115"/>
@@ -37411,7 +37422,7 @@ fallo: %2</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="240"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="275"/>
         <source>Change staff settings</source>
-        <translation type="unfinished"/>
+        <translation>Cambiar la configuración del pentagrama</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayersettingsmodel.cpp" line="99"/>
@@ -37912,12 +37923,12 @@ fallo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6484"/>
         <source>Respell pitches with sharps</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonizar con sostenidos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6491"/>
         <source>Respell pitches with flats</source>
-        <translation type="unfinished"/>
+        <translation>Enarmonizar con bemoles</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6498"/>

@@ -1147,7 +1147,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="127"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6943"/>
         <source>Chord brackets</source>
-        <translation>Kulaté závorky akordu</translation>
+        <translation>Závorky akordu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="132"/>
@@ -2350,7 +2350,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4177"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4401"/>
         <source>Symbol size:</source>
-        <translation>Velikost symbolu</translation>
+        <translation>Velikost symbolu:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4187"/>
@@ -2368,7 +2368,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4259"/>
         <source>Center on the leftmost system barline</source>
-        <translation>Vystředit na nejlevější taktové čáře systému</translation>
+        <translation>Vystředit na levé taktové čáře systému</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4266"/>
@@ -2378,7 +2378,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4479"/>
         <source>Center on the rightmost system barline</source>
-        <translation>Vystředit na nejpravější taktové čáře systému</translation>
+        <translation>Vystředit na pravé taktové čáře systému</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4486"/>
@@ -3449,7 +3449,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10434"/>
         <source>Reset &apos;Min. space between lyrics&apos; value</source>
-        <translation>Obnovit nejmenší mezeru mezi texty</translation>
+        <translation>Obnovit velikost nejmenší mezery mezi texty</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10457"/>
@@ -5851,7 +5851,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="97"/>
         <source>Show actions list</source>
-        <translation>Zobrazit seznam činností</translation>
+        <translation>Zobrazit seznam akcí</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="102"/>
@@ -6614,22 +6614,22 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="488"/>
         <source>Respell pitches with &amp;sharps</source>
-        <translation>Přepočítat posuvky s &amp;křížky</translation>
+        <translation>Přepočítat posuvky na &amp;křížky</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="489"/>
         <source>Respell pitches with sharps</source>
-        <translation>Přepočítat posuvky s křížky</translation>
+        <translation>Přepočítat posuvky na křížky</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="494"/>
         <source>Respell pitches with &amp;flats</source>
-        <translation>Přepočítat posuvky s &amp;béčky</translation>
+        <translation>Přepočítat posuvky na &amp;béčka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="495"/>
         <source>Respell pitches with flats</source>
-        <translation>Přepočítat posuvky s béčky</translation>
+        <translation>Přepočítat posuvky na béčka</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="500"/>
@@ -9447,7 +9447,7 @@ u nepravidelných rytmických skupin</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="49"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="50"/>
         <source>Play from selection</source>
-        <translation>Přehrávat z výběru</translation>
+        <translation>Přehrát z výběru</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="56"/>
@@ -10405,7 +10405,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="412"/>
         <source>Enharmonic spelling</source>
-        <translation>Enharmonické záměny</translation>
+        <translation>Enharmonická záměna</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="425"/>
@@ -10551,7 +10551,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="52"/>
         <source>Do you want to add SoundFont %1?</source>
-        <translation>Chcete přidat zvukovou banku %1?</translation>
+        <translation>Chcete přidat SoundFont %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="72"/>
@@ -10867,25 +10867,25 @@ Pražec %1 na strunách %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
         <source>Dotted %1</source>
         <translation>Tečkovaná %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="532"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
         <translation>Dvojitá tečka %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="535"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
         <translation>Trojitá tečka %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="538"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
         <translation>Čtyřnásobná tečka %1</translation>
     </message>
@@ -11357,13 +11357,13 @@ Pražec %1 na strunách %2</translation>
         <translation>Pravou rukou</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nota = %2 nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="478"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="476"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nota = %2</translation>
@@ -29223,7 +29223,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="214"/>
         <source>Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Velká písmena</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="225"/>
@@ -29405,17 +29405,17 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="253"/>
         <source>Don’t show chord symbols transposed by capo</source>
-        <translation type="unfinished"/>
+        <translation>Nezobrazovat akordové značky transponované pomocí kapodastru</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="256"/>
         <source>Show chord symbols &amp; transposed symbols</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit akordové značky a transponované značky</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="259"/>
         <source>Show transposed symbols only</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit pouze transponované značky</translation>
     </message>
 </context>
 <context>
@@ -29815,7 +29815,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="526"/>
         <source>Show naturals when switching between sharps and flats</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit odrážky při změně mezi křížky a bé</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="537"/>
@@ -30234,7 +30234,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="70"/>
         <source>Open the panel automatically</source>
-        <translation type="unfinished"/>
+        <translation>Otevřít panel automaticky</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="112"/>
@@ -30824,13 +30824,13 @@ se nezdařil:</translation>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="379"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1294"/>
         <source>Line (right arrowhead)</source>
-        <translation type="unfinished"/>
+        <translation>Čára (šipka doprava)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="387"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1299"/>
         <source>Line (left arrowhead)</source>
-        <translation type="unfinished"/>
+        <translation>Čára (šipka směřující doleva)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="427"/>
@@ -33716,7 +33716,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio API</source>
-        <translation type="unfinished"/>
+        <translation>Zvukové API</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -33751,7 +33751,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every</source>
-        <translation type="unfinished"/>
+        <translation>Automaticky ukládat každých</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
@@ -33761,12 +33761,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Braillova tabulka pro zpěvní text</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
         <source>Interval direction</source>
-        <translation type="unfinished"/>
+        <translation>Směr intervalu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleSection.qml" line="31"/>
@@ -33801,12 +33801,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device</source>
-        <translation type="unfinished"/>
+        <translation>Zvukové zařízení</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="71"/>
         <source>Buffer size</source>
-        <translation type="unfinished"/>
+        <translation>Velikost vyrovnávací paměti</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
@@ -33816,12 +33816,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="32"/>
         <source>Default style</source>
-        <translation type="unfinished"/>
+        <translation>Výchozí styl</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="73"/>
         <source>Style for parts</source>
-        <translation type="unfinished"/>
+        <translation>Styl pro party</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="80"/>
@@ -33843,17 +33843,17 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>
         <source>Video converter</source>
-        <translation type="unfinished"/>
+        <translation>Převodník videa</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="43"/>
         <source>FFmpeg library version:</source>
-        <translation type="unfinished"/>
+        <translation>Verze knihovny FFmpeg:</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="45"/>
         <source>FFmpeg library not found</source>
-        <translation type="unfinished"/>
+        <translation>Knihovna FFmpeg nenalezena</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="60"/>
@@ -33864,12 +33864,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="63"/>
         <source>Locate existing installation</source>
-        <translation type="unfinished"/>
+        <translation>Vyhledat stávající instalaci</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="79"/>
         <source>Download FFmpeg</source>
-        <translation type="unfinished"/>
+        <translation>Stáhnout FFmpeg</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="30"/>
@@ -33931,7 +33931,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output</source>
-        <translation type="unfinished"/>
+        <translation>MIDI výstup</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiSection.qml" line="42"/>
@@ -33961,17 +33961,17 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="30"/>
         <source>MNX</source>
-        <translation type="unfinished"/>
+        <translation>MNX</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation type="unfinished"/>
+        <translation>Vypnutí této funkce může způsobit chyby. Zkuste to pouze u souborů, které se jinak nedaří importovat.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
         <source>Require exact schema validation</source>
-        <translation type="unfinished"/>
+        <translation>Vyžaduje přesné ověření schématu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="29"/>
@@ -34107,7 +34107,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="73"/>
         <source>Playback duration</source>
-        <translation type="unfinished"/>
+        <translation>Délka přehrávání</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="96"/>
@@ -34147,7 +34147,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect</source>
-        <translation type="unfinished"/>
+        <translation>Zadání by mělo ovlivnit dynamiku a dynamické šipky</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -34182,7 +34182,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="113"/>
         <source>Show processing visualization</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit vizualizaci zpracování</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="123"/>
@@ -34207,12 +34207,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PageSection.qml" line="56"/>
         <source>Invert score colors</source>
-        <translation type="unfinished"/>
+        <translation>Převrátit barvy notového zápisu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PageSection.qml" line="74"/>
         <source>Only invert colors in dark theme</source>
-        <translation type="unfinished"/>
+        <translation>Převrátit barvy notového zápisu pouze u tmavého motivu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/PageSection.qml" line="93"/>
@@ -34287,12 +34287,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="32"/>
         <source>Reset appearance to default</source>
-        <translation type="unfinished"/>
+        <translation>Obnovit výchozí vzhled</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="30"/>
         <source>High-contrast theme</source>
-        <translation type="unfinished"/>
+        <translation>Motiv s vysokým kontrastem</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="30"/>
@@ -34317,12 +34317,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="48"/>
         <source>Text and icons</source>
-        <translation type="unfinished"/>
+        <translation>Text a ikony</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="49"/>
         <source>Disabled text</source>
-        <translation type="unfinished"/>
+        <translation>Zakázaný text</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="50"/>
@@ -34332,12 +34332,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="29"/>
         <source>App text</source>
-        <translation type="unfinished"/>
+        <translation>Text aplikace</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Typeface</source>
-        <translation type="unfinished"/>
+        <translation>Písmo</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiFontSection.qml" line="57"/>
@@ -34421,7 +34421,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="99"/>
         <source>Instruments and score orders</source>
-        <translation type="unfinished"/>
+        <translation>Pořadí nástrojů a partitur</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="104"/>
@@ -34571,7 +34571,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="179"/>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Video</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="182"/>
@@ -34604,12 +34604,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="47"/>
         <source>Style for full score</source>
-        <translation type="unfinished"/>
+        <translation>Styl pro partituru</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="54"/>
         <source>Choose default style for full score</source>
-        <translation type="unfinished"/>
+        <translation>Vyberte výchozí styl pro partituru</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="55"/>
@@ -35057,7 +35057,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1898"/>
         <source>MNX files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Soubory MNX (experimentální)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1899"/>
@@ -35344,6 +35344,7 @@ se nezdařilo: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="65"/>
@@ -35375,7 +35376,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/LrcSettingsPage.qml" line="31"/>
         <source>LRC enhanced format</source>
-        <translation type="unfinished"/>
+        <translation>Vylepšený formát LRC</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
@@ -35405,12 +35406,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="32"/>
         <source>Disable to let the importing app choose beam groupings.</source>
-        <translation type="unfinished"/>
+        <translation>Zakázat, aby si importující aplikace mohla vybrat seskupení trámců</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
         <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
-        <translation type="unfinished"/>
+        <translation>Zapněte tuto možnost, chcete-li vyvést notovou linku u každé pomlk. Vypněte ji, chcete-li rozhodnutí ponechat na importující aplikaci.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
@@ -35454,7 +35455,7 @@ se nezdařilo: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="76"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <source>Grayscale</source>
-        <translation type="unfinished"/>
+        <translation>Stupně šedi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="89"/>
@@ -35495,52 +35496,52 @@ se nezdařilo: %2</translation>
         <translation>Party</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="358"/>
         <source>File already exists</source>
         <translation>Soubor již existuje</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>Soubor s názvem %1 již existuje. Chcete jej nahradit?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
         <source>Replace</source>
         <translation>Nahradit</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace all</source>
         <translation>Nahradit vše</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Skip</source>
         <translation>Přeskočit</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip all</source>
         <translation>Přeskočit vše</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="390"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="387"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>Při zápisu souboru %1 došlo k chybě. Chcete to zkusit znovu?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting audio…</source>
         <translation>Vyvádí se zvukový záznam…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting…</source>
         <translation>Vyvádí se…</translation>
     </message>
@@ -35633,102 +35634,112 @@ se nezdařilo: %2</translation>
         <translation>Zvukové soubory FLAC</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
-        <source>MP4 video</source>
-        <translation type="unfinished"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <source>AAC audio</source>
+        <translation>Zvuk AAC</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
+        <source>AAC audio files</source>
+        <translation>Zvukové soubory AAC</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
+        <source>MP4 video</source>
+        <translation>Video MP4</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
         <source>MIDI file</source>
         <translation>Soubor MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
         <source>MIDI files</source>
         <translation>Soubory MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Braillovo písmo (základní – takty pod sebou)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
         <source>Braille files</source>
         <translation>Soubory Braillova písma</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>MEI files</source>
         <translation>Soubory MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
-        <source>MNX (experimental)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
-        <source>MNX files (experimental)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
-        <source>LRC file</source>
-        <translation type="unfinished"/>
+        <source>MNX (experimental)</source>
+        <translation>MNX (experimentální)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
-        <source>LRC files</source>
-        <translation type="unfinished"/>
+        <source>MNX files (experimental)</source>
+        <translation>Soubory MNX (experimentální)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="337"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
+        <source>LRC file</source>
+        <translation>Soubor LRC</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
+        <source>LRC files</source>
+        <translation>Soubory LRC</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="341"/>
         <source>Each page to a separate file</source>
         <translation>Každou stránku do samostatného souboru</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="338"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
         <source>Each part to a separate file</source>
         <translation>Každý part do samostatného souboru</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="339"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
         <source>All parts combined in one file</source>
         <translation>Sloučit všechny party do jednoho souboru</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="755"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Celé rozvržení notového zápisu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="757"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Zalomení systémů a stran</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="763"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Pouze ručně přidaná zalomení systémů a stran</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="765"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Bez zalomení systémů a stran</translation>
@@ -37912,12 +37923,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6484"/>
         <source>Respell pitches with sharps</source>
-        <translation>Přepočítat posuvky s křížky</translation>
+        <translation>Přepočítat posuvky na křížky</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6491"/>
         <source>Respell pitches with flats</source>
-        <translation>Přepočítat posuvky s béčky</translation>
+        <translation>Přepočítat posuvky na béčka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6498"/>

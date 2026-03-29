@@ -193,7 +193,7 @@
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="317"/>
         <source>Stem direction:</source>
-        <translation>Leggjaætt:</translation>
+        <translation>Hálsaætt:</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/customizekitdialog.ui" line="337"/>
@@ -779,7 +779,7 @@
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="258"/>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="367"/>
         <source>Stemless</source>
-        <translation>Leggleys</translation>
+        <translation>Hálsleyst</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="268"/>
@@ -915,7 +915,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="897"/>
         <source>Stems and beams</source>
-        <translation>Leggir og bjálkar</translation>
+        <translation>Hálsar og bjálkar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="947"/>
@@ -945,7 +945,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1046"/>
         <source>Stem style:</source>
-        <translation>Snið á leggi:</translation>
+        <translation>Snið á hálsi:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1062"/>
@@ -960,7 +960,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1119"/>
         <source>Stem position:</source>
-        <translation>Legg støða:</translation>
+        <translation>Háls støða:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1135"/>
@@ -986,12 +986,12 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1227"/>
         <source>As short stem</source>
-        <translation>Sum stuttur leggur</translation>
+        <translation>Sum stuttur hálsurur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1237"/>
         <source>As slashed stem</source>
-        <translation>Leggur skákstrikaður</translation>
+        <translation>Hálsur skákstrikaður</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="1265"/>
@@ -1640,7 +1640,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="558"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Goym tómar nótalinjur sjálvvirkandi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="570"/>
@@ -2561,7 +2561,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5198"/>
         <source>Stem thickness:</source>
-        <translation>Vídd á leggi:</translation>
+        <translation>Vídd á hálsi:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5208"/>
@@ -2576,12 +2576,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5250"/>
         <source>Shorten stems</source>
-        <translation>Stytt leggir</translation>
+        <translation>Stytt hálsar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5259"/>
         <source>Shortest stem:</source>
-        <translation>Stytsti leggur:</translation>
+        <translation>Stytsti hálsur:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5285"/>
@@ -2596,7 +2596,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5304"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation>Set saman røddir sum hava somu leggjaætt</translation>
+        <translation>Set saman røddir sum hava somu hálsætt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5314"/>
@@ -2800,12 +2800,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6136"/>
         <source>Vertical distance from stem:</source>
-        <translation>Loddrøtt fjarstøða til legg:</translation>
+        <translation>Loddrøtt fjarstøða til háls:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6155"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
-        <translation>Nullstilla &quot;Loddrætt fjarstøða frá leggi&quot;</translation>
+        <translation>Nullstilla &quot;Loddrætt fjarstøða frá hálsi&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6196"/>
@@ -2943,7 +2943,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6603"/>
         <source>Distance after stem of last note:</source>
-        <translation>Fjarstøða aftaná legg á seinasta tóna:</translation>
+        <translation>Fjarstøða aftaná háls á seinasta tóna:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6657"/>
@@ -2963,7 +2963,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6714"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
-        <translation>Nullstilla &quot;Fjarstøða til legg á fyrsta nóta&quot;</translation>
+        <translation>Nullstilla &quot;Fjarstøða til háls á fyrsta nóta&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6724"/>
@@ -2978,7 +2978,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6772"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
-        <translation>Nullstilla &quot;Fjarstøða aftaná legg á seinasta tóna&quot;</translation>
+        <translation>Nullstilla &quot;Fjarstøða aftaná háls á seinasta tóna&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6831"/>
@@ -3345,7 +3345,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9459"/>
         <source>Distance from stem:</source>
-        <translation>Fjarstøða til legg:</translation>
+        <translation>Fjarstøða til háls:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9469"/>
@@ -3355,7 +3355,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9524"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation>Nullstilla &quot;Leggjafjarstøða&quot;</translation>
+        <translation>Nullstilla &quot;Hálsfjarstøða&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9531"/>
@@ -3400,7 +3400,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9644"/>
         <source>Center between stem and notehead</source>
-        <translation>Á miðju millum legg og nótahøvd</translation>
+        <translation>Á miðju millum háls og nótahøvd</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9670"/>
@@ -4171,7 +4171,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="67"/>
         <source>Stemless</source>
-        <translation>Leggleysir nótar</translation>
+        <translation>Hálsleysir nótar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="96"/>
@@ -10495,7 +10495,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
         <source>Includes a new system for hiding empty staves, a new text editing widget, guitar notation improvements, engraving improvements and more.</source>
-        <translation type="unfinished"/>
+        <translation>Fevnir um nýggja skipan at goyma tóma nótalinjur, eitt nýtt ritsetingarlut, betra gittar nótaskrift, prentbetringar og meira. </translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="46"/>
@@ -10863,25 +10863,25 @@ Bond %1 á streingjum %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
         <source>Dotted %1</source>
         <translation>Prikkað %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="532"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
         <translation>Dupult prikkað %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="535"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
         <translation>Trífaldað prikkaður %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="538"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
         <translation>Fjórfalda prikkað %1</translation>
     </message>
@@ -11353,13 +11353,13 @@ Bond %1 á streingjum %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nóti = %2 nóti</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="478"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="476"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nóti = %2</translation>
@@ -11589,12 +11589,12 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>staff/staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>nótalinja/nótalinjur</numerusform><numerusform>nótalinja/nótalinjur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Staff/Staves</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nótalinja/Nótalinjur</numerusform><numerusform>Nótalinja/Nótalinjur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
@@ -16213,7 +16213,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="68"/>
         <source>hide staves when individually empty</source>
-        <translation type="unfinished"/>
+        <translation>goym nótalinjur tá einstaka tómar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="69"/>
@@ -17626,7 +17626,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="399"/>
         <source>center between staves</source>
-        <translation type="unfinished"/>
+        <translation>miðja millum nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="401"/>
@@ -17636,7 +17636,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="403"/>
         <source>staves distance</source>
-        <translation type="unfinished"/>
+        <translation>nótalinju fjarstøða</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="404"/>
@@ -17971,7 +17971,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>apply to all staves</source>
-        <translation type="unfinished"/>
+        <translation>legg afturat øllum nótalinjum</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="493"/>
@@ -19751,52 +19751,52 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4853"/>
         <source>1024th note (semihemidemisemihemidemisemiquaver) stem up</source>
-        <translation>1024pt nóti (semihemidemisemihemidemisemiquaver) leggur upp</translation>
+        <translation>1024pt nóti (semihemidemisemihemidemisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4855"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
-        <translation>128pt nóti (semihemidemisemiquaver) leggur upp</translation>
+        <translation>128pt nóti (semihemidemisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4857"/>
         <source>16th note (semiquaver) stem up</source>
-        <translation>16pt nóti (semiquaver) leggur upp</translation>
+        <translation>16pt nóti (semiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4859"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
-        <translation>256pt nóti (demisemihemidemisemiquaver) leggur upp</translation>
+        <translation>256pt nóti (demisemihemidemisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4861"/>
         <source>32nd note (demisemiquaver) stem up</source>
-        <translation>32pt nóti (demisemiquaver) leggur upp</translation>
+        <translation>32pt nóti (demisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4863"/>
         <source>512th note (hemidemisemihemidemisemiquaver) stem up</source>
-        <translation>512pt nóti (hemidemisemihemidemisemiquaver) leggur upp</translation>
+        <translation>512pt nóti (hemidemisemihemidemisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4865"/>
         <source>64th note (hemidemisemiquaver) stem up</source>
-        <translation>64pt nóti (hemidemisemiquaver) leggur upp</translation>
+        <translation>64pt nóti (hemidemisemiquaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4867"/>
         <source>Eighth note (quaver) stem up</source>
-        <translation>Áttandaparts nóti (quaver) leggur upp</translation>
+        <translation>Áttandaparts nóti (quaver) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4871"/>
         <source>Half note (minim) stem up</source>
-        <translation>Hálvnóti (minim) leggur upp</translation>
+        <translation>Hálvnóti (minim) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4873"/>
         <source>Quarter note (crotchet) stem up</source>
-        <translation>Fjórðingsnóti (crotchet) leggur upp</translation>
+        <translation>Fjórðingsnóti (crotchet) hálsur upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4874"/>
@@ -20335,22 +20335,22 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2470"/>
         <source>Eighth through stem</source>
-        <translation>8prt gjøgnum legg</translation>
+        <translation>8prt gjøgnum háls</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2471"/>
         <source>16th through stem</source>
-        <translation>16prt gjøgnum legg</translation>
+        <translation>16prt gjøgnum háls</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2472"/>
         <source>32nd through stem</source>
-        <translation>32prt gjøgnum legg</translation>
+        <translation>32prt gjøgnum háls</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2473"/>
         <source>64th through stem</source>
-        <translation>64prt gjøgnum legg</translation>
+        <translation>64prt gjøgnum háls</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
@@ -23222,7 +23222,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="189"/>
         <source>Center between staves</source>
-        <translation type="unfinished"/>
+        <translation>Miðja millum nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="198"/>
@@ -23251,7 +23251,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml" line="87"/>
         <source>Show empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vís tómar nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="66"/>
@@ -24804,24 +24804,24 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="189"/>
         <source>Combine with voices that share the same stem direction</source>
-        <translation>Set saman við røddir sum hava somu leggjaætt</translation>
+        <translation>Set saman við røddir sum hava somu hálsætt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="53"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="209"/>
         <source>Stemless</source>
-        <translation>Leggleysir</translation>
+        <translation>Hálsleysir</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="62"/>
         <source>Show stem slash</source>
-        <translation>Vís leggja skákstriku</translation>
+        <translation>Vís háls skákstriku</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="75"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="64"/>
         <source>Stem direction</source>
-        <translation>Leggjaætt</translation>
+        <translation>Hálsætt</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="89"/>
@@ -24848,7 +24848,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="211"/>
         <source>Stem offset</source>
-        <translation>Leggja offset</translation>
+        <translation>Háls offset</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/StemSettings.qml" line="222"/>
@@ -25276,7 +25276,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="54"/>
         <source>Automatically hide all empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Goym tómar nótalinjur sjálvvirkandi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="81"/>
@@ -25531,7 +25531,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="40"/>
         <source>Empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Sýni tómar nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/playback/internal/arpeggioplaybackmodel.cpp" line="34"/>
@@ -26059,7 +26059,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/stemsettingsmodel.cpp" line="36"/>
         <source>Stem</source>
-        <translation>Leggur</translation>
+        <translation>Hálsur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/ornamentsettingsmodel.cpp" line="45"/>
@@ -26556,7 +26556,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="176"/>
         <source>Only hide staves on a system if the entire instrument is empty</source>
-        <translation type="unfinished"/>
+        <translation>Einans goym nótalinjur í skipanum, um alt ljóðførið er tómt</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="197"/>
@@ -26625,7 +26625,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="272"/>
         <source>Linked staves contain identical notation (e.g. for guitar tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Leinkjaðar nótalinjur innihalda eins nótaskrift (t.d. til gittar tablatur)</translation>
     </message>
 </context>
 <context>
@@ -27366,12 +27366,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="151"/>
         <source>Draw inner stems through beams</source>
-        <translation>Tekna innaru leggir gjøgnum bjálkar</translation>
+        <translation>Tekna innaru hálsar gjøgnum bjálkar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="152"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation>Tekna innaru leggir til nærmasta bjálka (&quot;Franskt&quot; snið)</translation>
+        <translation>Tekna innaru hálsar til nærmasta bjálka (&quot;Franskt&quot; snið)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="263"/>
@@ -29424,13 +29424,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="67"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="141"/>
         <source>Standard staves</source>
-        <translation type="unfinished"/>
+        <translation>Vanligar nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="76"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="147"/>
         <source>Tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Tablatur nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="88"/>
@@ -29485,7 +29485,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="204"/>
         <source>Show on standard staves</source>
-        <translation type="unfinished"/>
+        <translation>Vís á vanligum nótalinjum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="229"/>
@@ -29510,7 +29510,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="297"/>
         <source>Show on tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Vís á tablatur nótalinjum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="385"/>
@@ -30125,7 +30125,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.cpp" line="231"/>
         <source>Stemless</source>
-        <translation>Leggleysir nótar</translation>
+        <translation>hálsleysir nótar</translation>
     </message>
 </context>
 <context>
@@ -30492,7 +30492,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="50"/>
         <source>Input by duration mode</source>
-        <translation type="unfinished"/>
+        <translation>Skriviháttur eftir tíðarbili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="51"/>
@@ -35333,6 +35333,7 @@ miseydnað: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="65"/>
@@ -35484,52 +35485,52 @@ miseydnað: %2</translation>
         <translation>Partar</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="358"/>
         <source>File already exists</source>
         <translation>Fíla er longu til</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="359"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
         <translation>Ein fíla er longu til við navninum %1. Ynskir tú at seta hesa í staðin?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="361"/>
         <source>Replace</source>
         <translation>Skift út</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="362"/>
         <source>Replace all</source>
         <translation>Skift út alt</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>Skip</source>
         <translation>Leyp um</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Skip all</source>
         <translation>Leyp um alt</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="390"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="387"/>
         <source>Error</source>
         <translation>Villa</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="391"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="388"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
         <translation>Villa kom í meðan fílan %1 bleiv skriva. Ynskir tú at royna aftur?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting audio…</source>
         <translation>Flytir út ljóð...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="443"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="440"/>
         <source>Exporting…</source>
         <translation>Flytir út…</translation>
     </message>
@@ -35622,102 +35623,112 @@ miseydnað: %2</translation>
         <translation>FLAC ljóð fílur</translation>
     </message>
     <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <source>AAC audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
+        <source>AAC audio files</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
         <source>MP4 video</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
         <source>MIDI file</source>
         <translation>MID fíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
         <source>MIDI files</source>
         <translation>MIDI fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Blindaskift (grundleggjandi takt yvir takt)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
         <source>Braille files</source>
         <translation>Blindaskrift filur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>MEI files</source>
         <translation>MEI fíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
         <source>MNX (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
         <source>MNX files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
         <source>LRC file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
         <source>LRC files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="337"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="341"/>
         <source>Each page to a separate file</source>
         <translation>Hvør síða á ymiskar fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="338"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
         <source>Each part to a separate file</source>
         <translation>Hvør partur á ymsar fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="339"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
         <source>All parts combined in one file</source>
         <translation>Allir partar saman á eina fílu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="755"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Øll uppseting</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="757"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Reglubrot í skipan og á síðu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="763"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Einans handstýrd reglubrot í skipan og á síðu.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="765"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Eingi reglubrot í skipan ella á síðu</translation>
@@ -37301,12 +37312,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="108"/>
         <source>Show empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Vís tómar nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/emptystaves/emptystavesvisiblitysettingsmodel.cpp" line="131"/>
         <source>Reset empty staves visibility</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla sýni tómar nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/generalsettingsmodel.cpp" line="162"/>
@@ -37444,7 +37455,7 @@ miseydnað: %2</translation>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1076"/>
         <source>Remove staves</source>
-        <translation type="unfinished"/>
+        <translation>Strika nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
@@ -37786,7 +37797,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5995"/>
         <source>Transposition</source>
-        <translation type="unfinished"/>
+        <translation>Transpositión</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6019"/>
@@ -38201,7 +38212,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="1156"/>
         <source>Move staves</source>
-        <translation type="unfinished"/>
+        <translation>Flyt nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationstyle.cpp" line="115"/>
