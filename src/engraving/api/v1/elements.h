@@ -27,6 +27,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/arpeggio.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracketItem.h"
@@ -2663,6 +2664,76 @@ public:
     bool isMelisma() const { return lyrics()->isMelisma(); }
     /** APIDOC @property {EngravingItem} - the lyrics line for this lyric, if it exists */
     apiv1::EngravingItem* separator() const { return wrap(lyrics()->separator()); }
+};
+
+//---------------------------------------------------------
+//   FretDiagram
+/// Exposes FretDiagram dot, marker, and barre manipulation
+/// to the QML plugin API.
+/// \since MuseScore 4.7
+//---------------------------------------------------------
+
+class FretDiagram : public EngravingItem
+{
+    Q_OBJECT
+
+    /// Number of strings in the diagram.
+    Q_PROPERTY(int strings READ strings WRITE setStrings)
+    /// Number of frets shown in the diagram.
+    Q_PROPERTY(int frets READ frets WRITE setFrets)
+    /// Fret offset (0-based: value N means the top of the diagram is at fret N+1).
+    Q_PROPERTY(int fretOffset READ fretOffset WRITE setFretOffset)
+    /// Whether to show the nut (thick line at top of diagram).
+    Q_PROPERTY(bool showNut READ showNut WRITE setShowNut)
+
+public:
+    /// \cond MS_INTERNAL
+    FretDiagram(mu::engraving::FretDiagram* fd = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(fd, own) {}
+
+    mu::engraving::FretDiagram* fretDiagram() { return toFretDiagram(e); }
+    const mu::engraving::FretDiagram* fretDiagram() const { return toFretDiagram(e); }
+    /// \endcond
+
+    int strings() const { return fretDiagram()->strings(); }
+    void setStrings(int n) { fretDiagram()->setStrings(n); }
+    int frets() const { return fretDiagram()->frets(); }
+    void setFrets(int n) { fretDiagram()->setFrets(n); }
+    int fretOffset() const { return fretDiagram()->fretOffset(); }
+    void setFretOffset(int val) { fretDiagram()->setFretOffset(val); }
+    bool showNut() const { return fretDiagram()->showNut(); }
+    void setShowNut(bool val) { fretDiagram()->setShowNut(val); }
+
+    /// Set a dot on the specified string at the specified fret.
+    /// \param string 0-based string index (0 = highest pitched string)
+    /// \param fret fret number (1-based, 0 removes the dot)
+    /// \param add if true, add a second dot without removing existing ones
+    /// \param dotType dot type: 0=normal, 1=cross, 2=square, 3=triangle
+    Q_INVOKABLE void setDot(int string, int fret, bool add = false, int dotType = 0) {
+        fretDiagram()->setDot(string, fret, add,
+                              static_cast<mu::engraving::FretDotType>(dotType));
+    }
+
+    /// Set a marker on the specified string.
+    /// \param string 0-based string index (0 = highest pitched string)
+    /// \param markerType marker type: 0=none, 1=circle (open), 2=cross (muted)
+    Q_INVOKABLE void setMarker(int string, int markerType) {
+        fretDiagram()->setMarker(string,
+                                 static_cast<mu::engraving::FretMarkerType>(markerType));
+    }
+
+    /// Set a barre across strings at the specified fret.
+    /// \param startString 0-based start string index
+    /// \param endString 0-based end string index
+    /// \param fret fret number (1-based)
+    Q_INVOKABLE void setBarre(int startString, int endString, int fret) {
+        fretDiagram()->setBarre(startString, endString, fret);
+    }
+
+    /// Remove all dots, markers, and barres from the diagram.
+    Q_INVOKABLE void clear() {
+        fretDiagram()->clear();
+    }
 };
 
 #undef API_PROPERTY
