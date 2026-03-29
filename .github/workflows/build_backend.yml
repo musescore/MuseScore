@@ -41,15 +41,15 @@ on:
         type: string
         required: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backend:
     runs-on: ubuntu-22.04
     if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.13.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v6
 

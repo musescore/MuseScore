@@ -39,6 +39,10 @@ on:
         type: string
         required: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
 
@@ -46,10 +50,6 @@ jobs:
   macos_universal:
     runs-on: macos-26
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.13.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v6
 
