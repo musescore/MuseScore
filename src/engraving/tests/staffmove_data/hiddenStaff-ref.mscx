@@ -90,8 +90,16 @@
           <name>stdNormal</name>
           </StaffType>
         <isStaffVisible>0</isStaffVisible>
-        <bracket type="0" span="2" col="0" visible="1"/>
-        <bracket type="2" span="2" col="2" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <BracketItem>
+          <type>Square</type>
+          <bracketSpan>2</bracketSpan>
+          <level>2</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>

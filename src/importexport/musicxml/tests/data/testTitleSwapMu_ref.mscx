@@ -55,6 +55,8 @@
       <shortInstrumentFontSize>11.9365</shortInstrumentFontSize>
       <partInstrumentFontFace>Plantin MT Std</partInstrumentFontFace>
       <partInstrumentFontSize>11.9365</partInstrumentFontSize>
+      <groupBracketFontFace>Plantin MT Std</groupBracketFontFace>
+      <groupBracketFontSize>11.9365</groupBracketFontSize>
       <expressionFontFace>Plantin MT Std</expressionFontFace>
       <expressionFontSize>11.9365</expressionFontSize>
       <tempoFontFace>Plantin MT Std</tempoFontFace>
