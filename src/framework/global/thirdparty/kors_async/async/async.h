@@ -134,12 +134,17 @@ private:
         struct Func : public ICallable
         {
             Call func;
-            Func(const Call& f = nullptr)
-                : func(f) {}
+            Func(const Call& f)
+                : func(f)
+            {
+                assert(func && "callback is nullptr");
+            }
 
             void call(const void*) override
             {
-                func();
+                if (func) {
+                    func();
+                }
             }
         };
 

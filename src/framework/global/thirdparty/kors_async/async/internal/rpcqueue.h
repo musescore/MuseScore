@@ -74,6 +74,7 @@ private:
     std::vector<T> m_buffer;
     std::queue<T> m_pending;
     std::function<void(const T&)> m_handler;
+    bool m_isProcessing = false;
 
 public:
 
@@ -93,6 +94,19 @@ public:
         sendPending();
 
         assert(m_connPort);
+
+        assert(!m_isProcessing && "Recursive processing of messages is not allowed");
+
+        if (m_isProcessing) {
+            return;
+        }
+
+        struct Guard {
+            bool& flag;
+            Guard(bool& flag)
+                : flag(flag) { flag = true; }
+            ~Guard() { flag = false; }
+        } guard { m_isProcessing };
 
         // receive messages
         m_buffer.clear();
