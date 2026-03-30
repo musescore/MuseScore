@@ -78,6 +78,7 @@
 #include "../dom/stem.h"
 #include "../dom/stringdata.h"
 #include "../dom/system.h"
+#include "../dom/tapping.h"
 #include "../dom/tie.h"
 #include "../dom/timesig.h"
 #include "../dom/tremolotwochord.h"

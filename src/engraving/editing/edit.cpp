@@ -85,6 +85,7 @@
 #include "../dom/stringtunings.h"
 #include "../dom/system.h"
 #include "../dom/systemtext.h"
+#include "../dom/tapping.h"
 #include "../dom/tempotext.h"
 #include "../dom/text.h"
 #include "../dom/textline.h"
