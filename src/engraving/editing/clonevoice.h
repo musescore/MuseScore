@@ -32,14 +32,14 @@ class CloneVoice : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, CloneVoice)
 
-    Segment* sourceSeg = nullptr;
-    Fraction lTick;
-    Segment* destSeg = nullptr; //Destination
-    track_idx_t strack = muse::nidx;
-    track_idx_t dtrack = muse::nidx;
-    track_idx_t otrack = muse::nidx;
-    bool linked = false;
-    bool first = true; //first redo
+    Segment* m_sourceSeg = nullptr;
+    Fraction m_lTick;
+    Segment* m_destSeg = nullptr;
+    track_idx_t m_strack = muse::nidx;
+    track_idx_t m_dtrack = muse::nidx;
+    track_idx_t m_otrack = muse::nidx;
+    bool m_link = false;
+    bool m_first = true; // first redo
 
 public:
     CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, track_idx_t strack, track_idx_t dtrack, track_idx_t otrack,
@@ -49,6 +49,6 @@ public:
 
     UNDO_TYPE(CommandType::CloneVoice)
     UNDO_NAME("CloneVoice")
-    UNDO_CHANGED_OBJECTS({ sourceSeg, destSeg })
+    UNDO_CHANGED_OBJECTS({ m_sourceSeg, m_destSeg })
 };
 }

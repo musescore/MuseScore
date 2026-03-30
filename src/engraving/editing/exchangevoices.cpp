@@ -133,11 +133,6 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
     Fraction tick = measure->tick();
 
     for (staff_idx_t staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
-        std::set<Staff*> staffList;
-        for (Staff* s : score->staff(staffIdx)->staffList()) {
-            staffList.insert(s);
-        }
-
         track_idx_t srcStaffTrack = staffIdx * VOICES;
         track_idx_t srcTrack = srcStaffTrack + srcVoice;
         track_idx_t dstTrack = srcStaffTrack + dstVoice;
@@ -146,7 +141,7 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
         //handle score and complete measures first
         score->undo(new ExchangeVoicesInMeasure(measure, srcTrack, dstTrack, staffIdx));
 
-        for (Staff* st : staffList) {
+        for (Staff* st : score->staff(staffIdx)->staffList()) {
             track_idx_t staffTrack = st->idx() * VOICES;
             Measure* measure2 = st->score()->tick2measure(tick);
             Excerpt* ex = st->score()->excerpt();
