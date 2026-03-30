@@ -42,7 +42,7 @@ public:
     void setPlaying(bool playing) override;
     bool shouldProcessDuringSilence() const override;
 
-    void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
+    void process(float* buffer, samples_t sampleCount, samples_t playbackPositionSamples = 0) override;
 
 private:
     void calculate();

@@ -209,8 +209,8 @@ void VstAudioClient::flushSound()
     m_playingParams.clear();
 }
 
-muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::samples_t samplesPerChannel,
-                                               muse::audio::msecs_t playbackPosition)
+audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel,
+                                         samples_t playbackPositionSamples)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -228,7 +228,7 @@ muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::sampl
     //! but never bigger than the maxSamplesPerBlock
     m_processData.numSamples = samplesPerChannel;
 
-    m_processContext.projectTimeSamples = (playbackPosition / 1000000.f) * m_outputSpec.sampleRate;
+    m_processContext.projectTimeSamples = playbackPositionSamples;
 
     if (samplesPerChannel > m_outputSpec.samplesPerChannel) {
         OutputSpec newSpec = m_outputSpec;

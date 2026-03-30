@@ -209,6 +209,12 @@ msecs_t Mixer::playbackPosition() const
     return clock->currentTime();
 }
 
+samples_t Mixer::playbackPositionSamples() const
+{
+    const msecs_t pos = playbackPosition();
+    return pos / 1000000. * m_outputSpec.sampleRate;
+}
+
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -561,7 +567,7 @@ void Mixer::processMasterFx(float* buffer, samples_t samplesPerChannel)
 {
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(buffer, samplesPerChannel, playbackPosition());
+            fxProcessor->process(buffer, samplesPerChannel, playbackPositionSamples());
         }
     }
 }

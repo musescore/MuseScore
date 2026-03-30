@@ -342,7 +342,7 @@ bool ReverbProcessor::shouldProcessDuringSilence() const
     return false;
 }
 
-void ReverbProcessor::process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t)
+void ReverbProcessor::process(float* buffer, samples_t sampleCount, samples_t)
 {
     if (m_processor._blockSize != static_cast<int>(sampleCount)) {
         setFormat(m_processor._audioChannelsCount, m_processor._sampleRate, sampleCount);
@@ -357,13 +357,13 @@ void ReverbProcessor::process(float* buffer, unsigned int sampleCount, muse::aud
     }
 
     switch (m_delays) {
-    case 24: _processLines<24>(m_signalBuffers, sampleCount);
+    case 24: _processLines<24>(m_signalBuffers, static_cast<int32_t>(sampleCount));
         break;
-    case 16: _processLines<16>(m_signalBuffers, sampleCount);
+    case 16: _processLines<16>(m_signalBuffers, static_cast<int32_t>(sampleCount));
         break;
-    case 12: _processLines<12>(m_signalBuffers, sampleCount);
+    case 12: _processLines<12>(m_signalBuffers, static_cast<int32_t>(sampleCount));
         break;
-    default: _processLines<8>(m_signalBuffers, sampleCount);
+    default: _processLines<8>(m_signalBuffers, static_cast<int32_t>(sampleCount));
         break;
     }
 

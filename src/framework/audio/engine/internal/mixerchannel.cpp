@@ -221,7 +221,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (fx->active()) {
-            const msecs_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPosition() : 0;
+            const samples_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPositionSamples() : 0;
             fx->process(buffer, samplesPerChannel, pos);
         }
     }
