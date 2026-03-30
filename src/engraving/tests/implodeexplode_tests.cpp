@@ -23,6 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
+#include "engraving/editing/implodeexplode.h"
 #include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
@@ -58,7 +59,7 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
-    score->cmdExplode();
+    ImplodeExplode::explode(score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -89,7 +90,7 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Implode/explode tests"));
-    score->cmdImplode();
+    ImplodeExplode::implode(score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

@@ -28,6 +28,7 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/score.h"
+#include "engraving/editing/exchangevoices.h"
 #include "engraving/editing/undo.h"
 
 #include "utils/scorerw.h"
@@ -54,7 +55,7 @@ TEST_F(Engraving_ExchangevoicesTests, slurs)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     // compare
@@ -74,7 +75,7 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     // compare
@@ -93,7 +94,7 @@ TEST_F(Engraving_ExchangevoicesTests, rangeSelection)
     score->endCmd();
 
     score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
-    score->cmdExchangeVoice(0, 1);
+    ExchangeVoices::exchangeVoicesInSelection(score, 0, 1);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-range.mscx",
