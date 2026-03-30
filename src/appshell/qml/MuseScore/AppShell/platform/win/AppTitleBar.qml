@@ -63,11 +63,13 @@ Rectangle {
             Layout.preferredWidth: implicitWidth
             Layout.preferredHeight: implicitHeight
 
-            availableWidth: root.width - (content.spacing + titleTextmetrics.width + content.spacing + systemButtons.width)
+            availableWidth: root.width - (content.spacing + titleLabel.minDistanceFromMenu + titleTextmetrics.width + content.spacing + systemButtons.width)
         }
 
         StyledTextLabel {
             id: titleLabel
+
+            readonly property int minDistanceFromMenu: 24
 
             Layout.fillWidth: !menu.truncated ? true : false
             Layout.fillHeight: true
@@ -78,11 +80,7 @@ Rectangle {
             leftPadding: {
                 var parentCenterX = parent.width / 2
                 var expectedTextCenterX = parentCenterX - titleTextmetrics.width / 2
-                if (expectedTextCenterX > x) {
-                    return expectedTextCenterX - x
-                }
-
-                return 0
+                return Math.max(expectedTextCenterX - x, minDistanceFromMenu)
             }
 
             text: titleTextmetrics.elidedText
