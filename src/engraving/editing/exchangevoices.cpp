@@ -171,8 +171,7 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
 
                     // only source voice is in this staff
                     if (!hasVoice) {
-                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
-                                               measure2->first(), tempTrack, srcTrack2, tempTrack + trackDiff);
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, srcTrack2, false, true);
                         muse::remove(srcTrackList, srcTrack2);
                     }
                 }
@@ -194,8 +193,7 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
 
                     // only destination voice is in this staff
                     if (!hasVoice) {
-                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
-                                               measure2->first(), tempTrack, dstTrack2, tempTrack - trackDiff);
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, dstTrack2, false, true);
                         muse::remove(dstTrackList, dstTrack2);
                     }
                 }

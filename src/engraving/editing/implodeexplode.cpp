@@ -220,7 +220,7 @@ bool ImplodeExplode::explode(Score* score)
             track_idx_t strack = sTracks[j % VOICES];
             track_idx_t dtrack = dTracks[j % VOICES];
             if (strack != muse::nidx && strack != dtrack && dtrack != muse::nidx) {
-                CloneVoice::cloneVoice(startSegment, lTick, startSegment, strack, dtrack, muse::nidx, false);
+                CloneVoice::cloneVoice(startSegment, lTick, startSegment, strack, dtrack, true, false);
             }
         }
     }
@@ -364,7 +364,7 @@ bool ImplodeExplode::implode(Score* score)
         for (track_idx_t i = dstTrack; i < dstTrack + VOICES; i++) {
             track_idx_t strack = tracks[i % VOICES];
             if (strack != muse::nidx && strack != i) {
-                CloneVoice::cloneVoice(startSegment, endTick, startSegment, strack, i, i, false);
+                CloneVoice::cloneVoice(startSegment, endTick, startSegment, strack, i, false, false);
             }
         }
     }

@@ -322,7 +322,7 @@ void CloneVoice::cloneVoice(
     Segment* destSeg, // first destination segment
     track_idx_t strack,
     track_idx_t dtrack,
-    track_idx_t otrack, // old source track if -1 delete voice in strack after copy
+    bool deleteSource,
     bool link // if true  add elements in destination segment only
               // if false add elements in every linked staff
     )
@@ -331,29 +331,27 @@ void CloneVoice::cloneVoice(
     Fraction ticks = destSeg->tick() + lTick - sourceSeg->tick();
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (otrack != muse::nidx && link) {
-        for (Segment* seg = destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
-            EngravingItem* el = seg->element(dtrack);
-            if (el && el->isChordRest()) {
-                s->doUndoRemoveElement(el);
-            }
+    for (Segment* seg = destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
+        EngravingItem* el = seg->element(dtrack);
+        if (el && el->isChordRest()) {
+            link ? s->doUndoRemoveElement(el) : s->undoRemoveElement(el);
         }
     }
 
-    if (otrack == muse::nidx && !link) {
-        // On the first run get going the undo redo action for adding/deleting elements and slurs
-        doCloneVoice(s, strack, dtrack, sourceSeg, ticks, link);
+    doCloneVoice(s, strack, dtrack, sourceSeg, ticks, link);
+
+    if (deleteSource) {
         auto spanners = s->spannerMap().findOverlapping(sourceSeg->tick().ticks(), lTick.ticks());
         for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* sp = i->value;
             if (sp->isSlur() && (sp->track() == strack || sp->track2() == strack)) {
-                s->undoRemoveElement(sp);
+                link ? s->doUndoRemoveElement(sp) : s->undoRemoveElement(sp);
             }
         }
         for (Segment* seg = destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
             EngravingItem* el = seg->element(strack);
             if (el && el->isChordRest()) {
-                s->undoRemoveElement(el);
+                link ? s->doUndoRemoveElement(el) : s->undoRemoveElement(el);
             }
 
             const std::vector<EngravingItem*> annotations = seg->annotations();
@@ -365,15 +363,14 @@ void CloneVoice::cloneVoice(
                             continue;
                         }
                     }
-                    s->undoRemoveElement(annotation);
+                    link ? s->doUndoRemoveElement(annotation) : s->undoRemoveElement(annotation);
                 }
             }
         }
         // Set rests if first voice in a staff
         if (!(strack % VOICES)) {
+            // TODO: take `link` into account?
             s->setRest(destSeg->tick(), strack, ticks, false, nullptr);
         }
-    } else {
-        doCloneVoice(s, strack, dtrack, sourceSeg, ticks, link);
     }
 }
