@@ -53,3 +53,7 @@ target_sources(muse_workspace PRIVATE
 if (MUSE_MODULE_WORKSPACE_QML)
     add_subdirectory(qml/Muse/Workspace)
 endif()
+
+if (MUSE_MODULE_WORKSPACE_TESTS)
+    add_subdirectory(tests)
+endif()
