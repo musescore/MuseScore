@@ -1109,14 +1109,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     std::vector<Lyrics*> lyricsToPreserve;
     bool shouldPreserveLyrics = false;
     if (!isRest && cr) {
-        auto& existingLyrics = cr->lyrics();
-        lyricsToPreserve.reserve(existingLyrics.size());
-        for (Lyrics* lyric : existingLyrics) {
-            if (!lyric) {
-                continue;
-            }
-            lyricsToPreserve.push_back(Factory::copyLyrics(*lyric));
-        }
+        lyricsToPreserve = cr->lyrics();
         shouldPreserveLyrics = !lyricsToPreserve.empty();
     }
     bool lyricsPreserved = false;
@@ -1209,9 +1202,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 // to ensure they are not duplicated during subsequent operations
                 lyricsPreserved = true;
                 for (Lyrics* lyric : lyricsToPreserve) {
-                    lyric->setParent(ncr);
-                    lyric->setTrack(ncr->track());
-                    undoAddElement(lyric);
+                    undoChangeParent(lyric, ncr, ncr->staffIdx());
                 }
             }
 
