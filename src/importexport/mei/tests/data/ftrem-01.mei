@@ -7,7 +7,7 @@
          <titleStmt>
             <title type="main">Fingered tremolos</title>
             <respStmt>
-               <persName role="composer"></persName>
+               <persName role="composer" />
             </respStmt>
          </titleStmt>
          <pubStmt>
@@ -38,7 +38,6 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <pb />
                   <measure xml:id="mig8ke7" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
@@ -107,7 +106,6 @@
                         </layer>
                      </staff>
                   </measure>
-                  <sb />
                   <measure xml:id="m5f4zv1" right="end" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
