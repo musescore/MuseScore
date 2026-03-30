@@ -42,8 +42,8 @@
 
 using namespace mu::engraving;
 
-static void cloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dstTrack, Segment* sourceSeg, const Fraction& lTick,
-                       bool link = true, bool spanner = true)
+static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dstTrack, Segment* sourceSeg, const Fraction& lTick,
+                         bool link = true)
 {
     Score* sourceScore = sourceSeg->score();
     Fraction start = sourceSeg->tick();
@@ -262,184 +262,118 @@ static void cloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dstTr
         }
     }
 
-    if (spanner) {
-        // Find and add corresponding slurs and hairpins
-        static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF, ElementType::HAIRPIN };
-        auto spanners = sourceScore->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
-        for (auto i = spanners.begin(); i < spanners.end(); i++) {
-            Spanner* sp      = i->value;
-            Fraction spStart = sp->tick();
-            Fraction spEnd = spStart + sp->ticks();
+    // Find and add corresponding slurs and hairpins
+    static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF, ElementType::HAIRPIN };
+    auto spanners = sourceScore->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
+    for (auto i = spanners.begin(); i < spanners.end(); i++) {
+        Spanner* sp      = i->value;
+        Fraction spStart = sp->tick();
+        Fraction spEnd = spStart + sp->ticks();
 
-            if (muse::contains(SPANNERS_TO_COPY, sp->type()) && (spStart >= start && spEnd < lTick)) {
-                if (!sp->elementAppliesToTrack(srcTrack)) {
-                    continue;
-                }
-                Spanner* ns = toSpanner(maybeLinkedClone(sp));
-
-                ns->setScore(destScore);
-                ns->setParent(0);
-                ns->setTrack(dstTrack);
-                ns->setTrack2(dstTrack);
-
-                // set start/end element for slur
-                ChordRest* cr1 = sp->startCR();
-                ChordRest* cr2 = sp->endCR();
-
-                ns->setStartElement(0);
-                ns->setEndElement(0);
-                if (cr1 && cr1->links()) {
-                    for (EngravingObject* e : *cr1->links()) {
-                        ChordRest* cr = toChordRest(e);
-                        if (cr == cr1) {
-                            continue;
-                        }
-                        if ((cr->score() == destScore) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
-                            ns->setStartElement(cr);
-                            break;
-                        }
-                    }
-                }
-                if (cr2 && cr2->links()) {
-                    for (EngravingObject* e : *cr2->links()) {
-                        ChordRest* cr = toChordRest(e);
-                        if (cr == cr2) {
-                            continue;
-                        }
-                        if ((cr->score() == destScore) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack) {
-                            ns->setEndElement(cr);
-                            break;
-                        }
-                    }
-                }
-                destScore->doUndoAddElement(ns);
+        if (muse::contains(SPANNERS_TO_COPY, sp->type()) && (spStart >= start && spEnd < lTick)) {
+            if (!sp->elementAppliesToTrack(srcTrack)) {
+                continue;
             }
+            Spanner* ns = toSpanner(maybeLinkedClone(sp));
+
+            ns->setScore(destScore);
+            ns->setParent(0);
+            ns->setTrack(dstTrack);
+            ns->setTrack2(dstTrack);
+
+            // set start/end element for slur
+            ChordRest* cr1 = sp->startCR();
+            ChordRest* cr2 = sp->endCR();
+
+            ns->setStartElement(0);
+            ns->setEndElement(0);
+            if (cr1 && cr1->links()) {
+                for (EngravingObject* e : *cr1->links()) {
+                    ChordRest* cr = toChordRest(e);
+                    if (cr == cr1) {
+                        continue;
+                    }
+                    if ((cr->score() == destScore) && (cr->tick() == ns->tick()) && cr->track() == dstTrack) {
+                        ns->setStartElement(cr);
+                        break;
+                    }
+                }
+            }
+            if (cr2 && cr2->links()) {
+                for (EngravingObject* e : *cr2->links()) {
+                    ChordRest* cr = toChordRest(e);
+                    if (cr == cr2) {
+                        continue;
+                    }
+                    if ((cr->score() == destScore) && (cr->tick() == ns->tick2()) && cr->track() == dstTrack) {
+                        ns->setEndElement(cr);
+                        break;
+                    }
+                }
+            }
+            destScore->doUndoAddElement(ns);
         }
     }
 }
 
-CloneVoice::CloneVoice(Segment* sourceSeg, const Fraction& lTick, Segment* destSeg, track_idx_t strack, track_idx_t dtrack,
-                       track_idx_t otrack,
-                       bool link)
+void CloneVoice::cloneVoice(
+    Segment* sourceSeg, // first source segment
+    const Fraction& lTick, // last tick to clone
+    Segment* destSeg, // first destination segment
+    track_idx_t strack,
+    track_idx_t dtrack,
+    track_idx_t otrack, // old source track if -1 delete voice in strack after copy
+    bool link // if true  add elements in destination segment only
+              // if false add elements in every linked staff
+    )
 {
-    m_sourceSeg = sourceSeg; // first source segment
-    m_lTick     = lTick;     // last tick to clone
-    m_destSeg   = destSeg;   // first destination segment
-    m_strack    = strack;
-    m_dtrack    = dtrack;
-    m_otrack    = otrack;    // old source track if -1 delete voice in strack after copy
-    m_link      = link;      // if true  add elements in destination segment only
-                             // if false add elements in every linked staff
-}
-
-void CloneVoice::undo(EditData*)
-{
-    assert(!m_first);
-    Score* s = m_destSeg->score();
-    Fraction ticks = m_destSeg->tick() + m_lTick - m_sourceSeg->tick();
-    track_idx_t sTrack = m_otrack == muse::nidx ? m_dtrack : m_otrack;   // use the correct source / destination if deleting the source
-    track_idx_t dTrack = m_otrack == muse::nidx ? m_strack : m_dtrack;
+    Score* s = destSeg->score();
+    Fraction ticks = destSeg->tick() + lTick - sourceSeg->tick();
 
     // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (m_otrack != muse::nidx && m_link) {
-        for (Segment* seg = m_destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
-            EngravingItem* el = seg->element(dTrack);
+    if (otrack != muse::nidx && link) {
+        for (Segment* seg = destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
+            EngravingItem* el = seg->element(dtrack);
             if (el && el->isChordRest()) {
                 s->doUndoRemoveElement(el);
             }
         }
     }
 
-    if (m_otrack == muse::nidx && !m_link) {
-        // Set rests if first voice in a staff
-        if (!(sTrack % VOICES)) {
-            s->setRest(m_destSeg->tick(), sTrack, ticks, false, nullptr);
-        }
-    } else {
-        cloneVoice(s, sTrack, dTrack, m_sourceSeg, ticks, m_link);
-        if (!m_link && !(dTrack % VOICES)) {
-            s->setRest(m_destSeg->tick(), dTrack, ticks, false, nullptr);
-        }
-
-        // Remove annotations
-        for (Segment* seg = m_destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
-            const std::vector<EngravingItem*> annotations = seg->annotations();
-            for (EngravingItem* annotation : annotations) {
-                if (annotation && annotation->hasVoiceAssignmentProperties() && annotation->track() == dTrack) {
-                    // Remove extra all voice annotations which have been created
-                    VoiceAssignment voiceAssignment = annotation->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-                    if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
-                        s->undoRemoveElement(annotation);
-                    }
-                }
-            }
-        }
-
-        auto spanners = s->spannerMap().findOverlapping(m_sourceSeg->tick().ticks(), m_lTick.ticks());
+    if (otrack == muse::nidx && !link) {
+        // On the first run get going the undo redo action for adding/deleting elements and slurs
+        doCloneVoice(s, strack, dtrack, sourceSeg, ticks, link);
+        auto spanners = s->spannerMap().findOverlapping(sourceSeg->tick().ticks(), lTick.ticks());
         for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* sp = i->value;
-            if (sp->hasVoiceAssignmentProperties() && (sp->track() == dTrack || sp->track2() == dTrack)) {
-                // Remove extra all voice annotations which have been created
-                VoiceAssignment voiceAssignment = sp->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-                if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
-                    s->undoRemoveElement(sp);
-                }
+            if (sp->isSlur() && (sp->track() == strack || sp->track2() == strack)) {
+                s->undoRemoveElement(sp);
             }
         }
-    }
-}
-
-void CloneVoice::redo(EditData*)
-{
-    Score* s = m_destSeg->score();
-    Fraction ticks = m_destSeg->tick() + m_lTick - m_sourceSeg->tick();
-
-    // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
-    if (m_otrack != muse::nidx && m_link) {
-        for (Segment* seg = m_destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
-            EngravingItem* el = seg->element(m_dtrack);
+        for (Segment* seg = destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
+            EngravingItem* el = seg->element(strack);
             if (el && el->isChordRest()) {
-                s->doUndoRemoveElement(el);
+                s->undoRemoveElement(el);
             }
-        }
-    }
 
-    if (m_otrack == muse::nidx && !m_link) {
-        // On the first run get going the undo redo action for adding/deleting elements and slurs
-        if (m_first) {
-            cloneVoice(s, m_strack, m_dtrack, m_sourceSeg, ticks, m_link);
-            auto spanners = s->spannerMap().findOverlapping(m_sourceSeg->tick().ticks(), m_lTick.ticks());
-            for (auto i = spanners.begin(); i < spanners.end(); i++) {
-                Spanner* sp = i->value;
-                if (sp->isSlur() && (sp->track() == m_strack || sp->track2() == m_strack)) {
-                    s->undoRemoveElement(sp);
-                }
-            }
-            for (Segment* seg = m_destSeg; seg && seg->tick() < ticks; seg = seg->next1()) {
-                EngravingItem* el = seg->element(m_strack);
-                if (el && el->isChordRest()) {
-                    s->undoRemoveElement(el);
-                }
-
-                const std::vector<EngravingItem*> annotations = seg->annotations();
-                for (EngravingItem* annotation : annotations) {
-                    if (annotation && annotation->track() == m_strack) {
-                        if (annotation->hasVoiceAssignmentProperties()) {
-                            VoiceAssignment voiceAssignment = annotation->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-                            if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
-                                continue;
-                            }
+            const std::vector<EngravingItem*> annotations = seg->annotations();
+            for (EngravingItem* annotation : annotations) {
+                if (annotation && annotation->track() == strack) {
+                    if (annotation->hasVoiceAssignmentProperties()) {
+                        VoiceAssignment voiceAssignment = annotation->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+                        if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
+                            continue;
                         }
-                        s->undoRemoveElement(annotation);
                     }
+                    s->undoRemoveElement(annotation);
                 }
             }
         }
         // Set rests if first voice in a staff
-        if (!(m_strack % VOICES)) {
-            s->setRest(m_destSeg->tick(), m_strack, ticks, false, nullptr);
+        if (!(strack % VOICES)) {
+            s->setRest(destSeg->tick(), strack, ticks, false, nullptr);
         }
     } else {
-        cloneVoice(s, m_strack, m_dtrack, m_sourceSeg, ticks, m_link, m_first);
+        doCloneVoice(s, strack, dtrack, sourceSeg, ticks, link);
     }
 }

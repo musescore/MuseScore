@@ -31,6 +31,7 @@
 #include "../types/types.h"
 
 #include "clonevoice.h"
+#include "undo.h"
 
 using namespace mu::engraving;
 
@@ -170,8 +171,8 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
 
                     // only source voice is in this staff
                     if (!hasVoice) {
-                        score->undo(new CloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, srcTrack2,
-                                                   tempTrack + trackDiff));
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
+                                               measure2->first(), tempTrack, srcTrack2, tempTrack + trackDiff);
                         muse::remove(srcTrackList, srcTrack2);
                     }
                 }
@@ -193,8 +194,8 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
 
                     // only destination voice is in this staff
                     if (!hasVoice) {
-                        score->undo(new CloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, dstTrack2,
-                                                   tempTrack - trackDiff));
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
+                                               measure2->first(), tempTrack, dstTrack2, tempTrack - trackDiff);
                         muse::remove(dstTrackList, dstTrack2);
                     }
                 }

@@ -22,33 +22,16 @@
 
 #pragma once
 
-#include "dom/segment.h"
-#include "undo.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Score;
+class Segment;
 
-class CloneVoice : public UndoCommand
+class CloneVoice
 {
-    OBJECT_ALLOCATOR(engraving, CloneVoice)
-
-    Segment* m_sourceSeg = nullptr;
-    Fraction m_lTick;
-    Segment* m_destSeg = nullptr;
-    track_idx_t m_strack = muse::nidx;
-    track_idx_t m_dtrack = muse::nidx;
-    track_idx_t m_otrack = muse::nidx;
-    bool m_link = false;
-    bool m_first = true; // first redo
-
 public:
-    CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, track_idx_t strack, track_idx_t dtrack, track_idx_t otrack,
-               bool linked = true);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-
-    UNDO_TYPE(CommandType::CloneVoice)
-    UNDO_NAME("CloneVoice")
-    UNDO_CHANGED_OBJECTS({ m_sourceSeg, m_destSeg })
+    static void cloneVoice(Segment* sourceSeg, const Fraction& lTick, Segment* destSeg, track_idx_t strack, track_idx_t dtrack,
+                           track_idx_t otrack, bool link = true);
 };
 }
