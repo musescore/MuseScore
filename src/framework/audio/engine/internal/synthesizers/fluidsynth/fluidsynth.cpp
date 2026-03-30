@@ -37,6 +37,8 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::mpe;
 
+static constexpr bool FLUID_DEBUG = false;
+
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;
 static constexpr msecs_t MIN_NOTE_LENGTH = 10;
@@ -90,7 +92,9 @@ Ret FluidSynth::init(const OutputSpec& spec)
             LOGI() << message;
         } break;
         case FLUID_DBG:  {
-            LOGD() << message;
+            if (FLUID_DEBUG) {
+                LOGD() << message;
+            }
         } break;
         }
 
