@@ -95,7 +95,6 @@ target_sources(muse_ui PRIVATE
     view/widgetstatestore.cpp
     view/widgetstatestore.h
     view/widgetutils.h
-    view/widgetdialog.cpp
     view/widgetdialog.h
 )
 
