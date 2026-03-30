@@ -6,7 +6,6 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        # default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
         default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
         required: true
       build_mode:
@@ -29,7 +28,6 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        # default: 'backend linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable'
         default: 'backend linux_arm64 linux_x64 macos windows_x64 windows_portable'
         type: string
         required: true
@@ -88,18 +86,6 @@ jobs:
       deploy: ${{ inputs.deploy_backend }}
       build_number: ${{ needs.generate_build_number.outputs.build_number }}
 
-  linux_arm32:
-    name: Linux ARM32
-    needs: generate_build_number
-    if: ${{ contains(inputs.platforms, 'linux_arm32') }}
-    uses: ./.github/workflows/build_linux_arm32.yml
-    secrets: inherit
-    with:
-      build_mode: ${{ inputs.build_mode }}
-      publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
-      build_number: ${{ needs.generate_build_number.outputs.build_number }}
-
   linux:
     name: Linux
     needs: generate_build_number
@@ -145,7 +131,7 @@ jobs:
         # Expose edge cases like different command versions, CRLF line endings, etc.
         # Use same OS versions as used in real build workflows.
         os:
-        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
+        - ubuntu-22.04 # linux_x64, linux_arm64, backend
         - macos-latest
         - windows-2025 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}
