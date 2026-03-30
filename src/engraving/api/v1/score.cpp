@@ -26,6 +26,7 @@
 #include "dom/factory.h"
 #include "dom/instrtemplate.h"
 #include "dom/measure.h"
+#include "dom/scoreorder.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/masterscore.h"
@@ -41,6 +42,7 @@
 #include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
+#include "instrument.h"
 #include "apitypes.h"
 
 using namespace mu::engraving::apiv1;
@@ -342,6 +344,112 @@ void Score::moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinati
     }
 
     mu::engraving::EditPart::moveSystemObjects(score(), sourceStaff->staff(), destinationStaff->staff());
+}
+
+Staff* Score::appendStaff(Part* destinationPart)
+{
+    if (!destinationPart) {
+        LOGW("appendStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendStaff(score(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
+Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
+{
+    if (!sourceStaff) {
+        LOGW("appendLinkedStaff: sourceStaff is null");
+        return nullptr;
+    }
+    if (!destinationPart) {
+        LOGW("appendLinkedStaff: destinationPart is null");
+        return nullptr;
+    }
+
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(), destinationPart->part());
+    return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
+}
+
+bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+{
+    if (!staff) {
+        LOGW("setVoiceVisible: staff is null");
+        return false;
+    }
+
+    return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
+}
+
+void Score::replaceDrumset(Part* part, Drumset* drumset)
+{
+    if (!part) {
+        LOGW("replaceDrumset: part is null");
+        return;
+    }
+    if (!drumset) {
+        LOGW("replaceDrumset: drumset is null");
+        return;
+    }
+
+    // Find the instrumentId from the part's first instrument that has a drumset
+    mu::engraving::String instrumentId;
+    for (auto pair : part->part()->instruments()) {
+        mu::engraving::Instrument* instr = pair.second;
+        if (instr && instr->drumset()) {
+            instrumentId = instr->id();
+            break;
+        }
+    }
+
+    if (instrumentId.isEmpty()) {
+        LOGW("replaceDrumset: no percussion instrument found in part");
+        return;
+    }
+
+    mu::engraving::EditPart::replaceDrumset(score(), part->part(), instrumentId, *drumset->drumset());
+}
+
+void Score::insertPart(const QString& instrumentId, int index)
+{
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("insertPart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::insertPart(score(), t, static_cast<size_t>(index));
+}
+
+void Score::replacePart(Part* part, const QString& instrumentId)
+{
+    if (!part) {
+        LOGW("replacePart: part is null");
+        return;
+    }
+
+    const InstrumentTemplate* t = searchTemplate(instrumentId);
+    if (!t) {
+        LOGW("replacePart: <%s> not found", qPrintable(instrumentId));
+        return;
+    }
+
+    mu::engraving::EditPart::replacePart(score(), part->part(), t);
+}
+
+void Score::setScoreOrder(const QString& orderId)
+{
+    muse::String id = muse::String::fromQString(orderId);
+
+    for (const mu::engraving::ScoreOrder& order : mu::engraving::instrumentOrders) {
+        if (order.id == id) {
+            mu::engraving::EditPart::setScoreOrder(score(), order);
+            return;
+        }
+    }
+
+    LOGW("setScoreOrder: <%s> not found", qPrintable(orderId));
 }
 
 //---------------------------------------------------------

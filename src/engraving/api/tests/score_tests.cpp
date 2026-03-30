@@ -23,9 +23,11 @@
 #include <gtest/gtest.h>
 
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/scoreorder.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
@@ -35,6 +37,7 @@
 #include "engraving/api/v1/score.h"
 #include "engraving/api/v1/part.h"
 #include "engraving/api/v1/elements.h"
+#include "engraving/api/v1/instrument.h"
 #include "engraving/api/v1/apistructs.h"
 
 using namespace mu::engraving;
@@ -1012,6 +1015,517 @@ TEST_F(Engraving_ApiScoreTests, staffPropertiesApi)
     EXPECT_EQ(domStaff->hideSystemBarLine(), false);
     EXPECT_EQ(domStaff->mergeMatchingRests(), AutoOnOff::AUTO);
     EXPECT_EQ(domStaff->reflectTranspositionInLinkedTab(), true);
+
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testAppendStaff
+//   Test appending a new staff to a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a new staff
+    score->startCmd(TranslatableString::untranslatable("Append staff test"));
+    Staff* newStaff = EditPart::appendStaff(score, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(newStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaff
+//   Test appending a linked staff and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaff)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* sourceStaff = Factory::createStaff(part);
+    score->appendStaff(sourceStaff);
+
+    ASSERT_EQ(part->nstaves(), 1);
+
+    // [WHEN] We append a linked staff
+    score->startCmd(TranslatableString::untranslatable("Append linked staff test"));
+    Staff* linkedStaff = EditPart::appendLinkedStaff(score, sourceStaff, part);
+    score->endCmd();
+
+    // [THEN] The part should have 2 staves
+    ASSERT_NE(linkedStaff, nullptr);
+    EXPECT_EQ(part->nstaves(), 2);
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The part should have 1 staff again
+    EXPECT_EQ(part->nstaves(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testAppendStaffApi
+//   Test the Plugin API Score::appendStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a staff via API
+    apiv1::Staff* apiStaff = apiScore.appendStaff(apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testAppendLinkedStaffApi
+//   Test the Plugin API Score::appendLinkedStaff() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, appendLinkedStaffApi)
+{
+    // [GIVEN] A score with a part containing one staff
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    ASSERT_EQ(domPart->nstaves(), 1);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+    apiv1::Staff* apiSourceStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We append a linked staff via API
+    apiv1::Staff* apiLinkedStaff = apiScore.appendLinkedStaff(apiSourceStaff, apiPart);
+
+    // [THEN] The part should have 2 staves
+    EXPECT_NE(apiLinkedStaff, nullptr);
+    EXPECT_EQ(domPart->nstaves(), 2);
+
+    delete apiSourceStaff;
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleOnMainScore
+//   Test that setVoiceVisible returns false on main score
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleOnMainScore)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    Staff* staff = Factory::createStaff(part);
+    score->appendStaff(staff);
+
+    // [WHEN] We try to set voice visible on the main score
+    bool result = EditPart::setVoiceVisible(score, staff, 0, false);
+
+    // [THEN] It should return false (only works on excerpts)
+    EXPECT_FALSE(result);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetVoiceVisibleApi
+//   Test the Plugin API Score::setVoiceVisible() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setVoiceVisibleApi)
+{
+    // [GIVEN] A main score (not an excerpt)
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    Staff* domStaff = Factory::createStaff(domPart);
+    domScore->appendStaff(domStaff);
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Staff* apiStaff = new apiv1::Staff(domStaff, apiv1::Ownership::SCORE);
+
+    // [WHEN] We try to set voice visible via API on main score
+    bool result = apiScore.setVoiceVisible(apiStaff, 0, false);
+
+    // [THEN] It should return false
+    EXPECT_FALSE(result);
+
+    delete apiStaff;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumset
+//   Test replacing a drumset and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumset)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    part->setInstrument(percInstrument);
+
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    // [WHEN] We replace the drumset with modified values
+    Drumset newDs(ds);
+    newDs.drum(36).name = u"Kick Drum";
+
+    score->startCmd(TranslatableString::untranslatable("Replace drumset test"));
+    EditPart::replaceDrumset(score, part, u"drumset", newDs);
+    score->endCmd();
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Kick Drum");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The drumset should be back to original
+    EXPECT_EQ(part->instrument()->drumset()->name(36), u"Bass Drum");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplaceDrumsetApi
+//   Test the Plugin API replaceDrumset workflow
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
+{
+    // [GIVEN] A score with a percussion part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Set up a percussion instrument with a drumset
+    Instrument percInstrument;
+    percInstrument.setId(u"drumset");
+    Drumset ds;
+    ds.drum(36).name = u"Bass Drum";
+    ds.drum(36).notehead = NoteHeadGroup::HEAD_NORMAL;
+    ds.drum(36).line = 7;
+    ds.drum(36).voice = 0;
+    ds.drum(36).stemDirection = DirectionV::DOWN;
+    percInstrument.setDrumset(&ds);
+    domPart->setInstrument(percInstrument);
+
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Bass Drum");
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We clone the drumset via API, modify it, and replace
+    apiv1::Instrument apiInstr(domPart->instrument(), domPart);
+    apiv1::Drumset* cloned = apiInstr.cloneDrumset();
+    ASSERT_NE(cloned, nullptr);
+
+    cloned->setName(36, "Kick Drum");
+    apiScore.replaceDrumset(apiPart, cloned);
+
+    // [THEN] The drumset should have the new name
+    EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Kick Drum");
+
+    delete cloned;
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testInsertPart
+//   Test inserting a part at a given index and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part1 = new Part(score);
+    score->appendPart(part1);
+    score->appendStaff(Factory::createStaff(part1));
+
+    Instrument instr1;
+    instr1.setId(u"test.first");
+    part1->setInstrument(instr1);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    // Load instrument templates so searchTemplate works
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We insert a part at index 0
+    score->startCmd(TranslatableString::untranslatable("Insert part test"));
+    EditPart::insertPart(score, violinTempl, 0);
+    score->endCmd();
+
+    // [THEN] Two parts should exist, the new one at index 0
+    EXPECT_EQ(score->parts().size(), 2);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to one part
+    EXPECT_EQ(score->parts().size(), 1);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testReplacePart
+//   Test replacing a part and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePart)
+{
+    // [GIVEN] A score with one part
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    part->setInstrument(instr);
+
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    // [WHEN] We replace the part
+    score->startCmd(TranslatableString::untranslatable("Replace part test"));
+    EditPart::replacePart(score, part, violinTempl);
+    score->endCmd();
+
+    // [THEN] The part should be replaced with violin
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"violin");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] Should be back to the original part
+    EXPECT_EQ(score->parts().size(), 1);
+    EXPECT_EQ(score->parts()[0]->instrumentId(), u"test.original");
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testInsertPartApi
+//   Test the Plugin API Score::insertPart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, insertPartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We insert a part via API
+    apiScore.insertPart("violin", 0);
+
+    // [THEN] Two parts should exist
+    EXPECT_EQ(domScore->parts().size(), 2);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testReplacePartApi
+//   Test the Plugin API Score::replacePart() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, replacePartApi)
+{
+    // [GIVEN] A score with one part
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    Instrument instr;
+    instr.setId(u"test.original");
+    domPart->setInstrument(instr);
+
+    ASSERT_EQ(domScore->parts().size(), 1);
+
+    const InstrumentTemplate* violinTempl = searchTemplate(u"violin");
+    if (!violinTempl) {
+        GTEST_SKIP() << "Instrument templates not loaded";
+    }
+
+    apiv1::Score apiScore(domScore);
+    apiv1::Part* apiPart = new apiv1::Part(domPart, apiv1::Ownership::SCORE);
+
+    // [WHEN] We replace the part via API
+    apiScore.replacePart(apiPart, "violin");
+
+    // [THEN] The part should be replaced
+    EXPECT_EQ(domScore->parts().size(), 1);
+    EXPECT_EQ(domScore->parts()[0]->instrumentId(), u"violin");
+
+    delete apiPart;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrder
+//   Test setting the score order and undo
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrder)
+{
+    // [GIVEN] A score
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* part = new Part(score);
+    score->appendPart(part);
+    score->appendStaff(Factory::createStaff(part));
+
+    // Create a custom score order
+    ScoreOrder testOrder;
+    testOrder.id = u"test-order";
+    testOrder.name = TranslatableString::untranslatable("Test Order");
+
+    String originalOrderId = score->scoreOrder().id;
+
+    // [WHEN] We set the score order
+    score->startCmd(TranslatableString::untranslatable("Set score order test"));
+    EditPart::setScoreOrder(score, testOrder);
+    score->endCmd();
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(score->scoreOrder().id, u"test-order");
+
+    // [WHEN] We undo
+    score->undoRedo(true, nullptr);
+
+    // [THEN] The score order should be back to original
+    EXPECT_EQ(score->scoreOrder().id, originalOrderId);
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   testSetScoreOrderApi
+//   Test the Plugin API Score::setScoreOrder() method
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
+{
+    // [GIVEN] A score and an orchestral order available
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+
+    Part* domPart = new Part(domScore);
+    domScore->appendPart(domPart);
+    domScore->appendStaff(Factory::createStaff(domPart));
+
+    // Add a test order to the global list for API lookup
+    ScoreOrder testOrder;
+    testOrder.id = u"test-api-order";
+    testOrder.name = TranslatableString::untranslatable("Test API Order");
+    instrumentOrders.push_back(testOrder);
+
+    apiv1::Score apiScore(domScore);
+
+    // [WHEN] We set the score order via API
+    apiScore.setScoreOrder("test-api-order");
+
+    // [THEN] The score order should be changed
+    EXPECT_EQ(domScore->scoreOrder().id, u"test-api-order");
+
+    // Clean up the added test order
+    instrumentOrders.pop_back();
 
     delete domScore;
 }
