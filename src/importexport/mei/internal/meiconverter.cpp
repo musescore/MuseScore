@@ -2967,24 +2967,26 @@ engraving::TremoloType Convert::unitdurFromMEI(const libmei::FTrem& meiFTrem, bo
     case (libmei::DURATION_64): return engraving::TremoloType::C64;
     default:
         warning = true;
-        return (engraving::TremoloType::INVALID_TREMOLO);
+        return engraving::TremoloType::INVALID_TREMOLO;
     }
 }
 
 libmei::data_DURATION Convert::unitdurToMEI(const engraving::TremoloTwoChord* tremolo)
 {
-    libmei::FTrem meiFTrem;
-
     const libmei::data_DURATION dur = Convert::durToMEI(tremolo->durationType().type());
     int unitdur = 0;
     if (dur > libmei::DURATION_4) {
         unitdur = dur - libmei::DURATION_4;
     }
     switch (tremolo->tremoloType()) {
-    case (engraving::TremoloType::C8):  unitdur += libmei::DURATION_8; break;
-    case (engraving::TremoloType::C16): unitdur += libmei::DURATION_16; break;
-    case (engraving::TremoloType::C32): unitdur += libmei::DURATION_32; break;
-    case (engraving::TremoloType::C64): unitdur += libmei::DURATION_64; break;
+    case (engraving::TremoloType::C8):  unitdur += libmei::DURATION_8;
+        break;
+    case (engraving::TremoloType::C16): unitdur += libmei::DURATION_16;
+        break;
+    case (engraving::TremoloType::C32): unitdur += libmei::DURATION_32;
+        break;
+    case (engraving::TremoloType::C64): unitdur += libmei::DURATION_64;
+        break;
     default:
         unitdur = libmei::DURATION_NONE;
     }
