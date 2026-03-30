@@ -21,11 +21,15 @@
  */
 
 #include "editpart.h"
+#include "editscoreproperties.h"
 #include "editstaff.h"
 #include "transpose.h"
 
 #include "../dom/excerpt.h"
+#include "../dom/factory.h"
 #include "../dom/instrchange.h"
+#include "../dom/instrtemplate.h"
+#include "../dom/scoreorder.h"
 #include "../dom/masterscore.h"
 #include "../dom/mscore.h"
 #include "../dom/part.h"
@@ -682,4 +686,127 @@ void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destin
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }
+}
+
+void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
+{
+    if (!score || !staff || !destinationPart) {
+        return;
+    }
+
+    staff_idx_t staffLocalIndex = destinationPart->nstaves();
+    KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
+
+    staff->setScore(score);
+    staff->setPart(destinationPart);
+
+    score->undoInsertStaff(staff, staffLocalIndex, createRests);
+
+    staff_idx_t staffGlobalIndex = staff->idx();
+    score->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
+
+    score->updateBracesAndBarlines(destinationPart, staffLocalIndex);
+
+    destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
+}
+
+Staff* EditPart::appendStaff(Score* score, Part* destinationPart)
+{
+    if (!score || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart);
+    return staff;
+}
+
+Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart)
+{
+    if (!score || !sourceStaff || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart, false);
+
+    staff->setLinks(nullptr);
+    Excerpt::cloneStaff(sourceStaff, staff);
+
+    return staff;
+}
+
+bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible)
+{
+    if (!score || !staff) {
+        return false;
+    }
+
+    if (!score->excerpt()) {
+        return false;
+    }
+
+    if (!visible && !staff->canDisableVoice()) {
+        return false;
+    }
+
+    score->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
+    return true;
+}
+
+void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t index)
+{
+    if (!score || !templ) {
+        return;
+    }
+
+    Part* part = new Part(score);
+    part->initFromInstrTemplate(templ);
+
+    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
+        Staff* staff = Factory::createStaff(part);
+        StaffType* stt = staff->staffType(Fraction(0, 1));
+        staff->init(templ, stt, int(i));
+        score->undoInsertStaff(staff, i);
+    }
+
+    score->undoInsertPart(part, index);
+    score->setUpTempoMapLater();
+    score->masterScore()->rebuildMidiMapping();
+}
+
+void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ)
+{
+    if (!score || !oldPart || !templ) {
+        return;
+    }
+
+    size_t partIndex = muse::indexOf(score->parts(), oldPart);
+    score->cmdRemovePart(oldPart);
+    insertPart(score, templ, partIndex);
+}
+
+void EditPart::replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    for (auto pair : part->instruments()) {
+        Instrument* instrument = pair.second;
+        if (instrument && instrument->drumset() && instrument->id() == instrumentId) {
+            score->undo(new ChangeDrumset(instrument, newDrumset, part));
+        }
+    }
+}
+
+void EditPart::setScoreOrder(Score* score, const ScoreOrder& order)
+{
+    if (!score) {
+        return;
+    }
+
+    score->undo(new ChangeScoreOrder(score, order));
+    ScoreOrder mutableOrder = order;
+    mutableOrder.setBracketsAndBarlines(score);
 }

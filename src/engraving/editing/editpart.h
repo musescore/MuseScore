@@ -242,6 +242,8 @@ public:
     UNDO_NAME("SetUserBankController")
 };
 
+class InstrumentTemplate;
+struct ScoreOrder;
 class Staff;
 class StaffType;
 enum class PreferSharpFlat : char;
@@ -272,5 +274,20 @@ public:
     static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
     static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+
+    static Staff* appendStaff(Score* score, Part* destinationPart);
+    static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
+
+    static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
+
+    static void replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset);
+
+    static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
+    static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
+
+    static void setScoreOrder(Score* score, const ScoreOrder& order);
+
+private:
+    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };
 }

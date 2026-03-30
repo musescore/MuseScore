@@ -51,6 +51,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
+class Drumset;
 class Lyrics;
 class Spanner;
 
@@ -651,6 +652,79 @@ public:
      * @since 4.7
     */
     Q_INVOKABLE void moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff);
+
+    /** APIDOC
+     * Creates and appends a new default staff to the given part.
+     * @method
+     * @param {Engraving.Part} destinationPart The Part to append the staff to.
+     * @return {Engraving.Staff} The newly created Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendStaff(apiv1::Part* destinationPart);
+
+    /** APIDOC
+     * Creates a staff linked to a source staff and appends it to the given part.
+     * The linked staff will share content with the source staff.
+     * @method
+     * @param {Engraving.Staff} sourceStaff The Staff to link from.
+     * @param {Engraving.Part} destinationPart The Part to append the linked staff to.
+     * @return {Engraving.Staff} The newly created linked Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendLinkedStaff(apiv1::Staff* sourceStaff, apiv1::Part* destinationPart);
+
+    /** APIDOC
+     * Sets the visibility of a voice on a staff.
+     * This method only works on excerpt (linked part) scores, not on the main score.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} voiceIndex The voice index (0 to 3).
+     * @param {Boolean} visible Whether the voice should be visible.
+     * @return {Boolean} True if successful, false if not an excerpt or voice cannot be disabled.
+     * @since 4.7
+    */
+    Q_INVOKABLE bool setVoiceVisible(apiv1::Staff* staff, int voiceIndex, bool visible);
+
+    /** APIDOC
+     * Replaces the drumset of a part's percussion instrument.
+     * Use Instrument.cloneDrumset() to get a modifiable copy, then call Drumset.setDrum()
+     * to modify entries, and finally pass the modified drumset to this method.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Engraving.Drumset} drumset The new Drumset to apply.
+     * @since 4.7
+    */
+    Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Drumset* drumset);
+
+    /** APIDOC
+     * Inserts a part with the instrument defined by `instrumentId` at the given index.
+     * @method
+     * @param {String} instrumentId ID of the instrument to be added,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @param {Number} index The position to insert the part at (0 = first).
+     * @since 4.7
+    */
+    Q_INVOKABLE void insertPart(const QString& instrumentId, int index);
+
+    /** APIDOC
+     * Replaces a part with a new instrument, keeping the same position.
+     * This removes the old part and inserts a new one with the given instrument.
+     * @method
+     * @param {Engraving.Part} part The Part to replace.
+     * @param {String} instrumentId ID of the new instrument,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @since 4.7
+    */
+    Q_INVOKABLE void replacePart(apiv1::Part* part, const QString& instrumentId);
+
+    /** APIDOC
+     * Sets the score order (e.g. "orchestral", "marching-band").
+     * Score orders define the standard ordering of instruments and bracket/barline groupings.
+     * @method
+     * @param {String} orderId The ID of the score order (e.g. "orchestral", "marching-band", "jazz-combo").
+     * @since 4.7
+    */
+    Q_INVOKABLE void setScoreOrder(const QString& orderId);
 
     /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score

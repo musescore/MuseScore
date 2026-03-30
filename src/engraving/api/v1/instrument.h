@@ -204,11 +204,22 @@ class Drumset : public QObject
     Q_OBJECT
 
     mu::engraving::Drumset* m_drumset;
+    bool m_owned = false;
 
 public:
     /// \cond MS_INTERNAL
     Drumset(mu::engraving::Drumset* d, QObject* parent = nullptr)
         : QObject(parent), m_drumset(d) {}
+
+    Drumset(mu::engraving::Drumset* d, bool owned, QObject* parent = nullptr)
+        : QObject(parent), m_drumset(d), m_owned(owned) {}
+
+    ~Drumset() override
+    {
+        if (m_owned) {
+            delete m_drumset;
+        }
+    }
 
     mu::engraving::Drumset* drumset() { return m_drumset; }
     const mu::engraving::Drumset* drumset() const { return m_drumset; }
@@ -297,6 +308,45 @@ public:
     /// \param pitch The pitch from which to find the previous used pitch from.
     Q_INVOKABLE int prevPitch(int pitch) { return drumset()->prevPitch(pitch); }
 
+    /// Sets the name of the drum note at the given pitch.
+    /// These setters allow modifying a cloned drumset before passing it
+    /// to Score.replaceDrumset(). The Drumset obtained from an Instrument
+    /// is read-only; use Instrument.cloneDrumset() to get a writable copy.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param name The new name for this drum note.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setName(int pitch, const QString& name);
+
+    /// Sets the notehead group for the drum note at the given pitch.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param noteHead The notehead group (NoteHeadGroup value).
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setNoteHead(int pitch, int noteHead);
+
+    /// Sets the staff line for the drum note at the given pitch.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param line The staff line for this note.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setLine(int pitch, int line);
+
+    /// Sets the voice for the drum note at the given pitch.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param voice The voice index (0 to 3).
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setVoice(int pitch, int voice);
+
+    /// Sets the stem direction for the drum note at the given pitch.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param stemDirection The stem direction (Direction value).
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setStemDirection(int pitch, int stemDirection);
+
+    /// Sets the keyboard shortcut for the drum note at the given pitch.
+    /// \param pitch The MIDI pitch (0 to 127).
+    /// \param shortcut The keyboard shortcut character.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE void setShortcut(int pitch, const QString& shortcut);
+
     /// Checks whether two drumsets represent the same object.
     Q_INVOKABLE bool is(apiv1::Drumset* other) { return other && drumset() == other->drumset(); }
 };
@@ -377,6 +427,13 @@ public:
 
     ChannelListProperty channels();
     /// \endcond
+
+    /// Creates and returns a copy of this instrument's drumset.
+    /// The returned Drumset is owned by the caller and can be modified
+    /// without affecting the original instrument until replaceDrumset is called.
+    /// Returns null if the instrument has no drumset.
+    /// \since MuseScore 4.7
+    Q_INVOKABLE apiv1::Drumset* cloneDrumset();
 
     /// Checks whether two instruments represent the same object.
     Q_INVOKABLE bool is(apiv1::Instrument* other) { return other && instrument() == other->instrument(); }
