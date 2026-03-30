@@ -53,7 +53,7 @@ public:
 
     bool shouldProcessDuringSilence() const override;
 
-    void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
+    void process(float* buffer, audio::samples_t sampleCount, audio::samples_t playbackPositionSamples = 0) override;
 
 private:
     bool m_inited = false;

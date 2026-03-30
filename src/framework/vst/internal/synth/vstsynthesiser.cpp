@@ -179,6 +179,7 @@ muse::audio::msecs_t VstSynthesiser::playbackPosition() const
 void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
+    m_currentPositionSamples = microSecsToSamples(newPosition, m_outputSpec.sampleRate);
 
     if (isActive()) {
         m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
@@ -188,6 +189,7 @@ void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
 void VstSynthesiser::setOutputSpec(const audio::OutputSpec& spec)
 {
     m_outputSpec = spec;
+    m_currentPositionSamples = microSecsToSamples(m_sequencer.playbackPosition(), m_outputSpec.sampleRate);
 
     if (m_inited) {
         m_vstAudioClient->setOutputSpec(spec);
@@ -212,6 +214,7 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_outputSpec.sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
+    const bool active = m_sequencer.isActive();
 
     samples_t sampleOffset = 0;
     samples_t processedSamples = 0;
@@ -231,6 +234,10 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
 
         processedSamples += processSequence(it->second, durationInSamples, buffer + sampleOffset * m_outputSpec.audioChannelCount);
         sampleOffset += durationInSamples;
+
+        if (active) {
+            m_currentPositionSamples += durationInSamples;
+        }
     }
 
     return processedSamples;
@@ -253,5 +260,5 @@ samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& seq
         return 0;
     }
 
-    return m_vstAudioClient->process(buffer, samples, m_sequencer.playbackPosition());
+    return m_vstAudioClient->process(buffer, samples, m_currentPositionSamples);
 }
