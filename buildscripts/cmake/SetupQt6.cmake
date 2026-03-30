@@ -85,13 +85,13 @@ if (OS_IS_WASM)
     set(QT_WASM_EXTRA_EXPORTED_METHODS ccall)
 endif()
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS ${qt_components})
+find_package(Qt6 6.9 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
 
 message(STATUS "Qt version: ${Qt6_VERSION}")
 
-qt_standard_project_setup(REQUIRES 6.8 SUPPORTS_UP_TO 6.10)
+qt_standard_project_setup(REQUIRES 6.9 SUPPORTS_UP_TO 6.11)
 
 if (QT_IS_STATIC)
     qt_add_library(all_qml_plugins STATIC)
