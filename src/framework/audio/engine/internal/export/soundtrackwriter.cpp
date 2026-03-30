@@ -148,7 +148,6 @@ Ret SoundTrackWriter::generateAudioData()
 
     sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
 
-    const std::thread::id thisThId = std::this_thread::get_id();
     while (inputBufferOffset < inputBufferMaxOffset && !m_isAborted) {
         m_source->process(m_intermBuffer.data(), m_renderStep);
 
@@ -163,7 +162,6 @@ Ret SoundTrackWriter::generateAudioData()
 
         //! NOTE It is necessary for cancellation to work
         //! and for information about the audio signal to be transmitted.
-        async::processMessages(thisThId);
         rpcChannel()->process();
     }
 

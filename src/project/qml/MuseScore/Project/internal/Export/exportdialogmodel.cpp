@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <QItemSelectionModel>
+#include <QTimer>
 
 #include "async/async.h"
 #include "translation.h"
@@ -425,7 +426,11 @@ bool ExportDialogModel::exportScores()
                    shouldDestinationFolderBeOpenedOnExport() };
 
     std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
-    async::Async::call(nullptr, [scenario, params]() {
+
+    //! NOTE We can't use Async here
+    // because the async::processMessages is called deep within the functions,
+    // and this can't be done in Async's callback.
+    QTimer::singleShot(0, [scenario, params]() {
         scenario->exportScores(params.notations, params.exportPath, params.selectedUnitType, params.openFolderOnExport);
     });
 
