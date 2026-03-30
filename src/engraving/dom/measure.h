@@ -305,7 +305,6 @@ public:
 
     AccidentalVal findAccidental(Note*) const;
     AccidentalVal findAccidental(Segment* s, staff_idx_t staffIdx, int line, bool& error) const;
-    void exchangeVoice(track_idx_t voice1, track_idx_t voice2, staff_idx_t staffIdx);
     void checkMultiVoices(staff_idx_t staffIdx);
     bool hasVoice(track_idx_t track) const;
     bool isEmpty(staff_idx_t staffIdx) const;
