@@ -1067,12 +1067,12 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     }
 
     // Only vertically align one chord symbol per tick & staff
-    std::map<Fraction, staff_idx_t> harmonyPositions;
+    std::set<std::pair<Fraction, staff_idx_t> > harmonyPositions;
     std::vector<EngravingItem*> harmonyItemsAlign;
     std::vector<EngravingItem*> harmonyItemsNoAlign;
 
     for (Harmony* h : harmonies) {
-        if (muse::contains(harmonyPositions, h->tick())) {
+        if (muse::contains(harmonyPositions, { h->tick(), h->staffIdx() })) {
             harmonyItemsNoAlign.push_back(h);
             continue;
         }
@@ -1114,13 +1114,13 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
     }
 
     // Only vertically align one fd per tick & staff
-    std::map<Fraction, staff_idx_t> fretHarmonyPositions;
+    std::set<std::pair<Fraction, staff_idx_t> > fretHarmonyPositions;
     std::vector<EngravingItem*> fretItemsAlign;
     std::vector<EngravingItem*> fretOrHarmonyItemsNoAlign;
     std::vector<Harmony*> harmonyItemsAlign(elements.harmonies.begin(), elements.harmonies.end());
 
     for (FretDiagram* fd : elements.fretDiagrams) {
-        if (muse::contains(fretHarmonyPositions, fd->tick())) {
+        if (muse::contains(fretHarmonyPositions, { fd->tick(), fd->staffIdx() })) {
             fretOrHarmonyItemsNoAlign.push_back(fd);
             if (fd->harmony()) {
                 harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), fd->harmony()));
@@ -1140,7 +1140,7 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
         if (h->getParentFretDiagram()) {
             continue;
         }
-        if (muse::contains(fretHarmonyPositions, h->tick())) {
+        if (muse::contains(fretHarmonyPositions, { h->tick(), h->staffIdx() })) {
             harmonyItemsAlign.erase(std::remove(harmonyItemsAlign.begin(), harmonyItemsAlign.end(), h));
             fretOrHarmonyItemsNoAlign.push_back(h);
             continue;
@@ -1161,7 +1161,7 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
             Autoplace::autoplaceSegmentElement(item, item->mutldata());
             Harmony* harmony = toFretDiagram(item)->harmony();
             if (harmony) {
-                autoplaceHarmony(item);
+                autoplaceHarmony(harmony);
             }
         } else if (item->isHarmony()) {
             autoplaceHarmony(item);
