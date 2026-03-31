@@ -301,8 +301,7 @@ static void doMigrateOffset500(EngravingItem* item)
         return;
     }
 
-    PointF defaultOffset = item->defaultPos();
-    item->setOffset(item->offset() - defaultOffset);
+    item->setOffset(CompatUtils::getAdjustedOffset(item, item->offset()));
 }
 
 void EngravingCompat::migrateOffset500(MasterScore* masterScore)

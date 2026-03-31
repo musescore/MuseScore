@@ -54,6 +54,7 @@ public:
     static Spatium convertPre470FrameRadius(double frameRadius);
     static void convertPre470ImageSize(Image* image);
     static void doMigrateNoteParens(EngravingItem* item);
+    static PointF getAdjustedOffset(EngravingItem* item, PointF offset);
     static void migrateOffset500(EngravingItem* item, PropertyValue& offset);
     static void migrateOffsetPre302(EngravingItem* item, int mscVersion);
 

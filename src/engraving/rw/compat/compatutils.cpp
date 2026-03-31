@@ -1090,6 +1090,12 @@ void CompatUtils::convertPre470ImageSize(Image* image)
     }
 }
 
+PointF CompatUtils::getAdjustedOffset(EngravingItem* item, PointF offset)
+{
+    PointF defaultOffset = item->defaultPos();
+    return offset - defaultOffset;
+}
+
 void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
 {
     if (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) {
@@ -1102,8 +1108,7 @@ void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
         return;
     }
 
-    PointF defaultOffset = item->defaultPos();
-    offset = offset.value<PointF>() - defaultOffset;
+    offset = getAdjustedOffset(item, offset.value<PointF>());
 }
 
 void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
