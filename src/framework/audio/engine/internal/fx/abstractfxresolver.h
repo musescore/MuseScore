@@ -23,7 +23,6 @@
 #pragma once
 
 #include <map>
-#include <unordered_map>
 
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
@@ -46,7 +45,7 @@ protected:
     virtual void removeTrackFx(const TrackId trackId, const AudioResourceId& resoureId, AudioFxChainOrder order);
 
 private:
-    using FxMap = std::unordered_map<AudioFxChainOrder, IFxProcessorPtr>;
+    using FxMap = std::map<AudioFxChainOrder, IFxProcessorPtr>;
 
     void updateMasterFxMap(const AudioFxChain& newFxChain, const OutputSpec& outputSpec);
     void updateTrackFxMap(FxMap& fxMap, const TrackId trackId, const AudioFxChain& newFxChain, const audio::OutputSpec& outputSpec);
