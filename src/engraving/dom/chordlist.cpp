@@ -543,7 +543,7 @@ void ParsedChord::configure(const ChordList* cl)
     // TODO: allow this to be parameterized via chord list
     m_major << u"ma" << u"maj" << u"major" << u"t" << u"^";
     m_minor << u"mi" << u"min" << u"minor" << u"-" << u"=";
-    m_diminished << u"dim" << u"o";
+    m_diminished << u"dim" << u"dim." << u"o";
     m_augmented << u"aug" << u"+";
     m_lower << u"b" << u"-" << u"dim";
     m_raise << u"#" << u"+" << u"aug";
