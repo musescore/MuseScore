@@ -1984,14 +1984,12 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
     ElementType et = edd.ed.dropElement->type();
     switch (et) {
-    case ElementType::TEXTLINE:
-        systemStavesOnly = edd.ed.dropElement->systemFlag();
-        [[fallthrough]];
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
-        systemStavesOnly = systemStavesOnly || !(edd.ed.modifiers & Qt::ControlModifier);
+        systemStavesOnly = !(edd.ed.modifiers & Qt::ControlModifier);
         [[fallthrough]];
+    case ElementType::TEXTLINE:
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::PEDAL:
@@ -2001,6 +1999,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::HAIRPIN:
     case ElementType::WHAMMY_BAR:
     {
+        systemStavesOnly |=  edd.ed.dropElement->systemFlag();
         mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
         score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
