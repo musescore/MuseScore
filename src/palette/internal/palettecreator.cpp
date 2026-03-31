@@ -647,7 +647,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
 
-    for (int i = int(TremoloType::C8); i <= int(TremoloType::C64); ++i) {
+    for (int i = int(TremoloType::C8); i <= int(TremoloType::C256); ++i) {
         auto tremolo = Factory::makeTremoloTwoChord(paletteScore()->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
