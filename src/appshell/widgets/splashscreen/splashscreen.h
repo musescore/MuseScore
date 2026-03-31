@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_SPLASHSCREEN_H
-#define MU_APPSHELL_SPLASHSCREEN_H
+#pragma once
 
 #include <QWidget>
 
@@ -47,5 +46,3 @@ private:
     QWidget* m_view = nullptr;
 };
 }
-
-#endif // MU_APPSHELL_SPLASHSCREEN_H

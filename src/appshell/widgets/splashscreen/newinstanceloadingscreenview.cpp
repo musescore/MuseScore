@@ -25,13 +25,14 @@
 #include <QApplication>
 #include <QPainter>
 #include <QScreen>
+#include <QFontDatabase>
 
 #include "translation.h"
 
 using namespace mu::appshell;
 
 NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent)
-    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+    : QWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -70,17 +71,15 @@ void NewInstanceLoadingScreenView::draw(QPainter* painter)
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
     // Draw background
-    QString bgColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString();
+    QString bgColorStr = "#00081C";
     painter->fillRect(0, 0, width(), height(), QColor(bgColorStr));
 
     // Draw message
-    QFont font(QString::fromStdString(uiConfiguration()->fontFamily()));
-    font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY_LARGE));
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     font.setBold(true);
-
     painter->setFont(font);
 
-    QString messageColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::FONT_PRIMARY_COLOR).toString();
+    QString messageColorStr = "#F1F1EE";
     QPen pen(messageColorStr);
     painter->setPen(pen);
 

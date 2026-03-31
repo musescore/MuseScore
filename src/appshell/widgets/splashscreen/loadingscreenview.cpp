@@ -26,8 +26,10 @@
 #include <QPainter>
 #include <QScreen>
 #include <QSvgRenderer>
+#include <QFontDatabase>
 
 #include "translation.h"
+#include "global/internal/baseapplication.h"
 
 using namespace mu::appshell;
 
@@ -45,7 +47,7 @@ static const QColor versionNumberColor("#19F3FF");
 static constexpr qreal versionNumberSpacing = 5.0;
 
 LoadingScreenView::LoadingScreenView(QWidget* parent)
-    : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(parent)),
+    : QWidget(parent),
     m_backgroundRenderer(new QSvgRenderer(imagePath, this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -73,9 +75,7 @@ void LoadingScreenView::draw(QPainter* painter)
     m_backgroundRenderer->render(painter);
 
     // Draw message
-    QFont font(QString::fromStdString(uiConfiguration()->fontFamily()));
-    font.setPixelSize(uiConfiguration()->fontSize());
-
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     painter->setFont(font);
 
     QPen pen(messageColor);
@@ -83,8 +83,7 @@ void LoadingScreenView::draw(QPainter* painter)
 
     painter->drawText(messageRect, Qt::AlignTop | Qt::AlignLeft | Qt::TextDontClip, m_message);
 
-    Qt::AlignmentFlag alignment = languagesService()->currentLanguage().direction == Qt::RightToLeft
-                                  ? Qt::AlignLeft : Qt::AlignRight;
+    Qt::AlignmentFlag alignment = layoutDirection() == Qt::RightToLeft ? Qt::AlignLeft : Qt::AlignRight;
 
     // Draw website URL
     QRectF websiteBoundingRect;
@@ -96,5 +95,5 @@ void LoadingScreenView::draw(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | alignment | Qt::TextDontClip,
-                      muse::qtrc("appshell", "Version %1").arg(application()->fullVersion().toString()));
+                      muse::qtrc("appshell", "Version %1").arg(muse::BaseApplication::appFullVersion().toString()));
 }

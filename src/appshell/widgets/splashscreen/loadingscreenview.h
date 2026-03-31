@@ -24,21 +24,12 @@
 
 #include <QWidget>
 
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
-#include "languages/ilanguagesservice.h"
-#include "global/iapplication.h"
-
 class QSvgRenderer;
 
 namespace mu::appshell {
-class LoadingScreenView : public QWidget, public muse::Contextable
+class LoadingScreenView : public QWidget
 {
     Q_OBJECT
-
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
-    muse::GlobalInject<muse::IApplication> application;
 
 public:
     explicit LoadingScreenView(QWidget* parent = nullptr);
