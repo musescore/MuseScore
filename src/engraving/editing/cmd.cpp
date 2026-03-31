@@ -1259,9 +1259,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     if (tie) {
         connectTies();
     }
-    if (!lyricsPreserved) {
-        muse::DeleteAll(lyricsToPreserve);
-    }
+    
     if (nr) {
         if (is.slur() && nr->isNote()) {
             // If the start element was the same as the end element when the slur was created,
