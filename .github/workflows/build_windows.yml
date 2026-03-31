@@ -48,13 +48,16 @@ on:
         type: string
         required: false
 
+concurrency:
+  # If run via workflow_call, ${{ github.workflow }} is the root workflow's name (e.g. 'Deploy'),
+  # which is the same for all workflows called in that run, hence we must add a unique suffix here.
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }} windows
+  cancel-in-progress: true
+
 jobs:
   windows_x64:
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64')
     runs-on: windows-2025
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-native
-      cancel-in-progress: true
     steps:
     - name: Clone repository
       uses: actions/checkout@v6
@@ -245,9 +248,6 @@ jobs:
       github.event_name != 'pull_request' &&
       (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2025
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-portable
-      cancel-in-progress: true
     steps:
     - name: Clone repository
       uses: actions/checkout@v6
