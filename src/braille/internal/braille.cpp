@@ -2823,10 +2823,14 @@ QString Braille::brailleTremolo(Chord* chord)
     case TremoloType::R16: return BRAILLE_TREMOLO_16THS;
     case TremoloType::R32: return BRAILLE_TREMOLO_32NDS;
     case TremoloType::R64: return BRAILLE_TREMOLO_64THS;
+    case TremoloType::R128:
+    case TremoloType::R256: return BRAILLE_TREMOLO_128THS;
     case TremoloType::C8:  return BRAILLE_TREMOLO_8THS_ALT;
     case TremoloType::C16: return BRAILLE_TREMOLO_16THS_ALT;
     case TremoloType::C32: return BRAILLE_TREMOLO_32NDS_ALT;
     case TremoloType::C64: return BRAILLE_TREMOLO_64THS_ALT;
+    case TremoloType::C128:
+    case TremoloType::C256: return BRAILLE_TREMOLO_128THS_ALT;
     case TremoloType::BUZZ_ROLL: return QString();     //TODO
     case TremoloType::INVALID_TREMOLO: return QString();
     }
