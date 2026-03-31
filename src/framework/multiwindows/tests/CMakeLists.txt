@@ -18,26 +18,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE_TEST muse_workspace_tests)
+set(MODULE_TEST muse_multiwindows_tests)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/workspaceconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/multiwindowsprovidermock.h
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacemanager_tests.cpp
 )
 
 set(MODULE_TEST_LINK
-    muse::workspace
-)
-
-set(MODULE_TEST_INCLUDE
-    ${MUSE_FRAMEWORK_SRC_PATH}/workspace
-    ${MUSE_FRAMEWORK_SRC_PATH}/workspace/internal
-    ${MUSE_FRAMEWORK_SRC_PATH}/multiwindows
-)
-
-set(MODULE_TEST_DEF
-    BUILTIN_WORKSPACES_DIR="${CMAKE_SOURCE_DIR}/share/workspaces"
+    muse::multiwindows
 )
 
 include(SetupGTest)

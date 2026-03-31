@@ -56,3 +56,7 @@ target_sources(muse_multiwindows PRIVATE
 if (MUSE_MODULE_MULTIWINDOWS_QML)
     add_subdirectory(qml/Muse/MultiWindows)
 endif()
+
+if (MUSE_MODULE_MULTIWINDOWS_TESTS)
+    add_subdirectory(tests)
+endif()
