@@ -101,7 +101,9 @@ Ret SoundTrackWriter::write()
     m_source->setIsActive(true);
 
     DEFER {
-        m_encoderPtr->end();
+        if (!m_isAborted) {
+            m_encoderPtr->end();
+        }
 
         audioEngine()->setMode(RenderMode::IdleMode);
 
