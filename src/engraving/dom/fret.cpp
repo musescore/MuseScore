@@ -1140,12 +1140,12 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         }
 
         for (EngravingItem* item : parentSeg->annotations()) {
-            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
                 continue;
             }
 
             if (item->excludeVerticalAlign() != val) {
-                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
+                item->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
             }
         }
         break;

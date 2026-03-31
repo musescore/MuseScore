@@ -701,8 +701,21 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::HARMONY:
-    case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
+    case ElementType::FRET_DIAGRAM: {
+        bool exclude = el->excludeVerticalAlign();
+        for (EngravingItem* item : m_annotations) {
+            if ((!item->isFretDiagram() && !item->isHarmony())
+                || item->staffIdx() != el->staffIdx()) {
+                continue;
+            }
+
+            exclude = item->excludeVerticalAlign();
+            break;
+        }
+        if (exclude != el->excludeVerticalAlign()) {
+            el->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, exclude);
+        }
+    }
     //fallthrough
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
