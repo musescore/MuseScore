@@ -433,7 +433,7 @@ String Trill::accessibleInfo() const
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 
-Sid Trill::offsetSid() const
+Sid Trill::defaultPosSid() const
 {
     return placeAbove() ? Sid::trillPosAbove : Sid::trillPosBelow;
 }

@@ -194,7 +194,7 @@ Sid Rasgueado::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
-Sid Rasgueado::offsetSid() const
+Sid Rasgueado::defaultPosSid() const
 {
     return placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow;
 }

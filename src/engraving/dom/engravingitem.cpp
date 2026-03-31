@@ -291,14 +291,14 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
-Sid EngravingItem::offsetSid() const
+Sid EngravingItem::defaultPosSid() const
 {
     return Sid::NOSTYLE;
 }
 
-PointF EngravingItem::defaultOffset() const
+PointF EngravingItem::defaultPos() const
 {
-    Sid styleId = offsetSid();
+    Sid styleId = defaultPosSid();
 
     if (styleId == Sid::NOSTYLE) {
         return PointF();

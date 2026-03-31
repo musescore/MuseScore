@@ -2012,8 +2012,8 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
 
     ldata->setPos(x, y);
 
-    PointF offsetPos = item->defaultOffset();
-    ldata->move(offsetPos);
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
 
     if (item->autoplace()) {
         const Segment* s2 = item->segment();
@@ -5898,8 +5898,8 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->endText()->setSize(item->endText()->size() * item->defaultSpatium() / item->spatium());
     }
 
-    PointF offsetPos = tl->defaultOffset();
-    ldata->move(offsetPos);
+    PointF defaultPos = tl->defaultPos();
+    ldata->move(defaultPos);
 
     PointF pp1;
     PointF pp2(item->pos2());
@@ -6377,8 +6377,8 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     const double yOff = item->staffOffsetY();
     ldata->moveY(yOff);
 
-    PointF offsetPos = item->defaultOffset();
-    ldata->move(offsetPos);
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
 
     bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
     Ornament* ornament = trill->ornament();

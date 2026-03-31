@@ -201,7 +201,7 @@ void NoteLine::reset()
     TextLineBase::reset();
 }
 
-Sid NoteLine::offsetSid() const
+Sid NoteLine::defaultPosSid() const
 {
     return Sid::NOSTYLE;
 }

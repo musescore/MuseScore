@@ -195,7 +195,7 @@ Sid PickScrape::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
-Sid PickScrape::offsetSid() const
+Sid PickScrape::defaultPosSid() const
 {
     return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
 }

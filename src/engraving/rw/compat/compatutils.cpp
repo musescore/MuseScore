@@ -1102,7 +1102,7 @@ void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
         return;
     }
 
-    PointF defaultOffset = item->defaultOffset();
+    PointF defaultOffset = item->defaultPos();
     offset = offset.value<PointF>() - defaultOffset;
 }
 

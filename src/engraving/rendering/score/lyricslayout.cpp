@@ -587,8 +587,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = -(maxVerseAbove - verse) * lyrics->lineSpacing() * lyricsLineHeightFactor;
-            PointF offsetPos = lyrics->defaultOffset();
-            y += offsetPos.y();
+            PointF defaultPos = lyrics->defaultPos();
+            y += defaultPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -602,8 +602,8 @@ void LyricsLayout::setDefaultPositions(staff_idx_t staffIdx, const LyricsVersesM
         const LyricsVerse& lyricsVerse = pair.second;
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             double y = staffHeight + verse * lyrics->lineSpacing() * lyricsLineHeightFactor;
-            PointF offsetPos = lyrics->defaultOffset();
-            y += offsetPos.y();
+            PointF defaultPos = lyrics->defaultPos();
+            y += defaultPos.y();
             lyrics->setYRelativeToStaff(y);
         }
         for (LyricsLineSegment* lyricsLineSegment : lyricsVerse.lines()) {
@@ -844,8 +844,8 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     if (lyricsLine->isPartialLyricsLine()) {
         Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
         if (nextLyrics) {
-            PointF nextLyricsOffsetPos = nextLyrics->defaultOffset();
-            ldata->setPosY(nextLyrics->offset().y() + nextLyricsOffsetPos.y());
+            PointF nextLyricsDefaultPos = nextLyrics->defaultPos();
+            ldata->setPosY(nextLyrics->offset().y() + nextLyricsDefaultPos.y());
         } else {
             PointF lyricsOffset = item->styleValue(Pid::OFFSET,
                                                    item->placeBelow() ? Sid::lyricsPosBelow : Sid::lyricsPosAbove).value<PointF>();
@@ -855,8 +855,8 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
     }
 
     if (item->isSingleBeginType()) {
-        PointF startLyricsOffsetPos = startLyrics->defaultOffset();
-        ldata->setPosY(startLyrics->offset().y() + startLyricsOffsetPos.y());
+        PointF startLyricsDefaultPos = startLyrics->defaultPos();
+        ldata->setPosY(startLyrics->offset().y() + startLyricsDefaultPos.y());
         return;
     }
 
@@ -864,13 +864,13 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
         const Lyrics* nextLyrics = findNextLyrics(endChordRest, item->verse());
 
         const Lyrics* refLyrics = nextLyrics ? nextLyrics : startLyrics;
-        PointF refLyricsOffsetPos = refLyrics->defaultOffset();
+        PointF refLyricsDefaultPos = refLyrics->defaultPos();
 
-        ldata->setPosY(refLyrics->offset().y() + refLyricsOffsetPos.y());
+        ldata->setPosY(refLyrics->offset().y() + refLyricsDefaultPos.y());
         return;
     }
 
-    PointF endLyricsOffsetPos = endLyrics->defaultOffset();
+    PointF endLyricsDefaultPos = endLyrics->defaultPos();
 
-    ldata->setPosY(endLyrics->offset().y() + endLyricsOffsetPos.y());
+    ldata->setPosY(endLyrics->offset().y() + endLyricsDefaultPos.y());
 }

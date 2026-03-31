@@ -68,7 +68,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& value) override;
 
 protected:
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
 
 private:
 

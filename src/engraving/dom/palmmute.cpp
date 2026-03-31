@@ -188,7 +188,7 @@ void PalmMute::setChannel()
     }
 }
 
-Sid PalmMute::offsetSid() const
+Sid PalmMute::defaultPosSid() const
 {
     return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
 }

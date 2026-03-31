@@ -302,7 +302,7 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
     }
 
     double staffHeight = staff() && placeBelow() ? staff()->staffHeight(tick()) : 0.0;
-    double tempoChangePos = staffHeight + defaultOffset().y() + (autoplace() ? absoluteFromSpatium(minDistance()) : 0.0);
+    double tempoChangePos = staffHeight + defaultPos().y() + (autoplace() ? absoluteFromSpatium(minDistance()) : 0.0);
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     const bool sameSide = placeAbove() == rehearsalMark->placeAbove();
@@ -362,7 +362,7 @@ void GradualTempoChange::removed()
     requestToRebuildTempo();
 }
 
-Sid GradualTempoChange::offsetSid() const
+Sid GradualTempoChange::defaultPosSid() const
 {
     return placeAbove() ? Sid::tempoChangePosAbove : Sid::tempoChangePosBelow;
 }

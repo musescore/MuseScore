@@ -114,7 +114,7 @@ public:
     Ornament* ornament() const { return m_ornament; }
     void setOrnament(Ornament* o) { m_ornament = o; }
 
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
 
 protected:
     void doComputeEndElement() override;

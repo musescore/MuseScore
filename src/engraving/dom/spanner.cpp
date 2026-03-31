@@ -207,9 +207,9 @@ PropertyValue SpannerSegment::propertyDefault(Pid pid) const
     }
 }
 
-PointF SpannerSegment::defaultOffset() const
+PointF SpannerSegment::defaultPos() const
 {
-    return spanner()->defaultOffset();
+    return spanner()->defaultPos();
 }
 
 //---------------------------------------------------------

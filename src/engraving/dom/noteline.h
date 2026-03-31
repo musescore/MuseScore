@@ -69,7 +69,7 @@ public:
     bool enforceMinLength() { return m_lineEndPlacement != NoteLineEndPlacement::LEFT_EDGE; }
 
 protected:
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
 
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;

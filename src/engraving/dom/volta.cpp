@@ -439,7 +439,7 @@ Volta::Type Volta::voltaType() const
     return endHookType() != HookType::NONE ? Type::CLOSED : Type::OPEN;
 }
 
-Sid Volta::offsetSid() const
+Sid Volta::defaultPosSid() const
 {
     return Sid::voltaPosAbove;
 }

@@ -92,9 +92,9 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
     }
 
     Staff* staff = item->staff();
-    PointF offsetPos = item->defaultOffset() * (staff ? staff->staffMag(item->tick()) : 1.0);
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
 
-    ldata->move(offsetPos);
+    ldata->move(defaultPos);
 
     checkBarlineCollisions(item, barlineSeg, hPlacement, ldata);
 }
@@ -121,9 +121,9 @@ void MeasureNumberLayout::layoutMMRestRange(MMRestRange* item, MMRestRange::Layo
     }
 
     Staff* staff = item->staff();
-    PointF offsetPos = item->defaultOffset() * (staff ? staff->staffMag(item->tick()) : 1.0);
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
 
-    ldata->move(offsetPos);
+    ldata->move(defaultPos);
 }
 
 void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)

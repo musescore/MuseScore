@@ -2834,19 +2834,19 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 //   offsetSid
 //---------------------------------------------------------
 
-Sid TextBase::offsetSid() const
+Sid TextBase::defaultPosSid() const
 {
     const OffsetSids offsets = textStyle(textStyleType())->offsetSids;
     return placeAbove() ? offsets.above : offsets.below;
 }
 
-PointF TextBase::defaultOffset() const
+PointF TextBase::defaultPos() const
 {
     if (parent()->isTextLineBaseSegment()) {
         return PointF();
     }
 
-    return EngravingItem::defaultOffset();
+    return EngravingItem::defaultPos();
 }
 
 //---------------------------------------------------------

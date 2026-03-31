@@ -321,7 +321,7 @@ void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, Pro
     TextLineBase::undoChangeProperty(id, v, ps);
 }
 
-Sid TextLine::offsetSid() const
+Sid TextLine::defaultPosSid() const
 {
     if (systemFlag()) {
         return placeAbove() ? Sid::systemTextLinePosAbove : Sid::systemTextLinePosBelow;

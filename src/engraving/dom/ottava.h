@@ -141,7 +141,7 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
 protected:
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
     void doComputeEndElement() override;
 
 private:

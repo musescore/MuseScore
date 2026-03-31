@@ -204,7 +204,7 @@ Sid HarmonicMark::getPropertyStyle(Pid id) const
     return TextLineBase::getPropertyStyle(id);
 }
 
-Sid HarmonicMark::offsetSid() const
+Sid HarmonicMark::defaultPosSid() const
 {
     return placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow;
 }

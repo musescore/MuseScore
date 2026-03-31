@@ -448,7 +448,7 @@ void Ottava::doComputeEndElement()
     setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track())));
 }
 
-Sid Ottava::offsetSid() const
+Sid Ottava::defaultPosSid() const
 {
     return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
 }

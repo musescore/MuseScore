@@ -836,7 +836,7 @@ muse::TranslatableString Hairpin::subtypeUserName() const
     }
 }
 
-Sid Hairpin::offsetSid() const
+Sid Hairpin::defaultPosSid() const
 {
     if (isLineType()) {
         return placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;

@@ -140,8 +140,8 @@ void TextLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData*
         ldata->highResShape.mut_value().transform(t);
     }
 
-    PointF offsetPos = item->defaultOffset();
-    ldata->move(offsetPos);
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
 }
 
 void TextLayout::layoutBaseTextBase1(TextBase* item, const LayoutContext&)

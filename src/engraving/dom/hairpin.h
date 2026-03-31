@@ -180,7 +180,7 @@ public:
     TranslatableString subtypeUserName() const override;
 
 protected:
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
 
 private:
 

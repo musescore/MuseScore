@@ -69,7 +69,7 @@ public:
     void setChannel();
 
 protected:
-    Sid offsetSid() const override;
+    Sid defaultPosSid() const override;
 
     friend class PalmMuteLine;
 };

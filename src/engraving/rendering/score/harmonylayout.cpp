@@ -199,8 +199,8 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     PointF newPos = PointF(newPosX, newPosY);
 
     if (!alignToFretDiagram) {
-        PointF offsetPos = item->defaultOffset();
-        newPos += offsetPos;
+        PointF defaultPos = item->defaultPos();
+        newPos += defaultPos;
     }
 
     return newPos;

@@ -95,7 +95,7 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    PointF defaultOffset() const override;
+    PointF defaultPos() const override;
 
     Sid getPropertyStyle(Pid id) const override;
     void resetProperty(Pid id) override;
