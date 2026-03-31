@@ -604,7 +604,7 @@ void MnxImporter::createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremol
         return;
     }
     int tremoloBeamsNum = int(TremoloType::C8) - 1 + mnxTremolo.marks();
-    tremoloBeamsNum = std::clamp(tremoloBeamsNum, int(TremoloType::C8), int(TremoloType::C64));
+    tremoloBeamsNum = std::clamp(tremoloBeamsNum, int(TremoloType::C8), int(TremoloType::C256));
     if (tremoloBeamsNum <= c1->durationType().hooks()) {
         return; // no tremolo is possible
     }
