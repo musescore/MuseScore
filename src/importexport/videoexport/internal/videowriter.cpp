@@ -140,9 +140,6 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         QThread::yieldCurrentThread();
     }
 
-    //! NOTE: we have to do it in main thread
-    notation->notationChanged().notify();
-
     if (m_audioWriter) {
         m_audioWriter->progress()->finished().disconnect(this);
         m_audioWriter = nullptr;
@@ -284,7 +281,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
 
     result.style = score->style();
 
-    result.viewMode = notation->viewMode();
+    result.layoutMode = score->layoutMode();
 
     result.showFrames = score->showFrames();
     result.showInstrumentNames = score->showInstrumentNames();
@@ -293,7 +290,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     result.showUnprintable = score->showUnprintable();
     result.showVBox = score->layoutOptions().isShowVBox;
 
-    notation->setViewMode(notation::ViewMode::PAGE);
+    score->setLayoutMode(engraving::LayoutMode::PAGE);
 
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
@@ -360,7 +357,7 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
     score->setShowUnprintable(data.showUnprintable);
     score->setShowVBox(data.showVBox);
 
-    notation->setViewMode(data.viewMode);
+    score->setLayoutMode(data.layoutMode);
 
     score->setLayoutAll();
     score->update();

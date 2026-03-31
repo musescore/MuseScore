@@ -99,7 +99,7 @@ private:
     struct ScoreRestoreData
     {
         engraving::MStyle style;
-        notation::ViewMode viewMode = notation::ViewMode::PAGE;
+        engraving::LayoutMode layoutMode = engraving::LayoutMode::PAGE;
 
         bool showFrames = true;
         bool showInstrumentNames = true;

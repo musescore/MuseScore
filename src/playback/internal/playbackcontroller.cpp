@@ -1501,6 +1501,10 @@ void PlaybackController::setupSequenceTracks()
 void PlaybackController::setupSequencePlayer()
 {
     currentPlayer()->playbackPositionChanged().onReceive(this, [this](const audio::secs_t pos) {
+        if (m_isExportingAudio) {
+            return;
+        }
+
         m_currentTick = notationPlayback()->secToTick(pos);
         m_currentPlaybackPositionChanged.send(pos, m_currentTick);
 
@@ -1513,6 +1517,10 @@ void PlaybackController::setupSequencePlayer()
     });
 
     currentPlayer()->playbackStatusChanged().onReceive(this, [this](PlaybackStatus) {
+        if (m_isExportingAudio) {
+            return;
+        }
+
         m_isPlayingChanged.notify();
         onPlaybackStatusChanged();
     });
