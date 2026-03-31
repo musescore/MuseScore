@@ -118,7 +118,7 @@ bool Stem::acceptDrop(EditData& data) const
     const EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::TREMOLO_SINGLECHORD:
-        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
+        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R256;
     default:
         break;
     }
