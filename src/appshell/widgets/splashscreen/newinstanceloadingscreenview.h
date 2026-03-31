@@ -20,24 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
-#define MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
+#pragma once
 
 #include <QWidget>
-
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
-#include "languages/ilanguagesservice.h"
 
 class QSvgRenderer;
 
 namespace mu::appshell {
-class NewInstanceLoadingScreenView : public QWidget, public muse::Contextable
+class NewInstanceLoadingScreenView : public QWidget
 {
     Q_OBJECT
-
-    muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<muse::languages::ILanguagesService> languagesService;
 
 public:
     explicit NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent = nullptr);
@@ -51,5 +43,3 @@ private:
     QSize m_dialogSize;
 };
 }
-
-#endif // MU_APPSHELL_NEWINSTANCELOADINSCREENVIEW_H
