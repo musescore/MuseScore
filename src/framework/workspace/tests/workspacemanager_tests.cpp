@@ -58,7 +58,10 @@ public:
 
     void TearDown() override
     {
-        m_manager.reset();
+        if (m_manager) {
+            m_manager->deinit();
+            m_manager.reset();
+        }
         modularity::globalIoc()->unregister<mi::IMultiWindowsProvider>("utests");
     }
 
@@ -114,8 +117,6 @@ TEST_F(Workspace_WorkspaceManagerTests, BuiltinWorkspaceLoadsOnInit)
 
     //! [THEN] Builtin workspace is available
     EXPECT_EQ(m_manager->workspaces().size(), 1);
-
-    m_manager->deinit();
 }
 
 TEST_F(Workspace_WorkspaceManagerTests, FallbackToDefaultOnMissingCurrentWorkspace)
@@ -139,8 +140,6 @@ TEST_F(Workspace_WorkspaceManagerTests, FallbackToDefaultOnMissingCurrentWorkspa
     EXPECT_EQ(m_manager->currentWorkspace()->name(), "Default");
     EXPECT_NE(m_manager->defaultWorkspace(), nullptr);
     EXPECT_EQ(m_manager->defaultWorkspace()->name(), "Default");
-
-    m_manager->deinit();
 }
 
 TEST_F(Workspace_WorkspaceManagerTests, EmptyUserDirUsesBuiltinWorkspaces)
@@ -165,7 +164,5 @@ TEST_F(Workspace_WorkspaceManagerTests, EmptyUserDirUsesBuiltinWorkspaces)
     //! [THEN] Reading workspace data does not crash
     auto data = current->rawData("ui_settings");
     EXPECT_TRUE(data.ret);
-
-    m_manager->deinit();
 }
 }
