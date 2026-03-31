@@ -64,7 +64,7 @@ using duration_t = usecs_t;
 using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
-using layer_idx_t = size_t;
+using layer_idx_t = uint_fast32_t;
 
 static constexpr duration_t INFINITE_DURATION = std::numeric_limits<duration_t>::max();
 
@@ -374,7 +374,7 @@ constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENT;
 constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
 constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = 5 * ONE_PERCENT;
 
-enum class DynamicType {
+enum class DynamicType : percentage_t {
     Undefined = -1,
     ppppppppp = MIN_DYNAMIC_LEVEL,
     pppppppp = static_cast<int>(7.5f * ONE_PERCENT),
