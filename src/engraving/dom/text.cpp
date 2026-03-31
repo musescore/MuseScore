@@ -46,6 +46,7 @@ static bool styleIsSelectable(TextStyleType style)
     case TextStyleType::FOOTER:
     case TextStyleType::COPYRIGHT:
     case TextStyleType::PAGE_NUMBER:
+    case TextStyleType::GROUP_BRACKET:
         return false;
     default: break;
     }
@@ -60,8 +61,6 @@ Text::Text(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
-
-    setSelectable(!parent->isBracket());
 }
 
 EngravingObject* Text::propertyDelegate(Pid id) const
@@ -132,10 +131,5 @@ bool Text::positionRelativeToNoteheadRest() const
     }
 
     return true;
-}
-
-bool Text::isEditable() const
-{
-    return !parent()->isBracket();
 }
 }

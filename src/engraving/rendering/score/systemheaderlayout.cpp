@@ -678,8 +678,8 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         staffIdx += nstaves;
     }
 
-    for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
-        InstrumentName* groupName = system->staff(staffIdx)->groupName;
+    for (staff_idx_t idx = 0; idx < system->staves().size(); ++idx) {
+        InstrumentName* groupName = system->staff(idx)->groupName;
         if (!groupName || groupName->effectiveStaffIdx() == muse::nidx) {
             continue;
         }
@@ -687,7 +687,7 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         const RectF& bbox = groupName->ldata()->bbox();
         double yCenter = 0.5 * (bbox.bottom() + bbox.top());
 
-        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(staffIdx, groupName->ldata()->endIdxOfGroup());
+        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(idx, groupName->ldata()->endIdxOfGroup());
         size_t visiblePartsCount = visibleParts.size();
         DO_ASSERT(visiblePartsCount > 0);
 
