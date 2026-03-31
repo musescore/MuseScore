@@ -13,7 +13,7 @@ on:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
