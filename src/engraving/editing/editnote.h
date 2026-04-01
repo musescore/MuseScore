@@ -36,8 +36,6 @@ class Articulation;
 class EditNote
 {
 public:
-    static void toggleArticulation(Score* score, SymId attr);
-    static bool toggleArticulation(Score* score, EngravingItem* el, Articulation* a);
     static void toggleOrnament(Score* score, SymId attr);
     static void toggleAccidental(Score* score, AccidentalType at);
     static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);

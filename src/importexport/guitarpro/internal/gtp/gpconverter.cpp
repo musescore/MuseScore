@@ -53,7 +53,7 @@
 #include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
 
-#include "engraving/editing/editnote.h"
+#include "engraving/editing/editchord.h"
 
 #include "../utils.h"
 #include "../guitarprodrumset.h"
@@ -1816,7 +1816,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreOrnament(gpnote->ornament()));
-    if (!EditNote::toggleArticulation(_score, note, art)) {
+    if (!EditChord::toggleArticulation(_score, note, art)) {
         delete art;
     }
 }
@@ -2674,7 +2674,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreFadding(beat->fadding()));
-    if (!EditNote::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
+    if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
     }
 }
@@ -2704,7 +2704,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scorePickStroke(beat->pickStroke()));
-    if (!EditNote::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
+    if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
     }
 }
@@ -2751,7 +2751,7 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreWah(beat->wah()));
-    if (!EditNote::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
+    if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
     }
 }
@@ -2772,7 +2772,7 @@ void GPConverter::addGolpe(const GPBeat* beat, ChordRest* cr)
         art->setAnchor(ArticulationAnchor::BOTTOM);
     }
 
-    if (!EditNote::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
+    if (!EditChord::toggleArticulation(_score, toChord(cr)->upNote(), art)) {
         delete art;
     }
 }

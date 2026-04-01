@@ -1545,7 +1545,7 @@ EngravingItem* Chord::drop(EditData& data)
             if (m_articulations.empty()) {
                 score()->undoAddElement(atr);
             } else {
-                EditNote::toggleArticulation(score(), this, atr);
+                EditChord::toggleArticulation(score(), this, atr);
             }
         }
         return atr;
@@ -1804,7 +1804,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 newArticulation->setAnchor(artic->anchor());
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
                 if (!hasArticulation(newArticulation)) {
-                    EditNote::toggleArticulation(score(), this, newArticulation);
+                    EditChord::toggleArticulation(score(), this, newArticulation);
                 } else {
                     delete newArticulation;
                 }
@@ -1893,7 +1893,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
             if (!hasArticulation(newArticulation)) {
-                EditNote::toggleArticulation(score(), this, newArticulation);
+                EditChord::toggleArticulation(score(), this, newArticulation);
             } else {
                 delete newArticulation;
             }

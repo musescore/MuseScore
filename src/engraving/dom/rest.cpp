@@ -29,7 +29,7 @@
 #include "translation.h"
 
 #include "../editing/addremoveelement.h"
-#include "../editing/editnote.h"
+#include "../editing/editchord.h"
 
 #include "actionicon.h"
 #include "articulation.h"
@@ -198,7 +198,7 @@ EngravingItem* Rest::drop(EditData& data)
     case ElementType::ARTICULATION:
     {
         Articulation* a = toArticulation(e);
-        if (!a->isFermata() || !EditNote::toggleArticulation(score(), this, a)) {
+        if (!a->isFermata() || !EditChord::toggleArticulation(score(), this, a)) {
             delete e;
             e = nullptr;
         }

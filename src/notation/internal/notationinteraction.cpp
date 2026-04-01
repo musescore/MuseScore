@@ -8384,7 +8384,7 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)(P), P 
 void NotationInteraction::toggleArticulation(mu::engraving::SymId symId)
 {
     startEdit(TranslatableString("undoableAction", "Toggle articulation"));
-    mu::engraving::EditNote::toggleArticulation(score(), symId);
+    mu::engraving::EditChord::toggleArticulation(score(), symId);
     apply();
 }
 

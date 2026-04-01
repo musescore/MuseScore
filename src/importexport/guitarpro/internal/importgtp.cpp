@@ -73,7 +73,7 @@
 #include "engraving/rw/xmlwriter.h"
 #include "engraving/types/symid.h"
 
-#include "engraving/editing/editnote.h"
+#include "engraving/editing/editchord.h"
 
 #include "log.h"
 
@@ -2529,7 +2529,7 @@ bool GuitarPro3::read(IODevice* io)
                         art->setSymId(SymId::guitarFadeOut);
                         art->setAnchor(ArticulationAnchor::TOP);
                         art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-                        if (!EditNote::toggleArticulation(score, cr, art)) {
+                        if (!EditChord::toggleArticulation(score, cr, art)) {
                             delete art;
                         }
                     }

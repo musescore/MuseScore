@@ -21,6 +21,7 @@
  */
 
 #include "editnote.h"
+#include "editchord.h"
 
 #include <set>
 
@@ -41,39 +42,6 @@
 using namespace mu::engraving;
 
 //---------------------------------------------------------
-//   toggleArticulation
-///   Toggle attribute \a attr for all selected notes/rests.
-///
-///   Called from padToggle() to add note prefix/accent.
-//---------------------------------------------------------
-
-void EditNote::toggleArticulation(Score* score, SymId attr)
-{
-    std::set<Chord*> set;
-    for (EngravingItem* el : score->selection().elements()) {
-        if (el->isNote() || el->isChord()) {
-            Chord* cr = 0;
-            // apply articulation on a given chord only once
-            if (el->isNote()) {
-                cr = toNote(el)->chord();
-                if (muse::contains(set, cr)) {
-                    continue;
-                }
-            }
-            Articulation* na = Factory::createArticulation(score->dummy()->chord());
-            na->setSymId(attr);
-            if (!EditNote::toggleArticulation(score, el, na)) {
-                delete na;
-            }
-
-            if (cr) {
-                set.insert(cr);
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   toggleOrnament
 //---------------------------------------------------------
 
@@ -92,7 +60,7 @@ void EditNote::toggleOrnament(Score* score, SymId attr)
             }
             Ornament* na = Factory::createOrnament(score->dummy()->chord());
             na->setSymId(attr);
-            if (!EditNote::toggleArticulation(score, el, na)) {
+            if (!EditChord::toggleArticulation(score, el, na)) {
                 delete na;
             }
 
@@ -132,53 +100,6 @@ void EditNote::toggleAccidental(Score* score, AccidentalType at)
             EditNote::changeAccidental(score, at);
         }
     }
-}
-
-bool EditNote::toggleArticulation(Score* score, EngravingItem* el, Articulation* a)
-{
-    Chord* c;
-    if (el->isNote()) {
-        c = toNote(el)->chord();
-    } else if (el->isChord()) {
-        c = toChord(el);
-    } else {
-        return false;
-    }
-    Articulation* oa = c->hasArticulation(a);
-    if (oa) {
-        score->undoRemoveElement(oa);
-        return false;
-    }
-
-    Tapping* tap = c->tapping();
-    if (tap) {
-        // If we got here it means that the user is entering a tap
-        // of different hand, so replace the old one
-        score->undoRemoveElement(tap);
-    }
-
-    if (!a->isDouble()) {
-        a->setParent(c);
-        a->setTrack(c->track());
-        score->undoAddElement(a);
-        return true;
-    }
-
-    // Split the new articulation into "sub-components", only add the unique ones (not present in the chord)...
-    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
-    for (const SymId& id : newSubComponentIds) {
-        Articulation* articCopy = a->clone();
-        articCopy->setSymId(id);
-
-        if (!c->hasArticulation(articCopy)) {
-            articCopy->setParent(c);
-            articCopy->setTrack(c->track());
-            score->undoAddElement(articCopy);
-            continue;
-        }
-        delete articCopy;
-    }
-    return true;
 }
 
 //---------------------------------------------------------
