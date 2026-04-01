@@ -19,5 +19,8 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+  slop_detection:
+    enabled: true
+    label: "slop"
 chat:
   auto_reply: true
