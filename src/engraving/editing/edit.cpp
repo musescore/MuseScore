@@ -7684,28 +7684,9 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
     }
 }
 
-//---------------------------------------------------------
-//   undoChangeTuning
-//---------------------------------------------------------
-
-void Score::undoChangeTuning(Note* n, double v)
-{
-    n->undoChangeProperty(Pid::TUNING, v);
-}
-
 void Score::undoChangeUserMirror(Note* n, DirectionH d)
 {
     n->undoChangeProperty(Pid::MIRROR_HEAD, d);
-}
-
-//---------------------------------------------------------
-//   undoChangeTpc
-//    TODO-TPC: check
-//---------------------------------------------------------
-
-void Score::undoChangeTpc(Note* note, int v)
-{
-    note->undoChangeProperty(Pid::TPC1, v);
 }
 
 //---------------------------------------------------------

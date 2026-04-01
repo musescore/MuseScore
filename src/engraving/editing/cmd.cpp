@@ -2989,7 +2989,7 @@ void Score::cmdMirrorNoteHead()
                 } else {
                     d = d == DirectionH::LEFT ? DirectionH::RIGHT : DirectionH::LEFT;
                 }
-                undoChangeUserMirror(note, d);
+                note->undoChangeProperty(Pid::MIRROR_HEAD, d);
             }
         }
     }
