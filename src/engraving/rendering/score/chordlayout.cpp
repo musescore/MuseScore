@@ -377,32 +377,31 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     bool hasZigzagAdjustments = false;
     double rightHeadWidth = 0.0;
     if (tab->zigzagFretNumbers()) {
-
         int prevNoteString = 1000; // just a very large value
         for (size_t i = 0; i < numOfNotes; ++i) {
-            Note *note = item->notes().at(i);
+            Note* note = item->notes().at(i);
             char position;
             // notes in TAB are always sorted by string from highest num (lowest pitch) to lowest num (highest pitch)
-            if (note->string() + 1  != prevNoteString || notePositions.empty()) {
+            if (note->string() + 1 != prevNoteString || notePositions.empty()) {
                 position = CENTER;
             } else {
                 switch (notePositions.back()) {
-                    case LEFT: {
-                        position = RIGHT;
-                        break;
-                    }
-                    case RIGHT: {
-                        position = LEFT;
-                        break;
-                    };
-                    case CENTER: {
-                        position = RIGHT;
-                        notePositions.back() = LEFT;
-                        break;
-                    }
-                    default: {
-                        position = CENTER;
-                    };
+                case LEFT: {
+                    position = RIGHT;
+                    break;
+                }
+                case RIGHT: {
+                    position = LEFT;
+                    break;
+                };
+                case CENTER: {
+                    position = RIGHT;
+                    notePositions.back() = LEFT;
+                    break;
+                }
+                default: {
+                    position = CENTER;
+                };
                 }
             }
             prevNoteString = note->string();
@@ -433,24 +432,23 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             assert(notePositions.size() == item->notes().size());
             char position = notePositions[i];
             switch (position) {
-                case LEFT: {
-                    x = stemX - fretWidth;
-                    break;
-                }
-                case RIGHT: {
-                    x = stemX;
-                    if (fretWidth > rightHeadWidth) {
-                        rightHeadWidth = fretWidth;
-                    }
-                    break;
-                }
-                case CENTER: {
-                    x = stemX - fretWidth * 0.5;
-                    break;
-                }
-                default: ;
+            case LEFT: {
+                x = stemX - fretWidth;
+                break;
             }
-
+            case RIGHT: {
+                x = stemX;
+                if (fretWidth > rightHeadWidth) {
+                    rightHeadWidth = fretWidth;
+                }
+                break;
+            }
+            case CENTER: {
+                x = stemX - fretWidth * 0.5;
+                break;
+            }
+            default:;
+            }
         } else {
             // Standard centered positioning
             x = stemX - fretWidth * 0.5;
