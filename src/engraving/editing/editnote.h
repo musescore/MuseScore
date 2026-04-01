@@ -29,6 +29,8 @@
 namespace mu::engraving {
 enum class SymId;
 enum class AccidentalType : unsigned char;
+enum class UpDownMode : char;
+enum class Key : signed char;
 class Score;
 class EngravingItem;
 class Articulation;
@@ -43,8 +45,10 @@ public:
     static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
     static void undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2);
     static void undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
+    static void upDown(Score* score, bool up, UpDownMode mode);
 private:
     static void changeAccidental2(Note* n, int pitch, int tpc);
+    static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
 class ChangePitch : public UndoCommand

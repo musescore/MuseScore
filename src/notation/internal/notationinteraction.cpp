@@ -4249,7 +4249,7 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
     } else {
         startEdit(TranslatableString("undoableAction", "Change pitch"));
-        score()->upDown(MoveDirection::Up == d, mode);
+        EditNote::upDown(score(), MoveDirection::Up == d, mode);
     }
 
     apply();

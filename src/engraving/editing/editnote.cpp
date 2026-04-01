@@ -28,6 +28,7 @@
 #include "dom/accidental.h"
 #include "dom/articulation.h"
 #include "dom/chord.h"
+#include "dom/drumset.h"
 #include "dom/factory.h"
 #include "dom/linkedobjects.h"
 #include "dom/measure.h"
@@ -312,6 +313,236 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
         changeAccidental2(ln, pitch, tpc);
     }
     score->setPlayNote(true);
+    score->setSelectionChanged(true);
+}
+
+//---------------------------------------------------------
+//   upDownChromatic
+//---------------------------------------------------------
+
+void EditNote::upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2,
+                               int& newPitch, int& newTpc1, int& newTpc2)
+{
+    bool concertPitch = n->concertPitch();
+    AccidentalVal noteAccVal = tpc2alter(concertPitch ? tpc1 : tpc2);
+    AccidentalVal accState = AccidentalVal::NATURAL;
+    if (Measure* m = n->findMeasure()) {
+        accState = m->findAccidental(n);
+    }
+    if (up && pitch < 127) {
+        newPitch = pitch + 1;
+        if (concertPitch) {
+            if (tpc1 > Tpc::TPC_A + int(key) && noteAccVal >= accState) {
+                newTpc1 = tpc1 - 5;           // up semitone diatonic
+            } else {
+                newTpc1 = tpc1 + 7;           // up semitone chromatic
+            }
+            newTpc2 = n->transposeTpc(newTpc1);
+        } else {
+            if (tpc2 > Tpc::TPC_A + int(key) && noteAccVal >= accState) {
+                newTpc2 = tpc2 - 5;           // up semitone diatonic
+            } else {
+                newTpc2 = tpc2 + 7;           // up semitone chromatic
+            }
+            newTpc1 = n->transposeTpc(newTpc2);
+        }
+    } else if (!up && pitch > 0) {
+        newPitch = pitch - 1;
+        if (concertPitch) {
+            if (tpc1 > Tpc::TPC_C + int(key) || noteAccVal > accState) {
+                newTpc1 = tpc1 - 7;           // down semitone chromatic
+            } else {
+                newTpc1 = tpc1 + 5;           // down semitone diatonic
+            }
+            newTpc2 = n->transposeTpc(newTpc1);
+        } else {
+            if (tpc2 > Tpc::TPC_C + int(key) || noteAccVal > accState) {
+                newTpc2 = tpc2 - 7;           // down semitone chromatic
+            } else {
+                newTpc2 = tpc2 + 5;           // down semitone diatonic
+            }
+            newTpc1 = n->transposeTpc(newTpc2);
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   upDown
+//---------------------------------------------------------
+
+void EditNote::upDown(Score* score, bool up, UpDownMode mode)
+{
+    std::list<Note*> el = score->selection().uniqueNotes();
+
+    el.sort([up](Note* a, Note* b) {
+        if (up) {
+            return a->string() < b->string();
+        } else {
+            return a->string() > b->string();
+        }
+    });
+
+    for (Note* oNote : el) {
+        Fraction tick     = oNote->chord()->tick();
+        Staff* staff = oNote->staff();
+        Part* part   = staff->part();
+        Key key      = staff->key(tick);
+        int tpc1     = oNote->tpc1();
+        int tpc2     = oNote->tpc2();
+        int pitch    = oNote->pitch();
+        int pitchOffset = staff->pitchOffset(tick);
+        int newTpc1  = tpc1;          // default to unchanged
+        int newTpc2  = tpc2;          // default to unchanged
+        int newPitch = pitch;         // default to unchanged
+        int string   = oNote->string();
+        int fret     = oNote->fret();
+
+        StaffGroup staffGroup = staff->staffType(oNote->chord()->tick())->group();
+        // if not tab, check for instrument instead of staffType (for pitched to unpitched instrument changes)
+        if (staffGroup != StaffGroup::TAB) {
+            staffGroup = staff->part()->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+        }
+
+        switch (staffGroup) {
+        case StaffGroup::PERCUSSION:
+        {
+            const Drumset* ds = part->instrument(tick)->drumset();
+            if (ds) {
+                newPitch = up ? ds->nextPitch(pitch) : ds->prevPitch(pitch);
+                newTpc1 = pitch2tpc(newPitch, Key::C, Prefer::NEAREST);
+                newTpc2 = newTpc1;
+            }
+        }
+        break;
+        case StaffGroup::TAB:
+        {
+            const StringData* stringData = part->stringData(tick, staff->idx());
+            switch (mode) {
+            case UpDownMode::OCTAVE:
+            {
+                const StaffType* stt = staff->staffType(tick);
+                string = stt->physStringToVisual(string);
+                string += (up ? -1 : 1);
+                if (string < 0 || string >= static_cast<int>(stringData->strings())) {
+                    return;                                 // no next string to move to
+                }
+                string = stt->visualStringToPhys(string);
+                fret = stringData->fret(pitch, string, staff, tick);
+                if (fret == -1) {
+                    return;
+                }
+            }
+            break;
+
+            case UpDownMode::DIATONIC:
+                upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
+                break;
+
+            case UpDownMode::CHROMATIC:
+            {
+                if (!stringData->frets()) {
+                    LOGD("upDown tab chromatic: no frets?");
+                    return;
+                }
+                fret += (up ? 1 : -1);
+                if (fret < 0 || fret > stringData->frets()) {
+                    LOGD("upDown tab in-string: out of fret range");
+                    return;
+                }
+                upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
+                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff, oNote->tick()) && !oNote->bendBack()) {
+                    LOGD("upDown tab in-string: pitch mismatch");
+                    return;
+                }
+                oNote->undoChangeProperty(Pid::FRET, fret);
+            }
+            break;
+            }
+        }
+        break;
+        case StaffGroup::STANDARD:
+            switch (mode) {
+            case UpDownMode::OCTAVE:
+                if (up) {
+                    if (pitch < 116) {
+                        newPitch = pitch + 12;
+                    }
+                } else {
+                    if (pitch > 11) {
+                        newPitch = pitch - 12;
+                    }
+                }
+                break;
+
+            case UpDownMode::CHROMATIC:
+                upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
+                break;
+
+            case UpDownMode::DIATONIC:
+            {
+                Note* firstTiedNote = oNote->firstTiedNote();
+                int newLine = firstTiedNote->line() + (up ? -1 : 1);
+                Staff* vStaff = score->staff(firstTiedNote->chord()->vStaffIdx());
+
+                bool error = false;
+                AccidentalVal accOffs = firstTiedNote->chord()->measure()->findAccidental(
+                    firstTiedNote->chord()->segment(), firstTiedNote->chord()->vStaffIdx(), newLine, error);
+                if (error) {
+                    accOffs = Accidental::subtype2value(AccidentalType::NONE);
+                }
+                int nStep = absStep(newLine, vStaff->clef(tick));
+                int octave = nStep / 7;
+                int testPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
+
+                if (testPitch <= 127 && testPitch > 0) {
+                    newPitch = testPitch;
+                    newTpc1 = newTpc2 = step2tpc(nStep % 7, accOffs);
+                    if (firstTiedNote->concertPitch()) {
+                        newTpc2 = firstTiedNote->transposeTpc(newTpc1);
+                    } else {
+                        newPitch += vStaff->transpose(tick).chromatic;
+                        newTpc1 = firstTiedNote->transposeTpc(newTpc2);
+                    }
+                }
+            }
+            break;
+            }
+            break;
+        }
+
+        if ((oNote->pitch() != newPitch) || (oNote->tpc1() != newTpc1) || oNote->tpc2() != newTpc2) {
+            if (mode != UpDownMode::OCTAVE) {
+                auto l = oNote->linkList();
+                for (EngravingObject* e : l) {
+                    Note* ln = toNote(e);
+                    if (ln->accidental()) {
+                        score->doUndoRemoveElement(ln->accidental());
+                    }
+                }
+            }
+            EditNote::undoChangePitch(score, oNote, newPitch, newTpc1, newTpc2);
+            if (mode == UpDownMode::DIATONIC) {
+                part->stringData(tick, staff->idx())->convertPitch(newPitch, staff, tick, &string, &fret);
+                EditNote::undoChangeFretting(score, oNote, newPitch, string, fret, newTpc1, newTpc2);
+            }
+        } else if (staff->staffType(tick)->group() == StaffGroup::TAB) {
+            bool refret = false;
+            if (oNote->string() != string) {
+                oNote->undoChangeProperty(Pid::STRING, string);
+                refret = true;
+            }
+            if (oNote->fret() != fret) {
+                oNote->undoChangeProperty(Pid::FRET, fret);
+                refret = true;
+            }
+            if (refret) {
+                const StringData* stringData = part->stringData(tick, staff->idx());
+                stringData->fretChords(oNote->chord());
+            }
+        }
+
+        score->setPlayNote(true);
+    }
     score->setSelectionChanged(true);
 }
 

@@ -544,8 +544,6 @@ public:
     std::vector<Rest*> setRests(const Fraction& tick, track_idx_t track, const Fraction& l, bool useDots, Tuplet* tuplet,
                                 bool useFullMeasureRest = true);
 
-    void upDown(bool up, UpDownMode);
-    void upDownDelta(int pitchDelta);
     ChordRest* searchNote(const Fraction& tick, track_idx_t track) const;
 
     // undo/redo ops
