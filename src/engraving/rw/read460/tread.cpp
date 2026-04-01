@@ -3014,6 +3014,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DURATION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_BASS_SCALE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_DO_NOT_STACK_MODIFIERS)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::EXCLUDE_VERTICAL_ALIGN)) {
         } else if (!readProperties(toTextBase(h), e, ctx)) {
             e.unknown();
         }
