@@ -389,6 +389,10 @@ int Harmony::id() const
 Segment* Harmony::getParentSeg() const
 {
     Segment* seg = nullptr;
+    if (!explicitParent()) {
+        return nullptr;
+    }
+
     if (explicitParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
