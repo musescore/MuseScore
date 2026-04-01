@@ -211,7 +211,7 @@ private:
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 
-    bool startNoteInputAllowed() const;
+    bool toggleNoteInputAllowed() const;
     void startNoteInput();
 
     bool hasSelection() const;
