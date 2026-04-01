@@ -3,11 +3,19 @@ language: "en-US"
 early_access: false
 reviews:
   profile: "assertive"
-  request_changes_workflow: false
-  high_level_summary: true
-  poem: false
   review_status: false
   review_details: false
+  poem: false
+  high_level_summary: false
+  high_level_summary_in_walkthrough: false
+  changed_files_summary: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  related_issues: false
+  assess_linked_issues: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
   auto_review:
     enabled: true
     drafts: false
