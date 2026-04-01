@@ -3074,7 +3074,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::ACCIDENTAL:
         if (el->explicitParent()->isNote()) {
-            changeAccidental(toNote(el->explicitParent()), AccidentalType::NONE);
+            EditNote::changeAccidental(this, toNote(el->explicitParent()), AccidentalType::NONE);
         } else {
             undoRemoveElement(el);
         }

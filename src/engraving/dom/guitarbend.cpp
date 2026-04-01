@@ -22,6 +22,7 @@
 
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
+#include "../editing/editnote.h"
 #include "../editing/transpose.h"
 
 #include "accidental.h"
@@ -185,10 +186,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
         if (Accidental::isMicrotonal(accidentalType)) {
             doChangeEndNotePitch();
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
         } else {
             linkedNoteOnNotationStaff->updateLine();
-            score()->changeAccidental(linkedNoteOnNotationStaff, accidentalType);
+            EditNote::changeAccidental(score(), linkedNoteOnNotationStaff, accidentalType);
             doChangeEndNotePitch();
         }
     } else {

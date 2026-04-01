@@ -27,6 +27,26 @@
 #include "../dom/note.h"
 
 namespace mu::engraving {
+enum class SymId;
+enum class AccidentalType : unsigned char;
+class Score;
+class EngravingItem;
+class Articulation;
+
+class EditNote
+{
+public:
+    static void toggleArticulation(Score* score, SymId attr);
+    static bool toggleArticulation(Score* score, EngravingItem* el, Articulation* a);
+    static void toggleOrnament(Score* score, SymId attr);
+    static void toggleAccidental(Score* score, AccidentalType at);
+    static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);
+    static void changeAccidental(Score* score, AccidentalType idx);
+    static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
+private:
+    static void changeAccidental2(Note* n, int pitch, int tpc);
+};
+
 class ChangePitch : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePitch)

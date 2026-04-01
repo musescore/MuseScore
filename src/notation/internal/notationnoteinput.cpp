@@ -36,6 +36,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
+#include "engraving/editing/editnote.h"
+
 #include "log.h"
 
 using namespace mu::notation;
@@ -639,7 +641,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;
 
-    score()->toggleAccidental(accidentalType);
+    mu::engraving::EditNote::toggleAccidental(score(), accidentalType);
 
     notifyAboutStateChanged();
 

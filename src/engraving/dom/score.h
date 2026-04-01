@@ -553,13 +553,6 @@ public:
     ChordRest* searchNote(const Fraction& tick, track_idx_t track) const;
 
     // undo/redo ops
-    void toggleArticulation(SymId);
-    bool toggleArticulation(EngravingItem*, Articulation* atr);
-    void toggleOrnament(SymId);
-    void toggleAccidental(AccidentalType);
-    void changeAccidental(AccidentalType);
-    void changeAccidental(Note* oNote, AccidentalType);
-
     void addElement(EngravingItem*);
     void doUndoAddElement(EngravingItem*);
     void removeElement(EngravingItem*);
@@ -1156,8 +1149,6 @@ private:
     void assignIdIfNeed(Part& part) const;
 
     void updateStavesNumberForSystems();
-
-    void applyAccidentalToInputNotes(AccidentalType accidentalType);
 
     Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr, bool forceAccidental = false);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);

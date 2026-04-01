@@ -63,6 +63,8 @@
 #include "engraving/types/symid.h"
 #include "engraving/dom/stringtunings.h"
 
+#include "engraving/editing/editnote.h"
+
 #include "guitarprodrumset.h"
 #include "utils.h"
 
@@ -1488,7 +1490,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
     if (noteBits & NOTE_MARCATO) {
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articMarcatoAbove);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditNote::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }
@@ -1497,7 +1499,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
         note->add(art);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditNote::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }

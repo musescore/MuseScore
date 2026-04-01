@@ -22,11 +22,376 @@
 
 #include "editnote.h"
 
+#include <set>
+
+#include "dom/accidental.h"
+#include "dom/articulation.h"
 #include "dom/chord.h"
+#include "dom/factory.h"
+#include "dom/measure.h"
 #include "dom/note.h"
+#include "dom/ornament.h"
+#include "dom/part.h"
 #include "dom/score.h"
+#include "dom/staff.h"
+#include "dom/stringdata.h"
+#include "dom/tapping.h"
+#include "dom/utils.h"
 
 using namespace mu::engraving;
+
+//---------------------------------------------------------
+//   toggleArticulation
+///   Toggle attribute \a attr for all selected notes/rests.
+///
+///   Called from padToggle() to add note prefix/accent.
+//---------------------------------------------------------
+
+void EditNote::toggleArticulation(Score* score, SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = 0;
+            // apply articulation on a given chord only once
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            na->setSymId(attr);
+            if (!EditNote::toggleArticulation(score, el, na)) {
+                delete na;
+            }
+
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   toggleOrnament
+//---------------------------------------------------------
+
+void EditNote::toggleOrnament(Score* score, SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = 0;
+            // apply articulation on a given chord only once
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Ornament* na = Factory::createOrnament(score->dummy()->chord());
+            na->setSymId(attr);
+            if (!EditNote::toggleArticulation(score, el, na)) {
+                delete na;
+            }
+
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   toggleAccidental
+//---------------------------------------------------------
+
+void EditNote::toggleAccidental(Score* score, AccidentalType at)
+{
+    bool applyNaturalToInputNotes = false;
+    if (score->inputState().accidentalType() == at && at != AccidentalType::NONE) {
+        at = AccidentalType::NONE; // NONE also means "search for previous accidental and use it if found"
+        applyNaturalToInputNotes = true;
+    }
+
+    if (score->noteEntryMode()) {
+        score->inputState().setAccidentalType(at);
+        score->inputState().setRest(false);
+
+        if (!score->inputState().notes().empty()) {
+            EditNote::applyAccidentalToInputNotes(score,
+                                                  applyNaturalToInputNotes ? AccidentalType::NATURAL : at);
+        }
+    } else {
+        if (score->selection().isNone()) {
+            score->inputState().setAccidentalType(at);
+            score->inputState().setDuration(DurationType::V_QUARTER);
+            score->inputState().setRest(false);
+        } else {
+            EditNote::changeAccidental(score, at);
+        }
+    }
+}
+
+bool EditNote::toggleArticulation(Score* score, EngravingItem* el, Articulation* a)
+{
+    Chord* c;
+    if (el->isNote()) {
+        c = toNote(el)->chord();
+    } else if (el->isChord()) {
+        c = toChord(el);
+    } else {
+        return false;
+    }
+    Articulation* oa = c->hasArticulation(a);
+    if (oa) {
+        score->undoRemoveElement(oa);
+        return false;
+    }
+
+    Tapping* tap = c->tapping();
+    if (tap) {
+        // If we got here it means that the user is entering a tap
+        // of different hand, so replace the old one
+        score->undoRemoveElement(tap);
+    }
+
+    if (!a->isDouble()) {
+        a->setParent(c);
+        a->setTrack(c->track());
+        score->undoAddElement(a);
+        return true;
+    }
+
+    // Split the new articulation into "sub-components", only add the unique ones (not present in the chord)...
+    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
+    for (const SymId& id : newSubComponentIds) {
+        Articulation* articCopy = a->clone();
+        articCopy->setSymId(id);
+
+        if (!c->hasArticulation(articCopy)) {
+            articCopy->setParent(c);
+            articCopy->setTrack(c->track());
+            score->undoAddElement(articCopy);
+            continue;
+        }
+        delete articCopy;
+    }
+    return true;
+}
+
+//---------------------------------------------------------
+//   applyAccidentalToInputNotes
+//---------------------------------------------------------
+
+void EditNote::applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType)
+{
+    NoteValList notes;
+    notes.reserve(score->inputState().notes().size());
+
+    Position pos;
+    pos.segment = score->inputState().segment();
+    pos.staffIdx = score->inputState().staffIdx();
+
+    for (const NoteVal& oldVal : score->inputState().notes()) {
+        pos.line = noteValToLine(oldVal, score->inputState().staff(), score->inputState().tick());
+
+        bool error = false;
+        const NoteVal newVal = score->noteValForPosition(pos, accidentalType, error);
+
+        if (error) {
+            notes.push_back(oldVal);
+        } else {
+            notes.push_back(newVal);
+        }
+    }
+
+    score->inputState().setNotes(notes);
+}
+
+//---------------------------------------------------------
+//   changeAccidental
+///   Change accidental to subtype \a idx for all selected
+///   notes.
+//---------------------------------------------------------
+
+void EditNote::changeAccidental(Score* score, AccidentalType idx)
+{
+    for (EngravingItem* item : score->selection().elements()) {
+        switch (item->type()) {
+        case ElementType::ACCIDENTAL: {
+            Accidental* accidental = toAccidental(item);
+            if (accidental->accidentalType() == idx) {
+                EditNote::changeAccidental(score, accidental->note(), AccidentalType::NONE);
+            } else {
+                EditNote::changeAccidental(score, accidental->note(), idx);
+            }
+            break;
+        }
+        case ElementType::NOTE:
+            EditNote::changeAccidental(score, toNote(item), idx);
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   changeAccidental2
+//---------------------------------------------------------
+
+void EditNote::changeAccidental2(Note* n, int pitch, int tpc)
+{
+    Score* score  = n->score();
+    Chord* chord  = n->chord();
+    Staff* st     = chord->staff();
+    int fret      = n->fret();
+    int string    = n->string();
+
+    if (st->isTabStaff(chord->tick())) {
+        if (pitch != n->pitch()) {
+            //
+            // as pitch has changed, calculate new
+            // string & fret
+            //
+            const StringData* stringData = n->part()->stringData(n->tick(), st->idx());
+            if (stringData) {
+                stringData->convertPitch(pitch, st, &string, &fret);
+            }
+        }
+    }
+    int tpc1;
+    int tpc2 = n->transposeTpc(tpc);
+    if (n->style().styleB(Sid::concertPitch)) {
+        tpc1 = tpc;
+    } else {
+        tpc1 = tpc2;
+        tpc2 = tpc;
+    }
+
+    if (!st->isTabStaff(chord->tick())) {
+        //
+        // handle ties
+        //
+        if (n->tieBack()) {
+            if (pitch != n->pitch()) {
+                score->undoRemoveElement(n->tieBack());
+                if (n->tieFor()) {
+                    score->undoRemoveElement(n->tieFor());
+                }
+            }
+        } else {
+            Note* nn = n;
+            while (nn && nn->tieFor()) {
+                nn = nn->tieFor()->endNote();
+                if (nn) {
+                    score->undo(new ChangePitch(nn, pitch, tpc1, tpc2));
+                }
+            }
+        }
+    }
+    score->undoChangePitch(n, pitch, tpc1, tpc2);
+}
+
+//---------------------------------------------------------
+//   changeAccidental
+///   Change accidental to subtype \accidental for
+///   note \a note.
+//---------------------------------------------------------
+
+void EditNote::changeAccidental(Score* score, Note* note, AccidentalType accidental)
+{
+    Chord* chord = note ? note->chord() : nullptr;
+    if (!chord) {
+        return;
+    }
+    Segment* segment = chord->segment();
+    if (!segment) {
+        return;
+    }
+    Measure* measure = segment->measure();
+    if (!measure) {
+        return;
+    }
+    Fraction tick = segment->tick();
+    Staff* estaff = score->staff(chord->vStaffIdx());
+    if (!estaff) {
+        return;
+    }
+    ClefType clef = estaff->clef(tick);
+    if (clef == ClefType::TAB
+        || clef == ClefType::TAB4
+        || clef == ClefType::TAB_SERIF
+        || clef == ClefType::TAB4_SERIF) {
+        return;
+    }
+    int step      = ClefInfo::pitchOffset(clef) - note->line();
+    while (step < 0) {
+        step += 7;
+    }
+    step %= 7;
+    //
+    // accidental change may result in pitch change
+    //
+    AccidentalVal acc2 = measure->findAccidental(note);
+    AccidentalVal acc = (accidental == AccidentalType::NONE) ? acc2 : Accidental::subtype2value(accidental);
+
+    int pitch = line2pitch(note->line(), clef, Key::C) + int(acc);
+    if (!note->concertPitch()) {
+        pitch += note->transposition();
+    }
+
+    int tpc = step2tpc(step, acc);
+
+    bool forceRemove = false;
+    bool forceAdd = false;
+
+    // delete accidental
+    // both for this note and for any linked notes
+    if (accidental == AccidentalType::NONE) {
+        forceRemove = true;
+    }
+    // precautionary or microtonal accidental
+    // either way, we display it unconditionally
+    // both for this note and for any linked notes
+    else if (acc == acc2 || (pitch == note->pitch() && !Accidental::isMicrotonal(note->accidentalType()))
+             || Accidental::isMicrotonal(accidental)) {
+        forceAdd = true;
+    }
+
+    for (EngravingObject* se : note->linkList()) {
+        Note* ln = toNote(se);
+        if (ln->concertPitch() != note->concertPitch()) {
+            continue;
+        }
+        Score* lns    = ln->score();
+        Accidental* a = ln->accidental();
+        if (forceRemove) {
+            if (a) {
+                lns->undoRemoveElement(a);
+            }
+            if (ln->tieBack()) {
+                continue;
+            }
+        } else if (forceAdd) {
+            if (a) {
+                score->undoRemoveElement(a);
+            }
+            Accidental* a1 = Factory::createAccidental(ln);
+            a1->setParent(ln);
+            a1->setAccidentalType(accidental);
+            a1->setRole(AccidentalRole::USER);
+            lns->undoAddElement(a1);
+        } else if (a && Accidental::isMicrotonal(a->accidentalType())) {
+            lns->undoRemoveElement(a);
+        }
+        changeAccidental2(ln, pitch, tpc);
+    }
+    score->setPlayNote(true);
+    score->setSelectionChanged(true);
+}
 
 //---------------------------------------------------------
 //   ChangePitch
