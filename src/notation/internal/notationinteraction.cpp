@@ -4241,10 +4241,14 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
         return;
     }
-
-    if (score()->selection().element() && score()->selection().element()->isRest()) {
+    EngravingItem* selected = score()->selection().element();
+    if (selected && selected->isRest()) {
+        if (noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+            // The rest won't be visible - don't try to move it...
+            return;
+        }
         startEdit(TranslatableString("undoableAction", "Change vertical position"));
-        score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
+        score()->cmdMoveRest(toRest(selected), toDirection(d));
     } else {
         startEdit(TranslatableString("undoableAction", "Change pitch"));
         score()->upDown(MoveDirection::Up == d, mode);
