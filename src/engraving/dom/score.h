@@ -486,8 +486,6 @@ public:
     void undoRemoveHopoText(HammerOnPullOffText* hopoText);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
     void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
-    void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
-    void undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
     void spellNotelist(std::vector<Note*>& notes);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);

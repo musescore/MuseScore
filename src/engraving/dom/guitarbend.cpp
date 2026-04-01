@@ -164,10 +164,10 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterToneOffset)
     int targetTpc2 = Transpose::transposeTpc(targetTpc1, interval, true);
 
     auto doChangeEndNotePitch = [&]() {
-        score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+        EditNote::undoChangePitch(score(), note, pitch, targetTpc1, targetTpc2);
         Note* tiedNote = note->tieFor() ? note->tieFor()->endNote() : nullptr;
         while (tiedNote) {
-            score()->undoChangePitch(tiedNote, pitch, targetTpc1, targetTpc2);
+            EditNote::undoChangePitch(score(), tiedNote, pitch, targetTpc1, targetTpc2);
             tiedNote = tiedNote->tieFor() ? tiedNote->tieFor()->endNote() : nullptr;
         }
     };

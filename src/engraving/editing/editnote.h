@@ -41,6 +41,8 @@ public:
     static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);
     static void changeAccidental(Score* score, AccidentalType idx);
     static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
+    static void undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2);
+    static void undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
 private:
     static void changeAccidental2(Note* n, int pitch, int tpc);
 };

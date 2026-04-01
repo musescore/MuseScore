@@ -4143,7 +4143,7 @@ bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     newPitch = clampPitch(newPitch, true);
 
     // store new data
-    score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
+    EditNote::undoChangePitch(score(), this, newPitch, newTpc1, newTpc2);
     return true;
 }
 
@@ -4164,7 +4164,7 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
             ntpc2 = Transpose::transposeTpc(tpc2(), interval, useDoubleSharpsFlats);
         }
     }
-    score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
+    EditNote::undoChangePitch(score(), this, npitch, ntpc1, ntpc2);
     return true;
 }
 }

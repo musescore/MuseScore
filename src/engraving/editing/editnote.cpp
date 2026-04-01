@@ -29,6 +29,7 @@
 #include "dom/articulation.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
+#include "dom/linkedobjects.h"
 #include "dom/measure.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
@@ -213,7 +214,7 @@ void EditNote::changeAccidental2(Note* n, int pitch, int tpc)
             }
         }
     }
-    score->undoChangePitch(n, pitch, tpc1, tpc2);
+    undoChangePitch(score, n, pitch, tpc1, tpc2);
 }
 
 //---------------------------------------------------------
@@ -312,6 +313,35 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
     }
     score->setPlayNote(true);
     score->setSelectionChanged(true);
+}
+
+//---------------------------------------------------------
+//   undoChangePitch
+//---------------------------------------------------------
+
+void EditNote::undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2)
+{
+    for (EngravingObject* e : note->linkList()) {
+        Note* n = toNote(e);
+        score->undoStack()->pushAndPerform(new ChangePitch(n, pitch, tpc1, tpc2), 0);
+    }
+}
+
+//---------------------------------------------------------
+//   undoChangeFretting
+//---------------------------------------------------------
+
+void EditNote::undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
+{
+    const LinkedObjects* l = note->links();
+    if (l) {
+        for (EngravingObject* e : *l) {
+            Note* n = toNote(e);
+            score->undo(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
+        }
+    } else {
+        score->undo(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
+    }
 }
 
 //---------------------------------------------------------
