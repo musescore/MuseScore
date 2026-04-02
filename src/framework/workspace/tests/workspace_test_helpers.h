@@ -33,6 +33,11 @@ class WorkspaceTestConfig
 public:
     static WorkspaceTestConfig& instance();
 
+    WorkspaceTestConfig(const WorkspaceTestConfig&) = delete;
+    WorkspaceTestConfig& operator=(const WorkspaceTestConfig&) = delete;
+    WorkspaceTestConfig(WorkspaceTestConfig&&) = delete;
+    WorkspaceTestConfig& operator=(WorkspaceTestConfig&&) = delete;
+
     void load(const io::path_t& configPath, const std::string& builtinWorkspacesDir);
 
     const Config& config() const;
@@ -41,6 +46,8 @@ public:
     const std::string& builtinWorkspacesDir() const;
 
 private:
+    WorkspaceTestConfig() = default;
+
     Config m_config;
     std::string m_defaultWorkspaceName;
     std::vector<std::string> m_builtinFiles;
