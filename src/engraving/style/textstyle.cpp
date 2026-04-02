@@ -1057,6 +1057,7 @@ const TextStyle whammyBarTextStyle { {
     { TextStylePropertyType::FrameBorderColor,     Sid::whammyBarFrameFgColor,                    Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::whammyBarFrameBgColor,                    Pid::FRAME_BG_COLOR },
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                 Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::whammyBarMusicalSymbolSize,               Pid::MUSIC_SYMBOL_SIZE },
     { TextStylePropertyType::Position,             Sid::whammyBarPosition,                        Pid::BEGIN_TEXT_POSITION },
 } };
 

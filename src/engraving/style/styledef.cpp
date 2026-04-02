@@ -2067,6 +2067,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(ottavaMusicalSymbolSize,                             10.0),
     styleDef(pageNumberMusicalSymbolSize,                         11.0),
     styleDef(palmMuteMusicalSymbolSize,                           10.0),
+    styleDef(whammyBarMusicalSymbolSize,                          10.0),
     styleDef(partInstrumentMusicalSymbolSize,                     14.0),
     styleDef(pedalMusicalSymbolSize,                              10.0),
     styleDef(rehearsalMarkMusicalSymbolSize,                      14.0),

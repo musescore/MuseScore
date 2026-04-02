@@ -112,9 +112,13 @@ class TextLineBase : public SLine
     M_PROPERTY(String,     beginFontFamily,       setBeginFontFamily)
     M_PROPERTY(double,     beginFontSize,         setBeginFontSize)
     M_PROPERTY(FontStyle,  beginFontStyle,        setBeginFontStyle)
+    M_PROPERTY2(double,    beginTextMusicalSymbolsScale, setBeginTextMusicalSymbolsScale, 1.0)
+    M_PROPERTY2(double,    beginTextMusicSymbolsSize, setBeginTextMusicSymbolsSize, 12.0)
     M_PROPERTY(PointF,     beginTextOffset,       setBeginTextOffset)
 
     M_PROPERTY2(TextPlace, continueTextPlace,     setContinueTextPlace, TextPlace::AUTO)
+    M_PROPERTY2(double,    continueTextMusicalSymbolsScale, setContinueTextMusicalSymbolsScale, 1.0)
+    M_PROPERTY2(double,    continueTextMusicSymbolsSize, setContinueTextMusicSymbolsSize, 12.0)
     M_PROPERTY(String,     continueText,          setContinueText)
     M_PROPERTY(Align,      continueTextAlign,     setContinueTextAlign)
     M_PROPERTY(AlignH,     continueTextPosition,  setContinueTextPosition)
@@ -124,6 +128,8 @@ class TextLineBase : public SLine
     M_PROPERTY(PointF,     continueTextOffset,    setContinueTextOffset)
 
     M_PROPERTY2(TextPlace, endTextPlace,          setEndTextPlace,      TextPlace::AUTO)
+    M_PROPERTY2(double,    endTextMusicalSymbolsScale, setEndTextMusicalSymbolsScale, 1.0)
+    M_PROPERTY2(double,    endTextMusicSymbolsSize, setEndTextMusicSymbolsSize, 12.0)
     M_PROPERTY(String,     endText,               setEndText)
     M_PROPERTY(Align,      endTextAlign,          setEndTextAlign)
     M_PROPERTY(AlignH,     endTextPosition,       setEndTextPosition)
@@ -143,7 +149,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
     void setPropertyFlags(Pid, PropertyFlags) override;
 
-    static const std::array<Pid, 38>& textLineBasePropertyIds();
+    static const std::array<Pid, 44>& textLineBasePropertyIds();
 
     void reset() override;
 

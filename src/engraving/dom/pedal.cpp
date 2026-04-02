@@ -49,6 +49,12 @@ static const ElementStyle pedalStyle {
     { Sid::pedalFontStyle,                     Pid::BEGIN_FONT_STYLE },
     { Sid::pedalFontStyle,                     Pid::CONTINUE_FONT_STYLE },
     { Sid::pedalFontStyle,                     Pid::END_FONT_STYLE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::pedalMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
     { Sid::pedalTextAlign,                     Pid::BEGIN_TEXT_ALIGN },
     { Sid::pedalTextAlign,                     Pid::CONTINUE_TEXT_ALIGN },
     { Sid::pedalTextAlign,                     Pid::END_TEXT_ALIGN },
@@ -194,6 +200,31 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
+}
+
+bool Pedal::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    // Update style flag for text
+    if (propertyId == Pid::BEGIN_HOOK_TYPE) {
+        setBeginHookType(v.value<HookType>());
+
+        PropertyFlags beginTextStyleFlag = beginText() == propertyDefault(Pid::BEGIN_TEXT).value<String>()
+                                           ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::BEGIN_TEXT, beginTextStyleFlag);
+        PropertyFlags continueTextStyleFlag = continueText() == propertyDefault(Pid::CONTINUE_TEXT).value<String>()
+                                              ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::CONTINUE_TEXT, continueTextStyleFlag);
+    } else if (propertyId == Pid::LINE_VISIBLE) {
+        setLineVisible(v.toBool());
+        PropertyFlags endTextStyleFlag = endText() == propertyDefault(Pid::END_TEXT).value<String>()
+                                         ? PropertyFlags::STYLED : PropertyFlags::UNSTYLED;
+        setPropertyFlags(Pid::END_TEXT, endTextStyleFlag);
+    } else {
+        return TextLineBase::setProperty(propertyId, v);
+    }
+
+    triggerLayout();
+    return true;
 }
 
 Pedal* Pedal::findNextInStaff() const
