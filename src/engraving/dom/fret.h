@@ -228,8 +228,10 @@ public:
         THREE,
         FOUR,
         FIVE,
-        THUMB = 6, //T
-        PULGAR = 7 //P
+        THUMB_UPPER = 6, //T
+        THUMB_LOWER = 7, //t
+        PULGAR_UPPER = 8, //P
+        PULGAR_LOWER = 9 //p
     };
 
     static int fingeringFromChar(Char c);

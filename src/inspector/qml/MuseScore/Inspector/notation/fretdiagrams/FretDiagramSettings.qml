@@ -157,7 +157,7 @@ Item {
                                 if(!f || f.length === 0)
                                     return true
 
-                                if(f === "T" || f === "P")
+                                if(f === "T" || f === "P" || f === "t" || f === "p")
                                     return false
 
                                 const v = parseInt(f)
@@ -168,10 +168,6 @@ Item {
                             currentText: isIndeterminate ? '' : repeaterItem.finger
 
                             validator: RegularExpressionValidator { regularExpression: /^[1-5TtPp]?$/ }
-
-                            onTextEdited: {
-                                text = text.toUpperCase()
-                            }
 
                             navigation.name: `Finger ${repeaterItem.string + 1} text input`
                             navigation.panel: root.navigationPanel

@@ -1328,14 +1328,10 @@ int FretDiagram::fingeringFromChar(Char c)
     case '3': return int(FretDiagram::FingeringValue::THREE);
     case '4': return int(FretDiagram::FingeringValue::FOUR);
     case '5': return int(FretDiagram::FingeringValue::FIVE);
-
-    case 'T':
-    case 't':
-        return int(FretDiagram::FingeringValue::THUMB);
-
-    case 'P':
-    case 'p':
-        return int(FretDiagram::FingeringValue::PULGAR);
+    case 'T': return int(FretDiagram::FingeringValue::THUMB_UPPER);
+    case 't': return int(FretDiagram::FingeringValue::THUMB_LOWER);
+    case 'P': return int(FretDiagram::FingeringValue::PULGAR_UPPER);
+    case 'p': return int(FretDiagram::FingeringValue::PULGAR_LOWER);
 
     default:
         return int(FretDiagram::FingeringValue::NONE);
@@ -1348,15 +1344,18 @@ String FretDiagram::fingeringToString(int v)
         return String::number(v);
     }
 
-    if (v == int(FretDiagram::FingeringValue::THUMB)) {
+    switch (static_cast<FretDiagram::FingeringValue>(v)) {
+    case FretDiagram::FingeringValue::THUMB_UPPER:
         return String(u"T");
-    }
-
-    if (v == int(FretDiagram::FingeringValue::PULGAR)) {
+    case FretDiagram::FingeringValue::THUMB_LOWER:
+        return String(u"t");
+    case FretDiagram::FingeringValue::PULGAR_UPPER:
         return String(u"P");
+    case FretDiagram::FingeringValue::PULGAR_LOWER:
+        return String(u"p");
+    default:
+        return String();
     }
-
-    return String();
 }
 
 void FretDiagram::setFingering(std::vector<int> v)

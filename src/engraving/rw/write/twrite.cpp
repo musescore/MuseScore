@@ -1462,7 +1462,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     std::vector<int> legacyFingering = fullFingering;
 
     for (int& v: legacyFingering) {
-        if (v == 6 || v == 7) {
+        if (v >= 6 && v <= 9) {
             v = 0;
         }
     }
