@@ -25,7 +25,6 @@
 #include <QTemporaryDir>
 
 #include "modularity/ioc.h"
-#include "global/configreader.h"
 #include "io/fileinfo.h"
 #include "workspace/internal/workspacemanager.h"
 #include "workspace/iworkspaceconfiguration.h"
