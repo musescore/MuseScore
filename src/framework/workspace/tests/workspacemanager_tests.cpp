@@ -30,6 +30,7 @@
 #include "workspace/internal/workspacemanager.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "workspace/tests/mocks/workspaceconfigurationmock.h"
+#include "workspace/tests/workspace_test_helpers.h"
 #include "multiwindows/tests/mocks/multiwindowsprovidermock.h"
 
 using ::testing::Return;
@@ -38,8 +39,6 @@ using namespace muse;
 using namespace muse::workspace;
 
 static const std::string BUILTIN_WORKSPACE_DIR = BUILTIN_WORKSPACES_DIR;
-
-const Config& workspaceTestConfig();
 
 TEST(Workspace_ConfigTests, ConfigIsValid)
 {

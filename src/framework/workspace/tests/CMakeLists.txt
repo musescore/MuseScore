@@ -22,6 +22,7 @@ set(MODULE_TEST muse_workspace_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/workspaceconfigurationmock.h
+    ${CMAKE_CURRENT_LIST_DIR}/workspace_test_helpers.h
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspacemanager_tests.cpp
 )

@@ -25,6 +25,7 @@
 #include "testing/environment.h"
 
 #include "global/configreader.h"
+#include "workspace/tests/workspace_test_helpers.h"
 #include "workspace/tests/mocks/workspaceconfigurationmock.h"
 
 using namespace ::testing;
