@@ -51,46 +51,6 @@ private:
     static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
-class ChangePitch : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangePitch)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
-public:
-    ChangePitch(Note* note, int pitch, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangePitch)
-    UNDO_NAME("ChangePitch")
-    UNDO_CHANGED_OBJECTS({ note })
-};
-
-class ChangeFretting : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeFretting)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int string = 0;
-    int fret = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangeFretting)
-    UNDO_NAME("ChangeFretting")
-    UNDO_CHANGED_OBJECTS({ note })
-};
-
 class ChangeVelocity : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeVelocity)

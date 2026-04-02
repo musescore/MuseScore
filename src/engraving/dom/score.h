@@ -494,7 +494,6 @@ public:
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
     void undoChangeVisible(EngravingItem* item, bool visible);
-    void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr);
     bool undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue,

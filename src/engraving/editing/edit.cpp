@@ -7650,11 +7650,6 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
     }
 }
 
-void Score::undoChangeUserMirror(Note* n, DirectionH d)
-{
-    n->undoChangeProperty(Pid::MIRROR_HEAD, d);
-}
-
 //---------------------------------------------------------
 //   undoAddBracket
 //---------------------------------------------------------
