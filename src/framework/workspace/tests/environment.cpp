@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <gtest/gtest.h>
+
 #include "testing/environment.h"
 
 #include "global/configreader.h"
@@ -33,6 +35,10 @@ static muse::testing::SuiteEnvironment workspace_se
     = muse::testing::SuiteEnvironment()
       .setPreInit([](){
     s_workspaceConfig = muse::ConfigReader::read(muse::io::path_t(WORKSPACE_CONFIG_FILE));
+
+    if (s_workspaceConfig.value("default_workspace_name").toString().empty()) {
+        FAIL() << "Failed to load workspace config from: " << WORKSPACE_CONFIG_FILE;
+    }
 
     auto workspaceConfigMock = std::make_shared<::testing::NiceMock<muse::workspace::WorkspaceConfigurationMock> >();
 
