@@ -54,6 +54,7 @@ public:
     VstPluginInstanceId id() const override;
 
     PluginViewPtr createView() const override;
+    void setViewAllowed(bool allowed) override { m_viewAllowed = allowed; }
 
     PluginControllerPtr controller() const override;
     PluginComponentPtr component() const override;
@@ -91,6 +92,7 @@ private:
     mutable async::Channel<muse::audio::AudioUnitConfig> m_pluginSettingsChanges;
 
     std::atomic_bool m_isLoaded = false;
+    std::atomic_bool m_viewAllowed = false;
     async::Notification m_loadingCompleted;
 
     mutable std::mutex m_mutex;

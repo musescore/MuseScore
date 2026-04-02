@@ -37,6 +37,7 @@ public:
     void loadSupportedParams();
 
     void setIsActive(const bool isActive);
+    bool isActive() const { return m_isActive; }
     void setOutputSpec(const audio::OutputSpec& spec);
     void setProcessMode(VstProcessMode mode);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);

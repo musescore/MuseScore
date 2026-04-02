@@ -191,7 +191,7 @@ PluginViewPtr VstPluginInstance::createView() const
 
     std::lock_guard lock(m_mutex);
 
-    if (!m_pluginProvider) {
+    if (!m_pluginProvider || !m_viewAllowed) {
         return nullptr;
     }
 

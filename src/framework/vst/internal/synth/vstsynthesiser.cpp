@@ -67,7 +67,10 @@ void VstSynthesiser::init(const OutputSpec& spec)
         m_vstAudioClient->setOutputSpec(m_outputSpec);
         m_vstAudioClient->loadSupportedParams();
         m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS), m_useDynamicEvents);
-        m_inited = true;
+        if (m_vstAudioClient->isActive()) {
+            m_inited = true;
+            m_pluginPtr->setViewAllowed(true);
+        }
     };
 
     if (m_pluginPtr->isLoaded()) {

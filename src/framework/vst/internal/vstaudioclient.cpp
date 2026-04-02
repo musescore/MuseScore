@@ -461,8 +461,12 @@ void VstAudioClient::ensureActivity()
         return;
     }
 
-    component->setActive(true);
-    processor->setProcessing(true);
+    if (component->setActive(true) != Steinberg::kResultOk) {
+        return;
+    }
+    if (processor->setProcessing(true) != Steinberg::kResultOk) {
+        return;
+    }
 
     m_isActive = true;
 }

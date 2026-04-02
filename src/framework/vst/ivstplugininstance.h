@@ -41,6 +41,7 @@ public:
     virtual async::Notification loadingCompleted() const = 0;
 
     virtual PluginViewPtr createView() const = 0;
+    virtual void setViewAllowed(bool allowed) = 0;
     virtual PluginControllerPtr controller() const = 0;
     virtual PluginComponentPtr component() const = 0;
     virtual PluginMidiMappingPtr midiMapping() const = 0;

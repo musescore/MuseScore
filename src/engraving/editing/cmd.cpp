@@ -1395,7 +1395,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             tuplet = 0;
         } else {
             if (seg != firstSegment || !keepChord) {
-                undoRemoveElement(cr);
+                undoRemoveElement(cr, false);
             }
             // even if there was a tuplet, we didn't remove it
             ltuplet = 0;

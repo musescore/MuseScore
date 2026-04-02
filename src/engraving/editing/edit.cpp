@@ -7476,6 +7476,14 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             toRest(newcr)->setGap(false);
         }
 
+        if (staff != ostaff) {
+            if (EngravingItem* existing = seg->element(linkedTrack)) {
+                if (!existing->findLinkedInStaff(ostaff)) {
+                    doUndoRemoveElement(existing);
+                }
+            }
+        }
+
         doUndoAddElement(newcr);
     }
 }
