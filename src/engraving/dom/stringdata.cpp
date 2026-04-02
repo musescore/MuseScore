@@ -589,7 +589,6 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
 
     if (useSameString) {
         sortChordNotesUseSameString(chord, pitchOffset);
-        return;
     }
 
     for (Note* note : chord->notes()) {
