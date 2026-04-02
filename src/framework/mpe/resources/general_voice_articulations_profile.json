@@ -53,8 +53,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Acciaccatura": [
@@ -110,8 +109,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -222,8 +220,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -444,8 +441,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -666,8 +662,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -888,8 +883,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -1110,8 +1104,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -1333,7 +1326,6 @@
                         }
                     ]
                 },
-                "patternPosition": 0,
                 "pitchPattern": {
                     "pitchOffsets": [
                         {
@@ -1437,8 +1429,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "DownMordent": [
@@ -1494,8 +1485,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "GhostNote": [
@@ -1551,8 +1541,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "InvertedTurn": [
@@ -1608,8 +1597,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Legato": [
@@ -1665,8 +1653,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "LinePrall": [
@@ -1722,8 +1709,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Marcato": [
@@ -1779,8 +1765,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "MoltoVibrato": [
@@ -1836,8 +1821,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Mordent": [
@@ -1893,8 +1877,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "MordentWithUpperPrefix": [
@@ -1950,8 +1933,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Pedal": [
@@ -2007,8 +1989,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "PostAppoggiatura": [
@@ -2064,8 +2045,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -2176,8 +2156,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "PrallMordent": [
@@ -2233,8 +2212,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "PrallUp": [
@@ -2290,8 +2268,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "PreAppoggiatura": [
@@ -2347,8 +2324,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             },
             {
                 "arrangementPattern": {
@@ -2459,8 +2435,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "ShortTrill": [
@@ -2516,8 +2491,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "SoftAccent": [
@@ -2573,8 +2547,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Staccatissimo": [
@@ -2630,8 +2603,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Staccato": [
@@ -2687,8 +2659,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Standard": [
@@ -2744,8 +2715,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Subito": [
@@ -2801,8 +2771,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tenuto": [
@@ -2858,8 +2827,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tremblement": [
@@ -2915,8 +2883,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tremolo16th": [
@@ -2972,8 +2939,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tremolo32nd": [
@@ -3029,8 +2995,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tremolo64th": [
@@ -3086,8 +3051,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Tremolo8th": [
@@ -3143,8 +3107,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Trill": [
@@ -3200,8 +3163,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Turn": [
@@ -3257,8 +3219,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Undefined": [
@@ -3315,7 +3276,6 @@
                         }
                     ]
                 },
-                "patternPosition": 0,
                 "pitchPattern": {
                     "pitchOffsets": [
                         {
@@ -3474,8 +3434,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "UpPrall": [
@@ -3531,8 +3490,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "Vibrato": [
@@ -3588,8 +3546,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ],
         "WideVibrato": [
@@ -3645,8 +3602,7 @@
                             "offsetValue": 0
                         }
                     ]
-                },
-                "patternPosition": 0
+                }
             }
         ]
     },
