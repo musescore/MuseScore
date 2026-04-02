@@ -160,7 +160,6 @@ static const std::unordered_set<ElementType> BREAK_TYPES {
     ElementType::FRET_DIAGRAM,
     ElementType::HARP_DIAGRAM,
     ElementType::PLAY_COUNT_TEXT,
-    ElementType::BREATH,
 };
 
 static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
@@ -182,7 +181,6 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
     ElementType::SYMBOL,
     ElementType::FRET_DIAGRAM,
     ElementType::HARP_DIAGRAM,
-    ElementType::BREATH,
 };
 
 //---------------------------------------------------------
@@ -530,7 +528,10 @@ void MeasureLayout::cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mm
     // clone elements from underlying measure to mmr
     for (EngravingItem* e : underlyingSeg->annotations()) {
         // look at elements in underlying measure
-        if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
+        const bool breakType = muse::contains(BREAK_TYPES, e->type());
+        const bool fermata = e->isFermata();
+        const bool visible = e->visible();
+        if ((!breakType && !fermata) || !visible) {
             continue;
         }
         // try to find a match in mmr
@@ -553,7 +554,9 @@ void MeasureLayout::cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mm
     // this should not happen since the elements are linked?
     const auto annotations = mmrSeg->annotations();     // make a copy since we alter the list
     for (EngravingItem* e : annotations) {     // look at elements in mmr
-        if (!muse::contains(BREAK_TYPES, e->type())) {
+        const bool breakType = muse::contains(BREAK_TYPES, e->type());
+        const bool fermata = e->isFermata();
+        if (!breakType && !fermata) {
             continue;
         }
         // try to find a match in underlying measure
@@ -750,6 +753,10 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                     continue;
                 }
                 if (breakForAnnotation(e)) {
+                    return true;
+                }
+                // break for fermatas on the end barline in previous measure
+                if (e->isFermata()) {
                     return true;
                 }
             }
