@@ -36,6 +36,9 @@ set(MODULE_TEST_INCLUDE
     ${MUSE_FRAMEWORK_SRC_PATH}/multiwindows
 )
 
+# Paths injected as compile-time defines for use by the test environment:
+#   BUILTIN_WORKSPACES_DIR - path to share/workspaces/ containing .mws files
+#   WORKSPACE_CONFIG_FILE  - path to the workspace config (src/app/configs/workspaces.cfg)
 set(MODULE_TEST_DEF
     BUILTIN_WORKSPACES_DIR="${CMAKE_SOURCE_DIR}/share/workspaces"
     WORKSPACE_CONFIG_FILE="${CMAKE_SOURCE_DIR}/src/app/configs/workspaces.cfg"

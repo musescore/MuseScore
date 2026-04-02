@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "global/configreader.h"
+#include "io/fileinfo.h"
 #include "workspace/internal/workspacemanager.h"
 #include "workspace/iworkspaceconfiguration.h"
 #include "workspace/tests/mocks/workspaceconfigurationmock.h"
@@ -39,6 +40,55 @@ using namespace muse::workspace;
 static const std::string BUILTIN_WORKSPACE_DIR = BUILTIN_WORKSPACES_DIR;
 
 const Config& workspaceTestConfig();
+
+TEST(Workspace_ConfigTests, ConfigIsValid)
+{
+    const Config& cfg = workspaceTestConfig();
+
+    //! [THEN] default_workspace_name is a non-empty string
+    std::string defaultName = cfg.value("default_workspace_name").toString();
+    EXPECT_FALSE(defaultName.empty());
+
+    //! [THEN] builtin_workspace_files is a non-empty list
+    ValList builtinFiles = cfg.value("builtin_workspace_files").toList();
+    EXPECT_FALSE(builtinFiles.empty());
+
+    //! [THEN] Each builtin file exists on disk
+    bool defaultFoundInBuiltins = false;
+    for (const Val& v : builtinFiles) {
+        std::string filename = v.toString();
+        io::path_t fullPath = io::path_t(BUILTIN_WORKSPACE_DIR + "/" + filename);
+        EXPECT_TRUE(io::FileInfo::exists(fullPath)) << "missing: " << fullPath.toStdString();
+
+        //! [THEN] Check if the default workspace matches a builtin file (without .mws)
+        std::string baseName = io::completeBasename(fullPath).toStdString();
+        if (baseName == defaultName) {
+            defaultFoundInBuiltins = true;
+        }
+    }
+
+    EXPECT_TRUE(defaultFoundInBuiltins) << "default workspace \"" << defaultName << "\" not found in builtin files";
+}
+
+//! If this test fails, a new field was added to workspaces.cfg.
+//! Please add validation for it in ConfigIsValid above, then update EXPECTED_KEYS.
+TEST(Workspace_ConfigTests, NoUntestedConfigKeys)
+{
+    const Config& cfg = workspaceTestConfig();
+
+    const std::set<std::string> EXPECTED_KEYS = {
+        "default_workspace_name",
+        "builtin_workspace_files",
+    };
+
+    std::set<std::string> actualKeys;
+    for (const auto& [key, val] : cfg.data()) {
+        actualKeys.insert(key);
+    }
+
+    EXPECT_EQ(actualKeys, EXPECTED_KEYS)
+        << "workspaces.cfg has changed — add validation in ConfigIsValid and update EXPECTED_KEYS";
+}
 
 namespace muse::workspace {
 class Workspace_WorkspaceManagerTests : public ::testing::Test
