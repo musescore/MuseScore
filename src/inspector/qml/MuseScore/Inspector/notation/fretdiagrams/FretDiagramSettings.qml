@@ -123,7 +123,7 @@ Item {
                         required property int index
 
                         property int string: repeater.count - index - 1
-                        property string finger: root.model ? root.model.displayFingerings[string] : 0
+                        property string finger: root.model ? root.model.displayFingerings[string] : ""
 
                         Layout.preferredWidth: 40
                         spacing: 8
