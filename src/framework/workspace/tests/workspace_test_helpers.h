@@ -31,12 +31,14 @@ namespace muse::workspace {
 class WorkspaceTestConfig
 {
 public:
-    static WorkspaceTestConfig& instance();
+    WorkspaceTestConfig() = default;
 
     WorkspaceTestConfig(const WorkspaceTestConfig&) = delete;
     WorkspaceTestConfig& operator=(const WorkspaceTestConfig&) = delete;
     WorkspaceTestConfig(WorkspaceTestConfig&&) = delete;
     WorkspaceTestConfig& operator=(WorkspaceTestConfig&&) = delete;
+
+    static WorkspaceTestConfig& instance();
 
     bool load(const io::path_t& configPath, const std::string& builtinWorkspacesDir);
 
@@ -46,8 +48,6 @@ public:
     const std::string& builtinWorkspacesDir() const;
 
 private:
-    WorkspaceTestConfig() = default;
-
     Config m_config;
     std::string m_defaultWorkspaceName;
     std::vector<std::string> m_builtinFiles;

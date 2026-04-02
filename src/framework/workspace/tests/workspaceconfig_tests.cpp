@@ -29,38 +29,68 @@
 using namespace muse;
 using namespace muse::workspace;
 
-TEST(Workspace_ConfigTests, ConfigIsValid)
+struct ConfigTestParam {
+    std::string configFile;
+    std::string workspacesDir;
+};
+
+static void PrintTo(const ConfigTestParam& param, std::ostream* os)
 {
-    const auto& testCfg = WorkspaceTestConfig::instance();
+    *os << param.configFile;
+}
+
+static std::vector<ConfigTestParam> configTestParams()
+{
+    std::vector<ConfigTestParam> params = {
+        { WORKSPACE_CONFIG_FILE, BUILTIN_WORKSPACES_DIR },
+    };
+#if defined(APP_WORKSPACE_CONFIG_FILE) && defined(APP_BUILTIN_WORKSPACES_DIR)
+    params.push_back({ APP_WORKSPACE_CONFIG_FILE, APP_BUILTIN_WORKSPACES_DIR });
+#endif
+    return params;
+}
+
+class Workspace_ConfigTests : public ::testing::TestWithParam<ConfigTestParam>
+{
+};
+
+TEST_P(Workspace_ConfigTests, ConfigIsValid)
+{
+    const auto& param = GetParam();
+    WorkspaceTestConfig cfg;
+    ASSERT_TRUE(cfg.load(io::path_t(param.configFile), param.workspacesDir))
+        << "failed to load: " << param.configFile;
 
     //! [THEN] default_workspace_name is a non-empty string
-    EXPECT_FALSE(testCfg.defaultWorkspaceName().empty());
+    EXPECT_FALSE(cfg.defaultWorkspaceName().empty());
 
     //! [THEN] builtin_workspace_files is a non-empty list
-    EXPECT_FALSE(testCfg.builtinFiles().empty());
+    EXPECT_FALSE(cfg.builtinFiles().empty());
 
     //! [THEN] Each builtin file exists on disk
     bool defaultFoundInBuiltins = false;
-    for (const auto& filename : testCfg.builtinFiles()) {
-        io::path_t fullPath = io::path_t(testCfg.builtinWorkspacesDir() + "/" + filename);
+    for (const auto& filename : cfg.builtinFiles()) {
+        io::path_t fullPath = io::path_t(cfg.builtinWorkspacesDir() + "/" + filename);
         EXPECT_TRUE(io::FileInfo::exists(fullPath)) << "missing: " << fullPath.toStdString();
 
-        //! [THEN] Check if the default workspace matches a builtin file (without .mws)
         std::string baseName = io::completeBasename(fullPath).toStdString();
-        if (baseName == testCfg.defaultWorkspaceName()) {
+        if (baseName == cfg.defaultWorkspaceName()) {
             defaultFoundInBuiltins = true;
         }
     }
 
     EXPECT_TRUE(defaultFoundInBuiltins)
-        << "default workspace \"" << testCfg.defaultWorkspaceName() << "\" not found in builtin files";
+        << "default workspace \"" << cfg.defaultWorkspaceName() << "\" not found in builtin files";
 }
 
-//! If this test fails, a new field was added to workspaces.cfg.
+//! If this test fails, a new field was added to the config.
 //! Please add validation for it in ConfigIsValid above, then update EXPECTED_KEYS.
-TEST(Workspace_ConfigTests, NoUntestedConfigKeys)
+TEST_P(Workspace_ConfigTests, NoUntestedConfigKeys)
 {
-    const Config& cfg = WorkspaceTestConfig::instance().config();
+    const auto& param = GetParam();
+    WorkspaceTestConfig cfg;
+    ASSERT_TRUE(cfg.load(io::path_t(param.configFile), param.workspacesDir))
+        << "failed to load: " << param.configFile;
 
     const std::set<std::string> EXPECTED_KEYS = {
         "default_workspace_name",
@@ -68,10 +98,16 @@ TEST(Workspace_ConfigTests, NoUntestedConfigKeys)
     };
 
     std::set<std::string> actualKeys;
-    for (const auto& [key, val] : cfg.data()) {
+    for (const auto& [key, val] : cfg.config().data()) {
         actualKeys.insert(key);
     }
 
     EXPECT_EQ(actualKeys, EXPECTED_KEYS)
-        << "workspaces.cfg has changed — add validation in ConfigIsValid and update EXPECTED_KEYS";
+        << "config has changed — add validation in ConfigIsValid and update EXPECTED_KEYS";
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    Configs,
+    Workspace_ConfigTests,
+    ::testing::ValuesIn(configTestParams())
+    );
