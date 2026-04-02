@@ -90,6 +90,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editchord.h"
+#include "engraving/editing/editnote.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -4248,7 +4249,7 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
     } else {
         startEdit(TranslatableString("undoableAction", "Change pitch"));
-        score()->upDown(MoveDirection::Up == d, mode);
+        EditNote::upDown(score(), MoveDirection::Up == d, mode);
     }
 
     apply();
@@ -5766,9 +5767,9 @@ void NotationInteraction::toggleAccidentalForSelection(AccidentalType type)
     startEdit(TranslatableString("undoableAction", "Toggle accidental"));
 
     if (accidentalAlreadyAdded) {
-        score()->changeAccidental(AccidentalType::NONE);
+        mu::engraving::EditNote::changeAccidental(score(), AccidentalType::NONE);
     } else {
-        score()->changeAccidental(type);
+        mu::engraving::EditNote::changeAccidental(score(), type);
     }
 
     apply();
@@ -8382,12 +8383,16 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)(P), P 
 
 void NotationInteraction::toggleArticulation(mu::engraving::SymId symId)
 {
-    execute(&mu::engraving::Score::toggleArticulation, symId, TranslatableString("undoableAction", "Toggle articulation"));
+    startEdit(TranslatableString("undoableAction", "Toggle articulation"));
+    mu::engraving::EditChord::toggleArticulation(score(), symId);
+    apply();
 }
 
 void NotationInteraction::toggleOrnament(mu::engraving::SymId symId)
 {
-    execute(&mu::engraving::Score::toggleOrnament, symId, TranslatableString("undoableAction", "Toggle ornament"));
+    startEdit(TranslatableString("undoableAction", "Toggle ornament"));
+    mu::engraving::EditNote::toggleOrnament(score(), symId);
+    apply();
 }
 
 void NotationInteraction::toggleAutoplace(bool all)
@@ -8408,7 +8413,9 @@ void NotationInteraction::insertClef(ClefType type)
 
 void NotationInteraction::changeAccidental(mu::engraving::AccidentalType accidental)
 {
-    execute(&mu::engraving::Score::changeAccidental, accidental, TranslatableString("undoableAction", "Add accidental"));
+    startEdit(TranslatableString("undoableAction", "Add accidental"));
+    mu::engraving::EditNote::changeAccidental(score(), accidental);
+    apply();
 }
 
 void NotationInteraction::transposeSemitone(int steps)

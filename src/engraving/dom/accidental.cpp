@@ -29,6 +29,8 @@
 #include "note.h"
 #include "score.h"
 
+#include "../editing/editnote.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -447,7 +449,7 @@ EngravingItem* Accidental::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ACCIDENTAL:
-        score()->changeAccidental(note(), toAccidental(e)->accidentalType());
+        EditNote::changeAccidental(score(), note(), toAccidental(e)->accidentalType());
         break;
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {

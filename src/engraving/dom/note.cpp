@@ -33,6 +33,7 @@
 
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
+#include "../editing/editnote.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1767,7 +1768,7 @@ EngravingItem* Note::drop(EditData& data)
         return e;
 
     case ElementType::ACCIDENTAL:
-        score()->changeAccidental(this, toAccidental(e)->accidentalType());
+        EditNote::changeAccidental(score(), this, toAccidental(e)->accidentalType());
         break;
 
     case ElementType::BEND:
@@ -2153,7 +2154,7 @@ void Note::updateAccidental(AccidentalState* as)
         } else {
             AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), quarterToneOffset());
             updateLine();
-            score()->changeAccidental(this, accType);
+            EditNote::changeAccidental(score(), this, accType);
         }
     }
 
@@ -3885,7 +3886,7 @@ AccidentalType Note::accidentalType() const
 void Note::setAccidentalType(AccidentalType type)
 {
     if (score()) {
-        score()->changeAccidental(this, type);
+        EditNote::changeAccidental(score(), this, type);
     }
 }
 
@@ -4142,7 +4143,7 @@ bool Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
     newPitch = clampPitch(newPitch, true);
 
     // store new data
-    score()->undoChangePitch(this, newPitch, newTpc1, newTpc2);
+    EditNote::undoChangePitch(score(), this, newPitch, newTpc1, newTpc2);
     return true;
 }
 
@@ -4163,7 +4164,7 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
             ntpc2 = Transpose::transposeTpc(tpc2(), interval, useDoubleSharpsFlats);
         }
     }
-    score()->undoChangePitch(this, npitch, ntpc1, ntpc2);
+    EditNote::undoChangePitch(score(), this, npitch, ntpc1, ntpc2);
     return true;
 }
 }

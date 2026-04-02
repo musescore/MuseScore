@@ -27,44 +27,28 @@
 #include "../dom/note.h"
 
 namespace mu::engraving {
-class ChangePitch : public UndoCommand
+enum class SymId;
+enum class AccidentalType : unsigned char;
+enum class UpDownMode : char;
+enum class Key : signed char;
+class Score;
+class EngravingItem;
+class Articulation;
+
+class EditNote
 {
-    OBJECT_ALLOCATOR(engraving, ChangePitch)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
 public:
-    ChangePitch(Note* note, int pitch, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangePitch)
-    UNDO_NAME("ChangePitch")
-    UNDO_CHANGED_OBJECTS({ note })
-};
-
-class ChangeFretting : public UndoCommand
-{
-    OBJECT_ALLOCATOR(engraving, ChangeFretting)
-
-    Note* note = nullptr;
-    int pitch = 0;
-    int string = 0;
-    int fret = 0;
-    int tpc1 = 0;
-    int tpc2 = 0;
-
-    void flip(EditData*) override;
-
-public:
-    ChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
-
-    UNDO_TYPE(CommandType::ChangeFretting)
-    UNDO_NAME("ChangeFretting")
-    UNDO_CHANGED_OBJECTS({ note })
+    static void toggleOrnament(Score* score, SymId attr);
+    static void toggleAccidental(Score* score, AccidentalType at);
+    static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);
+    static void changeAccidental(Score* score, AccidentalType idx);
+    static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
+    static void undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2);
+    static void undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
+    static void upDown(Score* score, bool up, UpDownMode mode);
+private:
+    static void changeAccidental2(Note* n, int pitch, int tpc);
+    static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
 };
 
 class ChangeVelocity : public UndoCommand

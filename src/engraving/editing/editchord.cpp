@@ -23,12 +23,14 @@
 #include "editchord.h"
 
 #include "../dom/arpeggio.h"
+#include "../dom/articulation.h"
 #include "../dom/chord.h"
 #include "../dom/chordrest.h"
 #include "../dom/factory.h"
 #include "../dom/note.h"
 #include "../dom/score.h"
 #include "../dom/segment.h"
+#include "../dom/tapping.h"
 #include "../dom/tremolotwochord.h"
 #include "../dom/utils.h"
 
@@ -40,6 +42,81 @@ void EditChord::addChordParentheses(Chord* chord, std::vector<Note*> notes, bool
         return;
     }
     undoAddParenthesesToNotes(chord, notes, addToLinked, generated);
+}
+
+//---------------------------------------------------------
+//   toggleArticulation
+///   Toggle attribute \a attr for all selected notes/rests.
+///
+///   Called from padToggle() to add note prefix/accent.
+//---------------------------------------------------------
+
+void EditChord::toggleArticulation(Score* score, SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : score->selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = nullptr;
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Articulation* na = Factory::createArticulation(score->dummy()->chord());
+            na->setSymId(attr);
+            if (!EditChord::toggleArticulation(score, el, na)) {
+                delete na;
+            }
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+bool EditChord::toggleArticulation(Score* score, EngravingItem* el, Articulation* a)
+{
+    Chord* c;
+    if (el->isNote()) {
+        c = toNote(el)->chord();
+    } else if (el->isChord()) {
+        c = toChord(el);
+    } else {
+        return false;
+    }
+    Articulation* oa = c->hasArticulation(a);
+    if (oa) {
+        score->undoRemoveElement(oa);
+        return false;
+    }
+
+    Tapping* tap = c->tapping();
+    if (tap) {
+        score->undoRemoveElement(tap);
+    }
+
+    if (!a->isDouble()) {
+        a->setParent(c);
+        a->setTrack(c->track());
+        score->undoAddElement(a);
+        return true;
+    }
+
+    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
+    for (const SymId& id : newSubComponentIds) {
+        Articulation* articCopy = a->clone();
+        articCopy->setSymId(id);
+
+        if (!c->hasArticulation(articCopy)) {
+            articCopy->setParent(c);
+            articCopy->setTrack(c->track());
+            score->undoAddElement(articCopy);
+            continue;
+        }
+        delete articCopy;
+    }
+    return true;
 }
 
 void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked, bool generated)

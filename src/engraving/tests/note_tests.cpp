@@ -37,6 +37,8 @@
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
 
+#include "engraving/editing/editnote.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -399,13 +401,13 @@ TEST_F(Engraving_NoteTests, tpcTranspose)
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     Measure* m = score->firstMeasure();
     score->select(m, SelectType::SINGLE, 0);
-    score->changeAccidental(AccidentalType::FLAT);
+    EditNote::changeAccidental(score, AccidentalType::FLAT);
     score->endCmd();
 
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
     m = m->nextMeasure();
     score->select(m, SelectType::SINGLE, 0);
-    score->upDown(false, UpDownMode::CHROMATIC);
+    EditNote::upDown(score, false, UpDownMode::CHROMATIC);
     score->endCmd();
 
     score->startCmd(TranslatableString::untranslatable("Engraving note tests"));

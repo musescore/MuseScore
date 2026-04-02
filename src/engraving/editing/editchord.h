@@ -26,11 +26,19 @@
 #include "../dom/parenthesis.h"
 
 namespace mu::engraving {
+class Chord;
+class Note;
+class EngravingItem;
+class Articulation;
+enum class SymId;
+
 class EditChord
 {
 public:
     static void addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
     static void removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void toggleArticulation(Score* score, SymId attr);
+    static bool toggleArticulation(Score* score, EngravingItem* el, Articulation* a);
 
 private:
 

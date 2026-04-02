@@ -3074,7 +3074,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::ACCIDENTAL:
         if (el->explicitParent()->isNote()) {
-            changeAccidental(toNote(el->explicitParent()), AccidentalType::NONE);
+            EditNote::changeAccidental(this, toNote(el->explicitParent()), AccidentalType::NONE);
         } else {
             undoRemoveElement(el);
         }
@@ -6029,40 +6029,6 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 }
 
 //---------------------------------------------------------
-//   undoChangePitch
-//---------------------------------------------------------
-
-void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
-{
-    for (EngravingObject* e : note->linkList()) {
-        Note* n = toNote(e);
-        undoStack()->pushAndPerform(new ChangePitch(n, pitch, tpc1, tpc2), 0);
-    }
-}
-
-//---------------------------------------------------------
-//   undoChangeFretting
-//
-//    To use with tablatures to force a specific note fretting;
-//    Pitch, string and fret must be changed all together; otherwise,
-//    if they are not consistent among themselves, the refretting algorithm may re-assign
-//    fret and string numbers for (potentially) all the notes of all the chords of a segment.
-//---------------------------------------------------------
-
-void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
-{
-    const LinkedObjects* l = note->links();
-    if (l) {
-        for (EngravingObject* e : *l) {
-            Note* n = toNote(e);
-            undo(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
-        }
-    } else {
-        undo(new ChangeFretting(note, pitch, string, fret, tpc1, tpc2));
-    }
-}
-
-//---------------------------------------------------------
 //   undoChangeKeySig
 //---------------------------------------------------------
 
@@ -7682,30 +7648,6 @@ void Score::undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElem
             toTie(sp)->updatePossibleJumpPoints();
         }
     }
-}
-
-//---------------------------------------------------------
-//   undoChangeTuning
-//---------------------------------------------------------
-
-void Score::undoChangeTuning(Note* n, double v)
-{
-    n->undoChangeProperty(Pid::TUNING, v);
-}
-
-void Score::undoChangeUserMirror(Note* n, DirectionH d)
-{
-    n->undoChangeProperty(Pid::MIRROR_HEAD, d);
-}
-
-//---------------------------------------------------------
-//   undoChangeTpc
-//    TODO-TPC: check
-//---------------------------------------------------------
-
-void Score::undoChangeTpc(Note* note, int v)
-{
-    note->undoChangeProperty(Pid::TPC1, v);
 }
 
 //---------------------------------------------------------

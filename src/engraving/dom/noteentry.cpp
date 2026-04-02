@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "../editing/editmeasures.h"
+#include "../editing/editnote.h"
 #include "../editing/inserttime.h"
 #include "../editing/transpose.h"
 #include "infrastructure/messagebox.h"
@@ -480,7 +481,7 @@ Ret Score::putNote(const Position& p, bool replace)
                         // set fret number (original or combined) in all linked notes
                         int tpc1 = note->tpc1default(nval.pitch);
                         int tpc2 = note->tpc2default(nval.pitch);
-                        undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
+                        EditNote::undoChangeFretting(this, note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                         setPlayNote(true);
                         return muse::make_ok();
                     }
@@ -711,7 +712,7 @@ std::pair<Note*, Note*> Score::repitchReplaceNote(Chord* chord, const NoteVal& n
                 firstTiedNote = tn;
             }
             lastTiedNote = tn;
-            undoChangePitch(tn, note->pitch(), note->tpc1(), note->tpc2());
+            EditNote::undoChangePitch(this, tn, note->pitch(), note->tpc1(), note->tpc2());
             if (tn->tieFor()) {
                 tn = tn->tieFor()->endNote();
             } else {
