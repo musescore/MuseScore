@@ -28,6 +28,7 @@
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 
@@ -202,6 +203,9 @@ public:
 
     static engraving::DurationType durFromMEI(const libmei::data_DURATION meiDuration, bool& warning);
     static libmei::data_DURATION durToMEI(const engraving::DurationType duration);
+
+    static engraving::TremoloType unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning);
+    static libmei::data_DURATION unitdurToMEI(const engraving::TremoloTwoChord* tremolo);
 
     static void dynamFromMEI(engraving::Dynamic* dynamic, const muse::StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning);
     static libmei::Dynam dynamToMEI(const engraving::Dynamic* dynamic, muse::StringList& meiLines);

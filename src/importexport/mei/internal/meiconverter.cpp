@@ -1272,50 +1272,6 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
     return meiDir;
 }
 
-engraving::DurationType Convert::durFromMEI(const libmei::data_DURATION meiDuration, bool& warning)
-{
-    warning = false;
-    switch (meiDuration) {
-    case (libmei::DURATION_long): return engraving::DurationType::V_LONG;
-    case (libmei::DURATION_breve): return engraving::DurationType::V_BREVE;
-    case (libmei::DURATION_1): return engraving::DurationType::V_WHOLE;
-    case (libmei::DURATION_2): return engraving::DurationType::V_HALF;
-    case (libmei::DURATION_4): return engraving::DurationType::V_QUARTER;
-    case (libmei::DURATION_8): return engraving::DurationType::V_EIGHTH;
-    case (libmei::DURATION_16): return engraving::DurationType::V_16TH;
-    case (libmei::DURATION_32): return engraving::DurationType::V_32ND;
-    case (libmei::DURATION_64): return engraving::DurationType::V_64TH;
-    case (libmei::DURATION_128): return engraving::DurationType::V_128TH;
-    case (libmei::DURATION_256): return engraving::DurationType::V_256TH;
-    case (libmei::DURATION_512): return engraving::DurationType::V_512TH;
-    case (libmei::DURATION_1024): return engraving::DurationType::V_1024TH;
-    default:
-        warning = true;
-        return engraving::DurationType::V_QUARTER;
-    }
-}
-
-libmei::data_DURATION Convert::durToMEI(const engraving::DurationType duration)
-{
-    switch (duration) {
-    case (engraving::DurationType::V_LONG): return libmei::DURATION_long;
-    case (engraving::DurationType::V_BREVE): return libmei::DURATION_breve;
-    case (engraving::DurationType::V_WHOLE): return libmei::DURATION_1;
-    case (engraving::DurationType::V_HALF): return libmei::DURATION_2;
-    case (engraving::DurationType::V_QUARTER): return libmei::DURATION_4;
-    case (engraving::DurationType::V_EIGHTH): return libmei::DURATION_8;
-    case (engraving::DurationType::V_16TH): return libmei::DURATION_16;
-    case (engraving::DurationType::V_32ND): return libmei::DURATION_32;
-    case (engraving::DurationType::V_64TH): return libmei::DURATION_64;
-    case (engraving::DurationType::V_128TH): return libmei::DURATION_128;
-    case (engraving::DurationType::V_256TH): return libmei::DURATION_256;
-    case (engraving::DurationType::V_512TH): return libmei::DURATION_512;
-    case (engraving::DurationType::V_1024TH): return libmei::DURATION_1024;
-    default:
-        return libmei::DURATION_4;
-    }
-}
-
 void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning)
 {
     // The letters in the MEI to be mapped to SMuFL symbols in the xmlText
@@ -2955,6 +2911,87 @@ libmei::data_STAFFREL Convert::directionToMEI(engraving::DirectionV direction)
     default:
         return libmei::STAFFREL_NONE;
     }
+}
+
+engraving::DurationType Convert::durFromMEI(const libmei::data_DURATION meiDuration, bool& warning)
+{
+    warning = false;
+    switch (meiDuration) {
+    case (libmei::DURATION_long): return engraving::DurationType::V_LONG;
+    case (libmei::DURATION_breve): return engraving::DurationType::V_BREVE;
+    case (libmei::DURATION_1): return engraving::DurationType::V_WHOLE;
+    case (libmei::DURATION_2): return engraving::DurationType::V_HALF;
+    case (libmei::DURATION_4): return engraving::DurationType::V_QUARTER;
+    case (libmei::DURATION_8): return engraving::DurationType::V_EIGHTH;
+    case (libmei::DURATION_16): return engraving::DurationType::V_16TH;
+    case (libmei::DURATION_32): return engraving::DurationType::V_32ND;
+    case (libmei::DURATION_64): return engraving::DurationType::V_64TH;
+    case (libmei::DURATION_128): return engraving::DurationType::V_128TH;
+    case (libmei::DURATION_256): return engraving::DurationType::V_256TH;
+    case (libmei::DURATION_512): return engraving::DurationType::V_512TH;
+    case (libmei::DURATION_1024): return engraving::DurationType::V_1024TH;
+    default:
+        warning = true;
+        return engraving::DurationType::V_QUARTER;
+    }
+}
+
+libmei::data_DURATION Convert::durToMEI(const engraving::DurationType duration)
+{
+    switch (duration) {
+    case (engraving::DurationType::V_LONG): return libmei::DURATION_long;
+    case (engraving::DurationType::V_BREVE): return libmei::DURATION_breve;
+    case (engraving::DurationType::V_WHOLE): return libmei::DURATION_1;
+    case (engraving::DurationType::V_HALF): return libmei::DURATION_2;
+    case (engraving::DurationType::V_QUARTER): return libmei::DURATION_4;
+    case (engraving::DurationType::V_EIGHTH): return libmei::DURATION_8;
+    case (engraving::DurationType::V_16TH): return libmei::DURATION_16;
+    case (engraving::DurationType::V_32ND): return libmei::DURATION_32;
+    case (engraving::DurationType::V_64TH): return libmei::DURATION_64;
+    case (engraving::DurationType::V_128TH): return libmei::DURATION_128;
+    case (engraving::DurationType::V_256TH): return libmei::DURATION_256;
+    case (engraving::DurationType::V_512TH): return libmei::DURATION_512;
+    case (engraving::DurationType::V_1024TH): return libmei::DURATION_1024;
+    default:
+        return libmei::DURATION_4;
+    }
+}
+
+engraving::TremoloType Convert::unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning)
+{
+    warning = false;
+    switch (meiFTrem.GetUnitdur()) {
+    case (libmei::DURATION_8): return engraving::TremoloType::C8;
+    case (libmei::DURATION_16): return engraving::TremoloType::C16;
+    case (libmei::DURATION_32): return engraving::TremoloType::C32;
+    case (libmei::DURATION_64): return engraving::TremoloType::C64;
+    default:
+        warning = true;
+        return engraving::TremoloType::INVALID_TREMOLO;
+    }
+}
+
+libmei::data_DURATION Convert::unitdurToMEI(const engraving::TremoloTwoChord* tremolo)
+{
+    const libmei::data_DURATION dur = Convert::durToMEI(tremolo->durationType().type());
+    int unitdur = 0;
+    if (dur > libmei::DURATION_4) {
+        unitdur = dur - libmei::DURATION_4;
+    }
+    switch (tremolo->tremoloType()) {
+    case (engraving::TremoloType::C8):  unitdur += libmei::DURATION_8;
+        break;
+    case (engraving::TremoloType::C16): unitdur += libmei::DURATION_16;
+        break;
+    case (engraving::TremoloType::C32): unitdur += libmei::DURATION_32;
+        break;
+    case (engraving::TremoloType::C64): unitdur += libmei::DURATION_64;
+        break;
+    default:
+        unitdur = libmei::DURATION_NONE;
+    }
+
+    return static_cast<libmei::data_DURATION>(unitdur);
 }
 
 void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur, bool& warning)

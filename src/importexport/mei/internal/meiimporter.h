@@ -108,6 +108,7 @@ private:
     bool readBTrem(pugi::xml_node bTremNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
+    bool readFTrem(pugi::xml_node fTremNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readMRpt(pugi::xml_node mRptNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
@@ -253,6 +254,7 @@ private:
     engraving::BeamMode m_graceBeamBeginMode;
     engraving::Chord* m_lastChord;
     std::string m_tremoloId;
+    engraving::TremoloType m_tremoloType;
 
     std::list<engraving::Chord*> m_graceNotes;
     GraceReading m_readingGraceNotes;
