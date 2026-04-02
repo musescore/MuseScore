@@ -33,9 +33,7 @@ static muse::testing::SuiteEnvironment workspace_se
     = muse::testing::SuiteEnvironment()
       .setPreInit([](){
     auto& testCfg = muse::workspace::WorkspaceTestConfig::instance();
-    testCfg.load(muse::io::path_t(WORKSPACE_CONFIG_FILE), BUILTIN_WORKSPACES_DIR);
-
-    if (testCfg.defaultWorkspaceName().empty()) {
+    if (!testCfg.load(muse::io::path_t(WORKSPACE_CONFIG_FILE), BUILTIN_WORKSPACES_DIR)) {
         FAIL() << "Failed to load workspace config from: " << WORKSPACE_CONFIG_FILE;
     }
 

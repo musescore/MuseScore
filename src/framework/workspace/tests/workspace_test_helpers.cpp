@@ -33,18 +33,25 @@ WorkspaceTestConfig& WorkspaceTestConfig::instance()
     return s;
 }
 
-void WorkspaceTestConfig::load(const io::path_t& configPath, const std::string& builtinWorkspacesDir)
+bool WorkspaceTestConfig::load(const io::path_t& configPath, const std::string& builtinWorkspacesDir)
 {
+    m_defaultWorkspaceName.clear();
+    m_builtinFiles.clear();
+
     m_builtinWorkspacesDir = builtinWorkspacesDir;
     m_config = ConfigReader::read(configPath);
 
     m_defaultWorkspaceName = m_config.value("default_workspace_name").toString();
+    if (m_defaultWorkspaceName.empty()) {
+        return false;
+    }
 
     ValList files = m_config.value("builtin_workspace_files").toList();
-    m_builtinFiles.clear();
     for (const Val& v : files) {
         m_builtinFiles.push_back(v.toString());
     }
+
+    return !m_builtinFiles.empty();
 }
 
 const Config& WorkspaceTestConfig::config() const

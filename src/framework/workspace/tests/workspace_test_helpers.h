@@ -38,7 +38,7 @@ public:
     WorkspaceTestConfig(WorkspaceTestConfig&&) = delete;
     WorkspaceTestConfig& operator=(WorkspaceTestConfig&&) = delete;
 
-    void load(const io::path_t& configPath, const std::string& builtinWorkspacesDir);
+    bool load(const io::path_t& configPath, const std::string& builtinWorkspacesDir);
 
     const Config& config() const;
     const std::string& defaultWorkspaceName() const;
