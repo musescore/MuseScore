@@ -4142,7 +4142,8 @@ void TRead::read(BracketItem* b, XmlReader& xml, ReadContext& ctx)
         if (tag == "type") {
             b->setBracketType(TConv::fromXml(xml.readAsciiText(), BracketType::NORMAL));
         } else if (readProperty(b, tag, xml, ctx, Pid::BRACKET_SPAN)) {
-        } else if (readProperty(b, tag, xml, ctx, Pid::BRACKET_COLUMN)) {
+        } else if (tag == "level") {
+            b->setColumn(xml.readInt());
         } else if (readProperty(b, tag, xml, ctx, Pid::VISIBLE)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::GROUP_BRACKET_SHOW_TEXT)) {
         } else if (readProperty(b, tag, xml, ctx, Pid::GROUP_BRACKET_SHOW_BRACKET)) {

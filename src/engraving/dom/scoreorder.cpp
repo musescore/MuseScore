@@ -411,6 +411,9 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
             std::vector<BracketItem*> brackets = staff->brackets();
 
             for (BracketItem* bi : brackets) {
+                if (bi->bracketType() == BracketType::GROUP) {
+                    continue;
+                }
                 if (bi->bracketType() == BracketType::BRACE) {
                     braceSpan = std::max(braceSpan, bi->bracketSpan() - 1);
                 }

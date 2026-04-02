@@ -7664,6 +7664,19 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
     for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
         const std::vector<BracketItem*>& brackets = m_staves.at(staffIdx)->brackets();
 
+        bool collision = false;
+        for (BracketItem* b : brackets) {
+            if (b->bracketType() != BracketType::NO_BRACKET && b->bracketType() != BracketType::GROUP
+                && b->column() == level) {
+                collision = true;
+                break;
+            }
+        }
+
+        if (!collision) {
+            continue;
+        }
+
         for (int i = static_cast<int>(brackets.size()) - 1; i >= static_cast<int>(level); --i) {
             if (i >= static_cast<int>(brackets.size())) {
                 // This might theoretically happen when a lot of brackets get cleaned up
@@ -7671,13 +7684,16 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
                 continue;
             }
 
-            if (brackets[i]->bracketType() == BracketType::NO_BRACKET) {
-                // Better not get brackets with type NO_BRACKET in the UndoStack,
-                // as they might be cleaned up (Staff::cleanupBrackets())
+            BracketItem* bi = brackets[i];
+            if (bi->column() > level) {
                 continue;
             }
 
-            brackets[i]->undoChangeProperty(Pid::BRACKET_COLUMN, brackets[i]->column() + 1);
+            if (bi->bracketType() == BracketType::NO_BRACKET || bi->bracketType() == BracketType::GROUP) {
+                continue;
+            }
+
+            bi->undoChangeProperty(Pid::BRACKET_COLUMN, bi->column() + 1);
         }
     }
 

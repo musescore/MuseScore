@@ -70,10 +70,10 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        m_bracketType = v.value<BracketType>();
+        staff()->setBracketType(column(), BracketType(v.toInt())); // change bracket type global
         break;
     case Pid::BRACKET_COLUMN:
-        m_column = v.toInt();
+        staff()->changeBracketColumn(column(), static_cast<size_t>(v.toInt()));
         break;
     case Pid::BRACKET_SPAN:
         m_bracketSpan = static_cast<size_t>(v.toInt());

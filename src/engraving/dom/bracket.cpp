@@ -69,6 +69,17 @@ void Bracket::scanElements(std::function<void(EngravingItem*)> func)
     EngravingItem::scanElements(func);
 }
 
+bool Bracket::isInteractionAvailable() const
+{
+    // TODO: in general it probably doesn't make sense that both these functions exist as they do almost the same thing
+    return collectForDrawing();
+}
+
+bool Bracket::collectForDrawing() const
+{
+    return bracketItem()->showBracket() || bracketItem()->showText() || score()->isShowInvisible();
+}
+
 //---------------------------------------------------------
 //   setStaffSpan
 //---------------------------------------------------------

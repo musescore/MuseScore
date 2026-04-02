@@ -338,15 +338,10 @@ void EditStyle::classBegin()
     groupBracketOrientation->addButton(groupBracketTextVertical, 0);
     groupBracketOrientation->addButton(groupBracketTextHorizontal, 1);
 
-    QButtonGroup* groupBracketTextPos = new QButtonGroup(this);
-    groupBracketTextPos->addButton(groupBracketHangIntoMargin, true);
-    groupBracketTextPos->addButton(groupBracketKeepInMargin, false);
-
     auto updateHangIntoMarginEnabled = [&]() {
         bool rightAlign = groupBracketTextRight->isChecked();
         bool vertical = groupBracketTextVertical->isChecked();
         groupBracketHangIntoMargin->setEnabled(vertical && !rightAlign);
-        groupBracketKeepInMargin->setEnabled(vertical && !rightAlign);
     };
 
     connect(groupBracketTextAlign, &QButtonGroup::buttonClicked, this, updateHangIntoMarginEnabled);
@@ -513,7 +508,7 @@ void EditStyle::classBegin()
         { StyleId::groupBracketLineWidth,   false, groupBracketLineThick,   groupBracketLineThickReset },
         { StyleId::groupBracketHookLen,     false, groupBracketHookLen,     groupBracketHookLenReset },
         { StyleId::groupBracketTextAlign,   false, groupBracketTextAlign,   0 },
-        { StyleId::groupBracketHangTextIntoMargin, false, groupBracketTextPos, 0 },
+        { StyleId::groupBracketHangTextIntoMargin, false, groupBracketHangIntoMargin, 0 },
         { StyleId::groupBracketDistanceToNames, false, groupBracketDistanceToNames, groupBracketDistanceToNamesReset },
         { StyleId::groupBracketDistanceToGroupBracket, false, groupBracketDistanceToBrackets, groupBracketDistanceToBracketsReset },
         { StyleId::groupBracketTextOrientation, false, groupBracketOrientation },
@@ -1769,7 +1764,6 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
     case StyleId::angleHangingSlursAwayFromStaff:
     case StyleId::dividerLeftAlignToSystemBarline:
     case StyleId::dividerRightAlignToSystemBarline:
-    case StyleId::groupBracketHangTextIntoMargin:
         return true;
     default:
         return false;
@@ -2099,7 +2093,6 @@ void EditStyle::setValues()
     bool vertical = styleValue(StyleId::groupBracketTextOrientation).value<mu::engraving::Orientation>()
                     == mu::engraving::Orientation::VERTICAL;
     groupBracketHangIntoMargin->setEnabled(vertical && !textBracketRight);
-    groupBracketKeepInMargin->setEnabled(vertical && !textBracketRight);
 }
 
 //---------------------------------------------------------

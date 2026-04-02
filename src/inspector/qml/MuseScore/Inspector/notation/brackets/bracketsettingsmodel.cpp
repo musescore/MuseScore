@@ -46,19 +46,7 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, const muse::modulari
 
 void BracketSettingsModel::createProperties()
 {
-    m_bracketColumnPosition = buildPropertyItem(mu::engraving::Pid::BRACKET_COLUMN, [&](Pid pid, const QVariant val) {
-        if (!areSettingsAvailable()) {
-            return;
-        }
-        BracketItem* b = toBracketItem(m_elementList.front());
-        Staff* staff = b->staff();
-        beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
-        staff->changeBracketColumn(b->column(), val.toInt());
-        staff->score()->setLayoutAll();
-        updateNotation();
-        endCommand();
-    });
-
+    m_bracketColumnPosition = buildPropertyItem(mu::engraving::Pid::BRACKET_COLUMN);
     m_bracketSpanStaves = buildPropertyItem(mu::engraving::Pid::BRACKET_SPAN);
     m_longName = buildPropertyItem(mu::engraving::Pid::STAFF_LONG_NAME);
     m_shortName = buildPropertyItem(mu::engraving::Pid::STAFF_SHORT_NAME);

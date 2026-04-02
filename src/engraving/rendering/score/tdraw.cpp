@@ -1092,9 +1092,6 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         return;
     }
 
-    painter->save();
-    setMask(item, painter);
-
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         if (ldata->braceSymbol == SymId::noSym) {
@@ -1151,6 +1148,13 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
     break;
     case BracketType::GROUP:
     {
+        if (!item->bracketItem()->showBracket() && !item->score()->isShowInvisible()) {
+            return;
+        }
+
+        painter->save();
+        setMask(item, painter);
+
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::groupBracketLineWidth);
         double hookLen = item->style().styleAbsolute(Sid::groupBracketHookLen);
@@ -1159,13 +1163,13 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
         painter->drawLine(LineF(0.0, 0.0, hookLen, 0.0));
         painter->drawLine(LineF(0.0, h, hookLen, h));
+
+        painter->restore();
     }
     break;
     case BracketType::NO_BRACKET:
         break;
     }
-
-    painter->restore();
 }
 
 void TDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)

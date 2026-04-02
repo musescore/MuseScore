@@ -1482,6 +1482,8 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
 
 void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    BracketItem* bracketItem = item->bracketItem();
+
     double w = conf.styleAbsolute(Sid::groupBracketLineWidth) * 0.5;
     double x = 0.0;
     double y = -w;
@@ -1497,12 +1499,13 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
     if (!item->text()) {
         Text* bracketText = new Text(const_cast<Bracket*>(item), TextStyleType::GROUP_BRACKET);
         bracketText->setParent(const_cast<Bracket*>(item));
+        bracketText->setSelected(item->selected());
         bracketText->setGenerated(true);
         const_cast<Bracket*>(item)->setText(bracketText);
     }
 
     Text* text = item->text();
-    text->setVisible(item->bracketItem()->visible() && item->bracketItem()->showText());
+    text->setVisible(bracketItem->visible() && bracketItem->showText());
     text->setAlign(Align(text->align().horizontal, AlignV::VCENTER));
     text->setPosition(AlignH::HCENTER);
 
@@ -1514,13 +1517,13 @@ void TLayout::layoutGroupBracket(const Bracket* item, Bracket::LayoutData* ldata
     double minHeight = bracketHeight - 6 * textPadding;
 
     if (textOrientation == Orientation::HORIZONTAL) {
-        text->setXmlText(item->system()->ldata()->useLongNames() ? item->bracketItem()->longName() : item->bracketItem()->shortName());
+        text->setXmlText(item->system()->ldata()->useLongNames() ? bracketItem->longName() : bracketItem->shortName());
         layoutText(text, text->mutldata());
     } else {
-        text->setXmlText(item->bracketItem()->longName());
+        text->setXmlText(bracketItem->longName());
         layoutText(text, text->mutldata());
         if (text->ldata()->bbox().height() > minHeight) {
-            text->setXmlText(item->bracketItem()->shortName());
+            text->setXmlText(bracketItem->shortName());
             layoutText(text, text->mutldata());
         }
     }
