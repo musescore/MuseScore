@@ -22,6 +22,8 @@
 
 #include "mp3encoder.h"
 
+#include <cmath>
+
 #ifdef SYSTEM_LAME
 #  include <lame/lame.h>
 #else
@@ -77,12 +79,13 @@ Mp3Encoder::Mp3Encoder(const SoundTrackFormat& format, io::IODevice& dstDevice)
 
 Mp3Encoder::~Mp3Encoder() noexcept = default;
 
-bool Mp3Encoder::begin(const samples_t totalSamplesNumber)
+bool Mp3Encoder::begin(const samples_t /*totalSamplesNumber*/)
 {
-    m_progress.progress(0, 100);
-
-    //! Note See thirdparty/lame/API
-    m_outputBuffer.resize(totalSamplesNumber);
+    // LAME (lame.h): mp3buf for one encode call — worst case ≈ 1.25 * num_samples_per_channel + 7200 bytes;
+    // flush needs at least 7200. Same buffer is used for encode + lame_encode_flush, hence margin + ceil.
+    const samples_t n = m_format.outputSpec.samplesPerChannel > 0 ? m_format.outputSpec.samplesPerChannel : 4096;
+    const double sz = 7200.0 + 1.25 * static_cast<double>(n) + 7200.0;
+    m_outputBuffer.resize(static_cast<size_t>(std::ceil(sz)) + 512);
 
     if (!m_handler->init()) {
         return false;
@@ -93,24 +96,38 @@ bool Mp3Encoder::begin(const samples_t totalSamplesNumber)
 
 size_t Mp3Encoder::encode(const samples_t samplesPerChannel, const float* input)
 {
-    int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, samplesPerChannel,
-                                                                 m_outputBuffer.data(),
-                                                                 static_cast<int>(m_outputBuffer.size()));
+    if (samplesPerChannel > m_format.outputSpec.samplesPerChannel) {
+        LOGE() << "Chunk size exceeds buffer capacity";
+        return 0;
+    }
 
-    m_progress.progress(50, 100);
-    const size_t result = m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(encodedBytes));
+    const int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, static_cast<int>(samplesPerChannel),
+                                                                       m_outputBuffer.data(),
+                                                                       static_cast<int>(m_outputBuffer.size()));
 
-    return result;
+    if (encodedBytes < 0) {
+        LOGE() << "LAME encoder failed: " << encodedBytes;
+        return 0;
+    }
+
+    if (encodedBytes > 0) {
+        const size_t written = m_dstDevice->write(m_outputBuffer.data(), static_cast<size_t>(encodedBytes));
+        if (written != static_cast<size_t>(encodedBytes)) {
+            return 0;
+        }
+    }
+
+    return samplesPerChannel;
 }
 
 size_t Mp3Encoder::end()
 {
-    int encodedBytes = lame_encode_flush(m_handler->flags,
-                                         m_outputBuffer.data(),
-                                         static_cast<int>(m_outputBuffer.size()));
-    const std::size_t numBytesWritten = m_dstDevice->write(m_outputBuffer.data(), static_cast<std::size_t>(encodedBytes));
+    const int encodedBytes = lame_encode_flush(m_handler->flags,
+                                               m_outputBuffer.data(),
+                                               static_cast<int>(m_outputBuffer.size()));
+    if (encodedBytes > 0) {
+        m_dstDevice->write(m_outputBuffer.data(), static_cast<size_t>(encodedBytes));
+    }
 
-    m_progress.progress(100, 100);
-
-    return numBytesWritten;
+    return 0;
 }
