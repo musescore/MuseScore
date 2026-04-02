@@ -606,9 +606,9 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
                 }
             }
         }
+        size_t tracks = ctx.dom().ntracks();
         if (s->isChordRestType()) {
             bool restFound = false;
-            size_t tracks = ctx.dom().ntracks();
             for (track_idx_t track = 0; track < tracks; ++track) {
                 if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
                     track += VOICES - 1;
@@ -637,6 +637,17 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             // measure is not empty if there is more than one rest
             if (n > 1) {
                 return false;
+            }
+        } else if (s->isBreathType()) {
+            for (track_idx_t track = 0; track < tracks; ++track) {
+                if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
+                    track += VOICES - 1;
+                    continue;
+                }
+                EngravingItem* el = s->element(track);
+                if (el && el->visible()) {
+                    return false;
+                }
             }
         }
     }
