@@ -22,19 +22,29 @@
 
 #include "testing/environment.h"
 
+#include "global/configreader.h"
 #include "workspace/tests/mocks/workspaceconfigurationmock.h"
 
 using namespace ::testing;
 
+static muse::Config s_workspaceConfig;
+
 static muse::testing::SuiteEnvironment workspace_se
     = muse::testing::SuiteEnvironment()
       .setPreInit([](){
-    auto workspaceConfig = std::make_shared<::testing::NiceMock<muse::workspace::WorkspaceConfigurationMock> >();
+    s_workspaceConfig = muse::ConfigReader::read(muse::io::path_t(WORKSPACE_CONFIG_FILE));
 
-    ON_CALL(*workspaceConfig, defaultWorkspaceName())
-    .WillByDefault(Return("Default"));
+    auto workspaceConfigMock = std::make_shared<::testing::NiceMock<muse::workspace::WorkspaceConfigurationMock> >();
 
-    muse::modularity::globalIoc()->registerExport<muse::workspace::IWorkspaceConfiguration>("utests", workspaceConfig);
+    ON_CALL(*workspaceConfigMock, defaultWorkspaceName())
+    .WillByDefault(Return(s_workspaceConfig.value("default_workspace_name").toString()));
+
+    muse::modularity::globalIoc()->registerExport<muse::workspace::IWorkspaceConfiguration>("utests", workspaceConfigMock);
 }).setDeInit([](){
     muse::modularity::globalIoc()->unregister<muse::workspace::IWorkspaceConfiguration>("utests");
 });
+
+const muse::Config& workspaceTestConfig()
+{
+    return s_workspaceConfig;
+}

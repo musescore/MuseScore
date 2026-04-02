@@ -38,6 +38,7 @@ set(MODULE_TEST_INCLUDE
 
 set(MODULE_TEST_DEF
     BUILTIN_WORKSPACES_DIR="${CMAKE_SOURCE_DIR}/share/workspaces"
+    WORKSPACE_CONFIG_FILE="${CMAKE_SOURCE_DIR}/src/app/configs/workspaces.cfg"
 )
 
 include(SetupGTest)
