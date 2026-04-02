@@ -160,6 +160,7 @@ static const std::unordered_set<ElementType> BREAK_TYPES {
     ElementType::FRET_DIAGRAM,
     ElementType::HARP_DIAGRAM,
     ElementType::PLAY_COUNT_TEXT,
+    ElementType::FERMATA,
 };
 
 static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
@@ -528,10 +529,7 @@ void MeasureLayout::cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mm
     // clone elements from underlying measure to mmr
     for (EngravingItem* e : underlyingSeg->annotations()) {
         // look at elements in underlying measure
-        const bool breakType = muse::contains(BREAK_TYPES, e->type());
-        const bool fermata = e->isFermata();
-        const bool visible = e->visible();
-        if ((!breakType && !fermata) || !visible) {
+        if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
             continue;
         }
         // try to find a match in mmr
@@ -554,9 +552,7 @@ void MeasureLayout::cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mm
     // this should not happen since the elements are linked?
     const auto annotations = mmrSeg->annotations();     // make a copy since we alter the list
     for (EngravingItem* e : annotations) {     // look at elements in mmr
-        const bool breakType = muse::contains(BREAK_TYPES, e->type());
-        const bool fermata = e->isFermata();
-        if (!breakType && !fermata) {
+        if (!muse::contains(BREAK_TYPES, e->type())) {
             continue;
         }
         // try to find a match in underlying measure
@@ -600,8 +596,8 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
                 continue;
             }
             if (muse::contains(BREAK_TYPES, e->type()) && !s->rtick().isZero()) {
-                // play count text is permitted at the end of a measure
-                if (!e->isPlayCountText()) {
+                // play count text and fermatas are permitted at the end of a measure
+                if (!e->isPlayCountText() && !e->isFermata()) {
                     return false;
                 }
             }
