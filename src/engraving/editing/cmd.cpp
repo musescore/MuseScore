@@ -4249,6 +4249,10 @@ void Score::cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)
 {
     insert = insert || inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+    const Drumset* ds = inputState().drumset();
+    // Current drum note maps to a valid drumset line
+    const bool hasValidDrumLine = ds && ds->isValid(m_is.drumNote());
+
     Position pos;
     if (addFlag) {
         EngravingItem* el = selection().element();
@@ -4259,7 +4263,12 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             pos.segment   = seg;
             pos.staffIdx  = chord->vStaffIdx();
             ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
-            pos.line      = relStep(step, clef);
+            if (hasValidDrumLine) {
+                // For percussion, prefer the mapped drumset line
+                pos.line = ds->line(m_is.drumNote());
+            } else {
+                pos.line = relStep(step, clef);
+            }
             bool error;
             NoteVal nval = noteValForPosition(pos, m_is.accidentalType(), error);
             if (error) {
@@ -4283,7 +4292,12 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
     pos.segment   = inputState().segment();
     pos.staffIdx  = inputState().track() / VOICES;
     ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
-    pos.line      = relStep(step, clef);
+    if (hasValidDrumLine) {
+        // For percussion, prefer the mapped drumset line
+        pos.line = ds->line(m_is.drumNote());
+    } else {
+        pos.line = relStep(step, clef);
+    }
     pos.beyondScore = inputState().beyondScore();
 
     if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {

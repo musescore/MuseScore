@@ -98,6 +98,9 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             const int defaultPitch = ds->defaultPitchForLine(line);
             if (ds->isValid(defaultPitch)) {
                 nval.pitch = defaultPitch;
+            } else {
+                // No drum is mapped to this line - reject note entry
+                nval.pitch = -1;
             }
         }
         if (nval.pitch < 0) {
