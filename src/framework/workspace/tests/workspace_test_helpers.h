@@ -21,6 +21,29 @@
  */
 #pragma once
 
-#include "global/types/config.h"
+#include <string>
+#include <vector>
 
-const muse::Config& workspaceTestConfig();
+#include "global/types/config.h"
+#include "io/path.h"
+
+namespace muse::workspace {
+class WorkspaceTestConfig
+{
+public:
+    static WorkspaceTestConfig& instance();
+
+    void load(const io::path_t& configPath, const std::string& builtinWorkspacesDir);
+
+    const Config& config() const;
+    const std::string& defaultWorkspaceName() const;
+    const std::vector<std::string>& builtinFiles() const;
+    const std::string& builtinWorkspacesDir() const;
+
+private:
+    Config m_config;
+    std::string m_defaultWorkspaceName;
+    std::vector<std::string> m_builtinFiles;
+    std::string m_builtinWorkspacesDir;
+};
+}

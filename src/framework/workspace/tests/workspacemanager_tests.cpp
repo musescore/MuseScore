@@ -37,42 +37,38 @@ using ::testing::Return;
 using namespace muse;
 using namespace muse::workspace;
 
-static const std::string BUILTIN_WORKSPACE_DIR = BUILTIN_WORKSPACES_DIR;
-
 TEST(Workspace_ConfigTests, ConfigIsValid)
 {
-    const Config& cfg = workspaceTestConfig();
+    const auto& testCfg = WorkspaceTestConfig::instance();
 
     //! [THEN] default_workspace_name is a non-empty string
-    std::string defaultName = cfg.value("default_workspace_name").toString();
-    EXPECT_FALSE(defaultName.empty());
+    EXPECT_FALSE(testCfg.defaultWorkspaceName().empty());
 
     //! [THEN] builtin_workspace_files is a non-empty list
-    ValList builtinFiles = cfg.value("builtin_workspace_files").toList();
-    EXPECT_FALSE(builtinFiles.empty());
+    EXPECT_FALSE(testCfg.builtinFiles().empty());
 
     //! [THEN] Each builtin file exists on disk
     bool defaultFoundInBuiltins = false;
-    for (const Val& v : builtinFiles) {
-        std::string filename = v.toString();
-        io::path_t fullPath = io::path_t(BUILTIN_WORKSPACE_DIR + "/" + filename);
+    for (const auto& filename : testCfg.builtinFiles()) {
+        io::path_t fullPath = io::path_t(testCfg.builtinWorkspacesDir() + "/" + filename);
         EXPECT_TRUE(io::FileInfo::exists(fullPath)) << "missing: " << fullPath.toStdString();
 
         //! [THEN] Check if the default workspace matches a builtin file (without .mws)
         std::string baseName = io::completeBasename(fullPath).toStdString();
-        if (baseName == defaultName) {
+        if (baseName == testCfg.defaultWorkspaceName()) {
             defaultFoundInBuiltins = true;
         }
     }
 
-    EXPECT_TRUE(defaultFoundInBuiltins) << "default workspace \"" << defaultName << "\" not found in builtin files";
+    EXPECT_TRUE(defaultFoundInBuiltins)
+        << "default workspace \"" << testCfg.defaultWorkspaceName() << "\" not found in builtin files";
 }
 
 //! If this test fails, a new field was added to workspaces.cfg.
 //! Please add validation for it in ConfigIsValid above, then update EXPECTED_KEYS.
 TEST(Workspace_ConfigTests, NoUntestedConfigKeys)
 {
-    const Config& cfg = workspaceTestConfig();
+    const Config& cfg = WorkspaceTestConfig::instance().config();
 
     const std::set<std::string> EXPECTED_KEYS = {
         "default_workspace_name",
@@ -94,13 +90,10 @@ class Workspace_WorkspaceManagerTests : public ::testing::Test
 public:
     void SetUp() override
     {
-        const Config& cfg = workspaceTestConfig();
-        m_defaultWorkspaceName = cfg.value("default_workspace_name").toString();
-
-        ValList builtinFiles = cfg.value("builtin_workspace_files").toList();
-        for (const Val& v : builtinFiles) {
-            m_builtinFiles.push_back(v.toString());
-        }
+        const auto& testCfg = WorkspaceTestConfig::instance();
+        m_defaultWorkspaceName = testCfg.defaultWorkspaceName();
+        m_builtinFiles = testCfg.builtinFiles();
+        m_builtinWorkspacesDir = testCfg.builtinWorkspacesDir();
 
         m_userWorkspacesDir = std::make_unique<QTemporaryDir>();
         ASSERT_TRUE(m_userWorkspacesDir->isValid());
@@ -128,7 +121,7 @@ public:
     {
         io::paths_t paths;
         for (const auto& name : filenames) {
-            paths.push_back(io::path_t(BUILTIN_WORKSPACE_DIR + "/" + name));
+            paths.push_back(io::path_t(m_builtinWorkspacesDir + "/" + name));
         }
 
         ON_CALL(*m_workspaceConfig, builtinWorkspacesFilePaths())
@@ -147,6 +140,7 @@ public:
 protected:
     std::string m_defaultWorkspaceName;
     std::vector<std::string> m_builtinFiles;
+    std::string m_builtinWorkspacesDir;
 
     std::unique_ptr<QTemporaryDir> m_userWorkspacesDir;
     std::string m_userWorkspacesPath;
