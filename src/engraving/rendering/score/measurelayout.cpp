@@ -714,9 +714,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     }
 
     // break for marker & jump in previous measure
-    Measure* pm = m->prevMeasure();
-    if (pm) {
-        for (EngravingItem* e : pm->el()) {
+    if (prevMeas) {
+        for (EngravingItem* e : prevMeas->el()) {
             if (e->isJump()) {
                 return true;
             } else if (e->isMarker()) {
@@ -788,8 +787,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
             }
         }
     }
-    if (pm) {
-        Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
+    if (prevMeas) {
+        Segment* s = prevMeas->findSegmentR(SegmentType::EndBarLine, prevMeas->ticks());
         if (s) {
             for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
@@ -818,17 +817,17 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
             return false;
         };
 
-        if (Segment* clefSeg = pm->findSegment(SegmentType::Clef, m->tick())) {
+        if (Segment* clefSeg = prevMeas->findSegment(SegmentType::Clef, m->tick())) {
             if (hasVisibleElement(clefSeg)) {
                 return true;
             }
         }
-        if (Segment* tsSeg = pm->findSegment(SegmentType::TimeSigType, m->tick())) {
+        if (Segment* tsSeg = prevMeas->findSegment(SegmentType::TimeSigType, m->tick())) {
             if (hasVisibleElement(tsSeg)) {
                 return true;
             }
         }
-        if (Segment* ksSeg = pm->findSegment(SegmentType::KeySigType, m->tick())) {
+        if (Segment* ksSeg = prevMeas->findSegment(SegmentType::KeySigType, m->tick())) {
             if (hasVisibleElement(ksSeg)) {
                 return true;
             }
