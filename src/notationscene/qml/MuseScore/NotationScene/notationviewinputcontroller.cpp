@@ -682,6 +682,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
+        if (hitStaffIndex == muse::nidx) {
+            // Prevent note input actions when click does not hit a valid staff
+            return;
+        }
         handleClickInNoteInputMode(event);
         return;
     }
@@ -757,11 +761,6 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
         m_ignoreNextMouseContextMenuEvent = true;
         dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
     } else {
-        const ShadowNote* shadowNote = viewInteraction()->shadowNote();
-        if (!shadowNote || !shadowNote->visible()) {
-            // Prevent entering notes by clicking outside the staff when no shadow note is shown
-            return;
-        }
         const Qt::KeyboardModifiers keyState = event->modifiers();
         const bool replace = keyState & Qt::ShiftModifier;
         const bool insert = keyState & Qt::ControlModifier;

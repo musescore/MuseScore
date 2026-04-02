@@ -29,7 +29,6 @@
 #include "notation/tests/mocks/notationselectionrangemock.h"
 #include "playback/tests/mocks/playbackcontrollermock.h"
 
-#include "engraving/dom/shadownote.h"
 #include "engraving/tests/utils/scorerw.h"
 
 #include "notationscene/qml/MuseScore/NotationScene/notationviewinputcontroller.h"
@@ -951,66 +950,99 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
 }
 
 /**
- * @brief Mouse_Press_Note_Input_Mode_Shadow_Note_Invisible
- * @details In note input mode, left click should not dispatch put-note when shadow note is not visible
+ * @brief Mouse_Press_Note_Input_Mode_Left_Click_No_Hit_Staff
+ * @details The user left-clicks in note input mode, but does not hit a staff.
+ *          No put-note action should be dispatched.
  */
-TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Shadow_Note_Invisible)
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Left_Click_No_Hit_Staff)
 {
-    //! [GIVEN] There is a test score
-    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
-
     //! [GIVEN] Note input mode is active
-    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
-    .Times(2)
-    .WillRepeatedly(Return(PointF(100, 100)));
-
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(true));
 
-    //! [GIVEN] Shadow note exists but is not visible
-    engraving::ShadowNote* shadowNote = score->shadowNote();
-    shadowNote->setVisible(false);
-    EXPECT_CALL(*m_interaction, shadowNote())
-    .WillOnce(Return(shadowNote));
+    //! [GIVEN] No staff is hit (hitStaff returns nullptr)
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(nullptr));
 
-    //! [THEN] No note insertion action should be dispatched
-    EXPECT_CALL(*m_dispatcher, dispatch(_, _))
-    .Times(0);
+    //! [THEN] Should not dispatch any put-note action
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _)).Times(0);
 
-    //! [WHEN] User left-clicks in note input mode
+    //! [WHEN] User left-clicks in note input mode but does not hit a staff
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
 }
 
 /**
- * @brief Mouse_Press_Note_Input_Mode_Shadow_Note_Visible
- * @details In note input mode, left click should dispatch put-note when shadow note is visible
+ * @brief Mouse_Press_Note_Input_Mode_Left_Click_With_Hit_Staff
+ * @details The user left-clicks in note input mode and hits a staff.
+ *          The put-note action should be dispatched.
  */
-TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Shadow_Note_Visible)
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Left_Click_With_Hit_Staff)
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
-    //! [GIVEN] Note input mode is active
-    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
-    .Times(2)
-    .WillRepeatedly(Return(PointF(100, 100)));
+    //! [GIVEN] User clicks on a valid staff
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, true });
 
+    //! [GIVEN] Note input mode is active
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillOnce(Return(true));
 
-    //! [GIVEN] Shadow note is visible
-    engraving::ShadowNote* shadowNote = score->shadowNote();
-    shadowNote->setVisible(true);
-    EXPECT_CALL(*m_interaction, shadowNote())
-    .WillOnce(Return(shadowNote));
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.staff));
 
-    //! [THEN] put-note should be dispatched exactly once
-    EXPECT_CALL(*m_dispatcher, dispatch(_, _))
-    .Times(1)
-    .WillOnce([](const muse::actions::ActionCode& actionCode, const muse::actions::ActionData&) {
-        EXPECT_EQ(actionCode, muse::actions::ActionCode("put-note"));
-    });
+    //! [THEN] Should call dispatcher for "put-note"
+    EXPECT_CALL(*m_dispatcher, dispatch("put-note", _)).Times(1);
 
-    //! [WHEN] User left-clicks in note input mode
+    //! [WHEN] User left-clicks in note input mode and hits a staff
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Right_Click_No_Hit_Staff
+ * @details The user right-clicks in note input mode, but does not hit a staff.
+ *          No remove-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Right_Click_No_Hit_Staff)
+{
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    //! [GIVEN] No staff is hit (hitStaff returns nullptr)
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(nullptr));
+
+    //! [THEN] Should not dispatch any action
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _)).Times(0);
+
+    //! [WHEN] User right-clicks in note input mode but does not hit a staff
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Right_Click_With_Hit_Staff
+ * @details The user right-clicks in note input mode and hits a staff.
+ *          The remove-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Right_Click_With_Hit_Staff)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] User right-clicks on a valid staff
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, true });
+
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.staff));
+
+    //! [THEN] Should call dispatcher for "remove-note"
+    EXPECT_CALL(*m_dispatcher, dispatch("remove-note", _)).Times(1);
+
+    //! [WHEN] User right-clicks in note input mode and hits a staff
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }
