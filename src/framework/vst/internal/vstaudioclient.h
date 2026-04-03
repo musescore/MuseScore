@@ -90,6 +90,7 @@ private:
     std::unordered_map<PluginParamId, PluginParamInfo> m_pluginParamInfoMap;
 
     bool m_needUnprepareProcessData = false;
+    bool m_needUpdateState = false;
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::OutputSpec m_outputSpec;
