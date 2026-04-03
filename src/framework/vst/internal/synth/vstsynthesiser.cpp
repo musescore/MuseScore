@@ -167,8 +167,8 @@ void VstSynthesiser::setIsActive(const bool isActive)
 
     m_sequencer.setActive(isActive);
     toggleVolumeGain(isActive);
-    m_vstAudioClient->setIsActive(isActive);
     m_vstAudioClient->setIsPlaying(isActive);
+    m_vstAudioClient->setIsActive(isActive);
 }
 
 muse::audio::msecs_t VstSynthesiser::playbackPosition() const

@@ -95,13 +95,21 @@ void VstAudioClient::setIsActive(const bool isActive)
     }
 }
 
-void VstAudioClient::setIsPlaying(const bool isPlaying)
+void VstAudioClient::setIsPlaying(const bool newPlaying)
 {
-    if (isPlaying) {
-        m_processContext.state |= static_cast<uint32_t>(VstProcessContext::kPlaying);
-    } else {
-        m_processContext.state &= ~static_cast<uint32_t>(VstProcessContext::kPlaying);
+    constexpr uint32_t playingFlag = static_cast<uint32_t>(VstProcessContext::kPlaying);
+    const bool playing = (m_processContext.state & playingFlag) != 0;
+    if (playing == newPlaying) {
+        return;
     }
+
+    if (newPlaying) {
+        m_processContext.state |= playingFlag;
+    } else {
+        m_processContext.state &= ~playingFlag;
+    }
+
+    m_needUpdateState = true;
 }
 
 void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
@@ -243,6 +251,8 @@ audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChan
     if (processor->process(m_processData) != Steinberg::kResultOk) {
         return 0;
     }
+
+    m_needUpdateState = false;
 
     if (m_type == AudioPluginType::Instrument) {
         m_eventList.clear();
@@ -496,6 +506,11 @@ void VstAudioClient::disableActivity()
     PluginComponentPtr component = pluginComponent();
     if (!component) {
         return;
+    }
+
+    if (m_needUpdateState) {
+        processor->process(m_processData);
+        m_needUpdateState = false;
     }
 
     processor->setProcessing(false);
