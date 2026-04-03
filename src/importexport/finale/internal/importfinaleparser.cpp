@@ -179,25 +179,26 @@ void FinaleParser::parse()
 
 Image* FinaleParser::getImageFromShape(const Cmper& shapeId)
 {
+    using Svg = musx::util::SvgConvert;
     Image* registeredImage = muse::value(m_registeredShapes, shapeId, nullptr);
     if (!registeredImage) {
         const auto shape = m_doc->getOthers()->get<others::ShapeDef>(m_currentMusxPartId, shapeId);
         const std::string shapeSvgData
-            = musx::util::SvgConvert::toSvg(*shape, [this](const FontInfo& font,
-                                                           std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
+            = Svg::toSvg(*shape,  1.0 / EVPU_PER_SPACE, Svg::SvgUnit::None, // use spatium units in shape
+                         [](const FontInfo& font, std::u32string_view text) -> std::optional<Svg::GlyphMetrics> {
             if (text.empty()) {
                 return std::nullopt;
             }
 
-            muse::draw::FontMetrics fm(FontTracker(std::make_shared<musx::dom::FontInfo>(font),
-                                                   score()->style().defaultSpatium()).toFontMetrics());
-            const char32_t& codePoint = text.front();
+            muse::draw::FontMetrics fm(FontTracker(std::make_shared<musx::dom::FontInfo>(font)).toFontMetrics());
+            const String strText = String::fromUcs4(text.data(), text.size());
 
             // Scaled as EvpuFloat
-            musx::util::SvgConvert::GlyphMetrics result;
-            result.advance = fm.horizontalAdvance(codePoint) * engraving::DPI / EVPU_PER_INCH;
-            result.ascent = fm.tightBoundingRect(codePoint).top() * engraving::DPI / EVPU_PER_INCH;
-            result.descent = fm.tightBoundingRect(codePoint).bottom() * engraving::DPI / EVPU_PER_INCH;
+            Svg::GlyphMetrics result;
+            result.advance = fm.horizontalAdvance(strText) * EVPU_PER_INCH / engraving::DPI;
+            RectF br = fm.boundingRect(strText); /// @note not tightBoundingRect -- RGP
+            result.ascent = -br.top() * EVPU_PER_INCH / engraving::DPI;
+            result.descent = br.bottom() * EVPU_PER_INCH / engraving::DPI;
             return result;
         });
 
@@ -207,8 +208,9 @@ Image* FinaleParser::getImageFromShape(const Cmper& shapeId)
 
         ByteArray ba(shapeSvgData.c_str(), shapeSvgData.size());
         registeredImage = new Image(score()->dummy());
-        // registeredImage->setImageType(ImageType::SVG);
         registeredImage->loadFromData(std::to_string(shapeId) + ".svg", ba);
+        registeredImage->init(); // required so that `imageSize()` can work
+        registeredImage->setSize(registeredImage->imageSize());
         m_registeredShapes.emplace(shapeId, registeredImage);
     }
     IF_ASSERT_FAILED(registeredImage) {
