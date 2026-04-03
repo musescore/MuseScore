@@ -983,6 +983,9 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
 
     const Bracket::LayoutData* ldata = item->ldata();
 
+    painter->save();
+    setMask(item, painter);
+
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         double h = ldata->bracketHeight;
@@ -1010,7 +1013,8 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
         item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
         double bracketWidth = ldata->bracketWidth - lineW / 2;
@@ -1030,9 +1034,23 @@ void SingleDraw::draw(const Bracket* item, Painter* painter, const PaintOptions&
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
+    case BracketType::GROUP:
+    {
+        double h = ldata->bracketHeight;
+        double lineW = item->style().styleAbsolute(Sid::staffLineWidth);
+        double bracketWidth = ldata->bracketWidth;
+        Pen pen(item->curColor(opt), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
+        painter->drawLine(LineF(0.0, 0.0, bracketWidth, 0.0));
+        painter->drawLine(LineF(0.0, h, bracketWidth, h));
+    }
+    break;
     case BracketType::NO_BRACKET:
         break;
     }
+
+    painter->restore();
 }
 
 void SingleDraw::draw(const Breath* item, Painter* painter, const PaintOptions& opt)
@@ -1530,6 +1548,9 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
 {
     TRACE_DRAW_ITEM;
 
+    painter->save();
+    painter->rotate(item->textAngle());
+
     const TextBase::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
@@ -1557,6 +1578,8 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
     for (const TextBlock& t : ldata->blocks) {
         draw(t, item, painter);
     }
+
+    painter->restore();
 }
 
 void SingleDraw::draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter)
@@ -2515,4 +2538,18 @@ void SingleDraw::draw(const WhammyBarSegment* item, Painter* painter, const Pain
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
+}
+
+void SingleDraw::setMask(const EngravingItem* item, Painter* painter)
+{
+    const EngravingItem::LayoutData* ldata = item->ldata();
+
+    const Shape& mask = ldata->mask();
+    if (mask.empty()) {
+        return;
+    }
+
+    RectF background = ldata->bbox().padded(item->spatium());
+
+    painter->setMask(background, mask.toRects());
 }

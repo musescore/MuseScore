@@ -368,5 +368,7 @@ private:
     static muse::String lineBreakToTag(const String& str);
     static void writeProperties(const StaffLabel& item, XmlWriter& xml);
     static void writeProperties(const InstrumentLabel& item, XmlWriter& xml);
+
+    static void write(const BracketItem* item, XmlWriter& xml);
 };
 }

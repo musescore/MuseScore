@@ -284,6 +284,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/instrumentNamesImages/short-left-right.png
         styledialog/instrumentNamesImages/stack-horizontally.png
         styledialog/instrumentNamesImages/stack-vertically.png
+        styledialog/instrumentNamesImages/groupBracket-align-include.png
+        styledialog/instrumentNamesImages/groupBracket-align-exclude.png
         styledialog/timeSigImages/timesig-above_staves.png
         styledialog/timeSigImages/timesig-across_staves.png
         styledialog/timeSigImages/timesig-courtesy-hang.png

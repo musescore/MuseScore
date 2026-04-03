@@ -162,6 +162,24 @@ Shape Shape::padded(double p) const
     return s;
 }
 
+mu::engraving::Shape& mu::engraving::Shape::transform(const muse::draw::Transform& t)
+{
+    for (ShapeElement& el : m_elements) {
+        bool ignoreForLayout = el.ignoreForLayout();
+        const EngravingItem* item = el.item();
+        RectF rect = t.map(el);
+        el = ShapeElement(rect, item, ignoreForLayout);
+    }
+
+    return *this;
+}
+
+Shape Shape::transformed(const muse::draw::Transform& t)
+{
+    Shape s(*this);
+    return s.transform(t);
+}
+
 void Shape::invalidateBBox()
 {
     m_bbox = RectF();
@@ -361,6 +379,30 @@ double Shape::bottom() const
         }
     }
     return dist;
+}
+
+double Shape::width() const
+{
+    double left = DBL_MAX;
+    double right = -DBL_MAX;
+    for (const RectF& r : m_elements) {
+        left = std::min(left, r.left());
+        right = std::max(right, r.right());
+    }
+
+    return right - left;
+}
+
+double Shape::height() const
+{
+    double top = DBL_MAX;
+    double bottom = -DBL_MAX;
+    for (const RectF& r : m_elements) {
+        top = std::min(top, r.top());
+        bottom = std::max(bottom, r.bottom());
+    }
+
+    return bottom - top;
 }
 
 double Shape::topAtX(double x) const

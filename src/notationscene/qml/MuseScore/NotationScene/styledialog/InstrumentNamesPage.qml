@@ -352,6 +352,44 @@ StyledFlickable {
                         }
                     }
                 }
+
+                ColumnLayout {
+                    width: parent.width
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Alignment of names and group brackets")
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        StyledImage {
+                            Layout.alignment: Qt.AlignTop
+                            forceHeight: 145
+                            source: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value === true ? "instrumentNamesImages/groupBracket-align-include.png" : "instrumentNamesImages/groupBracket-align-exclude.png"
+                        }
+
+                        ColumnLayout {
+                            spacing : 8
+                            Layout.alignment: Qt.AlignTop
+
+                            Repeater {
+                                model: [
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Include brackets"), value: true },
+                                    { text: qsTrc("notation/editstyle/instrumentnames", "Exclude brackets"), value: false },
+                                ]
+
+                                RoundedRadioButton {
+                                    required property var modelData
+                                    text: modelData.text
+                                    checked: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value === modelData.value
+                                    onClicked: instrumentNamesModel.instrumentNamesAlignIncludeGroupBrackets.value = modelData.value
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

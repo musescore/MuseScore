@@ -58,6 +58,7 @@ class VBox;
 class FBox;
 class TBox;
 class Bracket;
+class BracketItem;
 class Breath;
 
 class Chord;
@@ -416,5 +417,7 @@ private:
 
     static bool readProperties(StaffLabel& item, XmlReader& xml);
     static bool readProperties(InstrumentLabel& item, XmlReader& xml);
+
+    static void read(BracketItem* b, XmlReader& xml, ReadContext& ctx);
 };
 }

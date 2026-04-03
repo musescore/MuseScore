@@ -46,6 +46,7 @@ static bool styleIsSelectable(TextStyleType style)
     case TextStyleType::FOOTER:
     case TextStyleType::COPYRIGHT:
     case TextStyleType::PAGE_NUMBER:
+    case TextStyleType::GROUP_BRACKET:
         return false;
     default: break;
     }
@@ -125,7 +126,7 @@ bool mu::engraving::Text::collectForDrawing() const
 
 bool Text::positionRelativeToNoteheadRest() const
 {
-    if (parent()->isBox() || parent()->isTuplet() || parent()->isSpannerSegment()) {
+    if (parent()->isBox() || parent()->isTuplet() || parent()->isSpannerSegment() || parent()->isBracket()) {
         return false;
     }
 

@@ -34,10 +34,15 @@ class BracketSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * bracketColumnPosition READ bracketColumnPosition CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * bracketSpanStaves READ bracketSpanStaves CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * longName READ longName CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * shortName READ shortName CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showText READ showText CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * showBracket READ showBracket CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY selectionChanged)
     Q_PROPERTY(int maxBracketColumnPosition READ maxBracketColumnPosition NOTIFY maxBracketColumnPositionChanged)
     Q_PROPERTY(int maxBracketSpanStaves READ maxBracketSpanStaves NOTIFY selectionChanged)
+    Q_PROPERTY(bool isGroupBracket READ isGroupBracket NOTIFY isGroupBracketChanged)
 
 public:
 
@@ -51,6 +56,12 @@ public:
     PropertyItem* bracketColumnPosition() const;
     PropertyItem* bracketSpanStaves() const;
 
+    bool isGroupBracket() const;
+    PropertyItem* longName() const;
+    PropertyItem* shortName() const;
+    PropertyItem* showText() const;
+    PropertyItem* showBracket() const;
+
     bool areSettingsAvailable() const;
     int maxBracketColumnPosition() const;
     int maxBracketSpanStaves() const;
@@ -58,14 +69,22 @@ public:
 signals:
     void selectionChanged();
     void maxBracketColumnPositionChanged();
+    void isGroupBracketChanged(bool isGroupBracket);
 
 private:
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+    void updateIsGroupBracket();
 
     PropertyItem* m_bracketColumnPosition = nullptr;
     PropertyItem* m_bracketSpanStaves = nullptr;
+
+    bool m_isGroupBracket = false;
+    PropertyItem* m_longName = nullptr;
+    PropertyItem* m_shortName = nullptr;
+    PropertyItem* m_showText = nullptr;
+    PropertyItem* m_showBracket = nullptr;
 };
 }

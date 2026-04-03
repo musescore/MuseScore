@@ -55,7 +55,9 @@ double SystemHeaderLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 if (b != nullptr) {
                     b->mutldata()->bracketHeight.set_value(3.5 * b->spatium() * 2); // dummy
                     TLayout::layoutBracket(b, b->mutldata(), ctx.conf());
-                    bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
+                    if (bi->bracketType() != BracketType::GROUP) { // Because Group brackets always stay outside
+                        bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
+                    }
                 }
             }
         }
@@ -192,9 +194,9 @@ void SystemHeaderLayout::addBrackets(System* system, Measure* measure, LayoutCon
     //---------------------------------------------------
     //  layout brackets
     //---------------------------------------------------
-    SystemLayout::layoutBracketsVertical(system, ctx);
+    layoutBracketsVertical(system, ctx);
 
-    system->setBracketsXPosition(measure->x());
+    setBracketsXPosition(system, measure->x());
 
     muse::join(system->brackets(), bl);
 }
@@ -217,7 +219,7 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         const Staff* staff = ctx.dom().staff(staffIdx);
         for (auto bi : staff->brackets()) {
-            if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible()) {
+            if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible() || bi->bracketType() == BracketType::GROUP) {
                 continue;
             }
 
@@ -268,6 +270,66 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
     return totalBracketsWidth;
 }
 
+void SystemHeaderLayout::setBracketsXPosition(System* system, double xPosition)
+{
+    std::vector<Bracket*> brackets = system->brackets();
+    for (Bracket* b1 : brackets) {
+        BracketType bracketType = b1->bracketType();
+        // For brackets that are drawn, we must correct for half line width
+        double lineWidthCorrection = 0.0;
+        if (bracketType == BracketType::NORMAL || bracketType == BracketType::LINE) {
+            lineWidthCorrection = system->style().styleAbsolute(Sid::bracketWidth) / 2;
+        }
+        // Compute offset cause by other stacked brackets
+        double xOffset = 0;
+        for (const Bracket* b2 : brackets) {
+            if (!b2->bracketItem()->visible() || b2->bracketType() == BracketType::GROUP) {
+                continue;
+            }
+            if (b1->column() > b2->column() && b1->intersects(b2)) {
+                xOffset += b2->ldata()->bracketWidth();
+            }
+        }
+        // Set position
+        double x = xPosition - xOffset - b1->ldata()->bracketWidth() + lineWidthCorrection;
+        b1->mutldata()->setPosX(x);
+    }
+}
+
+void SystemHeaderLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
+{
+    for (Bracket* b : system->brackets()) {
+        int staffIdx1 = static_cast<int>(b->firstStaff());
+        int staffIdx2 = static_cast<int>(b->lastStaff());
+        double sy = 0;                           // assume bracket not visible
+        double ey = 0;
+        // if start staff not visible, try next staff
+        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx1)->show()) {
+            ++staffIdx1;
+        }
+        // if end staff not visible, try prev staff
+        while (staffIdx1 <= staffIdx2 && !system->staves().at(staffIdx2)->show()) {
+            --staffIdx2;
+        }
+        // if the score doesn't have "alwaysShowBracketsWhenEmptyStavesAreHidden" as true,
+        // the bracket will be shown IF:
+        // it spans at least 2 visible staves (staffIdx1 < staffIdx2) OR
+        // it spans just one visible staff (staffIdx1 == staffIdx2) but it is required to do so
+        // (the second case happens at least when the bracket is initially dropped)
+        bool notHidden = ctx.conf().styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden)
+                         ? (staffIdx1 <= staffIdx2) : (staffIdx1 < staffIdx2) || (b->span() == 1 && staffIdx1 == staffIdx2);
+        if (notHidden) {                        // set vert. pos. and height to visible spanned staves
+            sy = system->staves().at(staffIdx1)->bbox().top();
+            ey = system->staves().at(staffIdx2)->bbox().bottom();
+        }
+
+        Bracket::LayoutData* bldata = b->mutldata();
+        bldata->setPosY(sy);
+        bldata->bracketHeight = ey - sy;
+        TLayout::layoutBracket(b, bldata, ctx.conf());
+    }
+}
+
 bool SystemHeaderLayout::stackLabelsVertically(System* system)
 {
     const MStyle& style = system->style();
@@ -306,8 +368,97 @@ void SystemHeaderLayout::computeInstrumentNameOffset(System* system, LayoutConte
     system->mutldata()->setInstrumentNameOffset(instrumentNameOffset);
 }
 
+void SystemHeaderLayout::computeGroupBracketsWidths(System* system, LayoutContext& ctx)
+{
+    System::LayoutData* ldata = system->mutldata();
+    ldata->clearGroupBracketsWidth();
+
+    std::vector<Bracket*> groupBrackets;
+    for (Bracket* bracket : system->brackets()) {
+        if (bracket->bracketType() == BracketType::GROUP) {
+            groupBrackets.push_back(bracket);
+        }
+    }
+
+    if (groupBrackets.empty()) {
+        return;
+    }
+
+    std::sort(groupBrackets.begin(), groupBrackets.end(), [](Bracket* b1, Bracket* b2) { return b1->column() < b2->column(); });
+
+    bool hangIntoMargin = ctx.conf().styleB(Sid::groupBracketHangTextIntoMargin)
+                          && ctx.conf().styleV(Sid::groupBracketTextOrientation).value<Orientation>() == Orientation::VERTICAL;
+    double bracketDistToNames = ctx.conf().styleAbsolute(Sid::groupBracketDistanceToNames);
+
+    for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
+        Bracket* firstBracketOnThisStaff = nullptr;
+        for (Bracket* b : groupBrackets) {
+            if (b->contains(staffIdx)) {
+                firstBracketOnThisStaff = b;
+                break;
+            }
+        }
+
+        if (!firstBracketOnThisStaff) {
+            continue;
+        }
+
+        std::vector<Bracket*> stack;
+        double bracketWidth = 0.0;
+        computeStackedBracketsWidth(firstBracketOnThisStaff, groupBrackets, bracketWidth, stack);
+        if (hangIntoMargin) {
+            bracketWidth += stack.back()->ldata()->bbox().left();
+        }
+
+        ldata->setGroupBracketsWidthAtStaffIdx(staffIdx, bracketWidth + bracketDistToNames);
+    }
+
+    if (!ctx.conf().styleB(Sid::instrumentNamesAlignIncludeGroupBrackets)) {
+        double maxGroupBracketWidth = 0.0;
+        for (const auto& pair : ldata->groupBracketsWidth()) {
+            maxGroupBracketWidth = std::max(maxGroupBracketWidth, pair.second);
+        }
+        for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
+            ldata->setGroupBracketsWidthAtStaffIdx(staffIdx, maxGroupBracketWidth);
+        }
+    }
+}
+
+void SystemHeaderLayout::computeStackedBracketsWidth(Bracket* first, const std::vector<Bracket*>& allGroupBracketsOrderedByColumn,
+                                                     double& width, std::vector<Bracket*>& stack)
+{
+    stack.push_back(first);
+
+    width += first->ldata()->bbox().width();
+    double bracketDist = first->style().styleAbsolute(Sid::groupBracketDistanceToGroupBracket);
+
+    for (Bracket* b2 : allGroupBracketsOrderedByColumn) {
+        if (muse::contains(stack, b2)) {
+            continue;
+        }
+        if (b2->column() > first->column() && b2->intersects(first)) {
+            stack.push_back(b2);
+            computeStackedBracketsWidth(b2, allGroupBracketsOrderedByColumn, width, stack);
+            width += bracketDist;
+        }
+    }
+}
+
+double SystemHeaderLayout::nameWidthIncludingGroupBrackets(InstrumentName* name, System* system)
+{
+    const System::LayoutData* ldata = system->ldata();
+    double groupBracketsWidth = ldata->groupBracketsWidthAtStaffIdx(name->effectiveStaffIdx());
+    double result = name->width();
+    if (!muse::RealIsNull(groupBracketsWidth)) {
+        result += groupBracketsWidth;
+    }
+    return result;
+}
+
 void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutContext& ctx)
 {
+    computeGroupBracketsWidths(system, ctx);
+
     System::LayoutData* ldata = system->mutldata();
     ldata->setFirstColumnWidth(0.0);
     ldata->setSecondColumnWidth(0.0);
@@ -337,8 +488,8 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
             for (staff_idx_t groupIdx = groupName->staffIdx(); groupIdx < groupName->ldata()->endIdxOfGroup(); ++groupIdx) {
                 partsWithGroupNames.insert(ctx.dom().staff(groupIdx)->part());
             }
-            ldata->setSecondColumnWidth(std::max(ldata->secondColumnWidth(), groupName->width()));
-            ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), groupName->width()));
+            ldata->setSecondColumnWidth(std::max(ldata->secondColumnWidth(), nameWidthIncludingGroupBrackets(groupName, system)));
+            ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), nameWidthIncludingGroupBrackets(groupName, system)));
         }
 
         if (!staff->show()) {
@@ -358,7 +509,7 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
             name->mutldata()->setColumn(0);
             partsWithIndividualStaffNames.insert(ctx.dom().staff(staffIdx)->part());
             ldata->setFirstColumnWidth(std::max(ldata->firstColumnWidth(), name->width()));
-            ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), name->width()));
+            ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), nameWidthIncludingGroupBrackets(name, system)));
         }
     }
 
@@ -386,14 +537,14 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         instrName->mutldata()->setIsSkipDraw(false);
 
         instrumentNames.push_back(instrName);
-        ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), instrName->width()));
+        ldata->setTotalNamesWidth(std::max(ldata->totalNamesWidth(), nameWidthIncludingGroupBrackets(instrName, system)));
 
         if (partsWithGroupNames.count(part)) {
             instrName->mutldata()->setColumn(0);
             ldata->setFirstColumnWidth(std::max(ldata->firstColumnWidth(), instrName->width()));
         } else {
             instrName->mutldata()->setColumn(1);
-            ldata->setSecondColumnWidth(std::max(ldata->secondColumnWidth(), instrName->width()));
+            ldata->setSecondColumnWidth(std::max(ldata->secondColumnWidth(), nameWidthIncludingGroupBrackets(instrName, system)));
         }
     }
 
@@ -404,13 +555,13 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
     auto sumWidth = [&](InstrumentName* outerName, InstrumentName* innerName) {
         AlignH staffNameAlign = innerName->position();
         if (staffNameAlign == AlignH::LEFT || staffNameAlign == AlignH::JUSTIFY) {
-            return ldata->firstColumnWidth() + outerName->width() + ldata->instrumentNameOffset();
+            return ldata->firstColumnWidth() + nameWidthIncludingGroupBrackets(outerName, system) + ldata->instrumentNameOffset();
         } else if (staffNameAlign == AlignH::HCENTER) {
-            double sumWidth = innerName->width() + outerName->width() + ldata->instrumentNameOffset();
+            double sumWidth = innerName->width() + nameWidthIncludingGroupBrackets(outerName, system) + ldata->instrumentNameOffset();
             double move = 0.5 * (ldata->firstColumnWidth() - innerName->width());
             return sumWidth + move;
         } else {
-            return innerName->width() + outerName->width() + ldata->instrumentNameOffset();
+            return innerName->width() + ldata->instrumentNameOffset() + nameWidthIncludingGroupBrackets(outerName, system);
         }
     };
 
@@ -527,8 +678,8 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         staffIdx += nstaves;
     }
 
-    for (staff_idx_t staffIdx = 0; staffIdx < system->staves().size(); ++staffIdx) {
-        InstrumentName* groupName = system->staff(staffIdx)->groupName;
+    for (staff_idx_t idx = 0; idx < system->staves().size(); ++idx) {
+        InstrumentName* groupName = system->staff(idx)->groupName;
         if (!groupName || groupName->effectiveStaffIdx() == muse::nidx) {
             continue;
         }
@@ -536,7 +687,7 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         const RectF& bbox = groupName->ldata()->bbox();
         double yCenter = 0.5 * (bbox.bottom() + bbox.top());
 
-        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(staffIdx, groupName->ldata()->endIdxOfGroup());
+        std::vector<Part*> visibleParts = system->visiblePartsOfGroup(idx, groupName->ldata()->endIdxOfGroup());
         size_t visiblePartsCount = visibleParts.size();
         DO_ASSERT(visiblePartsCount > 0);
 
@@ -642,7 +793,8 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
     auto placeFirstColumnName = [&](InstrumentName* name) {
         const RectF& bbox = name->ldata()->bbox();
         if (align == InstrumentNamesAlign::CENTER_CENTER) {
-            name->mutldata()->setPosX(totalNamesWidth * .5 - (bbox.right() + bbox.left()) * .5);
+            double groupBracketsWidth = ldata->groupBracketsWidthAtStaffIdx(name->effectiveStaffIdx());
+            name->mutldata()->setPosX(0.5 * totalNamesWidth - 0.5 * (bbox.right() + bbox.left()) + groupBracketsWidth);
         } else {
             switch (name->position()) {
             case AlignH::JUSTIFY:
@@ -671,19 +823,20 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
 
     auto placeSecondColumnName = [&](InstrumentName* name, staff_idx_t staffIdx) {
         const RectF& bbox = name->ldata()->bbox();
+        double groupBracketsWidth = ldata->groupBracketsWidthAtStaffIdx(name->effectiveStaffIdx());
 
         if (align == InstrumentNamesAlign::LEFT_RIGHT) {
-            name->mutldata()->setPosX(0 - bbox.left());
+            name->mutldata()->setPosX(groupBracketsWidth - bbox.left());
             return;
         }
 
         if (align == InstrumentNamesAlign::CENTER_CENTER) {
-            name->mutldata()->setPosX(0.5 * totalNamesWidth - 0.5 * (bbox.right() + bbox.left()));
+            name->mutldata()->setPosX(0.5 * totalNamesWidth - 0.5 * (bbox.right() + bbox.left()) + 0.5 * groupBracketsWidth);
             return;
         }
 
         if (align == InstrumentNamesAlign::CENTER_RIGHT) {
-            name->mutldata()->setPosX(0.5 * ldata->secondColumnWidth() - 0.5 * (bbox.right() + bbox.left()));
+            name->mutldata()->setPosX(0.5 * ldata->secondColumnWidth() - 0.5 * (bbox.right() + bbox.left()) + 0.5 * groupBracketsWidth);
             return;
         }
 
@@ -755,6 +908,34 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
         InstrumentName* groupName = s->groupName;
         if (groupName && groupName->effectiveStaffIdx() != muse::nidx) {
             placeSecondColumnName(groupName, staffIdx);
+        }
+    }
+}
+
+void SystemHeaderLayout::setGroupBracketsHorizontalPos(System* system)
+{
+    std::vector<Bracket*> groupBrackets;
+    for (Bracket* b : system->brackets()) {
+        if (b->bracketType() == BracketType::GROUP) {
+            groupBrackets.push_back(b);
+        }
+    }
+    std::sort(groupBrackets.begin(), groupBrackets.end(), [](Bracket* b1, Bracket* b2) { return b1->column() > b2->column(); });
+
+    const MStyle& style = system->style();
+    bool intoMargin = style.styleB(Sid::groupBracketHangTextIntoMargin)
+                      && style.styleV(Sid::groupBracketTextOrientation).value<Orientation>() == Orientation::VERTICAL;
+    double bracketsDist = style.styleAbsolute(Sid::groupBracketDistanceToGroupBracket);
+
+    for (Bracket* b : groupBrackets) {
+        b->mutldata()->setPosX(intoMargin ? 0.0 : -b->mutldata()->bbox().left());
+        for (Bracket* bb : groupBrackets) {
+            if (bb == b) {
+                break;
+            }
+            if (bb->column() > b->column() && bb->intersects(b)) {
+                b->mutldata()->setPosX(bb->x() + bb->ldata()->bbox().right() - b->ldata()->bbox().left() + bracketsDist);
+            }
         }
     }
 }
@@ -1026,6 +1207,10 @@ void SystemHeaderLayout::updateGroupNames(System* system, LayoutContext& ctx, co
             Instrument* nextInstrument = nextPart->instrument(tick);
             InstrumentLabel& nextLabel = nextInstrument->instrumentLabel();
             if (nextPart != curPart && (nextInstrument->id() != curInstrument->id() || !nextLabel.allowGroupName())) {
+                break;
+            }
+            if (nextLabel.useCustomGroupName() && (nextLabel.customNameLongGroup() != curLabel.customNameLongGroup()
+                                                   || nextLabel.customNameShortGroup() != curLabel.customNameShortGroup())) {
                 break;
             }
 

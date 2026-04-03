@@ -75,7 +75,6 @@ public:
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, const LayoutContext& ctx);
-    static void layoutBracketsVertical(System* system, LayoutContext& ctx);
 
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 

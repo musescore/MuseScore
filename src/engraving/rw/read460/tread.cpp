@@ -356,6 +356,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::BOOL:
         return PropertyValue(bool(e.readInt()));
     case P_TYPE::INT:
+    case P_TYPE::SIZE_T:
         return PropertyValue(e.readInt());
     case P_TYPE::REAL:
         return PropertyValue(e.readDouble());
@@ -4070,7 +4071,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
         TRead::read(s->keyList(), e, ctx);
-    } else if (tag == "bracket") {
+    } else if (tag == "bracket") { // LEGACY
         Color color = Color::fromString(e.attribute("color"));
         int col = e.intAttribute("col", -1);
         if (col == -1) {
@@ -4084,6 +4085,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
             bi->setColor(color);
         }
         e.readNext();
+    } else if (tag == "BracketItem") {
+        BracketItem* b = Factory::createBracketItem(s);
+        b->setStaff(s);
+        read(b, e, ctx);
+        s->insertBracket(b);
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();
         if (barLineSpan < 0) {
@@ -4127,6 +4133,27 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         return false;
     }
     return true;
+}
+
+void TRead::read(BracketItem* b, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView& tag = xml.name();
+        if (tag == "type") {
+            b->setBracketType(TConv::fromXml(xml.readAsciiText(), BracketType::NORMAL));
+        } else if (readProperty(b, tag, xml, ctx, Pid::BRACKET_SPAN)) {
+        } else if (tag == "level") {
+            b->setColumn(xml.readInt());
+        } else if (readProperty(b, tag, xml, ctx, Pid::VISIBLE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::GROUP_BRACKET_SHOW_TEXT)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::GROUP_BRACKET_SHOW_BRACKET)) {
+        } else if (tag == "StaffLabel") {
+            StaffLabel& label = b->label();
+            readStaffLabel(label, xml);
+        } else {
+            xml.unknown();
+        }
+    }
 }
 
 String TRead::readLegacyStaffName(XmlReader& xml)

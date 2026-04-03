@@ -27,11 +27,13 @@
 #include <optional>
 
 #include "draw/types/geometry.h"
+#include "draw/types/transform.h"
 
 #include "engraving/types/types.h"
 
 namespace muse::draw {
 class Painter;
+class Transform;
 }
 
 namespace mu::engraving {
@@ -149,6 +151,8 @@ public:
     Shape adjusted(double xp1, double yp1, double xp2, double yp2) const;
     Shape& pad(double p);
     Shape padded(double p) const;
+    Shape& transform(const muse::draw::Transform& t);
+    Shape transformed(const muse::draw::Transform& t);
 
     const RectF& bbox() const;
     double minVerticalDistance(const Shape&, double minHorizontalClearance = 0.0) const;
@@ -159,6 +163,8 @@ public:
     double right() const;
     double top() const;
     double bottom() const;
+    double width() const;
+    double height() const;
     double topAtX(double x) const;
     double bottomAtX(double x) const;
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;

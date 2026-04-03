@@ -29,7 +29,6 @@
         <barLineSpan>1</barLineSpan>
         <barLineSpanFrom>8</barLineSpanFrom>
         </Staff>
-      <trackName>Soprano</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Soprano</longName>
@@ -96,7 +95,6 @@
         <barLineSpan>1</barLineSpan>
         <barLineSpanFrom>8</barLineSpanFrom>
         </Staff>
-      <trackName>Alto</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Alto</longName>
@@ -163,7 +161,6 @@
         <barLineSpan>1</barLineSpan>
         <barLineSpanFrom>8</barLineSpanFrom>
         </Staff>
-      <trackName>Tenor</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Tenor</longName>
@@ -229,7 +226,6 @@
           </StaffType>
         <barLineSpanFrom>8</barLineSpanFrom>
         </Staff>
-      <trackName>Bass</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Bass</longName>
@@ -293,7 +289,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0" visible="1"/>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         </Staff>
       <Staff>
         <eid>H_H</eid>
@@ -301,7 +301,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Piano</longName>

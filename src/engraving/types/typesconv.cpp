@@ -1706,6 +1706,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::INSTRUMENT_LONG,   "instrument_long",      muse::TranslatableString("engraving", "Instrument name (Long)") },
     { TextStyleType::INSTRUMENT_SHORT,  "instrument_short",     muse::TranslatableString("engraving", "Instrument name (Short)") },
     { TextStyleType::INSTRUMENT_CHANGE, "instrument_change",    muse::TranslatableString("engraving", "Instrument change") },
+    { TextStyleType::GROUP_BRACKET,     "group_bracket",        muse::TranslatableString("engraving", "Group bracket") },
     { TextStyleType::HEADER,            "header",               muse::TranslatableString("engraving", "Header") },
     { TextStyleType::FOOTER,            "footer",               muse::TranslatableString("engraving", "Footer") },
     { TextStyleType::COPYRIGHT,         "copyright",            muse::TranslatableString("engraving", "Copyright") },
@@ -2518,6 +2519,7 @@ static const std::vector<Item<BracketType> > BRACKET_TYPES = {
     { BracketType::BRACE,      "Brace",     muse::TranslatableString("engraving/brackettype", "Brace") },
     { BracketType::SQUARE,     "Square",    muse::TranslatableString("engraving/brackettype", "Square") },
     { BracketType::LINE,       "Line",      muse::TranslatableString("engraving/brackettype", "Line") },
+    { BracketType::GROUP,      "Group",     muse::TranslatableString("engraving/brackettype", "Group") },
     { BracketType::NO_BRACKET, "NoBracket", muse::TranslatableString("engraving/brackettype", "No bracket") }
 };
 

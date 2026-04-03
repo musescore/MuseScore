@@ -71,6 +71,8 @@
       <shortInstrumentFontSize>11.9365</shortInstrumentFontSize>
       <partInstrumentFontFace>Quicksand</partInstrumentFontFace>
       <partInstrumentFontSize>11.9365</partInstrumentFontSize>
+      <groupBracketFontFace>Quicksand</groupBracketFontFace>
+      <groupBracketFontSize>11.9365</groupBracketFontSize>
       <expressionFontFace>Quicksand</expressionFontFace>
       <expressionFontSize>11.9365</expressionFontSize>
       <tempoFontFace>Quicksand</tempoFontFace>

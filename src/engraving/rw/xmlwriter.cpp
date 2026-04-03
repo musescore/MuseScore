@@ -156,6 +156,7 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, int(data.value<bool>()));
         break;
     case P_TYPE::INT:
+    case P_TYPE::SIZE_T:
         element(name, data.value<int>());
         break;
     case P_TYPE::REAL:

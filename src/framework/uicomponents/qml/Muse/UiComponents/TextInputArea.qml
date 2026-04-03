@@ -35,6 +35,7 @@ FocusScope {
 
     property bool hasText: valueInput.text.length > 0
 
+    property int initialHeight: 90
     property bool resizeVerticallyWithText: false
     property bool allowNewLineByEnter: true
 
@@ -78,7 +79,7 @@ FocusScope {
         }
     }
 
-    implicitHeight: root.resizeVerticallyWithText ? Math.max(valueInput.height, 90) : 90
+    implicitHeight: root.resizeVerticallyWithText ? Math.max(valueInput.height, initialHeight) : initialHeight
     implicitWidth: parent.width
 
     height: implicitHeight

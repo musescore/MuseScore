@@ -26,9 +26,12 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="4" col="0" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>4</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         </Staff>
-      <trackName>Part A</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Part A</longName>
@@ -92,8 +95,16 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="3" col="1" visible="1"/>
-        <bracket type="1" span="2" col="2" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>3</bracketSpan>
+          <level>1</level>
+          </BracketItem>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>2</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -103,7 +114,6 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Part B</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Part B</longName>
@@ -168,7 +178,6 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Part C</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Part C</longName>

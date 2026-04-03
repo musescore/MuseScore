@@ -1559,19 +1559,19 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::BRACKET:
     {
-        Bracket* b = toBracket(e);
+        Selection sel = score()->selection();
+        staff_idx_t firstStaff = sel.staffStart();
+        staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
-        staff_idx_t firstStaff = 0;
-        for (Staff* s : score()->staves()) {
-            for (const BracketItem* bi : s->brackets()) {
-                staff_idx_t lastStaff = firstStaff + bi->bracketSpan() - 1;
-                if (staffIdx >= firstStaff && staffIdx <= lastStaff) {
-                    ++level;
+        for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
+            for (const BracketItem* bi : score()->staff(idx)->brackets()) {
+                if (bi->intersects(firstStaff, lastStaff)) {
+                    level = std::max(level, bi->column() + 1);
                 }
             }
-            firstStaff++;
         }
-        Selection sel = score()->selection();
+
+        Bracket* b = toBracket(e);
         if (sel.isRange()) {
             score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {

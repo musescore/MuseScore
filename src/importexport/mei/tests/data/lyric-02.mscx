@@ -27,7 +27,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="3" col="0" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>3</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         </Staff>
       <Instrument id="soprano">
         <InstrumentLabel>

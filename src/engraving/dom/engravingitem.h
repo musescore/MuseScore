@@ -218,7 +218,7 @@ public:
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
     virtual void setVisible(bool f);
 
-    bool isInteractionAvailable() const;
+    virtual bool isInteractionAvailable() const;
 
     bool sizeIsSpatiumDependent() const override { return !flag(ElementFlag::SIZE_SPATIUM_DEPENDENT); }
     void setSizeIsSpatiumDependent(bool v) { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }

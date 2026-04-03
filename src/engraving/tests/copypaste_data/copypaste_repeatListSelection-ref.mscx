@@ -74,7 +74,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="3" col="2" visible="1"/>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>3</bracketSpan>
+          <level>2</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>

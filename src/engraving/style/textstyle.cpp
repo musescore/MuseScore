@@ -462,6 +462,26 @@ const TextStyle partInstrumentTextStyle { {
     { TextStylePropertyType::Position,             Sid::partInstrumentPosition,                 Pid::POSITION },
 } };
 
+const TextStyle groupBracketTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::groupBracketFontFace,                 Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::groupBracketFontSize,                 Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::groupBracketLineSpacing,              Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::groupBracketFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::groupBracketFontStyle,                Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::groupBracketColor,                    Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::groupBracketAlign,                    Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::groupBracketOffset,                   Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::groupBracketFrameType,                Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::groupBracketFramePadding,             Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::groupBracketFrameWidth,               Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::groupBracketFrameRound,               Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::groupBracketFrameFgColor,             Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::groupBracketFrameBgColor,             Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,             Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsSize,   Sid::groupBracketMusicalSymbolSize,        Pid::MUSIC_SYMBOL_SIZE },
+    { TextStylePropertyType::Position,             Sid::longInstrumentPosition,               Pid::POSITION },
+} };
+
 // With the single exception of text alignment, after 4.1 Dynamics use Expression text style
 const TextStyle dynamicsTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::expressionFontFace,                     Pid::FONT_FACE },
@@ -1496,6 +1516,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::INSTRUMENT_LONG: return &longInstrumentTextStyle;
     case TextStyleType::INSTRUMENT_SHORT: return &shortInstrumentTextStyle;
     case TextStyleType::INSTRUMENT_CHANGE: return &instrumentChangeTextStyle;
+    case TextStyleType::GROUP_BRACKET: return &groupBracketTextStyle;
     case TextStyleType::HEADER: return &headerTextStyle;
     case TextStyleType::FOOTER: return &footerTextStyle;
     case TextStyleType::COPYRIGHT: return &copyrightTextStyle;

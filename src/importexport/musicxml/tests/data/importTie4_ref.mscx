@@ -62,6 +62,8 @@
       <shortInstrumentFontSize>22</shortInstrumentFontSize>
       <partInstrumentFontFace>Palatino,serif</partInstrumentFontFace>
       <partInstrumentFontSize>22</partInstrumentFontSize>
+      <groupBracketFontFace>Palatino,serif</groupBracketFontFace>
+      <groupBracketFontSize>22</groupBracketFontSize>
       <expressionFontFace>Palatino,serif</expressionFontFace>
       <expressionFontSize>22</expressionFontSize>
       <tempoFontFace>Palatino,serif</tempoFontFace>
@@ -157,7 +159,11 @@ Arranged by [Arranger]</metaTag>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="1" visible="1"/>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>1</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>

@@ -113,6 +113,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "instrument-name-long",
     "instrument-name-short",
     "instrument-change",
+    "group-bracket",
     "header",
     "footer",
     "copyright",
@@ -328,6 +329,24 @@ void EditStyle::classBegin()
     dividerRightAlignToSystemBarline->addButton(rightDividerAlignToSystemBarline, 1);
     dividerRightAlignToSystemBarline->addButton(rightDividerAlignToPageMargin, 0);
 
+    QButtonGroup* groupBracketTextAlign = new QButtonGroup(this);
+    groupBracketTextAlign->addButton(groupBracketTextLeft, 1);
+    groupBracketTextAlign->addButton(groupBracketTextCenter, 0);
+    groupBracketTextAlign->addButton(groupBracketTextRight, 2);
+
+    QButtonGroup* groupBracketOrientation = new QButtonGroup(this);
+    groupBracketOrientation->addButton(groupBracketTextVertical, 0);
+    groupBracketOrientation->addButton(groupBracketTextHorizontal, 1);
+
+    auto updateHangIntoMarginEnabled = [&]() {
+        bool rightAlign = groupBracketTextRight->isChecked();
+        bool vertical = groupBracketTextVertical->isChecked();
+        groupBracketHangIntoMargin->setEnabled(vertical && !rightAlign);
+    };
+
+    connect(groupBracketTextAlign, &QButtonGroup::buttonClicked, this, updateHangIntoMarginEnabled);
+    connect(groupBracketOrientation, &QButtonGroup::buttonClicked, this, updateHangIntoMarginEnabled);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -486,6 +505,14 @@ void EditStyle::classBegin()
         { StyleId::bracketDistance,         false, bracketDistance,         resetBracketDistance },
         { StyleId::akkoladeWidth,           false, akkoladeWidth,           resetBraceThickness },
         { StyleId::akkoladeBarDistance,     false, akkoladeBarDistance,     resetBraceDistance },
+        { StyleId::groupBracketLineWidth,   false, groupBracketLineThick,   groupBracketLineThickReset },
+        { StyleId::groupBracketHookLen,     false, groupBracketHookLen,     groupBracketHookLenReset },
+        { StyleId::groupBracketTextAlign,   false, groupBracketTextAlign,   0 },
+        { StyleId::groupBracketHangTextIntoMargin, false, groupBracketHangIntoMargin, 0 },
+        { StyleId::groupBracketDistanceToNames, false, groupBracketDistanceToNames, groupBracketDistanceToNamesReset },
+        { StyleId::groupBracketDistanceToGroupBracket, false, groupBracketDistanceToBrackets, groupBracketDistanceToBracketsReset },
+        { StyleId::groupBracketTextOrientation, false, groupBracketOrientation },
+
         { StyleId::dividerLeft,             false, dividerLeft,             0 },
         { StyleId::dividerLeftX,            false, dividerLeftX,            dividerLeftXReset },
         { StyleId::dividerLeftY,            false, dividerLeftY,            dividerLeftYReset },
@@ -1275,6 +1302,14 @@ void EditStyle::classBegin()
         resetStyleValue(int(StyleId::lyricsMaxDashCount));
     });
 
+    editGroupBracketTextStyleLink->setChecked(false);
+    connect(editGroupBracketTextStyleLink, &QPushButton::clicked, pageList, [=](){
+        pageList->setCurrentRow(ALL_PAGE_CODES.indexOf("text-styles"));
+    });
+    connect(editGroupBracketTextStyleLink, &QPushButton::clicked, textStyles, [=](){
+        textStyles->setCurrentRow(ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf("group-bracket"));
+    });
+
     adjustPagesStackSize(0);
 
     // Consistency checks
@@ -1783,6 +1818,8 @@ PropertyValue EditStyle::getValue(StyleId idx)
     } break;
     case P_TYPE::PLACEMENT_H:
     case P_TYPE::PLACEMENT_V:
+    case P_TYPE::DIRECTION_H:
+    case P_TYPE::ORIENTATION:
     case P_TYPE::LINE_TYPE:
     case P_TYPE::TIMESIG_PLACEMENT:
     case P_TYPE::TIMESIG_STYLE:
@@ -1902,6 +1939,8 @@ void EditStyle::setValues()
         } break;
         case P_TYPE::PLACEMENT_H:
         case P_TYPE::PLACEMENT_V:
+        case P_TYPE::DIRECTION_H:
+        case P_TYPE::ORIENTATION:
         case P_TYPE::BARLINE_TYPE:
         case P_TYPE::LINE_TYPE:
         case P_TYPE::HOOK_TYPE:
@@ -2049,6 +2088,11 @@ void EditStyle::setValues()
                                            != defaultStyleValue(StyleId::lyricsDashMaxDistance));
 
     updateParenthesisIndicatingTiesGroupState();
+
+    bool textBracketRight = styleValue(StyleId::groupBracketTextAlign).value<DirectionH>() == DirectionH::RIGHT;
+    bool vertical = styleValue(StyleId::groupBracketTextOrientation).value<mu::engraving::Orientation>()
+                    == mu::engraving::Orientation::VERTICAL;
+    groupBracketHangIntoMargin->setEnabled(vertical && !textBracketRight);
 }
 
 //---------------------------------------------------------

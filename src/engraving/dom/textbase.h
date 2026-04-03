@@ -518,6 +518,9 @@ public:
 
     double spatiumScaling() const;
 
+    double textAngle() const { return m_textAngle; }
+    void setTextAngle(double v) { m_textAngle = v; }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -587,6 +590,8 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
     bool m_anchorToEndOfPrevious = false;
+
+    double m_textAngle = 0.0;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

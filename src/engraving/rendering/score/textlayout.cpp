@@ -132,6 +132,13 @@ void TextLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData*
     if (!item->isDynamic() && !(item->explicitParent() && item->parent()->isBox())) {
         computeTextHighResShape(item, ldata);
     }
+
+    if (!muse::RealIsNull(item->textAngle())) {
+        Transform t;
+        t.rotate(item->textAngle());
+        ldata->setShape(shape.transform(t));
+        ldata->highResShape.mut_value().transform(t);
+    }
 }
 
 void TextLayout::layoutBaseTextBase1(TextBase* item, const LayoutContext&)

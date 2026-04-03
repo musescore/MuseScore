@@ -203,7 +203,6 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    void setBracketsXPosition(const double xOffset);
     size_t getBracketsColumnsCount();
 
     void resetShortestLongestChordRest();
@@ -232,6 +231,15 @@ public:
         double totalNamesWidth() const { return m_totalNamesWidth; }
         void setTotalNamesWidth(double v) { m_totalNamesWidth = v; }
 
+        const std::unordered_map<staff_idx_t, double>& groupBracketsWidth() const { return m_groupBracketsWidth; }
+        void setGroupBracketsWidthAtStaffIdx(staff_idx_t i, double w) { m_groupBracketsWidth[i] = w; }
+        double groupBracketsWidthAtStaffIdx(staff_idx_t i) const
+        {
+            return m_groupBracketsWidth.count(i) ? m_groupBracketsWidth.at(i) : 0.0;
+        }
+
+        void clearGroupBracketsWidth() { m_groupBracketsWidth.clear(); }
+
         const std::unordered_map<Part*, InstrumentName*>& partsWithGroupName() const { return m_partsWithGroupName; }
         void addPartWithGroupNames(Part* p, InstrumentName* n) { m_partsWithGroupName.emplace(p, n); }
         void clearPartsWithGroupNames() { m_partsWithGroupName.clear(); }
@@ -243,6 +251,8 @@ public:
         double m_firstColumnWidth = 0.0;
         double m_secondColumnWidth = 0.0;
         double m_totalNamesWidth = 0.0;
+
+        std::unordered_map<staff_idx_t, double> m_groupBracketsWidth;
 
         std::unordered_map<Part*, InstrumentName*> m_partsWithGroupName;
     };

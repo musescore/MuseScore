@@ -368,6 +368,10 @@ void Staff::swapBracket(size_t oldIdx, size_t newIdx)
 
 void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
 {
+    if (oldColumn == newColumn) {
+        return;
+    }
+
     size_t idx = std::max(oldColumn, newColumn);
     fillBrackets(idx);
     int step = newColumn > oldColumn ? 1 : -1;
@@ -419,6 +423,23 @@ void Staff::addBracket(BracketItem* b)
                 s->m_brackets.push_back(bi);
             }
         }
+    }
+}
+
+void Staff::insertBracket(BracketItem* b)
+{
+    b->setStaff(this);
+    size_t column = b->column();
+    if (column < m_brackets.size()) {
+        if (m_brackets[column]) {
+            delete m_brackets[column];
+        }
+        m_brackets[column] = b;
+    } else if (column == m_brackets.size()) {
+        m_brackets.push_back(b);
+    } else {
+        fillBrackets(column - 1);
+        m_brackets.push_back(b);
     }
 }
 

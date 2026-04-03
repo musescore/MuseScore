@@ -43,6 +43,7 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatLong READ instrumentNamesCustomFormatLong CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesFormatShort READ instrumentNamesFormatShort CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * instrumentNamesCustomFormatShort READ instrumentNamesCustomFormatShort CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * instrumentNamesAlignIncludeGroupBrackets READ instrumentNamesAlignIncludeGroupBrackets CONSTANT)
 
     QML_ELEMENT
 
@@ -63,5 +64,6 @@ public:
     StyleItem* instrumentNamesCustomFormatLong() const;
     StyleItem* instrumentNamesFormatShort() const;
     StyleItem* instrumentNamesCustomFormatShort() const;
+    StyleItem* instrumentNamesAlignIncludeGroupBrackets() const;
 };
 }

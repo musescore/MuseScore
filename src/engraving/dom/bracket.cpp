@@ -29,6 +29,7 @@
 #include "score.h"
 #include "staff.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 
@@ -54,6 +55,18 @@ Bracket::Bracket(EngravingItem* parent)
 
 Bracket::~Bracket()
 {
+    if (m_text) {
+        delete m_text;
+    }
+}
+
+void Bracket::scanElements(std::function<void(EngravingItem*)> func)
+{
+    if (m_text) {
+        m_text->scanElements(func);
+    }
+
+    EngravingItem::scanElements(func);
 }
 
 //---------------------------------------------------------
@@ -340,5 +353,19 @@ Fraction Bracket::tick() const
 void Bracket::setSelected(bool f)
 {
     m_bi->setSelected(f);
+    if (m_text) {
+        m_text->setSelected(f);
+    }
+
     EngravingItem::setSelected(f);
+}
+
+bool Bracket::intersects(const Bracket* other) const
+{
+    return m_firstStaff <= other->m_lastStaff && m_lastStaff >= other->m_firstStaff;
+}
+
+bool Bracket::contains(staff_idx_t staffIdx) const
+{
+    return staffIdx >= m_firstStaff && staffIdx <= m_lastStaff;
 }

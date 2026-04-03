@@ -27,7 +27,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="1" col="0" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>1</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         </Staff>
       <Instrument id="soprano">
         <InstrumentLabel>
@@ -46,8 +50,16 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="9" col="0" visible="1"/>
-        <bracket type="1" span="2" col="1" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>9</bracketSpan>
+          <level>0</level>
+          </BracketItem>
+        <BracketItem>
+          <type>Brace</type>
+          <bracketSpan>2</bracketSpan>
+          <level>1</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -74,7 +86,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="2" span="3" col="1" visible="1"/>
+        <BracketItem>
+          <type>Square</type>
+          <bracketSpan>3</bracketSpan>
+          <level>1</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -108,7 +124,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="3" span="3" col="1" visible="1"/>
+        <BracketItem>
+          <type>Line</type>
+          <bracketSpan>3</bracketSpan>
+          <level>1</level>
+          </BracketItem>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
@@ -160,7 +180,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="2" col="0" visible="1"/>
+        <BracketItem>
+          <type>Normal</type>
+          <bracketSpan>2</bracketSpan>
+          <level>0</level>
+          </BracketItem>
         </Staff>
       <Instrument id="violin">
         <InstrumentLabel>

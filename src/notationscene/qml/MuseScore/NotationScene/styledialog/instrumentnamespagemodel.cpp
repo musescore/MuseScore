@@ -40,6 +40,7 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
     StyleId::instrumentNamesCustomFormatLong,
     StyleId::instrumentNamesFormatShort,
     StyleId::instrumentNamesCustomFormatShort,
+    StyleId::instrumentNamesAlignIncludeGroupBrackets,
 })
 {
 }
@@ -107,4 +108,9 @@ StyleItem* InstrumentNamesPageModel::instrumentNamesFormatShort() const
 StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatShort() const
 {
     return styleItem(StyleId::instrumentNamesCustomFormatShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesAlignIncludeGroupBrackets() const
+{
+    return styleItem(StyleId::instrumentNamesAlignIncludeGroupBrackets);
 }
