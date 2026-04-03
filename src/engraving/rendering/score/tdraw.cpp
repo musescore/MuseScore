@@ -1148,7 +1148,7 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
     break;
     case BracketType::GROUP:
     {
-        if (!item->bracketItem()->showBracket() && !item->score()->isShowInvisible()) {
+        if (!item->bracketItem()->showBracket() && (!item->score()->isShowInvisible() || opt.isPrinting)) {
             return;
         }
 
@@ -1158,7 +1158,8 @@ void TDraw::draw(const Bracket* item, Painter* painter, const PaintOptions& opt)
         double h = ldata->bracketHeight;
         double lineW = item->style().styleAbsolute(Sid::groupBracketLineWidth);
         double hookLen = item->style().styleAbsolute(Sid::groupBracketHookLen);
-        Pen pen(item->curColor(opt), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        Color color = item->curColor(item->visible() && item->bracketItem()->showBracket(), opt);
+        Pen pen(color, lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.5 * lineW, 0.0, 0.5 * lineW, h));
         painter->drawLine(LineF(0.0, 0.0, hookLen, 0.0));

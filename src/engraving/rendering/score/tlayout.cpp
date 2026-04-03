@@ -1379,9 +1379,6 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
     }
 
     const_cast<Bracket*>(item)->setVisible(item->bi()->visible());
-    if (item->bracketType() == BracketType::GROUP) {
-        const_cast<Bracket*>(item)->setVisible(item->visible() && item->bi()->showBracket());
-    }
 
     ldata->braceSymbol = item->braceSymbol();
 

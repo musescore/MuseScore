@@ -46,8 +46,6 @@ public:
     Bracket* clone() const override { return new Bracket(*this); }
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
-    bool isInteractionAvailable() const override;
-    bool collectForDrawing() const override;
 
     void setBracketItem(BracketItem* i) { m_bi = i; }
     BracketItem* bracketItem() const { return m_bi; }
