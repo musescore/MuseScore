@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "polyline.h"
+#include "polylineplot.h"
 #include "realfn.h"
 
 #include <QPainter>
@@ -55,7 +55,7 @@ static inline qreal toPxY(const QQuickItem* item, qreal yN)
     }
 
     // NOTE: preserve full height of the line at top/bottom edges
-    const auto* polyline = static_cast<const Polyline*>(item);
+    const auto* polyline = static_cast<const PolylinePlot*>(item);
     const qreal inset = std::clamp(polyline->lineWidth() * 0.5, 0.0, h * 0.5);
     const qreal drawableHeight = h - (2.0 * inset);
 
@@ -134,7 +134,7 @@ static double valueAtX(const QVector<QPointF>& sortedPoints, double x)
 }
 }
 
-Polyline::Polyline(QQuickItem* parent)
+PolylinePlot::PolylinePlot(QQuickItem* parent)
     : QQuickPaintedItem(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
     setAcceptHoverEvents(true);
@@ -145,7 +145,7 @@ Polyline::Polyline(QQuickItem* parent)
     setOpaquePainting(false);
 }
 
-void Polyline::init()
+void PolylinePlot::init()
 {
     dispatcher()->reg(this, "action://cancel", [this](){
         // emit signal and let decide model what to do
@@ -154,12 +154,12 @@ void Polyline::init()
     });
 }
 
-QColor Polyline::lineColor() const
+QColor PolylinePlot::lineColor() const
 {
     return m_lineColor;
 }
 
-void Polyline::setLineColor(const QColor& c)
+void PolylinePlot::setLineColor(const QColor& c)
 {
     if (m_lineColor == c) {
         return;
@@ -170,12 +170,12 @@ void Polyline::setLineColor(const QColor& c)
     update();
 }
 
-qreal Polyline::lineWidth() const
+qreal PolylinePlot::lineWidth() const
 {
     return m_lineWidth;
 }
 
-void Polyline::setLineWidth(qreal w)
+void PolylinePlot::setLineWidth(qreal w)
 {
     if (m_lineWidth == w) {
         return;
@@ -187,12 +187,12 @@ void Polyline::setLineWidth(qreal w)
     update();
 }
 
-qreal Polyline::baselineN() const
+qreal PolylinePlot::baselineN() const
 {
     return m_baselineN;
 }
 
-void Polyline::setBaselineN(qreal v)
+void PolylinePlot::setBaselineN(qreal v)
 {
     v = clamp01(v);
 
@@ -206,12 +206,12 @@ void Polyline::setBaselineN(qreal v)
     update();
 }
 
-qreal Polyline::pointRadius() const
+qreal PolylinePlot::pointRadius() const
 {
     return m_pointRadius;
 }
 
-void Polyline::setPointRadius(qreal r)
+void PolylinePlot::setPointRadius(qreal r)
 {
     if (m_pointRadius == r) {
         return;
@@ -223,12 +223,12 @@ void Polyline::setPointRadius(qreal r)
     update();
 }
 
-qreal Polyline::ghostPointRadius() const
+qreal PolylinePlot::ghostPointRadius() const
 {
     return m_ghostPointRadius;
 }
 
-void Polyline::setGhostPointRadius(qreal r)
+void PolylinePlot::setGhostPointRadius(qreal r)
 {
     if (m_ghostPointRadius == r) {
         return;
@@ -240,12 +240,12 @@ void Polyline::setGhostPointRadius(qreal r)
     update();
 }
 
-qreal Polyline::pointOutlineWidth() const
+qreal PolylinePlot::pointOutlineWidth() const
 {
     return m_pointOutlineWidth;
 }
 
-void Polyline::setPointOutlineWidth(qreal w)
+void PolylinePlot::setPointOutlineWidth(qreal w)
 {
     if (m_pointOutlineWidth == w) {
         return;
@@ -255,12 +255,12 @@ void Polyline::setPointOutlineWidth(qreal w)
     emit pointOutlineWidthChanged();
 }
 
-QColor Polyline::pointOutlineColor() const
+QColor PolylinePlot::pointOutlineColor() const
 {
     return m_pointOutlineColor;
 }
 
-void Polyline::setPointOutlineColor(const QColor& c)
+void PolylinePlot::setPointOutlineColor(const QColor& c)
 {
     if (m_pointOutlineColor == c) {
         return;
@@ -270,12 +270,12 @@ void Polyline::setPointOutlineColor(const QColor& c)
     emit pointOutlineColorChanged();
 }
 
-QColor Polyline::pointCentreColor() const
+QColor PolylinePlot::pointCentreColor() const
 {
     return m_pointCentreColor;
 }
 
-void Polyline::setPointCentreColor(const QColor& c)
+void PolylinePlot::setPointCentreColor(const QColor& c)
 {
     if (m_pointCentreColor == c) {
         return;
@@ -285,12 +285,12 @@ void Polyline::setPointCentreColor(const QColor& c)
     emit pointCentreColorChanged();
 }
 
-QColor Polyline::ghostPointOutlineColor() const
+QColor PolylinePlot::ghostPointOutlineColor() const
 {
     return m_ghostPointOutlineColor;
 }
 
-void Polyline::setGhostPointOutlineColor(const QColor& c)
+void PolylinePlot::setGhostPointOutlineColor(const QColor& c)
 {
     if (m_ghostPointOutlineColor == c) {
         return;
@@ -300,12 +300,12 @@ void Polyline::setGhostPointOutlineColor(const QColor& c)
     emit ghostPointOutlineColorChanged();
 }
 
-qreal Polyline::hitRadius() const
+qreal PolylinePlot::hitRadius() const
 {
     return m_hitRadius;
 }
 
-void Polyline::setHitRadius(qreal r)
+void PolylinePlot::setHitRadius(qreal r)
 {
     if (m_hitRadius == r) {
         return;
@@ -315,42 +315,42 @@ void Polyline::setHitRadius(qreal r)
     emit hitRadiusChanged();
 }
 
-bool Polyline::snap() const
+bool PolylinePlot::isSnapEnabled() const
 {
-    return m_snap;
+    return m_isSnapEnabled;
 }
 
-void Polyline::setSnap(bool v)
+void PolylinePlot::setIsSnapEnabled(bool v)
 {
-    if (m_snap == v) {
+    if (m_isSnapEnabled == v) {
         return;
     }
 
-    m_snap = v;
-    emit snapChanged();
+    m_isSnapEnabled = v;
+    emit isSnapEnabledChanged();
 }
 
-qreal Polyline::snapPx() const
+qreal PolylinePlot::snapThresholdPx() const
 {
-    return m_snapPx;
+    return m_snapThresholdPx;
 }
 
-void Polyline::setSnapPx(qreal v)
+void PolylinePlot::setSnapThresholdPx(qreal v)
 {
-    if (m_snapPx == v) {
+    if (m_snapThresholdPx == v) {
         return;
     }
 
-    m_snapPx = v;
-    emit snapPxChanged();
+    m_snapThresholdPx = v;
+    emit snapThresholdPxChanged();
 }
 
-QVector<QPointF> Polyline::points() const
+QVector<QPointF> PolylinePlot::points() const
 {
     return m_points;
 }
 
-void Polyline::setPoints(const QVector<QPointF>& pts)
+void PolylinePlot::setPoints(const QVector<QPointF>& pts)
 {
     if (m_points == pts) {
         if (m_points.isEmpty()) {
@@ -401,12 +401,12 @@ void Polyline::setPoints(const QVector<QPointF>& pts)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::defaultValue() const
+qreal PolylinePlot::defaultValue() const
 {
     return m_defaultValue;
 }
 
-void Polyline::setXRangeFrom(qreal v)
+void PolylinePlot::setXRangeFrom(qreal v)
 {
     if (m_xFrom == v) {
         return;
@@ -418,12 +418,12 @@ void Polyline::setXRangeFrom(qreal v)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::xRangeTo() const
+qreal PolylinePlot::xRangeTo() const
 {
     return m_xTo;
 }
 
-void Polyline::setXRangeTo(qreal v)
+void PolylinePlot::setXRangeTo(qreal v)
 {
     if (m_xTo == v) {
         return;
@@ -435,12 +435,12 @@ void Polyline::setXRangeTo(qreal v)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::yRangeFrom() const
+qreal PolylinePlot::yRangeFrom() const
 {
     return m_yFrom;
 }
 
-void Polyline::setYRangeFrom(qreal v)
+void PolylinePlot::setYRangeFrom(qreal v)
 {
     if (m_yFrom == v) {
         return;
@@ -452,12 +452,12 @@ void Polyline::setYRangeFrom(qreal v)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::yRangeTo() const
+qreal PolylinePlot::yRangeTo() const
 {
     return m_yTo;
 }
 
-void Polyline::setYRangeTo(qreal v)
+void PolylinePlot::setYRangeTo(qreal v)
 {
     if (m_yTo == v) {
         return;
@@ -469,12 +469,12 @@ void Polyline::setYRangeTo(qreal v)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::ySplitNormalized() const
+qreal PolylinePlot::ySplitNormalized() const
 {
     return m_ySplitNormalized;
 }
 
-void Polyline::setYSplitNormalized(qreal v)
+void PolylinePlot::setYSplitNormalized(qreal v)
 {
     v = clamp01(v);
     if (m_ySplitNormalized == v) {
@@ -487,12 +487,12 @@ void Polyline::setYSplitNormalized(qreal v)
     rebuildVisiblePoints();
 }
 
-qreal Polyline::ySplitValue() const
+qreal PolylinePlot::ySplitValue() const
 {
     return m_ySplitValue;
 }
 
-void Polyline::setYSplitValue(qreal v)
+void PolylinePlot::setYSplitValue(qreal v)
 {
     const qreal low = std::min(m_yFrom, m_yTo);
     const qreal high = std::max(m_yFrom, m_yTo);
@@ -508,12 +508,12 @@ void Polyline::setYSplitValue(qreal v)
     rebuildVisiblePoints();
 }
 
-bool Polyline::yAxisInverse() const
+bool PolylinePlot::yAxisInverse() const
 {
     return m_yAxisInverse;
 }
 
-void Polyline::setYAxisInverse(bool v)
+void PolylinePlot::setYAxisInverse(bool v)
 {
     if (m_yAxisInverse == v) {
         return;
@@ -524,27 +524,27 @@ void Polyline::setYAxisInverse(bool v)
     rebuildVisiblePoints();
 }
 
-bool Polyline::hasActivePoint() const
+bool PolylinePlot::hasActivePoint() const
 {
     return m_hasActivePoint;
 }
 
-qreal Polyline::activePointX() const
+qreal PolylinePlot::activePointX() const
 {
     return m_activePointPx.x();
 }
 
-qreal Polyline::activePointY() const
+qreal PolylinePlot::activePointY() const
 {
     return m_activePointPx.y();
 }
 
-qreal Polyline::activePointValue() const
+qreal PolylinePlot::activePointValue() const
 {
     return m_activePointValue;
 }
 
-void Polyline::setDefaultValue(qreal v)
+void PolylinePlot::setDefaultValue(qreal v)
 {
     if (m_defaultValue == v) {
         return;
@@ -560,37 +560,37 @@ void Polyline::setDefaultValue(qreal v)
     }
 }
 
-qreal Polyline::xRangeFrom() const
+qreal PolylinePlot::xRangeFrom() const
 {
     return m_xFrom;
 }
 
-qreal Polyline::clamp01(qreal v) const
+qreal PolylinePlot::clamp01(qreal v) const
 {
     return std::max<qreal>(0.0, std::min<qreal>(1.0, v));
 }
 
-QPointF Polyline::clamp01(const QPointF& p) const
+QPointF PolylinePlot::clamp01(const QPointF& p) const
 {
     return QPointF(clamp01(p.x()), clamp01(p.y()));
 }
 
-bool Polyline::hasValidXRange() const
+bool PolylinePlot::hasValidXRange() const
 {
     return std::isfinite(m_xFrom) && std::isfinite(m_xTo) && std::abs(m_xTo - m_xFrom) > EPSILON;
 }
 
-bool Polyline::hasValidYRange() const
+bool PolylinePlot::hasValidYRange() const
 {
     return std::isfinite(m_yFrom) && std::isfinite(m_yTo) && std::abs(m_yTo - m_yFrom) > EPSILON;
 }
 
-bool Polyline::hasValidYSplit() const
+bool PolylinePlot::hasValidYSplit() const
 {
     return hasValidYRange() && !muse::RealIsEqualOrLess(m_ySplitNormalized, 0.0) && !muse::RealIsEqualOrMore(m_ySplitNormalized, 1.0);
 }
 
-qreal Polyline::yDomainFromNormalized(qreal yNormalized) const
+qreal PolylinePlot::yDomainFromNormalized(qreal yNormalized) const
 {
     const qreal n = clamp01(yNormalized);
 
@@ -622,7 +622,7 @@ qreal Polyline::yDomainFromNormalized(qreal yNormalized) const
     return splitValue + segmentN * (m_yTo - splitValue);
 }
 
-qreal Polyline::yNormalizedFromDomain(qreal yDomain) const
+qreal PolylinePlot::yNormalizedFromDomain(qreal yDomain) const
 {
     // simple linear mapping (no split)
     if (!hasValidYSplit()) {
@@ -663,7 +663,7 @@ qreal Polyline::yNormalizedFromDomain(qreal yDomain) const
     return clamp01(splitNormalized + segmentN * (1.0 - splitNormalized));
 }
 
-void Polyline::updateBaselineFromDefaultValue()
+void PolylinePlot::updateBaselineFromDefaultValue()
 {
     const qreal baseline = normalizedFromDomain(QPointF(m_xFrom, m_defaultValue)).y();
     if (m_baselineN == baseline) {
@@ -674,7 +674,7 @@ void Polyline::updateBaselineFromDefaultValue()
     emit baselineNChanged();
 }
 
-void Polyline::updateActivePoint()
+void PolylinePlot::updateActivePoint()
 {
     const int hoveredDomainIdx = pointIndexAtPx(m_hoverPx);
     int draggedDisplayDomainIdx = INVALID_POINT_IDX;
@@ -742,7 +742,7 @@ void Polyline::updateActivePoint()
     }
 }
 
-QPointF Polyline::normalizedFromDomain(const QPointF& p) const
+QPointF PolylinePlot::normalizedFromDomain(const QPointF& p) const
 {
     if (!hasValidXRange() || !hasValidYRange()) {
         return clamp01(QPointF(0.0, 0.0));
@@ -758,7 +758,7 @@ QPointF Polyline::normalizedFromDomain(const QPointF& p) const
     return clamp01(QPointF(xN, yN));
 }
 
-QPointF Polyline::domainFromNormalized(const QPointF& pN) const
+QPointF PolylinePlot::domainFromNormalized(const QPointF& pN) const
 {
     if (!hasValidXRange() || !hasValidYRange()) {
         return QPointF(m_xFrom, m_yFrom);
@@ -775,7 +775,7 @@ QPointF Polyline::domainFromNormalized(const QPointF& pN) const
     return QPointF(x, y);
 }
 
-QVector<QPointF> Polyline::normalizedFromDomain(const QVector<QPointF>& pts) const
+QVector<QPointF> PolylinePlot::normalizedFromDomain(const QVector<QPointF>& pts) const
 {
     QVector<QPointF> out;
     out.reserve(pts.size());
@@ -786,7 +786,7 @@ QVector<QPointF> Polyline::normalizedFromDomain(const QVector<QPointF>& pts) con
     return out;
 }
 
-QVector<QPointF> Polyline::domainFromNormalized(const QVector<QPointF>& ptsN) const
+QVector<QPointF> PolylinePlot::domainFromNormalized(const QVector<QPointF>& ptsN) const
 {
     QVector<QPointF> out;
     out.reserve(ptsN.size());
@@ -797,7 +797,7 @@ QVector<QPointF> Polyline::domainFromNormalized(const QVector<QPointF>& ptsN) co
     return out;
 }
 
-void Polyline::rebuildVisiblePoints()
+void PolylinePlot::rebuildVisiblePoints()
 {
     m_pointsNVisible.clear();
     m_visibleToDomainIndex.clear();
@@ -884,7 +884,7 @@ void Polyline::rebuildVisiblePoints()
     update();
 }
 
-QVector<QPointF> Polyline::polylinePx() const
+QVector<QPointF> PolylinePlot::polylinePx() const
 {
     QVector<QPointF> pts;
 
@@ -935,7 +935,7 @@ QVector<QPointF> Polyline::polylinePx() const
     return pts;
 }
 
-bool Polyline::isNearLinePx(const QPointF& px) const
+bool PolylinePlot::isNearLinePx(const QPointF& px) const
 {
     const auto pts = polylinePx();
     if (pts.size() < 2) {
@@ -949,7 +949,7 @@ bool Polyline::isNearLinePx(const QPointF& px) const
     return best <= m_hitRadius;
 }
 
-int Polyline::pointIndexAtPx(const QPointF& px) const
+int PolylinePlot::pointIndexAtPx(const QPointF& px) const
 {
     // search in visible points, skip synthetic boundary points
     for (int i = 0; i < m_pointsNVisible.size(); ++i) {
@@ -971,7 +971,7 @@ int Polyline::pointIndexAtPx(const QPointF& px) const
     return INVALID_POINT_IDX;
 }
 
-GhostPoint Polyline::ghostPointToPolylinePx(const QPointF& px) const
+GhostPoint PolylinePlot::ghostPointToPolylinePx(const QPointF& px) const
 {
     GhostPoint best;
 
@@ -992,9 +992,9 @@ GhostPoint Polyline::ghostPointToPolylinePx(const QPointF& px) const
     return best;
 }
 
-QPointF Polyline::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
+QPointF PolylinePlot::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
 {
-    if (!m_snap || !m_hasDraggedPointDomain || m_points.size() < 2) {
+    if (!m_isSnapEnabled || !m_hasDraggedPointDomain || m_points.size() < 2) {
         return pDomain;
     }
 
@@ -1020,14 +1020,14 @@ QPointF Polyline::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
 
     if (currentIdx + 1 < m_points.size()) {
         const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx + 1]).x());
-        if (std::abs(dragPxX - neighborPxX) <= m_snapPx) {
+        if (std::abs(dragPxX - neighborPxX) <= m_snapThresholdPx) {
             pDomain.setX(m_points[currentIdx + 1].x());
         }
     }
 
     if (currentIdx > 0) {
         const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx - 1]).x());
-        if (std::abs(dragPxX - neighborPxX) <= m_snapPx) {
+        if (std::abs(dragPxX - neighborPxX) <= m_snapThresholdPx) {
             pDomain.setX(m_points[currentIdx - 1].x());
         }
     }
@@ -1035,7 +1035,7 @@ QPointF Polyline::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
     return pDomain;
 }
 
-void Polyline::updateCursor()
+void PolylinePlot::updateCursor()
 {
     const bool interactive = m_hoveredOnLine || m_pressed || (m_pressedPointIndex >= 0);
 
@@ -1046,7 +1046,7 @@ void Polyline::updateCursor()
     }
 }
 
-void Polyline::resetGestureState()
+void PolylinePlot::resetGestureState()
 {
     m_pressed = false;
     m_pressedOnLine = false;
@@ -1062,7 +1062,7 @@ void Polyline::resetGestureState()
     update();
 }
 
-void Polyline::geometryChange(const QRectF& newG, const QRectF& oldG)
+void PolylinePlot::geometryChange(const QRectF& newG, const QRectF& oldG)
 {
     QQuickPaintedItem::geometryChange(newG, oldG);
     if (newG.size() != oldG.size()) {
@@ -1070,7 +1070,7 @@ void Polyline::geometryChange(const QRectF& newG, const QRectF& oldG)
     }
 }
 
-void Polyline::paint(QPainter* painter)
+void PolylinePlot::paint(QPainter* painter)
 {
     if (!painter) {
         return;
@@ -1176,7 +1176,7 @@ void Polyline::paint(QPainter* painter)
     }
 }
 
-void Polyline::hoverMoveEvent(QHoverEvent* e)
+void PolylinePlot::hoverMoveEvent(QHoverEvent* e)
 {
     // NOTE: even if mouse is still, Qt produces hoverMoveEvents constantly
     if (m_hoverPx == e->position()) {
@@ -1215,7 +1215,7 @@ void Polyline::hoverMoveEvent(QHoverEvent* e)
     }
 }
 
-void Polyline::hoverLeaveEvent(QHoverEvent* e)
+void PolylinePlot::hoverLeaveEvent(QHoverEvent* e)
 {
     Q_UNUSED(e);
     m_hoveredOnLine = false;
@@ -1224,7 +1224,7 @@ void Polyline::hoverLeaveEvent(QHoverEvent* e)
     update();
 }
 
-void Polyline::mousePressEvent(QMouseEvent* e)
+void PolylinePlot::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
         e->ignore();
@@ -1280,7 +1280,7 @@ void Polyline::mousePressEvent(QMouseEvent* e)
     }
 }
 
-void Polyline::mouseMoveEvent(QMouseEvent* e)
+void PolylinePlot::mouseMoveEvent(QMouseEvent* e)
 {
     if (!m_pressed) {
         e->ignore();
@@ -1314,7 +1314,7 @@ void Polyline::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void Polyline::mouseReleaseEvent(QMouseEvent* e)
+void PolylinePlot::mouseReleaseEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton || !m_pressed) {
         e->ignore();
@@ -1344,7 +1344,7 @@ void Polyline::mouseReleaseEvent(QMouseEvent* e)
     resetGestureState();
 }
 
-void Polyline::mouseDoubleClickEvent(QMouseEvent* e)
+void PolylinePlot::mouseDoubleClickEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
         e->ignore();

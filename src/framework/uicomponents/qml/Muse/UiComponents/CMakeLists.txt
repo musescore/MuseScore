@@ -62,8 +62,8 @@ qt_add_qml_module(muse_uicomponents_qml
         menuitem.h
         menuview.cpp
         menuview.h
-        polyline.cpp
-        polyline.h
+        polylineplot.cpp
+        polylineplot.h
         popupview.cpp
         popupview.h
         qmllistproperty.cpp

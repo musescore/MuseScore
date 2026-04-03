@@ -43,7 +43,7 @@ struct GhostPoint {
     qreal distToSegment = 1e18;
 };
 
-class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public muse::actions::Actionable, public muse::Contextable
+class PolylinePlot : public QQuickPaintedItem, public muse::async::Asyncable, public muse::actions::Actionable, public muse::Contextable
 {
     Q_OBJECT
 
@@ -59,8 +59,8 @@ class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public
         QColor ghostPointOutlineColor READ ghostPointOutlineColor WRITE setGhostPointOutlineColor NOTIFY ghostPointOutlineColorChanged)
     Q_PROPERTY(qreal hitRadius READ hitRadius WRITE setHitRadius NOTIFY hitRadiusChanged)
 
-    Q_PROPERTY(bool snap READ snap WRITE setSnap NOTIFY snapChanged)
-    Q_PROPERTY(qreal snapPx READ snapPx WRITE setSnapPx NOTIFY snapPxChanged)
+    Q_PROPERTY(bool isSnapEnabled READ isSnapEnabled WRITE setIsSnapEnabled NOTIFY isSnapEnabledChanged)
+    Q_PROPERTY(qreal snapThresholdPx READ snapThresholdPx WRITE setSnapThresholdPx NOTIFY snapThresholdPxChanged)
 
     Q_PROPERTY(QVector<QPointF> points READ points WRITE setPoints NOTIFY pointsChanged)
 
@@ -90,7 +90,7 @@ class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher { this };
 
 public:
-    explicit Polyline(QQuickItem* parent = nullptr);
+    explicit PolylinePlot(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void init();
 
@@ -124,11 +124,11 @@ public:
     qreal hitRadius() const;
     void setHitRadius(qreal);
 
-    bool snap() const;
-    void setSnap(bool);
+    bool isSnapEnabled() const;
+    void setIsSnapEnabled(bool);
 
-    qreal snapPx() const;
-    void setSnapPx(qreal);
+    qreal snapThresholdPx() const;
+    void setSnapThresholdPx(qreal);
 
     QVector<QPointF> points() const;
     void setPoints(const QVector<QPointF>&);
@@ -176,8 +176,8 @@ signals:
     void pointCentreColorChanged();
     void ghostPointOutlineColorChanged();
     void hitRadiusChanged();
-    void snapChanged();
-    void snapPxChanged();
+    void isSnapEnabledChanged();
+    void snapThresholdPxChanged();
 
     void pointAdded(qreal x, qreal y, bool completed);
     void pointMoved(int index, qreal x, qreal y, bool completed);
@@ -248,8 +248,8 @@ private:
     QColor m_pointCentreColor;
     QColor m_ghostPointOutlineColor;
     qreal m_hitRadius = 9.0;
-    bool m_snap = true;
-    qreal m_snapPx = 7.0;
+    bool m_isSnapEnabled = true;
+    qreal m_snapThresholdPx = 7.0;
 
     QVector<QPointF> m_points;          // domain points as provided from model
     QVector<QPointF> m_pointsNVisible;  // normalized points [0..1], cropped to frame boundaries (used for drawing only)
