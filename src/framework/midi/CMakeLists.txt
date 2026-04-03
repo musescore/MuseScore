@@ -73,3 +73,7 @@ elseif (OS_IS_LIN OR OS_IS_FBSD)
     target_include_directories(muse_midi PRIVATE ${ALSA_INCLUDE_DIRS})
     target_link_libraries(muse_midi PRIVATE ${ALSA_LIBRARIES} pthread)
 endif()
+
+if (MUSE_MODULE_MIDI_TESTS)
+   add_subdirectory(tests)
+endif()
