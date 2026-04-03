@@ -134,7 +134,9 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
 ExportDialogModel::~ExportDialogModel()
 {
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
-    disableVideoExportSettingMode();
+    if (videoEncoderResolver()) {
+        disableVideoExportSettingMode();
+    }
 #endif
 
     m_selectionModel->deleteLater();
@@ -616,9 +618,9 @@ void ExportDialogModel::setVideoResolution(const QString& resolution)
 bool ExportDialogModel::isFFmpegAvailable() const
 {
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
-    return videoEncoderResolver()->loadedFFmpegVersion() != muse::media::FFMPEG_INVALID_VERION;
+    return videoEncoderResolver()->loadedFFmpegVersion() != muse::media::FFMPEG_INVALID_VERSION;
 #else
-    return true;
+    return false;
 #endif
 }
 

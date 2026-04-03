@@ -24,5 +24,5 @@
 
 namespace muse::media {
 using FFmpegVersion = int;
-static const FFmpegVersion FFMPEG_INVALID_VERION = -1;
+inline constexpr FFmpegVersion FFMPEG_INVALID_VERSION = -1;
 }

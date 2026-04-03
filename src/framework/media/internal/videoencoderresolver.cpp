@@ -40,6 +40,8 @@ void VideoEncoderResolver::init()
 {
     loadFFmpeg(configuration()->ffmpegLibsDir());
 
+    //! NOTE: We need to search for and reload the FFmpeg libraries with a delay,
+    //!       because this is a resource-intensive operation.
     m_reloadFfmpegTimer = std::make_shared<Timer>(std::chrono::seconds(1));
     m_reloadFfmpegTimer->onTimeout(this, [this](){
         loadFFmpeg(configuration()->ffmpegLibsDir());
@@ -88,7 +90,7 @@ void VideoEncoderResolver::loadFFmpeg(const io::path_t& ffmpegLibsDir)
 void VideoEncoderResolver::setIsSettingMode(bool arg)
 {
     if (arg) {
-        if (m_currentEncoderFFmpegVersion == FFMPEG_INVALID_VERION) {
+        if (m_currentEncoderFFmpegVersion == FFMPEG_INVALID_VERSION) {
             startWatchingFfmpegsDirs();
         }
     } else {
@@ -135,7 +137,7 @@ void VideoEncoderResolver::setCurrentVideoEncoder(IVideoEncoderPtr encoder)
 
 void VideoEncoderResolver::resetFFmpegSettings()
 {
-    m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERION;
+    m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
     configuration()->setFFmpegLibsDir({});
 
     m_loadedFFmpegChanged.notify();

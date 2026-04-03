@@ -60,14 +60,14 @@ private:
 
     struct EncoderInfo {
         IVideoEncoderPtr encoder;
-        FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERION;
+        FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERSION;
         io::path_t ffmpegLibsDir;
     };
 
     EncoderInfo makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const;
 
     IVideoEncoderPtr m_encoder;
-    FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERION;
+    FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
 
     async::Notification m_loadedFFmpegChanged;
 

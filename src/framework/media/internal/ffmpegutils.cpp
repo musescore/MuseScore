@@ -142,7 +142,7 @@ FFmpegVersion versionFromAVFormatPath(const io::path_t& path)
         }
     }
 
-    return FFMPEG_INVALID_VERION;
+    return FFMPEG_INVALID_VERSION;
 }
 
 FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)

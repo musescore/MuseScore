@@ -31,7 +31,9 @@ VideoPreferencesModel::VideoPreferencesModel(QObject* parent)
 
 VideoPreferencesModel::~VideoPreferencesModel()
 {
-    disableVideoExportSettingMode();
+    if (videoEncoderResolver()) {
+        disableVideoExportSettingMode();
+    }
 }
 
 void VideoPreferencesModel::load()

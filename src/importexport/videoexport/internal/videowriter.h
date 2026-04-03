@@ -36,8 +36,6 @@
 #include "project/inotationwriter.h"
 #include "project/inotationwritersregister.h"
 
-#include "notation/notationtypes.h"
-
 class QImage;
 
 namespace muse::draw {
@@ -48,11 +46,11 @@ namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
     muse::ContextInject<project::INotationWritersRegister> writers = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
-    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 
 public:
     explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
@@ -86,7 +84,7 @@ private:
     void startVideoExport(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& cfg);
     void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
 
-    void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, Config config);
+    void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& config);
 
     bool generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, muse::draw::Painter& painter,
                                QImage& frame, const Config& config, int totalFrameCount);

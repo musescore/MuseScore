@@ -363,9 +363,10 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
     score->update();
 }
 
-void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, Config config)
+void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& config)
 {
-    auto restoreData = prepareScore(notation, config);
+    Config actualConfig = config;
+    auto restoreData = prepareScore(notation, actualConfig);
     if (!restoreData) {
         m_writeRet = make_ret(muse::Ret::Code::UnknownError);
         m_isCompleted = true;
@@ -378,9 +379,9 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     };
 
     // Setup painting
-    QImage frame(config.width, config.height, QImage::Format_RGB32);
-    frame.setDotsPerMeterX(std::lrint((config.canvasDpi * 1000) / engraving::INCH));
-    frame.setDotsPerMeterY(std::lrint((config.canvasDpi * 1000) / engraving::INCH));
+    QImage frame(actualConfig.width, actualConfig.height, QImage::Format_RGB32);
+    frame.setDotsPerMeterX(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
+    frame.setDotsPerMeterY(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
 
     QPainter qp(&frame);
     qp.setRenderHint(QPainter::Antialiasing, true);
@@ -392,26 +393,26 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     INotationPlaybackPtr playback = notation->masterNotation()->playback();
     float totalPlayTimeSec = playback->totalPlayTime();
 
-    int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
-    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
-    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    int leadingFrameCount = static_cast<int>(actualConfig.leadingSec * actualConfig.fps);
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * actualConfig.fps);
+    int trailingFrameCount = static_cast<int>(actualConfig.trailingSec * actualConfig.fps);
     int totalFrameCount = leadingFrameCount + scoreFrameCount + trailingFrameCount;
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << totalFrameCount;
 
     m_progress.start();
 
     // Add score title
-    if (!generateLeadingFrames(encoder, notation, painter, frame, config, totalFrameCount)) {
+    if (!generateLeadingFrames(encoder, notation, painter, frame, actualConfig, totalFrameCount)) {
         return;
     }
 
     // Add score frames
-    if (!generateScoreFrames(encoder, notation, painter, frame, config, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
+    if (!generateScoreFrames(encoder, notation, painter, frame, actualConfig, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
         return;
     }
 
     // Add "Made with MuseScore"
-    if (!generateTrailingFrames(encoder, config)) {
+    if (!generateTrailingFrames(encoder, actualConfig)) {
         return;
     }
 
