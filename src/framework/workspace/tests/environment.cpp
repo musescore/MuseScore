@@ -20,8 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <gtest/gtest.h>
+
 #include "testing/environment.h"
 
+#include "workspace/tests/workspace_test_helpers.h"
 #include "workspace/tests/mocks/workspaceconfigurationmock.h"
 
 using namespace ::testing;
@@ -29,12 +32,17 @@ using namespace ::testing;
 static muse::testing::SuiteEnvironment workspace_se
     = muse::testing::SuiteEnvironment()
       .setPreInit([](){
-    auto workspaceConfig = std::make_shared<::testing::NiceMock<muse::workspace::WorkspaceConfigurationMock> >();
+    auto& testCfg = muse::workspace::WorkspaceTestConfig::instance();
+    if (!testCfg.load(muse::io::path_t(WORKSPACE_CONFIG_FILE), BUILTIN_WORKSPACES_DIR)) {
+        FAIL() << "Failed to load workspace config from: " << WORKSPACE_CONFIG_FILE;
+    }
 
-    ON_CALL(*workspaceConfig, defaultWorkspaceName())
-    .WillByDefault(Return("Default"));
+    auto workspaceConfigMock = std::make_shared<::testing::NiceMock<muse::workspace::WorkspaceConfigurationMock> >();
 
-    muse::modularity::globalIoc()->registerExport<muse::workspace::IWorkspaceConfiguration>("utests", workspaceConfig);
+    ON_CALL(*workspaceConfigMock, defaultWorkspaceName())
+    .WillByDefault(Return(testCfg.defaultWorkspaceName()));
+
+    muse::modularity::globalIoc()->registerExport<muse::workspace::IWorkspaceConfiguration>("utests", workspaceConfigMock);
 }).setDeInit([](){
     muse::modularity::globalIoc()->unregister<muse::workspace::IWorkspaceConfiguration>("utests");
 });
