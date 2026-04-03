@@ -37,7 +37,6 @@ public:
     void setup() override;
     void finish() override;
 
-    void showContextSplash() override;
     muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
     void destroyContext(const muse::modularity::ContextPtr& ctx) override;
     size_t contextCount() const override;
@@ -52,11 +51,18 @@ private:
     };
 
     SplashConfig splashConfig(const CmdOptions& options) const;
+    void showContextSplash(const muse::modularity::ContextPtr& ctxId);
 
     void applyCommandLineOptions(const CmdOptions& options);
 
+    void setupContext(const muse::modularity::ContextPtr& ctxId);
+    bool loadMainWindow(const muse::modularity::ContextPtr& ctxId);
+    void startupScenario(const muse::modularity::ContextPtr& ctxId);
+
     struct Context {
         muse::modularity::ContextPtr ctx;
+        bool initializing = false;
+        CmdOptions options;
         std::vector<muse::modularity::IContextSetup*> setups;
         QQuickWindow* window = nullptr;
 
@@ -65,7 +71,7 @@ private:
 
     Context& context(const muse::modularity::ContextPtr& ctx);
 
-    CmdOptions m_options;
+    CmdOptions m_appOptions;
 
     appshell::SplashScreen* m_splashScreen = nullptr;
 

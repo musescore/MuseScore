@@ -173,11 +173,8 @@ int main(int argc, char** argv)
         app->showSplash();
         QMetaObject::invokeMethod(qapp, [qapp, &app]() {
             app->setup();
-            QMetaObject::invokeMethod(qapp, [qapp, &app]() {
-                app->showContextSplash();
-                QMetaObject::invokeMethod(qapp, [&app]() {
-                    app->setupNewContext();
-                }, Qt::QueuedConnection);
+            QMetaObject::invokeMethod(qapp, [&app]() {
+                app->setupNewContext();
             }, Qt::QueuedConnection);
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);

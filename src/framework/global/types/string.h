@@ -410,6 +410,8 @@ public:
     bool removeAll(const String& str);
     void removeAt(size_t i);
 
+    std::vector<std::string> toStdStringList() const;
+
 #ifndef NO_QT_SUPPORT
     StringList(const QStringList& l);
     QStringList toQStringList() const;
