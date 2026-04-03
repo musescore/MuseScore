@@ -109,14 +109,18 @@ void VstPluginInstance::load()
 
         const auto& factory = m_module->getFactory();
 
+        //! NOTE: For multi-component bundles, the resource ID is the component name or UID.
+        //! Match by name or UID against the factory's audio effect components.
         for (const ClassInfo& classInfo : factory.classInfos()) {
             if (classInfo.category() != kVstAudioEffectClass) {
                 continue;
             }
 
-            m_pluginProvider = std::make_unique<VstPluginProvider>(factory, classInfo);
-            m_classInfo = classInfo;
-            break;
+            if (classInfo.name() == m_resourceId || classInfo.ID().toString() == m_resourceId) {
+                m_pluginProvider = std::make_unique<VstPluginProvider>(factory, classInfo);
+                m_classInfo = classInfo;
+                break;
+            }
         }
 
         if (!m_pluginProvider) {
