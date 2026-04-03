@@ -4060,7 +4060,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_brackets">
           <property name="title">
            <string>Group brackets</string>
           </property>
