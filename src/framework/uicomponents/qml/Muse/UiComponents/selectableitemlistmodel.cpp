@@ -34,7 +34,16 @@ SelectableItemListModel::Item::Item(QObject* parent)
 SelectableItemListModel::SelectableItemListModel(QObject* parent)
     : QAbstractListModel(parent), m_selection(new ItemMultiSelectionModel(this))
 {
-    connect(m_selection, &ItemMultiSelectionModel::selectionChanged, [this]() {
+    connect(m_selection, &ItemMultiSelectionModel::selectionChanged, this,
+            [this](const QItemSelection& selected, const QItemSelection& deselected) {
+        QModelIndexList changedIndexes;
+        changedIndexes << selected.indexes();
+        changedIndexes << deselected.indexes();
+
+        for (const QModelIndex& idx : changedIndexes) {
+            emit dataChanged(idx, idx, { RoleIsSelected });
+        }
+
         emit selectionChanged();
         onUpdateOperationsAvailability();
     });
@@ -88,8 +97,6 @@ void SelectableItemListModel::selectRow(int row)
     TRACEFUNC;
 
     m_selection->select(index(row));
-
-    emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
 }
 
 void SelectableItemListModel::moveSelectionUp()
