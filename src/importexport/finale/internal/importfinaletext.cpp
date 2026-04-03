@@ -118,7 +118,9 @@ void FrameSettings::setFrameProperties(TextBase* item) const
     if (item->frameType() != FrameType::NO_FRAME) {
         setAndStyleProperty(item, Pid::FRAME_WIDTH, spatiumFromSp(frameWidth, item)); // is this the correct scaling?
         setAndStyleProperty(item, Pid::FRAME_PADDING, spatiumFromSp(paddingWidth, item)); // is this the correct scaling?
-        setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
+        if (frameRound > 0) {
+            setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
+        }
     }
 }
 
