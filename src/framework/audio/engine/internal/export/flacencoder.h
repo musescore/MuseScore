@@ -38,6 +38,7 @@ public:
 
 protected:
     size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
+    void prepareOutputBuffer(const samples_t totalSamplesNumber) override;
     bool openDestination(const io::path_t& path) override;
     void closeDestination() override;
 

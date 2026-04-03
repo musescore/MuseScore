@@ -22,6 +22,8 @@
 
 #include "mp3encoder.h"
 
+#include <cmath>
+
 #include "lame.h"
 
 #include "log.h"
@@ -80,35 +82,47 @@ bool Mp3Encoder::init(const io::path_t& path, const SoundTrackFormat& format, co
     return true;
 }
 
-size_t Mp3Encoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
+size_t Mp3Encoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
 {
-    //!Note See thirdparty/lame/API
-
-    return totalSamplesNumber;
+    //! LAME (lame.h): worst-case mp3buf for one encode call ≈ 1.25 * samples_per_channel + 7200;
+    //! same buffer is used for lame_encode_flush (needs ≥ 7200). Extra margin for rounding.
+    const samples_t n = m_format.outputSpec.samplesPerChannel > 0 ? m_format.outputSpec.samplesPerChannel : 4096;
+    const double sz = 7200.0 + 1.25 * static_cast<double>(n) + 7200.0;
+    return static_cast<size_t>(std::ceil(sz)) + 512;
 }
 
 size_t Mp3Encoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    m_progress.progress(0, 100, "");
+    const int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, static_cast<int>(samplesPerChannel),
+                                                                       m_outputBuffer.data(),
+                                                                       static_cast<int>(m_outputBuffer.size()));
 
-    int encodedBytes = lame_encode_buffer_interleaved_ieee_float(m_handler->flags, input, samplesPerChannel,
-                                                                 m_outputBuffer.data(),
-                                                                 static_cast<int>(m_outputBuffer.size()));
+    if (encodedBytes < 0) {
+        LOGE() << "LAME encoder failed: " << encodedBytes;
+        return 0;
+    }
 
-    m_progress.progress(50, 100, "");
-    size_t result = std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
-    m_progress.progress(100, 100, "");
+    if (encodedBytes > 0) {
+        const size_t written = std::fwrite(m_outputBuffer.data(), sizeof(unsigned char),
+                                           static_cast<size_t>(encodedBytes), m_fileStream);
+        if (written != static_cast<size_t>(encodedBytes)) {
+            return 0;
+        }
+    }
 
-    return result;
+    return samplesPerChannel;
 }
 
 size_t Mp3Encoder::flush()
 {
-    int encodedBytes = lame_encode_flush(m_handler->flags,
-                                         m_outputBuffer.data(),
-                                         static_cast<int>(m_outputBuffer.size()));
+    const int encodedBytes = lame_encode_flush(m_handler->flags,
+                                               m_outputBuffer.data(),
+                                               static_cast<int>(m_outputBuffer.size()));
+    if (encodedBytes > 0) {
+        std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), static_cast<size_t>(encodedBytes), m_fileStream);
+    }
 
-    return std::fwrite(m_outputBuffer.data(), sizeof(unsigned char), encodedBytes, m_fileStream);
+    return 0;
 }
 
 void Mp3Encoder::closeDestination()

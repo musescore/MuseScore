@@ -22,6 +22,9 @@
 
 #include "flacencoder.h"
 
+#include <algorithm>
+#include <vector>
+
 #include "FLAC++/encoder.h"
 
 #include "../dsp/audiomathutils.h"
@@ -33,25 +36,7 @@ using namespace muse::audio::encode;
 
 struct FlacHandler : public FLAC::Encoder::File
 {
-    using ProgressCallBack = std::function<void (int64_t /*current*/, int64_t /*total*/)>;
-
-    FlacHandler(const ProgressCallBack& progressCallBack)
-        : FLAC::Encoder::File(), m_callBack(progressCallBack) {}
-
-    void progress_callback(FLAC__uint64 bytes_written,
-                           FLAC__uint64 samples_written,
-                           uint32_t frames_written,
-                           uint32_t total_frames_estimate) override
-    {
-        LOGI() << "wrote " << bytes_written << " bytes, "
-               << samples_written << " samples, "
-               << frames_written << " frames\n"
-               << "TOTAL FRAMES: " << total_frames_estimate;
-
-        m_callBack(frames_written * 4, total_frames_estimate);
-    }
-
-    ProgressCallBack m_callBack;
+    void progress_callback(FLAC__uint64, FLAC__uint64, uint32_t, uint32_t) override {}
 };
 
 bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber)
@@ -62,9 +47,7 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
 
     m_format = format;
 
-    m_flac = new FlacHandler([this](int64_t current, int64_t total){
-        m_progress.progress(current, total);
-    });
+    m_flac = new FlacHandler();
 
     int bitsPerSample = 0;
     switch (m_format.sampleFormat) {
@@ -108,16 +91,16 @@ bool FlacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, c
     return true;
 }
 
+void FlacEncoder::prepareOutputBuffer(const samples_t /*totalSamplesNumber*/)
+{
+    m_outputBuffer.clear();
+}
+
 size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
     IF_ASSERT_FAILED(m_flac) {
         return 0;
     }
-
-    size_t result = 0;
-    size_t totalSamplesNumber = samplesPerChannel * m_format.outputSpec.audioChannelCount;
-    uint32_t frameSize = 1024;
-    size_t stepSize = frameSize * m_format.outputSpec.audioChannelCount;
 
     int bitsPerSample = 0;
     switch (m_format.sampleFormat) {
@@ -131,29 +114,33 @@ size_t FlacEncoder::encode(samples_t samplesPerChannel, const float* input)
         return 0;
     }
 
-    std::vector<FLAC__int32> buff(totalSamplesNumber);
-
-    for (size_t i = 0; i < totalSamplesNumber; ++i) {
-        buff[i] = dsp::convertFloatSamples<FLAC__int32>(input[i], bitsPerSample);
+    const auto channels = m_format.outputSpec.audioChannelCount;
+    if (channels == 0 || samplesPerChannel == 0) {
+        return 0;
     }
 
-    std::vector<FLAC__int32> intermBuff(stepSize);
+    constexpr uint32_t BLOCK_FRAMES = 1024;
+    std::vector<FLAC__int32> blockBuffer(static_cast<size_t>(BLOCK_FRAMES) * channels);
 
-    for (size_t i = 0; i < totalSamplesNumber; i += stepSize) {
-        size_t remainingSamples = totalSamplesNumber - i;
-        size_t samplesToCopy = std::min(stepSize, remainingSamples);
-        uint32_t samplesPerChannelToProcess = static_cast<uint32_t>(samplesToCopy) / m_format.outputSpec.audioChannelCount;
+    for (samples_t frameStart = 0; frameStart < samplesPerChannel;) {
+        const uint32_t nFrames = static_cast<uint32_t>(std::min<samples_t>(BLOCK_FRAMES, samplesPerChannel - frameStart));
 
-        std::copy(buff.data() + i, buff.data() + i + samplesToCopy, intermBuff.data());
-
-        if (m_flac->process_interleaved(intermBuff.data(), samplesPerChannelToProcess)) {
-            result += stepSize;
-        } else {
-            break;
+        for (uint32_t f = 0; f < nFrames; ++f) {
+            for (audioch_t c = 0; c < channels; ++c) {
+                const size_t i = (static_cast<size_t>(frameStart) + f) * channels + c;
+                blockBuffer[static_cast<size_t>(f) * channels + c]
+                    = dsp::convertFloatSamples<FLAC__int32>(input[i], bitsPerSample);
+            }
         }
+
+        if (!m_flac->process_interleaved(blockBuffer.data(), nFrames)) {
+            return 0;
+        }
+
+        frameStart += nFrames;
     }
 
-    return result;
+    return static_cast<size_t>(samplesPerChannel) * channels;
 }
 
 size_t FlacEncoder::flush()
@@ -162,9 +149,9 @@ size_t FlacEncoder::flush()
     return 0;
 }
 
-size_t FlacEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
+size_t FlacEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
 {
-    return totalSamplesNumber;
+    return 0;
 }
 
 bool FlacEncoder::openDestination(const io::path_t& path)
@@ -183,4 +170,5 @@ bool FlacEncoder::openDestination(const io::path_t& path)
 void FlacEncoder::closeDestination()
 {
     delete m_flac;
+    m_flac = nullptr;
 }
