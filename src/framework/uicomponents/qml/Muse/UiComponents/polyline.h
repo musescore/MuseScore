@@ -59,6 +59,9 @@ class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public
         QColor ghostPointOutlineColor READ ghostPointOutlineColor WRITE setGhostPointOutlineColor NOTIFY ghostPointOutlineColorChanged)
     Q_PROPERTY(qreal hitRadius READ hitRadius WRITE setHitRadius NOTIFY hitRadiusChanged)
 
+    Q_PROPERTY(bool snap READ snap WRITE setSnap NOTIFY snapChanged)
+    Q_PROPERTY(qreal snapPx READ snapPx WRITE setSnapPx NOTIFY snapPxChanged)
+
     Q_PROPERTY(QVector<QPointF> points READ points WRITE setPoints NOTIFY pointsChanged)
 
     Q_PROPERTY(qreal defaultValue READ defaultValue WRITE setDefaultValue NOTIFY defaultValueChanged)
@@ -82,8 +85,9 @@ class Polyline : public QQuickPaintedItem, public muse::async::Asyncable, public
 
     QML_ELEMENT
 
-    muse::Inject<muse::actions::IActionsDispatcher> dispatcher { this };
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+
+    muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher { this };
 
 public:
     explicit Polyline(QQuickItem* parent = nullptr);
@@ -119,6 +123,12 @@ public:
 
     qreal hitRadius() const;
     void setHitRadius(qreal);
+
+    bool snap() const;
+    void setSnap(bool);
+
+    qreal snapPx() const;
+    void setSnapPx(qreal);
 
     QVector<QPointF> points() const;
     void setPoints(const QVector<QPointF>&);
@@ -166,6 +176,8 @@ signals:
     void pointCentreColorChanged();
     void ghostPointOutlineColorChanged();
     void hitRadiusChanged();
+    void snapChanged();
+    void snapPxChanged();
 
     void pointAdded(qreal x, qreal y, bool completed);
     void pointMoved(int index, qreal x, qreal y, bool completed);
@@ -222,6 +234,7 @@ private:
     qreal yNormalizedFromDomain(qreal yDomain) const;
     void updateBaselineFromDefaultValue();
 
+    QPointF snapToNeighbor(qreal dragPxX, QPointF pDomain) const;
     void updateActivePoint();
 
 private:
@@ -235,6 +248,8 @@ private:
     QColor m_pointCentreColor;
     QColor m_ghostPointOutlineColor;
     qreal m_hitRadius = 9.0;
+    bool m_snap = true;
+    qreal m_snapPx = 7.0;
 
     QVector<QPointF> m_points;          // domain points as provided from model
     QVector<QPointF> m_pointsNVisible;  // normalized points [0..1], cropped to frame boundaries (used for drawing only)

@@ -315,6 +315,36 @@ void Polyline::setHitRadius(qreal r)
     emit hitRadiusChanged();
 }
 
+bool Polyline::snap() const
+{
+    return m_snap;
+}
+
+void Polyline::setSnap(bool v)
+{
+    if (m_snap == v) {
+        return;
+    }
+
+    m_snap = v;
+    emit snapChanged();
+}
+
+qreal Polyline::snapPx() const
+{
+    return m_snapPx;
+}
+
+void Polyline::setSnapPx(qreal v)
+{
+    if (m_snapPx == v) {
+        return;
+    }
+
+    m_snapPx = v;
+    emit snapPxChanged();
+}
+
 QVector<QPointF> Polyline::points() const
 {
     return m_points;
@@ -962,6 +992,49 @@ GhostPoint Polyline::ghostPointToPolylinePx(const QPointF& px) const
     return best;
 }
 
+QPointF Polyline::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
+{
+    if (!m_snap || !m_hasDraggedPointDomain || m_points.size() < 2) {
+        return pDomain;
+    }
+
+    // Find the dragged point's actual current index in m_points (which may
+    // have shifted after neighbor consumption) without modifying
+    // m_pressedPointIndex — the model needs that to stay at the original
+    // value so it can restore consumed points when dragging back.
+    int currentIdx = -1;
+    double bestDist = std::numeric_limits<double>::max();
+    for (int i = 0; i < m_points.size(); ++i) {
+        const double dx = std::abs(m_points[i].x() - m_draggedPointDomain.x());
+        const double dy = std::abs(m_points[i].y() - m_draggedPointDomain.y());
+        const double dist = dx + dy;
+        if (dist < bestDist) {
+            bestDist = dist;
+            currentIdx = i;
+        }
+    }
+
+    if (currentIdx < 0) {
+        return pDomain;
+    }
+
+    if (currentIdx + 1 < m_points.size()) {
+        const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx + 1]).x());
+        if (std::abs(dragPxX - neighborPxX) <= m_snapPx) {
+            pDomain.setX(m_points[currentIdx + 1].x());
+        }
+    }
+
+    if (currentIdx > 0) {
+        const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx - 1]).x());
+        if (std::abs(dragPxX - neighborPxX) <= m_snapPx) {
+            pDomain.setX(m_points[currentIdx - 1].x());
+        }
+    }
+
+    return pDomain;
+}
+
 void Polyline::updateCursor()
 {
     const bool interactive = m_hoveredOnLine || m_pressed || (m_pressedPointIndex >= 0);
@@ -1230,7 +1303,8 @@ void Polyline::mouseMoveEvent(QMouseEvent* e)
         QPointF pN(pos.x() / width(), 1.0 - (pos.y() / height()));
         pN = clamp01(pN);
 
-        const QPointF pDomain = domainFromNormalized(pN);
+        const QPointF pDomain = snapToNeighbor(pos.x(), domainFromNormalized(pN));
+
         m_draggedPointDomain = pDomain;
         m_hasDraggedPointDomain = true;
         emit pointMoved(m_pressedPointIndex, pDomain.x(), pDomain.y(), /*completed*/ false);
@@ -1256,7 +1330,8 @@ void Polyline::mouseReleaseEvent(QMouseEvent* e)
         QPointF pN(rel.x() / width(), 1.0 - (rel.y() / height()));
         pN = clamp01(pN);
 
-        const QPointF pDomain = domainFromNormalized(pN);
+        const QPointF pDomain = snapToNeighbor(rel.x(), domainFromNormalized(pN));
+
         m_draggedPointDomain = pDomain;
         m_hasDraggedPointDomain = true;
         emit pointMoved(m_pressedPointIndex, pDomain.x(), pDomain.y(), /*completed*/ true);
