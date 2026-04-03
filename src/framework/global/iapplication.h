@@ -69,7 +69,6 @@ public:
     virtual void finish() = 0;
     virtual void restart() = 0;
 
-    virtual void showContextSplash() {}
     virtual modularity::ContextPtr setupNewContext(const StringList& args = {}) = 0;
     virtual void destroyContext(const modularity::ContextPtr& ctx) = 0;
     virtual size_t contextCount() const = 0;

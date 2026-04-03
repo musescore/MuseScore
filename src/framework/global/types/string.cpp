@@ -1502,6 +1502,16 @@ void StringList::removeAt(size_t i)
     erase(begin() + i);
 }
 
+std::vector<std::string> StringList::toStdStringList() const
+{
+    std::vector<std::string> result;
+    result.reserve(size());
+    for (const String& s : *this) {
+        result.push_back(s.toStdString());
+    }
+    return result;
+}
+
 #ifndef NO_QT_SUPPORT
 StringList::StringList(const QStringList& l)
 {
