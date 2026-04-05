@@ -3804,7 +3804,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12401"/>
         <source>Parentheses indicating ties</source>
-        <translation>Sulkumerkit merkitsevät sidonnaisuuksia</translation>
+        <translation>Kaarisulut osoittavat yhdistymisiä</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12407"/>
@@ -3875,12 +3875,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12673"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation>Palauta &apos;Käytä musiikkisymbolien fonttia tuplettinumeroissa&apos; -arvo</translation>
+        <translation>Palauta &apos;Käytä musiikkisymbolien fonttia tuplettinumeroille&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12844"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation>Käytä musiikkisymbolien fonttia tuplettinumeroissa</translation>
+        <translation>Käytä musiikkisymbolien fonttia tuplettinumeroille</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12573"/>
@@ -7197,7 +7197,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="912"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="913"/>
         <source>Add parentheses to element</source>
-        <translation>Lisää sulut elementtiin</translation>
+        <translation>Lisää kaarisulut elementtiin</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="919"/>
@@ -7745,7 +7745,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1464"/>
         <source>Othe&amp;r…</source>
-        <translation>&amp;Muita…</translation>
+        <translation>&amp;Muu…</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1465"/>
@@ -16349,7 +16349,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="96"/>
         <source>hide generated parentheses</source>
-        <translation>piilota luodut sulkeet</translation>
+        <translation>piilota luodut kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
@@ -16994,7 +16994,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="248"/>
         <source>vertical position of multimeasure rest number</source>
-        <translation>monitahtisen taukonumeron pystysuora sijainti</translation>
+        <translation>monitahtisen taukonumeron pystysijainti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="249"/>
@@ -17009,7 +17009,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
         <source>vertical position of measure repeat number</source>
-        <translation>tahdin toistonumeron pystysuora sijainti</translation>
+        <translation>tahdin toistonumeron pystysijainti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
@@ -17379,7 +17379,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
         <source>musical symbols scale</source>
-        <translation>musiikillisten symbolien skaala</translation>
+        <translation>musiikkisymbolien skaalaus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="343"/>
@@ -24738,7 +24738,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="52"/>
         <source>Notehead parentheses</source>
-        <translation>Nuotinpään sulut</translation>
+        <translation>Nuotinpään kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="59"/>
@@ -24748,7 +24748,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="60"/>
         <source>Notehead with parentheses</source>
-        <translation>Nuotinpää suluilla</translation>
+        <translation>Nuotinpää kaarisuluilla</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/HeadSettings.qml" line="77"/>
@@ -27477,7 +27477,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="747"/>
         <source>Small parentheses</source>
-        <translation>Pienet kaarisulkeet</translation>
+        <translation>Pienet kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="48"/>
@@ -29043,7 +29043,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/AccidentalsPage.qml" line="49"/>
         <source>Padding inside parentheses:</source>
-        <translation>Täyte sulkujen sisällä:</translation>
+        <translation>Täyte kaarisulkujen sisällä:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/AccidentalsPage.qml" line="64"/>
@@ -29823,7 +29823,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="573"/>
         <source>Use parentheses</source>
-        <translation>Käytä sulkeita</translation>
+        <translation>Käytä kaarisulkuja</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="603"/>
@@ -30066,7 +30066,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="56"/>
         <source>Vertical position:</source>
-        <translation>Pystysuora sijainti:</translation>
+        <translation>Pystysijainti:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="84"/>
@@ -37059,7 +37059,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/navigationpanel.cpp" line="143"/>
         <source>direction is horizontal</source>
-        <translation>suunta on horisonttaalinen</translation>
+        <translation>suunta on vaakasuora</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/navigationpanel.cpp" line="144"/>
@@ -37390,12 +37390,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
         <source>Add notehead parentheses</source>
-        <translation>Lisää nuotinpään sulkeet</translation>
+        <translation>Lisää nuotinpään kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="57"/>
         <source>Remove notehead parentheses</source>
-        <translation>Poista nuotinpään sulkeet</translation>
+        <translation>Poista nuotinpään kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/stems/stemsettingsmodel.cpp" line="115"/>
@@ -37709,7 +37709,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5629"/>
         <source>Add parentheses</source>
-        <translation>Lisää sulkeet</translation>
+        <translation>Lisää kaarisulut</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5656"/>

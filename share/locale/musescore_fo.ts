@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="64"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Vinstra-stilla tekst innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="89"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Set tekst á vatnrættu miðju innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="114"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Høgra-stilla tekst innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="139"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Breið tekst út á fullu vídd</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="164"/>
         <source>Left-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Høgra stilla tekst boks á tilvísingarpunkt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="189"/>
         <source>Horizontally center text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Stilla vatnrætta miðju av teksti til tilvísingarpunkt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="214"/>
         <source>Right-align text box to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Høgra stilla tekst boks á tilvísingarpunkt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/align_select.ui" line="262"/>
@@ -810,7 +810,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="452"/>
         <source>Tab font preset</source>
-        <translation type="unfinished"/>
+        <translation>Tab funtur forstilling</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="466"/>
@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="57"/>
         <source>Spacing</source>
-        <translation type="unfinished"/>
+        <translation>Millumrúm</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="62"/>
@@ -1147,7 +1147,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="127"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6943"/>
         <source>Chord brackets</source>
-        <translation type="unfinished"/>
+        <translation>Akkord klombur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="132"/>
@@ -1196,7 +1196,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="172"/>
         <source>Bends &amp; dives</source>
-        <translation type="unfinished"/>
+        <translation>Bendingar og kavan</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="177"/>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="192"/>
         <source>Hammer-ons, pull-offs &amp; tapping</source>
-        <translation type="unfinished"/>
+        <translation>Hammer-ons, pull-offs &amp; tapping</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="197"/>
@@ -1724,17 +1724,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="750"/>
         <source>Eighth</source>
-        <translation>Átta</translation>
+        <translation>Áttandi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="757"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sekstandi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="781"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Swing lutfall:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="831"/>
@@ -1754,7 +1754,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="969"/>
         <source>Vertical spacing</source>
-        <translation type="unfinished"/>
+        <translation>Loddrætt millumrúm</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="998"/>
@@ -1923,7 +1923,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2023"/>
         <source>Horizontal spacing</source>
-        <translation type="unfinished"/>
+        <translation>Vatnrætt millumrúm</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2041"/>
@@ -2073,7 +2073,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2608"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Nóta til nóta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2634"/>
@@ -2088,7 +2088,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2702"/>
         <source>System density:</source>
-        <translation type="unfinished"/>
+        <translation>Skipanar tættleiki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2709"/>
@@ -2128,7 +2128,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2836"/>
         <source>Start of the system to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Byrjan av skipan til fyrsta nóta:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2889"/>
@@ -2280,7 +2280,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3783"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Nýtsla av broytingum á evrabredda/neðrabredda</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="3839"/>
@@ -2351,7 +2351,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4177"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4401"/>
         <source>Symbol size:</source>
-        <translation type="unfinished"/>
+        <translation>Tekn stødd:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4187"/>
@@ -2364,27 +2364,27 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4249"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4472"/>
         <source>Horizontal alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Vatnrøtt støða:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4259"/>
         <source>Center on the leftmost system barline</source>
-        <translation type="unfinished"/>
+        <translation>Miðja skipanar nótalinju longst til vinstru</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4266"/>
         <source>Align to the left page margin</source>
-        <translation type="unfinished"/>
+        <translation>Stilla til vinstra síðubredda</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4479"/>
         <source>Center on the rightmost system barline</source>
-        <translation type="unfinished"/>
+        <translation>Miðja á skipanarnótalinju longst til høgru</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4486"/>
         <source>Align to the right page margin</source>
-        <translation type="unfinished"/>
+        <translation>Stila til høgra síðubredda</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4574"/>
@@ -2531,7 +2531,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4966"/>
         <source>Left (start) repeat signs</source>
-        <translation type="unfinished"/>
+        <translation>Vinstra (byrjan) endurtøku tekn</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4995"/>
@@ -2686,7 +2686,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5595"/>
         <source>Use H-bar</source>
-        <translation type="unfinished"/>
+        <translation>Brúka H-takt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5605"/>
@@ -2713,7 +2713,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5676"/>
         <source>Break H-bar if number overlaps</source>
-        <translation type="unfinished"/>
+        <translation>H-takt reglubrot um tøl umskarast</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5686"/>
@@ -2933,7 +2933,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6568"/>
         <source>Extend bracket to end of duration</source>
-        <translation type="unfinished"/>
+        <translation>Lat klombur fevna um enda av tíðarbili</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6578"/>
@@ -3114,7 +3114,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7222"/>
         <source>Reset &apos;Avoid barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla &quot;uttanum taktstrikur&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7235"/>
@@ -3450,12 +3450,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10434"/>
         <source>Reset &apos;Min. space between lyrics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla &quot;min. rúm millum sangtekstir&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10457"/>
         <source>Min. space between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Min. rúm millum sangtekstir:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10483"/>
@@ -3480,7 +3480,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10592"/>
         <source>Align verse numbers</source>
-        <translation type="unfinished"/>
+        <translation>Versnummur í beinum rað</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10665"/>
@@ -3500,17 +3500,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10795"/>
         <source>Dashes</source>
-        <translation type="unfinished"/>
+        <translation>Strok</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10803"/>
         <source>Min. space between dash and text:</source>
-        <translation type="unfinished"/>
+        <translation>Min. rúm millum strok og tekst:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10813"/>
         <source>Limit number of dashes to:</source>
-        <translation type="unfinished"/>
+        <translation>Mesta tal av strokum:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10823"/>
@@ -3568,7 +3568,7 @@ tekstur x-hædd):</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11064"/>
         <source>Max. space between dashes:</source>
-        <translation type="unfinished"/>
+        <translation>Mesta rúm millum strok:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11081"/>
@@ -3606,12 +3606,13 @@ fyrsta nóta í skipanini</translation>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11142"/>
         <source>Never left-align syllables
 followed by dashes</source>
-        <translation type="unfinished"/>
+        <translation>Ongantíð vinstrastilla stavilsir 
+um aftaná strok</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11162"/>
         <source>Extension lines</source>
-        <translation type="unfinished"/>
+        <translation>Leingingarstrikur:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11202"/>
@@ -3651,7 +3652,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11387"/>
         <source>Reset &apos;Snap to dynamics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla &quot;Fest í dynamikk&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11609"/>
@@ -3891,22 +3892,22 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12582"/>
         <source>Symbol font scale:</source>
-        <translation type="unfinished"/>
+        <translation>Tekn snið stødd:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12611"/>
         <source>Reset &apos;Symbol font scale&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla &quot;tekn snið stødd&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12621"/>
         <source>Text font size:</source>
-        <translation type="unfinished"/>
+        <translation>Tekstfuntastødd:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12647"/>
         <source>Reset &apos;Text font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla &quot;Tekstfuntastødd&quot; virði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12887"/>
@@ -4738,12 +4739,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sekstandi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Swing lutfall:</translation>
     </message>
 </context>
 <context>
@@ -5206,12 +5207,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>Transponera akkordtekn og bandaborð diagramm</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="523"/>
         <source>Accidentals:</source>
-        <translation type="unfinished"/>
+        <translation>Fortekn:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="537"/>
@@ -5371,7 +5372,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="338"/>
         <source>%1 panel</source>
-        <translation type="unfinished"/>
+        <translation>%1 panel</translation>
     </message>
 </context>
 <context>
@@ -5430,7 +5431,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Accessibility &amp;statement</source>
-        <translation type="unfinished"/>
+        <translation>Atgongd &amp;boð</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
@@ -5498,7 +5499,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="72"/>
         <source>Show/hide layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Vìs/goym uppsetingarpanel</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="143"/>
@@ -5515,7 +5516,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
         <source>S&amp;election filter</source>
-        <translation type="unfinished"/>
+        <translation>Ú&amp;rvalsfiltur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
@@ -5527,13 +5528,13 @@ followed by dashes</source>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="157"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Søga</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="158"/>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="93"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>Vís/goym angra søgu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
@@ -5807,7 +5808,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>&amp;Dumsa accessibility tree to console</translation>
+        <translation>&amp;Dumsa atkomutræ til stýripult</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="73"/>
@@ -5827,12 +5828,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="84"/>
         <source>Show engraving &amp;undo stack</source>
-        <translation type="unfinished"/>
+        <translation>Vís prenta &amp;angra stakk</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="85"/>
         <source>Show engraving undo stack</source>
-        <translation type="unfinished"/>
+        <translation>Vís prenta angra stakk</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="90"/>
@@ -9649,22 +9650,22 @@ followed by dashes</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="65"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Goym sum</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
         <source>Save a &amp;copy…</source>
-        <translation type="unfinished"/>
+        <translation>Goym eitt &amp;avrit</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="71"/>
         <source>Save a copy</source>
-        <translation type="unfinished"/>
+        <translation>Goym eitt avrit</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
         <source>Save &amp;selection…</source>
-        <translation type="unfinished"/>
+        <translation>Goym &amp;úrval</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="77"/>
@@ -9780,7 +9781,7 @@ followed by dashes</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="93"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="88"/>
         <source>MuseSounds</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/HomePage/HomeMenu.qml" line="94"/>
@@ -10021,7 +10022,9 @@ Hetta strikar tó ikki nakað nótablað.</translation>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Hetta nullstillar allar tínar stillingar og strikar allar sergjørdar sniðvegir.  Hetta strikar tó ikki nakað nótablað.
+
+Hetta kann ikki angrast.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="221"/>
@@ -10263,7 +10266,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="177"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Bandatalvu tekstur</translation>
     </message>
 </context>
 <context>
@@ -10339,7 +10342,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="208"/>
         <source>Save o&amp;ther</source>
-        <translation type="unfinished"/>
+        <translation>Goym a&amp;nnað</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="209"/>
@@ -10480,7 +10483,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Save your scores privately on MuseScore.com to revisit past versions and invite others to view and comment – and when you’re ready, share your music with the world.</source>
-        <translation type="unfinished"/>
+        <translation>Goym og fjal tíni nótabløð á MuseScore.com sí gamlar útgávur og bjóða øðrum at hyggja og viðmerkja – og send út í heimin tá liðugt er.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -11489,7 +11492,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="88"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Fílan varð goymd við nýggjari útgávu av Musescore Studio. Vitja &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; og fá tær nýggjastu útgávuna.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
@@ -11544,7 +11547,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="158"/>
         <source>Do not save EIDs</source>
-        <translation type="unfinished"/>
+        <translation>Goym ikki EID</translation>
     </message>
     <message>
         <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="94"/>
@@ -21299,7 +21302,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="59"/>
         <source>Don’t save</source>
-        <translation>Strika</translation>
+        <translation>Goym ikki</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="60"/>
@@ -25351,17 +25354,17 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="227"/>
         <source>Left-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Vinstra-stilla tekst innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="233"/>
         <source>Horizontally center text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Set tekst á vatnrættu miðju innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="239"/>
         <source>Right-align text within its bounding box</source>
-        <translation type="unfinished"/>
+        <translation>Høgra-stilla tekst innan avmarkingina</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="244"/>
@@ -25373,7 +25376,7 @@ byrjunar takt</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="245"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="296"/>
         <source>Justify text to fill the available width</source>
-        <translation type="unfinished"/>
+        <translation>Breið tekst út á fullu vídd</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="353"/>
@@ -25661,7 +25664,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/fretframesettingsproxymodel.cpp" line="35"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Bandatalvu tekstur</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/horizontalframesettingsmodel.cpp" line="35"/>
@@ -28121,7 +28124,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="179"/>
         <source>Fretboard diagrams that could not be transposed have been left blank. You can undo this action if required.</source>
-        <translation type="unfinished"/>
+        <translation>Bandaborðsdiagramm sum ikki kundu transponerast eru tóm. Tú kanst angra um neyðugt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
@@ -28167,25 +28170,25 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4567"/>
         <source>‘</source>
         <extracomment>Single open quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>‘</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4569"/>
         <source>’</source>
         <extracomment>Single close quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>’</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4571"/>
         <source>“</source>
         <extracomment>Double open quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>“</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4573"/>
         <source>”</source>
         <extracomment>Double close quotation mark</extracomment>
-        <translation type="unfinished"/>
+        <translation>”</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="58"/>
@@ -28542,7 +28545,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="742"/>
         <source>Fretboard diagram legend</source>
-        <translation type="unfinished"/>
+        <translation>Bandatalvu tekstur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="129"/>
@@ -28921,7 +28924,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1374"/>
         <source>Using variables in the header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Nýtsla av broytingum á evrabredda/neðrabredda</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1376"/>
@@ -29001,12 +29004,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1407"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore útgávan sum seinast goymdi hetta nótablaðið</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1409"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>Endurskoðanin av MuseScore sum seinast goymdi hetta nótablaðið</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="1411"/>
@@ -29548,12 +29551,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/repeatplaycounttextmodel.cpp" line="45"/>
         <source>x3</source>
-        <translation type="unfinished"/>
+        <translation>x3</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/repeatplaycounttextmodel.cpp" line="48"/>
         <source>3x</source>
-        <translation type="unfinished"/>
+        <translation>3x</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/repeatplaycounttextmodel.cpp" line="51"/>
@@ -30134,7 +30137,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/PercussionPanelPad.qml" line="79"/>
         <source>MIDI %1</source>
         <extracomment>%1 will be the MIDI note for a drum (displayed in the percussion panel)</extracomment>
-        <translation type="unfinished"/>
+        <translation>MIDI %1</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/PercussionPanelPad.qml" line="87"/>
@@ -33293,7 +33296,7 @@ miseydnað: %2</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="111"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/OnlineSoundsStatusView.qml" line="121"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Ljóð á netinum</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="642"/>
@@ -33640,7 +33643,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>vanligt</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundprofilesmodel.cpp" line="161"/>
@@ -33684,7 +33687,7 @@ miseydnað: %2</translation>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AccentColorsSection.qml" line="61"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color</source>
-        <translation type="unfinished"/>
+        <translation>Áherðslulitur</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -33705,7 +33708,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio API</source>
-        <translation type="unfinished"/>
+        <translation>Ljóð API</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -33740,7 +33743,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every</source>
-        <translation type="unfinished"/>
+        <translation>Goym sjálvvirkandi øll</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
@@ -33750,12 +33753,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Blindaskrift borð til sangtekst</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
         <source>Interval direction</source>
-        <translation type="unfinished"/>
+        <translation>Interval ætt</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/BrailleSection.qml" line="31"/>
@@ -33790,12 +33793,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device</source>
-        <translation type="unfinished"/>
+        <translation>Ljóðtól</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="71"/>
         <source>Buffer size</source>
-        <translation type="unfinished"/>
+        <translation>Buffarastødd</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
@@ -33805,12 +33808,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="32"/>
         <source>Default style</source>
-        <translation type="unfinished"/>
+        <translation>Forsett snið</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="73"/>
         <source>Style for parts</source>
-        <translation type="unfinished"/>
+        <translation>Snið til partar</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/DefaultStyleSection.qml" line="80"/>
@@ -33832,17 +33835,17 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>
         <source>Video converter</source>
-        <translation type="unfinished"/>
+        <translation>Video umformari</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="43"/>
         <source>FFmpeg library version:</source>
-        <translation type="unfinished"/>
+        <translation>FFmpeg savn útgáva:</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="45"/>
         <source>FFmpeg library not found</source>
-        <translation type="unfinished"/>
+        <translation>FFmpeg savn ikki funnið</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="60"/>
@@ -33853,12 +33856,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="63"/>
         <source>Locate existing installation</source>
-        <translation type="unfinished"/>
+        <translation>Finn verandi installatión </translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="79"/>
         <source>Download FFmpeg</source>
-        <translation type="unfinished"/>
+        <translation>Tak niður FFmpeg</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="30"/>
@@ -33915,12 +33918,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="47"/>
         <source>MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>MIDI inntøka</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output</source>
-        <translation type="unfinished"/>
+        <translation>MIDI úttøka:</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiSection.qml" line="42"/>
@@ -33945,22 +33948,22 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Vel doyv spor við at vísa/goyma ljóðføri í uppsetingarpanelinum</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="30"/>
         <source>MNX</source>
-        <translation type="unfinished"/>
+        <translation>MNX</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="32"/>
         <source>Disabling this may cause errors. Try only for files that fail to import otherwise.</source>
-        <translation type="unfinished"/>
+        <translation>At óvirka hetta kann volda villur. Royn bert til fílur sum ikki kunnu takast inn á annan hátt.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MnxSection.qml" line="42"/>
         <source>Require exact schema validation</source>
-        <translation type="unfinished"/>
+        <translation>bið um neyva yvirlit góðkenning</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MusicXmlSection.qml" line="29"/>
@@ -33995,12 +33998,12 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Ikki fylla sjálvvirkandi bandaborð diagrammir tá akkord tekn verða broytt</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
         <source>MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>MIDI tól</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/MidiInputSection.qml" line="49"/>
@@ -34151,7 +34154,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="30"/>
         <source>Online sounds</source>
-        <translation type="unfinished"/>
+        <translation>Ljóð á netinum</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/OnlineSoundsSection.qml" line="52"/>
@@ -34616,7 +34619,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Nótabløð síggjast her, tá tú goymir eina fílu á netinum, ella gevur út nótablað á &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="154"/>
@@ -34912,7 +34915,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1526"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on MuseScore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Hetta nótablaðið er spilt og tað eru villur í. Til ber at rætta tær, ella goyma nótablaðið á telduni, og fáa hjálp á Musescore.org</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1534"/>
@@ -34991,7 +34994,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1780"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Fílan varð goymd við nýggjari útgávu av Musescore Studio. Vitja &lt;a href=&quot;%1&quot;&gt;MuseScore.org&lt;/a&gt; og fá tær nýggjastu útgávuna.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
@@ -38461,7 +38464,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/workspacelistmodel.cpp" line="225"/>
         <source>This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Hetta nullstillar títt arbeiðspláss til forsetta sniðið, og kann ikki angrast. Ætlar tú tað?</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/workspacelistmodel.cpp" line="228"/>
