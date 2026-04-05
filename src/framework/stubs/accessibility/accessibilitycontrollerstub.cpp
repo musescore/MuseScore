@@ -65,6 +65,11 @@ QString AccessibilityControllerStub::currentPanelAccessibleName() const
     return QString();
 }
 
+bool AccessibilityControllerStub::isEnabled() const
+{
+    return false;
+}
+
 void AccessibilityControllerStub::setIgnoreQtAccessibilityEvents(bool)
 {
 }

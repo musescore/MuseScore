@@ -39,7 +39,8 @@
 #include "modularity/ioc.h"
 #include "ui/tests/mocks/mainwindowmock.h"
 #include "global/tests/mocks/applicationmock.h"
-#include "mocks/accessibilitycontextconfigurationmock.h"
+#include "mocks/accessibleapprootobjectmock.h"
+#include "ui/tests/mocks/navigationmocks.h"
 
 class QEvent;
 
@@ -70,8 +71,11 @@ public:
         m_application = std::make_shared<NiceMock<ApplicationMock> >();
         m_controller->application.set(m_application);
 
-        m_configuration = std::make_shared<NiceMock<AccessibilityContextConfigurationMock> >();
-        m_controller->configuration.set(m_configuration);
+        m_appRootObject = std::make_shared<NiceMock<AccessibleAppRootObjectMock> >();
+        m_controller->appRootObject.set(m_appRootObject);
+
+        m_navigationController = std::make_shared<NiceMock<muse::ui::NavigationControllerMock> >();
+        m_controller->navigationController.set(m_navigationController);
     }
 
     class AccessibleItem : public IAccessible
@@ -173,17 +177,17 @@ public:
 
     std::shared_ptr<AccessibilityController> m_controller;
     std::shared_ptr<muse::ui::MainWindowMock> m_mainWindow;
-    std::shared_ptr<AccessibilityContextConfigurationMock> m_configuration;
+    std::shared_ptr<AccessibleAppRootObjectMock> m_appRootObject;
     std::shared_ptr<ApplicationMock> m_application;
+    std::shared_ptr<muse::ui::NavigationControllerMock> m_navigationController;
 };
 
 TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
 {
-    //! [GIVEN] Accessibility is enabled
-    ON_CALL(*m_configuration, isAccessibleEnabled()).WillByDefault(Return(true));
-
     //! [GIVEN] Accessibility is active
-    ON_CALL(*m_configuration, isAccessibleActive()).WillByDefault(Return(true));
+    ON_CALL(*m_appRootObject, isAccessibilityActive()).WillByDefault(Return(true));
+    //! [GIVEN] Navigation has an active section (so isEnabled() returns true)
+    ON_CALL(*m_navigationController, activeSection()).WillByDefault(Return(reinterpret_cast<muse::ui::INavigationSection*>(1)));
 
     //! [GIVEN] Two items
     AccessibleItem* item1 = makeItemWithRegisteredParent();
@@ -211,16 +215,14 @@ TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)
     //! NOTE: need if tested class was created as a shared pointer
     testing::Mock::AllowLeak(m_mainWindow.get());
     testing::Mock::AllowLeak(m_application.get());
-    testing::Mock::AllowLeak(m_configuration.get());
+    testing::Mock::AllowLeak(m_appRootObject.get());
+    testing::Mock::AllowLeak(m_navigationController.get());
 }
 
 TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityIsNotActive)
 {
-    //! [GIVEN] Accessibility is enabled
-    ON_CALL(*m_configuration, isAccessibleEnabled()).WillByDefault(Return(true));
-
     //! [GIVEN] Accessibility is not active
-    ON_CALL(*m_configuration, isAccessibleActive()).WillByDefault(Return(false));
+    ON_CALL(*m_appRootObject, isAccessibilityActive()).WillByDefault(Return(false));
 
     //! [GIVEN] Two items
     AccessibleItem* item1 = makeItemWithRegisteredParent();
@@ -244,5 +246,6 @@ TEST_F(Accessibility_ControllerTests, NotSendEventOnFocusChangedIfAccessibilityI
     //! NOTE: need if tested class was created as a shared pointer
     testing::Mock::AllowLeak(m_mainWindow.get());
     testing::Mock::AllowLeak(m_application.get());
-    testing::Mock::AllowLeak(m_configuration.get());
+    testing::Mock::AllowLeak(m_appRootObject.get());
+    testing::Mock::AllowLeak(m_navigationController.get());
 }

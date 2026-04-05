@@ -23,9 +23,8 @@
 
 #include "modularity/ioc.h"
 
-#include "accessibilityconfigurationstub.h"
-#include "accessibilitycontextconfigurationstub.h"
 #include "accessibilitycontrollerstub.h"
+#include "accessibleapprootobjectstub.h"
 
 using namespace muse::accessibility;
 using namespace muse::modularity;
@@ -39,7 +38,7 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
-    globalIoc()->registerExport<IAccessibilityConfiguration>(mname, new AccessibilityConfigurationStub());
+    globalIoc()->registerExport<IAccessibleAppRootObject>(moduleName(), new AccessibleAppRootObjectStub());
 }
 
 IContextSetup* AccessibilityModule::newContext(const muse::modularity::ContextPtr& ctx) const
@@ -49,6 +48,5 @@ IContextSetup* AccessibilityModule::newContext(const muse::modularity::ContextPt
 
 void AccessibilityContext::registerExports()
 {
-    ioc()->registerExport<IAccessibilityContextConfiguration>(mname, new AccessibilityContextConfigurationStub());
     ioc()->registerExport<IAccessibilityController>(mname, new AccessibilityControllerStub());
 }
