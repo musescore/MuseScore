@@ -1671,7 +1671,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="609"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="629"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Isem twil</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="619"/>
@@ -1703,7 +1703,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="670"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="677"/>
         <source>Short name</source>
-        <translation type="unfinished"/>
+        <translation>Isem qasir</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="725"/>
@@ -1728,7 +1728,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="757"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sittax</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="781"/>
@@ -2072,7 +2072,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2608"/>
         <source>Note to note:</source>
-        <translation type="unfinished"/>
+        <translation>Nota għal nota:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2634"/>
@@ -3434,7 +3434,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10330"/>
         <source>Lyrics text</source>
-        <translation type="unfinished"/>
+        <translation>Test tal-lirika</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10338"/>
@@ -4524,7 +4524,7 @@ followed by dashes</source>
         <location filename="../../src/notationscene/widgets/selectdialog.ui" line="14"/>
         <location filename="../../src/notationscene/widgets/selectdialog.ui" line="34"/>
         <source>Select</source>
-        <translation>Għażel</translation>
+        <translation>Agħżel</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/selectdialog.ui" line="40"/>
@@ -4579,7 +4579,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/selectdialog.ui" line="136"/>
         <source>Replace selection</source>
-        <translation>Biddel l-għażla</translation>
+        <translation>Biddel is-selezzjoni</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/selectdialog.ui" line="146"/>
@@ -4602,12 +4602,12 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/selectnotedialog.ui" line="14"/>
         <source>Select notes</source>
-        <translation>Agħżel noti</translation>
+        <translation>Agħżel in-noti</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/selectnotedialog.ui" line="34"/>
         <source>Select</source>
-        <translation>Għażel</translation>
+        <translation>Agħżel</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/selectnotedialog.ui" line="40"/>
@@ -4682,7 +4682,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/selectnotedialog.ui" line="189"/>
         <source>Replace selection</source>
-        <translation>Biddel l-għażla</translation>
+        <translation>Biddel is-selezzjoni</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/selectnotedialog.ui" line="199"/>
@@ -4734,7 +4734,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth</source>
-        <translation type="unfinished"/>
+        <translation>Sittax</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/stafftextpropertiesdialog.ui" line="112"/>
@@ -9515,7 +9515,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="114"/>
         <source>Written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Ton miktub</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="115"/>
@@ -20821,7 +20821,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/WorkspacesDialog.qml" line="113"/>
         <source>Select</source>
-        <translation>Għażel</translation>
+        <translation>Agħżel</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/common/FrameSettings.qml" line="125"/>
@@ -28437,7 +28437,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="276"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="418"/>
         <source>Select</source>
-        <translation>Għażel</translation>
+        <translation>Agħżel</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="295"/>
@@ -35272,7 +35272,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="90"/>
         <source>Select all</source>
-        <translation>Għażel kollox</translation>
+        <translation>Agħżel kollox</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="104"/>
@@ -37163,7 +37163,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="159"/>
         <source>Select</source>
-        <translation>Għażel</translation>
+        <translation>Agħżel</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="160"/>

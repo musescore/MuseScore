@@ -33894,7 +33894,7 @@ zakończone niepowodzeniem: %2.</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/LanguagesSection.qml" line="31"/>
         <source>Languages</source>
-        <translation>Języki</translation>
+        <translation>Język</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/LanguagesSection.qml" line="79"/>

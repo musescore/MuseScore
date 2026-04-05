@@ -34,7 +34,7 @@
         <source>Piccolo in E♭, sounding a minor third above the standard piccolo.</source>
         <comment>eb-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ottavin fit-ton ta&apos; E♭, jinstama&apos; &apos;minor third&apos;ogħla mill-ottavin standardizzat.</translation>
+        <translation>Ottavin fit-ton ta&apos; E♭, jinstama&apos; &apos;minor third&apos; ogħla mill-ottavin standardizzat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="219"/>
@@ -21131,7 +21131,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="59"/>
         <source>Band and Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Banda u Perkussjoni</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>

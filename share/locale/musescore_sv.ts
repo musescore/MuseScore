@@ -17753,17 +17753,17 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>bracket hook length</source>
-        <translation type="unfinished"/>
+        <translation>hakens längd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="433"/>
         <source>bracket hook position</source>
-        <translation type="unfinished"/>
+        <translation>hakens position</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>bracket right side</source>
-        <translation type="unfinished"/>
+        <translation>klammerns högersida</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="437"/>
@@ -17903,7 +17903,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="473"/>
         <source>transposition behaviour</source>
-        <translation type="unfinished"/>
+        <translation>transponeringsbeteende</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="475"/>
@@ -35632,12 +35632,12 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
         <source>AAC audio</source>
-        <translation type="unfinished"/>
+        <translation>AAC-ljud</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
         <source>AAC audio files</source>
-        <translation type="unfinished"/>
+        <translation>AAC-ljudfiler</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
