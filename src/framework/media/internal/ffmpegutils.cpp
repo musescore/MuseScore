@@ -29,7 +29,7 @@ using namespace muse::media;
 using namespace muse;
 
 namespace muse::media {
-static io::paths_t defaultSearchPaths()
+io::paths_t defaultSearchPaths()
 {
     io::paths_t paths;
 #if defined(Q_OS_MAC)
@@ -142,7 +142,7 @@ FFmpegVersion versionFromAVFormatPath(const io::path_t& path)
         }
     }
 
-    return FFMPEG_INVALID_VERION;
+    return FFMPEG_INVALID_VERSION;
 }
 
 FFmpegLibPaths findLibraryPaths(const io::path_t& configPath)

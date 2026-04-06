@@ -29,6 +29,13 @@ VideoPreferencesModel::VideoPreferencesModel(QObject* parent)
 {
 }
 
+VideoPreferencesModel::~VideoPreferencesModel()
+{
+    if (videoEncoderResolver()) {
+        disableVideoExportSettingMode();
+    }
+}
+
 void VideoPreferencesModel::load()
 {
     videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
@@ -38,6 +45,8 @@ void VideoPreferencesModel::load()
 
     emit ffmpegVersionChanged();
     emit ffmpegDirChanged();
+
+    enableVideoExportSettingMode();
 }
 
 int VideoPreferencesModel::ffmpegVersion() const
@@ -57,4 +66,14 @@ void VideoPreferencesModel::setFFmpegDir(const QString& dir)
     }
 
     videoEncoderResolver()->loadFFmpeg(dir);
+}
+
+void VideoPreferencesModel::enableVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(true);
+}
+
+void VideoPreferencesModel::disableVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(false);
 }

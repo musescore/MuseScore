@@ -35,7 +35,7 @@ BaseSection {
         width: parent.width
         height: 30
 
-        spacing: 20
+        spacing: 12
 
         StyledTextLabel {
             id: titleLabel
@@ -48,9 +48,9 @@ BaseSection {
 
         RowLayout {
             Layout.fillWidth: true
-            height: 30
+            height: 24
 
-            spacing: root.columnSpacing
+            spacing: 24
 
             FilePicker {
                 id: ffmpegDirPicker
@@ -68,6 +68,8 @@ BaseSection {
                 navigation: root.navigation
                 pathFieldTitle: titleLabel.text
 
+                spacing: 8
+
                 onPathEdited: function(newPath) {
                     if (model) {
                         model.ffmpegDir = newPath
@@ -77,7 +79,9 @@ BaseSection {
 
             FlatButton {
                 text: qsTrc("preferences", "Download FFmpeg")
+                icon: IconCode.OPEN_LINK
                 isNarrow: true
+                orientation: Qt.Horizontal
 
                 navigation.panel: root.navigation
                 navigation.row: ffmpegDirPicker.navigationRowOrderStart

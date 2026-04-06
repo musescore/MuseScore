@@ -30,7 +30,7 @@ ExportSettingsPage {
     AudioSettings {
         model: root.model
         navigationPanel: root.navigationPanel
-        navigationOrder: root.navigationOrder
+        navigationOrderStart: root.navigationOrder
     }
 
     StyledTextLabel {

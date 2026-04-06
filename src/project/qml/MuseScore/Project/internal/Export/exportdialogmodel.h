@@ -33,6 +33,7 @@
 #include "async/asyncable.h"
 
 #include "iinteractive.h"
+#include "media/ivideoencoderresolver.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -102,6 +103,9 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
+    Q_PROPERTY(bool isFFmpegAvailable READ isFFmpegAvailable NOTIFY isFFmpegAvailableChanged)
+    Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged)
+
     QML_ELEMENT
 
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
@@ -114,6 +118,7 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::ContextInject<muse::IInteractive> interactive = { this };
+    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<INotationWritersRegister> writers = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
@@ -222,6 +227,10 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    bool isFFmpegAvailable() const;
+    QString ffmpegDir() const;
+    void setFFmpegDir(const QString& dir);
+
     Q_INVOKABLE void updateExportInfo();
 
 signals:
@@ -266,6 +275,9 @@ signals:
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
+    void isFFmpegAvailableChanged();
+    void ffmpegDirChanged();
+
 private:
     void classBegin() override;
     void componentComplete() override {}
@@ -283,6 +295,11 @@ private:
     notation::IMasterNotationPtr masterNotation() const;
 
     void selectSavedNotations();
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    void disableVideoExportSettingMode();
+    void updateVideoExportSettingMode();
+#endif
 
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;

@@ -27,14 +27,14 @@
 #include "engraving/style/style.h"
 
 #include "modularity/ioc.h"
+#include "io/ifilesystem.h"
 #include "global/iapplication.h"
 #include "media/ivideoencoderresolver.h"
 #include "../ivideoexportconfiguration.h"
+#include "context/iglobalcontext.h"
 
 #include "project/inotationwriter.h"
 #include "project/inotationwritersregister.h"
-
-#include "notation/notationtypes.h"
 
 class QImage;
 
@@ -46,9 +46,11 @@ namespace mu::iex::videoexport {
 class VideoWriter : public project::INotationWriter, public muse::Contextable, public muse::async::Asyncable
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
+    muse::GlobalInject<muse::io::IFileSystem> fileSystem;
     muse::ContextInject<muse::IApplication> application = { this };
     muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
     muse::ContextInject<project::INotationWritersRegister> writers = { this };
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
@@ -74,6 +76,7 @@ private:
         int bitrate = 800000;
         float leadingSec = 3.;
         float trailingSec = 3.;
+        double canvasDpi = 300.0;
     };
 
     Config makeConfig() const;
@@ -94,7 +97,7 @@ private:
     struct ScoreRestoreData
     {
         engraving::MStyle style;
-        notation::ViewMode viewMode = notation::ViewMode::PAGE;
+        engraving::LayoutMode layoutMode = engraving::LayoutMode::PAGE;
 
         bool showFrames = true;
         bool showInstrumentNames = true;
@@ -104,7 +107,7 @@ private:
         bool showVBox = true;
     };
 
-    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, const Config& config);
+    std::optional<ScoreRestoreData> prepareScore(notation::INotationPtr notation, Config& config);
     void restoreScore(notation::INotationPtr notation, const ScoreRestoreData& data);
 
     muse::Progress m_progress;

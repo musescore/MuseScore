@@ -51,9 +51,9 @@ Item {
     property int navigationRowOrderStart: 0
     property int navigationColumnOrderStart: 0
 
+    property alias showPathField: pathField.visible
     property string pathFieldTitle: qsTrc("ui", "Current path:")
     property alias pathFieldWidth: pathField.implicitWidth
-
 
     property alias spacing: row.spacing
 

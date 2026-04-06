@@ -37,6 +37,8 @@
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
+#include "draw/fontmetrics.h"
+
 #include "defer.h"
 #include "log.h"
 
@@ -46,7 +48,37 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-double CANVAS_DPI = 300;
+static muse::String notationTitle(const INotationPtr notation)
+{
+    muse::String title;
+    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* masterScore = notation->masterNotation()->masterScore();
+
+    if (const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::TITLE)) {
+        title = text->plainText();
+    }
+
+    if (title.isEmpty()) {
+        if (const mu::engraving::Text* text = masterScore->getText(mu::engraving::TextStyleType::TITLE)) {
+            title = text->plainText();
+        }
+    }
+
+    if (title.isEmpty()) {
+        title = masterScore->metaTag(u"workTitle");
+    }
+
+    return title;
+}
+
+static muse::String notationSubtitle(const INotationPtr notation)
+{
+    if (notation->isMaster()) {
+        return muse::String();
+    }
+
+    return notation->name();
+}
 
 std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
@@ -107,9 +139,6 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         application()->processEvents();
         QThread::yieldCurrentThread();
     }
-
-    //! NOTE: we have to do it in main thread
-    notation->notationChanged().notify();
 
     if (m_audioWriter) {
         m_audioWriter->progress()->finished().disconnect(this);
@@ -245,14 +274,14 @@ void VideoWriter::abort()
     }
 }
 
-std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, const Config& config)
+std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, Config& config)
 {
     ScoreRestoreData result;
     engraving::Score* score = notation->elements()->msScore();
 
     result.style = score->style();
 
-    result.viewMode = notation->viewMode();
+    result.layoutMode = score->layoutMode();
 
     result.showFrames = score->showFrames();
     result.showInstrumentNames = score->showInstrumentNames();
@@ -261,7 +290,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     result.showUnprintable = score->showUnprintable();
     result.showVBox = score->layoutOptions().isShowVBox;
 
-    notation->setViewMode(notation::ViewMode::PAGE);
+    score->setLayoutMode(engraving::LayoutMode::PAGE);
 
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
@@ -286,11 +315,11 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
         double margin = 100.0;
         double ttboxHeight = ttbox.height() + margin * 2;
         double scale = config.height / ttboxHeight;
-        CANVAS_DPI = scale * engraving::DPI;
+        config.canvasDpi = scale * engraving::DPI;
     }
 
-    score->style().set(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
-    score->style().set(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
+    score->style().set(engraving::Sid::pageHeight, config.height / config.canvasDpi);
+    score->style().set(engraving::Sid::pageWidth, config.width / config.canvasDpi);
     score->style().set(engraving::Sid::pagePrintableWidth, score->style().styleD(engraving::Sid::pageWidth)
                        - score->style().styleD(engraving::Sid::pageOddLeftMargin)
                        - score->style().styleD(engraving::Sid::pageEvenLeftMargin));
@@ -309,6 +338,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
+    score->doLayout();
     score->update();
 
     return result;
@@ -327,7 +357,7 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
     score->setShowUnprintable(data.showUnprintable);
     score->setShowVBox(data.showVBox);
 
-    notation->setViewMode(data.viewMode);
+    score->setLayoutMode(data.layoutMode);
 
     score->setLayoutAll();
     score->update();
@@ -335,7 +365,8 @@ void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& da
 
 void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& config)
 {
-    auto restoreData = prepareScore(notation, config);
+    Config actualConfig = config;
+    auto restoreData = prepareScore(notation, actualConfig);
     if (!restoreData) {
         m_writeRet = make_ret(muse::Ret::Code::UnknownError);
         m_isCompleted = true;
@@ -348,9 +379,9 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     };
 
     // Setup painting
-    QImage frame(config.width, config.height, QImage::Format_RGB32);
-    frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
-    frame.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
+    QImage frame(actualConfig.width, actualConfig.height, QImage::Format_RGB32);
+    frame.setDotsPerMeterX(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
+    frame.setDotsPerMeterY(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
 
     QPainter qp(&frame);
     qp.setRenderHint(QPainter::Antialiasing, true);
@@ -362,26 +393,26 @@ void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr
     INotationPlaybackPtr playback = notation->masterNotation()->playback();
     float totalPlayTimeSec = playback->totalPlayTime();
 
-    int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
-    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
-    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    int leadingFrameCount = static_cast<int>(actualConfig.leadingSec * actualConfig.fps);
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * actualConfig.fps);
+    int trailingFrameCount = static_cast<int>(actualConfig.trailingSec * actualConfig.fps);
     int totalFrameCount = leadingFrameCount + scoreFrameCount + trailingFrameCount;
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << totalFrameCount;
 
     m_progress.start();
 
     // Add score title
-    if (!generateLeadingFrames(encoder, notation, painter, frame, config, totalFrameCount)) {
+    if (!generateLeadingFrames(encoder, notation, painter, frame, actualConfig, totalFrameCount)) {
         return;
     }
 
     // Add score frames
-    if (!generateScoreFrames(encoder, notation, painter, frame, config, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
+    if (!generateScoreFrames(encoder, notation, painter, frame, actualConfig, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
         return;
     }
 
     // Add "Made with MuseScore"
-    if (!generateTrailingFrames(encoder, config)) {
+    if (!generateTrailingFrames(encoder, actualConfig)) {
         return;
     }
 
@@ -398,15 +429,31 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return true;
     }
 
-    engraving::Score* score = notation->elements()->msScore();
-    muse::String title = score->metaTag(u"workTitle");
+    muse::String title = notationTitle(notation);
+    muse::String subtitle = notationSubtitle(notation);
 
-    Font font(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    auto scaledFontPointSize = [&config](double basePixelSize) {
+        double pixelSize = basePixelSize * config.height / 1080.0;
+        return pixelSize * 72.0 / engraving::DPI;
+    };
 
-    double desiredPixelSize = 128.0 * config.height / 1080.0;
-    font.setPointSizeF(desiredPixelSize * 72.0 / engraving::DPI);
+    Font titleFont(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    titleFont.setPointSizeF(scaledFontPointSize(128.0));
+
+    Font subFont(titleFont);
+    subFont.setPointSizeF(scaledFontPointSize(48.0));
 
     muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
+
+    FontMetrics titleFontMetrics(titleFont);
+    muse::RectF titleBBox = titleFontMetrics.boundingRect(title);
+
+    double centerY = frameRect.center().y();
+    double titleBottom = centerY + titleBBox.height() / 2.0;
+
+    const double subtitleOffset = config.height / 20.0;
+    double subtitleTop = titleBottom + subtitleOffset;
+    muse::RectF subtitleRect(0.0, subtitleTop, frameRect.width(), 80.0);
 
     for (int f = 0; f < leadingFrameCount; f++) {
         if (m_abort) {
@@ -419,8 +466,13 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
 
         painter.fillRect(frameRect, Color::BLACK);
         painter.setPen(Color::WHITE);
-        painter.setFont(font);
+        painter.setFont(titleFont);
         painter.drawText(frameRect, AlignCenter, title);
+
+        if (!subtitle.isEmpty()) {
+            painter.setFont(subFont);
+            painter.drawText(subtitleRect, AlignCenter, subtitle);
+        }
 
         encoder->encodeImage(frame);
     }
@@ -474,7 +526,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         return nullptr;
     };
 
-    const Color CURSOR_COLOR = Color(0, 0, 255, 50);
+    const Color CURSOR_COLOR = Color(2, 109, 203, 127);
 
     PlaybackCursor cursor(iocContext());
     cursor.setNotation(notation);
@@ -503,7 +555,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         INotationPainting::Options opt;
         opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
-        opt.deviceDpi = CANVAS_DPI;
+        opt.deviceDpi = config.canvasDpi;
 
         painter.fillRect(frameRect, Color::WHITE);
 

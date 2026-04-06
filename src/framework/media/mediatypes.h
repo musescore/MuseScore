@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
 
-import Muse.UiComponents
-import MuseScore.Project
+#pragma once
 
-ExportSettingsPage {
-    id: root
-
-    AudioSettings {
-        model: root.model
-        navigationPanel: root.navigationPanel
-        navigationOrderStart: root.navigationOrder
-        showBitRateControl: true
-    }
-
-    StyledTextLabel {
-        width: parent.width
-        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
-        horizontalAlignment: Text.AlignLeft
-        wrapMode: Text.WordWrap
-    }
+namespace muse::media {
+using FFmpegVersion = int;
+inline constexpr FFmpegVersion FFMPEG_INVALID_VERSION = -1;
 }

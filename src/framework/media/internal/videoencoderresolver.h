@@ -24,11 +24,16 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "io/filesystemwatcher.h"
 #include "imediaconfiguration.h"
 
 #include "ffmpegutils.h"
 
 #include "../ivideoencoderresolver.h"
+
+namespace muse {
+class Timer;
+}
 
 namespace muse::media {
 class VideoEncoderResolver : public IVideoEncoderResolver, public muse::async::Asyncable
@@ -37,29 +42,36 @@ class VideoEncoderResolver : public IVideoEncoderResolver, public muse::async::A
 
 public:
     void init();
+    void deinit();
 
     void loadFFmpeg(const muse::io::path_t& ffmpegLibsDir) override;
     io::path_t loadedFFmpegDir() const override;
-    int loadedFFmpegVersion() const override;
+    FFmpegVersion loadedFFmpegVersion() const override;
     async::Notification loadedFFmpegChanged() const override;
 
     IVideoEncoderPtr currentVideoEncoder() const override;
     void setCurrentVideoEncoder(IVideoEncoderPtr encoder) override;
 
+    void setIsSettingMode(bool arg) override;
+
 private:
     void resetFFmpegSettings();
+    void startWatchingFfmpegsDirs();
 
     struct EncoderInfo {
         IVideoEncoderPtr encoder;
-        FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERION;
+        FFmpegVersion ffmpegVersion = FFMPEG_INVALID_VERSION;
         io::path_t ffmpegLibsDir;
     };
 
     EncoderInfo makeEncoder(const FFmpegLibPaths& ffmpegLibsPaths) const;
 
     IVideoEncoderPtr m_encoder;
-    int m_currentEncoderFFmpegVersion = -1;
+    FFmpegVersion m_currentEncoderFFmpegVersion = FFMPEG_INVALID_VERSION;
 
     async::Notification m_loadedFFmpegChanged;
+
+    muse::io::FileSystemWatcher m_ffmpegLibWatcher;
+    std::shared_ptr<Timer> m_reloadFfmpegTimer;
 };
 }

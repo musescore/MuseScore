@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "imainwindow.h"
 #include "internal/iplatformtheme.h"
-#include "io/filewatcher.h"
+#include "io/filesystemwatcher.h"
 
 #include "types/val.h"
 #include "uiarrangement.h"
@@ -176,6 +176,6 @@ private:
 
     Config m_config;
 
-    mutable io::FileWatcher m_themeWatcher;
+    mutable io::FileSystemWatcher m_themeWatcher;
 };
 }
