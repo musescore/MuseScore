@@ -22,7 +22,18 @@
 #ifndef MUSE_IO_IOENUMS_H
 #define MUSE_IO_IOENUMS_H
 
+#include <cstdint>
+
 namespace muse::io {
+using StreamId = int;
+static constexpr StreamId INVALID_STREAM_ID = -1;
+static constexpr uint64_t STREAM_POS_CURRENT = ~uint64_t(0);
+
+enum class OpenMode {
+    WriteOnly,
+    Append
+};
+
 enum class ScanMode {
     FilesInCurrentDir,
     FilesAndFoldersInCurrentDir,

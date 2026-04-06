@@ -65,6 +65,11 @@ public:
     virtual Ret readFile(const io::path_t& filePath, ByteArray& data) const = 0;
     virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) = 0;
 
+    //! Streaming write
+    virtual RetVal<StreamId> openStream(const io::path_t& filePath, OpenMode mode) = 0;
+    virtual Ret writeToStream(StreamId fileId, const ByteArray& data, uint64_t offset = STREAM_POS_CURRENT) = 0;
+    virtual Ret closeStream(StreamId fileId) = 0;
+
     //! NOTE File info
     virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;
     virtual io::path_t absolutePath(const io::path_t& filePath) const = 0;

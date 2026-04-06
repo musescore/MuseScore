@@ -36,6 +36,15 @@
 using namespace muse;
 using namespace muse::io;
 
+FileSystem::~FileSystem()
+{
+    std::lock_guard<std::mutex> lock(m_openStreamsMutex);
+    for (auto& [id, file] : m_openStreams) {
+        file->close();
+    }
+    m_openStreams.clear();
+}
+
 Ret FileSystem::exists(const io::path_t& path) const
 {
     QFileInfo fileInfo(path.toQString());
@@ -449,6 +458,81 @@ DateTime FileSystem::birthTime(const io::path_t& filePath) const
 DateTime FileSystem::lastModified(const io::path_t& filePath) const
 {
     return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).lastModified());
+}
+
+RetVal<StreamId> FileSystem::openStream(const io::path_t& filePath, OpenMode mode)
+{
+    RetVal<StreamId> result;
+
+    auto file = std::make_unique<QFile>(filePath.toQString());
+
+    QIODevice::OpenMode qmode = (mode == OpenMode::Append) ? QIODevice::Append : QIODevice::WriteOnly;
+
+    if (!file->open(qmode)) {
+        result.ret = make_ret(Err::FSWriteError);
+        result.ret.setText(file->errorString().toStdString());
+        return result;
+    }
+
+    std::lock_guard<std::mutex> lock(m_openStreamsMutex);
+    StreamId id = m_nextStreamId++;
+    m_openStreams.emplace(id, std::move(file));
+
+    result.ret = make_ret(Err::NoError);
+    result.val = id;
+    return result;
+}
+
+Ret FileSystem::writeToStream(StreamId fileId, const ByteArray& data, uint64_t offset)
+{
+    std::lock_guard<std::mutex> lock(m_openStreamsMutex);
+    auto it = m_openStreams.find(fileId);
+    if (it == m_openStreams.end()) {
+        return make_ret(Err::FSWriteError);
+    }
+
+    QFile* file = it->second.get();
+    IF_ASSERT_FAILED(file) {
+        return make_ret(Err::FSWriteError);
+    }
+
+    if (offset != STREAM_POS_CURRENT) {
+        if (!file->seek(static_cast<qint64>(offset))) {
+            Ret ret = make_ret(Err::FSWriteError);
+            ret.setText(file->errorString().toStdString());
+            return ret;
+        }
+    }
+
+    const auto numBytesToWrite = static_cast<qint64>(data.size());
+    const qint64 written = file->write(data.constChar(), numBytesToWrite);
+    if (written != numBytesToWrite) {
+        Ret ret = make_ret(Err::FSWriteError);
+        ret.setText(file->errorString().toStdString());
+        return ret;
+    }
+
+    return make_ret(Err::NoError);
+}
+
+Ret FileSystem::closeStream(StreamId fileId)
+{
+    std::lock_guard<std::mutex> lock(m_openStreamsMutex);
+
+    auto it = m_openStreams.find(fileId);
+    if (it == m_openStreams.end()) {
+        return make_ret(Err::FSWriteError);
+    }
+
+    std::unique_ptr<QFile> file = std::move(it->second);
+    m_openStreams.erase(it);
+
+    IF_ASSERT_FAILED(file) {
+        return make_ret(Err::FSWriteError);
+    }
+
+    file->close();
+    return make_ret(Err::NoError);
 }
 
 Ret FileSystem::isWritable(const io::path_t& filePath) const
