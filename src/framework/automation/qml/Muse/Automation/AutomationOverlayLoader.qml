@@ -30,8 +30,25 @@ Loader {
     id: root
 
     property var viewMatrix: null
+    property var linesData: null
 
     sourceComponent: AutomationOverlay {
+        id: automationOverlay
+
         viewMatrix: root.viewMatrix
+
+        Connections {
+            target: root
+            function onLoaded() {
+                automationOverlay.initAutomationLinesData(root.linesData)
+            }
+        }
+
+        Connections {
+            target: root
+            function onLinesDataChanged() {
+                automationOverlay.initAutomationLinesData(root.linesData)
+            }
+        }
     }
 }

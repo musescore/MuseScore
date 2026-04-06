@@ -63,6 +63,7 @@
 namespace mu::notation {
 using Page = mu::engraving::Page;
 using System = mu::engraving::System;
+using SysStaff = mu::engraving::SysStaff;
 using EngravingItem = mu::engraving::EngravingItem;
 using ElementType = mu::engraving::ElementType;
 using PropertyValue = engraving::PropertyValue;

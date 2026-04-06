@@ -23,16 +23,30 @@
 
 #include "../inotationautomation.h"
 
+#include "igetscore.h"
+#include "async/channel.h"
+#include "draw/types/geometry.h"
+
 namespace mu::notation {
 class NotationAutomation : public INotationAutomation
 {
 public:
+    NotationAutomation(IGetScore* getScore, muse::async::Channel<muse::RectF> notationChanged);
+
     bool isAutomationModeEnabled() const override;
     void setAutomationModeEnabled(bool enabled) override;
     muse::async::Notification automationModeEnabledChanged() const override;
 
+    QVariant automationLinesData() const override;
+    muse::async::Notification automationLinesDataChanged() const override; // TODO: probably a channel specifying indices
+
 private:
+    IGetScore* m_getScore = nullptr;
+    muse::async::Channel<muse::RectF> m_notationChanged;
+
     bool m_isAutomationModeEnabled = false;
     muse::async::Notification m_automationModeEnabledChanged;
+
+    muse::async::Notification m_automationLinesDataChanged;
 };
 }

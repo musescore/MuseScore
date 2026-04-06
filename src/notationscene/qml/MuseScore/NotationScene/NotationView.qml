@@ -226,6 +226,7 @@ FocusScope {
                         anchors.fill: notationView
 
                         viewMatrix: notationView.matrix
+                        linesData: notationView.automationLinesData
                     }
 
                     NotationRegionsBeingProcessedView {
