@@ -48,6 +48,7 @@ class Marker;
 class Measure;
 class MeasureRepeat;
 class Note;
+
 class RehearsalMark;
 class Rest;
 class Score;
@@ -226,11 +227,11 @@ private:
     QString brailleNote(const QString& pitchName, DurationType durationType, int dots);
     QString brailleOctave(int octave);
     QString brailleRest(Rest* rest);
-    QString brailleStaffText(StaffText * staffText, int staffIdx);
-QString brailleSystemText(SystemText* systemText, int staffIdx);
+    QString brailleStaffText(StaffText* staffText, int staffIdx);
+    QString brailleSystemText(SystemText* systemText, int staffIdx);
     QString brailleRehearsalMark(RehearsalMark* rehearsalMark, int staffIdx);
-QString brailleExpressionText(Expression* expression, int staffIdx);
-        QString brailleTempoText(TempoText* tempoText, int staffIdx);
+    QString brailleExpressionText(Expression* expression, int staffIdx);
+    QString brailleTempoText(TempoText* tempoText, int staffIdx);
     QString brailleTie(Chord* chord);
     QString brailleTie(Note* note);
     QString brailleTimeSig(TimeSig* timeSig);

@@ -1256,7 +1256,7 @@ bool Braille::brailleSingleItem(BrailleEngravingItemList* beiz, EngravingItem* e
         beiz->addEngravingItem(el, brailleJump(toJump(el)));
         return true;
     } else if (el->isDynamic()) {
-        beiz->addEngravingItem(el, brailleDynamic(toDynamic(el)));  
+        beiz->addEngravingItem(el, brailleDynamic(toDynamic(el)));
         return true;
     } else if (el->isClef()) {
         beiz->addEngravingItem(el, brailleClef(toClef(el)));
@@ -1331,14 +1331,14 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
     for (auto seg = measure->first(); seg; seg = seg->next()) {
         for (EngravingItem* annotation : seg->annotations()) {
             if (annotation->isExpression()) {
-				beiz->addEngravingItem(annotation, brailleExpressionText(toExpression(annotation), staffCount));   // Expression text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+                beiz->addEngravingItem(annotation, brailleExpressionText(toExpression(annotation), staffCount));           // Expression text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
             } else if (annotation->isRehearsalMark()) {
-				beiz->addEngravingItem(annotation, brailleRehearsalMark(toRehearsalMark(annotation), staffCount));   // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.  // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
-			} else if (annotation->isStaffText()) {
-				beiz->addEngravingItem(annotation, brailleStaffText(toStaffText(annotation), staffCount));  // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+                beiz->addEngravingItem(annotation, brailleRehearsalMark(toRehearsalMark(annotation), staffCount));           // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.  // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+            } else if (annotation->isStaffText()) {
+                beiz->addEngravingItem(annotation, brailleStaffText(toStaffText(annotation), staffCount));          // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
             } else if (annotation->isSystemText()) {
-				beiz->addEngravingItem(annotation, brailleSystemText(toSystemText(annotation), staffCount));
-            }  else if (annotation->isTempoText()) {
+                beiz->addEngravingItem(annotation, brailleSystemText(toSystemText(annotation), staffCount));
+            } else if (annotation->isTempoText()) {
                 beiz->addEngravingItem(annotation, brailleTempoText(toTempoText(annotation), staffCount));
             }
             if (annotation->track() == staffCount * VOICES) {
@@ -1371,7 +1371,7 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
             beiz->addEngravingItem(el, brailleBarline(toBarLine(el)));
         } else if (el->isMeasureRepeat()) {
             beiz->addEngravingItem(el, brailleMeasureRepeat(toMeasureRepeat(el)));
-        }        
+        }
     }
 
     // Render the rest of the voices
@@ -2342,7 +2342,7 @@ QString Braille::brailleMeasure(Measure* measure, int staffCount)
             }
             if (annotation->track() == staffCount * VOICES) {
                 if (annotation->isDynamic()) {
-                                        out << brailleDynamic(toDynamic(annotation));
+                    out << brailleDynamic(toDynamic(annotation));
                 }
             }
         }
@@ -2691,27 +2691,26 @@ QString Braille::brailleExpressionText(Expression* expression, int staffIdx)
     return ">" + TextToUEBBraille().braille(expression->plainText());
 }
 
-
 QString Braille::brailleRehearsalMark(RehearsalMark* rehearsalMark, int staffIdx)
 {
     if ((!rehearsalMark) || (rehearsalMark->plainText().isEmpty())) {
         return QString();
     }
 
-        resetOctave(rehearsalMark->staffIdx());
+    resetOctave(rehearsalMark->staffIdx());
     // Need a reference
     return ">" + TextToUEBBraille().braille(rehearsalMark->plainText());
 }
 
-    QString Braille::brailleStaffText(StaffText* staffText, int staffIdx)
+QString Braille::brailleStaffText(StaffText* staffText, int staffIdx)
 {
-            if (!staffText || staffText->plainText().isEmpty()) {
-    return QString();
-}
+    if (!staffText || staffText->plainText().isEmpty()) {
+        return QString();
+    }
 
-            // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
-            resetOctave(staffText->staffIdx());
-return ">" + TextToUEBBraille().braille(staffText->plainText());
+    // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+    resetOctave(staffText->staffIdx());
+    return ">" + TextToUEBBraille().braille(staffText->plainText());
 }
 
 QString Braille::brailleSystemText(SystemText* systemText, int staffIdx)
