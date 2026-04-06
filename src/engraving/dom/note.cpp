@@ -3364,6 +3364,10 @@ String Note::accessibleInfo() const
 
 String Note::screenReaderInfo() const
 {
+    if (!part()) {
+        return String();
+    }
+
     const Instrument* instrument = part()->instrument(chord()->tick());
     String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
