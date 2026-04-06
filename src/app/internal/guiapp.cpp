@@ -52,20 +52,18 @@ GuiApp::SplashConfig GuiApp::splashConfig(const CmdOptions& options) const
         if (options.startup.type.value() == "start-with-new") {
             cfg.type = SplashScreen::ForNewInstance;
             cfg.forNewScore = true;
-        } else if (options.startup.scoreUrl.has_value()) {
-            project::ProjectFile file { options.startup.scoreUrl.value() };
+        }
+    } else if (options.startup.scoreUrl.has_value()) {
+        project::ProjectFile file { options.startup.scoreUrl.value() };
 
-            if (options.startup.scoreDisplayNameOverride.has_value()) {
-                file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
-            }
+        if (options.startup.scoreDisplayNameOverride.has_value()) {
+            file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
+        }
 
-            cfg.type = SplashScreen::ForNewInstance;
-            cfg.forNewScore = false;
-            if (file.hasDisplayName()) {
-                cfg.openingFileName = file.displayName(true /* includingExtension */);
-            }
-        } else {
-            cfg.type = SplashScreen::Default;
+        cfg.type = SplashScreen::ForNewInstance;
+        cfg.forNewScore = false;
+        if (file.hasDisplayName()) {
+            cfg.openingFileName = file.displayName(true /* includingExtension */);
         }
     }
 
@@ -75,7 +73,8 @@ GuiApp::SplashConfig GuiApp::splashConfig(const CmdOptions& options) const
 void GuiApp::showSplash()
 {
 #ifdef MUE_ENABLE_SPLASHSCREEN
-    if (splashConfig(m_appOptions).type == SplashScreen::Default) {
+    SplashConfig cfg = splashConfig(m_appOptions);
+    if (cfg.type == SplashScreen::Default) {
         m_splashScreen = new SplashScreen(SplashScreen::Default);
         m_splashScreen->show();
     }
@@ -289,6 +288,7 @@ muse::modularity::ContextPtr GuiApp::setupNewContext(const StringList& args)
 
     if (args.size() > 0) {
         std::vector<std::string> args_ = args.toStdStringList();
+        args_.insert(args_.begin(), "dummy/path/to/app.exe");  // for compatibility
         const int argc = static_cast<int>(args_.size());
         std::vector<char*> argv(argc + 1, nullptr);
         for (int i = 0; i < argc; ++i) {

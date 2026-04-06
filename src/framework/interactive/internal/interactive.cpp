@@ -1217,6 +1217,13 @@ void Interactive::onOpen(const QVariant& type, const QVariant& objectId, QObject
 
     notifyAboutCurrentUriChanged();
 
+    if (ContainerMeta::PrimaryPage == containerMeta && m_openingObject.resolve) {
+        auto resolve = m_openingObject.resolve;
+        Async::call(this, [resolve]() {
+            (void)resolve(Val(true));
+        });
+    }
+
     Uri uri = m_openingObject.query.uri();
     m_openingObject = ObjectInfo(); // clear
 
