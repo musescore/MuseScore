@@ -60,6 +60,7 @@ void VstActionsController::fxEditor(const actions::ActionQuery& actionQuery)
     int trackId = actionQuery.param("trackId", Val(-1)).toInt();
     int chainOrder = actionQuery.param("chainOrder", Val(0)).toInt();
     std::string operation = actionQuery.param("operation", Val("open")).toString();
+    bool sync = actionQuery.param("sync", Val(false)).toBool();
 
     auto instance = instancesRegister()->fxPlugin(resourceId, trackId, chainOrder);
 
@@ -73,7 +74,7 @@ void VstActionsController::fxEditor(const actions::ActionQuery& actionQuery)
         return;
     }
 
-    editorOperation(operation, instance->id());
+    editorOperation(operation, instance->id(), sync);
 }
 
 void VstActionsController::instEditor(const actions::ActionQuery& actionQuery)
@@ -98,6 +99,7 @@ void VstActionsController::instEditor(const actions::ActionQuery& actionQuery)
     auto instance = instancesRegister()->instrumentPlugin(resourceId, trackId);
 
     std::string operation = actionQuery.param("operation", Val("open")).toString();
+    bool sync = actionQuery.param("sync", Val(false)).toBool();
 
     if (operation == "close" && !instance) {
         return;
@@ -109,21 +111,28 @@ void VstActionsController::instEditor(const actions::ActionQuery& actionQuery)
         return;
     }
 
-    editorOperation(operation, instance->id());
+    editorOperation(operation, instance->id(), sync);
 }
 
-void VstActionsController::editorOperation(const std::string& operation, int instanceId)
+void VstActionsController::editorOperation(const std::string& operation, int instanceId, bool sync)
 {
     UriQuery editorUri = UriQuery(String(VST_EDITOR_URI).arg(instanceId));
 
     if (operation == "close") {
-        interactive()->close(editorUri);
-    } else {
-        if (interactive()->isOpened(editorUri).val) {
-            interactive()->raise(editorUri);
+        if (sync) {
+            interactive()->closeSync(editorUri);
         } else {
-            interactive()->open(editorUri);
+            interactive()->close(editorUri);
         }
+        return;
+    }
+
+    if (interactive()->isOpened(editorUri).val) {
+        interactive()->raise(editorUri);
+    } else if (sync) {
+        interactive()->openSync(editorUri);
+    } else {
+        interactive()->open(editorUri);
     }
 }
 

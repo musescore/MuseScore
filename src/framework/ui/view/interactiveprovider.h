@@ -82,9 +82,10 @@ public:
 
     void raise(const UriQuery& uri) override;
 
-    void close(const Uri& uri) override;
-    void close(const UriQuery& uri) override;
-    void closeAllDialogs() override;
+    async::Promise<Ret> close(const Uri& uri) override;
+    async::Promise<Ret> close(const UriQuery& uri) override;
+    Ret closeSync(const UriQuery& uri) override;
+    Ret closeAllDialogsSync() override;
 
     ValCh<Uri> currentUri() const override;
     RetVal<bool> isCurrentUriDialog() const override;
@@ -135,12 +136,14 @@ private:
     RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
     RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
 
-    void closeObject(const ObjectInfo& obj);
+    async::Promise<Ret> closeObjects(const std::vector<ObjectInfo>& objs);
+    Ret closeObjectsSync(const std::vector<ObjectInfo>& objs);
 
     void closeQml(const QVariant& objectId);
     void raiseQml(const QVariant& objectId);
 
     std::vector<ObjectInfo> allOpenObjects() const;
+    std::vector<ObjectInfo> collectOpenObjects(std::function<bool(const ObjectInfo&)> accepted) const;
 
     void notifyAboutCurrentUriChanged();
     void notifyAboutCurrentUriWillBeChanged();
@@ -153,6 +156,8 @@ private:
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
     async::Channel<Uri> m_opened;
+
+    std::map<QString /*objectId*/, std::function<void(const Ret&)> > m_onClosedFuncs;
 
     bool m_isSelectColorOpened = false;
 };

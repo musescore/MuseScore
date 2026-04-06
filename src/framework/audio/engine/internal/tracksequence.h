@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <unordered_set>
+
 #include "global/async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
@@ -75,6 +77,8 @@ public:
 private:
     TrackId newTrackId() const;
 
+    void onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess);
+
     std::shared_ptr<Mixer> mixer() const;
 
     TrackSequenceId m_id = -1;
@@ -93,5 +97,6 @@ private:
     async::Channel<TrackPtr> m_trackAboutToBeRemoved;
 
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
+    std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 };
 }

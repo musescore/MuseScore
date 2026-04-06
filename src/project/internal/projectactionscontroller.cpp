@@ -724,7 +724,7 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
     }
 
     if (result) {
-        interactive()->closeAllDialogs();
+        interactive()->closeAllDialogsSync();
         globalContext()->setCurrentProject(nullptr);
 
         if (goToHome) {

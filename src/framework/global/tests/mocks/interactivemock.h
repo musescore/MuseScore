@@ -76,9 +76,10 @@ public:
 
     MOCK_METHOD(void, raise, (const UriQuery&), (override));
 
-    MOCK_METHOD(void, close, (const UriQuery&), (override));
-    MOCK_METHOD(void, close, (const Uri&), (override));
-    MOCK_METHOD(void, closeAllDialogs, (), (override));
+    MOCK_METHOD(async::Promise<Ret>, close, (const UriQuery&), (override));
+    MOCK_METHOD(async::Promise<Ret>, close, (const Uri&), (override));
+    MOCK_METHOD(Ret, closeSync, (const UriQuery&), (override));
+    MOCK_METHOD(Ret, closeAllDialogsSync, (), (override));
 
     MOCK_METHOD(ValCh<Uri>, currentUri, (), (const, override));
     MOCK_METHOD(RetVal<bool>, isCurrentUriDialog, (), (const, override));

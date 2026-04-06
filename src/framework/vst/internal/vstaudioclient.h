@@ -30,13 +30,14 @@ namespace muse::vst {
 class VstAudioClient
 {
 public:
-    VstAudioClient() = default;
+    VstAudioClient();
     ~VstAudioClient();
 
     void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance);
     void loadSupportedParams();
 
     void setIsActive(const bool isActive);
+    void setIsPlaying(const bool isPlaying);
     void setOutputSpec(const audio::OutputSpec& spec);
     void setProcessMode(VstProcessMode mode);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
@@ -46,7 +47,7 @@ public:
 
     void flushSound();
 
-    muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel, muse::audio::msecs_t playbackPosition = 0);
+    audio::samples_t process(float* output, audio::samples_t samplesPerChannel, audio::samples_t playbackPositionSamples = 0);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
 
@@ -89,6 +90,7 @@ private:
     std::unordered_map<PluginParamId, PluginParamInfo> m_pluginParamInfoMap;
 
     bool m_needUnprepareProcessData = false;
+    bool m_needUpdateState = false;
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::OutputSpec m_outputSpec;

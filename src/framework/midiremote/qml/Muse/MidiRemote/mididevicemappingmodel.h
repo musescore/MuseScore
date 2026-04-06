@@ -30,11 +30,10 @@
 
 #include "modularity/ioc.h"
 #include "imidiremote.h"
-#include "ishortcutsconfiguration.h"
 #include "midi/imidiconfiguration.h"
 #include "ui/iuiactionsregister.h"
 
-namespace muse::shortcuts {
+namespace muse::midiremote {
 class MidiDeviceMappingModel : public QAbstractListModel, public Contextable, public async::Asyncable
 {
     Q_OBJECT
@@ -46,10 +45,9 @@ class MidiDeviceMappingModel : public QAbstractListModel, public Contextable, pu
 
     QML_ELEMENT
 
-    GlobalInject<IShortcutsConfiguration> configuration;
     GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
     ContextInject<muse::ui::IUiActionsRegister> uiActionsRegister = { this };
-    ContextInject<shortcuts::IMidiRemote> midiRemote = { this };
+    ContextInject<IMidiRemote> midiRemote = { this };
 
 public:
     explicit MidiDeviceMappingModel(QObject* parent = nullptr);
@@ -92,7 +90,7 @@ private:
 
     QVariantMap midiMappingToObject(const MidiControlsMapping& midiMapping) const;
 
-    QList<MidiControlsMapping> m_midiMappings;
+    MidiMappingList m_midiMappings;
     QItemSelection m_selection;
 };
 }

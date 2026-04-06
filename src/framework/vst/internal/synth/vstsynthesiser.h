@@ -88,6 +88,8 @@ private:
 
     bool m_inited = false;
     bool m_useDynamicEvents = false;
+
+    audio::samples_t m_currentPositionSamples = 0;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;

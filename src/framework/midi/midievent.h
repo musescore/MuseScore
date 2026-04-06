@@ -171,6 +171,74 @@ struct Event {
         return 0;
     }
 
+    static std::vector<Event> fromMidi10SysExBytes(const uint8_t* data, size_t size)
+    {
+        if (!data || size == 0) {
+            return {};
+        }
+
+        // Remove F0/F7 if present
+        if (size >= 2 && data[0] == 0xF0 && data[size - 1] == 0xF7) {
+            data += 1;
+            size -= 2;
+        }
+
+        std::vector<Event> result;
+        size_t pos = 0;
+
+        while (pos < size) {
+            const size_t chunk = std::min<size_t>(6, size - pos);
+            std::array<uint32_t, 4> words = {};
+
+            uint32_t status;
+            if (pos == 0 && chunk == size) {
+                status = 0; // COMPLETE
+            } else if (pos == 0) {
+                status = 1; // START
+            } else if (pos + chunk >= size) {
+                status = 3; // END
+            } else {
+                status = 2; // CONTINUE
+            }
+
+            uint32_t w0 = 0;
+
+            // MessageType = SysEx
+            w0 |= (static_cast<uint32_t>(MessageType::SystemExclusiveData) << 28);
+
+            // Group = 0
+            w0 |= (0 << 24);
+
+            // Status
+            w0 |= (status << 20);
+
+            // Byte count
+            w0 |= (static_cast<uint32_t>(chunk) << 16);
+
+            // First 2 bytes
+            if (chunk >= 1) {
+                w0 |= static_cast<uint32_t>(data[pos + 0]) << 8;
+            }
+            if (chunk >= 2) {
+                w0 |= static_cast<uint32_t>(data[pos + 1]);
+            }
+
+            // Remaining bytes (up to 4)
+            uint32_t w1 = 0;
+            for (size_t i = 2; i < chunk; ++i) {
+                w1 |= static_cast<uint32_t>(data[pos + i]) << (24 - (i - 2) * 8);
+            }
+
+            words[0] = w0;
+            words[1] = w1;
+
+            result.emplace_back(words);
+            pos += chunk;
+        }
+
+        return result;
+    }
+
     static Event fromMidi20Words(const uint32_t* data, size_t count)
     {
         Event e;

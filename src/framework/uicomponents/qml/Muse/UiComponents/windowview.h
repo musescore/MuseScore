@@ -173,6 +173,7 @@ protected:
     void setViewContent(QQuickItem* item);
 
     virtual void beforeOpen();
+    virtual void afterShow() {}
     void doOpen();
     void showView();
 

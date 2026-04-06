@@ -36,6 +36,11 @@ static size_t noteEventKey(int pitch, int channel)
     return h1 ^ (h2 << 1);
 }
 
+VstAudioClient::VstAudioClient()
+{
+    m_processContext.state = 0;
+}
+
 VstAudioClient::~VstAudioClient()
 {
     if (!m_pluginComponent) {
@@ -69,7 +74,8 @@ void VstAudioClient::loadSupportedParams()
         return;
     }
 
-    int paramCount = controller->getParameterCount();
+    const int paramCount = controller->getParameterCount();
+    m_pluginParamInfoMap.reserve(static_cast<size_t>(paramCount));
 
     for (int i = 0; i < paramCount; ++i) {
         PluginParamInfo info;
@@ -87,6 +93,23 @@ void VstAudioClient::setIsActive(const bool isActive)
     } else {
         disableActivity();
     }
+}
+
+void VstAudioClient::setIsPlaying(const bool newPlaying)
+{
+    constexpr uint32_t playingFlag = static_cast<uint32_t>(VstProcessContext::kPlaying);
+    const bool playing = (m_processContext.state & playingFlag) != 0;
+    if (playing == newPlaying) {
+        return;
+    }
+
+    if (newPlaying) {
+        m_processContext.state |= playingFlag;
+    } else {
+        m_processContext.state &= ~playingFlag;
+    }
+
+    m_needUpdateState = true;
 }
 
 void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
@@ -194,8 +217,8 @@ void VstAudioClient::flushSound()
     m_playingParams.clear();
 }
 
-muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::samples_t samplesPerChannel,
-                                               muse::audio::msecs_t playbackPosition)
+audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel,
+                                         samples_t playbackPositionSamples)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -213,7 +236,7 @@ muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::sampl
     //! but never bigger than the maxSamplesPerBlock
     m_processData.numSamples = samplesPerChannel;
 
-    m_processContext.projectTimeSamples = (playbackPosition / 1000000.f) * m_outputSpec.sampleRate;
+    m_processContext.projectTimeSamples = playbackPositionSamples;
 
     if (samplesPerChannel > m_outputSpec.samplesPerChannel) {
         OutputSpec newSpec = m_outputSpec;
@@ -228,6 +251,8 @@ muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::sampl
     if (processor->process(m_processData) != Steinberg::kResultOk) {
         return 0;
     }
+
+    m_needUpdateState = false;
 
     if (m_type == AudioPluginType::Instrument) {
         m_eventList.clear();
@@ -481,6 +506,11 @@ void VstAudioClient::disableActivity()
     PluginComponentPtr component = pluginComponent();
     if (!component) {
         return;
+    }
+
+    if (m_needUpdateState) {
+        processor->process(m_processData);
+        m_needUpdateState = false;
     }
 
     processor->setProcessing(false);

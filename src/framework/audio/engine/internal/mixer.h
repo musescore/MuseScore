@@ -71,24 +71,28 @@ public:
     AudioSignalChanges masterAudioSignalChanges() const;
 
     void setIsIdle(bool idle);
-    void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
+    void setTracksToProcessWhenIdle(const std::unordered_set<TrackId>& trackIds);
 
     // IAudioSource
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
-    samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
+
     void setIsActive(bool arg) override;
+
+    samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
 
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
     msecs_t playbackPosition() const override;
+    samples_t playbackPositionSamples() const override;
 
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
+    void processMasterFx(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
 
     bool useMultithreading() const;
@@ -121,6 +125,7 @@ private:
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 
     bool m_isSilence = false;
+    bool m_shouldProcessMasterFxDuringSilence = false;
     bool m_isIdle = false;
 };
 

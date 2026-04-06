@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSCONFIGURATIONSTUB_H
-#define MUSE_SHORTCUTS_SHORTCUTSCONFIGURATIONSTUB_H
+#pragma once
 
 #include "shortcuts/ishortcutsconfiguration.h"
 
@@ -33,13 +32,5 @@ public:
 
     io::path_t shortcutsUserAppDataPath() const override;
     io::path_t shortcutsAppDataPath() const override;
-
-    io::path_t midiMappingUserAppDataPath() const override;
-
-    bool advanceToNextNoteOnKeyRelease() const override;
-    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
-    muse::async::Channel<bool> advanceToNextNoteOnKeyReleaseChanged() const override;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSCONFIGURATIONSTUB_H

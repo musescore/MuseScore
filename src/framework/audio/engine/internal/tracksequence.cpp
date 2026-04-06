@@ -47,8 +47,12 @@ TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::Context
     m_player = std::make_shared<SequencePlayer>(this, m_clock, iocCtx);
     m_audioIO = std::make_shared<SequenceIO>(this);
 
-    audioEngine()->modeChanged().onReceive(this, [this](RenderMode) {
+    audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
         m_prevActiveTrackId = INVALID_TRACK_ID;
+
+        if (mode == RenderMode::IdleMode) {
+            mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
+        }
     });
 
     mixer()->addClock(m_clock);
@@ -91,25 +95,37 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
     TrackId newId = newTrackId();
 
     auto onOffStreamReceived = [this](const TrackId trackId) {
+        std::unordered_set<TrackId> tracksToProcess = m_tracksToProcessWhenIdle;
+
         if (m_prevActiveTrackId == INVALID_TRACK_ID) {
-            mixer()->setTracksToProcessWhenIdle({ trackId });
+            tracksToProcess.insert(trackId);
         } else {
-            mixer()->setTracksToProcessWhenIdle({ m_prevActiveTrackId, trackId });
+            tracksToProcess.insert({ m_prevActiveTrackId, trackId });
         }
 
+        mixer()->setTracksToProcessWhenIdle(tracksToProcess);
         m_prevActiveTrackId = trackId;
     };
 
-    EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived, iocContext());
-
     source->setOutputSpec(audioEngine()->outputSpec());
 
+    RetVal<MixerChannelPtr> channel = mixer()->addChannel(newId, source);
+    if (!channel.ret) {
+        result.ret = channel.ret;
+        return result;
+    }
+
+    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, newId](bool shouldProcess) {
+        onShouldProcessDuringSilenceChanged(newId, shouldProcess);
+    });
+
+    EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     trackPtr->id = newId;
     trackPtr->name = trackName;
     trackPtr->setPlaybackData(playbackData);
     trackPtr->inputHandler = source;
-    trackPtr->outputHandler = mixer()->addChannel(newId, source).val;
+    trackPtr->outputHandler = channel.val;
     trackPtr->setInputParams(requiredParams.in);
     trackPtr->setOutputParams(requiredParams.out);
 
@@ -172,11 +188,20 @@ RetVal2<TrackId, AudioOutputParams> TrackSequence::addAuxTrack(const std::string
     }
 
     TrackId newId = newTrackId();
+    RetVal<MixerChannelPtr> channel = mixer()->addAuxChannel(newId);
+    if (!channel.ret) {
+        result.ret = channel.ret;
+        return result;
+    }
+
+    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, newId](bool shouldProcess) {
+        onShouldProcessDuringSilenceChanged(newId, shouldProcess);
+    });
 
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     trackPtr->id = newId;
     trackPtr->name = trackName;
-    trackPtr->outputHandler = mixer()->addAuxChannel(newId).val;
+    trackPtr->outputHandler = channel.val;
     trackPtr->setOutputParams(requiredOutputParams);
 
     m_trackAboutToBeAdded.send(trackPtr);
@@ -228,9 +253,17 @@ Ret TrackSequence::removeTrack(const TrackId id)
 
     if (search != m_tracks.end() && search->second) {
         m_trackAboutToBeRemoved.send(search->second);
+
         mixer()->removeChannel(id);
         m_tracks.erase(id);
+        muse::remove(m_tracksToProcessWhenIdle, id);
+
+        if (m_prevActiveTrackId == id) {
+            m_prevActiveTrackId = INVALID_TRACK_ID;
+        }
+
         m_trackRemoved.send(id);
+
         return true;
     }
 
@@ -301,12 +334,22 @@ Channel<TrackPtr> TrackSequence::trackAboutToBeRemoved() const
 TrackId TrackSequence::newTrackId() const
 {
     if (m_tracks.empty()) {
-        return static_cast<TrackId>(m_tracks.size());
+        return 0;
     }
 
     auto last = m_tracks.rbegin();
-
     return last->first + 1;
+}
+
+void TrackSequence::onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess)
+{
+    if (shouldProcess) {
+        m_tracksToProcessWhenIdle.insert(trackId);
+    } else {
+        muse::remove(m_tracksToProcessWhenIdle, trackId);
+    }
+
+    mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
 }
 
 std::shared_ptr<Mixer> TrackSequence::mixer() const

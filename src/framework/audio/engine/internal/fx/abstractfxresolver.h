@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_ABSTRACTFXRESOLVER_H
-#define MUSE_AUDIO_ABSTRACTFXRESOLVER_H
+#pragma once
 
 #include <map>
-#include <unordered_map>
 
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
@@ -35,6 +33,7 @@ class AbstractFxResolver : public IFxResolver::IResolver
 public:
     std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
     std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) override;
+
     void refresh() override;
     void clearAllFx() override;
 
@@ -46,7 +45,7 @@ protected:
     virtual void removeTrackFx(const TrackId trackId, const AudioResourceId& resoureId, AudioFxChainOrder order);
 
 private:
-    using FxMap = std::unordered_map<AudioFxChainOrder, IFxProcessorPtr>;
+    using FxMap = std::map<AudioFxChainOrder, IFxProcessorPtr>;
 
     void updateMasterFxMap(const AudioFxChain& newFxChain, const OutputSpec& outputSpec);
     void updateTrackFxMap(FxMap& fxMap, const TrackId trackId, const AudioFxChain& newFxChain, const audio::OutputSpec& outputSpec);
@@ -58,5 +57,3 @@ private:
     FxMap m_masterFxMap;
 };
 }
-
-#endif // MUSE_AUDIO_ABSTRACTFXRESOLVER_H

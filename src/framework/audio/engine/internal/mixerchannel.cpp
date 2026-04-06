@@ -92,6 +92,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setOutputSpec(m_outputSpec);
+        fx->setPlaying(isActive());
 
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
@@ -132,6 +133,16 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
     if (mutedChanged) {
         m_mutedChanged.notify();
     }
+
+    const bool shouldProcessDuringSilence = std::any_of(m_fxProcessors.cbegin(), m_fxProcessors.cend(),
+                                                        [](const IFxProcessorPtr& fx) {
+        return fx->shouldProcessDuringSilence();
+    });
+
+    if (shouldProcessDuringSilence != m_shouldProcessDuringSilence) {
+        m_shouldProcessDuringSilence = shouldProcessDuringSilence;
+        m_shouldProcessDuringSilenceChanged.send(shouldProcessDuringSilence);
+    }
 }
 
 async::Channel<AudioOutputParams> MixerChannel::outputParamsChanged() const
@@ -157,6 +168,10 @@ void MixerChannel::setIsActive(bool arg)
 
     if (m_audioSource) {
         m_audioSource->setIsActive(arg);
+    }
+
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
+        fx->setPlaying(arg);
     }
 }
 
@@ -210,7 +225,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (fx->active()) {
-            const msecs_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPosition() : 0;
+            const samples_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPositionSamples() : 0;
             fx->process(buffer, samplesPerChannel, pos);
         }
     }
@@ -255,6 +270,16 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount)
 bool MixerChannel::isSilent() const
 {
     return m_isSilent;
+}
+
+bool MixerChannel::shouldProcessDuringSilence() const
+{
+    return m_shouldProcessDuringSilence;
+}
+
+async::Channel<bool> MixerChannel::shouldProcessDuringSilenceChanged() const
+{
+    return m_shouldProcessDuringSilenceChanged;
 }
 
 AudioSignalsNotifier& MixerChannel::signalNotifier() const

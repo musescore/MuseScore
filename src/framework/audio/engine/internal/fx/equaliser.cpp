@@ -44,9 +44,18 @@ void Equaliser::setActive(bool active)
     m_active = active;
 }
 
-void Equaliser::process(float* buffer, unsigned int sampleCount, msecs_t)
+void Equaliser::setPlaying(bool)
 {
-    for (unsigned int i = 0; i < sampleCount; ++i) {
+}
+
+bool Equaliser::shouldProcessDuringSilence() const
+{
+    return false;
+}
+
+void Equaliser::process(float* buffer, samples_t sampleCount, samples_t)
+{
+    for (samples_t i = 0; i < sampleCount; ++i) {
         m_x[2] = m_x[1];
         m_x[1] = m_x[0];
         m_x[0] = buffer[i];

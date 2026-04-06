@@ -42,23 +42,3 @@ io::path_t ShortcutsConfigurationStub::shortcutsAppDataPath() const
 {
     return io::path_t();
 }
-
-io::path_t ShortcutsConfigurationStub::midiMappingUserAppDataPath() const
-{
-    return io::path_t();
-}
-
-bool ShortcutsConfigurationStub::advanceToNextNoteOnKeyRelease() const
-{
-    return false;
-}
-
-void ShortcutsConfigurationStub::setAdvanceToNextNoteOnKeyRelease(bool)
-{
-}
-
-async::Channel<bool> ShortcutsConfigurationStub::advanceToNextNoteOnKeyReleaseChanged() const
-{
-    static async::Channel<bool> ch;
-    return ch;
-}

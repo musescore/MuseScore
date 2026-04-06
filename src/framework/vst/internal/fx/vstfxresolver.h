@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_VST_VSTFXRESOLVER_H
-#define MUSE_VST_VSTFXRESOLVER_H
+#pragma once
 
 #include "audio/engine/internal/fx/abstractfxresolver.h"
 
@@ -37,6 +36,7 @@ class VstFxResolver : public audio::fx::AbstractFxResolver, public muse::Context
 public:
     VstFxResolver(const muse::modularity::ContextPtr& ctx)
         : muse::Contextable(ctx) {}
+
     // IFxResolver::IResolver interface
     audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
@@ -51,5 +51,3 @@ private:
     void removeTrackFx(const audio::TrackId trackId, const audio::AudioResourceId& resoureId, audio::AudioFxChainOrder order) override;
 };
 }
-
-#endif // MUSE_VST_VSTFXRESOLVER_H

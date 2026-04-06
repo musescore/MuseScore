@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IFXRESOLVER_H
-#define MUSE_AUDIO_IFXRESOLVER_H
+#pragma once
 
 #include <memory>
 
@@ -47,6 +46,7 @@ public:
                                                            const OutputSpec& outputSpec) = 0;
         virtual std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec) = 0;
         virtual AudioResourceMetaList resolveResources() const = 0;
+
         virtual void refresh() = 0;
         virtual void clearAllFx() = 0;
     };
@@ -56,11 +56,10 @@ public:
     virtual std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxChain& fxChain,
                                                        const OutputSpec& outputSpec) = 0;
     virtual AudioResourceMetaList resolveAvailableResources() const = 0;
+
     virtual void registerResolver(const AudioFxType type, IResolverPtr resolver) = 0;
     virtual void clearAllFx() = 0;
 };
 
 using IFxResolverPtr = std::shared_ptr<IFxResolver>;
 }
-
-#endif // MUSE_AUDIO_IFXRESOLVER_H

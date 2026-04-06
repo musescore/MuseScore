@@ -35,17 +35,25 @@ namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
 public:
-    explicit VstFxProcessor(IVstPluginInstancePtr&& instance, const muse::audio::AudioFxParams& params);
+    explicit VstFxProcessor(IVstPluginInstancePtr instance, const muse::audio::AudioFxParams& params);
 
     void init(const audio::OutputSpec& spec);
 
     muse::audio::AudioFxType type() const override;
+
     const muse::audio::AudioFxParams& params() const override;
     async::Channel<muse::audio::AudioFxParams> paramsChanged() const override;
+
     void setOutputSpec(const audio::OutputSpec& spec) override;
+
     bool active() const override;
     void setActive(bool active) override;
-    void process(float* buffer, unsigned int sampleCount, muse::audio::msecs_t playbackPosition = 0) override;
+
+    void setPlaying(bool playing) override;
+
+    bool shouldProcessDuringSilence() const override;
+
+    void process(float* buffer, audio::samples_t sampleCount, audio::samples_t playbackPositionSamples = 0) override;
 
 private:
     bool m_inited = false;

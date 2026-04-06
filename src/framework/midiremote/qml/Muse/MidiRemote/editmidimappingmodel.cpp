@@ -24,8 +24,8 @@
 
 #include "translation.h"
 
-using namespace muse::shortcuts;
 using namespace muse::midi;
+using namespace muse::midiremote;
 
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
     : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))

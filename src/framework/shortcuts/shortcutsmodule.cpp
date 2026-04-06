@@ -25,7 +25,6 @@
 
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
-#include "internal/midiremote.h"
 #include "internal/shortcutsconfiguration.h"
 
 #include "global/api/iapiregister.h"
@@ -51,11 +50,9 @@ void ShortcutsModule::registerExports()
     m_shortcutsController = std::make_shared<ShortcutsController>(iocContext());
     m_shortcutsRegister = std::make_shared<ShortcutsRegister>(iocContext());
     m_configuration = std::make_shared<ShortcutsConfiguration>(iocContext());
-    m_midiRemote = std::make_shared<MidiRemote>(iocContext());
 
     ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
     ioc()->registerExport<IShortcutsController>(moduleName(), m_shortcutsController);
-    ioc()->registerExport<IMidiRemote>(moduleName(), m_midiRemote);
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
 }
 
@@ -73,14 +70,12 @@ void ShortcutsModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_shortcutsController->init();
-    m_midiRemote->init();
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());
-        pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
     }
 #endif
 }
