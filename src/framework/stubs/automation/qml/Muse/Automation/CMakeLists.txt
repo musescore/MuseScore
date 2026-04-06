@@ -18,13 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(muse_automation ALIAS muse::automation STUB)
+muse_create_qml_module(muse_automation_qml ALIAS muse::automation_qml FOR muse_automation STUB)
 
-target_sources(muse_automation PRIVATE
-    automationstubmodule.cpp
-    automationstubmodule.h
+qt_add_qml_module(muse_automation_qml
+    URI Muse.Automation
+    VERSION 1.0
+    QML_FILES
+        AutomationOverlayLoader.qml
 )
 
-if (MUSE_MODULE_AUTOMATION_QML)
-    add_subdirectory(qml/Muse/Automation)
-endif()
+fixup_qml_module_dependencies(muse_automation_qml)
