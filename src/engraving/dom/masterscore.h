@@ -170,6 +170,8 @@ public:
     void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
+    void initAutomation(); // TODO: Placeholder?
+
     void setPlaybackScore(Score*);
     Score* playbackScore() { return m_playbackScore; }
     const Score* playbackScore() const { return m_playbackScore; }

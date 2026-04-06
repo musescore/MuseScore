@@ -86,7 +86,7 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
     m_notationPlayback = std::make_shared<NotationPlaybackStub>();
 #endif
 
-    m_notationAutomation = std::make_shared<NotationAutomation>();
+    m_notationAutomation = std::make_shared<NotationAutomation>(this, m_notationChanged);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();

@@ -375,6 +375,14 @@ void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_
     }
 }
 
+void MasterScore::initAutomation()
+{
+    IF_ASSERT_FAILED(m_automationController) {
+        return;
+    }
+    m_automationController->init(this);
+}
+
 //---------------------------------------------------------
 //   setPlaybackScore
 //---------------------------------------------------------

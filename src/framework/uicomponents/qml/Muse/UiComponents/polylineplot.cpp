@@ -187,6 +187,23 @@ void PolylinePlot::setLineWidth(qreal w)
     update();
 }
 
+bool PolylinePlot::drawBackground() const
+{
+    return m_drawBackground;
+}
+
+void PolylinePlot::setDrawBackground(bool v)
+{
+    if (m_drawBackground == v) {
+        return;
+    }
+
+    m_drawBackground = v;
+    emit drawBackgroundChanged();
+
+    update();
+}
+
 qreal PolylinePlot::baselineN() const
 {
     return m_baselineN;
@@ -1079,7 +1096,7 @@ void PolylinePlot::paint(QPainter* painter)
     painter->setRenderHint(QPainter::Antialiasing, antialiasing());
 
     // draw background overlay
-    {
+    if (m_drawBackground) {
         QColor overlay = uiConfiguration()->currentTheme().extra["black_color"].value<QColor>();
         overlay.setAlphaF(0.25);
 

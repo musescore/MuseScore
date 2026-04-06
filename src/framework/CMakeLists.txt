@@ -61,6 +61,10 @@ if (MUSE_MODULE_AUTOBOT)
     add_subdirectory(autobot)
 endif()
 
+if (MUSE_MODULE_AUTOMATION)
+    add_subdirectory(automation)
+endif()
+
 if (MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()

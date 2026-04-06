@@ -65,7 +65,10 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
+    Q_PROPERTY(QVariant automationLinesData READ automationLinesData NOTIFY automationLinesDataChanged)
+
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
+    Q_PROPERTY(bool automationMode READ automationMode NOTIFY automationModeChanged)
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
@@ -150,8 +153,12 @@ public:
     muse::RectF viewport() const;
     QRectF viewport_property() const;
 
+    QVariant automationLinesData() const;
+
     bool publishMode() const;
     void setPublishMode(bool arg);
+
+    bool automationMode() const;
 
     bool isMainView() const;
     void setIsMainView(bool isMainView);
@@ -171,6 +178,9 @@ signals:
     void matrixChanged();
     void viewportChanged();
     void publishModeChanged();
+    void automationModeChanged();
+
+    void automationLinesDataChanged();
 
     void activeFocusRequested();
 
@@ -210,6 +220,7 @@ private:
     INotationElementsPtr notationElements() const;
     INotationStylePtr notationStyle() const;
     INotationSelectionPtr notationSelection() const;
+    INotationAutomationPtr notationAutomation() const;
 
     void clear();
     void initBackground();

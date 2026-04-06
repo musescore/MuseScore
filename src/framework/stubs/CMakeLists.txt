@@ -26,6 +26,10 @@ if (NOT MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
 endif()
 
+if (NOT MUSE_MODULE_AUTOMATION)
+    add_subdirectory(automation)
+endif()
+
 if (NOT MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()

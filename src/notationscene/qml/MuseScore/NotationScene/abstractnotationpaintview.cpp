@@ -340,8 +340,13 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     // FIXME: only un-/re-subscribe when master notation changes
-    m_notation->masterNotation()->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
+    notationAutomation()->automationModeEnabledChanged().onNotify(this, [this]() {
         scheduleRedraw();
+        emit automationModeChanged();
+    });
+
+    notationAutomation()->automationLinesDataChanged().onNotify(this, [this]() {
+        emit automationLinesDataChanged();
     });
 
     if (isMainView()) {
@@ -373,6 +378,8 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
+    emit automationModeChanged();
+    emit automationLinesDataChanged();
 }
 
 void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
@@ -389,7 +396,8 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     interaction->shadowNoteChanged().disconnect(this);
     notationPlayback()->loopBoundariesChanged().disconnect(this);
     m_notation->viewModeChanged().disconnect(this);
-    m_notation->masterNotation()->automation()->automationModeEnabledChanged().disconnect(this);
+    notationAutomation()->automationModeEnabledChanged().disconnect(this);
+    notationAutomation()->automationLinesDataChanged().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -556,6 +564,12 @@ INotationSelectionPtr AbstractNotationPaintView::notationSelection() const
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
+INotationAutomationPtr AbstractNotationPaintView::notationAutomation() const
+{
+    const IMasterNotationPtr masterNotation = m_notation ? m_notation->masterNotation() : nullptr;
+    return masterNotation ? masterNotation->automation() : nullptr;
+}
+
 void AbstractNotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
@@ -692,7 +706,7 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
     const bool isPrinting = publishMode() || m_inputController->readonly();
-    const bool isAutomation = notation()->masterNotation()->automation()->isAutomationModeEnabled();
+    const bool isAutomation = automationMode();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting, isAutomation);
 
     const INotationNoteInputPtr noteInput = notationNoteInput();
@@ -1243,6 +1257,11 @@ void AbstractNotationPaintView::forceFocusIn()
     forceActiveFocus();
 }
 
+QVariant AbstractNotationPaintView::automationLinesData() const
+{
+    return notationAutomation() ? notationAutomation()->automationLinesData() : QVariant();
+}
+
 void AbstractNotationPaintView::onContextMenuIsOpenChanged(bool open)
 {
     m_isContextMenuOpen = open;
@@ -1633,6 +1652,11 @@ void AbstractNotationPaintView::setPublishMode(bool arg)
 
     m_publishMode = arg;
     emit publishModeChanged();
+}
+
+bool AbstractNotationPaintView::automationMode() const
+{
+    return notationAutomation() ? notationAutomation()->isAutomationModeEnabled() : false;
 }
 
 bool AbstractNotationPaintView::isMainView() const

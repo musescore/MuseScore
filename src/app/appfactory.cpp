@@ -134,6 +134,12 @@
 #include "autobot/autobotmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_AUTOMATION
+#include "framework/automation/automationmodule.h"
+#else
+#include "framework/stubs/automation/automationstubmodule.h"
+#endif
+
 #ifdef MUE_BUILD_BRAILLE_MODULE
 #include "braille/braillemodule.h"
 #else
@@ -293,6 +299,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUSE_MODULE_AUDIOPLUGINS
     app->addModule(new muse::audioplugins::AudioPluginsModule());
 #endif
+    app->addModule(new muse::automation::AutomationModule());
     app->addModule(new muse::draw::DrawModule());
 #ifdef MUSE_MODULE_INTERACTIVE
     app->addModule(new muse::interactive::InteractiveModule());
