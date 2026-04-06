@@ -76,6 +76,7 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
         //! NOTE: Only set the points for now - we'll update the geometry separately...
         muse::uicomponents::PolylinePlot* polyline = new muse::uicomponents::PolylinePlot(this);
         polyline->setPoints(pointsList);
+        polyline->setDrawBackground(false);
 
         QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
                          [polyline](int index, qreal x, qreal y, bool completed) {
