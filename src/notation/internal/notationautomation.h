@@ -23,9 +23,17 @@
 
 #include "../inotationautomation.h"
 
-#include "igetscore.h"
+#include "notationtypes.h"
+#include "engraving/automation/automationtypes.h"
+
 #include "async/channel.h"
+
+#include "igetscore.h"
 #include "draw/types/geometry.h"
+
+namespace mu::engraving {
+class IAutomation;
+}
 
 namespace mu::notation {
 class NotationAutomation : public INotationAutomation
@@ -41,6 +49,11 @@ public:
     muse::async::Notification automationLinesDataChanged() const override; // TODO: probably a channel specifying indices
 
 private:
+    QVariantList linesDataForSystem(const System* system) const;
+
+    mu::engraving::Score* score() const;
+    mu::engraving::IAutomation* automation() const;
+
     IGetScore* m_getScore = nullptr;
     muse::async::Channel<muse::RectF> m_notationChanged;
 

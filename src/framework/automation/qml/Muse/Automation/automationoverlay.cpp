@@ -39,7 +39,7 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
     m_automationLinesData.clear();
 
     const QVariantList automationDataList = automationLinesData.toList();
-    IF_ASSERT_FAILED(!automationDataList.isEmpty()) {
+    if (automationDataList.isEmpty()) {
         update();
         return;
     }

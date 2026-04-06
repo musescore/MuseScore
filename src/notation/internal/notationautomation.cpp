@@ -21,7 +21,8 @@
  */
 
 #include "notationautomation.h"
-#include "notationtypes.h"
+#include "engraving/automation/iautomation.h"
+#include "engraving/dom/masterscore.h"
 
 using namespace mu::notation;
 
@@ -42,8 +43,17 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
         return;
     }
 
+    if (enabled) { // TODO: Placeholder - need to init this somewhere...
+        if (score() && score()->masterScore()) {
+            score()->masterScore()->initAutomation();
+        } else {
+            ASSERT_X("No score for automation...")
+        }
+    }
+
     m_isAutomationModeEnabled = enabled;
     m_automationModeEnabledChanged.notify();
+    m_automationLinesDataChanged.notify(); // TODO: Delete once above placeholder has been removed...
 }
 
 muse::async::Notification NotationAutomation::automationModeEnabledChanged() const
@@ -53,53 +63,97 @@ muse::async::Notification NotationAutomation::automationModeEnabledChanged() con
 
 QVariant NotationAutomation::automationLinesData() const
 {
-    // TODO: Entire method is a dummy - here we'll construct from actual automation data...
-    QVariantList dummyAutomationData;
+    QVariantList automationLinesData;
 
-    // Hack - using second system because first is normally the title...
-    const System* systemOne = m_getScore ? m_getScore->score()->systems().at(1) : nullptr;
-    if (!systemOne) {
-        return QVariantList();
+    IF_ASSERT_FAILED(automation()) {
+        return automationLinesData;
     }
 
-    const muse::PointF systemOnePos = systemOne->canvasPos();
-    for (const SysStaff* staff : systemOne->staves()) {
+    for (const System* system : score()->systems()) {
+        const QVariantList linesData = linesDataForSystem(system);
+        if (!linesData.empty()) {
+            automationLinesData << linesData;
+        }
+    }
+
+    return automationLinesData;
+}
+
+QVariantList NotationAutomation::linesDataForSystem(const System* system) const
+{
+    QVariantList lines;
+
+    const int systemStartTick = system->first()->tick().ticks();
+    const int systemEndTick = system->last()->endTick().ticks();
+
+    staff_idx_t staffIdx = system->firstVisibleStaff();
+    while (staffIdx != muse::nidx) {
+        const Staff* staff = score()->staff(staffIdx);
+        const SysStaff* sysStaff = system->staff(staffIdx);
+        IF_ASSERT_FAILED(staff && sysStaff) {
+            staffIdx = system->nextVisibleStaff(staffIdx);
+            continue;
+        }
+        if (!staff->isPrimaryStaff()) {
+            staffIdx = system->nextVisibleStaff(staffIdx);
+            continue;
+        }
+
+        QVariantList pointsOnLine;
+
+        const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
+        for (auto point : automation()->curve(key)) {
+            const int tick = point.first;
+            if (tick < systemStartTick || tick > systemEndTick) {
+                continue;
+            }
+
+            const mu::engraving::AutomationPoint& autoPoint = point.second;
+
+            QVariantMap pointData;
+
+            // TODO: xFactor is a placeholder - it assumes time is linear in a staff - which is not the case. We should
+            // instead base this on segment/timetick positions...
+            const double xFactor = static_cast<double>(tick - systemStartTick) / (systemEndTick - systemStartTick);
+            pointData["x"] = xFactor;
+
+            pointData["y"] = autoPoint.inValue;
+            pointsOnLine << pointData;
+        }
+
+        if (pointsOnLine.isEmpty()) {
+            staffIdx = system->nextVisibleStaff(staffIdx);
+            continue;
+        }
+
+        const muse::RectF staffRect = sysStaff->bbox().translated(system->canvasPos());
+
         QVariantMap lineData;
-
-        const muse::RectF staffRect = staff->bbox().translated(systemOnePos);
-
         lineData["x"] = staffRect.x();
         lineData["y"] = staffRect.y();
         lineData["width"] = staffRect.width();
         lineData["height"] = staffRect.height();
+        lineData["points"] = pointsOnLine;
 
-        QVariantList points;
+        lines << lineData;
 
-        // Dummy points...
-        QVariantMap point1;
-        point1["x"] = 0.10;
-        point1["y"] = 0.50;
-        points << point1;
-
-        QVariantMap point2;
-        point2["x"] = 0.50;
-        point2["y"] = 0.10;
-        points << point2;
-
-        QVariantMap point3;
-        point3["x"] = 0.66;
-        point3["y"] = 0.90;
-        points << point3;
-
-        lineData["points"] = points;
-
-        dummyAutomationData << lineData;
+        staffIdx = system->nextVisibleStaff(staffIdx);
     }
 
-    return dummyAutomationData;
+    return lines;
 }
 
 muse::async::Notification NotationAutomation::automationLinesDataChanged() const
 {
     return m_automationLinesDataChanged;
+}
+
+mu::engraving::Score* NotationAutomation::score() const
+{
+    return m_getScore ? m_getScore->score() : nullptr;
+}
+
+mu::engraving::IAutomation* NotationAutomation::automation() const
+{
+    return score() ? score()->automation() : nullptr;
 }
