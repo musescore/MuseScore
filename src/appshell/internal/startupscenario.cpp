@@ -147,64 +147,25 @@ void StartupScenario::registerAudioPlugins()
 void StartupScenario::runAfterSplashScreen()
 {
     TRACEFUNC;
-    //! TODO We need to recognize this and refactor it.
-    //! This is a temporary solution for now.
-
-#ifdef MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
-    if (m_startupScoreFile.isValid()) {
-        muse::async::Channel<Uri> opened = interactive()->opened();
-        opened.onReceive(this, [this, opened](const Uri&) {
-            muse::async::Channel<Uri> mut = opened;
-            mut.disconnect(this);
-            openScore(m_startupScoreFile);
-            m_startupCompleted = true;
-        });
-        interactive()->open(HOME_URI);
-    } else if (isStartWithNewFileAsSecondaryInstance()) {
-        muse::async::Channel<Uri> opened = interactive()->opened();
-        opened.onReceive(this, [this, opened](const Uri&) {
-            muse::async::Channel<Uri> mut = opened;
-            mut.disconnect(this);
-            dispatcher()->dispatch("file-new");
-            m_startupCompleted = true;
-        });
-        interactive()->open(HOME_URI);
-    } else {
-        interactive()->open(HOME_URI);
-    }
-
-#else // MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
 
     if (m_startupCompleted) {
         return;
     }
 
-    StartupModeType modeType = resolveStartupModeType();
+    m_startupCompleted = true;
+
+    StartupModeType modeType = StartupModeType::StartEmpty;
     if (multiwindowsProvider()->isFirstWindow() && sessionsManager()->hasProjectsForRestore()) {
         modeType = StartupModeType::Recovery;
+    } else {
+        modeType = resolveStartupModeType();
     }
 
-    muse::async::Channel<Uri> opened = interactive()->opened();
-    opened.onReceive(this, [this, opened, modeType](const Uri&) {
-        static bool once = false;
-        if (once) {
-            return;
-        }
-        once = true;
-
-        onStartupPageOpened(modeType);
-
-        async::Async::call(this, [this, opened]() {
-            muse::async::Channel<Uri> mut = opened;
-            mut.disconnect(this);
-            m_startupCompleted = true;
-        });
-    });
-
     const Uri& startupUri = startupPageUri(modeType);
-    interactive()->open(startupUri);
-
-#endif // MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE
+    auto promise = interactive()->open(startupUri);
+    promise.onResolve(this, [this, modeType](const Val&) {
+        onStartupPageOpened(modeType);
+    });
 }
 
 bool StartupScenario::startupCompleted() const
