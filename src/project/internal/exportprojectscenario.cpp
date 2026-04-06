@@ -21,8 +21,8 @@
  */
 #include "exportprojectscenario.h"
 
-#include "global/io/file.h"
 #include "global/io/fileinfo.h"
+#include "global/io/filestream.h"
 
 #include "translation.h"
 #include "defer.h"
@@ -403,9 +403,9 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     while (true) {
-        io::File outputFile(scorePath);
+        io::FileStream outputFile(scorePath);
         outputFile.setMeta("file_path", scorePath.toStdString());
-        if (!outputFile.open(File::WriteOnly)) {
+        if (!outputFile.open(FileStream::WriteOnly)) {
             if (askForRetry(filename)) {
                 continue;
             } else {
