@@ -22,12 +22,19 @@
 #ifndef MUSE_IO_FILESYSTEM_H
 #define MUSE_IO_FILESYSTEM_H
 
+#include <map>
+#include <memory>
+#include <mutex>
+
 #include "../ifilesystem.h"
+
+class QFile;
 
 namespace muse::io {
 class FileSystem : public IFileSystem
 {
 public:
+    ~FileSystem() override;
 
     Ret exists(const io::path_t& path) const override;
     Ret remove(const io::path_t& path, bool onlyIfEmpty = false) override;
@@ -49,6 +56,10 @@ public:
     Ret readFile(const io::path_t& filePath, ByteArray& data) const override;
     Ret writeFile(const io::path_t& filePath, const ByteArray& data) override;
 
+    RetVal<StreamId> openStream(const io::path_t& filePath, OpenMode mode) override;
+    Ret writeToStream(StreamId fileId, const ByteArray& data, uint64_t offset = STREAM_POS_CURRENT) override;
+    Ret closeStream(StreamId fileId) override;
+
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
     bool setPermissionsAllowedForAll(const io::path_t& path) const override;
 
@@ -63,6 +74,10 @@ private:
     Ret removeFile(const io::path_t& path);
     Ret removeDir(const io::path_t& path, bool onlyIfEmpty = false);
     Ret copyRecursively(const io::path_t& src, const io::path_t& dst) const;
+
+    mutable std::mutex m_openStreamsMutex;
+    std::map<StreamId, std::unique_ptr<QFile> > m_openStreams;
+    StreamId m_nextStreamId = 0;
 };
 }
 

@@ -119,6 +119,8 @@ target_sources(muse_global PRIVATE
     io/iodevice.h
     io/file.cpp
     io/file.h
+    io/filestream.cpp
+    io/filestream.h
     io/filesystemwatcher.cpp
     io/filesystemwatcher.h
     io/buffer.cpp
