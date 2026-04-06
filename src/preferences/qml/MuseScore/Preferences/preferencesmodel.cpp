@@ -26,6 +26,8 @@
 #include "translation.h"
 #include "ui/view/iconcodes.h"
 
+#include "muse_framework_config.h"
+
 using namespace mu::preferences;
 using namespace muse::ui;
 
@@ -173,8 +175,10 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("audio-midi", QT_TRANSLATE_NOOP("preferences", "Audio & MIDI"), IconCode::Code::AUDIO,
                  "Preferences/AudioMidiPreferencesPage.qml"),
 
+#ifdef MUSE_MODULE_MIDIREMOTE
         makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
+#endif
 
         makeItem("percussion", QT_TRANSLATE_NOOP("preferences", "Percussion"), IconCode::Code::PERCUSSION,
                  "Preferences/PercussionPreferencesPage.qml"),

@@ -38,13 +38,7 @@ std::vector<IFxProcessorPtr> AbstractFxResolver::resolveFxList(const TrackId tra
     FxMap& fxMap = m_tracksFxMap[trackId];
     updateTrackFxMap(fxMap, trackId, fxChain, outputSpec);
 
-    std::vector<IFxProcessorPtr> result;
-
-    for (const auto& pair : fxMap) {
-        result.emplace_back(pair.second);
-    }
-
-    return result;
+    return muse::values(fxMap);
 }
 
 std::vector<IFxProcessorPtr> AbstractFxResolver::resolveMasterFxList(const AudioFxChain& fxChain, const OutputSpec& outputSpec)
@@ -56,13 +50,7 @@ std::vector<IFxProcessorPtr> AbstractFxResolver::resolveMasterFxList(const Audio
 
     updateMasterFxMap(fxChain, outputSpec);
 
-    std::vector<IFxProcessorPtr> result;
-
-    for (const auto& pair : m_masterFxMap) {
-        result.emplace_back(pair.second);
-    }
-
-    return result;
+    return muse::values(m_masterFxMap);
 }
 
 void AbstractFxResolver::refresh()

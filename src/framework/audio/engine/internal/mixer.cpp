@@ -209,6 +209,12 @@ msecs_t Mixer::playbackPosition() const
     return clock->currentTime();
 }
 
+samples_t Mixer::playbackPositionSamples() const
+{
+    const msecs_t pos = playbackPosition();
+    return pos / 1000000. * m_outputSpec.sampleRate;
+}
+
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -220,7 +226,7 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     size_t outBufferSize = samplesPerChannel * m_outputSpec.audioChannelCount;
     std::fill(outBuffer, outBuffer + outBufferSize, 0.f);
 
-    if (m_isIdle && m_tracksToProcessWhenIdle.empty() && m_isSilence) {
+    if (m_isIdle && m_tracksToProcessWhenIdle.empty() && (m_isSilence && !m_shouldProcessMasterFxDuringSilence)) {
         notifyNoAudioSignal();
         return 0;
     }
@@ -248,20 +254,15 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         writeTrackToAuxBuffers(trackBuffer.data(), channel->outputParams().auxSends, samplesPerChannel);
     }
 
-    if (m_masterParams.muted || samplesPerChannel == 0 || m_isSilence) {
+    if (m_masterParams.muted || samplesPerChannel == 0 || (m_isSilence && !m_shouldProcessMasterFxDuringSilence)) {
         notifyNoAudioSignal();
         return 0;
     }
 
     processAuxChannels(outBuffer, samplesPerChannel);
-
-    for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
-        if (fxProcessor->active()) {
-            fxProcessor->process(outBuffer, samplesPerChannel, playbackPosition());
-        }
-    }
-
+    processMasterFx(outBuffer, samplesPerChannel);
     completeOutput(outBuffer, samplesPerChannel);
+
     notifyAboutAudioSignalChanges();
 
     return samplesPerChannel;
@@ -364,6 +365,10 @@ void Mixer::setIsActive(bool arg)
             aux.channel->setIsActive(arg);
         }
     }
+
+    for (IFxProcessorPtr& fx : m_masterFxProcessors) {
+        fx->setPlaying(arg);
+    }
 }
 
 void Mixer::addClock(IClockPtr clock)
@@ -400,10 +405,12 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
         fx->setOutputSpec(m_outputSpec);
+        fx->setPlaying(m_isActive);
+
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
             m_masterOutputParamsChanged.send(m_masterParams);
-        });
+        }, async::Asyncable::Mode::SetReplace);
     }
 
     AudioOutputParams resultParams = params;
@@ -431,6 +438,11 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         }
     }
 
+    m_shouldProcessMasterFxDuringSilence = std::any_of(m_masterFxProcessors.cbegin(), m_masterFxProcessors.cend(),
+                                                       [](const IFxProcessorPtr& fx) {
+        return fx->shouldProcessDuringSilence();
+    });
+
     m_masterParams = resultParams;
     m_masterOutputParamsChanged.send(resultParams);
 }
@@ -454,19 +466,14 @@ void Mixer::setIsIdle(bool idle)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (m_isIdle == idle) {
-        return;
-    }
-
     m_isIdle = idle;
-    m_tracksToProcessWhenIdle.clear();
 }
 
-void Mixer::setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds)
+void Mixer::setTracksToProcessWhenIdle(const std::unordered_set<TrackId>& trackIds)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    m_tracksToProcessWhenIdle = std::move(trackIds);
+    m_tracksToProcessWhenIdle = trackIds;
 }
 
 void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const
@@ -552,6 +559,15 @@ void Mixer::processAuxChannels(float* buffer, samples_t samplesPerChannel)
 
         if (!aux.channel->isSilent()) {
             mixOutputFromChannel(buffer, auxBuffer, samplesPerChannel);
+        }
+    }
+}
+
+void Mixer::processMasterFx(float* buffer, samples_t samplesPerChannel)
+{
+    for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
+        if (fxProcessor->active()) {
+            fxProcessor->process(buffer, samplesPerChannel, playbackPositionSamples());
         }
     }
 }

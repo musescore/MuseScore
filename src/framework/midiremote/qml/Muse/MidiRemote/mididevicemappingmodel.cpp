@@ -28,8 +28,8 @@
 #include "log.h"
 #include "translation.h"
 
-using namespace muse::shortcuts;
 using namespace muse::midi;
+using namespace muse::midiremote;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -92,14 +92,13 @@ QVariant MidiDeviceMappingModel::data(const QModelIndex& index, int role) const
 
 QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiControlsMapping& midiMapping) const
 {
-    UiAction action = uiActionsRegister()->action(midiMapping.action);
+    const UiAction& action = uiActionsRegister()->action(midiMapping.action);
 
     QVariantMap obj;
-
     obj[TITLE_KEY] = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
     obj[ICON_KEY] = static_cast<int>(action.iconCode);
     obj[ENABLED_KEY] = midiMapping.isValid();
-    obj[STATUS_KEY] = midiMapping.isValid() ? midiMapping.event.name().toQString() : muse::qtrc("shortcuts", "Inactive");
+    obj[STATUS_KEY] = midiMapping.isValid() ? midiMapping.event.name().toQString() : muse::qtrc("global", "Inactive");
     obj[MAPPED_TYPE_KEY] = static_cast<int>(midiMapping.event.type);
     obj[MAPPED_VALUE_KEY] = midiMapping.event.value;
 
@@ -108,7 +107,7 @@ QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiControlsMappin
 
 int MidiDeviceMappingModel::rowCount(const QModelIndex&) const
 {
-    return m_midiMappings.size();
+    return static_cast<int>(m_midiMappings.size());
 }
 
 QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
@@ -132,7 +131,7 @@ void MidiDeviceMappingModel::load()
     beginResetModel();
     m_midiMappings.clear();
 
-    shortcuts::MidiMappingList midiMappings = midiRemote()->midiMappings();
+    const MidiMappingList& midiMappings = midiRemote()->midiMappings();
 
     auto remoteEvent = [&midiMappings](const ActionCode& actionCode) {
         for (const MidiControlsMapping& midiMapping : midiMappings) {
@@ -163,12 +162,7 @@ void MidiDeviceMappingModel::load()
 
 bool MidiDeviceMappingModel::apply()
 {
-    MidiMappingList midiMappings;
-    for (const MidiControlsMapping& midiMapping : std::as_const(m_midiMappings)) {
-        midiMappings.push_back(midiMapping);
-    }
-
-    Ret ret = midiRemote()->setMidiMappings(midiMappings);
+    Ret ret = midiRemote()->setMidiMappings(m_midiMappings);
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -242,7 +236,7 @@ QVariant MidiDeviceMappingModel::currentAction() const
         return QVariant();
     }
 
-    MidiControlsMapping midiMapping = m_midiMappings[indexes.first().row()];
+    const MidiControlsMapping& midiMapping = m_midiMappings[indexes.first().row()];
     return midiMappingToObject(midiMapping);
 }
 

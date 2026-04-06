@@ -51,7 +51,8 @@ public:
     async::Channel<tick_t, Event> eventReceived() const override;
 
     // internal;
-    void doProcess(uint32_t message, tick_t timing);
+    void doProcess(uint32_t message, tick_t tick);
+    void doProcessLongData(uint8_t* data, size_t size, tick_t tick);
 
 private:
     Ret run();

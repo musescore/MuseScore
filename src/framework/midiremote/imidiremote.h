@@ -19,15 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_IMIDIREMOTE_H
-#define MUSE_SHORTCUTS_IMIDIREMOTE_H
+
+#pragma once
 
 #include "modularity/imoduleinterface.h"
-#include "midi/miditypes.h"
-#include "types/ret.h"
-#include "shortcutstypes.h"
 
-namespace muse::shortcuts {
+#include "async/notification.h"
+#include "midiremotetypes.h"
+#include "types/ret.h"
+
+namespace muse::midiremote {
 class IMidiRemote : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IMidiRemote)
@@ -49,5 +50,3 @@ public:
     virtual Ret process(const muse::midi::Event& ev) = 0;
 };
 }
-
-#endif // MUSE_SHORTCUTS_IMIDIREMOTE_H

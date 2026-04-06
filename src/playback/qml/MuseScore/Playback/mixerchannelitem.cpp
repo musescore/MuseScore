@@ -645,6 +645,7 @@ void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const actions
             // make and send close
             actions::ActionQuery closeAction = item->editorAction();
             closeAction.addParam("operation", Val("close"));
+            closeAction.addParam("sync", Val(true));
             dispatcher()->dispatch(closeAction);
         }
         // set new action
@@ -659,6 +660,7 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
     // make and send close
     actions::ActionQuery closeAction = item->editorAction();
     closeAction.addParam("operation", Val("close"));
+    closeAction.addParam("sync", Val(true));
     dispatcher()->dispatch(closeAction);
 
     item->setEditorAction(UriQuery());

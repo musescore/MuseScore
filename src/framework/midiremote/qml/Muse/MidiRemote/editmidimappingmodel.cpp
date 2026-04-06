@@ -24,8 +24,8 @@
 
 #include "translation.h"
 
-using namespace muse::shortcuts;
 using namespace muse::midi;
+using namespace muse::midiremote;
 
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
     : QObject(parent), Contextable(muse::iocCtxForQmlObject(this))
@@ -60,7 +60,7 @@ QString EditMidiMappingModel::mappingTitle() const
 {
     MidiDeviceID currentMidiInDeviceId = midiInPort()->deviceID();
     if (currentMidiInDeviceId.empty() || !m_event.isValid()) {
-        return muse::qtrc("shortcuts", "Waiting…");
+        return muse::qtrc("global", "Waiting…");
     }
 
     return deviceName(currentMidiInDeviceId) + " > " + m_event.name().toQString();

@@ -40,7 +40,7 @@ Row {
         name: "MidiMappingBottomPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("shortcuts", "MIDI mapping bottom panel")
+        accessible.name: qsTrc("midiremote", "MIDI mapping bottom panel")
 
         onActiveChanged: function(active) {
             if (active) {
@@ -52,7 +52,7 @@ Row {
     FlatButton {
         id: editActionButton
 
-        text: qsTrc("shortcuts", "Assign MIDI mapping…")
+        text: qsTrc("midiremote", "Assign MIDI mapping…")
 
         navigation.name: "EditActionButton"
         navigation.panel: root.navigation

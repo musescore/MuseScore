@@ -29,8 +29,6 @@ target_sources(muse_shortcuts PRIVATE
     shortcutscontrollerstub.h
     shortcutsconfigurationstub.cpp
     shortcutsconfigurationstub.h
-    midiremotestub.cpp
-    midiremotestub.h
 )
 
 if (MUSE_MODULE_SHORTCUTS_QML)

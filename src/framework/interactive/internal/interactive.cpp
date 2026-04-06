@@ -764,54 +764,122 @@ void Interactive::raise(const UriQuery& uri)
     }
 }
 
-void Interactive::close(const UriQuery& uri)
+Promise<Ret> Interactive::close(const UriQuery& uri)
 {
-    for (const ObjectInfo& obj : allOpenObjects()) {
-        if (obj.query == uri) {
-            closeObject(obj);
-        }
-    }
+    std::vector<ObjectInfo> objs = collectOpenObjects([&uri](const ObjectInfo& obj) {
+        return obj.query == uri;
+    });
+
+    return closeObjects(objs);
 }
 
-void Interactive::close(const Uri& uri)
+Promise<Ret> Interactive::close(const Uri& uri)
 {
-    for (const ObjectInfo& obj : allOpenObjects()) {
-        if (obj.query.uri() == uri) {
-            closeObject(obj);
-        }
-    }
+    std::vector<ObjectInfo> objs = collectOpenObjects([&uri](const ObjectInfo& obj) {
+        return obj.query.uri() == uri;
+    });
+
+    return closeObjects(objs);
 }
 
-void Interactive::closeAllDialogs()
+Ret Interactive::closeSync(const UriQuery& uri)
 {
-    for (const ObjectInfo& objectInfo: allOpenObjects()) {
-        UriQuery uriQuery = objectInfo.query;
-        if (muse::diagnostics::isDiagnosticsUri(uriQuery.uri())) {
-            continue;
-        }
-        ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
-        if (openMeta.type == ContainerMeta::QWidgetDialog || openMeta.type == ContainerMeta::QmlDialog) {
-            closeObject(objectInfo);
-        }
-    }
+    std::vector<ObjectInfo> objs = collectOpenObjects([&uri](const ObjectInfo& obj) {
+        return obj.query == uri;
+    });
+
+    return closeObjectsSync(objs);
 }
 
-void Interactive::closeObject(const ObjectInfo& obj)
+Ret Interactive::closeAllDialogsSync()
 {
-    ContainerMeta openMeta = uriRegister()->meta(obj.query.uri());
-    switch (openMeta.type) {
-    case ContainerMeta::QWidgetDialog: {
-        if (auto window = dynamic_cast<QWidget*>(obj.window)) {
-            window->close();
+    std::vector<ObjectInfo> objs = collectOpenObjects([this](const ObjectInfo& obj) {
+        if (muse::diagnostics::isDiagnosticsUri(obj.query.uri())) {
+            return false;
         }
-    } break;
-    case ContainerMeta::QmlDialog:
-        closeQml(obj.objectId);
-        break;
-    case ContainerMeta::PrimaryPage:
-    case ContainerMeta::Undefined:
-        break;
+        ContainerMeta meta = uriRegister()->meta(obj.query.uri());
+        return meta.type == ContainerMeta::QWidgetDialog || meta.type == ContainerMeta::QmlDialog;
+    });
+
+    return closeObjectsSync(objs);
+}
+
+Promise<Ret> Interactive::closeObjects(const std::vector<ObjectInfo>& objs)
+{
+    return async::make_promise<Ret>([this, objs](auto resolve, auto) {
+        if (objs.empty()) {
+            return resolve(make_ok());
+        }
+
+        auto count = std::make_shared<size_t>(objs.size());
+        auto ret = std::make_shared<Ret>(make_ok());
+
+        for (const ObjectInfo& obj : objs) {
+            const QString objectId = obj.objectId.toString();
+            bool ok = m_onClosedFuncs.try_emplace(objectId, [this, objectId, count, ret, resolve](const Ret& funcRet) {
+                if (!funcRet) {
+                    *ret = funcRet;
+                }
+
+                if (--(*count) == 0) {
+                    (void)resolve(*ret);
+                }
+
+                muse::remove(m_onClosedFuncs, objectId);
+            }).second;
+
+            IF_ASSERT_FAILED(ok) {
+                if (--(*count) == 0) {
+                    (void)resolve(*ret);
+                }
+                continue;
+            }
+
+            ContainerMeta meta = uriRegister()->meta(obj.query.uri());
+            switch (meta.type) {
+                case ContainerMeta::QWidgetDialog: {
+                    if (auto window = dynamic_cast<QWidget*>(obj.window)) {
+                        ok = window->close();
+                    } else {
+                        ok = false;
+                    }
+                } break;
+                case ContainerMeta::QmlDialog:
+                    closeQml(obj.objectId);
+                    break;
+                case ContainerMeta::PrimaryPage:
+                case ContainerMeta::Undefined:
+                    break;
+            }
+
+            if (!ok) {
+                if (auto it = m_onClosedFuncs.find(objectId); it != m_onClosedFuncs.end()) {
+                    it->second(make_ret(Ret::Code::UnknownError));
+                }
+            }
+        }
+
+        return Promise<Ret>::dummy_result();
+    });
+}
+
+Ret Interactive::closeObjectsSync(const std::vector<ObjectInfo>& objs)
+{
+    if (objs.empty()) {
+        return make_ok();
     }
+
+    QEventLoop loop;
+    Ret ret = make_ok();
+
+    closeObjects(objs).onResolve(this, [&loop, &ret](const Ret& closeRet) {
+        ret = closeRet;
+        loop.quit();
+    });
+
+    loop.exec();
+
+    return ret;
 }
 
 void Interactive::fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params_) const
@@ -1194,6 +1262,13 @@ void Interactive::onClose(const QString& objectId, const QVariant& jsrv)
     if (inStack) {
         notifyAboutCurrentUriChanged();
     }
+
+    Async::call(this, [this, objectId, rv]() {
+        auto onClosedIt = m_onClosedFuncs.find(objectId);
+        if (onClosedIt != m_onClosedFuncs.end()) {
+            onClosedIt->second(rv.ret);
+        }
+    });
 }
 
 std::vector<Interactive::ObjectInfo> Interactive::allOpenObjects() const
@@ -1202,6 +1277,18 @@ std::vector<Interactive::ObjectInfo> Interactive::allOpenObjects() const
 
     result.insert(result.end(), m_stack.cbegin(), m_stack.cend());
     result.insert(result.end(), m_floatingObjects.cbegin(), m_floatingObjects.cend());
+
+    return result;
+}
+
+std::vector<Interactive::ObjectInfo> Interactive::collectOpenObjects(std::function<bool(const ObjectInfo&)> accepted) const
+{
+    std::vector<ObjectInfo> result;
+    for (const ObjectInfo& obj : allOpenObjects()) {
+        if (accepted(obj)) {
+            result.push_back(obj);
+        }
+    }
 
     return result;
 }

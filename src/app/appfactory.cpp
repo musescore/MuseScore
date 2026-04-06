@@ -56,6 +56,12 @@
 #include "framework/stubs/midi/midistubmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_MIDIREMOTE
+#include "framework/midiremote/midiremotemodule.h"
+#else
+#include "framework/stubs/midiremote/midiremotestubmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_MPE
 #include "framework/mpe/mpemodule.h"
 #else
@@ -305,6 +311,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::interactive::InteractiveModule());
 #endif
     app->addModule(new muse::midi::MidiModule());
+    app->addModule(new muse::midiremote::MidiRemoteModule());
     app->addModule(new muse::mpe::MpeModule());
 
 #ifdef MUSE_MODULE_MUSESAMPLER

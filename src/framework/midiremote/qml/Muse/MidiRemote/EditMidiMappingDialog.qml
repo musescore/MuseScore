@@ -24,12 +24,12 @@ import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.Shortcuts
+import Muse.MidiRemote
 
 StyledDialogView {
     id: root
 
-    title: qsTrc("shortcuts", "MIDI remote control")
+    title: qsTrc("midiremote", "MIDI remote control")
 
     contentWidth: 538
     contentHeight: 164
@@ -91,7 +91,7 @@ StyledDialogView {
             StyledTextLabel {
                 width: parent.width
 
-                text: qsTrc("shortcuts", "Press a key or adjust a control on your MIDI device to assign it to this action.")
+                text: qsTrc("midiremote", "Press a key or adjust a control on your MIDI device to assign it to this action.")
             }
 
             RowLayout {
@@ -100,7 +100,7 @@ StyledDialogView {
                 spacing: 10
 
                 StyledTextLabel {
-                    text: qsTrc("shortcuts", "MIDI mapping:")
+                    text: qsTrc("midiremote", "MIDI mapping:")
                 }
 
                 TextInputField {
@@ -115,7 +115,7 @@ StyledDialogView {
                     currentText: model.mappingTitle
 
                     //: The app is waiting for the user to trigger a valid MIDI remote event
-                    hint: qsTrc("shortcuts", "Waiting…")
+                    hint: qsTrc("global", "Waiting…")
 
                     navigation.panel: navPanel
                     navigation.order: 1

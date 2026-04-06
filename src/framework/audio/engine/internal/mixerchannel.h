@@ -49,6 +49,8 @@ public:
     async::Notification mutedChanged() const;
 
     bool isSilent() const;
+    bool shouldProcessDuringSilence() const;
+    async::Channel<bool> shouldProcessDuringSilenceChanged() const;
 
     AudioSignalsNotifier& signalNotifier() const;
     void setNoAudioSignal();
@@ -80,6 +82,8 @@ private:
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
 
     bool m_isSilent = true;
+    bool m_shouldProcessDuringSilence = false;
+    async::Channel<bool> m_shouldProcessDuringSilenceChanged;
 
     async::Notification m_mutedChanged;
     mutable async::Channel<AudioOutputParams> m_paramsChanges;

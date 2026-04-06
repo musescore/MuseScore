@@ -24,7 +24,7 @@ import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
-import Muse.Shortcuts
+import Muse.MidiRemote
 
 import "internal"
 
@@ -90,9 +90,9 @@ Item {
             readOnly: true
 
             keyRoleName: "title"
-            keyTitle: qsTrc("shortcuts", "action")
+            keyTitle: qsTrc("global", "action")
             valueRoleName: "status"
-            valueTitle: qsTrc("shortcuts", "status")
+            valueTitle: qsTrc("global", "status")
             iconRoleName: "icon"
             valueEnabledRoleName: "enabled"
 

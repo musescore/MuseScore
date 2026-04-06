@@ -30,7 +30,6 @@ target_sources(muse_shortcuts PRIVATE
     ishortcutsregister.h
     ishortcutscontroller.h
     ishortcutsconfiguration.h
-    imidiremote.h
 
     api/shortcutsapi.cpp
     api/shortcutsapi.h
@@ -41,8 +40,6 @@ target_sources(muse_shortcuts PRIVATE
     internal/shortcutscontroller.h
     internal/shortcutsconfiguration.cpp
     internal/shortcutsconfiguration.h
-    internal/midiremote.cpp
-    internal/midiremote.h
 )
 
 target_link_libraries(muse_shortcuts PRIVATE Qt::Gui)

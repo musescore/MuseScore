@@ -50,6 +50,10 @@ if (NOT MUSE_MODULE_MIDI)
     add_subdirectory(midi)
 endif()
 
+if (NOT MUSE_MODULE_MIDIREMOTE)
+    add_subdirectory(midiremote)
+endif()
+
 if (NOT MUSE_MODULE_MPE)
     add_subdirectory(mpe)
 endif()

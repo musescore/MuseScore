@@ -31,8 +31,8 @@
 namespace muse::vst {
 class VstFxResolver : public audio::fx::AbstractFxResolver
 {
-    muse::GlobalInject<IVstModulesRepository> pluginModulesRepo;
-    muse::GlobalInject<IVstInstancesRegister> instancesRegister;
+    GlobalInject<IVstModulesRepository> pluginModulesRepo;
+    GlobalInject<IVstInstancesRegister> instancesRegister;
 
 public:
     audio::AudioResourceMetaList resolveResources() const override;
