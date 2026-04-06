@@ -342,6 +342,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     // FIXME: only un-/re-subscribe when master notation changes
     m_notation->masterNotation()->automation()->automationModeEnabledChanged().onNotify(this, [this]() {
         scheduleRedraw();
+        emit automationModeChanged();
     });
 
     if (isMainView()) {
@@ -373,6 +374,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
+    emit automationModeChanged();
 }
 
 void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
@@ -1633,6 +1635,16 @@ void AbstractNotationPaintView::setPublishMode(bool arg)
 
     m_publishMode = arg;
     emit publishModeChanged();
+}
+
+bool AbstractNotationPaintView::automationMode() const
+{
+    const IMasterNotationPtr masterNotation = m_notation ? m_notation->masterNotation() : nullptr;
+    const INotationAutomationPtr automation = masterNotation ? masterNotation->automation() : nullptr;
+    if (!automation) {
+        return false;
+    }
+    return automation->isAutomationModeEnabled();
 }
 
 bool AbstractNotationPaintView::isMainView() const
