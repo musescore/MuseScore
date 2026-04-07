@@ -50,6 +50,7 @@ set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH "" CACHE FILEPATH "Path to cus
 set(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL "" CACHE STRING "URL where to send crash reports")
 
 declare_muse_module_opt(DOCKWINDOW ON)
+option(MUSE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2 "Use KDDockWidgets v2" OFF)
 
 declare_muse_module_opt(DRAW ON)
 option(MUSE_MODULE_DRAW_TRACE "Trace draw objects" OFF)
