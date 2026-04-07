@@ -147,6 +147,9 @@ PreferencesPage {
         MeiSection {
             meiImportLayout: importPreferencesModel.meiImportLayout
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
             onMeiImportLayoutChangeRequested: function(meiImportLayout) {
                 importPreferencesModel.meiImportLayout = meiImportLayout
             }
@@ -164,7 +167,7 @@ PreferencesPage {
             requireExactSchemaValidation: importPreferencesModel.mnxRequireExactSchemaValidation
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 5
+            navigation.order: root.navigationOrderStart + 6
 
             onRequireExactSchemaValidationChangeRequested: function(value) {
                 importPreferencesModel.mnxRequireExactSchemaValidation = value
