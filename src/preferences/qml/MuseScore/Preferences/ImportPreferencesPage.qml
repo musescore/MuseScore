@@ -150,6 +150,12 @@ PreferencesPage {
             onMeiImportLayoutChangeRequested: function(meiImportLayout) {
                 importPreferencesModel.meiImportLayout = meiImportLayout
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }

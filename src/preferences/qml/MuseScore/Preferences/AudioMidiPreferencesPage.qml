@@ -51,6 +51,12 @@ PreferencesPage {
             onCurrentAudioApiIndexChangeRequested: function(newIndex) {
                 audioMidiModel.currentAudioApiIndex = newIndex
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -78,6 +84,12 @@ PreferencesPage {
             onUseMIDI20OutputChangeRequested: function(use) {
                 audioMidiModel.useMIDI20Output = use
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -90,6 +102,12 @@ PreferencesPage {
 
             onMuteHiddenInstrumentsChangeRequested: function(mute) {
                 audioMidiModel.muteHiddenInstruments = mute
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -117,6 +135,12 @@ PreferencesPage {
 
             onProgressBarModeChangeRequired: function(mode) {
                 audioMidiModel.onlineSoundsShowProgressBarMode = mode
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 

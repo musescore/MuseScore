@@ -55,6 +55,12 @@ PreferencesPage {
             onIntervalChanged: function(minutes) {
                 preferencesModel.autoSaveInterval = minutes
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
@@ -62,6 +68,12 @@ PreferencesPage {
         SaveToCloudSection {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
@@ -74,6 +86,12 @@ PreferencesPage {
 
             onAlsoShareAudioComChangeRequested: function(share) {
                 preferencesModel.alsoShareAudioCom = share;
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }

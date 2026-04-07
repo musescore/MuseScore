@@ -122,6 +122,12 @@ PreferencesPage {
                     percussionPreferencesModel.autoClosePercussionPanel = !autoCloseCheckBox.checked
                 }
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -157,6 +163,12 @@ PreferencesPage {
 
                 onToggled: {
                     percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
+                }
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
             }
         }

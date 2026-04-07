@@ -62,6 +62,12 @@ PreferencesPage {
             onUseNoteInputCursorInInputByDurationChangeRequested: function(use) {
                 noteInputModel.useNoteInputCursorInInputByDuration = use
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -89,6 +95,12 @@ PreferencesPage {
 
             onDelayBetweenNotesChangeRequested: function(delay) {
                 noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = delay
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -142,6 +154,12 @@ PreferencesPage {
             onUseMidiVelocityAndDurationDuringNoteInputChangeRequested: function(use) {
                 noteInputModel.useMidiVelocityAndDurationDuringNoteInput = use
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -157,6 +175,12 @@ PreferencesPage {
             onDynamicsApplyToAllVoicesChangeRequested: function(value) {
                 noteInputModel.dynamicsApplyToAllVoices = value
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -171,6 +195,12 @@ PreferencesPage {
 
             onAutoUpdateFretboardDiagramsChangeRequested: function(update) {
                 noteInputModel.autoUpdateFretboardDiagrams = update
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -191,6 +221,12 @@ PreferencesPage {
 
             onWarnGuitarBendsChangeRequested: function(warn) {
                 noteInputModel.warnGuitarBends = warn
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }
