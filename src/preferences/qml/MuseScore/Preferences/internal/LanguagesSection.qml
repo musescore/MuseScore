@@ -28,7 +28,7 @@ import Muse.UiComponents
 BaseSection {
     id: root
 
-    title: qsTrc("preferences", "Languages")
+    title: qsTrc("preferences", "Language")
 
     navigation.direction: NavigationPanel.Horizontal
 
