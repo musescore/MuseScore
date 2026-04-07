@@ -27,12 +27,14 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+
 #include "audio/main/iaudioconfiguration.h"
 #include "audio/iaudiodrivercontroller.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
 #include "playback/iplaybackconfiguration.h"
+#include "global/iinteractive.h"
 
 namespace mu::preferences {
 class AudioMidiPreferencesModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -66,6 +68,7 @@ class AudioMidiPreferencesModel : public QObject, public muse::Contextable, publ
     muse::ContextInject<muse::audio::IAudioDriverController> audioDriverController = { this };
     muse::ContextInject<muse::midi::IMidiOutPort> midiOutPort = { this };
     muse::ContextInject<muse::midi::IMidiInPort> midiInPort = { this };
+    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

@@ -39,7 +39,7 @@ BaseSection {
         ComboBoxWithTitle {
             id: apiComboBox
 
-            title: qsTrc("preferences", "Audio API")
+            title: qsTrc("preferences", "Audio driver")
             columnWidth: root.columnWidth
 
             visible: root.audioApiList.length > 1
