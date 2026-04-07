@@ -39,9 +39,8 @@
 
 Q_MOC_INCLUDE(< QQuickWindow >)
 
-namespace KDDockWidgets {
-class MainWindowBase;
-class LayoutSaver;
+namespace KDDockWidgets::QtQuick {
+class MainWindow;
 }
 
 namespace muse::dock {
@@ -143,8 +142,7 @@ private:
 
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 
-    int m_ctx = 0;
-    KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
+    KDDockWidgets::QtQuick::MainWindow* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     uicomponents::QmlListProperty<DockPageView> m_pages;

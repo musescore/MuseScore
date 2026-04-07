@@ -71,24 +71,28 @@ static KDDockWidgets::Location locationToKLocation(Location location)
     return KDDockWidgets::Location_None;
 }
 
-static void clearRegistry(int ctx)
+static void clearRegistry()
 {
     TRACEFUNC;
 
-    auto registry = KDDockWidgets::DockRegistry::self(ctx);
+    auto* registry = KDDockWidgets::DockRegistry::self();
+
+    for (KDDockWidgets::Core::MainWindow* mw : registry->mainwindows()) {
+        mw->layout()->clearLayout();
+    }
 
     registry->clear();
 
-    for (KDDockWidgets::DockWidgetBase* dock : registry->dockwidgets()) {
+    for (KDDockWidgets::Core::DockWidget* dock : registry->dockwidgets()) {
         registry->unregisterDockWidget(dock);
     }
 
-    for (KDDockWidgets::Frame* frame : registry->frames()) {
-        for (KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
-            frame->removeWidget(dock);
+    for (KDDockWidgets::Core::Group* group : registry->groups()) {
+        const auto dockWidgets = group->dockWidgets();
+        for (KDDockWidgets::Core::DockWidget* dock : dockWidgets) {
+            group->removeWidget(dock);
         }
-
-        registry->unregisterFrame(frame);
+        registry->unregisterGroup(group);
     }
 }
 }
@@ -133,14 +137,11 @@ void DockWindow::componentComplete()
 
     QQuickItem::componentComplete();
 
-    m_ctx = iocContext()->id;
-
     static const QString name = "mainWindow";
 
-    m_mainWindow = new KDDockWidgets::MainWindowQuick(m_ctx,
-                                                      name,
-                                                      KDDockWidgets::MainWindowOption_None,
-                                                      this);
+    m_mainWindow = new KDDockWidgets::QtQuick::MainWindow(name,
+                                                          KDDockWidgets::MainWindowOption_None,
+                                                          this);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
@@ -157,6 +158,8 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
         return;
     }
 
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+
     //! NOTE: it is important to reset the current minimum width for all top-level toolbars
     //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
     //! due to lack of free space
@@ -164,8 +167,6 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
     for (DockToolBarView* toolBar : topToolBars) {
         toolBar->setMinimumWidth(toolBar->contentWidth());
     }
-
-    QQuickItem::geometryChange(newGeometry, oldGeometry);
 
     alignTopLevelToolBars(m_currentPage);
 }
@@ -181,7 +182,7 @@ void DockWindow::onQuit()
     savePageState(m_currentPage->objectName());
     m_reloadCurrentPageAllowed = false;
 
-    clearRegistry(m_ctx);
+    clearRegistry();
 
     saveWindowGeometry();
 }
@@ -208,7 +209,7 @@ QQuickWindow* DockWindow::windowProperty() const
 
 void DockWindow::init()
 {
-    clearRegistry(m_ctx);
+    clearRegistry();
     restoreGeometry();
 
     dockWindowProvider()->init(this);
@@ -241,7 +242,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         const QString pageName = m_currentPage->objectName();
         uiState()->pageState(pageName).notification.disconnect(this);
         savePageState(pageName);
-        clearRegistry(m_ctx);
+        clearRegistry();
         m_currentPage->setVisible(false);
         m_currentPage->deinit();
     }
@@ -265,10 +266,10 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     if (isFirstOpening) {
         async::Async::call(this, [this, notifyAboutPageLoaded]() {
             if (!m_hasGeometryBeenRestored
-                || (m_mainWindow->windowHandle()->windowStates() & Qt::WindowFullScreen)) {
+                || (m_mainWindow->window()->isFullScreen())) {
                 //! NOTE: show window as maximized if no geometry has been restored
                 //! or if the user had closed app in FullScreen mode
-                m_mainWindow->windowHandle()->showMaximized();
+                // m_mainWindow->window()->->showMaximized(); // todo kddock
             }
 
             notifyAboutPageLoaded();
@@ -432,7 +433,7 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
     int centralToolBarsWidth = 0;
     int rightToolBarsWidth = 0;
 
-    int separatorThickness = KDDockWidgets::Config::self(m_ctx).separatorThickness();
+    int separatorThickness = KDDockWidgets::Config::self().separatorThickness();
 
     for (DockToolBarView* toolBar : topToolBars) {
         if (toolBar->floating() || !toolBar->isVisible()) {
@@ -472,7 +473,10 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
     }
 
     lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
-    lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+
+    if (freeSpace >= 0) {
+        lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+    }
 }
 
 void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
@@ -481,14 +485,21 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
 
     registerDock(dock);
 
-    KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
+    auto* dockWidgetView = qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+        KDDockWidgets::QtQuick::asQQuickItem(dock->dockWidget()));
+
+    KDDockWidgets::QtQuick::DockWidget* relativeDockWidgetView = nullptr;
+    if (relativeTo) {
+        relativeDockWidgetView = qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+            KDDockWidgets::QtQuick::asQQuickItem(relativeTo->dockWidget()));
+    }
 
     auto visibilityOption = dock->defaultVisibility() ? KDDockWidgets::InitialVisibilityOption::StartVisible
                             : KDDockWidgets::InitialVisibilityOption::StartHidden;
 
     KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
 
-    m_mainWindow->addDockWidget(dock->dockWidget(), locationToKLocation(location), relativeDock, options);
+    m_mainWindow->addDockWidget(dockWidgetView, locationToKLocation(location), relativeDockWidgetView, options);
 }
 
 void DockWindow::addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel)
@@ -509,8 +520,8 @@ void DockWindow::registerDock(DockBase* dock)
         return;
     }
 
-    auto registry = KDDockWidgets::DockRegistry::self(m_ctx);
-    auto dockWidget = dock->dockWidget();
+    auto* registry = KDDockWidgets::DockRegistry::self();
+    auto* dockWidget = dock->dockWidget();
 
     if (!registry->containsDockWidget(dockWidget->uniqueName())) {
         registry->registerDockWidget(dockWidget);
@@ -538,10 +549,16 @@ void DockWindow::handleUnknownDock(const DockPageView* page, DockBase* unknownDo
 
     registerDock(unknownPanel);
 
-    holder->open(); // init the frame...
+    holder->open(); // init the group...
 
-    KDDockWidgets::Frame* frame = holder->dockWidget()->frame();
-    frame->addWidget(unknownPanel->dockWidget());
+    auto* holderDockWidgetView = qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+        KDDockWidgets::QtQuick::asQQuickItem(holder->dockWidget()));
+    if (holderDockWidgetView) {
+        KDDockWidgets::Core::Group* group = holderDockWidgetView->group();
+        if (group) {
+            group->addTab(unknownPanel->dockWidget());
+        }
+    }
 
     holder->close();
 
@@ -586,11 +603,6 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
 
 void DockWindow::saveWindowGeometry()
 {
-    //! NOTE We save only if one window or the last one is open
-    if (KDDockWidgets::ContextData::contextCount() > 1) {
-        return;
-    }
-
     /// NOTE: The state of all dock widgets is also saved here,
     /// since the library does not provide the ability to save
     /// and restore only the application geometry.
@@ -615,10 +627,6 @@ void DockWindow::restoreGeometry()
 void DockWindow::savePageState(const QString& pageName)
 {
     TRACEFUNC;
-    //! NOTE We save only if one window or the last one is open
-    if (KDDockWidgets::ContextData::contextCount() > 1) {
-        return;
-    }
 
     m_reloadCurrentPageAllowed = false;
     uiState()->setPageState(pageName, windowState());
@@ -637,7 +645,7 @@ void DockWindow::restorePageState(const DockPageView* page)
     QSet<DockBase*> unknownDocks;
     if (!layoutIsEmpty) {
         for (DockBase* dock : page->allDocks()) {
-            const KDDockWidgets::DockWidgetBase* dockWidget = dock->dockWidget();
+            const KDDockWidgets::Core::DockWidget* dockWidget = dock->dockWidget();
             if (!pageStateValNt.val.contains(dockWidget->uniqueName().toLocal8Bit())) {
                 unknownDocks.insert(dock);
             }
@@ -677,7 +685,7 @@ bool DockWindow::restoreLayout(const QByteArray& layout, bool restoreRelativeToM
     auto option = restoreRelativeToMainWindow ? KDDockWidgets::RestoreOption_RelativeToMainWindow
                   : KDDockWidgets::RestoreOption_None;
 
-    KDDockWidgets::LayoutSaver layoutSaver(m_ctx, option);
+    KDDockWidgets::LayoutSaver layoutSaver(option);
     return layoutSaver.restoreLayout(layout);
 }
 
@@ -707,7 +715,7 @@ QByteArray DockWindow::windowState() const
 {
     TRACEFUNC;
 
-    KDDockWidgets::LayoutSaver layoutSaver(m_ctx, KDDockWidgets::RestoreOption_None);
+    KDDockWidgets::LayoutSaver layoutSaver(KDDockWidgets::RestoreOption_None);
     return layoutSaver.serializeLayout();
 }
 
@@ -719,7 +727,7 @@ void DockWindow::reloadCurrentPage()
 
     TRACEFUNC;
 
-    clearRegistry(m_ctx);
+    clearRegistry();
 
     for (DockBase* dock : m_currentPage->allDocks()) {
         dock->deinit();
