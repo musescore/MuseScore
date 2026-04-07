@@ -1658,6 +1658,12 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Repeat selection"),
              TranslatableString("action", "Repeat selection")
              ),
+    UiAction("repeat-last-action",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Repeat last action"),
+             TranslatableString("action", "Repeat the last notation action")
+             ),
     UiAction("toggle-score-lock",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

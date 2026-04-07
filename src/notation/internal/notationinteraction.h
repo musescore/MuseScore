@@ -143,6 +143,9 @@ public:
     muse::async::Notification dropChanged() const override;
 
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
+    bool canReapplyLastPaletteElement() const override;
+    uint64_t lastPaletteElementSequence() const override;
+    bool reapplyLastPaletteElement() override;
     void undo() override;
     void redo() override;
     void undoRedoToIndex(size_t idx) override;
@@ -576,6 +579,8 @@ private:
     mu::engraving::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
+    mu::engraving::ElementPtr m_lastPaletteElement;
+    uint64_t m_lastPaletteElementSequence = 0;
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;

@@ -38,6 +38,7 @@
 
 #include "defer.h"
 #include "ptrutils.h"
+#include "actions/actiontypes.h"
 #include "containers.h"
 
 #include "draw/painter.h"
@@ -2361,7 +2362,29 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
     checkAndShowError();
 
+    m_lastPaletteElement.reset(element->clone());
+    m_lastPaletteElementSequence = muse::actions::nextActionSequence();
+
     return true;
+}
+
+bool NotationInteraction::canReapplyLastPaletteElement() const
+{
+    return m_lastPaletteElement != nullptr;
+}
+
+uint64_t NotationInteraction::lastPaletteElementSequence() const
+{
+    return m_lastPaletteElementSequence;
+}
+
+bool NotationInteraction::reapplyLastPaletteElement()
+{
+    if (!m_lastPaletteElement) {
+        return false;
+    }
+
+    return applyPaletteElement(m_lastPaletteElement.get());
 }
 
 void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score,

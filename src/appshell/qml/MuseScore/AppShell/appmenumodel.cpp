@@ -395,6 +395,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
     };
 
     MenuItemList toolsItems {
+        makeMenuItem("repeat-last-action"),
+        makeSeparator(),
         makeMenuItem("transpose"),
         makeSeparator(),
         makeMenuItem("explode"),

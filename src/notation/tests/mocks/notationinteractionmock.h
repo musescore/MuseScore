@@ -89,6 +89,9 @@ public:
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
 
     MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, canReapplyLastPaletteElement, (), (const, override));
+    MOCK_METHOD(uint64_t, lastPaletteElementSequence, (), (const, override));
+    MOCK_METHOD(bool, reapplyLastPaletteElement, (), (override));
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
     MOCK_METHOD(void, undoRedoToIndex, (size_t idx), (override));
