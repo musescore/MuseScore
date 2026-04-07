@@ -38,7 +38,11 @@ if (MUSE_MODULE_INTERACTIVE)
 endif()
 
 if (MUSE_MODULE_DOCKWINDOW)
-    add_subdirectory(dockwindow)
+    if (MUSE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2)
+        add_subdirectory(dockwindow_v2)
+    else()
+        add_subdirectory(dockwindow)
+    endif()
 endif()
 
 if (MUSE_MODULE_ACCESSIBILITY)
