@@ -48,19 +48,6 @@ using namespace mu::engraving;
 
 static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
 
-static String formatInstrumentTitleOnScore(const String& instrumentName, const Trait& trait)
-{
-    // Comments for translators start with //:
-
-    if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
-        //: %1=name ("Horn"), %2=transposition ("C alto"). Example: "Horn in C alto"
-        return muse::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the score")
-               .arg(instrumentName, trait.name);
-    }
-
-    return instrumentName; // Example: "Flute"
-}
-
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
