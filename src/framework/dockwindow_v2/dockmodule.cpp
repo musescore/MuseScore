@@ -46,10 +46,12 @@ public:
     explicit DockWidgetFactory(const modularity::ContextPtr& iocCtx)
         : m_iocContext(iocCtx) {}
 
-    // KDDockWidgets::Core::DropIndicatorOverlay* createDropIndicatorOverlay(KDDockWidgets::Core::DropArea* dropArea) const override
-    // {
-    //     return new DropController(dropArea, m_iocContext);
-    // }
+    KDDockWidgets::Core::ClassicIndicatorWindowViewInterface*
+    createClassicIndicatorWindow(KDDockWidgets::Core::ClassicDropIndicatorOverlay* classicIndicators,
+                                 KDDockWidgets::Core::View* parent = nullptr) const override
+    {
+        return new DropController(classicIndicators, parent, m_iocContext);
+    }
 
     KDDockWidgets::Core::View* createSeparator(KDDockWidgets::Core::Separator* controller,
                                                KDDockWidgets::Core::View* parent = nullptr) const override

@@ -28,26 +28,36 @@
 
 #include "dockbase.h"
 
-#include "kddockwidgets/src/core/DropIndicatorOverlay.h"
+#include "kddockwidgets/src/core/views/ClassicIndicatorWindowViewInterface.h"
+#include "kddockwidgets/src/core/indicators/ClassicDropIndicatorOverlay.h"
 
 namespace muse::dock {
 class DockPanelView;
 class DockingHolderView;
 class DockToolBarView;
 class DockPageView;
-class DropController : public KDDockWidgets::Core::DropIndicatorOverlay, public Contextable
+
+class DropController : public KDDockWidgets::Core::ClassicIndicatorWindowViewInterface, public Contextable
 {
     ContextInject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
-    explicit DropController(KDDockWidgets::Core::DropArea* dropArea, const modularity::ContextPtr& iocCtx);
+    explicit DropController(KDDockWidgets::Core::ClassicDropIndicatorOverlay* classicIndicators, KDDockWidgets::Core::View* parent,
+                            const modularity::ContextPtr& iocCtx);
 
-    KDDockWidgets::DropLocation hover_impl(KDDockWidgets::Point globalPos) override;
+    // ClassicIndicatorWindowViewInterface
+    void setObjectName(const QString&) override {}
+    KDDockWidgets::DropLocation hover(KDDockWidgets::Point globalPos) override;
     KDDockWidgets::Point posForIndicator(KDDockWidgets::DropLocation) const override;
+    void updatePositions() override {}
+    void raise() override {}
+    void setVisible(bool visible) override;
+    void resize(KDDockWidgets::Size) override {}
+    void setGeometry(KDDockWidgets::Rect) override {}
+    bool isWindow() const override { return false; }
+    void updateIndicatorVisibility() override {}
 
 private:
-    void updateVisibility() override;
-
     void endHover();
 
     bool isMouseOverDock(const QPoint& mouseLocalPos, const DockBase* dock) const;
@@ -64,6 +74,7 @@ private:
     DockPageView* currentPage() const;
     DockBase* draggedDock() const;
 
+    KDDockWidgets::Core::ClassicDropIndicatorOverlay* m_classicIndicators = nullptr;
     DropDestination m_currentDropDestination;
 };
 }
