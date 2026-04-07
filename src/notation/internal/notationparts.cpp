@@ -720,7 +720,14 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
 
     if (undoable) {
         startEdit(TranslatableString("undoableAction", "Edit drumset"));
-        EditPart::replaceDrumset(score(), part, instrumentKey.instrumentId, newDrumset);
+
+        for (auto pair : part->instruments()) {
+            Instrument* instrument = pair.second;
+            if (instrument && instrument->drumset() && instrument->id() == instrumentKey.instrumentId) {
+                EditPart::replaceDrumset(score(), part, Fraction::fromTicks(pair.first), newDrumset);
+            }
+        }
+
         apply();
     } else {
         for (auto pair : part->instruments()) {

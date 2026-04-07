@@ -202,7 +202,7 @@ void ChangeInstrumentShort::flip(EditData*)
 
 void ChangeDrumset::flip(EditData*)
 {
-    Drumset d = *instrument->drumset();
+    Drumset d = instrument->drumset() ? *instrument->drumset() : Drumset();
     instrument->setDrumset(&drumset);
     drumset = d;
 
@@ -740,17 +740,15 @@ void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate
     insertPart(score, templ, partIndex);
 }
 
-void EditPart::replaceDrumset(Score* score, Part* part, const String& instrumentId, const Drumset& newDrumset)
+void EditPart::replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset)
 {
     if (!score || !part) {
         return;
     }
 
-    for (auto pair : part->instruments()) {
-        Instrument* instrument = pair.second;
-        if (instrument && instrument->drumset() && instrument->id() == instrumentId) {
-            score->undo(new ChangeDrumset(instrument, newDrumset, part));
-        }
+    Instrument* instrument = part->instrument(tick);
+    if (instrument) {
+        score->undo(new ChangeDrumset(instrument, newDrumset, part));
     }
 }
 
