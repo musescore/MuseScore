@@ -175,15 +175,9 @@ bool GuiApplication::loadMainWindow(const muse::modularity::ContextPtr& ctxId)
         return false;
     }
 
-    // The main window must be shown at this point so KDDockWidgets can read its size correctly
-    // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-    // but before that, let's make the window transparent,
-    // otherwise the empty window frame will be visible
-    // https://github.com/musescore/MuseScore/issues/29630
-    // Transparency will be removed after the page loads.
-
+    //! The main window must be shown at this point so KDDockWidgets can read its size correctly
+    //! and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
     QQuickWindow* window = dynamic_cast<QQuickWindow*>(obj);
-    window->setOpacity(0.01);
     window->setVisible(true);
 
     m_windows[ctxId->id] = window;
