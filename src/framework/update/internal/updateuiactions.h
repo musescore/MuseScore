@@ -23,16 +23,16 @@
 #define MUSE_UPDATE_UPDATEUIACTIONS_H
 
 #include "modularity/ioc.h"
-#include "context/iuicontextresolver.h"
 
 #include "framework/ui/iuiactionsmodule.h"
+#include "framework/ui/iuicontextresolver.h"
 
 #include "updateactioncontroller.h"
 
 namespace muse::update {
 class UpdateUiActions : public muse::ui::IUiActionsModule, public Contextable
 {
-    ContextInject<mu::context::IUiContextResolver> uicontextResolver = { this };
+    ContextInject<muse::ui::IUiContextResolver> uicontextResolver = { this };
 
 public:
     UpdateUiActions(std::shared_ptr<UpdateActionController> controller, const modularity::ContextPtr& iocCtx);
