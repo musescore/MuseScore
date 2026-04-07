@@ -23,23 +23,22 @@
 #ifndef MUSE_DOCK_DOCKTITLEBAR_H
 #define MUSE_DOCK_DOCKTITLEBAR_H
 
-#include "internal/dockbase.h"
+#include "kddockwidgets/src/qtquick/views/TitleBar.h"
 
-#include "thirdparty/KDDockWidgets/src/private/quick/TitleBarQuick_p.h"
-
-#include <QtGlobal>
+namespace KDDockWidgets::Core {
+class TitleBar;
+}
 
 namespace muse::dock {
-class DockTitleBar : public KDDockWidgets::TitleBarQuick
+class DockTitleBar : public KDDockWidgets::QtQuick::TitleBar
 {
     Q_OBJECT
 
 public:
-    explicit DockTitleBar(int ctx, KDDockWidgets::Frame* parent);
-    explicit DockTitleBar(int ctx, KDDockWidgets::FloatingWindow* parent);
+    explicit DockTitleBar(KDDockWidgets::Core::TitleBar* controller, QQuickItem* parent = nullptr);
 
-    QPoint mapToWindow(QPoint pos) const override;
-    Q_INVOKABLE bool doubleClicked(const QPoint& /*pos*/);
+protected:
+    void init() override;
 };
 }
 

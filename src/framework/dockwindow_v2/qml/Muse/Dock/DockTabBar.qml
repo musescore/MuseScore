@@ -67,6 +67,20 @@ Rectangle {
         }
     }
 
+    //! NOTE: please, don't rename this function because it is used in c++
+    // Called by KDDW to resolve which tab is at a global position
+    function getTabIndexAtPosition(globalPoint) {
+        for (var i = 0; i < tabs.count; ++i) {
+            var item = tabs.itemAtIndex(i)
+            if (!item) continue
+            var localPt = item.mapFromGlobal(globalPoint.x, globalPoint.y)
+            if (item.contains(localPt)) {
+                return i
+            }
+        }
+        return tabs.currentIndex
+    }
+
     Component.onDestruction: { root.tabsModel.clear() }
 
     onTabBarCppChanged: { updateMouseArea() }

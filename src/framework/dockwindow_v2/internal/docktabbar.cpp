@@ -3,7 +3,7 @@
  * MuseScore-CLA-applies
  *
  * MuseScore
- * Music Composition & Notation
+ * Music Notation & Composition
  *
  * Copyright (C) 2021 MuseScore Limited and others
  *
@@ -22,12 +22,16 @@
 
 #include "docktabbar.h"
 
+#include "kddockwidgets/src/core/TabBar.h"
+#include "kddockwidgets/src/core/DockWidget.h"
+
 #include "log.h"
 
 using namespace muse::dock;
+using namespace KDDockWidgets;
 
-DockTabBar::DockTabBar(int ctx, KDDockWidgets::TabWidget* parent)
-    : KDDockWidgets::TabBarQuick(ctx, parent)
+DockTabBar::DockTabBar(Core::TabBar* controller, QQuickItem* parent)
+    : KDDockWidgets::QtQuick::TabBar(controller, parent)
 {
 }
 
@@ -49,13 +53,13 @@ bool DockTabBar::event(QEvent* event)
         break;
     }
 
-    return KDDockWidgets::TabBarQuick::event(event);
+    return KDDockWidgets::QtQuick::TabBar::event(event);
 }
 
 void DockTabBar::onMousePressRelease(const QMouseEvent* mouseEvent)
 {
-    QQuickItem* tabBar = tabBarQmlItem();
-    if (!mouseEvent || !tabBar) {
+    QQuickItem* tabBarItem = tabBarQmlItem();
+    if (!mouseEvent || !tabBarItem) {
         return;
     }
 
@@ -70,13 +74,14 @@ void DockTabBar::onMousePressRelease(const QMouseEvent* mouseEvent)
     case QEvent::MouseButtonPress: {
         m_indexOfPressedTab = tabIndex;
         m_tabChangedOnClick = false;
-        TabBar::onMousePress(localPos);
+        auto* tabBarCtrl = static_cast<Core::TabBar*>(controller());
+        tabBarCtrl->onMousePress(KDDockWidgets::Point(localPos.x(), localPos.y()));
         break;
     }
     case QEvent::MouseButtonRelease: {
-        const int currentTabIndex = tabBar->property("currentIndex").toInt();
+        const int currentTabIndex = tabBarItem->property("currentIndex").toInt();
         if (tabIndex != currentTabIndex && tabIndex == m_indexOfPressedTab) {
-            tabBar->setProperty("currentIndex", tabIndex);
+            tabBarItem->setProperty("currentIndex", tabIndex);
             m_tabChangedOnClick = true;
         }
         m_indexOfPressedTab = -1;
@@ -86,20 +91,12 @@ void DockTabBar::onMousePressRelease(const QMouseEvent* mouseEvent)
     }
 }
 
-void DockTabBar::doubleClicked(const QPoint& pos) const
+void DockTabBar::doubleClicked(QPoint pos) const
 {
-    if (KDDockWidgets::DockWidgetBase* dw = dockWidgetAt(pos)) {
+    auto* tabBarCtrl = static_cast<Core::TabBar*>(controller());
+    if (Core::DockWidget* dw = tabBarCtrl->dockWidgetAt(KDDockWidgets::Point(pos.x(), pos.y()))) {
         dw->setFloating(!dw->isFloating());
     }
-}
-
-bool DockTabBar::isPositionDraggable(QPoint localPos) const
-{
-    if (!m_draggableMouseArea) {
-        return false;
-    }
-
-    return m_draggableMouseArea->contains(localPos);
 }
 
 void DockTabBar::setDraggableMouseArea(QQuickItem* mouseArea)

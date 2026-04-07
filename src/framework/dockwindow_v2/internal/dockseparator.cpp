@@ -25,33 +25,47 @@
 #include "log.h"
 #include "../docktypes.h"
 
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Rubberband_quick.h"
-#include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
-#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
+#include "kddockwidgets/src/core/Separator.h"
+#include "kddockwidgets/src/core/DockRegistry.h"
+#include "kddockwidgets/src/core/Group.h"
+#include "kddockwidgets/src/core/DockWidget.h"
+#include "kddockwidgets/src/core/layouting/LayoutingSeparator_p.h"
+
+// This include pulls in kdbindings/signal.h which is incompatible with
+// Qt's `emit` macro being defined. Temporarily undefine it, then restore it.
+#ifdef emit
+#undef emit
+#include "kddockwidgets/src/core/layouting/Item_p.h"
+#define emit
+#else
+#include "kddockwidgets/src/core/layouting/Item_p.h"
+#endif
 
 #include <QTimer>
 
 using namespace muse::dock;
+using namespace KDDockWidgets;
 
 namespace muse::dock {
-static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator* separator)
+static const QObject* findNearestDockView(const DockSeparator* separator)
 {
-    const Layouting::ItemBoxContainer* container = separator->parentContainer();
+    auto* coreSeparator = static_cast<Core::Separator*>(separator->controller());
+    auto* layoutingSeparator = coreSeparator->asLayoutingSeparator();
+    auto* container = layoutingSeparator->parentContainer();
     if (!container) {
         return nullptr;
     }
 
-    int separatorPos = separator->Layouting::Separator::position();
-    Qt::Orientation orientation = separator->orientation();
-    Layouting::Item::List children = container->visibleChildren();
+    int separatorPos = layoutingSeparator->position();
+    Qt::Orientation orientation = layoutingSeparator->orientation();
+    Core::Item::List children = container->visibleChildren();
 
-    const Layouting::Item* nearestItem = nullptr;
+    const Core::Item* nearestItem = nullptr;
     int minPosDiff = std::numeric_limits<int>::max();
 
-    for (const Layouting::Item* child : children) {
+    for (const Core::Item* child : children) {
         int childPos = child->pos(orientation);
         int diff = std::abs(childPos - separatorPos);
-
         if (diff < minPosDiff) {
             nearestItem = child;
             minPosDiff = diff;
@@ -62,29 +76,38 @@ static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator*
         return nullptr;
     }
 
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(nearestItem->guestAsQObject());
-    return frame && !frame->isEmpty() ? frame->currentDockWidget() : nullptr;
+    auto* guest = nearestItem->guest();
+    for (Core::Group* group : DockRegistry::self()->groups()) {
+        if (group->asLayoutingGuest() == guest) {
+            if (group->isEmpty()) {
+                return nullptr;
+            }
+
+            return group->currentDockWidget();
+        }
+    }
+
+    return nullptr;
 }
 }
 
-DockSeparator::DockSeparator(Layouting::Widget* parent)
-    : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject())),
-    Layouting::Separator(parent),
-    Layouting::Widget_quick(this), m_isSeparatorVisible(true)
+DockSeparator::DockSeparator(Core::Separator* controller, QQuickItem* parent)
+    : KDDockWidgets::QtQuick::Separator(controller, parent),
+    m_isSeparatorVisible(true)
 {
-    createQQuickItem("qrc:/qt/qml/Muse/Dock/DockSeparator.qml", this);
-
-    // Only set on Separator::init(), so single-shot
-    QTimer::singleShot(0, this, &DockSeparator::isVerticalChanged);
-    QTimer::singleShot(0, this, &DockSeparator::showResizeCursorChanged);
     QTimer::singleShot(0, this, [this]() {
+        // Set inited before emitting showResizeCursorChanged so QML bindings
+        // can safely call showResizeCursor() — minPosForSeparator_global() asserts
+        // if called during construction before the separator is in the layout.
+        m_inited = true;
+        emit showResizeCursorChanged();
         initAvailability();
     });
 }
 
 void DockSeparator::initAvailability()
 {
-    const QObject* dock = findNearestDock(this);
+    const QObject* dock = findNearestDockView(this);
     DockProperties properties = readPropertiesFromObject(dock);
 
     if (properties.isValid()) {
@@ -94,11 +117,6 @@ void DockSeparator::initAvailability()
     }
 }
 
-bool DockSeparator::isVertical() const
-{
-    return Layouting::Separator::isVertical();
-}
-
 bool DockSeparator::isSeparatorVisible() const
 {
     return m_isSeparatorVisible;
@@ -106,43 +124,15 @@ bool DockSeparator::isSeparatorVisible() const
 
 bool DockSeparator::showResizeCursor() const
 {
-    return parentContainer()
-           && (parentContainer()->minPosForSeparator_global(const_cast<DockSeparator*>(this))
-               != parentContainer()->maxPosForSeparator_global(const_cast<DockSeparator*>(this)));
-}
-
-Layouting::Widget* DockSeparator::createRubberBand(Layouting::Widget* parent)
-{
-    if (!parent) {
-        LOGE() << "Parent is required";
-        return nullptr;
+    if (!m_inited) {
+        // Called during QML item construction before the separator is in the layout.
+        // minPosForSeparator_global() would assert — return false until inited.
+        return false;
     }
-
-    return new Layouting::Widget_quick(new Layouting::RubberBand(parent));
-}
-
-Layouting::Widget* DockSeparator::asWidget()
-{
-    return this;
-}
-
-void DockSeparator::onMousePressed()
-{
-    Layouting::Separator::onMousePress();
-}
-
-void DockSeparator::onMouseMoved(QPointF localPos)
-{
-    const QPointF pos = QQuickItem::mapToItem(parentItem(), localPos);
-    Layouting::Separator::onMouseMove(pos.toPoint());
-}
-
-void DockSeparator::onMouseReleased()
-{
-    Layouting::Separator::onMouseReleased();
-}
-
-void DockSeparator::onMouseDoubleClicked()
-{
-    Layouting::Separator::onMouseDoubleClick();
+    auto* coreSepa = static_cast<Core::Separator*>(controller());
+    auto* layoutingSep = coreSepa->asLayoutingSeparator();
+    auto* container = layoutingSep->parentContainer();
+    return container
+           && (container->minPosForSeparator_global(layoutingSep)
+               != container->maxPosForSeparator_global(layoutingSep));
 }

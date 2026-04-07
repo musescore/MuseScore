@@ -32,15 +32,22 @@
 
 #include "globaltypes.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/MainWindowBase.h"
-#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
-#include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
-#include "thirdparty/KDDockWidgets/src/private/DropAreaWithCentralFrame_p.h"
+// This include pulls in kdbindings/signal.h which is incompatible with
+// Qt's `emit` macro being defined. Temporarily undefine it, then restore it.
+#ifdef emit
+#undef emit
+#include "kddockwidgets/src/core/DragController_p.h"
+#define emit
+#else
+#include "kddockwidgets/src/core/DragController_p.h"
+#endif
+
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
 
 #include "log.h"
 
-using KDDropLocation = KDDockWidgets::DropIndicatorOverlayInterface::DropLocation;
+using KDDropLocation = KDDockWidgets::DropLocation;
 
 namespace muse::dock {
 static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
@@ -89,26 +96,16 @@ static bool isPointAllowedForDrop(const QPoint& point, const DropDestination& dr
 
 using namespace muse::dock;
 
-DropController::DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx)
-    : KDDockWidgets::DropIndicatorOverlayInterface(dropArea), Contextable(iocCtx)
+DropController::DropController(KDDockWidgets::Core::DropArea* dropArea, const modularity::ContextPtr& iocCtx)
+    : KDDockWidgets::Core::DropIndicatorOverlay(dropArea), Contextable(iocCtx)
 {
-    const int ctx = iocCtx->id;
-    KDDockWidgets::DragController::instance(ctx)->setResolveDropAreaFunc([ctx](const QPoint& globalPos) -> KDDockWidgets::DropArea* {
-        for (auto mainWindow : KDDockWidgets::DockRegistry::self(ctx)->mainwindows()) {
-            if (mainWindow->windowGeometry().contains(globalPos)) {
-                return mainWindow->dropArea();
-            }
-        }
-
-        return nullptr;
-    });
 }
 
-KDDropLocation DropController::hover_impl(QPoint globalPos)
+KDDropLocation DropController::hover_impl(KDDockWidgets::Point globalPos)
 {
     DockBase* draggedDock = this->draggedDock();
     if (!draggedDock) {
-        return DropLocation_None;
+        return KDDockWidgets::DropLocation_None;
     }
 
     QPoint hoveredLocalPos = dockWindow()->asItem().mapFromGlobal(globalPos).toPoint();
@@ -122,7 +119,12 @@ KDDropLocation DropController::hover_impl(QPoint globalPos)
     setCurrentDropLocation(dropLocationToKDDockLocation(m_currentDropDestination.dropLocation));
 
     if (m_currentDropDestination.isValid()) {
-        setHoveredFrame(m_currentDropDestination.dock->dockWidget()->frame());
+        auto* dw = m_currentDropDestination.dock->dockWidget();
+        auto* dwView = qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+            KDDockWidgets::QtQuick::asQQuickItem(dw));
+        if (dwView) {
+            setHoveredGroup(dwView->group());
+        }
     }
 
     return currentDropLocation();
@@ -131,7 +133,7 @@ KDDropLocation DropController::hover_impl(QPoint globalPos)
 void DropController::updateVisibility()
 {
     auto resetDropLocation = [this]() {
-        setCurrentDropLocation(DropLocation_None);
+        setCurrentDropLocation(KDDockWidgets::DropLocation_None);
         endHover();
     };
 
@@ -151,9 +153,9 @@ void DropController::updateVisibility()
     }
 }
 
-QPoint DropController::posForIndicator(KDDropLocation) const
+KDDockWidgets::Point DropController::posForIndicator(KDDockWidgets::DropLocation) const
 {
-    return QPoint();
+    return KDDockWidgets::Point();
 }
 
 void DropController::endHover()
@@ -320,7 +322,7 @@ DockPanelView* DropController::resolvePanelForDrop(const DockPanelView* panel, c
     return nullptr;
 }
 
-Location DropController::resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const
+muse::dock::Location DropController::resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const
 {
     if (!hoveredDock) {
         return Location::Undefined;
@@ -413,7 +415,7 @@ DockPageView* DropController::currentPage() const
 
 DockBase* DropController::draggedDock() const
 {
-    auto windowBeingDragged = KDDockWidgets::DragController::instance(iocContext()->id)->windowBeingDragged();
+    auto windowBeingDragged = KDDockWidgets::Core::DragController::instance()->windowBeingDragged();
     if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
         return nullptr;
     }
@@ -423,7 +425,7 @@ DockBase* DropController::draggedDock() const
         return nullptr;
     }
 
-    KDDockWidgets::DockWidgetBase* draggedDockWidget = windowBeingDragged->dockWidgets().first();
+    KDDockWidgets::Core::DockWidget* draggedDockWidget = windowBeingDragged->dockWidgets().first();
     for (DockBase* dock : page->allDocks()) {
         if (dock->dockWidget() == draggedDockWidget) {
             return dock;

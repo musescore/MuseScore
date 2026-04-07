@@ -22,89 +22,84 @@
 
 #include "docktoolbarview.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/private/TitleBar_p.h"
-#include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
+#include "kddockwidgets/src/core/DockWidget.h"
+#include "kddockwidgets/src/core/FloatingWindow.h"
+#include "kddockwidgets/src/core/Draggable_p.h"
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
+
+// This include pulls in kdbindings/signal.h which is incompatible with
+// Qt's `emit` macro being defined. Temporarily undefine it, then restore it.
+#ifdef emit
+#undef emit
+#include "kddockwidgets/src/core/WindowBeingDragged_p.h"
+#define emit
+#else
+#include "kddockwidgets/src/core/WindowBeingDragged_p.h"
+#endif
 
 #include "log.h"
 #include "docktypes.h"
 
 using namespace muse::dock;
 
-class DockToolBarView::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
+class DockToolBarView::DockToolBarDraggable : public KDDockWidgets::Core::Draggable
 {
 public:
-    DraggableArea(int ctx)
-        : KDDockWidgets::QWidgetAdapter(ctx)
-        , KDDockWidgets::Draggable(ctx, this)
+    explicit DockToolBarDraggable(KDDockWidgets::Core::DockWidget* dw)
+        : KDDockWidgets::Core::Draggable(dw->view())
+        , m_dockWidget(dw)
     {
     }
 
-    std::unique_ptr<KDDockWidgets::WindowBeingDragged> makeWindow() override
+    void setMouseArea(QQuickItem* area)
+    {
+        m_mouseArea = area;
+    }
+
+    std::unique_ptr<KDDockWidgets::Core::WindowBeingDragged> makeWindow() override
     {
         if (!m_dockWidget) {
             return {};
         }
 
-        KDDockWidgets::FloatingWindow* floatingWindow = m_dockWidget->floatingWindow();
+        KDDockWidgets::Core::FloatingWindow* floatingWindow = m_dockWidget->floatingWindow();
         if (floatingWindow) {
-            return std::unique_ptr<KDDockWidgets::WindowBeingDragged>(new KDDockWidgets::WindowBeingDragged(m_ctx, floatingWindow, this));
+            return std::make_unique<KDDockWidgets::Core::WindowBeingDragged>(floatingWindow, this);
         }
 
         m_dockWidget->setFloating(true);
         floatingWindow = m_dockWidget->floatingWindow();
-
-        auto draggable = static_cast<KDDockWidgets::Draggable*>(this);
-        return std::unique_ptr<KDDockWidgets::WindowBeingDragged>(new KDDockWidgets::WindowBeingDragged(m_ctx, floatingWindow, draggable));
+        return std::make_unique<KDDockWidgets::Core::WindowBeingDragged>(floatingWindow, this);
     }
 
-    KDDockWidgets::DockWidgetBase* singleDockWidget() const override
+    KDDockWidgets::Core::DockWidget* singleDockWidget() const override
     {
         return m_dockWidget;
     }
 
-    bool isMDI() const override
-    {
-        return false;
-    }
+    bool isMDI() const override { return false; }
+    bool isWindow() const override { return false; }
 
-    bool isWindow() const override
+    KDDockWidgets::Point mapToWindow(KDDockWidgets::Point pos) const override
     {
-        return false;
-    }
-
-    QPoint mapToWindow(QPoint pos) const override
-    {
-        if (!m_mouseArea) {
+        if (!m_mouseArea || !m_dockWidget) {
             return pos;
         }
 
-        QPointF result = m_mouseArea->mapToItem(m_dockWidget, QPointF(pos));
-
-        result.setX(result.x() + DOCK_WINDOW_SHADOW);
-        result.setY(result.y() + DOCK_WINDOW_SHADOW);
-
-        return QPoint(result.x(), result.y());
-    }
-
-    void setDockWidget(KDDockWidgets::DockWidgetBase* dockWidget)
-    {
-        IF_ASSERT_FAILED(dockWidget) {
-            return;
+        auto* dockWidgetItem = KDDockWidgets::QtQuick::asQQuickItem(m_dockWidget);
+        if (!dockWidgetItem) {
+            return pos;
         }
 
-        m_dockWidget = dockWidget;
-        setObjectName(dockWidget->objectName() + "_draggableArea");
-    }
-
-    void setMouseArea(QQuickItem* mouseArea)
-    {
-        m_mouseArea = mouseArea;
-        redirectMouseEvents(mouseArea);
+        QPointF result = m_mouseArea->mapToItem(dockWidgetItem, QPointF(pos.x(), pos.y()));
+        result.setX(result.x() + DOCK_WINDOW_SHADOW);
+        result.setY(result.y() + DOCK_WINDOW_SHADOW);
+        return KDDockWidgets::Point(result.x(), result.y());
     }
 
 private:
-    KDDockWidgets::DockWidgetBase* m_dockWidget = nullptr;
+    KDDockWidgets::Core::DockWidget* m_dockWidget = nullptr;
     QQuickItem* m_mouseArea = nullptr;
 };
 
@@ -113,6 +108,11 @@ DockToolBarView::DockToolBarView(QQuickItem* parent)
     : DockBase(DockType::ToolBar, parent)
 {
     setLocation(Location::Top);
+}
+
+DockToolBarView::~DockToolBarView()
+{
+    delete m_draggable;
 }
 
 Qt::Orientation DockToolBarView::orientation() const
@@ -147,20 +147,26 @@ void DockToolBarView::setAlignment(int alignment)
 
 void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
 {
-    IF_ASSERT_FAILED(m_draggableArea) {
+    IF_ASSERT_FAILED(m_draggable) {
         return;
     }
 
-    m_draggableArea->setParent(mouseArea);
-    m_draggableArea->setMouseArea(mouseArea);
+    m_draggable->setMouseArea(mouseArea);
+
+    // Redirect mouse events from the grip/mouseArea to the dock widget view
+    // so the DragController can initiate dragging when the user drags the grip
+    auto* dwView = qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+        KDDockWidgets::QtQuick::asQQuickItem(dockWidget()));
+    if (dwView) {
+        dwView->redirectMouseEvents(mouseArea);
+    }
 }
 
 void DockToolBarView::componentComplete()
 {
     DockBase::componentComplete();
 
-    m_draggableArea = new DraggableArea(iocContext()->id);
-    m_draggableArea->setDockWidget(dockWidget());
+    m_draggable = new DockToolBarDraggable(dockWidget());
 }
 
 void DockToolBarView::init()
@@ -205,7 +211,7 @@ void DockToolBarView::onGripDoubleClicked()
 
 void DockToolBarView::toggleFloating()
 {
-    if (KDDockWidgets::DockWidgetBase* dw = m_draggableArea->singleDockWidget()) {
+    if (auto* dw = dockWidget()) {
         bool wasFloating = dw->isFloating();
 
         // If the toolbar is floating, first make it think it is docked so it can update itself

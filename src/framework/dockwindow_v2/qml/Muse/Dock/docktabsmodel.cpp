@@ -22,6 +22,10 @@
 
 #include "docktabsmodel.h"
 
+#include "kddockwidgets/src/core/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
+
 #include "docktypes.h"
 
 using namespace muse::dock;
@@ -58,17 +62,19 @@ QHash<int, QByteArray> DockTabsModel::roleNames() const
     return roles;
 }
 
-void DockTabsModel::init(const KDDockWidgets::DockWidgetBase::List& widgets)
+void DockTabsModel::init(const QVector<KDDockWidgets::Core::DockWidget*>& widgets)
 {
     beginResetModel();
 
     m_dockTabs.clear();
 
-    for (const KDDockWidgets::DockWidgetBase* dock : widgets) {
+    for (const KDDockWidgets::Core::DockWidget* dock : widgets) {
+        const auto* view = qobject_cast<const KDDockWidgets::QtQuick::DockWidget*>(
+            KDDockWidgets::QtQuick::asQQuickItem(const_cast<KDDockWidgets::Core::DockWidget*>(dock)));
         DockTab tab;
         tab.title = dock->title();
-        tab.contextMenu = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
-        tab.toolBarComponent = dock->property(TOOLBAR_COMPONENT_PROPERTY);
+        tab.contextMenu = view ? view->property(CONTEXT_MENU_MODEL_PROPERTY) : QVariant();
+        tab.toolBarComponent = view ? view->property(TOOLBAR_COMPONENT_PROPERTY) : QVariant();
         m_dockTabs.emplaceBack(tab);
     }
 
@@ -76,7 +82,7 @@ void DockTabsModel::init(const KDDockWidgets::DockWidgetBase::List& widgets)
     emit numTabsChanged();
 }
 
-void DockTabsModel::toolBarComponentChanged(const KDDockWidgets::DockWidgetBase* dock)
+void DockTabsModel::toolBarComponentChanged(const KDDockWidgets::QtQuick::DockWidget* dock)
 {
     const int idx = indexOfDock(dock->title());
     if (idx < 0 || idx >= m_dockTabs.size()) {
@@ -89,7 +95,7 @@ void DockTabsModel::toolBarComponentChanged(const KDDockWidgets::DockWidgetBase*
     emit dataChanged(qIdx, qIdx, { ToolBarComponent });
 }
 
-void DockTabsModel::contextMenuChanged(const KDDockWidgets::DockWidgetBase* dock)
+void DockTabsModel::contextMenuChanged(const KDDockWidgets::QtQuick::DockWidget* dock)
 {
     const int idx = indexOfDock(dock->title());
     if (idx < 0 || idx >= m_dockTabs.size()) {

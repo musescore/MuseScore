@@ -31,8 +31,9 @@ Rectangle {
     id: root
 
     //! NOTE: please, don't rename those properties because they are used in c++
-    property QtObject frameCpp
-    readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
+    //! groupCpp is set by the KDDockWidgets framework via setProperty("groupCpp", ...)
+    property QtObject groupCpp
+    readonly property QtObject titleBarCpp: Boolean(groupCpp) ? groupCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.height + tabBar.height + stackLayout.anchors.topMargin
     property int titleBarNavigationPanelOrder: 1
     //! ---
@@ -44,27 +45,27 @@ Rectangle {
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
-    onFrameCppChanged: {
-        if (Boolean(frameCpp)) {
-            frameCpp.setStackLayout(stackLayout)
+    onGroupCppChanged: {
+        if (Boolean(groupCpp)) {
+            groupCpp.setStackLayout(stackLayout)
         }
     }
 
     onNonContentsHeightChanged: {
-        if (Boolean(frameCpp)) {
-            frameCpp.geometryUpdated()
+        if (Boolean(groupCpp)) {
+            groupCpp.geometryUpdated()
         }
     }
 
     DockFrameModel {
         id: frameModel
-        frame: root.frameCpp
+        frame: root.groupCpp
     }
 
     QtObject {
         id: prv
         readonly property alias tabsModel: frameModel.tabsModel
-        readonly property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
+        readonly property int currentIndex: Boolean(root.groupCpp) && root.groupCpp.currentIndex >= 0 ? root.groupCpp.currentIndex : 0
     }
 
     NavigationPanel {
@@ -126,15 +127,15 @@ Rectangle {
         visible: root.hasTabBar
         draggingTabsAllowed: root.hasTabBar && !root.hasSingleTab
 
-        tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
+        tabBarCpp: Boolean(root.groupCpp) ? root.groupCpp.tabBar : null
         tabsModel: prv.tabsModel
         currentIndex: prv.currentIndex
 
         navigationPanel: navPanel
 
         function setCurrentDockWidget(index: int) {
-            if (root.frameCpp) {
-                root.frameCpp.tabWidget.setCurrentDockWidget(index)
+            if (root.groupCpp && root.groupCpp.tabBar) {
+                root.groupCpp.tabBar.setCurrentIndex(index)
             }
         }
 

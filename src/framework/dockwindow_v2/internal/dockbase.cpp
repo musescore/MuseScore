@@ -28,10 +28,23 @@
 
 #include "log.h"
 
-#include "modularity/ioc.h"
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
-#include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
+#include "kddockwidgets/src/core/DockWidget.h"
+#include "kddockwidgets/src/core/FloatingWindow.h"
+#include "kddockwidgets/src/core/Group.h"
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/Group.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
+#include "kddockwidgets/src/qtquick/Action.h"
+
+// This include pulls in kdbindings/signal.h which is incompatible with
+// Qt's `emit` macro being defined. Temporarily undefine it, then restore it.
+#ifdef emit
+#undef emit
+#include "kddockwidgets/src/core/layouting/Item_p.h"
+#define emit
+#else
+#include "kddockwidgets/src/core/layouting/Item_p.h"
+#endif
 
 #include "ui/qml/Muse/Ui/navigationsection.h"
 

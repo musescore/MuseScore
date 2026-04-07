@@ -22,12 +22,15 @@
 
 #include "dockwindow.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
-#include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
-#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
-#include "thirdparty/KDDockWidgets/src/Config.h"
-#include "thirdparty/KDDockWidgets/src/ContextData.h"
+#include "kddockwidgets/src/LayoutSaver.h"
+#include "kddockwidgets/src/Config.h"
+#include "kddockwidgets/src/core/DockRegistry.h"
+#include "kddockwidgets/src/core/Layout.h"
+#include "kddockwidgets/src/qtquick/views/MainWindow.h"
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
+#include "kddockwidgets/src/core/Group.h"
+#include "kddockwidgets/src/core/Window_p.h"
 
 #include "global/async/async.h"
 

@@ -48,7 +48,7 @@ Item {
 
     function doubleClicked(pos) {
         if (root.titleBarCpp) {
-            root.titleBarCpp.doubleClicked(pos)
+            root.titleBarCpp.onDoubleClicked()
         }
     }
 

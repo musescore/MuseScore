@@ -52,6 +52,7 @@ class DockToolBarView : public DockBase
 
 public:
     explicit DockToolBarView(QQuickItem* parent = nullptr);
+    ~DockToolBarView() override;
 
     Qt::Orientation orientation() const;
     int alignment() const;
@@ -77,8 +78,8 @@ private:
 
     bool canChangeOrientation() const;
 
-    class DraggableArea;
-    DraggableArea* m_draggableArea = nullptr;
+    class DockToolBarDraggable;
+    DockToolBarDraggable* m_draggable = nullptr;
 
     Qt::Orientation m_orientation = Qt::Horizontal;
     int m_alignment = static_cast<int>(DockToolBarAlignment::Left);

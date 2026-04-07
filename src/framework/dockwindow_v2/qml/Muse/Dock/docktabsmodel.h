@@ -26,7 +26,14 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
+namespace KDDockWidgets {
+namespace Core {
+class DockWidget;
+}
+namespace QtQuick {
+class DockWidget;
+}
+}
 
 namespace muse::dock {
 class DockTabsModel : public QAbstractListModel
@@ -51,13 +58,13 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void init(const KDDockWidgets::DockWidgetBase::List& widgets);
+    void init(const QVector<KDDockWidgets::Core::DockWidget*>& widgets);
     Q_INVOKABLE void clear() { init({}); }
 
     int numTabs() { return m_dockTabs.size(); }
 
-    void toolBarComponentChanged(const KDDockWidgets::DockWidgetBase* dock);
-    void contextMenuChanged(const KDDockWidgets::DockWidgetBase* dock);
+    void toolBarComponentChanged(const KDDockWidgets::QtQuick::DockWidget* dock);
+    void contextMenuChanged(const KDDockWidgets::QtQuick::DockWidget* dock);
 
 signals:
     void numTabsChanged();

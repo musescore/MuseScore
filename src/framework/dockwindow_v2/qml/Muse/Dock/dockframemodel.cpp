@@ -25,8 +25,10 @@
 #include <QQuickItem>
 #include <QApplication>
 
-#include "private/TitleBar_p.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "kddockwidgets/src/core/Group.h"
+#include "kddockwidgets/src/qtquick/views/Group.h"
+#include "kddockwidgets/src/qtquick/views/DockWidget.h"
+#include "kddockwidgets/src/qtquick/views/View.h"
 
 #include "ui/qml/Muse/Ui/navigationsection.h"
 #include "uicomponents/qml/Muse/UiComponents/abstractmenumodel.h"
@@ -72,28 +74,28 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
 
 void DockFrameModel::onContextMenuChanged(QObject* obj)
 {
-    const KDDockWidgets::DockWidgetBase* dwb = dynamic_cast<const KDDockWidgets::DockWidgetBase*>(obj);
-    if (!dwb) {
+    const auto* dwv = qobject_cast<const KDDockWidgets::QtQuick::DockWidget*>(obj);
+    if (!dwv) {
         return;
     }
 
-    m_tabsModel->contextMenuChanged(dwb);
+    m_tabsModel->contextMenuChanged(dwv);
 
-    if (dwb == currentDockWidget()) {
+    if (dwv == currentDockWidget()) {
         emit currentDockChanged();
     }
 }
 
 void DockFrameModel::onToolBarComponentChanged(QObject* obj)
 {
-    const KDDockWidgets::DockWidgetBase* dwb = dynamic_cast<const KDDockWidgets::DockWidgetBase*>(obj);
-    if (!dwb) {
+    const auto* dwv = qobject_cast<const KDDockWidgets::QtQuick::DockWidget*>(obj);
+    if (!dwv) {
         return;
     }
 
-    m_tabsModel->toolBarComponentChanged(dwb);
+    m_tabsModel->toolBarComponentChanged(dwv);
 
-    if (dwb == currentDockWidget()) {
+    if (dwv == currentDockWidget()) {
         emit currentDockChanged();
     }
 }
@@ -124,7 +126,7 @@ void DockFrameModel::setFrame(QQuickItem* frame)
         return;
     }
 
-    m_frame = dynamic_cast<KDDockWidgets::Frame*>(frame);
+    m_frame = qobject_cast<KDDockWidgets::QtQuick::Group*>(frame);
     emit frameChanged(frame);
 
     listenChangesInFrame();
@@ -136,16 +138,19 @@ void DockFrameModel::listenChangesInFrame()
         return;
     }
 
-    connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
-        m_tabsModel->init(m_frame->dockWidgets());
-
-        if (!currentDockWidget()) {
-            m_frame->setCurrentTabIndex(0);
+    connect(m_frame, &KDDockWidgets::QtQuick::Group::currentDockWidgetChanged, this, [this]() {
+        auto* group = m_frame ? m_frame->group() : nullptr;
+        if (!group) {
+            return;
         }
 
-        auto allDocks = m_frame->dockWidgets();
+        auto allDocks = group->dockWidgets();
+        m_tabsModel->init(allDocks);
+
         if (allDocks.isEmpty()) {
             setTitleBarAllowed(false);
+            updateNavigationSection();
+            emit currentDockChanged();
             return;
         }
 
@@ -160,11 +165,6 @@ void DockFrameModel::listenChangesInFrame()
         setTitleBarAllowed(titleBarAllowed);
 
         updateNavigationSection();
-    });
-
-    connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
-        updateNavigationSection();
-
         emit currentDockChanged();
     });
 }
@@ -226,7 +226,7 @@ QObject* DockFrameModel::navigationSection() const
 
 QString DockFrameModel::currentDockUniqueName() const
 {
-    auto dock = currentDockWidget();
+    auto* dock = currentDockWidget();
     return dock ? dock->uniqueName() : QString();
 }
 
@@ -251,7 +251,8 @@ QRect DockFrameModel::highlightingRect() const
         return QRect();
     }
 
-    for (auto dock : m_frame->dockWidgets()) {
+    auto* group = m_frame->group();
+    for (auto* dock : group->dockWidgets()) {
         DockProperties properties = readPropertiesFromObject(dock);
 
         if (properties.highlightingRect.isValid()) {
@@ -262,9 +263,18 @@ QRect DockFrameModel::highlightingRect() const
     return QRect();
 }
 
-KDDockWidgets::DockWidgetBase* DockFrameModel::currentDockWidget() const
+KDDockWidgets::QtQuick::DockWidget* DockFrameModel::currentDockWidget() const
 {
-    return m_frame && !m_frame->isEmpty() ? m_frame->currentDockWidget() : nullptr;
+    if (!m_frame) {
+        return nullptr;
+    }
+    auto* group = m_frame->group();
+    if (!group || group->isEmpty()) {
+        return nullptr;
+    }
+    auto* ctrl = group->currentDockWidget();
+    return ctrl ? qobject_cast<KDDockWidgets::QtQuick::DockWidget*>(
+        KDDockWidgets::QtQuick::asQQuickItem(ctrl)) : nullptr;
 }
 
 QVariant DockFrameModel::currentDockProperty(const char* propertyName) const

@@ -25,28 +25,33 @@
 
 #include <QQuickItem>
 
-#include "thirdparty/KDDockWidgets/src/private/quick/TabBarQuick_p.h"
+#include "kddockwidgets/src/qtquick/views/TabBar.h"
+
+namespace KDDockWidgets::Core {
+class TabBar;
+}
 
 namespace muse::dock {
-class DockTabBar : public KDDockWidgets::TabBarQuick
+class DockTabBar : public KDDockWidgets::QtQuick::TabBar
 {
     Q_OBJECT
 
 public:
-    explicit DockTabBar(int ctx, KDDockWidgets::TabWidget* parent = nullptr);
+    explicit DockTabBar(KDDockWidgets::Core::TabBar* controller, QQuickItem* parent = nullptr);
 
     // The following is a hack (see PR #29794)- revisit this system when updating KDDockWidgets
     Q_PROPERTY(bool tabChangedOnClick READ tabChangedOnClick CONSTANT)
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
-    Q_INVOKABLE void doubleClicked(const QPoint& pos) const;
+    Q_INVOKABLE void doubleClicked(QPoint pos) const;
 
     bool tabChangedOnClick() const { return m_tabChangedOnClick; }
 
-private:
+protected:
     bool event(QEvent* event) override;
+
+private:
     void onMousePressRelease(const QMouseEvent* mouseEvent);
-    bool isPositionDraggable(QPoint localPos) const override;
 
     QQuickItem* m_draggableMouseArea = nullptr;
     int m_indexOfPressedTab = -1;

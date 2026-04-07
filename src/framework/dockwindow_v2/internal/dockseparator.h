@@ -23,44 +23,35 @@
 #ifndef MUSE_DOCK_DOCKSEPARATOR_H
 #define MUSE_DOCK_DOCKSEPARATOR_H
 
-#include <QQuickItem>
+#include "kddockwidgets/src/qtquick/views/Separator.h"
 
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Separator_p.h"
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Widget_quick.h"
+namespace KDDockWidgets::Core {
+class Separator;
+}
 
 namespace muse::dock {
-class DockSeparator : public QQuickItem, public Layouting::Separator, public Layouting::Widget_quick
+class DockSeparator : public KDDockWidgets::QtQuick::Separator
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool isVertical READ isVertical NOTIFY isVerticalChanged)
     Q_PROPERTY(bool isSeparatorVisible READ isSeparatorVisible NOTIFY isSeparatorVisibleChanged)
     Q_PROPERTY(bool showResizeCursor READ showResizeCursor NOTIFY showResizeCursorChanged)
 
 public:
-    explicit DockSeparator(Layouting::Widget* parent = nullptr);
+    explicit DockSeparator(KDDockWidgets::Core::Separator* controller, QQuickItem* parent = nullptr);
 
-    bool isVertical() const;
     bool isSeparatorVisible() const;
     bool showResizeCursor() const;
 
-    Q_INVOKABLE void onMousePressed();
-    Q_INVOKABLE void onMouseMoved(QPointF localPos);
-    Q_INVOKABLE void onMouseReleased();
-    Q_INVOKABLE void onMouseDoubleClicked();
-
 signals:
-    void isVerticalChanged();
     void isSeparatorVisibleChanged();
     void showResizeCursorChanged();
 
 private:
     void initAvailability();
 
-    Widget* createRubberBand(Widget* parent) override;
-    Widget* asWidget() override;
-
-    bool m_isSeparatorVisible = false;
+    bool m_isSeparatorVisible = true;
+    bool m_inited = false;
 };
 }
 

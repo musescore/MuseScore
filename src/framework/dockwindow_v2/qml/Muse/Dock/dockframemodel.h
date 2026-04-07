@@ -32,8 +32,10 @@
 #include "docktabsmodel.h"
 
 namespace KDDockWidgets {
-class Frame;
-class DockWidgetBase;
+namespace QtQuick {
+class Group;
+class DockWidget;
+}
 }
 
 namespace muse::dock {
@@ -99,7 +101,7 @@ private:
     void setTitleBarAllowed(bool allowed);
     void setIsHorizontalPanel(bool is);
 
-    KDDockWidgets::DockWidgetBase* currentDockWidget() const;
+    KDDockWidgets::QtQuick::DockWidget* currentDockWidget() const;
     QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;
@@ -108,7 +110,7 @@ private:
     QQmlComponent* currentTitleBar() const;
     void updateTitleBar();
 
-    QPointer<KDDockWidgets::Frame> m_frame;
+    QPointer<KDDockWidgets::QtQuick::Group> m_frame;
     QQmlComponent* m_titleBar = nullptr;
     bool m_titleBarAllowed = false;
     bool m_isHorizontalPanel = false;

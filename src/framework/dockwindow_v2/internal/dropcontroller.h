@@ -28,22 +28,22 @@
 
 #include "dockbase.h"
 
-#include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
+#include "kddockwidgets/src/core/DropIndicatorOverlay.h"
 
 namespace muse::dock {
 class DockPanelView;
 class DockingHolderView;
 class DockToolBarView;
 class DockPageView;
-class DropController : public KDDockWidgets::DropIndicatorOverlayInterface, public Contextable
+class DropController : public KDDockWidgets::Core::DropIndicatorOverlay, public Contextable
 {
     ContextInject<IDockWindowProvider> dockWindowProvider = { this };
 
 public:
-    explicit DropController(KDDockWidgets::DropArea* dropArea, const modularity::ContextPtr& iocCtx);
+    explicit DropController(KDDockWidgets::Core::DropArea* dropArea, const modularity::ContextPtr& iocCtx);
 
-    DropLocation hover_impl(QPoint globalPos) override;
-    QPoint posForIndicator(DropLocation) const override;
+    KDDockWidgets::DropLocation hover_impl(KDDockWidgets::Point globalPos) override;
+    KDDockWidgets::Point posForIndicator(KDDockWidgets::DropLocation) const override;
 
 private:
     void updateVisibility() override;

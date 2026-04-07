@@ -21,38 +21,19 @@
  */
 
 #include "docktitlebar.h"
-#include "docktypes.h"
 
 using namespace muse::dock;
 
-DockTitleBar::DockTitleBar(int ctx, KDDockWidgets::Frame* parent)
-    : KDDockWidgets::TitleBarQuick(ctx, parent)
+DockTitleBar::DockTitleBar(KDDockWidgets::Core::TitleBar* controller, QQuickItem* parent)
+    : KDDockWidgets::QtQuick::TitleBar(controller, parent)
 {
+}
+
+void DockTitleBar::init()
+{
+    KDDockWidgets::QtQuick::TitleBar::init();
+
     // Suppress the default title bar because we add our own. Otherwise
     // the default title bar steals the mouse events from our title bar.
-    setFixedHeight(0);
-}
-
-DockTitleBar::DockTitleBar(int ctx, KDDockWidgets::FloatingWindow* parent)
-    : KDDockWidgets::TitleBarQuick(ctx, parent)
-{
-    // Suppress the default title bar because we add our own. Otherwise
-    // the default title bar steals the mouse events from our title bar.
-    setFixedHeight(0);
-}
-
-QPoint DockTitleBar::mapToWindow(QPoint pos) const
-{
-    QPoint result = pos;
-
-    result.setX(result.x() + DOCK_WINDOW_SHADOW);
-    result.setY(result.y() + DOCK_WINDOW_SHADOW);
-
-    return result;
-}
-
-bool DockTitleBar::doubleClicked(const QPoint& /*pos*/)
-{
-    onFloatClicked();
-    return true;
+    setHeight(0);
 }
