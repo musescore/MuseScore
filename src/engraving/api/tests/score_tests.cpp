@@ -1229,7 +1229,7 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumset)
     newDs.drum(36).name = u"Kick Drum";
 
     score->startCmd(TranslatableString::untranslatable("Replace drumset test"));
-    EditPart::replaceDrumset(score, part, u"drumset", newDs);
+    EditPart::replaceDrumset(score, part, Fraction(0, 1), newDs);
     score->endCmd();
 
     // [THEN] The drumset should have the new name
@@ -1281,7 +1281,9 @@ TEST_F(Engraving_ApiScoreTests, replaceDrumsetApi)
     ASSERT_NE(cloned, nullptr);
 
     cloned->setName(36, "Kick Drum");
-    apiScore.replaceDrumset(apiPart, cloned);
+    apiv1::Fraction tick(Fraction(0, 1));
+
+    apiScore.replaceDrumset(apiPart, &tick, cloned);
 
     // [THEN] The drumset should have the new name
     EXPECT_EQ(domPart->instrument()->drumset()->name(36), u"Kick Drum");

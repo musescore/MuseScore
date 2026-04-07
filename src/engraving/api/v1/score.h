@@ -687,14 +687,17 @@ public:
 
     /** APIDOC
      * Replaces the drumset of a part's percussion instrument.
-     * Use Instrument.cloneDrumset() to get a modifiable copy, then call Drumset.setDrum()
-     * to modify entries, and finally pass the modified drumset to this method.
+     * Use Instrument.cloneDrumset() to get a modifiable copy, update it with the
+     * available Drumset setter methods (`setName()`, `setNoteHead()`, `setLine()`,
+     * `setVoice()`, `setStemDirection()`, `setShortcut()`), and then pass the
+     * modified drumset to this method.
      * @method
      * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
      * @param {Engraving.Drumset} drumset The new Drumset to apply.
      * @since 4.7
     */
-    Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Drumset* drumset);
+    Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Fraction* tick, apiv1::Drumset* drumset);
 
     /** APIDOC
      * Inserts a part with the instrument defined by `instrumentId` at the given index.

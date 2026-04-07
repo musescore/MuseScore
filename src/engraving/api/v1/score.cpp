@@ -382,10 +382,14 @@ bool Score::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     return mu::engraving::EditPart::setVoiceVisible(score(), staff->staff(), voiceIndex, visible);
 }
 
-void Score::replaceDrumset(Part* part, Drumset* drumset)
+void Score::replaceDrumset(Part* part, apiv1::Fraction* tick, Drumset* drumset)
 {
     if (!part) {
         LOGW("replaceDrumset: part is null");
+        return;
+    }
+    if (!tick) {
+        LOGW("replaceDrumset: tick is null");
         return;
     }
     if (!drumset) {
@@ -393,22 +397,7 @@ void Score::replaceDrumset(Part* part, Drumset* drumset)
         return;
     }
 
-    // Find the instrumentId from the part's first instrument that has a drumset
-    mu::engraving::String instrumentId;
-    for (auto pair : part->part()->instruments()) {
-        mu::engraving::Instrument* instr = pair.second;
-        if (instr && instr->drumset()) {
-            instrumentId = instr->id();
-            break;
-        }
-    }
-
-    if (instrumentId.isEmpty()) {
-        LOGW("replaceDrumset: no percussion instrument found in part");
-        return;
-    }
-
-    mu::engraving::EditPart::replaceDrumset(score(), part->part(), instrumentId, *drumset->drumset());
+    mu::engraving::EditPart::replaceDrumset(score(), part->part(), tick->fraction(), *drumset->drumset());
 }
 
 void Score::insertPart(const QString& instrumentId, int index)
