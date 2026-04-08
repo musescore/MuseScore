@@ -26,10 +26,16 @@ import Muse.UiComponents
 import MuseScore.NotationScene
 
 StyledToolBarView {
+    property alias isCompactMode: toolBarModel.isCompactMode
+
     navigationPanel.name: "NotationToolBar"
     navigationPanel.accessible.name: qsTrc("notation", "Notation toolbar")
 
     spacing: 2
 
-    model: NotationToolBarModel { }
+    NotationToolBarModel {
+        id: toolBarModel
+    }
+
+    model: toolBarModel
 }
