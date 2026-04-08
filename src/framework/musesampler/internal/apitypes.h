@@ -151,6 +151,7 @@ enum ms_NoteArticulation2 : uint64_t
     ms_NoteArticulation2_PlopRough = 1LL << 10,
     ms_NoteArticulation2_DoitRough = 1LL << 11,
     ms_NoteArticulation2_ScoopRough = 1LL << 12,
+    ms_NoteArticulation2_BreathMark = 1LL << 13,
 };
 
 // added in v0.6
