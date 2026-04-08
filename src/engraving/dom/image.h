@@ -96,9 +96,9 @@ public:
     const std::shared_ptr<muse::draw::Pixmap>& rasterImage() const { return m_rasterDoc; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return 2; }
-    Grip initialEditModeGrip() const override { return Grip(1); }
-    Grip defaultGrip() const override { return Grip(1); }
+    int gripsCount() const override { return 3; }
+    Grip initialEditModeGrip() const override { return Grip(2); }
+    Grip defaultGrip() const override { return Grip(2); }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     SizeF pixel2size(const SizeF& s) const;
