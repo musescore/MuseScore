@@ -1035,17 +1035,21 @@ QPointF PolylinePlot::snapToNeighbor(qreal dragPxX, QPointF pDomain) const
         return pDomain;
     }
 
+    // Snap close to — but not exactly onto — a neighbor.
+    // Can't have multiple automation points at the exact same timepoint.
+    static constexpr double SNAP_EPSILON = 1e-9;
+
     if (currentIdx + 1 < m_points.size()) {
         const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx + 1]).x());
         if (std::abs(dragPxX - neighborPxX) <= m_snapThresholdPx) {
-            pDomain.setX(m_points[currentIdx + 1].x());
+            pDomain.setX(m_points[currentIdx + 1].x() - SNAP_EPSILON);
         }
     }
 
     if (currentIdx > 0) {
         const qreal neighborPxX = toPxX(this, normalizedFromDomain(m_points[currentIdx - 1]).x());
         if (std::abs(dragPxX - neighborPxX) <= m_snapThresholdPx) {
-            pDomain.setX(m_points[currentIdx - 1].x());
+            pDomain.setX(m_points[currentIdx - 1].x() + SNAP_EPSILON);
         }
     }
 
@@ -1289,7 +1293,7 @@ void PolylinePlot::mousePressEvent(QMouseEvent* e)
                        1.0 - clamp01(ghostPoint.point.y() / height()));
 
             const QPointF pDomain = domainFromNormalized(pN);
-            emit pointAdded(pDomain.x(), pDomain.y(), /*completed*/ true);
+            emit pointAdded(pDomain.x(), pDomain.y(), /*completed*/ false);
         }
 
         updateActivePoint();
@@ -1355,6 +1359,12 @@ void PolylinePlot::mouseReleaseEvent(QMouseEvent* e)
         emit interactionFinished();
         resetGestureState();
         return;
+    }
+
+    // click-without-drag on line: finalize the point that was added during press
+    if (isClick && m_pressedOnLine && m_pressedPointIndex >= 0 && m_pressedPointIndex < m_points.size()) {
+        const QPointF pDomain = m_points[m_pressedPointIndex];
+        emit pointAdded(pDomain.x(), pDomain.y(), /*completed*/ true);
     }
 
     emit interactionFinished();
