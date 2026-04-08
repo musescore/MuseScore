@@ -215,6 +215,9 @@ else()
 
         internal/baseapplication.cpp
         internal/baseapplication.h
+        internal/cmdoptions.h
+        internal/consoleapplication.cpp
+        internal/consoleapplication.h
         internal/globalconfiguration.cpp
         internal/globalconfiguration.h
         internal/cryptographichash.cpp

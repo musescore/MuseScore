@@ -69,22 +69,6 @@ using namespace muse;
 using namespace muse::modularity;
 using namespace muse::io;
 
-class ApplicationStub : public BaseApplication
-{
-public:
-
-    ApplicationStub()
-        : BaseApplication() {}
-
-    void setup() override {}
-    void finish() override {}
-
-    modularity::ContextPtr setupNewContext(const StringList&) override { return nullptr; }
-    void destroyContext(const modularity::ContextPtr&) override {}
-    size_t contextCount() const override { return 0; }
-    std::vector<modularity::ContextPtr> contexts() const override { return {}; }
-};
-
 GlobalModule::GlobalModule()
 {
 }
@@ -96,15 +80,10 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
-    if (!m_application) {
-        m_application = std::make_shared<ApplicationStub>();
-    }
-
     m_configuration = std::make_shared<GlobalConfiguration>();
     m_systemInfo = std::make_shared<SystemInfo>();
     m_tickerProvider = std::make_shared<TickerProvider>();
 
-    globalIoc()->registerExport<IApplication>(moduleName(), m_application);
     globalIoc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
     globalIoc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
@@ -195,9 +174,12 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 #endif
     }
 
-    LOGI() << "=== Started " << m_application->title()
-           << " " << m_application->fullVersion().toString()
-           << ", build: " << m_application->build() << " ===";
+    auto application = globalIoc()->resolve<IApplication>("global");
+    if (application) {
+        LOGI() << "=== Started " << application->title()
+               << " " << application->fullVersion().toString()
+               << ", build: " << application->build() << " ===";
+    }
 
     //! --- Setup profiler ---
     using namespace muse::profiler;

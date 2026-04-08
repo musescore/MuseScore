@@ -150,12 +150,12 @@ int main(int argc, char** argv)
     }
 
     commandLineParser.processBuiltinArgs(*qapp);
-    CmdOptions opt = commandLineParser.options();
+    std::shared_ptr<MuseScoreCmdOptions> opt = commandLineParser.options();
 
 #else
     QCoreApplication* qapp = new QApplication(argc, argv);
-    CmdOptions opt;
-    opt.runMode = IApplication::RunMode::GuiApp;
+    std::shared_ptr<MuseScoreCmdOptions> opt = std::make_shared<MuseScoreCmdOptions>();
+    opt->runMode = IApplication::RunMode::GuiApp;
 #endif
 
     // ====================================================
@@ -170,6 +170,9 @@ int main(int argc, char** argv)
     QMetaObject::invokeMethod(qapp, [qapp, &app, &opt]() {
         AppFactory f;
         app = f.newApp(opt);
+        IF_ASSERT_FAILED(app) {
+            return;
+        }
         app->showSplash();
         QMetaObject::invokeMethod(qapp, [qapp, &app]() {
             app->setup();

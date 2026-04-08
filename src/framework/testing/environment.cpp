@@ -22,8 +22,10 @@
 
 #include "environment.h"
 
+#include "global/modularity/ioc.h"
 #include "global/globalmodule.h"
 #include "global/iapplication.h"
+#include "global/tests/mocks/applicationstub.h"
 
 using namespace muse::testing;
 
@@ -57,17 +59,15 @@ void Environment::setup()
 {
     IApplication::RunMode runMode = IApplication::RunMode::GuiApp;
 
+    muse::modularity::globalIoc()->registerExport<IApplication>("testing", new muse::ApplicationStub());
+
     m_globalModule = new GlobalModule();
     m_globalModule->registerResources();
     m_globalModule->registerExports();
     m_globalModule->registerUiTypes();
 
     for (modularity::IModuleSetup* m : m_dependencyModules) {
-        m->setApplication(m_globalModule->application());
         m->registerResources();
-    }
-
-    for (modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerExports();
     }
 

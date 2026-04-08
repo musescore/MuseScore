@@ -279,18 +279,22 @@
 using namespace muse;
 using namespace mu::app;
 
-std::shared_ptr<muse::IApplication> AppFactory::newApp(const CmdOptions& options) const
+std::shared_ptr<muse::IApplication> AppFactory::newApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const
 {
-    if (options.runMode == IApplication::RunMode::GuiApp) {
+    IF_ASSERT_FAILED(options) {
+        return nullptr;
+    }
+
+    if (options->runMode == IApplication::RunMode::GuiApp) {
         return newGuiApp(options);
     } else {
         return newConsoleApp(options);
     }
 }
 
-std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& options) const
+std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const
 {
-    std::shared_ptr<GuiApp> app = std::make_shared<GuiApp>(options);
+    std::shared_ptr<MuseScoreGuiApp> app = std::make_shared<MuseScoreGuiApp>(options);
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
@@ -429,7 +433,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     return app;
 }
 
-static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
+static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
 {
 #ifdef MUSE_MODULE_DIAGNOSTICS
     //! NOTE `diagnostics` must be first, because it installs the crash handler.
@@ -530,7 +534,7 @@ static void addConsoleModules(std::shared_ptr<ConsoleApp> app)
     app->addModule(new mu::notation::NotationSceneModule());
 }
 
-static void addAudioPluginRegistrationModules(std::shared_ptr<ConsoleApp> app)
+static void addAudioPluginRegistrationModules(std::shared_ptr<MuseScoreConsoleApp> app)
 {
     app->addModule(new muse::audio::AudioModule());
 
@@ -543,15 +547,15 @@ static void addAudioPluginRegistrationModules(std::shared_ptr<ConsoleApp> app)
 #endif
 }
 
-std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
+std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const
 {
 #ifdef MUE_ENABLE_CONSOLEAPP
 
-    std::shared_ptr<ConsoleApp> app = std::make_shared<ConsoleApp>(options);
+    std::shared_ptr<MuseScoreConsoleApp> app = std::make_shared<MuseScoreConsoleApp>(options);
 
-    if (options.runMode == muse::IApplication::RunMode::ConsoleApp) {
+    if (options->runMode == muse::IApplication::RunMode::ConsoleApp) {
         addConsoleModules(app);
-    } else if (options.runMode == muse::IApplication::RunMode::AudioPluginRegistration) {
+    } else if (options->runMode == muse::IApplication::RunMode::AudioPluginRegistration) {
         addAudioPluginRegistrationModules(app);
     }
 
