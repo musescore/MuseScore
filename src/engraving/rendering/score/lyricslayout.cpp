@@ -491,7 +491,6 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         item->separator()->setTicks(lyricsLineTicks);
         item->separator()->setTrack(item->track());
         item->separator()->setTrack2(item->track());
-        item->separator()->setVisible(item->visible());
         item->separator()->styleChanged();
     } else {
         if (item->separator()) {
