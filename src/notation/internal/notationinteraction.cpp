@@ -4272,9 +4272,6 @@ void NotationInteraction::moveLyrics(MoveDirection d)
 void NotationInteraction::nudge(MoveDirection d, bool quickly)
 {
     EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el && (el->isTextBase() || el->isArticulationFamily())) {
-        return;
-    }
 
     startEdit(TranslatableString("undoableAction", "Nudge element"));
 
