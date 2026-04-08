@@ -1745,12 +1745,25 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
     INotationNoteInputPtr noteInput = interaction->noteInput();
     bool playChord = false;
 
+    auto shouldNudge = [](const EngravingItem* selectedElement) -> bool {
+        if (!selectedElement) {
+            return false;
+        }
+        bool isText = selectedElement->isTextBase();
+        bool isArticulationFamily = selectedElement->isArticulationFamily();
+        bool isSymbol = selectedElement->isSymbol();
+        bool isTupletText = selectedElement->isTuplet() && !toTuplet(selectedElement)->hasBracket();
+        bool isFermataOrBreath = selectedElement->isFermata() || selectedElement->isBreath();
+
+        return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath;
+    };
+
     switch (direction) {
     case MoveDirection::Up:
     case MoveDirection::Down:
         if (!quickly && selectedElement && selectedElement->isLyrics()) {
             interaction->moveLyrics(direction);
-        } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulationFamily())) {
+        } else if (shouldNudge(selectedElement)) {
             interaction->nudge(direction, quickly);
         } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
             interaction->nudgeAnchors(direction);
@@ -1809,7 +1822,7 @@ muse::Ret NotationActionController::moveWithRet(MoveDirection direction, bool qu
             return muse::make_ok();
         }
 
-        if (selectedElement && selectedElement->isTextBase()) {
+        if (shouldNudge(selectedElement)) {
             interaction->nudge(direction, quickly);
         } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
             interaction->nudgeAnchors(direction);
