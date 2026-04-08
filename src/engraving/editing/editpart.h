@@ -205,7 +205,12 @@ public:
     UNDO_NAME("SetUserBankController")
 };
 
+class InstrumentTemplate;
+struct ScoreOrder;
+class Staff;
 class StaffType;
+enum class PreferSharpFlat : char;
+enum class StaffTypes : signed char;
 
 class EditPart
 {
@@ -214,5 +219,36 @@ public:
                                       const String& partName = String());
 
     static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
+
+    static void setPartVisible(Score* score, Part* part, bool visible);
+    static void setStaffVisible(Score* score, Staff* staff, bool visible);
+    static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
+    static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
+    static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
+    static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
+
+    static void removeParts(Score* score, const std::vector<Part*>& parts);
+    static void removeStaves(Score* score, const std::vector<Staff*>& staves);
+    static void moveParts(Score* score, const std::vector<Part*>& sourceParts, Part* destinationPart, bool insertAfter);
+    static void moveStaves(Score* score, const std::vector<Staff*>& sourceStaves, Staff* destinationStaff, bool insertAfter);
+
+    static void addSystemObjects(Score* score, const std::vector<Staff*>& staves);
+    static void removeSystemObjects(Score* score, const std::vector<Staff*>& staves);
+    static void moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destinationStaff);
+
+    static Staff* appendStaff(Score* score, Part* destinationPart);
+    static Staff* appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart);
+
+    static bool setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible);
+
+    static void replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset);
+
+    static void insertPart(Score* score, const InstrumentTemplate* templ, size_t index);
+    static void replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ);
+
+    static void setScoreOrder(Score* score, const ScoreOrder& order);
+
+private:
+    static void doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests = true);
 };
 }

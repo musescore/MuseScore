@@ -51,6 +51,7 @@ class System;
 class Selection;
 class Score;
 class Staff;
+class Drumset;
 class Lyrics;
 class Spanner;
 
@@ -542,6 +543,191 @@ public:
      * @since 4.7
     */
     Q_INVOKABLE void replaceInstrument(apiv1::Part* part, const QString& instrumentId);
+
+    /** APIDOC
+     * Sets the visibility of a part.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Boolean} visible Whether the part should be visible.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartVisible(apiv1::Part* part, bool visible);
+
+    /** APIDOC
+     * Sets the sharp/flat preference for a part's transposition.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Number} sharpFlat 0 = NONE, 1 = SHARPS, 2 = FLATS.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setPartSharpFlat(apiv1::Part* part, int sharpFlat);
+
+    /** APIDOC
+     * Sets the long instrument name for a part at the given tick position.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
+     * @param {String} name The new long instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentName(apiv1::Part* part, apiv1::Fraction* tick, const QString& name);
+
+    /** APIDOC
+     * Sets the abbreviated instrument name for a part at the given tick position.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
+     * @param {String} abbreviature The new abbreviated instrument name.
+     * @since 4.7
+    */
+    Q_INVOKABLE void setInstrumentAbbreviature(apiv1::Part* part, apiv1::Fraction* tick, const QString& abbreviature);
+
+    /** APIDOC
+     * Sets the staff type for a staff.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} staffTypeId The staff type ID (0 = STANDARD, 4 = PERC_DEFAULT, 6 = TAB_DEFAULT, etc.).
+     * @since 4.7
+    */
+    Q_INVOKABLE void setStaffType(apiv1::Staff* staff, int staffTypeId);
+
+    /** APIDOC
+     * Removes the specified parts from the score.
+     * @method
+     * @param {Engraving.Part[]} parts Array of Part objects to remove.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeParts(QList<apiv1::Part*> parts);
+
+    /** APIDOC
+     * Removes the specified staves from the score.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to remove.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeStaves(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Moves parts to a new position relative to a destination part.
+     * @method
+     * @param {Engraving.Part[]} sourceParts Array of Part objects to move.
+     * @param {Engraving.Part} destinationPart The Part to insert before or after.
+     * @param {Number} insertMode 0 = BEFORE, 1 = AFTER.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveParts(QList<apiv1::Part*> sourceParts, apiv1::Part* destinationPart, int insertMode);
+
+    /** APIDOC
+     * Moves staves to a new position relative to a destination staff.
+     * All staves must belong to the same part.
+     * @method
+     * @param {Engraving.Staff[]} sourceStaves Array of Staff objects to move.
+     * @param {Engraving.Staff} destinationStaff The Staff to insert before or after.
+     * @param {Number} insertMode 0 = BEFORE, 1 = AFTER.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveStaves(QList<apiv1::Staff*> sourceStaves, apiv1::Staff* destinationStaff, int insertMode);
+
+    /** APIDOC
+     * Adds system objects (rehearsal marks, tempo markings, etc.) to the specified staves.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to add system objects to.
+     * @since 4.7
+    */
+    Q_INVOKABLE void addSystemObjects(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Removes system objects from the specified staves.
+     * @method
+     * @param {Engraving.Staff[]} staves Array of Staff objects to remove system objects from.
+     * @since 4.7
+    */
+    Q_INVOKABLE void removeSystemObjects(QList<apiv1::Staff*> staves);
+
+    /** APIDOC
+     * Moves system objects from one staff to another.
+     * @method
+     * @param {Engraving.Staff} sourceStaff The Staff to move system objects from.
+     * @param {Engraving.Staff} destinationStaff The Staff to move system objects to.
+     * @since 4.7
+    */
+    Q_INVOKABLE void moveSystemObjects(apiv1::Staff* sourceStaff, apiv1::Staff* destinationStaff);
+
+    /** APIDOC
+     * Creates and appends a new default staff to the given part.
+     * @method
+     * @param {Engraving.Part} destinationPart The Part to append the staff to.
+     * @return {Engraving.Staff} The newly created Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendStaff(apiv1::Part* destinationPart);
+
+    /** APIDOC
+     * Creates a staff linked to a source staff and appends it to the given part.
+     * The linked staff will share content with the source staff.
+     * @method
+     * @param {Engraving.Staff} sourceStaff The Staff to link from.
+     * @param {Engraving.Part} destinationPart The Part to append the linked staff to.
+     * @return {Engraving.Staff} The newly created linked Staff, or null on failure.
+     * @since 4.7
+    */
+    Q_INVOKABLE apiv1::Staff* appendLinkedStaff(apiv1::Staff* sourceStaff, apiv1::Part* destinationPart);
+
+    /** APIDOC
+     * Sets the visibility of a voice on a staff.
+     * This method only works on excerpt (linked part) scores, not on the main score.
+     * @method
+     * @param {Engraving.Staff} staff The Staff object.
+     * @param {Number} voiceIndex The voice index (0 to 3).
+     * @param {Boolean} visible Whether the voice should be visible.
+     * @return {Boolean} True if successful, false if not an excerpt or voice cannot be disabled.
+     * @since 4.7
+    */
+    Q_INVOKABLE bool setVoiceVisible(apiv1::Staff* staff, int voiceIndex, bool visible);
+
+    /** APIDOC
+     * Replaces the drumset of a part's percussion instrument.
+     * Use Instrument.cloneDrumset() to get a modifiable copy, update it with the
+     * available Drumset setter methods (`setName()`, `setNoteHead()`, `setLine()`,
+     * `setVoice()`, `setStemDirection()`, `setShortcut()`), and then pass the
+     * modified drumset to this method.
+     * @method
+     * @param {Engraving.Part} part The Part object.
+     * @param {Fraction} tick The tick position (use fraction(0, 1) for the beginning).
+     * @param {Engraving.Drumset} drumset The new Drumset to apply.
+     * @since 4.7
+    */
+    Q_INVOKABLE void replaceDrumset(apiv1::Part* part, apiv1::Fraction* tick, apiv1::Drumset* drumset);
+
+    /** APIDOC
+     * Inserts a part with the instrument defined by `instrumentId` at the given index.
+     * @method
+     * @param {String} instrumentId ID of the instrument to be added,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @param {Number} index The position to insert the part at (0 = first).
+     * @since 4.7
+    */
+    Q_INVOKABLE void insertPart(const QString& instrumentId, int index);
+
+    /** APIDOC
+     * Replaces a part with a new instrument, keeping the same position.
+     * This removes the old part and inserts a new one with the given instrument.
+     * @method
+     * @param {Engraving.Part} part The Part to replace.
+     * @param {String} instrumentId ID of the new instrument,
+     * as listed in {@link https://github.com/musescore/MuseScore/blob/master/share/instruments/instruments.xml|instruments.xml}
+     * @since 4.7
+    */
+    Q_INVOKABLE void replacePart(apiv1::Part* part, const QString& instrumentId);
+
+    /** APIDOC
+     * Sets the score order (e.g. "orchestral", "marching-band").
+     * Score orders define the standard ordering of instruments and bracket/barline groupings.
+     * @method
+     * @param {String} orderId The ID of the score order (e.g. "orchestral", "marching-band", "jazz-combo").
+     * @since 4.7
+    */
+    Q_INVOKABLE void setScoreOrder(const QString& orderId);
 
     /** APIDOC
      * Creates and returns a cursor to be used to navigate in the score
