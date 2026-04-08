@@ -711,8 +711,8 @@ void SingleDraw::draw(const BarLine* item, Painter* painter, const PaintOptions&
 
     case BarLineType::BROKEN: {
         double lw = item->style().styleAbsolute(Sid::dashBarWidth) * item->mag();
-        double dl = item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
-        double gl = item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
+        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
+        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
         Pen pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap);
         pen.setDashPattern({ dl, gl });
         painter->setPen(pen);
