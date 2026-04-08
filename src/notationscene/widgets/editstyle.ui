@@ -4974,7 +4974,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
+                  <string>Reset 'Repeat barline to dots distance' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -5135,7 +5135,7 @@
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Repeat barline to dots distance' value</string>
+                  <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
