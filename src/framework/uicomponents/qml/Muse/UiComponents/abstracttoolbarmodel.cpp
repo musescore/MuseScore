@@ -331,6 +331,27 @@ ToolBarItem& AbstractToolBarModel::item(const ToolBarItemList& items, const Acti
     return dummy;
 }
 
+bool AbstractToolBarModel::isCompactMode() const
+{
+    return m_isCompactMode;
+}
+
+void AbstractToolBarModel::setIsCompactMode(bool isCompactMode)
+{
+    if (m_isCompactMode == isCompactMode) {
+        return;
+    }
+
+    for (ToolBarItem* item : std::as_const(m_items)) {
+        if (item) {
+            item->setShowTitle(!isCompactMode);
+        }
+    }
+
+    m_isCompactMode = isCompactMode;
+    emit isCompactModeChanged();
+}
+
 void AbstractToolBarModel::updateShortcutsAll()
 {
     for (ToolBarItem* toolBarItem : std::as_const(m_items)) {

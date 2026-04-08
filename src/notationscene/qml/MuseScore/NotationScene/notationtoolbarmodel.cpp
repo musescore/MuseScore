@@ -43,7 +43,11 @@ void NotationToolBarModel::load()
     ToolBarItemList items;
     for (const ActionCode& code : itemsCodes) {
         ToolBarItem* item = makeItem(code);
-        item->setShowTitle(true);
+        if (!item) {
+            continue;
+        }
+
+        item->setShowTitle(!isCompactMode());
         item->setIsTitleBold(true);
 
         items << item;

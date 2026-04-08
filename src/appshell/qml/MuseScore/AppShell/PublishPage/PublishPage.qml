@@ -63,9 +63,13 @@ DockPage {
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
+            compactPriorityOrder: 1
+
             navigationSection: root.topToolbarKeyNavSec
 
             NotationToolBar {
+                isCompactMode: notationToolBar.isCompact
+
                 navigationPanel.section: notationToolBar.navigationSection
                 navigationPanel.order: 2
             }
