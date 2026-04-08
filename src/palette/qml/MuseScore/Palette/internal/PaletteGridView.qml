@@ -167,7 +167,7 @@ StyledGridView {
         visible: paletteView.showMoreButton
         color: background.color
 
-        z: grid.z + 1
+        z: 1
 
         FlatButton {
             id: moreButton
@@ -211,126 +211,114 @@ StyledGridView {
         interval: 400
     }
 
-    PaletteGridLinesCanvas {
-        id: grid
-        z: 1
+    DropArea {
+        id: paletteDropArea
         anchors.fill: parent
-        drawGrid: parent.drawGrid && !parent.empty
-        stretchWidth: paletteView.stretchWidth
-        offsetX: parent.contentX
-        offsetY: parent.contentY
-        cellWidth: parent.cellWidth
-        cellHeight: parent.cellHeight
 
-        DropArea {
-            id: paletteDropArea
-            anchors.fill: parent
+        property var action
+        property int proposedAction: Qt.IgnoreAction
+        property bool internal: false
 
-            property var action
-            property int proposedAction: Qt.IgnoreAction
-            property bool internal: false
-
-            function onDrag(drag) {
-                if (drag.proposedAction !== proposedAction) {
-                    onEntered(drag);
-                    return;
-                }
-
-                if (drag.source.dragged) {
-                    drag.source.internalDrag = internal;
-                    drag.source.dragCopy = action === Qt.CopyAction;
-                    paletteView.state = "drag";
-                    drag.source.paletteDrag = true;
-                } else if (typeof drag.source.paletteDrag !== "undefined") { // if this is a palette and not, e.g., scoreview
-                    return;
-                }
-
-                drag.accept(action); // confirm we accept the action we determined inside onEntered
-
-                var idx = paletteView.indexAt(drag.x, drag.y);
-                if (idx === -1) {
-                    idx = paletteView.paletteModel.rowCount(paletteView.paletteRootIndex) - (internal ? 1 : 0);
-                }
-
-                if (placeholder.active && placeholder.index === idx) {
-                    return;
-                }
-
-                placeholder.makePlaceholder(idx, { decoration: ui.theme.textFieldColor, toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
+        function onDrag(drag) {
+            if (drag.proposedAction !== proposedAction) {
+                onEntered(drag);
+                return;
             }
 
-            onEntered: function(drag) {
+            if (drag.source.dragged) {
+                drag.source.internalDrag = internal;
+                drag.source.dragCopy = action === Qt.CopyAction;
+                paletteView.state = "drag";
+                drag.source.paletteDrag = true;
+            } else if (typeof drag.source.paletteDrag !== "undefined") { // if this is a palette and not, e.g., scoreview
+                return;
+            }
+
+            drag.accept(action); // confirm we accept the action we determined inside onEntered
+
+            var idx = paletteView.indexAt(drag.x, drag.y);
+            if (idx === -1) {
+                idx = paletteView.paletteModel.rowCount(paletteView.paletteRootIndex) - (internal ? 1 : 0);
+            }
+
+            if (placeholder.active && placeholder.index === idx) {
+                return;
+            }
+
+            placeholder.makePlaceholder(idx, { decoration: ui.theme.textFieldColor, toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
+        }
+
+        onEntered: function(drag) {
+            onDragOverPaletteFinished();
+
+            // first check if controller allows dropping this item here
+            const mimeData = PaletteUtils.dropEventMimeData(drag);
+            internal = (drag.source.parentModelIndex === paletteView.paletteRootIndex);
+            action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
+            proposedAction = drag.proposedAction;
+
+            if (action !== Qt.MoveAction) {
+                internal = false;
+            }
+
+            const accept = (action & drag.supportedActions) && (internal || !paletteView.externalDropBlocked);
+
+            if (accept) {
+                drag.accept(action);
+            } else {
+                drag.accepted = false;
+            }
+
+            // If event is accepted, process the drag in a usual way
+            if (drag.accepted) {
+                onDrag(drag);
+            }
+        }
+
+        onPositionChanged: function(drag) {
+            onDrag(drag)
+        }
+
+        function onDragOverPaletteFinished() {
+            if (placeholder.active) {
+                placeholder.removePlaceholder();
+                paletteView.state = "default";
+            }
+
+            if (drag.source && drag.source.parentModelIndex === paletteView.paletteRootIndex) {
+                drag.source.internalDrag = false;
+            }
+        }
+
+        onExited: onDragOverPaletteFinished();
+
+        onDropped: function(drop) {
+            if (!action) {
                 onDragOverPaletteFinished();
-
-                // first check if controller allows dropping this item here
-                const mimeData = PaletteUtils.dropEventMimeData(drag);
-                internal = (drag.source.parentModelIndex === paletteView.paletteRootIndex);
-                action = paletteView.paletteController.dropAction(mimeData, drag.proposedAction, paletteView.paletteRootIndex, internal);
-                proposedAction = drag.proposedAction;
-
-                if (action !== Qt.MoveAction) {
-                    internal = false;
-                }
-
-                const accept = (action & drag.supportedActions) && (internal || !paletteView.externalDropBlocked);
-
-                if (accept) {
-                    drag.accept(action);
-                } else {
-                    drag.accepted = false;
-                }
-
-                // If event is accepted, process the drag in a usual way
-                if (drag.accepted) {
-                    onDrag(drag);
-                }
+                return;
             }
 
-            onPositionChanged: function(drag) {
-                onDrag(drag)
+            const destIndex = placeholder.active ? placeholder.index : paletteView.paletteModel.rowCount(paletteView.paletteRootIndex);
+            onDragOverPaletteFinished();
+
+            // Moving cells here causes Drag.onDragFinished be not called properly.
+            // Therefore record the necessary information to move cells later.
+            const data = {
+                action: action,
+                srcParentModelIndex: drag.source.parentModelIndex,
+                srcRowIndex: drag.source.rowIndex,
+                paletteView: paletteView,
+                destIndex: destIndex,
+                mimeData: PaletteUtils.dropEventMimeData(drop)
+            };
+
+            if (typeof data.srcParentModelIndex !== "undefined") {
+                drag.source.dropData = data;
+            } else {
+                data.paletteView.insertCell(data.destIndex, data.mimeData, data.action);
             }
 
-            function onDragOverPaletteFinished() {
-                if (placeholder.active) {
-                    placeholder.removePlaceholder();
-                    paletteView.state = "default";
-                }
-
-                if (drag.source && drag.source.parentModelIndex === paletteView.paletteRootIndex) {
-                    drag.source.internalDrag = false;
-                }
-            }
-
-            onExited: onDragOverPaletteFinished();
-
-            onDropped: function(drop) {
-                if (!action) {
-                    onDragOverPaletteFinished();
-                    return;
-                }
-
-                const destIndex = placeholder.active ? placeholder.index : paletteView.paletteModel.rowCount(paletteView.paletteRootIndex);
-                onDragOverPaletteFinished();
-
-                // Moving cells here causes Drag.onDragFinished be not called properly.
-                // Therefore record the necessary information to move cells later.
-                const data = {
-                    action: action,
-                    srcParentModelIndex: drag.source.parentModelIndex,
-                    srcRowIndex: drag.source.rowIndex,
-                    paletteView: paletteView,
-                    destIndex: destIndex,
-                    mimeData: PaletteUtils.dropEventMimeData(drop)
-                };
-
-                if (typeof data.srcParentModelIndex !== "undefined") {
-                    drag.source.dropData = data;
-                } else {
-                    data.paletteView.insertCell(data.destIndex, data.mimeData, data.action);
-                }
-
-                drop.accept(action);
-            }
+            drop.accept(action);
         }
     }
 
@@ -683,7 +671,7 @@ StyledGridView {
 
             function endDrag() {
                 draggedIcon.visible = false
-                draggedIcon.parent = grid
+                draggedIcon.parent = paletteView
                 draggedIcon.x = 0
                 draggedIcon.y = 0
             }
@@ -701,4 +689,15 @@ StyledGridView {
             */
         } // end ListItemBlank
     } // end DelegateModel
+
+    PaletteGridLinesCanvas {
+        id: grid
+        anchors.fill: parent
+        drawGrid: parent.drawGrid && !parent.empty
+        stretchWidth: paletteView.stretchWidth
+        offsetX: parent.contentX
+        offsetY: parent.contentY
+        cellWidth: parent.cellWidth
+        cellHeight: parent.cellHeight
+    }
 }
