@@ -7034,6 +7034,7 @@ void NotationInteraction::navigateToNextSyllable()
 
         if (hasPrecedingRepeat) {
             score()->endCmd();
+            score()->startCmd(TranslatableString("undoableAction", "Add partial lyrics dash"));
             // No from lyrics - create incoming partial dash
             PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
             dash->setIsEndMelisma(false);
