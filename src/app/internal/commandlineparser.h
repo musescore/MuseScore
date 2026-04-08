@@ -24,6 +24,7 @@
 
 #include <QCommandLineParser>
 #include <QStringList>
+#include <memory>
 
 #include "cmdoptions.h"
 
@@ -42,13 +43,13 @@ public:
     void processBuiltinArgs(const QCoreApplication& app);
 
     muse::IApplication::RunMode runMode() const;
-    const CmdOptions& options() const;
+    std::shared_ptr<MuseScoreCmdOptions> options() const;
 
 private:
     void printLongVersion() const;
 
     QCommandLineParser m_parser;
-    CmdOptions m_options;
+    std::shared_ptr<MuseScoreCmdOptions> m_options;
 };
 }
 

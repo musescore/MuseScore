@@ -27,7 +27,7 @@
 #include <memory>
 #include <map>
 
-#include "global/internal/baseapplication.h"
+#include "global/internal/consoleapplication.h"
 #include "../cmdoptions.h"
 
 #include "global/globalmodule.h"
@@ -51,7 +51,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 
 namespace mu::app {
-class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
+class MuseScoreConsoleApp : public muse::ConsoleApplication
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
@@ -65,42 +65,17 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
 
 public:
-    ConsoleApp(const CmdOptions& options);
-
-    void addModule(muse::modularity::IModuleSetup* module);
+    MuseScoreConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
     void showSplash() override;
-    void setup() override;
-    void finish() override;
-
-    muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
-    void destroyContext(const muse::modularity::ContextPtr& ctx) override;
-    size_t contextCount() const override;
-    std::vector<muse::modularity::ContextPtr> contexts() const override;
 
 private:
-    void applyCommandLineOptions(const CmdOptions& options, muse::IApplication::RunMode runMode);
-    int processConverter(const CmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
-    int processDiagnostic(const CmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
-    int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
-    void processAutobot(const CmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx);
-
-    std::vector<muse::modularity::IContextSetup*>& contextSetups(const muse::modularity::ContextPtr& ctx);
-
-    CmdOptions m_options;
-
-    //! NOTE Separately to initialize logger and profiler as early as possible
-    muse::GlobalModule* m_globalModule = nullptr;
-
-    std::vector<muse::modularity::IModuleSetup*> m_modules;
-    muse::modularity::ContextPtr m_context;
-
-    struct Context {
-        muse::modularity::ContextPtr ctx;
-        std::vector<muse::modularity::IContextSetup*> setups;
-    };
-
-    std::vector<Context> m_contexts;
+    void applyCommandLineOptions(const std::shared_ptr<muse::CmdOptions>& options) override;
+    void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
+    int processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
+    int processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
+    int processAudioPluginRegistration(const MuseScoreCmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
+    void processAutobot(const MuseScoreCmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx);
 };
 }
 

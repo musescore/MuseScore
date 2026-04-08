@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_BASEAPPLICATION_H
-#define MUSE_GLOBAL_BASEAPPLICATION_H
+#pragma once
+
+#include <vector>
+#include <memory>
 
 #include "../iapplication.h"
 
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
 #include "global/itickerprovider.h"
+#include "global/modularity/imodulesetup.h"
+
+#include "cmdoptions.h"
 
 namespace muse {
-class BaseApplication : public IApplication
+class GlobalModule;
+class BaseApplication : public IApplication, public std::enable_shared_from_this<BaseApplication>
 {
     GlobalInject<ITickerProvider> tickerProvider;
 public:
 
-    BaseApplication() = default;
+    BaseApplication(const std::shared_ptr<CmdOptions>& appOptions);
 
     static String appName();
     static String appTitle();
@@ -55,9 +61,20 @@ public:
     RunMode runMode() const override;
     bool noGui() const override;
 
+    void addModule(modularity::IModuleSetup* module);
+
+    // application lifecycle
+    void setup() override;
     void restart() override;
     void finish() override;
 
+    // context management
+    muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
+    void destroyContext(const muse::modularity::ContextPtr& ctx) override;
+    size_t contextCount() const override;
+    std::vector<muse::modularity::ContextPtr> contexts() const override;
+
+    // runtime
     void processEvents() override;
 
 #ifndef NO_QT_SUPPORT
@@ -69,12 +86,35 @@ public:
 
 protected:
 
-    void removeIoC();
+    struct ContextData {
+        muse::modularity::ContextPtr ctxId;
+        bool initializing = false;
+        std::shared_ptr<CmdOptions> options;
+        std::vector<muse::modularity::IContextSetup*> setups;
 
-private:
+        bool isValid() const { return ctxId != nullptr && !setups.empty(); }
+    };
+
+    virtual void doSetup(const std::shared_ptr<CmdOptions>& options);
+    virtual void doFinish();
+    virtual void applyCommandLineOptions(const std::shared_ptr<CmdOptions>& options);
+
+    ContextData& contextData(const muse::modularity::ContextPtr& ctx);
+    virtual std::shared_ptr<CmdOptions> makeContextOptions(const muse::StringList& args) const;
+    virtual void showContextSplash(const muse::modularity::ContextPtr& ctx);
+    virtual void setupContext(const muse::modularity::ContextPtr& ctx);
+    virtual void startupScenario(const muse::modularity::ContextPtr& ctx) = 0;
+    virtual void doDestroyContext(const ContextData& data);
+
     RunMode m_runMode = RunMode::GuiApp;
+
+    //! NOTE Separately to initialize logger and profiler as early as possible
+    muse::GlobalModule* m_globalModule = nullptr;
+    std::vector<muse::modularity::IModuleSetup*> m_modules;
+    std::shared_ptr<CmdOptions> m_appOptions;
+
+    std::vector<ContextData> m_contexts;
+
     FinishMode m_finishMode = FinishMode::Default;
 };
 }
-
-#endif // MUSE_GLOBAL_BASEAPPLICATION_H

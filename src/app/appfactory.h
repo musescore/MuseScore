@@ -10,10 +10,10 @@ class AppFactory
 public:
     AppFactory() = default;
 
-    std::shared_ptr<muse::IApplication> newApp(const CmdOptions& options) const;
+    std::shared_ptr<muse::IApplication> newApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const;
 
 private:
-    std::shared_ptr<muse::IApplication> newGuiApp(const CmdOptions& options) const;
-    std::shared_ptr<muse::IApplication> newConsoleApp(const CmdOptions& options) const;
+    std::shared_ptr<muse::IApplication> newGuiApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const;
+    std::shared_ptr<muse::IApplication> newConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options) const;
 };
 }

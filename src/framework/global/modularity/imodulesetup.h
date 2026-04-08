@@ -80,17 +80,6 @@ public:
 
     // Context
     virtual IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const { (void)ctx; return nullptr; }
-
-    // to remove
-    void setApplication(std::shared_ptr<IApplication> app)
-    {
-        m_application = app;
-    }
-
-    std::shared_ptr<IApplication> application() const { return m_application; }
-
-protected:
-    std::shared_ptr<IApplication> m_application;
 };
 }
 
