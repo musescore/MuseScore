@@ -13800,18 +13800,18 @@ followed by dashes</string>
   <tabstop>resetBarWidth</tabstop>
   <tabstop>endBarWidth</tabstop>
   <tabstop>resetEndBarWidth</tabstop>
-  <tabstop>dashBarWidth</tabstop>
-  <tabstop>resetDashBarWidth</tabstop>
-  <tabstop>dashBarDash</tabstop>
-  <tabstop>resetDashBarDash</tabstop>
-  <tabstop>dashBarGap</tabstop>
-  <tabstop>resetDashBarGap</tabstop>
   <tabstop>endBarDistance</tabstop>
   <tabstop>resetEndBarDistance</tabstop>
   <tabstop>doubleBarWidth</tabstop>
   <tabstop>resetDoubleBarWidth</tabstop>
   <tabstop>doubleBarDistance</tabstop>
   <tabstop>resetDoubleBarDistance</tabstop>
+  <tabstop>dashBarWidth</tabstop>
+  <tabstop>resetDashBarWidth</tabstop>
+  <tabstop>dashBarDash</tabstop>
+  <tabstop>resetDashBarDash</tabstop>
+  <tabstop>dashBarGap</tabstop>
+  <tabstop>resetDashBarGap</tabstop>
   <tabstop>repeatBarlineDotSeparation</tabstop>
   <tabstop>resetRepeatBarlineDotSeparation</tabstop>
   <tabstop>radioKeySigCourtesyBarlineAlwaysDouble</tabstop>
