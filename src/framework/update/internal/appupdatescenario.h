@@ -31,10 +31,12 @@
 #include "multiwindows/imultiwindowsprovider.h"
 #include "update/iupdateconfiguration.h"
 #include "update/iappupdateservice.h"
+#include "global/iapplication.h"
 
 namespace muse::update {
 class AppUpdateScenario : public IAppUpdateScenario, public Contextable, public async::Asyncable
 {
+    GlobalInject<IApplication> application;
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
     GlobalInject<IUpdateConfiguration> configuration;
     ContextInject<IInteractive> interactive = { this };

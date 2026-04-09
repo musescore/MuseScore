@@ -136,9 +136,9 @@ Promise<IInteractive::Result> AppUpdateScenario::showNoUpdateMsg()
 {
     std::string webSiteUrl = configuration()->appWebSiteUrl();
     QUrl url(QString::fromStdString(webSiteUrl));
-    const QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
-                                             "Please visit <a href=\"%1\">%2</a> for news on what’s coming next.")
-                        .arg(QString::fromStdString(webSiteUrl), url.host());
+    const QString str = muse::qtrc("update", "You already have the latest version of %1. "
+                                             "Please visit <a href=\"%2\">%3</a> for news on what’s coming next.")
+                        .arg(application()->title().toQString(), QString::fromStdString(webSiteUrl), url.host());
 
     const IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     const IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
@@ -150,6 +150,7 @@ Promise<IInteractive::Result> AppUpdateScenario::showNoUpdateMsg()
 Promise<Ret> AppUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
     UriQuery query("muse://update/appreleaseinfo");
+    query.addParam("appName", Val(application()->title().toStdString()));
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
@@ -192,8 +193,9 @@ Promise<Ret> AppUpdateScenario::downloadRelease()
 
 Promise<Ret> AppUpdateScenario::askToCloseAppAndCompleteInstall(const io::path_t& installerPath)
 {
-    const std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
-                                                 "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
+    const std::string info = muse::qtrc("update", "%1 needs to close to complete the installation. "
+                                                  "If you have any unsaved changes, you will be prompted to save them before %1 closes.")
+                             .arg(application()->title().toQString()).toStdString();
     const int closeBtn = int(IInteractive::Button::CustomButton) + 1;
     const IInteractive::ButtonDatas buttons = {
         interactive()->buttonData(IInteractive::Button::Cancel),
