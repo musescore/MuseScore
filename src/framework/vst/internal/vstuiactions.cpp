@@ -34,13 +34,13 @@ using namespace muse::vst;
 const UiActionList VstUiActions::m_actions = {
     UiAction("vst-use-oldview",
              muse::ui::UiCtxAny,
-             muse::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_DISABLED,
              TranslatableString("action", "Use old view"),
              Checkable::Yes
              ),
     UiAction("vst-use-newview",
              muse::ui::UiCtxAny,
-             muse::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_DISABLED,
              TranslatableString("action", "Use new view"),
              Checkable::Yes
              )
