@@ -56,7 +56,11 @@ Text {
             cursorShape: root.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
             hoverEnabled: true
 
-            onPressed: {
+            onPressed: function(mouse) {
+                if (root.hoveredLink) {
+                    mouse.accepted = false
+                    return
+                }
                 ui.tooltip.hide(root, true)
             }
 
