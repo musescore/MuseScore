@@ -471,6 +471,12 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::AVOID_BARLINES:
         m_avoidBarlines = v.toBool();
         break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
+        if (separator()) {
+            separator()->setVisible(v.toBool());
+        }
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;

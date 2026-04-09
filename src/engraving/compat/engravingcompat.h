@@ -45,5 +45,6 @@ private:
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
     static bool resetHookHeightSign(MasterScore* masterScore);
+    static bool setLyricLineVisibility(MasterScore* masterScore);
 };
 } // namespace mu::engraving::compat
