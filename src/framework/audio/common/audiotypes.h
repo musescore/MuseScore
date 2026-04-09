@@ -120,13 +120,17 @@ struct SoundTrackFormat {
     OutputSpec outputSpec;
     AudioSampleFormat sampleFormat = AudioSampleFormat::Undefined;
     int bitRate = 0;
+    msecs_t leadingSilenceDuration = 0;
+    msecs_t trailingSilenceDuration = 0;
 
     bool operator==(const SoundTrackFormat& other) const
     {
         return type == other.type
                && outputSpec == other.outputSpec
                && sampleFormat == other.sampleFormat
-               && bitRate == other.bitRate;
+               && bitRate == other.bitRate
+               && leadingSilenceDuration == other.leadingSilenceDuration
+               && trailingSilenceDuration == other.trailingSilenceDuration;
     }
 
     bool isValid() const

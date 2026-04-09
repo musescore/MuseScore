@@ -82,7 +82,7 @@ private:
     Config makeConfig() const;
 
     void startVideoExport(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& cfg);
-    void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath);
+    void startAudioExport(notation::INotationPtr notation, const muse::io::path_t& audioPath, const Config& cfg);
 
     void doGenerate(muse::media::IVideoEncoderPtr encoder, notation::INotationPtr notation, const Config& config);
 

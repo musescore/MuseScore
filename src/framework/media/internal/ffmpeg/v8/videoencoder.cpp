@@ -588,7 +588,7 @@ bool VideoEncoder::encodeVideo(const ByteArray& videoData, int maxFrames)
     return true;
 }
 
-bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
+bool VideoEncoder::addAudio(const io::path_t& audioPath)
 {
     if (m_outputPath.empty()) {
         LOGE() << "addAudio: encoder was not opened or path not set";
@@ -703,13 +703,6 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
         return false;
     }
 
-    int64_t audioOffsetPts = 0;
-    {
-        AVStream* audioOutStream = outputFmtCtx->streams[outAudioIdx];
-        audioOffsetPts = static_cast<int64_t>(audioOffsetSec * audioOutStream->time_base.den
-                                              / audioOutStream->time_base.num);
-    }
-
     AVPacket* pkt = m_ffmpegHandler->av_packet_alloc();
 
     while (m_ffmpegHandler->av_read_frame(videoFmtCtx, pkt) >= 0) {
@@ -728,8 +721,6 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath, double audioOffsetSec)
             pkt->stream_index = outAudioIdx;
             m_ffmpegHandler->av_packet_rescale_ts(pkt, audioFmtCtx->streams[audioInIdx]->time_base,
                                                   outputFmtCtx->streams[outAudioIdx]->time_base);
-            pkt->pts += audioOffsetPts;
-            pkt->dts += audioOffsetPts;
             pkt->pos = -1;
             m_ffmpegHandler->av_interleaved_write_frame(outputFmtCtx, pkt);
         }

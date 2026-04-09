@@ -114,7 +114,17 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
 
-    doWrite(path, format);
+    SoundTrackFormat actualFormat = format;
+
+    double leadingSilenceSec = muse::value(options, OptionKey::LEADING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec)
+                                          ? static_cast<msecs_t>(leadingSilenceSec * 1000000.0) : 0;
+
+    double trailingSilenceSec = muse::value(options, OptionKey::TRAILING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
+                                           ? static_cast<msecs_t>(trailingSilenceSec * 1000000.0) : 0;
+
+    doWrite(path, actualFormat);
 
     bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
     if (waitForCompletion) {

@@ -60,8 +60,11 @@ private:
     engine::IAudioSourcePtr m_source = nullptr;
 
     std::vector<float> m_intermBuffer;
+
     samples_t m_renderStep = 0;
-    samples_t m_totalSamplesPerChannel = 0;
+    samples_t m_leadingSilenceSamples = 0;
+    samples_t m_dataSamples = 0;
+    samples_t m_totalSamples = 0;
 
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
 

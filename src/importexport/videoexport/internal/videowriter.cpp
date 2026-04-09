@@ -129,7 +129,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
     startVideoExport(encoder, notation, cfg);
 
     if (withAudio) {
-        startAudioExport(notation, tempAudioPath);
+        startAudioExport(notation, tempAudioPath, cfg);
     } else {
         m_audioCompleted = true;
         m_audioRet = muse::make_ok();
@@ -151,7 +151,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
 
     if (withAudio) {
         if (result && m_audioRet) {
-            if (!encoder->addAudio(tempAudioPath, cfg.leadingSec)) {
+            if (!encoder->addAudio(tempAudioPath)) {
                 result = make_ret(muse::Ret::Code::UnknownError);
             }
         } else if (!result) {
@@ -229,7 +229,7 @@ void VideoWriter::startVideoExport(muse::media::IVideoEncoderPtr encoder, INotat
     });
 }
 
-void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath)
+void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath, const Config& cfg)
 {
     m_audioWriter = writers()->writer("aac");
     if (!m_audioWriter) {
@@ -246,6 +246,8 @@ void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t
 
     Options audioOpts;
     audioOpts[OptionKey::WAIT_FOR_COMPLETION] = muse::Val(false);
+    audioOpts[OptionKey::LEADING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.leadingSec));
+    audioOpts[OptionKey::TRAILING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.trailingSec));
 
     muse::io::Buffer audioDevice;
     audioDevice.setMeta("file_path", audioPath.toStdString());

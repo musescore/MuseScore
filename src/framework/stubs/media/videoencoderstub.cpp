@@ -41,7 +41,7 @@ void VideoEncoderStub::finishEncode()
 {
 }
 
-bool VideoEncoderStub::addAudio(const muse::io::path_t&, double)
+bool VideoEncoderStub::addAudio(const muse::io::path_t&)
 {
     return false;
 }

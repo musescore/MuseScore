@@ -51,7 +51,10 @@ public:
         BEATS_COLORS,
         WAIT_FOR_COMPLETION,
 
-        WITH_AUDIO, // todo: delete after stabilization of the video export + audio
+        WITH_AUDIO,
+
+        LEADING_SILENCE_SEC,
+        TRAILING_SILENCE_SEC,
     };
 
     using Options = std::map<OptionKey, muse::Val>;
