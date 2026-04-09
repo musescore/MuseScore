@@ -358,11 +358,13 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
     }
 
     if (m_useDynamicEvents) {
-        velocity_t result = RealRound(expressionCtx.expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+        float fraction = expressionCtx.expressionCurve.empty() ? 0.5f : expressionCtx.expressionCurve.velocityFraction();
+        velocity_t result = RealRound(fraction * MAX_SUPPORTED_VELOCITY, 0);
         return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
     }
 
-    dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
+    dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.empty()
+                                   ? expressionCtx.nominalDynamicLevel : expressionCtx.expressionCurve.maxAmplitudeLevel();
     return expressionLevel(dynamicLevel) << 9; // midi::Event::scaleUp(7,16)
 }
 

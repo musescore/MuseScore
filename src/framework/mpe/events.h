@@ -228,6 +228,10 @@ private:
             m_expressionCtx.velocityOverride = requiredVelocityFraction;
         }
 
+        if (m_expressionCtx.expressionCurve.empty()) {
+            return;
+        }
+
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
 

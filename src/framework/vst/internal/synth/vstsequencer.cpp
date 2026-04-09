@@ -355,7 +355,8 @@ float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
         return std::clamp(expressionCtx.velocityOverride.value(), 0.f, 1.f);
     }
 
-    mpe::dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
+    mpe::dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.empty()
+                                        ? expressionCtx.nominalDynamicLevel : expressionCtx.expressionCurve.maxAmplitudeLevel();
     return expressionLevel(dynamicLevel);
 }
 
