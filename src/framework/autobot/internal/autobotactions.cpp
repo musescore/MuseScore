@@ -33,7 +33,7 @@ using namespace muse::autobot;
 const UiActionList AutobotActions::m_actions = {
     UiAction("autobot-show-scripts",
              muse::ui::UiCtxAny,
-             muse::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_DISABLED,
              TranslatableString("action", "Show &scripts…"),
              TranslatableString("action", "Show scripts")
              ),
