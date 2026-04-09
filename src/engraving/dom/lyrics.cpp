@@ -365,15 +365,9 @@ void Lyrics::removeFromScore()
     }
 
     if (!plainText().isEmpty()) {
-        for (auto sp : score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks())) {
-            if (!sp.value->isPartialLyricsLine() || sp.value->track() != track()) {
-                continue;
-            }
-            PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-            if (partialLine->isEndMelisma() || partialLine->verse() != verse() || partialLine->placement() != placement()) {
-                continue;
-            }
-            score()->undoRemoveElement(partialLine);
+        PartialLyricsLine* partialDash = findPrevPartialLyricsLineDash(this);
+        if (partialDash) {
+            score()->undoRemoveElement(partialDash);
         }
     }
 
