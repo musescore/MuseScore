@@ -33,7 +33,7 @@ using namespace muse::testflow;
 const UiActionList TestflowActions::m_actions = {
     UiAction("testflow-show-scripts",
              muse::ui::UiCtxAny,
-             muse::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_DISABLED,
              TranslatableString("action", "Show &scripts…"),
              TranslatableString("action", "Show scripts")
              ),
