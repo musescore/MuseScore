@@ -154,7 +154,7 @@ void MuseSamplerCheckUpdateScenario::openMuseHubAndQuit()
 void MuseSamplerCheckUpdateScenario::openMuseHubWebsiteAndQuit()
 {
 #ifdef Q_OS_LINUX
-    platformInteractive()->openUrl(globalConfiguration()->museScoreUrl());
+    platformInteractive()->openUrl(globalConfiguration()->appWebSiteUrl());
 #else
     platformInteractive()->openUrl(globalConfiguration()->museHubWebUrl());
 #endif

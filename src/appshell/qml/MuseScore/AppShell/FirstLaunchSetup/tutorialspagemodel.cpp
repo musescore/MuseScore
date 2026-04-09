@@ -30,5 +30,5 @@ TutorialsPageModel::TutorialsPageModel(QObject* parent)
 
 QUrl TutorialsPageModel::museScorePrivacyPolicyUrl() const
 {
-    return QUrl(QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl()));
+    return QUrl(QString::fromStdString(updateConfiguration()->privacyPolicyUrl()));
 }

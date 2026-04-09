@@ -49,8 +49,8 @@ public:
 
     MOCK_METHOD(muse::network::RequestHeaders, updateHeaders, (), (const, override));
 
-    MOCK_METHOD(std::string, museScoreUrl, (), (const, override));
-    MOCK_METHOD(std::string, museScorePrivacyPolicyUrl, (), (const, override));
+    MOCK_METHOD(std::string, appWebSiteUrl, (), (const, override));
+    MOCK_METHOD(std::string, privacyPolicyUrl, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, updateDataPath, (), (const, override));
     MOCK_METHOD(muse::io::path_t, updateRequestHistoryJsonPath, (), (const, override));
