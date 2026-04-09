@@ -119,7 +119,7 @@ StyledDialogView {
                 obj.reset()
             }
 
-            preferencesModel.resetFactorySettings()
+            Qt.callLater(preferencesModel.resetFactorySettings)
         }
     }
 
