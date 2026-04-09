@@ -37,8 +37,6 @@ static const Settings::Key CHECK_FOR_UPDATE_TEST_MODE_KEY(module_name, "applicat
 static const Settings::Key ALLOW_UPDATE_ON_PRERELEASE(module_name, "application/allowUpdateOnPreRelease");
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
 
-static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
-
 void UpdateConfiguration::init()
 {
     m_config = ConfigReader::read(":/configs/update.cfg");
@@ -125,12 +123,12 @@ muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const
 
 std::string UpdateConfiguration::museScoreUrl() const
 {
-    return globalConfiguration()->museScoreUrl();
+    return m_config.value("appUrl").toString();
 }
 
 std::string UpdateConfiguration::museScorePrivacyPolicyUrl() const
 {
-    return globalConfiguration()->museScoreUrl() + PRIVACY_POLICY_URL_PATH;
+    return m_config.value("privacyPolicyUrl").toString();
 }
 
 muse::io::path_t UpdateConfiguration::updateDataPath() const
