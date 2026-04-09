@@ -22,6 +22,8 @@
 
 #include "aacencoder.h"
 
+#include <algorithm>
+
 #include "aacenc_lib.h"
 #include "FDK_audio.h"
 
@@ -154,6 +156,11 @@ bool AacEncoder::init(const io::path_t& path, const SoundTrackFormat& format, co
     return true;
 }
 
+void AacEncoder::prepareOutputBuffer(const samples_t /*totalSamplesNumber*/)
+{
+    m_outputBuffer.clear();
+}
+
 size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
     IF_ASSERT_FAILED(m_handler && m_fileStream) {
@@ -164,12 +171,11 @@ size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
     const size_t frameLength = m_handler->frameLength;
     const size_t samplesPerFrame = frameLength * channels;
 
-    size_t totalBytesWritten = 0;
     size_t inputOffset = 0;
-    const size_t totalSamples = samplesPerChannel * channels;
+    const size_t totalSamples = samplesPerChannel * static_cast<size_t>(channels);
 
     while (inputOffset < totalSamples) {
-        size_t samplesToProcess = std::min(samplesPerFrame, totalSamples - inputOffset);
+        const size_t samplesToProcess = std::min(samplesPerFrame, totalSamples - inputOffset);
 
         for (size_t i = 0; i < samplesToProcess; ++i) {
             m_handler->inputBuffer[i] = dsp::convertFloatSamples<INT_PCM>(input[inputOffset + i], 16);
@@ -204,19 +210,22 @@ size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
 
         inArgs.numInSamples = static_cast<int>(samplesToProcess);
 
-        AACENC_ERROR err = aacEncEncode(m_handler->handle, &inBufDesc, &outBufDesc, &inArgs, &outArgs);
+        const AACENC_ERROR err = aacEncEncode(m_handler->handle, &inBufDesc, &outBufDesc, &inArgs, &outArgs);
 
         if (err == AACENC_ENCODE_EOF) {
-            break;
+            LOGE() << "AAC encoding unexpected EOF";
+            return 0;
         }
         if (err != AACENC_OK) {
             LOGE() << "AAC encoding failed:" << err;
-            break;
+            return 0;
         }
 
         if (outArgs.numOutBytes > 0) {
-            size_t written = std::fwrite(m_handler->outputBuffer.data(), 1, outArgs.numOutBytes, m_fileStream);
-            totalBytesWritten += written;
+            const size_t written = std::fwrite(m_handler->outputBuffer.data(), 1, outArgs.numOutBytes, m_fileStream);
+            if (written != static_cast<size_t>(outArgs.numOutBytes)) {
+                return 0;
+            }
         }
 
         inputOffset += samplesToProcess;
@@ -226,7 +235,11 @@ size_t AacEncoder::encode(samples_t samplesPerChannel, const float* input)
         }
     }
 
-    return totalBytesWritten;
+    if (inputOffset != totalSamples) {
+        return 0;
+    }
+
+    return static_cast<size_t>(samplesPerChannel) * static_cast<size_t>(channels);
 }
 
 size_t AacEncoder::flush()
@@ -285,9 +298,9 @@ size_t AacEncoder::flush()
     return totalBytesWritten;
 }
 
-size_t AacEncoder::requiredOutputBufferSize(samples_t totalSamplesNumber) const
+size_t AacEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
 {
-    return totalSamplesNumber;
+    return 0;
 }
 
 bool AacEncoder::openDestination(const io::path_t& path)

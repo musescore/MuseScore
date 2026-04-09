@@ -44,6 +44,10 @@ public:
     MOCK_METHOD(Ret, readFile, (const io::path_t& filePath, ByteArray & data), (const, override));
     MOCK_METHOD(Ret, writeFile, (const io::path_t& filePath, const ByteArray& data), (override));
 
+    MOCK_METHOD(RetVal<StreamId>, openStream, (const io::path_t& filePath, OpenMode mode), (override));
+    MOCK_METHOD(Ret, writeToStream, (StreamId fileId, const ByteArray& data, uint64_t offset), (override));
+    MOCK_METHOD(Ret, closeStream, (StreamId fileId), (override));
+
     MOCK_METHOD(Ret, makePath, (const io::path_t&), (const, override));
     MOCK_METHOD(Ret, makeLink, (const io::path_t& targetPath, const io::path_t& linkPath), (const, override));
 

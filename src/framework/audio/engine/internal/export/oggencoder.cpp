@@ -28,6 +28,9 @@
 #include "opusenc.h"
 #endif
 
+#include <algorithm>
+#include <climits>
+
 #include "log.h"
 
 using namespace muse::audio;
@@ -35,16 +38,23 @@ using namespace muse::audio::encode;
 
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {
-    m_progress.progress(0, 100);
-    int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel);
-    m_progress.progress(100, 100);
+    if (samplesPerChannel == 0 || !m_opusEncoder) {
+        return 0;
+    }
 
-    return code == OPE_OK ? samplesPerChannel : 0;
+    const int n = static_cast<int>(std::min(samplesPerChannel, static_cast<samples_t>(INT_MAX)));
+    const int code = ope_encoder_write_float(m_opusEncoder, input, n);
+
+    return code == OPE_OK ? static_cast<size_t>(n) : 0;
 }
 
 size_t OggEncoder::flush()
 {
-    return ope_encoder_drain(m_opusEncoder);
+    if (!m_opusEncoder) {
+        return 0;
+    }
+
+    return ope_encoder_drain(m_opusEncoder) == OPE_OK ? 1 : 0;
 }
 
 size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) const
@@ -55,13 +65,21 @@ size_t OggEncoder::requiredOutputBufferSize(samples_t /*totalSamplesNumber*/) co
 bool OggEncoder::openDestination(const io::path_t& path)
 {
     OggOpusComments* comments = ope_comments_create();
+    if (!comments) {
+        return false;
+    }
+
     int error = 0;
 
     m_opusEncoder = ope_encoder_create_file(path.c_str(), comments, m_format.outputSpec.sampleRate,
                                             m_format.outputSpec.audioChannelCount, 0, &error);
+    ope_comments_destroy(comments);
 
-    if (error != OPE_OK && m_opusEncoder) {
-        ope_encoder_destroy(m_opusEncoder);
+    if (error != OPE_OK || !m_opusEncoder) {
+        if (m_opusEncoder) {
+            ope_encoder_destroy(m_opusEncoder);
+            m_opusEncoder = nullptr;
+        }
         return false;
     }
 
@@ -72,5 +90,8 @@ bool OggEncoder::openDestination(const io::path_t& path)
 
 void OggEncoder::closeDestination()
 {
-    ope_encoder_destroy(m_opusEncoder);
+    if (m_opusEncoder) {
+        ope_encoder_destroy(m_opusEncoder);
+        m_opusEncoder = nullptr;
+    }
 }

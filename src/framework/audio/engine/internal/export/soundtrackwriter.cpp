@@ -22,8 +22,10 @@
 
 #include "soundtrackwriter.h"
 
+#include <algorithm>
+#include <cstdint>
+
 #include "global/defer.h"
-#include "global/async/processevents.h"
 
 #include "audio/common/audioerrors.h"
 
@@ -39,9 +41,6 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::audio::soundtrack;
-
-static constexpr int PREPARE_STEP = 0;
-static constexpr int ENCODE_STEP = 1;
 
 static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType type)
 {
@@ -66,25 +65,26 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     if (!m_source) {
         return;
     }
+    IF_ASSERT_FAILED(format.isValid()) {
+        return;
+    }
 
     const OutputSpec& outputSpec = format.outputSpec;
-    samples_t totalSamplesNumber = (totalDuration / 1000000.f) * outputSpec.audioChannelCount * outputSpec.sampleRate;
-    samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
+    const uint64_t totalUs = static_cast<uint64_t>(std::max<int64_t>(0, totalDuration));
+    m_totalSamplesPerChannel = static_cast<samples_t>((totalUs * static_cast<uint64_t>(outputSpec.sampleRate)) / 1000000ULL);
 
-    m_inputBuffer.resize(totalSamplesNumber);
+    const samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
     m_intermBuffer.resize(intermediateSamplesNumber);
     m_renderStep = outputSpec.samplesPerChannel;
 
     m_encoderPtr = createEncoder(format.type);
-
     if (!m_encoderPtr) {
         return;
     }
 
-    m_encoderPtr->init(destination, format, totalSamplesNumber);
-    m_encoderPtr->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string) {
-        sendStepProgress(ENCODE_STEP, current, total);
-    });
+    if (!m_encoderPtr->init(destination, format, m_totalSamplesPerChannel)) {
+        m_encoderPtr.reset();
+    }
 }
 
 SoundTrackWriter::~SoundTrackWriter()
@@ -118,19 +118,9 @@ Ret SoundTrackWriter::write()
         m_isAborted = false;
     };
 
-    Ret ret = generateAudioData();
+    Ret ret = writeStreaming();
     if (!ret) {
         return ret;
-    }
-
-    size_t bytes = m_encoderPtr->encode(m_inputBuffer.size() / m_encoderPtr->format().outputSpec.audioChannelCount, m_inputBuffer.data());
-
-    if (m_isAborted) {
-        return make_ret(Ret::Code::Cancel);
-    }
-
-    if (bytes == 0) {
-        return make_ret(Err::ErrorEncode);
     }
 
     return muse::make_ok();
@@ -146,26 +136,30 @@ Progress SoundTrackWriter::progress()
     return m_progress;
 }
 
-Ret SoundTrackWriter::generateAudioData()
+Ret SoundTrackWriter::writeStreaming()
 {
-    TRACEFUNC;
+    if (m_totalSamplesPerChannel == 0) {
+        LOGI() << "No audio to export";
+        return make_ret(Err::NoAudioToExport);
+    }
 
-    const size_t inputBufferMaxOffset = m_inputBuffer.size();
-    size_t inputBufferOffset = 0;
+    samples_t framesWritten = 0;
 
-    sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
+    sendStreamingProgress(0, m_totalSamplesPerChannel);
 
-    while (inputBufferOffset < inputBufferMaxOffset && !m_isAborted) {
-        m_source->process(m_intermBuffer.data(), m_renderStep);
+    while (framesWritten < m_totalSamplesPerChannel && !m_isAborted) {
+        const samples_t chunk = static_cast<samples_t>(
+            std::min<uint64_t>(m_renderStep, m_totalSamplesPerChannel - framesWritten));
 
-        size_t samplesToCopy = std::min(m_intermBuffer.size(), inputBufferMaxOffset - inputBufferOffset);
+        m_source->process(m_intermBuffer.data(), chunk);
 
-        std::copy(m_intermBuffer.begin(),
-                  m_intermBuffer.begin() + samplesToCopy,
-                  m_inputBuffer.begin() + inputBufferOffset);
+        const size_t encoded = m_encoderPtr->encode(chunk, m_intermBuffer.data());
+        if (encoded == 0) {
+            return make_ret(Err::ErrorEncode);
+        }
 
-        inputBufferOffset += samplesToCopy;
-        sendStepProgress(PREPARE_STEP, inputBufferOffset, inputBufferMaxOffset);
+        framesWritten += chunk;
+        sendStreamingProgress(framesWritten, m_totalSamplesPerChannel);
 
         //! NOTE It is necessary for cancellation to work
         //! and for information about the audio signal to be transmitted.
@@ -176,18 +170,11 @@ Ret SoundTrackWriter::generateAudioData()
         return make_ret(Ret::Code::Cancel);
     }
 
-    if (inputBufferOffset == 0) {
-        LOGI() << "No audio to export";
-        return make_ret(Err::NoAudioToExport);
-    }
-
     return muse::make_ok();
 }
 
-void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total)
+void SoundTrackWriter::sendStreamingProgress(uint64_t framesWritten, uint64_t totalFrames)
 {
-    int stepRange = step == PREPARE_STEP ? 80 : 20;
-    int stepProgressStart = step == PREPARE_STEP ? 0 : 80;
-    int stepCurrentProgress = stepProgressStart + ((current * 100 / total) * stepRange) / 100;
-    m_progress.progress(stepCurrentProgress, 100);
+    const int current = totalFrames > 0 ? static_cast<int>((framesWritten * 100) / totalFrames) : 0;
+    m_progress.progress(current, 100);
 }

@@ -54,6 +54,10 @@ public:
     muse::Ret readFile(const muse::io::path_t& filePath, muse::ByteArray& data) const override;
     muse::Ret writeFile(const muse::io::path_t& filePath, const muse::ByteArray& data) override;
 
+    muse::RetVal<StreamId> openStream(const muse::io::path_t& filePath, OpenMode mode) override;
+    muse::Ret writeToStream(StreamId fileId, const muse::ByteArray& data, uint64_t offset = STREAM_POS_CURRENT) override;
+    muse::Ret closeStream(StreamId fileId) override;
+
     //! NOTE File info
     muse::io::path_t canonicalFilePath(const muse::io::path_t& filePath) const override;
     muse::io::path_t absolutePath(const muse::io::path_t& filePath) const override;
@@ -64,6 +68,13 @@ public:
 
 private:
 
+    struct OpenFileState {
+        muse::io::path_t path;
+        size_t pos = 0;
+    };
+
     std::map<muse::io::path_t, muse::ByteArray> m_files;
+    std::map<StreamId, OpenFileState> m_openStates;
+    StreamId m_nextStreamId = 0;
 };
 }

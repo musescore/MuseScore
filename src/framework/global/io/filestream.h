@@ -19,29 +19,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
-#include "abstractaudioencoder.h"
+#include "global/modularity/ioc.h"
+#include "ifilesystem.h"
 
-struct AacEncoderHandler;
+#include "iodevice.h"
+#include "path.h"
 
-namespace muse::audio::encode {
-class AacEncoder : public AbstractAudioEncoder
+namespace muse::io {
+class FileStream : public IODevice
 {
-public:
-    bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesNumber) override;
+    static inline GlobalInject<IFileSystem> fileSystem;
 
-    size_t encode(samples_t samplesPerChannel, const float* input) override;
-    size_t flush() override;
+public:
+    FileStream() = default;
+    explicit FileStream(const path_t& filePath);
+    ~FileStream() override;
+
+    FileStream(const FileStream&) = delete;
+    FileStream& operator=(const FileStream&) = delete;
+
+    const path_t& filePath() const;
 
 protected:
-    size_t requiredOutputBufferSize(samples_t totalSamplesNumber) const override;
-    void prepareOutputBuffer(const samples_t totalSamplesNumber) override;
-    bool openDestination(const io::path_t& path) override;
-    void closeDestination() override;
+    bool doOpen(OpenMode m) override;
+    size_t dataSize() const override;
+    const uint8_t* rawData() const override;
+    bool resizeData(size_t size) override;
+    size_t writeData(const uint8_t* data, size_t len) override;
 
 private:
-    AacEncoderHandler* m_handler = nullptr;
+    path_t m_filePath;
+    size_t m_size = 0;
+
+    StreamId m_streamId = INVALID_STREAM_ID;
+    size_t m_expectedPos = 0;
 };
 }

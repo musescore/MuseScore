@@ -31,6 +31,8 @@ namespace muse::audio::encode {
 class WavEncoder : public AbstractAudioEncoder
 {
 public:
+    bool init(const io::path_t& path, const SoundTrackFormat& format, const samples_t totalSamplesPerChannel) override;
+
     size_t encode(samples_t samplesPerChannel, const float* input) override;
     size_t flush() override;
 
@@ -40,7 +42,12 @@ protected:
     void closeDestination() override;
 
 private:
+    bool writePlaceholderHeader();
+    void patchHeaderSizes();
+
     std::ofstream m_fileStream;
+    bool m_headerWritten = false;
+    uint64_t m_pcmStartPos = 0;
 };
 }
 
