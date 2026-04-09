@@ -2306,41 +2306,6 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
 }
 
 //---------------------------------------------------------
-//   exchangeVoice
-//---------------------------------------------------------
-
-void Measure::exchangeVoice(track_idx_t strack, track_idx_t dtrack, staff_idx_t staffIdx)
-{
-    for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        s->swapElements(strack, dtrack);
-    }
-
-    auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), endTick().ticks() - 1);
-    Fraction start = tick();
-    Fraction end = start + ticks();
-    for (auto i = spanners.begin(); i < spanners.end(); i++) {
-        Spanner* sp = i->value;
-        Fraction spStart = sp->tick();
-        Fraction spEnd = spStart + sp->ticks();
-        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
-             start.ticks(), end.ticks());
-        if (sp->isSlur() && (spStart >= start || spEnd < end)) {
-            if (sp->track() == strack && spStart >= start) {
-                sp->setTrack(dtrack);
-            } else if (sp->track() == dtrack && spStart >= start) {
-                sp->setTrack(strack);
-            }
-            if (sp->track2() == strack && spEnd < end) {
-                sp->setTrack2(dtrack);
-            } else if (sp->track2() == dtrack && spEnd < end) {
-                sp->setTrack2(strack);
-            }
-        }
-    }
-    checkMultiVoices(staffIdx);     // probably true, but check for invisible notes & rests
-}
-
-//---------------------------------------------------------
 //   checkMultiVoices
 ///   Check for more than on voice in this measure and staff and
 ///   set MStaff->hasVoices

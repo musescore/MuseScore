@@ -139,7 +139,6 @@ enum class CommandType : signed char {
 
     // Voices
     ExchangeVoice,
-    CloneVoice,
 
     // Excerpts
     AddExcerpt,

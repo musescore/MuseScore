@@ -103,6 +103,8 @@ target_sources(engraving PRIVATE
 
     editing/addremoveelement.cpp
     editing/addremoveelement.h
+    editing/clonevoice.cpp
+    editing/clonevoice.h
     editing/cmd.cpp
     editing/cmd.h
     editing/edit.cpp
@@ -150,8 +152,10 @@ target_sources(engraving PRIVATE
     editing/edittie.h
     editing/edittremolo.cpp
     editing/edittremolo.h
-    editing/editvoicing.cpp
-    editing/editvoicing.h
+    editing/exchangevoices.cpp
+    editing/exchangevoices.h
+    editing/implodeexplode.cpp
+    editing/implodeexplode.h
     editing/inserttime.cpp
     editing/inserttime.h
     editing/elementeditdata.h
