@@ -158,3 +158,11 @@ void AutomationOverlay::updatePolylinesGeometry(size_t firstIndex, size_t lastIn
         polyline->setHeight(lineHeight * m_viewMatrix.m22());
     }
 }
+
+void AutomationOverlay::updateAllPolylinesGeometry()
+{
+    IF_ASSERT_FAILED(!m_automationLinesData.empty()) {
+        return;
+    }
+    updatePolylinesGeometry(0, m_automationLinesData.size() - 1);
+}

@@ -100,25 +100,41 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
         }
 
         QVariantList pointsOnLine;
+        const auto addPointToLine = [&pointsOnLine](double x, double y) {
+            QVariantMap pointData;
+            pointData["x"] = x;
+            pointData["y"] = y;
+            pointsOnLine << pointData;
+        };
+
+        const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
 
         const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
-        for (auto point : automation()->curve(key)) {
+        for (auto& point : automation()->curve(key)) {
             const int tick = point.first;
             if (tick < systemStartTick || tick > systemEndTick) {
                 continue;
             }
 
+            const Fraction frac = Fraction::fromTicks(tick);
+            const Segment* seg = score()->tick2segmentMM(frac);
+            IF_ASSERT_FAILED(seg) {
+                continue;
+            }
+
+            // TODO: The following won't work for dynamics at time ticks...
+
+            // x positions scaled between 0 and 1 (where 0 is the staff start and 1 is the staff end)
+            const double pointX = (seg->canvasX() - staffCanvasRect.x()) / staffCanvasRect.width();
+
             const mu::engraving::AutomationPoint& autoPoint = point.second;
+            if (!muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
+                // inValue is always between 0 and 1 - higher value == lower Y...
+                addPointToLine(pointX, 1 - autoPoint.inValue);
+            }
 
-            QVariantMap pointData;
-
-            // TODO: xFactor is a placeholder - it assumes time is linear in a staff - which is not the case. We should
-            // instead base this on segment/timetick positions...
-            const double xFactor = static_cast<double>(tick - systemStartTick) / (systemEndTick - systemStartTick);
-            pointData["x"] = xFactor;
-
-            pointData["y"] = autoPoint.inValue;
-            pointsOnLine << pointData;
+            // outValue is always between 0 and 1 - higher value == lower Y...
+            addPointToLine(pointX, 1 - autoPoint.outValue);
         }
 
         if (pointsOnLine.isEmpty()) {
@@ -126,13 +142,11 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
             continue;
         }
 
-        const muse::RectF staffRect = sysStaff->bbox().translated(system->canvasPos());
-
         QVariantMap lineData;
-        lineData["x"] = staffRect.x();
-        lineData["y"] = staffRect.y();
-        lineData["width"] = staffRect.width();
-        lineData["height"] = staffRect.height();
+        lineData["x"] = staffCanvasRect.x();
+        lineData["y"] = staffCanvasRect.y();
+        lineData["width"] = staffCanvasRect.width();
+        lineData["height"] = staffCanvasRect.height();
         lineData["points"] = pointsOnLine;
 
         lines << lineData;

@@ -240,6 +240,8 @@ void AutomationController::init(Score* score)
 {
     TRACEFUNC;
 
+    m_automation->clear();
+
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
         const int tickOffset = repeatSegment->utick - repeatSegment->tick;
 

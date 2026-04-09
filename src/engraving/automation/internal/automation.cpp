@@ -60,6 +60,11 @@ const AutomationPoint& Automation::activePoint(const AutomationCurveKey& key, in
     return it->second;
 }
 
+void Automation::clear()
+{
+    m_curveMap.clear();
+}
+
 bool Automation::isEmpty() const
 {
     return m_curveMap.empty();
