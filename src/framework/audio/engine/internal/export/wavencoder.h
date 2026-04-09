@@ -39,6 +39,11 @@ public:
     size_t end() override;
 
 private:
-    muse::io::IODevice* m_dstDevice;
+    bool writePlaceholderHeader();
+    void patchHeaderSizes();
+
+    muse::io::IODevice* m_dstDevice = nullptr;
+    bool m_headerWritten = false;
+    size_t m_pcmStartPos = 0;
 };
 }

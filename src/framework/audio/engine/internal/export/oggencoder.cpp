@@ -28,6 +28,9 @@
 #include "opusenc.h"
 #endif
 
+#include <algorithm>
+#include <climits>
+
 #include "global/io/iodevice.h"
 
 #include "log.h"
@@ -50,9 +53,11 @@ OggEncoder::~OggEncoder() noexcept
 
 bool OggEncoder::begin(const samples_t)
 {
-    m_progress.progress(0, 100);
-
     OggOpusComments* comments = ope_comments_create();
+    if (!comments) {
+        return false;
+    }
+
     int error = 0;
 
     const OpusEncCallbacks callbacks{
@@ -74,10 +79,13 @@ bool OggEncoder::begin(const samples_t)
 
     m_opusEncoder = ope_encoder_create_callbacks(&callbacks, m_dstDevice, comments, m_format.outputSpec.sampleRate,
                                                  m_format.outputSpec.audioChannelCount, 0, &error);
+    ope_comments_destroy(comments);
 
-    if (error != OPE_OK && m_opusEncoder) {
-        ope_encoder_destroy(m_opusEncoder);
-        m_opusEncoder = nullptr;
+    if (error != OPE_OK || !m_opusEncoder) {
+        if (m_opusEncoder) {
+            ope_encoder_destroy(m_opusEncoder);
+            m_opusEncoder = nullptr;
+        }
         return false;
     }
 
@@ -92,9 +100,14 @@ size_t OggEncoder::encode(const samples_t samplesPerChannel, const float* input)
         return 0;
     }
 
-    int code = ope_encoder_write_float(m_opusEncoder, input, samplesPerChannel);
+    if (samplesPerChannel == 0) {
+        return 0;
+    }
 
-    return code == OPE_OK ? samplesPerChannel : 0;
+    const int n = static_cast<int>(std::min(samplesPerChannel, static_cast<samples_t>(INT_MAX)));
+    const int code = ope_encoder_write_float(m_opusEncoder, input, n);
+
+    return code == OPE_OK ? static_cast<size_t>(n) : 0;
 }
 
 size_t OggEncoder::end()
@@ -104,8 +117,6 @@ size_t OggEncoder::end()
     }
 
     ope_encoder_drain(m_opusEncoder);
-
-    m_progress.progress(100, 100);
 
     return 0;
 }

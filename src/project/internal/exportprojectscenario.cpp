@@ -21,8 +21,8 @@
  */
 #include "exportprojectscenario.h"
 
-#include "global/io/buffer.h"
 #include "global/io/fileinfo.h"
+#include "global/io/filestream.h"
 
 #include "translation.h"
 #include "defer.h"
@@ -404,12 +404,12 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
     }
 
     while (true) {
-        //! NOTE Most writers write data to a given device (buffer)
+        //! NOTE Most writers stream to the destination device (file on disk).
         //! But there is one atypical case:
         //! Export score to unpacked directory - creates a directory and writes files to it
 
         // Remove previous file because we need to know whether
-        // exportFunctions writes at scorePath
+        // exportFunction writes at scorePath
         Ret ret = fileSystem()->remove(scorePath);
         if (!ret) {
             if (askForRetry(filename)) {
@@ -419,22 +419,9 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
             }
         }
 
-        auto outputBuf = Buffer::opened(IODevice::WriteOnly);
-        outputBuf.setMeta("file_path", scorePath.toStdString());
-
-        ret = exportFunction(outputBuf);
-        outputBuf.close();
-
-        const bool isFileMode = fileSystem()->exists(scorePath);
-        if (!ret) {
-            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                if (isFileMode) {
-                    fileSystem()->remove(scorePath);
-                }
-
-                return ret;
-            }
-
+        FileStream outputFile(scorePath);
+        outputFile.setMeta("file_path", scorePath.toStdString());
+        if (!outputFile.open(IODevice::WriteOnly)) {
             if (askForRetry(filename)) {
                 continue;
             } else {
@@ -442,13 +429,19 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
             }
         }
 
-        if (isFileMode) {
-            // files were written by writer - we're done
-            break;
-        }
+        ret = exportFunction(outputFile);
+        outputFile.close();
 
-        ret = fileSystem()->writeFile(scorePath, outputBuf.data());
         if (!ret) {
+            if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
+                const bool isFileMode = fileSystem()->exists(scorePath);
+                if (isFileMode) {
+                    fileSystem()->remove(scorePath);
+                }
+
+                return ret;
+            }
+
             if (askForRetry(filename)) {
                 continue;
             } else {

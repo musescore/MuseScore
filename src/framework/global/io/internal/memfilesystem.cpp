@@ -21,6 +21,8 @@
  */
 #include "memfilesystem.h"
 
+#include <cstring>
+
 #include <QFile>
 #include <QFileInfo>
 
@@ -192,6 +194,67 @@ muse::Ret MemFileSystem::writeFile(const muse::io::path_t& path, const muse::Byt
         return muse::Ret();
     }
     m_files[path] = data;
+    return muse::make_ok();
+}
+
+muse::RetVal<StreamId> MemFileSystem::openStream(const muse::io::path_t& path, muse::io::OpenMode mode)
+{
+    muse::RetVal<StreamId> result;
+
+    if (isRC(path)) {
+        UNREACHABLE;
+        result.ret = muse::Ret();
+        return result;
+    }
+
+    if (mode == muse::io::OpenMode::WriteOnly) {
+        m_files[path] = muse::ByteArray();
+    } else {
+        // Append: ensure entry exists, if not, create empty
+        m_files.emplace(path, muse::ByteArray());
+    }
+
+    size_t initialPos = m_files[path].size(); // 0 for WriteOnly (just cleared), existing size for Append
+
+    StreamId id = m_nextStreamId++;
+    m_openStates.emplace(id, OpenFileState { path, initialPos });
+
+    result.ret = muse::make_ok();
+    result.val = id;
+    return result;
+}
+
+muse::Ret MemFileSystem::writeToStream(StreamId fileId, const muse::ByteArray& data, uint64_t offset)
+{
+    auto it = m_openStates.find(fileId);
+    if (it == m_openStates.end()) {
+        return muse::make_ret(muse::Ret::Code::UnknownError);
+    }
+
+    OpenFileState& state = it->second;
+    muse::ByteArray& buf = m_files[state.path];
+
+    size_t writePos = (offset == STREAM_POS_CURRENT) ? state.pos : static_cast<size_t>(offset);
+
+    size_t end = writePos + data.size();
+    if (end > buf.size()) {
+        buf.resize(end);
+    }
+    std::memcpy(buf.data() + writePos, data.constData(), data.size());
+
+    state.pos = end;
+    return muse::make_ok();
+}
+
+muse::Ret MemFileSystem::closeStream(StreamId fileId)
+{
+    auto it = m_openStates.find(fileId);
+    if (it == m_openStates.end()) {
+        return muse::make_ret(muse::Ret::Code::UnknownError);
+    }
+
+    m_openStates.erase(it);
+
     return muse::make_ok();
 }
 
