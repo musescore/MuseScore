@@ -123,12 +123,12 @@ muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const
 
 std::string UpdateConfiguration::appWebSiteUrl() const
 {
-    return m_config.value("appWebSiteUrl").toString();
+    return m_config.value("app_website_url").toString();
 }
 
 std::string UpdateConfiguration::privacyPolicyUrl() const
 {
-    return m_config.value("privacyPolicyUrl").toString();
+    return m_config.value("privacy_policy_url").toString();
 }
 
 muse::io::path_t UpdateConfiguration::updateDataPath() const

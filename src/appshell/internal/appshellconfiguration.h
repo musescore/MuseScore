@@ -34,6 +34,7 @@
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
+#include "update/iupdateconfiguration.h"
 
 #include "iappshellconfiguration.h"
 
@@ -49,6 +50,7 @@ class AppShellConfiguration : public IAppShellConfiguration, public muse::Contex
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
     muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalInject<muse::update::IUpdateConfiguration> updateConfiguration;
 
 public:
     AppShellConfiguration(const muse::modularity::ContextPtr& iocCtx)

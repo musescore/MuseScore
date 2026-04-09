@@ -24,6 +24,8 @@
 
 #include "updateerrors.h"
 
+#include <QUrl>
+
 #include "types/val.h"
 #include "translation.h"
 #include "defer.h"
@@ -132,9 +134,11 @@ Promise<Ret> AppUpdateScenario::processUpdateError(int errorCode)
 
 Promise<IInteractive::Result> AppUpdateScenario::showNoUpdateMsg()
 {
+    std::string webSiteUrl = configuration()->appWebSiteUrl();
+    QUrl url(QString::fromStdString(webSiteUrl));
     const QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
-                                             "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
-                        .arg(QString::fromStdString(configuration()->appWebSiteUrl()));
+                                             "Please visit <a href=\"%1\">%2</a> for news on what’s coming next.")
+                        .arg(QString::fromStdString(webSiteUrl), url.host());
 
     const IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     const IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
