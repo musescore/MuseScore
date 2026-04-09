@@ -253,7 +253,7 @@ static String fingeringTextRH(int rightFinger)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int pitch, muse::draw::Color color,
+static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch, muse::draw::Color color,
                            std::vector<mu::engraving::Note*>& tiedNotes)
 {
     LOGN("pitch %d", pitch);
@@ -263,7 +263,7 @@ static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, 
         note->setPitch(pitch);
         note->setTpcFromPitch(Prefer::NEAREST);
         note->setFret(tefNote->fret);
-        note->setString(tefNote->string - 1);
+        note->setString(tefNote->string - stringOffset - 1);
         note->setColor(color);
         if (tefNote->tie) {
             tiedNotes.push_back(note);
@@ -440,11 +440,11 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                             int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->fret;
                             LOGN("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
                             // note TableEdit's strings start at 1, MuseScore's at 0
-                            addNoteToChord(chord, note, pitch, toColor(voice), tiedNotes);
+                            addNoteToChord(chord, note, stringOffset, pitch, toColor(voice), tiedNotes);
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
-                                int gracePitch = 96 - instrument.tuning.at(/* todo */ note->string - stringOffset - 1) + note->graceFret;
-                                addGraceNotesToChord(chord, gracePitch, note->graceFret, /* todo */ note->string - 1, toColor(voice));
+                                int gracePitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->graceFret;
+                                addGraceNotesToChord(chord, gracePitch, note->graceFret, note->string - stringOffset - 1, toColor(voice));
                             }
                         }
                         tupletHandler.addCr(measure, chord);
