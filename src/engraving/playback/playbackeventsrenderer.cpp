@@ -76,10 +76,11 @@ static void applySwingIfNeed(const Harmony* chordSymbol,
 
     const Swing::ChordDurationAdjustment swingDurationAdjustment = Swing::applySwing(chord, swing);
     const duration_t nominalDuration = timestampFromTicks(score, positionTickWithOffset + chord->actualTicks().ticks()) - eventTimestamp;
+    const duration_t additionalDuration = duration - nominalDuration;
     const timestamp_t swingOffset = static_cast<timestamp_t>(nominalDuration * swingDurationAdjustment.remainingDurationMultiplier);
 
     eventTimestamp += swingOffset;
-    duration -= swingOffset;
+    duration = static_cast<duration_t>(nominalDuration * swingDurationAdjustment.durationMultiplier) + additionalDuration;
 }
 
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
