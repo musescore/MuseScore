@@ -204,7 +204,7 @@ std::string AppShellConfiguration::accessibilityStatementUrl() const
 
 std::string AppShellConfiguration::museScoreUrl() const
 {
-    return globalConfiguration()->appWebSiteUrl();
+    return updateConfiguration()->appWebSiteUrl();
 }
 
 std::string AppShellConfiguration::museScoreForumUrl() const
