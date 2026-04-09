@@ -24,3 +24,7 @@ reviews:
     label: "slop"
 chat:
   auto_reply: true
+
+issue_enrichment:
+  auto_enrich:
+    enabled: false  
