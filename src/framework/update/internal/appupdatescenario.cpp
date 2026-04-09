@@ -134,7 +134,7 @@ Promise<IInteractive::Result> AppUpdateScenario::showNoUpdateMsg()
 {
     const QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
                                              "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
-                        .arg(QString::fromStdString(configuration()->museScoreUrl()));
+                        .arg(QString::fromStdString(configuration()->appWebSiteUrl()));
 
     const IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     const IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);

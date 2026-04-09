@@ -172,9 +172,9 @@ void GlobalConfiguration::setMetricUnit(bool metricUnit)
     settings()->setSharedValue(METRIC_UNIT_KEY, Val(metricUnit));
 }
 
-std::string GlobalConfiguration::museScoreUrl() const
+std::string GlobalConfiguration::appWebSiteUrl() const
 {
-    return m_config.value("appUrl").toString();
+    return m_config.value("appWebSiteUrl").toString();
 }
 
 std::string GlobalConfiguration::museHubWebUrl() const

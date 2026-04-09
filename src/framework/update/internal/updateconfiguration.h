@@ -62,8 +62,8 @@ public:
 
     muse::network::RequestHeaders updateHeaders() const override;
 
-    std::string museScoreUrl() const override;
-    std::string museScorePrivacyPolicyUrl() const override;
+    std::string appWebSiteUrl() const override;
+    std::string privacyPolicyUrl() const override;
 
     muse::io::path_t updateDataPath() const override;
     muse::io::path_t updateRequestHistoryJsonPath() const override;

@@ -58,5 +58,5 @@ void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
 
 QString UpdatePreferencesModel::museScorePrivacyPolicyUrl() const
 {
-    return QString::fromStdString(updateConfiguration()->museScorePrivacyPolicyUrl());
+    return QString::fromStdString(updateConfiguration()->privacyPolicyUrl());
 }

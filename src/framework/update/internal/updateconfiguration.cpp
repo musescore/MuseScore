@@ -121,12 +121,12 @@ muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const
     return networkConfiguration()->defaultHeaders();
 }
 
-std::string UpdateConfiguration::museScoreUrl() const
+std::string UpdateConfiguration::appWebSiteUrl() const
 {
-    return m_config.value("appUrl").toString();
+    return m_config.value("appWebSiteUrl").toString();
 }
 
-std::string UpdateConfiguration::museScorePrivacyPolicyUrl() const
+std::string UpdateConfiguration::privacyPolicyUrl() const
 {
     return m_config.value("privacyPolicyUrl").toString();
 }
