@@ -48,6 +48,8 @@ public:
     QVariant automationLinesData() const override;
     muse::async::Notification automationLinesDataChanged() const override; // TODO: probably a channel specifying indices
 
+    void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y) override;
+
 private:
     QVariantList linesDataForSystem(const System* system) const;
     QVariantList linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;

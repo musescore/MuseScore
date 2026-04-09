@@ -178,3 +178,11 @@ mu::engraving::IAutomation* NotationAutomation::automation() const
 {
     return score() ? score()->automation() : nullptr;
 }
+
+void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y)
+{
+    // TODO: Placeholder
+    LOGD() << "AUTOMATION POINT CHANGE REQUEST RECEIVED:";
+    LOGD() << "lineIdx/pointIdx: " << lineIdx << ", " << pointIdx;
+    LOGD() << "requested x/y: " << x << ", " << y;
+}

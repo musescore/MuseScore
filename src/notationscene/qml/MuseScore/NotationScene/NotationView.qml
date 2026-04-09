@@ -227,7 +227,11 @@ FocusScope {
 
                         viewMatrix: notationView.matrix
                         linesData: notationView.automationLinesData
-                    }
+
+                        onPointChangeRequested: function(lineIdx, pointIdx, x, y) {
+                            notationView.requestChangeAutomationPoint(lineIdx, pointIdx, x, y)
+                        }
+                     }
 
                     NotationRegionsBeingProcessedView {
                         notationViewRect: Qt.rect(notationView.x, notationView.y, notationView.width, notationView.height)

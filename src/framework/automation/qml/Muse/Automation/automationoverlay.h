@@ -46,6 +46,7 @@ protected:
 
 signals:
     void viewMatrixChanged();
+    void pointChangeRequested(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y);
 
 private:
     struct AutomationLineData {

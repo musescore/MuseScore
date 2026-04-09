@@ -32,10 +32,16 @@ Loader {
     property var viewMatrix: null
     property var linesData: null
 
+    signal pointChangeRequested(var lineIdx, var pointIdx, var x, var y)
+
     sourceComponent: AutomationOverlay {
         id: automationOverlay
 
         viewMatrix: root.viewMatrix
+
+        onPointChangeRequested: function(lineIdx, pointIdx, x, y) {
+            root.pointChangeRequested(lineIdx, pointIdx, x, y)
+        }
 
         Connections {
             target: root

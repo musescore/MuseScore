@@ -46,8 +46,8 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
 
     m_automationLinesData.reserve(automationDataList.size());
 
-    for (qsizetype i = 0; i < automationDataList.size(); ++i) {
-        const QVariantMap& lineDataMap = automationDataList.at(i).toMap();
+    for (qsizetype lineIdx = 0; lineIdx < automationDataList.size(); ++lineIdx) {
+        const QVariantMap& lineDataMap = automationDataList.at(lineIdx).toMap();
         IF_ASSERT_FAILED(!lineDataMap.isEmpty()) {
             continue;
         }
@@ -79,15 +79,16 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
         polyline->setDrawBackground(false);
 
         QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
-                         [polyline](int index, qreal x, qreal y, bool completed) {
-            IF_ASSERT_FAILED(index > -1 && index < static_cast<int>(polyline->points().size())) {
+                         [this, lineIdx, polyline](int pointIdx, qreal x, qreal y, bool completed) {
+            IF_ASSERT_FAILED(pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size())) {
                 return;
             }
-            // TODO: When completed, change the model (create an undo action in the process)...
-            UNUSED(completed);
-
+            if (completed) {
+                emit pointChangeRequested(lineIdx, pointIdx, x, y);
+                return;
+            }
             QVector<QPointF> points = polyline->points();
-            points.replace(index, { x, y });
+            points.replace(pointIdx, { x, y });
             polyline->setPoints(points);
             polyline->update();                  // TODO: pass update rect?
         });
