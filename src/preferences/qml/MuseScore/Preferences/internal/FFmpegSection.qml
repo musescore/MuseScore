@@ -88,7 +88,7 @@ BaseSection {
                 navigation.column: 100
 
                 onClicked: {
-                    api.launcher.openUrl("https://support.audacityteam.org/basics/installing-ffmpeg") // todo
+                    api.launcher.openUrl("https://handbook.musescore.org/video/installing-ffmpeg")
                 }
             }
         }
