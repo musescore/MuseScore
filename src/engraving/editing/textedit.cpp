@@ -32,6 +32,7 @@
 #include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
+#include "../dom/utils.h"
 
 #include "log.h"
 
@@ -209,6 +210,11 @@ void TextBase::endEdit(EditData& ed)
             if (prev) {
                 prev->setNeedRemoveInvalidSegments();
                 renderer()->layoutItem(prev);
+            }
+
+            PartialLyricsLine* partialDash = findPrevPartialLyricsLineDash(toLyrics(this));
+            if (partialDash) {
+                score()->undoRemoveElement(partialDash);
             }
         }
 

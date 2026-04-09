@@ -6992,19 +6992,7 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
-    PartialLyricsLine* prevPartialLyricsLine = nullptr;
-
-    for (auto sp : score()->spannerMap().findOverlapping(initialCR->tick().ticks(), initialCR->tick().ticks())) {
-        if (!sp.value->isPartialLyricsLine() || sp.value->track() != track) {
-            continue;
-        }
-        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
-            continue;
-        }
-        prevPartialLyricsLine = partialLine;
-        break;
-    }
+    PartialLyricsLine* prevPartialLyricsLine = findPrevPartialLyricsLineDash(lyrics);
 
     endEditText();
 
