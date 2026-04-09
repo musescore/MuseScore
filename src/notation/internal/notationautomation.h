@@ -50,6 +50,7 @@ public:
 
 private:
     QVariantList linesDataForSystem(const System* system) const;
+    QVariantList linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
 
     mu::engraving::Score* score() const;
     mu::engraving::IAutomation* automation() const;

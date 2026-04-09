@@ -94,50 +94,15 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
             staffIdx = system->nextVisibleStaff(staffIdx);
             continue;
         }
+
         if (!staff->isPrimaryStaff()) {
             staffIdx = system->nextVisibleStaff(staffIdx);
             continue;
         }
 
-        QVariantList pointsOnLine;
-        const auto addPointToLine = [&pointsOnLine](double x, double y) {
-            QVariantMap pointData;
-            pointData["x"] = x;
-            pointData["y"] = y;
-            pointsOnLine << pointData;
-        };
-
         const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-
-        const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
-        for (auto& point : automation()->curve(key)) {
-            const int tick = point.first;
-            if (tick < systemStartTick || tick > systemEndTick) {
-                continue;
-            }
-
-            const Fraction frac = Fraction::fromTicks(tick);
-            const Segment* seg = score()->tick2segmentMM(frac);
-            IF_ASSERT_FAILED(seg) {
-                continue;
-            }
-
-            // TODO: The following won't work for dynamics at time ticks...
-
-            // x positions scaled between 0 and 1 (where 0 is the staff start and 1 is the staff end)
-            const double pointX = (seg->canvasX() - staffCanvasRect.x()) / staffCanvasRect.width();
-
-            const mu::engraving::AutomationPoint& autoPoint = point.second;
-            if (!muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
-                // inValue is always between 0 and 1 - higher value == lower Y...
-                addPointToLine(pointX, 1 - autoPoint.inValue);
-            }
-
-            // outValue is always between 0 and 1 - higher value == lower Y...
-            addPointToLine(pointX, 1 - autoPoint.outValue);
-        }
-
-        if (pointsOnLine.isEmpty()) {
+        const QVariantList staffLinesData = linesDataForSysStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
+        if (staffLinesData.isEmpty()) {
             staffIdx = system->nextVisibleStaff(staffIdx);
             continue;
         }
@@ -147,7 +112,7 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
         lineData["y"] = staffCanvasRect.y();
         lineData["width"] = staffCanvasRect.width();
         lineData["height"] = staffCanvasRect.height();
-        lineData["points"] = pointsOnLine;
+        lineData["points"] = staffLinesData;
 
         lines << lineData;
 
@@ -155,6 +120,48 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
     }
 
     return lines;
+}
+
+QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect,
+                                                      int startTick, int endTick) const
+{
+    QVariantList points;
+    const auto addPoint = [&points](double x, double y) {
+        QVariantMap pointData;
+        pointData["x"] = x;
+        pointData["y"] = y;
+        points << pointData;
+    };
+
+    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
+    for (auto& point : automation()->curve(key)) {
+        const int tick = point.first;
+        if (tick < startTick || tick > endTick) {
+            continue;
+        }
+
+        const Fraction frac = Fraction::fromTicks(tick);
+        const Segment* seg = score()->tick2segmentMM(frac);
+        IF_ASSERT_FAILED(seg) {
+            continue;
+        }
+
+        // TODO: The following won't work for dynamics at time ticks...
+
+        // x positions scaled between 0 and 1 (where 0 is the staff start and 1 is the staff end)
+        const double pointX = (seg->canvasX() - sysStaffCanvasRect.x()) / sysStaffCanvasRect.width();
+
+        const mu::engraving::AutomationPoint& autoPoint = point.second;
+        if (!muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
+            // inValue is always between 0 and 1 - higher value == lower Y...
+            addPoint(pointX, 1 - autoPoint.inValue);
+        }
+
+        // outValue is always between 0 and 1 - higher value == lower Y...
+        addPoint(pointX, 1 - autoPoint.outValue);
+    }
+
+    return points;
 }
 
 muse::async::Notification NotationAutomation::automationLinesDataChanged() const
