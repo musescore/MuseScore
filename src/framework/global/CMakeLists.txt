@@ -57,7 +57,6 @@ target_sources(muse_global PRIVATE
     progress.h
     utils.cpp
     utils.h
-    interpolation.cpp
     interpolation.h
     defer.h
     containers.h

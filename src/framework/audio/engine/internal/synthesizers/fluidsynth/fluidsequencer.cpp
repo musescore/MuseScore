@@ -172,7 +172,7 @@ void FluidSequencer::addNoteEvent(EventSequenceMap& destination, const mpe::Note
 
         const mpe::ArticulationMeta& meta = artPair.second.meta;
 
-        if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
+        if (!noteEvent.pitchCtx().pitchCurve.empty() && muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
             addPitchCurve(destination, noteEvent, meta, channelIdx);
             continue;
         }
@@ -248,10 +248,6 @@ void FluidSequencer::addControlChange(EventSequenceMap& destination, const mpe::
 void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
                                    const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
 {
-    if (noteEvent.pitchCtx().pitchCurve.empty()) {
-        return;
-    }
-
     const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
     const timestamp_t pitchBendTimestampTo = std::min(artMeta.timestamp + artMeta.overallDuration, noteTimestampTo);
 
@@ -261,35 +257,35 @@ void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::Not
     auto nextIt = std::next(currIt);
     auto endIt = noteEvent.pitchCtx().pitchCurve.cend();
 
-    auto makePoint = [](mpe::timestamp_t time, int value) {
-        return Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
-    };
+    int prevBendValue = -1;
 
     for (; nextIt != endIt; currIt = nextIt, nextIt = std::next(currIt)) {
-        int currBendValue = pitchBendLevel(currIt->second);
-        int nextBendValue = pitchBendLevel(nextIt->second);
+        const int currValue = pitchBendLevel(currIt->second);
+        const int nextValue = pitchBendLevel(nextIt->second);
 
-        timestamp_t currTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(currIt->first);
-        timestamp_t nextTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(nextIt->first);
+        const timestamp_t currTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(currIt->first);
+        const timestamp_t nextTime = artMeta.timestamp + artMeta.overallDuration * percentageToFactor(nextIt->first);
 
-        Interpolation::Point p0 = makePoint(currTime, currBendValue);
-        Interpolation::Point p1 = makePoint(nextTime, currBendValue);
-        Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
+        using namespace muse::interpolation;
+        const Point currPoint { static_cast<double>(currTime), static_cast<double>(currValue) };
+        const Point nextPoint { static_cast<double>(nextTime), static_cast<double>(nextValue) };
 
         //! NOTE: Increasing this number results in fewer points being interpolated
-        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 10;
+        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 25;
         size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
         pointCount = std::max(pointCount, size_t(1));
 
-        std::vector<Interpolation::Point> points = Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
+        const std::vector<Point> points = lerp(currPoint, nextPoint, pointCount);
 
-        for (const Interpolation::Point& point : points) {
-            timestamp_t time = static_cast<timestamp_t>(std::round(point.x));
-            int bendValue = static_cast<int>(std::round(point.y));
+        for (const Point& point : points) {
+            const timestamp_t time = static_cast<timestamp_t>(std::round(point.x));
+            const int bendValue = static_cast<int>(std::round(point.y));
 
-            if (time < pitchBendTimestampTo) {
+            if (time < pitchBendTimestampTo && bendValue != prevBendValue) {
                 addPitchBend(destination, time, channelIdx, bendValue);
             }
+
+            prevBendValue = bendValue;
         }
     }
 }
