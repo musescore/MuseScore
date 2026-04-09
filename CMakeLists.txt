@@ -224,6 +224,8 @@ if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
 endif(MUE_DOWNLOAD_SOUNDFONT)
 
+include(SetupDependencies)
+
 ###########################################
 # Add source tree
 ###########################################
