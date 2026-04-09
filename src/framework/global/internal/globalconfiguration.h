@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "../iapplication.h"
+#include "../types/config.h"
 
 namespace muse {
 class GlobalConfiguration : public IGlobalConfiguration
@@ -67,6 +68,8 @@ public:
 private:
     QString resolveAppDataPath() const;
     QString resolveUserAppDataPath() const;
+
+    Config m_config;
 
     mutable io::path_t m_appDataPath;
     mutable io::path_t m_userAppDataPath;

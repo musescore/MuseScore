@@ -27,6 +27,7 @@
 #include <QCoreApplication>
 
 #include "settings.h"
+#include "configreader.h"
 
 #include "muse_framework_config.h"
 
@@ -39,11 +40,12 @@ static const Settings::Key DEV_MODE_ENABLED_KEY("global", "application/devModeEn
 static const Settings::Key METRIC_UNIT_KEY("global", "application/metricUnit");
 static const Settings::Key HIGH_RESOLUTION_TIMERS("global", "application/highResolutionTimers");
 
-static const std::string MUSESCORE_URL("https://www.musescore.org/");
 static const std::string MUSEHUB_WEB_URL("https://www.musehub.com/");
 
 void GlobalConfiguration::init()
 {
+    m_config = ConfigReader::read(":/configs/update.cfg");
+
     settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(application()->unstable()));
     settings()->setDefaultValue(HIGH_RESOLUTION_TIMERS, Val(false));
 }
@@ -172,7 +174,7 @@ void GlobalConfiguration::setMetricUnit(bool metricUnit)
 
 std::string GlobalConfiguration::museScoreUrl() const
 {
-    return MUSESCORE_URL;
+    return m_config.value("appUrl").toString();
 }
 
 std::string GlobalConfiguration::museHubWebUrl() const
