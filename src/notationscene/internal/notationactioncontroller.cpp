@@ -1143,14 +1143,11 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     for (EngravingItem* el : selectedElements) {
         if (el->isLyrics()) {
             lyrics.push_back(el);
-        }
-        if (shouldNudge(el)) {
-            nudgeable.push_back(el);
-        }
-        if (el->hasGrips() && interaction->isGripEditStarted()) {
+        } else if (el->hasGrips() && interaction->isGripEditStarted()) {
             gripEditable.push_back(el);
-        }
-        if (el->isNote() || el->isRest()) {
+        } else if (shouldNudge(el) || el->hasGrips()) {
+            nudgeable.push_back(el);
+        } else if (el->isNote() || el->isRest()) {
             notes.push_back(el);
         }
     }
