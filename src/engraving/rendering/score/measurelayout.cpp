@@ -440,6 +440,37 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     }
 
     //
+    // check for end of measure breaths
+    //
+    Segment* underlyingBreathSeg = lastMeasure->findSegmentR(SegmentType::Breath, lastMeasure->ticks());
+    Segment* mmrBreathSeg = mmrMeasure->findSegment(SegmentType::Breath, lastMeasure->endTick());
+
+    if (underlyingBreathSeg) {
+        if (mmrBreathSeg == 0) {
+            mmrBreathSeg = mmrMeasure->undoGetSegmentR(SegmentType::Breath, lastMeasure->ticks());
+        }
+        mmrBreathSeg->setEnabled(underlyingBreathSeg->enabled());
+        for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
+            Breath* underlyingBreath = toBreath(underlyingBreathSeg->element(track));
+            if (underlyingBreath) {
+                Breath* mmrBreath = toBreath(mmrBreathSeg->element(track));
+                if (!mmrBreath) {
+                    mmrBreath = underlyingBreath->generated() ? underlyingBreath->clone() : toBreath(
+                        underlyingBreath->linkedClone());
+                    mmrBreath->setParent(mmrBreathSeg);
+                    ctx.mutDom().doUndoAddElement(mmrBreath);
+                } else {
+                    TLayout::layoutBreath(mmrBreath, mmrBreath->mutldata(), ctx.conf());
+                }
+            }
+        }
+    } else if (mmrBreathSeg) {
+        // TODO: remove elements from mmrSeg?
+        ctx.mutDom().doUndoRemoveElement(mmrBreathSeg);
+    }
+
+    //
     // check for ambitus
     //
     underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
@@ -634,17 +665,6 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             if (n > 1) {
                 return false;
             }
-        } else if (s->isBreathType()) {
-            for (track_idx_t track = 0; track < tracks; ++track) {
-                if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
-                    track += VOICES - 1;
-                    continue;
-                }
-                EngravingItem* el = s->element(track);
-                if (el && el->visible()) {
-                    return false;
-                }
-            }
         }
     }
     return true;
@@ -751,6 +771,11 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     // Break for annotations found mid-way into the previous measure
     if (prevMeas) {
         for (Segment* s = prevMeas->first(); s; s = s->next()) {
+            // Break for breath segments in previous measure
+            if (s->isBreathType()) {
+                return true;
+            }
+
             for (EngravingItem* e : s->annotations()) {
                 if (!e->visible()) {
                     continue;
@@ -1428,7 +1453,7 @@ MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Mea
     Segment* s2;
 
     for (s2 = firstCrSeg->nextActive(); s2; s2 = s2->nextActive()) {
-        if (modernMMRest && !s2->isChordRestType() && s2->element(staffIdx * VOICES)) {
+        if (modernMMRest && !s2->isChordRestType() && !s2->isBreathType() && s2->element(staffIdx * VOICES)) {
             break;
         }
 
