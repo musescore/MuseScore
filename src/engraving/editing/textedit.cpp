@@ -32,6 +32,7 @@
 #include "../dom/navigate.h"
 #include "../dom/score.h"
 #include "../dom/symbol.h"
+#include "../dom/utils.h"
 
 #include "log.h"
 
@@ -200,6 +201,16 @@ void TextBase::endEdit(EditData& ed)
             ted->deleteText = true;
         } else {
             score()->undoRemoveElement(this);
+
+            if (isLyrics()) {
+                PartialLyricsLine* partialDash = findPrevPartialLyricsLineDash(toLyrics(this));
+                if (partialDash) {
+                    // TODO: Making this operation undoable only makes sense if the text is restored too which is currently isn't
+                    // Otherwise, we end up with a trailing partial dash with no ending syllable
+                    score()->removeElement(partialDash);
+                }
+            }
+
             commitText();
         }
         ed.element = 0;

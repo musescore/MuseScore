@@ -36,6 +36,7 @@ class KeySig;
 class Lyrics;
 class Measure;
 class Note;
+class PartialLyricsLine;
 class Rest;
 class Score;
 class Score;
@@ -123,6 +124,8 @@ extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
 extern bool segmentsAreAdjacent(const Segment* firstSeg, const Segment* secondSeg);
 extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 extern bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* secondSeg);
+
+extern PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics);
 
 extern bool isElementInFretBox(const EngravingItem* item);
 
