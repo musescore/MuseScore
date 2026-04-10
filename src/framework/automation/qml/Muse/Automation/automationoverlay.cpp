@@ -83,14 +83,14 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
             IF_ASSERT_FAILED(pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size())) {
                 return;
             }
-            if (completed) {
-                emit pointChangeRequested(lineIdx, pointIdx, x, y);
-                return;
-            }
             QVector<QPointF> points = polyline->points();
             points.replace(pointIdx, { x, y });
             polyline->setPoints(points);
-            polyline->update();                  // TODO: pass update rect?
+            polyline->update(); // TODO: pass update rect?
+            if (completed) {
+                // Only request to update the model when completed...
+                emit pointChangeRequested(lineIdx, pointIdx, x, y);
+            }
         });
 
         AutomationLineData lineData = { lineDataMap, polyline };

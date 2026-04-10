@@ -43,17 +43,14 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
         return;
     }
 
-    if (enabled) { // TODO: Placeholder - need to init this somewhere...
-        if (score() && score()->masterScore()) {
-            score()->masterScore()->initAutomation();
-        } else {
-            ASSERT_X("No score for automation...")
-        }
+    if (enabled) {
+        // TODO: Optimization - we don't need to init all the lines every time. Only the bits that
+        // changed since the last time automation was enabled...
+        initAutomationLinesData();
     }
 
     m_isAutomationModeEnabled = enabled;
     m_automationModeEnabledChanged.notify();
-    m_automationLinesDataChanged.notify(); // TODO: Delete once above placeholder has been removed...
 }
 
 muse::async::Notification NotationAutomation::automationModeEnabledChanged() const
@@ -63,20 +60,31 @@ muse::async::Notification NotationAutomation::automationModeEnabledChanged() con
 
 QVariant NotationAutomation::automationLinesData() const
 {
-    QVariantList automationLinesData;
+    return m_automationLinesData;
+}
 
-    IF_ASSERT_FAILED(automation()) {
-        return automationLinesData;
+void NotationAutomation::initAutomationLinesData()
+{
+    mu::engraving::MasterScore* masterScore = score() ? score()->masterScore() : nullptr;
+    IF_ASSERT_FAILED(masterScore) {
+        return;
     }
 
+    if (m_automationLinesData.isEmpty()) {
+        // TODO: Placeholder - init this elsewhere. Also note that automation data doesn't currently
+        // update through score interactions (such as deleting dynamics, etc)...
+        masterScore->initAutomation();
+    }
+
+    QVariantList automationLinesData;
     for (const System* system : score()->systems()) {
         const QVariantList linesData = linesDataForSystem(system);
         if (!linesData.empty()) {
             automationLinesData << linesData;
         }
     }
-
-    return automationLinesData;
+    m_automationLinesData = automationLinesData;
+    m_automationLinesDataChanged.notify();
 }
 
 QVariantList NotationAutomation::linesDataForSystem(const System* system) const
@@ -108,6 +116,7 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
         }
 
         QVariantMap lineData;
+        lineData["staffIdx"] = static_cast<int>(staffIdx);
         lineData["x"] = staffCanvasRect.x();
         lineData["y"] = staffCanvasRect.y();
         lineData["width"] = staffCanvasRect.width();
@@ -126,12 +135,18 @@ QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const 
                                                       int startTick, int endTick) const
 {
     QVariantList points;
-    const auto addPoint = [&points](double x, double y) {
+    const auto addPoint = [&points](double x, double y, int tick, PointType pointType) {
         QVariantMap pointData;
         pointData["x"] = x;
         pointData["y"] = y;
+        pointData["tick"] = tick;
+        pointData["pointType"] = static_cast<int>(pointType);
         points << pointData;
     };
+
+    IF_ASSERT_FAILED(automation()) {
+        return points;
+    }
 
     const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
     for (auto& point : automation()->curve(key)) {
@@ -151,14 +166,14 @@ QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const 
         // x positions scaled between 0 and 1 (where 0 is the staff start and 1 is the staff end)
         const double pointX = (seg->canvasX() - sysStaffCanvasRect.x()) / sysStaffCanvasRect.width();
 
+        // Point in/out values are always between 0 and 1 - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = point.second;
-        if (!muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
-            // inValue is always between 0 and 1 - higher value == lower Y...
-            addPoint(pointX, 1 - autoPoint.inValue);
+        if (muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
+            addPoint(pointX, 1 - autoPoint.inValue, tick, PointType::BOTH);
+            continue;
         }
-
-        // outValue is always between 0 and 1 - higher value == lower Y...
-        addPoint(pointX, 1 - autoPoint.outValue);
+        addPoint(pointX, 1 - autoPoint.inValue, tick, PointType::IN);
+        addPoint(pointX, 1 - autoPoint.outValue, tick, PointType::OUT);
     }
 
     return points;
@@ -181,8 +196,50 @@ mu::engraving::IAutomation* NotationAutomation::automation() const
 
 void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y)
 {
-    // TODO: Placeholder
-    LOGD() << "AUTOMATION POINT CHANGE REQUEST RECEIVED:";
-    LOGD() << "lineIdx/pointIdx: " << lineIdx << ", " << pointIdx;
-    LOGD() << "requested x/y: " << x << ", " << y;
+    IF_ASSERT_FAILED(automation() && lineIdx < m_automationLinesData.size()) {
+        return;
+    }
+
+    const QVariantMap lineData = m_automationLinesData.at(lineIdx).toMap();
+    IF_ASSERT_FAILED(!lineData.isEmpty()) {
+        return;
+    }
+
+    bool ok;
+    const staff_idx_t staffIdx = static_cast<staff_idx_t>(lineData.value("staffIdx").toInt(&ok));
+    IF_ASSERT_FAILED(ok && staffIdx != muse::nidx) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    const QVariantList pointsList = lineData.value("points").toList();
+    IF_ASSERT_FAILED(staff && !pointsList.isEmpty() && pointIdx < pointsList.size()) {
+        return;
+    }
+
+    const QVariantMap point = pointsList.at(pointIdx).toMap();
+    IF_ASSERT_FAILED(!point.isEmpty()) {
+        return;
+    }
+
+    const int tick = point.value("tick").toInt(&ok);
+    const int pointTypeRaw = ok ? point.value("pointType").toInt(&ok) : 0;
+    IF_ASSERT_FAILED(ok) {
+        return;
+    }
+
+    const PointType pointType = static_cast<PointType>(pointTypeRaw);
+    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
+
+    // Point in/out values are always between 0 and 1 - higher value == lower Y...
+    if (pointType == PointType::IN || pointType == PointType::BOTH) {
+        automation()->setPointInValue(key, tick, 1 - y);
+    }
+    if (pointType == PointType::OUT || pointType == PointType::BOTH) {
+        automation()->setPointOutValue(key, tick, 1 - y);
+    }
+
+    UNUSED(x);
+    // TODO: use x to calculate newTick...
+    // automation()->movePoint(key, tick, newTick) = 0;
 }

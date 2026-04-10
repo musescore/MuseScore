@@ -51,6 +51,15 @@ public:
     void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y) override;
 
 private:
+    enum class PointType : unsigned char {
+        UNKNOWN = 0,
+        IN,
+        OUT,
+        BOTH
+    };
+
+    void initAutomationLinesData();
+
     QVariantList linesDataForSystem(const System* system) const;
     QVariantList linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
 
@@ -63,6 +72,7 @@ private:
     bool m_isAutomationModeEnabled = false;
     muse::async::Notification m_automationModeEnabledChanged;
 
+    QVariantList m_automationLinesData;
     muse::async::Notification m_automationLinesDataChanged;
 };
 }
