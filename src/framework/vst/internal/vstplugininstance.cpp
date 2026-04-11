@@ -129,17 +129,43 @@ void VstPluginInstance::load()
             return;
         }
 
-        auto controller = m_pluginProvider->controller();
-
+        PluginControllerPtr controller = m_pluginProvider->controller();
         if (!controller) {
             return;
         }
 
         controller->setComponentHandler(m_componentHandlerPtr);
+        syncControllerToComponentState();
 
         m_isLoaded = true;
         m_loadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
+}
+
+void VstPluginInstance::syncControllerToComponentState()
+{
+    // Synchronize controller to the component's default state.
+    // Some plugins (e.g. Roland Cloud ZENOLOGY) rely on this to
+    // fully initialize internal data structures; without it the
+    // controller may crash when the editor UI is opened.
+    PluginComponentPtr component = m_pluginProvider->component();
+    PluginControllerPtr controller = m_pluginProvider->controller();
+
+    if (!component || !controller) {
+        return;
+    }
+
+    m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+    m_componentStateBuffer.setSize(0);
+
+    if (component->getState(&m_componentStateBuffer) != Steinberg::kResultOk) {
+        return;
+    }
+
+    if (m_componentStateBuffer.getSize() > 0) {
+        m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+        controller->setComponentState(&m_componentStateBuffer);
+    }
 }
 
 void VstPluginInstance::rescanParams()
@@ -181,6 +207,7 @@ void VstPluginInstance::stateBufferFromString(VstMemoryStream& buffer, char* str
         return;
     }
 
+    buffer.setSize(0);
     buffer.write(strData, static_cast<Steinberg::int32>(strSize), nullptr);
     buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
