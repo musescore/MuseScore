@@ -747,13 +747,7 @@ std::pair<Note*, Note*> Score::repitchReplaceNote(Chord* chord, const NoteVal& n
     // recreate tie forward if there is a note to tie to
     // one-sided ties will not be recreated
     if (firstTiedNote) {
-        Tie* tie = Factory::createTie(note);
-        tie->setStartNote(note);
-        tie->setEndNote(firstTiedNote);
-        tie->setTick(tie->startNote()->tick());
-        tie->setTick2(tie->endNote()->tick());
-        tie->setTrack(note->track());
-        undoAddElement(tie);
+        tieNotesTogether(note, firstTiedNote);
     }
     select(lastTiedNote);
 

@@ -5938,6 +5938,20 @@ bool Score::autoLayoutEnabled() const
     return isOpen();
 }
 
+Tie* Score::tieNotesTogether(Note* n1, Note* n2)
+{
+    Tie* tie = Factory::createTie(this->dummy());
+    tie->setStartNote(n1);
+    tie->setEndNote(n2);
+    tie->setTick(tie->startNote()->tick());
+    tie->setTick2(tie->endNote()->tick());
+    tie->setTrack(n1->track());
+    n1->setTieFor(tie);
+    n2->setTieBack(tie);
+    undoAddElement(tie);
+    return tie;
+}
+
 //---------------------------------------------------------
 //   doLayout
 //    do a complete (re-) layout

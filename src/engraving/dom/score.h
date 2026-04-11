@@ -866,6 +866,7 @@ public:
     Segment* lastSegment() const;
     Segment* lastSegmentMM() const;
 
+    Tie* tieNotesTogether(Note* n1, Note* n2);
     void connectTies(bool silent = false);
     void undoRemoveStaleTieJumpPoints(bool undo = true);
 

@@ -1066,15 +1066,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = Factory::createTie(this->dummy());
-                tie->setStartNote(on);
-                tie->setEndNote(nn);
-                tie->setTick(tie->startNote()->tick());
-                tie->setTick2(tie->endNote()->tick());
-                tie->setTrack(cr->track());
-                on->setTieFor(tie);
-                nn->setTieBack(tie);
-                undoAddElement(tie);
+                tieNotesTogether(on, nn);
             }
         }
 
@@ -4214,13 +4206,7 @@ bool Score::cmdImplode()
                                 for (Note* tn : tied->notes()) {
                                     if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                         // found note to tie
-                                        Tie* tie = Factory::createTie(this->dummy());
-                                        tie->setStartNote(tn);
-                                        tie->setEndNote(nn);
-                                        tie->setTick(tie->startNote()->tick());
-                                        tie->setTick2(tie->endNote()->tick());
-                                        tie->setTrack(tn->track());
-                                        undoAddElement(tie);
+                                        tieNotesTogether(tn, nn);
                                     }
                                 }
                             }

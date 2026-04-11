@@ -422,13 +422,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
         for (size_t i = 0; i < n; ++i) {
             Note* n1  = oc->notes()[i];
             Note* n2 = chord->notes()[i];
-            Tie* tie = Factory::createTie(this->dummy());
-            tie->setStartNote(n1);
-            tie->setEndNote(n2);
-            tie->setTick(tie->startNote()->tick());
-            tie->setTick2(tie->endNote()->tick());
-            tie->setTrack(n1->track());
-            undoAddElement(tie);
+            tieNotesTogether(n1, n2);
         }
     }
 
@@ -1700,15 +1694,7 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool al
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
-            Tie* tie = Factory::createTie(this->dummy());
-            tie->setStartNote(nn);
-            tie->setEndNote(n);
-            tie->setTick(tie->startNote()->tick());
-            tie->setTick2(tie->endNote()->tick());
-            tie->setTrack(n->track());
-            n->setTieBack(tie);
-            nn->setTieFor(tie);
-            undoAddElement(tie);
+            tieNotesTogether(nn, n);
         }
     }
     return n;
@@ -1908,14 +1894,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    Tie* tie = Factory::createTie(this->dummy());
-                                    tie->setStartNote(nl1[j]);
-                                    tie->setEndNote(nl2[j]);
-                                    tie->setTick(tie->startNote()->tick());
-                                    tie->setTick2(tie->endNote()->tick());
-                                    tie->setTrack(tr);
-                                    nl1[j]->setTieFor(tie);
-                                    nl2[j]->setTieBack(tie);
+                                    Tie* tie = tieNotesTogether(nl1[j], nl2[j]);
                                     ties.push_back(tie);
                                 }
                             }
