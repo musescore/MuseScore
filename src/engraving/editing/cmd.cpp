@@ -1769,6 +1769,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     ChordRest* cr1 = cr;
     Chord* oc      = 0;
     Segment* s     = cr->segment();
+    Fraction endTickBefore = cr->isChord() ? toChord(cr)->endTickIncludingTied() : cr->endTick();
 
     bool first = true;
     for (const Fraction& f2 : flist) {
@@ -1856,6 +1857,22 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
         s = m1->first(SegmentType::ChordRest);
         cr1 = toChordRest(s->element(track));
     }
+
+    Fraction endTickAfter = cr->isChord() ? toChord(cr)->endTickIncludingTied() : cr->endTick();
+    while (endTickAfter < endTickBefore) {  // making a chord *longer* shouldn't _shorten_ its total duration
+        if (!oc){  // everything up to oc should already be tied together
+            oc = toChord(cr1);
+        }
+
+        for (Note* n: oc->notes()){
+            if (Note* nn = searchTieNote(n)){
+                tieNotesTogether(n, nn);
+            }
+        }
+        oc = oc->next();
+        endTickAfter = cr->isChord() ? toChord(cr)->endTickIncludingTied() : cr->endTick();
+    }
+
     connectTies();
 
     if (elementToSelect) {
