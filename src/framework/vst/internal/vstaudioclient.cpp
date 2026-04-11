@@ -67,10 +67,10 @@ VstAudioClient::VstAudioClient(const modularity::ContextPtr& iocCtx)
 
 VstAudioClient::~VstAudioClient()
 {
-    if (m_pluginComponent) {
-        m_pluginComponent->setActive(false);
-        m_pluginComponent->terminate();
-    }
+    // Do not call setActive(false) or terminate() here.
+    // The component lifecycle is managed by VstPluginInstance,
+    // which defers cleanup to the main thread so that any open
+    // editor view is destroyed first (required by ZENOLOGY).
 }
 
 void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)

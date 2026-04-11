@@ -63,7 +63,18 @@ VstPluginInstance::~VstPluginInstance()
 
         repo()->removePluginModule(resourceId);
 
-        //! NOTE: the order of destruction is important here
+        //! NOTE: the order of destruction is important here.
+        //! Deactivate the component before the provider destroys it.
+        //! This must happen on the main thread, after any editor view
+        //! has been closed, to avoid crashes in plugins (e.g. ZENOLOGY)
+        //! that free editor-dependent resources in setActive(false).
+        if (provider) {
+            auto component = provider->component();
+            if (component) {
+                component->setActive(false);
+            }
+        }
+
         provider.reset();
         module.reset();
     }, threadSecurer()->mainThreadId());
