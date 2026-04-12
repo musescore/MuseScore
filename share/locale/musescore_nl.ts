@@ -15524,27 +15524,27 @@ Fret %1 op snaren %2</translation>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="830"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="836"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo-teken</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="832"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="838"/>
         <source>Diminuendo hairpin</source>
         <translation>Diminuendo teken</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="834"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="840"/>
         <source>Crescendo line</source>
         <translation>Crescendo-lijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="836"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="842"/>
         <source>Diminuendo line</source>
         <translation>Diminuendo lijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="838"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="844"/>
         <source>Custom</source>
         <translation>Eigen aangepast</translation>
     </message>
@@ -17463,546 +17463,576 @@ Fret %1 op snaren %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="360"/>
+        <source>begin text musical symbols scale</source>
+        <translation>begintekst schaal voor muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
+        <source>continue text musical symbols scale</source>
+        <translation>vervolgtekst schaal voor muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="362"/>
+        <source>end text musical symbols scale</source>
+        <translation>eindtekst schaal voor muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
+        <source>begin text music symbols size</source>
+        <translation>begintekst grootte muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
+        <source>continue text music symbols size</source>
+        <translation>vervolgtekst grootte muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
+        <source>end text music symbols size</source>
+        <translation>eindtekst grootte muzieksymbolen</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
         <source>begin text offset</source>
         <translation>begintekst correctie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="361"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
         <source>gap between text and line</source>
         <translation>ruimte tussen tekst en lijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="363"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="369"/>
         <source>continue text</source>
         <translation>vervolgtekst</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="364"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
         <source>continue text align</source>
         <translation>vervolgtekst uitlijning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="365"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="371"/>
         <source>continue text position</source>
         <translation>vervolgtekst positie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="366"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="372"/>
         <source>continue text place</source>
         <translation>vervolgtekst plaatsing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="367"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
         <source>continue font face</source>
         <translation>vervolgtekst letterrtype uiterlijk</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="368"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="374"/>
         <source>continue font size</source>
         <translation>vervolgtekst lettertype grootte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="369"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
         <source>continue font style</source>
         <translation>vervolgtekst lettertype stijl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="370"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
         <source>continue text offset</source>
         <translation>vervolgtekst correctie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="372"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
         <source>end text</source>
         <translation>eindtekst</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="373"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="379"/>
         <source>end text align</source>
         <translation>eindtekst uitlijning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="374"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
         <source>end text position</source>
         <translation>eindtekst positie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="375"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
         <source>end text place</source>
         <translation>eindtekst plaatsing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="376"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
         <source>end hook type</source>
         <translation>eind haak type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="377"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="383"/>
         <source>end hook height</source>
         <translation>eind haak hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="378"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="384"/>
         <source>end line arrow height</source>
         <translation>eind open pijl hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="379"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
         <source>end line arrow width</source>
         <translation>eind open pijl breedte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="380"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="386"/>
         <source>end filled arrow height</source>
         <translation>eind gevulde pijl hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="381"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
         <source>end filled arrow width</source>
         <translation>eind gevulde pijl breedte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="382"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="388"/>
         <source>end font face</source>
         <translation>eindtekst lettertype uiterlijk</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="383"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
         <source>end font size</source>
         <translation>eindtekst lettertype grootte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="384"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
         <source>end font style</source>
         <translation>eindtekst lettertype stijl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="385"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="391"/>
         <source>end text offset</source>
         <translation>eindtekst correctie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="387"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="393"/>
         <source>note-anchored line placement</source>
         <translation>noot-gebonden lijn plaatsing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="389"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="395"/>
         <source>avoid barlines</source>
         <translation>ontwijk maatstrepen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="390"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
         <source>dynamic size</source>
         <translation>dynamiek grootte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="391"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="397"/>
         <source>use text alignment</source>
         <translation>gebruik tekst uitlijning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="392"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="398"/>
         <source>anchor to end of previous</source>
         <translation>veranker aan het einde van de vorige</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="394"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="400"/>
         <source>snap expression</source>
         <translation>expressie uitlijnen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="395"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
         <source>snap before</source>
         <translation>uitlijnen voor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="396"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="402"/>
         <source>snap after</source>
         <translation>uitlijnen na</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="398"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
         <source>voice assignment</source>
         <translation>stemtoewijzing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="399"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="405"/>
         <source>center between staves</source>
         <translation>centreer tussen notenbalken</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="401"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="407"/>
         <source>position above</source>
         <translation>positie boven</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="403"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="409"/>
         <source>staves distance</source>
         <translation>notenbalk afstand</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="404"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="410"/>
         <source>voices distance</source>
         <translation>stemmen afstand</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="405"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
         <source>measures distance</source>
         <translation>maten afstand</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="406"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="412"/>
         <source>position distance</source>
         <translation>positie afstand</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="407"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
         <source>grace note index</source>
         <translation>siernoot index</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="408"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
         <source>note index</source>
         <translation>stem index</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="410"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
         <source>voice</source>
         <translation>stem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="417"/>
         <source>position</source>
         <translation>positie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="413"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="419"/>
         <source>concert clef type</source>
         <translation>werkelijke toonhoogte sleuteltype</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="414"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
         <source>transposing clef type</source>
         <translation>transponerende sleuteltype</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="415"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="421"/>
         <source>clef to barline position</source>
         <translation>sleutel tot maatstreep positie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="416"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
         <source>is header</source>
         <translation>is systeemkop</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
         <source>concert key</source>
         <translation>werkelijk toonsoort</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="418"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="424"/>
         <source>key</source>
         <translation>toonsoort</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="420"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
         <source>autoplace minimum distance</source>
         <translation>min. afstand automatisch plaatsen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="422"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
         <source>arpeggio type</source>
         <translation>arpeggio type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="423"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="429"/>
         <source>chord line type</source>
         <translation>akkoordlijn type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="424"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
         <source>straight chord line</source>
         <translation>rechte akkoordlijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="425"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="431"/>
         <source>wavy chord line</source>
         <translation>golvende akkoordlijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="426"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
         <source>tremolo type</source>
         <translation>tremolo type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="427"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="433"/>
         <source>tremolo style</source>
         <translation>tremolo stijl</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="428"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="434"/>
         <source>harmony type</source>
         <translation>harmonie type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="430"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="436"/>
         <source>arpeggio span</source>
         <translation>arpeggio omspanning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="432"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
         <source>bracket hook length</source>
         <translation>haaklengte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="433"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
         <source>bracket hook position</source>
         <translation>haakpositie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="434"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
         <source>bracket right side</source>
         <translation>haak rechterkant</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="437"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="443"/>
         <source>bend type</source>
         <translation>bend type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="438"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
         <source>bend curve</source>
         <translation>bend-curve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="439"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="445"/>
         <source>bend vertex offset</source>
         <translation>bend hoekpunt correctie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="440"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
         <source>bend show hold line</source>
         <translation>bend toon greeplijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="441"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="447"/>
         <source>bend start time factor</source>
         <translation>bend start tijd factor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="442"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="448"/>
         <source>bend target time factor</source>
         <translation>bend doel tijd factor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="443"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="449"/>
         <source>bend end time factor</source>
         <translation>bend eind tijd factor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="444"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="450"/>
         <source>guitar dive tab pos</source>
         <translation>gitaar dive tab pos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="445"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="451"/>
         <source>guitar bend amount</source>
         <translation>gitaar bend hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="446"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="452"/>
         <source>guitar dip tremolo line</source>
         <translation>gitaar dip tremolo lijn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="447"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="453"/>
         <source>guitar dive is slack</source>
         <translation>gitaar dive is slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="449"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="455"/>
         <source>tremolobar type</source>
         <translation>tremolohendel type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="450"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="456"/>
         <source>tremolobar curve</source>
         <translation>tremolohendel curve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="452"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="458"/>
         <source>start with long names</source>
         <translation>start met lange namen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="453"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="459"/>
         <source>start with measure one</source>
         <translation>start met maat één</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="454"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="460"/>
         <source>first system indentation</source>
         <translation>inspringafstand eerste systeem</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="456"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="462"/>
         <source>path</source>
         <translation>pad</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="458"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="464"/>
         <source>prefer sharps or flats</source>
         <translation>voorkeur voor kruisen of mollen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="460"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="466"/>
         <source>playing technique type</source>
         <translation>speeltechniek type</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="462"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="468"/>
         <source>gradual tempo change type</source>
         <translation>geleidelijk tempoveranderingstype</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="463"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="469"/>
         <source>tempo easing method</source>
         <translation>tempo verloop methode</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="464"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="470"/>
         <source>tempo change factor</source>
         <translation>tempowijzigingsfactor</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="466"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
         <source>is diagram</source>
         <translation>is diagram</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="468"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="474"/>
         <source>active</source>
         <translation>actief</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="470"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="476"/>
         <source>fret position</source>
         <translation>fret positie</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="471"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="477"/>
         <source>ignored strings</source>
         <translation>genegeerde snaren</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="478"/>
         <source>automatically generate text</source>
         <translation>automatisch tekst genereren</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="473"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="479"/>
         <source>transposition behaviour</source>
         <translation>transpositiegedrag</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="475"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="481"/>
         <source>tie placement</source>
         <translation>overbinding plaatsing</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="476"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="482"/>
         <source>minimum length</source>
         <translation>minimum lengte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="477"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="483"/>
         <source>partial spanner direction</source>
         <translation>gedeeltelijke sleutelrichting</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="479"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="485"/>
         <source>position linked to main score</source>
         <translation>positie gekoppeld aan partituur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="480"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="486"/>
         <source>appearance linked to main score</source>
         <translation>uiterlijk gekoppeld aan partituur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="481"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="487"/>
         <source>text linked to main score</source>
         <translation>tekst gekoppeld aan partituur</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="482"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="488"/>
         <source>exclude from parts</source>
         <translation>sluit uit van partijen</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="484"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="490"/>
         <source>strings count</source>
         <translation>aantal snaren</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="485"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="491"/>
         <source>strings preset</source>
         <translation>snaren voorinstelling</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="486"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>visible strings</source>
         <translation>zichtbare snaren</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="488"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="494"/>
         <source>score font</source>
         <translation>partituur lettertype</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="489"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="495"/>
         <source>symbols size</source>
         <translation>symboolgrootte</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="490"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="496"/>
         <source>symbol angle</source>
         <translation>symbool hoek</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="492"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="498"/>
         <source>apply to all staves</source>
         <translation>pas toe op alle notenbalken</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="493"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="499"/>
         <source>is courtesy</source>
         <translation>is herinnering</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="494"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="500"/>
         <source>exclude vertical align</source>
         <translation>sluit uit van verticale uitlijning</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="496"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="502"/>
         <source>show measure numbers</source>
         <translation>laat maatnummers zien</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="497"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="503"/>
         <source>play count text setting</source>
         <translation>aantal keer spelen-tekst instelling</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="498"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="504"/>
         <source>play count text</source>
         <translation>aantal keer spelen-tekst</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="500"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="506"/>
         <source>align with other rests in the same voice</source>
         <translation>lijn uit met andere rusten in dezelfde stem</translation>
     </message>
@@ -26176,47 +26206,47 @@ opmaat</translation>
         <translation>Partituur uiterlijk</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="762"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="767"/>
         <source>Left-align text box within frame</source>
         <translation>Lijn het tekstvak links uit binnen kader</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="764"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="769"/>
         <source>Left-align text box to note/rest</source>
         <translation>Lijn het tekstvak links uit met de noot/rust</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="766"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="771"/>
         <source>Left-align text box to barline</source>
         <translation>Lijn het tekstvak links uit met de maatstreep</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="780"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="785"/>
         <source>Horizontally center text box within frame</source>
         <translation>Centreer het tekstvak horizontaal binnen het kader</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="782"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="787"/>
         <source>Horizontally center text box to note/rest</source>
         <translation>Centreer het tekstvak horizontaal met de noot/rust</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="784"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="789"/>
         <source>Horizontally center text box to barline</source>
         <translation>Centreer het tekstvak horizontaal met de maatstreep</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="798"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="803"/>
         <source>Right-align text box within frame</source>
         <translation>Lijn het tekstvak rechts uit binnen kader</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="800"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="805"/>
         <source>Right-align text box to note/rest</source>
         <translation>Lijn het tekstvak rechts uit met de noot/rust</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="802"/>
+        <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textsettingsmodel.cpp" line="807"/>
         <source>Right-align text box to barline</source>
         <translation>Lijn het tekstvak rechts uit met de maatstreep</translation>
     </message>
@@ -33516,17 +33546,17 @@ mislukt: %2</translation>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1065"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1074"/>
         <source>Metronome</source>
         <translation>Metronoom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1075"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1084"/>
         <source>Chords</source>
         <translation>Akkoorden</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1436"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1445"/>
         <source>Loading audio samples</source>
         <translation>Audio-samples laden</translation>
     </message>
@@ -35544,200 +35574,200 @@ mislukt: %2</translation>
         <translation>Bezig met exporteren…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="52"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="53"/>
         <source>Compressed</source>
         <translation>Gecomprimeerd</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="53"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="54"/>
         <source>Compressed MusicXML files</source>
         <translation>Gecomprimeerde MusicXML-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="56"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="57"/>
         <source>Uncompressed</source>
         <translation>Ongecomprimeerd</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="57"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="61"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="58"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="62"/>
         <source>Uncompressed MusicXML files</source>
         <translation>Niet-gecomprimeerde MusicXML-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="60"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="61"/>
         <source>Uncompressed (outdated)</source>
         <translation>Ongecomprimeerd (verouderd)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="67"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="68"/>
         <source>PDF file</source>
         <translation>PDF-bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="68"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="69"/>
         <source>PDF files</source>
         <translation>PDF-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="71"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="72"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="73"/>
         <source>PNG images</source>
         <translation>PNG-afbeeldingen</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="75"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="76"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="77"/>
         <source>SVG images</source>
         <translation>SVG-afbeeldingen</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="79"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="80"/>
         <source>MP3 audio</source>
         <translation>MP3-audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="80"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="81"/>
         <source>MP3 audio files</source>
         <translation>MP3-audiobestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="83"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="84"/>
         <source>WAV audio</source>
         <translation>WAV-audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="84"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="85"/>
         <source>WAV audio files</source>
         <translation>WAV-audiobestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="87"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="88"/>
         <source>OGG audio</source>
         <translation>OGG-audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="88"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="89"/>
         <source>OGG audio files</source>
         <translation>OGG-audiobestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="91"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="92"/>
         <source>FLAC audio</source>
         <translation>FLAC-audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="92"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="93"/>
         <source>FLAC audio files</source>
         <translation>FLAC-audiobestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
         <source>AAC audio</source>
         <translation>AAC-audio</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
         <source>AAC audio files</source>
         <translation>AAC-audiobestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
         <source>MP4 video</source>
         <translation>MP4 video</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
         <source>MIDI file</source>
         <translation>MIDI-bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="107"/>
         <source>MIDI files</source>
         <translation>MIDI-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Braille (basis maat-boven-maat-notatie)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="116"/>
         <source>Braille files</source>
         <translation>Braille-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="119"/>
         <source>MEI files</source>
         <translation>MEI-bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
         <source>MNX (experimental)</source>
         <translation>MNX (experimenteel)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="123"/>
         <source>MNX files (experimental)</source>
         <translation>MNX bestanden (experimenteel)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
         <source>LRC file</source>
         <translation>LRC bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="127"/>
         <source>LRC files</source>
         <translation>LRC bestanden</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="341"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
         <source>Each page to a separate file</source>
         <translation>Elke pagina in een apart bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
         <source>Each part to a separate file</source>
         <translation>Elke partij in een apart bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="344"/>
         <source>All parts combined in one file</source>
         <translation>Alle partijen gecombineerd in één bestand</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="759"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="764"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Alle opmaak</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="761"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="766"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Systeemomslagen en pagina-eindes</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="763"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="768"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Alleen handmatig toegevoegde systeemomslagen en pagina-eindes</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="765"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="770"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Geen systeemomslagen of pagina-eindes</translation>
