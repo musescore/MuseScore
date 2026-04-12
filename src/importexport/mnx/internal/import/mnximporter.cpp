@@ -390,9 +390,7 @@ void MnxImporter::createStaff(Part* part, const mnx::Part& mnxPart, int staffNum
 
 void MnxImporter::importParts()
 {
-    size_t partNum = 0;
     for (mnx::Part mnxPart : mnxDocument().parts()) {
-        partNum++;
         Part* part = new Part(m_score);
         /// @todo a better way to find the instrument, perhaps by part name or else some future mnx enhancement
         const InstrumentTemplate* it = [&]() {
