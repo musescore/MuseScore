@@ -363,7 +363,7 @@ void FinaleParser::importMeasures()
         measure->setBreakMultiMeasureRest(musxMeasure->breakMmRest);
         if (const MusxInstance<others::MeasureNumberRegion> measNumRegion = musxMeasure->findMeasureNumberRegion()) {
             if (musxMeasure->getCmper() == measNumRegion->startMeas) {
-                measure->setNoOffset(measNumRegion->numberOffset - lastDisplayNum);
+                measure->setMeasureNumberOffset(measNumRegion->numberOffset - lastDisplayNum);
             }
             if (musxMeasure->getCmper() == measNumRegion->endMeas - 1) {
                 if (std::optional<int> currLast = measNumRegion->calcLastDisplayNumber()) {
@@ -371,10 +371,10 @@ void FinaleParser::importMeasures()
                 }
             }
             if (musxMeasure->noMeasNum) {
-                measure->setIrregular(true);
+                measure->setExcludeFromNumbering(true);
             }
         } else {
-            measure->setIrregular(true);
+            measure->setExcludeFromNumbering(true);
         }
     }
 }
@@ -427,7 +427,6 @@ void FinaleParser::importParts()
         }
 
         // Instrument names
-        part->setPartName(String::fromStdString(staff->getFullInstrumentName()));
         if (staff->calcShowInstrumentName()) {
             part->setLongName(nameFromEnigmaText(*this, u"longInstrument", staff->getFullInstrumentNameCtx(m_currentMusxPartId)));
             part->setShortName(nameFromEnigmaText(*this, u"shortInstrument",

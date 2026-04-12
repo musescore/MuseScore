@@ -69,7 +69,6 @@ static void fixupScore(MasterScore* score) // probably not needed
 {
     score->connectTies();
     score->masterScore()->rebuildMidiMapping();
-    score->setSaved(false);
 }
 
 void Finale_Tests::setValue(const std::string& key, const Val& value)
