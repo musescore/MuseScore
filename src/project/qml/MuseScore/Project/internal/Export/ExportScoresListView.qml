@@ -84,11 +84,58 @@ Rectangle {
                 navigation.name: "ExportScoreCheckBox " + text
                 navigation.panel: navPanel
                 navigation.row: delegateItem.index
+                navigation.column: 0
 
                 checked: delegateItem.isSelected
 
                 onClicked: {
                     root.scoresModel.setSelected(delegateItem.index, !checked)
+                }
+
+                navigation.onNavigationEvent: function(event) {
+                    let targetIndex = delegateItem.index
+
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                        if (delegateItem.index === 0) {
+                            event.accepted = true
+                            return
+                        }
+                        targetIndex = delegateItem.index - 1
+                        break
+
+                    case NavigationEvent.Down:
+                        if (delegateItem.index === listView.count - 1) {
+                            event.accepted = true
+                            return
+                        }
+                        targetIndex = delegateItem.index + 1
+                        break
+
+                    default:
+                        return
+                    }
+
+                    listView.positionViewAtIndex(targetIndex, ListView.Contain)
+
+                    Qt.callLater(function() {
+                        let item = listView.itemAtIndex(targetIndex)
+                        if (item) {
+                            item.requestActiveFocus()
+                        }
+                    })
+
+                    event.accepted = true
+                }
+
+                Connections {
+                    target: checkBox.navigation
+
+                    function onActiveChanged() {
+                        if (target.active) {
+                            listView.positionViewAtIndex(index, ListView.Contain)
+                        }
+                    }
                 }
             }
         }
