@@ -2557,7 +2557,7 @@ class Spanner : public EngravingItem
     Q_OBJECT
     /// The tick this spanner starts at.
     API_PROPERTY(spannerTick,             SPANNER_TICK)
-    /// The tick this spanner end at.
+    /// The duration of this spanner.
     API_PROPERTY(spannerTicks,            SPANNER_TICKS)
     /// The track this spanner end at.
     API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
