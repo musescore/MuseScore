@@ -49,6 +49,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/slur.h"
 #include "engraving/dom/slurtie.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/system.h"
@@ -870,7 +871,6 @@ void FinaleParser::importSmartShapes()
                 toGuitarBend(newSpanner)->setBendType(GuitarBendType::SLIGHT_BEND);
             } else if (toNote(newSpanner->startElement())->chord()->isGrace()) {
                 toGuitarBend(newSpanner)->setBendType(GuitarBendType::GRACE_NOTE_BEND);
-                toGuitarBend(newSpanner)->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
             } else {
                 toGuitarBend(newSpanner)->setBendType(GuitarBendType::BEND);
             }
