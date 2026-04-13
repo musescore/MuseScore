@@ -70,9 +70,8 @@ static InputProcessingProgress::StatusInfo::StatusData parseStatusData(const std
 
 MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
                                        const InstrumentInfo& instrument,
-                                       const AudioSourceParams& params,
-                                       const modularity::ContextPtr& iocCtx)
-    : AbstractSynthesizer(params, iocCtx),
+                                       const AudioSourceParams& params)
+    : AbstractSynthesizer(params),
     m_samplerLib(samplerLib),
     m_instrument(instrument)
 {

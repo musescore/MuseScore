@@ -38,8 +38,7 @@ namespace muse::musesampler {
 class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer, public IMuseSamplerTracks
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
-                       const modularity::ContextPtr& iocCtx);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
     ~MuseSamplerWrapper() override;
 
     void setOutputSpec(const audio::OutputSpec& spec) override;

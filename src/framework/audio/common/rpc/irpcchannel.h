@@ -350,7 +350,7 @@ private:
     bool m_inited = false;
 };
 
-class IRpcChannel : MODULE_CONTEXT_INTERFACE
+class IRpcChannel : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IRpcChannel)
 public:

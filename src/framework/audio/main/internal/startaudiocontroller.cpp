@@ -56,13 +56,9 @@ static void measureInputLag(const float* buf, const size_t size)
     }
 }
 
-StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
-                                           const muse::modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_rpcChannel(rpcChannel)
+StartAudioController::StartAudioController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
+    : m_rpcChannel(rpcChannel)
 {
-#ifndef Q_OS_WASM
-    m_engineController = std::make_shared<engine::EngineController>(rpcChannel, iocCtx);
-#endif
 }
 
 #ifndef Q_OS_WASM
@@ -74,6 +70,8 @@ void StartAudioController::th_setupEngine()
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_rpcChannel->setupOnEngine();
+
+    m_engineController = std::make_shared<engine::EngineController>(m_rpcChannel);
     m_engineController->onStartRunning();
 
     LOGI() << "audio engine running";
@@ -180,7 +178,9 @@ void StartAudioController::startAudioProcessing(const IApplication::RunMode& mod
 
         //! NOTE In this mode, an alignment buffer is not needed.
         if (workmode::mode() == workmode::WorkerMode) {
-            m_engineController->popAudioData(driverDest, (unsigned)driverSamplesPerChannel);
+            if (m_engineController) {
+                m_engineController->popAudioData(driverDest, (unsigned)driverSamplesPerChannel);
+            }
             return;
         }
 

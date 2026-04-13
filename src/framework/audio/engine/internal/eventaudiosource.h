@@ -31,15 +31,14 @@
 #include "track.h"
 
 namespace muse::audio::engine {
-class EventAudioSource : public ITrackAudioInput, public muse::Contextable, public async::Asyncable
+class EventAudioSource : public ITrackAudioInput, public async::Asyncable
 {
     GlobalInject<synth::ISynthResolver> synthResolver;
 
 public:
     using OnOffStreamEventsReceived = std::function<void (const TrackId)>;
 
-    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData, OnOffStreamEventsReceived onOffStreamReceived,
-                              const muse::modularity::ContextPtr& iocCtx);
+    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData, OnOffStreamEventsReceived onOffStreamReceived);
 
     ~EventAudioSource() override;
 

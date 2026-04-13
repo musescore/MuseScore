@@ -44,6 +44,8 @@ void AudioModule::registerExports()
     globalIoc()->registerExport<IAudioConfiguration>(mname, new AudioConfigurationStub());
     globalIoc()->registerExport<synth::ISynthResolver>(mname, new synth::SynthResolverStub());
     globalIoc()->registerExport<fx::IFxResolver>(mname, new fx::FxResolverStub());
+    globalIoc()->registerExport<IAudioDriverController>(mname, new AudioDriverControllerStub());
+    globalIoc()->registerExport<ISoundFontController>(mname, new SoundFontControllerStub());
 }
 
 IContextSetup* AudioModule::newContext(const muse::modularity::ContextPtr& ctx) const
@@ -53,6 +55,4 @@ IContextSetup* AudioModule::newContext(const muse::modularity::ContextPtr& ctx) 
 
 void AudioContext::registerExports()
 {
-    ioc()->registerExport<IAudioDriverController>(mname, new AudioDriverControllerStub());
-    ioc()->registerExport<ISoundFontController>(mname, new SoundFontControllerStub());
 }

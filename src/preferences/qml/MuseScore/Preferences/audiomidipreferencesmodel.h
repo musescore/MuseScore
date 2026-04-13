@@ -65,7 +65,7 @@ class AudioMidiPreferencesModel : public QObject, public muse::Contextable, publ
     muse::GlobalInject<playback::IPlaybackConfiguration> playbackConfiguration;
     muse::GlobalInject<muse::midi::IMidiOutPort> midiOutPort;
     muse::GlobalInject<muse::midi::IMidiInPort> midiInPort;
-    muse::ContextInject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::GlobalInject<muse::audio::IAudioDriverController> audioDriverController;
 
 public:
     explicit AudioMidiPreferencesModel(QObject* parent = nullptr);

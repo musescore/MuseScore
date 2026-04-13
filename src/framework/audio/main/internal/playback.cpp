@@ -212,7 +212,7 @@ Channel<TrackSequenceId> Playback::sequenceRemoved() const
 
 IPlayerPtr Playback::player(const TrackSequenceId id) const
 {
-    std::shared_ptr<Player> p = std::make_shared<Player>(id, iocContext());
+    std::shared_ptr<Player> p = std::make_shared<Player>(id);
     p->init();
     return p;
 }

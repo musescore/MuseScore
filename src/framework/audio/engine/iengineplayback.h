@@ -32,7 +32,7 @@ class IODevice;
 }
 
 namespace muse::audio::engine {
-class IEnginePlayback : MODULE_CONTEXT_INTERFACE
+class IEnginePlayback : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IEnginePlayback)
 public:

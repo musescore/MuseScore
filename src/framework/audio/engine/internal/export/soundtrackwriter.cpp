@@ -56,9 +56,8 @@ static encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackFormat& for
 }
 
 SoundTrackWriter::SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format,
-                                   const msecs_t totalDuration, IAudioSourcePtr source,
-                                   const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_source(std::move(source))
+                                   const msecs_t totalDuration, IAudioSourcePtr source)
+    : m_source(std::move(source))
 {
     if (!m_source) {
         return;

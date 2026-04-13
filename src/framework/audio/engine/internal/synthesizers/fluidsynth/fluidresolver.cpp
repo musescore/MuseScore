@@ -52,8 +52,7 @@ FluidResolver::~FluidResolver()
     fluid::FluidVorbisDecoder::decoder = nullptr;
 }
 
-ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params, const OutputSpec& spec,
-                                            const muse::modularity::ContextPtr& iocCtx) const
+ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params, const OutputSpec& spec) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -63,7 +62,7 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
         return nullptr;
     }
 
-    FluidSynthPtr synth = std::make_shared<FluidSynth>(params, iocCtx);
+    FluidSynthPtr synth = std::make_shared<FluidSynth>(params);
     synth->init(spec);
     synth->addSoundFonts({ search->second.path });
     synth->setPreset(search->second.preset);

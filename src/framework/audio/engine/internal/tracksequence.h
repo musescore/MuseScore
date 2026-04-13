@@ -38,12 +38,12 @@
 
 namespace muse::audio::engine {
 class Mixer;
-class TrackSequence : public ITrackSequence, public IGetTracks, public muse::Contextable, public async::Asyncable
+class TrackSequence : public ITrackSequence, public IGetTracks, public async::Asyncable
 {
-    ContextInject<IAudioEngine> audioEngine = { this };
+    GlobalInject<IAudioEngine> audioEngine;
 
 public:
-    TrackSequence(const TrackSequenceId id, const muse::modularity::ContextPtr& iocCtx);
+    TrackSequence(const TrackSequenceId id);
     ~TrackSequence() override;
 
     // ITrackSequence

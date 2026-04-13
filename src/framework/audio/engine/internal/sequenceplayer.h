@@ -34,12 +34,12 @@
 #include "igettracks.h"
 
 namespace muse::audio::engine {
-class SequencePlayer : public ISequencePlayer, public Contextable, public async::Asyncable
+class SequencePlayer : public ISequencePlayer, public async::Asyncable
 {
-    ContextInject<engine::IAudioEngine> audioEngine = { this };
+    GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
-    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const modularity::ContextPtr& iocCtx);
+    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock);
 
     async::Promise<Ret> prepareToPlay() override;
 

@@ -22,7 +22,6 @@
 
 #include "generalsoundfontcontroller.h"
 
-#include "global/translation.h"
 #include "global/io/path.h"
 
 #include "audio/common/rpc/rpcpacker.h"
@@ -32,11 +31,6 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::audio::synth;
 
-GeneralSoundFontController::GeneralSoundFontController(const muse::modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx)
-{
-}
-
 void GeneralSoundFontController::loadSoundFonts()
 {
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
@@ -44,92 +38,6 @@ void GeneralSoundFontController::loadSoundFonts()
     });
 
     doLoadSoundFonts();
-}
-
-void GeneralSoundFontController::addSoundFont(const SoundFontUri& uri)
-{
-    io::path_t path = uri.toLocalFile();
-    std::string title = muse::qtrc("audio", "Do you want to add SoundFont %1?")
-                        .arg(io::filename(path).toQString()).toStdString();
-
-    interactive()->question(title, "", {
-        IInteractive::Button::No,
-        IInteractive::Button::Yes
-    })
-    .onResolve(this, [this, path](const IInteractive::Result& res) {
-        if (res.isButton(IInteractive::Button::No)) {
-            LOGI() << "soundfont addition cancelled";
-            return;
-        }
-
-        RetVal<io::path_t> newPath = resolveInstallationPath(path);
-        if (!newPath.ret) {
-            LOGE() << "failed resolve path, err: " << newPath.ret.toString();
-            return;
-        }
-
-        if (fileSystem()->exists(newPath.val)) {
-            std::string title = muse::trc("audio", "File already exists. Do you want to overwrite it?");
-
-            std::string body = muse::qtrc("audio", "File path: %1")
-                               .arg(newPath.val.toQString()).toStdString();
-
-            interactive()->question(title, body, {
-                IInteractive::Button::No,
-                IInteractive::Button::Yes
-            }, IInteractive::Button::Yes, IInteractive::WithIcon)
-            .onResolve(this, [this, path, newPath](const IInteractive::Result& res) {
-                if (res.isButton(IInteractive::Button::No)) {
-                    LOGI() << "soundfont replacement cancelled";
-                    return;
-                }
-
-                Ret ret = doAddSoundFont(path, newPath.val);
-                if (ret) {
-                    interactive()->info(muse::trc("audio", "SoundFont installed"),
-                                        muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
-                                        {}, 0, IInteractive::Option::WithIcon);
-                } else {
-                    LOGE() << "failed add soundfont, err: " << ret.toString();
-                }
-            });
-        } else {
-            Ret ret = doAddSoundFont(path, newPath.val);
-            if (ret) {
-                interactive()->info(muse::trc("audio", "SoundFont installed"),
-                                    muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
-                                    {}, 0, IInteractive::Option::WithIcon);
-            } else {
-                LOGE() << "failed add soundfont, err: " << ret.toString();
-            }
-        }
-    });
-}
-
-Ret GeneralSoundFontController::doAddSoundFont(const io::path_t& src, const io::path_t& dst)
-{
-    Ret ret = fileSystem()->copy(src, dst, true /* replace */);
-
-    if (ret) {
-        synth::SoundFontUri uri = synth::SoundFontUri::fromLocalFile(dst);
-        channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
-    }
-
-    return ret;
-}
-
-RetVal<io::path_t> GeneralSoundFontController::resolveInstallationPath(const io::path_t& path) const
-{
-    io::paths_t dirs = configuration()->userSoundFontDirectories();
-
-    for (const io::path_t& dir : dirs) {
-        if (fileSystem()->isWritable(dir)) {
-            io::path_t newPath = dir + "/" + io::filename(path);
-            return RetVal<io::path_t>::make_ok(newPath);
-        }
-    }
-
-    return RetVal<io::path_t>(make_ret(Ret::Code::UnknownError));
 }
 
 void GeneralSoundFontController::doLoadSoundFonts()
@@ -161,4 +69,9 @@ void GeneralSoundFontController::loadSoundFonts(const std::vector<io::path_t>& p
         uris.push_back(synth::SoundFontUri::fromLocalFile(p));
     }
     channel()->send(rpc::make_request(Method::LoadSoundFonts, RpcPacker::pack(uris)));
+}
+
+void GeneralSoundFontController::addSoundFont(const synth::SoundFontUri& uri)
+{
+    channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
 }

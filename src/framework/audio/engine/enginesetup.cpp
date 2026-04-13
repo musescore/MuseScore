@@ -54,11 +54,15 @@ void EngineGlobalSetup::registerExports()
     m_synthResolver = std::make_shared<synth::SynthResolver>();
     m_fxResolver = std::make_shared<fx::FxResolver>();
     m_soundFontRepository = std::make_shared<synth::SoundFontRepository>();
+    m_audioEngine = std::make_shared<AudioEngine>();
+    m_playback = std::make_shared<EnginePlayback>();
 
     globalIoc()->registerExport<IAudioEngineConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<synth::ISynthResolver>(mname, m_synthResolver);
     globalIoc()->registerExport<fx::IFxResolver>(mname, m_fxResolver);
     globalIoc()->registerExport<synth::ISoundFontRepository>(mname, m_soundFontRepository);
+    globalIoc()->registerExport<IAudioEngine>(mname, m_audioEngine);
+    globalIoc()->registerExport<IEnginePlayback>(mname, m_playback);
 }
 
 void EngineGlobalSetup::resolveImports()
@@ -74,20 +78,6 @@ void EngineGlobalSetup::onDeinit()
     globalIoc()->unregister<synth::ISynthResolver>(mname);
     globalIoc()->unregister<synth::ISoundFontRepository>(mname);
     globalIoc()->unregister<fx::IFxResolver>(mname);
-}
-
-// Context
-void EngineContextSetup::registerExports()
-{
-    m_audioEngine = std::make_shared<AudioEngine>();
-    m_playback = std::make_shared<EnginePlayback>(iocContext());
-
-    ioc()->registerExport<IAudioEngine>(mname, m_audioEngine);
-    ioc()->registerExport<IEnginePlayback>(mname, m_playback);
-}
-
-void EngineContextSetup::onDeinit()
-{
-    ioc()->unregister<IAudioEngine>(mname);
-    ioc()->unregister<IEnginePlayback>(mname);
+    globalIoc()->unregister<IAudioEngine>(mname);
+    globalIoc()->unregister<IEnginePlayback>(mname);
 }

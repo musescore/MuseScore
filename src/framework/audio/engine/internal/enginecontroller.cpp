@@ -40,9 +40,8 @@ using namespace muse::audio::engine;
 using namespace muse::audio::fx;
 using namespace muse::audio::synth;
 
-EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel,
-                                   const muse::modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_rpcChannel(rpcChannel)
+EngineController::EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel)
+    : m_rpcChannel(rpcChannel)
 {
     m_rpcChannel->onMethod(rpc::Method::EngineInit, [this](const rpc::Msg& msg) {
         OutputSpec spec;
@@ -68,7 +67,7 @@ void EngineController::onStartRunning()
     //! NOTE After sending a EngineRunning,
     //! we may receive RPC messages, such as for example load a soundfont.
     //! Therefore, we need to subscribe to RPC messages.
-    m_rpcController  = std::make_shared<EngineRpcController>(iocContext());
+    m_rpcController = std::make_shared<EngineRpcController>();
     m_rpcController->init();
 
     //! NOTE We inform that the engine is running and can receive messages

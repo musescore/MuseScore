@@ -27,10 +27,9 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 
 ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
-                                           const audio::OutputSpec& outputSpec,
-                                           const muse::modularity::ContextPtr& iocCtx) const
+                                           const audio::OutputSpec& outputSpec) const
 {
-    return createSynth(trackId, params, outputSpec, iocCtx);
+    return createSynth(trackId, params, outputSpec);
 }
 
 bool VstiResolver::hasCompatibleResources(const muse::audio::PlaybackSetupData& /*setup*/) const
@@ -43,14 +42,13 @@ void VstiResolver::refresh()
     pluginModulesRepo()->refresh();
 }
 
-VstSynthPtr VstiResolver::createSynth(const TrackId trackId, const AudioInputParams& params, const OutputSpec& outputSpec,
-                                      const muse::modularity::ContextPtr& iocCtx) const
+VstSynthPtr VstiResolver::createSynth(const TrackId trackId, const AudioInputParams& params, const OutputSpec& outputSpec) const
 {
     if (!pluginModulesRepo()->exists(params.resourceMeta.id)) {
         return nullptr;
     }
 
-    auto synth = std::make_shared<VstSynthesiser>(trackId, params, iocCtx);
+    auto synth = std::make_shared<VstSynthesiser>(trackId, params);
     synth->init(outputSpec);
 
     return synth;

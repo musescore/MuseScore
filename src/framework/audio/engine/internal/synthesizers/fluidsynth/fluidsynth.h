@@ -42,7 +42,7 @@ class FluidSynth : public AbstractSynthesizer
     GlobalInject<midi::IMidiOutPort> midiOutPort;
 
 public:
-    FluidSynth(const audio::AudioSourceParams& params, const modularity::ContextPtr& iocCtx);
+    FluidSynth(const audio::AudioSourceParams& params);
 
     Ret init(const OutputSpec& spec);
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);

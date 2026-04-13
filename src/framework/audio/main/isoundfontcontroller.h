@@ -27,7 +27,7 @@
 #include "audio/common/soundfonttypes.h"
 
 namespace muse::audio {
-class ISoundFontController : MODULE_CONTEXT_INTERFACE
+class ISoundFontController : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(ISoundFontController)
 

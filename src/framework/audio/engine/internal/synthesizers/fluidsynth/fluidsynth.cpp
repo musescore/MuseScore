@@ -62,8 +62,8 @@ struct muse::audio::synth::Fluid {
     }
 };
 
-FluidSynth::FluidSynth(const AudioSourceParams& params, const modularity::ContextPtr& iocCtx)
-    : AbstractSynthesizer(params, iocCtx)
+FluidSynth::FluidSynth(const AudioSourceParams& params)
+    : AbstractSynthesizer(params)
 {
     m_fluid = std::make_shared<Fluid>();
     m_midiOutPort = midiOutPort();
