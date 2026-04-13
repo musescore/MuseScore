@@ -4249,7 +4249,7 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode, const std::
     startEdit(TranslatableString("undoableAction", "Change pitch"));
     for (EngravingItem* selected : selectedElements) {
         if (selected && selected->isRest()) {
-            if (noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+            if (selected->staff()->isTabStaff(selected->tick())) {
                 continue;
             }
             score()->cmdMoveRest(toRest(selected), toDirection(d));
@@ -4261,6 +4261,9 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode, const std::
 
 void NotationInteraction::moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& selectedElements)
 {
+    IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+        return;
+    }
     if (selectedElements.empty()) {
         return;
     }
@@ -4279,6 +4282,9 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
     if (selectedElements.empty()) {
         return;
     }
+    IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
+        return;
+    }
     startEdit(TranslatableString("undoableAction", "Nudge element"));
     for (EngravingItem* el : selectedElements) {
         if (!el) {
@@ -4288,11 +4294,6 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
         step = step * el->spatium();
 
         switch (d) {
-        case MoveDirection::Undefined: {
-            IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
-                return;
-            }
-        } break;
         case MoveDirection::Left:
             el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
             break;
@@ -4305,6 +4306,8 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
         case MoveDirection::Down:
             el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
             break;
+        case MoveDirection::Undefined:
+            UNREACHABLE;
         }
     }
     apply();

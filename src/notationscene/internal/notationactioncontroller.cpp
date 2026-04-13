@@ -1130,8 +1130,10 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         bool isSymbol = selectedElement->isSymbol();
         bool isTupletText = selectedElement->isTuplet() && !toTuplet(selectedElement)->hasBracket();
         bool isFermataOrBreath = selectedElement->isFermata() || selectedElement->isBreath();
+        bool hasGrips = selectedElement->hasGrips();
+        bool isLyrics = selectedElement->isLyrics();
 
-        return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath;
+        return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath || hasGrips || isLyrics;
     };
 
     std::vector<EngravingItem*> lyrics;
@@ -1140,11 +1142,11 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     std::vector<EngravingItem*> notes;
 
     for (EngravingItem* el : selectedElements) {
-        if (el->isLyrics()) {
+        if (el->isLyrics() && !quickly && (direction == MoveDirection::Up || direction == MoveDirection::Down)) {
             lyrics.push_back(el);
         } else if (el->hasGrips() && interaction->isGripEditStarted()) {
             gripEditable = true;
-        } else if (shouldNudge(el) || el->hasGrips()) {
+        } else if (shouldNudge(el)) {
             nudgeable.push_back(el);
         } else if (el->isNote() || el->isRest()) {
             notes.push_back(el);
@@ -1165,7 +1167,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             return;
         }
 
-        if (!lyrics.empty() && !quickly) {
+        if (!lyrics.empty()) {
             interaction->moveLyrics(direction, lyrics);
         }
         if (!nudgeable.empty()) {
