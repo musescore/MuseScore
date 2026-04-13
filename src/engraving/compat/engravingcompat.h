@@ -44,5 +44,8 @@ private:
     static void migrateNoteParens(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
+
+    static void resetAllElementsPositions(MasterScore* score);
+    static void resetCrossBeams(MasterScore* score);
 };
 } // namespace mu::engraving::compat

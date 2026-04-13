@@ -295,6 +295,12 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     int mscVersion = score->mscVersion();
 
+    if (mscVersion < 300) {
+        resetAllElementsPositions(score);
+        resetCrossBeams(score);
+        needRelayout = true;
+    }
+
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
     }
@@ -302,6 +308,31 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
     if (needRelayout) {
         score->update();
     }
+}
+
+void EngravingCompat::resetAllElementsPositions(MasterScore* score)
+{
+    score->scanElements([](EngravingItem* e) {
+        if (e->generated()) {
+            return;
+        }
+        e->resetProperty(Pid::AUTOPLACE);
+        e->resetProperty(Pid::OFFSET);
+        e->resetProperty(Pid::LEADING_SPACE);
+        e->setOffsetChanged(false);
+        if (e->isSpanner()) {
+            e->resetProperty(Pid::OFFSET2);
+        }
+    });
+}
+
+void EngravingCompat::resetCrossBeams(MasterScore* score)
+{
+    score->scanElements([](EngravingItem* e) {
+        if (e->isBeam() && toBeam(e)->fullCross()) {
+            e->reset();
+        }
+    });
 }
 
 bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)

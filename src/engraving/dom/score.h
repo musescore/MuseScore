@@ -379,15 +379,8 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
-    void setResetAutoplace() { m_resetAutoplace = true; }
-    void setResetCrossBeams() { m_resetCrossBeams = true; }
-
     Excerpt* excerpt() { return m_excerpt; }
     void setExcerpt(Excerpt* e) { m_excerpt = e; }
-
-    // methods for resetting elements for pre-4.0 score migration
-    void resetAutoplace();
-    void resetCrossBeams();
 
     void cmdAddBracket();
     void cmdToggleParentheses();
@@ -418,7 +411,7 @@ public:
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
     void cmdResetNoteAndRestGroupings();
-    void cmdResetAllPositions(bool undoable = true);
+
     void cmdDoubleDuration() { cmdIncDecDuration(-1, false); }
     void cmdHalfDuration() { cmdIncDecDuration(1, false); }
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
@@ -938,7 +931,7 @@ public:
     PlayMode playMode() const { return m_playMode; }
     void setPlayMode(PlayMode v) { m_playMode = v; }
 
-    std::list<Score*> scoreList();
+    std::vector<Score*> scoreList();
 
     void appendMeasures(int numMeasures);
 
@@ -1193,8 +1186,7 @@ private:
     ShowAnchors m_showAnchors;
 
     ScoreOrder m_scoreOrder;                 // used for score ordering
-    bool m_resetAutoplace = false;
-    bool m_resetCrossBeams = false;
+
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;

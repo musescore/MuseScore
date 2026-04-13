@@ -4360,10 +4360,11 @@ void Score::undo(UndoCommand* cmd, EditData* ed) const
 //    and all part scores (if there are any)
 //---------------------------------------------------------
 
-std::list<Score*> Score::scoreList()
+std::vector<Score*> Score::scoreList()
 {
-    std::list<Score*> scores;
+    std::vector<Score*> scores;
     MasterScore* root = masterScore();
+    scores.reserve(1 + root->excerpts().size());
     scores.push_back(root);
     for (const Excerpt* ex : root->excerpts()) {
         if (ex->excerptScore()) {
@@ -5977,16 +5978,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     renderer()->layoutScore(this, start, end);
-
-    if (m_resetAutoplace) {
-        m_resetAutoplace = false;
-        resetAutoplace();
-    }
-
-    if (m_resetCrossBeams) {
-        m_resetCrossBeams = false;
-        resetCrossBeams();
-    }
 }
 
 void Score::createPaddingTable()
