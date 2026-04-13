@@ -573,6 +573,13 @@ enum class FretDotType {
 };
 Q_ENUM_NS(FretDotType);
 
+// Pin the API/DOM enum equivalence so a future reorder of either enum
+// fails compilation instead of silently corrupting plugin writes.
+static_assert(int(FretDotType::NORMAL) == int(mu::engraving::FretDotType::NORMAL));
+static_assert(int(FretDotType::CROSS) == int(mu::engraving::FretDotType::CROSS));
+static_assert(int(FretDotType::SQUARE) == int(mu::engraving::FretDotType::SQUARE));
+static_assert(int(FretDotType::TRIANGLE) == int(mu::engraving::FretDotType::TRIANGLE));
+
 /** APIDOC
  * Type of string marker in a fretboard diagram (open / muted / none).
  * @memberof Engraving
@@ -585,6 +592,10 @@ enum class FretMarkerType {
     CROSS  = int(mu::engraving::FretMarkerType::CROSS),
 };
 Q_ENUM_NS(FretMarkerType);
+
+static_assert(int(FretMarkerType::NONE) == int(mu::engraving::FretMarkerType::NONE));
+static_assert(int(FretMarkerType::CIRCLE) == int(mu::engraving::FretMarkerType::CIRCLE));
+static_assert(int(FretMarkerType::CROSS) == int(mu::engraving::FretMarkerType::CROSS));
 
 /** APIDOC
  * Auto-hide flag

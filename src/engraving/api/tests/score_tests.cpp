@@ -1567,17 +1567,36 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
     FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
     domFd->setHarmony(u"Fdim7");
 
-    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+    // Construct the wrapper through the public dispatcher so that
+    // the FretDiagram and Harmony branches added in elements.cpp are
+    // exercised.
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
 
-    // [WHEN/THEN] The harmonyPlainText property reflects the chord
+    // [WHEN/THEN] The chord symbol is reachable via plainText.
+    // displayText depends on layout state and is empty before layout runs;
+    // we just exercise the call to confirm the wrapper forwards correctly.
     EXPECT_EQ(apiFd->harmonyPlainText(), QString("Fdim7"));
+    apiFd->harmonyDisplayText();
 
-    // [WHEN/THEN] The nested Harmony wrapper is reachable and exposes plainText
+    // [WHEN/THEN] The nested Harmony wrapper is reachable via the typed
+    // FretDiagram::harmony() accessor (the path real plugins would use).
     apiv1::Harmony* apiHarmony = apiFd->harmony();
     ASSERT_NE(apiHarmony, nullptr);
     EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
+    apiHarmony->displayText();
+    EXPECT_FALSE(apiHarmony->harmonyName().isEmpty());
+
+    // Also exercise the wrap() dispatcher branch for Harmony.
+    apiv1::Harmony* apiHarmonyViaDispatcher
+        = qobject_cast<apiv1::Harmony*>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
+    ASSERT_NE(apiHarmonyViaDispatcher, nullptr);
+    EXPECT_EQ(apiHarmonyViaDispatcher->plainText(), QString("Fdim7"));
 
     delete apiFd;
+    delete apiHarmony;
+    delete apiHarmonyViaDispatcher;
     delete domFd;
     delete domScore;
 }
@@ -1597,7 +1616,9 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
     FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
-    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
 
     EXPECT_EQ(domFd->dot(0).front().fret, 0);
 
@@ -1618,6 +1639,7 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
     EXPECT_EQ(domFd->dot(0).front().fret, 0);
 
     delete apiFd;
+    delete domFd;
     delete domScore;
 }
 
@@ -1632,7 +1654,9 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
     MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
     FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
 
-    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
 
     // [WHEN] We mute a string via the API inside a startCmd/endCmd transaction
     domScore->startCmd(TranslatableString::untranslatable("set marker test"));
@@ -1649,6 +1673,43 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
     EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::NONE);
 
     delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetBarreApi
+//   Test the Plugin API write method FretDiagram::setBarre.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    // [WHEN] We add a barre at fret 2 via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set barre test"));
+    apiFd->setBarre(0, 2);
+    domScore->endCmd();
+
+    // [THEN] The barre is recorded
+    EXPECT_TRUE(domFd->barre(2).exists());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The barre is gone
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    delete apiFd;
+    delete domFd;
     delete domScore;
 }
 
@@ -1668,7 +1729,9 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
 
     ASSERT_FALSE(domFd->isClear());
 
-    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
 
     // [WHEN] We clear the diagram via the API inside a startCmd/endCmd transaction
     domScore->startCmd(TranslatableString::untranslatable("clear diagram test"));
@@ -1688,5 +1751,6 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
     EXPECT_EQ(domFd->marker(1).mtype, FretMarkerType::CROSS);
 
     delete apiFd;
+    delete domFd;
     delete domScore;
 }

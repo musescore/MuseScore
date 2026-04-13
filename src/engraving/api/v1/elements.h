@@ -86,10 +86,10 @@ class Beam;
 extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Ownership::SCORE);
 
 #define API_PROPERTY(name, pid) \
-        Q_PROPERTY(QVariant name READ get_##name WRITE set_##name RESET reset_##name) \
-        QVariant get_##name() const { return get(mu::engraving::Pid::pid); }  \
-        void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }  \
-        void reset_##name() { reset(mu::engraving::Pid::pid); }
+    Q_PROPERTY(QVariant name READ get_##name WRITE set_##name RESET reset_##name) \
+    QVariant get_##name() const { return get(mu::engraving::Pid::pid); }  \
+    void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 /**
  * API_PROPERTY flavor which allows to define the property type.
@@ -98,40 +98,40 @@ extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Own
  * value to be exposed to QML in case of invalid property.
  */
 #define API_PROPERTY_T(type, name, pid) \
-        Q_PROPERTY(type name READ get_##name WRITE set_##name RESET reset_##name) \
-        type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
-        void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
-        void reset_##name() { reset(mu::engraving::Pid::pid); }
+    Q_PROPERTY(type name READ get_##name WRITE set_##name RESET reset_##name) \
+    type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
+    void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_ENUM(Enum, name, pid) \
-        Q_PROPERTY(QJSValue name READ get_##name WRITE set_##name RESET reset_##name) \
-        QJSValue get_##name() const { \
-            int val = get(mu::engraving::Pid::pid).toInt(); \
-            if (apiversion() == 1) { \
-                return QJSValue(val); \
-            } else { \
-                static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
-                return QJSValue(QString(meta.valueToKey(val))); \
-            } \
-        }  \
-        void set_##name(QJSValue val) { \
-            if (apiversion() == 1) { \
-                set(mu::engraving::Pid::pid, QVariant(val.toInt())); \
-            } else { \
-                static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
-                std::string key = val.toString().toStdString(); \
-                set(mu::engraving::Pid::pid, meta.keyToValue(key.c_str())); \
-            } \
-        }  \
-        void reset_##name() { reset(mu::engraving::Pid::pid); }
+    Q_PROPERTY(QJSValue name READ get_##name WRITE set_##name RESET reset_##name) \
+    QJSValue get_##name() const { \
+        int val = get(mu::engraving::Pid::pid).toInt(); \
+        if (apiversion() == 1) { \
+            return QJSValue(val); \
+        } else { \
+            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+            return QJSValue(QString(meta.valueToKey(val))); \
+        } \
+    }  \
+    void set_##name(QJSValue val) { \
+        if (apiversion() == 1) { \
+            set(mu::engraving::Pid::pid, QVariant(val.toInt())); \
+        } else { \
+            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+            std::string key = val.toString().toStdString(); \
+            set(mu::engraving::Pid::pid, meta.keyToValue(key.c_str())); \
+        } \
+    }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_READ_ONLY(name, pid) \
-        Q_PROPERTY(QVariant name READ get_##name) \
-        QVariant get_##name() const { return get(mu::engraving::Pid::pid); }
+    Q_PROPERTY(QVariant name READ get_##name) \
+    QVariant get_##name() const { return get(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_READ_ONLY_T(type, name, pid) \
-        Q_PROPERTY(type name READ get_##name) \
-        type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
+    Q_PROPERTY(type name READ get_##name) \
+    type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
 
 //---------------------------------------------------------
 //   EngravingItem
@@ -2755,7 +2755,7 @@ public:
      * @param {Number} dotType One of PluginAPI::PluginAPI::FretDotType values.
      * @since 4.7
      */
-    Q_INVOKABLE void setDot(int string, int fret, bool add = false, int dotType = 0);
+    Q_INVOKABLE void setDot(int string, int fret, bool add = false, int dotType = int(mu::engraving::FretDotType::NORMAL));
 
     /** APIDOC
      * Set the marker for a string (open circle / muted X / none). Undoable and

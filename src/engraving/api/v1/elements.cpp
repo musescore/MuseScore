@@ -677,6 +677,13 @@ void FretDiagram::setDot(int string, int fret, bool add, int dotType)
     IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
         return;
     }
+    IF_ASSERT_FAILED(fret >= 0) {
+        return;
+    }
+    IF_ASSERT_FAILED(dotType >= int(mu::engraving::FretDotType::NORMAL)
+                     && dotType <= int(mu::engraving::FretDotType::TRIANGLE)) {
+        return;
+    }
     fretDiagram()->undoSetFretDot(string, fret, add,
                                   static_cast<mu::engraving::FretDotType>(dotType));
 }
@@ -686,6 +693,10 @@ void FretDiagram::setMarker(int string, int marker)
     IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
         return;
     }
+    IF_ASSERT_FAILED(marker >= int(mu::engraving::FretMarkerType::NONE)
+                     && marker <= int(mu::engraving::FretMarkerType::CROSS)) {
+        return;
+    }
     fretDiagram()->undoSetFretMarker(string,
                                      static_cast<mu::engraving::FretMarkerType>(marker));
 }
@@ -693,6 +704,9 @@ void FretDiagram::setMarker(int string, int marker)
 void FretDiagram::setBarre(int string, int fret, bool add)
 {
     IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+        return;
+    }
+    IF_ASSERT_FAILED(fret > 0) {
         return;
     }
     fretDiagram()->undoSetFretBarre(string, fret, add);
