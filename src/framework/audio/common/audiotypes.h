@@ -170,11 +170,11 @@ enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
     VstPlugin,
-    MusePlugin,
+    NativeEffect,
     MuseSamplerSoundPack,
     Lv2Plugin,
     AudioUnit,
-    NyquistPlugin
+    NyquistPlugin,
 };
 
 static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
@@ -182,7 +182,10 @@ static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::MuseSamplerSoundPack, "muse_sampler_sound_pack" },
     { AudioResourceType::FluidSoundfont, "fluid_soundfont" },
     { AudioResourceType::VstPlugin, "vst_plugin" },
-    { AudioResourceType::MusePlugin, "muse_plugin" },
+    { AudioResourceType::NativeEffect, "muse_plugin" },
+    { AudioResourceType::Lv2Plugin, "lv2_plugin" },
+    { AudioResourceType::AudioUnit, "audio_unit" },
+    { AudioResourceType::NyquistPlugin, "nyquist_plugin" },
 };
 
 struct AudioResourceMeta {
@@ -293,7 +296,7 @@ struct AudioFxParams {
     {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
-        case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::NativeEffect: return AudioFxType::MuseFx;
         case AudioResourceType::AudioUnit:
         case AudioResourceType::Lv2Plugin:
         case AudioResourceType::FluidSoundfont:
@@ -381,7 +384,7 @@ inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
     case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
     case AudioResourceType::AudioUnit:
     case AudioResourceType::Lv2Plugin:
-    case AudioResourceType::MusePlugin:
+    case AudioResourceType::NativeEffect:
     case AudioResourceType::NyquistPlugin:
     case AudioResourceType::Undefined: break;
     }
