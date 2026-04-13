@@ -2743,6 +2743,48 @@ public:
     QString harmonyPlainText() const { return fretDiagram()->harmonyPlainText().toQString(); }
     QString harmonyDisplayText() const { return fretDiagram()->harmonyDisplayText().toQString(); }
     /// \endcond
+
+    /** APIDOC
+     * Place or remove a dot at the given fret on the given string. The change is
+     * undoable and propagates to all linked clones of the diagram.
+     * @method
+     * @param {Number} string  0-based string index (0 is the lowest pitched string).
+     * @param {Number} fret    fret number (1-based, relative to fretOffset).
+     *                         Pass 0 to clear the dots on that string.
+     * @param {Boolean} add    If true, append to existing dots instead of replacing.
+     * @param {Number} dotType One of PluginAPI::PluginAPI::FretDotType values.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setDot(int string, int fret, bool add = false, int dotType = 0);
+
+    /** APIDOC
+     * Set the marker for a string (open circle / muted X / none). Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @param {Number} string 0-based string index.
+     * @param {Number} marker One of PluginAPI::PluginAPI::FretMarkerType values.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setMarker(int string, int marker);
+
+    /** APIDOC
+     * Add a barre at the given fret extending up to the given string. Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @param {Number} string 0-based last string covered by the barre.
+     * @param {Number} fret   fret number (1-based, relative to fretOffset).
+     * @param {Boolean} add   If true, append to existing barres at that fret.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setBarre(int string, int fret, bool add = false);
+
+    /** APIDOC
+     * Clear all dots, markers, and barres from this diagram. Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @since 4.7
+     */
+    Q_INVOKABLE void clear();
 };
 
 #undef API_PROPERTY

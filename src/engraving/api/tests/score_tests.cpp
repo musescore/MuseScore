@@ -1581,3 +1581,112 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
     delete domFd;
     delete domScore;
 }
+
+//---------------------------------------------------------
+//   fretDiagramSetDotApi
+//   Test the Plugin API write method FretDiagram::setDot.
+//   Verifies the change is recorded on the undo stack and can
+//   be undone, as required by reviewers of PR #32848.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API.
+    // FretDiagram::dot(s) returns a placeholder Dot(fret=0) when no dot is set,
+    // so we check fret values rather than vector emptiness.
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    // [WHEN] We place a dot through the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set dot test"));
+    apiFd->setDot(0, 3);
+    domScore->endCmd();
+
+    // [THEN] The dot is recorded on the diagram
+    std::vector<FretItem::Dot> dots = domFd->dot(0);
+    ASSERT_EQ(dots.size(), 1u);
+    EXPECT_EQ(dots[0].fret, 3);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The dot is gone, confirming the change went through the undo stack
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    delete apiFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetMarkerApi
+//   Test the Plugin API write method FretDiagram::setMarker.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+
+    // [WHEN] We mute a string via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set marker test"));
+    apiFd->setMarker(0, int(FretMarkerType::CROSS));
+    domScore->endCmd();
+
+    // [THEN] The marker is recorded
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::CROSS);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The marker is gone
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::NONE);
+
+    delete apiFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramClearApi
+//   Test the Plugin API write method FretDiagram::clear and
+//   that the previous content is restored on undo.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
+{
+    // [GIVEN] A score and a FretDiagram populated with a dot and a marker
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+
+    ASSERT_FALSE(domFd->isClear());
+
+    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+
+    // [WHEN] We clear the diagram via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("clear diagram test"));
+    apiFd->clear();
+    domScore->endCmd();
+
+    // [THEN] The diagram is empty
+    EXPECT_TRUE(domFd->isClear());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The previous dot and marker are restored
+    EXPECT_FALSE(domFd->isClear());
+    ASSERT_EQ(domFd->dot(0).size(), 1u);
+    EXPECT_EQ(domFd->dot(0)[0].fret, 3);
+    EXPECT_EQ(domFd->marker(1).mtype, FretMarkerType::CROSS);
+
+    delete apiFd;
+    delete domScore;
+}

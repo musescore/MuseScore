@@ -663,6 +663,47 @@ Ornament* Spanner::ornament() const
 }
 
 //---------------------------------------------------------
+//   FretDiagram::setDot
+//   FretDiagram::setMarker
+//   FretDiagram::setBarre
+//   FretDiagram::clear
+///   These thin wrappers forward to the undo-aware DOM methods so that
+///   modifications are recorded on the undo stack and propagated to all
+///   linked clones of the diagram (the DOM walks linkList() internally).
+//---------------------------------------------------------
+
+void FretDiagram::setDot(int string, int fret, bool add, int dotType)
+{
+    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+        return;
+    }
+    fretDiagram()->undoSetFretDot(string, fret, add,
+                                  static_cast<mu::engraving::FretDotType>(dotType));
+}
+
+void FretDiagram::setMarker(int string, int marker)
+{
+    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+        return;
+    }
+    fretDiagram()->undoSetFretMarker(string,
+                                     static_cast<mu::engraving::FretMarkerType>(marker));
+}
+
+void FretDiagram::setBarre(int string, int fret, bool add)
+{
+    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+        return;
+    }
+    fretDiagram()->undoSetFretBarre(string, fret, add);
+}
+
+void FretDiagram::clear()
+{
+    fretDiagram()->undoFretClear();
+}
+
+//---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
 ///   Wraps mu::engraving::EngravingItem choosing the correct wrapper type

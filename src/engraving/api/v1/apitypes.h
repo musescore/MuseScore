@@ -26,6 +26,7 @@
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
@@ -557,6 +558,33 @@ enum class Orientation {
     HORIZONTAL = int(mu::engraving::Orientation::HORIZONTAL),
 };
 Q_ENUM_NS(Orientation);
+
+/** APIDOC
+ * Type of dot in a fretboard diagram.
+ * @memberof Engraving
+ * @enum
+ * @since 4.7
+ */
+enum class FretDotType {
+    NORMAL   = int(mu::engraving::FretDotType::NORMAL),
+    CROSS    = int(mu::engraving::FretDotType::CROSS),
+    SQUARE   = int(mu::engraving::FretDotType::SQUARE),
+    TRIANGLE = int(mu::engraving::FretDotType::TRIANGLE),
+};
+Q_ENUM_NS(FretDotType);
+
+/** APIDOC
+ * Type of string marker in a fretboard diagram (open / muted / none).
+ * @memberof Engraving
+ * @enum
+ * @since 4.7
+ */
+enum class FretMarkerType {
+    NONE   = int(mu::engraving::FretMarkerType::NONE),
+    CIRCLE = int(mu::engraving::FretMarkerType::CIRCLE),
+    CROSS  = int(mu::engraving::FretMarkerType::CROSS),
+};
+Q_ENUM_NS(FretMarkerType);
 
 /** APIDOC
  * Auto-hide flag
