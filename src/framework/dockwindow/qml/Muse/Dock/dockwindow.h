@@ -155,5 +155,6 @@ private:
 
     bool m_hasGeometryBeenRestored = false;
     bool m_reloadCurrentPageAllowed = false;
+    bool m_reloadCurrentPageScheduled = false;
 };
 }
