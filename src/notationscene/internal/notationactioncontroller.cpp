@@ -1134,17 +1134,16 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath;
     };
 
-    // Categorize selected elements
     std::vector<EngravingItem*> lyrics;
     std::vector<EngravingItem*> nudgeable;
-    std::vector<EngravingItem*> gripEditable;
+    bool gripEditable = false;  // TODO: Refactor grip editing to allow multiple selection and nudging (without rebasing anchors)
     std::vector<EngravingItem*> notes;
 
     for (EngravingItem* el : selectedElements) {
         if (el->isLyrics()) {
             lyrics.push_back(el);
         } else if (el->hasGrips() && interaction->isGripEditStarted()) {
-            gripEditable.push_back(el);
+            gripEditable = true;
         } else if (shouldNudge(el) || el->hasGrips()) {
             nudgeable.push_back(el);
         } else if (el->isNote() || el->isRest()) {
@@ -1172,14 +1171,14 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         if (!nudgeable.empty()) {
             interaction->nudge(direction, quickly, nudgeable);
         }
-        if (!gripEditable.empty()) {
-            interaction->nudgeAnchors(direction, gripEditable);
+        if (gripEditable) {
+            interaction->nudgeAnchors(direction);
         }
         if (!notes.empty()) {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC, notes);
             playChord = true;
         }
-        if (lyrics.empty() && nudgeable.empty() && gripEditable.empty() && notes.empty() && interaction->selection()->isNone()
+        if (lyrics.empty() && nudgeable.empty() && !gripEditable && notes.empty() && interaction->selection()->isNone()
             && !state.beyondScore()) {
             interaction->selectFirstElement(false);
         }
@@ -1227,10 +1226,10 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         if (!nudgeable.empty()) {
             interaction->nudge(direction, quickly, nudgeable);
         }
-        if (!gripEditable.empty()) {
-            interaction->nudgeAnchors(direction, gripEditable);
+        if (gripEditable) {
+            interaction->nudgeAnchors(direction);
         }
-        if (nudgeable.empty() && gripEditable.empty()) {
+        if (nudgeable.empty() && !gripEditable) {
             if (interaction->selection()->isNone() && !state.beyondScore()) {
                 interaction->selectFirstElement(false);
             }

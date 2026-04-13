@@ -142,7 +142,7 @@ public:
     // Move/nudge elements
     virtual void movePitch(MoveDirection d, PitchMode mode, const std::vector<EngravingItem*>& elements) = 0;
     virtual void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements) = 0;
-    virtual void nudgeAnchors(MoveDirection d, const std::vector<EngravingItem*>& elements) = 0;
+    virtual void nudgeAnchors(MoveDirection d) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
     virtual void swapChordRest(MoveDirection d) = 0;
     virtual void toggleSnapToPrevious() = 0;

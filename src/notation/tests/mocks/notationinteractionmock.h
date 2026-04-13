@@ -107,7 +107,7 @@ public:
 
     MOCK_METHOD(void, movePitch, (MoveDirection, PitchMode, const std::vector<EngravingItem*>&), (override));
     MOCK_METHOD(void, nudge, (MoveDirection, bool, const std::vector<EngravingItem*>&), (override));
-    MOCK_METHOD(void, nudgeAnchors, (MoveDirection, const std::vector<EngravingItem*>&), (override));
+    MOCK_METHOD(void, nudgeAnchors, (MoveDirection), (override));
     MOCK_METHOD(void, moveChordRestToStaff, (MoveDirection), (override));
     MOCK_METHOD(void, swapChordRest, (MoveDirection), (override));
     MOCK_METHOD(void, toggleSnapToPrevious, (), (override));

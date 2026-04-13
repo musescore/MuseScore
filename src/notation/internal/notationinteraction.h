@@ -158,7 +158,7 @@ public:
     // Move
     void movePitch(MoveDirection d, PitchMode mode, const std::vector<EngravingItem*>& elements) override;
     void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements) override;
-    void nudgeAnchors(MoveDirection d, const std::vector<EngravingItem*>& elements) override;
+    void nudgeAnchors(MoveDirection d) override;
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements) override;
     void swapChordRest(MoveDirection d) override;

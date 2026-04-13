@@ -4311,9 +4311,9 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
     notifyAboutDragChanged();
 }
 
-void NotationInteraction::nudgeAnchors(MoveDirection d, const std::vector<EngravingItem*>& selectedElements)
+void NotationInteraction::nudgeAnchors(MoveDirection d)
 {
-    if (selectedElements.empty() || !m_editData.element) {
+    IF_ASSERT_FAILED(m_editData.element) {
         return;
     }
 
