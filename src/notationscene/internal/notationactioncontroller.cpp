@@ -1155,18 +1155,24 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
 
     switch (direction) {
     case MoveDirection::Up:
-    case MoveDirection::Down:
+    case MoveDirection::Down: {
         if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
             return;
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
+                currentNotationUndoStack()->prepareChanges(TranslatableString("undoableAction", "Change pitch"));
                 interaction->movePitch(direction, PitchMode::OCTAVE, notes);
+                currentNotationUndoStack()->commitChanges();
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
         }
 
+        bool doUndoCommand = !lyrics.empty() || !nudgeable.empty() || gripEditable || !notes.empty();
+        if (doUndoCommand) {
+            currentNotationUndoStack()->prepareChanges(TranslatableString("undoableAction", "Move items"));
+        }
         if (!lyrics.empty()) {
             interaction->moveLyrics(direction, lyrics);
         }
@@ -1180,13 +1186,17 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC, notes);
             playChord = true;
         }
+        if (doUndoCommand) {
+            currentNotationUndoStack()->commitChanges();
+        }
         if (lyrics.empty() && nudgeable.empty() && !gripEditable && notes.empty() && interaction->selection()->isNone()
             && !state.beyondScore()) {
             interaction->selectFirstElement(false);
         }
         break;
+    }
     case MoveDirection::Right:
-    case MoveDirection::Left:
+    case MoveDirection::Left: {
         if (playbackController()->isPlaying()) {
             MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
@@ -1225,11 +1235,18 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             return;
         }
 
+        bool doUndoCommand = !nudgeable.empty() || gripEditable;
+        if (doUndoCommand) {
+            currentNotationUndoStack()->prepareChanges(TranslatableString("undoableAction", "Move items"));
+        }
         if (!nudgeable.empty()) {
             interaction->nudge(direction, quickly, nudgeable);
         }
         if (gripEditable) {
             interaction->nudgeAnchors(direction);
+        }
+        if (doUndoCommand) {
+            currentNotationUndoStack()->commitChanges();
         }
         if (nudgeable.empty() && !gripEditable) {
             if (interaction->selection()->isNone() && !state.beyondScore()) {
@@ -1239,6 +1256,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             playChord = true;
         }
         break;
+    }
     case MoveDirection::Undefined:
         break;
     }

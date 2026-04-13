@@ -4246,7 +4246,6 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode, const std::
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Change pitch"));
     for (EngravingItem* selected : selectedElements) {
         if (selected && selected->isRest()) {
             if (selected->staff()->isTabStaff(selected->tick())) {
@@ -4256,7 +4255,6 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode, const std::
         }
     }
     EditNote::upDown(score(), MoveDirection::Up == d, mode);
-    apply();
 }
 
 void NotationInteraction::moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& selectedElements)
@@ -4268,13 +4266,11 @@ void NotationInteraction::moveLyrics(MoveDirection d, const std::vector<Engravin
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Move lyrics"));
     for (EngravingItem* el : selectedElements) {
         if (el && el->isLyrics()) {
             score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
         }
     }
-    apply();
 }
 
 void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& selectedElements)
@@ -4285,7 +4281,6 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
     IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
         return;
     }
-    startEdit(TranslatableString("undoableAction", "Nudge element"));
     for (EngravingItem* el : selectedElements) {
         if (!el) {
             continue;
@@ -4310,7 +4305,6 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector
             UNREACHABLE;
         }
     }
-    apply();
     notifyAboutDragChanged();
 }
 
@@ -4320,7 +4314,6 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Nudge"));
     double vRaster = getVRaster();
     double hRaster = getHRaster();
 
@@ -4357,8 +4350,6 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
         m_editData.element->drag(m_editData);
         m_editData.element->endDrag(m_editData);
     }
-
-    apply();
 }
 
 bool NotationInteraction::isTextSelected() const
