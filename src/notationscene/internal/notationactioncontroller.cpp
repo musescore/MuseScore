@@ -1117,7 +1117,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
-    const EngravingItem* selectedElement = interaction->selection()->element();
+    const std::vector<EngravingItem*>& selectedElements = interaction->selection()->elements();
     INotationNoteInputPtr noteInput = interaction->noteInput();
     bool playChord = false;
 
@@ -1134,28 +1134,57 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return isText || isArticulationFamily || isSymbol || isTupletText || isFermataOrBreath;
     };
 
+    // Categorize selected elements
+    std::vector<EngravingItem*> lyrics;
+    std::vector<EngravingItem*> nudgeable;
+    std::vector<EngravingItem*> gripEditable;
+    std::vector<EngravingItem*> notes;
+
+    for (EngravingItem* el : selectedElements) {
+        if (el->isLyrics()) {
+            lyrics.push_back(el);
+        }
+        if (shouldNudge(el)) {
+            nudgeable.push_back(el);
+        }
+        if (el->hasGrips() && interaction->isGripEditStarted()) {
+            gripEditable.push_back(el);
+        }
+        if (el->isNote() || el->isRest()) {
+            notes.push_back(el);
+        }
+    }
+
     switch (direction) {
     case MoveDirection::Up:
     case MoveDirection::Down:
-        if (!quickly && selectedElement && selectedElement->isLyrics()) {
-            interaction->moveLyrics(direction);
-        } else if (shouldNudge(selectedElement)) {
-            interaction->nudge(direction, quickly);
-        } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
-            interaction->nudgeAnchors(direction);
-        } else if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
+        if (noteInput->isNoteInputMode() && noteInput->usingNoteInputMethod(NoteInputMethod::BY_DURATION)) {
             moveInputNotes(direction == MoveDirection::Up, quickly ? PitchMode::OCTAVE : PitchMode::DIATONIC);
             return;
         } else if (noteInput->isNoteInputMode() && noteInput->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
             if (quickly) {
-                interaction->movePitch(direction, PitchMode::OCTAVE);
+                interaction->movePitch(direction, PitchMode::OCTAVE, notes);
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
-        } else if (interaction->selection()->isNone() && !state.beyondScore()) {
+        }
+
+        if (!lyrics.empty() && !quickly) {
+            interaction->moveLyrics(direction, lyrics);
+        }
+        if (!nudgeable.empty()) {
+            interaction->nudge(direction, quickly, nudgeable);
+        }
+        if (!gripEditable.empty()) {
+            interaction->nudgeAnchors(direction, gripEditable);
+        }
+        if (!notes.empty()) {
+            interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC, notes);
+            playChord = true;
+        }
+        if (lyrics.empty() && nudgeable.empty() && gripEditable.empty() && notes.empty() && interaction->selection()->isNone()
+            && !state.beyondScore()) {
             interaction->selectFirstElement(false);
-        } else {
-            interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
         break;
     case MoveDirection::Right:
@@ -1198,11 +1227,13 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             return;
         }
 
-        if (shouldNudge(selectedElement)) {
-            interaction->nudge(direction, quickly);
-        } else if (selectedElement && selectedElement->hasGrips() && interaction->isGripEditStarted()) {
-            interaction->nudgeAnchors(direction);
-        } else {
+        if (!nudgeable.empty()) {
+            interaction->nudge(direction, quickly, nudgeable);
+        }
+        if (!gripEditable.empty()) {
+            interaction->nudgeAnchors(direction, gripEditable);
+        }
+        if (nudgeable.empty() && gripEditable.empty()) {
             if (interaction->selection()->isNone() && !state.beyondScore()) {
                 interaction->selectFirstElement(false);
             }
@@ -1246,7 +1277,7 @@ void NotationActionController::movePitchDiatonic(MoveDirection direction, bool)
         return;
     }
 
-    interaction->movePitch(direction, PitchMode::DIATONIC);
+    interaction->movePitch(direction, PitchMode::DIATONIC, interaction->selection()->elements());
     seekAndPlaySelectedElement(true);
 }
 

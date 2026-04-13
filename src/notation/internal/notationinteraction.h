@@ -156,11 +156,11 @@ public:
     void selectEmptyTrailingMeasure() override;
 
     // Move
-    void movePitch(MoveDirection d, PitchMode mode) override;
-    void nudge(MoveDirection d, bool quickly) override;
-    void nudgeAnchors(MoveDirection) override;
+    void movePitch(MoveDirection d, PitchMode mode, const std::vector<EngravingItem*>& elements) override;
+    void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements) override;
+    void nudgeAnchors(MoveDirection d, const std::vector<EngravingItem*>& elements) override;
     void moveChordRestToStaff(MoveDirection d) override;
-    void moveLyrics(MoveDirection d) override;
+    void moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements) override;
     void swapChordRest(MoveDirection d) override;
     void toggleSnapToPrevious() override;
     void toggleSnapToNext() override;
