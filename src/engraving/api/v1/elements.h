@@ -31,6 +31,8 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/measure.h"
@@ -63,6 +65,8 @@ Q_MOC_INCLUDE("engraving/api/v1/part.h")
 
 namespace mu::engraving::apiv1 {
 class Fraction;
+class FretDiagram;
+class Harmony;
 class IntervalWrapper;
 class EngravingItem;
 class Lyrics;
@@ -82,10 +86,10 @@ class Beam;
 extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Ownership::SCORE);
 
 #define API_PROPERTY(name, pid) \
-    Q_PROPERTY(QVariant name READ get_##name WRITE set_##name RESET reset_##name) \
-    QVariant get_##name() const { return get(mu::engraving::Pid::pid); }  \
-    void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }  \
-    void reset_##name() { reset(mu::engraving::Pid::pid); }
+        Q_PROPERTY(QVariant name READ get_##name WRITE set_##name RESET reset_##name) \
+        QVariant get_##name() const { return get(mu::engraving::Pid::pid); }  \
+        void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }  \
+        void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 /**
  * API_PROPERTY flavor which allows to define the property type.
@@ -94,40 +98,40 @@ extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Own
  * value to be exposed to QML in case of invalid property.
  */
 #define API_PROPERTY_T(type, name, pid) \
-    Q_PROPERTY(type name READ get_##name WRITE set_##name RESET reset_##name) \
-    type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
-    void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
-    void reset_##name() { reset(mu::engraving::Pid::pid); }
+        Q_PROPERTY(type name READ get_##name WRITE set_##name RESET reset_##name) \
+        type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
+        void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
+        void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_ENUM(Enum, name, pid) \
-    Q_PROPERTY(QJSValue name READ get_##name WRITE set_##name RESET reset_##name) \
-    QJSValue get_##name() const { \
-        int val = get(mu::engraving::Pid::pid).toInt(); \
-        if (apiversion() == 1) { \
-            return QJSValue(val); \
-        } else { \
-            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
-            return QJSValue(QString(meta.valueToKey(val))); \
-        } \
-    }  \
-    void set_##name(QJSValue val) { \
-        if (apiversion() == 1) { \
-            set(mu::engraving::Pid::pid, QVariant(val.toInt())); \
-        } else { \
-            static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
-            std::string key = val.toString().toStdString(); \
-            set(mu::engraving::Pid::pid, meta.keyToValue(key.c_str())); \
-        } \
-    }  \
-    void reset_##name() { reset(mu::engraving::Pid::pid); }
+        Q_PROPERTY(QJSValue name READ get_##name WRITE set_##name RESET reset_##name) \
+        QJSValue get_##name() const { \
+            int val = get(mu::engraving::Pid::pid).toInt(); \
+            if (apiversion() == 1) { \
+                return QJSValue(val); \
+            } else { \
+                static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+                return QJSValue(QString(meta.valueToKey(val))); \
+            } \
+        }  \
+        void set_##name(QJSValue val) { \
+            if (apiversion() == 1) { \
+                set(mu::engraving::Pid::pid, QVariant(val.toInt())); \
+            } else { \
+                static const QMetaEnum meta = QMetaEnum::fromType<Enum>(); \
+                std::string key = val.toString().toStdString(); \
+                set(mu::engraving::Pid::pid, meta.keyToValue(key.c_str())); \
+            } \
+        }  \
+        void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_READ_ONLY(name, pid) \
-    Q_PROPERTY(QVariant name READ get_##name) \
-    QVariant get_##name() const { return get(mu::engraving::Pid::pid); }
+        Q_PROPERTY(QVariant name READ get_##name) \
+        QVariant get_##name() const { return get(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_READ_ONLY_T(type, name, pid) \
-    Q_PROPERTY(type name READ get_##name) \
-    type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
+        Q_PROPERTY(type name READ get_##name) \
+        type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
 
 //---------------------------------------------------------
 //   EngravingItem
@@ -2663,6 +2667,82 @@ public:
     bool isMelisma() const { return lyrics()->isMelisma(); }
     /** APIDOC @property {EngravingItem} - the lyrics line for this lyric, if it exists */
     apiv1::EngravingItem* separator() const { return wrap(lyrics()->separator()); }
+};
+
+//---------------------------------------------------------
+//   Harmony
+//---------------------------------------------------------
+
+/** APIDOC
+ * Class representing a chord symbol (Harmony).
+ * @class Harmony
+ * @memberof Engraving
+ * @hideconstructor
+ * @since 4.7
+*/
+class Harmony : public EngravingItem
+{
+    Q_OBJECT
+    /// Plain text representation of the chord symbol (no formatting).
+    Q_PROPERTY(QString plainText READ plainText)
+    /// Display text of the chord symbol (with formatting).
+    Q_PROPERTY(QString displayText READ displayText)
+    /// Internal harmony name used for chord matching against the diagram database.
+    Q_PROPERTY(QString harmonyName READ harmonyName)
+
+public:
+    /// \cond MS_INTERNAL
+    Harmony(mu::engraving::Harmony* h = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(h, own) {}
+
+    mu::engraving::Harmony* harmony() { return toHarmony(e); }
+    const mu::engraving::Harmony* harmony() const { return toHarmony(e); }
+
+    QString plainText() const { return harmony()->plainText(); }
+    QString displayText() const { return harmony()->displayText().toQString(); }
+    QString harmonyName() const { return harmony()->harmonyName().toQString(); }
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   FretDiagram
+//---------------------------------------------------------
+
+/** APIDOC
+ * Class representing a fretboard diagram. The chord symbol that this diagram is
+ * associated with (when present) is nested inside it and can be reached via the
+ * `harmony` property.
+ * @class FretDiagram
+ * @memberof Engraving
+ * @hideconstructor
+ * @since 4.7
+*/
+class FretDiagram : public EngravingItem
+{
+    Q_OBJECT
+    /// The chord symbol nested inside this fretboard diagram, or null if none.
+    Q_PROPERTY(apiv1::Harmony * harmony READ harmony)
+    /// Plain text of the nested chord symbol, or an empty string if none.
+    Q_PROPERTY(QString harmonyPlainText READ harmonyPlainText)
+    /// Display text of the nested chord symbol, or an empty string if none.
+    Q_PROPERTY(QString harmonyDisplayText READ harmonyDisplayText)
+
+public:
+    /// \cond MS_INTERNAL
+    FretDiagram(mu::engraving::FretDiagram* fd = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(fd, own) {}
+
+    mu::engraving::FretDiagram* fretDiagram() { return toFretDiagram(e); }
+    const mu::engraving::FretDiagram* fretDiagram() const { return toFretDiagram(e); }
+
+    apiv1::Harmony* harmony() const
+    {
+        return wrap<apiv1::Harmony>(fretDiagram()->harmony(), Ownership::SCORE);
+    }
+
+    QString harmonyPlainText() const { return fretDiagram()->harmonyPlainText().toQString(); }
+    QString harmonyDisplayText() const { return fretDiagram()->harmonyDisplayText().toQString(); }
+    /// \endcond
 };
 
 #undef API_PROPERTY

@@ -25,6 +25,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/scoreorder.h"
@@ -1522,5 +1524,60 @@ TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
     // Clean up the added test order
     instrumentOrders.pop_back();
 
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyAtDomLevel
+//   Confirm the DOM-level building block: a FretDiagram with
+//   setHarmony() exposes the chord text via harmonyPlainText().
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
+{
+    // [GIVEN] A score and a FretDiagram with no harmony
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+
+    EXPECT_EQ(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), String());
+
+    // [WHEN] We attach a chord symbol to the diagram
+    fd->setHarmony(u"Cm7");
+
+    // [THEN] The diagram exposes the nested Harmony and its plain text
+    ASSERT_NE(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), u"Cm7");
+
+    delete fd;
+    delete score;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyApi
+//   Test the Plugin API wrappers for FretDiagram and Harmony.
+//   Plugins must be able to read the chord name from a fret
+//   diagram annotation and from the nested Harmony directly.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
+{
+    // [GIVEN] A score with a FretDiagram carrying a chord symbol
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setHarmony(u"Fdim7");
+
+    apiv1::FretDiagram* apiFd = new apiv1::FretDiagram(domFd, apiv1::Ownership::SCORE);
+
+    // [WHEN/THEN] The harmonyPlainText property reflects the chord
+    EXPECT_EQ(apiFd->harmonyPlainText(), QString("Fdim7"));
+
+    // [WHEN/THEN] The nested Harmony wrapper is reachable and exposes plainText
+    apiv1::Harmony* apiHarmony = apiFd->harmony();
+    ASSERT_NE(apiHarmony, nullptr);
+    EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
+
+    delete apiFd;
+    delete domFd;
     delete domScore;
 }

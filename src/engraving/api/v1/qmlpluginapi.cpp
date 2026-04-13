@@ -185,6 +185,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    qmlRegisterAnonymousType<Harmony>("MuseScore", 3);
+    qmlRegisterAnonymousType<FretDiagram>("MuseScore", 3);
     qmlRegisterAnonymousType<Drumset>("MuseScore", 3);
     qmlRegisterAnonymousType<MeasureBase>("MuseScore", 3);
     qmlRegisterAnonymousType<System>("MuseScore", 3);
