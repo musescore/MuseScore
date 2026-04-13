@@ -30,7 +30,7 @@ class Page;
 class System;
 class StaffLines;
 class TextBase;
-class TieSegment;
+class SlurTieSegment;
 enum class SegmentType;
 }
 
@@ -46,8 +46,7 @@ private:
     static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
     static std::vector<TextBase*> collectAllSystemText(const System* system);
 
-    static void computeTieMasks(TieSegment* tieSegment, const std::vector<const EngravingItem*>& itemsToMaskOver);
-    static std::vector<const EngravingItem*> collectAllSystemElementsOfType(const SegmentType type, const System* system);
+    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment, const SegmentType type);
 
     static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding);
 

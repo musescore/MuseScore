@@ -37,7 +37,6 @@
 #include "dom/system.h"
 #include "dom/page.h"
 #include "dom/textlinebase.h"
-#include "dom/tie.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -66,17 +65,6 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 }
             }
 
-            if (maskTies) {
-                std::vector<const EngravingItem*> systemElementsToMaskTiesOver = collectAllSystemElementsOfType(
-                    SegmentType::TimeSig | SegmentType::KeySig, system);
-
-                for (SpannerSegment* seg : system->spannerSegments()) {
-                    if (seg->isTieSegment() && system->staff(seg->staffIdx())->show() && seg->visible()) {
-                        computeTieMasks(toTieSegment(seg), systemElementsToMaskTiesOver);
-                    }
-                }
-            }
-
             staff_idx_t nstaves = ctx.dom().nstaves();
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                 if (staffIdx >= system->staves().size() || !system->staff(staffIdx)->show()) {
@@ -88,6 +76,16 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 if (staffType->isTabStaff()) {
                     maskTABStringLinesForFrets(staffLines, ctx);
                 }
+            }
+        }
+
+        if (maskTies) {
+            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+                if (!spannerSeg->isSlurTieSegment() || !spannerSeg->isSingleBeginType()
+                    || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
+                    continue;
+                }
+                computeSlurTieMasks(toSlurTieSegment(spannerSeg), SegmentType::KeySig | SegmentType::TimeSig);
             }
         }
     }
@@ -362,72 +360,61 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     staffLines->mutldata()->setMask(mask);
 }
 
-void MaskLayout::computeTieMasks(TieSegment* tieSegment, const std::vector<const EngravingItem*>& itemsToMaskOver)
+void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, const SegmentType type)
 {
     TRACEFUNC;
 
-    PointF tiePos = tieSegment->pagePos();
-    Shape tieShape = tieSegment->shape().translated(tiePos);
+    Spanner* spanner = slurTieSegment->spanner();
+    staff_idx_t spannerStaffTrackIdx = spanner->staffIdx() * VOICES;
+    std::vector<const EngravingItem*> itemsToMaskOver;
+    for (Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
+        if (!seg->isType(type) || !seg->element(spannerStaffTrackIdx)) {
+            continue;
+        }
+        for (const EngravingItem* item : seg->elist()) {
+            if (!item) {
+                continue;
+            }
+            itemsToMaskOver.push_back(item);
+        }
+    }
+
+    PointF slurTiePos = slurTieSegment->pagePos();
+    Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
 
     Shape mask;
-    const double spatium = tieSegment->spatium();
+    const double spatium = slurTieSegment->spatium();
     const double collisionPadding = 0.2 * spatium;
     const double maskPadding = 0.1 * spatium;
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
-        if (!tieShape.intersects(item->ldata()->bbox().translated(itemPos).padded(collisionPadding))) {
+        if (!slurTieShape.intersects(item->ldata()->bbox().translated(itemPos).padded(collisionPadding))) {
             continue;
         }
 
         Shape itemShape = item->shape().translated(itemPos);
-        Shape filteredItemShape = createFilteredItemShape(itemShape, tieShape, collisionPadding);
+        Shape filteredItemShape = createFilteredItemShape(itemShape, slurTieShape, collisionPadding);
         if (filteredItemShape.empty()) {
             continue;
         }
 
         filteredItemShape.pad(maskPadding);
-        mask.add(filteredItemShape.translate(-tiePos));
+        mask.add(filteredItemShape.translate(-slurTiePos));
     }
 
     if (mask.empty()) {
-        tieSegment->mutldata()->setMask(mask);
+        slurTieSegment->mutldata()->setMask(mask);
         return;
     }
 
-    // Ensure that we don't leave tiny tie fragments. If two masking
+    // Ensure that we don't leave tiny tie/slur fragments. If two masking
     // elements are too close to each other we extend them to join.
-    tieShape.translate(-tiePos);
+    slurTieShape.translate(-slurTiePos);
     const double minFragmentLengh = 0.5 * spatium;
-    cleanupMask(tieShape, mask, minFragmentLengh);
+    cleanupMask(slurTieShape, mask, minFragmentLengh);
 
-    tieSegment->mutldata()->setMask(mask);
-}
-
-std::vector<const EngravingItem*> MaskLayout::collectAllSystemElementsOfType(const SegmentType type, const System* system)
-{
-    TRACEFUNC;
-
-    std::vector<const EngravingItem*> allItems;
-    for (MeasureBase* mb : system->measures()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        Measure* measure = toMeasure(mb);
-
-        for (const Segment& seg : measure->segments()) {
-            if (!seg.isType(type)) {
-                continue;
-            }
-            for (const EngravingItem* item : seg.elist()) {
-                if (!item || !system->staff(item->staffIdx())->show()) {
-                    continue;
-                }
-                allItems.push_back(item);
-            }
-        }
-    }
-    return allItems;
+    slurTieSegment->mutldata()->setMask(mask);
 }
 
 Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
