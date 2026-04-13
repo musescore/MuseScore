@@ -1580,15 +1580,16 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
     EXPECT_EQ(apiFd->harmonyPlainText(), QString("Fdim7"));
     apiFd->harmonyDisplayText();
 
-    // [WHEN/THEN] The nested Harmony wrapper is reachable via the typed
-    // FretDiagram::harmony() accessor (the path real plugins would use).
+    // [WHEN/THEN] (A) The plugin-facing accessor returns the nested Harmony
+    // wrapper (this is the path a real plugin would use).
     apiv1::Harmony* apiHarmony = apiFd->harmony();
     ASSERT_NE(apiHarmony, nullptr);
     EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
     apiHarmony->displayText();
     EXPECT_FALSE(apiHarmony->harmonyName().isEmpty());
 
-    // Also exercise the wrap() dispatcher branch for Harmony.
+    // [WHEN/THEN] (B) The wrap() dispatcher returns the same wrapper too
+    // (exercises the API_WRAP(Harmony) branch in elements.cpp).
     apiv1::Harmony* apiHarmonyViaDispatcher
         = qobject_cast<apiv1::Harmony*>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
     ASSERT_NE(apiHarmonyViaDispatcher, nullptr);
