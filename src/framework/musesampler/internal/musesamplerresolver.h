@@ -45,8 +45,7 @@ public:
     int buildNumber() const;
 
     audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params,
-                                               const audio::OutputSpec& outputSpec,
-                                               const muse::modularity::ContextPtr& iocCtx) const override;
+                                               const audio::OutputSpec& outputSpec) const override;
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
     audio::AudioResourceMetaList resolveResources() const override;
     audio::SoundPresetList resolveSoundPresets(const audio::AudioResourceMeta& resourceMeta) const override;

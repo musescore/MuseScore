@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include "global/modularity/imoduleinterface.h"
+ #pragma once
 
-#include "global/async/channel.h"
+ #include "global/modularity/imoduleinterface.h"
 
-#include "global/iapplication.h"
+ #include "audio/common/soundfonttypes.h"
 
 namespace muse::audio {
-class IStartAudioController : MODULE_GLOBAL_INTERFACE
+class ISoundFontInstallScenario : MODULE_CONTEXT_INTERFACE
 {
-    INTERFACE_ID(IStartAudioController)
+    INTERFACE_ID(ISoundFontInstallScenario)
+
 public:
-    virtual ~IStartAudioController() = default;
+    virtual ~ISoundFontInstallScenario() = default;
 
-    virtual void startAudioProcessing(const IApplication::RunMode& mode) = 0;
-    virtual void stopAudioProcessing() = 0;
-
-    virtual bool isAudioStarted() const = 0;
-    virtual async::Channel<bool> isAudioStartedChanged() const = 0;
+    virtual void installSoundFont(const synth::SoundFontUri& uri) = 0;
 };
 }

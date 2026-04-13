@@ -23,8 +23,6 @@
 #ifndef MU_PLAYBACK_SOUNDPROFILESREPOSITORY_H
 #define MU_PLAYBACK_SOUNDPROFILESREPOSITORY_H
 
-#include <map>
-
 #include "audio/main/iplayback.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
@@ -33,16 +31,13 @@
 #include "iplaybackconfiguration.h"
 
 namespace mu::playback {
-class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable, public muse::Contextable
+class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable
 {
     muse::GlobalInject<IPlaybackConfiguration> config;
-    muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::GlobalInject<muse::audio::IPlayback> playback;
 
 public:
-    SoundProfilesRepository(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Contextable(iocCtx)
-    {
-    }
+    SoundProfilesRepository() = default;
 
     void init();
 

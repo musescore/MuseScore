@@ -32,14 +32,13 @@
 #include "../iplayer.h"
 
 namespace muse::audio {
-class Playback : public IPlayback, public Contextable, public async::Asyncable
+class Playback : public IPlayback, public async::Asyncable
 {
-    ContextInject<rpc::IRpcChannel> channel = { this };
-    ContextInject<IStartAudioController> startAudioController = { this };
+    GlobalInject<rpc::IRpcChannel> channel;
+    GlobalInject<IStartAudioController> startAudioController;
 
 public:
-    Playback(const muse::modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    Playback() = default;
 
     void init();
     void deinit();

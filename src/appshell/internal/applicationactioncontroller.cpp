@@ -193,7 +193,7 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
         case DragTarget::SoundFont: {
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
-                    soundFontController()->addSoundFont(Uri::fromLocalFile(filePath));
+                    soundFontInstallScenario()->installSoundFont(Uri::fromLocalFile(filePath));
                 });
         } break;
         case DragTarget::Extension: {

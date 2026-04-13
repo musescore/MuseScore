@@ -38,13 +38,13 @@ using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
-TrackSequence::TrackSequence(const TrackSequenceId id, const modularity::ContextPtr& iocCtx)
-    : muse::Contextable(iocCtx), m_id(id)
+TrackSequence::TrackSequence(const TrackSequenceId id)
+    : m_id(id)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock = std::make_shared<Clock>();
-    m_player = std::make_shared<SequencePlayer>(this, m_clock, iocCtx);
+    m_player = std::make_shared<SequencePlayer>(this, m_clock);
     m_audioIO = std::make_shared<SequenceIO>(this);
 
     audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
@@ -107,7 +107,7 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
         m_prevActiveTrackId = trackId;
     };
 
-    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived, iocContext());
+    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived);
     source->setOutputSpec(audioEngine()->outputSpec());
 
     RetVal<MixerChannelPtr> channel = mixer()->addChannel(newId, source);

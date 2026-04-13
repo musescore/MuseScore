@@ -27,7 +27,7 @@
 #include "modularity/imoduleinterface.h"
 
 namespace muse::audio {
-class IAudioDriverController : MODULE_CONTEXT_INTERFACE
+class IAudioDriverController : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IAudioDriverController)
 

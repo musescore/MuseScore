@@ -39,16 +39,15 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 namespace muse::audio::engine {
 class Mixer;
-class EnginePlayback : public IEnginePlayback, public Contextable, public async::Asyncable
+class EnginePlayback : public IEnginePlayback, public async::Asyncable
 {
     GlobalInject<synth::ISynthResolver> synthResolver;
     GlobalInject<fx::IFxResolver> fxResolver;
     GlobalInject<IAudioEngineConfiguration> configuration;
-    ContextInject<IAudioEngine> audioEngine = { this };
+    GlobalInject<IAudioEngine> audioEngine;
 
 public:
-    EnginePlayback(const muse::modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    EnginePlayback() = default;
 
     void init() override;
     void deinit() override;

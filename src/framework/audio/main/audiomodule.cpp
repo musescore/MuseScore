@@ -32,6 +32,7 @@
 #else
 #include "audio/common/rpc/platform/general/generalrpcchannel.h"
 #include "platform/general/generalsoundfontcontroller.h"
+#include "platform/general/generalsoundfontinstallscenario.h"
 #endif
 
 #include "internal/audioconfiguration.h"
@@ -65,12 +66,30 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>(globalCtx());
-    globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
-    globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());
+    m_configuration = std::make_shared<AudioConfiguration>();
+    m_audioDriverController = std::make_shared<AudioDriverController>();
 
     m_engineGlobalSetup = std::make_shared<engine::EngineGlobalSetup>();
     m_engineGlobalSetup->registerExports();
+
+#ifdef Q_OS_WASM
+    m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
+    m_soundFontController = std::make_shared<WebSoundFontController>();
+#else
+    m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
+    m_soundFontController = std::make_shared<GeneralSoundFontController>();
+#endif
+
+    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel);
+    m_mainPlayback = std::make_shared<Playback>();
+
+    globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
+    globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());
+    globalIoc()->registerExport<rpc::IRpcChannel>(mname, m_rpcChannel);
+    globalIoc()->registerExport<IAudioDriverController>(mname, m_audioDriverController);
+    globalIoc()->registerExport<ISoundFontController>(mname, m_soundFontController);
+    globalIoc()->registerExport<IStartAudioController>(mname, m_startAudioController);
+    globalIoc()->registerExport<IPlayback>(mname, m_mainPlayback);
 }
 
 void AudioModule::resolveImports()
@@ -86,6 +105,21 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
+    // rpc
+    m_rpcChannel->setupOnMain();
+#ifndef Q_OS_WASM
+    m_rpcTicker.start(1, [this]() {
+        m_rpcChannel->process();
+    }, Ticker::Mode::Repeat);
+#endif
+
+    m_startAudioController->init();
+    m_mainPlayback->init();
+
+#ifndef Q_OS_WASM
+    m_startAudioController->startAudioProcessing(mode);
+#endif
+
     //! --- Diagnostics ---
     auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);
     if (pr) {
@@ -98,6 +132,9 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
 void AudioModule::onDeinit()
 {
+    m_rpcTicker.stop();
+    m_mainPlayback->deinit();
+    m_startAudioController->stopAudioProcessing();
     m_engineGlobalSetup->onDeinit();
 }
 
@@ -111,32 +148,9 @@ modularity::IContextSetup* AudioModule::newContext(const muse::modularity::Conte
 void AudioContext::registerExports()
 {
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
-    m_mainPlayback = std::make_shared<Playback>(iocContext());
-    m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
-
-#ifdef Q_OS_WASM
-    m_rpcChannel = std::make_shared<rpc::WebRpcChannel>();
-#else
-    m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
-#endif
-
-#ifdef Q_OS_WASM
-    m_soundFontController = std::make_shared<WebSoundFontController>();
-#else
-    m_soundFontController = std::make_shared<GeneralSoundFontController>(iocContext());
-#endif
-
-    m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel, iocContext());
-
-    ioc()->registerExport<IAudioDriverController>(mname, m_audioDriverController);
-    ioc()->registerExport<ISoundFontController>(mname, m_soundFontController);
-    ioc()->registerExport<IStartAudioController>(mname, m_startAudioController);
-    ioc()->registerExport<rpc::IRpcChannel>(mname, m_rpcChannel);
-    ioc()->registerExport<IPlayback>(mname, m_mainPlayback);
 
 #ifndef Q_OS_WASM
-    m_engineContextSetup = std::make_shared<engine::EngineContextSetup>(iocContext());
-    m_engineContextSetup->registerExports();
+    ioc()->registerExport<ISoundFontInstallScenario>(mname, new GeneralSoundFontInstallScenario(iocContext()));
 #endif
 }
 
@@ -146,10 +160,6 @@ void AudioContext::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<AudioUiActions>(m_actionsController));
     }
-
-#ifndef Q_OS_WASM
-    m_engineContextSetup->resolveImports();
-#endif
 }
 
 void AudioContext::onInit(const IApplication::RunMode& mode)
@@ -158,38 +168,7 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    // rpc
-    m_rpcChannel->setupOnMain();
-#ifndef Q_OS_WASM
-    m_rpcTicker.start(1, [this]() {
-        m_rpcChannel->process();
-    }, Ticker::Mode::Repeat);
-#endif
-
-    m_startAudioController->init();
-
-#ifndef Q_OS_WASM
-    m_startAudioController->startAudioProcessing(mode);
-#endif
-
     m_audioInited = true;
 
     m_actionsController->init();
-    m_mainPlayback->init();
-}
-
-void AudioContext::onDeinit()
-{
-    m_mainPlayback->deinit();
-
-    if (!m_audioInited) {
-        return;
-    }
-
-    m_rpcTicker.stop();
-    m_startAudioController->stopAudioProcessing();
-
-#ifndef Q_OS_WASM
-    m_engineContextSetup->onDeinit();
-#endif
 }

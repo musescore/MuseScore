@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,33 @@
 
 #pragma once
 
-#include "../../isoundfontcontroller.h"
+#include "../../isoundfontinstallscenario.h"
 
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "../../iaudioconfiguration.h"
-#include "audio/common/rpc/irpcchannel.h"
 #include "global/io/ifilesystem.h"
+#include "interactive/iinteractive.h"
+#include "../../iaudioconfiguration.h"
+#include "../../isoundfontcontroller.h"
 
 namespace muse::audio {
-class GeneralSoundFontController : public ISoundFontController, public async::Asyncable
+class GeneralSoundFontInstallScenario : public ISoundFontInstallScenario, public async::Asyncable, public muse::Contextable
 {
     GlobalInject<IAudioConfiguration> configuration;
-    GlobalInject<rpc::IRpcChannel> channel;
     GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<ISoundFontController> soundFontController;
+    ContextInject<IInteractive> interactive = { this };
 
 public:
-    GeneralSoundFontController() = default;
+    GeneralSoundFontInstallScenario(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx) {}
 
-    void loadSoundFonts() override;
-    void addSoundFont(const synth::SoundFontUri& uri) override;
+    void installSoundFont(const synth::SoundFontUri& uri) override;
 
 private:
 
-    void doLoadSoundFonts();
-    void loadSoundFonts(const std::vector<io::path_t>& paths);
+    RetVal<io::path_t> resolveInstallationPath(const io::path_t& path) const;
+    Ret doAddSoundFont(const io::path_t& src, const io::path_t& dst);
 };
 }

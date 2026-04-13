@@ -156,11 +156,11 @@ int MuseSamplerResolver::buildNumber() const
 }
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params,
-                                                  const audio::OutputSpec&, const muse::modularity::ContextPtr& iocCtx) const
+                                                  const audio::OutputSpec&) const
 {
     const InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, iocCtx);
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params);
     }
 
     return nullptr;

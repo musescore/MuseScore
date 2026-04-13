@@ -71,10 +71,16 @@ void GeneralRpcChannel::process()
 
 void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
-    RPCLOG() << "callId: " << msg.callId
-             << ", method: " << to_string(msg.method)
-             << ", type: " << to_string(msg.type)
-             << ", data.size: " << msg.data.size();
+    if (msg.type == MsgType::Stream) {
+        RPCLOG() << "stream: " << to_string(static_cast<StreamName>(msg.method))
+                 << ", streamId: " << msg.callId
+                 << ", data.size: " << msg.data.size();
+    } else {
+        RPCLOG() << "callId: " << msg.callId
+                 << ", method: " << to_string(msg.method)
+                 << ", type: " << to_string(msg.type)
+                 << ", data.size: " << msg.data.size();
+    }
 
     if (s_isMainThread) {
         if (onResponse) {
@@ -93,10 +99,16 @@ void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 
 void GeneralRpcChannel::receive(RpcData& to, const Msg& m) const
 {
-    RPCLOG() << "callId: " << m.callId
-             << ", method: " << to_string(m.method)
-             << ", type: " << to_string(m.type)
-             << ", data.size: " << m.data.size();
+    if (m.type == MsgType::Stream) {
+        RPCLOG() << "stream: " << to_string(static_cast<StreamName>(m.method))
+                 << ", streamId: " << m.callId
+                 << ", data.size: " << m.data.size();
+    } else {
+        RPCLOG() << "callId: " << m.callId
+                 << ", method: " << to_string(m.method)
+                 << ", type: " << to_string(m.type)
+                 << ", data.size: " << m.data.size();
+    }
 
     // all
     if (to.listenerAll) {

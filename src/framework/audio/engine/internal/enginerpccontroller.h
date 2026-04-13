@@ -31,17 +31,16 @@
 #include "../iaudioengineconfiguration.h"
 
 namespace muse::audio::engine {
-class EngineRpcController : public async::Asyncable, public muse::Contextable
+class EngineRpcController : public async::Asyncable
 {
     GlobalInject<IAudioEngineConfiguration> configuration;
     GlobalInject<synth::ISoundFontRepository> soundFontRepository;
-    ContextInject<rpc::IRpcChannel> channel = { this };
-    ContextInject<IAudioEngine> audioEngine = { this };
-    ContextInject<IEnginePlayback> playback = { this };
+    GlobalInject<rpc::IRpcChannel> channel;
+    GlobalInject<IAudioEngine> audioEngine;
+    GlobalInject<IEnginePlayback> playback;
 
 public:
-    EngineRpcController(const muse::modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    EngineRpcController() = default;
 
     void init();
     void deinit();

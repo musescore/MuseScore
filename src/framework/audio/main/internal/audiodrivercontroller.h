@@ -31,14 +31,12 @@
 #include "audio/common/rpc/irpcchannel.h"
 
 namespace muse::audio {
-class AudioDriverController : public IAudioDriverController, public Contextable, public async::Asyncable
+class AudioDriverController : public IAudioDriverController, public async::Asyncable
 {
     GlobalInject<IAudioConfiguration> configuration;
-    ContextInject<rpc::IRpcChannel> rpcChannel = { this };
+    GlobalInject<rpc::IRpcChannel> rpcChannel;
 
 public:
-    AudioDriverController(const modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
 
     // Api
     std::vector<std::string> availableAudioApiList() const override;

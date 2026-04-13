@@ -31,8 +31,8 @@ public:
     void init(const AudioInputParams& defaultInputParams, const audio::OutputSpec& defaultOutputSpec) override;
 
     ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params, const audio::OutputSpec& outputSpec,
-                                 const PlaybackSetupData& setupData, const muse::modularity::ContextPtr& iocCtx) const override;
-    ISynthesizerPtr resolveDefaultSynth(const TrackId trackId, const muse::modularity::ContextPtr& iocCtx) const override;
+                                 const PlaybackSetupData& setupData) const override;
+    ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const override;
     AudioInputParams resolveDefaultInputParams() const override;
     audio::AudioResourceMetaList resolveAvailableResources() const override;
     SoundPresetList resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const override;

@@ -49,7 +49,7 @@ class CommonAudioApiConfigurationModel : public QObject, public muse::Contextabl
     Q_PROPERTY(QList<unsigned int> sampleRateList READ sampleRateList NOTIFY sampleRateListChanged)
 
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
-    muse::ContextInject<muse::audio::IAudioDriverController> audioDriverController = { this };
+    muse::GlobalInject<muse::audio::IAudioDriverController> audioDriverController;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

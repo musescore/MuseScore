@@ -36,7 +36,7 @@
 #include "iappshellconfiguration.h"
 #include "multiwindows/imultiwindowsprovider.h"
 #include "project/iprojectfilescontroller.h"
-#include "audio/main/isoundfontcontroller.h"
+#include "audio/main/isoundfontinstallscenario.h"
 #include "istartupscenario.h"
 #include "iapplication.h"
 #include "extensions/iextensioninstaller.h"
@@ -62,7 +62,7 @@ class ApplicationActionController : public QObject, public muse::Contextable, pu
     muse::ContextInject<muse::ui::IMainWindow> mainWindow = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<project::IProjectFilesController> projectFilesController = { this };
-    muse::ContextInject<muse::audio::ISoundFontController> soundFontController = { this };
+    muse::ContextInject<muse::audio::ISoundFontInstallScenario> soundFontInstallScenario = { this };
     muse::ContextInject<IStartupScenario> startupScenario = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<context::IUiContextResolver> uiContextResolver = { this };
