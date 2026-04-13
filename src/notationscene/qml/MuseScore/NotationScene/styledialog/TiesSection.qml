@@ -176,6 +176,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.minHangingTieLength
             }
+
+            CheckBox {
+                id: maskTiesOverTimeAndKeySignaturesCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask ties over time and key signatures")
+                checked: root.pageModel.maskTiesOverTimeAndKeySignatures.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskTiesOverTimeAndKeySignatures.value = !maskTiesOverTimeAndKeySignaturesCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskTiesOverTimeAndKeySignatures
+            }
         }
 
         ColumnLayout {

@@ -37,6 +37,7 @@
 #include "dom/system.h"
 #include "dom/page.h"
 #include "dom/textlinebase.h"
+#include "dom/tie.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -46,6 +47,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
+    bool maskTies = ctx.conf().styleB(Sid::maskTiesOverTimeAndKeySignatures);
 
     for (const System* system : page->systems()) {
         std::vector<TextBase*> allSystemText = collectAllSystemText(system);
@@ -60,6 +62,17 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 for (const Segment& seg : measure->segments()) {
                     if (seg.isType(SegmentType::BarLineType)) {
                         computeBarlineMasks(&seg, system, allSystemText, ctx);
+                    }
+                }
+            }
+
+            if (maskTies) {
+                std::vector<const EngravingItem*> systemElementsToMaskTiesOver = collectAllSystemElementsOfType(
+                    SegmentType::TimeSig | SegmentType::KeySig, system);
+
+                for (SpannerSegment* seg : system->spannerSegments()) {
+                    if (seg->isTieSegment() && system->staff(seg->staffIdx())->show() && seg->visible()) {
+                        computeTieMasks(toTieSegment(seg), systemElementsToMaskTiesOver);
                     }
                 }
             }
@@ -128,13 +141,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
 
         Shape textShape = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
 
-        Shape filteredTextShape;
-        filteredTextShape.elements().reserve(textShape.elements().size());
-        for (const ShapeElement& el : textShape.elements()) {
-            if (barlineShape.intersects(el.padded(collisionPadding))) {
-                filteredTextShape.add(el);
-            }
-        }
+        Shape filteredTextShape = createFilteredItemShape(textShape, barlineShape, collisionPadding);
         if (filteredTextShape.empty()) {
             continue;
         }
@@ -353,4 +360,84 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     }
 
     staffLines->mutldata()->setMask(mask);
+}
+
+void MaskLayout::computeTieMasks(TieSegment* tieSegment, const std::vector<const EngravingItem*>& itemsToMaskOver)
+{
+    TRACEFUNC;
+
+    PointF tiePos = tieSegment->pagePos();
+    Shape tieShape = tieSegment->shape().translated(tiePos);
+
+    Shape mask;
+    const double spatium = tieSegment->spatium();
+    const double collisionPadding = 0.2 * spatium;
+    const double maskPadding = 0.1 * spatium;
+
+    for (const EngravingItem* item : itemsToMaskOver) {
+        PointF itemPos = item->pagePos();
+        if (!tieShape.intersects(item->ldata()->bbox().translated(itemPos).padded(collisionPadding))) {
+            continue;
+        }
+
+        Shape itemShape = item->shape().translated(itemPos);
+        Shape filteredItemShape = createFilteredItemShape(itemShape, tieShape, collisionPadding);
+        if (filteredItemShape.empty()) {
+            continue;
+        }
+
+        filteredItemShape.pad(maskPadding);
+        mask.add(filteredItemShape.translate(-tiePos));
+    }
+
+    if (mask.empty()) {
+        tieSegment->mutldata()->setMask(mask);
+        return;
+    }
+
+    // Ensure that we don't leave tiny tie fragments. If two masking
+    // elements are too close to each other we extend them to join.
+    tieShape.translate(-tiePos);
+    const double minFragmentLengh = 0.5 * spatium;
+    cleanupMask(tieShape, mask, minFragmentLengh);
+
+    tieSegment->mutldata()->setMask(mask);
+}
+
+std::vector<const EngravingItem*> MaskLayout::collectAllSystemElementsOfType(const SegmentType type, const System* system)
+{
+    TRACEFUNC;
+
+    std::vector<const EngravingItem*> allItems;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* measure = toMeasure(mb);
+
+        for (const Segment& seg : measure->segments()) {
+            if (!seg.isType(type)) {
+                continue;
+            }
+            for (const EngravingItem* item : seg.elist()) {
+                if (!item || !system->staff(item->staffIdx())->show()) {
+                    continue;
+                }
+                allItems.push_back(item);
+            }
+        }
+    }
+    return allItems;
+}
+
+Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
+{
+    Shape filteredItemShape;
+    filteredItemShape.elements().reserve(overlyingItemShape.elements().size());
+    for (const ShapeElement& el : overlyingItemShape.elements()) {
+        if (maskedItemShape.intersects(el.padded(collisionPadding))) {
+            filteredItemShape.add(el);
+        }
+    }
+    return filteredItemShape;
 }

@@ -595,6 +595,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minWigglyGlissandoLength,                   2.0_sp),
     styleDef(slurMinDistance,                            0.5_sp),
     styleDef(tieMinDistance,                             0.5_sp),
+    styleDef(maskTiesOverTimeAndKeySignatures,           true),
     styleDef(laissezVibMinDistance,                      0.5_sp),
     styleDef(headerToLineStartDistance,                  1.0_sp),
     styleDef(lineEndToBarlineDistance,                   0.25_sp),
