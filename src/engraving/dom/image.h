@@ -97,8 +97,8 @@ public:
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 3; }
-    Grip initialEditModeGrip() const override { return Grip(2); }
-    Grip defaultGrip() const override { return Grip(2); }
+    Grip initialEditModeGrip() const override { return Grip::MIDDLE; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     SizeF pixel2size(const SizeF& s) const;
