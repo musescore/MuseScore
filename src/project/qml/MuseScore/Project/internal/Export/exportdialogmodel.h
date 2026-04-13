@@ -79,6 +79,9 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(QVariantList availableSampleFormats READ availableSampleFormats NOTIFY availableSampleFormatsChanged)
     Q_PROPERTY(int selectedSampleFormat READ selectedSampleFormat WRITE setSelectedSampleFormat NOTIFY selectedSampleFormatChanged)
 
+    Q_PROPERTY(bool showSelectionOnlyControl READ showSelectionOnlyControl CONSTANT)
+    Q_PROPERTY(bool selectionOnly READ selectionOnly WRITE setSelectionOnly NOTIFY selectionOnlyChanged)
+
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
 
@@ -173,6 +176,10 @@ public:
     int selectedSampleFormat() const;
     void setSelectedSampleFormat(int format);
 
+    bool showSelectionOnlyControl() const;
+    bool selectionOnly() const;
+    void setSelectionOnly(bool flag);
+
     bool midiExpandRepeats() const;
     void setMidiExpandRepeats(bool expandRepeats);
 
@@ -237,6 +244,8 @@ signals:
     void bitRateChanged(int bitRate);
     void availableSampleFormatsChanged();
     void selectedSampleFormatChanged();
+
+    void selectionOnlyChanged(bool flag);
 
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);

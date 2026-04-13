@@ -641,12 +641,13 @@ async::Promise<AudioSignalChanges> Playback::masterSignalChanges() const
 }
 
 async::Promise<bool> Playback::saveSoundTrack(const TrackSequenceId sequenceId, const SoundTrackFormat& format,
-                                              io::IODevice& dstDevice)
+                                              io::IODevice& dstDevice, const secs_t startPosition, const secs_t duration)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    return async::make_promise<bool>([this, sequenceId, format, &dstDevice](auto resolve, auto reject) {
+    return async::make_promise<bool>([this, sequenceId, format, &dstDevice, startPosition, duration](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(Method::SaveSoundTrack, RpcPacker::pack(sequenceId, format, reinterpret_cast<uintptr_t>(&dstDevice)));
+        ByteArray data = RpcPacker::pack(sequenceId, format, reinterpret_cast<uintptr_t>(&dstDevice), startPosition, duration);
+        Msg msg = rpc::make_request(Method::SaveSoundTrack, data);
         channel()->send(msg, [resolve, reject](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             Ret ret;
