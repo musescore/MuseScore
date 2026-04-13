@@ -78,7 +78,7 @@ static IExcerptNotationPtr createAndInitExcerptNotation(MasterNotation* master, 
 MasterNotation::MasterNotation(project::INotationProject* project, const muse::modularity::ContextPtr& iocCtx)
     : Notation(this, iocCtx), m_project(project)
 {
-    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack(), style());
 
 #ifdef MUE_BUILD_ENGRAVING_PLAYBACK
     m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged, iocCtx);

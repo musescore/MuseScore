@@ -39,8 +39,9 @@ static NotationParts* get_impl(const INotationPartsPtr& parts)
     return static_cast<NotationParts*>(parts.get());
 }
 
-MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : NotationParts(getScore, interaction, undoStack)
+MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+                                         INotationStylePtr style)
+    : NotationParts(getScore, interaction, undoStack, style)
 {
 }
 
