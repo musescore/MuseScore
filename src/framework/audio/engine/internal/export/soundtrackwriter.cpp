@@ -118,10 +118,15 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        audioEngine()->setMode(RenderMode::IdleMode);
+        //! NOTE Changes to the source and audio engine state
+        //! must be performed via execOperation - so that synchronization with the audio driver process works
+        IAudioEngine::Operation func = [this]() {
+            audioEngine()->setMode(RenderMode::IdleMode);
 
-        m_source->setOutputSpec(audioEngine()->outputSpec());
-        m_source->setIsActive(false);
+            m_source->setOutputSpec(audioEngine()->outputSpec());
+            m_source->setIsActive(false);
+        };
+        audioEngine()->execOperation(OperationType::LongOperation, func);
 
         m_isAborted = false;
     };
