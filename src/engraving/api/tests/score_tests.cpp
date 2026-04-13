@@ -1638,6 +1638,16 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
     // [THEN] The dot is gone, confirming the change went through the undo stack
     EXPECT_EQ(domFd->dot(0).front().fret, 0);
 
+#ifndef NDEBUG
+    // Negative-path checks: invalid inputs trigger IF_ASSERT_FAILED.
+    EXPECT_DEATH({ apiFd->setDot(99, 3);
+                 }, ".*string.*");
+    EXPECT_DEATH({ apiFd->setDot(0, -1);
+                 }, ".*fret.*");
+    EXPECT_DEATH({ apiFd->setDot(0, 3, false, 99);
+                 }, ".*dotType.*");
+#endif
+
     delete apiFd;
     delete domFd;
     delete domScore;
@@ -1671,6 +1681,14 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
 
     // [THEN] The marker is gone
     EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::NONE);
+
+#ifndef NDEBUG
+    // Negative-path checks: invalid inputs trigger IF_ASSERT_FAILED.
+    EXPECT_DEATH({ apiFd->setMarker(99, int(FretMarkerType::CROSS));
+                 }, ".*string.*");
+    EXPECT_DEATH({ apiFd->setMarker(0, 99);
+                 }, ".*marker.*");
+#endif
 
     delete apiFd;
     delete domFd;
@@ -1707,6 +1725,14 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
 
     // [THEN] The barre is gone
     EXPECT_FALSE(domFd->barre(2).exists());
+
+#ifndef NDEBUG
+    // Negative-path checks: invalid inputs trigger IF_ASSERT_FAILED.
+    EXPECT_DEATH({ apiFd->setBarre(99, 2);
+                 }, ".*string.*");
+    EXPECT_DEATH({ apiFd->setBarre(0, 0);
+                 }, ".*fret.*");
+#endif
 
     delete apiFd;
     delete domFd;
