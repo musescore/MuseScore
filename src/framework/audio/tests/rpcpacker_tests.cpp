@@ -80,7 +80,7 @@ TEST_F(Audio_RpcPackerTests, AudioResourceMeta)
 {
     AudioResourceMeta origin;
     origin.id = "1234";
-    origin.type = AudioResourceType::MusePlugin;
+    origin.type = AudioResourceType::NativeEffect;
     origin.vendor = "muse";
     origin.attributes.insert({ u"key", u"val" });
     origin.hasNativeEditorSupport = true;
