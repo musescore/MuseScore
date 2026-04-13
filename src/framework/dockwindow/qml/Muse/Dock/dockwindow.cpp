@@ -714,22 +714,31 @@ void DockWindow::reloadCurrentPage()
         return;
     }
 
-    TRACEFUNC;
-
-    clearRegistry(m_ctx);
-
-    for (DockBase* dock : m_currentPage->allDocks()) {
-        dock->deinit();
+    if (m_reloadCurrentPageScheduled) {
+        return;
     }
 
-    QString currentPageUriBackup = currentPageUri();
+    m_reloadCurrentPageScheduled = true;
+    async::Async::call(this, [this]() {
+        m_reloadCurrentPageScheduled = false;
 
-    /// NOTE: for reset geometry
-    m_currentPage = nullptr;
+        TRACEFUNC;
 
-    if (doLoadPage(currentPageUriBackup)) {
-        notifyAboutDocksOpenStatus();
-    }
+        clearRegistry(m_ctx);
+
+        for (DockBase* dock : m_currentPage->allDocks()) {
+            dock->deinit();
+        }
+
+        QString currentPageUriBackup = currentPageUri();
+
+        /// NOTE: for reset geometry
+        m_currentPage = nullptr;
+
+        if (doLoadPage(currentPageUriBackup)) {
+            notifyAboutDocksOpenStatus();
+        }
+    });
 }
 
 void DockWindow::initDocks(DockPageView* page)
