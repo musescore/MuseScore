@@ -3112,7 +3112,7 @@ QString Braille::braillePedalAfter(ChordRest* chordRest, const std::vector<Pedal
     }
     QString result;
     for (Pedal* pedal : pedalList) {
-        if (!pedal || chordRest->tick() + chordRest->actualTicks() != pedal->tick2()) {
+        if (!pedal || chordRest->endTick() != pedal->tick2()) {
             continue;
         }
         // Omit pedal up if immediately followed by pedal down on the next note
