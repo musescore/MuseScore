@@ -240,6 +240,9 @@ TEST_F(Braille_Tests, hairpins) {
     // removed the 4th measure from the example as MuseScore does not have a representations for mordents with accidentals
     brailleSaveTest("testHairpins_Example_22.3.3.2_MBC2015");
 }
+TEST_F(Braille_Tests, pedals) {
+    brailleSaveTest("testPedals_MBC2015");
+}
 TEST_F(Braille_Tests, sectionBreak) {
     brailleSaveTest("testSectionBreak");
 }
