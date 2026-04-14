@@ -114,6 +114,10 @@ TEST_F(TablEdit_Tests, tef_metadata) {
     tefReadTest("metadata");
 }
 
+TEST_F(TablEdit_Tests, tef_multi_track_frets) {
+    tefReadTest("multi_track_frets");
+}
+
 TEST_F(TablEdit_Tests, tef_multi_track_rests) {
     tefReadTest("multi_track_rests");
 }
