@@ -1757,6 +1757,23 @@ bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* seco
     return segEndsWithBl && adjacentAndSecondShareSegment;
 }
 
+PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics)
+{
+    Score* score = lyrics->score();
+    for (auto sp : score->spannerMap().findOverlapping(lyrics->tick().ticks(), lyrics->tick().ticks())) {
+        if (!sp.value->isPartialLyricsLine() || sp.value->track() != lyrics->track()) {
+            continue;
+        }
+        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
+            continue;
+        }
+        return partialLine;
+    }
+
+    return nullptr;
+}
+
 MeasureBeat findBeat(const Score* score, int tick)
 {
     MeasureBeat measureBeat;

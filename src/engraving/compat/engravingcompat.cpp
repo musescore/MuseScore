@@ -29,6 +29,7 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
@@ -295,6 +296,10 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     int mscVersion = score->mscVersion();
 
+    if (mscVersion < 470) {
+        needRelayout |= setLyricLineVisibility(score);
+    }
+
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
     }
@@ -342,5 +347,27 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::setLyricLineVisibility(MasterScore* masterScore)
+{
+    bool needRelayout = false;
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->unmanagedSpanners()) {
+            if (!sp->isLyricsLine()) {
+                continue;
+            }
+
+            LyricsLine* ll = toLyricsLine(sp);
+            if (!ll->lyrics() || ll->visible() == ll->lyrics()->visible()) {
+                continue;
+            }
+
+            ll->setVisible(ll->lyrics()->visible());
+            needRelayout = true;
+        }
+    }
+
+    return needRelayout;
 }
 } // namespace mu::engraving::compat
