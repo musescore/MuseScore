@@ -60,7 +60,7 @@ ExportSettingsPage {
     ExportOptionItem {
         id: bitrateLabel
         visible: root.showBitRateControl
-        text: qsTrc("project/export", "Bitrate:")
+        text: qsTrc("project/export", "Bit rate:")
 
         StyledDropdown {
             Layout.preferredWidth: 126
