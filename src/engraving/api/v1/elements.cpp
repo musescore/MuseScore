@@ -676,14 +676,17 @@ Ornament* Spanner::ornament() const
 
 void FretDiagram::setDot(int string, int fret, bool add, int dotType)
 {
-    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+    if (string < 0 || string >= fretDiagram()->strings()) {
+        LOGW("PluginAPI::FretDiagram::setDot: string %d is out of range (0..%d)", string, fretDiagram()->strings() - 1);
         return;
     }
-    IF_ASSERT_FAILED(fret >= 0) {
+    if (fret < 0) {
+        LOGW("PluginAPI::FretDiagram::setDot: fret %d is negative", fret);
         return;
     }
-    IF_ASSERT_FAILED(dotType >= int(mu::engraving::FretDotType::NORMAL)
-                     && dotType <= int(mu::engraving::FretDotType::TRIANGLE)) {
+    if (dotType < int(mu::engraving::FretDotType::NORMAL)
+        || dotType > int(mu::engraving::FretDotType::TRIANGLE)) {
+        LOGW("PluginAPI::FretDiagram::setDot: dotType %d is out of range", dotType);
         return;
     }
     if (ownership() == Ownership::SCORE) {
@@ -697,11 +700,13 @@ void FretDiagram::setDot(int string, int fret, bool add, int dotType)
 
 void FretDiagram::setMarker(int string, int marker)
 {
-    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+    if (string < 0 || string >= fretDiagram()->strings()) {
+        LOGW("PluginAPI::FretDiagram::setMarker: string %d is out of range (0..%d)", string, fretDiagram()->strings() - 1);
         return;
     }
-    IF_ASSERT_FAILED(marker >= int(mu::engraving::FretMarkerType::NONE)
-                     && marker <= int(mu::engraving::FretMarkerType::CROSS)) {
+    if (marker < int(mu::engraving::FretMarkerType::NONE)
+        || marker > int(mu::engraving::FretMarkerType::CROSS)) {
+        LOGW("PluginAPI::FretDiagram::setMarker: marker %d is out of range", marker);
         return;
     }
     if (ownership() == Ownership::SCORE) {
@@ -715,10 +720,12 @@ void FretDiagram::setMarker(int string, int marker)
 
 void FretDiagram::setBarre(int string, int fret, bool add)
 {
-    IF_ASSERT_FAILED(string >= 0 && string < fretDiagram()->strings()) {
+    if (string < 0 || string >= fretDiagram()->strings()) {
+        LOGW("PluginAPI::FretDiagram::setBarre: string %d is out of range (0..%d)", string, fretDiagram()->strings() - 1);
         return;
     }
-    IF_ASSERT_FAILED(fret > 0) {
+    if (fret <= 0) {
+        LOGW("PluginAPI::FretDiagram::setBarre: fret %d must be > 0", fret);
         return;
     }
     if (ownership() == Ownership::SCORE) {
