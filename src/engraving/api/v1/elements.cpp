@@ -667,9 +667,11 @@ Ornament* Spanner::ornament() const
 //   FretDiagram::setMarker
 //   FretDiagram::setBarre
 //   FretDiagram::clear
-///   These thin wrappers forward to the undo-aware DOM methods so that
-///   modifications are recorded on the undo stack and propagated to all
-///   linked clones of the diagram (the DOM walks linkList() internally).
+///   When the element is owned by the score, use the undo-aware DOM methods
+///   so that modifications are recorded on the undo stack and propagated to
+///   all linked clones. When the element is plugin-owned (not yet added to
+///   a score), use the direct setters to avoid accessing an invalid undo
+///   stack (see ScoreElement::set() in scoreelement.cpp for the same pattern).
 //---------------------------------------------------------
 
 void FretDiagram::setDot(int string, int fret, bool add, int dotType)
@@ -684,8 +686,13 @@ void FretDiagram::setDot(int string, int fret, bool add, int dotType)
                      && dotType <= int(mu::engraving::FretDotType::TRIANGLE)) {
         return;
     }
-    fretDiagram()->undoSetFretDot(string, fret, add,
-                                  static_cast<mu::engraving::FretDotType>(dotType));
+    if (ownership() == Ownership::SCORE) {
+        fretDiagram()->undoSetFretDot(string, fret, add,
+                                      static_cast<mu::engraving::FretDotType>(dotType));
+    } else {
+        fretDiagram()->setDot(string, fret, add,
+                              static_cast<mu::engraving::FretDotType>(dotType));
+    }
 }
 
 void FretDiagram::setMarker(int string, int marker)
@@ -697,8 +704,13 @@ void FretDiagram::setMarker(int string, int marker)
                      && marker <= int(mu::engraving::FretMarkerType::CROSS)) {
         return;
     }
-    fretDiagram()->undoSetFretMarker(string,
-                                     static_cast<mu::engraving::FretMarkerType>(marker));
+    if (ownership() == Ownership::SCORE) {
+        fretDiagram()->undoSetFretMarker(string,
+                                         static_cast<mu::engraving::FretMarkerType>(marker));
+    } else {
+        fretDiagram()->setMarker(string,
+                                 static_cast<mu::engraving::FretMarkerType>(marker));
+    }
 }
 
 void FretDiagram::setBarre(int string, int fret, bool add)
@@ -709,12 +721,20 @@ void FretDiagram::setBarre(int string, int fret, bool add)
     IF_ASSERT_FAILED(fret > 0) {
         return;
     }
-    fretDiagram()->undoSetFretBarre(string, fret, add);
+    if (ownership() == Ownership::SCORE) {
+        fretDiagram()->undoSetFretBarre(string, fret, add);
+    } else {
+        fretDiagram()->setBarre(string, fret, add);
+    }
 }
 
 void FretDiagram::clear()
 {
-    fretDiagram()->undoFretClear();
+    if (ownership() == Ownership::SCORE) {
+        fretDiagram()->undoFretClear();
+    } else {
+        fretDiagram()->clear();
+    }
 }
 
 //---------------------------------------------------------
