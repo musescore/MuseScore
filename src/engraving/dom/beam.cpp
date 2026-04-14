@@ -32,6 +32,7 @@
 
 #include "actionicon.h"
 #include "chord.h"
+#include "note.h"
 #include "groups.h"
 #include "measure.h"
 #include "score.h"
@@ -48,6 +49,21 @@ using namespace muse;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+/*!
+ * First chord in beam order, skipping leading rests so beam color can follow the first pitched content.
+ * @param elements Chord/rest sequence stored on the beam.
+ * @return First @c Chord in @p elements, or @c nullptr if none.
+ */
+static ChordRest* firstChordRestInBeam(const std::vector<ChordRest*>& elements)
+{
+    for (ChordRest* cr : elements) {
+        if (cr && cr->isChord()) {
+            return cr;
+        }
+    }
+    return nullptr;
+}
+
 static const ElementStyle beamStyle {
     { Sid::beamNoSlope,                        Pid::BEAM_NO_SLOPE },
 };
@@ -222,6 +238,7 @@ void Beam::move(const PointF& offset)
     }
 }
 
+/*! Determines whether sub-beams at @p level are broken between @p prevCr and @p cr. */
 void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken16, bool& isBroken32) const
 {
     BeamMode beamMode = cr->beamMode();
@@ -415,6 +432,7 @@ void Beam::setDirection(DirectionV d)
     }
 }
 
+/*! Converts the beam into a feathered (accelerando/ritardando) beam. */
 void Beam::setAsFeathered(const bool slower)
 {
     if (slower) {
@@ -545,6 +563,7 @@ void Beam::setBeamPos(const PairF& bp)
     }
 }
 
+/*! Sets @p b as the no-slope flag and updates the beam position to be level. */
 void Beam::setNoSlope(bool b)
 {
     m_noSlope = b;
@@ -559,6 +578,7 @@ void Beam::setNoSlope(bool b)
     }
 }
 
+/*! Recalculates slope from the current start and end anchor positions. */
 void Beam::computeAndSetSlope()
 {
     double xDiff = m_endAnchor.x() - m_startAnchor.x();
@@ -576,6 +596,7 @@ void Beam::computeAndSetSlope()
 //   getProperty
 //---------------------------------------------------------
 
+/*! Returns the current value of the given beam property. */
 PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -601,6 +622,7 @@ PropertyValue Beam::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
+/*! Applies @p v to the beam property identified by @p propertyId and triggers a relayout. */
 bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
@@ -644,14 +666,47 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 //   propertyDefault
 //---------------------------------------------------------
 
+/*!
+ * Default beam properties.
+ * For @c Pid::COLOR, uses the first chord in @c m_elements (skipping leading rests); when
+ * @c Sid::colorApplyToBeam is enabled, returns the top note's color.
+ */
 PropertyValue Beam::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
+    case Pid::COLOR: {
+        ChordRest* cr = firstChordRestInBeam(m_elements);
+        if (cr) {
+            Chord* chord = toChord(cr);
+            if (chord->upNote()->style().styleV(Sid::colorApplyToBeam).toBool()) {
+                return PropertyValue::fromValue(chord->upNote()->color());
+            }
+        }
+    }
+    // fall through
     default:                  return BeamBase::propertyDefault(id);
     }
+}
+
+/*!
+ * Draw color when using the score default: if beams inherit note colors, returns
+ * the top note's color for the first chord after skipping leading rests.
+ */
+Color Beam::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        ChordRest* cr = firstChordRestInBeam(m_elements);
+        if (cr) {
+            Chord* chord = toChord(cr);
+            if (chord->upNote()->style().styleV(Sid::colorApplyToBeam).toBool()) {
+                return chord->upNote()->color();
+            }
+        }
+    }
+    return m_color;
 }
 
 //---------------------------------------------------------
@@ -758,6 +813,7 @@ RectF Beam::drag(EditData& ed)
 //---------------------------------------------------------
 //   isMovable
 //---------------------------------------------------------
+/*! Beams are always considered user-movable (grip editing). */
 bool Beam::isMovable() const
 {
     return true;
@@ -766,6 +822,7 @@ bool Beam::isMovable() const
 //---------------------------------------------------------
 //   initBeamEditData
 //---------------------------------------------------------
+/*! Initialises edit-mode data for the beam, saving the fragment state for undo. */
 void Beam::initBeamEditData(EditData& ed)
 {
     std::shared_ptr<BeamEditData> bed = std::make_shared<BeamEditData>();
@@ -786,6 +843,7 @@ void Beam::startDrag(EditData& editData)
 //---------------------------------------------------------
 //   containsChord
 //---------------------------------------------------------
+/*! Returns true when every element in the beam group is a rest (no chords). */
 bool Beam::hasAllRests()
 {
     for (ChordRest* cr : m_elements) {
@@ -796,6 +854,7 @@ bool Beam::hasAllRests()
     return true;
 }
 
+/*! Deletes all rendered beam segments and detaches beamlet references from child chord-rests. */
 void Beam::clearBeamSegments()
 {
     for (ChordRest* chordRest : m_elements) {

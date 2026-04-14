@@ -249,6 +249,9 @@ public:
     void setRole(AccidentalRole r) { m_role = r; }
     AccidentalRole role() const { return m_role; }
 
+    //! Draw color; when inheriting, uses parent @c Note::color() (rendered head color).
+    Color color() const override;
+
     AccidentalBracket bracket() const { return m_bracket; }
     void setBracket(AccidentalBracket val) { m_bracket = val; }
     bool parentNoteHasParentheses() const;
@@ -266,6 +269,7 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    //! Default @c Pid::COLOR: parent @c Note::color() when accidentals inherit themed color.
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset

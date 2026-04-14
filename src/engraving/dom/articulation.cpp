@@ -92,6 +92,7 @@ void Articulation::setTextType(ArticulationTextType textType)
     m_textType = textType;
 }
 
+/*! Selects or deselects this articulation, propagating to the text sub-element. */
 void Articulation::setSelected(bool f)
 {
     if (m_text) {
@@ -101,6 +102,7 @@ void Articulation::setSelected(bool f)
     EngravingItem::setSelected(f);
 }
 
+/*! Shows or hides this articulation, propagating visibility to the text sub-element. */
 void Articulation::setVisible(bool f)
 {
     if (m_text) {
@@ -239,6 +241,7 @@ Page* Articulation::page() const
     return toPage(s ? s->explicitParent() : 0);
 }
 
+/*! True if this articulation should not be rendered on the current TAB staff. */
 bool Articulation::isHiddenOnTabStaff() const
 {
     if (m_showOnTabStyles.first == Sid::NOSTYLE || m_showOnTabStyles.second == Sid::NOSTYLE) {
@@ -286,6 +289,7 @@ std::vector<LineF> Articulation::dragAnchorLines() const
 //   getProperty
 //---------------------------------------------------------
 
+/*! Returns the current value of the given articulation property. */
 PropertyValue Articulation::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -303,6 +307,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
+/*! Applies @p v to the articulation property identified by @p propertyId and triggers a relayout. */
 bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
@@ -332,6 +337,11 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 //   propertyDefault
 //---------------------------------------------------------
 
+/*!
+ * Default articulation properties.
+ * For @c Pid::COLOR on a chord-attached articulation, when @c Sid::colorApplyToArticulation is set,
+ * returns the top note's color.
+ */
 PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
@@ -344,10 +354,38 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
 
+    case Pid::COLOR: {
+        ChordRest* cr = chordRest();
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            if (chord->upNote()->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                return PropertyValue::fromValue(chord->upNote()->color());
+            }
+        }
+    }
+    // fall through
     default:
         break;
     }
     return EngravingItem::propertyDefault(propertyId);
+}
+
+/*!
+ * Draw color when using the score default: if articulations inherit note colors, returns
+ * the top note's color.
+ */
+Color Articulation::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        ChordRest* cr = chordRest();
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            if (chord->upNote()->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                return chord->upNote()->color();
+            }
+        }
+    }
+    return m_color;
 }
 
 //---------------------------------------------------------

@@ -52,7 +52,10 @@ public:
     void reset() override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+    //! Default @c Pid::COLOR: @c chordRootColorDefault() when stems inherit themed color.
     PropertyValue propertyDefault(Pid id) const override;
+    //! Draw color: @c chordRootNoteColor() when inheriting themed note color.
+    Color color() const override;
 
     staff_idx_t vStaffIdx() const override;
 
