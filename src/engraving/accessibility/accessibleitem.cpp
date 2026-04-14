@@ -203,8 +203,7 @@ QString AccessibleItem::accessibleName() const
                    .arg(m_element->screenReaderInfo().toQString())
                    .arg(m_element->visible() ? "" : " " + muse::qtrc("engraving", "invisible"))
                    .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "")
-                   .arg(root->isRangeSelection() ? ("; " + muse::qtrc("engraving", "selected")) : "");
-
+                   .arg((root && root->isRangeSelection()) ? ("; " + muse::qtrc("engraving", "selected")) : "");
     return readable(name);
 }
 
@@ -215,7 +214,7 @@ QString AccessibleItem::accessibleDescription() const
     }
 
     AccessibleRoot* root = accessibleRoot();
-    if (root->isRangeSelection()) {
+    if (root && root->isRangeSelection()) {
         return readable(root->rangeSelectionInfo());
     }
 
