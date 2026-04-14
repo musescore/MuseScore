@@ -52,10 +52,10 @@ public:
     ~ScriptApi();
 
     QJSValue log() const { return api("MuseApi.Log"); }
-    QJSValue autobot() const { return api("api.autobot"); }
+    QJSValue autobot() const { return api("MuseInternal.Autobot"); }
     QJSValue dispatcher() const { return api("MuseInternal.Dispatcher"); }
     QJSValue navigation() const { return api("MuseInternal.Navigation"); }
-    QJSValue context() const { return api("api.context"); }
+    QJSValue context() const { return api("MuseInternal.AutobotContext"); }
     QJSValue shortcuts() const { return api("MuseInternal.Shortcuts"); }
     QJSValue interactive() const { return api("MuseApi.Interactive"); }
     QJSValue keyboard() const { return api("MuseInternal.Keyboard"); }

@@ -59,13 +59,21 @@ QJSValue JsModuleLoader::require(QString module)
         return QJSValue();
     }
 
-    bool ok = false;
-    QString filePath = resolvePath(module, &ok);
-    if (!ok) {
-        return QJSValue();
+    // require built-in module
+    //! NOTE Internal modules are available for the Autobot
+    if (module.startsWith("MuseApi.") || module.startsWith("MuseInternal.")) {
+        return engine()->requireModule(module);
     }
+    // require js file
+    else {
+        bool ok = false;
+        QString filePath = resolvePath(module, &ok);
+        if (!ok) {
+            return QJSValue();
+        }
 
-    return engine()->require(filePath);
+        return engine()->requireFile(filePath);
+    }
 }
 
 QJSValue JsModuleLoader::exports() const

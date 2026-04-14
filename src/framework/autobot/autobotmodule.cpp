@@ -65,8 +65,8 @@ void AutobotModule::resolveImports()
 
     auto api = globalIoc()->resolve<IApiRegister>(mname);
     if (api) {
-        api->regApiCreator(mname, "api.autobot", new ApiCreator<api::AutobotApi>());
-        api->regApiCreator(mname, "api.context", new ApiCreator<ContextApi>());
+        api->regApiCreator(mname, "MuseInternal.Autobot", new ApiCreator<api::AutobotApi>());
+        api->regApiCreator(mname, "MuseInternal.AutobotContext", new ApiCreator<ContextApi>());
     }
 }
 

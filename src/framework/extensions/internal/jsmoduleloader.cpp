@@ -59,7 +59,8 @@ QJSValue JsModuleLoader::require(QString module)
         return QJSValue();
     }
 
-    // require buildin module
+    // require built-in module
+    //! NOTE Only public modules are available
     if (module.startsWith("MuseApi.")) {
         return engine()->requireModule(module);
     }
