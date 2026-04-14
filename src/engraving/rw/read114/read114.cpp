@@ -1127,6 +1127,7 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
     } else if (tag == "Segment") {
         LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
+        tl->add(ls);
         readLineSegment114(e, ctx, ls);
         // in v1.x "visible" is a property of the segment only;
         // we must ensure that it propagates also to the parent element.
@@ -1135,7 +1136,6 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
         ls->setVisible(ls->visible());
         ls->setOffset(PointF());            // ignore offsets
         ls->setAutoplace(true);
-        tl->add(ls);
     } else if (!read400::TRead::readProperties(tl, e, ctx)) {
         return false;
     }
