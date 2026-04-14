@@ -744,6 +744,55 @@ void FretDiagram::clear()
     }
 }
 
+QVariantList FretDiagram::dots() const
+{
+    QVariantList result;
+    for (const auto& [string, dotVec] : fretDiagram()->dots()) {
+        for (const mu::engraving::FretItem::Dot& d : dotVec) {
+            if (!d.exists()) {
+                continue;
+            }
+            QVariantMap entry;
+            entry["string"] = string;
+            entry["fret"] = d.fret;
+            entry["dotType"] = int(d.dtype);
+            result.append(entry);
+        }
+    }
+    return result;
+}
+
+QVariantList FretDiagram::markers() const
+{
+    QVariantList result;
+    for (const auto& [string, m] : fretDiagram()->markers()) {
+        if (!m.exists()) {
+            continue;
+        }
+        QVariantMap entry;
+        entry["string"] = string;
+        entry["markerType"] = int(m.mtype);
+        result.append(entry);
+    }
+    return result;
+}
+
+QVariantList FretDiagram::barres() const
+{
+    QVariantList result;
+    for (const auto& [fret, b] : fretDiagram()->barres()) {
+        if (!b.exists()) {
+            continue;
+        }
+        QVariantMap entry;
+        entry["fret"] = fret;
+        entry["startString"] = b.startString;
+        entry["endString"] = b.endString;
+        result.append(entry);
+    }
+    return result;
+}
+
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond

@@ -1768,3 +1768,59 @@ TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
     delete domFd;
     delete domScore;
 }
+
+//---------------------------------------------------------
+//   fretDiagramGettersApi
+//   Test the read-only getters: scalar properties (strings,
+//   frets, fretOffset) and collection methods (dots, markers,
+//   barres) that allow plugins to read back diagram state.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
+{
+    // [GIVEN] A FretDiagram populated with known content
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    // Set a dot on string 0 fret 3, a marker on string 1, and a barre at fret 2
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+    domFd->setBarre(2, 5, 2);     // startString=2, endString=5, fret=2
+    domFd->setFretOffset(3);
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [THEN] Scalar properties match the DOM state
+    EXPECT_EQ(apiFd->strings(), domFd->strings());
+    EXPECT_EQ(apiFd->frets(), domFd->frets());
+    EXPECT_EQ(apiFd->fretOffset(), 3);
+
+    // [THEN] dots() returns the dot we placed
+    QVariantList dotList = apiFd->dots();
+    ASSERT_EQ(dotList.size(), 1);
+    QVariantMap dot0 = dotList[0].toMap();
+    EXPECT_EQ(dot0["string"].toInt(), 0);
+    EXPECT_EQ(dot0["fret"].toInt(), 3);
+    EXPECT_EQ(dot0["dotType"].toInt(), int(FretDotType::NORMAL));
+
+    // [THEN] markers() returns the marker we placed
+    QVariantList markerList = apiFd->markers();
+    ASSERT_EQ(markerList.size(), 1);
+    QVariantMap marker0 = markerList[0].toMap();
+    EXPECT_EQ(marker0["string"].toInt(), 1);
+    EXPECT_EQ(marker0["markerType"].toInt(), int(FretMarkerType::CROSS));
+
+    // [THEN] barres() returns the barre we placed
+    QVariantList barreList = apiFd->barres();
+    ASSERT_EQ(barreList.size(), 1);
+    QVariantMap barre0 = barreList[0].toMap();
+    EXPECT_EQ(barre0["fret"].toInt(), 2);
+    EXPECT_EQ(barre0["startString"].toInt(), 2);
+    EXPECT_EQ(barre0["endString"].toInt(), 5);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}

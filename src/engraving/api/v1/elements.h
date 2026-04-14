@@ -2726,6 +2726,12 @@ class FretDiagram : public EngravingItem
     Q_PROPERTY(QString harmonyPlainText READ harmonyPlainText)
     /// Display text of the nested chord symbol, or an empty string if none.
     Q_PROPERTY(QString harmonyDisplayText READ harmonyDisplayText)
+    /// Number of strings in this diagram.
+    Q_PROPERTY(int strings READ strings)
+    /// Number of frets displayed in this diagram.
+    Q_PROPERTY(int frets READ frets)
+    /// Starting fret number (0 means no offset, nut is shown).
+    Q_PROPERTY(int fretOffset READ fretOffset)
 
 public:
     /// \cond MS_INTERNAL
@@ -2742,7 +2748,41 @@ public:
 
     QString harmonyPlainText() const { return fretDiagram()->harmonyPlainText().toQString(); }
     QString harmonyDisplayText() const { return fretDiagram()->harmonyDisplayText().toQString(); }
+
+    int strings() const { return fretDiagram()->strings(); }
+    int frets() const { return fretDiagram()->frets(); }
+    int fretOffset() const { return fretDiagram()->fretOffset(); }
     /// \endcond
+
+    /** APIDOC
+     * Return all dots currently placed on this diagram as a list of objects,
+     * each with `string` (0-based), `fret` (1-based), and `dotType`
+     * (one of PluginAPI::PluginAPI::FretDotType values).
+     * @method
+     * @returns {Array.<{string: Number, fret: Number, dotType: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList dots() const;
+
+    /** APIDOC
+     * Return all string markers on this diagram as a list of objects,
+     * each with `string` (0-based) and `markerType`
+     * (one of PluginAPI::PluginAPI::FretMarkerType values).
+     * Only strings with an active marker (open or muted) are included.
+     * @method
+     * @returns {Array.<{string: Number, markerType: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList markers() const;
+
+    /** APIDOC
+     * Return all barres on this diagram as a list of objects,
+     * each with `fret` (1-based), `startString` and `endString` (0-based).
+     * @method
+     * @returns {Array.<{fret: Number, startString: Number, endString: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList barres() const;
 
     /** APIDOC
      * Place or remove a dot at the given fret on the given string. The change is
