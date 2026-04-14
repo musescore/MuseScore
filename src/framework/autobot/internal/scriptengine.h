@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 #include "types/ret.h"
+#include "global/api/iapiregister.h"
 
 #include "api/iapiengine.h"
 #include "api/scriptapi.h"
@@ -40,6 +41,8 @@ class JsModuleLoader;
 class ScriptEngine : public muse::api::IApiEngine
 {
     GlobalInject<io::IFileSystem> fileSystem;
+    GlobalInject<muse::api::IApiRegister> apiRegister;
+
 public:
     ScriptEngine(const modularity::ContextPtr& iocContext);
     ~ScriptEngine();
@@ -63,7 +66,8 @@ public:
     void throwError(const QString& message);
 
     // js modules
-    QJSValue require(const QString& filePath);
+    QJSValue requireModule(const QString& module);
+    QJSValue requireFile(const QString& filePath);
     QJSValue exports() const;
     void setExports(const QJSValue& obj);
 
@@ -92,6 +96,7 @@ private:
 
     const modularity::ContextPtr m_iocContext;
     QJSEngine* m_engine = nullptr;
+    muse::api::JsApiEngine* m_apiengine = nullptr;
     ScriptApi* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;
     bool m_isRequireMode = false;
