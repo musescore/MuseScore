@@ -41,6 +41,7 @@ SlursAndTiesPageModel::SlursAndTiesPageModel(QObject* parent)
     StyleId::tieDotsPlacement,
     StyleId::minLaissezVibLength,
     StyleId::laissezVibUseSmuflSym,
+    StyleId::maskSlursOverTimeAndKeySignatures,
     StyleId::maskTiesOverTimeAndKeySignatures
 })
 {
@@ -124,6 +125,11 @@ StyleItem* SlursAndTiesPageModel::minLaissezVibLength() const
 StyleItem* SlursAndTiesPageModel::laissezVibUseSmuflSym() const
 {
     return styleItem(StyleId::laissezVibUseSmuflSym);
+}
+
+StyleItem* SlursAndTiesPageModel::maskSlursOverTimeAndKeySignatures() const
+{
+    return styleItem(StyleId::maskSlursOverTimeAndKeySignatures);
 }
 
 StyleItem* SlursAndTiesPageModel::maskTiesOverTimeAndKeySignatures() const
