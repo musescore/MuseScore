@@ -695,6 +695,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         }
 
         async::Async::call(this, [this, objectId, dialog]() {
+            QQmlEngine::setObjectOwnership(dialog, QQmlEngine::CppOwnership);
+            QQmlEngine::setObjectOwnership(dialog->windowHandle(), QQmlEngine::CppOwnership);
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
         });
     })
