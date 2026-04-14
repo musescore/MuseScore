@@ -46,6 +46,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
+    bool maskSlurs = ctx.conf().styleB(Sid::maskSlursOverTimeAndKeySignatures);
     bool maskTies = ctx.conf().styleB(Sid::maskTiesOverTimeAndKeySignatures);
 
     for (const System* system : page->systems()) {
@@ -79,13 +80,15 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
             }
         }
 
-        if (maskTies) {
+        if (maskSlurs || maskTies) {
             for (SpannerSegment* spannerSeg : system->spannerSegments()) {
                 if (!spannerSeg->isSlurTieSegment() || !spannerSeg->isSingleBeginType()
                     || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                     continue;
                 }
-                computeSlurTieMasks(toSlurTieSegment(spannerSeg), SegmentType::KeySig | SegmentType::TimeSig);
+                if ((maskSlurs && spannerSeg->isSlurSegment()) || (maskTies && spannerSeg->isTieSegment())) {
+                    computeSlurTieMasks(toSlurTieSegment(spannerSeg), SegmentType::KeySig | SegmentType::TimeSig);
+                }
             }
         }
     }
@@ -368,13 +371,11 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, const Segme
     staff_idx_t spannerStaffTrackIdx = spanner->staffIdx() * VOICES;
     std::vector<const EngravingItem*> itemsToMaskOver;
     for (Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
-        if (!seg->isType(type) || !seg->element(spannerStaffTrackIdx)) {
+        if (!seg->isType(type)) {
             continue;
         }
-        for (const EngravingItem* item : seg->elist()) {
-            if (!item) {
-                continue;
-            }
+        EngravingItem* item = seg->element(spannerStaffTrackIdx);
+        if (item) {
             itemsToMaskOver.push_back(item);
         }
     }

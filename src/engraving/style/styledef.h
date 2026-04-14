@@ -607,6 +607,7 @@ enum class Sid : short {
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
+    maskSlursOverTimeAndKeySignatures,
     maskTiesOverTimeAndKeySignatures,
     laissezVibMinDistance,
     headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
