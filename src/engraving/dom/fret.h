@@ -210,6 +210,8 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
