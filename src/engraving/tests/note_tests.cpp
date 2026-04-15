@@ -549,3 +549,24 @@ TEST_F(Engraving_NoteTests, LongNoteAfterShort_183746)
     Fraction breveTicks = TDuration(DurationType::V_BREVE).ticks();
     EXPECT_TRUE(totalTicks == breveTicks);   // total duration same as a breve
 }
+
+//---------------------------------------------------------
+///   changeAccidentalBracket
+///   test changeAccidental with bracket argument
+//---------------------------------------------------------
+
+TEST_F(Engraving_NoteTests, changeAccidentalWithBracket)
+{
+    MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"altered-unison.mscx");
+    Measure* m = score->firstMeasure();
+    Chord* c = m->findChord(Fraction(0, 1), 0);
+    Note* note = c->upNote();
+
+    score->startCmd(TranslatableString::untranslatable("Engraving note tests"));
+    EditNote::changeAccidental(score, note, AccidentalType::SHARP, AccidentalBracket::BRACKET);
+    score->endCmd();
+
+    EXPECT_TRUE(note->accidental());
+    EXPECT_EQ(note->accidental()->accidentalType(), AccidentalType::SHARP);
+    EXPECT_EQ(note->accidental()->bracket(), AccidentalBracket::BRACKET);
+}

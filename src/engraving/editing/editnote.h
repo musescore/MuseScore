@@ -42,7 +42,7 @@ public:
     static void toggleAccidental(Score* score, AccidentalType at);
     static void applyAccidentalToInputNotes(Score* score, AccidentalType accidentalType);
     static void changeAccidental(Score* score, AccidentalType idx);
-    static void changeAccidental(Score* score, Note* note, AccidentalType accidental);
+    static void changeAccidental(Score* score, Note* note, AccidentalType accidental, std::optional<AccidentalBracket> = std::nullopt);
     static void undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2);
     static void undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
     static void upDown(Score* score, bool up, UpDownMode mode);

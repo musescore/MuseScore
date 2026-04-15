@@ -23,6 +23,7 @@
 #include "editnote.h"
 #include "editchord.h"
 
+#include <optional>
 #include <set>
 
 #include "dom/accidental.h"
@@ -328,7 +329,7 @@ void EditNote::changeAccidental2(Note* n, int pitch, int tpc)
 ///   note \a note.
 //---------------------------------------------------------
 
-void EditNote::changeAccidental(Score* score, Note* note, AccidentalType accidental)
+void EditNote::changeAccidental(Score* score, Note* note, AccidentalType accidental, std::optional<AccidentalBracket> bracket)
 {
     Chord* chord = note ? note->chord() : nullptr;
     if (!chord) {
@@ -387,6 +388,12 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
              || Accidental::isMicrotonal(accidental)) {
         forceAdd = true;
     }
+    // since Note::updateAccidental doesn't have
+    // enough context to pick the correct parenthesis
+    // the accidental needs to be added here
+    else if (bracket.has_value()) {
+        forceAdd = true;
+    }
 
     for (EngravingObject* se : note->linkList()) {
         Note* ln = toNote(se);
@@ -407,6 +414,10 @@ void EditNote::changeAccidental(Score* score, Note* note, AccidentalType acciden
                 score->undoRemoveElement(a);
             }
             Accidental* a1 = Factory::createAccidental(ln);
+
+            if (bracket.has_value()) {
+                a1->setBracket(bracket.value());
+            }
             a1->setParent(ln);
             a1->setAccidentalType(accidental);
             a1->setRole(AccidentalRole::USER);
