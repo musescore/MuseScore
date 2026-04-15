@@ -216,7 +216,11 @@ void UiConfiguration::updateThemes()
 
         bool isModified = it != modifiedThemes.end();
         if (isModified) {
-            theme = *it;
+            for (auto key : it->values.keys()) {
+                if (key != UNKNOWN) {
+                    theme.values[key] = it->values[key];
+                }
+            }
         }
     }
 }
