@@ -217,6 +217,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             // adjust length
             mmrMeasure->setTicks(len);
             // move existing end barline, clef and breath
+            // TODO [J.M]: WILL THESE STILL EXIST AFTER CHANGING PARENT BACK TO UNDERLYING? CHECK.
             if (barLineSeg) {
                 barLineSeg->setRtick(len);
             }
@@ -243,38 +244,50 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 
     ctx.mutDom().updateSystemLocksOnCreateMMRest(firstMeasure, lastMeasure);
 
+    mmrMeasure->setRepeatStart(firstMeasure->repeatStart() || lastMeasure->repeatStart());
+    mmrMeasure->setRepeatEnd(firstMeasure->repeatEnd() || lastMeasure->repeatEnd());
+    mmrMeasure->setSectionBreak(lastMeasure->sectionBreak());
+
+    Segment* chordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        track_idx_t track = staffIdx * VOICES;
+        if (chordRestSeg->element(track) == 0) {
+            MMRest* mmr = Factory::createMMRest(chordRestSeg);
+            mmr->setDurationType(DurationType::V_MEASURE);
+            mmr->setTicks(mmrMeasure->ticks());
+            mmr->setTrack(track);
+            mmr->setParent(chordRestSeg);
+            ctx.mutDom().doUndoAddElement(mmr);
+        }
+    }
+
+    changeMeasureElParents(firstMeasure, lastMeasure, mmrMeasure, ctx);
+
+    MeasureBase* nm = ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure();
+    mmrMeasure->setNext(nm);
+    mmrMeasure->setPrev(firstMeasure->prev());
+}
+
+void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx)
+{
+    Score* score = firstMeasure->score();
+
     //
     // set mmrMeasure with same barline as last underlying measure
+    // TODO MAYBE THESE NEED TO BE CLONED, CHECK SCORES WITH MULTIPLE INSTRUMENTS
     //
     Segment* lastMeasureEndBarlineSeg = lastMeasure->findSegmentR(SegmentType::EndBarLine, lastMeasure->ticks());
     if (lastMeasureEndBarlineSeg) {
         Segment* mmrEndBarlineSeg = mmrMeasure->undoGetSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
         for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            EngravingItem* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
-            if (e) {
-                bool generated = e->generated();
-                if (!mmrEndBarlineSeg->element(staffIdx * VOICES)) {
-                    EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
-                    eClone->setGenerated(generated);
-                    eClone->setParent(mmrEndBarlineSeg);
-                    ctx.mutDom().doUndoAddElement(eClone);// ???
-                } else {
-                    BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
-                    BarLine* lastMeasureEndBarline = toBarLine(e);
-                    if (!generated && !mmrEndBarline->links()) {
-                        ctx.mutDom().undo(new Link(mmrEndBarline, lastMeasureEndBarline));
-                    }
-                    if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
-                        // change directly when generating mmrests, do not change underlying measures or follow links
-                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
-                                                             PropertyValue::fromValue(lastMeasureEndBarline->barLineType()),
-                                                             PropertyFlags::NOSTYLE));
-                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                    }
-                }
+            const track_idx_t track = staff2track(staffIdx);
+            EngravingItem* e = lastMeasureEndBarlineSeg->element(track);
+            if (!e) {
+                continue;
             }
+            score->undoChangeParent(e, mmrEndBarlineSeg, e->staffIdx());
         }
-        cloneAnnotationsToMMRest(lastMeasureEndBarlineSeg, mmrEndBarlineSeg, ctx);
+        changeAnnotationsParent(lastMeasureEndBarlineSeg, mmrEndBarlineSeg);
     }
 
     //
@@ -283,34 +296,21 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     Segment* lastMeasureClefSeg = lastMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
                                                             lastMeasure->ticks());
     if (lastMeasureClefSeg) {
-        Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
+        Segment* mmrEndClefSeg = mmrMeasure->undoGetSegmentR(lastMeasureClefSeg->segmentType(), mmrMeasure->ticks());
         for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
             const track_idx_t track = staff2track(staffIdx);
-            EngravingItem* e = lastMeasureClefSeg->element(track);
-            if (e && e->isClef()) {
-                Clef* lastMeasureClef = toClef(e);
-                if (!mmrClefSeg->element(track)) {
-                    Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(
-                        lastMeasureClef->linkedClone());
-                    mmrClef->setParent(mmrClefSeg);
-                    ctx.mutDom().doUndoAddElement(mmrClef);
-                } else {
-                    Clef* mmrClef = toClef(mmrClefSeg->element(track));
-                    mmrClef->setClefType(lastMeasureClef->clefType());
-                    mmrClef->setShowCourtesy(lastMeasureClef->showCourtesy());
-                }
+            Clef* lastMeasureClef = toClef(lastMeasureClefSeg->element(track));
+            if (!lastMeasureClef) {
+                continue;
             }
+            score->undoChangeParent(lastMeasureClef, mmrEndClefSeg, lastMeasureClef->staffIdx());
         }
     }
 
-    mmrMeasure->setRepeatStart(firstMeasure->repeatStart() || lastMeasure->repeatStart());
-    mmrMeasure->setRepeatEnd(firstMeasure->repeatEnd() || lastMeasure->repeatEnd());
-    mmrMeasure->setSectionBreak(lastMeasure->sectionBreak());
-
     //
-    // copy markers to mmrMeasure
+    // copy markers & jumps to mmrMeasure
+    // jumps come from lastMeasure, markers come from firstMeasure
     //
-    ElementList oldList = mmrMeasure->takeElements();
     ElementList newList = lastMeasure->el();
     for (EngravingItem* e : firstMeasure->el()) {
         if (e->isMarker() && firstMeasure != lastMeasure) {
@@ -318,228 +318,164 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     }
     for (EngravingItem* e : newList) {
-        bool found = false;
-        for (EngravingItem* ee : oldList) {
-            if (ee->type() == e->type() && ee->subtype() == e->subtype()) {
-                mmrMeasure->add(ee);
-                auto i = std::find(oldList.begin(), oldList.end(), ee);
-                if (i != oldList.end()) {
-                    oldList.erase(i);
-                }
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            EngravingItem* newEl = e->isLayoutBreak() ? e->clone() : e->linkedClone();
-            newEl->setParent(mmrMeasure);
-            ctx.mutDom().doUndoAddElement(newEl);
-        }
-    }
-    for (EngravingItem* e : oldList) {
-        ctx.mutDom().doUndoRemoveElement(e);
-    }
-
-    Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        track_idx_t track = staffIdx * VOICES;
-        if (s->element(track) == 0) {
-            MMRest* mmr = Factory::createMMRest(s);
-            mmr->setDurationType(DurationType::V_MEASURE);
-            mmr->setTicks(mmrMeasure->ticks());
-            mmr->setTrack(track);
-            mmr->setParent(s);
-            ctx.mutDom().doUndoAddElement(mmr);
-        }
+        score->undoChangeParent(e, mmrMeasure, e->staffIdx());
     }
 
     //
     // further check for clefs
     //
-    Segment* underlyingSeg = lastMeasure->findSegmentR(SegmentType::Clef, lastMeasure->ticks());
-    Segment* mmrSeg = mmrMeasure->findSegment(SegmentType::Clef, lastMeasure->endTick());
-    if (underlyingSeg) {
-        if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Clef, lastMeasure->ticks());
+    Segment* underlyingClefSeg = lastMeasure->findSegmentR(SegmentType::Clef, lastMeasure->ticks());
+    Segment* mmrClefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
+    if (underlyingClefSeg) {
+        if (!mmrClefSeg) {
+            mmrClefSeg = mmrMeasure->undoGetSegmentR(SegmentType::Clef, mmrMeasure->ticks());
         }
-        mmrSeg->setEnabled(underlyingSeg->enabled());
-        mmrSeg->setTrailer(underlyingSeg->trailer());
         for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
-            Clef* clef = toClef(underlyingSeg->element(track));
-            if (clef) {
-                if (mmrSeg->element(track) == 0) {
-                    mmrSeg->add(clef->clone());
-                } else {
-                    //TODO: check if same clef
-                }
+            const track_idx_t track = staffIdx * VOICES;
+            Clef* underlyingClef = toClef(underlyingClefSeg->element(track));
+            if (!underlyingClef) {
+                continue;
             }
+            score->undoChangeParent(underlyingClef, mmrClefSeg, underlyingClef->staffIdx());
         }
-    } else if (mmrSeg) {
-        // TODO: remove elements from mmrSeg?
-        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    } else if (mmrClefSeg) {
+        // TODO: remove elements from mmrSeg? ALSO DO WE NEED THIS? SHOULDN'T EXIST, JUST ASSERT
+        ctx.mutDom().doUndoRemoveElement(mmrClefSeg);
+    }
+
+    if (underlyingClefSeg) {
+        mmrClefSeg->setEnabled(underlyingClefSeg->enabled());
+        mmrClefSeg->setTrailer(underlyingClefSeg->trailer());
     }
 
     //
     // check for time signature
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
-    mmrSeg = mmrMeasure->findSegment(SegmentType::TimeSig, firstMeasure->tick());
-    if (underlyingSeg) {
-        if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    Segment* underlyingTimeSigSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    Segment* mmrTimeSigSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    if (underlyingTimeSigSeg) {
+        if (!mmrTimeSigSeg) {
+            mmrTimeSigSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         }
-        mmrSeg->setEnabled(underlyingSeg->enabled());
-        mmrSeg->setHeader(underlyingSeg->header());
         for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
-            TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
-            if (underlyingTimeSig) {
-                TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
-                if (!mmrTimeSig) {
-                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
-                        underlyingTimeSig->linkedClone());
-                    mmrTimeSig->setParent(mmrSeg);
-                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
-                } else {
-                    TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
-                }
+            const track_idx_t track = staffIdx * VOICES;
+            TimeSig* underlyingTimeSig = toTimeSig(underlyingTimeSigSeg->element(track));
+            if (!underlyingTimeSig) {
+                continue;
             }
+            score->undoChangeParent(underlyingTimeSig, mmrTimeSigSeg, underlyingTimeSig->staffIdx());
         }
-    } else if (mmrSeg) {
-        // TODO: remove elements from mmrSeg?
-        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    } else if (mmrTimeSigSeg) {
+        // TODO: remove elements from mmrSeg? ALSO DO WE NEED THIS? SHOULDN'T EXIST, JUST ASSERT
+        ctx.mutDom().doUndoRemoveElement(mmrTimeSigSeg);
+    }
+
+    if (underlyingTimeSigSeg) {
+        mmrTimeSigSeg->setEnabled(underlyingTimeSigSeg->enabled());
+        mmrTimeSigSeg->setHeader(underlyingTimeSigSeg->header());
     }
 
     //
     // check for end of measure time signature
     //
-    underlyingSeg = lastMeasure->findSegmentR(SegmentType::TimeSig, lastMeasure->ticks());
-    mmrSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
-    if (underlyingSeg) {
-        if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+    Segment* underlyingEndTimeSigSeg = lastMeasure->findSegmentR(SegmentType::TimeSig, lastMeasure->ticks());
+    Segment* mmrEndTimeSigSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+    if (underlyingEndTimeSigSeg) {
+        if (!mmrEndTimeSigSeg) {
+            mmrEndTimeSigSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
         }
-        mmrSeg->setEnabled(underlyingSeg->enabled());
-        mmrSeg->setHeader(underlyingSeg->header());
-        mmrSeg->setEndOfMeasureChange(underlyingSeg->endOfMeasureChange());
         for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
-            TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
-            if (underlyingTimeSig) {
-                TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
-                if (!mmrTimeSig) {
-                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
-                        underlyingTimeSig->linkedClone());
-                    mmrTimeSig->setParent(mmrSeg);
-                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
-                } else {
-                    TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
-                }
+            const track_idx_t track = staffIdx * VOICES;
+            TimeSig* underlyingTimeSig = toTimeSig(underlyingEndTimeSigSeg->element(track));
+            if (!underlyingTimeSig) {
+                continue;
             }
+            score->undoChangeParent(underlyingTimeSig, mmrEndTimeSigSeg, underlyingTimeSig->staffIdx());
         }
-    } else if (mmrSeg) {
-        // TODO: remove elements from mmrSeg?
-        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    } else if (mmrEndTimeSigSeg) {
+        // TODO: remove elements from mmrSeg? ALSO DO WE NEED THIS? SHOULDN'T EXIST, JUST ASSERT
+        ctx.mutDom().doUndoRemoveElement(mmrEndTimeSigSeg);
+    }
+
+    if (underlyingEndTimeSigSeg) {
+        mmrEndTimeSigSeg->setEnabled(underlyingEndTimeSigSeg->enabled());
+        mmrEndTimeSigSeg->setHeader(underlyingEndTimeSigSeg->header());
+        mmrEndTimeSigSeg->setEndOfMeasureChange(underlyingEndTimeSigSeg->endOfMeasureChange());
     }
 
     //
     // check for end of measure breaths
     //
     Segment* underlyingBreathSeg = lastMeasure->findSegmentR(SegmentType::Breath, lastMeasure->ticks());
-    Segment* mmrBreathSeg = mmrMeasure->findSegment(SegmentType::Breath, lastMeasure->endTick());
+    Segment* mmrBreathSeg = mmrMeasure->findSegmentR(SegmentType::Breath, mmrMeasure->ticks());
 
     if (underlyingBreathSeg) {
-        if (mmrBreathSeg == 0) {
+        if (!mmrBreathSeg) {
             mmrBreathSeg = mmrMeasure->undoGetSegmentR(SegmentType::Breath, mmrMeasure->ticks());
         }
-        mmrBreathSeg->setEnabled(underlyingBreathSeg->enabled());
         for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
+            const track_idx_t track = staffIdx * VOICES;
             Breath* underlyingBreath = toBreath(underlyingBreathSeg->element(track));
-            if (underlyingBreath) {
-                Breath* mmrBreath = toBreath(mmrBreathSeg->element(track));
-                if (!mmrBreath) {
-                    mmrBreath = underlyingBreath->generated() ? underlyingBreath->clone() : toBreath(
-                        underlyingBreath->linkedClone());
-                    mmrBreath->setParent(mmrBreathSeg);
-                    ctx.mutDom().doUndoAddElement(mmrBreath);
-                } else {
-                    TLayout::layoutBreath(mmrBreath, mmrBreath->mutldata(), ctx.conf());
-                }
+            if (!underlyingBreath) {
+                continue;
             }
+            score->undoChangeParent(underlyingBreath, mmrBreathSeg, underlyingBreath->staffIdx());
         }
     } else if (mmrBreathSeg) {
-        // TODO: remove elements from mmrSeg?
+        // TODO: remove elements from mmrSeg? ALSO DO WE NEED THIS? SHOULDN'T EXIST, JUST ASSERT
         ctx.mutDom().doUndoRemoveElement(mmrBreathSeg);
     }
 
     //
     // check for ambitus
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
-    mmrSeg = mmrMeasure->findSegment(SegmentType::Ambitus, firstMeasure->tick());
-    if (underlyingSeg) {
-        if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+    Segment* underlyingAmbitusSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+    Segment* mmrAmbitusSeg = mmrMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+    if (underlyingAmbitusSeg) {
+        if (!mmrAmbitusSeg) {
+            mmrAmbitusSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
         }
         for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
-            Ambitus* underlyingAmbitus = toAmbitus(underlyingSeg->element(track));
-            if (underlyingAmbitus) {
-                Ambitus* mmrAmbitus = toAmbitus(mmrSeg->element(track));
-                if (!mmrAmbitus) {
-                    mmrAmbitus = underlyingAmbitus->clone();
-                    mmrAmbitus->setParent(mmrSeg);
-                    ctx.mutDom().doUndoAddElement(mmrAmbitus);
-                } else {
-                    mmrAmbitus->initFrom(underlyingAmbitus);
-                    TLayout::layoutAmbitus(mmrAmbitus, mmrAmbitus->mutldata(), ctx);
-                }
+            const track_idx_t track = staffIdx * VOICES;
+            Ambitus* underlyingAmbitus = toAmbitus(underlyingAmbitusSeg->element(track));
+            if (!underlyingAmbitus) {
+                continue;
             }
+            score->undoChangeParent(underlyingAmbitus, mmrAmbitusSeg, underlyingAmbitus->staffIdx());
         }
-    } else if (mmrSeg) {
-        // TODO: remove elements from mmrSeg?
-        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    } else if (mmrAmbitusSeg) {
+        // TODO: remove elements from mmrSeg? ALSO DO WE NEED THIS? SHOULDN'T EXIST, JUST ASSERT
+        ctx.mutDom().doUndoRemoveElement(mmrAmbitusSeg);
     }
 
     //
     // check for key signature
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
-    mmrSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
-    if (underlyingSeg) {
-        if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* underlyingKeySigSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* mmrKeySigSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    if (underlyingKeySigSeg) {
+        if (!mmrKeySigSeg) {
+            mmrKeySigSeg = mmrMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
         }
-        mmrSeg->setEnabled(underlyingSeg->enabled());
-        mmrSeg->setHeader(underlyingSeg->header());
         for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-            track_idx_t track = staffIdx * VOICES;
-            KeySig* underlyingKeySig  = toKeySig(underlyingSeg->element(track));
-            if (underlyingKeySig) {
-                KeySig* mmrKeySig = toKeySig(mmrSeg->element(track));
-                if (!mmrKeySig) {
-                    mmrKeySig = underlyingKeySig->generated() ? underlyingKeySig->clone() : toKeySig(
-                        underlyingKeySig->linkedClone());
-                    mmrKeySig->setParent(mmrSeg);
-                    mmrKeySig->setGenerated(true);
-                    ctx.mutDom().doUndoAddElement(mmrKeySig);
-                } else {
-                    if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
-                        bool addKey = underlyingKeySig->isChange();
-                        ctx.mutDom().undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
-                                                           addKey));
-                    }
-                }
+            const track_idx_t track = staffIdx * VOICES;
+            KeySig* underlyingKeySig  = toKeySig(underlyingKeySigSeg->element(track));
+            if (!underlyingKeySig) {
+                continue;
             }
+            score->undoChangeParent(underlyingKeySig, mmrKeySigSeg, underlyingKeySig->staffIdx());
         }
-    } else if (mmrSeg) {
-        mmrSeg->setEnabled(false);
+    } else if (mmrKeySigSeg) {
+        mmrKeySigSeg->setEnabled(false);
         // TODO: remove elements from mmrSeg, then delete mmrSeg
         // previously we removed the segment if not empty,
         // but this resulted in "stale" keysig in mmrest after removed from underlying measure
         //doUndoRemoveElement(mmrSeg);
+    }
+
+    if (underlyingKeySigSeg) {
+        mmrKeySigSeg->setEnabled(underlyingKeySigSeg->enabled());
+        mmrKeySigSeg->setHeader(underlyingKeySigSeg->header());
     }
 
     mmrMeasure->checkHeader();
@@ -548,60 +484,23 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     //
     // check for rehearsal mark etc.
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-    cloneAnnotationsToMMRest(underlyingSeg, s, ctx);
-
-    MeasureBase* nm = ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure();
-    mmrMeasure->setNext(nm);
-    mmrMeasure->setPrev(firstMeasure->prev());
+    Segment* mmrChordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    Segment* underlyingCRSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    changeAnnotationsParent(underlyingCRSeg, mmrChordRestSeg);
 }
 
-void MeasureLayout::cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mmrSeg, LayoutContext& ctx)
+void MeasureLayout::changeAnnotationsParent(Segment* oldParent, Segment* newParent)
 {
-    if (!underlyingSeg) {
+    if (!oldParent) {
         return;
     }
-    // clone elements from underlying measure to mmr
-    for (EngravingItem* e : underlyingSeg->annotations()) {
+    for (EngravingItem* e : oldParent->annotations()) {
         // look at elements in underlying measure
         if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
             continue;
         }
-        // try to find a match in mmr
-        bool found = false;
-        for (EngravingItem* ee : mmrSeg->annotations()) {
-            if (muse::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
-                found = true;
-                break;
-            }
-        }
-        // add to mmr if no match found
-        if (!found) {
-            EngravingItem* eClone = e->linkedClone();
-            eClone->setParent(mmrSeg);
-            ctx.mutDom().doUndoAddElement(eClone);
-        }
-    }
 
-    // remove stray elements (possibly leftover from a previous layout of this mmr)
-    // this should not happen since the elements are linked?
-    const auto annotations = mmrSeg->annotations();     // make a copy since we alter the list
-    for (EngravingItem* e : annotations) {     // look at elements in mmr
-        if (!muse::contains(BREAK_TYPES, e->type())) {
-            continue;
-        }
-        // try to find a match in underlying measure
-        bool found = false;
-        for (EngravingItem* ee : underlyingSeg->annotations()) {
-            if (muse::contains(e->linkList(), static_cast<EngravingObject*>(ee))) {
-                found = true;
-                break;
-            }
-        }
-        // remove from mmr if no match found
-        if (!found) {
-            ctx.mutDom().doUndoRemoveElement(e);
-        }
+        e->score()->undoChangeParent(e, newParent, e->staffIdx());
     }
 }
 
@@ -941,6 +840,10 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutC
             ctx.mutState().setMeasureNumber(mn);
         }
     } else if (firstMeasure->mmRest()) {
+        Segment* underlyingCRSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        Segment* MMRestCRSeg = firstMeasure->mmRest()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+
+        changeAnnotationsParent(MMRestCRSeg, underlyingCRSeg);
         removeMMRestElements(firstMeasure->mmRest());
 
         if (firstMeasure->mmRestCount() > 0) {
@@ -953,6 +856,7 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutC
 
 void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
 {
+    return;
     // Removed linked clones that were created for the mmRest measure
     // copy because we're removing elements
     const ElementList elements = mmRestMeasure->el();
@@ -964,8 +868,6 @@ void MeasureLayout::removeMMRestElements(Measure* mmRestMeasure)
     for (Segment* seg = mmRestMeasure->first(); seg && seg->rtick().isZero(); seg = seg->next()) {
         const std::vector<EngravingItem*> annotations = seg->annotations(); // copy because we're removing elements
         for (EngravingItem* item : annotations) {
-            item->undoUnlink();
-            mmRestMeasure->score()->doUndoRemoveElement(item);
         }
     }
 }
