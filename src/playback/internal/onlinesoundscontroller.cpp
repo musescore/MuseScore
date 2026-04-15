@@ -53,15 +53,9 @@ void OnlineSoundsController::regActions()
     dispatcher()->reg(this, "clear-online-sounds-cache", this, &OnlineSoundsController::clearOnlineSoundsCache);
 }
 
-void OnlineSoundsController::setCurrentSequence(TrackSequenceId seqId)
-{
-    m_currentSequenceId = seqId;
-}
-
-void OnlineSoundsController::resetCurrentSequence()
+void OnlineSoundsController::reset()
 {
     const bool hadOnlineSounds = !m_onlineSounds.empty();
-    m_currentSequenceId = -1;
     m_onlineSounds.clear();
     m_onlineSoundsBeingProcessed.clear();
     m_onlineLibrariesWithExceededLimit.clear();
@@ -117,7 +111,7 @@ void OnlineSoundsController::removeOnlineTrack(const TrackId trackId)
 
 void OnlineSoundsController::listenProcessingProgress(const TrackId trackId)
 {
-    playback()->inputProcessingProgress(m_currentSequenceId, trackId)
+    playback()->inputProcessingProgress(trackId)
     .onResolve(this, [this, trackId](InputProcessingProgress inputProgress) {
         inputProgress.processedChannel.onReceive(this, [this, trackId]
                                                  (const InputProcessingProgress::StatusInfo& status,
@@ -234,7 +228,7 @@ void OnlineSoundsController::processOnlineSounds()
     }
 
     for (const auto& pair : m_onlineSounds) {
-        playback()->processInput(m_currentSequenceId, pair.first);
+        playback()->processInput(pair.first);
     }
 }
 
@@ -257,7 +251,7 @@ void OnlineSoundsController::clearOnlineSoundsCache()
         }
 
         for (const auto& pair : m_onlineSounds) {
-            playback()->clearCache(m_currentSequenceId, pair.first);
+            playback()->clearCache(pair.first);
         }
     });
 }

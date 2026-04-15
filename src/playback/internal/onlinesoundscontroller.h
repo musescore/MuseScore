@@ -45,8 +45,7 @@ public:
 
     void regActions();
 
-    void setCurrentSequence(muse::audio::TrackSequenceId seqId);
-    void resetCurrentSequence();
+    void reset();
 
     void addOnlineTrack(const muse::audio::TrackId trackId, const muse::audio::AudioResourceMeta& meta);
     void removeOnlineTrack(const muse::audio::TrackId trackId);
@@ -65,7 +64,6 @@ private:
     void processOnlineSounds();
     void clearOnlineSoundsCache();
 
-    muse::audio::TrackSequenceId m_currentSequenceId = -1;
     std::map<muse::audio::TrackId, muse::audio::AudioResourceMeta> m_onlineSounds;
     std::unordered_set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
     std::unordered_set<muse::String> m_onlineLibrariesWithExceededLimit;

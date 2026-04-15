@@ -54,8 +54,8 @@ void MixerPanelModel::init()
     //! NOTE Must be set from Qml
     DO_ASSERT(m_navigationSection);
 
-    controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
-        load();
+    controller()->playbackInitedChanged().onReceive(this, [this](bool) {
+        reload();
     });
 
     controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
@@ -66,22 +66,14 @@ void MixerPanelModel::init()
         removeItem(trackId);
     });
 
-    load();
+    reload();
 }
 
-void MixerPanelModel::load()
+void MixerPanelModel::reload()
 {
     TRACEFUNC;
 
-    TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
-
-    if (m_currentTrackSequenceId == sequenceId) {
-        return;
-    }
-
-    m_currentTrackSequenceId = sequenceId;
-
-    loadItems();
+    reloadItems();
 }
 
 QVariantMap MixerPanelModel::get(int index)
@@ -123,7 +115,7 @@ QHash<int, QByteArray> MixerPanelModel::roleNames() const
     return roles;
 }
 
-void MixerPanelModel::loadItems()
+void MixerPanelModel::reloadItems()
 {
     TRACEFUNC;
 
@@ -136,7 +128,7 @@ void MixerPanelModel::loadItems()
 
     clear();
 
-    if (m_currentTrackSequenceId == -1) {
+    if (!controller()->isPlaybackInited()) {
         return;
     }
 
@@ -282,30 +274,19 @@ void MixerPanelModel::setupConnections()
         }
     });
 
-    playback()->inputParamsChanged().onReceive(
-        this, [this](const TrackSequenceId sequenceId, const TrackId trackId, AudioInputParams params) {
-        if (m_currentTrackSequenceId != sequenceId) {
-            return;
-        }
-
+    playback()->inputParamsChanged().onReceive(this, [this](const TrackId trackId, AudioInputParams params) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->loadInputParams(std::move(params));
         }
     });
 
-    playback()->outputParamsChanged().onReceive(
-        this, [this](const TrackSequenceId sequenceId, const TrackId trackId, AudioOutputParams params) {
-        if (m_currentTrackSequenceId != sequenceId) {
-            return;
-        }
-
+    playback()->outputParamsChanged().onReceive(this, [this](const TrackId trackId, AudioOutputParams params) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             loadOutputParams(item, std::move(params));
         }
     });
 
-    playback()->masterOutputParamsChanged().onReceive(this,
-                                                      [this](AudioOutputParams params) {
+    playback()->masterOutputParamsChanged().onReceive(this, [this](AudioOutputParams params) {
         if (m_masterChannelItem) {
             loadOutputParams(m_masterChannelItem, std::move(params));
         }
@@ -430,7 +411,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     item->setPanelSection(m_navigationSection);
     item->loadSoloMuteState(controller()->trackSoloMuteState(instrumentTrackId));
 
-    playback()->inputParams(m_currentTrackSequenceId, trackId)
+    playback()->inputParams(trackId)
     .onResolve(this, [this, trackId](AudioInputParams inParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->loadInputParams(std::move(inParams));
@@ -441,7 +422,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
                << ", " << text;
     });
 
-    playback()->trackName(m_currentTrackSequenceId, trackId)
+    playback()->trackName(trackId)
     .onResolve(this, [this, trackId](const RetVal<TrackName>& trackName) {
         if (trackName.ret) {
             if (MixerChannelItem* item = findChannelItem(trackId)) {
@@ -452,7 +433,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
         }
     });
 
-    playback()->outputParams(m_currentTrackSequenceId, trackId)
+    playback()->outputParams(trackId)
     .onResolve(this, [this, trackId](AudioOutputParams outParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             loadOutputParams(item, std::move(outParams));
@@ -463,7 +444,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
                << ", " << text;
     });
 
-    playback()->signalChanges(m_currentTrackSequenceId, trackId)
+    playback()->signalChanges(trackId)
     .onResolve(this, [this, trackId](AudioSignalChanges signalChanges) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->subscribeOnAudioSignalChanges(std::move(signalChanges));
@@ -475,11 +456,11 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     });
 
     connect(item, &MixerChannelItem::inputParamsChanged, this, [this, trackId](const AudioInputParams& params) {
-        playback()->setInputParams(m_currentTrackSequenceId, trackId, params);
+        playback()->setInputParams(trackId, params);
     });
 
     connect(item, &MixerChannelItem::outputParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
-        playback()->setOutputParams(m_currentTrackSequenceId, trackId, params);
+        playback()->setOutputParams(trackId, params);
     });
 
     connect(item, &MixerChannelItem::auxSendItemListChanged, this, [this, item]() {
@@ -503,7 +484,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     item->setPanelSection(m_navigationSection);
     item->loadSoloMuteState(audioSettings()->auxSoloMuteState(index));
 
-    playback()->trackName(m_currentTrackSequenceId, trackId)
+    playback()->trackName(trackId)
     .onResolve(this, [this, trackId](const RetVal<TrackName>& trackName) {
         if (trackName.ret) {
             if (MixerChannelItem* item = findChannelItem(trackId)) {
@@ -514,7 +495,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
         }
     });
 
-    playback()->outputParams(m_currentTrackSequenceId, trackId)
+    playback()->outputParams(trackId)
     .onResolve(this, [this, trackId](AudioOutputParams outParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             loadOutputParams(item, std::move(outParams));
@@ -525,7 +506,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
                << ", " << text;
     });
 
-    playback()->signalChanges(m_currentTrackSequenceId, trackId)
+    playback()->signalChanges(trackId)
     .onResolve(this, [this, trackId](AudioSignalChanges signalChanges) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->subscribeOnAudioSignalChanges(std::move(signalChanges));
@@ -537,7 +518,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     });
 
     connect(item, &MixerChannelItem::outputParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
-        playback()->setOutputParams(m_currentTrackSequenceId, trackId, params);
+        playback()->setOutputParams(trackId, params);
     });
 
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,

@@ -60,6 +60,10 @@ using balance_t = float;
 using TrackSequenceId = int32_t;
 using TrackSequenceIdList = std::vector<TrackSequenceId>;
 
+//! NOTE: We are eliminating the concept of a sequence.
+//! This is a temporary required for the transitional phase.
+static constexpr TrackSequenceId DUMMY_SEQUENCE_ID = 1;
+
 using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
 using TrackName = std::string;

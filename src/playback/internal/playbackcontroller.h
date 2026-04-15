@@ -73,8 +73,8 @@ public:
 
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
 
-    muse::audio::TrackSequenceId currentTrackSequenceId() const override;
-    muse::async::Notification currentTrackSequenceIdChanged() const override;
+    bool isPlaybackInited() const override;
+    muse::async::Channel<bool> playbackInitedChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
@@ -206,11 +206,11 @@ private:
 
     project::IProjectAudioSettingsPtr audioSettings() const;
 
-    void resetCurrentSequence();
-    void setupNewCurrentSequence(const muse::audio::TrackSequenceId sequenceId);
+    void resetPlayback();
+    void setupPlayback();
     void subscribeOnAudioParamsChanges();
-    void setupSequenceTracks();
-    void setupSequencePlayer();
+    void setupTracks();
+    void setupPlayer();
 
     void updateSoloMuteStates();
     void updateAuxMuteStates();
@@ -234,6 +234,8 @@ private:
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
     muse::audio::IPlayerPtr m_player;
+    bool m_isPlaybackInited = false;
+    muse::async::Channel<bool> m_playbackInited;
 
     muse::async::Notification m_isPlayAllowedChanged;
     muse::async::Notification m_isPlayingChanged;
@@ -242,9 +244,6 @@ private:
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> m_currentPlaybackPositionChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
-    muse::audio::TrackSequenceId m_currentSequenceId = -1;
-
-    muse::async::Notification m_currentSequenceIdChanged;
     muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
@@ -253,7 +252,7 @@ private:
 
     muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> m_auxChannelNameChanged;
 
-    muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupSequenceTracks
+    muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupTracks
 
     InstrumentTrackIdMap m_instrumentTrackIdMap;
     AuxTrackIdMap m_auxTrackIdMap;

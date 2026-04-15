@@ -270,9 +270,7 @@ void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId 
         return;
     }
 
-    const TrackSequenceId sequenceId = playbackController()->currentTrackSequenceId();
-
-    playback()->inputProcessingProgress(sequenceId, trackId)
+    playback()->inputProcessingProgress(trackId)
     .onResolve(this, [this, instrumentTrackId](InputProcessingProgress inputProgress) {
         if (inputProgress.isStarted) {
             onProgressStarted(instrumentTrackId);

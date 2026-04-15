@@ -38,8 +38,8 @@ public:
 
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
 
-    muse::audio::TrackSequenceId currentTrackSequenceId() const override;
-    muse::async::Notification currentTrackSequenceIdChanged() const override;
+    bool isPlaybackInited() const override;
+    muse::async::Channel<bool> playbackInitedChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
