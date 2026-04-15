@@ -181,6 +181,7 @@ void InputResourceItem::setParamsRecourceMeta(const AudioResourceMeta& newMeta)
     requestToCloseNativeEditorView();
 
     m_currentInputParams.resourceMeta = newMeta;
+    m_currentInputParams.configuration.clear();
 
     emit titleChanged();
     emit isBlankChanged();
