@@ -25,6 +25,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/scoreorder.h"
@@ -1522,5 +1524,303 @@ TEST_F(Engraving_ApiScoreTests, setScoreOrderApi)
     // Clean up the added test order
     instrumentOrders.pop_back();
 
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyAtDomLevel
+//   Confirm the DOM-level building block: a FretDiagram with
+//   setHarmony() exposes the chord text via harmonyPlainText().
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyAtDomLevel)
+{
+    // [GIVEN] A score and a FretDiagram with no harmony
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* fd = Factory::createFretDiagram(score->dummy()->segment());
+
+    EXPECT_EQ(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), String());
+
+    // [WHEN] We attach a chord symbol to the diagram
+    fd->setHarmony(u"Cm7");
+
+    // [THEN] The diagram exposes the nested Harmony and its plain text
+    ASSERT_NE(fd->harmony(), nullptr);
+    EXPECT_EQ(fd->harmonyPlainText(), u"Cm7");
+
+    delete fd;
+    delete score;
+}
+
+//---------------------------------------------------------
+//   fretDiagramHarmonyApi
+//   Test the Plugin API wrappers for FretDiagram and Harmony.
+//   Plugins must be able to read the chord name from a fret
+//   diagram annotation and from the nested Harmony directly.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramHarmonyApi)
+{
+    // [GIVEN] A score with a FretDiagram carrying a chord symbol
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setHarmony(u"Fdim7");
+
+    // Construct the wrapper through the public dispatcher so that
+    // the FretDiagram and Harmony branches added in elements.cpp are
+    // exercised.
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN/THEN] The chord symbol is reachable via plainText.
+    // displayText depends on layout state and is empty before layout runs;
+    // we just exercise the call to confirm the wrapper forwards correctly.
+    EXPECT_EQ(apiFd->harmonyPlainText(), QString("Fdim7"));
+    apiFd->harmonyDisplayText();
+
+    // [WHEN/THEN] (A) The plugin-facing accessor returns the nested Harmony
+    // wrapper (this is the path a real plugin would use).
+    apiv1::Harmony* apiHarmony = apiFd->harmony();
+    ASSERT_NE(apiHarmony, nullptr);
+    EXPECT_EQ(apiHarmony->plainText(), QString("Fdim7"));
+    apiHarmony->displayText();
+    EXPECT_FALSE(apiHarmony->harmonyName().isEmpty());
+
+    // [WHEN/THEN] (B) The wrap() dispatcher returns the same wrapper too
+    // (exercises the API_WRAP(Harmony) branch in elements.cpp).
+    apiv1::Harmony* apiHarmonyViaDispatcher
+        = qobject_cast<apiv1::Harmony*>(apiv1::wrap(domFd->harmony(), apiv1::Ownership::SCORE));
+    ASSERT_NE(apiHarmonyViaDispatcher, nullptr);
+    EXPECT_EQ(apiHarmonyViaDispatcher->plainText(), QString("Fdim7"));
+
+    delete apiFd;
+    delete apiHarmony;
+    delete apiHarmonyViaDispatcher;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetDotApi
+//   Test the Plugin API write method FretDiagram::setDot.
+//   Verifies the change is recorded on the undo stack and can
+//   be undone, as required by reviewers of PR #32848.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetDotApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API.
+    // FretDiagram::dot(s) returns a placeholder Dot(fret=0) when no dot is set,
+    // so we check fret values rather than vector emptiness.
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    // [WHEN] We place a dot through the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set dot test"));
+    apiFd->setDot(0, 3);
+    domScore->endCmd();
+
+    // [THEN] The dot is recorded on the diagram
+    std::vector<FretItem::Dot> dots = domFd->dot(0);
+    ASSERT_EQ(dots.size(), 1u);
+    EXPECT_EQ(dots[0].fret, 3);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The dot is gone, confirming the change went through the undo stack
+    EXPECT_EQ(domFd->dot(0).front().fret, 0);
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setDot(99, 3);
+    apiFd->setDot(0, -1);
+    apiFd->setDot(0, 3, false, 99);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetMarkerApi
+//   Test the Plugin API write method FretDiagram::setMarker.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetMarkerApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN] We mute a string via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set marker test"));
+    apiFd->setMarker(0, int(FretMarkerType::CROSS));
+    domScore->endCmd();
+
+    // [THEN] The marker is recorded
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::CROSS);
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The marker is gone
+    EXPECT_EQ(domFd->marker(0).mtype, FretMarkerType::NONE);
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setMarker(99, int(FretMarkerType::CROSS));
+    apiFd->setMarker(0, 99);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramSetBarreApi
+//   Test the Plugin API write method FretDiagram::setBarre.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramSetBarreApi)
+{
+    // [GIVEN] A score and an empty FretDiagram, wrapped via the API
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    // [WHEN] We add a barre at fret 2 via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("set barre test"));
+    apiFd->setBarre(0, 2);
+    domScore->endCmd();
+
+    // [THEN] The barre is recorded
+    EXPECT_TRUE(domFd->barre(2).exists());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The barre is gone
+    EXPECT_FALSE(domFd->barre(2).exists());
+
+    // Negative-path checks: invalid inputs log a warning and return early.
+    apiFd->setBarre(99, 2);
+    apiFd->setBarre(0, 0);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramClearApi
+//   Test the Plugin API write method FretDiagram::clear and
+//   that the previous content is restored on undo.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramClearApi)
+{
+    // [GIVEN] A score and a FretDiagram populated with a dot and a marker
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+
+    ASSERT_FALSE(domFd->isClear());
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [WHEN] We clear the diagram via the API inside a startCmd/endCmd transaction
+    domScore->startCmd(TranslatableString::untranslatable("clear diagram test"));
+    apiFd->clear();
+    domScore->endCmd();
+
+    // [THEN] The diagram is empty
+    EXPECT_TRUE(domFd->isClear());
+
+    // [WHEN] We undo
+    domScore->undoRedo(true, nullptr);
+
+    // [THEN] The previous dot and marker are restored
+    EXPECT_FALSE(domFd->isClear());
+    ASSERT_EQ(domFd->dot(0).size(), 1u);
+    EXPECT_EQ(domFd->dot(0)[0].fret, 3);
+    EXPECT_EQ(domFd->marker(1).mtype, FretMarkerType::CROSS);
+
+    delete apiFd;
+    delete domFd;
+    delete domScore;
+}
+
+//---------------------------------------------------------
+//   fretDiagramGettersApi
+//   Test the read-only getters: scalar properties (strings,
+//   frets, fretOffset) and collection methods (dots, markers,
+//   barres) that allow plugins to read back diagram state.
+//---------------------------------------------------------
+
+TEST_F(Engraving_ApiScoreTests, fretDiagramGettersApi)
+{
+    // [GIVEN] A FretDiagram populated with known content
+    MasterScore* domScore = compat::ScoreAccess::createMasterScore(nullptr);
+    FretDiagram* domFd = Factory::createFretDiagram(domScore->dummy()->segment());
+
+    // Set a dot on string 0 fret 3, a marker on string 1, and a barre at fret 2
+    domFd->setDot(0, 3);
+    domFd->setMarker(1, FretMarkerType::CROSS);
+    domFd->setBarre(2, 5, 2);     // startString=2, endString=5, fret=2
+    domFd->setFretOffset(3);
+
+    apiv1::FretDiagram* apiFd
+        = qobject_cast<apiv1::FretDiagram*>(apiv1::wrap(domFd, apiv1::Ownership::SCORE));
+    ASSERT_NE(apiFd, nullptr);
+
+    // [THEN] Scalar properties match the DOM state
+    EXPECT_EQ(apiFd->strings(), domFd->strings());
+    EXPECT_EQ(apiFd->frets(), domFd->frets());
+    EXPECT_EQ(apiFd->fretOffset(), 3);
+
+    // [THEN] dots() returns the dot we placed
+    QVariantList dotList = apiFd->dots();
+    ASSERT_EQ(dotList.size(), 1);
+    QVariantMap dot0 = dotList[0].toMap();
+    EXPECT_EQ(dot0["string"].toInt(), 0);
+    EXPECT_EQ(dot0["fret"].toInt(), 3);
+    EXPECT_EQ(dot0["dotType"].toInt(), int(FretDotType::NORMAL));
+
+    // [THEN] markers() returns the marker we placed
+    QVariantList markerList = apiFd->markers();
+    ASSERT_EQ(markerList.size(), 1);
+    QVariantMap marker0 = markerList[0].toMap();
+    EXPECT_EQ(marker0["string"].toInt(), 1);
+    EXPECT_EQ(marker0["markerType"].toInt(), int(FretMarkerType::CROSS));
+
+    // [THEN] barres() returns the barre we placed
+    QVariantList barreList = apiFd->barres();
+    ASSERT_EQ(barreList.size(), 1);
+    QVariantMap barre0 = barreList[0].toMap();
+    EXPECT_EQ(barre0["fret"].toInt(), 2);
+    EXPECT_EQ(barre0["startString"].toInt(), 2);
+    EXPECT_EQ(barre0["endString"].toInt(), 5);
+
+    delete apiFd;
+    delete domFd;
     delete domScore;
 }

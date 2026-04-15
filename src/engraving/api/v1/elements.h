@@ -31,6 +31,8 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/measure.h"
@@ -63,6 +65,8 @@ Q_MOC_INCLUDE("engraving/api/v1/part.h")
 
 namespace mu::engraving::apiv1 {
 class Fraction;
+class FretDiagram;
+class Harmony;
 class IntervalWrapper;
 class EngravingItem;
 class Lyrics;
@@ -2663,6 +2667,164 @@ public:
     bool isMelisma() const { return lyrics()->isMelisma(); }
     /** APIDOC @property {EngravingItem} - the lyrics line for this lyric, if it exists */
     apiv1::EngravingItem* separator() const { return wrap(lyrics()->separator()); }
+};
+
+//---------------------------------------------------------
+//   Harmony
+//---------------------------------------------------------
+
+/** APIDOC
+ * Class representing a chord symbol (Harmony).
+ * @class Harmony
+ * @memberof Engraving
+ * @hideconstructor
+ * @since 4.7
+*/
+class Harmony : public EngravingItem
+{
+    Q_OBJECT
+    /// Plain text representation of the chord symbol (no formatting).
+    Q_PROPERTY(QString plainText READ plainText)
+    /// Display text of the chord symbol (with formatting).
+    Q_PROPERTY(QString displayText READ displayText)
+    /// Internal harmony name used for chord matching against the diagram database.
+    Q_PROPERTY(QString harmonyName READ harmonyName)
+
+public:
+    /// \cond MS_INTERNAL
+    Harmony(mu::engraving::Harmony* h = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(h, own) {}
+
+    mu::engraving::Harmony* harmony() { return toHarmony(e); }
+    const mu::engraving::Harmony* harmony() const { return toHarmony(e); }
+
+    QString plainText() const { return harmony()->plainText(); }
+    QString displayText() const { return harmony()->displayText().toQString(); }
+    QString harmonyName() const { return harmony()->harmonyName().toQString(); }
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   FretDiagram
+//---------------------------------------------------------
+
+/** APIDOC
+ * Class representing a fretboard diagram. The chord symbol that this diagram is
+ * associated with (when present) is nested inside it and can be reached via the
+ * `harmony` property.
+ * @class FretDiagram
+ * @memberof Engraving
+ * @hideconstructor
+ * @since 4.7
+*/
+class FretDiagram : public EngravingItem
+{
+    Q_OBJECT
+    /// The chord symbol nested inside this fretboard diagram, or null if none.
+    Q_PROPERTY(apiv1::Harmony * harmony READ harmony)
+    /// Plain text of the nested chord symbol, or an empty string if none.
+    Q_PROPERTY(QString harmonyPlainText READ harmonyPlainText)
+    /// Display text of the nested chord symbol, or an empty string if none.
+    Q_PROPERTY(QString harmonyDisplayText READ harmonyDisplayText)
+    /// Number of strings in this diagram.
+    Q_PROPERTY(int strings READ strings)
+    /// Number of frets displayed in this diagram.
+    Q_PROPERTY(int frets READ frets)
+    /// Starting fret number (0 means no offset, nut is shown).
+    Q_PROPERTY(int fretOffset READ fretOffset)
+
+public:
+    /// \cond MS_INTERNAL
+    FretDiagram(mu::engraving::FretDiagram* fd = nullptr, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(fd, own) {}
+
+    mu::engraving::FretDiagram* fretDiagram() { return toFretDiagram(e); }
+    const mu::engraving::FretDiagram* fretDiagram() const { return toFretDiagram(e); }
+
+    apiv1::Harmony* harmony() const
+    {
+        return wrap<apiv1::Harmony>(fretDiagram()->harmony(), Ownership::SCORE);
+    }
+
+    QString harmonyPlainText() const { return fretDiagram()->harmonyPlainText().toQString(); }
+    QString harmonyDisplayText() const { return fretDiagram()->harmonyDisplayText().toQString(); }
+
+    int strings() const { return fretDiagram()->strings(); }
+    int frets() const { return fretDiagram()->frets(); }
+    int fretOffset() const { return fretDiagram()->fretOffset(); }
+    /// \endcond
+
+    /** APIDOC
+     * Return all dots currently placed on this diagram as a list of objects,
+     * each with `string` (0-based), `fret` (1-based), and `dotType`
+     * (one of PluginAPI::PluginAPI::FretDotType values).
+     * @method
+     * @returns {Array.<{string: Number, fret: Number, dotType: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList dots() const;
+
+    /** APIDOC
+     * Return all string markers on this diagram as a list of objects,
+     * each with `string` (0-based) and `markerType`
+     * (one of PluginAPI::PluginAPI::FretMarkerType values).
+     * Only strings with an active marker (open or muted) are included.
+     * @method
+     * @returns {Array.<{string: Number, markerType: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList markers() const;
+
+    /** APIDOC
+     * Return all barres on this diagram as a list of objects,
+     * each with `fret` (1-based), `startString` and `endString` (0-based).
+     * @method
+     * @returns {Array.<{fret: Number, startString: Number, endString: Number}>}
+     * @since 4.7
+     */
+    Q_INVOKABLE QVariantList barres() const;
+
+    /** APIDOC
+     * Place or remove a dot at the given fret on the given string. The change is
+     * undoable and propagates to all linked clones of the diagram.
+     * @method
+     * @param {Number} string  0-based string index (0 is the lowest pitched string).
+     * @param {Number} fret    fret number (1-based, relative to fretOffset).
+     *                         Pass 0 to clear the dots on that string.
+     * @param {Boolean} add    If true, append to existing dots instead of replacing.
+     * @param {Number} dotType One of PluginAPI::PluginAPI::FretDotType values.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setDot(int string, int fret, bool add = false, int dotType = int(mu::engraving::FretDotType::NORMAL));
+
+    /** APIDOC
+     * Set the marker for a string (open circle / muted X / none). Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @param {Number} string 0-based string index.
+     * @param {Number} marker One of PluginAPI::PluginAPI::FretMarkerType values.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setMarker(int string, int marker);
+
+    /** APIDOC
+     * Add a barre at the given fret extending up to the given string. Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @param {Number} string 0-based last string covered by the barre.
+     * @param {Number} fret   fret number (1-based, relative to fretOffset).
+     * @param {Boolean} add   If true, append to existing barres at that fret.
+     * @since 4.7
+     */
+    Q_INVOKABLE void setBarre(int string, int fret, bool add = false);
+
+    /** APIDOC
+     * Clear all dots, markers, and barres from this diagram. Undoable and
+     * propagates to all linked clones.
+     * @method
+     * @since 4.7
+     */
+    Q_INVOKABLE void clear();
 };
 
 #undef API_PROPERTY
