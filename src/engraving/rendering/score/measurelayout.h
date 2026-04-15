@@ -85,7 +85,8 @@ public:
 private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
-    static void cloneAnnotationsToMMRest(Segment* underlyingSeg, Segment* mmrSeg, LayoutContext& ctx);
+    static void changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
+    static void changeAnnotationsParent(Segment* oldParent, Segment* newParent);
 
     static int adjustMeasureNumber(Measure* m, int measureNumber);
 
