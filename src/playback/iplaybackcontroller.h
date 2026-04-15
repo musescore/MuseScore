@@ -53,8 +53,8 @@ public:
 
     virtual muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const = 0;
 
-    virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
-    virtual muse::async::Notification currentTrackSequenceIdChanged() const = 0;
+    virtual bool isPlaybackInited() const = 0;
+    virtual muse::async::Channel<bool> playbackInitedChanged() const = 0;
 
     using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;

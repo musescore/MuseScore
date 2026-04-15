@@ -53,14 +53,14 @@ muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackController
     return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
 }
 
-muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
+bool PlaybackControllerStub::isPlaybackInited() const
 {
-    return 0;
+    return false;
 }
 
-muse::async::Notification PlaybackControllerStub::currentTrackSequenceIdChanged() const
+muse::async::Channel<bool> PlaybackControllerStub::playbackInitedChanged() const
 {
-    return muse::async::Notification();
+    return {};
 }
 
 const IPlaybackController::InstrumentTrackIdMap& PlaybackControllerStub::instrumentTrackIdMap() const

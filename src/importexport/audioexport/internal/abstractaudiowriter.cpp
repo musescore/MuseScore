@@ -139,35 +139,26 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
         }
     };
 
-    playback()->sequenceIdList()
-    .onResolve(this, [this, &dstDevice, format, sendProgress](const TrackSequenceIdList& sequenceIdList) {
-        m_progress.start();
+    m_progress.start();
 
-        for (const TrackSequenceId sequenceId : sequenceIdList) {
-            playback()->saveSoundTrackProgressChanged(sequenceId)
-            .onReceive(this, [sendProgress](int64_t current, int64_t total, SaveSoundTrackStage stage) {
-                sendProgress(current, total, stage);
-            });
+    playback()->saveSoundTrackProgressChanged()
+    .onReceive(this, [sendProgress](int64_t current, int64_t total, SaveSoundTrackStage stage) {
+        sendProgress(current, total, stage);
+    });
 
-            playback()->saveSoundTrack(sequenceId, std::move(format), dstDevice)
-            .onResolve(this, [this, sequenceId](const bool /*result*/) {
-                LOGI() << "Successfully saved sound track";
-                m_writeRet = muse::make_ok();
-                m_isCompleted = true;
-                m_progress.finish(muse::make_ok());
-                playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
-            })
-            .onReject(this, [this, sequenceId](int errorCode, const std::string& msg) {
-                m_writeRet = Ret(errorCode, msg);
-                m_isCompleted = true;
-                m_progress.finish(make_ret(errorCode, msg));
-                playback()->saveSoundTrackProgressChanged(sequenceId).disconnect(this);
-            });
-        }
+    playback()->saveSoundTrack(std::move(format), dstDevice)
+    .onResolve(this, [this](const bool /*result*/) {
+        LOGI() << "Successfully saved sound track";
+        m_writeRet = muse::make_ok();
+        m_isCompleted = true;
+        m_progress.finish(muse::make_ok());
+        playback()->saveSoundTrackProgressChanged().disconnect(this);
     })
     .onReject(this, [this](int errorCode, const std::string& msg) {
-        LOGE() << "errorCode: " << errorCode << ", " << msg;
+        m_writeRet = Ret(errorCode, msg);
         m_isCompleted = true;
+        m_progress.finish(make_ret(errorCode, msg));
+        playback()->saveSoundTrackProgressChanged().disconnect(this);
     });
 }
 

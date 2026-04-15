@@ -88,9 +88,11 @@ TrackSequenceId EnginePlayback::addSequence()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    static TrackSequenceId lastId = 0;
+    IF_ASSERT_FAILED(m_sequences.empty()) {
+        return DUMMY_SEQUENCE_ID;
+    }
 
-    TrackSequenceId newId = ++lastId;
+    TrackSequenceId newId = DUMMY_SEQUENCE_ID;
     ITrackSequencePtr s = std::make_shared<TrackSequence>(newId);
 
     m_sequences.emplace(newId, s);

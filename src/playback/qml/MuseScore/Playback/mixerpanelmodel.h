@@ -85,8 +85,8 @@ private:
         ChannelItemRole = Qt::UserRole + 1
     };
 
-    void load();
-    void loadItems();
+    void reload();
+    void reloadItems();
     void onTrackAdded(const muse::audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);
     void removeItem(const muse::audio::TrackId trackId);
@@ -116,7 +116,6 @@ private:
 
     QList<MixerChannelItem*> m_mixerChannelList;
     MixerChannelItem* m_masterChannelItem = nullptr;
-    muse::audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;
