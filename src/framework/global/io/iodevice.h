@@ -75,6 +75,7 @@ public:
 protected:
 
     virtual bool doOpen(OpenMode m) = 0;
+    virtual void doClose() {}
     virtual size_t dataSize() const = 0;
     virtual const uint8_t* rawData() const = 0;
     virtual bool resizeData(size_t size) = 0;
