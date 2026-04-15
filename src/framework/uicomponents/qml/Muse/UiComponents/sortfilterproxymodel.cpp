@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "sortfilterproxymodel.h"
 
 #include <QTimer>
 
-#include "defer.h"
-#include "types/val.h"
+#include "global/defer.h"
+#include "global/types/val.h"
 
-#include "view/modelutils.h"
+#include "uicomponents/view/modelutils.h"
 
 using namespace muse::uicomponents;
 
-static const int INVALID_KEY = -1;
+static constexpr int INVALID_KEY = -1;
 
 SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent), m_filters(this), m_sorters(this)
@@ -161,12 +162,6 @@ void SortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
     }
 }
 
-void SortFilterProxyModel::refresh()
-{
-    setFilterFixedString(filterRegularExpression().pattern());
-    setSortCaseSensitivity(sortCaseSensitivity());
-}
-
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     if (m_alwaysIncludeIndices.contains(sourceRow)) {
@@ -178,31 +173,25 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
     }
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-
-    QHashIterator<int, FilterValue*> it(m_roleIdToFilterValueHash);
-    while (it.hasNext()) {
-        it.next();
-
-        QVariant data = sourceModel()->data(index, it.key());
-        FilterValue* value = it.value();
-
-        if (!value->enabled()) {
+    for (const auto& [role, filter] : m_roleIdToFilterValueHash.asKeyValueRange()) {
+        if (!filter->enabled()) {
             continue;
         }
 
-        switch (value->compareType()) {
+        QVariant data = sourceModel()->data(index, role);
+        switch (filter->compareType()) {
         case CompareType::Equal:
-            if (data != value->roleValue()) {
+            if (data != filter->roleValue()) {
                 return false;
             }
             break;
         case CompareType::NotEqual:
-            if (data == value->roleValue()) {
+            if (data == filter->roleValue()) {
                 return false;
             }
             break;
         case CompareType::Contains:
-            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
+            if (!data.toString().contains(filter->roleValue().toString(), Qt::CaseInsensitive)) {
                 return false;
             }
             break;
@@ -227,13 +216,6 @@ bool SortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& 
     return leftData < rightData;
 }
 
-void SortFilterProxyModel::reset()
-{
-    beginResetModel();
-    resetInternalData();
-    endResetModel();
-}
-
 void SortFilterProxyModel::fillRoleIds()
 {
     beginFilterChange();
@@ -248,30 +230,24 @@ void SortFilterProxyModel::fillRoleIds()
 
     m_roleIdToFilterValueHash.clear();
 
-    if (!sourceModel()) {
-        return;
+    const QList<FilterValue*> filterList = m_filters.list();
+    QHash<QByteArray, FilterValue*> roleNameToValueHash;
+    for (FilterValue* filter : filterList) {
+        roleNameToValueHash.insert(filter->roleName().toUtf8(), filter);
     }
 
-    QHash<QString, FilterValue*> roleNameToValueHash;
-    QList<FilterValue*> filterList = m_filters.list();
-    for (FilterValue* filter : std::as_const(filterList)) {
-        roleNameToValueHash.insert(filter->roleName(), filter);
-    }
-
-    QHash<int, QByteArray> roles = sourceModel()->roleNames();
-    QHash<int, QByteArray>::const_iterator it = roles.constBegin();
-    while (it != roles.constEnd()) {
-        if (roleNameToValueHash.contains(it.value())) {
-            m_roleIdToFilterValueHash.insert(it.key(), roleNameToValueHash[it.value()]);
+    const QHash<int, QByteArray> roles = roleNames();
+    for (const auto& [role, roleName] : roles.asKeyValueRange()) {
+        if (roleNameToValueHash.contains(roleName)) {
+            m_roleIdToFilterValueHash.insert(role, roleNameToValueHash[roleName]);
         }
-        ++it;
     }
 }
 
 SorterValue* SortFilterProxyModel::currentSorterValue() const
 {
-    QList<SorterValue*> sorterList = m_sorters.list();
-    for (SorterValue* sorter : std::as_const(sorterList)) {
+    const QList<SorterValue*> sorterList = m_sorters.list();
+    for (SorterValue* sorter : sorterList) {
         if (sorter->enabled()) {
             return sorter;
         }
@@ -282,12 +258,5 @@ SorterValue* SortFilterProxyModel::currentSorterValue() const
 
 int SortFilterProxyModel::roleKey(const QString& roleName) const
 {
-    QHash<int, QByteArray> roles = sourceModel()->roleNames();
-    for (auto it = roles.begin(); it != roles.end(); ++it) {
-        if (roleName == QString(it.value())) {
-            return it.key();
-        }
-    }
-
-    return INVALID_KEY;
+    return roleNames().key(roleName.toUtf8(), INVALID_KEY);
 }

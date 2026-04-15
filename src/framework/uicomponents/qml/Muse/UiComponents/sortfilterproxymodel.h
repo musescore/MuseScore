@@ -19,11 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #pragma once
 
-#include <qqmlintegration.h>
-
+#include <QHash>
+#include <QList>
+#include <QMetaObject>
 #include <QSortFilterProxyModel>
+
+#include <QtQmlIntegration/qqmlintegration.h>
 
 #include "filtervalue.h"
 #include "sortervalue.h"
@@ -33,14 +37,13 @@ namespace muse::uicomponents {
 class SortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    QML_ELEMENT
-
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
-
     Q_PROPERTY(QQmlListProperty<muse::uicomponents::FilterValue> filters READ filters CONSTANT)
     Q_PROPERTY(QQmlListProperty<muse::uicomponents::SorterValue> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> alwaysIncludeIndices READ alwaysIncludeIndices WRITE setAlwaysIncludeIndices NOTIFY alwaysIncludeIndicesChanged)
     Q_PROPERTY(QList<int> alwaysExcludeIndices READ alwaysExcludeIndices WRITE setAlwaysExcludeIndices NOTIFY alwaysExcludeIndicesChanged)
+
+    QML_ELEMENT
 
 public:
     explicit SortFilterProxyModel(QObject* parent = nullptr);
@@ -58,12 +61,8 @@ public:
 
     void setSourceModel(QAbstractItemModel* sourceModel) override;
 
-    Q_INVOKABLE void refresh();
-
 signals:
     void rowCountChanged();
-
-    void filtersChanged(QQmlListProperty<muse::uicomponents::FilterValue> filters);
 
     void alwaysIncludeIndicesChanged();
     void alwaysExcludeIndicesChanged();
@@ -75,9 +74,7 @@ protected:
     bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
 private:
-    void reset();
     void fillRoleIds();
-
     SorterValue* currentSorterValue() const;
     int roleKey(const QString& roleName) const;
 
