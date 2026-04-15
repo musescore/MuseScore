@@ -185,6 +185,7 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
     audio::AudioFxParams newParams = m_currentFxParams;
     newParams.categories = audio::audioFxCategoriesFromString(newMeta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
     newParams.resourceMeta = newMeta;
+    newParams.configuration.clear();
     newParams.active = newMeta.isValid();
 
     setParams(newParams);
