@@ -2574,8 +2574,7 @@ void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx
             if (!tab->onLines()) {
                 // if fret marks above lines, raise the dots by half line distance
                 y = -0.5;
-            }
-            if (dotMove == 0) {
+            } else if (dotMove == 0) {
                 bool oddVoice = note->voice() & 1;
                 y = oddVoice ? 0.5 : -0.5;
             } else {
