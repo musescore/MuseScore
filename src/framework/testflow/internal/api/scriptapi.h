@@ -1,0 +1,84 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MUSE_TESTFLOW_API_SCRIPTAPI_H
+#define MUSE_TESTFLOW_API_SCRIPTAPI_H
+
+#include <QObject>
+#include <QMap>
+
+#include "modularity/ioc.h"
+#include "api/iapiregister.h"
+#include "api/iapiengine.h"
+
+namespace muse::testflow {
+class ScriptApi : public QObject, public Contextable
+{
+    Q_OBJECT
+    Q_PROPERTY(QJSValue log READ log CONSTANT)
+    Q_PROPERTY(QJSValue autobot READ autobot CONSTANT) // deprecated
+    Q_PROPERTY(QJSValue testflow READ testflow CONSTANT)
+    Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
+    Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
+    Q_PROPERTY(QJSValue context READ context CONSTANT)
+    Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
+    Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
+    Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
+    Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+    Q_PROPERTY(QJSValue process READ process CONSTANT)
+    Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
+
+    GlobalInject<muse::api::IApiRegister> apiRegister;
+
+public:
+    ScriptApi(muse::api::IApiEngine* engine, QObject* parent);
+    ~ScriptApi();
+
+    QJSValue log() const { return api("MuseApi.Log"); }
+    QJSValue testflow() const { return api("MuseInternal.Testflow"); }
+    QJSValue autobot() const { return api("MuseInternal.Testflow"); } // deprecated
+    QJSValue dispatcher() const { return api("MuseInternal.Dispatcher"); }
+    QJSValue navigation() const { return api("MuseInternal.Navigation"); }
+    QJSValue context() const { return api("MuseInternal.TestflowContext"); }
+    QJSValue shortcuts() const { return api("MuseInternal.Shortcuts"); }
+    QJSValue interactive() const { return api("MuseApi.Interactive"); }
+    QJSValue keyboard() const { return api("MuseInternal.Keyboard"); }
+    QJSValue accessibility() const { return api("MuseInternal.Accessibility"); }
+    QJSValue process() const { return api("api.process"); }
+    QJSValue filesystem() const { return api("api.filesystem"); }
+
+private:
+
+    QJSValue api(const std::string& name) const;
+
+    struct Api
+    {
+        muse::api::ApiObject* obj = nullptr;
+        bool isNeedDelete = false;
+        QJSValue jsval;
+    };
+
+    muse::api::IApiEngine* m_engine = nullptr;
+    mutable QMap<std::string, Api> m_apis;
+};
+}
+
+#endif // MUSE_TESTFLOW_API_SCRIPTAPI_H

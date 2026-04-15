@@ -171,7 +171,7 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("diagnostic-drawdata-to-png", "Convert draw data to png", "file"));
     m_parser.addOption(QCommandLineOption("diagnostic-drawdiff-to-png", "Convert draw diff to png"));
 
-    // Autobot
+    // Testflow
     m_parser.addOption(QCommandLineOption("test-case", "Run test case by name or file", "nameOrFile"));
     m_parser.addOption(QCommandLineOption("test-case-context", "Set test case context by name or file", "nameOrFile"));
     m_parser.addOption(QCommandLineOption("test-case-context-value", "Set test case context value", "value"));
@@ -525,26 +525,26 @@ void CommandLineParser::parse(int argc, char** argv)
         m_options->diagnostic.input = scorefiles;
     }
 
-    // Autobot
+    // Testflow
     if (m_parser.isSet("test-case")) {
         m_options->runMode = IApplication::RunMode::ConsoleApp;
-        m_options->autobot.testCaseNameOrFile = fromUserInputPath(m_parser.value("test-case"));
+        m_options->testflow.testCaseNameOrFile = fromUserInputPath(m_parser.value("test-case"));
     }
 
     if (m_parser.isSet("test-case-context")) {
-        m_options->autobot.testCaseContextNameOrFile = fromUserInputPath(m_parser.value("test-case-context"));
+        m_options->testflow.testCaseContextNameOrFile = fromUserInputPath(m_parser.value("test-case-context"));
     }
 
     if (m_parser.isSet("test-case-context-value")) {
-        m_options->autobot.testCaseContextValue = m_parser.value("test-case-context-value");
+        m_options->testflow.testCaseContextValue = m_parser.value("test-case-context-value");
     }
 
     if (m_parser.isSet("test-case-func")) {
-        m_options->autobot.testCaseFunc = m_parser.value("test-case-func");
+        m_options->testflow.testCaseFunc = m_parser.value("test-case-func");
     }
 
     if (m_parser.isSet("test-case-func-args")) {
-        m_options->autobot.testCaseFuncArgs = m_parser.value("test-case-func-args");
+        m_options->testflow.testCaseFuncArgs = m_parser.value("test-case-func-args");
     }
 
     // Startup

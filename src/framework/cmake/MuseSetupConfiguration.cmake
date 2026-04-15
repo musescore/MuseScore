@@ -38,8 +38,8 @@ if (NOT MUSE_MODULE_UI_QML)
     endforeach()
 endif()
 
-if (NOT MUSE_MODULE_AUTOBOT)
-    set(MUSE_MODULE_AUTOBOT_QML OFF) # Does not have stub that has QML
+if (NOT MUSE_MODULE_TESTFLOW)
+    set(MUSE_MODULE_TESTFLOW_QML OFF) # Does not have stub that has QML
 endif()
 
 if (NOT MUSE_MODULE_DIAGNOSTICS)

@@ -1,0 +1,58 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MUSE_TESTFLOW_TESTCASEREPORT_H
+#define MUSE_TESTFLOW_TESTCASEREPORT_H
+
+#include <QFile>
+#include <QTextStream>
+
+#include "modularity/ioc.h"
+#include "../itestflowconfiguration.h"
+#include "io/ifilesystem.h"
+
+#include "../testflowtypes.h"
+#include "../itestcasecontext.h"
+
+namespace muse::testflow {
+class TestCaseReport : public Contextable
+{
+    GlobalInject<ITestflowConfiguration> configuration;
+    GlobalInject<io::IFileSystem> fileSystem;
+
+public:
+    TestCaseReport(const modularity::ContextPtr& iocCtx)
+        : Contextable(iocCtx) {}
+
+    Ret beginReport(const TestCase& testCase);
+    void endReport(bool aborted);
+
+    void onStepStatusChanged(const StepInfo& stepInfo, const ITestCaseContextPtr& ctx);
+
+private:
+
+    QFile m_file;
+    QTextStream m_stream;
+    bool m_opened = false;
+};
+}
+
+#endif // MUSE_TESTFLOW_TESTCASEREPORT_H

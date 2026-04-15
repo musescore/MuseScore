@@ -156,11 +156,11 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
     switch (options->runMode) {
     case IApplication::RunMode::ConsoleApp: {
         // ====================================================
-        // Process Autobot
+        // Process Testflow
         // ====================================================
-        MuseScoreCmdOptions::Autobot autobotOptions = options->autobot;
-        if (!autobotOptions.testCaseNameOrFile.isEmpty()) {
-            processAutobot(autobotOptions, ctxId);
+        MuseScoreCmdOptions::Testflow testflowOptions = options->testflow;
+        if (!testflowOptions.testCaseNameOrFile.isEmpty()) {
+            processTestflow(testflowOptions, ctxId);
         } else {
             // ====================================================
             // Process Diagnostic
@@ -335,12 +335,12 @@ int MuseScoreConsoleApp::processAudioPluginRegistration(const MuseScoreCmdOption
     return ret.code();
 }
 
-void MuseScoreConsoleApp::processAutobot(const MuseScoreCmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx)
+void MuseScoreConsoleApp::processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx)
 {
-    using namespace muse::autobot;
-    muse::ContextInject<IAutobot> autobot = { ctx };
+    using namespace muse::testflow;
+    muse::ContextInject<ITestflow> testflow = { ctx };
 
-    muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
+    muse::async::Channel<StepInfo, Ret> stepCh = testflow()->stepStatusChanged();
     stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret) {
         if (!ret) {
             LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
@@ -350,19 +350,19 @@ void MuseScoreConsoleApp::processAutobot(const MuseScoreCmdOptions::Autobot& tas
         }
     });
 
-    muse::async::Channel<muse::io::path_t, IAutobot::Status> statusCh = autobot()->statusChanged();
-    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, IAutobot::Status st) {
-        if (st == IAutobot::Status::Finished) {
+    muse::async::Channel<muse::io::path_t, ITestflow::Status> statusCh = testflow()->statusChanged();
+    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, ITestflow::Status st) {
+        if (st == ITestflow::Status::Finished) {
             LOGI() << "success finished, path: " << path;
             qApp->exit(0);
         }
     });
 
-    IAutobot::Options opt;
+    ITestflow::Options opt;
     opt.context = task.testCaseContextNameOrFile;
     opt.contextVal = task.testCaseContextValue.toStdString();
     opt.func = task.testCaseFunc.toStdString();
     opt.funcArgs = task.testCaseFuncArgs.toStdString();
 
-    autobot()->execScript(task.testCaseNameOrFile, opt);
+    testflow()->execScript(task.testCaseNameOrFile, opt);
 }

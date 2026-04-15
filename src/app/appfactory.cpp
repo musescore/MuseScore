@@ -136,8 +136,8 @@
 // Modules
 #include "appshell/appshellmodule.h"
 
-#ifdef MUSE_MODULE_AUTOBOT
-#include "autobot/autobotmodule.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/testflowmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_AUTOMATION
@@ -350,8 +350,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
     app->addModule(new mu::appshell::AppShellModule());
 #endif
 
-#ifdef MUSE_MODULE_AUTOBOT
-    app->addModule(new muse::autobot::AutobotModule());
+#ifdef MUSE_MODULE_TESTFLOW
+    app->addModule(new muse::testflow::TestflowModule());
 #endif
 
     app->addModule(new mu::braille::BrailleModule());
@@ -475,8 +475,8 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
     app->addModule(new muse::vst::VSTModule());
 #endif
 
-#ifdef MUSE_MODULE_AUTOBOT
-    app->addModule(new muse::autobot::AutobotModule());
+#ifdef MUSE_MODULE_TESTFLOW
+    app->addModule(new muse::testflow::TestflowModule());
 #endif
 
     app->addModule(new mu::context::ContextModule());

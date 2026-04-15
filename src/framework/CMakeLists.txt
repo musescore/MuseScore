@@ -61,8 +61,8 @@ if (MUSE_MODULE_AUDIOPLUGINS)
     add_subdirectory(audioplugins)
 endif()
 
-if (MUSE_MODULE_AUTOBOT)
-    add_subdirectory(autobot)
+if (MUSE_MODULE_TESTFLOW)
+    add_subdirectory(testflow)
 endif()
 
 if (MUSE_MODULE_AUTOMATION)

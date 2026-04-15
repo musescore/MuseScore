@@ -54,7 +54,7 @@ public:
     virtual void setActive(bool active) = 0;
     virtual async::Notification activeChanged() const = 0;
 
-    // for autobot tests
+    // for testflow tests
     virtual void reload(bool onlyDef = false) = 0;
 };
 }

@@ -37,8 +37,6 @@ set(MUSE_MODULE_AUDIO_WORKMODE 1 CACHE STRING "Audio subsystem work mode")
 
 declare_muse_module_opt(AUDIOPLUGINS ON)
 
-declare_muse_module_opt(AUTOBOT ON)
-
 declare_muse_module_opt(AUTOMATION ON)
 
 declare_muse_module_opt(CLOUD ON)
@@ -81,7 +79,7 @@ declare_muse_module_opt(NETWORK ON)
 option(MUSE_MODULE_NETWORK_WEBSOCKET "Enable websocket support" OFF)
 
 declare_muse_module_opt(SHORTCUTS ON)
-
+declare_muse_module_opt(TESTFLOW ON)
 declare_muse_module_opt(TOURS ON)
 
 declare_muse_module_opt(UI ON)

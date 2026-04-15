@@ -37,7 +37,7 @@
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
-#include "autobot/iautobot.h"
+#include "testflow/itestflow.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -75,7 +75,7 @@ private:
     int processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
     int processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
     int processAudioPluginRegistration(const MuseScoreCmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
-    void processAutobot(const MuseScoreCmdOptions::Autobot& task, const muse::modularity::ContextPtr& ctx);
+    void processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx);
 };
 }
 
