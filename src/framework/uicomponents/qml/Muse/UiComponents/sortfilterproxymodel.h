@@ -30,8 +30,8 @@
 #include <QtQmlIntegration/qqmlintegration.h>
 
 #include "filter.h"
-#include "sortervalue.h"
 #include "qmllistproperty.h"
+#include "sorter.h"
 
 namespace muse::uicomponents {
 class SortFilterProxyModel : public QSortFilterProxyModel
@@ -39,7 +39,7 @@ class SortFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
     Q_PROPERTY(QQmlListProperty<muse::uicomponents::Filter> filters READ filters CONSTANT)
-    Q_PROPERTY(QQmlListProperty<muse::uicomponents::SorterValue> sorters READ sorters CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::uicomponents::Sorter> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> alwaysIncludeIndices READ alwaysIncludeIndices WRITE setAlwaysIncludeIndices NOTIFY alwaysIncludeIndicesChanged)
     Q_PROPERTY(QList<int> alwaysExcludeIndices READ alwaysExcludeIndices WRITE setAlwaysExcludeIndices NOTIFY alwaysExcludeIndicesChanged)
 
@@ -49,7 +49,7 @@ public:
     explicit SortFilterProxyModel(QObject* parent = nullptr);
 
     QQmlListProperty<Filter> filters();
-    QQmlListProperty<SorterValue> sorters();
+    QQmlListProperty<Sorter> sorters();
 
     QList<int> alwaysIncludeIndices() const;
     void setAlwaysIncludeIndices(const QList<int>& indices);
@@ -75,10 +75,10 @@ protected:
     bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
 private:
-    SorterValue* currentSorterValue() const;
+    Sorter* currentSorter() const;
 
     QmlListProperty<Filter> m_filters;
-    QmlListProperty<SorterValue> m_sorters;
+    QmlListProperty<Sorter> m_sorters;
 
     QList<int> m_alwaysIncludeIndices;
     QList<int> m_alwaysExcludeIndices;

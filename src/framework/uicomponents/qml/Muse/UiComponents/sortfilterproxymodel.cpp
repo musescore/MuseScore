@@ -24,8 +24,6 @@
 
 #include <QTimer>
 
-#include "global/types/val.h"
-
 #include "uicomponents/view/modelutils.h"
 
 using namespace muse::uicomponents;
@@ -64,10 +62,11 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     });
 
     auto onSortersChanged = [this] {
-        SorterValue* sorter = currentSorterValue();
+        Sorter* sorter = currentSorter();
         invalidate();
 
         if (!sorter) {
+            sort(-1, Qt::AscendingOrder);
             return;
         }
 
@@ -77,9 +76,12 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     };
 
     connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onSortersChanged](int index) {
-        onSortersChanged();
+        Sorter* sorter = m_sorters.at(index);
+        if (sorter->enabled()) {
+            onSortersChanged();
+        }
 
-        connect(m_sorters.at(index), &SorterValue::dataChanged, this, onSortersChanged);
+        connect(sorter, &Sorter::dataChanged, this, onSortersChanged);
     });
 
     connect(this, &SortFilterProxyModel::sourceModelRoleNamesChanged, this, [this]() {
@@ -92,7 +94,7 @@ QQmlListProperty<Filter> SortFilterProxyModel::filters()
     return m_filters.property();
 }
 
-QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
+QQmlListProperty<Sorter> SortFilterProxyModel::sorters()
 {
     return m_sorters.property();
 }
@@ -197,23 +199,18 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
 
 bool SortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    SorterValue* sorter = currentSorterValue();
+    Sorter* sorter = currentSorter();
     if (!sorter) {
         return false;
     }
 
-    const int sorterRoleKey = roleFromRoleName(sorter->roleName());
-
-    Val leftData = Val::fromQVariant(sourceModel()->data(left, sorterRoleKey));
-    Val rightData = Val::fromQVariant(sourceModel()->data(right, sorterRoleKey));
-
-    return leftData < rightData;
+    return sorter->lessThan(left, right, *this);
 }
 
-SorterValue* SortFilterProxyModel::currentSorterValue() const
+Sorter* SortFilterProxyModel::currentSorter() const
 {
-    const QList<SorterValue*> sorterList = m_sorters.list();
-    for (SorterValue* sorter : sorterList) {
+    const QList<Sorter*> sorterList = m_sorters.list();
+    for (Sorter* sorter : sorterList) {
         if (sorter->enabled()) {
             return sorter;
         }

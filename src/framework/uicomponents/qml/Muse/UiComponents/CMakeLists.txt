@@ -76,6 +76,8 @@ qt_add_qml_module(muse_uicomponents_qml
         selectableitemlistmodel.h
         selectmultipledirectoriesmodel.cpp
         selectmultipledirectoriesmodel.h
+        sorter.cpp
+        sorter.h
         sortervalue.cpp
         sortervalue.h
         sortfilterproxymodel.cpp
