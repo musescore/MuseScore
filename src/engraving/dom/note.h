@@ -375,7 +375,6 @@ public:
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }
     void setScore(Score* s) override;
-    void setDotRelativeLine(int);
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);

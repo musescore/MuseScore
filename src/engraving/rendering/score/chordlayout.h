@@ -140,8 +140,9 @@ private:
 
     static void createParenGroups(Chord* chord);
 
-    static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);
+    static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes, LayoutContext& ctx);
 
+    static void setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx);
     static void setDotX(const std::vector<Chord*>& chords, const std::array<double, 3 * VOICES>& dotPos, const Staff* staff,
                         const double upDotPosX, const double downDotPosX);
 
