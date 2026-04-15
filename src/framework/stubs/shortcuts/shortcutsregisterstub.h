@@ -48,7 +48,7 @@ public:
     void setActive(bool active) override;
     async::Notification activeChanged() const override;
 
-    // for autobot tests
+    // for testflow tests
     void reload(bool onlyDef = false) override;
 };
 }

@@ -27,8 +27,8 @@
 #include "extensions/api/extapi.h"
 
 #include "muse_framework_config.h"
-#ifdef MUSE_MODULE_AUTOBOT
-#include "autobot/internal/api/scriptapi.h"
+#ifdef MUSE_MODULE_TESTFLOW
+#include "testflow/internal/api/scriptapi.h"
 #endif
 
 #include "log.h"
@@ -109,9 +109,9 @@ bool ApiDumpModel::isAllowedByType(const QString& module, ApiType type) const
     switch (type) {
     case ApiType::All: return true;
     case ApiType::Extensions: return hasProperty(api::ExtApi::staticMetaObject, module);
-    case ApiType::Autobot: {
-#ifdef MUSE_MODULE_AUTOBOT
-        return hasProperty(autobot::ScriptApi::staticMetaObject, module);
+    case ApiType::Testflow: {
+#ifdef MUSE_MODULE_TESTFLOW
+        return hasProperty(testflow::ScriptApi::staticMetaObject, module);
 #else
         return false;
 #endif
@@ -241,7 +241,7 @@ QVariantList ApiDumpModel::apiTypes() const
     QVariantList types;
     types << makeItem("All", ApiType::All);
     types << makeItem("Extensions", ApiType::Extensions);
-    types << makeItem("Autobot", ApiType::Autobot);
+    types << makeItem("Testflow", ApiType::Testflow);
 
     return types;
 }

@@ -111,13 +111,13 @@ struct MuseScoreCmdOptions : public muse::CmdOptions {
         QString output;
     } diagnostic;
 
-    struct Autobot {
+    struct Testflow {
         QString testCaseNameOrFile;
         QString testCaseContextNameOrFile;
         QString testCaseContextValue;
         QString testCaseFunc;
         QString testCaseFuncArgs;
-    } autobot;
+    } testflow;
 
     struct AudioPluginRegistration {
         muse::io::path_t pluginPath;

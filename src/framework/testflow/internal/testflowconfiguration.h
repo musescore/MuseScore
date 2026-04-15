@@ -1,0 +1,50 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MUSE_TESTFLOW_TESTFLOWCONFIGURATION_H
+#define MUSE_TESTFLOW_TESTFLOWCONFIGURATION_H
+
+#include "../itestflowconfiguration.h"
+
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
+namespace muse::testflow {
+class TestflowConfiguration : public ITestflowConfiguration, public Contextable
+{
+    GlobalInject<IGlobalConfiguration> globalConfiguration;
+
+public:
+    TestflowConfiguration(const modularity::ContextPtr& iocCtx)
+        : Contextable(iocCtx) {}
+
+    io::paths_t scriptsDirPaths() const override;
+    io::paths_t testingFilesDirPaths() const override;
+
+    io::path_t dataPath() const override;
+    io::path_t savingFilesPath() const override;
+    io::path_t reportsPath() const override;
+    io::path_t drawDataPath() const override;
+    io::path_t fileDrawDataPath(const io::path_t& filePath) const override;
+};
+}
+
+#endif // MUSE_TESTFLOW_TESTFLOWCONFIGURATION_H

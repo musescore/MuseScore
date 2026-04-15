@@ -47,7 +47,7 @@ public:
     enum ApiType {
         All = 0,
         Extensions,
-        Autobot
+        Testflow
     };
     Q_ENUM(ApiType);
 
