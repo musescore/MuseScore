@@ -166,6 +166,74 @@ public:
         return p;
     }
 
+    Section* make_directed_section(int sectOrder, size_t controlsCount, NavigationPanel::QmlDirection dir)
+    {
+        Section* s = new Section();
+
+        NavigationSection* navSection = new NavigationSection(iocCtx);
+
+        Panel* p = new Panel();
+        NavigationPanel* navPanel = new NavigationPanel(iocCtx);
+
+        for (size_t ci = 0; ci < controlsCount; ++ci) {
+            INavigation::Index& idx = make_idx();
+            bool isLast = (ci == controlsCount - 1);
+            if (dir == NavigationPanel::Vertical) {
+                idx.row = static_cast<int>(ci);
+                idx.column = isLast ? 1 : 0;
+            } else {
+                idx.row = isLast ? 1 : 0;
+                idx.column = static_cast<int>(ci);
+            }
+
+            Control* c = make_control(idx);
+            c->control->setPanel(navPanel);
+
+            p->controls.push_back(c);
+            p->icontrols.insert(c->control);
+        }
+
+        navPanel->setDirection(dir);
+        navPanel->setEnabled(true);
+        navPanel->setActive(false);
+
+        INavigation::Index& panelIdx = make_idx();
+        panelIdx.setOrder(0);
+
+        navPanel->setRow(panelIdx.row);
+        navPanel->setColumn(panelIdx.column);
+        navPanel->setOrder(panelIdx.order());
+
+        setComponentWindow(navPanel, &m_window);
+
+        navPanel->navigationController.set(m_controller);
+
+        navPanel->setSection(navSection);
+        p->panel = navPanel;
+        s->panels.push_back(p);
+        s->ipanels.insert(p->panel);
+
+        navSection->setType(NavigationSection::QmlType::Regular);
+        navSection->setEnabled(true);
+        navSection->setActive(false);
+
+        INavigation::Index& sectIdx = make_idx();
+        sectIdx.setOrder(sectOrder);
+
+        navSection->setRow(sectIdx.row);
+        navSection->setColumn(sectIdx.column);
+        navSection->setOrder(sectIdx.order());
+
+        setComponentWindow(navSection, &m_window);
+        navSection->application.set(m_applicationMock);
+
+        navSection->navigationController.set(m_controller);
+
+        s->section = navSection;
+
+        return s;
+    }
+
     Section* make_section(int sectOrder, size_t panelsCount, size_t controlsCount)
     {
         Section* s = new Section();
@@ -618,4 +686,84 @@ TEST_F(Ui_NavigationControllerTests, UserClickedNotOnControlHasDefaultControlWit
 
     delete sect1;
     delete sect2;
+}
+
+TEST_F(Ui_NavigationControllerTests, RightWrapsToFirstOnHorizontalPanel)
+{
+    //! CASE On a horizontal panel, pressing Right at the last control wraps to the first
+
+    //! [GIVEN] Section with a horizontal panel containing 3 controls
+    Section* sect = make_directed_section(1, 3, NavigationPanel::Horizontal);
+    m_controller->reg(sect->section);
+
+    //! [GIVEN] Last control is active
+    sect->panels[0]->controls[2]->control->requestActive();
+
+    //! [WHEN] Navigate right
+    m_dispatcher->dispatch("nav-right");
+
+    //! [THEN] First control becomes active (wraps around)
+    EXPECT_EQ(m_controller->activeControl(), sect->panels[0]->controls[0]->control);
+
+    delete sect;
+}
+
+TEST_F(Ui_NavigationControllerTests, LeftWrapsToLastOnHorizontalPanel)
+{
+    //! CASE On a horizontal panel, pressing Left at the first control wraps to the last
+
+    //! [GIVEN] Section with a horizontal panel containing 3 controls
+    Section* sect = make_directed_section(1, 3, NavigationPanel::Horizontal);
+    m_controller->reg(sect->section);
+
+    //! [GIVEN] First control is active
+    sect->panels[0]->controls[0]->control->requestActive();
+
+    //! [WHEN] Navigate left
+    m_dispatcher->dispatch("nav-left");
+
+    //! [THEN] Last control becomes active (wraps around)
+    EXPECT_EQ(m_controller->activeControl(), sect->panels[0]->controls[2]->control);
+
+    delete sect;
+}
+
+TEST_F(Ui_NavigationControllerTests, DownWrapsToFirstOnVerticalPanel)
+{
+    //! CASE On a vertical panel, pressing Down at the last control wraps to the first
+
+    //! [GIVEN] Section with a vertical panel containing 3 controls
+    Section* sect = make_directed_section(1, 3, NavigationPanel::Vertical);
+    m_controller->reg(sect->section);
+
+    //! [GIVEN] Last control is active
+    sect->panels[0]->controls[2]->control->requestActive();
+
+    //! [WHEN] Navigate down
+    m_dispatcher->dispatch("nav-down");
+
+    //! [THEN] First control becomes active (wraps around)
+    EXPECT_EQ(m_controller->activeControl(), sect->panels[0]->controls[0]->control);
+
+    delete sect;
+}
+
+TEST_F(Ui_NavigationControllerTests, UpWrapsToLastOnVerticalPanel)
+{
+    //! CASE On a vertical panel, pressing Up at the first control wraps to the last
+
+    //! [GIVEN] Section with a vertical panel containing 3 controls
+    Section* sect = make_directed_section(1, 3, NavigationPanel::Vertical);
+    m_controller->reg(sect->section);
+
+    //! [GIVEN] First control is active
+    sect->panels[0]->controls[0]->control->requestActive();
+
+    //! [WHEN] Navigate up
+    m_dispatcher->dispatch("nav-up");
+
+    //! [THEN] Last control becomes active (wraps around)
+    EXPECT_EQ(m_controller->activeControl(), sect->panels[0]->controls[2]->control);
+
+    delete sect;
 }
