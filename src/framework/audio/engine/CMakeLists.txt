@@ -47,6 +47,7 @@ else()
         isynthesizer.h
         isynthresolver.h
         isoundfontrepository.h
+        itransporteventsdispatcher.h
 
         # internal
         internal/audioengineconfiguration.cpp
@@ -84,6 +85,8 @@ else()
         # internal/noisesource.h
         internal/abstracteventsequencer.h
         internal/audiosignalnotifier.h
+        internal/transporteventsdispatcher.cpp
+        internal/transporteventsdispatcher.h
 
         # DSP
         internal/dsp/envelopefilterconfig.h

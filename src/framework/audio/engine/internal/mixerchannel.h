@@ -72,6 +72,8 @@ public:
 private:
     void completeOutput(float* buffer, unsigned int samplesCount);
 
+    void updateShouldProcessDuringSilence();
+
     TrackId m_trackId = -1;
 
     OutputSpec m_outputSpec;
