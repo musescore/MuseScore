@@ -70,8 +70,16 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     }
 
     const OutputSpec& outputSpec = format.outputSpec;
-    const uint64_t totalUs = static_cast<uint64_t>(std::max<int64_t>(0, totalDuration));
-    m_totalSamplesPerChannel = static_cast<samples_t>((totalUs * static_cast<uint64_t>(outputSpec.sampleRate)) / 1000000ULL);
+
+    auto durationToSamples = [&](msecs_t duration) {
+        const uint64_t _duration = static_cast<uint64_t>(std::max<int64_t>(0, duration));
+        return static_cast<samples_t>((_duration * static_cast<uint64_t>(outputSpec.sampleRate)) / 1000000ULL);
+    };
+
+    m_dataSamples = durationToSamples(totalDuration);
+    m_leadingSilenceSamples = durationToSamples(format.leadingSilenceDuration);
+    samples_t trailingSilenceSamples = durationToSamples(format.trailingSilenceDuration);
+    m_totalSamples = m_leadingSilenceSamples + m_dataSamples + trailingSilenceSamples;
 
     const samples_t intermediateSamplesNumber = outputSpec.samplesPerChannel * outputSpec.audioChannelCount;
     m_intermBuffer.resize(intermediateSamplesNumber);
@@ -82,7 +90,7 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
         return;
     }
 
-    if (!m_encoderPtr->init(destination, format, m_totalSamplesPerChannel)) {
+    if (!m_encoderPtr->init(destination, format, m_totalSamples)) {
         m_encoderPtr.reset();
     }
 }
@@ -110,10 +118,15 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        audioEngine()->setMode(RenderMode::IdleMode);
+        //! NOTE Changes to the source and audio engine state
+        //! must be performed via execOperation - so that synchronization with the audio driver process works
+        IAudioEngine::Operation func = [this]() {
+            audioEngine()->setMode(RenderMode::IdleMode);
 
-        m_source->setOutputSpec(audioEngine()->outputSpec());
-        m_source->setIsActive(false);
+            m_source->setOutputSpec(audioEngine()->outputSpec());
+            m_source->setIsActive(false);
+        };
+        audioEngine()->execOperation(OperationType::LongOperation, func);
 
         m_isAborted = false;
     };
@@ -138,18 +151,38 @@ Progress SoundTrackWriter::progress()
 
 Ret SoundTrackWriter::writeStreaming()
 {
-    if (m_totalSamplesPerChannel == 0) {
+    if (m_totalSamples == 0) {
         LOGI() << "No audio to export";
         return make_ret(Err::NoAudioToExport);
     }
 
     samples_t framesWritten = 0;
 
-    sendStreamingProgress(0, m_totalSamplesPerChannel);
+    sendStreamingProgress(0, m_totalSamples);
 
-    while (framesWritten < m_totalSamplesPerChannel && !m_isAborted) {
+    // Phase 1: leading silence
+    const samples_t leadingEnd = m_leadingSilenceSamples;
+    while (framesWritten < leadingEnd && !m_isAborted) {
         const samples_t chunk = static_cast<samples_t>(
-            std::min<uint64_t>(m_renderStep, m_totalSamplesPerChannel - framesWritten));
+            std::min<uint64_t>(m_renderStep, leadingEnd - framesWritten));
+
+        std::fill(m_intermBuffer.begin(), m_intermBuffer.end(), 0.f);
+
+        const size_t encoded = m_encoderPtr->encode(chunk, m_intermBuffer.data());
+        if (encoded == 0) {
+            return make_ret(Err::ErrorEncode);
+        }
+
+        framesWritten += chunk;
+        sendStreamingProgress(framesWritten, m_totalSamples);
+        rpcChannel()->process();
+    }
+
+    // Phase 2: actual audio data
+    const samples_t audioEnd = m_leadingSilenceSamples + m_dataSamples;
+    while (framesWritten < audioEnd && !m_isAborted) {
+        const samples_t chunk = static_cast<samples_t>(
+            std::min<uint64_t>(m_renderStep, audioEnd - framesWritten));
 
         m_source->process(m_intermBuffer.data(), chunk);
 
@@ -159,10 +192,24 @@ Ret SoundTrackWriter::writeStreaming()
         }
 
         framesWritten += chunk;
-        sendStreamingProgress(framesWritten, m_totalSamplesPerChannel);
+        sendStreamingProgress(framesWritten, m_totalSamples);
+        rpcChannel()->process();
+    }
 
-        //! NOTE It is necessary for cancellation to work
-        //! and for information about the audio signal to be transmitted.
+    // Phase 3: trailing silence
+    while (framesWritten < m_totalSamples && !m_isAborted) {
+        const samples_t chunk = static_cast<samples_t>(
+            std::min<uint64_t>(m_renderStep, m_totalSamples - framesWritten));
+
+        std::fill(m_intermBuffer.begin(), m_intermBuffer.end(), 0.f);
+
+        const size_t encoded = m_encoderPtr->encode(chunk, m_intermBuffer.data());
+        if (encoded == 0) {
+            return make_ret(Err::ErrorEncode);
+        }
+
+        framesWritten += chunk;
+        sendStreamingProgress(framesWritten, m_totalSamples);
         rpcChannel()->process();
     }
 
