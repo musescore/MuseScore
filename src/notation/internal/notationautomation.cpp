@@ -26,6 +26,26 @@
 
 using namespace mu::notation;
 
+// TODO: This will do for now, but it needs to be smarter because there will be gaps between ChordRest/TimeTick segment types (e.g.
+// barlines). This method effectively needs to return the closest segment of the desired type (and probably whether canvasX is before
+// or after the segment). If the canvasX is before the closest segment, then we'll go on to use the start tick of the segment. If it's
+// after, we'll use the end tick of the segment....
+static const Segment* segmentForCanvasX(const System* system, double canvasX)
+{
+    IF_ASSERT_FAILED(system) {
+        return nullptr;
+    }
+    const mu::engraving::SegmentType type = Segment::CHORD_REST_OR_TIME_TICK_TYPE;
+    const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
+    while (seg && seg->system() == system) {
+        if (canvasX >= seg->canvasX() && canvasX <= seg->canvasX() + seg->width()) {
+            return seg;
+        }
+        seg = seg->next1(type);
+    }
+    return nullptr;
+}
+
 NotationAutomation::NotationAutomation(IGetScore* getScore,
                                        muse::async::Channel<muse::RectF> notationChanged)
     : m_getScore(getScore), m_notationChanged(notationChanged)
@@ -156,24 +176,29 @@ QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const 
         }
 
         const Fraction frac = Fraction::fromTicks(tick);
-        const Segment* seg = score()->tick2segmentMM(frac);
+        const Segment* seg = score()->tick2leftSegmentMM(frac);
         IF_ASSERT_FAILED(seg) {
             continue;
         }
 
-        // TODO: The following won't work for dynamics at time ticks...
+        // The point's tick may not exactly match that of a segment. For this reason we can only calculate the x position
+        // of our points based on a "tickRatio". This ratio is based on the "tick difference" between the point tick and
+        // the segment's tick, and the duration of the segment (in ticks)...
+        const int tickDiff = tick - seg->tick().ticks();
+        const double tickRatio = static_cast<double>(tickDiff) / seg->ticks().ticks();
+        const double pointXInSeg = tickRatio * seg->width(); // The point's x relative to the segment
 
-        // x positions scaled between 0 and 1 (where 0 is the staff start and 1 is the staff end)
-        const double pointX = (seg->canvasX() - sysStaffCanvasRect.x()) / sysStaffCanvasRect.width();
+        const double segXInStaff = seg->canvasX() - sysStaffCanvasRect.x(); // The segment's x relative to the staff
+        const double pointXInStaff = (segXInStaff + pointXInSeg) / sysStaffCanvasRect.width();
 
         // Point in/out values are always between 0 and 1 - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = point.second;
         if (muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
-            addPoint(pointX, 1 - autoPoint.inValue, tick, PointType::BOTH);
+            addPoint(pointXInStaff, 1 - autoPoint.inValue, tick, PointType::BOTH);
             continue;
         }
-        addPoint(pointX, 1 - autoPoint.inValue, tick, PointType::IN);
-        addPoint(pointX, 1 - autoPoint.outValue, tick, PointType::OUT);
+        addPoint(pointXInStaff, 1 - autoPoint.inValue, tick, PointType::IN);
+        addPoint(pointXInStaff, 1 - autoPoint.outValue, tick, PointType::OUT);
     }
 
     return points;
@@ -222,7 +247,7 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
         return;
     }
 
-    const int tick = point.value("tick").toInt(&ok);
+    const int oldTick = point.value("tick").toInt(&ok); // "Old" because we might change it given a new x value...
     const int pointTypeRaw = ok ? point.value("pointType").toInt(&ok) : 0;
     IF_ASSERT_FAILED(ok) {
         return;
@@ -232,14 +257,62 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
     const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
 
     // Point in/out values are always between 0 and 1 - higher value == lower Y...
+    const double newValue = 1.0 - y;
+
     if (pointType == PointType::IN || pointType == PointType::BOTH) {
-        automation()->setPointInValue(key, tick, 1 - y);
+        automation()->setPointInValue(key, oldTick, newValue);
     }
     if (pointType == PointType::OUT || pointType == PointType::BOTH) {
-        automation()->setPointOutValue(key, tick, 1 - y);
+        automation()->setPointOutValue(key, oldTick, newValue);
     }
 
-    UNUSED(x);
-    // TODO: use x to calculate newTick...
-    // automation()->movePoint(key, tick, newTick) = 0;
+    //! NOTE: newSeg will always be in the same system as oldSeg...
+    const Segment* oldSeg = score()->tick2leftSegmentMM(Fraction::fromTicks(oldTick));
+    const System* system = oldSeg ? oldSeg->system() : nullptr;
+    const SysStaff* sysStaff = system ? system->staff(staffIdx) : nullptr;
+    IF_ASSERT_FAILED(sysStaff) {
+        return;
+    }
+
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+    const double staffStartCanvasX = staffCanvasRect.x();
+    const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
+    const double pointCanvasX = staffStartCanvasX + x * (staffEndCanvasX - staffStartCanvasX);
+
+    // TODO: See segmentForCanvasX - it needs to be a bit smarter...
+    const Segment* newSeg = segmentForCanvasX(system, pointCanvasX);
+    IF_ASSERT_FAILED(newSeg) {
+        return;
+    }
+
+    const double segStartCanvasX = newSeg->canvasX();
+    const double setEndCanvasX = segStartCanvasX + newSeg->width();
+
+    const int segStartTick = newSeg->tick().ticks();
+    const int segEndTick = segStartTick + newSeg->ticks().ticks();
+
+    const double tickRatio = (pointCanvasX - segStartCanvasX) / (setEndCanvasX - segStartCanvasX);
+    const int newTick = segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
+    if (newTick == oldTick) {
+        return;
+    }
+
+    //! NOTE: Moving a BOTH point is the simplest case - we can simply change the tick. Moving IN/OUT points is slightly
+    //! more complex. In this case we need to set the in/out values to be equal at oldTick (effectively converting the
+    //! original point to a BOTH point) and create a new point at newTick...
+
+    if (pointType == PointType::BOTH) {
+        automation()->movePoint(key, oldTick, newTick);
+        return;
+    }
+
+    const mu::engraving::AutomationPoint& oldPoint = automation()->activePoint(key, oldTick);
+    const mu::engraving::AutomationPoint newPoint = { newValue, newValue };
+    if (pointType == PointType::IN) {
+        automation()->setPointInValue(key, oldTick, oldPoint.outValue);
+    }
+    if (pointType == PointType::OUT) {
+        automation()->setPointOutValue(key, oldTick, oldPoint.inValue);
+    }
+    automation()->addPoint(key, newTick, newPoint);
 }
