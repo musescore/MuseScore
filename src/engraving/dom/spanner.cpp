@@ -393,7 +393,7 @@ bool SpannerSegment::isUserModified() const
                         || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
                     || (!isStyled(Pid::OFFSET) && (!offset().isNull() || !userOff2().isNull()));
 
-    return modified;
+    return modified ? modified : EngravingItem::isUserModified();
 }
 
 bool SpannerSegment::allowTimeAnchor() const
