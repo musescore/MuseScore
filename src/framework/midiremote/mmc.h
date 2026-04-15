@@ -61,13 +61,14 @@ struct MMCMessage
 class MMCParser
 {
 public:
-    MMCParser() = default;
+    MMCParser();
     ~MMCParser();
 
     MMCParser(const MMCParser&) = delete;
     MMCParser& operator=(const MMCParser&) = delete;
 
     std::optional<MMCMessage> process(const midi::Event& event);
+    std::optional<MMCMessage> process(const uint8_t* data, size_t size);
 
     static std::optional<double> locateToSeconds(const MMCMessage& msg);
 

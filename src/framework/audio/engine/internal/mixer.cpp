@@ -415,6 +415,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
             m_masterOutputParamsChanged.send(m_masterParams);
+            updateShouldProcessMasterFxDuringSilence();
         }, async::Asyncable::Mode::SetReplace);
     }
 
@@ -443,13 +444,9 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
         }
     }
 
-    m_shouldProcessMasterFxDuringSilence = std::any_of(m_masterFxProcessors.cbegin(), m_masterFxProcessors.cend(),
-                                                       [](const IFxProcessorPtr& fx) {
-        return fx->shouldProcessDuringSilence();
-    });
-
     m_masterParams = resultParams;
     m_masterOutputParamsChanged.send(resultParams);
+    updateShouldProcessMasterFxDuringSilence();
 }
 
 void Mixer::clearMasterOutputParams()
@@ -610,6 +607,17 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
     }
 
     m_isSilence = RealIsNull(globalPeak);
+}
+
+void Mixer::updateShouldProcessMasterFxDuringSilence()
+{
+    m_shouldProcessMasterFxDuringSilence = false;
+    for (const IFxProcessorPtr& fx : m_masterFxProcessors) {
+        if (fx->shouldProcessDuringSilence()) {
+            m_shouldProcessMasterFxDuringSilence = true;
+            return;
+        }
+    }
 }
 
 void Mixer::notifyAboutAudioSignalChanges()

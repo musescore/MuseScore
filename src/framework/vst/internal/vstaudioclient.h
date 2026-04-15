@@ -26,11 +26,21 @@
 #include "../ivstplugininstance.h"
 #include "../vsttypes.h"
 
+#include "modularity/ioc.h"
+
+#include "audio/engine/itransporteventsdispatcher.h"
+
+namespace muse::midiremote {
+class MMCParser;
+}
+
 namespace muse::vst {
-class VstAudioClient
+class VstAudioClient : public muse::Contextable
 {
+    muse::ContextInject<muse::audio::engine::ITransportEventsDispatcher> transportEventsDispatcher = { this };
+
 public:
-    VstAudioClient();
+    VstAudioClient(const modularity::ContextPtr& iocCtx);
     ~VstAudioClient();
 
     void init(audioplugins::AudioPluginType type, IVstPluginInstancePtr instance);
@@ -62,6 +72,8 @@ private:
     void fillOutputBufferInstrument(muse::audio::samples_t sampleCount, float* output);
     void fillOutputBufferFx(muse::audio::samples_t sampleCount, float* output);
 
+    void processOutputEvents();
+
     void ensureActivity();
     void disableActivity();
 
@@ -78,8 +90,9 @@ private:
     std::vector<int> m_activeOutputBusses;
     std::vector<int> m_activeInputBusses;
 
-    VstEventList m_eventList;
-    VstParameterChanges m_paramChanges;
+    VstEventList m_inputEvents;
+    VstParameterChanges m_inputParamChanges;
+    VstEventList m_outputEvents;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
     VstProcessMode m_processMode = VstProcessMode::kRealtime;
@@ -94,5 +107,7 @@ private:
 
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::OutputSpec m_outputSpec;
+
+    midiremote::MMCParser* m_mmcParser = nullptr;
 };
 }

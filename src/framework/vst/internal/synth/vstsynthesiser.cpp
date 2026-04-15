@@ -40,7 +40,7 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
 VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params,
                                const modularity::ContextPtr& iocCtx)
     : AbstractSynthesizer(params, iocCtx),
-    m_vstAudioClient(std::make_unique<VstAudioClient>()),
+    m_vstAudioClient(std::make_unique<VstAudioClient>(iocCtx)),
     m_trackId(trackId)
 {
 }

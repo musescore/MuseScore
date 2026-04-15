@@ -55,7 +55,7 @@ IFxProcessorPtr VstFxResolver::createMasterFx(const AudioFxParams& fxParams, con
 
     IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterMasterFxPlugin(fxParams.resourceMeta.id, fxParams.chainOrder);
 
-    VstFxPtr fx = std::make_shared<VstFxProcessor>(pluginPtr, fxParams);
+    VstFxPtr fx = std::make_shared<VstFxProcessor>(pluginPtr, fxParams, iocContext());
     fx->init(outputSpec);
 
     return fx;
@@ -73,7 +73,7 @@ IFxProcessorPtr VstFxResolver::createTrackFx(const TrackId trackId, const AudioF
 
     IVstPluginInstancePtr pluginPtr = instancesRegister()->makeAndRegisterFxPlugin(fxParams.resourceMeta.id, trackId, fxParams.chainOrder);
 
-    VstFxPtr fx = std::make_shared<VstFxProcessor>(pluginPtr, fxParams);
+    VstFxPtr fx = std::make_shared<VstFxProcessor>(pluginPtr, fxParams, iocContext());
     fx->init(outputSpec);
 
     return fx;

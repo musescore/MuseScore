@@ -21,13 +21,17 @@
  */
 #include "vstaudioclient.h"
 
+#include "midiremote/mmc.h"
+
 #include "log.h"
 
 using namespace muse;
 using namespace muse::vst;
 using namespace muse::mpe;
 using namespace muse::audio;
+using namespace muse::audio::engine;
 using namespace muse::audioplugins;
+using namespace muse::midiremote;
 
 static size_t noteEventKey(int pitch, int channel)
 {
@@ -36,19 +40,43 @@ static size_t noteEventKey(int pitch, int channel)
     return h1 ^ (h2 << 1);
 }
 
-VstAudioClient::VstAudioClient()
+static std::optional<TransportEvent> mmcToTransportEvent(const MMCMessage& msg)
+{
+    switch (msg.command) {
+    case MMCCommand::Play:
+        return TransportEvent::play();
+    case MMCCommand::Pause:
+        return TransportEvent::pause();
+    case MMCCommand::Stop:
+        return TransportEvent::stop();
+    case MMCCommand::Locate: {
+        const std::optional<double> pos = MMCParser::locateToSeconds(msg);
+        if (pos.has_value()) {
+            return TransportEvent::seek(pos.value());
+        }
+    } break;
+    default: break;
+    }
+
+    return std::nullopt;
+}
+
+VstAudioClient::VstAudioClient(const modularity::ContextPtr& iocCtx)
+    : muse::Contextable(iocCtx)
 {
     m_processContext.state = 0;
 }
 
 VstAudioClient::~VstAudioClient()
 {
-    if (!m_pluginComponent) {
-        return;
+    if (m_pluginComponent) {
+        m_pluginComponent->setActive(false);
+        m_pluginComponent->terminate();
     }
 
-    m_pluginComponent->setActive(false);
-    m_pluginComponent->terminate();
+    if (m_mmcParser) {
+        delete m_mmcParser;
+    }
 }
 
 void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)
@@ -59,6 +87,8 @@ void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)
 
     m_type = type;
     m_pluginPtr = std::move(instance);
+
+    transportEventsDispatcher(); // Force resolution outside audio callback
 }
 
 void VstAudioClient::loadSupportedParams()
@@ -154,7 +184,7 @@ bool VstAudioClient::handleEvent(const VstEvent& event)
         m_playingNotes.erase(key);
     }
 
-    if (m_eventList.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
+    if (m_inputEvents.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
         return true;
     }
 
@@ -179,8 +209,8 @@ void VstAudioClient::flushSound()
 
     flushBuffers();
 
-    m_eventList.clear();
-    m_paramChanges.clearQueue();
+    m_inputEvents.clear();
+    m_inputParamChanges.clearQueue();
 
     for (const auto& pair : m_playingNotes) {
         const VstEvent& noteOn = pair.second;
@@ -197,7 +227,7 @@ void VstAudioClient::flushSound()
         noteOff.noteOff.tuning = noteOn.noteOn.tuning;
         noteOff.noteOff.velocity = noteOn.noteOn.velocity;
 
-        m_eventList.addEvent(noteOff);
+        m_inputEvents.addEvent(noteOff);
     }
 
     for (PluginParamId id : m_playingParams) {
@@ -255,13 +285,15 @@ audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChan
     m_needUpdateState = false;
 
     if (m_type == AudioPluginType::Instrument) {
-        m_eventList.clear();
-        m_paramChanges.clearQueue();
+        m_inputEvents.clear();
+        m_inputParamChanges.clearQueue();
 
         fillOutputBufferInstrument(samplesPerChannel, output);
     } else {
         fillOutputBufferFx(samplesPerChannel, output);
     }
+
+    processOutputEvents();
 
     return samplesPerChannel;
 }
@@ -320,8 +352,9 @@ void VstAudioClient::setUpProcessData()
     }
 
     m_processContext.sampleRate = m_outputSpec.sampleRate;
-    m_processData.inputEvents = &m_eventList;
-    m_processData.inputParameterChanges = &m_paramChanges;
+    m_processData.inputEvents = &m_inputEvents;
+    m_processData.inputParameterChanges = &m_inputParamChanges;
+    m_processData.outputEvents = &m_outputEvents;
     m_processData.processContext = &m_processContext;
 
     if (m_needUnprepareProcessData) {
@@ -470,6 +503,52 @@ void VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
     }
 }
 
+void VstAudioClient::processOutputEvents()
+{
+    if (!transportEventsDispatcher()) {
+        return;
+    }
+
+    const int32_t count = m_outputEvents.getEventCount();
+    if (count == 0) {
+        return;
+    }
+
+    TransportEvents events;
+
+    for (int32_t i = 0; i < count; ++i) {
+        VstEvent vstEvent;
+        if (m_outputEvents.getEvent(i, vstEvent) != Steinberg::kResultOk) {
+            continue;
+        }
+
+        if (vstEvent.type != Steinberg::Vst::Event::kDataEvent
+            || vstEvent.data.type != Steinberg::Vst::DataEvent::kMidiSysEx) {
+            continue;
+        }
+
+        if (!m_mmcParser) {
+            m_mmcParser = new MMCParser();
+        }
+
+        std::optional<MMCMessage> msg = m_mmcParser->process(vstEvent.data.bytes, vstEvent.data.size);
+        if (!msg.has_value()) {
+            continue;
+        }
+
+        std::optional<TransportEvent> event = mmcToTransportEvent(msg.value());
+        if (event.has_value()) {
+            events.push_back(event.value());
+        }
+    }
+
+    m_outputEvents.clear();
+
+    if (!events.empty()) {
+        transportEventsDispatcher()->dispatch(events);
+    }
+}
+
 void VstAudioClient::ensureActivity()
 {
     if (m_isActive) {
@@ -545,7 +624,7 @@ void VstAudioClient::flushBuffers()
 void VstAudioClient::addParamChange(const ParamChangeEvent& param)
 {
     Steinberg::int32 dummyIdx = 0;
-    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.paramId, dummyIdx);
+    Steinberg::Vst::IParamValueQueue* queue = m_inputParamChanges.addParameterData(param.paramId, dummyIdx);
     if (queue) {
         queue->addPoint(0, param.value, dummyIdx);
     }

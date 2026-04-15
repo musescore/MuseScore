@@ -82,7 +82,7 @@ protected:
     }
 };
 
-TEST_F(MMCParserTests, Process_PlayCommand)
+TEST_F(MMCParserTests, Process_MidiEvents_PlayCommand)
 {
     // [GIVEN] Play command
     // SysEx: 7F <dev> 06 02
@@ -100,7 +100,39 @@ TEST_F(MMCParserTests, Process_PlayCommand)
     EXPECT_TRUE(msg->data.empty());
 }
 
-TEST_F(MMCParserTests, Process_LocateCommand_FragmentedSysEx)
+TEST_F(MMCParserTests, Process_ShortSysEx_PlayCommand)
+{
+    // [GIVEN] Short SysEx (no F0/F7)
+    constexpr uint8_t data[] = { 0x7F, 0x7F, 0x06, 0x02 };
+
+    // [WHEN] Parse MMC message
+    MMCParser parser;
+    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
+
+    // [THEN] Message is valid
+    ASSERT_TRUE(msg.has_value());
+    EXPECT_EQ(msg->command, MMCCommand::Play);
+    EXPECT_EQ(msg->deviceId, 0x7F);
+    EXPECT_TRUE(msg->data.empty());
+}
+
+TEST_F(MMCParserTests, Process_FullSysEx_PlayCommand)
+{
+    // [GIVEN] Full SysEx (with start and end bytes)
+    constexpr uint8_t data[] = { 0xF0, 0x7F, 0x7F, 0x06, 0x02, 0xF7 };
+
+    // [WHEN] Parse MMC message
+    MMCParser parser;
+    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
+
+    // [THEN] Message is valid
+    ASSERT_TRUE(msg.has_value());
+    EXPECT_EQ(msg->command, MMCCommand::Play);
+    EXPECT_EQ(msg->deviceId, 0x7F);
+    EXPECT_TRUE(msg->data.empty());
+}
+
+TEST_F(MMCParserTests, Process_MidiEvents_LocateCommand)
 {
     // [GIVEN] Locate command
     std::vector<Event> events = makeSysExEvents({
@@ -110,21 +142,44 @@ TEST_F(MMCParserTests, Process_LocateCommand_FragmentedSysEx)
     });
     ASSERT_EQ(events.size(), 2);
 
-    // [WHEN] Parse MMC message
+    // [WHEN] Process events incrementally
     MMCParser parser;
-    std::optional<MMCMessage> msg;
-    for (const Event& event : events) {
-        msg = parser.process(event);
-    }
+    std::optional<MMCMessage> msg1 = parser.process(events.at(0));
+    std::optional<MMCMessage> msg2 = parser.process(events.at(1));
 
-    // [THEN] Message is valid
-    ASSERT_TRUE(msg.has_value());
-    EXPECT_EQ(msg->command, MMCCommand::Locate);
-    EXPECT_EQ(msg->deviceId, 0x7F);
-    EXPECT_EQ(msg->data, (std::vector<uint8_t> { 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
+    // [THEN] No message until final event
+    EXPECT_FALSE(msg1.has_value());
+
+    ASSERT_TRUE(msg2.has_value());
+    EXPECT_EQ(msg2->command, MMCCommand::Locate);
+    EXPECT_EQ(msg2->deviceId, 0x7F);
+    EXPECT_EQ(msg2->data, (std::vector<uint8_t> { 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
 }
 
-TEST_F(MMCParserTests, Process_NonMMCMessage)
+TEST_F(MMCParserTests, Process_SysEx_LocateCommand)
+{
+    // [GIVEN] Full Locate message split into chunks
+    constexpr uint8_t chunk1[] = { 0xF0, 0x7F, 0x7F };                   // Start
+    constexpr uint8_t chunk2[] = { 0x06, 0x44, 0x06, 0x01 };             // Continue
+    constexpr uint8_t chunk3[] = { 0x96, 0x00, 0x15, 0x04, 0x00, 0xF7 }; // End
+
+    // [WHEN] Process chunks incrementally
+    MMCParser parser;
+    std::optional<MMCMessage> msg1 = parser.process(chunk1, sizeof(chunk1));
+    std::optional<MMCMessage> msg2 = parser.process(chunk2, sizeof(chunk2));
+    std::optional<MMCMessage> msg3 = parser.process(chunk3, sizeof(chunk3));
+
+    // [THEN] No message until final chunk
+    EXPECT_FALSE(msg1.has_value());
+    EXPECT_FALSE(msg2.has_value());
+
+    ASSERT_TRUE(msg3.has_value());
+    EXPECT_EQ(msg3->command, MMCCommand::Locate);
+    EXPECT_EQ(msg3->deviceId, 0x7F);
+    EXPECT_EQ(msg3->data, (std::vector<uint8_t>{ 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
+}
+
+TEST_F(MMCParserTests, Process_MidiEvents_NonMMCMessage)
 {
     // [GIVEN] Not MMC (missing 0x7F / 0x06)
     std::vector<Event> events = makeSysExEvents({ 0x01, 0x02, 0x03, 0x04 });
@@ -133,6 +188,19 @@ TEST_F(MMCParserTests, Process_NonMMCMessage)
     // [WHEN] Parse message
     MMCParser parser;
     std::optional<MMCMessage> msg = parser.process(events.front());
+
+    // [THEN] No message
+    EXPECT_FALSE(msg.has_value());
+}
+
+TEST_F(MMCParserTests, Process_SysEx_NonMMCMessage)
+{
+    // [GIVEN] Not MMC (missing 0x7F / 0x06)
+    constexpr uint8_t data[] = { 0x01, 0x02, 0x03, 0x04 };
+
+     // [WHEN] Parse message
+    MMCParser parser;
+    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
 
     // [THEN] No message
     EXPECT_FALSE(msg.has_value());
