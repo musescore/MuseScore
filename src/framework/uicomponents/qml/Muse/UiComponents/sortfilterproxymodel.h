@@ -74,13 +74,10 @@ protected:
     bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
 private:
-    void fillRoleIds();
     SorterValue* currentSorterValue() const;
     int roleKey(const QString& roleName) const;
 
     QmlListProperty<FilterValue> m_filters;
-    QHash<int, FilterValue*> m_roleIdToFilterValueHash;
-
     QmlListProperty<SorterValue> m_sorters;
 
     QList<int> m_alwaysIncludeIndices;

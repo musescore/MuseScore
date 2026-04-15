@@ -24,7 +24,6 @@
 
 #include <QTimer>
 
-#include "global/defer.h"
 #include "global/types/val.h"
 
 #include "uicomponents/view/modelutils.h"
@@ -38,13 +37,19 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 {
     ModelUtils::connectRowCountChangedSignal(this, &SortFilterProxyModel::rowCountChanged);
 
-    auto onFilterChanged = [this](FilterValue* changedFilterValue) {
+    const auto invalidateRows = [this]() {
+        beginFilterChange();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        endFilterChange(Direction::Rows);
+#else
+        invalidateFilter();
+#endif
+    };
+    const auto onFilterChanged = [this, invalidateRows](FilterValue* changedFilterValue) {
         if (changedFilterValue->async()) {
-            QTimer::singleShot(0, this, [this](){
-                fillRoleIds();
-            });
+            QTimer::singleShot(0, this, invalidateRows);
         } else {
-            fillRoleIds();
+            invalidateRows();
         }
     };
 
@@ -79,7 +84,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 
     connect(this, &SortFilterProxyModel::sourceModelRoleNamesChanged, this, [this]() {
         invalidate();
-        fillRoleIds();
     });
 }
 
@@ -173,8 +177,14 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
     }
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    for (const auto& [role, filter] : m_roleIdToFilterValueHash.asKeyValueRange()) {
+    const QList<FilterValue*> filters = m_filters.list();
+    for (auto* filter : filters) {
         if (!filter->enabled()) {
+            continue;
+        }
+
+        const int role = roleKey(filter->roleName());
+        if (role == INVALID_KEY) {
             continue;
         }
 
@@ -214,34 +224,6 @@ bool SortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& 
     Val rightData = Val::fromQVariant(sourceModel()->data(right, sorterRoleKey));
 
     return leftData < rightData;
-}
-
-void SortFilterProxyModel::fillRoleIds()
-{
-    beginFilterChange();
-
-    DEFER {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
-        endFilterChange(QSortFilterProxyModel::Direction::Rows);
-#else
-        invalidateFilter();
-#endif
-    };
-
-    m_roleIdToFilterValueHash.clear();
-
-    const QList<FilterValue*> filterList = m_filters.list();
-    QHash<QByteArray, FilterValue*> roleNameToValueHash;
-    for (FilterValue* filter : filterList) {
-        roleNameToValueHash.insert(filter->roleName().toUtf8(), filter);
-    }
-
-    const QHash<int, QByteArray> roles = roleNames();
-    for (const auto& [role, roleName] : roles.asKeyValueRange()) {
-        if (roleNameToValueHash.contains(roleName)) {
-            m_roleIdToFilterValueHash.insert(role, roleNameToValueHash[roleName]);
-        }
-    }
 }
 
 SorterValue* SortFilterProxyModel::currentSorterValue() const
