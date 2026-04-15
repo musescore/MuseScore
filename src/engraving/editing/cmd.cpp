@@ -1104,6 +1104,16 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     Tuplet* tuplet = cr ? cr->tuplet() : nullptr;
     Measure* measure = nullptr;
     bool targetIsRest = cr && cr->isRest();
+
+    // preserve lyrics before the ChordRest is removed or replaced
+    std::vector<Lyrics*> lyricsToPreserve;
+    bool shouldPreserveLyrics = false;
+    if (!isRest && cr) {
+        lyricsToPreserve = cr->lyrics();
+        shouldPreserveLyrics = !lyricsToPreserve.empty();
+    }
+    bool lyricsPreserved = false;
+
     for (;;) {
         if (track % VOICES) {
             expandVoice(segment, track);
@@ -1186,6 +1196,16 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
             }
             tuplet = 0;
             undoAddCR(ncr, measure, tick);
+
+            if (shouldPreserveLyrics && !lyricsPreserved) {
+                // reattach the preserved lyrics to the first replacement ChordRest
+                // to ensure they are not duplicated during subsequent operations
+                lyricsPreserved = true;
+                for (Lyrics* lyric : lyricsToPreserve) {
+                    undoChangeParent(lyric, ncr, ncr->staffIdx());
+                }
+            }
+
             if (addTie) {
                 undoAddElement(addTie);
             }
@@ -1239,6 +1259,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
     if (tie) {
         connectTies();
     }
+
     if (nr) {
         if (is.slur() && nr->isNote()) {
             // If the start element was the same as the end element when the slur was created,
