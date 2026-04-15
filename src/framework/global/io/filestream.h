@@ -44,6 +44,7 @@ public:
 
 protected:
     bool doOpen(OpenMode m) override;
+    void doClose() override;
     size_t dataSize() const override;
     const uint8_t* rawData() const override;
     bool resizeData(size_t size) override;

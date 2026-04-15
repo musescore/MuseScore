@@ -149,6 +149,9 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
 
     encoder->finishEncode();
 
+    // Release the device's file handle before add audio replaces the file
+    device.close();
+
     if (withAudio) {
         if (result && m_audioRet) {
             if (!encoder->addAudio(tempAudioPath)) {

@@ -617,6 +617,7 @@ bool VideoEncoder::addAudio(const io::path_t& audioPath)
         if (outputFmtCtx) {
             if (outputFmtCtx->pb) {
                 m_ffmpegHandler->avio_close(outputFmtCtx->pb);
+                outputFmtCtx->pb = nullptr;
             }
             m_ffmpegHandler->avformat_free_context(outputFmtCtx);
         }
