@@ -29,7 +29,7 @@
 
 #include <QtQmlIntegration/qqmlintegration.h>
 
-#include "filtervalue.h"
+#include "filter.h"
 #include "sortervalue.h"
 #include "qmllistproperty.h"
 
@@ -38,7 +38,7 @@ class SortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
-    Q_PROPERTY(QQmlListProperty<muse::uicomponents::FilterValue> filters READ filters CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::uicomponents::Filter> filters READ filters CONSTANT)
     Q_PROPERTY(QQmlListProperty<muse::uicomponents::SorterValue> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> alwaysIncludeIndices READ alwaysIncludeIndices WRITE setAlwaysIncludeIndices NOTIFY alwaysIncludeIndicesChanged)
     Q_PROPERTY(QList<int> alwaysExcludeIndices READ alwaysExcludeIndices WRITE setAlwaysExcludeIndices NOTIFY alwaysExcludeIndicesChanged)
@@ -48,7 +48,7 @@ class SortFilterProxyModel : public QSortFilterProxyModel
 public:
     explicit SortFilterProxyModel(QObject* parent = nullptr);
 
-    QQmlListProperty<FilterValue> filters();
+    QQmlListProperty<Filter> filters();
     QQmlListProperty<SorterValue> sorters();
 
     QList<int> alwaysIncludeIndices() const;
@@ -57,6 +57,7 @@ public:
     QList<int> alwaysExcludeIndices() const;
     void setAlwaysExcludeIndices(const QList<int>& indices);
 
+    int roleFromRoleName(const QString&) const;
     QHash<int, QByteArray> roleNames() const override;
 
     void setSourceModel(QAbstractItemModel* sourceModel) override;
@@ -75,9 +76,8 @@ protected:
 
 private:
     SorterValue* currentSorterValue() const;
-    int roleKey(const QString& roleName) const;
 
-    QmlListProperty<FilterValue> m_filters;
+    QmlListProperty<Filter> m_filters;
     QmlListProperty<SorterValue> m_sorters;
 
     QList<int> m_alwaysIncludeIndices;

@@ -42,6 +42,8 @@ qt_add_qml_module(muse_uicomponents_qml
         filepickermodel.h
         filteredflyoutmodel.cpp
         filteredflyoutmodel.h
+        filter.cpp
+        filter.h
         filtervalue.cpp
         filtervalue.h
         iconview.cpp

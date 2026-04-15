@@ -45,8 +45,8 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
         invalidateFilter();
 #endif
     };
-    const auto onFilterChanged = [this, invalidateRows](FilterValue* changedFilterValue) {
-        if (changedFilterValue->async()) {
+    const auto onFilterChanged = [this, invalidateRows](Filter* changedFilter) {
+        if (changedFilter->async()) {
             QTimer::singleShot(0, this, invalidateRows);
         } else {
             invalidateRows();
@@ -54,13 +54,13 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     };
 
     connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onFilterChanged](int index) {
-        FilterValue* filter = m_filters.at(index);
+        Filter* filter = m_filters.at(index);
 
         if (filter->enabled()) {
             onFilterChanged(filter);
         }
 
-        connect(filter, &FilterValue::dataChanged, this, [onFilterChanged, filter] { onFilterChanged(filter); });
+        connect(filter, &Filter::dataChanged, this, [onFilterChanged, filter] { onFilterChanged(filter); });
     });
 
     auto onSortersChanged = [this] {
@@ -87,7 +87,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     });
 }
 
-QQmlListProperty<FilterValue> SortFilterProxyModel::filters()
+QQmlListProperty<Filter> SortFilterProxyModel::filters()
 {
     return m_filters.property();
 }
@@ -141,6 +141,11 @@ void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
     emit alwaysExcludeIndicesChanged();
 }
 
+int SortFilterProxyModel::roleFromRoleName(const QString& roleName) const
+{
+    return roleNames().key(roleName.toUtf8(), INVALID_KEY);
+}
+
 QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
 {
     if (!sourceModel()) {
@@ -176,35 +181,14 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
         return false;
     }
 
-    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    const QList<FilterValue*> filters = m_filters.list();
+    const QList<Filter*> filters = m_filters.list();
     for (auto* filter : filters) {
         if (!filter->enabled()) {
             continue;
         }
 
-        const int role = roleKey(filter->roleName());
-        if (role == INVALID_KEY) {
-            continue;
-        }
-
-        QVariant data = sourceModel()->data(index, role);
-        switch (filter->compareType()) {
-        case CompareType::Equal:
-            if (data != filter->roleValue()) {
-                return false;
-            }
-            break;
-        case CompareType::NotEqual:
-            if (data == filter->roleValue()) {
-                return false;
-            }
-            break;
-        case CompareType::Contains:
-            if (!data.toString().contains(filter->roleValue().toString(), Qt::CaseInsensitive)) {
-                return false;
-            }
-            break;
+        if (!filter->acceptsRow(sourceRow, sourceParent, *this)) {
+            return false;
         }
     }
 
@@ -218,7 +202,7 @@ bool SortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& 
         return false;
     }
 
-    int sorterRoleKey = roleKey(sorter->roleName());
+    const int sorterRoleKey = roleFromRoleName(sorter->roleName());
 
     Val leftData = Val::fromQVariant(sourceModel()->data(left, sorterRoleKey));
     Val rightData = Val::fromQVariant(sourceModel()->data(right, sorterRoleKey));
@@ -236,9 +220,4 @@ SorterValue* SortFilterProxyModel::currentSorterValue() const
     }
 
     return nullptr;
-}
-
-int SortFilterProxyModel::roleKey(const QString& roleName) const
-{
-    return roleNames().key(roleName.toUtf8(), INVALID_KEY);
 }
