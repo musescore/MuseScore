@@ -211,16 +211,20 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     if (mmrMeasure) {
         // reuse existing mmrest
         if (mmrMeasure->ticks() != len) {
-            Segment* bls = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-            Segment* cs = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
+            Segment* barLineSeg = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+            Segment* clefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
+            Segment* breathSeg = mmrMeasure->findSegmentR(SegmentType::Breath, mmrMeasure->ticks());
             // adjust length
             mmrMeasure->setTicks(len);
-            // move existing end barline and clef
-            if (bls) {
-                bls->setRtick(len);
+            // move existing end barline, clef and breath
+            if (barLineSeg) {
+                barLineSeg->setRtick(len);
             }
-            if (cs) {
-                cs->setRtick(len);
+            if (clefSeg) {
+                clefSeg->setRtick(len);
+            }
+            if (breathSeg) {
+                breathSeg->setRtick(len);
             }
         }
         MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
@@ -447,7 +451,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 
     if (underlyingBreathSeg) {
         if (mmrBreathSeg == 0) {
-            mmrBreathSeg = mmrMeasure->undoGetSegmentR(SegmentType::Breath, lastMeasure->ticks());
+            mmrBreathSeg = mmrMeasure->undoGetSegmentR(SegmentType::Breath, mmrMeasure->ticks());
         }
         mmrBreathSeg->setEnabled(underlyingBreathSeg->enabled());
         for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
