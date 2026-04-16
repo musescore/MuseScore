@@ -24,11 +24,6 @@
 
 #include <cstdint>
 #include <vector>
-#include <optional>
-
-namespace muse::midi {
-struct Event;
-}
 
 namespace muse::midiremote {
 enum class MMCCommand : uint8_t
@@ -56,24 +51,5 @@ struct MMCMessage
     uint8_t deviceId = 0;
     MMCCommand command = MMCCommand::Unknown;
     std::vector<uint8_t> data;
-};
-
-class MMCParser
-{
-public:
-    MMCParser();
-    ~MMCParser();
-
-    MMCParser(const MMCParser&) = delete;
-    MMCParser& operator=(const MMCParser&) = delete;
-
-    std::optional<MMCMessage> process(const midi::Event& event);
-    std::optional<MMCMessage> process(const uint8_t* data, size_t size);
-
-    static std::optional<double> locateToSeconds(const MMCMessage& msg);
-
-private:
-    class SysExAssembler;
-    SysExAssembler* m_assembler = nullptr;
 };
 }

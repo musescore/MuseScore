@@ -24,6 +24,7 @@
 
 #include "midiremote/internal/midiremoteconfiguration.h"
 #include "midiremote/internal/midiremote.h"
+#include "midiremote/internal/mmcdecoderfactory.h"
 
 #include "muse_framework_config.h"
 
@@ -46,6 +47,8 @@ void MidiRemoteModule::registerExports()
     m_configuration = std::make_shared<MidiRemoteConfiguration>();
 
     globalIoc()->registerExport<IMidiRemoteConfiguration>(mname, m_configuration);
+
+    globalIoc()->registerExport<IMMCDecoderFactory>(moduleName(), std::make_shared<MMCDecoderFactory>());
 
 #ifdef MUSE_MODULE_DIAGNOSTICS
     auto pr = globalIoc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(mname);

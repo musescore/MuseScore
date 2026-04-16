@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "midiremote/mmc.h"
+#include "midiremote/internal/mmcdecoder.h"
 #include "midi/midievent.h"
 
 using namespace muse::midi;
@@ -30,7 +30,7 @@ using namespace muse::midiremote;
 
 static constexpr double LOCATE_ERROR(0.000001);
 
-class MMCParserTests : public ::testing::Test
+class MMCDecoderTests : public ::testing::Test
 {
 protected:
     void SetUp() override {}
@@ -82,16 +82,16 @@ protected:
     }
 };
 
-TEST_F(MMCParserTests, Process_MidiEvents_PlayCommand)
+TEST_F(MMCDecoderTests, Process_MidiEvents_PlayCommand)
 {
     // [GIVEN] Play command
     // SysEx: 7F <dev> 06 02
     std::vector<Event> events = makeSysExEvents({ 0x7F, 0x7F, 0x06, 0x02 });
     ASSERT_EQ(events.size(), 1);
 
-    // [WHEN] Parse MMC message
-    MMCParser parser;
-    std::optional<MMCMessage> msg = parser.process(events.front());
+    // [WHEN] Decode MMC message
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg = decoder.decode(events.front());
 
     // [THEN] Message is valid
     ASSERT_TRUE(msg.has_value());
@@ -100,14 +100,14 @@ TEST_F(MMCParserTests, Process_MidiEvents_PlayCommand)
     EXPECT_TRUE(msg->data.empty());
 }
 
-TEST_F(MMCParserTests, Process_ShortSysEx_PlayCommand)
+TEST_F(MMCDecoderTests, Process_ShortSysEx_PlayCommand)
 {
     // [GIVEN] Short SysEx (no F0/F7)
     constexpr uint8_t data[] = { 0x7F, 0x7F, 0x06, 0x02 };
 
-    // [WHEN] Parse MMC message
-    MMCParser parser;
-    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
+    // [WHEN] Decode MMC message
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg = decoder.decode(data, sizeof(data));
 
     // [THEN] Message is valid
     ASSERT_TRUE(msg.has_value());
@@ -116,14 +116,14 @@ TEST_F(MMCParserTests, Process_ShortSysEx_PlayCommand)
     EXPECT_TRUE(msg->data.empty());
 }
 
-TEST_F(MMCParserTests, Process_FullSysEx_PlayCommand)
+TEST_F(MMCDecoderTests, Process_FullSysEx_PlayCommand)
 {
     // [GIVEN] Full SysEx (with start and end bytes)
     constexpr uint8_t data[] = { 0xF0, 0x7F, 0x7F, 0x06, 0x02, 0xF7 };
 
-    // [WHEN] Parse MMC message
-    MMCParser parser;
-    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
+    // [WHEN] Decode MMC message
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg = decoder.decode(data, sizeof(data));
 
     // [THEN] Message is valid
     ASSERT_TRUE(msg.has_value());
@@ -132,7 +132,7 @@ TEST_F(MMCParserTests, Process_FullSysEx_PlayCommand)
     EXPECT_TRUE(msg->data.empty());
 }
 
-TEST_F(MMCParserTests, Process_MidiEvents_LocateCommand)
+TEST_F(MMCDecoderTests, Process_MidiEvents_LocateCommand)
 {
     // [GIVEN] Locate command
     std::vector<Event> events = makeSysExEvents({
@@ -143,9 +143,9 @@ TEST_F(MMCParserTests, Process_MidiEvents_LocateCommand)
     ASSERT_EQ(events.size(), 2);
 
     // [WHEN] Process events incrementally
-    MMCParser parser;
-    std::optional<MMCMessage> msg1 = parser.process(events.at(0));
-    std::optional<MMCMessage> msg2 = parser.process(events.at(1));
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg1 = decoder.decode(events.at(0));
+    std::optional<MMCMessage> msg2 = decoder.decode(events.at(1));
 
     // [THEN] No message until final event
     EXPECT_FALSE(msg1.has_value());
@@ -156,7 +156,7 @@ TEST_F(MMCParserTests, Process_MidiEvents_LocateCommand)
     EXPECT_EQ(msg2->data, (std::vector<uint8_t> { 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
 }
 
-TEST_F(MMCParserTests, Process_SysEx_LocateCommand)
+TEST_F(MMCDecoderTests, Process_SysEx_LocateCommand)
 {
     // [GIVEN] Full Locate message split into chunks
     constexpr uint8_t chunk1[] = { 0xF0, 0x7F, 0x7F };                   // Start
@@ -164,10 +164,10 @@ TEST_F(MMCParserTests, Process_SysEx_LocateCommand)
     constexpr uint8_t chunk3[] = { 0x96, 0x00, 0x15, 0x04, 0x00, 0xF7 }; // End
 
     // [WHEN] Process chunks incrementally
-    MMCParser parser;
-    std::optional<MMCMessage> msg1 = parser.process(chunk1, sizeof(chunk1));
-    std::optional<MMCMessage> msg2 = parser.process(chunk2, sizeof(chunk2));
-    std::optional<MMCMessage> msg3 = parser.process(chunk3, sizeof(chunk3));
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg1 = decoder.decode(chunk1, sizeof(chunk1));
+    std::optional<MMCMessage> msg2 = decoder.decode(chunk2, sizeof(chunk2));
+    std::optional<MMCMessage> msg3 = decoder.decode(chunk3, sizeof(chunk3));
 
     // [THEN] No message until final chunk
     EXPECT_FALSE(msg1.has_value());
@@ -176,37 +176,37 @@ TEST_F(MMCParserTests, Process_SysEx_LocateCommand)
     ASSERT_TRUE(msg3.has_value());
     EXPECT_EQ(msg3->command, MMCCommand::Locate);
     EXPECT_EQ(msg3->deviceId, 0x7F);
-    EXPECT_EQ(msg3->data, (std::vector<uint8_t>{ 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
+    EXPECT_EQ(msg3->data, (std::vector<uint8_t> { 0x06, 0x01, 0x96, 0x00, 0x15, 0x04, 0x00 }));
 }
 
-TEST_F(MMCParserTests, Process_MidiEvents_NonMMCMessage)
+TEST_F(MMCDecoderTests, Process_MidiEvents_NonMMCMessage)
 {
     // [GIVEN] Not MMC (missing 0x7F / 0x06)
     std::vector<Event> events = makeSysExEvents({ 0x01, 0x02, 0x03, 0x04 });
     ASSERT_EQ(events.size(), 1);
 
-    // [WHEN] Parse message
-    MMCParser parser;
-    std::optional<MMCMessage> msg = parser.process(events.front());
+    // [WHEN] Decode MMC message
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg = decoder.decode(events.front());
 
     // [THEN] No message
     EXPECT_FALSE(msg.has_value());
 }
 
-TEST_F(MMCParserTests, Process_SysEx_NonMMCMessage)
+TEST_F(MMCDecoderTests, Process_SysEx_NonMMCMessage)
 {
     // [GIVEN] Not MMC (missing 0x7F / 0x06)
     constexpr uint8_t data[] = { 0x01, 0x02, 0x03, 0x04 };
 
-     // [WHEN] Parse message
-    MMCParser parser;
-    std::optional<MMCMessage> msg = parser.process(data, sizeof(data));
+    // [WHEN] Decode MMC message
+    MMCDecoder decoder;
+    std::optional<MMCMessage> msg = decoder.decode(data, sizeof(data));
 
     // [THEN] No message
     EXPECT_FALSE(msg.has_value());
 }
 
-TEST_F(MMCParserTests, LocateToSeconds_WithFormatByte)
+TEST_F(MMCDecoderTests, LocateToSeconds_WithFormatByte)
 {
     // [GIVEN] format = 1, hr_byte = 96 (30 fps, 0h), min = 0, sec = 15, frame = 4, subframe = 0
     MMCMessage msg;
@@ -214,7 +214,8 @@ TEST_F(MMCParserTests, LocateToSeconds_WithFormatByte)
     msg.data = { 6, 1, 96, 0, 15, 4, 0 };
 
     // [WHEN] Convert msg to seconds
-    std::optional<double> secs = MMCParser::locateToSeconds(msg);
+    MMCDecoder decoder;
+    std::optional<double> secs = decoder.locateToSeconds(msg);
 
     // [THEN] Result is valid
     ASSERT_TRUE(secs.has_value());
@@ -223,7 +224,7 @@ TEST_F(MMCParserTests, LocateToSeconds_WithFormatByte)
     EXPECT_NEAR(secs.value(), expected, LOCATE_ERROR);
 }
 
-TEST_F(MMCParserTests, LocateToSeconds_WithoutFormatByte)
+TEST_F(MMCDecoderTests, LocateToSeconds_WithoutFormatByte)
 {
     // [GIVEN] hr_byte = 96 (30 fps), min = 0, sec = 15, frame = 4, subframe = 0
     MMCMessage msg;
@@ -231,7 +232,8 @@ TEST_F(MMCParserTests, LocateToSeconds_WithoutFormatByte)
     msg.data = { 6, 96, 0, 15, 4, 0 };
 
     // [WHEN] Convert msg to seconds
-    std::optional<double> secs = MMCParser::locateToSeconds(msg);
+    MMCDecoder decoder;
+    std::optional<double> secs = decoder.locateToSeconds(msg);
 
     // [THEN] Result is valid
     ASSERT_TRUE(secs.has_value());
@@ -240,7 +242,7 @@ TEST_F(MMCParserTests, LocateToSeconds_WithoutFormatByte)
     EXPECT_NEAR(secs.value(), expected, LOCATE_ERROR);
 }
 
-TEST_F(MMCParserTests, LocateToSeconds_InvalidFormat)
+TEST_F(MMCDecoderTests, LocateToSeconds_InvalidFormat)
 {
     // [GIVEN] Invalid msg
     MMCMessage msg;
@@ -248,7 +250,8 @@ TEST_F(MMCParserTests, LocateToSeconds_InvalidFormat)
     msg.data = { 6, 2, 96, 0, 15, 4, 0 }; // format != 1
 
     // [WHEN] Convert msg to seconds
-    std::optional<double> secs = MMCParser::locateToSeconds(msg);
+    MMCDecoder decoder;
+    std::optional<double> secs = decoder.locateToSeconds(msg);
 
     // [THEN]
     EXPECT_FALSE(secs.has_value());
