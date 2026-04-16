@@ -89,10 +89,6 @@ ItemMultiSelectionModel* AbstractTableViewModel::selectionModel() const
 
 void AbstractTableViewModel::setTable(const QVector<QVector<TableViewCell*> >& table)
 {
-    if (table.isEmpty()) {
-        return;
-    }
-
     for (const auto& row : std::as_const(m_table)) {
         for (TableViewCell* cell : row) {
             if (cell) {
