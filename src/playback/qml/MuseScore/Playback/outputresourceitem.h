@@ -56,7 +56,7 @@ class OutputResourceItem : public AbstractAudioResourceItem
 
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
-    muse::GlobalInject<muse::audio::IPlayback> playback;
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
 
 public:
     explicit OutputResourceItem(QObject* parent, const muse::audio::AudioFxParams& params);

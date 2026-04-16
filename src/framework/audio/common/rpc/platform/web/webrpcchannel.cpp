@@ -43,8 +43,8 @@ static constexpr size_t DEFAULT_CAPACITY = 1024 * 200;
 static std::vector<uint8_t> buffer = {};
 static std::function<void(const ByteArray&)> g_rpcListen = nullptr;
 
-static constexpr int MSG_ID = 1;
-static constexpr int STREAM_ID = 2;
+static constexpr uint8_t MSG_ID = 1;
+static constexpr uint8_t STREAM_ID = 2;
 
 static void rpcSend(const uint8_t* data, size_t size)
 {
@@ -102,7 +102,8 @@ void WebRpcChannel::process()
 
 void WebRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
-    RPCLOG() << "callId: " << msg.callId
+    RPCLOG() << "ctxId: " << msg.ctxId
+             << ", callId: " << msg.callId
              << ", method: " << to_string(msg.method)
              << ", type: " << to_string(msg.type)
              << ", data.size: " << msg.data.size();
@@ -112,7 +113,7 @@ void WebRpcChannel::send(const Msg& msg, const Handler& onResponse)
     // makes sense if the reserve is greater than the current capacity
     buffer.reserve(std::max(msg.data.size(), DEFAULT_CAPACITY));
 
-    msgpack::pack(buffer, MSG_ID, msg.callId, (int)msg.method, (int)msg.type, msg.data.constVData());
+    msgpack::pack(buffer, MSG_ID, msg.ctxId, msg.callId, (uint8_t)msg.method, (uint8_t)msg.type, msg.data.constVData());
 
     IF_ASSERT_FAILED(buffer.size() > 0) {
         return;
@@ -131,22 +132,22 @@ void WebRpcChannel::receive(const ByteArray& data)
         return;
     }
     muse::msgpack::Cursor cursor(data.constData(), data.size());
-    int msgId = 0;
+    uint8_t msgId = 0;
     msgpack::unpack(cursor, msgId);
 
     if (msgId == MSG_ID) {
         Msg msg;
-        int method = 0;
-        int type = 0;
-        msgpack::unpack(cursor, msg.callId, method, type, msg.data.vdata());
+        uint8_t method = 0;
+        uint8_t type = 0;
+        msgpack::unpack(cursor, msg.ctxId, msg.callId, method, type, msg.data.vdata());
         msg.method = static_cast<Method>(method);
         msg.type = static_cast<MsgType>(type);
 
         receive(msg);
     } else if (msgId == STREAM_ID) {
         StreamMsg msg;
-        int name = 0;
-        msgpack::unpack(cursor, name, msg.streamId, msg.data.vdata());
+        uint8_t name = 0;
+        msgpack::unpack(cursor, msg.ctxId, name, msg.streamId, msg.data.vdata());
         msg.name = static_cast<StreamName>(name);
 
         receive(msg);
@@ -157,7 +158,8 @@ void WebRpcChannel::receive(const ByteArray& data)
 
 void WebRpcChannel::receive(const Msg& msg)
 {
-    RPCLOG() << "callId: " << msg.callId
+    RPCLOG() << "ctxId: " << msg.ctxId
+             << ", callId: " << msg.callId
              << ", method: " << to_string(msg.method)
              << ", type: " << to_string(msg.type)
              << ", data.size: " << msg.data.size();
@@ -187,7 +189,8 @@ void WebRpcChannel::receive(const Msg& msg)
 
 void WebRpcChannel::receive(const StreamMsg& msg)
 {
-    RPCLOG() << "received stream: " << to_string(msg.name)
+    RPCLOG() << "ctxId: " << msg.ctxId
+             << ", stream: " << to_string(msg.name)
              << ", streamId: " << msg.streamId
              << ", data.size: " << msg.data.size();
 
@@ -228,7 +231,8 @@ void WebRpcChannel::removeStream(StreamId id)
 
 void WebRpcChannel::sendStream(const StreamMsg& msg)
 {
-    RPCLOG() << "stream: " << to_string(msg.name)
+    RPCLOG() << "ctxId: " << msg.ctxId
+             << ", stream: " << to_string(msg.name)
              << ", streamId: " << msg.streamId
              << ", data.size: " << msg.data.size();
 
@@ -237,7 +241,7 @@ void WebRpcChannel::sendStream(const StreamMsg& msg)
     // makes sense if the reserve is greater than the current capacity
     buffer.reserve(std::max(msg.data.size(), DEFAULT_CAPACITY));
 
-    msgpack::pack(buffer, STREAM_ID, (int)msg.name, msg.streamId, msg.data.constVData());
+    msgpack::pack(buffer, STREAM_ID, msg.ctxId, (uint8_t)msg.name, msg.streamId, msg.data.constVData());
 
     IF_ASSERT_FAILED(buffer.size() > 0) {
         return;

@@ -130,7 +130,7 @@ Promise<bool> Playback::initPlayback()
 
         auto sendAddSequence = [this, resolve]() {
             Msg msg = rpc::make_request(Method::AddSequence);
-            channel()->send(msg, [this, resolve](const Msg& res) {
+            channel()->send(msg, [resolve](const Msg& res) {
                 ONLY_AUDIO_MAIN_THREAD;
                 TrackSequenceId seqId = 0;
                 IF_ASSERT_FAILED(RpcPacker::unpack(res.data, seqId)) {

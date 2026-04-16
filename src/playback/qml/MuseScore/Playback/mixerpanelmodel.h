@@ -52,7 +52,7 @@ class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, publ
     QML_ELEMENT
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
-    muse::GlobalInject<muse::audio::IPlayback> playback;
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<IPlaybackController> controller = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
 

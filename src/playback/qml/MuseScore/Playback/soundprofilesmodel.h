@@ -48,7 +48,7 @@ class SoundProfilesModel : public QAbstractListModel, public muse::Contextable
     QML_ELEMENT
 
     muse::GlobalInject<IPlaybackConfiguration> config;
-    muse::GlobalInject<ISoundProfilesRepository> profilesRepo;
+    muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<IPlaybackController> controller = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };

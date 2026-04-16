@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-//#define RPC_LOGGING_ENABLED
+// #define RPC_LOGGING_ENABLED
 
 #ifdef RPC_LOGGING_ENABLED
 #define RPCLOG() LOGDA()
@@ -72,11 +72,13 @@ void GeneralRpcChannel::process()
 void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
     if (msg.type == MsgType::Stream) {
-        RPCLOG() << "stream: " << to_string(static_cast<StreamName>(msg.method))
+        RPCLOG() << "ctxId: " << msg.ctxId
+                 << ", stream: " << to_string(static_cast<StreamName>(msg.method))
                  << ", streamId: " << msg.callId
                  << ", data.size: " << msg.data.size();
     } else {
-        RPCLOG() << "callId: " << msg.callId
+        RPCLOG() << "ctxId: " << msg.ctxId
+                 << ", callId: " << msg.callId
                  << ", method: " << to_string(msg.method)
                  << ", type: " << to_string(msg.type)
                  << ", data.size: " << msg.data.size();
@@ -100,11 +102,13 @@ void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 void GeneralRpcChannel::receive(RpcData& to, const Msg& m) const
 {
     if (m.type == MsgType::Stream) {
-        RPCLOG() << "stream: " << to_string(static_cast<StreamName>(m.method))
+        RPCLOG() << "ctxId: " << m.ctxId
+                 << ", stream: " << to_string(static_cast<StreamName>(m.method))
                  << ", streamId: " << m.callId
                  << ", data.size: " << m.data.size();
     } else {
-        RPCLOG() << "callId: " << m.callId
+        RPCLOG() << "ctxId: " << m.ctxId
+                 << ", callId: " << m.callId
                  << ", method: " << to_string(m.method)
                  << ", type: " << to_string(m.type)
                  << ", data.size: " << m.data.size();
@@ -118,6 +122,7 @@ void GeneralRpcChannel::receive(RpcData& to, const Msg& m) const
     // if stream
     if (m.type == MsgType::Stream) {
         StreamMsg msg;
+        msg.ctxId = m.ctxId;
         msg.streamId = m.callId;
         msg.name = static_cast<StreamName>(m.method);
         msg.data = m.data;
@@ -164,6 +169,7 @@ void GeneralRpcChannel::listenAll(Handler h)
 void GeneralRpcChannel::sendStream(const StreamMsg& msg)
 {
     Msg m;
+    m.ctxId = msg.ctxId;
     m.type = MsgType::Stream;
     m.callId = msg.streamId;
     m.method = static_cast<Method>(msg.name);

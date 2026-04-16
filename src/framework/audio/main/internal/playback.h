@@ -26,19 +26,23 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "common/rpc/irpcchannel.h"
+#include "common/rpc/icontextrpcchannel.h"
 #include "../istartaudiocontroller.h"
 
 #include "../iplayer.h"
 
 namespace muse::audio {
-class Playback : public IPlayback, public async::Asyncable
+//! NOTE It may not use contextual services,
+// but the playback itself is contextual,
+// because each context (window) has its own playback.
+class Playback : public IPlayback, public async::Asyncable, public Contextable
 {
-    GlobalInject<rpc::IRpcChannel> channel;
     GlobalInject<IStartAudioController> startAudioController;
+    ContextInject<rpc::IContextRpcChannel> channel = { this };
 
 public:
-    Playback() = default;
+    Playback(const muse::modularity::ContextPtr& ctx)
+        : Contextable(ctx) {}
 
     void init();
     void deinit();

@@ -31,13 +31,14 @@
 #include "iplaybackconfiguration.h"
 
 namespace mu::playback {
-class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable
+class SoundProfilesRepository : public ISoundProfilesRepository, public muse::async::Asyncable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> config;
-    muse::GlobalInject<muse::audio::IPlayback> playback;
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
 
 public:
-    SoundProfilesRepository() = default;
+    SoundProfilesRepository(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx) {}
 
     void init();
 

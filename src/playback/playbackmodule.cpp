@@ -47,10 +47,8 @@ std::string PlaybackModule::moduleName() const
 void PlaybackModule::registerExports()
 {
     m_configuration = std::make_shared<PlaybackConfiguration>();
-    m_soundProfileRepo = std::make_shared<SoundProfilesRepository>();
 
     globalIoc()->registerExport<IPlaybackConfiguration>(mname, m_configuration);
-    globalIoc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
 }
 
 void PlaybackModule::resolveImports()
@@ -64,7 +62,6 @@ void PlaybackModule::resolveImports()
 void PlaybackModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
-    m_soundProfileRepo->init();
 }
 
 IContextSetup* PlaybackModule::newContext(const muse::modularity::ContextPtr& ctx) const
@@ -76,8 +73,10 @@ void PlaybackContext::registerExports()
 {
     m_playbackController = std::make_shared<PlaybackController>(iocContext());
     m_playbackUiActions = std::make_shared<PlaybackUiActions>(m_playbackController, iocContext());
+    m_soundProfileRepo = std::make_shared<SoundProfilesRepository>(iocContext());
 
     ioc()->registerExport<IPlaybackController>(mname, m_playbackController);
+    ioc()->registerExport<ISoundProfilesRepository>(mname, m_soundProfileRepo);
 }
 
 void PlaybackContext::resolveImports()
@@ -97,4 +96,5 @@ void PlaybackContext::onInit(const IApplication::RunMode& mode)
     }
 
     m_playbackUiActions->init();
+    m_soundProfileRepo->init();
 }
