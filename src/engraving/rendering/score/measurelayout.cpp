@@ -359,15 +359,15 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
     changeElementsParent(mmrEndBarlineSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
     // restore clef segments from mmrMeasure to the last underlying measure
-    Segment* mmrClefSeg = mmrMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, mmrMeasure->ticks());
-    changeElementsParent(mmrClefSeg, lastMeasure, lastMeasure->ticks(), ctx);
+    Segment* mmrClefOrHeaderSeg = mmrMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, mmrMeasure->ticks());
+    changeElementsParent(mmrClefOrHeaderSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
-    Segment* mmrUnderlyingClefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
-    Segment* lastMeasureClefSeg = changeElementsParent(mmrUnderlyingClefSeg, lastMeasure, lastMeasure->ticks(), ctx);
+    Segment* mmrClefSeg = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
+    Segment* lastMeasureClefSeg = changeElementsParent(mmrClefSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
-    if (mmrUnderlyingClefSeg && lastMeasureClefSeg) {
-        lastMeasureClefSeg->setEnabled(mmrUnderlyingClefSeg->enabled());
-        lastMeasureClefSeg->setTrailer(mmrUnderlyingClefSeg->trailer());
+    if (mmrClefSeg && lastMeasureClefSeg) {
+        lastMeasureClefSeg->setEnabled(mmrClefSeg->enabled());
+        lastMeasureClefSeg->setTrailer(mmrClefSeg->trailer());
     }
 
     // restore time signature segments from mmrMeasure to the first underlying measure
@@ -406,8 +406,8 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
         firstMeasureKeySigSeg->setHeader(mmrKeySigSeg->header());
     }
 
-    mmrMeasure->checkHeader();
-    mmrMeasure->checkTrailer();
+    firstMeasure->checkHeader();
+    lastMeasure->checkTrailer();
 
     // restore annotations from the mmr chord/rest segment back to the first underlying measure
     Segment* mmrChordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
