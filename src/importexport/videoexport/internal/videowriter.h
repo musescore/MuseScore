@@ -67,7 +67,6 @@ public:
     void abort() override;
 
 private:
-
     struct Config
     {
         int width = 1920;
@@ -77,6 +76,8 @@ private:
         float leadingSec = 3.;
         float trailingSec = 3.;
         double canvasDpi = 300.0;
+        ViewMode viewMode = ViewMode::PageFull;
+        muse::PointF moveToCenter;
     };
 
     Config makeConfig() const;
