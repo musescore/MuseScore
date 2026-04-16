@@ -28,21 +28,30 @@ void ContextRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
     Msg m = msg;
     m.ctxId = contextId();
-    globalChannel()->send(m, [this, onResponse](const Msg& msg) {
-        DO_ASSERT(msg.ctxId == contextId());
-        onResponse(msg);
-    });
+    Handler h;
+    if (onResponse) {
+        h = [this, onResponse](const Msg& msg) {
+            DO_ASSERT(msg.ctxId == contextId());
+            onResponse(msg);
+        };
+    }
+    globalChannel()->send(m, h);
 }
 
 void ContextRpcChannel::onMethod(Method method, Handler h)
 {
-    globalChannel()->onMethod(method, [this, h](const Msg& msg) {
-        if (msg.ctxId == contextId()) {
-            h(msg);
-        } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
-            h(msg);
-        }
-    });
+    if (h) {
+        globalChannel()->onMethod(method, [this, h](const Msg& msg) {
+            if (msg.ctxId == contextId()) {
+                h(msg);
+            } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
+                h(msg);
+            }
+        });
+    } else {
+        // reset
+        globalChannel()->onMethod(method, nullptr);
+    }
 }
 
 void ContextRpcChannel::addStream(std::shared_ptr<IRpcStream> s)

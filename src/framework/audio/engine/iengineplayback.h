@@ -41,62 +41,55 @@ public:
     virtual void init() = 0;
     virtual void deinit() = 0;
 
-    // 1. Add Sequence
-    virtual TrackSequenceId addSequence() = 0;
-    virtual void removeSequence(const TrackSequenceId id) = 0;
-    virtual TrackSequenceIdList sequenceIdList() const = 0;
-
-    // 2. Setup tracks for Sequence
-    virtual RetVal<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
-    virtual RetVal<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName, io::IODevice* playbackData,
+    // 2. Setup tracks
+    virtual RetVal<TrackIdList> trackIdList() const = 0;
+    virtual RetVal<TrackName> trackName(const TrackId trackId) const = 0;
+    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackName& trackName, io::IODevice* playbackData, const AudioParams& params) = 0;
+    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackName& trackName, const mpe::PlaybackData& playbackData,
                                                    const AudioParams& params) = 0;
-    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
-                                                   const mpe::PlaybackData& playbackData, const AudioParams& params) = 0;
-    virtual RetVal2<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
-                                                            const AudioOutputParams& outputParams) = 0;
+    virtual RetVal2<TrackId, AudioOutputParams> addAuxTrack(const TrackName& trackName, const AudioOutputParams& outputParams) = 0;
 
-    virtual void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) = 0;
-    virtual void removeAllTracks(const TrackSequenceId sequenceId) = 0;
+    virtual void removeTrack(const TrackId trackId) = 0;
+    virtual void removeAllTracks() = 0;
 
-    virtual async::Channel<TrackSequenceId, TrackId> trackAdded() const = 0;
-    virtual async::Channel<TrackSequenceId, TrackId> trackRemoved() const = 0;
+    virtual async::Channel<TrackId> trackAdded() const = 0;
+    virtual async::Channel<TrackId> trackRemoved() const = 0;
 
     virtual AudioResourceMetaList availableInputResources() const = 0;
     virtual SoundPresetList availableSoundPresets(const AudioResourceMeta& resourceMeta) const = 0;
 
-    virtual RetVal<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
-    virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
+    virtual RetVal<AudioInputParams> inputParams(const TrackId trackId) const = 0;
+    virtual void setInputParams(const TrackId trackId, const AudioInputParams& params) = 0;
+    virtual async::Channel<TrackId, AudioInputParams> inputParamsChanged() const = 0;
 
-    virtual void processInput(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual RetVal<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual void processInput(const TrackId trackId) const = 0;
+    virtual RetVal<InputProcessingProgress> inputProcessingProgress(const TrackId trackId) const = 0;
 
-    virtual void clearCache(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual void clearCache(const TrackId trackId) const = 0;
     virtual void clearSources() = 0;
 
-    // 3. Play Sequence
-    virtual async::Promise<Ret> prepareToPlay(TrackSequenceId sequenceId) = 0;
+    // 3. Play
+    virtual async::Promise<Ret> prepareToPlay() = 0;
 
-    virtual void play(TrackSequenceId sequenceId, const secs_t delay = 0.0) = 0;
-    virtual void seek(TrackSequenceId sequenceId, const secs_t newPosition, const bool flushSound = true) = 0;
-    virtual void stop(TrackSequenceId sequenceId) = 0;
-    virtual void pause(TrackSequenceId sequenceId) = 0;
-    virtual void resume(TrackSequenceId sequenceId, const secs_t delay = 0.0) = 0;
+    virtual void play(const secs_t delay = 0.0) = 0;
+    virtual void seek(const secs_t newPosition, const bool flushSound = true) = 0;
+    virtual void stop() = 0;
+    virtual void pause() = 0;
+    virtual void resume(const secs_t delay = 0.0) = 0;
 
-    virtual void setDuration(TrackSequenceId sequenceId, const msecs_t durationMsec) = 0;
-    virtual Ret setLoop(TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) = 0;
-    virtual void resetLoop(TrackSequenceId sequenceId) = 0;
+    virtual void setDuration(const msecs_t durationMsec) = 0;
+    virtual Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
+    virtual void resetLoop() = 0;
 
-    virtual PlaybackStatus playbackStatus(TrackSequenceId sequenceId) const = 0;
-    virtual async::Channel<PlaybackStatus> playbackStatusChanged(TrackSequenceId sequenceId) const = 0;
-    virtual secs_t playbackPosition(TrackSequenceId sequenceId) const = 0;
-    virtual async::Channel<secs_t> playbackPositionChanged(TrackSequenceId sequenceId) const = 0;
+    virtual PlaybackStatus playbackStatus() const = 0;
+    virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual secs_t playbackPosition() const = 0;
+    virtual async::Channel<secs_t> playbackPositionChanged() const = 0;
 
-    // 4. Adjust a Sequence output
-    virtual RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) = 0;
-    virtual async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const = 0;
+    // 4. Adjust a output
+    virtual RetVal<AudioOutputParams> outputParams(const TrackId trackId) const = 0;
+    virtual void setOutputParams(const TrackId trackId, const AudioOutputParams& params) = 0;
+    virtual async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const = 0;
 
     virtual RetVal<AudioOutputParams> masterOutputParams() const = 0;
     virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
@@ -105,14 +98,13 @@ public:
 
     virtual AudioResourceMetaList availableOutputResources() const = 0;
 
-    virtual RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual RetVal<AudioSignalChanges> signalChanges(const TrackId trackId) const = 0;
     virtual RetVal<AudioSignalChanges> masterSignalChanges() const = 0;
 
-    virtual async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice,
-                                               const SoundTrackFormat& format) = 0;
+    virtual async::Promise<Ret> saveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format) = 0;
     virtual void abortSavingAllSoundTracks() = 0;
 
-    virtual SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const = 0;
+    virtual SaveSoundTrackProgress saveSoundTrackProgressChanged() const = 0;
 
     virtual void clearAllFx() = 0;
 };

@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <unordered_set>
+
 #include "../iengineplayback.h"
 
 #include "global/async/asyncable.h"
@@ -29,8 +31,13 @@
 #include "../isynthresolver.h"
 #include "../ifxresolver.h"
 #include "../iaudioengine.h"
-#include "../itracksequence.h"
 #include "../iaudioengineconfiguration.h"
+#include "../iclock.h"
+#include "../isequenceio.h"
+#include "../isequenceplayer.h"
+
+#include "igettracks.h"
+#include "track.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter;
@@ -39,7 +46,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 namespace muse::audio::engine {
 class Mixer;
-class EnginePlayback : public IEnginePlayback, public async::Asyncable
+class EnginePlayback : public IEnginePlayback, public IGetTracks, public async::Asyncable
 {
     GlobalInject<synth::ISynthResolver> synthResolver;
     GlobalInject<fx::IFxResolver> fxResolver;
@@ -52,63 +59,55 @@ public:
     void init() override;
     void deinit() override;
 
-    // 1. Add Sequence
-    TrackSequenceId addSequence() override;
-    void removeSequence(const TrackSequenceId id) override;
-    TrackSequenceIdList sequenceIdList() const override;
-    ITrackSequencePtr sequence(const TrackSequenceId id) const;
-
-    // 2. Setup tracks for Sequence
-    RetVal<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
-    RetVal<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
-    RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::IODevice* playbackData,
+    // 2. Setup tracks
+    RetVal<TrackIdList> trackIdList() const override;
+    RetVal<TrackName> trackName(const TrackId trackId) const override;
+    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::IODevice* playbackData, const AudioParams& params) override;
+    RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
                                            const AudioParams& params) override;
-    RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                           const mpe::PlaybackData& playbackData, const AudioParams& params) override;
-    RetVal2<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                    const AudioOutputParams& outputParams) override;
+    RetVal2<TrackId, AudioOutputParams> addAuxTrack(const std::string& trackName, const AudioOutputParams& outputParams) override;
 
-    void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) override;
-    void removeAllTracks(const TrackSequenceId sequenceId) override;
+    void removeTrack(const TrackId trackId) override;
+    void removeAllTracks() override;
 
-    async::Channel<TrackSequenceId, TrackId> trackAdded() const override;
-    async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
+    async::Channel<TrackId> trackAdded() const override;
+    async::Channel<TrackId> trackRemoved() const override;
 
     AudioResourceMetaList availableInputResources() const override;
     SoundPresetList availableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
 
-    RetVal<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
-    void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
-    async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
+    RetVal<AudioInputParams> inputParams(const TrackId trackId) const override;
+    void setInputParams(const TrackId trackId, const AudioInputParams& params) override;
+    async::Channel<TrackId, AudioInputParams> inputParamsChanged() const override;
 
-    void processInput(const TrackSequenceId sequenceId, const TrackId trackId) const override;
-    RetVal<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void processInput(const TrackId trackId) const override;
+    RetVal<InputProcessingProgress> inputProcessingProgress(const TrackId trackId) const override;
 
-    void clearCache(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void clearCache(const TrackId trackId) const override;
     void clearSources() override;
 
-    // 3. Play Sequence
-    async::Promise<Ret> prepareToPlay(TrackSequenceId sequenceId) override;
+    // 3. Play
+    async::Promise<Ret> prepareToPlay() override;
 
-    void play(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
-    void seek(TrackSequenceId sequenceId, const secs_t newPosition, const bool flushSound = true) override;
-    void stop(TrackSequenceId sequenceId) override;
-    void pause(TrackSequenceId sequenceId) override;
-    void resume(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
+    void play(const secs_t delay = 0.0) override;
+    void seek(const secs_t newPosition, const bool flushSound = true) override;
+    void stop() override;
+    void pause() override;
+    void resume(const secs_t delay = 0.0) override;
 
-    void setDuration(TrackSequenceId sequenceId, const msecs_t durationMsec) override;
-    Ret setLoop(TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) override;
-    void resetLoop(TrackSequenceId sequenceId) override;
+    void setDuration(const msecs_t durationMsec) override;
+    Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    void resetLoop() override;
 
-    PlaybackStatus playbackStatus(TrackSequenceId sequenceId) const override;
-    async::Channel<PlaybackStatus> playbackStatusChanged(TrackSequenceId sequenceId) const override;
-    secs_t playbackPosition(TrackSequenceId sequenceId) const override;
-    async::Channel<secs_t> playbackPositionChanged(TrackSequenceId sequenceId) const override;
+    PlaybackStatus playbackStatus() const override;
+    async::Channel<PlaybackStatus> playbackStatusChanged() const override;
+    secs_t playbackPosition() const override;
+    async::Channel<secs_t> playbackPositionChanged() const override;
 
     // 4. Adjust a Sequence output
-    RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
-    void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) override;
-    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const override;
+    RetVal<AudioOutputParams> outputParams(const TrackId trackId) const override;
+    void setOutputParams(const TrackId trackId, const AudioOutputParams& params) override;
+    async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
 
     RetVal<AudioOutputParams> masterOutputParams() const override;
     void setMasterOutputParams(const AudioOutputParams& params) override;
@@ -117,39 +116,54 @@ public:
 
     AudioResourceMetaList availableOutputResources() const override;
 
-    RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    RetVal<AudioSignalChanges> signalChanges(const TrackId trackId) const override;
     RetVal<AudioSignalChanges> masterSignalChanges() const override;
 
-    async::Promise<Ret> saveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format) override;
+    async::Promise<Ret> saveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format) override;
     void abortSavingAllSoundTracks() override;
-    SaveSoundTrackProgress saveSoundTrackProgressChanged(const TrackSequenceId sequenceId) const override;
+    SaveSoundTrackProgress saveSoundTrackProgressChanged() const override;
 
     void clearAllFx() override;
 
 private:
-    std::shared_ptr<Mixer> mixer() const;
 
-    void ensureSubscriptions(const ITrackSequencePtr s);
+    std::shared_ptr<Mixer> mixer() const;
     void ensureMixerSubscriptions();
 
-    void listenInputProcessing(ITrackSequencePtr s, std::function<void(const Ret&)> completed);
-    size_t tracksBeingProcessedCount(const ITrackSequencePtr s) const;
+    TrackId newTrackId() const;
+    void onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess);
 
-    Ret doSaveSoundTrack(const TrackSequenceId sequenceId, io::IODevice& dstDevice, const SoundTrackFormat& format);
+    // IGetTracks
+    TrackPtr track(const TrackId id) const override;
+    const TracksMap& allTracks() const override;
+    async::Channel<TrackPtr> trackAboutToBeAdded() const override;
+    async::Channel<TrackPtr> trackAboutToBeRemoved() const override;
 
-    async::Channel<TrackSequenceId, TrackId> m_trackAdded;
-    async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
-    async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
-    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
+    void listenInputProcessing(std::function<void(const Ret&)> completed);
+    size_t tracksBeingProcessedCount() const;
+
+    Ret doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format);
+
+    async::Channel<TrackId> m_trackAdded;
+    async::Channel<TrackId> m_trackRemoved;
+    async::Channel<TrackId, AudioInputParams> m_inputParamsChanged;
+    async::Channel<TrackId, AudioOutputParams> m_outputParamsChanged;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
-    std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
+    TracksMap m_tracks;
+    ISequencePlayerPtr m_player = nullptr;
+    ISequenceIOPtr m_audioIO = nullptr;
+    IClockPtr m_clock = nullptr;
+    async::Channel<TrackPtr> m_trackAboutToBeAdded;
+    async::Channel<TrackPtr> m_trackAboutToBeRemoved;
+    TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
+    std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 
     struct SaveSoundTrackProgressData {
         SaveSoundTrackProgress progress;
         async::Notification aborted;
     };
 
-    mutable std::unordered_map<TrackSequenceId, SaveSoundTrackProgressData> m_saveSoundTracksProgressMap;
+    SaveSoundTrackProgressData m_saveSoundTracksProgress;
 };
 }
