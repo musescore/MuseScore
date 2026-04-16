@@ -270,10 +270,8 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 
 void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx)
 {
-    //
     // copy markers & jumps to mmrMeasure
     // jumps come from lastMeasure, markers come from firstMeasure
-    //
     ElementList newList = lastMeasure->el();
     for (EngravingItem* e : firstMeasure->el()) {
         if (e->isMarker() && firstMeasure != lastMeasure) {
@@ -284,26 +282,16 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
         ctx.mutDom().undoChangeParent(e, mmrMeasure, e->staffIdx());
     }
 
-    //
     // set mmrMeasure with same barline as last underlying measure
-    //
     Segment* lastMeasureEndBarlineSeg = lastMeasure->findSegmentR(SegmentType::EndBarLine, lastMeasure->ticks());
-    Segment* mmrEndBarlineSeg = changeElementsParent(lastMeasureEndBarlineSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
+    changeElementsParent(lastMeasureEndBarlineSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
 
-    if (lastMeasureEndBarlineSeg && mmrEndBarlineSeg) {
-        changeAnnotationsParent(lastMeasureEndBarlineSeg, mmrEndBarlineSeg);
-    }
-
-    //
     // if last underlying measure ends with clef change, show same at end of mmrest
-    //
     Segment* lastMeasureClefSeg = lastMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
                                                             lastMeasure->ticks());
     changeElementsParent(lastMeasureClefSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
 
-    //
     // further check for clefs
-    //
     Segment* underlyingClefSeg = lastMeasure->findSegmentR(SegmentType::Clef, lastMeasure->ticks());
     Segment* mmrClefSeg = changeElementsParent(underlyingClefSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
 
@@ -312,9 +300,7 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
         mmrClefSeg->setTrailer(underlyingClefSeg->trailer());
     }
 
-    //
     // check for time signature
-    //
     Segment* underlyingTimeSigSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
     Segment* mmrTimeSigSeg = changeElementsParent(underlyingTimeSigSeg, mmrMeasure, Fraction(0, 1), ctx);
 
@@ -323,9 +309,7 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
         mmrTimeSigSeg->setHeader(underlyingTimeSigSeg->header());
     }
 
-    //
     // check for end of measure time signature
-    //
     Segment* underlyingEndTimeSigSeg = lastMeasure->findSegmentR(SegmentType::TimeSig, lastMeasure->ticks());
     Segment* mmrEndTimeSigSeg = changeElementsParent(underlyingEndTimeSigSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
 
@@ -335,21 +319,15 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
         mmrEndTimeSigSeg->setEndOfMeasureChange(underlyingEndTimeSigSeg->endOfMeasureChange());
     }
 
-    //
     // check for end of measure breaths
-    //
     Segment* underlyingBreathSeg = lastMeasure->findSegmentR(SegmentType::Breath, lastMeasure->ticks());
     changeElementsParent(underlyingBreathSeg, mmrMeasure, mmrMeasure->ticks(), ctx);
 
-    //
     // check for ambitus
-    //
     Segment* underlyingAmbitusSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
     changeElementsParent(underlyingAmbitusSeg, mmrMeasure, Fraction(0, 1), ctx);
 
-    //
     // check for key signature
-    //
     Segment* underlyingKeySigSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
     Segment* mmrKeySigSeg = changeElementsParent(underlyingKeySigSeg, mmrMeasure, Fraction(0, 1), ctx);
 
@@ -361,9 +339,7 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
     mmrMeasure->checkHeader();
     mmrMeasure->checkTrailer();
 
-    //
     // check for rehearsal mark etc.
-    //
     Segment* mmrChordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     Segment* underlyingCRSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     changeAnnotationsParent(underlyingCRSeg, mmrChordRestSeg);
@@ -371,28 +347,18 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
 
 void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx)
 {
-    //
     // copy markers & jumps back to underlying measures
-    //
     ElementList mmrMeasureEls = mmrMeasure->el();
     for (EngravingItem* e : mmrMeasureEls) {
         Measure* newMeasure = e->isMarker() ? firstMeasure : lastMeasure;
         ctx.mutDom().undoChangeParent(e, newMeasure, e->staffIdx());
     }
 
-    //
     // restore the barline from mmrMeasure to the last underlying measure
-    //
     Segment* mmrEndBarlineSeg = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-    Segment* lastMeasureEndBarlineSeg = changeElementsParent(mmrEndBarlineSeg, lastMeasure, lastMeasure->ticks(), ctx);
+    changeElementsParent(mmrEndBarlineSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
-    if (mmrEndBarlineSeg && lastMeasureEndBarlineSeg) {
-        changeAnnotationsParent(mmrEndBarlineSeg, lastMeasureEndBarlineSeg);
-    }
-
-    //
     // restore clef segments from mmrMeasure to the last underlying measure
-    //
     Segment* mmrClefSeg = mmrMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, mmrMeasure->ticks());
     changeElementsParent(mmrClefSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
@@ -404,9 +370,7 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
         lastMeasureClefSeg->setTrailer(mmrUnderlyingClefSeg->trailer());
     }
 
-    //
     // restore time signature segments from mmrMeasure to the first underlying measure
-    //
     Segment* mmrTimeSigSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
     Segment* firstMeasureTimeSigSeg = changeElementsParent(mmrTimeSigSeg, firstMeasure, Fraction(0, 1), ctx);
 
@@ -415,9 +379,7 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
         firstMeasureTimeSigSeg->setHeader(mmrTimeSigSeg->header());
     }
 
-    //
     // restore end-of-measure time signature segment from mmrMeasure to the last underlying measure
-    //
     Segment* mmrEndTimeSigSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
     Segment* lastMeasureEndTimeSigSeg = changeElementsParent(mmrEndTimeSigSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
@@ -427,21 +389,15 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
         lastMeasureEndTimeSigSeg->setEndOfMeasureChange(mmrEndTimeSigSeg->endOfMeasureChange());
     }
 
-    //
     // restore breath segment from mmrMeasure to the last underlying measure
-    //
     Segment* mmrBreathSeg = mmrMeasure->findSegmentR(SegmentType::Breath, mmrMeasure->ticks());
     changeElementsParent(mmrBreathSeg, lastMeasure, lastMeasure->ticks(), ctx);
 
-    //
     // restore ambitus segment from mmrMeasure to the first underlying measure
-    //
     Segment* mmrAmbitusSeg = mmrMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
     changeElementsParent(mmrAmbitusSeg, firstMeasure, Fraction(0, 1), ctx);
 
-    //
     // restore key signature segment from mmrMeasure to the first underlying measure
-    //
     Segment* mmrKeySigSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
     Segment* firstMeasureKeySigSeg = changeElementsParent(mmrKeySigSeg, firstMeasure, Fraction(0, 1), ctx);
 
@@ -453,9 +409,7 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
     mmrMeasure->checkHeader();
     mmrMeasure->checkTrailer();
 
-    //
     // restore annotations from the mmr chord/rest segment back to the first underlying measure
-    //
     Segment* mmrChordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     Segment* underlyingCRSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     changeAnnotationsParent(mmrChordRestSeg, underlyingCRSeg);
@@ -491,6 +445,8 @@ Segment* MeasureLayout::changeElementsParent(Segment* oldSeg, Measure* newMeasur
         }
         ctx.mutDom().undoChangeParent(el, newSeg, el->staffIdx());
     }
+
+    changeAnnotationsParent(oldSeg, newSeg);
 
     return newSeg;
 }
@@ -831,10 +787,6 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutC
             ctx.mutState().setMeasureNumber(mn);
         }
     } else if (firstMeasure->mmRest()) {
-        Segment* underlyingCRSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-        Segment* MMRestCRSeg = firstMeasure->mmRest()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-
-        changeAnnotationsParent(MMRestCRSeg, underlyingCRSeg);
         removeMMRestElements(firstMeasure->mmRest(), ctx);
 
         if (firstMeasure->mmRestCount() > 0) {
