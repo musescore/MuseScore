@@ -23,16 +23,23 @@ muse_create_module(muse_midiremote ALIAS muse::midiremote)
 target_sources(muse_midiremote PRIVATE
     midiremotemodule.cpp
     midiremotemodule.h
-    mmc.cpp
-    mmc.h
     midiremotetypes.h
     imidiremoteconfiguration.h
     imidiremote.h
+
+    mmctypes.h
+    immcdecoder.h
+    immcdecoderfactory.h
 
     internal/midiremoteconfiguration.cpp
     internal/midiremoteconfiguration.h
     internal/midiremote.cpp
     internal/midiremote.h
+
+    internal/mmcdecoder.cpp
+    internal/mmcdecoder.h
+    internal/mmcdecoderfactory.cpp
+    internal/mmcdecoderfactory.h
 )
 
 if (MUSE_MODULE_MIDIREMOTE_QML)

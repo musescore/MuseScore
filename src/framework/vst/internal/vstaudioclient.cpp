@@ -21,8 +21,6 @@
  */
 #include "vstaudioclient.h"
 
-#include "midiremote/mmc.h"
-
 #include "log.h"
 
 using namespace muse;
@@ -40,7 +38,7 @@ static size_t noteEventKey(int pitch, int channel)
     return h1 ^ (h2 << 1);
 }
 
-static std::optional<TransportEvent> mmcToTransportEvent(const MMCMessage& msg)
+static std::optional<TransportEvent> mmcToTransportEvent(const IMMCDecoderPtr& decoder, const MMCMessage& msg)
 {
     switch (msg.command) {
     case MMCCommand::Play:
@@ -50,7 +48,7 @@ static std::optional<TransportEvent> mmcToTransportEvent(const MMCMessage& msg)
     case MMCCommand::Stop:
         return TransportEvent::stop();
     case MMCCommand::Locate: {
-        const std::optional<double> pos = MMCParser::locateToSeconds(msg);
+        const std::optional<double> pos = decoder->locateToSeconds(msg);
         if (pos.has_value()) {
             return TransportEvent::seek(pos.value());
         }
@@ -73,10 +71,6 @@ VstAudioClient::~VstAudioClient()
         m_pluginComponent->setActive(false);
         m_pluginComponent->terminate();
     }
-
-    if (m_mmcParser) {
-        delete m_mmcParser;
-    }
 }
 
 void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)
@@ -87,6 +81,10 @@ void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)
 
     m_type = type;
     m_pluginPtr = std::move(instance);
+
+    if (mmcDecoderFactory()) {
+        m_mmcDecoder = mmcDecoderFactory()->makeDecoder();
+    }
 
     transportEventsDispatcher(); // Force resolution outside audio callback
 }
@@ -505,7 +503,7 @@ void VstAudioClient::fillOutputBufferFx(samples_t sampleCount, float* output)
 
 void VstAudioClient::processOutputEvents()
 {
-    if (!transportEventsDispatcher()) {
+    if (!m_mmcDecoder || !transportEventsDispatcher()) {
         return;
     }
 
@@ -527,16 +525,12 @@ void VstAudioClient::processOutputEvents()
             continue;
         }
 
-        if (!m_mmcParser) {
-            m_mmcParser = new MMCParser();
-        }
-
-        std::optional<MMCMessage> msg = m_mmcParser->process(vstEvent.data.bytes, vstEvent.data.size);
+        std::optional<MMCMessage> msg = m_mmcDecoder->decode(vstEvent.data.bytes, vstEvent.data.size);
         if (!msg.has_value()) {
             continue;
         }
 
-        std::optional<TransportEvent> event = mmcToTransportEvent(msg.value());
+        std::optional<TransportEvent> event = mmcToTransportEvent(m_mmcDecoder, msg.value());
         if (event.has_value()) {
             events.push_back(event.value());
         }

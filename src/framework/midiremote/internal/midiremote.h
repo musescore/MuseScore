@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiwindows/imultiwindowsprovider.h"
 
-#include "midiremote/mmc.h"
+#include "midiremote/immcdecoderfactory.h"
 
 namespace muse {
 class XmlStreamReader;
@@ -44,6 +44,7 @@ class MidiRemote : public IMidiRemote, public Contextable, public async::Asyncab
     GlobalInject<IMidiRemoteConfiguration> configuration;
     GlobalInject<io::IFileSystem> fileSystem;
     GlobalInject<mi::IMultiWindowsProvider> multiwindowsProvider;
+    GlobalInject<IMMCDecoderFactory> mmcDecoderFactory;
     ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
@@ -84,6 +85,6 @@ private:
     MidiMappingList m_midiMappings;
     async::Notification m_midiMappingsChanged;
 
-    midiremote::MMCParser m_mmcParser;
+    IMMCDecoderPtr m_mmcDecoder;
 };
 }

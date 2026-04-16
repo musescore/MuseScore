@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mmc.h"
+#include "mmcdecoder.h"
 
 #include "midi/midievent.h"
 #include "log.h"
@@ -94,7 +94,7 @@ static MMCMessage parseMMC(const std::vector<uint8_t>& sysex)
     return msg;
 }
 
-class MMCParser::SysExAssembler
+class MMCDecoder::SysExAssembler
 {
 public:
     bool process(const Event& event, std::vector<uint8_t>& result)
@@ -189,20 +189,21 @@ private:
     bool m_inProgress = false;
 };
 
-MMCParser::MMCParser()
-    : m_assembler(new SysExAssembler())
+MMCDecoder::~MMCDecoder()
 {
+    if (m_assembler) {
+        delete m_assembler;
+    }
 }
 
-MMCParser::~MMCParser()
-{
-    delete m_assembler;
-}
-
-std::optional<MMCMessage> MMCParser::process(const Event& event)
+std::optional<MMCMessage> MMCDecoder::decode(const Event& event)
 {
     if (event.messageType() != Event::MessageType::SystemExclusiveData) {
         return std::nullopt;
+    }
+
+    if (!m_assembler) {
+        m_assembler = new SysExAssembler();
     }
 
     std::vector<uint8_t> sysex;
@@ -217,10 +218,14 @@ std::optional<MMCMessage> MMCParser::process(const Event& event)
     return parseMMC(sysex);
 }
 
-std::optional<MMCMessage> MMCParser::process(const uint8_t* data, size_t size)
+std::optional<MMCMessage> MMCDecoder::decode(const uint8_t* data, size_t size)
 {
     if (!data || size == 0) {
         return std::nullopt;
+    }
+
+    if (!m_assembler) {
+        m_assembler = new SysExAssembler();
     }
 
     std::vector<uint8_t> sysex;
@@ -235,7 +240,7 @@ std::optional<MMCMessage> MMCParser::process(const uint8_t* data, size_t size)
     return parseMMC(sysex);
 }
 
-std::optional<double> MMCParser::locateToSeconds(const MMCMessage& msg)
+std::optional<double> MMCDecoder::locateToSeconds(const MMCMessage& msg) const
 {
     IF_ASSERT_FAILED(msg.command == MMCCommand::Locate) {
         return std::nullopt;

@@ -56,6 +56,8 @@ void MidiRemote::init()
     });
 
     readMidiMappings();
+
+    m_mmcDecoder = mmcDecoderFactory()->makeDecoder();
 }
 
 const MidiMappingList& MidiRemote::midiMappings() const
@@ -117,8 +119,8 @@ Ret MidiRemote::process(const Event& ev)
         return Ret(Ret::Code::Undefined);
     }
 
-    if (ev.messageType() == Event::MessageType::SystemExclusiveData) {
-        const std::optional<MMCMessage> msg = m_mmcParser.process(ev);
+    if (ev.messageType() == Event::MessageType::SystemExclusiveData && m_mmcDecoder) {
+        const std::optional<MMCMessage> msg = m_mmcDecoder->decode(ev);
         if (msg.has_value()) {
             processMMC(msg.value());
         }
@@ -300,7 +302,7 @@ void MidiRemote::processMMC(const MMCMessage& msg)
         dispatcher()->dispatch("stop");
         break;
     case MMCCommand::Locate: {
-        const std::optional<double> pos = MMCParser::locateToSeconds(msg);
+        const std::optional<double> pos = m_mmcDecoder->locateToSeconds(msg);
         if (pos.has_value()) {
             dispatcher()->dispatch("rewind", actions::ActionData::make_arg1<secs_t>(pos.value()));
         }

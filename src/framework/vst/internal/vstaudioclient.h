@@ -27,17 +27,14 @@
 #include "../vsttypes.h"
 
 #include "modularity/ioc.h"
-
 #include "audio/engine/itransporteventsdispatcher.h"
-
-namespace muse::midiremote {
-class MMCParser;
-}
+#include "midiremote/immcdecoderfactory.h"
 
 namespace muse::vst {
 class VstAudioClient : public muse::Contextable
 {
     muse::ContextInject<muse::audio::engine::ITransportEventsDispatcher> transportEventsDispatcher = { this };
+    muse::GlobalInject<muse::midiremote::IMMCDecoderFactory> mmcDecoderFactory;
 
 public:
     VstAudioClient(const modularity::ContextPtr& iocCtx);
@@ -108,6 +105,6 @@ private:
     audioplugins::AudioPluginType m_type = audioplugins::AudioPluginType::Undefined;
     audio::OutputSpec m_outputSpec;
 
-    midiremote::MMCParser* m_mmcParser = nullptr;
+    midiremote::IMMCDecoderPtr m_mmcDecoder;
 };
 }
