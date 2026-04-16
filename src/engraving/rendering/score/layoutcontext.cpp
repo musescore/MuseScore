@@ -479,6 +479,14 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
     EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
 }
 
+void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->undoChangeParent(element, parent, staff);
+}
+
 void DomAccessor::addUnmanagedSpanner(Spanner* s)
 {
     IF_ASSERT_FAILED(score()) {

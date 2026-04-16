@@ -86,7 +86,9 @@ private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
     static void changeMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
+    static void restoreMeasureElParents(Measure* firstMeasure, Measure* lastMeasure, Measure* mmrMeasure, LayoutContext& ctx);
     static void changeAnnotationsParent(Segment* oldParent, Segment* newParent);
+    static Segment* changeElementsParent(Segment* oldSeg, Measure* newMeasure, const Fraction& newSegTick, LayoutContext& ctx);
 
     static int adjustMeasureNumber(Measure* m, int measureNumber);
 
@@ -99,7 +101,7 @@ private:
     static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 
     static void createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutContext& ctx);
-    static void removeMMRestElements(Measure* mmRestMeasure);
+    static void removeMMRestElements(Measure* mmRestMeasure, LayoutContext& ctx);
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
