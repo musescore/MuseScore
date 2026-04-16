@@ -3091,14 +3091,14 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
 {
     TRACE_DRAW_ITEM;
 
-    painter->save();
-
-    setMask(item, painter);
-
     // hide tie toward the second chord of a cross-measure value
     if (item->tie()->endNote() && item->tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
+
+    painter->save();
+
+    setMask(item, painter);
 
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(), opt);
     if (!opt.isPrinting && item->ldata()->allJumpPointsInactive) {
