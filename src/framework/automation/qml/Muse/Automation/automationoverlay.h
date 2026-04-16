@@ -46,6 +46,7 @@ protected:
 
 signals:
     void viewMatrixChanged();
+    void pointChangeRequested(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y);
 
 private:
     struct AutomationLineData {
@@ -56,7 +57,7 @@ private:
     bool lineIndexIsValid(size_t index) const;
 
     void updatePolylinesGeometry(size_t firstIndex, size_t lastIndex);
-    void updateAllPolylinesGeometry() { updatePolylinesGeometry(0, m_automationLinesData.size() - 1); }
+    void updateAllPolylinesGeometry();
 
     QTransform m_viewMatrix;
     std::vector<AutomationLineData> m_automationLinesData;

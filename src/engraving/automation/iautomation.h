@@ -31,6 +31,8 @@ class IAutomation
 public:
     virtual ~IAutomation() = default;
 
+    virtual void clear() = 0;
+
     virtual const AutomationCurve& curve(const AutomationCurveKey& key) const = 0;
     virtual const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const = 0;
 

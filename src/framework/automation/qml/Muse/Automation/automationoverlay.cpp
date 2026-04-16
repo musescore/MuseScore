@@ -46,8 +46,8 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
 
     m_automationLinesData.reserve(automationDataList.size());
 
-    for (qsizetype i = 0; i < automationDataList.size(); ++i) {
-        const QVariantMap& lineDataMap = automationDataList.at(i).toMap();
+    for (qsizetype lineIdx = 0; lineIdx < automationDataList.size(); ++lineIdx) {
+        const QVariantMap& lineDataMap = automationDataList.at(lineIdx).toMap();
         IF_ASSERT_FAILED(!lineDataMap.isEmpty()) {
             continue;
         }
@@ -79,17 +79,18 @@ void AutomationOverlay::initAutomationLinesData(const QVariant& automationLinesD
         polyline->setDrawBackground(false);
 
         QObject::connect(polyline, &muse::uicomponents::PolylinePlot::pointMoved,
-                         [polyline](int index, qreal x, qreal y, bool completed) {
-            IF_ASSERT_FAILED(index > -1 && index < static_cast<int>(polyline->points().size())) {
+                         [this, lineIdx, polyline](int pointIdx, qreal x, qreal y, bool completed) {
+            IF_ASSERT_FAILED(pointIdx > -1 && pointIdx < static_cast<int>(polyline->points().size())) {
                 return;
             }
-            // TODO: When completed, change the model (create an undo action in the process)...
-            UNUSED(completed);
-
             QVector<QPointF> points = polyline->points();
-            points.replace(index, { x, y });
+            points.replace(pointIdx, { x, y });
             polyline->setPoints(points);
-            polyline->update();                  // TODO: pass update rect?
+            polyline->update(); // TODO: pass update rect?
+            if (completed) {
+                // Only request to update the model when completed...
+                emit pointChangeRequested(lineIdx, pointIdx, x, y);
+            }
         });
 
         AutomationLineData lineData = { lineDataMap, polyline };
@@ -157,4 +158,12 @@ void AutomationOverlay::updatePolylinesGeometry(size_t firstIndex, size_t lastIn
         polyline->setWidth(lineWidth * m_viewMatrix.m11());
         polyline->setHeight(lineHeight * m_viewMatrix.m22());
     }
+}
+
+void AutomationOverlay::updateAllPolylinesGeometry()
+{
+    IF_ASSERT_FAILED(!m_automationLinesData.empty()) {
+        return;
+    }
+    updatePolylinesGeometry(0, m_automationLinesData.size() - 1);
 }

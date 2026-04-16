@@ -27,6 +27,8 @@ namespace mu::engraving {
 class Automation : public IAutomation
 {
 public:
+    void clear() override;
+
     const AutomationCurve& curve(const AutomationCurveKey& key) const override;
     const AutomationPoint& activePoint(const AutomationCurveKey& key, int utick) const override;
 
