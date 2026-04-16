@@ -50,8 +50,8 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::GlobalInject<muse::audio::IPlayback> playback;
-    muse::GlobalInject<ISoundProfilesRepository> profilesRepo;
+    muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };

@@ -35,6 +35,8 @@
 #include "platform/general/generalsoundfontinstallscenario.h"
 #endif
 
+#include "audio/common/rpc/contextrpcchannel.h"
+
 #include "internal/audioconfiguration.h"
 #include "internal/audioactionscontroller.h"
 #include "internal/audiouiactions.h"
@@ -81,7 +83,6 @@ void AudioModule::registerExports()
 #endif
 
     m_startAudioController = std::make_shared<StartAudioController>(m_rpcChannel);
-    m_mainPlayback = std::make_shared<Playback>();
 
     globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());
@@ -89,7 +90,6 @@ void AudioModule::registerExports()
     globalIoc()->registerExport<IAudioDriverController>(mname, m_audioDriverController);
     globalIoc()->registerExport<ISoundFontController>(mname, m_soundFontController);
     globalIoc()->registerExport<IStartAudioController>(mname, m_startAudioController);
-    globalIoc()->registerExport<IPlayback>(mname, m_mainPlayback);
 }
 
 void AudioModule::resolveImports()
@@ -114,7 +114,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 #endif
 
     m_startAudioController->init();
-    m_mainPlayback->init();
 
 #ifndef Q_OS_WASM
     m_startAudioController->startAudioProcessing(mode);
@@ -133,7 +132,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 void AudioModule::onDeinit()
 {
     m_rpcTicker.stop();
-    m_mainPlayback->deinit();
     m_startAudioController->stopAudioProcessing();
     m_engineGlobalSetup->onDeinit();
 }
@@ -148,10 +146,18 @@ modularity::IContextSetup* AudioModule::newContext(const muse::modularity::Conte
 void AudioContext::registerExports()
 {
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
+    m_mainPlayback = std::make_shared<Playback>(iocContext());
 
 #ifndef Q_OS_WASM
     ioc()->registerExport<ISoundFontInstallScenario>(mname, new GeneralSoundFontInstallScenario(iocContext()));
 #endif
+
+    ioc()->registerExport<IPlayback>(mname, m_mainPlayback);
+
+    //! NOTE The RPC channel itself is one global one.
+    // But for each context there is a wrapper
+    // that adds the context ID to messages and filters by context.
+    ioc()->registerExport<rpc::IContextRpcChannel>(mname, std::make_shared<rpc::ContextRpcChannel>(iocContext()));
 }
 
 void AudioContext::resolveImports()
@@ -171,4 +177,10 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
     m_audioInited = true;
 
     m_actionsController->init();
+    m_mainPlayback->init();
+}
+
+void AudioContext::onDeinit()
+{
+    m_mainPlayback->deinit();
 }

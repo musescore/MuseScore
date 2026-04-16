@@ -194,7 +194,7 @@ void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& 
 int MuseScoreConsoleApp::processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx)
 {
     muse::ContextInject<converter::IConverterController> converter = { ctx };
-    muse::GlobalInject<playback::ISoundProfilesRepository> soundProfilesRepository;
+    muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { ctx };
 
     Ret ret = make_ret(Ret::Code::Ok);
     String soundProfile = task.params[MuseScoreCmdOptions::ParamKey::SoundProfile].toString();

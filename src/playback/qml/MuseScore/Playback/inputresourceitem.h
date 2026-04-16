@@ -46,7 +46,7 @@ class InputResourceItem : public AbstractAudioResourceItem
 
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
-    muse::GlobalInject<muse::audio::IPlayback> playback;
+    muse::ContextInject<muse::audio::IPlayback> playback = { this };
 
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")

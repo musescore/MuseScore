@@ -38,7 +38,7 @@ class ITracks;
 class IPlayer;
 class IAudioOutput;
 
-class IPlayback : MODULE_GLOBAL_INTERFACE
+class IPlayback : MODULE_CONTEXT_INTERFACE
 {
     INTERFACE_ID(IPlayback)
 

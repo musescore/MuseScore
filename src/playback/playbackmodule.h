@@ -44,7 +44,6 @@ public:
 
 private:
     std::shared_ptr<PlaybackConfiguration> m_configuration;
-    std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
 };
 
 class PlaybackContext : public muse::modularity::IContextSetup
@@ -60,5 +59,6 @@ public:
 private:
     std::shared_ptr<PlaybackController> m_playbackController;
     std::shared_ptr<PlaybackUiActions> m_playbackUiActions;
+    std::shared_ptr<SoundProfilesRepository> m_soundProfileRepo;
 };
 }

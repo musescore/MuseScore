@@ -33,6 +33,7 @@
 
 namespace muse::audio::rpc {
 using CallId = uint64_t;
+using CtxId = uint8_t;
 
 enum class Method {
     Undefined = 0,
@@ -231,6 +232,7 @@ inline std::string to_string(MsgType t)
 
 struct Msg {
     CallId callId = 0;
+    CtxId ctxId = 0;   // 0 - global, >0 - contextual
     Method method = Method::Undefined;
     MsgType type = MsgType::Undefined;
     ByteArray data;
@@ -293,6 +295,7 @@ inline StreamId new_stream_id()
 }
 
 struct StreamMsg {
+    CtxId ctxId = 0;   // 0 - global, >0 - contextual
     StreamName name = StreamName::Undefined;
     StreamId streamId = 0;
     ByteArray data;
@@ -309,6 +312,8 @@ enum class StreamType {
 struct IRpcStream {
     virtual ~IRpcStream() = default;
 
+    virtual void setCtxId(CtxId ctxId) = 0;
+    virtual CtxId ctxId() const = 0;
     virtual StreamId streamId() const = 0;
     virtual StreamType type() const = 0;
     virtual void init() = 0;
@@ -317,13 +322,13 @@ struct IRpcStream {
 
 using RpcStreamExec = std::function<void (const std::function<void ()>&)>;
 
-class IRpcChannel;
+class IStreamRpcChannel;
 template<typename ... Types>
 class RpcStream : public IRpcStream, public async::Asyncable
 {
 public:
 
-    RpcStream(IRpcChannel* rpc, StreamName name, StreamId id, StreamType type,
+    RpcStream(IStreamRpcChannel* rpc, StreamName name, StreamId id, StreamType type,
               const async::Channel<Types...>& ch,
               const RpcStreamExec& exec)
         : m_rpc(rpc), m_name(name), m_streamId(id), m_type(type), m_ch(ch), m_exec(exec) {}
@@ -333,6 +338,8 @@ public:
         deinit();
     }
 
+    void setCtxId(CtxId ctxId) override { m_ctxId = ctxId; }
+    CtxId ctxId() const override { return m_ctxId; }
     StreamName name() const { return m_name; }
     StreamId streamId() const override { return m_streamId; }
     StreamType type() const override { return m_type; }
@@ -341,7 +348,8 @@ public:
     void deinit();
 
 private:
-    IRpcChannel* m_rpc = nullptr;
+    IStreamRpcChannel* m_rpc = nullptr;
+    CtxId m_ctxId = 0;
     StreamName m_name = StreamName::Undefined;
     StreamId m_streamId = 0;
     StreamType m_type = StreamType::Undefined;
@@ -350,7 +358,18 @@ private:
     bool m_inited = false;
 };
 
-class IRpcChannel : MODULE_GLOBAL_INTERFACE
+class IStreamRpcChannel
+{
+public:
+    virtual ~IStreamRpcChannel() = default;
+
+    virtual void addStream(std::shared_ptr<IRpcStream> s) = 0;
+    virtual void removeStream(StreamId id) = 0;
+    virtual void sendStream(const StreamMsg& msg) = 0;
+    virtual void onStream(StreamId id, StreamHandler h) = 0;
+};
+
+class IRpcChannel : MODULE_GLOBAL_INTERFACE, public IStreamRpcChannel
 {
     INTERFACE_ID(IRpcChannel)
 public:
@@ -381,11 +400,6 @@ public:
         auto s = new RpcStream<Types...>(this, name, id, StreamType::Receive, ch, exec);
         addStream(std::shared_ptr<IRpcStream>(s));
     }
-
-    virtual void addStream(std::shared_ptr<IRpcStream> s) = 0;
-    virtual void removeStream(StreamId id) = 0;
-    virtual void sendStream(const StreamMsg& msg) = 0;
-    virtual void onStream(StreamId id, StreamHandler h) = 0;
 };
 
 template<typename ... Types>
@@ -399,7 +413,7 @@ void RpcStream<Types...>::init()
     case StreamType::Send: {
         m_ch.onReceive(this, [this](const Types... args) {
                 ByteArray data = RpcPacker::pack(args ...);
-                m_rpc->sendStream(StreamMsg { m_name, m_streamId, data });
+                m_rpc->sendStream(StreamMsg { m_ctxId, m_name, m_streamId, data });
             });
     } break;
     case StreamType::Receive: {
@@ -472,6 +486,7 @@ inline Msg make_request(Method m, const ByteArray& data = ByteArray())
 inline Msg make_response(const Msg& req, const ByteArray& data = ByteArray())
 {
     Msg msg;
+    msg.ctxId = req.ctxId;
     msg.callId = req.callId;
     msg.method = req.method;
     msg.type = MsgType::Response;
