@@ -479,12 +479,12 @@ void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
     EditSystemLocks::updateSystemLocksOnCreateMMRests(score(), first, last);
 }
 
-void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff)
+void DomAccessor::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staff, bool changeLinksParents)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
-    score()->undoChangeParent(element, parent, staff);
+    score()->undoChangeParent(element, parent, staff, changeLinksParents);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

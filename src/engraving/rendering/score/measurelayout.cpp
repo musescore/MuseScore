@@ -217,7 +217,6 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             // adjust length
             mmrMeasure->setTicks(len);
             // move existing end barline, clef and breath
-            // TODO [J.M]: WILL THESE STILL EXIST AFTER CHANGING PARENT BACK TO UNDERLYING? CHECK.
             if (barLineSeg) {
                 barLineSeg->setRtick(len);
             }
@@ -279,7 +278,7 @@ void MeasureLayout::changeMeasureElParents(Measure* firstMeasure, Measure* lastM
         }
     }
     for (EngravingItem* e : newList) {
-        ctx.mutDom().undoChangeParent(e, mmrMeasure, e->staffIdx());
+        ctx.mutDom().undoChangeParent(e, mmrMeasure, e->staffIdx(), false);
     }
 
     // set mmrMeasure with same barline as last underlying measure
@@ -351,7 +350,7 @@ void MeasureLayout::restoreMeasureElParents(Measure* firstMeasure, Measure* last
     ElementList mmrMeasureEls = mmrMeasure->el();
     for (EngravingItem* e : mmrMeasureEls) {
         Measure* newMeasure = e->isMarker() ? firstMeasure : lastMeasure;
-        ctx.mutDom().undoChangeParent(e, newMeasure, e->staffIdx());
+        ctx.mutDom().undoChangeParent(e, newMeasure, e->staffIdx(), false);
     }
 
     // restore the barline from mmrMeasure to the last underlying measure
@@ -426,7 +425,7 @@ void MeasureLayout::changeAnnotationsParent(Segment* oldParent, Segment* newPare
             continue;
         }
 
-        e->score()->undoChangeParent(e, newParent, e->staffIdx());
+        e->score()->undoChangeParent(e, newParent, e->staffIdx(), false);
     }
 }
 
@@ -443,7 +442,7 @@ Segment* MeasureLayout::changeElementsParent(Segment* oldSeg, Measure* newMeasur
         if (!el) {
             continue;
         }
-        ctx.mutDom().undoChangeParent(el, newSeg, el->staffIdx());
+        ctx.mutDom().undoChangeParent(el, newSeg, el->staffIdx(), false);
     }
 
     changeAnnotationsParent(oldSeg, newSeg);
