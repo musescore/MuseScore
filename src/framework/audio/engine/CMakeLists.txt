@@ -71,8 +71,6 @@ else()
         internal/clock.h
         internal/sequenceio.cpp
         internal/sequenceio.h
-        internal/tracksequence.cpp
-        internal/tracksequence.h
         internal/igettracks.h
         internal/igetplaybackposition.h
         internal/sequenceplayer.cpp
