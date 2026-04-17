@@ -635,10 +635,12 @@ bool FinaleParser::collectStaffType(StaffType* staffType, const MusxInstance<oth
     }
     int numLines = currStaff->calcNumberOfStafflines();
     bool staffInvisible = numLines <= 0;
-    if (!staffInvisible) {
-        if (changed(staffType->lines(), numLines, result)) {
-            staffType->setLines(numLines);
-        }
+    /// @note For positioning purposes, Finale treats invisible staves as default 5-line ones
+    if (staffInvisible) {
+        numLines = 5;
+    }
+    if (changed(staffType->lines(), numLines, result)) {
+        staffType->setLines(numLines);
     }
     if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
