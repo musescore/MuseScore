@@ -36,6 +36,7 @@ Item {
 
     property bool showVerticalHeader: false
     property bool horizontalHeaderNavigationEnabled: true
+    property bool displayTruncatedTextOnHover: false
 
     property var currentEditedCell: null
 
@@ -242,6 +243,7 @@ Item {
             preferredWidth: hHeaderData.preferredWidth
 
             sourceComponentCallback: root.sourceComponentCallback
+            displayTruncatedTextOnHover: root.displayTruncatedTextOnHover
 
             isSelected: tableView.selectionModel.hasSelection && tableView.selectionModel.isSelected(tableView.model.index(row, column))
             evenMargins: showVerticalHeader
