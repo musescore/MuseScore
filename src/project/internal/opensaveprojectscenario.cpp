@@ -613,8 +613,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
     IInteractive::Result result = interactive()->warningSync(title, msg, buttons, defaultButtonCode);
     switch (result.button()) {
     case helpBtnCode:
-        //platformInteractive()->openUrl(configuration()->supportForumUrl());
-        platformInteractive()->openUrl(QUrl("https://musescore.com/groups/bug-reports"));
+        platformInteractive()->openUrl(configuration()->dotComBugReportUrl());
         break;
     case saveLocallyBtnCode:
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);

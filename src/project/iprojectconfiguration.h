@@ -137,6 +137,8 @@ public:
 
     virtual QUrl supportForumUrl() const = 0;
 
+    virtual QUrl dotComBugReportUrl() const = 0;
+
     virtual bool openDetailedProjectUploadedDialog() const = 0;
     virtual void setOpenDetailedProjectUploadedDialog(bool show) = 0;
 

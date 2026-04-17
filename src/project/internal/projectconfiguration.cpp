@@ -643,6 +643,12 @@ QUrl ProjectConfiguration::supportForumUrl() const
     return QUrl("https://musescore.org/forum");
 }
 
+QUrl ProjectConfiguration::dotComBugReportUrl() const
+{
+    // The general .com bug report page
+    return QUrl("https://musescore.com/groups/bug-reports");
+}
+
 bool ProjectConfiguration::openDetailedProjectUploadedDialog() const
 {
     return settings()->value(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG).toBool();
