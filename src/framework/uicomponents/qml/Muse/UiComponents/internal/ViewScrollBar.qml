@@ -45,6 +45,12 @@ Item {
     property real thickness: 10
     property real padding: 4
 
+    //! When true, the handle stays visible whenever there's content to be scrolled
+    property bool alwaysVisibleWhenNeeded: false
+
+    property real opacityNormal: 0.3
+    property real opacityPressed: 0.7
+
     signal moved(real newPosition)
 
     visible: isScrollbarNeeded
@@ -75,12 +81,12 @@ Item {
         states: [
             State {
                 name: "active"
-                when: handle.active && root.isScrollbarNeeded
+                when: root.isScrollbarNeeded && (root.alwaysVisibleWhenNeeded || handle.active)
 
                 PropertyChanges {
                     target: handle
                     visible: true
-                    opacity: mouseArea.pressed ? 0.7 : 0.3
+                    opacity: mouseArea.pressed ? root.opacityPressed : root.opacityNormal
                 }
             }
         ]

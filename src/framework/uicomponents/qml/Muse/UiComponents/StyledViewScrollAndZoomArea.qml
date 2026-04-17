@@ -34,6 +34,11 @@ PinchArea {
     property alias verticalScrollbarSize: verticalScrollBar.size
     property alias startVerticalScrollPosition: verticalScrollBar.position
 
+    property real scrollbarThickness: 10
+    property bool scrollbarAlwaysVisibleWhenNeeded: false
+    property real scrollbarOpacityNormal: 0.3
+    property real scrollbarOpacityPressed: 0.7
+
     signal pinchToZoom(real scale, var pos)
     signal scrollHorizontal(real newPos)
     signal scrollVertical(real newPos)
@@ -53,6 +58,11 @@ PinchArea {
         id: horizontalScrollBar
         orientation: Qt.Horizontal
 
+        thickness: root.scrollbarThickness
+        alwaysVisibleWhenNeeded: root.scrollbarAlwaysVisibleWhenNeeded
+        opacityNormal: root.scrollbarOpacityNormal
+        opacityPressed: root.scrollbarOpacityPressed
+
         onMoved: function(newPosition) {
             root.scrollHorizontal(newPosition)
         }
@@ -61,6 +71,11 @@ PinchArea {
     ViewScrollBar {
         id: verticalScrollBar
         orientation: Qt.Vertical
+
+        thickness: root.scrollbarThickness
+        alwaysVisibleWhenNeeded: root.scrollbarAlwaysVisibleWhenNeeded
+        opacityNormal: root.scrollbarOpacityNormal
+        opacityPressed: root.scrollbarOpacityPressed
 
         onMoved: function(newPosition) {
             root.scrollVertical(newPosition)
