@@ -55,7 +55,7 @@ public:
     virtual async::Promise<bool> initPlayback() = 0;
     virtual void deinitPlayback() = 0;
 
-    // 2. Setup tracks for Sequence
+    // 2. Setup tracks
     virtual async::Promise<TrackIdList> trackIdList() const = 0;
     virtual async::Promise<RetVal<TrackName> > trackName(const TrackId trackId) const = 0;
 
@@ -83,10 +83,10 @@ public:
     virtual void clearCache(const TrackId trackId) const = 0;
     virtual void clearSources() = 0;
 
-    // 3. Play Sequence
+    // 3. Play
     virtual std::shared_ptr<IPlayer> player() const = 0;
 
-    // 4. Adjust a Sequence output
+    // 4. Adjust output
     virtual async::Promise<AudioOutputParams> outputParams(const TrackId trackId) const = 0;
     virtual void setOutputParams(const TrackId trackId, const AudioOutputParams& params) = 0;
     virtual async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const = 0;

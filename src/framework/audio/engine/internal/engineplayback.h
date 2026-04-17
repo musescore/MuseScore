@@ -103,7 +103,7 @@ public:
     secs_t playbackPosition() const override;
     async::Channel<secs_t> playbackPositionChanged() const override;
 
-    // 4. Adjust a Sequence output
+    // 4. Adjust output
     RetVal<AudioOutputParams> outputParams(const TrackId trackId) const override;
     void setOutputParams(const TrackId trackId, const AudioOutputParams& params) override;
     async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
