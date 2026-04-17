@@ -61,9 +61,7 @@ void EnginePlayback::init()
         }
     });
 
-    if (mixer()) {
-        mixer()->addClock(m_clock);
-    }
+    mixer()->addClock(m_clock);
 
     m_audioIO->inputParamsChanged().onReceive(this, [this](const TrackId trackId, const AudioInputParams& params) {
         m_inputParamsChanged.send(trackId, params);
@@ -108,10 +106,6 @@ void EnginePlayback::ensureMixerSubscriptions()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (!mixer()) {
-        return;
-    }
-
     if (!mixer()->masterOutputParamsChanged().isConnected()) {
         mixer()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
             m_masterOutputParamsChanged.send(params);
@@ -126,7 +120,7 @@ TrackId EnginePlayback::newTrackId() const
     return lastId;
 }
 
-// 2. Setup tracks for Sequence
+// 2. Setup tracks
 RetVal<TrackIdList> EnginePlayback::trackIdList() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -192,11 +186,6 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
     RetVal2<TrackId, AudioParams> result;
     result.val1 = -1;
 
-    IF_ASSERT_FAILED(mixer()) {
-        result.ret = make_ret(Err::Undefined);
-        return result;
-    }
-
     if (!playbackData.setupData.isValid()) {
         result.ret = make_ret(Err::InvalidSetupData);
         return result;
@@ -257,11 +246,6 @@ RetVal2<TrackId, AudioOutputParams> EnginePlayback::addAuxTrack(const std::strin
     RetVal2<TrackId, AudioOutputParams> result;
     result.val1 = -1;
 
-    IF_ASSERT_FAILED(mixer()) {
-        result.ret = make_ret(Err::Undefined);
-        return result;
-    }
-
     TrackId newId = newTrackId();
     RetVal<MixerChannelPtr> channel = mixer()->addAuxChannel(newId);
     if (!channel.ret) {
@@ -292,10 +276,6 @@ RetVal2<TrackId, AudioOutputParams> EnginePlayback::addAuxTrack(const std::strin
 void EnginePlayback::removeTrack(const TrackId trackId)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(mixer()) {
-        return;
-    }
 
     auto it = m_tracks.find(trackId);
     if (it == m_tracks.end() || !it->second) {
@@ -472,7 +452,7 @@ async::Channel<secs_t> EnginePlayback::playbackPositionChanged() const
     return m_player->playbackPositionChanged();
 }
 
-// 4. Adjust a Sequence output
+// 4. Adjust output
 RetVal<AudioOutputParams> EnginePlayback::outputParams(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -524,9 +504,7 @@ void EnginePlayback::onShouldProcessDuringSilenceChanged(const TrackId trackId, 
         muse::remove(m_tracksToProcessWhenIdle, trackId);
     }
 
-    if (mixer()) {
-        mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
-    }
+    mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
 }
 
 std::shared_ptr<Mixer> EnginePlayback::mixer() const
@@ -538,33 +516,18 @@ std::shared_ptr<Mixer> EnginePlayback::mixer() const
 RetVal<AudioOutputParams> EnginePlayback::masterOutputParams() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(mixer()) {
-        return RetVal<AudioOutputParams>::make_ret((int)Err::Undefined, "undefined reference to a mixer");
-    }
-
     return RetVal<AudioOutputParams>::make_ok(mixer()->masterOutputParams());
 }
 
 void EnginePlayback::setMasterOutputParams(const AudioOutputParams& params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(mixer()) {
-        return;
-    }
-
     mixer()->setMasterOutputParams(params);
 }
 
 void EnginePlayback::clearMasterOutputParams()
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(mixer()) {
-        return;
-    }
-
     mixer()->clearMasterOutputParams();
 }
 
@@ -594,11 +557,6 @@ RetVal<AudioSignalChanges> EnginePlayback::signalChanges(const TrackId trackId) 
 RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(mixer()) {
-        return RetVal<AudioSignalChanges>::make_ret((int)Err::Undefined, "undefined reference to a mixer");
-    }
-
     return RetVal<AudioSignalChanges>::make_ok(mixer()->masterAudioSignalChanges());
 }
 
@@ -606,10 +564,6 @@ async::Promise<Ret> EnginePlayback::saveSoundTrack(io::IODevice& dstDevice, cons
 {
     return async::make_promise<Ret>([this, &dstDevice, format](auto resolve, auto) {
         ONLY_AUDIO_ENGINE_THREAD;
-
-        IF_ASSERT_FAILED(mixer()) {
-            return resolve(make_ret(Err::Undefined, "undefined reference to a mixer"));
-        }
 
 #ifdef MUSE_MODULE_AUDIO_EXPORT
         m_player->stop();
@@ -637,21 +591,16 @@ async::Promise<Ret> EnginePlayback::saveSoundTrack(io::IODevice& dstDevice, cons
 void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> completed)
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
-    const ISequenceIOPtr audioIO = m_audioIO;
-    IF_ASSERT_FAILED(audioIO) {
-        completed(make_ret(Err::Undefined, "undefined reference to audio io"));
-        return;
-    }
 
     auto soundsInProgress = std::make_shared<size_t>(0);
 
     for (TrackId trackId : trackIdList().val) {
-        if (!isOnlineAudioResource(audioIO->inputParams(trackId).val.resourceMeta)) {
+        if (!isOnlineAudioResource(m_audioIO->inputParams(trackId).val.resourceMeta)) {
             continue;
         }
 
-        InputProcessingProgress inputProgress = audioIO->inputProcessingProgress(trackId);
-        if (!inputProgress.isStarted && !audioIO->hasPendingChunks(trackId)) {
+        InputProcessingProgress inputProgress = m_audioIO->inputProcessingProgress(trackId);
+        if (!inputProgress.isStarted && !m_audioIO->hasPendingChunks(trackId)) {
             continue;
         }
 
@@ -710,10 +659,6 @@ void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> compl
 
 size_t EnginePlayback::tracksBeingProcessedCount() const
 {
-    IF_ASSERT_FAILED(m_audioIO) {
-        return 0;
-    }
-
     size_t count = 0;
 
     for (TrackId trackId : trackIdList().val) {

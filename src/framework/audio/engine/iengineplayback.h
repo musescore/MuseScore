@@ -86,7 +86,7 @@ public:
     virtual secs_t playbackPosition() const = 0;
     virtual async::Channel<secs_t> playbackPositionChanged() const = 0;
 
-    // 4. Adjust a output
+    // 4. Adjust output
     virtual RetVal<AudioOutputParams> outputParams(const TrackId trackId) const = 0;
     virtual void setOutputParams(const TrackId trackId, const AudioOutputParams& params) = 0;
     virtual async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const = 0;

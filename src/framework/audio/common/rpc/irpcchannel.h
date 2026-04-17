@@ -49,11 +49,6 @@ enum class Method {
     // AudioEngine
     SetOutputSpec,
 
-    // Sequences
-    AddSequence,
-    RemoveSequence,
-    GetSequenceIdList,
-
     // Tracks
     RemoveTrack,
     RemoveAllTracks,
@@ -135,11 +130,6 @@ inline std::string to_string(Method m)
 
     // AudioEngine
     case Method::SetOutputSpec: return "SetOutputSpec";
-
-    // Sequences
-    case Method::AddSequence: return "AddSequence";
-    case Method::RemoveSequence: return "RemoveSequence";
-    case Method::GetSequenceIdList: return "GetSequenceIdList";
 
     // Tracks
     case Method::RemoveTrack: return "RemoveTrack";

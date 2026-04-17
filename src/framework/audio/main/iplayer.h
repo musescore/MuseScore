@@ -35,8 +35,6 @@ class IPlayer
 public:
     virtual ~IPlayer() = default;
 
-    virtual TrackSequenceId sequenceId() const = 0;
-
     virtual async::Promise<Ret> prepareToPlay() = 0;
 
     virtual void play(const secs_t delay = 0) = 0;
