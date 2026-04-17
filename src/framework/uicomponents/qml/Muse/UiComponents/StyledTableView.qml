@@ -77,6 +77,7 @@ Item {
     }
 
     signal handleItem(var index, var item)
+    signal horizontalHeaderClicked(int column)
 
     QtObject {
         id: prv
@@ -135,6 +136,10 @@ Item {
 
             onFormatChangeRequested: function(formatId) {
                 display.currentFormatId = formatId
+            }
+
+            onClicked: {
+                root.horizontalHeaderClicked(index)
             }
         }
     }
