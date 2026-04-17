@@ -56,7 +56,6 @@ private:
 
     struct PendingTrack {
         rpc::Msg msg;
-        TrackSequenceId seqId;
         TrackName trackName;
         mpe::PlaybackData playbackData;
         AudioParams params;

@@ -109,9 +109,6 @@ public:
 
 private:
 
-    using PendingAddSequence = std::function<void ()>;
-    std::vector<PendingAddSequence> m_pendingAddSequences;
-
     async::Channel<TrackId> m_trackAdded;
     async::Channel<TrackId> m_trackRemoved;
     async::Channel<TrackId, AudioInputParams> m_inputParamsChanged;
