@@ -722,6 +722,10 @@ void DockWindow::reloadCurrentPage()
     async::Async::call(this, [this]() {
         m_reloadCurrentPageScheduled = false;
 
+        IF_ASSERT_FAILED(m_currentPage) {
+            return;
+        }
+
         TRACEFUNC;
 
         clearRegistry(m_ctx);
