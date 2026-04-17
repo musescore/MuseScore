@@ -23,8 +23,6 @@
 #ifndef MUSE_AUDIO_IGETTRACKS_H
 #define MUSE_AUDIO_IGETTRACKS_H
 
-#include "global/async/channel.h"
-
 #include "audio/common/audiotypes.h"
 
 #include "track.h"
@@ -37,9 +35,6 @@ public:
 
     virtual TrackPtr track(const TrackId id) const = 0;
     virtual const TracksMap& allTracks() const = 0;
-
-    virtual async::Channel<TrackPtr> trackAboutToBeAdded() const = 0;
-    virtual async::Channel<TrackPtr> trackAboutToBeRemoved() const = 0;
 };
 }
 

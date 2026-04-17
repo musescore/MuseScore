@@ -27,7 +27,6 @@
 
 #include "clock.h"
 #include "eventaudiosource.h"
-#include "sequenceio.h"
 #include "sequenceplayer.h"
 
 #include "muse_framework_config.h"
@@ -51,7 +50,6 @@ void EnginePlayback::init()
 
     m_clock = std::make_shared<Clock>();
     m_player = std::make_shared<SequencePlayer>(this, m_clock);
-    m_audioIO = std::make_shared<SequenceIO>(this);
 
     audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
         m_prevActiveTrackId = INVALID_TRACK_ID;
@@ -62,14 +60,6 @@ void EnginePlayback::init()
     });
 
     mixer()->addClock(m_clock);
-
-    m_audioIO->inputParamsChanged().onReceive(this, [this](const TrackId trackId, const AudioInputParams& params) {
-        m_inputParamsChanged.send(trackId, params);
-    });
-
-    m_audioIO->outputParamsChanged().onReceive(this, [this](const TrackId trackId, const AudioOutputParams& params) {
-        m_outputParamsChanged.send(trackId, params);
-    });
 
     ensureMixerSubscriptions();
 }
@@ -85,7 +75,6 @@ void EnginePlayback::deinit()
     removeAllTracks();
 
     m_player.reset();
-    m_audioIO.reset();
     m_clock.reset();
 
     // Explicitly disconnect and clear all channel members before
@@ -160,20 +149,18 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
         return result;
     }
 
-    TrackId newId = newTrackId();
+    TrackId trackId = newTrackId();
     SoundTrackPtr trackPtr = std::make_shared<SoundTrack>();
-    trackPtr->id = newId;
+    trackPtr->id = trackId;
     trackPtr->name = trackName;
     trackPtr->setPlaybackData(playbackData);
     trackPtr->setInputParams(params.in);
     trackPtr->setOutputParams(params.out);
 
-    m_trackAboutToBeAdded.send(trackPtr);
-    m_tracks.emplace(newId, trackPtr);
-    m_trackAdded.send(newId);
+    doAddTrack(trackPtr);
 
     result.ret = make_ret(Err::NoError);
-    result.val1 = newId;
+    result.val1 = trackId;
     result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
     return result;
 }
@@ -191,7 +178,7 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
         return result;
     }
 
-    TrackId newId = newTrackId();
+    TrackId trackId = newTrackId();
 
     auto onOffStreamReceived = [this](const TrackId trackId) {
         std::unordered_set<TrackId> tracksToProcess = m_tracksToProcessWhenIdle;
@@ -206,21 +193,21 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
         m_prevActiveTrackId = trackId;
     };
 
-    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived);
+    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(trackId, playbackData, onOffStreamReceived);
     source->setOutputSpec(audioEngine()->outputSpec());
 
-    RetVal<MixerChannelPtr> channel = mixer()->addChannel(newId, source);
+    RetVal<MixerChannelPtr> channel = mixer()->addChannel(trackId, source);
     if (!channel.ret) {
         result.ret = channel.ret;
         return result;
     }
 
-    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, newId](bool shouldProcess) {
-        onShouldProcessDuringSilenceChanged(newId, shouldProcess);
+    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, trackId](bool shouldProcess) {
+        onShouldProcessDuringSilenceChanged(trackId, shouldProcess);
     });
 
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
-    trackPtr->id = newId;
+    trackPtr->id = trackId;
     trackPtr->name = trackName;
     trackPtr->setPlaybackData(playbackData);
     trackPtr->inputHandler = source;
@@ -228,12 +215,10 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
     trackPtr->setInputParams(params.in);
     trackPtr->setOutputParams(params.out);
 
-    m_trackAboutToBeAdded.send(trackPtr);
-    m_tracks.emplace(newId, trackPtr);
-    m_trackAdded.send(newId);
+    doAddTrack(trackPtr);
 
     result.ret = make_ret(Err::NoError);
-    result.val1 = newId;
+    result.val1 = trackId;
     result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
     return result;
 }
@@ -246,29 +231,27 @@ RetVal2<TrackId, AudioOutputParams> EnginePlayback::addAuxTrack(const std::strin
     RetVal2<TrackId, AudioOutputParams> result;
     result.val1 = -1;
 
-    TrackId newId = newTrackId();
-    RetVal<MixerChannelPtr> channel = mixer()->addAuxChannel(newId);
+    TrackId trackId = newTrackId();
+    RetVal<MixerChannelPtr> channel = mixer()->addAuxChannel(trackId);
     if (!channel.ret) {
         result.ret = channel.ret;
         return result;
     }
 
-    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, newId](bool shouldProcess) {
-        onShouldProcessDuringSilenceChanged(newId, shouldProcess);
+    channel.val->shouldProcessDuringSilenceChanged().onReceive(this, [this, trackId](bool shouldProcess) {
+        onShouldProcessDuringSilenceChanged(trackId, shouldProcess);
     });
 
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
-    trackPtr->id = newId;
+    trackPtr->id = trackId;
     trackPtr->name = trackName;
     trackPtr->outputHandler = channel.val;
     trackPtr->setOutputParams(outputParams);
 
-    m_trackAboutToBeAdded.send(trackPtr);
-    m_tracks.emplace(newId, trackPtr);
-    m_trackAdded.send(newId);
+    doAddTrack(trackPtr);
 
     result.ret = make_ret(Err::NoError);
-    result.val1 = newId;
+    result.val1 = trackId;
     result.val2 = trackPtr->outputParams();
     return result;
 }
@@ -282,7 +265,10 @@ void EnginePlayback::removeTrack(const TrackId trackId)
         return;
     }
 
-    m_trackAboutToBeRemoved.send(it->second);
+    TrackPtr trackPtr = it->second;
+    trackPtr->inputParamsChanged().disconnect(this);
+    trackPtr->outputParamsChanged().disconnect(this);
+
     mixer()->removeChannel(trackId);
     m_tracks.erase(trackId);
     muse::remove(m_tracksToProcessWhenIdle, trackId);
@@ -301,6 +287,22 @@ void EnginePlayback::removeAllTracks()
     for (const TrackId& id : trackIdList().val) {
         removeTrack(id);
     }
+}
+
+void EnginePlayback::doAddTrack(const TrackPtr& track)
+{
+    const TrackId trackId = track->id;
+
+    track->inputParamsChanged().onReceive(this, [this, trackId](const AudioInputParams& params) {
+        m_inputParamsChanged.send(trackId, params);
+    });
+
+    track->outputParamsChanged().onReceive(this, [this, trackId](const AudioOutputParams& params) {
+        m_outputParamsChanged.send(trackId, params);
+    });
+
+    m_tracks.emplace(trackId, track);
+    m_trackAdded.send(trackId);
 }
 
 async::Channel<TrackId> EnginePlayback::trackAdded() const
@@ -330,13 +332,19 @@ SoundPresetList EnginePlayback::availableSoundPresets(const AudioResourceMeta& r
 RetVal<AudioInputParams> EnginePlayback::inputParams(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    return m_audioIO->inputParams(trackId);
+    if (TrackPtr t = track(trackId)) {
+        return RetVal<AudioInputParams>::make_ok(t->inputParams());
+    }
+
+    return make_ret(Err::InvalidTrackId);
 }
 
 void EnginePlayback::setInputParams(const TrackId trackId, const AudioInputParams& params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_audioIO->setInputParams(trackId, params);
+    if (TrackPtr t = track(trackId)) {
+        t->setInputParams(params);
+    }
 }
 
 async::Channel<TrackId, AudioInputParams> EnginePlayback::inputParamsChanged() const
@@ -348,23 +356,27 @@ async::Channel<TrackId, AudioInputParams> EnginePlayback::inputParamsChanged() c
 void EnginePlayback::processInput(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_audioIO->processInput(trackId);
+    if (TrackPtr t = track(trackId)) {
+        t->inputHandler->processInput();
+    }
 }
 
 RetVal<InputProcessingProgress> EnginePlayback::inputProcessingProgress(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    if (!m_audioIO->hasTrack(trackId)) {
-        return RetVal<InputProcessingProgress>::make_ret((int)Err::InvalidTrackId, "no track");
+    if (TrackPtr t = track(trackId)) {
+        return RetVal<InputProcessingProgress>::make_ok(t->inputHandler->inputProcessingProgress());
     }
 
-    return RetVal<InputProcessingProgress>::make_ok(m_audioIO->inputProcessingProgress(trackId));
+    return make_ret(Err::InvalidTrackId);
 }
 
 void EnginePlayback::clearCache(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_audioIO->clearCache(trackId);
+    if (TrackPtr t = track(trackId)) {
+        t->inputHandler->clearCache();
+    }
 }
 
 void EnginePlayback::clearSources()
@@ -456,13 +468,19 @@ async::Channel<secs_t> EnginePlayback::playbackPositionChanged() const
 RetVal<AudioOutputParams> EnginePlayback::outputParams(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    return m_audioIO->outputParams(trackId);
+    if (TrackPtr t = track(trackId)) {
+        return RetVal<AudioOutputParams>::make_ok(t->outputParams());
+    }
+
+    return make_ret(Err::InvalidTrackId);
 }
 
 void EnginePlayback::setOutputParams(const TrackId trackId, const AudioOutputParams& params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_audioIO->setOutputParams(trackId, params);
+    if (TrackPtr t = track(trackId)) {
+        t->setOutputParams(params);
+    }
 }
 
 async::Channel<TrackId, AudioOutputParams> EnginePlayback::outputParamsChanged() const
@@ -481,18 +499,6 @@ const TracksMap& EnginePlayback::allTracks() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
     return m_tracks;
-}
-
-async::Channel<TrackPtr> EnginePlayback::trackAboutToBeAdded() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-    return m_trackAboutToBeAdded;
-}
-
-async::Channel<TrackPtr> EnginePlayback::trackAboutToBeRemoved() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-    return m_trackAboutToBeRemoved;
 }
 
 void EnginePlayback::onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess)
@@ -547,11 +553,11 @@ AudioResourceMetaList EnginePlayback::availableOutputResources() const
 RetVal<AudioSignalChanges> EnginePlayback::signalChanges(const TrackId trackId) const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    if (!m_audioIO->hasTrack(trackId)) {
-        return RetVal<AudioSignalChanges>::make_ret((int)Err::InvalidTrackId, "no track");
+    if (TrackPtr t = track(trackId)) {
+        return RetVal<AudioSignalChanges>::make_ok(t->outputHandler->audioSignalChanges());
     }
 
-    return RetVal<AudioSignalChanges>::make_ok(m_audioIO->audioSignalChanges(trackId));
+    return make_ret(Err::InvalidTrackId);
 }
 
 RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
@@ -588,6 +594,17 @@ async::Promise<Ret> EnginePlayback::saveSoundTrack(io::IODevice& dstDevice, cons
     });
 }
 
+bool EnginePlayback::hasPendingChunks(const TrackId trackId) const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    if (TrackPtr t = track(trackId)) {
+        return t->inputHandler && t->inputHandler->hasPendingChunks();
+    }
+
+    return false;
+}
+
 void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> completed)
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
@@ -595,12 +612,12 @@ void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> compl
     auto soundsInProgress = std::make_shared<size_t>(0);
 
     for (TrackId trackId : trackIdList().val) {
-        if (!isOnlineAudioResource(m_audioIO->inputParams(trackId).val.resourceMeta)) {
+        if (!isOnlineAudioResource(inputParams(trackId).val.resourceMeta)) {
             continue;
         }
 
-        InputProcessingProgress inputProgress = m_audioIO->inputProcessingProgress(trackId);
-        if (!inputProgress.isStarted && !m_audioIO->hasPendingChunks(trackId)) {
+        InputProcessingProgress inputProgress = inputProcessingProgress(trackId).val;
+        if (!inputProgress.isStarted && !hasPendingChunks(trackId)) {
             continue;
         }
 
@@ -621,7 +638,7 @@ void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> compl
             const size_t tracksBeingProcessedCount = this->tracksBeingProcessedCount();
 
             if (status.status == InputProcessingProgress::Status::Finished) {
-                m_audioIO->inputProcessingProgress(trackId).processedChannel.disconnect(this);
+                inputProcessingProgress(trackId).val.processedChannel.disconnect(this);
             }
 
             if (tracksBeingProcessedCount == 0) {
@@ -645,8 +662,8 @@ void EnginePlayback::listenInputProcessing(std::function<void(const Ret&)> compl
         m_saveSoundTracksProgress.aborted.disconnect(this);
 
         for (TrackId trackId : trackIdList().val) {
-            if (isOnlineAudioResource(m_audioIO->inputParams(trackId).val.resourceMeta)) {
-                m_audioIO->inputProcessingProgress(trackId).processedChannel.disconnect(this);
+            if (isOnlineAudioResource(inputParams(trackId).val.resourceMeta)) {
+                inputProcessingProgress(trackId).val.processedChannel.disconnect(this);
             }
         }
 
@@ -662,7 +679,7 @@ size_t EnginePlayback::tracksBeingProcessedCount() const
     size_t count = 0;
 
     for (TrackId trackId : trackIdList().val) {
-        if (m_audioIO->inputProcessingProgress(trackId).isStarted || m_audioIO->hasPendingChunks(trackId)) {
+        if (inputProcessingProgress(trackId).val.isStarted || hasPendingChunks(trackId)) {
             count++;
         }
     }
