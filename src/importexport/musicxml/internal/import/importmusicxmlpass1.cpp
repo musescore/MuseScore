@@ -711,6 +711,7 @@ static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreakType 
 {
     LayoutBreak* lb = Factory::createLayoutBreak(mb);
     lb->setLayoutBreakType(type);
+    lb->setTrack(0);
     mb->add(lb);
 }
 
