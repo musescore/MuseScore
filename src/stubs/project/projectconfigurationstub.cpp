@@ -301,6 +301,11 @@ QUrl ProjectConfigurationStub::supportForumUrl() const
     return QUrl();
 }
 
+QUrl ProjectConfigurationStub::dotComBugReportUrl() const
+{
+    return QUrl();
+}
+
 bool ProjectConfigurationStub::openDetailedProjectUploadedDialog() const
 {
     return false;
