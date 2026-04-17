@@ -33,7 +33,7 @@
 #include "../iaudioengine.h"
 #include "../iaudioengineconfiguration.h"
 #include "../iclock.h"
-#include "../isequenceplayer.h"
+#include "../iengineplayer.h"
 
 #include "track.h"
 #include "igettracks.h"
@@ -151,7 +151,7 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
     TracksMap m_tracks;
-    ISequencePlayerPtr m_player = nullptr;
+    IEnginePlayerPtr m_player = nullptr;
     IClockPtr m_clock = nullptr;
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;

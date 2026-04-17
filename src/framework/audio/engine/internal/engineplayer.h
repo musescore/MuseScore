@@ -20,26 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_SEQUENCEPLAYER_H
-#define MUSE_AUDIO_SEQUENCEPLAYER_H
+#ifndef MUSE_AUDIO_ENGINEPLAYER_H
+#define MUSE_AUDIO_ENGINEPLAYER_H
 
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "../iaudioengine.h"
 
-#include "../isequenceplayer.h"
+#include "../iengineplayer.h"
 #include "../iclock.h"
 
 #include "igettracks.h"
 
 namespace muse::audio::engine {
-class SequencePlayer : public ISequencePlayer, public async::Asyncable
+class EnginePlayer : public IEnginePlayer, public async::Asyncable
 {
     GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
-    explicit SequencePlayer(IGetTracks* getTracks, IClockPtr clock);
+    explicit EnginePlayer(IGetTracks* getTracks, IClockPtr clock);
 
     async::Promise<Ret> prepareToPlay() override;
 
@@ -76,4 +76,4 @@ private:
 };
 }
 
-#endif // MUSE_AUDIO_SEQUENCEPLAYER_H
+#endif // MUSE_AUDIO_ENGINEPLAYER_H

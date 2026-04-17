@@ -27,7 +27,7 @@
 
 #include "clock.h"
 #include "eventaudiosource.h"
-#include "sequenceplayer.h"
+#include "engineplayer.h"
 
 #include "muse_framework_config.h"
 #ifdef MUSE_MODULE_AUDIO_EXPORT
@@ -49,7 +49,7 @@ void EnginePlayback::init()
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock = std::make_shared<Clock>();
-    m_player = std::make_shared<SequencePlayer>(this, m_clock);
+    m_player = std::make_shared<EnginePlayer>(this, m_clock);
 
     audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
         m_prevActiveTrackId = INVALID_TRACK_ID;
