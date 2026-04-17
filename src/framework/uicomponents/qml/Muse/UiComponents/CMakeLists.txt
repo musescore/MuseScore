@@ -46,6 +46,10 @@ qt_add_qml_module(muse_uicomponents_qml
         filter.h
         filtervalue.cpp
         filtervalue.h
+        fuzzyfilter.cpp
+        fuzzyfilter.h
+        fuzzyscoresorter.cpp
+        fuzzyscoresorter.h
         iconview.cpp
         iconview.h
         internal/focuslistener.cpp

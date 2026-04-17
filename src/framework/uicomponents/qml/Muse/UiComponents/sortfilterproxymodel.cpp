@@ -160,13 +160,20 @@ QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
 
 void SortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
-    if (m_subSourceModelConnection) {
-        disconnect(m_subSourceModelConnection);
-    }
+    disconnect(m_subSourceModelConnection);
+    disconnect(m_sourceModelAboutToBeResetConnection);
+    disconnect(m_sourceDataChangedConnection);
 
     QSortFilterProxyModel::setSourceModel(sourceModel);
 
     updateRoleMap();
+
+    if (sourceModel) {
+        m_sourceDataChangedConnection = connect(sourceModel, &QAbstractItemModel::dataChanged,
+                                                this, &SortFilterProxyModel::invalidateFilters);
+        m_sourceModelAboutToBeResetConnection = connect(sourceModel, &QAbstractItemModel::modelAboutToBeReset,
+                                                        this, &SortFilterProxyModel::invalidateFilters);
+    }
 
     emit sourceModelRoleNamesChanged();
 
@@ -223,6 +230,14 @@ Sorter* SortFilterProxyModel::currentSorter() const
     }
 
     return nullptr;
+}
+
+void SortFilterProxyModel::invalidateFilters() const
+{
+    const QList<Filter*> filters = m_filters.list();
+    for (auto* filter : filters) {
+        filter->invalidate();
+    }
 }
 
 void SortFilterProxyModel::updateRoleMap()

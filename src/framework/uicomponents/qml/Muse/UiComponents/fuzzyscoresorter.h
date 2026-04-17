@@ -22,42 +22,33 @@
 
 #pragma once
 
+#include <QMetaObject>
 #include <QObject>
+#include <QPointer>
 
 #include <QtQmlIntegration/qqmlintegration.h>
 
-class QModelIndex;
+#include "fuzzyfilter.h"
+#include "sorter.h"
 
 namespace muse::uicomponents {
-class SortFilterProxyModel;
-
-class Filter : public QObject
+class FuzzyScoreSorter : public Sorter
 {
     Q_OBJECT
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
-    /// Determines whether the SortFilterProxyModel should react asynchronously to the `dataChanged` signal.
-    Q_PROPERTY(bool async READ async WRITE setAsync NOTIFY dataChanged)
+    Q_PROPERTY(muse::uicomponents::FuzzyFilter * fuzzyFilter READ fuzzyFilter WRITE setFuzzyFilter NOTIFY dataChanged REQUIRED)
 
-    QML_ELEMENT;
-    QML_UNCREATABLE("")
+    QML_ELEMENT
 
 public:
-    explicit Filter(QObject* parent = nullptr);
+    explicit FuzzyScoreSorter(QObject* parent = nullptr);
 
-    virtual bool acceptsRow(int sourceRow, const QModelIndex& sourceParent, const SortFilterProxyModel&) = 0;
-    virtual void invalidate();
+    bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) override;
 
-    bool enabled() const;
-    void setEnabled(bool enabled);
-
-    bool async() const;
-    void setAsync(bool async);
-
-signals:
-    void dataChanged();
+    FuzzyFilter* fuzzyFilter() const;
+    void setFuzzyFilter(FuzzyFilter*);
 
 private:
-    bool m_enabled = true;
-    bool m_async = false;
+    QPointer<FuzzyFilter> m_fuzzyFilter;
+    QMetaObject::Connection m_filterChangedConnection;
 };
 }

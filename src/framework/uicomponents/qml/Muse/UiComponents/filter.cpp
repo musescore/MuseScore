@@ -28,6 +28,10 @@ Filter::Filter(QObject* parent)
 {
 }
 
+void Filter::invalidate()
+{
+}
+
 bool Filter::enabled() const
 {
     return m_enabled;

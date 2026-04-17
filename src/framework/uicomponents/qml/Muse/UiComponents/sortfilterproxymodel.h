@@ -77,6 +77,7 @@ protected:
 
 private:
     Sorter* currentSorter() const;
+    void invalidateFilters() const;
     void updateRoleMap();
 
     QHash<QByteArray, int> m_roles;
@@ -88,5 +89,7 @@ private:
     QList<int> m_alwaysExcludeIndices;
 
     QMetaObject::Connection m_subSourceModelConnection;
+    QMetaObject::Connection m_sourceDataChangedConnection;
+    QMetaObject::Connection m_sourceModelAboutToBeResetConnection;
 };
 }
