@@ -35,7 +35,7 @@ namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
 public:
-    explicit VstFxProcessor(IVstPluginInstancePtr instance, const muse::audio::AudioFxParams& params);
+    explicit VstFxProcessor(IVstPluginInstancePtr instance, const muse::audio::AudioFxParams& params, const modularity::ContextPtr& iocCtx);
 
     void init(const audio::OutputSpec& spec);
 

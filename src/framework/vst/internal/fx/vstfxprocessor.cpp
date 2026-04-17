@@ -27,9 +27,10 @@ using namespace muse::vst;
 using namespace muse::audio;
 using namespace muse::audioplugins;
 
-VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr instance, const AudioFxParams& params)
+VstFxProcessor::VstFxProcessor(IVstPluginInstancePtr instance, const AudioFxParams& params,
+                               const modularity::ContextPtr& iocCtx)
     : m_pluginPtr(instance),
-    m_vstAudioClient(std::make_unique<VstAudioClient>()),
+    m_vstAudioClient(std::make_unique<VstAudioClient>(iocCtx)),
     m_params(params)
 {
 }

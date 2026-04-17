@@ -36,6 +36,7 @@
 
 #include "internal/audioconfiguration.h"
 #include "internal/audioactionscontroller.h"
+#include "internal/transporteventscontroller.h"
 #include "internal/audiouiactions.h"
 #include "internal/startaudiocontroller.h"
 #include "internal/playback.h"
@@ -63,6 +64,7 @@ void AudioModule::registerExports()
 {
     m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
+    m_transportEventsController = std::make_shared<TransportEventsController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_audioDriverController = std::make_shared<AudioDriverController>(iocContext());
 
@@ -113,6 +115,8 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     }, Ticker::Mode::Repeat);
 #endif
 
+    m_transportEventsController->init(); //! NOTE: init AFTER RPC
+
     m_mainPlayback->init();
 
     m_startAudioController->init();
@@ -140,6 +144,7 @@ void AudioModule::onDeinit()
     }
 
     m_mainPlayback->deinit();
+    m_transportEventsController->deinit();
     m_rpcTicker.stop();
 
     m_startAudioController->stopAudioProcessing();

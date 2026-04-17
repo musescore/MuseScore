@@ -21,7 +21,7 @@
 set(MODULE_TEST muse_midiremote_test)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mmc_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mmcdecoder_tests.cpp
     )
 
 set(MODULE_TEST_LINK

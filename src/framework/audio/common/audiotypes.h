@@ -554,4 +554,27 @@ enum SaveSoundTrackStage {
 };
 
 using SaveSoundTrackProgress = async::Channel<int64_t /*current*/, int64_t /*total*/, SaveSoundTrackStage>;
+
+struct TransportEvent {
+    enum class Type : unsigned char {
+        Unknown = 0,
+        Play,
+        Pause,
+        Stop,
+        Seek,
+    };
+
+    struct SeekData {
+        secs_t position = 0.;
+    };
+
+    static TransportEvent play() { return { Type::Play, {} }; }
+    static TransportEvent pause() { return { Type::Pause, {} }; }
+    static TransportEvent stop() { return { Type::Stop, {} }; }
+    static TransportEvent seek(secs_t pos) { return { Type::Seek, SeekData { pos } }; }
+
+    Type type = Type::Unknown;
+    std::variant<std::monostate, SeekData> data;
+};
+using TransportEvents = std::vector<TransportEvent>;
 }

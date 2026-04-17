@@ -35,6 +35,7 @@ class IRpcChannel;
 namespace muse::audio {
 class AudioConfiguration;
 class AudioActionsController;
+class TransportEventsController;
 class StartAudioController;
 class Playback;
 class ISoundFontController;
@@ -54,6 +55,7 @@ public:
 private:
     std::shared_ptr<AudioConfiguration> m_configuration;
     std::shared_ptr<AudioActionsController> m_actionsController;
+    std::shared_ptr<TransportEventsController> m_transportEventsController;
     std::shared_ptr<StartAudioController> m_startAudioController;
     std::shared_ptr<Playback> m_mainPlayback;
     std::shared_ptr<ISoundFontController> m_soundFontController;

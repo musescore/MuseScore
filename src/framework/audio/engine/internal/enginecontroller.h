@@ -46,6 +46,7 @@ class AudioEngine;
 class WebAudioChannel;
 class EnginePlayback;
 class EngineRpcController;
+class TransportEventsDispatcher;
 
 class EngineController : public IEngineController, public muse::Contextable
 {
@@ -77,5 +78,6 @@ private:
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
     std::shared_ptr<synth::SoundFontRepository> m_soundFontRepository;
     std::shared_ptr<WebAudioChannel> m_webAudioChannel;
+    std::shared_ptr<TransportEventsDispatcher> m_transportEventsDispatcher;
 };
 }

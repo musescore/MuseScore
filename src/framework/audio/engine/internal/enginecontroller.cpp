@@ -42,6 +42,8 @@
 #include "synthesizers/synthresolver.h"
 #include "synthesizers/soundfontrepository.h"
 
+#include "transporteventsdispatcher.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -94,6 +96,7 @@ void EngineController::registerExports()
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
+    m_transportEventsDispatcher = std::make_shared<TransportEventsDispatcher>(iocContext());
 
     globalIoc()->registerExport<IAudioEngineConfiguration>(moduleName(), m_configuration);
     globalIoc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
@@ -101,6 +104,7 @@ void EngineController::registerExports()
     globalIoc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
     globalIoc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
     globalIoc()->registerExport<ISoundFontRepository>(moduleName(), m_soundFontRepository);
+    globalIoc()->registerExport<ITransportEventsDispatcher>(moduleName(), m_transportEventsDispatcher);
 }
 
 void EngineController::unregisterExports()
@@ -112,6 +116,7 @@ void EngineController::unregisterExports()
     globalIoc()->unregister<IFxResolver>(moduleName());
     globalIoc()->unregister<ISynthResolver>(moduleName());
     globalIoc()->unregister<ISoundFontRepository>(moduleName());
+    globalIoc()->unregister<ITransportEventsDispatcher>(moduleName());
 }
 
 void EngineController::onStartRunning()
@@ -148,6 +153,8 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     m_synthResolver->init(m_configuration->defaultAudioInputParams(), outputSpec);
 
     m_playback->init();
+
+    m_transportEventsDispatcher->init();
 }
 
 void EngineController::deinit()

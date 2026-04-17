@@ -97,6 +97,8 @@ private:
 
     bool useMultithreading() const;
 
+    void updateShouldProcessMasterFxDuringSilence();
+
     void notifyAboutAudioSignalChanges();
     void notifyNoAudioSignal();
 

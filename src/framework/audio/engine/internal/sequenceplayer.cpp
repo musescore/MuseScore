@@ -85,6 +85,10 @@ void SequencePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    if (playbackStatus() == PlaybackStatus::Running) {
+        return;
+    }
+
     m_clock->setCountDown(secsToMicrosecs(delay));
     m_countDownIsSet = !delay.is_zero();
     audioEngine()->setMode(RenderMode::RealTimeMode);
@@ -106,6 +110,10 @@ void SequencePlayer::stop()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    if (playbackStatus() == PlaybackStatus::Stopped) {
+        return;
+    }
+
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->stop();
     m_notYetReadyToPlayTrackIdSet.clear();
@@ -115,6 +123,10 @@ void SequencePlayer::pause()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    if (playbackStatus() == PlaybackStatus::Paused) {
+        return;
+    }
+
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->pause();
     m_notYetReadyToPlayTrackIdSet.clear();
@@ -123,6 +135,10 @@ void SequencePlayer::pause()
 void SequencePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
+
+    if (playbackStatus() == PlaybackStatus::Running) {
+        return;
+    }
 
     m_clock->setCountDown(secsToMicrosecs(delay));
     m_countDownIsSet = !delay.is_zero();
