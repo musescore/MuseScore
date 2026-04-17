@@ -33,11 +33,10 @@
 #include "../iaudioengine.h"
 #include "../iaudioengineconfiguration.h"
 #include "../iclock.h"
-#include "../isequenceio.h"
 #include "../isequenceplayer.h"
 
-#include "igettracks.h"
 #include "track.h"
+#include "igettracks.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter;
@@ -131,14 +130,15 @@ private:
     void ensureMixerSubscriptions();
 
     TrackId newTrackId() const;
+    void doAddTrack(const TrackPtr& track);
+
     void onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess);
 
     // IGetTracks
     TrackPtr track(const TrackId id) const override;
     const TracksMap& allTracks() const override;
-    async::Channel<TrackPtr> trackAboutToBeAdded() const override;
-    async::Channel<TrackPtr> trackAboutToBeRemoved() const override;
 
+    bool hasPendingChunks(const TrackId id) const;
     void listenInputProcessing(std::function<void(const Ret&)> completed);
     size_t tracksBeingProcessedCount() const;
 
@@ -152,10 +152,7 @@ private:
 
     TracksMap m_tracks;
     ISequencePlayerPtr m_player = nullptr;
-    ISequenceIOPtr m_audioIO = nullptr;
     IClockPtr m_clock = nullptr;
-    async::Channel<TrackPtr> m_trackAboutToBeAdded;
-    async::Channel<TrackPtr> m_trackAboutToBeRemoved;
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 
