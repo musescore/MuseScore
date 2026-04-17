@@ -46,7 +46,7 @@ private:
     static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
     static std::vector<TextBase*> collectAllSystemText(const System* system);
 
-    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment, const SegmentType type);
+    static void computeSlurTieMasks(SlurTieSegment* slurTieSegment);
 
     static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding);
 
