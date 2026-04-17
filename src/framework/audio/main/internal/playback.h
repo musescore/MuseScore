@@ -55,7 +55,7 @@ public:
     async::Promise<bool> initPlayback() override;
     void deinitPlayback() override;
 
-    // 2. Setup tracks for Sequence
+    // 2. Setup tracks
     async::Promise<TrackIdList> trackIdList() const override;
     async::Promise<RetVal<TrackName> > trackName(const TrackId trackId) const override;
 
@@ -83,10 +83,10 @@ public:
     void clearCache(const TrackId trackId) const override;
     void clearSources() override;
 
-    // 3. Play Sequence
+    // 3. Play
     IPlayerPtr player() const override;
 
-    // 4. Adjust a Sequence output
+    // 4. Adjust output
     async::Promise<AudioOutputParams> outputParams(const TrackId trackId) const override;
     void setOutputParams(const TrackId trackId, const AudioOutputParams& params) override;
     async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
@@ -115,7 +115,7 @@ private:
     async::Channel<TrackId, AudioOutputParams> m_outputParamsChanged;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
-    mutable std::map<TrackSequenceId, SaveSoundTrackProgress> m_saveSoundTrackProgressChannels;
+    mutable bool m_saveSoundTrackProgressStreamInited = false;
     async::Channel<int64_t, int64_t, SaveSoundTrackStage> m_saveSoundTrackProgressStream;
     mutable rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sequenceplayer.h"
+#include "engineplayer.h"
 
 #include "audio/common/audiosanitizer.h"
 
@@ -31,7 +31,7 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::async;
 
-SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
+EnginePlayer::EnginePlayer(IGetTracks* getTracks, IClockPtr clock)
     : m_getTracks(getTracks), m_clock(clock)
 {
     m_clock->seekOccurred().onNotify(this, [this]() {
@@ -54,7 +54,7 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
     });
 }
 
-async::Promise<Ret> SequencePlayer::prepareToPlay()
+async::Promise<Ret> EnginePlayer::prepareToPlay()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -67,7 +67,7 @@ async::Promise<Ret> SequencePlayer::prepareToPlay()
     });
 }
 
-void SequencePlayer::play(const secs_t delay)
+void EnginePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -77,7 +77,7 @@ void SequencePlayer::play(const secs_t delay)
     m_clock->start();
 }
 
-void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
+void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -88,7 +88,7 @@ void SequencePlayer::seek(const secs_t newPosition, const bool flushSound)
     m_flushSoundOnSeek = true;
 }
 
-void SequencePlayer::stop()
+void EnginePlayer::stop()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -97,7 +97,7 @@ void SequencePlayer::stop()
     m_notYetReadyToPlayTrackIdSet.clear();
 }
 
-void SequencePlayer::pause()
+void EnginePlayer::pause()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -106,7 +106,7 @@ void SequencePlayer::pause()
     m_notYetReadyToPlayTrackIdSet.clear();
 }
 
-void SequencePlayer::resume(const secs_t delay)
+void EnginePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -116,7 +116,7 @@ void SequencePlayer::resume(const secs_t delay)
     m_clock->resume();
 }
 
-msecs_t SequencePlayer::duration() const
+msecs_t EnginePlayer::duration() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -127,56 +127,56 @@ msecs_t SequencePlayer::duration() const
     return m_clock->timeDuration();
 }
 
-void SequencePlayer::setDuration(const msecs_t duration)
+void EnginePlayer::setDuration(const msecs_t duration)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock->setTimeDuration(duration * 1000);
 }
 
-Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
+Ret EnginePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     return m_clock->setTimeLoop(fromMsec * 1000, toMsec * 1000);
 }
 
-void SequencePlayer::resetLoop()
+void EnginePlayer::resetLoop()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_clock->resetTimeLoop();
 }
 
-secs_t SequencePlayer::playbackPosition() const
+secs_t EnginePlayer::playbackPosition() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     return microsecsToSecs(m_clock->currentTime());
 }
 
-Channel<secs_t> SequencePlayer::playbackPositionChanged() const
+Channel<secs_t> EnginePlayer::playbackPositionChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     return m_clock->timeChanged();
 }
 
-PlaybackStatus SequencePlayer::playbackStatus() const
+PlaybackStatus EnginePlayer::playbackStatus() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     return m_clock->status();
 }
 
-Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
+Channel<PlaybackStatus> EnginePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     return m_clock->statusChanged();
 }
 
-void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
+void EnginePlayer::seekAllTracks(const msecs_t newPositionMsecs)
 {
     IF_ASSERT_FAILED(m_getTracks) {
         return;
@@ -189,7 +189,7 @@ void SequencePlayer::seekAllTracks(const msecs_t newPositionMsecs)
     }
 }
 
-void SequencePlayer::flushAllTracks()
+void EnginePlayer::flushAllTracks()
 {
     IF_ASSERT_FAILED(m_getTracks) {
         return;
@@ -202,7 +202,7 @@ void SequencePlayer::flushAllTracks()
     }
 }
 
-void SequencePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback)
+void EnginePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

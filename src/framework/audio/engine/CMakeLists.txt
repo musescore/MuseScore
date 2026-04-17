@@ -41,8 +41,7 @@ else()
         iaudioengine.h
         iaudiosource.h
         iclock.h
-        itracksequence.h
-        isequenceplayer.h
+        iengineplayer.h
         ifxprocessor.h
         ifxresolver.h
         isynthesizer.h
@@ -70,8 +69,8 @@ else()
         internal/clock.cpp
         internal/clock.h
         internal/igetplaybackposition.h
-        internal/sequenceplayer.cpp
-        internal/sequenceplayer.h
+        internal/engineplayer.cpp
+        internal/engineplayer.h
         internal/samplerateconvertor.cpp
         internal/samplerateconvertor.h
         internal/track.h

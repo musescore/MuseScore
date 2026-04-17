@@ -531,7 +531,7 @@ void EngineRpcController::init()
         SaveSoundTrackProgress ch = playback()->saveSoundTrackProgressChanged();
         ch.onReceive(this, [this](int64_t current, int64_t total, SaveSoundTrackStage stage) {
             ONLY_AUDIO_RPC_THREAD;
-            m_saveSoundTrackProgressStream.send(DUMMY_SEQUENCE_ID, current, total, stage);
+            m_saveSoundTrackProgressStream.send(current, total, stage);
         });
 
         if (m_saveSoundTrackProgressStreamId == 0) {

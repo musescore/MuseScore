@@ -29,10 +29,10 @@
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class ISequencePlayer
+class IEnginePlayer
 {
 public:
-    virtual ~ISequencePlayer() = default;
+    virtual ~IEnginePlayer() = default;
 
     virtual async::Promise<Ret> prepareToPlay() = 0;
 
@@ -53,5 +53,5 @@ public:
     virtual secs_t playbackPosition() const = 0;
     virtual async::Channel<secs_t> playbackPositionChanged() const = 0;
 };
-using ISequencePlayerPtr = std::shared_ptr<ISequencePlayer>;
+using IEnginePlayerPtr = std::shared_ptr<IEnginePlayer>;
 }

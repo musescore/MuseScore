@@ -33,7 +33,7 @@
 #include "../iaudioengine.h"
 #include "../iaudioengineconfiguration.h"
 #include "../iclock.h"
-#include "../isequenceplayer.h"
+#include "../iengineplayer.h"
 
 #include "track.h"
 #include "igettracks.h"
@@ -103,7 +103,7 @@ public:
     secs_t playbackPosition() const override;
     async::Channel<secs_t> playbackPositionChanged() const override;
 
-    // 4. Adjust a Sequence output
+    // 4. Adjust output
     RetVal<AudioOutputParams> outputParams(const TrackId trackId) const override;
     void setOutputParams(const TrackId trackId, const AudioOutputParams& params) override;
     async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
@@ -151,7 +151,7 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
     TracksMap m_tracks;
-    ISequencePlayerPtr m_player = nullptr;
+    IEnginePlayerPtr m_player = nullptr;
     IClockPtr m_clock = nullptr;
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;

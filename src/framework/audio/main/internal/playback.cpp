@@ -84,15 +84,6 @@ void Playback::init()
         }
         m_masterOutputParamsChanged.send(params);
     });
-
-    m_saveSoundTrackProgressStream.onReceive(this, [this](int64_t current, int64_t total,
-                                                          SaveSoundTrackStage stage) {
-        TrackSequenceId sequenceId = DUMMY_SEQUENCE_ID;
-        auto it = m_saveSoundTrackProgressChannels.find(sequenceId);
-        if (it != m_saveSoundTrackProgressChannels.end()) {
-            it->second.send(current, total, stage);
-        }
-    });
 }
 
 void Playback::deinit()
@@ -145,7 +136,7 @@ Promise<bool> Playback::initPlayback()
 void Playback::deinitPlayback()
 {
     ONLY_AUDIO_MAIN_THREAD;
-    m_saveSoundTrackProgressChannels.erase(DUMMY_SEQUENCE_ID);
+    m_saveSoundTrackProgressStream = SaveSoundTrackProgress();
 }
 
 IPlayerPtr Playback::player() const
@@ -155,7 +146,7 @@ IPlayerPtr Playback::player() const
     return p;
 }
 
-// 2. Setup tracks for Sequence
+// 2. Setup tracks
 async::Promise<TrackIdList> Playback::trackIdList() const
 {
     ONLY_AUDIO_MAIN_THREAD;
@@ -174,7 +165,7 @@ async::Promise<TrackIdList> Playback::trackIdList() const
                 (void)reject(ret.ret.code(), ret.ret.text());
             }
         });
-        return Promise<TrackSequenceIdList>::dummy_result();
+        return Promise<TrackIdList>::dummy_result();
     }, PromiseType::AsyncByBody);
 }
 
@@ -430,7 +421,7 @@ void Playback::clearSources()
     channel()->send(msg);
 }
 
-// 4. Adjust a Sequence output
+// 4. Adjust output
 
 async::Promise<AudioOutputParams> Playback::outputParams(const TrackId trackId) const
 {
@@ -609,15 +600,9 @@ void Playback::abortSavingAllSoundTracks()
 
 SaveSoundTrackProgress Playback::saveSoundTrackProgressChanged() const
 {
-    TrackSequenceId sequenceId = DUMMY_SEQUENCE_ID;
-    auto it = m_saveSoundTrackProgressChannels.find(sequenceId);
-    if (it == m_saveSoundTrackProgressChannels.end()) {
-        it = m_saveSoundTrackProgressChannels.insert({ sequenceId, SaveSoundTrackProgress() }).first;
-
-        SaveSoundTrackProgress ch;
-
-        Msg msg = rpc::make_request(Method::GetSaveSoundTrackProgress, RpcPacker::pack(sequenceId));
-        channel()->send(msg, [this, ch](const Msg& res) {
+    if (!m_saveSoundTrackProgressStreamInited) {
+        Msg msg = rpc::make_request(Method::GetSaveSoundTrackProgress);
+        channel()->send(msg, [this](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             StreamId streamId = 0;
             IF_ASSERT_FAILED(RpcPacker::unpack(res.data, streamId)) {
@@ -633,9 +618,11 @@ SaveSoundTrackProgress Playback::saveSoundTrackProgressChanged() const
 
             assert(m_saveSoundTrackProgressStreamId == streamId);
         });
+
+        m_saveSoundTrackProgressStreamInited = true;
     }
 
-    return it->second;
+    return m_saveSoundTrackProgressStream;
 }
 
 void Playback::clearAllFx()
