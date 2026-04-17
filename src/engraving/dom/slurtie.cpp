@@ -184,6 +184,7 @@ std::vector<PointF> SlurTieSegment::gripsPositions(const EditData&) const
 bool SlurTieSegment::isUserModified() const
 {
     return SpannerSegment::isUserModified() || !(visible() && autoplace()
+                                                 && color() == configuration()->defaultColor()
                                                  && offset().isNull()
                                                  && ups(Grip::START).off.isNull()
                                                  && ups(Grip::BEZIER1).off.isNull()

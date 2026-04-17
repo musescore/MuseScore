@@ -82,12 +82,11 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 
         if (maskSlurs || maskTies) {
             for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-                if (!spannerSeg->isSlurTieSegment() || !spannerSeg->isSingleBeginType()
-                    || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
+                if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                     continue;
                 }
                 if ((maskSlurs && spannerSeg->isSlurSegment()) || (maskTies && spannerSeg->isTieSegment())) {
-                    computeSlurTieMasks(toSlurTieSegment(spannerSeg), SegmentType::KeySig | SegmentType::TimeSig);
+                    computeSlurTieMasks(toSlurTieSegment(spannerSeg));
                 }
             }
         }
@@ -363,20 +362,21 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     staffLines->mutldata()->setMask(mask);
 }
 
-void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment, const SegmentType type)
+void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
 {
     TRACEFUNC;
 
     Spanner* spanner = slurTieSegment->spanner();
-    staff_idx_t spannerStaffTrackIdx = spanner->staffIdx() * VOICES;
     std::vector<const EngravingItem*> itemsToMaskOver;
-    for (Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
-        if (!seg->isType(type)) {
+    for (const Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
+        if (!seg->isType(SegmentType::KeySig | SegmentType::TimeSig)
+            || seg->system() != slurTieSegment->system()) {
             continue;
         }
-        EngravingItem* item = seg->element(spannerStaffTrackIdx);
-        if (item) {
-            itemsToMaskOver.push_back(item);
+        for (const EngravingItem* item : seg->elist()) {
+            if (item) {
+                itemsToMaskOver.push_back(item);
+            }
         }
     }
 
