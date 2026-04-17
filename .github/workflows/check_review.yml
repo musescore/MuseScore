@@ -1,0 +1,13 @@
+name: 'Check: Code Review'
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "Review this pull request for code quality, correctness, and security. Analyze the diff, then post your findings as review comments."
+          claude_args: "--max-turns 5"
