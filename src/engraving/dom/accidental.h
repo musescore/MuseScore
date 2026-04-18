@@ -269,7 +269,7 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    //! Default @c Pid::COLOR: parent @c Note::color() when accidentals inherit themed color.
+    //! Default @c Pid::COLOR: sentinel (so resets keep inheritance) when accidentals inherit themed color.
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset

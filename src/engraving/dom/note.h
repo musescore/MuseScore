@@ -33,8 +33,6 @@
 #include "tie.h"
 #include "tiejumppointlist.h"
 
-#include "../types/notecoloringscheme.h"
-
 namespace mu::engraving {
 class Factory;
 class Tie;
@@ -373,9 +371,7 @@ public:
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    //! Default @c Pid::COLOR: style swatch from @c noteColoringSwatchIndex() or TAB fret text color.
     PropertyValue propertyDefault(Pid) const override;
-    //! Reapplies TAB fret text color from style when the staff uses text-style frets.
     void styleChanged() override;
 
     bool mark() const { return m_mark; }

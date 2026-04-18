@@ -68,19 +68,21 @@ double NoteDot::mag() const
 
 /*!
  * Default note-dot properties.
- * For @c Pid::COLOR, when @c Sid::colorApplyToDot is enabled, returns the parent
- * note's themed rendering color via @c Note::color() so dots follow the active coloring scheme.
+ * For @c Pid::COLOR, when @c Sid::colorApplyToDot is enabled, returns the sentinel
+ * @c configuration()->defaultColor() so that resetting restores the "inherit from parent" state;
+ * @c NoteDot::color() resolves the sentinel to the parent @c Note::color() or @c Rest::color()
+ * at draw time.
  */
 PropertyValue NoteDot::propertyDefault(Pid propertyId) const
 {
     if (propertyId == Pid::COLOR) {
         if (note()) {
             if (note()->style().styleV(Sid::colorApplyToDot).toBool()) {
-                return PropertyValue::fromValue(note()->color());
+                return PropertyValue::fromValue(configuration()->defaultColor());
             }
         } else if (rest()) {
             if (rest()->style().styleV(Sid::colorApplyToDot).toBool()) {
-                return rest()->getProperty(Pid::COLOR);
+                return PropertyValue::fromValue(configuration()->defaultColor());
             }
         }
     }

@@ -57,7 +57,7 @@ EngravingItem* Stem::elementBase() const
 /*! Virtual staff index, accounting for cross-staff chord movement. */
 staff_idx_t Stem::vStaffIdx() const
 {
-    return staffIdx() + chord()->staffMove();
+    return staffIdx() + (chord() ? chord()->staffMove() : 0);
 }
 
 /*! True if the parent chord's stem points upward. */
@@ -195,7 +195,9 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 
 /*!
  * Default stem properties.
- * For @c Pid::COLOR, returns the top note's color when @c Sid::colorApplyToStem is on.
+ * For @c Pid::COLOR, returns the sentinel @c configuration()->defaultColor() when
+ * @c Sid::colorApplyToStem is on so that resetting restores the "inherit from note" state;
+ * @c Stem::color() resolves the sentinel to the top note's color at draw time.
  */
 PropertyValue Stem::propertyDefault(Pid id) const
 {
@@ -207,7 +209,7 @@ PropertyValue Stem::propertyDefault(Pid id) const
     case Pid::COLOR:
         if (chord() && !chord()->notes().empty()) {
             if (chord()->upNote()->style().styleV(Sid::colorApplyToStem).toBool()) {
-                return PropertyValue::fromValue(chord()->upNote()->color());
+                return PropertyValue::fromValue(configuration()->defaultColor());
             }
         }
     // fall through

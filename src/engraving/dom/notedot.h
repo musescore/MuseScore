@@ -52,7 +52,7 @@ public:
     //! @return The parent note or rest (see @c parentItem()).
     EngravingItem* elementBase() const override;
 
-    //! Default @c Pid::COLOR: parent @c Note::getProperty / @c Rest default when dots inherit themed color.
+    //! Default @c Pid::COLOR: sentinel (so resets keep inheritance) when dots inherit themed color.
     PropertyValue propertyDefault(Pid propertyId) const override;
     //! Draw color: parent @c Note::color() or rest equivalent when inheriting.
     Color color() const override;

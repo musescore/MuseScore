@@ -867,12 +867,14 @@ void EditStyle::classBegin()
      * a single @c QScrollArea child so the tab scrolls when @c pageStack minimum height is tight.
      */
     {
-        //! Built-in palette rows vs user-edited colors in the preset combo.
+        /*!
+         * Preset row in @c m_noteColorPresetCombo: packaged palettes vs user-edited @c Custom.
+         */
         enum class NoteColorPreset : int {
-            Default = 0,
-            Boomwhackers = 1,
-            FigureNotes = 2,
-            Custom = 3
+            Default = 0,        //!< All-black swatches, @c OneColor scheme, written pitch.
+            Boomwhackers = 1,   //!< Built-in Boomwhackers chromatic colors + concert pitch.
+            FigureNotes = 2,    //!< Built-in Figurenotes (stage 3) colors + written pitch.
+            Custom = 3          //!< Non-packaged colors; list row may be hidden until inferred.
         };
 
         //! Number of visible swatches for @p scheme (7 diatonic modes, otherwise 12 chromatic).
@@ -1030,12 +1032,14 @@ void EditStyle::classBegin()
             NoteColoringScheme coloringScheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt());
             int inferredPreset = static_cast<int>(NoteColorPreset::Custom);
 
-            bool allBlack = true;
             if (coloringScheme == NoteColoringScheme::OneColor) {
-                if (defaultColorLabel->color() != QColor(Qt::black)) {
-                    allBlack = false;
+                // OneColor exposes only @c defaultColorLabel; the 12 hidden swatches are irrelevant here.
+                // A non-black default is never a packaged preset, so classify as Custom without comparing swatches.
+                if (defaultColorLabel->color() == QColor(Qt::black)) {
+                    inferredPreset = static_cast<int>(NoteColorPreset::Default);
                 }
             } else {
+                bool allBlack = true;
                 int numSwatches = swatchCountForScheme(coloringScheme);
                 for (int i = 0; i < numSwatches; ++i) {
                     if (colorLabels[i]->color() != QColor(Qt::black)) {
@@ -1043,26 +1047,25 @@ void EditStyle::classBegin()
                         break;
                     }
                 }
-            }
 
-            if (allBlack) {
-                inferredPreset = static_cast<int>(NoteColorPreset::Default);
-            } else {
-                bool isBoom = true;
-                bool isFig = true;
-                int numSwatches = swatchCountForScheme(coloringScheme);
-                for (int i = 0; i < numSwatches; ++i) {
-                    if (colorLabels[i]->color() != boomwhackerColors[i]) {
-                        isBoom = false;
+                if (allBlack) {
+                    inferredPreset = static_cast<int>(NoteColorPreset::Default);
+                } else {
+                    bool isBoom = true;
+                    bool isFig = true;
+                    for (int i = 0; i < numSwatches; ++i) {
+                        if (colorLabels[i]->color() != boomwhackerColors[i]) {
+                            isBoom = false;
+                        }
+                        if (colorLabels[i]->color() != figurenotesColors[i]) {
+                            isFig = false;
+                        }
                     }
-                    if (colorLabels[i]->color() != figurenotesColors[i]) {
-                        isFig = false;
+                    if (isBoom) {
+                        inferredPreset = static_cast<int>(NoteColorPreset::Boomwhackers);
+                    } else if (isFig) {
+                        inferredPreset = static_cast<int>(NoteColorPreset::FigureNotes);
                     }
-                }
-                if (isBoom) {
-                    inferredPreset = static_cast<int>(NoteColorPreset::Boomwhackers);
-                } else if (isFig) {
-                    inferredPreset = static_cast<int>(NoteColorPreset::FigureNotes);
                 }
             }
 
@@ -1202,7 +1205,7 @@ void EditStyle::classBegin()
 
         /*!
          * Preset combo: applies packaged swatches and aligns the scheme combo with the preset
-         * (Default @c -> OneColor, Boomwhackers/FigureNotes @c -> AbsolutePitchChromatic)
+         * (Default @c -> OneColor, Boomwhackers/FigureNotes @c -> MoveableDoChromatic)
          * so automatic coloring matches the loaded colors.
          * Always calls @c valueChanged(noteColorTheme) at the end (scheme combo updates use
          * @c blockSignals so the styleWidgets mapper does not double-write).
@@ -1231,6 +1234,7 @@ void EditStyle::classBegin()
 
                 m_noteColorRbWritten->setChecked(true);
                 valueChanged(static_cast<int>(StyleId::colorNotesByConcertPitch));
+                updatePresetFromState();
             } else if (preset == NoteColorPreset::Boomwhackers || preset == NoteColorPreset::FigureNotes) {
                 for (int i = 0; i < 12; ++i) {
                     colorLabels[i]->blockSignals(true);
@@ -1238,12 +1242,12 @@ void EditStyle::classBegin()
                     colorLabels[i]->blockSignals(false);
                     valueChanged(static_cast<int>(colorSids[i]));
                 }
-                int chromIdx = m_noteColorSchemeCombo->findData(static_cast<int>(NoteColoringScheme::AbsolutePitchChromatic));
-                if (chromIdx >= 0 && m_noteColorSchemeCombo->currentIndex() != chromIdx) {
+                int moveableChromIdx = m_noteColorSchemeCombo->findData(static_cast<int>(NoteColoringScheme::MoveableDoChromatic));
+                if (moveableChromIdx >= 0 && m_noteColorSchemeCombo->currentIndex() != moveableChromIdx) {
                     m_noteColorSchemeCombo->blockSignals(true);
-                    m_noteColorSchemeCombo->setCurrentIndex(chromIdx);
+                    m_noteColorSchemeCombo->setCurrentIndex(moveableChromIdx);
                     m_noteColorSchemeCombo->blockSignals(false);
-                    updateSwatchesUI(NoteColoringScheme::AbsolutePitchChromatic);
+                    updateSwatchesUI(NoteColoringScheme::MoveableDoChromatic);
                 }
                 if (preset == NoteColorPreset::Boomwhackers) {
                     m_noteColorRbConcert->setChecked(true);
@@ -1251,10 +1255,15 @@ void EditStyle::classBegin()
                     m_noteColorRbWritten->setChecked(true);
                 }
                 valueChanged(static_cast<int>(StyleId::colorNotesByConcertPitch));
+                updatePresetFromState();
             }
             valueChanged(static_cast<int>(StyleId::noteColorTheme));
         });
 
+        /*!
+         * "Reset all color settings": black swatches, @c OneColor theme, factory-default apply-to flags,
+         * written pitch, and @c Default preset; mirrors @c NoteColorPreset::Default handling.
+         */
         connect(m_noteColorResetBtn, &QPushButton::clicked, this, [=]() {
             for (int i = 0; i < 12; ++i) {
                 colorLabels[i]->blockSignals(true);
@@ -1277,23 +1286,23 @@ void EditStyle::classBegin()
             updateSwatchesUI(NoteColoringScheme::OneColor);
 
             m_noteColorCbAccidental->blockSignals(true);
-            m_noteColorCbAccidental->setChecked(true);
+            m_noteColorCbAccidental->setChecked(defaultStyleValue(StyleId::colorApplyToAccidental).toBool());
             m_noteColorCbAccidental->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToAccidental));
             m_noteColorCbStem->blockSignals(true);
-            m_noteColorCbStem->setChecked(false);
+            m_noteColorCbStem->setChecked(defaultStyleValue(StyleId::colorApplyToStem).toBool());
             m_noteColorCbStem->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToStem));
             m_noteColorCbArticulation->blockSignals(true);
-            m_noteColorCbArticulation->setChecked(false);
+            m_noteColorCbArticulation->setChecked(defaultStyleValue(StyleId::colorApplyToArticulation).toBool());
             m_noteColorCbArticulation->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToArticulation));
             m_noteColorCbDot->blockSignals(true);
-            m_noteColorCbDot->setChecked(true);
+            m_noteColorCbDot->setChecked(defaultStyleValue(StyleId::colorApplyToDot).toBool());
             m_noteColorCbDot->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToDot));
             m_noteColorCbBeam->blockSignals(true);
-            m_noteColorCbBeam->setChecked(false);
+            m_noteColorCbBeam->setChecked(defaultStyleValue(StyleId::colorApplyToBeam).toBool());
             m_noteColorCbBeam->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToBeam));
 
@@ -1309,11 +1318,16 @@ void EditStyle::classBegin()
             updatePresetFromState();
         });
 
+        /*!
+         * Re-runs @c updatePresetFromState and @c updateSwatchesUI after @c setValues() or
+         * @c retranslateNoteColorSection() so labels and preset row match the loaded style.
+         */
         m_syncNoteColorUi = [=]() {
             updatePresetFromState();
             updateSwatchesUI(static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt()));
         };
 
+        /*! Defer first sync until the event loop so note-color widgets are fully constructed. */
         QMetaObject::invokeMethod(this, [this]() {
             if (m_syncNoteColorUi) {
                 m_syncNoteColorUi();
@@ -2365,9 +2379,6 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
 //    return current gui value
 //---------------------------------------------------------
 
-/*!
- * Returns the value currently shown in the UI for @p idx, using the widget type from @c MStyle::valueType().
- */
 PropertyValue EditStyle::getValue(StyleId idx)
 {
     const StyleWidget& sw = styleWidget(idx);

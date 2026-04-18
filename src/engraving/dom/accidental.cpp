@@ -494,8 +494,10 @@ PropertyValue Accidental::getProperty(Pid propertyId) const
 
 /*!
  * Default accidental properties.
- * When @p propertyId is @c Pid::COLOR and @c Sid::colorApplyToAccidental is set, returns the parent
- * note's themed rendering color via @c Note::color() so accidentals follow the active coloring scheme.
+ * When @p propertyId is @c Pid::COLOR and @c Sid::colorApplyToAccidental is set, returns the
+ * sentinel @c configuration()->defaultColor() so that resetting restores the "inherit from note"
+ * state instead of snapshotting the currently-themed color. @c Accidental::color() resolves the
+ * sentinel to the parent note's themed color at draw time.
  * Otherwise falls back to @c EngravingItem::propertyDefault().
  */
 PropertyValue Accidental::propertyDefault(Pid propertyId) const
@@ -508,7 +510,7 @@ PropertyValue Accidental::propertyDefault(Pid propertyId) const
     case Pid::ACCIDENTAL_STACKING_ORDER_OFFSET: return 0;
     case Pid::COLOR:
         if (note() && note()->style().styleV(Sid::colorApplyToAccidental).toBool()) {
-            return PropertyValue::fromValue(note()->color());
+            return PropertyValue::fromValue(configuration()->defaultColor());
         }
         return EngravingItem::propertyDefault(propertyId);
     default:

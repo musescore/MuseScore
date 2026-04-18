@@ -12,7 +12,8 @@
  * \file
  * \brief Note coloring schemes and pitch-class helpers for engraving and Edit Style.
  *
- * Defines @c NoteColoringScheme and related pitch-class helpers used by @c Note coloring.
+ * Defines @c NoteColoringScheme, @c MAJOR_SCALE_INTERVALS, and helpers @c tonicPitchClassFromKey /
+ * @c pitchToDegreeIndex used when mapping notes to @c Sid::noteColor0 … @c Sid::noteColor11.
  */
 #pragma once
 
@@ -58,4 +59,4 @@ inline int pitchToDegreeIndex(int pitchClass, int tonicPC)
     }
     return -1;
 }
-}
+} // namespace mu::engraving

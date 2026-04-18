@@ -669,7 +669,9 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 /*!
  * Default beam properties.
  * For @c Pid::COLOR, uses the first chord in @c m_elements (skipping leading rests); when
- * @c Sid::colorApplyToBeam is enabled, returns the top note's color.
+ * @c Sid::colorApplyToBeam is enabled, returns the sentinel @c configuration()->defaultColor()
+ * so that resetting restores the "inherit from note" state; @c Beam::color() resolves the
+ * sentinel to the top note's color at draw time.
  */
 PropertyValue Beam::propertyDefault(Pid id) const
 {
@@ -682,7 +684,7 @@ PropertyValue Beam::propertyDefault(Pid id) const
         if (cr) {
             Chord* chord = toChord(cr);
             if (chord->upNote()->style().styleV(Sid::colorApplyToBeam).toBool()) {
-                return PropertyValue::fromValue(chord->upNote()->color());
+                return PropertyValue::fromValue(configuration()->defaultColor());
             }
         }
     }

@@ -37,7 +37,10 @@ using namespace mu::engraving;
 // Help keeping Sid names and XML tag texts in sync
 #define styleDef(sidAndXmlTag, property) { Sid::sidAndXmlTag, #sidAndXmlTag, property }
 
-//! Default for each @c Sid; keep in sync with @c styledef.h (includes @c noteColorTheme … @c colorNotesByConcertPitch for note coloring).
+/*!
+ * Factory default for every @c Sid row (XML name + typed value). Keep order and entries in sync with @c styledef.h.
+ * Note-color entries (@c noteColorTheme through @c colorNotesByConcertPitch) default the palette and apply-to flags.
+ */
 const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValues { {
     styleDef(pageWidth,                                  210.0 / INCH),
     styleDef(pageHeight,                                 297.0 / INCH),   // A4
@@ -238,26 +241,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(timeSigAcrossY,                             0.0_sp),
 
     styleDef(useStraightNoteFlags,                       false),
-    styleDef(noteColorTheme,                             static_cast<int>(NoteColoringScheme::OneColor)),
-    styleDef(defaultNoteColor,                           PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor0,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor1,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor2,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor3,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor4,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor5,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor6,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor7,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor8,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor9,                                 PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor10,                                PropertyValue::fromValue(Color::BLACK)),
-    styleDef(noteColor11,                                PropertyValue::fromValue(Color::BLACK)),
-    styleDef(colorApplyToAccidental,                     true),
-    styleDef(colorApplyToStem,                           false),
-    styleDef(colorApplyToArticulation,                   false),
-    styleDef(colorApplyToDot,                            true),
-    styleDef(colorApplyToBeam,                           false),
-    styleDef(colorNotesByConcertPitch,                   false),
     styleDef(stemWidth,                                  0.10_sp),
     styleDef(shortenStem,                                true),
     styleDef(stemLength,                                 PropertyValue(3.5)),
@@ -2229,6 +2212,27 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(palmMuteBeginFilledArrowWidth,              0.85_sp),
     styleDef(palmMuteEndFilledArrowHeight,               1.0_sp),
     styleDef(palmMuteEndFilledArrowWidth,                0.85_sp),
+
+    styleDef(noteColorTheme,                             static_cast<int>(NoteColoringScheme::OneColor)),
+    styleDef(defaultNoteColor,                           PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor0,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor1,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor2,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor3,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor4,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor5,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor6,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor7,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor8,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor9,                                 PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor10,                                PropertyValue::fromValue(Color::BLACK)),
+    styleDef(noteColor11,                                PropertyValue::fromValue(Color::BLACK)),
+    styleDef(colorApplyToAccidental,                     true),
+    styleDef(colorApplyToStem,                           false),
+    styleDef(colorApplyToArticulation,                   false),
+    styleDef(colorApplyToDot,                            true),
+    styleDef(colorApplyToBeam,                           false),
+    styleDef(colorNotesByConcertPitch,                   false),
 } };
 
 #undef styleDef

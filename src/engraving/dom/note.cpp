@@ -29,6 +29,8 @@
 
 #include "note.h"
 
+#include "../types/notecoloringscheme.h"
+
 #include <cassert>
 
 #include "translation.h"
@@ -1529,7 +1531,12 @@ void Note::setVisible(bool v)
     }
 }
 
-/*! Validates and finalises note state after being read from a file (pitch clamping, TPC repair, tab fret color). */
+/*!
+ * Validates and finalises note state after being read from a file: pitch clamping, TPC repair, etc.
+ *
+ * @param ctxTick Tick used for staff/key lookups when repairing pitch/TPC.
+ * @param pasteMode When @c true, skips some consistency checks meant for file load only.
+ */
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
@@ -1595,11 +1602,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
                 }
             }
         }
-    }
-
-    const StaffType* st = staffType();
-    if (st && st->isTabStaff() && st->fretUseTextStyle() && color() == configuration()->defaultColor()) {
-        setColor(propertyDefault(Pid::COLOR).value<Color>());
     }
 }
 
@@ -3207,24 +3209,17 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
 }
 
 /*!
- * MIDI pitch used for note coloring: respects style @c Sid::colorNotesByConcertPitch
- * (written vs concert basis) and Ottava linkage offset, consistent with @c Note::epitch() conventions.
+ * Swatch index (0–11) into @c Sid::noteColor0 … @c Sid::noteColor11 for the current @c Sid::noteColorTheme.
+ * Uses the same pitch/TPC basis as @c Note::color() for multi-color themes (when @c m_color is the sentinel).
  *
- * @param n Note whose style and pitch are read.
- * @return Pitch number in the coloring basis.
- */
-static int noteColoringEpitch(const Note* n)
-{
-    bool byConcertPitch = n->style().styleV(Sid::colorNotesByConcertPitch).toBool();
-    return n->pitch() - (byConcertPitch ? 0 : n->transposition()) + n->linkedOttavaPitchOffset();
-}
-
-/*!
- * Swatch index (0-11) into @c Sid::noteColor0 ... @c Sid::noteColor11 for the current @c Sid::noteColorTheme.
- * Matches the logic of @c Note::color() and @c Note::propertyDefault(Pid::COLOR) for non-one-color themes.
+ * @param note Note providing pitch, TPC, staff key, tick, and @c Sid::colorNotesByConcertPitch.
+ * @return Index added to @c Sid::noteColor0 to obtain the style color id (always 0 for @c OneColor).
  *
- * @param note Note providing pitch, TPC, staff key, measure, and style.
- * @return Index added to @c Sid::noteColor0 to obtain the style color id.
+ * @details
+ * - @c AbsolutePitchSimple: diatonic step from TPC (@c tpc2step), seven effective swatches.
+ * - @c AbsolutePitchChromatic: MIDI chroma from effective pitch (concert vs written per style).
+ * - @c MoveableDoSimple: scale degree 0–6 from TPC and local key (@c tpc2degree).
+ * - @c MoveableDoChromatic: chroma relative to the key tonic (@c tonicPitchClassFromKey + offset).
  */
 static int noteColoringSwatchIndex(const Note* note)
 {
@@ -3237,6 +3232,9 @@ static int noteColoringSwatchIndex(const Note* note)
     case NoteColoringScheme::OneColor:
         return 0;
     case NoteColoringScheme::AbsolutePitchSimple:
+        if (colorTpc == Tpc::TPC_INVALID) {
+            return 0;
+        }
         return tpc2step(colorTpc);
     case NoteColoringScheme::AbsolutePitchChromatic: {
         int idx = colorEpitch % 12;
@@ -3249,6 +3247,9 @@ static int noteColoringSwatchIndex(const Note* note)
             key = byConcertPitch ? note->staff()->concertKey(note->tick()) : note->staff()->key(note->tick());
         }
         if (scheme == NoteColoringScheme::MoveableDoSimple) {
+            if (colorTpc == Tpc::TPC_INVALID) {
+                return 0;
+            }
             int idx = tpc2degree(colorTpc, key);
             return idx < 0 ? idx + 7 : idx;
         }
@@ -3268,12 +3269,6 @@ static int noteColoringSwatchIndex(const Note* note)
 //   propertyDefault
 //---------------------------------------------------------
 
-/*!
- * Default property values for notes.
- * @c Pid::COLOR uses tab fret text color on TAB staves with text-style frets; for
- * @c NoteColoringScheme::OneColor uses @c Sid::defaultNoteColor; otherwise the themed swatch from
- * @c noteColoringSwatchIndex() and @c Sid::noteColor0 … @c Sid::noteColor11.
- */
 PropertyValue Note::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
@@ -3321,19 +3316,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
             }
         }
         return EngravingItem::propertyDefault(propertyId);
-    case Pid::COLOR: {
-        const StaffType* st = staffType();
-        if (st && st->isTabStaff() && st->fretUseTextStyle()) {
-            return style().styleV(Sid::tabFretNumberColor);
-        }
-        NoteColoringScheme theme = static_cast<NoteColoringScheme>(style().styleV(Sid::noteColorTheme).toInt());
-        if (theme != NoteColoringScheme::OneColor) {
-            int colorIdx = noteColoringSwatchIndex(this);
-            Sid colorSid = static_cast<Sid>(static_cast<int>(Sid::noteColor0) + colorIdx);
-            return style().styleV(colorSid);
-        }
-        return style().styleV(Sid::defaultNoteColor);
-    }
+    case Pid::COLOR:
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::HIDE_GENERATED_PARENTHESES:
         return false;
     default:
@@ -3346,13 +3330,14 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 //   color
 //---------------------------------------------------------
 
-/*!
- * Note head color: @c Sid::defaultNoteColor for one-color themes, else the palette swatch from
- * @c noteColoringSwatchIndex() when still using the score default color.
- */
 Color Note::color() const
 {
     if (m_color == configuration()->defaultColor()) {
+        const StaffType* st = staffType();
+        if (st && st->isTabStaff() && st->fretUseTextStyle()) {
+            return style().styleV(Sid::tabFretNumberColor).value<Color>();
+        }
+
         NoteColoringScheme scheme = static_cast<NoteColoringScheme>(style().styleV(Sid::noteColorTheme).toInt());
 
         if (scheme == NoteColoringScheme::OneColor) {
@@ -3367,16 +3352,8 @@ Color Note::color() const
     return m_color;
 }
 
-/*!
- * When the score style changes, TAB staves with text-style frets take @c Sid::tabFretNumberColor for @c Pid::COLOR.
- * Other cases defer to @c EngravingItem::styleChanged().
- */
 void Note::styleChanged()
 {
-    const StaffType* st = staffType();
-    if (st && st->isTabStaff() && st->fretUseTextStyle()) {
-        setProperty(Pid::COLOR, style().styleV(Sid::tabFretNumberColor));
-    }
     EngravingItem::styleChanged();
 }
 

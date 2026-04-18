@@ -340,7 +340,9 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 /*!
  * Default articulation properties.
  * For @c Pid::COLOR on a chord-attached articulation, when @c Sid::colorApplyToArticulation is set,
- * returns the top note's color.
+ * returns the sentinel @c configuration()->defaultColor() so that resetting restores the "inherit
+ * from note" state. @c Articulation::color() resolves the sentinel to the color of the chord note
+ * on the articulation's side (@c upNote() when above, @c downNote() when below).
  */
 PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
@@ -358,8 +360,11 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
         ChordRest* cr = chordRest();
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
-            if (chord->upNote()->style().styleV(Sid::colorApplyToArticulation).toBool()) {
-                return PropertyValue::fromValue(chord->upNote()->color());
+            Note* sideNote = up() ? chord->upNote() : chord->downNote();
+            if (sideNote->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                // Return sentinel so resetting keeps "inherit from note"; @c Articulation::color()
+                // resolves the sentinel to @c sideNote->color() at draw time.
+                return PropertyValue::fromValue(configuration()->defaultColor());
             }
         }
     }
@@ -371,8 +376,8 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
 }
 
 /*!
- * Draw color when using the score default: if articulations inherit note colors, returns
- * the top note's color.
+ * Draw color when using the score default: if articulations inherit note colors, returns the color
+ * of the chord note on the articulation's side (top note when above, bottom note when below).
  */
 Color Articulation::color() const
 {
@@ -380,8 +385,9 @@ Color Articulation::color() const
         ChordRest* cr = chordRest();
         if (cr && cr->isChord()) {
             Chord* chord = toChord(cr);
-            if (chord->upNote()->style().styleV(Sid::colorApplyToArticulation).toBool()) {
-                return chord->upNote()->color();
+            Note* sideNote = up() ? chord->upNote() : chord->downNote();
+            if (sideNote->style().styleV(Sid::colorApplyToArticulation).toBool()) {
+                return sideNote->color();
             }
         }
     }

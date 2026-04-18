@@ -140,9 +140,9 @@ public:
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
-    //! Default @c Pid::COLOR: @c chordRootColorDefault() when articulations inherit themed color.
+    //! Default @c Pid::COLOR: sentinel (so resets keep inheritance) when articulations inherit themed color.
     PropertyValue propertyDefault(Pid) const override;
-    //! Draw color: @c chordRootNoteColor() when inheriting themed note color.
+    //! Draw color: @c Chord::upNote()/downNote() color (side-dependent) when inheriting themed note color.
     Color color() const override;
     void resetProperty(Pid id) override;
     Sid getPropertyStyle(Pid id) const override;
