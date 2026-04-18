@@ -116,6 +116,7 @@ Rectangle {
                         return
                     }
 
+
                     listView.positionViewAtIndex(targetIndex, ListView.Contain)
 
                     Qt.callLater(function() {
@@ -128,13 +129,9 @@ Rectangle {
                     event.accepted = true
                 }
 
-                Connections {
-                    target: checkBox.navigation
-
-                    function onActiveChanged() {
-                        if (target.active) {
-                            listView.positionViewAtIndex(index, ListView.Contain)
-                        }
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        listView.positionViewAtIndex(index, ListView.Contain)
                     }
                 }
             }
