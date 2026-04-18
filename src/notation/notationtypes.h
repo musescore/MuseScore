@@ -293,9 +293,9 @@ struct InstrumentKey
     Fraction tick = mu::engraving::Fraction(0, 1);
 };
 
-inline bool isMainInstrumentForPart(const InstrumentKey& instrumentKey, const Part* part)
+inline bool isMainInstrumentForPart(const InstrumentKey& instrumentKey)
 {
-    return instrumentKey.instrumentId == part->instrumentId() && instrumentKey.tick == Part::MAIN_INSTRUMENT_TICK;
+    return instrumentKey.tick == Part::MAIN_INSTRUMENT_TICK;
 }
 
 inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait)
