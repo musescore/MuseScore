@@ -203,11 +203,15 @@ void VstPluginInstance::rescanParams()
 
     muse::audio::AudioUnitConfig updatedConfig;
 
-    component->getState(&m_componentStateBuffer);
-    updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(m_componentStateBuffer.getData(), m_componentStateBuffer.getSize()));
+    if (component->getState(&m_componentStateBuffer) == Steinberg::kResultOk
+        && m_componentStateBuffer.getSize() > 0) {
+        updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(m_componentStateBuffer.getData(), m_componentStateBuffer.getSize()));
+    }
 
-    controller->getState(&m_controllerStateBuffer);
-    updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(m_controllerStateBuffer.getData(), m_controllerStateBuffer.getSize()));
+    if (controller->getState(&m_controllerStateBuffer) == Steinberg::kResultOk
+        && m_controllerStateBuffer.getSize() > 0) {
+        updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(m_controllerStateBuffer.getData(), m_controllerStateBuffer.getSize()));
+    }
 
     m_pluginSettingsChanges.send(std::move(updatedConfig));
 }
@@ -317,26 +321,28 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
     }
 
     auto componentState = config.find(COMPONENT_STATE_KEY.data());
-    if (componentState == config.end()) {
-        return;
-    }
-
     auto controllerState = config.find(CONTROLLER_STATE_KEY.data());
-    if (controllerState == config.end()) {
+
+    if (componentState == config.end() && controllerState == config.end()) {
         return;
     }
 
     try {
-        stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-        component->setState(&m_componentStateBuffer);
-        controller->setComponentState(&m_componentStateBuffer);
+        if (componentState != config.end() && !componentState->second.empty()) {
+            stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+            component->setState(&m_componentStateBuffer);
+            controller->setComponentState(&m_componentStateBuffer);
+        }
     } catch (...) {
         LOGW() << "Unexpected VST plugin exception";
     }
 
     try {
-        stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()), controllerState->second.size());
-        controller->setState(&m_controllerStateBuffer);
+        if (controllerState != config.end() && !controllerState->second.empty()) {
+            stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()),
+                                  controllerState->second.size());
+            controller->setState(&m_controllerStateBuffer);
+        }
     } catch (...) {
         LOGW() << "Unexpected VST plugin exception";
     }
