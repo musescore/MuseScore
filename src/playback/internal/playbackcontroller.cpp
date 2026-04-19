@@ -1058,6 +1058,7 @@ void PlaybackController::resetCurrentSequence()
     playback()->removeSequence(m_currentSequenceId);
 
     m_instrumentTrackIdMap.clear();
+    m_pendingInstrumentTrackAddRequests.clear();
     m_auxTrackIdMap.clear();
 
     m_isRangeSelection = false;
@@ -1073,6 +1074,11 @@ void PlaybackController::resetCurrentSequence()
 
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
+    if (muse::contains(m_instrumentTrackIdMap, instrumentTrackId)
+        || muse::contains(m_pendingInstrumentTrackAddRequests, instrumentTrackId)) {
+        return;
+    }
+
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
         doAddTrack(instrumentTrackId, muse::trc("playback", "Metronome"), onFinished);
         return;
@@ -1114,10 +1120,34 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         return;
     }
 
+    if (muse::contains(m_instrumentTrackIdMap, instrumentTrackId)
+        || muse::contains(m_pendingInstrumentTrackAddRequests, instrumentTrackId)) {
+        return;
+    }
+
     mpe::PlaybackData playbackData = notationPlayback()->trackPlaybackData(instrumentTrackId);
     if (!playbackData.isValid()) {
         return;
     }
+
+    const TrackSequenceId sequenceId = m_currentSequenceId;
+    const uint64_t requestId = ++m_nextInstrumentTrackAddRequestId;
+    m_pendingInstrumentTrackAddRequests[instrumentTrackId] = requestId;
+
+    auto requestIsCurrent = [this, instrumentTrackId, requestId]() {
+        auto it = m_pendingInstrumentTrackAddRequests.find(instrumentTrackId);
+        return it != m_pendingInstrumentTrackAddRequests.cend() && it->second == requestId;
+    };
+
+    auto clearCurrentRequest = [this, instrumentTrackId, requestId]() {
+        auto it = m_pendingInstrumentTrackAddRequests.find(instrumentTrackId);
+        if (it != m_pendingInstrumentTrackAddRequests.cend() && it->second == requestId) {
+            m_pendingInstrumentTrackAddRequests.erase(it);
+            return true;
+        }
+
+        return false;
+    };
 
     AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
     AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
@@ -1147,16 +1177,34 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
     uint64_t playbackKey = notationPlaybackKey();
 
-    playback()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, title, instrumentTrackId, playbackKey, onFinished, originMeta](const TrackId trackId,
-                                                                                           const AudioParams& appliedParams) {
+    playback()->addTrack(sequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
+    .onResolve(this, [this, title, instrumentTrackId, playbackKey, sequenceId, onFinished, originMeta,
+                      requestIsCurrent, clearCurrentRequest](const TrackId trackId, const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         if (notationPlaybackKey() != playbackKey) {
+            const bool wasCurrentRequest = clearCurrentRequest();
+            playback()->removeTrack(sequenceId, trackId);
+            if (wasCurrentRequest) {
+                onFinished();
+            }
+            return;
+        }
+
+        if (!requestIsCurrent()) {
+            playback()->removeTrack(sequenceId, trackId);
+            return;
+        }
+
+        if (!muse::contains(notationPlayback()->existingTrackIdSet(), instrumentTrackId)) {
+            clearCurrentRequest();
+            playback()->removeTrack(sequenceId, trackId);
+            onFinished();
             return;
         }
 
         m_instrumentTrackIdMap.insert({ instrumentTrackId, trackId });
+        clearCurrentRequest();
 
         const bool trackNewlyAdded = !audioSettings()->trackHasExistingOutputParams(instrumentTrackId);
         audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
@@ -1184,7 +1232,11 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
             }
         }
     })
-    .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
+    .onReject(this, [this, instrumentTrackId, onFinished, clearCurrentRequest](int code, const std::string& msg) {
+        if (!clearCurrentRequest()) {
+            return;
+        }
+
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
 
         onFinished();
@@ -1436,6 +1488,7 @@ void PlaybackController::subscribeOnAudioParamsChanges()
 void PlaybackController::setupSequenceTracks()
 {
     m_instrumentTrackIdMap.clear();
+    m_pendingInstrumentTrackAddRequests.clear();
 
     if (!masterNotationParts()) {
         return;

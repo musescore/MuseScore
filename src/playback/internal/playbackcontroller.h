@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
@@ -256,6 +258,8 @@ private:
     muse::async::Asyncable m_seqAsyncReceiver; //! HACK - see PlaybackController::setupSequenceTracks
 
     InstrumentTrackIdMap m_instrumentTrackIdMap;
+    std::unordered_map<engraving::InstrumentTrackId, uint64_t> m_pendingInstrumentTrackAddRequests;
+    uint64_t m_nextInstrumentTrackAddRequestId = 0;
     AuxTrackIdMap m_auxTrackIdMap;
 
     muse::Progress m_loadingProgress;
