@@ -157,10 +157,8 @@ void VstView::deinit()
     m_screenMetricsTimer.stop();
 
     if (m_view) {
-        m_view->setFrame(nullptr);
-#ifndef Q_OS_MAC
         m_view->removed();
-#endif
+        m_view->setFrame(nullptr);
         m_view = nullptr;
 
         m_vstWindow->hide();
