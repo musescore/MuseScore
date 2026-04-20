@@ -80,6 +80,10 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
 
     Q_PROPERTY(QString videoResolution READ videoResolution WRITE setVideoResolution NOTIFY videoResolutionChanged)
 
+    using ViewMode = mu::iex::videoexport::ViewMode;
+    Q_ENUM(ViewMode);
+    Q_PROPERTY(ViewMode viewMode READ viewMode WRITE setViewMode NOTIFY viewModeChanged FINAL)
+
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
     Q_PROPERTY(QVariantList availableSampleFormats READ availableSampleFormats NOTIFY availableSampleFormatsChanged)
@@ -176,6 +180,10 @@ public:
     QString videoResolution() const;
     void setVideoResolution(const QString& resolution);
 
+    Q_INVOKABLE QVariantList availableViewModes() const;
+    ViewMode viewMode() const;
+    void setViewMode(ViewMode v);
+
     Q_INVOKABLE QList<int> availableSampleRates() const;
     int sampleRate() const;
     void setSampleRate(int sampleRate);
@@ -251,6 +259,7 @@ signals:
     void svgIllustratorCompatChanged(bool compat);
 
     void videoResolutionChanged(const QString& resolution);
+    void viewModeChanged(ViewMode v);
 
     void availableSampleRatesChanged();
     void sampleRateChanged(int sampleRate);

@@ -228,6 +228,8 @@ VideoWriter::Config VideoWriter::makeConfig() const
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
+    cfg.viewMode = configuration()->viewMode();
+
     return cfg;
 }
 
@@ -310,11 +312,14 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     score->setLayoutMode(engraving::LayoutMode::PAGE);
 
     score->setShowFrames(false);
-    score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
     score->setShowPageborders(false);
     score->setShowUnprintable(false);
-    score->setShowVBox(false);
+
+    if (config.viewMode == ViewMode::Flexible) {
+        score->setShowInstrumentNames(false);
+        score->setShowVBox(false);
+    }
 
     score->doLayout();
 
@@ -326,6 +331,16 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     }
 
     const Page* page = pages.front();
+
+    if (config.viewMode == ViewMode::PageFull) {
+        double scaleX = config.width / page->width();
+        double scaleY = config.height / page->height();
+        double scale = std::min(scaleX, scaleY);
+        config.canvasDpi = scale * engraving::DPI;
+        config.moveToCenter = muse::PointF(0.5 * (config.width / scale - page->width()), 0.5 * (config.height / scale - page->height()));
+        return result;
+    }
+
     if (score->staves().size() > 3) {
         //! NOTE: Calculate the dpi to display all page elements
         muse::RectF ttbox = page->tbbox();
@@ -355,7 +370,6 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
-    score->doLayout();
     score->update();
 
     return result;
@@ -580,12 +594,20 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
             break;
         }
 
+        if (!page->firstMeasure()) {
+            // Skip pages with no notation
+            continue;
+        }
+
         INotationPainting::Options opt;
         opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
         opt.deviceDpi = config.canvasDpi;
 
-        painter.fillRect(frameRect, Color::WHITE);
+        painter.fillRect(frameRect, Color::BLACK);
+
+        painter.save();
+        painter.translate(config.moveToCenter);
 
         painting->paintPrint(&painter, opt);
 
@@ -596,6 +618,8 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
         muse::RectF cursorAbsRect = cursorRect.translated(-pagePos);
 
         painter.fillRect(cursorAbsRect, CURSOR_COLOR);
+
+        painter.restore();
 
         encoder->encodeImage(frame);
     }
