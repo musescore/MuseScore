@@ -28,7 +28,7 @@
 #include "global/types/config.h"
 #include "modularity/ioc.h"
 #include "internal/iplatformtheme.h"
-#include "io/filewatcher.h"
+#include "io/filesystemwatcher.h"
 
 #include "types/val.h"
 #include "async/asyncable.h"
@@ -145,6 +145,6 @@ private:
 
     Config m_config;
 
-    mutable io::FileWatcher m_themeWatcher;
+    mutable io::FileSystemWatcher m_themeWatcher;
 };
 }
