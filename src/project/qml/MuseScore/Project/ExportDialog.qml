@@ -125,6 +125,8 @@ StyledDialogView {
             }
 
             ExportOptionsView {
+                id: exportOptionsView
+
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
@@ -149,7 +151,7 @@ StyledDialogView {
                         text: qsTrc("project/export", "Export…")
                         buttonRole: ButtonBoxModel.AcceptRole
                         buttonId: ButtonBoxModel.Done
-                        enabled: exportModel.selectionLength > 0
+                        enabled: exportModel.selectionLength > 0 && exportOptionsView.isExportAvailable
                         accentButton: true
 
                         onClicked: {
