@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "macoschildwindowcontroller.h"
+#include "macoswindowlevelcontroller.h"
 
 #include <Cocoa/Cocoa.h>
 #include <QWindow>
@@ -37,35 +37,12 @@ static NSWindow* nsWindowForQWindow(QWindow* window)
     return [nsView window];
 }
 
-void MacOSChildWindowController::attachWindow(QWindow* childWindow, QWindow* parentWindow)
+void MacOSWindowLevelController::setAlwaysAboveApp(QWindow* window)
 {
-    NSWindow* child = nsWindowForQWindow(childWindow);
-    NSWindow* parent = nsWindowForQWindow(parentWindow);
-    if (!child || !parent || child == parent) {
+    NSWindow* nsWindow = nsWindowForQWindow(window);
+    if (!nsWindow) {
         return;
     }
-
-    NSWindow* currentParent = [child parentWindow];
-    if (currentParent && currentParent != parent) {
-        [currentParent removeChildWindow:child];
-    }
-
-    [child orderFront:nil];
-
-    if ([child parentWindow] != parent) {
-        [parent addChildWindow:child ordered:NSWindowAbove];
-    }
-}
-
-void MacOSChildWindowController::detachWindow(QWindow* childWindow)
-{
-    NSWindow* child = nsWindowForQWindow(childWindow);
-    if (!child) {
-        return;
-    }
-
-    NSWindow* parent = [child parentWindow];
-    if (parent) {
-        [parent removeChildWindow:child];
-    }
+    [nsWindow setLevel:NSFloatingWindowLevel];
+    [nsWindow setHidesOnDeactivate:YES];
 }
