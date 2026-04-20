@@ -32,7 +32,7 @@
 #include "ivideoencoder.h"
 
 namespace muse::media {
-class IVideoEncoderResolver : MODULE_CONTEXT_INTERFACE
+class IVideoEncoderResolver : MODULE_GLOBAL_INTERFACE
 {
     INTERFACE_ID(IVideoEncoderResolver)
 

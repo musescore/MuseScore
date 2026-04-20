@@ -28,8 +28,6 @@
 
 #include "project/inotationwritersregister.h"
 
-#include "log.h"
-
 using namespace mu::iex::videoexport;
 using namespace mu::project;
 using namespace muse::modularity;
@@ -43,13 +41,13 @@ std::string VideoExportModule::moduleName() const
 
 void VideoExportModule::registerExports()
 {
-    ioc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
+    globalIoc()->registerExport<VideoExportConfiguration>(moduleName(), s_configuration);
 }
 
 void VideoExportModule::resolveImports()
 {
-    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(globalCtx()));
     }
 }

@@ -47,14 +47,14 @@ class VideoWriter : public project::INotationWriter, public muse::Contextable, p
 {
     muse::GlobalInject<IVideoExportConfiguration> configuration;
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
-    muse::ContextInject<muse::IApplication> application = { this };
-    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncodeResolver = { this };
-    muse::ContextInject<project::INotationWritersRegister> writers = { this };
+    muse::GlobalInject<muse::IApplication> application;
+    muse::GlobalInject<muse::media::IVideoEncoderResolver> videoEncodeResolver;
+    muse::GlobalInject<project::INotationWritersRegister> writers;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
 
 public:
-    explicit VideoWriter(const muse::modularity::ContextPtr& iocCtx)
-        : Contextable(iocCtx) {}
+    VideoWriter(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Contextable(iocCtx) {}
 
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;

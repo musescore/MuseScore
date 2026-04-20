@@ -49,7 +49,13 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        BEATS_COLORS
+        BEATS_COLORS,
+        WAIT_FOR_COMPLETION,
+
+        WITH_AUDIO,
+
+        LEADING_SILENCE_SEC,
+        TRAILING_SILENCE_SEC,
     };
 
     using Options = std::map<OptionKey, muse::Val>;
