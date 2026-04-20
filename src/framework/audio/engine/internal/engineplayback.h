@@ -32,7 +32,6 @@
 #include "../ifxresolver.h"
 #include "../iaudioengine.h"
 #include "../iaudioengineconfiguration.h"
-#include "../iclock.h"
 #include "../iengineplayer.h"
 
 #include "track.h"
@@ -152,7 +151,6 @@ private:
 
     TracksMap m_tracks;
     IEnginePlayerPtr m_player = nullptr;
-    IClockPtr m_clock = nullptr;
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 

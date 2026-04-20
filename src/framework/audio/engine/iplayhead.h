@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,11 +25,12 @@
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class IGetPlaybackPosition
+class IPlayhead
 {
 public:
-    virtual ~IGetPlaybackPosition() = default;
+    virtual ~IPlayhead() = default;
 
-    virtual const TimePosition& playbackPosition() const = 0;
+    virtual void forward(const TimePosition& delta) = 0;
+    virtual const TimePosition& currentPosition() const = 0;
 };
 }

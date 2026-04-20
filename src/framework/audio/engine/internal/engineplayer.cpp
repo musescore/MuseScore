@@ -23,6 +23,7 @@
 #include "engineplayer.h"
 
 #include "audio/common/audiosanitizer.h"
+#include "audio/common/audioerrors.h"
 
 #include "log.h"
 
@@ -31,27 +32,108 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::async;
 
-EnginePlayer::EnginePlayer(IGetTracks* getTracks, IClockPtr clock)
-    : m_getTracks(getTracks), m_clock(clock)
+EnginePlayer::EnginePlayer(IGetTracks* getTracks)
+    : m_getTracks(getTracks)
 {
-    m_clock->seekOccurred().onNotify(this, [this]() {
-        seekAllTracks(m_clock->currentTime());
+    m_status.set(PlaybackStatus::Stopped);
+
+    m_status.ch.onReceive(this, [this](const PlaybackStatus status) {
+        onStatusChanged(status);
     });
 
-    m_clock->statusChanged().onReceive(this, [this](const PlaybackStatus status) {
-        const bool active = status == PlaybackStatus::Running;
+    // Forwarding events from the processing thread to the engine thread
+    m_timeEvent.onReceive(this, [this](const TimeEvent event) {
+        onTimeEvent(event);
+    });
+}
 
-        if (!m_countDownIsSet) {
-            audioEngine()->mixer()->setIsActive(active);
-        } else if (!active) {
-            flushAllTracks();
+void EnginePlayer::onStatusChanged(const PlaybackStatus status)
+{
+    const bool active = status == PlaybackStatus::Running;
+    if (active) {
+        //! NOTE If there is no countdown, activate the mixer.
+        //! Otherwise, it will become active when the countdown ends.
+        if (m_countDown.is_zero()) {
+            audioEngine()->mixer()->setIsActive(true);
         }
-    });
+    } else {
+        audioEngine()->mixer()->setIsActive(false);
+        flushAllTracks();
+    }
+}
 
-    m_clock->countDownEnded().onNotify(this, [this]() {
-        m_countDownIsSet = false;
-        audioEngine()->mixer()->setIsActive(m_clock->status() == PlaybackStatus::Running);
-    });
+void EnginePlayer::forward(const TimePosition& delta)
+{
+    ONLY_AUDIO_PROC_THREAD;
+
+    // Check: Active
+    if (m_status.val != PlaybackStatus::Running) {
+        return;
+    }
+
+    const TimePosition newTime = proc_onTimeChanged(delta);
+
+    if (m_currentPosition == newTime) {
+        return;
+    }
+
+    m_currentPosition = newTime;
+    m_timeChanged.send(m_currentPosition.time());
+}
+
+TimePosition EnginePlayer::proc_onTimeChanged(const TimePosition& delta)
+{
+    ONLY_AUDIO_PROC_THREAD;
+
+    // Check: Count down
+    if (!m_countDown.is_zero()) {
+        m_countDown -= delta.time();
+
+        if (m_countDown > 0.) {
+            return m_currentPosition; // no change
+        }
+
+        m_countDown = 0.;
+        m_timeEvent.send(TimeEvent::CountDownEnded); // forwarding an event to the engine thread
+    }
+
+    // Check: Loop
+    const TimePosition newTime = TimePosition::fromSamples(m_currentPosition.samples() + delta.samples(), delta.sampleRate());
+    if (m_timeLoopStart < m_timeLoopEnd && newTime.time() >= m_timeLoopEnd) {
+        //! TODO Seek may be necessary to call this directly within the PROC thread.
+        m_timeEvent.send(TimeEvent::LoopEnded); // forwarding an event to the engine thread
+        const secs_t overshoot = newTime.time() - m_timeLoopEnd;
+        return TimePosition::fromTime(m_timeLoopStart + overshoot, delta.sampleRate());
+    }
+
+    // Check: Duration
+    if (newTime.time() >= m_timeDuration) {
+        m_timeEvent.send(TimeEvent::PlaybackEnded); // forwarding an event to the engine thread
+        return TimePosition::fromTime(m_timeDuration, delta.sampleRate());
+    }
+
+    return newTime;
+}
+
+const TimePosition& EnginePlayer::currentPosition() const
+{
+    return m_currentPosition;
+}
+
+void EnginePlayer::onTimeEvent(const TimeEvent event)
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    switch (event) {
+    case TimeEvent::CountDownEnded:
+        audioEngine()->mixer()->setIsActive(m_status.val == PlaybackStatus::Running);
+        break;
+    case TimeEvent::LoopEnded:
+        seekAllTracks(m_currentPosition.time());
+        break;
+    case TimeEvent::PlaybackEnded:
+        pause();
+        break;
+    }
 }
 
 async::Promise<Ret> EnginePlayer::prepareToPlay()
@@ -75,18 +157,22 @@ void EnginePlayer::play(const secs_t delay)
         return;
     }
 
-    m_clock->setCountDown(delay);
-    m_countDownIsSet = !delay.is_zero();
+    m_countDown = delay;
     audioEngine()->setMode(RenderMode::RealTimeMode);
-    m_clock->start();
+    m_status.set(PlaybackStatus::Running);
 }
 
 void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
+    if (newPosition == m_currentPosition.time()) {
+        return;
+    }
+
     m_flushSoundOnSeek = flushSound;
-    m_clock->seek(newPosition);
+    m_currentPosition = TimePosition::fromTime(newPosition, audioEngine()->outputSpec().sampleRate);
+    m_timeChanged.send(m_currentPosition.time());
     seekAllTracks(newPosition);
     m_flushSoundOnSeek = true;
 }
@@ -100,7 +186,9 @@ void EnginePlayer::stop()
     }
 
     audioEngine()->setMode(RenderMode::IdleMode);
-    m_clock->stop();
+    m_status.set(PlaybackStatus::Stopped);
+    m_countDown = 0.;
+    seek(0.);
     m_notYetReadyToPlayTrackIdSet.clear();
 }
 
@@ -113,7 +201,7 @@ void EnginePlayer::pause()
     }
 
     audioEngine()->setMode(RenderMode::IdleMode);
-    m_clock->pause();
+    m_status.set(PlaybackStatus::Paused);
     m_notYetReadyToPlayTrackIdSet.clear();
 }
 
@@ -125,66 +213,67 @@ void EnginePlayer::resume(const secs_t delay)
         return;
     }
 
-    m_clock->setCountDown(delay);
-    m_countDownIsSet = !delay.is_zero();
+    m_countDown = delay;
+    seek(m_currentPosition.time());
     audioEngine()->setMode(RenderMode::RealTimeMode);
-    m_clock->resume();
+    m_status.set(PlaybackStatus::Running);
 }
 
 secs_t EnginePlayer::duration() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    return m_clock ? m_clock->timeDuration() : secs_t { 0. };
+    return m_timeDuration;
 }
 
 void EnginePlayer::setDuration(const secs_t duration)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    m_clock->setTimeDuration(duration);
+    m_timeDuration = duration;
 }
 
 Ret EnginePlayer::setLoop(const secs_t from, const secs_t to)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    return m_clock->setTimeLoop(from, to);
+    if (from >= to) {
+        return make_ret(Err::InvalidTimeLoop);
+    }
+
+    m_timeLoopStart = from;
+    m_timeLoopEnd = to;
+
+    return Ret(Ret::Code::Ok);
 }
 
 void EnginePlayer::resetLoop()
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    m_clock->resetTimeLoop();
+    m_timeLoopStart = 0;
+    m_timeLoopEnd = 0;
 }
 
 secs_t EnginePlayer::playbackPosition() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    return m_clock->currentTime();
+    return m_currentPosition.time();
 }
 
 Channel<secs_t> EnginePlayer::playbackPositionChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    return m_clock->timeChanged();
+    return m_timeChanged;
 }
 
 PlaybackStatus EnginePlayer::playbackStatus() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    return m_clock->status();
+    return m_status.val;
 }
 
 Channel<PlaybackStatus> EnginePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    return m_clock->statusChanged();
+    return m_status.ch;
 }
 
 void EnginePlayer::seekAllTracks(const secs_t newPosition)

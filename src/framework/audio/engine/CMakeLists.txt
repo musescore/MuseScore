@@ -40,7 +40,7 @@ else()
         iengineplayback.h
         iaudioengine.h
         iaudiosource.h
-        iclock.h
+        iplayhead.h
         iengineplayer.h
         ifxprocessor.h
         ifxresolver.h
@@ -67,8 +67,6 @@ else()
         internal/mixer.h
         internal/mixerchannel.cpp
         internal/mixerchannel.h
-        internal/clock.cpp
-        internal/clock.h
         internal/igetplaybackposition.h
         internal/engineplayer.cpp
         internal/engineplayer.h
