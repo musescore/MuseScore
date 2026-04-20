@@ -1150,6 +1150,13 @@
                 }
             }
         ],
+        "Breath": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900
+                }
+            }
+        ],
         "WideVibrato": [
             {
                 "arrangementPattern": {
