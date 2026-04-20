@@ -113,9 +113,10 @@ ExportSettingsPage {
 
             ExportOptionItem {
                 id: videoResolutionLabel
-                text: qsTrc("project/export", "Video resolution:")
+                text: qsTrc("project/export", "Video resolution")
 
                 StyledDropdown {
+                    id: videoResolutionDropdown
                     Layout.preferredWidth: 126
 
                     navigation.name: "VideoResolutionDropdown"
@@ -132,6 +133,30 @@ ExportSettingsPage {
                     onActivated: function(index, value) {
                         root.model.videoResolution = value
                     }
+                }
+            }
+
+            RadioButtonGroup {
+                orientation: ListView.Vertical
+                spacing: 8
+                width: parent.width
+
+                model: root.model ? root.model.availableViewModes().map(function(obj) {
+                    return { text: obj.text, value: obj.value }
+                }) : []
+
+                delegate: RoundedRadioButton {
+                    required property var modelData
+                    required property int index
+
+                    text: modelData.text
+                    checked: root.model.viewMode === modelData.value
+                    onToggled: root.model.viewMode = modelData.value
+
+                    navigation.name: modelData.text
+                    navigation.panel: root.navigationPanel
+                    navigation.row: videoResolutionDropdown.navigation.row + 1 + index
+                    navigation.accessible.name: modelData.text
                 }
             }
 

@@ -615,6 +615,40 @@ void ExportDialogModel::setVideoResolution(const QString& resolution)
     emit videoResolutionChanged(resolution);
 }
 
+QVariantList ExportDialogModel::availableViewModes() const
+{
+    std::map<ViewMode, QString> viewModes {
+        { ViewMode::PageFull, muse::qtrc("project/export", "Use page layout") },
+        { ViewMode::Flexible, muse::qtrc("project/export", "Reflow to fit video resolution") },
+    };
+
+    QVariantList result;
+
+    for (const auto& [value, text] : viewModes) {
+        QVariantMap obj;
+        obj["value"] = value;
+        obj["text"] = text;
+        result << obj;
+    }
+
+    return result;
+}
+
+void ExportDialogModel::setViewMode(ViewMode v)
+{
+    if (v == videoExportConfiguration()->viewMode()) {
+        return;
+    }
+
+    videoExportConfiguration()->setViewMode(v);
+    emit viewModeChanged(v);
+}
+
+ExportDialogModel::ViewMode ExportDialogModel::viewMode() const
+{
+    return videoExportConfiguration()->viewMode();
+}
+
 bool ExportDialogModel::isFFmpegAvailable() const
 {
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
