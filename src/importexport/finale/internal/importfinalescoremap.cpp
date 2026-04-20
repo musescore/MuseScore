@@ -221,7 +221,7 @@ static String nameFromEnigmaText(const FinaleParser& ctx, const String& sidNameP
     return ctx.stringFromEnigmaText(parsingContext, options);
 }
 
-static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::Staff> musxStaff, Instrument* instrument)
+static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::Staff>& musxStaff, Instrument* instrument)
 {
     // Initialise drumset
     if (musxStaff->percussionMapId.has_value()) {
@@ -260,9 +260,9 @@ static void loadInstrument(const FinaleParser& ctx, const MusxInstance<others::S
     }
 }
 
-Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff> musxStaff, const InstrumentTemplate* it)
+Staff* FinaleParser::createStaff(Part* part, const MusxInstance<others::Staff>& musxStaff, const InstrumentTemplate* it)
 {
-    auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff> musxStaff) -> std::optional<ClefTypeList>
+    auto clefTypeListFromMusxStaff = [&](const MusxInstance<others::Staff>& musxStaff) -> std::optional<ClefTypeList>
     {
         const auto concertClefDef = musxOptions().clefOptions->getClefDef(musxStaff->calcFirstClefIndex());
         ClefType concertClef = toMuseScoreClefType(concertClefDef, musxStaff);
@@ -744,7 +744,7 @@ static bool instChanged(const MusxInstance<others::StaffComposite>& prev, const 
     return false;
 }
 
-static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature> timeSig, FinaleLoggerPtr& logger)
+static Groups computeTimeSignatureGroups(const MusxInstance<TimeSignature>& timeSig, FinaleLoggerPtr& logger)
 {
     // Other beaming options (such as over rests or beamThreeEighthsInCommonTime) not supported
     const MusxInstance<options::BeamOptions> config = timeSig->getDocument()->getOptions()->get<options::BeamOptions>();
