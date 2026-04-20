@@ -185,6 +185,10 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         convertTextLineToNoteAnchoredLine(masterScore);
         convertLaissezVibArticToTie(masterScore);
     }
+
+    if (masterScore->mscVersion() < 500) {
+        removeMMRestElements(masterScore);
+    }
 }
 
 void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score)
@@ -1087,5 +1091,53 @@ void CompatUtils::convertPre470ImageSize(Image* image)
     if (image->size().isNull() && image->score()->mscVersion() < 470) {
         image->init();
         image->setSize(image->size() * (DPI / PRE_470_DPI));
+    }
+}
+
+void CompatUtils::removeMMRestElements(MasterScore* masterScore)
+{
+    // <5.0 MMRests had copies of underlying elements. We now move the element when toggling the rests.
+    // Remove redundant copies which are written to the file
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* m = toMeasure(mb);
+            Measure* mmrest = m->mmRest();
+
+            if (!mmrest) {
+                continue;
+            }
+
+            // Remove jumps/markers/layout breaks
+            std::vector<EngravingItem*> measureEls = mmrest->el();
+            for (EngravingItem* el : measureEls) {
+                el->unlink();
+                score->removeElement(el);
+            }
+
+            // Remove annotations
+            for (Segment& seg : mmrest->segments()) {
+                std::vector<EngravingItem*> annotations = seg.annotations();
+                for (EngravingItem* annotation : annotations) {
+                    annotation->unlink();
+                    score->removeElement(annotation);
+                }
+                if (seg.isChordRestType()) {
+                    continue;
+                }
+                // Remove time sigs, key sigs, clefs, ambitus, breaths, barlines
+                for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                    EngravingItem* el = seg.element(staff2track(staffIdx));
+                    if (!el) {
+                        continue;
+                    }
+                    el->unlink();
+                    score->removeElement(el);
+                }
+            }
+        }
     }
 }
