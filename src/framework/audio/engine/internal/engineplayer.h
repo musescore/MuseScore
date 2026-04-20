@@ -26,7 +26,7 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 
 #include "../iengineplayer.h"
 #include "../iplayhead.h"

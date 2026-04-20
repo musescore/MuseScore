@@ -27,7 +27,7 @@
 #include "mpe/events.h"
 
 #include "global/modularity/ioc.h"
-#include "../../iaudioengine.h"
+#include "../iaudioengine.h"
 #include "../../iaudioengineconfiguration.h"
 
 #include "audio/common/audiotypes.h"

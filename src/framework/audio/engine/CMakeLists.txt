@@ -38,7 +38,6 @@ else()
         iaudioengineconfiguration.h
         ienginecontroller.h
         iengineplayback.h
-        iaudioengine.h
         iaudiosource.h
         iplayhead.h
         iengineplayer.h
@@ -50,6 +49,8 @@ else()
         itransporteventsdispatcher.h
 
         # internal
+        internal/audiocontext.h
+        internal/iaudioengine.h
         internal/audioengineconfiguration.cpp
         internal/audioengineconfiguration.h
         internal/enginecontroller.cpp
