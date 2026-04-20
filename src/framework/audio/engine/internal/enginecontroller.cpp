@@ -95,6 +95,8 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     audioEngine()->init(outputSpec, consts);
 
     playback()->init();
+
+    transportEventsDispatcher()->init();
 }
 
 void EngineController::deinit()

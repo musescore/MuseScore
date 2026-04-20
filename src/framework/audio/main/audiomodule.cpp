@@ -39,6 +39,7 @@
 
 #include "internal/audioconfiguration.h"
 #include "internal/audioactionscontroller.h"
+#include "internal/transporteventscontroller.h"
 #include "internal/audiouiactions.h"
 #include "internal/startaudiocontroller.h"
 #include "internal/playback.h"
@@ -147,6 +148,7 @@ void AudioContext::registerExports()
 {
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
     m_mainPlayback = std::make_shared<Playback>(iocContext());
+    m_transportEventsController = std::make_shared<TransportEventsController>(iocContext());
 
 #ifndef Q_OS_WASM
     ioc()->registerExport<ISoundFontInstallScenario>(mname, new GeneralSoundFontInstallScenario(iocContext()));
@@ -178,9 +180,11 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
 
     m_actionsController->init();
     m_mainPlayback->init();
+    m_transportEventsController->init();
 }
 
 void AudioContext::onDeinit()
 {
     m_mainPlayback->deinit();
+    m_transportEventsController->deinit();
 }

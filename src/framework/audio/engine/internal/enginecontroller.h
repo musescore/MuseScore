@@ -29,6 +29,7 @@
 #include "../isynthresolver.h"
 #include "../iaudioengine.h"
 #include "../iengineplayback.h"
+#include "../itransporteventsdispatcher.h"
 
 namespace muse::audio::rpc {
 class IRpcChannel;
@@ -44,6 +45,8 @@ class EngineController : public IEngineController
     muse::GlobalInject<synth::ISynthResolver> synthResolver;
     muse::GlobalInject<IAudioEngine> audioEngine;
     muse::GlobalInject<IEnginePlayback> playback;
+    muse::GlobalInject<ITransportEventsDispatcher> transportEventsDispatcher;
+
 public:
     EngineController(std::shared_ptr<rpc::IRpcChannel> rpcChannel);
 

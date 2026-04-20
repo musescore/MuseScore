@@ -81,6 +81,9 @@ void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgr
 void pack_custom(muse::msgpack::Packer& p, const muse::audio::InputProcessingProgress::StatusInfo& value);
 void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessingProgress::StatusInfo& value);
 
+void pack_custom(muse::msgpack::Packer& p, const muse::audio::TransportEvent& value);
+void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::TransportEvent& value);
+
 // MPE
 // PlaybackEvent
 void pack_custom(muse::msgpack::Packer& p, const muse::mpe::ArrangementContext& value);
@@ -338,6 +341,29 @@ inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::InputProcessi
     uint8_t status = 0;
     p.process(status, value.errorCode, value.errorText, value.data);
     value.status = static_cast<muse::audio::InputProcessingProgress::Status>(status);
+}
+
+inline void pack_custom(muse::msgpack::Packer& p, const muse::audio::TransportEvent& value)
+{
+    p.process(static_cast<uint8_t>(value.type));
+
+    if (value.type == muse::audio::TransportEvent::Type::Seek) {
+        const auto& seek = std::get<muse::audio::TransportEvent::SeekData>(value.data);
+        p.process(seek.position);
+    }
+}
+
+inline void unpack_custom(muse::msgpack::UnPacker& p, muse::audio::TransportEvent& value)
+{
+    uint8_t type = 0;
+    p.process(type);
+    value.type = static_cast<muse::audio::TransportEvent::Type>(type);
+
+    if (value.type == muse::audio::TransportEvent::Type::Seek) {
+        muse::audio::TransportEvent::SeekData seek;
+        p.process(seek.position);
+        value.data = seek;
+    }
 }
 
 // MPE

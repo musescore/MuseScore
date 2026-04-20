@@ -20,51 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mmc.h"
+#include "mmcdecoder.h"
 
 #include "midi/midievent.h"
 #include "log.h"
 
 using namespace muse::midi;
 using namespace muse::midiremote;
-
-inline std::optional<MMCMessage> fastParseMMC(const Event& event)
-{
-    if (event.midi20WordCount() < 2) {
-        return std::nullopt;
-    }
-
-    const uint32_t* words = event.midi20Words();
-    const uint32_t w0 = words[0];
-
-    // Extract UMP SysEx header fields
-    const uint8_t status = (w0 >> 20) & 0xF; // 0 = complete packet
-    const uint8_t count  = (w0 >> 16) & 0xF; // number of valid bytes (0-6)
-
-    // Fast path only handles complete, short messages
-    // Long messages, such as Locate, are ignored here
-    if (status != 0 || count != 4) {
-        return std::nullopt;
-    }
-
-    // SysEx packs first 2 bytes in word 0, next bytes in word 1
-    const uint8_t b0 = (w0 >> 8) & 0xFF;
-    const uint8_t b1 = (w0 >> 0) & 0xFF;
-    const uint32_t w1 = words[1];
-    const uint8_t b2 = (w1 >> 24) & 0xFF;
-    const uint8_t b3 = (w1 >> 16) & 0xFF;
-
-    // MMC structure: 7F <device> 06 <command>
-    if (!(b0 == 0x7F && b2 == 0x06)) {
-        return std::nullopt;
-    }
-
-    MMCMessage msg;
-    msg.deviceId = b1;
-    msg.command = static_cast<MMCCommand>(b3);
-
-    return msg;
-}
 
 static bool extractSysExBytes(const Event& event, std::vector<uint8_t>& out)
 {
@@ -132,7 +94,7 @@ static MMCMessage parseMMC(const std::vector<uint8_t>& sysex)
     return msg;
 }
 
-class MMCParser::SysExAssembler
+class MMCDecoder::SysExAssembler
 {
 public:
     bool process(const Event& event, std::vector<uint8_t>& result)
@@ -143,30 +105,76 @@ public:
         }
 
         const uint32_t* words = event.midi20Words();
-        const uint8_t status = (words[0] >> 20) & 0xF;
+        const Status status = static_cast<Status>((words[0] >> 20) & 0xF);
 
+        return processChunk(bytes.data(), bytes.size(), status, result);
+    }
+
+    bool process(const uint8_t* data, size_t size, std::vector<uint8_t>& result)
+    {
+        const bool hasStartByte = (data[0] == 0xF0);
+        const bool hasEndByte = (data[size - 1] == 0xF7);
+
+        Status status;
+
+        if (hasStartByte && hasEndByte) {
+            status = Status::Complete;
+        } else if (hasStartByte) {
+            status = Status::Start;
+        } else if (hasEndByte) {
+            status = Status::End;
+        } else {
+            status = m_inProgress ? Status::Continue : Status::Complete;
+        }
+
+        // Skip start & end bytes if present
+        const uint8_t* payload = data;
+        size_t payloadSize = size;
+
+        if (hasStartByte) {
+            payload += 1;
+            payloadSize -= 1;
+        }
+
+        if (payloadSize > 0 && hasEndByte) {
+            payloadSize -= 1;
+        }
+
+        return processChunk(payload, payloadSize, status, result);
+    }
+
+private:
+    enum class Status : uint8_t {
+        Complete = 0,
+        Start = 1,
+        Continue = 2,
+        End = 3,
+    };
+
+    bool processChunk(const uint8_t* data, size_t size, Status status, std::vector<uint8_t>& result)
+    {
         switch (status) {
-        case 0: { // COMPLETE
+        case Status::Complete: {
             m_buffer.clear();
             m_inProgress = false;
-            result = bytes;
+            result.assign(data, data + size);
             return true;
         }
-        case 1: { // START
-            m_buffer = bytes;
+        case Status::Start: {
+            m_buffer.assign(data, data + size);
             m_inProgress = true;
         } break;
-        case 2: { // CONTINUE
+        case Status::Continue: {
             if (!m_inProgress) {
                 return false;
             }
-            m_buffer.insert(m_buffer.end(), bytes.begin(), bytes.end());
+            m_buffer.insert(m_buffer.end(), data, data + size);
         } break;
-        case 3: { // END
+        case Status::End: {
             if (!m_inProgress) {
                 return false;
             }
-            m_buffer.insert(m_buffer.end(), bytes.begin(), bytes.end());
+            m_buffer.insert(m_buffer.end(), data, data + size);
             result = m_buffer;
             m_buffer.clear();
             m_inProgress = false;
@@ -177,26 +185,21 @@ public:
         return false;
     }
 
-private:
     std::vector<uint8_t> m_buffer;
     bool m_inProgress = false;
 };
 
-MMCParser::~MMCParser()
+MMCDecoder::~MMCDecoder()
 {
     if (m_assembler) {
         delete m_assembler;
     }
 }
 
-std::optional<MMCMessage> MMCParser::process(const Event& event)
+std::optional<MMCMessage> MMCDecoder::decode(const Event& event)
 {
     if (event.messageType() != Event::MessageType::SystemExclusiveData) {
         return std::nullopt;
-    }
-
-    if (std::optional<MMCMessage> msg = fastParseMMC(event)) {
-        return msg;
     }
 
     if (!m_assembler) {
@@ -215,7 +218,29 @@ std::optional<MMCMessage> MMCParser::process(const Event& event)
     return parseMMC(sysex);
 }
 
-std::optional<double> MMCParser::locateToSeconds(const MMCMessage& msg)
+std::optional<MMCMessage> MMCDecoder::decode(const uint8_t* data, size_t size)
+{
+    if (!data || size == 0) {
+        return std::nullopt;
+    }
+
+    if (!m_assembler) {
+        m_assembler = new SysExAssembler();
+    }
+
+    std::vector<uint8_t> sysex;
+    if (!m_assembler->process(data, size, sysex)) {
+        return std::nullopt;
+    }
+
+    if (!isMMC(sysex)) {
+        return std::nullopt;
+    }
+
+    return parseMMC(sysex);
+}
+
+std::optional<double> MMCDecoder::locateToSeconds(const MMCMessage& msg) const
 {
     IF_ASSERT_FAILED(msg.command == MMCCommand::Locate) {
         return std::nullopt;
