@@ -91,7 +91,8 @@ muse::Progress* AbstractAudioWriter::progress()
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                                         io::IODevice& dstDevice,
-                                        const SoundTrackFormat& format)
+                                        const SoundTrackFormat& format,
+                                        const Options& options)
 {
     //! NOTE Temporary fix for the context injection
     m_iocContext = notation->iocContext();
@@ -113,9 +114,12 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
     doWrite(dstDevice, format);
 
-    while (!m_isCompleted) {
-        application()->processEvents();
-        QThread::yieldCurrentThread();
+    const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
+    if (waitForCompletion) {
+        while (!m_isCompleted) {
+            application()->processEvents();
+            QThread::yieldCurrentThread();
+        }
     }
 
     playbackController()->setIsExportingAudio(false);

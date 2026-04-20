@@ -26,8 +26,6 @@
 #include <QItemSelectionModel>
 #include <QTimer>
 
-#include "media/mediatypes.h"
-
 #include "async/async.h"
 #include "translation.h"
 #include "log.h"
@@ -92,6 +90,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "AudioSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "aac" },
+                                     muse::qtrc("project/export", "AAC audio"),
+                                     muse::qtrc("project/export", "AAC audio files"),
+                                     "AacSettingsPage.qml"),
 #ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
         ExportType::makeWithSuffixes({ "mp4" },
                                      muse::qtrc("project/export", "MP4 video"),

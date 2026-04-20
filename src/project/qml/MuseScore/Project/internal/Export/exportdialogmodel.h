@@ -26,6 +26,8 @@
 #include <qqmlintegration.h>
 #include <QQmlParserStatus>
 
+#include "app_config.h"
+
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"

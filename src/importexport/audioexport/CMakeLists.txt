@@ -36,4 +36,6 @@ target_sources(iex_audioexport PRIVATE
     internal/oggwriter.h
     internal/flacwriter.cpp
     internal/flacwriter.h
+    internal/aacwriter.cpp
+    internal/aacwriter.h
 )

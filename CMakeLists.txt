@@ -209,6 +209,8 @@ endif(MUSE_COMPILE_USE_COMPILER_CACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
+set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
 
 if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
