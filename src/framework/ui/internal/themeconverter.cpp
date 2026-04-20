@@ -138,7 +138,10 @@ ThemeInfo ThemeConverter::fromMap(const QVariantMap& map)
     theme.title = map[TITLE_KEY].toString().toStdString();
 
     for (const QString& key : map.keys()) {
-        theme.values[themeStyleKeyFromString(key)] = map[key];
+        ThemeStyleKey styleKey = themeStyleKeyFromString(key);
+        if (styleKey != UNKNOWN) {
+            theme.values[styleKey] = map[key];
+        }
     }
 
     return theme;
