@@ -36,7 +36,7 @@ class VideoPreferencesModel : public QObject, public muse::Contextable, public m
     Q_OBJECT
     QML_ELEMENT;
 
-    muse::ContextInject<muse::media::IVideoEncoderResolver> videoEncoderResolver = { this };
+    muse::GlobalInject<muse::media::IVideoEncoderResolver> videoEncoderResolver;
 
     Q_PROPERTY(int ffmpegVersion READ ffmpegVersion NOTIFY ffmpegVersionChanged FINAL)
     Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged FINAL)
