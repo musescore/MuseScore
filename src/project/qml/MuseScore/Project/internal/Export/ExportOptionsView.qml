@@ -36,6 +36,10 @@ Column {
     required property ExportDialogModel exportModel
     property alias navigation: navPanel
 
+    readonly property bool isExportAvailable: Boolean(pageLoader.item)
+                                              ? pageLoader.item.isExportAvailable
+                                              : true
+
     spacing: 12
 
     Component.onCompleted: {
@@ -184,11 +188,15 @@ Column {
     SeparatorLine {
         anchors.topMargin: 24
         anchors.bottomMargin: 24
+
+        visible: root.isExportAvailable
     }
 
     CheckBox {
         width: parent.width
         text: qsTrc("project/export", "Open destination folder on export")
+
+        visible: root.isExportAvailable
 
         navigation.name: "OpenDestinationFolderOnExportCheckbox"
         navigation.panel: navPanel
