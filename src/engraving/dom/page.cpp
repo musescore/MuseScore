@@ -254,3 +254,14 @@ Fraction Page::endTick() const
 {
     return m_systems.empty() ? Fraction(-1, 1) : m_systems.back()->measures().back()->endTick();
 }
+
+Measure* Page::firstMeasure() const
+{
+    for (System* s : m_systems) {
+        if (Measure* m = s->firstMeasure()) {
+            return m;
+        }
+    }
+
+    return nullptr;
+}

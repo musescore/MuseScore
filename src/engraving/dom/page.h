@@ -77,6 +77,7 @@ public:
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     RectF tbbox() const;                             // tight bounding box, excluding white space
     Fraction endTick() const;
+    Measure* firstMeasure() const;
 
     Text* headerText(int index) const { return m_headerTexts.at(index); }
     Text* footerText(int index) const { return m_footerTexts.at(index); }

@@ -571,6 +571,11 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
             break;
         }
 
+        if (!page->firstMeasure()) {
+            // Skip pages with no notation
+            continue;
+        }
+
         INotationPainting::Options opt;
         opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
