@@ -178,6 +178,9 @@ public:
     bool playSpanner() const { return m_playSpanner; }
     void setPlaySpanner(bool p) { m_playSpanner = p; }
 
+    const std::vector<int>& playOnPasses() const { return m_playOnPasses; }
+    void setPlayOnPasses(const std::vector<int>& passes) { m_playOnPasses = passes; }
+
     Anchor anchor() const { return m_anchor; }
     void setAnchor(Anchor a) { m_anchor = a; }
 
@@ -282,6 +285,7 @@ private:
     EngravingItem* m_endElement = nullptr;
 
     bool m_playSpanner = true;
+    std::vector<int> m_playOnPasses;
 
     Anchor m_anchor = Anchor::SEGMENT;
     Fraction m_tick = Fraction(-1, 1);
