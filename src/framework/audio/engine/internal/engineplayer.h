@@ -29,17 +29,17 @@
 #include "../iaudioengine.h"
 
 #include "../iengineplayer.h"
-#include "../iclock.h"
+#include "../iplayhead.h"
 
 #include "igettracks.h"
 
 namespace muse::audio::engine {
-class EnginePlayer : public IEnginePlayer, public async::Asyncable
+class EnginePlayer : public IEnginePlayer, public IPlayhead, public async::Asyncable
 {
     GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
-    explicit EnginePlayer(IGetTracks* getTracks, IClockPtr clock);
+    explicit EnginePlayer(IGetTracks* getTracks);
 
     async::Promise<Ret> prepareToPlay() override;
 
@@ -54,6 +54,7 @@ public:
 
     secs_t duration() const override;
     void setDuration(const secs_t duration) override;
+
     Ret setLoop(const secs_t from, const secs_t to) override;
     void resetLoop() override;
 
@@ -61,6 +62,24 @@ public:
     async::Channel<secs_t> playbackPositionChanged() const override;
 
 private:
+
+    void onStatusChanged(const PlaybackStatus status);
+
+    // Processing thread functions
+    // IPlayhead interface
+    void forward(const TimePosition& delta) override;
+    const TimePosition& currentPosition() const override;
+
+    TimePosition proc_onTimeChanged(const TimePosition& delta);
+    // ----------------------------
+
+    enum class TimeEvent {
+        PlaybackEnded,
+        CountDownEnded,
+        LoopEnded,
+    };
+    void onTimeEvent(const TimeEvent event);
+
     void seekAllTracks(const secs_t newPosition);
     void flushAllTracks();
 
@@ -68,9 +87,19 @@ private:
     void prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback);
 
     IGetTracks* m_getTracks = nullptr;
-    IClockPtr m_clock = nullptr;
 
-    bool m_countDownIsSet = false;
+    ValCh<PlaybackStatus> m_status;
+
+    TimePosition m_currentPosition;
+    async::Channel<secs_t> m_timeChanged;
+
+    secs_t m_timeDuration = 0.;
+    secs_t m_countDown = 0.;
+    secs_t m_timeLoopStart = 0.;
+    secs_t m_timeLoopEnd = 0.;
+
+    async::Channel<TimeEvent> m_timeEvent;
+
     bool m_flushSoundOnSeek = true;
     std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
 };

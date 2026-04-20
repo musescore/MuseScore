@@ -31,7 +31,7 @@
 
 #include "abstractaudiosource.h"
 
-#include "../iclock.h"
+#include "../iplayhead.h"
 #include "../ifxresolver.h"
 
 #include "mixerchannel.h"
@@ -58,8 +58,7 @@ public:
     RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
     Ret removeChannel(const TrackId trackId);
 
-    void addClock(IClockPtr clock);
-    void removeClock(IClockPtr clock);
+    void setPlayhead(std::shared_ptr<IPlayhead> playhead);
 
     AudioOutputParams masterOutputParams() const;
     void setMasterOutputParams(const AudioOutputParams& params);
@@ -82,8 +81,7 @@ public:
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
-    secs_t playbackPosition() const override;
-    samples_t playbackPositionSamples() const override;
+    const TimePosition& playbackPosition() const override;
 
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;
@@ -120,7 +118,7 @@ private:
 
     std::vector<AuxChannelInfo> m_auxChannelInfoList;
 
-    std::set<IClockPtr> m_clocks;
+    std::shared_ptr<IPlayhead> m_playhead;
 
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 

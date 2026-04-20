@@ -111,7 +111,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
         if (source) {
             source->setIsActive(isActive());
-            source->seek(secsToMicrosecs(playbackPosition()));
+            source->seek(secsToMicrosecs(playbackPosition().time()));
         }
     });
 
@@ -199,28 +199,18 @@ unsigned int Mixer::audioChannelsCount() const
     return m_outputSpec.audioChannelCount;
 }
 
-secs_t Mixer::playbackPosition() const
+const TimePosition& Mixer::playbackPosition() const
 {
-    if (m_clocks.empty()) {
-        return 0.;
-    }
-
-    const IClockPtr clock = *m_clocks.begin();
-    return clock->currentTime();
-}
-
-samples_t Mixer::playbackPositionSamples() const
-{
-    const secs_t pos = playbackPosition();
-    return std::llround(pos.raw() * m_outputSpec.sampleRate);
+    static TimePosition nullpos;
+    return m_playhead ? m_playhead->currentPosition() : nullpos;
 }
 
 samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    for (const IClockPtr& clock : m_clocks) {
-        clock->forward(static_cast<double>(samplesPerChannel) / m_outputSpec.sampleRate);
+    if (m_playhead) {
+        m_playhead->forward(TimePosition::fromSamples(samplesPerChannel, m_outputSpec.sampleRate));
     }
 
     size_t outBufferSize = samplesPerChannel * m_outputSpec.audioChannelCount;
@@ -371,18 +361,10 @@ void Mixer::setIsActive(bool arg)
     }
 }
 
-void Mixer::addClock(IClockPtr clock)
+void Mixer::setPlayhead(std::shared_ptr<IPlayhead> playhead)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    m_clocks.insert(std::move(clock));
-}
-
-void Mixer::removeClock(IClockPtr clock)
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-
-    m_clocks.erase(clock);
+    m_playhead = playhead;
 }
 
 AudioOutputParams Mixer::masterOutputParams() const
@@ -564,7 +546,7 @@ void Mixer::processMasterFx(float* buffer, samples_t samplesPerChannel)
 {
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(buffer, samplesPerChannel, playbackPositionSamples());
+            fxProcessor->process(buffer, samplesPerChannel, playbackPosition().samples());
         }
     }
 }
