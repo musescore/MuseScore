@@ -42,6 +42,7 @@ public:
 
     std::string resolution() const override;
     void setResolution(std::optional<std::string> resolution) override;
+    const std::vector<std::string>& availableResolutions() const override;
 
     int fps() const override;
     void setFps(std::optional<int> fps) override;
