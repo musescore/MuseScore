@@ -5726,21 +5726,6 @@ um aftaná strok</translation>
         <translation>Umaftur ‘%1’</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="39"/>
-        <source>1. Worker mode</source>
-        <translation>1. Verka háttur</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="45"/>
-        <source>2. Driver mode</source>
-        <translation>2. Koyri háttur</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="51"/>
-        <source>3. Worker RPC mode</source>
-        <translation>3. Verka RPC háttur</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
         <source>Show &amp;scripts…</source>
         <translation>Vís &amp;røð av boðum…</translation>
@@ -5854,21 +5839,6 @@ um aftaná strok</translation>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="97"/>
         <source>Show actions list</source>
         <translation>Vís hendingalista</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="102"/>
-        <source>Test query action</source>
-        <translation>Royn fyrispurningagerð</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="107"/>
-        <source>Test query action with params 1</source>
-        <translation>Royn fyrispurningagerð við params 1</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="112"/>
-        <source>Test query action with params 2</source>
-        <translation>Royn fyrispurningagerð við params 2</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
@@ -8023,17 +7993,17 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1671"/>
         <source>Change enharmonic spelling (concert and transposed pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Broyt enharmoniska staving (skrivaðan og transponeraðan tóna)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1677"/>
         <source>Change enharmonic spelling (&amp;current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Broyt enharmoniska staving (&amp;bert verandi tónastøða)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1678"/>
         <source>Change enharmonic spelling (current pitch mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Broyt enharmoniska staving (bert verandi tónastøða)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1684"/>
@@ -8045,7 +8015,7 @@ um aftaná strok</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1691"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1692"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Vend vatnrætt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1696"/>
@@ -8103,55 +8073,55 @@ um aftaná strok</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1734"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: longa (generalbassur/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1740"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: breve (generalbassur/akkordtekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1746"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1747"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: heiltóna (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1752"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1753"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: hálvnóta (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1758"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1759"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: fjórðing (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1764"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1765"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: 8pt (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1771"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: 16pt (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1776"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1777"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: 32pt (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1782"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1783"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation type="unfinished"/>
+        <translation>Flyt vísara fram: 64pt (generalbass/akkord tekn)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1788"/>
@@ -8197,7 +8167,7 @@ um aftaná strok</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1812"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1813"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>Legg ørindi afturat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1818"/>
@@ -8330,22 +8300,22 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1908"/>
         <source>Toggle vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Vel loddrætta vending</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1909"/>
         <source>Add ornament: vertical turn</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat prýði; loddrøtt vending</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1914"/>
         <source>Toggle vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Vel umvent vend</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1915"/>
         <source>Add ornament: vertical inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat prýði; loddrøtt umvend vending</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1920"/>
@@ -8380,12 +8350,12 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1938"/>
         <source>Toggle Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Vel Haydn prýði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1939"/>
         <source>Add ornament: Haydn ornament</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat príði: Haydn prýði</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1944"/>
@@ -9036,7 +9006,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2440"/>
         <source>Add laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat laissez viber</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2446"/>
@@ -9204,7 +9174,7 @@ um aftaná strok</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2586"/>
         <source>Pre-dive</source>
         <extracomment>Pre-dive, i.e. a movement of the tremolo bar prepared before picking the note</extracomment>
-        <translation type="unfinished"/>
+        <translation>For-bending</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2593"/>
@@ -9223,12 +9193,12 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2608"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hamra-á/hála-av</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2609"/>
         <source>Add hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat hamra-á/hála-av</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2617"/>
@@ -9298,7 +9268,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2680"/>
         <source>Show/hide element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Goym/vís bindandi rætthyrningar í lutinum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2686"/>
@@ -9313,7 +9283,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2693"/>
         <source>Show/hide segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>Vís/goym lutaskap</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2699"/>
@@ -9328,7 +9298,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2706"/>
         <source>Show/hide skylines</source>
-        <translation type="unfinished"/>
+        <translation>Vís/goym umhvarv</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2712"/>
@@ -9338,60 +9308,60 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2713"/>
         <source>Show/hide system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Goym/vís bindandi rætthyrningar í skipanini</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2719"/>
         <source>Show element masks</source>
-        <translation type="unfinished"/>
+        <translation>Vís lutamaskur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2720"/>
         <source>Show/hide element masks</source>
-        <translation type="unfinished"/>
+        <translation>Goym/vís lutamaskur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2726"/>
         <source>Show line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Vís striku-festi puntar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2727"/>
         <source>Show/hide line-attach points</source>
-        <translation type="unfinished"/>
+        <translation>Goym/vís striku-festi puntar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2733"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2734"/>
         <source>Mark empty staff visibility overrides</source>
-        <translation type="unfinished"/>
+        <translation>Marka tómar nótalinu sýnisbroytingar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2740"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2741"/>
         <source>Mark corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Marka spiltar taktir</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2747"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2748"/>
         <source>Show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>Vís glopp tøgnir</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2754"/>
         <source>Check for score corruptions</source>
-        <translation type="unfinished"/>
+        <translation>Kannað um spilla er í nótablaðnum</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
         <source>&amp;Master palette…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Høvuðs palett...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="42"/>
         <source>Open master palette</source>
-        <translation type="unfinished"/>
+        <translation>Opna høvuðspalett</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
@@ -9449,153 +9419,163 @@ um aftaná strok</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="49"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="50"/>
         <source>Play from selection</source>
-        <translation type="unfinished"/>
+        <translation>Spæl frá vali</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="56"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="70"/>
         <source>Stop</source>
         <translation>Stoppa</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="71"/>
         <source>Stop playback</source>
         <translation>Steðga avspæling</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="63"/>
         <source>Pause and select</source>
+        <translation>Steðga og vel</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="56"/>
+        <source>Pause</source>
+        <translation>Íhald</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
+        <source>Pause playback</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="64"/>
         <source>Pause and select playback position</source>
-        <translation type="unfinished"/>
+        <translation>Steðga og vel spæl støðu</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="70"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="71"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="77"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="78"/>
         <source>Rewind</source>
         <translation>Spola aftur</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="77"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="84"/>
         <source>Loop playback</source>
         <translation>Sloyfu avspæling</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="78"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="85"/>
         <source>Toggle ‘Loop playback’</source>
         <translation>Vel &apos;sloyfuspæl&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="85"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="92"/>
         <source>Metronome</source>
         <translation>Metronomur</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="93"/>
         <source>Toggle metronome playback</source>
         <translation>Tendra/sløkk metronom spæl</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="93"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="100"/>
         <source>Playback setup</source>
         <translation>Avspælingsstilling</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="94"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
         <source>Open playback setup dialog</source>
         <translation>Opna avspælingsvindeyga</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="103"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="110"/>
         <source>Enable MIDI input</source>
         <translation>Gilda MIDI inntak</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="111"/>
         <source>Toggle MIDI input</source>
         <translation>Vel MIDI inngang</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="114"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="121"/>
         <source>Written pitch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="115"/>
-        <source>Input written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Skrivaður tóni</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="122"/>
+        <source>Input written pitch</source>
+        <translation>Set inn skrivaðan tóna</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="129"/>
         <source>Sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Ljómandi tóni</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="130"/>
         <source>Input sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Set inn ljómandi tóna</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="133"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="134"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="140"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="141"/>
         <source>Play repeats</source>
         <translation>Spæl endurtøkur</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="141"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="142"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="148"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="149"/>
         <source>Play chord symbols</source>
         <translation>Spæl akkord tekn</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="149"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="156"/>
         <source>Hear playback when editing</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="150"/>
-        <source>Toggle hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>Hoyr avspæling meðan broytt verður</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="157"/>
+        <source>Toggle hear playback when editing</source>
+        <translation>Vel hoyr avspæling meðan broytt verður</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="164"/>
         <source>Pan score automatically</source>
         <translation>Panorera nótablað sjálvvirkandi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="158"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="165"/>
         <source>Pan score automatically during playback</source>
         <translation>Fylg nótablaðnum tá avspælt verður</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="165"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="166"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="172"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="173"/>
         <source>Enable count-in when playing</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="176"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="177"/>
-        <source>Set loop marker left</source>
-        <translation>Áset sloyfumark vinstrumegin</translation>
+        <translation>Virka inn-teljing meðan spælt verður</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="183"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="184"/>
+        <source>Set loop marker left</source>
+        <translation>Áset sloyfumark vinstrumegin</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="190"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="191"/>
         <source>Set loop marker right</source>
         <translation>Áset sloyfumark høgrumegin</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="193"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="200"/>
         <source>Reload playback cache</source>
-        <translation type="unfinished"/>
+        <translation>Tak avspælings cache inn umaftur</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="201"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="208"/>
         <source>Clear online sounds cache for this score</source>
-        <translation type="unfinished"/>
+        <translation>Strika online ljóð savn hjá hesum nótablaðnum</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/playbacktoolbarmodel.cpp" line="117"/>
@@ -9685,7 +9665,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to &amp;MuseScore.com…</source>
-        <translation type="unfinished"/>
+        <translation>Gev út á &amp;MuseScore.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="90"/>
@@ -9695,7 +9675,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on &amp;Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Deil á &amp;Audio.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="97"/>
@@ -9745,12 +9725,12 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>&amp;Clear list of recent files</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Strika lista við seinastu fílum</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="131"/>
         <source>Clear list of recent files</source>
-        <translation type="unfinished"/>
+        <translation>Strika lista við seinastu fílum</translation>
     </message>
     <message>
         <location filename="../../src/web/appshell/internal/applicationuiactions.cpp" line="85"/>
@@ -9825,7 +9805,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="170"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Leingingar amboðsbjálkia</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="198"/>
@@ -9906,7 +9886,7 @@ um aftaná strok</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/PublishPage.qml" line="122"/>
         <source>Publish toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Gev út amboðsbjálka</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="76"/>
@@ -10013,12 +9993,12 @@ Hetta strikar tó ikki nakað nótablað.</translation>
         <translation>lesur nótablaðið inn...</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="210"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="214"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>Ert tú sikkur í at nullstilla stillingar?</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="211"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="215"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
@@ -10027,7 +10007,7 @@ This action cannot be undone.</source>
 Hetta kann ikki angrast.</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="221"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="225"/>
         <source>Reset preferences</source>
         <translation>Nullstilla stillingar</translation>
     </message>
@@ -10069,7 +10049,8 @@ Hetta kann ikki angrast.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2026 MuseScore Limited.
+Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10135,7 +10116,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Discover new sound libraries in MuseHub and enjoy realistic score playback</source>
-        <translation type="unfinished"/>
+        <translation>Finn nýggjar ljóðgoymslur í MuseHub og hoyr veruleikakendar avspælingar av nótablaðnum</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10192,12 +10173,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="104"/>
         <source>If you choose to cancel, then be sure to check out our free MuseSounds playback libraries on &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Um tú velur at strika, vinarliga kanna okkara ókeypis MuseSounds avspælingarbanka á &lt;a href=&quot;%1&quot;&gt;MuseHub.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="114"/>
         <source>Visit MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Vitja MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/firstlaunchsetupmodel.cpp" line="126"/>
@@ -10252,7 +10233,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Akkordir og bandaborð diagramm</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="345"/>
@@ -10279,12 +10260,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="509"/>
         <source>&amp;MuseSampler</source>
-        <translation type="unfinished"/>
+        <translation>&amp;MuseSampler</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="564"/>
         <source>A&amp;ctions</source>
-        <translation type="unfinished"/>
+        <translation>G&amp;erðir</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="565"/>
@@ -10299,7 +10280,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="567"/>
         <source>E&amp;xtensions</source>
-        <translation type="unfinished"/>
+        <translation>L&amp;eingingar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="568"/>
@@ -10309,18 +10290,18 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="569"/>
         <source>&amp;VST</source>
-        <translation type="unfinished"/>
+        <translation>&amp;VST</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
         <source>&amp;Audio</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ljóð</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="574"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Diagnostikkur</translation>
     </message>
 </context>
 <context>
@@ -10347,7 +10328,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="209"/>
         <source>Pu&amp;blish online</source>
-        <translation type="unfinished"/>
+        <translation>Ge&amp;v út alment</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="222"/>
@@ -10404,7 +10385,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="412"/>
         <source>Enharmonic spelling</source>
-        <translation type="unfinished"/>
+        <translation>Enharmonisk staving</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="425"/>
@@ -10445,12 +10426,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/MidiSection.qml" line="63"/>
         <source>Round tempos to nearest whole number</source>
-        <translation type="unfinished"/>
+        <translation>Runda tempo til nærmasta heiltal</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/commonaudioapiconfigurationmodel.cpp" line="97"/>
         <source>The driver for this device could not be opened.</source>
-        <translation type="unfinished"/>
+        <translation>Sniðfílan til hetta tólið kundi ikki opnast</translation>
     </message>
 </context>
 <context>
@@ -10458,27 +10439,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="34"/>
         <source>Welcome</source>
-        <translation type="unfinished"/>
+        <translation>Vælkomin</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="122"/>
         <source>Previous item</source>
-        <translation type="unfinished"/>
+        <translation>Undanfarni lutur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="172"/>
         <source>Next item</source>
-        <translation type="unfinished"/>
+        <translation>Næsti lutur</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/WelcomeDialog.qml" line="263"/>
         <source>Don’t show welcome dialog on startup</source>
-        <translation type="unfinished"/>
+        <translation>Vís ikki vælkomumynd á byrja verður</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
         <source>Enjoy free cloud storage</source>
-        <translation type="unfinished"/>
+        <translation>Nýt ókeypis goymslu á netinum</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
@@ -10488,12 +10469,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
         <source>View my scores online</source>
-        <translation type="unfinished"/>
+        <translation>Sjá nótabløð á netinum</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="42"/>
         <source>What’s new in MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Nýtt í MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="44"/>
@@ -10508,32 +10489,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="51"/>
         <source>Install our free MuseSounds libraries</source>
-        <translation type="unfinished"/>
+        <translation>Legg inn okkara ókeypis MuseSounds søvn</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="53"/>
         <source>Explore our collection of realistic sample libraries, including solo instruments, marching percussion, and full orchestra - available for free on MuseHub.</source>
-        <translation type="unfinished"/>
+        <translation>Granska okkara savn av sannroyndum sample søvnum, sum fevna um solo ljóðføri, marsjslagverki, og fullum orkestri - kann heintast ókeypis á MuseHub.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="55"/>
         <source>Get it on MuseHub</source>
-        <translation type="unfinished"/>
+        <translation>Fá tað á MuseHub</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="60"/>
         <source>Explore our tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Granska okkara vegleiðingar/venjingar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="62"/>
         <source>We’ve put together a playlist of tutorials to help both beginners and experienced users get the most out of MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Vit hava samansett ein spælilista av venjingum, sum hjálpa bæði royndum og óroyndum brúkarum at fáa sum mest úr MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="64"/>
         <source>View tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Sí venjingar/vegleiðingar</translation>
     </message>
 </context>
 <context>
@@ -10550,7 +10531,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="52"/>
         <source>Do you want to add SoundFont %1?</source>
-        <translation type="unfinished"/>
+        <translation>Ynskir tú at innleggja ljóðfuntin %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/main/platform/general/generalsoundfontcontroller.cpp" line="72"/>
@@ -10586,18 +10567,18 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="641"/>
         <source>Tuplet %1</source>
-        <translation type="unfinished"/>
+        <translation>Nótabólkar %1</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="880"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Seks-lykla inntøku støða</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="882"/>
         <source>Navigation mode</source>
-        <translation type="unfinished"/>
+        <translation>Leiðfinnara støða</translation>
     </message>
 </context>
 <context>
@@ -10611,13 +10592,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="172"/>
         <source>Six-key input mode</source>
         <extracomment>Braille input with 6 keyboard keys (F,D,S &amp; J,K,L) to represent the 6 dots in a braille cell.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Seks-lykla inntøku støða</translation>
     </message>
     <message>
         <location filename="../../src/braille/qml/MuseScore/Braille/BrailleView.qml" line="174"/>
         <source>Navigation mode</source>
         <extracomment>Braille navigation.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Leiðfinnara støða</translation>
     </message>
 </context>
 <context>
@@ -10680,9 +10661,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>debugOption</name>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8426"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8416"/>
         <source>Toggle show gap rests</source>
-        <translation type="unfinished"/>
+        <translation>Skift vís glopp tøgnir</translation>
     </message>
 </context>
 <context>
@@ -11017,12 +10998,12 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
         <source>%1; Duration: %Ln measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%1; Tíðarbil: %Ln takt(ir)</numerusform><numerusform>%1; Tíðarbil: %Ln takt(ir)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%Ln measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%Ln takt(ir)</numerusform><numerusform>%Ln takt(ir)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="864"/>
@@ -11187,13 +11168,13 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1623"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="164"/>
         <source>End displayed measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Enda sýndu taktina: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1626"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>Enda slag: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1126"/>
@@ -11343,17 +11324,17 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/systemlock.cpp" line="155"/>
         <source>Start measure: %1; End measure: %2</source>
-        <translation type="unfinished"/>
+        <translation>Byrjanartakt: %1; Endatakt: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tapping.cpp" line="96"/>
         <source>Left-hand</source>
-        <translation type="unfinished"/>
+        <translation>Vinstra-hond</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tapping.cpp" line="96"/>
         <source>Right-hand</source>
-        <translation type="unfinished"/>
+        <translation>Høgra-hond</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
@@ -11371,14 +11352,14 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="74"/>
         <source>Tie to %1 (m. %2)</source>
         <extracomment>%1 represents the preceding jump item eg. coda. %2 represents the measure number</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bind til %1 (t. %2)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="85"/>
         <source>start of score</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>byrjan av nótablaðnum</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="101"/>
@@ -11399,7 +11380,7 @@ Bond %1 á streingjum %2</translation>
         <source>“%1” volta</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;. %1 in this string represents the volta's text set by the user</extracomment>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; volta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="124"/>
@@ -11407,14 +11388,14 @@ Bond %1 á streingjum %2</translation>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>Byrja endurtøku</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="143"/>
         <source>next note</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>næsti nóti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="147"/>
@@ -11426,7 +11407,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="210"/>
         <source>Toggle partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Skift partvísan bindiboga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="3869"/>
@@ -11447,17 +11428,17 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/editing/edit.cpp" line="7954"/>
         <location filename="../../src/engraving/editing/edit.cpp" line="8102"/>
         <source>Remove stale partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Strika dovnan partvísan bindiboga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8012"/>
         <source>Reset incoming partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla komandi partvísa legatobogan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8022"/>
         <source>Reset outgoing partial slur</source>
-        <translation type="unfinished"/>
+        <translation>Nullstilla fráfarandi partvísa legatobogan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -11554,40 +11535,40 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
         <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
         <source>MSCX error at byte offset %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>MSCX villa á byte offset %1 skeiv takt longd: %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="185"/>
         <source>invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ógildugt</numerusform><numerusform>Ógildugt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
         <source>Invalid</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ógildugt</numerusform><numerusform>Ógildugt</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="188"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="548"/>
         <source>bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Klombur</numerusform><numerusform>Klombur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="549"/>
         <source>Bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Klombur</numerusform><numerusform>Klombur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>part(ar)</numerusform><numerusform>part(ar)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
         <source>Part(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Part(ar)</numerusform><numerusform>Part(ar)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -11602,92 +11583,92 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nótabløð</numerusform><numerusform>Nótabløð</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="198"/>
         <source>Score(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nótabløð</numerusform><numerusform>Nótabløð</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tekstur</numerusform><numerusform>tekstur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Text</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tektstur</numerusform><numerusform>Tekstur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="203"/>
         <source>measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt nummar</numerusform><numerusform>Takt nummar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
         <source>Measure number(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt nummar</numerusform><numerusform>Takt nummar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
         <source>multimeasure rest range(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>fleirtaktatøgn øki</numerusform><numerusform>fleirtaktatøgn øki</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
         <source>Multimeasure rest range(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fleirtaktatøgn øki</numerusform><numerusform>Fleirtaktatøgn øki</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
         <source>instrument name(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ljóðførisnøvn</numerusform><numerusform>ljóðførisnøvn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
         <source>Instrument name(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ljóðførisnøvn</numerusform><numerusform>Ljóðførisnøvn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="212"/>
         <source>slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Legatoboga petti</numerusform><numerusform>legatoboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
         <source>Slur segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Legatoboga petti</numerusform><numerusform>Legatoboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bindiboga petti</numerusform><numerusform>bindiboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bindiboga petti</numerusform><numerusform>Bindiboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>laissez vibrer segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>laissez vibrer petti</numerusform><numerusform>laissez vibrer petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <source>Laissez vibrer segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Laissez vibrer petti</numerusform><numerusform> laissez vibrer petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>partial tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>parta bindiboga petti</numerusform><numerusform>parta bindiboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Partial tie segment(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Parta bindiboga petti</numerusform><numerusform>Parta bindiboga petti</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -11712,222 +11693,222 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>system divider(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>skipan skiljarar</numerusform><numerusform>skipan skiljarar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="231"/>
         <source>System divider(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Skipan skiljarar</numerusform><numerusform>Skipan skiljarar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="233"/>
         <source>stem slash(es)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>hálsur skákstrikaður</numerusform><numerusform>hálsur skákstrikaður</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="234"/>
         <source>Stem slash(es)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hálsur skákstrikaður</numerusform><numerusform>Hálsur skákstrikaður</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
         <source>arpeggio(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>arpeggio</numerusform><numerusform>arpeggio</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
         <source>Arpeggio(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Arpeggio</numerusform><numerusform>Arpeggio</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>akkord klombur</numerusform><numerusform>akkord klombur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Chord bracket(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Akkord klombur</numerusform><numerusform>Akkord klombur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>fortekn</numerusform><numerusform>fortekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
         <source>Accidental(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fortekn</numerusform><numerusform>Fortekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
         <source>ledger line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>eyka strika</numerusform><numerusform>eyka strika</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Ledger line(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Eyka strika</numerusform><numerusform>Eyka strika</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>hálsur</numerusform><numerusform>hálsur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Stem(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Hálsur</numerusform><numerusform>Hálsur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>halar</numerusform><numerusform>halar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
         <source>Flag(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Halar</numerusform><numerusform>Halar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>nótar</numerusform><numerusform>nótar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Note(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Nótar</numerusform><numerusform>Nótar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>lyklar</numerusform><numerusform>lyklar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
         <source>Clef(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Lyklar</numerusform><numerusform>Lyklar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
         <source>key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tónaættir</numerusform><numerusform>tónaættir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="261"/>
         <source>Key signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tónaættir</numerusform><numerusform>Tónaættir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
         <source>ambitus</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>ambitus</numerusform><numerusform>ambitus</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="264"/>
         <source>Ambitus</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ambitus</numerusform><numerusform>Ambitus</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <source>time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>takttekn</numerusform><numerusform>takttekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
         <source>Time signature(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takttekn</numerusform><numerusform>Takttekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tøgnir</numerusform><numerusform>tøgnir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <source>Rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tøgnir</numerusform><numerusform>Tøgnir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
         <source>multimeasure rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Ffeirtakta tøgnir</numerusform><numerusform>fleirtakta tøgnir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
         <source>Multimeasure rest(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Fleirtakta tøgnir</numerusform><numerusform>Fleirtakta tøgnir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <source>dead slapped</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>deytt slag</numerusform><numerusform>deytt slag</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Dead slapped</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Deytt slag</numerusform><numerusform>Deytt slag</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
         <source>symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>tekn</numerusform><numerusform>tekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Symbol(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Tekn</numerusform><numerusform>Tekn</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
         <source>breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>sreath</numerusform><numerusform>steðgur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
         <source>Breath(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Breath</numerusform><numerusform>Breath</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <source>measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>takt endurtøkur</numerusform><numerusform>takt endurtøkur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Measure repeat(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Takt endurtøkur</numerusform><numerusform>Takt endurtøkur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>bindibogar</numerusform><numerusform>bindibogar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Bindibogar</numerusform><numerusform>Bindibogar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>laissez vibrer</numerusform><numerusform>laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Laissez vibrer(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Laissez vibrer</numerusform><numerusform>Laissez vibrer</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>parta bindibogar</numerusform><numerusform>parta bindibogar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Partial tie(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Parta bindibogar</numerusform><numerusform>Parta bindibogar</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
@@ -12002,22 +11983,22 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="317"/>
         <source>lyrics</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>sangtekstir</numerusform><numerusform>sangtekstir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="318"/>
         <source>Lyrics</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Sangtekstir</numerusform><numerusform>Sangtekstir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="320"/>
         <source>figured bass</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>besiffraður bassur</numerusform><numerusform>besiffraður bassur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="321"/>
         <source>Figured bass</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Besiffraður bassur</numerusform><numerusform>Besiffraður bassur</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
@@ -12583,12 +12564,12 @@ Bond %1 á streingjum %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="491"/>
         <source>parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>parantesis</numerusform><numerusform>parantesir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="492"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Parantesir</numerusform><numerusform>Parantesir</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
@@ -13866,12 +13847,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3361"/>
         <source>Open / Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Opin/Atonalur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/partialtiepopupmodel.cpp" line="218"/>
         <source>Remove partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Strika dovnan partvísan bindiboga</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="778"/>
@@ -13886,7 +13867,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="780"/>
         <source>Extra long</source>
-        <translation type="unfinished"/>
+        <translation>Ekstra langt</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/soundflagsettingsmodel.cpp" line="374"/>
@@ -14964,7 +14945,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1313"/>
         <source>G clef ottava bassa with C clef</source>
-        <translation type="unfinished"/>
+        <translation>G lykil ottava bassa við C lykli</translation>
     </message>
 </context>
 <context>
@@ -15524,27 +15505,27 @@ Bond %1 á streingjum %2</translation>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="836"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="839"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo kíli</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="838"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="841"/>
         <source>Diminuendo hairpin</source>
         <translation>Diminoendo kíli</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="840"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="843"/>
         <source>Crescendo line</source>
         <translation>Crescendo-strika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="842"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="845"/>
         <source>Diminuendo line</source>
         <translation>Diminuendo strika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="844"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="847"/>
         <source>Custom</source>
         <translation>Sergjørt</translation>
     </message>
@@ -16141,33 +16122,33 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Swing up</source>
-        <translation type="unfinished"/>
+        <translation>Swing upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Swing down</source>
-        <translation type="unfinished"/>
+        <translation>Swing niður</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
         <source>Echo</source>
-        <translation type="unfinished"/>
+        <translation>Ekko</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
         <source>Damp</source>
-        <translation type="unfinished"/>
+        <translation>Dempa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
         <source>Let vibrate</source>
-        <translation type="unfinished"/>
+        <translation>Lat vibrera</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
         <source>Ring</source>
-        <translation type="unfinished"/>
+        <translation>Ring</translation>
     </message>
 </context>
 <context>
@@ -16175,7 +16156,7 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="60"/>
         <source>subtype</source>
-        <translation type="unfinished"/>
+        <translation>undirslag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="61"/>
@@ -16185,13 +16166,13 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="62"/>
         <source>generated</source>
-        <translation type="unfinished"/>
+        <translation>framleitt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="63"/>
         <location filename="../../src/engraving/dom/property.cpp" line="313"/>
         <source>color</source>
-        <translation type="unfinished"/>
+        <translation>litur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="64"/>
@@ -16201,17 +16182,17 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="65"/>
         <source>stacking order</source>
-        <translation type="unfinished"/>
+        <translation>stakkskipan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="66"/>
         <source>small</source>
-        <translation type="unfinished"/>
+        <translation>lítil</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="67"/>
         <source>hide when empty</source>
-        <translation type="unfinished"/>
+        <translation>fjal tá tómt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="68"/>
@@ -16221,67 +16202,67 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="69"/>
         <source>show if entire system empty</source>
-        <translation type="unfinished"/>
+        <translation>goym um øll skipanin er tóm</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="70"/>
         <source>show courtesy</source>
-        <translation type="unfinished"/>
+        <translation>vís tignarheiti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="71"/>
         <source>key signature mode</source>
-        <translation type="unfinished"/>
+        <translation>tónaætt støða</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="72"/>
         <source>line type</source>
-        <translation type="unfinished"/>
+        <translation>strikuslag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="73"/>
         <source>pitch</source>
-        <translation type="unfinished"/>
+        <translation>tóni</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="74"/>
         <source>cent offset</source>
-        <translation type="unfinished"/>
+        <translation>cent byrjan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="76"/>
         <source>tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>tónalur tónaflokkur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="77"/>
         <source>transposed tonal pitch class</source>
-        <translation type="unfinished"/>
+        <translation>Transponeraður tónalur tónaflokkur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="78"/>
         <source>line</source>
-        <translation type="unfinished"/>
+        <translation>strika</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="79"/>
         <source>fixed</source>
-        <translation type="unfinished"/>
+        <translation>fest</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="80"/>
         <source>fixed line</source>
-        <translation type="unfinished"/>
+        <translation>fest strika</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="81"/>
         <source>head type</source>
-        <translation type="unfinished"/>
+        <translation>høvd slag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="82"/>
         <source>head</source>
-        <translation type="unfinished"/>
+        <translation>høvd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="83"/>
@@ -16292,28 +16273,28 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/dom/property.cpp" line="84"/>
         <location filename="../../src/engraving/dom/property.cpp" line="206"/>
         <source>velocity</source>
-        <translation type="unfinished"/>
+        <translation>snarleiki</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="85"/>
         <location filename="../../src/engraving/dom/property.cpp" line="258"/>
         <source>anchor</source>
-        <translation type="unfinished"/>
+        <translation>akker</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="87"/>
         <source>direction</source>
-        <translation type="unfinished"/>
+        <translation>leið</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="88"/>
         <source>horizontal direction</source>
-        <translation type="unfinished"/>
+        <translation>vatnrøtt leið</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="89"/>
         <source>stem direction</source>
-        <translation type="unfinished"/>
+        <translation>háls ætt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="90"/>
@@ -16324,77 +16305,77 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="91"/>
         <source>up</source>
-        <translation type="unfinished"/>
+        <translation>upp</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="92"/>
         <source>leading space</source>
-        <translation type="unfinished"/>
+        <translation>oddarúm</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="93"/>
         <source>end of measure change</source>
-        <translation type="unfinished"/>
+        <translation>endi á taktbroyting</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="94"/>
         <source>mirror</source>
-        <translation type="unfinished"/>
+        <translation>spegla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="95"/>
         <source>parentheses</source>
-        <translation type="unfinished"/>
+        <translation>klombur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="96"/>
         <source>hide generated parentheses</source>
-        <translation type="unfinished"/>
+        <translation>goym framleiddar klombur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="97"/>
         <source>dot position</source>
-        <translation type="unfinished"/>
+        <translation>prikk støða</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="98"/>
         <source>combine voice</source>
-        <translation type="unfinished"/>
+        <translation>set saman rødd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="99"/>
         <source>tuning</source>
-        <translation type="unfinished"/>
+        <translation>stilling</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="100"/>
         <source>pause</source>
-        <translation type="unfinished"/>
+        <translation>tøgn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="102"/>
         <source>barline type</source>
-        <translation type="unfinished"/>
+        <translation>taktstriku slag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="103"/>
         <source>span</source>
-        <translation type="unfinished"/>
+        <translation>fevning</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="104"/>
         <source>span from</source>
-        <translation type="unfinished"/>
+        <translation>fevning frá</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="105"/>
         <source>span to</source>
-        <translation type="unfinished"/>
+        <translation>fevning til</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="106"/>
         <source>show tips</source>
-        <translation type="unfinished"/>
+        <translation>vís prai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="108"/>
@@ -16404,12 +16385,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="109"/>
         <source>fret</source>
-        <translation type="unfinished"/>
+        <translation>band</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="110"/>
         <source>string</source>
-        <translation type="unfinished"/>
+        <translation>strongur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="111"/>
@@ -16419,107 +16400,107 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="112"/>
         <source>dead</source>
-        <translation type="unfinished"/>
+        <translation>deyður</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="113"/>
         <source>played</source>
-        <translation type="unfinished"/>
+        <translation>spældur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="114"/>
         <source>nominal time signature</source>
-        <translation type="unfinished"/>
+        <translation>formligt takttekn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="115"/>
         <source>actual time signature</source>
-        <translation type="unfinished"/>
+        <translation>verulgit takttekn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="116"/>
         <source>number type</source>
-        <translation type="unfinished"/>
+        <translation>nummar slag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="117"/>
         <source>bracket type</source>
-        <translation type="unfinished"/>
+        <translation>klombur slag</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="118"/>
         <source>normal notes</source>
-        <translation type="unfinished"/>
+        <translation>vanligir nótar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="119"/>
         <source>actual notes</source>
-        <translation type="unfinished"/>
+        <translation>veruligir nótar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="120"/>
         <source>bracket start offset</source>
-        <translation type="unfinished"/>
+        <translation>klombur byrjan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="121"/>
         <source>bracket end offset</source>
-        <translation type="unfinished"/>
+        <translation>klombur endi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="122"/>
         <source>grow left</source>
-        <translation type="unfinished"/>
+        <translation>hækka vinstra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="123"/>
         <source>grow right</source>
-        <translation type="unfinished"/>
+        <translation>hækka høgra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="125"/>
         <source>height</source>
-        <translation type="unfinished"/>
+        <translation>hædd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="126"/>
         <source>width</source>
-        <translation type="unfinished"/>
+        <translation>vídd</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="127"/>
         <source>autosize frame</source>
-        <translation type="unfinished"/>
+        <translation>autostødd ramma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="128"/>
         <source>top gap</source>
-        <translation type="unfinished"/>
+        <translation>glopp í erva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="129"/>
         <source>bottom gap</source>
-        <translation type="unfinished"/>
+        <translation>glopp í neðra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="130"/>
         <source>left padding</source>
-        <translation type="unfinished"/>
+        <translation>vinstri margvísari</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="131"/>
         <source>right padding</source>
-        <translation type="unfinished"/>
+        <translation>høgri margvísari</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="132"/>
         <source>top padding</source>
-        <translation type="unfinished"/>
+        <translation>ovasti margvísari</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="133"/>
         <source>bottom padding</source>
-        <translation type="unfinished"/>
+        <translation>niðasti margvísari</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="134"/>
@@ -16616,7 +16597,7 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/dom/property.cpp" line="156"/>
         <location filename="../../src/engraving/dom/property.cpp" line="222"/>
         <source>text</source>
-        <translation type="unfinished"/>
+        <translation>tekstur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="159"/>
@@ -18034,6 +18015,26 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="506"/>
         <source>align with other rests in the same voice</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="508"/>
+        <source>cutaway</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="509"/>
+        <source>hide system barline</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="510"/>
+        <source>merge matching rests</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="511"/>
+        <source>reflect transposition</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -20317,12 +20318,12 @@ Bond %1 á streingjum %2</translation>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="371"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="372"/>
         <source>Tick barline 2</source>
         <translation>Tjúkk taktstrika 2</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="373"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="374"/>
         <source>Short barline 2</source>
         <translation>Stutt taktstrika 2</translation>
     </message>
@@ -20331,29 +20332,29 @@ Bond %1 á streingjum %2</translation>
     <name>engraving/timesig</name>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="349"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1634"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1653"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1635"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1654"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/additionalinfomodel.cpp" line="200"/>
         <source>Common time</source>
         <translation>Vanlig takt</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="351"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1635"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1654"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1636"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1655"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/additionalinfomodel.cpp" line="202"/>
         <source>Cut time</source>
         <translation>2/2 alla breve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="353"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1658"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1659"/>
         <source>Cut time (Bach)</source>
         <translation>Alla Breve (Bach)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="355"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1659"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1660"/>
         <source>Cut triple time (9/8)</source>
         <translation>Trífalda Alla Breve (9/8)</translation>
     </message>
@@ -20721,14 +20722,14 @@ Bond %1 á streingjum %2</translation>
         <translation>Avlýs</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="134"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="134"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="552"/>
         <source>Add</source>
         <translation>Set inn</translation>
     </message>
     <message>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialogContent.qml" line="143"/>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="80"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="284"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="184"/>
@@ -20736,7 +20737,7 @@ Bond %1 á streingjum %2</translation>
         <translation>Strika</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="83"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="83"/>
         <source>Clear all</source>
         <translation>Strika alt</translation>
     </message>
@@ -21532,32 +21533,32 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="31"/>
         <source>C-1</source>
-        <translation type="unfinished"/>
+        <translation>C-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="32"/>
         <source>C♯-1</source>
-        <translation type="unfinished"/>
+        <translation>C♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="33"/>
         <source>D♭-1</source>
-        <translation type="unfinished"/>
+        <translation>D♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="34"/>
         <source>D-1</source>
-        <translation type="unfinished"/>
+        <translation>D-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="35"/>
         <source>D♯-1</source>
-        <translation type="unfinished"/>
+        <translation>D♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="36"/>
         <source>E♭-1</source>
-        <translation type="unfinished"/>
+        <translation>E♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="37"/>
@@ -21567,807 +21568,807 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="38"/>
         <source>E♯-1</source>
-        <translation type="unfinished"/>
+        <translation>E♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="39"/>
         <source>F♭-1</source>
-        <translation type="unfinished"/>
+        <translation>F♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="40"/>
         <source>F-1</source>
-        <translation type="unfinished"/>
+        <translation>F-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="41"/>
         <source>F♯-1</source>
-        <translation type="unfinished"/>
+        <translation>F♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="42"/>
         <source>G♭-1</source>
-        <translation type="unfinished"/>
+        <translation>G♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="43"/>
         <source>G-1</source>
-        <translation type="unfinished"/>
+        <translation>G-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="44"/>
         <source>G♯-1</source>
-        <translation type="unfinished"/>
+        <translation>G♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="45"/>
         <source>A♭-1</source>
-        <translation type="unfinished"/>
+        <translation>A♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="46"/>
         <source>A-1</source>
-        <translation type="unfinished"/>
+        <translation>A-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="47"/>
         <source>A♯-1</source>
-        <translation type="unfinished"/>
+        <translation>A♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="48"/>
         <source>B♭-1</source>
-        <translation type="unfinished"/>
+        <translation>B♭-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="49"/>
         <source>B-1</source>
-        <translation type="unfinished"/>
+        <translation>B-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>B♯-1</source>
-        <translation type="unfinished"/>
+        <translation>B♯-1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>C♭0</source>
-        <translation type="unfinished"/>
+        <translation>C♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="53"/>
         <source>C0</source>
-        <translation type="unfinished"/>
+        <translation>C0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>C♯0</source>
-        <translation type="unfinished"/>
+        <translation>C♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="55"/>
         <source>D♭0</source>
-        <translation type="unfinished"/>
+        <translation>D♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="56"/>
         <source>D0</source>
-        <translation type="unfinished"/>
+        <translation>D0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="57"/>
         <source>D♯0</source>
-        <translation type="unfinished"/>
+        <translation>D♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="58"/>
         <source>E♭0</source>
-        <translation type="unfinished"/>
+        <translation>E♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="59"/>
         <source>E0</source>
-        <translation type="unfinished"/>
+        <translation>E0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="60"/>
         <source>E♯0</source>
-        <translation type="unfinished"/>
+        <translation>E♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="61"/>
         <source>F♭0</source>
-        <translation type="unfinished"/>
+        <translation>F♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="62"/>
         <source>F0</source>
-        <translation type="unfinished"/>
+        <translation>F0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="63"/>
         <source>F♯0</source>
-        <translation type="unfinished"/>
+        <translation>F♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="64"/>
         <source>G♭0</source>
-        <translation type="unfinished"/>
+        <translation>G♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="65"/>
         <source>G0</source>
-        <translation type="unfinished"/>
+        <translation>G0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="66"/>
         <source>G♯0</source>
-        <translation type="unfinished"/>
+        <translation>G♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="67"/>
         <source>A♭0</source>
-        <translation type="unfinished"/>
+        <translation>A♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="68"/>
         <source>A0</source>
-        <translation type="unfinished"/>
+        <translation>A0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="69"/>
         <source>A♯0</source>
-        <translation type="unfinished"/>
+        <translation>A♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="70"/>
         <source>B♭0</source>
-        <translation type="unfinished"/>
+        <translation>B♭0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="71"/>
         <source>B0</source>
-        <translation type="unfinished"/>
+        <translation>B0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="72"/>
         <source>B♯0</source>
-        <translation type="unfinished"/>
+        <translation>B♯0</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="74"/>
         <source>C♭1</source>
-        <translation type="unfinished"/>
+        <translation>C♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="75"/>
         <source>C1</source>
-        <translation type="unfinished"/>
+        <translation>C1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="76"/>
         <source>C♯1</source>
-        <translation type="unfinished"/>
+        <translation>C♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="77"/>
         <source>D♭1</source>
-        <translation type="unfinished"/>
+        <translation>D♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="78"/>
         <source>D1</source>
-        <translation type="unfinished"/>
+        <translation>D1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="79"/>
         <source>D♯1</source>
-        <translation type="unfinished"/>
+        <translation>D♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="80"/>
         <source>E♭1</source>
-        <translation type="unfinished"/>
+        <translation>E♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="81"/>
         <source>E1</source>
-        <translation type="unfinished"/>
+        <translation>E1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="82"/>
         <source>E♯1</source>
-        <translation type="unfinished"/>
+        <translation>E♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="83"/>
         <source>F♭1</source>
-        <translation type="unfinished"/>
+        <translation>F♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="84"/>
         <source>F1</source>
-        <translation type="unfinished"/>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="85"/>
         <source>F♯1</source>
-        <translation type="unfinished"/>
+        <translation>F♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="86"/>
         <source>G♭1</source>
-        <translation type="unfinished"/>
+        <translation>G♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="87"/>
         <source>G1</source>
-        <translation type="unfinished"/>
+        <translation>G1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="88"/>
         <source>G♯1</source>
-        <translation type="unfinished"/>
+        <translation>G♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="89"/>
         <source>A♭1</source>
-        <translation type="unfinished"/>
+        <translation>A♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="90"/>
         <source>A1</source>
-        <translation type="unfinished"/>
+        <translation>A1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="91"/>
         <source>A♯1</source>
-        <translation type="unfinished"/>
+        <translation>A♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="92"/>
         <source>B♭1</source>
-        <translation type="unfinished"/>
+        <translation>B♭1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="93"/>
         <source>B1</source>
-        <translation type="unfinished"/>
+        <translation>B1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="94"/>
         <source>B♯1</source>
-        <translation type="unfinished"/>
+        <translation>B♯1</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="96"/>
         <source>C♭2</source>
-        <translation type="unfinished"/>
+        <translation>C♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="97"/>
         <source>C2</source>
-        <translation type="unfinished"/>
+        <translation>C2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="98"/>
         <source>C♯2</source>
-        <translation type="unfinished"/>
+        <translation>C♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="99"/>
         <source>D♭2</source>
-        <translation type="unfinished"/>
+        <translation>D♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="100"/>
         <source>D2</source>
-        <translation type="unfinished"/>
+        <translation>D2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="101"/>
         <source>D♯2</source>
-        <translation type="unfinished"/>
+        <translation>D♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="102"/>
         <source>E♭2</source>
-        <translation type="unfinished"/>
+        <translation>E♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="103"/>
         <source>E2</source>
-        <translation type="unfinished"/>
+        <translation>E2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="104"/>
         <source>E♯2</source>
-        <translation type="unfinished"/>
+        <translation>E♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="105"/>
         <source>F♭2</source>
-        <translation type="unfinished"/>
+        <translation>F♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="106"/>
         <source>F2</source>
-        <translation type="unfinished"/>
+        <translation>F2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="107"/>
         <source>F♯2</source>
-        <translation type="unfinished"/>
+        <translation>F♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="108"/>
         <source>G♭2</source>
-        <translation type="unfinished"/>
+        <translation>G♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="109"/>
         <source>G2</source>
-        <translation type="unfinished"/>
+        <translation>G2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="110"/>
         <source>G♯2</source>
-        <translation type="unfinished"/>
+        <translation>G♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="111"/>
         <source>A♭2</source>
-        <translation type="unfinished"/>
+        <translation>A♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="112"/>
         <source>A2</source>
-        <translation type="unfinished"/>
+        <translation>A2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="113"/>
         <source>A♯2</source>
-        <translation type="unfinished"/>
+        <translation>A♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="114"/>
         <source>B♭2</source>
-        <translation type="unfinished"/>
+        <translation>B♭2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="115"/>
         <source>B2</source>
-        <translation type="unfinished"/>
+        <translation>B2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="116"/>
         <source>B♯2</source>
-        <translation type="unfinished"/>
+        <translation>B♯2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="118"/>
         <source>C♭3</source>
-        <translation type="unfinished"/>
+        <translation>C♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="119"/>
         <source>C3</source>
-        <translation type="unfinished"/>
+        <translation>C3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="120"/>
         <source>C♯3</source>
-        <translation type="unfinished"/>
+        <translation>C♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="121"/>
         <source>D♭3</source>
-        <translation type="unfinished"/>
+        <translation>D♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="122"/>
         <source>D3</source>
-        <translation type="unfinished"/>
+        <translation>D3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="123"/>
         <source>D♯3</source>
-        <translation type="unfinished"/>
+        <translation>D♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="124"/>
         <source>E♭3</source>
-        <translation type="unfinished"/>
+        <translation>E♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="125"/>
         <source>E3</source>
-        <translation type="unfinished"/>
+        <translation>E3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="126"/>
         <source>E♯3</source>
-        <translation type="unfinished"/>
+        <translation>E♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="127"/>
         <source>F♭3</source>
-        <translation type="unfinished"/>
+        <translation>F♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="128"/>
         <source>F3</source>
-        <translation type="unfinished"/>
+        <translation>F3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="129"/>
         <source>F♯3</source>
-        <translation type="unfinished"/>
+        <translation>F♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="130"/>
         <source>G♭3</source>
-        <translation type="unfinished"/>
+        <translation>G♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="131"/>
         <source>G3</source>
-        <translation type="unfinished"/>
+        <translation>G3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="132"/>
         <source>G♯3</source>
-        <translation type="unfinished"/>
+        <translation>G♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="133"/>
         <source>A♭3</source>
-        <translation type="unfinished"/>
+        <translation>A♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="134"/>
         <source>A3</source>
-        <translation type="unfinished"/>
+        <translation>A3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="135"/>
         <source>A♯3</source>
-        <translation type="unfinished"/>
+        <translation>A♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="136"/>
         <source>B♭3</source>
-        <translation type="unfinished"/>
+        <translation>B♭3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="137"/>
         <source>B3</source>
-        <translation type="unfinished"/>
+        <translation>B3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="138"/>
         <source>B♯3</source>
-        <translation type="unfinished"/>
+        <translation>B♯3</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="140"/>
         <source>C♭4</source>
-        <translation type="unfinished"/>
+        <translation>C♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="141"/>
         <source>C4</source>
-        <translation type="unfinished"/>
+        <translation>C4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="142"/>
         <source>C♯4</source>
-        <translation type="unfinished"/>
+        <translation>C♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="143"/>
         <source>D♭4</source>
-        <translation type="unfinished"/>
+        <translation>D♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="144"/>
         <source>D4</source>
-        <translation type="unfinished"/>
+        <translation>D4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="145"/>
         <source>D♯4</source>
-        <translation type="unfinished"/>
+        <translation>D♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="146"/>
         <source>E♭4</source>
-        <translation type="unfinished"/>
+        <translation>E♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="147"/>
         <source>E4</source>
-        <translation type="unfinished"/>
+        <translation>E4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="148"/>
         <source>E♯4</source>
-        <translation type="unfinished"/>
+        <translation>E♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="149"/>
         <source>F♭4</source>
-        <translation type="unfinished"/>
+        <translation>F♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="150"/>
         <source>F4</source>
-        <translation type="unfinished"/>
+        <translation>F4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="151"/>
         <source>F♯4</source>
-        <translation type="unfinished"/>
+        <translation>F♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="152"/>
         <source>G♭4</source>
-        <translation type="unfinished"/>
+        <translation>G♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="153"/>
         <source>G4</source>
-        <translation type="unfinished"/>
+        <translation>G4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="154"/>
         <source>G♯4</source>
-        <translation type="unfinished"/>
+        <translation>G♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="155"/>
         <source>A♭4</source>
-        <translation type="unfinished"/>
+        <translation>A♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="156"/>
         <source>A4</source>
-        <translation type="unfinished"/>
+        <translation>A4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="157"/>
         <source>A♯4</source>
-        <translation type="unfinished"/>
+        <translation>A♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="158"/>
         <source>B♭4</source>
-        <translation type="unfinished"/>
+        <translation>B♭4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="159"/>
         <source>B4</source>
-        <translation type="unfinished"/>
+        <translation>B4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="160"/>
         <source>B♯4</source>
-        <translation type="unfinished"/>
+        <translation>B♯4</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="162"/>
         <source>C♭5</source>
-        <translation type="unfinished"/>
+        <translation>C♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="163"/>
         <source>C5</source>
-        <translation type="unfinished"/>
+        <translation>C5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="164"/>
         <source>C♯5</source>
-        <translation type="unfinished"/>
+        <translation>C♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="165"/>
         <source>D♭5</source>
-        <translation type="unfinished"/>
+        <translation>D♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="166"/>
         <source>D5</source>
-        <translation type="unfinished"/>
+        <translation>D5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="167"/>
         <source>D♯5</source>
-        <translation type="unfinished"/>
+        <translation>D♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="168"/>
         <source>E♭5</source>
-        <translation type="unfinished"/>
+        <translation>E♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="169"/>
         <source>E5</source>
-        <translation type="unfinished"/>
+        <translation>E5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="170"/>
         <source>E♯5</source>
-        <translation type="unfinished"/>
+        <translation>E♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="171"/>
         <source>F♭5</source>
-        <translation type="unfinished"/>
+        <translation>F♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="172"/>
         <source>F5</source>
-        <translation type="unfinished"/>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="173"/>
         <source>F♯5</source>
-        <translation type="unfinished"/>
+        <translation>F♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="174"/>
         <source>G♭5</source>
-        <translation type="unfinished"/>
+        <translation>G♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="175"/>
         <source>G5</source>
-        <translation type="unfinished"/>
+        <translation>G5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="176"/>
         <source>G♯5</source>
-        <translation type="unfinished"/>
+        <translation>G♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="177"/>
         <source>A♭5</source>
-        <translation type="unfinished"/>
+        <translation>A♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="178"/>
         <source>A5</source>
-        <translation type="unfinished"/>
+        <translation>A5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="179"/>
         <source>A♯5</source>
-        <translation type="unfinished"/>
+        <translation>A♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="180"/>
         <source>B♭5</source>
-        <translation type="unfinished"/>
+        <translation>B♭5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="181"/>
         <source>B5</source>
-        <translation type="unfinished"/>
+        <translation>B5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="182"/>
         <source>B♯5</source>
-        <translation type="unfinished"/>
+        <translation>B♯5</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="184"/>
         <source>C♭6</source>
-        <translation type="unfinished"/>
+        <translation>C♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="185"/>
         <source>C6</source>
-        <translation type="unfinished"/>
+        <translation>C6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="186"/>
         <source>C♯6</source>
-        <translation type="unfinished"/>
+        <translation>C♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="187"/>
         <source>D♭6</source>
-        <translation type="unfinished"/>
+        <translation>D♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="188"/>
         <source>D6</source>
-        <translation type="unfinished"/>
+        <translation>D6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="189"/>
         <source>D♯6</source>
-        <translation type="unfinished"/>
+        <translation>D♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="190"/>
         <source>E♭6</source>
-        <translation type="unfinished"/>
+        <translation>E♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="191"/>
         <source>E6</source>
-        <translation type="unfinished"/>
+        <translation>E6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="192"/>
         <source>E♯6</source>
-        <translation type="unfinished"/>
+        <translation>E♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="193"/>
         <source>F♭6</source>
-        <translation type="unfinished"/>
+        <translation>F♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="194"/>
         <source>F6</source>
-        <translation type="unfinished"/>
+        <translation>F6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="195"/>
         <source>F♯6</source>
-        <translation type="unfinished"/>
+        <translation>F♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="196"/>
         <source>G♭6</source>
-        <translation type="unfinished"/>
+        <translation>G♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="197"/>
         <source>G6</source>
-        <translation type="unfinished"/>
+        <translation>G6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="198"/>
         <source>G♯6</source>
-        <translation type="unfinished"/>
+        <translation>G♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="199"/>
         <source>A♭6</source>
-        <translation type="unfinished"/>
+        <translation>A♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="200"/>
         <source>A6</source>
-        <translation type="unfinished"/>
+        <translation>A6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="201"/>
         <source>A♯6</source>
-        <translation type="unfinished"/>
+        <translation>A♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="202"/>
         <source>B♭6</source>
-        <translation type="unfinished"/>
+        <translation>B♭6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="203"/>
         <source>B6</source>
-        <translation type="unfinished"/>
+        <translation>B6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="204"/>
         <source>B♯6</source>
-        <translation type="unfinished"/>
+        <translation>B♯6</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="206"/>
         <source>C♭7</source>
-        <translation type="unfinished"/>
+        <translation>C♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="207"/>
@@ -22377,12 +22378,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="208"/>
         <source>C♯7</source>
-        <translation type="unfinished"/>
+        <translation>C♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="209"/>
         <source>D♭7</source>
-        <translation type="unfinished"/>
+        <translation>D♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="210"/>
@@ -22392,12 +22393,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="211"/>
         <source>D♯7</source>
-        <translation type="unfinished"/>
+        <translation>D♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="212"/>
         <source>E♭7</source>
-        <translation type="unfinished"/>
+        <translation>E♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="213"/>
@@ -22407,12 +22408,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="214"/>
         <source>E♯7</source>
-        <translation type="unfinished"/>
+        <translation>E♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="215"/>
         <source>F♭7</source>
-        <translation type="unfinished"/>
+        <translation>F♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="216"/>
@@ -22422,12 +22423,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="217"/>
         <source>F♯7</source>
-        <translation type="unfinished"/>
+        <translation>F♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="218"/>
         <source>G♭7</source>
-        <translation type="unfinished"/>
+        <translation>G♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="219"/>
@@ -22437,12 +22438,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="220"/>
         <source>G♯7</source>
-        <translation type="unfinished"/>
+        <translation>G♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="221"/>
         <source>A♭7</source>
-        <translation type="unfinished"/>
+        <translation>A♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="222"/>
@@ -22452,12 +22453,12 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="223"/>
         <source>A♯7</source>
-        <translation type="unfinished"/>
+        <translation>A♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="224"/>
         <source>B♭7</source>
-        <translation type="unfinished"/>
+        <translation>B♭7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="225"/>
@@ -22467,182 +22468,182 @@ Bond %1 á streingjum %2</translation>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="226"/>
         <source>B♯7</source>
-        <translation type="unfinished"/>
+        <translation>B♯7</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="228"/>
         <source>C♭8</source>
-        <translation type="unfinished"/>
+        <translation>C♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="229"/>
         <source>C8</source>
-        <translation type="unfinished"/>
+        <translation>C8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="230"/>
         <source>C♯8</source>
-        <translation type="unfinished"/>
+        <translation>C♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="231"/>
         <source>D♭8</source>
-        <translation type="unfinished"/>
+        <translation>D♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="232"/>
         <source>D8</source>
-        <translation type="unfinished"/>
+        <translation>D8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="233"/>
         <source>D♯8</source>
-        <translation type="unfinished"/>
+        <translation>D♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="234"/>
         <source>E♭8</source>
-        <translation type="unfinished"/>
+        <translation>E♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="235"/>
         <source>E8</source>
-        <translation type="unfinished"/>
+        <translation>E8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="236"/>
         <source>E♯8</source>
-        <translation type="unfinished"/>
+        <translation>E♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="237"/>
         <source>F♭8</source>
-        <translation type="unfinished"/>
+        <translation>F♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="238"/>
         <source>F8</source>
-        <translation type="unfinished"/>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="239"/>
         <source>F♯8</source>
-        <translation type="unfinished"/>
+        <translation>F♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="240"/>
         <source>G♭8</source>
-        <translation type="unfinished"/>
+        <translation>G♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="241"/>
         <source>G8</source>
-        <translation type="unfinished"/>
+        <translation>G8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="242"/>
         <source>G♯8</source>
-        <translation type="unfinished"/>
+        <translation>G♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="243"/>
         <source>A♭8</source>
-        <translation type="unfinished"/>
+        <translation>A♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="244"/>
         <source>A8</source>
-        <translation type="unfinished"/>
+        <translation>A8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="245"/>
         <source>A♯8</source>
-        <translation type="unfinished"/>
+        <translation>A♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="246"/>
         <source>B♭8</source>
-        <translation type="unfinished"/>
+        <translation>B♭8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="247"/>
         <source>B8</source>
-        <translation type="unfinished"/>
+        <translation>B8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="248"/>
         <source>B♯8</source>
-        <translation type="unfinished"/>
+        <translation>B♯8</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="250"/>
         <source>C♭9</source>
-        <translation type="unfinished"/>
+        <translation>C♭9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="251"/>
         <source>C9</source>
-        <translation type="unfinished"/>
+        <translation>C9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="252"/>
         <source>C♯9</source>
-        <translation type="unfinished"/>
+        <translation>C♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="253"/>
         <source>D♭9</source>
-        <translation type="unfinished"/>
+        <translation>D♭9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="254"/>
         <source>D9</source>
-        <translation type="unfinished"/>
+        <translation>D9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="255"/>
         <source>D♯9</source>
-        <translation type="unfinished"/>
+        <translation>D♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="256"/>
         <source>E♭9</source>
-        <translation type="unfinished"/>
+        <translation>E♭9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="257"/>
         <source>E9</source>
-        <translation type="unfinished"/>
+        <translation>E9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="258"/>
         <source>E♯9</source>
-        <translation type="unfinished"/>
+        <translation>E♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="259"/>
         <source>F♭9</source>
-        <translation type="unfinished"/>
+        <translation>F♭9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="260"/>
         <source>F9</source>
-        <translation type="unfinished"/>
+        <translation>F9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="261"/>
         <source>F♯9</source>
-        <translation type="unfinished"/>
+        <translation>F♯9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="262"/>
         <source>G♭9</source>
-        <translation type="unfinished"/>
+        <translation>G♭9</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/utils.cpp" line="263"/>
         <source>G9</source>
-        <translation type="unfinished"/>
+        <translation>G9</translation>
     </message>
 </context>
 <context>
@@ -25909,7 +25910,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="65"/>
         <source>Hammer-on/pull-off</source>
-        <translation type="unfinished"/>
+        <translation>Hamra-á/hála-av</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
@@ -26740,7 +26741,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/framework/midi/internal/platform/lin/alsamidioutport.cpp" line="84"/>
         <location filename="../../src/framework/midi/internal/platform/osx/coremidiinport.cpp" line="85"/>
         <location filename="../../src/framework/midi/internal/platform/osx/coremidioutport.cpp" line="162"/>
-        <location filename="../../src/framework/midi/internal/platform/win/winmidiinport.cpp" line="97"/>
+        <location filename="../../src/framework/midi/internal/platform/win/winmidiinport.cpp" line="99"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidioutport.cpp" line="91"/>
         <source>No device</source>
         <translation>Einki tól</translation>
@@ -26878,7 +26879,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="32"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Leingingar amboðsbjálkia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
@@ -27779,7 +27780,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="174"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Forsett</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RestOffsetSelector.qml" line="45"/>
@@ -28221,21 +28222,21 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>”</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="58"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="57"/>
         <source>%1 in %2</source>
         <comment>Transposing instrument displayed in the score</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;). Example: &quot;Horn in C alto&quot;</extracomment>
         <translation>%1 í %2</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="78"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="77"/>
         <source>%1 in %2 %3</source>
         <comment>One of several transposing instruments displayed in the score</comment>
         <extracomment>%1=name (&quot;Horn&quot;), %2=transposition (&quot;C alto&quot;), %3=number (&quot;2&quot;). Example: &quot;Horn in C alto 2&quot;</extracomment>
         <translation>%1 in %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="83"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="82"/>
         <source>%1 %2</source>
         <comment>One of several instruments displayed in the score</comment>
         <extracomment>%1=name (&quot;Flute&quot;), %2=number (&quot;2&quot;). Example: &quot;Flute 2&quot;</extracomment>
@@ -29138,7 +29139,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="77"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="190"/>
         <source>Tablature staff</source>
-        <translation type="unfinished"/>
+        <translation>Tablatur nótalinja</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="102"/>
@@ -29153,67 +29154,67 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="131"/>
         <source>Label for full bends:</source>
-        <translation type="unfinished"/>
+        <translation>Merki hjá fullbendingum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="163"/>
         <source>Dives</source>
-        <translation type="unfinished"/>
+        <translation>Kav</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="198"/>
         <source>Show dive lines</source>
-        <translation type="unfinished"/>
+        <translation>Vís kav strikur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="205"/>
         <source>On the staff</source>
-        <translation type="unfinished"/>
+        <translation>Á nótalinjuni</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="206"/>
         <source>Above the staff</source>
-        <translation type="unfinished"/>
+        <translation>Omanfyri nótalinjuni</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="236"/>
         <source>Whammy bar line</source>
-        <translation type="unfinished"/>
+        <translation>Whammy stong strika</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="246"/>
         <source>Text label:</source>
-        <translation type="unfinished"/>
+        <translation>Tekst merki:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="289"/>
         <source>Grace note bends/dives on tablature</source>
-        <translation type="unfinished"/>
+        <translation>Príðisnótabend/kav á tablatur</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="296"/>
         <source>Use cue sized fret numbers</source>
-        <translation type="unfinished"/>
+        <translation>Brúka bandatøl við ábendinga stødd</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="307"/>
         <source>Align pre-bends and pre-dives</source>
-        <translation type="unfinished"/>
+        <translation>Javnstilla for-bend og for-kav</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="314"/>
         <source>To the main note</source>
-        <translation type="unfinished"/>
+        <translation>Til høvuðstónan</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="315"/>
         <source>To the grace note</source>
-        <translation type="unfinished"/>
+        <translation>Til príðistónan</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="333"/>
         <source>Interval labels</source>
-        <translation type="unfinished"/>
+        <translation>Interval merki</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="341"/>
@@ -29223,7 +29224,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="342"/>
         <source>Level</source>
-        <translation type="unfinished"/>
+        <translation>Stig</translation>
     </message>
 </context>
 <context>
@@ -29231,7 +29232,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="119"/>
         <source>Preset</source>
-        <translation type="unfinished"/>
+        <translation>Forsett</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="161"/>
@@ -29246,22 +29247,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="214"/>
         <source>Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Kapitalisering</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="225"/>
         <source>Automatically capitalize note names</source>
-        <translation type="unfinished"/>
+        <translation>Kapitalisera nótanøvn sjálvvirkandi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="240"/>
         <source>Lowercase minor chords</source>
-        <translation type="unfinished"/>
+        <translation>Moll akkordir við lítlum stavum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="247"/>
         <source>Lowercase bass notes</source>
-        <translation type="unfinished"/>
+        <translation>Bassnótar við lítlum stavum</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="254"/>
@@ -30813,50 +30814,50 @@ misseydnaðist</translation>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="326"/>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="328"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1826"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1827"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1828"/>
         <source>Capo</source>
         <translation>Kapo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="336"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1832"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1833"/>
         <source>String tunings</source>
         <translation>Strengjastillingar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="311"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1804"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1805"/>
         <source>Left-hand tapping</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="315"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1808"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1809"/>
         <source>Right-hand tapping</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="321"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1811"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1812"/>
         <source>Hammer-on / pull-off</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="379"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1294"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1295"/>
         <source>Line (right arrowhead)</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="387"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1299"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1300"/>
         <source>Line (left arrowhead)</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="427"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1685"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1686"/>
         <source>Blank</source>
         <translation>Glopp</translation>
     </message>
@@ -30876,723 +30877,723 @@ misseydnaðist</translation>
         <translation>Dynamikkur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="287"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="288"/>
         <location filename="../../src/palette/widgets/keyedit.cpp" line="312"/>
         <location filename="../../src/palette/widgets/masterpalette.cpp" line="169"/>
         <source>Key signatures</source>
         <translation>Tónaættir</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="322"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="323"/>
         <source>Accidentals</source>
         <translation>Leys fortekn</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="352"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="353"/>
         <source>Barlines</source>
         <translation>Taktstrikur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="389"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="390"/>
         <source>Repeats &amp; jumps</source>
         <translation>Endurtøkur &amp; lop</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="483"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1159"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="484"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1160"/>
         <source>Prima volta</source>
         <translation>Prima volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="491"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1185"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="492"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1186"/>
         <source>Seconda volta, open</source>
         <translation>Seconda volta, opin</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="499"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1168"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="500"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1169"/>
         <source>Seconda volta</source>
         <translation>Seconda volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="507"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1176"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="508"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1177"/>
         <source>Terza volta</source>
         <translation>Terza volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="526"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="527"/>
         <source>Layout</source>
         <extracomment>The name of a palette</extracomment>
         <translation>Uppseting</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="575"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="576"/>
         <source>Fingerings</source>
         <translation>Fingrasetningur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="585"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="586"/>
         <source>Fingering %1</source>
         <translation>Fingrasetingur %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="593"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1784"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="594"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1785"/>
         <source>RH guitar fingering %1</source>
         <translation>HH gittar fingrasetningur %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="601"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1792"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="602"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1793"/>
         <source>LH guitar fingering %1</source>
         <translation>VH gittar fingrasetningur %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="608"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1799"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="609"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1800"/>
         <source>String number %1</source>
         <translation>Streingja nummar %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="631"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="632"/>
         <source>Tremolos</source>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="666"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="667"/>
         <source>Noteheads</source>
         <translation>Nótahøvd</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="691"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="692"/>
         <source>Articulations</source>
         <translation>Framburðir</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="696"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1138"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="697"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1139"/>
         <source>Slur</source>
         <translation>Legatobogi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="775"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="776"/>
         <source>Ornaments</source>
         <translation>Prýði</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="841"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="842"/>
         <source>Accordion</source>
         <extracomment>The name of a palette</extracomment>
         <translation>Akkordion</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="920"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="921"/>
         <source>Brackets</source>
         <translation>Klombur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="927"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="928"/>
         <source>Bracket</source>
         <translation>Klombur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="928"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="929"/>
         <source>Brace</source>
         <translation>Band</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="929"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="930"/>
         <source>Square</source>
         <translation>Kvadrat</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="930"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1289"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="931"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1290"/>
         <source>Line</source>
         <translation>Strika</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="951"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="952"/>
         <source>Breaths &amp; pauses</source>
         <translation>Andadráttir &amp; íhald</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="998"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="999"/>
         <source>Arpeggios &amp; glissandos</source>
         <translation>Arpeggio &amp; glissando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1057"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1058"/>
         <source>Clefs</source>
         <translation>Lyklar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1090"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1091"/>
         <source>Grace notes</source>
         <translation>Skreytnótar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1111"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1112"/>
         <source>Bagpipe embellishments</source>
         <translation>Sekkjapípu skreyt</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1131"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1132"/>
         <source>Lines</source>
         <translation>Strikur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1212"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1878"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1213"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1879"/>
         <source>Pedal (with ped and line)</source>
         <translation>Pedal (við ped og striku)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1219"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1220"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation>Peda (við ped og stjørnu)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1227"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1886"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1228"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1887"/>
         <source>Pedal (straight hooks)</source>
         <translation>Pedal (Beint horn)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1236"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1894"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1237"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1895"/>
         <source>Pedal (angled end hook)</source>
         <translation>Pedal (Horn í vinkul)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1244"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1902"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1245"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1903"/>
         <source>Pedal (both hooks angled)</source>
         <translation>Pedal (bæði horn í vinkul)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1252"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1910"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1253"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1911"/>
         <source>Pedal (angled start hook)</source>
         <translation>Pedal (horn vinkul við byrjan)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1272"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1517"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1273"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1518"/>
         <source>Staff text line</source>
         <translation>Nótalinju tekstalinja</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1278"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1527"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1279"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1528"/>
         <source>System text line</source>
         <translation>Skipanar tekstalinja</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1284"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1285"/>
         <source>Text line</source>
         <translation>Tekst strika</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1304"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1958"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1305"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1959"/>
         <source>Ambitus</source>
         <translation>Ambitus</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1307"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1308"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
         <source>Let ring</source>
         <translation>Lat ljóma</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1325"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1326"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>Palm mute</source>
         <translation>Lógva doyving</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="396"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1327"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1912"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1328"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1913"/>
         <source>Chord bracket</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="397"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1328"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1913"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1329"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1914"/>
         <source>Chord bracket (play with left hand)</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="398"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1329"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1914"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1915"/>
         <source>Chord bracket (play with right hand)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1343"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1344"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1364"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1365"/>
         <source>Half note = 80 BPM</source>
         <translation>Hálvur nóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1367"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1368"/>
         <source>Quarter note = 80 BPM</source>
         <translation>Fjórðingsnóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1370"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1371"/>
         <source>Eighth note = 80 BPM</source>
         <translation>8 prt. nóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1373"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1374"/>
         <source>Dotted half note = 80 BPM</source>
         <translation>Prikkaður hálvnóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1376"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1377"/>
         <source>Dotted quarter note = 80 BPM</source>
         <translation>Prikkaður fjórðingsnóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1379"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1380"/>
         <source>Dotted eighth note = 80 BPM</source>
         <translation>Prikkaðir 8 prt. nóti = 80 SUM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1397"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1398"/>
         <source>Metric modulation: quarter note = dotted quarter note</source>
         <translation>Metrisk modulatión: fjórðingsnóti = prikkaður fjórðingsnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1400"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1401"/>
         <source>Metric modulation: dotted quarter note = quarter note</source>
         <translation>Metrisk modulatión: prikkaður fjórðingsnóti = fjórðingsnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1403"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1404"/>
         <source>Metric modulation: half note = quarter note</source>
         <translation>Metrisk modulatión: hálvnóti = fjórðingsnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1406"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1407"/>
         <source>Metric modulation: quarter note = half note</source>
         <translation>Metrisk modulatión: fjórðingsnóti = hálvnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1409"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1410"/>
         <source>Metric modulation: eighth note = eighth note</source>
         <translation>Metrisk modulatión: 8pt nóti = 8pt nóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1412"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1413"/>
         <source>Metric modulation: quarter note = quarter note</source>
         <translation>Metrisk modulatión: fjórðinsnóti = fjórðingsnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1415"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1416"/>
         <source>Metric modulation: dotted eighth note = quarter note</source>
         <translation>Metrisk modulatión = prikkaður 8pt = fjórðinsnóti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1436"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1437"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
         <source>accel.</source>
         <translation>accel.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1437"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1438"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1445"/>
         <source>allarg.</source>
         <translation>allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1438"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1439"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
         <source>rall.</source>
         <translation>rall.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1439"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1440"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
         <source>rit.</source>
         <translation>rit.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1445"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1446"/>
         <source>calando</source>
         <translation>calando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1446"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1447"/>
         <source>lentando</source>
         <translation>lentando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1447"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1448"/>
         <source>morendo</source>
         <translation>morendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1448"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
         <source>precipitando</source>
         <translation>precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
         <source>smorz.</source>
         <translation>smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
         <source>sost.</source>
         <translation>sost.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
         <source>string.</source>
         <translation>Strongur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1465"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1466"/>
         <source>a tempo</source>
         <translation>a tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1472"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1473"/>
         <source>tempo primo</source>
         <translation>tempo primo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1481"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1483"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1482"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1484"/>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1490"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1496"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1491"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1497"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
         <translation>Straight</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1505"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1506"/>
         <source>Text</source>
         <translation>Tekstur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1511"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1512"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1513"/>
         <source>Staff text</source>
         <translation>Nótalinju tekstur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1520"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1521"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1522"/>
         <source>System text</source>
         <translation>Skipanar tekstur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1531"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1532"/>
         <source>expression</source>
         <translation>framsøgn</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1533"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1534"/>
         <source>Expression text</source>
         <translation>Framsagnar tekstur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1536"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1537"/>
         <source>Change instr.</source>
         <translation>Broyt ljf.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1537"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>Instrument change</source>
         <translation>Ljóðføris broyting</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1541"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>Rehearsal mark</source>
         <translation>Venjingar merki</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1551"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1552"/>
         <source>legato</source>
         <translation>legato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1552"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
         <source>pizz.</source>
         <translation>pizz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
         <source>arco</source>
         <translation>arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
         <source>Arco</source>
         <translation>Arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1555"/>
         <source>tremolo</source>
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1556"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1557"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>mute</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1558"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1559"/>
         <source>open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>opin</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1559"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1840"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1560"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1841"/>
         <source>distort</source>
         <translation>avskepla</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1560"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1841"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1561"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1842"/>
         <source>overdrive</source>
         <translation>overdrive</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1561"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1842"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1562"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>harmonics</source>
         <translation>yvirtónar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1562"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1844"/>
         <source>jazz tone</source>
         <translation>jazz tóni</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1844"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1564"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1845"/>
         <source>normal</source>
         <translation>vanlig</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1583"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1584"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1585"/>
         <source>Measure number</source>
         <translation>Takt nummar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1587"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
         <source>détaché</source>
         <translation>détaché</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1589"/>
         <source>martelé</source>
         <translation>martelé</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1589"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1590"/>
         <source>col legno</source>
         <translation>col legno</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1590"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1591"/>
         <source>sul pont.</source>
         <translation>sul pont.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1591"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1592"/>
         <source>sul tasto</source>
         <translation>sul tasto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1592"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1593"/>
         <source>vibrato</source>
         <translation>vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1616"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1617"/>
         <location filename="../../src/palette/widgets/masterpalette.cpp" line="170"/>
         <location filename="../../src/palette/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation>Takttekn</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1674"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1675"/>
         <source>Fretboard diagrams</source>
         <translation>Bandatalvur</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1687"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1688"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1688"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1689"/>
         <source>Cm</source>
         <translation>Cm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1689"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1690"/>
         <source>C7</source>
         <translation>C7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1691"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1692"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1692"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1693"/>
         <source>Dm</source>
         <translation>Dm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1693"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1694"/>
         <source>D7</source>
         <translation>D7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1695"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1696"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1696"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1697"/>
         <source>Em</source>
         <translation>Em</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1697"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1698"/>
         <source>E7</source>
         <translation>E7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1699"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1700"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1700"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1701"/>
         <source>Fm</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1701"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1702"/>
         <source>F7</source>
         <translation>F7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1703"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1704"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1704"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1705"/>
         <source>Gm</source>
         <translation>Gm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1705"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1706"/>
         <source>G7</source>
         <translation>G7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1707"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1709"/>
         <source>Am</source>
         <translation>Am</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1709"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1710"/>
         <source>A7</source>
         <translation>A7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1711"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1712"/>
         <source>B</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1712"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1713"/>
         <source>Bm</source>
         <translation>Bm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1713"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1714"/>
         <source>B7</source>
         <translation>B7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>Guitar</source>
         <translation>Gittari</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
         <source>Barré line</source>
         <translation>Barré strika</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="287"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
         <source>Whammy bar</source>
         <translation>Whammy bar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1862"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1863"/>
         <source>Keyboard</source>
         <translation>Klaver</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1929"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1930"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
         <translation>Tónahædd</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1965"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1966"/>
         <source>Harp</source>
         <translation>Harpa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1971"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1972"/>
         <source>Harp pedal diagram</source>
         <translation>Harpupedal talva</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1976"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1977"/>
         <source>Harp pedal text diagram</source>
         <translation>Harpupedal tekstur talva</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1984"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1985"/>
         <source>Handbells</source>
         <translation type="unfinished"/>
     </message>
@@ -33529,28 +33530,28 @@ miseydnað: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="89"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="91"/>
         <source>Reverb</source>
         <translation>Reverb</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="95"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="97"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation>Eyka %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1074"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1077"/>
         <source>Metronome</source>
         <translation>Metronomur</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1084"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1087"/>
         <source>Chords</source>
         <translation>Akkordir</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1445"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1448"/>
         <source>Loading audio samples</source>
         <translation>Tekur inn ljóð sampul</translation>
     </message>
@@ -33591,17 +33592,17 @@ miseydnað: %2</translation>
         <translation> Blandipultur kanal %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="681"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="683"/>
         <source>Change sound</source>
         <translation>Broyt ljóð</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="684"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="686"/>
         <source>Are you sure you want to change this sound?</source>
         <translation>Ætlar tú veruliga at broyta hetta ljóðið?</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="685"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/mixerchannelitem.cpp" line="687"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
         <translation>Ljóðmerkir á hesum ljóðførinum verða møguliga nullstillaði, men nótalinju tekstur verður verðandi. Gerðin kann ikki broytast.</translation>
     </message>
@@ -33641,12 +33642,12 @@ miseydnað: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="15"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="17"/>
         <source>No effect</source>
         <translation>Eingin effekt</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="79"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/outputresourceitem.cpp" line="81"/>
         <source>Get more effects</source>
         <translation type="unfinished"/>
     </message>
@@ -33858,7 +33859,7 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FoldersSection.qml" line="31"/>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="191"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="195"/>
         <source>Folders</source>
         <translation>Faldarar</translation>
     </message>
@@ -33889,7 +33890,7 @@ miseydnað: %2</translation>
         <translation>Finn verandi installatión </translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="79"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="81"/>
         <source>Download FFmpeg</source>
         <translation>Tak niður FFmpeg</translation>
     </message>
@@ -33915,7 +33916,7 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/LanguagesSection.qml" line="31"/>
-        <source>Languages</source>
+        <source>Language</source>
         <translation>Mál</translation>
     </message>
     <message>
@@ -34077,7 +34078,7 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NoteInputSection.qml" line="33"/>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="167"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="169"/>
         <source>Note input</source>
         <translation>Nótapennur</translation>
     </message>
@@ -34556,67 +34557,67 @@ miseydnað: %2</translation>
         <translation>Vel forsett snið til innflutning</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="155"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="157"/>
         <source>General</source>
         <translation>Høvuðs-</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="158"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="160"/>
         <source>Appearance</source>
         <translation>Útsjónd</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="161"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="163"/>
         <source>Canvas</source>
         <translation>Lørift</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="164"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="166"/>
         <source>Save &amp; publish</source>
         <translation>Goym &amp; gev út</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="170"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="172"/>
         <source>Score</source>
         <translation>Raddskrá</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="173"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="175"/>
         <source>Audio &amp; MIDI</source>
         <translation>Ljóð &amp; MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="176"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="179"/>
         <source>MIDI mappings</source>
         <translation>MIDI kortlegging</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="179"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="183"/>
         <source>Video</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="182"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="186"/>
         <source>Percussion</source>
         <translation>Slagverk</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="185"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="189"/>
         <source>Import</source>
         <translation>Flyt inn</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="188"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="192"/>
         <source>Shortcuts</source>
         <translation>Sniðvegir</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="194"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="198"/>
         <source>Advanced</source>
         <translation>Framkomið</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="197"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="201"/>
         <source>Braille</source>
         <translation>Blindaskrift</translation>
     </message>
@@ -35336,32 +35337,32 @@ miseydnað: %2</translation>
         <translation>Útflutnings stillingar</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="149"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="151"/>
         <source>Export…</source>
         <translation>Flyt út…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="46"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="47"/>
         <source>Sample rate:</source>
         <translation>Sample Rate:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="57"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="58"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="71"/>
-        <source>Bitrate:</source>
-        <translation>Bitrate:</translation>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="72"/>
+        <source>Bit rate:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="82"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="83"/>
         <source>%1 kBit/s</source>
         <translation>%1 kBit/s</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="96"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="97"/>
         <source>Sample format:</source>
         <translation type="unfinished"/>
     </message>
@@ -35369,24 +35370,23 @@ miseydnað: %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="65"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/OggSettingsPage.qml" line="39"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/WavSettingsPage.qml" line="38"/>
         <source>Each selected part will be exported as a separate audio file.</source>
         <translation>Hvør parturin verður fluttur út á serstøkum ljóðfíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="55"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="59"/>
         <source>Format:</source>
         <translation>Forsnið:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="102"/>
         <source>File type:</source>
         <translation>Fíluslag:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="191"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="197"/>
         <source>Open destination folder on export</source>
         <translation>Opna mál faldara tá útflutt verður</translation>
     </message>
@@ -35568,207 +35568,232 @@ miseydnað: %2</translation>
         <translation>Flytir út…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="53"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="55"/>
         <source>Compressed</source>
         <translation>Stappa</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="54"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="56"/>
         <source>Compressed MusicXML files</source>
         <translation>Stappaðar MusicXML fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="57"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="59"/>
         <source>Uncompressed</source>
         <translation>Óstappa</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="58"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="62"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="60"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="64"/>
         <source>Uncompressed MusicXML files</source>
         <translation>Óstappaðar MusicXML fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="61"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="63"/>
         <source>Uncompressed (outdated)</source>
         <translation>Óstappa (avoldað)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="68"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="70"/>
         <source>PDF file</source>
         <translation>PDF fíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="69"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="71"/>
         <source>PDF files</source>
         <translation>PDF fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="72"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="73"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="74"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="75"/>
         <source>PNG images</source>
         <translation>PNG myndir</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="76"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="77"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="78"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="79"/>
         <source>SVG images</source>
         <translation>SVG myndir</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="80"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="82"/>
         <source>MP3 audio</source>
         <translation>MP3 ljóð</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="81"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="83"/>
         <source>MP3 audio files</source>
         <translation>MP3 ljóð fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="84"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="86"/>
         <source>WAV audio</source>
         <translation>WAV ljóð</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="85"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="87"/>
         <source>WAV audio files</source>
         <translation>Wav ljóð fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="88"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="90"/>
         <source>OGG audio</source>
         <translation>OGG ljóð</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="89"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="91"/>
         <source>OGG audio files</source>
         <translation>OGG ljóð fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="92"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="94"/>
         <source>FLAC audio</source>
         <translation>FLAC ljóð</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="93"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
         <source>FLAC audio files</source>
         <translation>FLAC ljóð fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="96"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="98"/>
         <source>AAC audio</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="97"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="99"/>
         <source>AAC audio files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="101"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="102"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="103"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="104"/>
         <source>MP4 video</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="108"/>
         <source>MIDI file</source>
         <translation>MID fíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="107"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="109"/>
         <source>MIDI files</source>
         <translation>MIDI fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="112"/>
         <source>MusicXML</source>
         <translation>MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation>Blindaskift (grundleggjandi takt yvir takt)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="116"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
         <source>Braille files</source>
         <translation>Blindaskrift filur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="118"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="120"/>
         <source>MEI</source>
         <translation>MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="119"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
         <source>MEI files</source>
         <translation>MEI fíla</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="122"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="124"/>
         <source>MNX (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="123"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
         <source>MNX files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="126"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="128"/>
         <source>LRC file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="127"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="129"/>
         <source>LRC files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="342"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="363"/>
         <source>Each page to a separate file</source>
         <translation>Hvør síða á ymiskar fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="343"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="364"/>
         <source>Each part to a separate file</source>
         <translation>Hvør partur á ymsar fílur</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="344"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="365"/>
         <source>All parts combined in one file</source>
         <translation>Allir partar saman á eina fílu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="764"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="816"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Øll uppseting</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="766"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="818"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Reglubrot í skipan og á síðu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="768"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="820"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Einans handstýrd reglubrot í skipan og á síðu.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="770"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="822"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation>Eingi reglubrot í skipan ella á síðu</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="41"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
+        <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
+        <source>Download FFmpeg</source>
+        <translation>Tak niður FFmpeg</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="77"/>
+        <source>Choose FFmpeg library folder</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="80"/>
+        <source>Locate existing installation</source>
+        <translation>Finn verandi installatión </translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
         <source>Video resolution:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="140"/>
+        <source>Each selected part will be exported as a separate video file.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -36217,8 +36242,8 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
-        <source>To the Cloud (free)</source>
-        <translation>Goym í skýnum (ókeypis)</translation>
+        <source>To the cloud (free)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
@@ -36620,30 +36645,30 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/PublishPage/PublishToolBar.qml" line="31"/>
         <source>Publish toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Gev út amboðsbjálka</translation>
     </message>
 </context>
 <context>
     <name>shortcuts</name>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="32"/>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="51"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="32"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingTopPanel.qml" line="51"/>
         <source>MIDI remote control</source>
         <translation>MIDI fjarstýring</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="94"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="94"/>
         <source>Press a key or adjust a control on your MIDI device to assign it to this action.</source>
         <translation>Trýst á knapp ella skrúva knøtt á tínum MIDI tólu, fyri at seta í samband við hesa funku.</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="103"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="103"/>
         <source>MIDI mapping:</source>
         <translation>MIDI kortlegging:</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="118"/>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/editmidimappingmodel.cpp" line="59"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/EditMidiMappingDialog.qml" line="118"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/editmidimappingmodel.cpp" line="59"/>
         <source>Waiting…</source>
         <extracomment>The app is waiting for the user to trigger a valid MIDI remote event</extracomment>
         <translation>Bíðar...</translation>
@@ -36664,17 +36689,17 @@ miseydnað: %2</translation>
         <translation>Slag sum ásetur sniðveg</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="43"/>
         <source>MIDI mapping bottom panel</source>
         <translation>MIDI kortlegging niðari vongur</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="55"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingBottomPanel.qml" line="55"/>
         <source>Assign MIDI mapping…</source>
         <translation>Áset MIDI kortlegging...</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="40"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/internal/MidiMappingTopPanel.qml" line="40"/>
         <source>MIDI mapping top panel</source>
         <translation>MIDI kortleggin ovari vongur</translation>
     </message>
@@ -36699,8 +36724,8 @@ miseydnað: %2</translation>
         <translation>Til forsett</translation>
     </message>
     <message>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/MidiDeviceMappingPage.qml" line="93"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="32"/>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="93"/>
         <source>action</source>
         <translation>gerð</translation>
     </message>
@@ -36725,7 +36750,7 @@ miseydnað: %2</translation>
         <translation>leita sniðveg</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/MidiDeviceMappingPage.qml" line="95"/>
         <source>status</source>
         <translation>støða</translation>
     </message>
@@ -36751,13 +36776,13 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/editshortcutmodel.cpp" line="223"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="140"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="142"/>
         <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>Hesin sniðvegurin er longu knýttur at: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/editshortcutmodel.cpp" line="243"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="189"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="191"/>
         <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
         <translation>Vil tú veruliga knýta tað til &lt;b&gt;%1&lt;/b&gt; í staðin?</translation>
     </message>
@@ -36767,7 +36792,7 @@ miseydnað: %2</translation>
         <translation>Endurknýt sniðveg</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/mididevicemappingmodel.cpp" line="102"/>
+        <location filename="../../src/framework/midiremote/qml/Muse/MidiRemote/mididevicemappingmodel.cpp" line="101"/>
         <source>Inactive</source>
         <translation>Óvirkið</translation>
     </message>
@@ -36787,19 +36812,19 @@ miseydnað: %2</translation>
         <translation>Flyt út sniðvegir</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="106"/>
+        <location filename="../../src/framework/midiremote/midiremotetypes.h" line="58"/>
         <source>Note %1</source>
         <extracomment>A MIDI remote event, namely a note event</extracomment>
         <translation>Nóti %1</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="110"/>
+        <location filename="../../src/framework/midiremote/midiremotetypes.h" line="62"/>
         <source>CC %1</source>
         <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
         <translation>CC %1</translation>
     </message>
     <message>
-        <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="114"/>
+        <location filename="../../src/framework/midiremote/midiremotetypes.h" line="66"/>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="506"/>
         <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="700"/>
         <source>None</source>
@@ -36807,12 +36832,12 @@ miseydnað: %2</translation>
         <translation>Einki</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="101"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="103"/>
         <source>Reassign shortcut for &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="184"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/editpercussionshortcutmodel.cpp" line="186"/>
         <source>When this instrument is selected, &lt;b&gt;%1&lt;/b&gt; will no longer run &lt;b&gt;%2&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
@@ -36885,7 +36910,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="162"/>
         <source>Got it</source>
-        <translation type="unfinished"/>
+        <translation>Eri við</translation>
     </message>
     <message>
         <location filename="../../src/framework/tours/qml/Muse/Tours/internal/TourStepPopup.qml" line="162"/>
@@ -36896,7 +36921,7 @@ miseydnað: %2</translation>
 <context>
     <name>ui</name>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="54"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="55"/>
         <source>Current path:</source>
         <translation>Verðandi leið:</translation>
     </message>
@@ -37099,7 +37124,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="136"/>
         <source>No button</source>
-        <translation type="unfinished"/>
+        <translation>Eingin knappur</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/buttonboxmodel.h" line="137"/>
@@ -37234,7 +37259,7 @@ miseydnað: %2</translation>
         <location filename="../../src/engraving/editing/edit.cpp" line="2065"/>
         <location filename="../../src/engraving/editing/edit.cpp" line="2214"/>
         <source>Add tie</source>
-        <translation type="unfinished"/>
+        <translation>Legg bindiboga afturat</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="738"/>
@@ -37245,7 +37270,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="783"/>
         <source>Add long slur</source>
-        <translation type="unfinished"/>
+        <translation>Legg langan legatoboga afturat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/api/v1/qmlpluginapi.cpp" line="404"/>
@@ -37253,7 +37278,7 @@ miseydnað: %2</translation>
         <translation>Nýtt nótablað</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/api/v1/score.cpp" line="333"/>
+        <location filename="../../src/engraving/api/v1/score.cpp" line="598"/>
         <source>Plugin edit</source>
         <translation type="unfinished"/>
     </message>
@@ -37299,7 +37324,7 @@ miseydnað: %2</translation>
         <translation>Set tøgn inn</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/editing/textedit.cpp" line="914"/>
+        <location filename="../../src/engraving/editing/textedit.cpp" line="925"/>
         <source>Paste text</source>
         <translation type="unfinished"/>
     </message>
@@ -37474,74 +37499,74 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="71"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="233"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="232"/>
         <source>Add/remove instruments</source>
         <translation>Legg afturat/strika ljóðføri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="106"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="954"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="867"/>
         <source>Remove instruments</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1076"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="987"/>
         <source>Remove staves</source>
         <translation>Strika nótalinjur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="601"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="621"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="592"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="612"/>
         <source>Add staff</source>
         <translation>Legg nótalinju afturat</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="167"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="645"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="636"/>
         <source>Add linked staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="191"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="706"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="697"/>
         <source>Replace instrument</source>
         <translation>Skift út ljóðføri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="226"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="732"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="722"/>
         <source>Edit drumset</source>
         <translation>Broyt Trummusett</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="264"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="773"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="762"/>
         <source>Add system markings</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="277"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="808"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="776"/>
         <source>Remove system markings</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="286"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="846"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="795"/>
         <source>Move system markings</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="303"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="891"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="804"/>
         <source>Add system object layer below the bottom staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="316"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="900"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="813"/>
         <source>Remove system object layer below the bottom staff</source>
         <translation type="unfinished"/>
     </message>
@@ -37704,7 +37729,7 @@ miseydnað: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5451"/>
         <source>Flip horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Vend vatnrætt</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5511"/>
@@ -37740,7 +37765,7 @@ miseydnað: %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5699"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8266"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8256"/>
         <source>Toggle articulation</source>
         <translation type="unfinished"/>
     </message>
@@ -37998,108 +38023,113 @@ miseydnað: %2</translation>
         <translation>Far til sangtekst</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6888"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6947"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6890"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6950"/>
         <source>Navigate to next syllable</source>
         <translation>Far til næsta stavilsi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7126"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="6912"/>
+        <source>Add partial lyrics dash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7116"/>
         <source>Navigate to verse</source>
         <translation>Far til vers</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7183"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7273"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7173"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7263"/>
         <source>Navigate to next chord symbol</source>
         <translation>Far til næsta akkord tekn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7316"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7306"/>
         <source>Navigate to chord symbol</source>
         <translation>Far til akkord tekn</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7373"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7419"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7363"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7409"/>
         <source>Navigate to next figured bass</source>
         <translation>Far til næsta generalbass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7467"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7457"/>
         <source>Navigate to figured bass</source>
         <translation>Far til generalbass</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7765"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7794"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7855"/>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7915"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7755"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7784"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7845"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7905"/>
         <source>Enter lyrics extension line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7940"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7930"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>Legg ørindi afturat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7980"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="7970"/>
         <source>Enter guitar bend</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8049"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8039"/>
         <source>Add fretboard diagram</source>
         <translation>Legg afturat bandaborð diagram</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8190"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8180"/>
         <source>Format text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8210"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8200"/>
         <source>Toggle subscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8212"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8202"/>
         <source>Toggle superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8214"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8204"/>
         <source>Toggle subscript/superscript</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8271"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8261"/>
         <source>Toggle ornament</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8276"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8266"/>
         <source>Toggle automatic placement</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8277"/>
         <source>Add clef</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8292"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8282"/>
         <source>Add accidental</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8297"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8287"/>
         <source>Transpose semitone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8304"/>
+        <location filename="../../src/notation/internal/notationinteraction.cpp" line="8294"/>
         <source>Transpose diatonically</source>
         <translation>Flyt tónalegu diatoniskt</translation>
     </message>
@@ -38146,104 +38176,104 @@ miseydnað: %2</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="252"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="251"/>
         <source>Set score order</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="274"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="273"/>
         <location filename="../../src/notationscene/widgets/timeline.cpp" line="3033"/>
         <source>Show instrument</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="275"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="274"/>
         <location filename="../../src/notationscene/widgets/timeline.cpp" line="3034"/>
         <source>Hide instrument</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="306"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="305"/>
         <source>Set sharps/flats no preference</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="306"/>
         <source>Set prefer flats</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="308"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
         <source>Set prefer sharps</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="309"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="308"/>
         <source>Set sharps/flats automatic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="311"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="310"/>
         <source>Set sharps/flats preference</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="435"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="431"/>
         <source>Set instrument name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="462"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="458"/>
         <source>Set abbreviated instrument name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="489"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="477"/>
         <source>Show voice %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="490"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="478"/>
         <source>Hide voice %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="525"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="517"/>
         <source>Show staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="526"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="518"/>
         <source>Hide staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="557"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="548"/>
         <source>Set staff type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="579"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="570"/>
         <source>Edit staff properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="666"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="657"/>
         <source>Add instrument</source>
         <translation>Legg ljóðføri afturat</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="686"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="677"/>
         <source>Reset instrument formatting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1127"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1009"/>
         <source>Move instruments</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="1156"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="1037"/>
         <source>Move staves</source>
         <translation>Flyt nótalinjur</translation>
     </message>
