@@ -26,7 +26,7 @@
 #include <atomic>
 #include <mutex>
 
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 
 #include "global/types/ret.h"
 

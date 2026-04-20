@@ -30,7 +30,7 @@
 #include "global/modularity/ioc.h"
 #include "../isynthresolver.h"
 #include "../ifxresolver.h"
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 #include "../iaudioengineconfiguration.h"
 #include "../iengineplayer.h"
 

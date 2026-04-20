@@ -27,7 +27,7 @@
 
 #include "audio/common/audiotypes.h"
 
-#include "internal/mixer.h"
+#include "mixer.h"
 
 namespace muse::audio::engine {
 class IAudioEngine : MODULE_GLOBAL_INTERFACE

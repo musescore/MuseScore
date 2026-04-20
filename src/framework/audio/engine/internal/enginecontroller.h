@@ -27,7 +27,7 @@
 #include "../iaudioengineconfiguration.h"
 #include "../ienginecontroller.h"
 #include "../isynthresolver.h"
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 #include "../iengineplayback.h"
 #include "../itransporteventsdispatcher.h"
 

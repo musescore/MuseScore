@@ -25,7 +25,7 @@
 
 #include "global/modularity/ioc.h"
 #include "audio/common/rpc/irpcchannel.h"
-#include "../iaudioengine.h"
+#include "iaudioengine.h"
 #include "../iengineplayback.h"
 #include "../isoundfontrepository.h"
 #include "../iaudioengineconfiguration.h"
