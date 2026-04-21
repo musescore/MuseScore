@@ -136,7 +136,7 @@ void VstAudioClient::setIsPlaying(const bool newPlaying)
         m_processContext.state &= ~playingFlag;
     }
 
-    m_needUpdateState = true;
+    m_needUpdateState = m_isActive;
 }
 
 void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
@@ -148,6 +148,7 @@ void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
     m_processData.numSamples = static_cast<Steinberg::int32>(spec.samplesPerChannel);
     m_outputSpec = spec;
     m_needUnprepareProcessData = true;
+    m_needUpdateState = false;
 
     updateProcessSetup();
 }
@@ -160,6 +161,7 @@ void VstAudioClient::setProcessMode(VstProcessMode mode)
 
     m_processMode = mode;
     m_needUnprepareProcessData = true;
+    m_needUpdateState = false;
 
     updateProcessSetup();
 }
