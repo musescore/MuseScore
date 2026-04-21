@@ -25,8 +25,10 @@
 #include "modularity/ioc.h"
 #include "vstpluginprovider.h"
 
-#include "log.h"
 #include "async/async.h"
+
+#include "defer.h"
+#include "log.h"
 
 using namespace muse;
 using namespace muse::vst;
@@ -183,13 +185,17 @@ void VstPluginInstance::rescanParams()
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
+    if (m_updatingState) {
+        return;
+    }
+
     if (!m_pluginProvider) {
         LOGE() << "Plugin provider is not initialized";
         return;
     }
 
-    auto component = m_pluginProvider->component();
-    auto controller = m_pluginProvider->controller();
+    PluginComponentPtr component = m_pluginProvider->component();
+    PluginControllerPtr controller = m_pluginProvider->controller();
 
     if (!controller || !component) {
         return;
@@ -312,8 +318,8 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
         return;
     }
 
-    auto controller = m_pluginProvider->controller();
-    auto component = m_pluginProvider->component();
+    PluginControllerPtr controller = m_pluginProvider->controller();
+    PluginComponentPtr component = m_pluginProvider->component();
 
     if (!controller || !component) {
         LOGE() << "Unable to update settings for VST plugin";
@@ -327,6 +333,11 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
         return;
     }
 
+    m_updatingState = true;
+    DEFER {
+        m_updatingState = false;
+    };
+
     try {
         if (componentState != config.end() && !componentState->second.empty()) {
             stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
@@ -335,7 +346,7 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
             controller->setComponentState(&m_componentStateBuffer);
         }
     } catch (...) {
-        LOGW() << "Unexpected VST plugin exception";
+        LOGW() << "Component state restore failed: " << m_resourceId;
     }
 
     try {
@@ -345,7 +356,7 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
             controller->setState(&m_controllerStateBuffer);
         }
     } catch (...) {
-        LOGW() << "Unexpected VST plugin exception";
+        LOGW() << "Controller state restore failed: " << m_resourceId;
     }
 }
 
