@@ -81,6 +81,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffmove_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stavesharing_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system_locks_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system_dividers_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
