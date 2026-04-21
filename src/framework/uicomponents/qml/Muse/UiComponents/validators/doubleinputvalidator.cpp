@@ -22,7 +22,26 @@
 #include "doubleinputvalidator.h"
 #include "global/realfn.h"
 
+#include <cmath>
+
 using namespace muse::uicomponents;
+
+namespace {
+int maxIntegerDigits(qreal top, qreal bottom)
+{
+    const qreal maxAbs = std::max(std::abs(top), std::abs(bottom));
+    if (maxAbs < 1.0) {
+        return 1;
+    }
+    int digits = 1;
+    qreal v = std::floor(maxAbs);
+    while (v >= 10.0) {
+        v /= 10.0;
+        ++digits;
+    }
+    return digits;
+}
+}
 
 DoubleInputValidator::DoubleInputValidator(QObject* parent)
     : QValidator(parent)
@@ -72,9 +91,10 @@ void DoubleInputValidator::fixup(QString& string) const
     QString intPart = strList.at(0);
     QString floatPart = strList.size() > 1 ? strList.at(1) : 0;
 
-    if (intPart.contains(QRegularExpression("^0{1,3}$"))) {
+    const int maxIntDigits = maxIntegerDigits(m_top, m_bottom);
+    if (intPart.contains(QRegularExpression(QString("^0{1,%1}$").arg(maxIntDigits)))) {
         intPart = QString("0");
-    } else if (intPart.contains(QRegularExpression("^\\-0{0,3}$"))) {
+    } else if (intPart.contains(QRegularExpression(QString("^\\-0{0,%1}$").arg(maxIntDigits)))) {
         intPart = QString("-0");
     }
 
@@ -111,10 +131,12 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
     QValidator::State state = Invalid;
 
     QString decimalSep = QRegularExpression::escape(locale.decimalPoint());
-    QRegularExpression validRegex(QString("^\\-?\\d{1,3}(" + decimalSep + "\\d{1,%1})?$").arg(m_decimal));
+    const int maxIntDigits = maxIntegerDigits(m_top, m_bottom);
+    QRegularExpression validRegex(QString("^\\-?\\d{1,%1}(" + decimalSep + "\\d{1,%2})?$")
+                                  .arg(maxIntDigits).arg(m_decimal));
 
     if (inputStr.contains(validRegex)) {
-        QRegularExpression invalidZeroRegex("^\\-?0{2,3}" + decimalSep); // for '-000,' or '-000.'
+        QRegularExpression invalidZeroRegex(QString("^\\-?0{2,%1}").arg(std::max(maxIntDigits, 2)) + decimalSep); // e.g. '-000,' or '-000.'
         QRegularExpression invalidTrailingZeroRegex("^\\-?\\d+" + decimalSep + "0{1,}$"); // for '1,00' or '1.00'
         QRegularExpression invalidTrailingDotRegex("^\\-?\\d+" + decimalSep + "$"); // for '1,' or '1.'
 
@@ -128,8 +150,9 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
         } else {
             state = Acceptable;
         }
-    } else if (inputStr.contains(QRegularExpression("^\\-?\\d{0,3}" + decimalSep + "?$"))
-               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}" + decimalSep + "\\d{0,%1}$").arg(m_decimal)))) {
+    } else if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,%1}" + decimalSep + "?$").arg(maxIntDigits)))
+               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,%1}" + decimalSep
+                                                               + "\\d{0,%2}$").arg(maxIntDigits).arg(m_decimal)))) {
         state = Intermediate;
     } else {
         cursorPos = 0;
