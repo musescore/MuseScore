@@ -596,6 +596,10 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
 
+            if (measureInsert->hasMMRest() && score->style().value(Sid::createMultiMeasureRests).toBool()) {
+                measureInsert = measureInsert->mmRest();
+            }
+
             if (pm && !options.moveSignaturesClef && !isBeginning) {
                 Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                 if (ps && ps->enabled()) {
@@ -604,6 +608,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         if (pc) {
                             previousClefList.push_back(toClef(pc));
                             doUndoRemoveElement(pc);
+                            pc->undoUnlink();
                             if (ps->empty()) {
                                 undoRemoveElement(ps);
                             }
@@ -688,6 +693,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         }
                         if (ee) {
                             doUndoRemoveElement(ee);
+                            ee->undoUnlink();
                             if (s->empty() && s->isTimeSigType()) {
                                 undoRemoveElement(s);
                             }

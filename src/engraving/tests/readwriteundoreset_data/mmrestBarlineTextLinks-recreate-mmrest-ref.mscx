@@ -115,16 +115,6 @@
       <Measure>
         <eid>F_F</eid>
         <voice>
-          <TimeSig>
-            <eid>G_G</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <eid>H_H</eid>
-            <offset x="-12.5239" y="-3.69242"/>
-            <text>test1</text>
-            </StaffText>
           <Rest>
             <eid>I_I</eid>
             <durationType>measure</durationType>
@@ -136,61 +126,45 @@
         <multiMeasureRest>2</multiMeasureRest>
         <eid>n_n</eid>
         <LayoutBreak>
-          <eid>o_o</eid>
+          <eid>Q_Q</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <TimeSig>
-            <eid>p_p</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>q_q</eid>
-            <linkedTo>H_H</linkedTo>
+            <eid>H_H</eid>
             <offset x="-12.5239" y="-3.69242"/>
             <text>test1</text>
             </StaffText>
           <Rest>
-            <eid>r_r</eid>
+            <eid>o_o</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>s_s</eid>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>P_P</eid>
-        <LayoutBreak>
-          <eid>Q_Q</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            <eid>S_S</eid>
-            <linkedTo>s_s</linkedTo>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>T_T</eid>
         <voice>
-          <StaffText>
-            <eid>U_U</eid>
-            <offset x="28.5455" y="-4.14373"/>
-            <text>test2</text>
-            </StaffText>
           <Rest>
             <eid>V_V</eid>
             <durationType>measure</durationType>
@@ -200,56 +174,42 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>t_t</eid>
+        <eid>p_p</eid>
         <LayoutBreak>
-          <eid>u_u</eid>
+          <eid>c_c</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>v_v</eid>
-            <linkedTo>U_U</linkedTo>
+            <eid>U_U</eid>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
             </StaffText>
           <Rest>
-            <eid>w_w</eid>
+            <eid>q_q</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>x_x</eid>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>b_b</eid>
-        <LayoutBreak>
-          <eid>c_c</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>double</subtype>
-            <eid>e_e</eid>
-            <linkedTo>x_x</linkedTo>
-            </BarLine>
           </voice>
         </Measure>
       <Measure>
         <eid>f_f</eid>
         <voice>
-          <StaffText>
-            <eid>g_g</eid>
-            <text>test3</text>
-            </StaffText>
           <Rest>
             <eid>h_h</eid>
             <durationType>measure</durationType>
@@ -259,15 +219,14 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>y_y</eid>
+        <eid>r_r</eid>
         <voice>
           <StaffText>
-            <eid>z_z</eid>
-            <linkedTo>g_g</linkedTo>
+            <eid>g_g</eid>
             <text>test3</text>
             </StaffText>
           <Rest>
-            <eid>0_0</eid>
+            <eid>s_s</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>

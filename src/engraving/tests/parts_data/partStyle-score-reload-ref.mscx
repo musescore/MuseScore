@@ -616,14 +616,8 @@
               <isHeader>1</isHeader>
               <eid>NB_NB</eid>
               </Clef>
-            <TimeSig>
-              <eid>OB_OB</eid>
-              <linkedTo>h_h</linkedTo>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Rest>
-              <eid>PB_PB</eid>
+              <eid>OB_OB</eid>
               <linkedTo>i_i</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -632,15 +626,16 @@
           </Measure>
         <Measure len="32/4">
           <multiMeasureRest>8</multiMeasureRest>
-          <eid>QB_QB</eid>
+          <eid>PB_PB</eid>
           <voice>
             <TimeSig>
-              <eid>RB_RB</eid>
+              <eid>QB_QB</eid>
+              <linkedTo>h_h</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>SB_SB</eid>
+              <eid>RB_RB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>32/4</duration>
@@ -648,10 +643,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>TB_TB</eid>
+          <eid>SB_SB</eid>
           <voice>
             <Rest>
-              <eid>UB_UB</eid>
+              <eid>TB_TB</eid>
               <linkedTo>j_j</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -659,10 +654,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>VB_VB</eid>
+          <eid>UB_UB</eid>
           <voice>
             <Rest>
-              <eid>WB_WB</eid>
+              <eid>VB_VB</eid>
               <linkedTo>k_k</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -670,10 +665,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>XB_XB</eid>
+          <eid>WB_WB</eid>
           <voice>
             <Rest>
-              <eid>YB_YB</eid>
+              <eid>XB_XB</eid>
               <linkedTo>l_l</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -681,10 +676,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>ZB_ZB</eid>
+          <eid>YB_YB</eid>
           <voice>
             <Rest>
-              <eid>aB_aB</eid>
+              <eid>ZB_ZB</eid>
               <linkedTo>m_m</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -692,10 +687,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>bB_bB</eid>
+          <eid>aB_aB</eid>
           <voice>
             <Rest>
-              <eid>cB_cB</eid>
+              <eid>bB_bB</eid>
               <linkedTo>n_n</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -703,10 +698,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>dB_dB</eid>
+          <eid>cB_cB</eid>
           <voice>
             <Rest>
-              <eid>eB_eB</eid>
+              <eid>dB_dB</eid>
               <linkedTo>o_o</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
@@ -714,10 +709,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>fB_fB</eid>
+          <eid>eB_eB</eid>
           <voice>
             <Rest>
-              <eid>gB_gB</eid>
+              <eid>fB_fB</eid>
               <linkedTo>p_p</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
