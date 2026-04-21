@@ -24,7 +24,23 @@
 #include "framework/global/types/val.h"
 #include "framework/uicomponents/qml/Muse/UiComponents/itemmultiselectionmodel.h"
 #include "framework/uicomponents/qml/Muse/UiComponents/internal/tableviewcell.h"
+#include "framework/uicomponents/qml/Muse/UiComponents/internal/tableviewlistcell.h"
 #include "framework/uicomponents/view/modelutils.h"
+
+namespace {
+muse::Val extractSortValue(const QVariant& data)
+{
+    if (data.canConvert<muse::uicomponents::TableViewCell*>()) {
+        if (auto* cell = data.value<muse::uicomponents::TableViewCell*>()) {
+            if (auto* listCell = qobject_cast<muse::uicomponents::TableViewListCell*>(cell)) {
+                return muse::Val(listCell->current());
+            }
+            return cell->value();
+        }
+    }
+    return muse::Val::fromQVariant(data);
+}
+}
 
 namespace muse::uicomponents {
 TableSortFilterProxyModel::TableSortFilterProxyModel(QObject* parent)
@@ -56,16 +72,19 @@ void TableSortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 
 void TableSortFilterProxyModel::toggleColumnSort(int column)
 {
-    auto it = std::find_if(m_sortPipeline.begin(), m_sortPipeline.end(),
-                           [column](const SortKey& k) { return k.column == column; });
+    const auto it = std::find_if(m_sortPipeline.begin(), m_sortPipeline.end(),
+                                 [column](const SortKey& k) { return k.column == column; });
 
     if (it == m_sortPipeline.end()) {
         m_sortPipeline.push_back({ column, true });
         if (static_cast<int>(m_sortPipeline.size()) > m_maxSortKeys) {
             m_sortPipeline.erase(m_sortPipeline.begin());
         }
+    } else if (it == m_sortPipeline.end() - 1) {
+        // Only toggle sort order if this column is already the primary sort key
+        it->ascending = !it->ascending;
     } else {
-        const bool ascending = !it->ascending;
+        const bool ascending = it->ascending;
         m_sortPipeline.erase(it);
         m_sortPipeline.push_back({ column, ascending });
     }
@@ -104,6 +123,7 @@ void TableSortFilterProxyModel::reapplySort()
         return;
     }
     invalidate();
+    //! Note: trigger a sort - what column and order we specify doesn't matter. The ordering is determined by the sort pipeline in `lessThan()`
     sort(0, Qt::AscendingOrder);
 }
 
@@ -137,25 +157,9 @@ int TableSortFilterProxyModel::compareCells(int column, int leftSourceRow, int r
     if (!src) {
         return 0;
     }
-    const QModelIndex leftIdx = src->index(leftSourceRow, column);
-    const QModelIndex rightIdx = src->index(rightSourceRow, column);
-    const QVariant leftData = src->data(leftIdx);
-    const QVariant rightData = src->data(rightIdx);
 
-    muse::Val leftVal;
-    muse::Val rightVal;
-    if (leftData.canConvert<muse::uicomponents::TableViewCell*>()
-        && rightData.canConvert<muse::uicomponents::TableViewCell*>()) {
-        auto* l = leftData.value<muse::uicomponents::TableViewCell*>();
-        auto* r = rightData.value<muse::uicomponents::TableViewCell*>();
-        if (l && r) {
-            leftVal = l->value();
-            rightVal = r->value();
-        }
-    } else {
-        leftVal = muse::Val::fromQVariant(leftData);
-        rightVal = muse::Val::fromQVariant(rightData);
-    }
+    const Val leftVal = extractSortValue(src->data(src->index(leftSourceRow, column)));
+    const Val rightVal = extractSortValue(src->data(src->index(rightSourceRow, column)));
 
     if (leftVal < rightVal) {
         return -1;
