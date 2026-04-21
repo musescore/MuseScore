@@ -205,6 +205,7 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
 
     const MeasureBase* lmb = nullptr;
     do {
+        PageLayout::removeEmptySystems(ctx);
         PageLayout::getNextPage(ctx);
         PageLayout::collectPage(ctx);
 
