@@ -30,10 +30,10 @@ endif()
 
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
-# 1 - worker
+# 1 - worker - NOT SUPPORTED NOW
 # 2 - driver callback
-# 3 - worker - RPC, driver callback - process
-set(MUSE_MODULE_AUDIO_WORKMODE 1 CACHE STRING "Audio subsystem work mode")
+# 3 - hybrid mode - worker - RPC, driver callback - process
+set(MUSE_MODULE_AUDIO_WORKMODE 3 CACHE STRING "Audio subsystem work mode")
 
 declare_muse_module_opt(AUDIOPLUGINS ON)
 

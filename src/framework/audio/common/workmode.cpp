@@ -26,6 +26,8 @@
 
 #include "muse_framework_config.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace muse::audio;
 
@@ -41,6 +43,11 @@ void workmode::load()
         m_mode = static_cast<Mode>(val);
     } else {
         m_mode = defaultMode();
+    }
+
+    if (m_mode == Mode::WorkerMode_NOT_SUPPORTED) {
+        LOGW() << "WorkerMode is not supported, using HybridMode instead";
+        m_mode = Mode::HybridMode;
     }
 
     m_desiredMode = m_mode;

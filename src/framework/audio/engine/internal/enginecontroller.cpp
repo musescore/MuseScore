@@ -121,13 +121,3 @@ void EngineController::process(float* stream, unsigned samplesPerChannel)
 {
     audioEngine()->process(stream, samplesPerChannel);
 }
-
-void EngineController::process()
-{
-    audioEngine()->processAudioData();
-}
-
-void EngineController::popAudioData(float* stream, unsigned samplesPerChannel)
-{
-    audioEngine()->popAudioData(stream, samplesPerChannel);
-}

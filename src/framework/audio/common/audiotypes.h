@@ -128,7 +128,7 @@ struct TimePosition {
             return TimePosition();
         }
 
-        IF_ASSERT_FAILED(time.raw() > 0.0) {
+        IF_ASSERT_FAILED(time >= 0.0) {
             return TimePosition();
         }
 

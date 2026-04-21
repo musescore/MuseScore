@@ -31,7 +31,6 @@
 #include "global/types/ret.h"
 
 namespace muse::audio::engine {
-class AudioBuffer;
 class AudioEngine : public IAudioEngine
 {
 public:
@@ -54,13 +53,10 @@ public:
 
     MixerPtr mixer() const override;
 
-    void processAudioData() override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
-    void popAudioData(float* dest, size_t sampleCount) override;
 
 private:
 
-    void updateBufferConstraints();
     samples_t fillSilent(float* buffer, samples_t samplesPerChannel);
 
     std::atomic<bool> m_inited = false;
@@ -76,7 +72,6 @@ private:
     std::mutex m_quickOperationWaitMutex;
 
     MixerPtr m_mixer = nullptr;
-    std::shared_ptr<AudioBuffer> m_buffer = nullptr;
     RenderConstraints m_renderConsts;
 };
 }
