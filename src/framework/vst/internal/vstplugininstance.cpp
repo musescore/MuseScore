@@ -331,6 +331,7 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
         if (componentState != config.end() && !componentState->second.empty()) {
             stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
             component->setState(&m_componentStateBuffer);
+            m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
             controller->setComponentState(&m_componentStateBuffer);
         }
     } catch (...) {
