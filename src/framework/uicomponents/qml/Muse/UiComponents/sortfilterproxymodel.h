@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <QByteArray>
 #include <QHash>
 #include <QList>
 #include <QMetaObject>
@@ -76,6 +77,9 @@ protected:
 
 private:
     Sorter* currentSorter() const;
+    void updateRoleMap();
+
+    QHash<QByteArray, int> m_roles;
 
     QmlListProperty<Filter> m_filters;
     QmlListProperty<Sorter> m_sorters;

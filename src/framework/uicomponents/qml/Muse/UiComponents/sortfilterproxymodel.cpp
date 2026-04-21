@@ -24,6 +24,7 @@
 
 #include <QTimer>
 
+#include "global/log.h"
 #include "uicomponents/view/modelutils.h"
 
 using namespace muse::uicomponents;
@@ -145,7 +146,7 @@ void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
 
 int SortFilterProxyModel::roleFromRoleName(const QString& roleName) const
 {
-    return roleNames().key(roleName.toUtf8(), INVALID_KEY);
+    return m_roles.value(roleName.toUtf8(), INVALID_KEY);
 }
 
 QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
@@ -165,11 +166,16 @@ void SortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 
     QSortFilterProxyModel::setSourceModel(sourceModel);
 
+    updateRoleMap();
+
     emit sourceModelRoleNamesChanged();
 
     if (auto sourceSortFilterModel = qobject_cast<SortFilterProxyModel*>(sourceModel)) {
         m_subSourceModelConnection = connect(sourceSortFilterModel, &SortFilterProxyModel::sourceModelRoleNamesChanged,
-                                             this, &SortFilterProxyModel::sourceModelRoleNamesChanged);
+                                             this, [this] {
+            updateRoleMap();
+            emit sourceModelRoleNamesChanged();
+        });
     }
 }
 
@@ -217,4 +223,13 @@ Sorter* SortFilterProxyModel::currentSorter() const
     }
 
     return nullptr;
+}
+
+void SortFilterProxyModel::updateRoleMap()
+{
+    m_roles.clear();
+    for (const auto& [role, roleName] : roleNames().asKeyValueRange()) {
+        const auto[it, didInsert] = m_roles.try_emplace(roleName, role);
+        DO_ASSERT(didInsert);
+    }
 }
