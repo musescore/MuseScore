@@ -79,6 +79,7 @@ Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const
 
 void AbstractAudioWriter::abort()
 {
+    muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     playback()->abortSavingAllSoundTracks();
     m_isCompleted = true;
 }
@@ -125,6 +126,8 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
 
 void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackFormat& format)
 {
+    muse::ContextInject<muse::audio::IPlayback> playbackInj = { m_iocContext };
+
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
 
     auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
@@ -141,24 +144,26 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
 
     m_progress.start();
 
-    playback()->saveSoundTrackProgressChanged()
+    auto playback = playbackInj();
+
+    playback->saveSoundTrackProgressChanged()
     .onReceive(this, [sendProgress](int64_t current, int64_t total, SaveSoundTrackStage stage) {
         sendProgress(current, total, stage);
     });
 
-    playback()->saveSoundTrack(std::move(format), dstDevice)
-    .onResolve(this, [this](const bool /*result*/) {
+    playback->saveSoundTrack(std::move(format), dstDevice)
+    .onResolve(this, [this, playback](const bool /*result*/) {
         LOGI() << "Successfully saved sound track";
         m_writeRet = muse::make_ok();
         m_isCompleted = true;
         m_progress.finish(muse::make_ok());
-        playback()->saveSoundTrackProgressChanged().disconnect(this);
+        playback->saveSoundTrackProgressChanged().disconnect(this);
     })
-    .onReject(this, [this](int errorCode, const std::string& msg) {
+    .onReject(this, [this, playback](int errorCode, const std::string& msg) {
         m_writeRet = Ret(errorCode, msg);
         m_isCompleted = true;
         m_progress.finish(make_ret(errorCode, msg));
-        playback()->saveSoundTrackProgressChanged().disconnect(this);
+        playback->saveSoundTrackProgressChanged().disconnect(this);
     });
 }
 
