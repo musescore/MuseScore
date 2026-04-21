@@ -143,63 +143,6 @@ StyledGridView {
         horizontalAlignment: Text.AlignLeft
     }
 
-    Rectangle {
-        id: moreButtonRect
-
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        implicitWidth: 64
-        width: {
-            if (paletteView.empty) {
-                return implicitWidth;
-            }
-
-            // align to the left border of some palette cell
-            var addition = (parent.width - implicitWidth) % paletteView.cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
-            if (addition < 0) {
-                addition += paletteView.cellWidth;
-            }
-
-            return implicitWidth + addition;
-        }
-
-        height: paletteView.cellHeight - (paletteView.oneRow ? 0 : 1)
-        visible: paletteView.showMoreButton
-        color: background.color
-
-        z: 1
-
-        FlatButton {
-            id: moreButton
-
-            anchors.fill: parent
-
-            visible: paletteView.isInVisibleArea
-
-            navigation.panel: paletteView.navigationPanel
-            //! NOTE Just Up/Down navigation now
-            navigation.row: paletteView.ncells + paletteView.navigationRow
-            navigation.column: 1
-
-            onActiveFocusChanged: {
-                if (activeFocus) {
-                    paletteView.setCurrentTreeItemRequested(this);
-
-                    if (ui.keyboardModifiers() === Qt.NoModifier) {
-                        paletteView.selectionModel.clearSelection();
-                    }
-                }
-            }
-
-            //: Caption of a button to reveal more elements
-            text: qsTrc("palette", "More")
-
-            transparent: true
-            accentButton: true
-
-            onClicked: paletteView.moreButtonClicked(moreButton)
-        }
-    }
 
     PlaceholderManager {
         id: placeholder
@@ -699,5 +642,61 @@ StyledGridView {
         offsetY: parent.contentY
         cellWidth: parent.cellWidth
         cellHeight: parent.cellHeight
+    }
+
+    Rectangle {
+        id: moreButtonRect
+
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        implicitWidth: 64
+        width: {
+            if (paletteView.empty) {
+                return implicitWidth;
+            }
+
+            // align to the left border of some palette cell
+            var addition = (parent.width - implicitWidth) % paletteView.cellWidth - 1; // -1 allows to fit into a cell if palette grid is visible
+            if (addition < 0) {
+                addition += paletteView.cellWidth;
+            }
+
+            return implicitWidth + addition;
+        }
+
+        height: paletteView.cellHeight - (paletteView.oneRow ? 0 : 1)
+        visible: paletteView.showMoreButton
+        color: background.color
+
+        FlatButton {
+            id: moreButton
+
+            anchors.fill: parent
+
+            visible: paletteView.isInVisibleArea
+
+            navigation.panel: paletteView.navigationPanel
+            //! NOTE Just Up/Down navigation now
+            navigation.row: paletteView.ncells + paletteView.navigationRow
+            navigation.column: 1
+
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    paletteView.setCurrentTreeItemRequested(this);
+
+                    if (ui.keyboardModifiers() === Qt.NoModifier) {
+                        paletteView.selectionModel.clearSelection();
+                    }
+                }
+            }
+
+            //: Caption of a button to reveal more elements
+            text: qsTrc("palette", "More")
+
+            transparent: true
+            accentButton: true
+
+            onClicked: paletteView.moreButtonClicked(moreButton)
+        }
     }
 }
