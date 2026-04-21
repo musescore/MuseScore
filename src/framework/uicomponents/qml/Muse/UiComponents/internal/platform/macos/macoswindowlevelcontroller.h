@@ -24,10 +24,9 @@
 class QWindow;
 
 namespace muse::uicomponents {
-class MacOSChildWindowController
+class MacOSWindowLevelController
 {
 public:
-    static void attachWindow(QWindow* childWindow, QWindow* parentWindow);
-    static void detachWindow(QWindow* childWindow);
+    static void setAlwaysAboveApp(QWindow* window);
 };
 }

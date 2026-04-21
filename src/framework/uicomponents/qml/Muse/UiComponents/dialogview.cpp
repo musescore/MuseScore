@@ -28,7 +28,7 @@
 #include <QStyle>
 
 #ifdef Q_OS_MAC
-#include "internal/platform/macos/macoschildwindowcontroller.h"
+#include "internal/platform/macos/macoswindowlevelcontroller.h"
 #endif
 
 #include "log.h"
@@ -101,12 +101,6 @@ void DialogView::beforeOpen()
 
 void DialogView::onHidden()
 {
-#ifdef Q_OS_MAC
-    if (m_nativeChildWindow) {
-        MacOSChildWindowController::detachWindow(m_view);
-    }
-#endif
-
     WindowView::onHidden();
 
     windowsController()->unregWindow(m_view->winId());
@@ -115,8 +109,8 @@ void DialogView::onHidden()
 void DialogView::afterShow()
 {
 #ifdef Q_OS_MAC
-    if (m_nativeChildWindow) {
-        MacOSChildWindowController::attachWindow(m_view, m_parentWindow);
+    if (m_alwaysAboveApp) {
+        MacOSWindowLevelController::setAlwaysAboveApp(m_view);
     }
 #endif
 }
@@ -263,19 +257,19 @@ void DialogView::setResizable(bool resizable)
     }
 }
 
-bool DialogView::nativeChildWindow() const
+bool DialogView::alwaysAboveApp() const
 {
-    return m_nativeChildWindow;
+    return m_alwaysAboveApp;
 }
 
-void DialogView::setNativeChildWindow(bool nativeChildWindow)
+void DialogView::setAlwaysAboveApp(bool alwaysAbove)
 {
-    if (m_nativeChildWindow == nativeChildWindow) {
+    if (m_alwaysAboveApp == alwaysAbove) {
         return;
     }
 
-    m_nativeChildWindow = nativeChildWindow;
-    emit nativeChildWindowChanged();
+    m_alwaysAboveApp = alwaysAbove;
+    emit alwaysAboveAppChanged();
 }
 
 QVariantMap DialogView::ret() const
