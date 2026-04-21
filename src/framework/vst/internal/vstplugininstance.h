@@ -95,6 +95,8 @@ private:
     std::atomic_bool m_isLoaded = false;
     async::Notification m_loadingCompleted;
 
+    std::atomic_bool m_updatingState = false;
+
     mutable std::mutex m_mutex;
 };
 }
