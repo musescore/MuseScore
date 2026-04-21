@@ -44,6 +44,9 @@ ApiRegister::~ApiRegister()
     for (auto& e : m_apiengines) {
         delete e.apiengine;
     }
+    for (auto& p : m_creators) {
+        delete p.second.c;
+    }
 }
 
 void ApiRegister::regApiCreator(const std::string& module, const std::string& api, ICreator* c)
