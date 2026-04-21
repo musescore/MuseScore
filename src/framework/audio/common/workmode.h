@@ -28,9 +28,17 @@ class workmode
 public:
     enum Mode {
         Undefined = 0,
-        WorkerMode = 1,
+
+        // We render audio into a buffer, and the driver reads from this buffer.
+        // NOT SUPPORTED NOW
+        WorkerMode_NOT_SUPPORTED = 1,
+
+        // Everything works in the driver thread (only relevant for the web)
         DriverMode = 2,
-        WorkerRpcMode = 3
+
+        // Operations (RPC calls) in the worker (for example, loading a sound font into a synthesizer),
+        // and processing in the driver directly thread
+        HybridMode = 3
     };
 
     static void load();

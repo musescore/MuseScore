@@ -63,8 +63,6 @@ public:
 
     virtual MixerPtr mixer() const = 0;
 
-    virtual void processAudioData() = 0;
     virtual samples_t process(float* buffer, samples_t samplesPerChannel) = 0;
-    virtual void popAudioData(float* dest, size_t sampleCount) = 0;
 };
 }

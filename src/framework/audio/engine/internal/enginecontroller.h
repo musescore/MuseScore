@@ -59,9 +59,6 @@ public:
 
     void process(float* stream, unsigned samplesPerChannel);
 
-    void process();
-    void popAudioData(float* stream, unsigned samplesPerChannel);
-
 private:
     std::shared_ptr<rpc::IRpcChannel> m_rpcChannel;
     std::shared_ptr<EngineRpcController> m_rpcController;

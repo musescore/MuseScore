@@ -61,8 +61,6 @@ else()
         internal/enginerpccontroller.h
         internal/audioengine.cpp
         internal/audioengine.h
-        internal/audiobuffer.cpp
-        internal/audiobuffer.h
         internal/mixer.cpp
         internal/mixer.h
         internal/mixerchannel.cpp

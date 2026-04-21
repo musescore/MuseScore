@@ -26,17 +26,15 @@ using namespace muse::audio;
 
 void AudioActionsController::init()
 {
-    dispatcher()->reg(this, "action://audio/dev/use-workermode", [this]() { setMode(workmode::WorkerMode); });
     dispatcher()->reg(this, "action://audio/dev/use-drivermode", [this]() { setMode(workmode::DriverMode); });
-    dispatcher()->reg(this, "action://audio/dev/use-workerrpcmode", [this]() { setMode(workmode::WorkerRpcMode); });
+    dispatcher()->reg(this, "action://audio/dev/use-hybridmode", [this]() { setMode(workmode::HybridMode); });
 }
 
 void AudioActionsController::setMode(workmode::Mode m)
 {
     workmode::setMode(m);
-    m_actionCheckedChanged.send({ "action://audio/dev/use-workermode",
-                                  "action://audio/dev/use-drivermode",
-                                  "action://audio/dev/use-workerrpcmode" });
+    m_actionCheckedChanged.send({ "action://audio/dev/use-drivermode",
+                                  "action://audio/dev/use-hybridmode" });
 
     auto promise = interactive()->question("Changing the audio mode",
                                            "Restart required, do you want to perform it?",
@@ -51,12 +49,10 @@ void AudioActionsController::setMode(workmode::Mode m)
 
 bool AudioActionsController::actionChecked(const actions::ActionCode& act) const
 {
-    if (act == "action://audio/dev/use-workermode") {
-        return workmode::desiredMode() == workmode::WorkerMode;
-    } else if (act == "action://audio/dev/use-drivermode") {
+    if (act == "action://audio/dev/use-drivermode") {
         return workmode::desiredMode() == workmode::DriverMode;
-    } else if (act == "action://audio/dev/use-workerrpcmode") {
-        return workmode::desiredMode() == workmode::WorkerRpcMode;
+    } else if (act == "action://audio/dev/use-hybridmode") {
+        return workmode::desiredMode() == workmode::HybridMode;
     }
 
     return false;
