@@ -80,6 +80,8 @@ qt_add_qml_module(muse_uicomponents_qml
         sortfilterproxymodel.h
         shortcutoverridemodel.cpp
         shortcutoverridemodel.h
+        tablesortfilterproxymodel.cpp
+        tablesortfilterproxymodel.h
         toolbaritem.cpp
         toolbaritem.h
         validators/doubleinputvalidator.cpp
