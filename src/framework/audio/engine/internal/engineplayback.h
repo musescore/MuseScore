@@ -125,8 +125,8 @@ public:
 
 private:
 
-    std::shared_ptr<Mixer> mixer() const;
-    void ensureMixerSubscriptions();
+    std::shared_ptr<IAudioContext> audioContext() const;
+    void ensureAudioContextSubscriptions();
 
     TrackId newTrackId() const;
     void doAddTrack(const TrackPtr& track);

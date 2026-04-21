@@ -85,9 +85,7 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     synthResolver()->init(configuration()->defaultAudioInputParams(), outputSpec);
     // ------------------------------------------------------------
 
-    IAudioEngine::RenderConstraints consts;
-    consts.minSamplesToReserveWhenIdle = minSamplesToReserve(RenderMode::IdleMode);
-    consts.minSamplesToReserveInRealtime = minSamplesToReserve(RenderMode::RealTimeMode);
+    RenderConstraints consts;
     consts.desiredAudioThreadNumber = configuration()->desiredAudioThreadNumber();
     consts.minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
 

@@ -53,21 +53,21 @@ void EnginePlayback::init()
         m_prevActiveTrackId = INVALID_TRACK_ID;
 
         if (mode == RenderMode::IdleMode) {
-            mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
+            audioContext()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
         }
     });
 
-    mixer()->setPlayhead(std::dynamic_pointer_cast<IPlayhead>(m_player));
+    audioContext()->setPlayhead(std::dynamic_pointer_cast<IPlayhead>(m_player));
 
-    ensureMixerSubscriptions();
+    ensureAudioContextSubscriptions();
 }
 
 void EnginePlayback::deinit()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (mixer()) {
-        mixer()->setPlayhead(nullptr);
+    if (audioContext()) {
+        audioContext()->setPlayhead(nullptr);
     }
 
     removeAllTracks();
@@ -88,12 +88,18 @@ void EnginePlayback::deinit()
     async_disconnectAll();
 }
 
-void EnginePlayback::ensureMixerSubscriptions()
+std::shared_ptr<IAudioContext> EnginePlayback::audioContext() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    return audioEngine()->context();
+}
+
+void EnginePlayback::ensureAudioContextSubscriptions()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (!mixer()->masterOutputParamsChanged().isConnected()) {
-        mixer()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+    if (!audioContext()->masterOutputParamsChanged().isConnected()) {
+        audioContext()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
             m_masterOutputParamsChanged.send(params);
         });
     }
@@ -186,14 +192,14 @@ RetVal2<TrackId, AudioParams> EnginePlayback::addTrack(const std::string& trackN
             tracksToProcess.insert({ m_prevActiveTrackId, trackId });
         }
 
-        mixer()->setTracksToProcessWhenIdle(tracksToProcess);
+        audioContext()->setTracksToProcessWhenIdle(tracksToProcess);
         m_prevActiveTrackId = trackId;
     };
 
     EventAudioSourcePtr source = std::make_shared<EventAudioSource>(trackId, playbackData, onOffStreamReceived);
     source->setOutputSpec(audioEngine()->outputSpec());
 
-    RetVal<MixerChannelPtr> channel = mixer()->addChannel(trackId, source);
+    RetVal<MixerChannelPtr> channel = audioContext()->addChannel(trackId, source);
     if (!channel.ret) {
         result.ret = channel.ret;
         return result;
@@ -229,7 +235,7 @@ RetVal2<TrackId, AudioOutputParams> EnginePlayback::addAuxTrack(const std::strin
     result.val1 = -1;
 
     TrackId trackId = newTrackId();
-    RetVal<MixerChannelPtr> channel = mixer()->addAuxChannel(trackId);
+    RetVal<MixerChannelPtr> channel = audioContext()->addAuxChannel(trackId);
     if (!channel.ret) {
         result.ret = channel.ret;
         return result;
@@ -266,7 +272,7 @@ void EnginePlayback::removeTrack(const TrackId trackId)
     trackPtr->inputParamsChanged().disconnect(this);
     trackPtr->outputParamsChanged().disconnect(this);
 
-    mixer()->removeChannel(trackId);
+    audioContext()->removeChannel(trackId);
     m_tracks.erase(trackId);
     muse::remove(m_tracksToProcessWhenIdle, trackId);
 
@@ -507,31 +513,25 @@ void EnginePlayback::onShouldProcessDuringSilenceChanged(const TrackId trackId, 
         muse::remove(m_tracksToProcessWhenIdle, trackId);
     }
 
-    mixer()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
-}
-
-std::shared_ptr<Mixer> EnginePlayback::mixer() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-    return audioEngine()->mixer();
+    audioContext()->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
 }
 
 RetVal<AudioOutputParams> EnginePlayback::masterOutputParams() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    return RetVal<AudioOutputParams>::make_ok(mixer()->masterOutputParams());
+    return RetVal<AudioOutputParams>::make_ok(audioContext()->masterOutputParams());
 }
 
 void EnginePlayback::setMasterOutputParams(const AudioOutputParams& params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    mixer()->setMasterOutputParams(params);
+    audioContext()->setMasterOutputParams(params);
 }
 
 void EnginePlayback::clearMasterOutputParams()
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    mixer()->clearMasterOutputParams();
+    audioContext()->clearMasterOutputParams();
 }
 
 async::Channel<AudioOutputParams> EnginePlayback::masterOutputParamsChanged() const
@@ -560,7 +560,7 @@ RetVal<AudioSignalChanges> EnginePlayback::signalChanges(const TrackId trackId) 
 RetVal<AudioSignalChanges> EnginePlayback::masterSignalChanges() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    return RetVal<AudioSignalChanges>::make_ok(mixer()->masterAudioSignalChanges());
+    return RetVal<AudioSignalChanges>::make_ok(audioContext()->masterAudioSignalChanges());
 }
 
 async::Promise<Ret> EnginePlayback::saveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format)
@@ -688,7 +688,7 @@ Ret EnginePlayback::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackFo
 {
 #ifdef MUSE_MODULE_AUDIO_EXPORT
     const secs_t totalDuration = m_player->duration();
-    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, mixer());
+    SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, audioContext()->output());
 
     writer->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string /*title*/) {
         m_saveSoundTracksProgress.progress.send(current, total, SaveSoundTrackStage::WritingSoundTrack);

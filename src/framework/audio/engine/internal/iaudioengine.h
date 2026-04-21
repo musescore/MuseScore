@@ -21,13 +21,16 @@
  */
 #pragma once
 
+#include <memory>
+
 #include "modularity/imoduleinterface.h"
 
 #include "global/async/channel.h"
+#include "global/modularity/ioc.h"
 
 #include "audio/common/audiotypes.h"
 
-#include "mixer.h"
+#include "iaudiocontext.h"
 
 namespace muse::audio::engine {
 class IAudioEngine : MODULE_GLOBAL_INTERFACE
@@ -37,17 +40,11 @@ class IAudioEngine : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
-    struct RenderConstraints {
-        samples_t minSamplesToReserveWhenIdle = 0;
-        samples_t minSamplesToReserveInRealtime = 0;
-
-        // mixer
-        size_t desiredAudioThreadNumber = 0;
-        size_t minTrackCountForMultithreading = 0;
-    };
-
     virtual Ret init(const OutputSpec& outputSpec, const RenderConstraints& consts) = 0;
     virtual void deinit() = 0;
+
+    virtual std::shared_ptr<IAudioContext> context(const modularity::IoCID& ctxId = 0) const = 0;
+    virtual void destroyContext(const modularity::IoCID& ctxId) = 0;
 
     virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
     virtual OutputSpec outputSpec() const = 0;
@@ -60,8 +57,6 @@ public:
     using Operation = std::function<void ()>;
     virtual void execOperation(OperationType type, const Operation& func) = 0;
     virtual OperationType operation() const = 0;
-
-    virtual MixerPtr mixer() const = 0;
 
     virtual samples_t process(float* buffer, samples_t samplesPerChannel) = 0;
 };

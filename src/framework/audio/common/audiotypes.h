@@ -147,6 +147,12 @@ private:
     secs_t m_time = 0.0; //cache
 };
 
+struct RenderConstraints {
+    // mixer
+    size_t desiredAudioThreadNumber = 0;
+    size_t minTrackCountForMultithreading = 0;
+};
+
 enum class SoundTrackType {
     Undefined = -1,
     MP3,

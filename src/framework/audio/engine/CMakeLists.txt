@@ -49,8 +49,12 @@ else()
         itransporteventsdispatcher.h
 
         # internal
-        internal/audiocontext.h
         internal/iaudioengine.h
+        internal/iaudiocontext.h
+        internal/audioengine.cpp
+        internal/audioengine.h
+        internal/audiocontext.cpp
+        internal/audiocontext.h
         internal/audioengineconfiguration.cpp
         internal/audioengineconfiguration.h
         internal/enginecontroller.cpp
@@ -60,8 +64,6 @@ else()
         internal/igettracks.h
         internal/enginerpccontroller.cpp
         internal/enginerpccontroller.h
-        internal/audioengine.cpp
-        internal/audioengine.h
         internal/mixer.cpp
         internal/mixer.h
         internal/mixerchannel.cpp
