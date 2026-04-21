@@ -1152,7 +1152,13 @@ Rectangle {
                 id: tableModel
             }
 
-            model: tableModel
+            TableSortFilterProxyModel {
+                id: tableProxy
+
+                sourceModel: tableModel
+            }
+
+            model: tableProxy
 
             headerCapitalization: Font.Capitalize
 
@@ -1162,6 +1168,10 @@ Rectangle {
                 }
 
                 return null
+            }
+
+            onHorizontalHeaderClicked: function (column) {
+                tableProxy.toggleColumnSort(column)
             }
 
             Component {
