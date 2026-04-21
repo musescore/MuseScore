@@ -2326,10 +2326,10 @@ void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)
         removeRepeatCourtesies(m);
     }
 
-    const bool courtesiesAfterCancellingRepeats = m->prevMeasure() && m->prevMeasure()->repeatEnd()
+    const bool courtesiesAfterCancellingRepeats = m->prevMeasureMM() && m->prevMeasureMM()->repeatEnd()
                                                   && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingRepeats)
                                                   && ctx.conf().styleB(Sid::showCourtesiesRepeats);
-    const bool courtesiesAfterCancellingOtherJumps = m->prevMeasure() && m->prevMeasure()->repeatJump()
+    const bool courtesiesAfterCancellingOtherJumps = m->prevMeasureMM() && m->prevMeasureMM()->repeatJump()
                                                      && ctx.conf().styleB(Sid::showCourtesiesAfterCancellingOtherJumps)
                                                      && ctx.conf().styleB(Sid::showCourtesiesOtherJumps);
     if (courtesiesAfterCancellingRepeats) {
@@ -2367,11 +2367,11 @@ void MeasureLayout::addRepeatCourtesies(Measure* m, LayoutContext& ctx)
     bool hasCourtesies = false;
     for (Measure* repeatStartMeasure : measures) {
         // Follow section break courtesy property
-        const Measure* prevMeasure = repeatStartMeasure->prevMeasure();
+        const Measure* prevMeasure = repeatStartMeasure->prevMeasureMM();
         const LayoutBreak* sectionBreak = prevMeasure ? prevMeasure->sectionBreakElement() : nullptr;
         const bool sectionBreakHideCourtesies = sectionBreak && !sectionBreak->showCourtesy();
 
-        if (repeatStartMeasure == m->nextMeasure() || sectionBreakHideCourtesies) {
+        if (repeatStartMeasure == m->nextMeasureMM() || sectionBreakHideCourtesies) {
             continue;
         }
         setCourtesyClef(m, repeatStartMeasure->tick(), m->endTick(), SegmentType::ClefRepeatAnnounce, ctx);
