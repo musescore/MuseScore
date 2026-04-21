@@ -26,6 +26,8 @@
 
 #include "audio/common/audiosanitizer.h"
 
+#include "audiocontext.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -36,7 +38,7 @@ static constexpr int MAX_SUPPORTED_AUDIO_CHANNELS = 2;
 
 AudioEngine::AudioEngine()
 {
-    m_mixer = std::make_shared<Mixer>();
+    m_context = std::make_shared<AudioContext>(0);
 }
 
 AudioEngine::~AudioEngine()
@@ -52,11 +54,6 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
         return make_ret(Ret::Code::Ok);
     }
 
-    IF_ASSERT_FAILED(consts.minSamplesToReserveWhenIdle != 0
-                     && consts.minSamplesToReserveInRealtime != 0) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
     IF_ASSERT_FAILED(outputSpec.audioChannelCount <= MAX_SUPPORTED_AUDIO_CHANNELS) {
         return make_ret(Ret::Code::InternalError);
     }
@@ -68,8 +65,7 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
     m_outputSpec = outputSpec;
     m_renderConsts = consts;
 
-    m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
-    m_mixer->setOutputSpec(outputSpec);
+    m_context->init(outputSpec, consts);
 
     setMode(RenderMode::IdleMode);
 
@@ -85,15 +81,41 @@ void AudioEngine::deinit()
     ONLY_AUDIO_ENGINE_THREAD;
     if (m_inited) {
         m_inited = false;
-        m_mixer = nullptr;
+        m_context = nullptr;
     }
+}
+
+std::shared_ptr<IAudioContext> AudioEngine::context(const modularity::IoCID& ctxId) const
+{
+    UNUSED(ctxId);
+    return m_context;
+/*
+    auto it = m_contexts.find(ctxId);
+    if (it != m_contexts.end()) {
+        return it->second;
+    }
+    auto context = std::make_shared<AudioContext>(ctxId);
+    m_contexts[ctxId] = context;
+    return context;
+*/
+}
+
+void AudioEngine::destroyContext(const modularity::IoCID& ctxId)
+{
+    UNUSED(ctxId);
+/*
+    auto it = m_contexts.find(ctxId);
+    if (it != m_contexts.end()) {
+        m_contexts.erase(it);
+    }
+*/
 }
 
 void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    IF_ASSERT_FAILED(m_mixer) {
+    IF_ASSERT_FAILED(m_context) {
         return;
     }
 
@@ -111,7 +133,7 @@ void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
 
     m_outputSpec = outputSpec;
 
-    m_mixer->setOutputSpec(outputSpec);
+    m_context->setOutputSpec(outputSpec);
 
     m_outputSpecChanged.send(outputSpec);
 }
@@ -145,13 +167,13 @@ void AudioEngine::setMode(const RenderMode newMode)
 
     switch (m_mode) {
     case RenderMode::RealTimeMode:
-        m_mixer->setIsIdle(false);
+        m_context->setIsIdle(false);
         break;
     case RenderMode::IdleMode:
-        m_mixer->setIsIdle(true);
+        m_context->setIsIdle(true);
         break;
     case RenderMode::OfflineMode:
-        m_mixer->setIsIdle(false);
+        m_context->setIsIdle(false);
         break;
     case RenderMode::Undefined:
         UNREACHABLE;
@@ -193,12 +215,6 @@ OperationType AudioEngine::operation() const
     return m_operationType.load();
 }
 
-MixerPtr AudioEngine::mixer() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-    return m_mixer;
-}
-
 samples_t AudioEngine::fillSilent(float* buffer, samples_t samplesPerChannel)
 {
     std::memset(buffer, 0, samplesPerChannel * sizeof(float) * m_outputSpec.audioChannelCount);
@@ -226,13 +242,13 @@ samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
         }
         case OperationType::NoOperation: {
             // normal playing
-            return m_mixer->process(buffer, samplesPerChannel);
+            return m_context->process(buffer, samplesPerChannel);
         }
         case OperationType::QuickOperation: {
             // wait
             LOGD() << "wait end of quick operation";
             std::scoped_lock<std::mutex> lock(m_quickOperationWaitMutex);
-            return m_mixer->process(buffer, samplesPerChannel);
+            return m_context->process(buffer, samplesPerChannel);
         }
         case OperationType::LongOperation: {
             return fillSilent(buffer, samplesPerChannel);
