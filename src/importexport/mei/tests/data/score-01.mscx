@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -48,8 +49,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -69,8 +71,9 @@
         </Instrument>
       </Part>
     <Part id="3">
+      <eid>G_G</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -90,8 +93,9 @@
         </Instrument>
       </Part>
     <Part id="4">
+      <eid>I_I</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -109,8 +113,9 @@
         </Instrument>
       </Part>
     <Part id="5">
+      <eid>K_K</eid>
       <Staff>
-        <eid>G_G</eid>
+        <eid>L_L</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -128,8 +133,9 @@
         </Instrument>
       </Part>
     <Part id="6">
+      <eid>M_M</eid>
       <Staff>
-        <eid>H_H</eid>
+        <eid>N_N</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -147,8 +153,9 @@
         </Instrument>
       </Part>
     <Part id="7">
+      <eid>O_O</eid>
       <Staff>
-        <eid>I_I</eid>
+        <eid>P_P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -166,8 +173,9 @@
         </Instrument>
       </Part>
     <Part id="8">
+      <eid>Q_Q</eid>
       <Staff>
-        <eid>J_J</eid>
+        <eid>R_R</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -185,8 +193,9 @@
         </Instrument>
       </Part>
     <Part id="9">
+      <eid>S_S</eid>
       <Staff>
-        <eid>K_K</eid>
+        <eid>T_T</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -203,8 +212,9 @@
         </Instrument>
       </Part>
     <Part id="10">
+      <eid>U_U</eid>
       <Staff>
-        <eid>L_L</eid>
+        <eid>V_V</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -216,7 +226,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>M_M</eid>
+        <eid>W_W</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -235,8 +245,9 @@
         </Instrument>
       </Part>
     <Part id="11">
+      <eid>X_X</eid>
       <Staff>
-        <eid>N_N</eid>
+        <eid>Y_Y</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -259,8 +270,9 @@
         </Instrument>
       </Part>
     <Part id="12">
+      <eid>Z_Z</eid>
       <Staff>
-        <eid>O_O</eid>
+        <eid>a_a</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -278,8 +290,9 @@
         </Instrument>
       </Part>
     <Part id="13">
+      <eid>b_b</eid>
       <Staff>
-        <eid>P_P</eid>
+        <eid>c_c</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -297,8 +310,9 @@
         </Instrument>
       </Part>
     <Part id="14">
+      <eid>d_d</eid>
       <Staff>
-        <eid>Q_Q</eid>
+        <eid>e_e</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -319,59 +333,59 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>R_R</eid>
+        <eid>f_f</eid>
         <Text>
-          <eid>S_S</eid>
+          <eid>g_g</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
-          <eid>T_T</eid>
+          <eid>h_h</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>U_U</eid>
+          <eid>i_i</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>V_V</eid>
+        <eid>j_j</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>W_W</eid>
+            <eid>k_k</eid>
             </Clef>
           <KeySig>
-            <eid>X_X</eid>
+            <eid>l_l</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>Y_Y</eid>
+            <eid>m_m</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>o_o</eid>
         <voice>
           <Rest>
-            <eid>b_b</eid>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>c_c</eid>
+            <eid>q_q</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -383,19 +397,19 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>d_d</eid>
+            <eid>r_r</eid>
             </Clef>
           <KeySig>
-            <eid>e_e</eid>
+            <eid>s_s</eid>
             <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>f_f</eid>
+            <eid>t_t</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>g_g</eid>
+            <eid>u_u</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -404,13 +418,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>h_h</eid>
+            <eid>v_v</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>i_i</eid>
+            <eid>w_w</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -422,19 +436,19 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>j_j</eid>
+            <eid>x_x</eid>
             </Clef>
           <KeySig>
-            <eid>k_k</eid>
+            <eid>y_y</eid>
             <concertKey>3</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>l_l</eid>
+            <eid>z_z</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>m_m</eid>
+            <eid>0_0</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -443,13 +457,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>1_1</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>o_o</eid>
+            <eid>2_2</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -461,15 +475,15 @@
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>p_p</eid>
+            <eid>3_3</eid>
             </Clef>
           <TimeSig>
-            <eid>q_q</eid>
+            <eid>4_4</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>r_r</eid>
+            <eid>5_5</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -478,13 +492,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>s_s</eid>
+            <eid>6_6</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>t_t</eid>
+            <eid>7_7</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -496,15 +510,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>u_u</eid>
+            <eid>8_8</eid>
             </Clef>
           <TimeSig>
-            <eid>v_v</eid>
+            <eid>9_9</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>w_w</eid>
+            <eid>+_+</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -513,13 +527,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>x_x</eid>
+            <eid>/_/</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>y_y</eid>
+            <eid>AB_AB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -531,15 +545,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>z_z</eid>
+            <eid>BB_BB</eid>
             </Clef>
           <TimeSig>
-            <eid>0_0</eid>
+            <eid>CB_CB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>1_1</eid>
+            <eid>DB_DB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -548,13 +562,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>2_2</eid>
+            <eid>EB_EB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>3_3</eid>
+            <eid>FB_FB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -566,15 +580,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>4_4</eid>
+            <eid>GB_GB</eid>
             </Clef>
           <TimeSig>
-            <eid>5_5</eid>
+            <eid>HB_HB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>6_6</eid>
+            <eid>IB_IB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -583,13 +597,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>7_7</eid>
+            <eid>JB_JB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>8_8</eid>
+            <eid>KB_KB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -601,15 +615,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>9_9</eid>
+            <eid>LB_LB</eid>
             </Clef>
           <TimeSig>
-            <eid>+_+</eid>
+            <eid>MB_MB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>/_/</eid>
+            <eid>NB_NB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -618,13 +632,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>AB_AB</eid>
+            <eid>OB_OB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>BB_BB</eid>
+            <eid>PB_PB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -636,15 +650,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>CB_CB</eid>
+            <eid>QB_QB</eid>
             </Clef>
           <TimeSig>
-            <eid>DB_DB</eid>
+            <eid>RB_RB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>EB_EB</eid>
+            <eid>SB_SB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -653,13 +667,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>FB_FB</eid>
+            <eid>TB_TB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>GB_GB</eid>
+            <eid>UB_UB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -671,15 +685,15 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>HB_HB</eid>
+            <eid>VB_VB</eid>
             </Clef>
           <TimeSig>
-            <eid>IB_IB</eid>
+            <eid>WB_WB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>JB_JB</eid>
+            <eid>XB_XB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -688,13 +702,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>KB_KB</eid>
+            <eid>YB_YB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>LB_LB</eid>
+            <eid>ZB_ZB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -706,15 +720,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>MB_MB</eid>
+            <eid>aB_aB</eid>
             </Clef>
           <TimeSig>
-            <eid>NB_NB</eid>
+            <eid>bB_bB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>OB_OB</eid>
+            <eid>cB_cB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -723,13 +737,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>PB_PB</eid>
+            <eid>dB_dB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>QB_QB</eid>
+            <eid>eB_eB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -741,15 +755,15 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>RB_RB</eid>
+            <eid>fB_fB</eid>
             </Clef>
           <TimeSig>
-            <eid>SB_SB</eid>
+            <eid>gB_gB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>TB_TB</eid>
+            <eid>hB_hB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -758,13 +772,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>UB_UB</eid>
+            <eid>iB_iB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>VB_VB</eid>
+            <eid>jB_jB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -776,15 +790,15 @@
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>WB_WB</eid>
+            <eid>kB_kB</eid>
             </Clef>
           <TimeSig>
-            <eid>XB_XB</eid>
+            <eid>lB_lB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>YB_YB</eid>
+            <eid>mB_mB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -793,13 +807,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>ZB_ZB</eid>
+            <eid>nB_nB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>aB_aB</eid>
+            <eid>oB_oB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -811,15 +825,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>bB_bB</eid>
+            <eid>pB_pB</eid>
             </Clef>
           <TimeSig>
-            <eid>cB_cB</eid>
+            <eid>qB_qB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>dB_dB</eid>
+            <eid>rB_rB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -828,13 +842,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>eB_eB</eid>
+            <eid>sB_sB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>fB_fB</eid>
+            <eid>tB_tB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -846,15 +860,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>gB_gB</eid>
+            <eid>uB_uB</eid>
             </Clef>
           <TimeSig>
-            <eid>hB_hB</eid>
+            <eid>vB_vB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>iB_iB</eid>
+            <eid>wB_wB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -863,13 +877,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>jB_jB</eid>
+            <eid>xB_xB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>kB_kB</eid>
+            <eid>yB_yB</eid>
             </BarLine>
           </voice>
         </Measure>

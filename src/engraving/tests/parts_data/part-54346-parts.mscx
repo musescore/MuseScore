@@ -36,6 +36,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Pickup-bug</metaTag>
     <Part id="1">
+      <eid>g_g</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -92,6 +93,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>h_h</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">
@@ -293,7 +295,7 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>g_g</eid>
+      <eid>i_i</eid>
       <name>B♭ Trumpet</name>
       <Division>480</Division>
       <Style>
@@ -305,8 +307,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">B♭ Trumpet</metaTag>
       <Part id="1">
+        <eid>j_j</eid>
         <Staff>
-          <eid>h_h</eid>
+          <eid>k_k</eid>
           <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -365,54 +368,54 @@
         <VBox>
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>i_i</eid>
+          <eid>l_l</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>j_j</eid>
+            <eid>m_m</eid>
             <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>k_k</eid>
+            <eid>n_n</eid>
             <style>instrument_excerpt</style>
             <text>B♭ Trumpet</text>
             </Text>
           </VBox>
         <Measure len="1/4">
-          <eid>l_l</eid>
+          <eid>o_o</eid>
           <irregular>1</irregular>
           <voice>
             <KeySig>
-              <eid>m_m</eid>
+              <eid>p_p</eid>
               <linkedTo>H_H</linkedTo>
               <concertKey>0</concertKey>
               <actualKey>2</actualKey>
               </KeySig>
             <TimeSig>
-              <eid>n_n</eid>
+              <eid>q_q</eid>
               <linkedTo>I_I</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>o_o</eid>
+              <eid>r_r</eid>
               <linkedTo>J_J</linkedTo>
               <durationType>eighth</durationType>
               </Rest>
             <SystemText>
               <swing unit="eighth" ratio="60"/>
-              <eid>p_p</eid>
+              <eid>s_s</eid>
               <linkedTo>K_K</linkedTo>
               <style>tempo</style>
               <text>Swing</text>
               </SystemText>
             <Chord>
-              <eid>q_q</eid>
+              <eid>t_t</eid>
               <linkedTo>L_L</linkedTo>
               <durationType>eighth</durationType>
               <Note>
-                <eid>r_r</eid>
+                <eid>u_u</eid>
                 <linkedTo>M_M</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -422,14 +425,14 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>s_s</eid>
+          <eid>v_v</eid>
           <voice>
             <Chord>
-              <eid>t_t</eid>
+              <eid>w_w</eid>
               <linkedTo>O_O</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>u_u</eid>
+                <eid>x_x</eid>
                 <linkedTo>P_P</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -437,11 +440,11 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>v_v</eid>
+              <eid>y_y</eid>
               <linkedTo>Q_Q</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>w_w</eid>
+                <eid>z_z</eid>
                 <linkedTo>R_R</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -449,11 +452,11 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>x_x</eid>
+              <eid>0_0</eid>
               <linkedTo>S_S</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>y_y</eid>
+                <eid>1_1</eid>
                 <linkedTo>T_T</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -461,11 +464,11 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>z_z</eid>
+              <eid>2_2</eid>
               <linkedTo>U_U</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>0_0</eid>
+                <eid>3_3</eid>
                 <linkedTo>V_V</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
@@ -477,7 +480,7 @@
         </Staff>
       </Score>
     <Score>
-      <eid>1_1</eid>
+      <eid>4_4</eid>
       <name>C Trumpet</name>
       <Division>480</Division>
       <Style>
@@ -489,8 +492,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">C Trumpet</metaTag>
       <Part id="2">
+        <eid>5_5</eid>
         <Staff>
-          <eid>2_2</eid>
+          <eid>6_6</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -547,32 +551,32 @@
         <VBox>
           <height>10</height>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>3_3</eid>
+          <eid>7_7</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>4_4</eid>
+            <eid>8_8</eid>
             <linkedTo>F_F</linkedTo>
             <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <eid>5_5</eid>
+            <eid>9_9</eid>
             <style>instrument_excerpt</style>
             <text>C Trumpet</text>
             </Text>
           </VBox>
         <Measure len="1/4">
-          <eid>6_6</eid>
+          <eid>+_+</eid>
           <irregular>1</irregular>
           <voice>
             <TimeSig>
-              <eid>7_7</eid>
+              <eid>/_/</eid>
               <linkedTo>W_W</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>8_8</eid>
+              <eid>AB_AB</eid>
               <linkedTo>X_X</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
@@ -581,7 +585,7 @@
               </location>
             <SystemText>
               <swing unit="eighth" ratio="60"/>
-              <eid>9_9</eid>
+              <eid>BB_BB</eid>
               <linkedTo>K_K</linkedTo>
               <style>tempo</style>
               <text>Swing</text>
@@ -589,47 +593,47 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>+_+</eid>
+          <eid>CB_CB</eid>
           <voice>
             <Chord>
-              <eid>/_/</eid>
+              <eid>DB_DB</eid>
               <linkedTo>Y_Y</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>AB_AB</eid>
+                <eid>EB_EB</eid>
                 <linkedTo>Z_Z</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>BB_BB</eid>
+              <eid>FB_FB</eid>
               <linkedTo>a_a</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>CB_CB</eid>
+                <eid>GB_GB</eid>
                 <linkedTo>b_b</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>DB_DB</eid>
+              <eid>HB_HB</eid>
               <linkedTo>c_c</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>EB_EB</eid>
+                <eid>IB_IB</eid>
                 <linkedTo>d_d</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>FB_FB</eid>
+              <eid>JB_JB</eid>
               <linkedTo>e_e</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>GB_GB</eid>
+                <eid>KB_KB</eid>
                 <linkedTo>f_f</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>

@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -90,8 +91,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -108,7 +110,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -172,8 +174,9 @@
         </Instrument>
       </Part>
     <Part id="3">
+      <eid>H_H</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>I_I</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -237,25 +240,25 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>G_G</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>K_K</eid>
             </Clef>
           <KeySig>
-            <eid>I_I</eid>
+            <eid>L_L</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>M_M</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>K_K</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -269,19 +272,19 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>L_L</eid>
+            <eid>O_O</eid>
             </Clef>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>P_P</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>Q_Q</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>O_O</eid>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -295,19 +298,19 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>P_P</eid>
+            <eid>S_S</eid>
             </Clef>
           <KeySig>
-            <eid>Q_Q</eid>
+            <eid>T_T</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>R_R</eid>
+            <eid>U_U</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>S_S</eid>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -321,19 +324,19 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>T_T</eid>
+            <eid>W_W</eid>
             </Clef>
           <KeySig>
-            <eid>U_U</eid>
+            <eid>X_X</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>V_V</eid>
+            <eid>Y_Y</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>W_W</eid>
+            <eid>Z_Z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

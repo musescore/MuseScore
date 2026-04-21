@@ -35,6 +35,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>e_e</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -118,7 +119,7 @@
         <eid>M_M</eid>
         <voice>
           <KeySig>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <concertKey>-3</concertKey>
             </KeySig>
           <Chord>
@@ -133,7 +134,7 @@
               <eid>P_P</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>i_i</eid>
+                <eid>j_j</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -142,7 +143,7 @@
               <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>j_j</eid>
+                <eid>k_k</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -165,7 +166,7 @@
               <eid>V_V</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>k_k</eid>
+                <eid>l_l</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -174,7 +175,7 @@
               <eid>X_X</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>l_l</eid>
+                <eid>m_m</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -197,7 +198,7 @@
               <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>m_m</eid>
+                <eid>n_n</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -206,7 +207,7 @@
               <eid>d_d</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>n_n</eid>
+                <eid>o_o</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>

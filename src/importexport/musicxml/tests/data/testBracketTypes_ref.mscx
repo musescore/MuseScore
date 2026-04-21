@@ -51,8 +51,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Bracket Types</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -118,40 +119,40 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text><font size="22"/>Bracket Types</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Henry Ives</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="TextLine">
             <TextLine>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               </TextLine>
             <next>
               <location>
@@ -160,10 +161,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -171,7 +172,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <voice>
           <Spanner type="TextLine">
             <prev>
@@ -182,7 +183,7 @@
             </Spanner>
           <Spanner type="TextLine">
             <TextLine>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <lineStyle>dashed</lineStyle>
               </TextLine>
             <next>
@@ -192,10 +193,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -203,7 +204,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>S_S</eid>
         <voice>
           <Spanner type="TextLine">
             <prev>
@@ -214,7 +215,7 @@
             </Spanner>
           <Spanner type="TextLine">
             <TextLine>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <lineStyle>dotted</lineStyle>
               </TextLine>
             <next>
@@ -224,10 +225,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -235,7 +236,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Spanner type="TextLine">
             <prev>
@@ -247,10 +248,10 @@
           <Spanner type="Trill">
             <Trill>
               <subtype>prallprall</subtype>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <Ornament>
                 <subtype>ornamentTrill</subtype>
-                <eid>X_X</eid>
+                <eid>Y_Y</eid>
                 </Ornament>
               </Trill>
             <next>
@@ -260,10 +261,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -284,7 +285,7 @@
             </Spanner>
           <BarLine>
             <subtype>end</subtype>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -23,16 +23,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Rests (dotted)</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -78,71 +79,71 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>Rests (dotted)</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <KeySig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Rest>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>N_N</eid>
         <voice>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>P_P</eid>
-            <dots>1</dots>
-            <durationType>16th</durationType>
-            </Rest>
-          <Rest>
             <eid>Q_Q</eid>
             <dots>1</dots>
-            <durationType>32nd</durationType>
+            <durationType>16th</durationType>
             </Rest>
           <Rest>
             <eid>R_R</eid>
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>S_S</eid>
+            <dots>1</dots>
+            <durationType>32nd</durationType>
+            </Rest>
+          <BarLine>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -151,47 +152,41 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>T_T</eid>
-            <linkedTo>H_H</linkedTo>
+            <eid>U_U</eid>
+            <linkedTo>I_I</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Rest>
-            <eid>U_U</eid>
-            <linkedTo>K_K</linkedTo>
+            <eid>V_V</eid>
+            <linkedTo>L_L</linkedTo>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>V_V</eid>
-            <linkedTo>L_L</linkedTo>
+            <eid>W_W</eid>
+            <linkedTo>M_M</linkedTo>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Rest>
-            <eid>W_W</eid>
-            <linkedTo>N_N</linkedTo>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <eid>X_X</eid>
             <linkedTo>O_O</linkedTo>
             <dots>1</dots>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <eid>Y_Y</eid>
             <linkedTo>P_P</linkedTo>
             <dots>1</dots>
-            <durationType>16th</durationType>
+            <durationType>eighth</durationType>
             </Rest>
           <Rest>
             <eid>Z_Z</eid>
             <linkedTo>Q_Q</linkedTo>
             <dots>1</dots>
-            <durationType>32nd</durationType>
+            <durationType>16th</durationType>
             </Rest>
           <Rest>
             <eid>a_a</eid>
@@ -199,9 +194,15 @@
             <dots>1</dots>
             <durationType>32nd</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>b_b</eid>
             <linkedTo>S_S</linkedTo>
+            <dots>1</dots>
+            <durationType>32nd</durationType>
+            </Rest>
+          <BarLine>
+            <eid>c_c</eid>
+            <linkedTo>T_T</linkedTo>
             </BarLine>
           </voice>
         </Measure>

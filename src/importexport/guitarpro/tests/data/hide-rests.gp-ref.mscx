@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -52,8 +53,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -87,33 +89,23 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Rest>
-            <eid>I_I</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>J_J</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>K_K</eid>
             <visible>0</visible>
@@ -124,21 +116,31 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>M_M</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>N_N</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             </Dynamic>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -146,31 +148,31 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>R_R</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>U_U</eid>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             </Dynamic>
           <Chord>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>X_X</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>W_W</eid>
+                <eid>Y_Y</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>23</tpc>
@@ -179,21 +181,11 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Z_Z</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
-          <Rest>
-            <eid>Y_Y</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>Z_Z</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>a_a</eid>
             <visible>0</visible>
@@ -204,6 +196,16 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>c_c</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>d_d</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -211,29 +213,29 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>c_c</eid>
+            <eid>e_e</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>d_d</eid>
+            <eid>f_f</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>e_e</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>f_f</eid>
+            <eid>h_h</eid>
             </Dynamic>
           <Chord>
-            <eid>g_g</eid>
+            <eid>i_i</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>j_j</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -241,38 +243,38 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>j_j</eid>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
-            <eid>k_k</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>l_l</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <eid>m_m</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>n_n</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>o_o</eid>
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>p_p</eid>
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>o_o</eid>
+            <eid>q_q</eid>
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
@@ -281,7 +283,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>p_p</eid>
+            <eid>r_r</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

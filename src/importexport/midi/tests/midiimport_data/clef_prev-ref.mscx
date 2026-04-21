@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -87,43 +88,43 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>G_G</eid>
+              <eid>H_H</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             </Rest>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>L_L</eid>
         <voice>
           <Tuplet>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -133,13 +134,13 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>O_O</eid>
+                <eid>P_P</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
@@ -147,10 +148,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>48</velocity>
@@ -158,7 +159,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -168,13 +169,13 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>U_U</eid>
+                <eid>V_V</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
@@ -182,13 +183,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>X_X</eid>
+                <eid>Y_Y</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -197,7 +198,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -207,14 +208,14 @@
               </Number>
             </Tuplet>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <velocity>71</velocity>
@@ -222,7 +223,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -232,14 +233,14 @@
               </Number>
             </Tuplet>
           <Rest>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <velocity>80</velocity>

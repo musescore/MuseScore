@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -49,29 +50,29 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>F8vb</concertClefType>
             <transposingClefType>F8vb</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -79,15 +80,15 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <l1>52</l1>
             <l2>52</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>cross</head>
@@ -97,10 +98,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -108,10 +109,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <head>cross</head>
@@ -121,15 +122,15 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <l1>52</l1>
             <l2>52</l2>
             </Beam>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -137,10 +138,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>33</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -148,10 +149,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               <head>cross</head>
@@ -161,10 +162,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -172,10 +173,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -183,7 +184,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>16th</durationType>
             </Rest>
           </voice>

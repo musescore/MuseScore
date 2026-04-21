@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -86,30 +87,30 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
@@ -118,188 +119,188 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>L_L</eid>
         <voice>
           <Rest>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>N_N</eid>
         <voice>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>R_R</eid>
         <voice>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>T_T</eid>
         <voice>
           <Rest>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <voice>
           <Rest>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
+        <eid>X_X</eid>
         <voice>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>Z_Z</eid>
         <voice>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>b_b</eid>
         <voice>
           <Rest>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>d_d</eid>
         <voice>
           <Rest>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>f_f</eid>
         <voice>
           <Rest>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>g_g</eid>
+        <eid>h_h</eid>
         <voice>
           <Rest>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>i_i</eid>
+        <eid>j_j</eid>
         <voice>
           <Rest>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>l_l</eid>
         <voice>
           <Rest>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>m_m</eid>
+        <eid>n_n</eid>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>o_o</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>o_o</eid>
+        <eid>p_p</eid>
         <voice>
           <Rest>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>q_q</eid>
+        <eid>r_r</eid>
         <voice>
           <Chord>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>s_s</eid>
+              <eid>t_t</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>u_u</eid>
+            <eid>v_v</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -38,6 +38,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Stemless</metaTag>
     <Part id="1">
+      <eid>IB_IB</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -103,6 +104,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>JB_JB</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">

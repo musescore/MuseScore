@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -74,69 +75,69 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <Breath>
             <symbol>breathMarkComma</symbol>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Breath>
           </voice>
         </Measure>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Rest>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <Breath>
             <symbol>caesuraCurved</symbol>
             <pause>2</pause>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Breath>
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>L_L</eid>
         <voice>
           <Rest>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <Breath>
             <symbol>caesura</symbol>
             <pause>2</pause>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </Breath>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <LayoutBreak>
-          <eid>O_O</eid>
+          <eid>P_P</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>

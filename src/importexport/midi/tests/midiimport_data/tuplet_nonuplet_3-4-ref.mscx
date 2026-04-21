@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -86,26 +87,26 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <eid>G_G</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <Chord>
+          <Rest>
             <eid>H_H</eid>
             <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <eid>I_I</eid>
+            <durationType>quarter</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
@@ -114,10 +115,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>J_J</eid>
+        <eid>K_K</eid>
         <voice>
           <Tuplet>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <normalNotes>8</normalNotes>
             <actualNotes>9</actualNotes>
             <baseNote>32nd</baseNote>
@@ -127,95 +128,95 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <l1>46</l1>
             <l2>46</l2>
             </Beam>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
@@ -223,11 +224,11 @@
             </Chord>
           <endTuplet/>
           <Rest>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

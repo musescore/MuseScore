@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -51,35 +52,35 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <Fingering>
-                <eid>K_K</eid>
+                <eid>L_L</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>62</pitch>
@@ -89,12 +90,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <Fingering>
-                <eid>N_N</eid>
+                <eid>O_O</eid>
                 <text>t</text>
                 </Fingering>
               <pitch>53</pitch>
@@ -104,12 +105,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Fingering>
-                <eid>Q_Q</eid>
+                <eid>R_R</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>47</pitch>
@@ -119,12 +120,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <Fingering>
-                <eid>T_T</eid>
+                <eid>U_U</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -134,20 +135,20 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <Fingering>
-                <eid>Y_Y</eid>
+                <eid>Z_Z</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>59</pitch>
@@ -157,16 +158,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>b_b</eid>
+                <eid>c_c</eid>
                 </Accidental>
               <Fingering>
-                <eid>c_c</eid>
+                <eid>d_d</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>51</pitch>
@@ -176,16 +177,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>f_f</eid>
+                <eid>g_g</eid>
                 </Accidental>
               <Fingering>
-                <eid>g_g</eid>
+                <eid>h_h</eid>
                 <text>p</text>
                 </Fingering>
               <pitch>61</pitch>
@@ -195,12 +196,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>j_j</eid>
               <Fingering>
-                <eid>j_j</eid>
+                <eid>k_k</eid>
                 <text>i</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -210,20 +211,20 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>l_l</eid>
+        <eid>m_m</eid>
         <voice>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <Fingering>
-                <eid>o_o</eid>
+                <eid>p_p</eid>
                 <text>m</text>
                 </Fingering>
               <pitch>55</pitch>
@@ -233,16 +234,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>q_q</eid>
+              <eid>r_r</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>r_r</eid>
+                <eid>s_s</eid>
                 </Accidental>
               <Fingering>
-                <eid>s_s</eid>
+                <eid>t_t</eid>
                 <text>a</text>
                 </Fingering>
               <pitch>56</pitch>
@@ -252,12 +253,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>u_u</eid>
+              <eid>v_v</eid>
               <Fingering>
-                <eid>v_v</eid>
+                <eid>w_w</eid>
                 <text>c</text>
                 </Fingering>
               <pitch>52</pitch>
@@ -267,7 +268,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>w_w</eid>
+            <eid>x_x</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

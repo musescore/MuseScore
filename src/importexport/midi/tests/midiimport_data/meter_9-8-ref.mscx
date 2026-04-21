@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -86,38 +87,38 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>9</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Chord>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>G_G</eid>
+              <eid>H_H</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>H_H</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
             <eid>I_I</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
             <eid>J_J</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>K_K</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>

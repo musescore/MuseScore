@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">copypastesymbollist-articulation-rest</metaTag>
     <Part id="1">
+      <eid>r9T/u7IfRsP_r9T/u7IfRsP</eid>
       <Staff>
-        <eid>r9T/u7IfRsP_r9T/u7IfRsP</eid>
+        <eid>s9T/u7IfRsP_s9T/u7IfRsP</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -192,7 +193,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>s9T/u7IfRsP_s9T/u7IfRsP</eid>
+              <eid>t9T/u7IfRsP_t9T/u7IfRsP</eid>
               </Articulation>
             <Note>
               <eid>4JPIfBwRa6N_mNbkcCDoNzH</eid>
@@ -205,7 +206,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>t9T/u7IfRsP_t9T/u7IfRsP</eid>
+              <eid>u9T/u7IfRsP_u9T/u7IfRsP</eid>
               </Articulation>
             <Note>
               <eid>JZf8DF6/nvB_hQDzrAtNHhH</eid>
@@ -218,7 +219,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>u9T/u7IfRsP_u9T/u7IfRsP</eid>
+              <eid>v9T/u7IfRsP_v9T/u7IfRsP</eid>
               </Articulation>
             <Note>
               <eid>cCwvLluec6J_GdhIkrChObJ</eid>

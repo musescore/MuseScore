@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="percussion">
           <name>perc5Line</name>
           <keysig>0</keysig>
@@ -310,44 +311,44 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <Beam>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <l1>-28</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -355,11 +356,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -367,17 +368,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
-            <Note>
-              <eid>P_P</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              <velocity>64</velocity>
-              </Note>
             <Note>
               <eid>Q_Q</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              <velocity>64</velocity>
+              </Note>
+            <Note>
+              <eid>R_R</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -385,17 +386,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -403,16 +404,16 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <l1>-28</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -420,11 +421,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -432,17 +433,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -450,11 +451,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -464,22 +465,22 @@
           </voice>
         <voice>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>h_h</eid>
+              <eid>i_i</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <velocity>64</velocity>
@@ -488,19 +489,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>i_i</eid>
+        <eid>j_j</eid>
         <voice>
           <Beam>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             <l1>-28</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>l_l</eid>
+              <eid>m_m</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -508,11 +509,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -520,17 +521,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>p_p</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
-            <Note>
-              <eid>p_p</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              <velocity>64</velocity>
-              </Note>
             <Note>
               <eid>q_q</eid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              <velocity>64</velocity>
+              </Note>
+            <Note>
+              <eid>r_r</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -538,17 +539,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>s_s</eid>
+              <eid>t_t</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>t_t</eid>
+              <eid>u_u</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -556,16 +557,16 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>u_u</eid>
+            <eid>v_v</eid>
             <l1>-28</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>w_w</eid>
+              <eid>x_x</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -573,11 +574,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>x_x</eid>
+            <eid>y_y</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>y_y</eid>
+              <eid>z_z</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -585,17 +586,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>0_0</eid>
+              <eid>1_1</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               <velocity>64</velocity>
               </Note>
             <Note>
-              <eid>1_1</eid>
+              <eid>2_2</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -603,11 +604,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>2_2</eid>
+            <eid>3_3</eid>
             <durationType>16th</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>3_3</eid>
+              <eid>4_4</eid>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <head>xcircle</head>
@@ -617,22 +618,22 @@
           </voice>
         <voice>
           <Chord>
-            <eid>4_4</eid>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>5_5</eid>
+              <eid>6_6</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <velocity>64</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>6_6</eid>
+            <eid>7_7</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>7_7</eid>
+              <eid>8_8</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               <velocity>64</velocity>

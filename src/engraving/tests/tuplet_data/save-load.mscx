@@ -38,6 +38,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>l_l</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">

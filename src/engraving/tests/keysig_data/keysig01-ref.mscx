@@ -35,6 +35,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>e_e</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -118,7 +119,7 @@
         <eid>M_M</eid>
         <voice>
           <KeySig>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <concertKey>2</concertKey>
             </KeySig>
           <Chord>
@@ -128,7 +129,7 @@
               <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>f_f</eid>
+                <eid>g_g</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -156,7 +157,7 @@
               <eid>U_U</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>g_g</eid>
+                <eid>h_h</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -184,7 +185,7 @@
               <eid>a_a</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>h_h</eid>
+                <eid>i_i</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>

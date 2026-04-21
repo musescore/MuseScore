@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -54,50 +55,46 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>All God´s People</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Queen<br/>Innuendo</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Music by Queen</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
+          <eid>I_I</eid>
           <style>poet</style>
           <text>Words by Queen</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <KeySig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.516667</tempo>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 91</text>
             </Tempo>
-          <Rest>
-            <eid>M_M</eid>
-            <durationType>eighth</durationType>
-            </Rest>
           <Rest>
             <eid>N_N</eid>
             <durationType>eighth</durationType>
@@ -112,23 +109,27 @@
             </Rest>
           <Rest>
             <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             </Rest>
           <Rest>
             <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             </Dynamic>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <fret>15</fret>
@@ -137,7 +138,7 @@
                 <Glissando>
                   <text></text>
                   <glissandoShift>1</glissandoShift>
-                  <eid>V_V</eid>
+                  <eid>W_W</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -151,16 +152,16 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             </Dynamic>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>Z_Z</eid>
+                <eid>a_a</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>

@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -86,26 +87,26 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <l1>8</l1>
             <l2>8</l2>
             </Beam>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>I_I</eid>
+                <eid>J_J</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
@@ -113,25 +114,25 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               </Articulation>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>73</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Tuplet>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -141,47 +142,47 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <l1>10</l1>
             <l2>8</l2>
             </Beam>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               </Articulation>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <velocity>73</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               </Articulation>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>83</velocity>
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               </Articulation>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>103</velocity>
@@ -189,7 +190,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -199,22 +200,22 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <l1>0</l1>
             <l2>2</l2>
             </Beam>
           <Chord>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               </Articulation>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>d_d</eid>
+                <eid>e_e</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -222,17 +223,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               </Articulation>
             <Note>
-              <eid>g_g</eid>
+              <eid>h_h</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>h_h</eid>
+                <eid>i_i</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -240,14 +241,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoBelow</subtype>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               </Articulation>
             <Note>
-              <eid>k_k</eid>
+              <eid>l_l</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>103</velocity>

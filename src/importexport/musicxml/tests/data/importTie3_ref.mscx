@@ -103,8 +103,9 @@ Arranged by [Arranger]</metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -116,7 +117,7 @@ Arranged by [Arranger]</metaTag>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -182,49 +183,49 @@ Arranged by [Arranger]</metaTag>
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>title</style>
           <text>[Title]</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>[COMPOSER]<br/>Arranged by [Arranger]</text>
           </Text>
         </VBox>
       <HBox>
         <width>5</width>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         </HBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Clef>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <text>for Piano</text>
             </StaffText>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>O_O</eid>
+                  <eid>P_P</eid>
                   </Tie>
                 <next>
                   <location>
@@ -238,25 +239,25 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -270,23 +271,23 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>Y_Y</eid>
+                  <eid>Z_Z</eid>
                   </Tie>
                 <next>
                   <location>
@@ -300,16 +301,16 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -321,15 +322,15 @@ Arranged by [Arranger]</metaTag>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             </Clef>
           <TimeSig>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -338,15 +339,15 @@ Arranged by [Arranger]</metaTag>
       <Measure>
         <voice>
           <Rest>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>h_h</eid>
+              <eid>i_i</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -360,12 +361,12 @@ Arranged by [Arranger]</metaTag>
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>

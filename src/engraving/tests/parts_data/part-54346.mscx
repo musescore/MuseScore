@@ -36,6 +36,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Pickup-bug</metaTag>
     <Part id="1">
+      <eid>g_g</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -92,6 +93,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>h_h</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">

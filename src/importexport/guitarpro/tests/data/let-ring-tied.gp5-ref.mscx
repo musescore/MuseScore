@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -50,25 +51,25 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Spanner type="LetRing">
             <LetRing>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               </LetRing>
             <next>
               <location>
@@ -77,15 +78,15 @@
               </next>
             </Spanner>
           <Beam>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <l1>44</l1>
             <l2>38</l2>
             </Beam>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -93,13 +94,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>N_N</eid>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -114,13 +115,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>Q_Q</eid>
+                  <eid>R_R</eid>
                   </Tie>
                 <next>
                   <location>
@@ -142,10 +143,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -167,11 +168,11 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

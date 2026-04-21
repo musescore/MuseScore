@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>7etb/zMLY4P_7etb/zMLY4P</eid>
       <Staff>
-        <eid>7etb/zMLY4P_7etb/zMLY4P</eid>
+        <eid>8etb/zMLY4P_8etb/zMLY4P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -295,7 +296,7 @@
             <eid>lU9v/yDNVNC_8U++tNzzDVH</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>8etb/zMLY4P_8etb/zMLY4P</eid>
+              <eid>9etb/zMLY4P_9etb/zMLY4P</eid>
               <text>Nel</text>
               </Lyrics>
             <Note>
@@ -309,7 +310,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <eid>9etb/zMLY4P_9etb/zMLY4P</eid>
+              <eid>+etb/zMLY4P_+etb/zMLY4P</eid>
               <text>mez</text>
               </Lyrics>
             <Note>
@@ -323,7 +324,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <eid>+etb/zMLY4P_+etb/zMLY4P</eid>
+              <eid>/etb/zMLY4P_/etb/zMLY4P</eid>
               <text>zo</text>
               </Lyrics>
             <Note>
@@ -336,7 +337,7 @@
             <eid>lh1jX5rIcZ_PlclLr6fGAJ</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <eid>/etb/zMLY4P_/etb/zMLY4P</eid>
+              <eid>Aftb/zMLY4P_Aftb/zMLY4P</eid>
               <text>del</text>
               </Lyrics>
             <Note>
@@ -360,7 +361,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <eid>Aftb/zMLY4P_Aftb/zMLY4P</eid>
+              <eid>Bftb/zMLY4P_Bftb/zMLY4P</eid>
               <text>cam</text>
               </Lyrics>
             <Note>
@@ -384,7 +385,7 @@
             <Lyrics>
               <syllabic>end</syllabic>
               <ticks_f>1/4</ticks_f>
-              <eid>Bftb/zMLY4P_Bftb/zMLY4P</eid>
+              <eid>Cftb/zMLY4P_Cftb/zMLY4P</eid>
               <text>min</text>
               </Lyrics>
             <Note>
@@ -420,7 +421,7 @@
             <eid>3gLpMm3C0G_FVS7ztQuPlL</eid>
             <durationType>eighth</durationType>
             <Lyrics>
-              <eid>Cftb/zMLY4P_Cftb/zMLY4P</eid>
+              <eid>Dftb/zMLY4P_Dftb/zMLY4P</eid>
               <text>di</text>
               </Lyrics>
             <Note>
@@ -434,7 +435,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <eid>Dftb/zMLY4P_Dftb/zMLY4P</eid>
+              <eid>Eftb/zMLY4P_Eftb/zMLY4P</eid>
               <text>no</text>
               </Lyrics>
             <Note>
@@ -448,7 +449,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <eid>Eftb/zMLY4P_Eftb/zMLY4P</eid>
+              <eid>Fftb/zMLY4P_Fftb/zMLY4P</eid>
               <text>stra</text>
               </Lyrics>
             <Note>
@@ -467,7 +468,7 @@
             <durationType>half</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <eid>Fftb/zMLY4P_Fftb/zMLY4P</eid>
+              <eid>Gftb/zMLY4P_Gftb/zMLY4P</eid>
               <text>vi</text>
               </Lyrics>
             <Note>
@@ -495,7 +496,7 @@
             <durationType>whole</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <eid>Gftb/zMLY4P_Gftb/zMLY4P</eid>
+              <eid>Hftb/zMLY4P_Hftb/zMLY4P</eid>
               <text>ta.</text>
               </Lyrics>
             <Note>

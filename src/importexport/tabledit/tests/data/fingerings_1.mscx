@@ -23,16 +23,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -78,35 +79,35 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>6</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <StaffText>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <text>Left hand fingerings</text>
             </StaffText>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -114,12 +115,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <Fingering>
-                <eid>O_O</eid>
+                <eid>P_P</eid>
                 <style>guitar_fingering_lh</style>
                 <text>0</text>
                 </Fingering>
@@ -130,12 +131,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <Fingering>
-                <eid>R_R</eid>
+                <eid>S_S</eid>
                 <style>guitar_fingering_lh</style>
                 <text>1</text>
                 </Fingering>
@@ -146,16 +147,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>U_U</eid>
+                <eid>V_V</eid>
                 </Accidental>
               <Fingering>
-                <eid>V_V</eid>
+                <eid>W_W</eid>
                 <style>guitar_fingering_lh</style>
                 <text>2</text>
                 </Fingering>
@@ -166,12 +167,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <Fingering>
-                <eid>Y_Y</eid>
+                <eid>Z_Z</eid>
                 <style>guitar_fingering_lh</style>
                 <text>3</text>
                 </Fingering>
@@ -182,16 +183,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>b_b</eid>
+                <eid>c_c</eid>
                 </Accidental>
               <Fingering>
-                <eid>c_c</eid>
+                <eid>d_d</eid>
                 <style>guitar_fingering_lh</style>
                 <text>4</text>
                 </Fingering>
@@ -202,22 +203,22 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>f_f</eid>
         <voice>
           <StaffText>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <text>Right hand fingerings</text>
             </StaffText>
           <Chord>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>i_i</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -225,12 +226,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <Fingering>
-                <eid>k_k</eid>
+                <eid>l_l</eid>
                 <style>guitar_fingering_rh</style>
                 <text>p</text>
                 </Fingering>
@@ -241,12 +242,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>n_n</eid>
               <Fingering>
-                <eid>n_n</eid>
+                <eid>o_o</eid>
                 <style>guitar_fingering_rh</style>
                 <text>i</text>
                 </Fingering>
@@ -257,16 +258,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>o_o</eid>
+            <eid>p_p</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>p_p</eid>
+              <eid>q_q</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>q_q</eid>
+                <eid>r_r</eid>
                 </Accidental>
               <Fingering>
-                <eid>r_r</eid>
+                <eid>s_s</eid>
                 <style>guitar_fingering_rh</style>
                 <text>m</text>
                 </Fingering>
@@ -277,12 +278,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>t_t</eid>
+              <eid>u_u</eid>
               <Fingering>
-                <eid>u_u</eid>
+                <eid>v_v</eid>
                 <style>guitar_fingering_rh</style>
                 <text>a</text>
                 </Fingering>
@@ -293,16 +294,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>w_w</eid>
+              <eid>x_x</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>x_x</eid>
+                <eid>y_y</eid>
                 </Accidental>
               <Fingering>
-                <eid>y_y</eid>
+                <eid>z_z</eid>
                 <style>guitar_fingering_rh</style>
                 <text>c</text>
                 </Fingering>
@@ -313,7 +314,7 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -322,17 +323,17 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>0_0</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>1_1</eid>
+            <linkedTo>H_H</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>1_1</eid>
-            <linkedTo>K_K</linkedTo>
+            <eid>2_2</eid>
+            <linkedTo>L_L</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>2_2</eid>
-              <linkedTo>L_L</linkedTo>
+              <eid>3_3</eid>
+              <linkedTo>M_M</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -340,15 +341,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>3_3</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>4_4</eid>
+            <linkedTo>N_N</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4_4</eid>
-              <linkedTo>N_N</linkedTo>
+              <eid>5_5</eid>
+              <linkedTo>O_O</linkedTo>
               <Fingering>
-                <eid>5_5</eid>
-                <linkedTo>O_O</linkedTo>
+                <eid>6_6</eid>
+                <linkedTo>P_P</linkedTo>
                 <style>guitar_fingering_lh</style>
                 <text>0</text>
                 </Fingering>
@@ -359,15 +360,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>6_6</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>7_7</eid>
+            <linkedTo>Q_Q</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>7_7</eid>
-              <linkedTo>Q_Q</linkedTo>
+              <eid>8_8</eid>
+              <linkedTo>R_R</linkedTo>
               <Fingering>
-                <eid>8_8</eid>
-                <linkedTo>R_R</linkedTo>
+                <eid>9_9</eid>
+                <linkedTo>S_S</linkedTo>
                 <style>guitar_fingering_lh</style>
                 <text>1</text>
                 </Fingering>
@@ -378,15 +379,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>9_9</eid>
-            <linkedTo>S_S</linkedTo>
+            <eid>+_+</eid>
+            <linkedTo>T_T</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>+_+</eid>
-              <linkedTo>T_T</linkedTo>
+              <eid>/_/</eid>
+              <linkedTo>U_U</linkedTo>
               <Fingering>
-                <eid>/_/</eid>
-                <linkedTo>V_V</linkedTo>
+                <eid>AB_AB</eid>
+                <linkedTo>W_W</linkedTo>
                 <style>guitar_fingering_lh</style>
                 <text>2</text>
                 </Fingering>
@@ -397,15 +398,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>AB_AB</eid>
-            <linkedTo>W_W</linkedTo>
+            <eid>BB_BB</eid>
+            <linkedTo>X_X</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>BB_BB</eid>
-              <linkedTo>X_X</linkedTo>
+              <eid>CB_CB</eid>
+              <linkedTo>Y_Y</linkedTo>
               <Fingering>
-                <eid>CB_CB</eid>
-                <linkedTo>Y_Y</linkedTo>
+                <eid>DB_DB</eid>
+                <linkedTo>Z_Z</linkedTo>
                 <style>guitar_fingering_lh</style>
                 <text>3</text>
                 </Fingering>
@@ -416,15 +417,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>DB_DB</eid>
-            <linkedTo>Z_Z</linkedTo>
+            <eid>EB_EB</eid>
+            <linkedTo>a_a</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>EB_EB</eid>
-              <linkedTo>a_a</linkedTo>
+              <eid>FB_FB</eid>
+              <linkedTo>b_b</linkedTo>
               <Fingering>
-                <eid>FB_FB</eid>
-                <linkedTo>c_c</linkedTo>
+                <eid>GB_GB</eid>
+                <linkedTo>d_d</linkedTo>
                 <style>guitar_fingering_lh</style>
                 <text>4</text>
                 </Fingering>
@@ -435,20 +436,20 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>GB_GB</eid>
-            <linkedTo>d_d</linkedTo>
+            <eid>HB_HB</eid>
+            <linkedTo>e_e</linkedTo>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>HB_HB</eid>
-            <linkedTo>g_g</linkedTo>
+            <eid>IB_IB</eid>
+            <linkedTo>h_h</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>IB_IB</eid>
-              <linkedTo>h_h</linkedTo>
+              <eid>JB_JB</eid>
+              <linkedTo>i_i</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -456,15 +457,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>JB_JB</eid>
-            <linkedTo>i_i</linkedTo>
+            <eid>KB_KB</eid>
+            <linkedTo>j_j</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>KB_KB</eid>
-              <linkedTo>j_j</linkedTo>
+              <eid>LB_LB</eid>
+              <linkedTo>k_k</linkedTo>
               <Fingering>
-                <eid>LB_LB</eid>
-                <linkedTo>k_k</linkedTo>
+                <eid>MB_MB</eid>
+                <linkedTo>l_l</linkedTo>
                 <style>guitar_fingering_rh</style>
                 <text>p</text>
                 </Fingering>
@@ -475,15 +476,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>MB_MB</eid>
-            <linkedTo>l_l</linkedTo>
+            <eid>NB_NB</eid>
+            <linkedTo>m_m</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>NB_NB</eid>
-              <linkedTo>m_m</linkedTo>
+              <eid>OB_OB</eid>
+              <linkedTo>n_n</linkedTo>
               <Fingering>
-                <eid>OB_OB</eid>
-                <linkedTo>n_n</linkedTo>
+                <eid>PB_PB</eid>
+                <linkedTo>o_o</linkedTo>
                 <style>guitar_fingering_rh</style>
                 <text>i</text>
                 </Fingering>
@@ -494,15 +495,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>PB_PB</eid>
-            <linkedTo>o_o</linkedTo>
+            <eid>QB_QB</eid>
+            <linkedTo>p_p</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>QB_QB</eid>
-              <linkedTo>p_p</linkedTo>
+              <eid>RB_RB</eid>
+              <linkedTo>q_q</linkedTo>
               <Fingering>
-                <eid>RB_RB</eid>
-                <linkedTo>r_r</linkedTo>
+                <eid>SB_SB</eid>
+                <linkedTo>s_s</linkedTo>
                 <style>guitar_fingering_rh</style>
                 <text>m</text>
                 </Fingering>
@@ -513,15 +514,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>SB_SB</eid>
-            <linkedTo>s_s</linkedTo>
+            <eid>TB_TB</eid>
+            <linkedTo>t_t</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>TB_TB</eid>
-              <linkedTo>t_t</linkedTo>
+              <eid>UB_UB</eid>
+              <linkedTo>u_u</linkedTo>
               <Fingering>
-                <eid>UB_UB</eid>
-                <linkedTo>u_u</linkedTo>
+                <eid>VB_VB</eid>
+                <linkedTo>v_v</linkedTo>
                 <style>guitar_fingering_rh</style>
                 <text>a</text>
                 </Fingering>
@@ -532,15 +533,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>VB_VB</eid>
-            <linkedTo>v_v</linkedTo>
+            <eid>WB_WB</eid>
+            <linkedTo>w_w</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>WB_WB</eid>
-              <linkedTo>w_w</linkedTo>
+              <eid>XB_XB</eid>
+              <linkedTo>x_x</linkedTo>
               <Fingering>
-                <eid>XB_XB</eid>
-                <linkedTo>y_y</linkedTo>
+                <eid>YB_YB</eid>
+                <linkedTo>z_z</linkedTo>
                 <style>guitar_fingering_rh</style>
                 <text>c</text>
                 </Fingering>
@@ -551,8 +552,8 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>YB_YB</eid>
-            <linkedTo>z_z</linkedTo>
+            <eid>ZB_ZB</eid>
+            <linkedTo>0_0</linkedTo>
             </BarLine>
           </voice>
         </Measure>

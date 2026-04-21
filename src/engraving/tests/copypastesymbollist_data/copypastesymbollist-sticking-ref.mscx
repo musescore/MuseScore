@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>qG0/hWmCX/P_qG0/hWmCX/P</eid>
       <Staff>
-        <eid>qG0/hWmCX/P_qG0/hWmCX/P</eid>
+        <eid>rG0/hWmCX/P_rG0/hWmCX/P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -301,7 +302,7 @@
         <eid>4bPUa3Ik8AC_LTTIoijH7mF</eid>
         <voice>
           <Sticking>
-            <eid>rG0/hWmCX/P_rG0/hWmCX/P</eid>
+            <eid>sG0/hWmCX/P_sG0/hWmCX/P</eid>
             <text>1</text>
             </Sticking>
           <Chord>
@@ -323,7 +324,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <eid>sG0/hWmCX/P_sG0/hWmCX/P</eid>
+            <eid>tG0/hWmCX/P_tG0/hWmCX/P</eid>
             <text>2</text>
             </Sticking>
           <Chord>
@@ -336,7 +337,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <eid>tG0/hWmCX/P_tG0/hWmCX/P</eid>
+            <eid>uG0/hWmCX/P_uG0/hWmCX/P</eid>
             <text>3</text>
             </Sticking>
           <Chord>
@@ -354,7 +355,7 @@
         <eid>eevepr+ZMfJ_IOpEWxrWhsH</eid>
         <voice>
           <Sticking>
-            <eid>uG0/hWmCX/P_uG0/hWmCX/P</eid>
+            <eid>vG0/hWmCX/P_vG0/hWmCX/P</eid>
             <text>4</text>
             </Sticking>
           <Beam>
@@ -399,7 +400,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <eid>vG0/hWmCX/P_vG0/hWmCX/P</eid>
+            <eid>wG0/hWmCX/P_wG0/hWmCX/P</eid>
             <text>5</text>
             </Sticking>
           <Beam>
@@ -426,7 +427,7 @@
               </Note>
             </Chord>
           <Sticking>
-            <eid>wG0/hWmCX/P_wG0/hWmCX/P</eid>
+            <eid>xG0/hWmCX/P_xG0/hWmCX/P</eid>
             <text>6</text>
             </Sticking>
           <Chord>
@@ -453,7 +454,7 @@
         <eid>esE0BX8EtQN_NdsOKCL9T/P</eid>
         <voice>
           <Sticking>
-            <eid>xG0/hWmCX/P_xG0/hWmCX/P</eid>
+            <eid>yG0/hWmCX/P_yG0/hWmCX/P</eid>
             <text>7</text>
             </Sticking>
           <Chord>
@@ -469,49 +470,49 @@
             <fractions>-7/8</fractions>
             </location>
           <Sticking>
-            <eid>yG0/hWmCX/P_yG0/hWmCX/P</eid>
+            <eid>zG0/hWmCX/P_zG0/hWmCX/P</eid>
             <text>8</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>zG0/hWmCX/P_zG0/hWmCX/P</eid>
+            <eid>0G0/hWmCX/P_0G0/hWmCX/P</eid>
             <text>9</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>0G0/hWmCX/P_0G0/hWmCX/P</eid>
+            <eid>1G0/hWmCX/P_1G0/hWmCX/P</eid>
             <text>10</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>1G0/hWmCX/P_1G0/hWmCX/P</eid>
+            <eid>2G0/hWmCX/P_2G0/hWmCX/P</eid>
             <text>11</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>2G0/hWmCX/P_2G0/hWmCX/P</eid>
+            <eid>3G0/hWmCX/P_3G0/hWmCX/P</eid>
             <text>12</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>3G0/hWmCX/P_3G0/hWmCX/P</eid>
+            <eid>4G0/hWmCX/P_4G0/hWmCX/P</eid>
             <text>13</text>
             </Sticking>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Sticking>
-            <eid>4G0/hWmCX/P_4G0/hWmCX/P</eid>
+            <eid>5G0/hWmCX/P_5G0/hWmCX/P</eid>
             <text>14</text>
             </Sticking>
           </voice>
@@ -520,7 +521,7 @@
         <eid>7eRjwXaTU4C_jlvgIS8fr3P</eid>
         <voice>
           <Sticking>
-            <eid>5G0/hWmCX/P_5G0/hWmCX/P</eid>
+            <eid>6G0/hWmCX/P_6G0/hWmCX/P</eid>
             <text>15</text>
             </Sticking>
           <Chord>

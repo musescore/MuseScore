@@ -23,8 +23,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -76,27 +77,27 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <durationType>half</durationType>
             </Rest>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>I_I</eid>
+                  <eid>J_J</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -117,21 +118,21 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>M_M</eid>
+                  <eid>N_N</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -143,15 +144,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>P_P</eid>
+                  <eid>Q_Q</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -171,14 +172,14 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <Spanner type="Glissando">
@@ -194,18 +195,18 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <voice>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>W_W</eid>
+                  <eid>X_X</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -218,10 +219,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <Spanner type="Glissando">
@@ -235,26 +236,26 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         <voice>
           <Chord>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>d_d</eid>
+                  <eid>e_e</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -267,10 +268,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
@@ -284,7 +285,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

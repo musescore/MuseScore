@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -74,9 +75,9 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Marker>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
@@ -84,21 +85,21 @@
           </Marker>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <Marker>
-          <eid>I_I</eid>
+          <eid>J_J</eid>
           <style>repeat_left</style>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
@@ -106,16 +107,16 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>K_K</eid>
+        <eid>L_L</eid>
         <Marker>
-          <eid>L_L</eid>
+          <eid>M_M</eid>
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
@@ -123,20 +124,20 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <LayoutBreak>
-          <eid>O_O</eid>
+          <eid>P_P</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <eid>P_P</eid>
+          <eid>Q_Q</eid>
           <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
@@ -144,32 +145,32 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>S_S</eid>
         <Marker>
-          <eid>S_S</eid>
+          <eid>T_T</eid>
           <style>repeat_right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
         <voice>
           <Rest>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <Marker>
-          <eid>V_V</eid>
+          <eid>W_W</eid>
           <style>repeat_right</style>
           <text>To Coda</text>
           <label>coda</label>
@@ -177,16 +178,16 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>X_X</eid>
+        <eid>Y_Y</eid>
         <Jump>
-          <eid>Y_Y</eid>
+          <eid>Z_Z</eid>
           <style>repeat_right</style>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
@@ -195,20 +196,20 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>b_b</eid>
         <LayoutBreak>
-          <eid>b_b</eid>
+          <eid>c_c</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <eid>c_c</eid>
+          <eid>d_d</eid>
           <style>repeat_right</style>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
@@ -217,16 +218,16 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>f_f</eid>
         <Jump>
-          <eid>f_f</eid>
+          <eid>g_g</eid>
           <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
@@ -235,16 +236,16 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>h_h</eid>
+        <eid>i_i</eid>
         <Jump>
-          <eid>i_i</eid>
+          <eid>j_j</eid>
           <style>repeat_right</style>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
@@ -253,16 +254,16 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>l_l</eid>
         <Jump>
-          <eid>l_l</eid>
+          <eid>m_m</eid>
           <style>repeat_right</style>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
@@ -271,20 +272,20 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>n_n</eid>
+        <eid>o_o</eid>
         <LayoutBreak>
-          <eid>o_o</eid>
+          <eid>p_p</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <Jump>
-          <eid>p_p</eid>
+          <eid>q_q</eid>
           <style>repeat_right</style>
           <text>D.S.</text>
           <jumpTo>segno</jumpTo>
@@ -293,25 +294,25 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>r_r</eid>
+        <eid>s_s</eid>
         <measureRepeatCount>1</measureRepeatCount>
         <voice>
           <MeasureRepeat>
             <subtype>1</subtype>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </MeasureRepeat>
           <BarLine>
             <subtype>end</subtype>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -39,6 +39,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">test_mmrest_text_links</metaTag>
     <Part id="1">
+      <eid>n_n</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">

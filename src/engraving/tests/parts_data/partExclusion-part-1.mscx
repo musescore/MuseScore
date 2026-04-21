@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>m_m</eid>
+    <eid>n_n</eid>
     <name>Flute</name>
     <Division>480</Division>
     <Style>
@@ -13,9 +13,10 @@
     <showMargins>0</showMargins>
     <metaTag name="partName">Flute</metaTag>
     <Part id="1">
+      <eid>o_o</eid>
       <Staff>
-        <eid>n_n</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>p_p</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -38,59 +39,59 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>q_q</eid>
+        <eid>s_s</eid>
         <voice>
           <KeySig>
-            <eid>r_r</eid>
-            <linkedTo>F_F</linkedTo>
+            <eid>t_t</eid>
+            <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>s_s</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>u_u</eid>
+            <linkedTo>H_H</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>u_u</eid>
-            <linkedTo>I_I</linkedTo>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>v_v</eid>
-              <linkedTo>J_J</linkedTo>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
             <eid>w_w</eid>
-            <linkedTo>K_K</linkedTo>
+            <linkedTo>J_J</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>x_x</eid>
-              <linkedTo>L_L</linkedTo>
+              <linkedTo>K_K</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>z_z</eid>
-            <linkedTo>N_N</linkedTo>
+            <eid>y_y</eid>
+            <linkedTo>L_L</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>0_0</eid>
-              <linkedTo>O_O</linkedTo>
+              <eid>z_z</eid>
+              <linkedTo>M_M</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>1_1</eid>
-            <linkedTo>P_P</linkedTo>
+            <linkedTo>O_O</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>2_2</eid>
-              <linkedTo>Q_Q</linkedTo>
+              <linkedTo>P_P</linkedTo>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>3_3</eid>
+            <linkedTo>Q_Q</linkedTo>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>4_4</eid>
+              <linkedTo>R_R</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -98,48 +99,48 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>4_4</eid>
+        <eid>6_6</eid>
         <voice>
           <Chord>
-            <eid>5_5</eid>
-            <linkedTo>T_T</linkedTo>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>6_6</eid>
-              <linkedTo>U_U</linkedTo>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
             <eid>7_7</eid>
-            <linkedTo>V_V</linkedTo>
+            <linkedTo>U_U</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>8_8</eid>
-              <linkedTo>W_W</linkedTo>
+              <linkedTo>V_V</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>+_+</eid>
-            <linkedTo>Y_Y</linkedTo>
+            <eid>9_9</eid>
+            <linkedTo>W_W</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>/_/</eid>
-              <linkedTo>Z_Z</linkedTo>
+              <eid>+_+</eid>
+              <linkedTo>X_X</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>AB_AB</eid>
-            <linkedTo>a_a</linkedTo>
+            <linkedTo>Z_Z</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>BB_BB</eid>
-              <linkedTo>b_b</linkedTo>
+              <linkedTo>a_a</linkedTo>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>CB_CB</eid>
+            <linkedTo>b_b</linkedTo>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>DB_DB</eid>
+              <linkedTo>c_c</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -147,48 +148,48 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>CB_CB</eid>
+        <eid>EB_EB</eid>
         <voice>
           <Chord>
-            <eid>EB_EB</eid>
-            <linkedTo>e_e</linkedTo>
-            <durationType>quarter</durationType>
-            <Note>
-              <eid>FB_FB</eid>
-              <linkedTo>f_f</linkedTo>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
             <eid>GB_GB</eid>
-            <linkedTo>g_g</linkedTo>
+            <linkedTo>f_f</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>HB_HB</eid>
-              <linkedTo>h_h</linkedTo>
+              <linkedTo>g_g</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>IB_IB</eid>
-            <linkedTo>i_i</linkedTo>
+            <linkedTo>h_h</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>JB_JB</eid>
-              <linkedTo>j_j</linkedTo>
+              <linkedTo>i_i</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <eid>KB_KB</eid>
-            <linkedTo>k_k</linkedTo>
+            <linkedTo>j_j</linkedTo>
             <durationType>quarter</durationType>
             <Note>
               <eid>LB_LB</eid>
-              <linkedTo>l_l</linkedTo>
+              <linkedTo>k_k</linkedTo>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>MB_MB</eid>
+            <linkedTo>l_l</linkedTo>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>NB_NB</eid>
+              <linkedTo>m_m</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>

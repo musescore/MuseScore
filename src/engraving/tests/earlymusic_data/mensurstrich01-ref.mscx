@@ -36,6 +36,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>t_t</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -88,6 +89,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>u_u</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">

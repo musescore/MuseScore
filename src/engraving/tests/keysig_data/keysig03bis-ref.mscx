@@ -35,6 +35,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>e_e</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -129,7 +130,7 @@
               <eid>P_P</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>i_i</eid>
+                <eid>j_j</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -157,7 +158,7 @@
               <eid>V_V</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>k_k</eid>
+                <eid>l_l</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -185,7 +186,7 @@
               <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>m_m</eid>
+                <eid>n_n</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>

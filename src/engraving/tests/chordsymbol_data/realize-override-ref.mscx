@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -89,10 +90,10 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -100,21 +101,17 @@
             <harmonyInfo>
               <root>17</root>
               </harmonyInfo>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             </Harmony>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>I_I</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>J_J</eid>
             <durationType>quarter</durationType>
@@ -123,34 +120,34 @@
             <eid>K_K</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>12</root>
               </harmonyInfo>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </Harmony>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
-                <eid>P_P</eid>
+                <eid>Q_Q</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>Q_Q</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>R_R</eid>
             <durationType>quarter</durationType>
@@ -159,34 +156,34 @@
             <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>T_T</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>21</root>
               </harmonyInfo>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </Harmony>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>X_X</eid>
+                <eid>Y_Y</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>Y_Y</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>Z_Z</eid>
             <durationType>quarter</durationType>
@@ -195,34 +192,34 @@
             <eid>a_a</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>b_b</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>c_c</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>30</root>
               </harmonyInfo>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             </Harmony>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
-                <eid>f_f</eid>
+                <eid>g_g</eid>
                 </Accidental>
               <pitch>40</pitch>
               <tpc>30</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>g_g</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>h_h</eid>
             <durationType>quarter</durationType>
@@ -231,34 +228,34 @@
             <eid>i_i</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>j_j</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>j_j</eid>
+        <eid>k_k</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>4</root>
               </harmonyInfo>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             </Harmony>
           <Chord>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>n_n</eid>
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
-                <eid>n_n</eid>
+                <eid>o_o</eid>
                 </Accidental>
               <pitch>38</pitch>
               <tpc>4</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>o_o</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>p_p</eid>
             <durationType>quarter</durationType>
@@ -267,30 +264,30 @@
             <eid>q_q</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>r_r</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>r_r</eid>
+        <eid>s_s</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>13</root>
               </harmonyInfo>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             </Harmony>
           <Chord>
-            <eid>t_t</eid>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>u_u</eid>
+              <eid>v_v</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>v_v</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>w_w</eid>
             <durationType>quarter</durationType>
@@ -299,36 +296,40 @@
             <eid>x_x</eid>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>y_y</eid>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>y_y</eid>
+        <eid>z_z</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <root>15</root>
               </harmonyInfo>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             </Harmony>
           <Chord>
-            <eid>0_0</eid>
+            <eid>1_1</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1_1</eid>
+              <eid>2_2</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>2_2</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>3_3</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <eid>4_4</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

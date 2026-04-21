@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -51,33 +52,33 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -85,23 +86,23 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </Clef>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -109,23 +110,23 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>R_R</eid>
         <voice>
           <Clef>
             <concertClefType>G8va</concertClefType>
             <transposingClefType>G8va</transposingClefType>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             </Clef>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               <fret>15</fret>
@@ -133,46 +134,46 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Clef>
             <concertClefType>G15ma</concertClefType>
             <transposingClefType>G15ma</transposingClefType>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             </Clef>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>91</pitch>
               <tpc>15</tpc>
               <string>0</string>
               </Note>
             </Chord>
           <BarLine>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>b_b</eid>
         <voice>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             </Clef>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -180,23 +181,23 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>f_f</eid>
+        <eid>g_g</eid>
         <voice>
           <Clef>
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             </Clef>
           <Chord>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>j_j</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -204,23 +205,23 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>k_k</eid>
+        <eid>l_l</eid>
         <voice>
           <Clef>
             <concertClefType>C4</concertClefType>
             <transposingClefType>C4</transposingClefType>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             </Clef>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>

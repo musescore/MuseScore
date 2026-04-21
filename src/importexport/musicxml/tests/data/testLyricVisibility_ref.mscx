@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Visibility of lyrics</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -89,140 +90,140 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Visibility of lyrics</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <text>One</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <visible>0</visible>
               <text>Two</text>
               </Lyrics>
             <Lyrics>
               <no>2</no>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <visible>0</visible>
               <text>Three</text>
               </Lyrics>
             <Stem>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <visible>0</visible>
               </Stem>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <visible>0</visible>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>Q_Q</eid>
         <voice>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <visible>0</visible>
               <text>One</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <text>Two</text>
               </Lyrics>
             <Lyrics>
               <no>2</no>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <visible>0</visible>
               <text>Three</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>W_W</eid>
+        <eid>X_X</eid>
         <voice>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <visible>0</visible>
               <text>One</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <visible>0</visible>
               <text>Two</text>
               </Lyrics>
             <Lyrics>
               <no>2</no>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <text>Three</text>
               </Lyrics>
             <Stem>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <visible>0</visible>
               </Stem>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <visible>0</visible>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             </BarLine>
           </voice>
         </Measure>

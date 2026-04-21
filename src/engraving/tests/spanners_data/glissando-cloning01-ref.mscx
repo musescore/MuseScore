@@ -22,15 +22,16 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -81,23 +82,23 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>H_H</eid>
+              <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>I_I</eid>
+                  <eid>J_J</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -109,10 +110,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
@@ -127,10 +128,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>
@@ -141,23 +142,23 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>O_O</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>P_P</eid>
+            <linkedTo>H_H</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
-              <linkedTo>H_H</linkedTo>
+              <eid>Q_Q</eid>
+              <linkedTo>I_I</linkedTo>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>Q_Q</eid>
-                  <linkedTo>I_I</linkedTo>
+                  <eid>R_R</eid>
+                  <linkedTo>J_J</linkedTo>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -169,12 +170,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>S_S</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>S_S</eid>
-              <linkedTo>K_K</linkedTo>
+              <eid>T_T</eid>
+              <linkedTo>L_L</linkedTo>
               <pitch>84</pitch>
               <tpc>14</tpc>
               <Spanner type="Glissando">
@@ -191,8 +192,8 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>T_T</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>U_U</eid>
+            <linkedTo>N_N</linkedTo>
             <durationType>measure</durationType>
             <duration>2/4</duration>
             </Rest>

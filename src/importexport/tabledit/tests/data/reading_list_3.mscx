@@ -23,16 +23,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -78,33 +79,33 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <startRepeat/>
         <endRepeat>2</endRepeat>
         <voice>
           <KeySig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -118,17 +119,17 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>L_L</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>M_M</eid>
+            <linkedTo>H_H</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>M_M</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>N_N</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>N_N</eid>
-              <linkedTo>K_K</linkedTo>
+              <eid>O_O</eid>
+              <linkedTo>L_L</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>

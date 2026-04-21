@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -51,32 +52,32 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>16th</durationType>
             </Rest>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Dynamic>
           <Tuplet>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -87,16 +88,16 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <l1>38</l1>
             <l2>36</l2>
             </Beam>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -104,11 +105,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -116,14 +117,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>R_R</eid>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -139,10 +140,10 @@
             </Chord>
           <endTuplet/>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>

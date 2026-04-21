@@ -23,16 +23,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -75,41 +76,41 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <visible>0</visible>
             <dots>1</dots>
             <durationType>half</durationType>
             <NoteDot>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <visible>0</visible>
               </NoteDot>
             </Rest>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -117,18 +118,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -136,19 +137,19 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -156,12 +157,12 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -170,28 +171,28 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>X_X</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>Y_Y</eid>
+            <linkedTo>H_H</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Rest>
-            <eid>Y_Y</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>Z_Z</eid>
+            <linkedTo>K_K</linkedTo>
             <visible>0</visible>
             <dots>1</dots>
             <durationType>half</durationType>
             <NoteDot>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <visible>0</visible>
               </NoteDot>
             </Rest>
           <Chord>
-            <eid>a_a</eid>
-            <linkedTo>L_L</linkedTo>
+            <eid>b_b</eid>
+            <linkedTo>M_M</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>b_b</eid>
-              <linkedTo>M_M</linkedTo>
+              <eid>c_c</eid>
+              <linkedTo>N_N</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -199,20 +200,20 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>c_c</eid>
-            <linkedTo>N_N</linkedTo>
+            <eid>d_d</eid>
+            <linkedTo>O_O</linkedTo>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>d_d</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>e_e</eid>
+            <linkedTo>Q_Q</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>e_e</eid>
-              <linkedTo>Q_Q</linkedTo>
+              <eid>f_f</eid>
+              <linkedTo>R_R</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -220,21 +221,21 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>f_f</eid>
-            <linkedTo>R_R</linkedTo>
+            <eid>g_g</eid>
+            <linkedTo>S_S</linkedTo>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
-            <eid>g_g</eid>
-            <linkedTo>T_T</linkedTo>
+            <eid>h_h</eid>
+            <linkedTo>U_U</linkedTo>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>h_h</eid>
-              <linkedTo>U_U</linkedTo>
+              <eid>i_i</eid>
+              <linkedTo>V_V</linkedTo>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -242,14 +243,14 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
-            <linkedTo>V_V</linkedTo>
+            <eid>j_j</eid>
+            <linkedTo>W_W</linkedTo>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>j_j</eid>
-            <linkedTo>W_W</linkedTo>
+            <eid>k_k</eid>
+            <linkedTo>X_X</linkedTo>
             </BarLine>
           </voice>
         </Measure>
