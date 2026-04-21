@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -54,8 +55,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -91,40 +93,40 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             </Dynamic>
           <Harmony>
             <harmonyInfo>
               <name>m</name>
               <root>18</root>
               </harmonyInfo>
-            <eid>I_I</eid>
+            <eid>K_K</eid>
             </Harmony>
           <Tempo>
             <tempo>2</tempo>
-            <eid>J_J</eid>
+            <eid>L_L</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>N_N</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -132,18 +134,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>M_M</eid>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -151,18 +153,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>V_V</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -176,32 +178,32 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>W_W</eid>
+            <eid>Y_Y</eid>
             </Dynamic>
           <Harmony>
             <harmonyInfo>
               <name>m</name>
               <root>18</root>
               </harmonyInfo>
-            <eid>X_X</eid>
+            <eid>Z_Z</eid>
             </Harmony>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>b_b</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -209,7 +211,7 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>a_a</eid>
+            <eid>c_c</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -220,13 +222,13 @@
               <name>m</name>
               <root>17</root>
               </harmonyInfo>
-            <eid>b_b</eid>
+            <eid>d_d</eid>
             </Harmony>
           <Chord>
-            <eid>c_c</eid>
+            <eid>e_e</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>f_f</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -234,7 +236,7 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>e_e</eid>
+            <eid>g_g</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -245,13 +247,13 @@
               <name>m</name>
               <root>18</root>
               </harmonyInfo>
-            <eid>f_f</eid>
+            <eid>h_h</eid>
             </Harmony>
           <Chord>
-            <eid>g_g</eid>
+            <eid>i_i</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>h_h</eid>
+              <eid>j_j</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>

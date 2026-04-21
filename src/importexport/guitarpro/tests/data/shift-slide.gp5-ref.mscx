@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -50,31 +51,31 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Dynamic>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>7</fret>
@@ -82,7 +83,7 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <glissandoShift>1</glissandoShift>
-                  <eid>K_K</eid>
+                  <eid>L_L</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -96,13 +97,13 @@
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             </Dynamic>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -117,15 +118,11 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
-          <Rest>
-            <eid>P_P</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>Q_Q</eid>
             <durationType>quarter</durationType>
@@ -136,6 +133,10 @@
             </Rest>
           <Rest>
             <eid>S_S</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

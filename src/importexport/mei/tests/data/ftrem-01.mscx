@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Fingered tremolos</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -43,54 +44,54 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Fingered tremolos</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>composer</style>
           <text/>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c8</subtype>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <l1>-10</l1>
               <l2>-4</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -98,30 +99,30 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <l1>-12</l1>
               <l2>-6</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -129,30 +130,30 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <l1>-18</l1>
               <l2>-12</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>Z_Z</eid>
+              <eid>a_a</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -160,30 +161,30 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>b_b</eid>
         <voice>
           <Chord>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c64</subtype>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <l1>-24</l1>
               <l2>-18</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>whole</durationType>
             <duration>1/2</duration>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -191,56 +192,56 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>g_g</eid>
+        <eid>h_h</eid>
         <voice>
           <Chord>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>i_i</eid>
+              <eid>j_j</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c8</subtype>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <l1>-10</l1>
               <l2>-6</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>l_l</eid>
+              <eid>m_m</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
-              <eid>o_o</eid>
+              <eid>p_p</eid>
               <l1>-14</l1>
               <l2>-12</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>q_q</eid>
+              <eid>r_r</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -248,56 +249,56 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>r_r</eid>
+        <eid>s_s</eid>
         <voice>
           <Chord>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>t_t</eid>
+              <eid>u_u</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>u_u</eid>
+              <eid>v_v</eid>
               <l1>-20</l1>
               <l2>-18</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>w_w</eid>
+              <eid>x_x</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>x_x</eid>
+            <eid>y_y</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>y_y</eid>
+              <eid>z_z</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c64</subtype>
-              <eid>z_z</eid>
+              <eid>0_0</eid>
               <l1>-26</l1>
               <l2>-24</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>0_0</eid>
+            <eid>1_1</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>1_1</eid>
+              <eid>2_2</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -305,115 +306,115 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>2_2</eid>
+        <eid>3_3</eid>
         <voice>
           <Chord>
-            <eid>3_3</eid>
+            <eid>4_4</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>4_4</eid>
+              <eid>5_5</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c8</subtype>
-              <eid>5_5</eid>
+              <eid>6_6</eid>
               <l1>-10</l1>
               <l2>-8</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>6_6</eid>
+            <eid>7_7</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>7_7</eid>
+              <eid>8_8</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>8_8</eid>
+            <eid>9_9</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>9_9</eid>
+              <eid>+_+</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c16</subtype>
-              <eid>+_+</eid>
+              <eid>/_/</eid>
               <l1>-14</l1>
               <l2>-12</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>/_/</eid>
+            <eid>AB_AB</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>AB_AB</eid>
+              <eid>BB_BB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>BB_BB</eid>
+            <eid>CB_CB</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>CB_CB</eid>
+              <eid>DB_DB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>DB_DB</eid>
+              <eid>EB_EB</eid>
               <l1>-20</l1>
               <l2>-18</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>EB_EB</eid>
+            <eid>FB_FB</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>FB_FB</eid>
+              <eid>GB_GB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>GB_GB</eid>
+            <eid>HB_HB</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>HB_HB</eid>
+              <eid>IB_IB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c64</subtype>
-              <eid>IB_IB</eid>
+              <eid>JB_JB</eid>
               <l1>-26</l1>
               <l2>-24</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>JB_JB</eid>
+            <eid>KB_KB</eid>
             <durationType>quarter</durationType>
             <duration>1/8</duration>
             <Note>
-              <eid>KB_KB</eid>
+              <eid>LB_LB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>LB_LB</eid>
+            <eid>MB_MB</eid>
             </BarLine>
           </voice>
         </Measure>

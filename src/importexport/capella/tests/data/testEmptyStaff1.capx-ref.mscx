@@ -26,8 +26,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -41,8 +42,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -57,34 +59,34 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>H_H</eid>
         <LayoutBreak>
-          <eid>G_G</eid>
+          <eid>I_I</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Rest>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>I_I</eid>
+        <eid>K_K</eid>
         <LayoutBreak>
-          <eid>J_J</eid>
+          <eid>L_L</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>N_N</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -92,17 +94,17 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>O_O</eid>
         <LayoutBreak>
-          <eid>N_N</eid>
+          <eid>P_P</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -111,19 +113,6 @@
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure>
-        <voice>
-          <Chord>
-            <eid>Q_Q</eid>
-            <durationType>whole</durationType>
-            <Note>
-              <eid>R_R</eid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
       <Measure>
         <voice>
           <Chord>
@@ -144,6 +133,19 @@
             <durationType>whole</durationType>
             <Note>
               <eid>V_V</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>W_W</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

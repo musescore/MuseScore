@@ -112,8 +112,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -125,7 +126,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -191,64 +192,64 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>composer</style>
           <family>Times New Roman</family>
           <text><font size="12"/><font face="Times New Roman"/>Franz Liszt<br/>(1811 - 1886)</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>title</style>
           <family>Times New Roman</family>
           <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
           </Text>
         <Text>
-          <eid>H_H</eid>
+          <eid>I_I</eid>
           <style>subtitle</style>
           <family>Times New Roman</family>
           <text><font size="14"/><font face="Times New Roman"/>S. 514</text>
           </Text>
         </VBox>
       <Measure len="4/8">
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             </Clef>
           <KeySig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <sigN>3</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </Fermata>
           <Fermata>
             <subtype>fermataAbove</subtype>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             </Fermata>
           <Tempo>
             <tempo>3.233333</tempo>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <family>Times New Roman</family>
             <text><font size="12"/><font face="Times New Roman"/><b>Allegro vivace (quasi presto)</b></text>
             </Tempo>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -259,18 +260,18 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -282,26 +283,26 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </Clef>
           <KeySig>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <sigN>3</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/8</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>

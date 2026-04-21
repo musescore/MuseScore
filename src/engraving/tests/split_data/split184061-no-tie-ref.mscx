@@ -63,8 +63,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
@@ -83,43 +84,43 @@
       </Part>
     <Staff id="1">
       <Measure len="11/16">
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>G_G</eid>
+              <eid>H_H</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <BeamMode>no</BeamMode>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
@@ -127,13 +128,13 @@
           </voice>
         <voice>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>N_N</eid>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -146,14 +147,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>Q_Q</eid>
+                  <eid>R_R</eid>
                   </Tie>
                 <next>
                   <location>
@@ -176,22 +177,22 @@
           </voice>
         </Measure>
       <Measure len="5/16">
-        <eid>R_R</eid>
+        <eid>S_S</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               </Note>
@@ -199,13 +200,13 @@
           </voice>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>Y_Y</eid>
+                  <eid>Z_Z</eid>
                   </Tie>
                 <next>
                   <location>
@@ -226,10 +227,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -244,19 +245,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>b_b</eid>
+        <eid>c_c</eid>
         <voice>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             </BarLine>
           </voice>
         </Measure>

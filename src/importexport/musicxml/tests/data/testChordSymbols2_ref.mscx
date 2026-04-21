@@ -44,8 +44,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -111,39 +112,39 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>testChordSymbols2</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>James M</text>
           </Text>
         </VBox>
       <HBox>
         <width>5</width>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         </HBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <FretDiagram>
             <frets>5</frets>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -171,13 +172,13 @@
               <root>13</root>
               <bass>17</bass>
               </harmonyInfo>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             </Harmony>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -185,11 +186,11 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <FretDiagram>
             <frets>5</frets>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -210,13 +211,13 @@
             <harmonyInfo>
               <root>12</root>
               </harmonyInfo>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             </Harmony>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -224,27 +225,27 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <voice>
           <Harmony>
             <harmonyInfo>
               <name>maj7(no3rd)</name>
               <root>14</root>
               </harmonyInfo>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </Harmony>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>

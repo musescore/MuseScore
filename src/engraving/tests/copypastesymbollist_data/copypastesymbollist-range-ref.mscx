@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">tst_copy_symbol_list</metaTag>
     <Part id="1">
+      <eid>zXyViKqA39P_zXyViKqA39P</eid>
       <Staff>
-        <eid>zXyViKqA39P_zXyViKqA39P</eid>
+        <eid>0XyViKqA39P_0XyViKqA39P</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -76,8 +77,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>1XyViKqA39P_1XyViKqA39P</eid>
       <Staff>
-        <eid>0XyViKqA39P_0XyViKqA39P</eid>
+        <eid>2XyViKqA39P_2XyViKqA39P</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -244,7 +246,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>1XyViKqA39P_1XyViKqA39P</eid>
+              <eid>3XyViKqA39P_3XyViKqA39P</eid>
               </Articulation>
             <Note>
               <eid>olsNbmulSrM_MADXdY9J5BN</eid>
@@ -257,7 +259,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>2XyViKqA39P_2XyViKqA39P</eid>
+              <eid>4XyViKqA39P_4XyViKqA39P</eid>
               </Articulation>
             <Note>
               <eid>IEaHtowQvwH_Qv9TJC9VpYG</eid>
@@ -270,7 +272,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>3XyViKqA39P_3XyViKqA39P</eid>
+              <eid>5XyViKqA39P_5XyViKqA39P</eid>
               </Articulation>
             <Note>
               <eid>NdqK52vDbMP_f0q7jU93xrH</eid>
@@ -283,7 +285,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>4XyViKqA39P_4XyViKqA39P</eid>
+              <eid>6XyViKqA39P_6XyViKqA39P</eid>
               </Articulation>
             <Note>
               <eid>C0jj2inp+uK_6zpN818eZs</eid>

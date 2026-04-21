@@ -71,6 +71,7 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>z0BF5d3QUKN_z0BF5d3QUKN</eid>
       <Staff>
         <eid>arh0Jm6otYD_HsfG596XOWB</eid>
         <StaffType group="pitched">
@@ -107,7 +108,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>z0BF5d3QUKN_z0BF5d3QUKN</eid>
+            <eid>00BF5d3QUKN_00BF5d3QUKN</eid>
             <text><b><i><s><font size="17"/>aaa<br/><br/>bbb</s></i></b></text>
             </StaffText>
           <Rest>

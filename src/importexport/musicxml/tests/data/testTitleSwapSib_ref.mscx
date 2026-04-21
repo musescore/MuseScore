@@ -146,8 +146,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -213,8 +214,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -280,8 +282,9 @@
         </Instrument>
       </Part>
     <Part id="3">
+      <eid>G_G</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -347,8 +350,9 @@
         </Instrument>
       </Part>
     <Part id="4">
+      <eid>I_I</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -417,9 +421,9 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>G_G</eid>
+        <eid>K_K</eid>
         <Text>
-          <eid>H_H</eid>
+          <eid>L_L</eid>
           <style>poet</style>
           <family>Edwin</family>
           <align>left,top</align>
@@ -427,68 +431,42 @@
           </Text>
         </VBox>
       <Measure>
-        <eid>I_I</eid>
+        <eid>M_M</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>N_N</eid>
             </Clef>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>O_O</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>M_M</eid>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
-        <eid>N_N</eid>
+        <eid>R_R</eid>
         <Text>
-          <eid>O_O</eid>
+          <eid>S_S</eid>
           <align>center,top</align>
           <text><font size="22.0128"/>Title</text>
           </Text>
         </VBox>
       </Staff>
     <Staff id="2">
-      <Measure>
-        <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            <eid>P_P</eid>
-            </Clef>
-          <TimeSig>
-            <eid>Q_Q</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <eid>R_R</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <eid>S_S</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      </Staff>
-    <Staff id="3">
       <Measure>
         <voice>
           <Clef>
@@ -514,7 +492,7 @@
           </voice>
         </Measure>
       </Staff>
-    <Staff id="4">
+    <Staff id="3">
       <Measure>
         <voice>
           <Clef>
@@ -536,6 +514,32 @@
           <BarLine>
             <subtype>end</subtype>
             <eid>a_a</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            <eid>b_b</eid>
+            </Clef>
+          <TimeSig>
+            <eid>c_c</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>d_d</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>

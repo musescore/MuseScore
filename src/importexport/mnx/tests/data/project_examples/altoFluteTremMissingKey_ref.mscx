@@ -21,13 +21,13 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Flute</trackName>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Alto Flute</longName>
@@ -90,37 +90,37 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             </Clef>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <concertKey>0</concertKey>
             <actualKey>-1</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <BeamMode>begin</BeamMode>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <duration>3/16</duration>
             <Spanner type="Slur">
               <Slur>
-                <eid>J_J</eid>
+                <eid>K_K</eid>
                 </Slur>
               <next>
                 <location>
@@ -129,20 +129,20 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <tpc2>17</tpc2>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <l1>52</l1>
               <l2>50</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <BeamMode>end</BeamMode>
             <dots>1</dots>
             <durationType>quarter</durationType>
@@ -155,14 +155,14 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>14</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

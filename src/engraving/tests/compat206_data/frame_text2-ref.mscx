@@ -176,8 +176,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
@@ -200,14 +201,14 @@
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>frame</style>
           <text>îèéààéà</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>éééàè</text>
@@ -217,14 +218,14 @@
         <height>47.762</height>
         <topGap>10</topGap>
         <boxAutoSize>0</boxAutoSize>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <Text>
-          <eid>H_H</eid>
+          <eid>I_I</eid>
           <style>frame</style>
           <text>êêàééééç*éô</text>
           </Text>
         <Text>
-          <eid>I_I</eid>
+          <eid>J_J</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>àéùééé</text>

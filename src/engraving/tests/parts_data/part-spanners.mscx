@@ -80,6 +80,7 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>SB_SB</eid>
       <Staff>
         <eid>QB_QB</eid>
         <StaffType group="pitched">
@@ -109,6 +110,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>TB_TB</eid>
       <Staff>
         <eid>RB_RB</eid>
         <StaffType group="pitched">

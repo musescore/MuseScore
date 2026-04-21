@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Laissez vibrer test</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -42,39 +43,39 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Laissez vibrer test</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Klaus Rettinghaus</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <LaissezVib>
-                <eid>L_L</eid>
+                <eid>M_M</eid>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -83,15 +84,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>M_M</eid>
+        <eid>N_N</eid>
         <voice>
           <Chord>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <LaissezVib>
-                <eid>P_P</eid>
+                <eid>Q_Q</eid>
                 <up>up</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -101,15 +102,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Q_Q</eid>
+        <eid>R_R</eid>
         <voice>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <LaissezVib>
-                <eid>T_T</eid>
+                <eid>U_U</eid>
                 <up>down</up>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -119,15 +120,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>U_U</eid>
+        <eid>V_V</eid>
         <voice>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <LaissezVib>
-                <eid>X_X</eid>
+                <eid>Y_Y</eid>
                 <lineType>2</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -137,15 +138,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>Y_Y</eid>
+        <eid>Z_Z</eid>
         <voice>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <LaissezVib>
-                <eid>b_b</eid>
+                <eid>c_c</eid>
                 <lineType>1</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -155,15 +156,15 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>d_d</eid>
         <voice>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <LaissezVib>
-                <eid>f_f</eid>
+                <eid>g_g</eid>
                 <color r="255" g="38" b="0" a="255"/>
                 </LaissezVib>
               <pitch>72</pitch>
@@ -172,7 +173,7 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             </BarLine>
           </voice>
         </Measure>

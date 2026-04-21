@@ -164,8 +164,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -222,34 +223,34 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <LayoutBreak>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <subtype>page</subtype>
           </LayoutBreak>
         </VBox>
       <HBox>
         <width>5</width>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         </HBox>
       <Measure>
-        <eid>G_G</eid>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8va</subtype>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               </Ottava>
             <next>
               <location>
@@ -258,23 +259,23 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -289,7 +290,7 @@
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8vb</subtype>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               </Ottava>
             <next>
               <location>
@@ -298,14 +299,14 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>R_R</eid>
+                  <eid>S_S</eid>
                   <up>down</up>
                   </Tie>
                 <next>
@@ -322,14 +323,14 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>S_S</eid>
+        <eid>T_T</eid>
         <voice>
           <Chord>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>U_U</eid>
+              <eid>V_V</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -343,11 +344,11 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
@@ -360,12 +361,12 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>
