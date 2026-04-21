@@ -47,6 +47,9 @@ public:
 
     void load();
 
+protected:
+    bool doCellValueChangeRequested(int row, int column, const Val& value) override;
+
 private:
     MenuItemList makeAvailableFormats();
 };
