@@ -35,7 +35,7 @@
       <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <repeatPlayCountShow>0</repeatPlayCountShow>
       <spatium>1.76389</spatium>
-      </Style>
+    </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -56,13 +56,13 @@
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
-          </StaffType>
-        </Staff>
+        </StaffType>
+      </Staff>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
-          </InstrumentLabel>
+        </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -73,36 +73,36 @@
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
           <gateTime>33</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="portato">
           <velocity>100</velocity>
           <gateTime>67</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="marcato">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
-          </Articulation>
+        </Articulation>
         <Channel>
           <program value="0"/>
-          </Channel>
-        </Instrument>
-      </Part>
+        </Channel>
+      </Instrument>
+    </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
@@ -112,13 +112,13 @@
           <eid>F_F</eid>
           <style>title</style>
           <text>Title</text>
-          </Text>
+        </Text>
         <Text>
           <eid>G_G</eid>
           <style>composer</style>
           <text>Composer</text>
-          </Text>
-        </VBox>
+        </Text>
+      </VBox>
       <Measure>
         <eid>H_H</eid>
         <voice>
@@ -126,14 +126,14 @@
             <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            </TimeSig>
+          </TimeSig>
           <Rest>
             <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
         <eid>K_K</eid>
@@ -143,15 +143,15 @@
             <linkedTo>I_I</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            </TimeSig>
+          </TimeSig>
           <Rest>
             <eid>M_M</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>N_N</eid>
         <voice>
@@ -165,37 +165,37 @@
                 <offset x="0" y="0"/>
                 <off2 x="0.106397" y="0"/>
                 <eid>P_P</eid>
-                </Segment>
-              </TextLine>
+              </Segment>
+            </TextLine>
             <next>
               <location>
                 <measures>3</measures>
-                </location>
-              </next>
-            </Spanner>
+              </location>
+            </next>
+          </Spanner>
           <Rest>
             <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="12/4">
         <multiMeasureRest>3</multiMeasureRest>
         <eid>R_R</eid>
         <LayoutBreak>
           <eid>S_S</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>T_T</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>12/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>U_U</eid>
         <voice>
@@ -203,23 +203,23 @@
             <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>W_W</eid>
         <LayoutBreak>
           <eid>X_X</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>Y_Y</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>Z_Z</eid>
         <voice>
@@ -227,32 +227,32 @@
             <prev>
               <location>
                 <measures>-3</measures>
-                </location>
-              </prev>
-            </Spanner>
+              </location>
+            </prev>
+          </Spanner>
           <Rest>
             <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <eid>b_b</eid>
         <LayoutBreak>
           <eid>c_c</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>d_d</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>e_e</eid>
         <voice>
@@ -260,9 +260,9 @@
             <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>g_g</eid>
         <voice>
@@ -270,23 +270,23 @@
             <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>i_i</eid>
         <LayoutBreak>
           <eid>j_j</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>l_l</eid>
         <voice>
@@ -296,36 +296,36 @@
               <beginText>1.</beginText>
               <eid>m_m</eid>
               <endings>1</endings>
-              </Volta>
+            </Volta>
             <next>
               <location>
                 <measures>4</measures>
-                </location>
-              </next>
-            </Spanner>
+              </location>
+            </next>
+          </Spanner>
           <Rest>
             <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <eid>o_o</eid>
         <LayoutBreak>
           <eid>p_p</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>q_q</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>r_r</eid>
         <voice>
@@ -333,9 +333,9 @@
             <eid>s_s</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>t_t</eid>
         <voice>
@@ -343,23 +343,23 @@
             <eid>u_u</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>v_v</eid>
         <LayoutBreak>
           <eid>w_w</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>x_x</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>y_y</eid>
         <voice>
@@ -367,32 +367,32 @@
             <prev>
               <location>
                 <measures>-4</measures>
-                </location>
-              </prev>
-            </Spanner>
+              </location>
+            </prev>
+          </Spanner>
           <Rest>
             <eid>z_z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="16/4">
         <multiMeasureRest>4</multiMeasureRest>
         <eid>0_0</eid>
         <LayoutBreak>
           <eid>1_1</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>2_2</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>3_3</eid>
         <voice>
@@ -400,9 +400,9 @@
             <eid>4_4</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>5_5</eid>
         <voice>
@@ -410,23 +410,23 @@
             <eid>6_6</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>7_7</eid>
         <LayoutBreak>
           <eid>8_8</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <Rest>
             <eid>9_9</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      </Staff>
-    </Score>
-  </museScore>
+          </Rest>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>

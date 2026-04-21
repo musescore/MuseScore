@@ -23,7 +23,7 @@
       <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <repeatPlayCountShow>0</repeatPlayCountShow>
       <spatium>1.76389</spatium>
-      </Style>
+    </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -44,13 +44,13 @@
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
-          </StaffType>
-        </Staff>
+        </StaffType>
+      </Staff>
       <Instrument id="piano">
         <InstrumentLabel>
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
-          </InstrumentLabel>
+        </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -60,48 +60,48 @@
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
           <gateTime>33</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>50</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="portato">
           <velocity>100</velocity>
           <gateTime>67</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="marcato">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="sforzato">
           <velocity>150</velocity>
           <gateTime>100</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="sforzatoStaccato">
           <velocity>150</velocity>
           <gateTime>50</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="marcatoStaccato">
           <velocity>120</velocity>
           <gateTime>50</gateTime>
-          </Articulation>
+        </Articulation>
         <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
-          </Articulation>
+        </Articulation>
         <Channel>
           <program value="0"/>
-          </Channel>
-        </Instrument>
-      </Part>
+        </Channel>
+      </Instrument>
+    </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
@@ -111,153 +111,126 @@
           <eid>E_E</eid>
           <style>title</style>
           <text>mmrest text links (see issue #296426)</text>
-          </Text>
-        </VBox>
+        </Text>
+      </VBox>
       <Measure>
         <eid>F_F</eid>
         <voice>
-          <TimeSig>
-            <eid>G_G</eid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <StaffText>
-            <eid>H_H</eid>
-            <offset x="-12.5239" y="-3.69242"/>
-            <text>test1</text>
-            </StaffText>
           <Rest>
             <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>o_o</eid>
         <LayoutBreak>
           <eid>p_p</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <TimeSig>
             <eid>q_q</eid>
             <linkedTo>G_G</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
-            </TimeSig>
+          </TimeSig>
           <StaffText>
             <eid>r_r</eid>
             <linkedTo>H_H</linkedTo>
             <offset x="-12.5239" y="-3.69242"/>
             <text>test1</text>
-            </StaffText>
+          </StaffText>
           <Rest>
             <eid>s_s</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
-            </Rest>
+          </Rest>
           <BarLine>
             <subtype>double</subtype>
             <eid>t_t</eid>
-            </BarLine>
-          </voice>
-        </Measure>
+          </BarLine>
+        </voice>
+      </Measure>
       <Measure>
         <eid>P_P</eid>
-        <LayoutBreak>
-          <eid>Q_Q</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
+          </Rest>
           <BarLine>
             <subtype>double</subtype>
             <eid>S_S</eid>
             <linkedTo>t_t</linkedTo>
-            </BarLine>
-          </voice>
-        </Measure>
+          </BarLine>
+        </voice>
+      </Measure>
       <Measure>
         <eid>T_T</eid>
         <voice>
-          <StaffText>
-            <eid>U_U</eid>
-            <offset x="28.5455" y="-4.14373"/>
-            <text>test2</text>
-            </StaffText>
           <Rest>
             <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>u_u</eid>
         <LayoutBreak>
           <eid>v_v</eid>
           <subtype>line</subtype>
-          </LayoutBreak>
+        </LayoutBreak>
         <voice>
           <StaffText>
             <eid>w_w</eid>
             <linkedTo>U_U</linkedTo>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
-            </StaffText>
+          </StaffText>
           <Rest>
             <eid>x_x</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
-            </Rest>
+          </Rest>
           <BarLine>
             <subtype>double</subtype>
             <eid>y_y</eid>
-            </BarLine>
-          </voice>
-        </Measure>
+          </BarLine>
+        </voice>
+      </Measure>
       <Measure>
         <eid>b_b</eid>
-        <LayoutBreak>
-          <eid>c_c</eid>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
+          </Rest>
           <BarLine>
             <subtype>double</subtype>
             <eid>e_e</eid>
             <linkedTo>y_y</linkedTo>
-            </BarLine>
-          </voice>
-        </Measure>
+          </BarLine>
+        </voice>
+      </Measure>
       <Measure>
         <eid>f_f</eid>
         <voice>
-          <StaffText>
-            <eid>g_g</eid>
-            <text>test3</text>
-            </StaffText>
           <Rest>
             <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
         <eid>z_z</eid>
@@ -266,15 +239,15 @@
             <eid>0_0</eid>
             <linkedTo>g_g</linkedTo>
             <text>test3</text>
-            </StaffText>
+          </StaffText>
           <Rest>
             <eid>1_1</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
+          </Rest>
+        </voice>
+      </Measure>
       <Measure>
         <eid>l_l</eid>
         <voice>
@@ -282,9 +255,9 @@
             <eid>m_m</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      </Staff>
-    </Score>
-  </museScore>
+          </Rest>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>
