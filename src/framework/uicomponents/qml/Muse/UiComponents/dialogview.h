@@ -43,7 +43,7 @@ class DialogView : public WindowView
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
     Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
-    Q_PROPERTY(bool nativeChildWindow READ nativeChildWindow WRITE setNativeChildWindow NOTIFY nativeChildWindowChanged)
+    Q_PROPERTY(bool alwaysAboveApp READ alwaysAboveApp WRITE setAlwaysAboveApp NOTIFY alwaysAboveAppChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
     GlobalInject<IApplication> application;
@@ -68,8 +68,8 @@ public:
     bool resizable() const;
     void setResizable(bool resizable);
 
-    bool nativeChildWindow() const;
-    void setNativeChildWindow(bool nativeChildWindow);
+    bool alwaysAboveApp() const;
+    void setAlwaysAboveApp(bool alwaysAbove);
 
     QVariantMap ret() const;
     void setRet(QVariantMap ret);
@@ -87,7 +87,7 @@ signals:
     void modalChanged(bool modal);
     void framelessChanged(bool frameless);
     void resizableChanged(bool resizable);
-    void nativeChildWindowChanged();
+    void alwaysAboveAppChanged();
     void retChanged(QVariantMap ret);
 
 private:
@@ -104,7 +104,7 @@ private:
     QString m_title;
     bool m_modal = true;
     bool m_frameless = false;
-    bool m_nativeChildWindow = false;
+    bool m_alwaysAboveApp = false;
     QVariantMap m_ret;
 };
 }
