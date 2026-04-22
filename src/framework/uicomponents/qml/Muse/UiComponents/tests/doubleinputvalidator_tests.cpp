@@ -23,6 +23,13 @@
 
 #include "../validators/doubleinputvalidator.h"
 
+// Teach GoogleTest how to print QString so failure diffs are readable
+// instead of a UTF-16 byte dump.
+inline void PrintTo(const QString& s, std::ostream* os)
+{
+    *os << '"' << s.toStdString() << '"';
+}
+
 using namespace muse;
 using namespace muse::uicomponents;
 
@@ -56,8 +63,8 @@ TEST_F(DoubleInputValidatorTests, ValidateDotLocale) {
     QLocale prev = QLocale();
     QLocale::setDefault(QLocale("en_US"));
 
-    m_validator->setTop(100.0);
-    m_validator->setBottom(-100.0);
+    m_validator->setTop(1000.0);
+    m_validator->setBottom(-1000.0);
     m_validator->setDecimal(2);
 
     std::vector<Input> inputs = {
@@ -71,9 +78,11 @@ TEST_F(DoubleInputValidatorTests, ValidateDotLocale) {
         { "00.", QValidator::Intermediate, "0" },
         { "2.00", QValidator::Intermediate, "2" },
         { "2.", QValidator::Intermediate, "2" },
-        { "-100.1", QValidator::Intermediate, "-100" },
-        { "100.1", QValidator::Intermediate, "100" },
+        { "-1000.1", QValidator::Intermediate, "-1,000" },
+        { "1000.1", QValidator::Intermediate, "1,000" },
         { "1.123", QValidator::Invalid }, // more than 2 decimal places
+        { "1000", QValidator::Acceptable, "1,000" },
+        { "10000", QValidator::Invalid }, // more than top
         { "abc", QValidator::Invalid },
         { "", QValidator::Intermediate, "0" }
     };
@@ -109,8 +118,8 @@ TEST_F(DoubleInputValidatorTests, ValidateCommaLocale) {
     QLocale prev = QLocale();
     QLocale::setDefault(QLocale("ro_RO"));
 
-    m_validator->setTop(100.0);
-    m_validator->setBottom(-100.0);
+    m_validator->setTop(1000.0);
+    m_validator->setBottom(-1000.0);
     m_validator->setDecimal(2);
 
     std::vector<Input> inputs = {
@@ -124,8 +133,8 @@ TEST_F(DoubleInputValidatorTests, ValidateCommaLocale) {
         { "00,", QValidator::Intermediate, "0" },
         { "2,00", QValidator::Intermediate, "2" },
         { "2,", QValidator::Intermediate, "2" },
-        { "-100,1", QValidator::Intermediate, "-100" },
-        { "100,1", QValidator::Intermediate, "100" },
+        { "-1000,1", QValidator::Intermediate, "-1.000" },
+        { "1000,1", QValidator::Intermediate, "1.000" },
         { "1,123", QValidator::Invalid }, // more than 2 decimal places
         { "abc", QValidator::Invalid },
         { "", QValidator::Intermediate, "0" }
