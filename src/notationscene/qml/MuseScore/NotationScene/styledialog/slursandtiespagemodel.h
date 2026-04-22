@@ -45,8 +45,8 @@ class SlursAndTiesPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * tieDotsPlacement READ tieDotsPlacement CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * minLaissezVibLength READ minLaissezVibLength CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * laissezVibUseSmuflSym READ laissezVibUseSmuflSym CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * maskSlursOverTimeAndKeySignatures READ maskSlursOverTimeAndKeySignatures CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * maskTiesOverTimeAndKeySignatures READ maskTiesOverTimeAndKeySignatures CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * maskSlurs READ maskSlurs CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem * maskTies READ maskTies CONSTANT)
 
     QML_ELEMENT
 
@@ -69,7 +69,7 @@ public:
     StyleItem* tieDotsPlacement() const;
     StyleItem* minLaissezVibLength() const;
     StyleItem* laissezVibUseSmuflSym() const;
-    StyleItem* maskSlursOverTimeAndKeySignatures() const;
-    StyleItem* maskTiesOverTimeAndKeySignatures() const;
+    StyleItem* maskSlurs() const;
+    StyleItem* maskTies() const;
 };
 }

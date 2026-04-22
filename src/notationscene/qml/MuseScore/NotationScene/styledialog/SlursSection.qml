@@ -135,19 +135,19 @@ StyledGroupBox {
             }
 
             CheckBox {
-                id: maskSlursOverTimeAndKeySignaturesCheckbox
-                text: qsTrc("notation/editstyle/slursandties", "Mask slurs over time and key signatures")
-                checked: root.pageModel.maskSlursOverTimeAndKeySignatures.value
+                id: maskSlursCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask slurs where they overlap other items")
+                checked: root.pageModel.maskSlurs.value
                 width: parent.width
                 Layout.columnSpan: 2
 
                 onClicked: {
-                    root.pageModel.maskSlursOverTimeAndKeySignatures.value = !maskSlursOverTimeAndKeySignaturesCheckbox.checked
+                    root.pageModel.maskSlurs.value = !maskSlursCheckbox.checked
                 }
             }
 
             StyleResetButton {
-                styleItem: root.pageModel.maskSlursOverTimeAndKeySignatures
+                styleItem: root.pageModel.maskSlurs
             }
         }
 
