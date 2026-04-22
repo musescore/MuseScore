@@ -37,6 +37,7 @@ public:
 
     EID newEIDForItem(const EngravingObject* item);
     void registerItemEID(const EID& eid, const EngravingObject* item);
+    void removeItem(const EngravingObject* item);
 
     EngravingObject* itemFromEID(const EID& eid) const;
     EID EIDFromItem(const EngravingObject* item) const;

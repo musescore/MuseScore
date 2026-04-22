@@ -23,6 +23,7 @@
 #include "readcontext.h"
 
 #include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
 #include "dom/score.h"
 #include "dom/trill.h"
 #include "editing/undo.h"
@@ -329,6 +330,10 @@ void ReadContext::clearOrphanedConnectors()
                         deletedLinks.insert(ornament->links());
                     }
                 }
+            }
+
+            if (conn->eid().isValid()) {
+                conn->masterScore()->eidRegister()->removeItem(conn);
             }
 
             delete conn;
