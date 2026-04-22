@@ -36,7 +36,7 @@ RowLayout {
 
     property alias title: titleLabel.text
     property bool isRootControl: true
-    property bool isSharedPartType: false
+    property alias useVisibilityToggle: visibilityBox.useToggle
 
     property alias useVisibilityButton: visibilityBox.visible
     property alias isVisible: visibilityBox.isVisible
@@ -58,8 +58,6 @@ RowLayout {
 
         Layout.alignment: Qt.AlignLeft
         Layout.preferredWidth: width
-
-        useToggle: isSharedPartType
 
         objectName: "VisibleBtn"
         navigation.panel: root.navigationPanel

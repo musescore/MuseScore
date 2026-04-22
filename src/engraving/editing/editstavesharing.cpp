@@ -149,6 +149,7 @@ void EditStaveSharing::createSharedParts(const StaveSharingGroups& groups, Score
             SharedPart* existingSharedPart = originPart->sharedPart();
             if (existingSharedPart && existingSharedPart != sharedPart) {
                 score->undo(new DisconnectSharedPart(existingSharedPart, originPart));
+                score->undo(new ConnectSharedPart(sharedPart, originPart));
             } else if (!existingSharedPart) {
                 score->undo(new ConnectSharedPart(sharedPart, originPart));
             }
@@ -192,7 +193,7 @@ void EditStaveSharing::handleRemovePart(Part* part)
             score->cmdRemovePart(sharedPart);
         }
     } else if (part->isSharedPart()) {
-        SharedPart* sharedPart = toSharedPart(part);
+        sharedPart = toSharedPart(part);
         std::vector<Part*> originParts = sharedPart->originParts();
         for (Part* originPart : originParts) {
             score->undo(new DisconnectSharedPart(sharedPart, originPart));
