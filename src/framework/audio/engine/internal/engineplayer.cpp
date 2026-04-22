@@ -166,9 +166,11 @@ void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    if (newPosition == m_currentPosition.time()) {
-        return;
-    }
+    //! NOTE During export, the current time does not change, it remains at 0
+    // but a seek operation is still required to reset the internal state of the sources (synthesizers).
+    // if (newPosition == m_currentPosition.time()) {
+    //     return;
+    // }
 
     m_flushSoundOnSeek = flushSound;
     m_currentPosition = TimePosition::fromTime(newPosition, audioEngine()->outputSpec().sampleRate);
