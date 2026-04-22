@@ -486,6 +486,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::TIE_PLACEMENT,                       P_TYPE::TIE_PLACEMENT,             PropertyGroup::APPEARANCE, true,  "tiePlacement",                    QT_TRANSLATE_NOOP("engraving/propertyName", "tie placement") },
     { Pid::MIN_LENGTH,                          P_TYPE::SPATIUM,                   PropertyGroup::APPEARANCE, true,  "minLength",                       QT_TRANSLATE_NOOP("engraving/propertyName", "minimum length") },
+    { Pid::SLURTIE_MASK,                        P_TYPE::AUTO_ON_OFF ,              PropertyGroup::APPEARANCE, true,  "maskOverTimeAndKeySigs",          QT_TRANSLATE_NOOP("engraving/propertyName", "mask over time and key signatures") },
     { Pid::PARTIAL_SPANNER_DIRECTION,           P_TYPE::PARTIAL_SPANNER_DIRECTION, PropertyGroup::NONE,       true,  "partialSpannerDirection",         QT_TRANSLATE_NOOP("engraving/propertyName", "partial spanner direction") },
 
     { Pid::POSITION_LINKED_TO_MASTER,           P_TYPE::BOOL,                      PropertyGroup::NONE,       false, "positionLinkedToMaster",          QT_TRANSLATE_NOOP("engraving/propertyName", "position linked to main score") },
