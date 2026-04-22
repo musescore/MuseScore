@@ -135,6 +135,7 @@ Progress SoundTrackWriter::progress()
 
 Ret SoundTrackWriter::writeStreaming()
 {
+    TRACEFUNC;
     if (m_totalSamplesPerChannel == 0) {
         LOGI() << "No audio to export";
         return make_ret(Err::NoAudioToExport);
