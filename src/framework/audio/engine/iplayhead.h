@@ -22,15 +22,26 @@
 
 #pragma once
 
+#include <memory>
+
 #include "audio/common/audiotypes.h"
 
 namespace muse::audio::engine {
-class IPlayhead
+class IPlayheadPosition
+{
+public:
+    virtual ~IPlayheadPosition() = default;
+    virtual const TimePosition& currentPosition() const = 0;
+};
+
+class IPlayhead : public IPlayheadPosition
 {
 public:
     virtual ~IPlayhead() = default;
 
     virtual void forward(const TimePosition& delta) = 0;
-    virtual const TimePosition& currentPosition() const = 0;
 };
+
+using PlayheadPositionPtr = std::shared_ptr<IPlayheadPosition>;
+using PlayheadPtr = std::shared_ptr<IPlayhead>;
 }

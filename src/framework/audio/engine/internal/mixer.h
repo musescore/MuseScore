@@ -32,10 +32,9 @@
 #include "abstractaudiosource.h"
 
 #include "../iplayhead.h"
-#include "../ifxresolver.h"
+#include "iaudiofactory.h"
 
 #include "mixerchannel.h"
-#include "igetplaybackposition.h"
 #include "audiosignalnotifier.h"
 
 namespace muse {
@@ -43,9 +42,9 @@ class TaskScheduler;
 }
 
 namespace muse::audio::engine {
-class Mixer : public AbstractAudioSource, public IGetPlaybackPosition, public async::Asyncable, public std::enable_shared_from_this<Mixer>
+class Mixer : public AbstractAudioSource, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
-    GlobalInject<fx::IFxResolver> fxResolver;
+    GlobalInject<IAudioFactory> audioFactory;
 
 public:
     ~Mixer() override;
@@ -54,11 +53,11 @@ public:
 
     IAudioSourcePtr mixedSource();
 
-    RetVal<MixerChannelPtr> addChannel(const TrackId trackId, ITrackAudioInputPtr source);
-    RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId);
+    Ret addChannel(ITrackAudioOutputPtr output);
+    Ret addAuxChannel(ITrackAudioOutputPtr output);
     Ret removeChannel(const TrackId trackId);
 
-    void setPlayhead(std::shared_ptr<IPlayhead> playhead);
+    void setPlayhead(PlayheadPtr playhead);
 
     AudioOutputParams masterOutputParams() const;
     void setMasterOutputParams(const AudioOutputParams& params);
@@ -81,7 +80,7 @@ public:
 private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
-    const TimePosition& playbackPosition() const override;
+    const TimePosition& playbackPosition() const;
 
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel);
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;

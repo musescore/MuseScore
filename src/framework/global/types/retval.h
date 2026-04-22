@@ -56,10 +56,11 @@ struct RetVal {
         return make_ret(static_cast<int>(code), text);
     }
 
-    static RetVal<T> make_ret(int code, const std::string& text = "")
+    template<typename C>
+    static RetVal<T> make_ret(C code, const std::string& text = "")
     {
         RetVal<T> rv;
-        rv.ret = Ret(code, text);
+        rv.ret = Ret(static_cast<int>(code), text);
         return rv;
     }
 };
@@ -86,10 +87,11 @@ struct RetVal2 {
         return rv;
     }
 
-    static RetVal2<T1, T2> make_ret(int code, const std::string& text = "")
+    template<typename C>
+    static RetVal2<T1, T2> make_ret(C code, const std::string& text = "")
     {
         RetVal2<T1, T2> rv;
-        rv.ret = Ret(code, text);
+        rv.ret = Ret(static_cast<int>(code), text);
         return rv;
     }
 };

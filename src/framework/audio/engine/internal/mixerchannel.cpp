@@ -26,7 +26,6 @@
 #include "audio/common/audiosanitizer.h"
 
 #include "dsp/audiomathutils.h"
-#include "igetplaybackposition.h"
 
 using namespace muse;
 using namespace muse::async;
@@ -34,20 +33,26 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 
 MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec, IAudioSourcePtr source,
-                           const IGetPlaybackPosition* getPlaybackPosition)
+                           PlayheadPositionPtr playheadPosition)
     : m_trackId(trackId),
     m_outputSpec(outputSpec),
     m_audioSource(std::move(source)),
-    m_getPlaybackPosition(getPlaybackPosition)
+    m_playheadPosition(playheadPosition)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 }
 
 MixerChannel::MixerChannel(const TrackId trackId, const OutputSpec& outputSpec,
-                           const IGetPlaybackPosition* getPlaybackPosition)
-    : MixerChannel(trackId, outputSpec, nullptr, getPlaybackPosition)
+                           PlayheadPositionPtr playheadPosition)
+    : MixerChannel(trackId, outputSpec, nullptr, playheadPosition)
 {
     ONLY_AUDIO_ENGINE_THREAD;
+}
+
+void MixerChannel::setPlayheadPosition(PlayheadPositionPtr playheadPosition)
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    m_playheadPosition = playheadPosition;
 }
 
 TrackId MixerChannel::trackId() const
@@ -84,7 +89,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
     }
 
     m_fxProcessors.clear();
-    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, requiredParams.fxChain, m_outputSpec);
+    m_fxProcessors = audioFactory()->makeTrackFxList(m_trackId, requiredParams.fxChain);
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setOutputSpec(m_outputSpec);
@@ -212,7 +217,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
         return processedSamplesCount;
     }
 
-    const samples_t pos = m_getPlaybackPosition ? m_getPlaybackPosition->playbackPosition().samples() : 0;
+    const samples_t pos = m_playheadPosition ? m_playheadPosition->currentPosition().samples() : 0;
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (fx->active()) {
             fx->process(buffer, samplesPerChannel, pos);
