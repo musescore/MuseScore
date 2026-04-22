@@ -7302,7 +7302,14 @@ static bool hasPageBreak(const System* const system)
 void ExportMusicXml::print(const Measure* const m, const int partNr, const int firstStaffOfPart,
                            const size_t nrStavesInPart, const MeasurePrintContext& mpc)
 {
-    const MeasureBase* const prevSysMB = lastMeasureBase(mpc.prevSystem);
+    const MeasureBase* prevSysMB = lastMeasureBase(mpc.prevSystem);
+
+    if (prevSysMB && prevSysMB->isMeasure()) {
+        const Measure* mmRest = toMeasure(prevSysMB)->coveringMMRestOrThis();
+        if (mmRest->isMMRest() && mmRest->mmRestLast() == prevSysMB) {
+            prevSysMB = mmRest;
+        }
+    }
 
     const bool prevMeasLineBreak = prevSysMB ? prevSysMB->lineBreak() : false;
     const bool prevMeasSectionBreak = prevSysMB ? prevSysMB->sectionBreak() : false;
@@ -8456,6 +8463,12 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const track_idx_t strack = part->startTrack();
     const track_idx_t etrack = part->endTrack();
 
+    // If MMRests are enabled, elements are moved from the underlying measure to the convering MMRest measure
+    // Make sure we find these elements in the correct measure
+    const Measure* mmRest = m->coveringMMRestOrThis();
+    const Measure* startMeasure = mmRest->isMMRest() && mmRest->mmRestFirst() == m ? mmRest : m;
+    const Measure* endMeasure = mmRest->isMMRest() && mmRest->mmRestLast() == m ? mmRest : m;
+
     // pickup and other irregular measures need special care
     String measureTag = u"measure";
     mnsh.updateForMeasure(m);
@@ -8475,7 +8488,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     findTrills(m, strack, etrack, m_trillStart, m_trillStop);
 
     // barline left must be the first element in a measure
-    barlineLeft(m, strack);
+    barlineLeft(startMeasure, strack);
 
     // output attributes with the first actual measure (pickup or regular)
     if (isFirstActualMeasure) {
@@ -8484,7 +8497,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     }
 
     // output attributes at start of measure: key, time
-    keysigTimesig(m, part);
+    keysigTimesig(startMeasure, part);
 
     // output attributes with the first actual measure (pickup or regular) only
     if (isFirstActualMeasure) {
@@ -8498,10 +8511,10 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     }
 
     // make sure clefs at end of measure get exported at start of next measure
-    findAndExportClef(m, static_cast<int>(staves), strack, etrack);
+    findAndExportClef(startMeasure, static_cast<int>(staves), strack, etrack);
 
     // make sure a clef gets exported if none is found
-    exportDefaultClef(part, m);
+    exportDefaultClef(part, startMeasure);
 
     // output attributes with the first actual measure (pickup or regular) only
     if (isFirstActualMeasure) {
@@ -8530,14 +8543,25 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     // MuseScore limitation: repeats are always in the first part
     // and are implicitly placed at either measure start or stop
     if (partIndex == 0) {
-        repeatAtMeasureStart(m_attr, m, strack, etrack, strack);
+        repeatAtMeasureStart(m_attr, startMeasure, strack, etrack, strack);
+    }
+
+    if (startMeasure->isMMRest()) {
+        // Write annotations on first chordrest
+        // rehearsal marks etc.
+        Segment* annotationSeg = startMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        if (annotationSeg) {
+            for (track_idx_t track = strack; track < etrack; ++track) {
+                annotations(this, strack, etrack, track, track2staff(track), annotationSeg);
+            }
+        }
     }
 
     // write data in the staves
     writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
 
     // write the annotations that could not be attached to notes
-    annotationsWithoutNote(this, strack, static_cast<int>(staves), m);
+    annotationsWithoutNote(this, strack, static_cast<int>(staves), startMeasure);
 
     // move to end of measure (in case of incomplete last voice)
 #ifdef DEBUG_TICK
@@ -8545,11 +8569,11 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
 #endif
     moveToTick(m->endTick(), stretch(m_score, etrack - 1, m->tick()));
     if (partIndex == 0) {
-        repeatAtMeasureStop(m, strack, etrack, strack);
+        repeatAtMeasureStop(endMeasure, strack, etrack, strack);
     }
     // note: don't use "m->repeatFlags() & Repeat::END" here, because more
     // barline types need to be handled besides repeat end ("light-heavy")
-    barlineRight(m, strack, etrack);
+    barlineRight(endMeasure, strack, etrack);
     m_xml.endElement();
 }
 
