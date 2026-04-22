@@ -46,8 +46,8 @@ public:
     virtual void clearMasterOutputParams() = 0;
     virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
 
-    virtual RetVal<MixerChannelPtr> addChannel(const TrackId trackId, ITrackAudioInputPtr source) = 0;
-    virtual RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId) = 0;
+    virtual Ret addChannel(ITrackAudioOutputPtr output) = 0;
+    virtual Ret addAuxChannel(ITrackAudioOutputPtr output) = 0;
     virtual Ret removeChannel(const TrackId trackId) = 0;
 
     virtual AudioSignalChanges masterAudioSignalChanges() const = 0;

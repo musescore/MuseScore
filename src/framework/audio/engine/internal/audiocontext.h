@@ -51,8 +51,8 @@ public:
     void clearMasterOutputParams() override;
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
 
-    RetVal<MixerChannelPtr> addChannel(const TrackId trackId, ITrackAudioInputPtr source) override;
-    RetVal<MixerChannelPtr> addAuxChannel(const TrackId trackId) override;
+    Ret addChannel(ITrackAudioOutputPtr output) override;
+    Ret addAuxChannel(ITrackAudioOutputPtr output) override;
     Ret removeChannel(const TrackId trackId) override;
 
     AudioSignalChanges masterAudioSignalChanges() const override;

@@ -27,13 +27,13 @@
 #include "mpe/events.h"
 
 #include "audio/common/audiotypes.h"
-#include "../isynthresolver.h"
+#include "iaudiofactory.h"
 #include "track.h"
 
 namespace muse::audio::engine {
 class EventAudioSource : public ITrackAudioInput, public async::Asyncable
 {
-    GlobalInject<synth::ISynthResolver> synthResolver;
+    GlobalInject<IAudioFactory> audioFactory;
 
 public:
     using OnOffStreamEventsReceived = std::function<void (const TrackId)>;

@@ -72,19 +72,16 @@ IAudioSourcePtr Mixer::mixedSource()
     return shared_from_this();
 }
 
-RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInputPtr source)
+Ret Mixer::addChannel(ITrackAudioOutputPtr output)
 {
-    ONLY_AUDIO_ENGINE_THREAD;
-
-    RetVal<MixerChannelPtr> result;
-
-    if (!source) {
-        result.val = nullptr;
-        result.ret = make_ret(Err::InvalidAudioSource);
-        return result;
+    MixerChannelPtr channel = std::dynamic_pointer_cast<MixerChannel>(output);
+    if (!channel) {
+        LOGE() << "Invalid audio output, only MixerChannel is available.";
+        return make_ret(Err::InvalidAudioOutput);
     }
 
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, source, this);
+    channel->setPlayheadPosition(m_playhead);
+
     std::weak_ptr<MixerChannel> channelWeakPtr = channel;
 
     updateNonMutedTrackCount();
@@ -110,7 +107,7 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
     });
 
     TrackData trackData;
-    trackData.trackId = trackId;
+    trackData.trackId = channel->trackId();
     trackData.channel = channel;
 
     const size_t outBufferSize = m_outputSpec.samplesPerChannel * m_outputSpec.audioChannelCount;
@@ -118,36 +115,27 @@ RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, ITrackAudioInpu
 
     m_tracks.emplace_back(std::move(trackData));
 
-    result.val = channel;
-    result.ret = make_ret(Ret::Code::Ok);
-
-    return result;
+    return make_ok();
 }
 
-RetVal<MixerChannelPtr> Mixer::addAuxChannel(const TrackId trackId)
+Ret Mixer::addAuxChannel(ITrackAudioOutputPtr output)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    IF_ASSERT_FAILED(m_outputSpec.isValid()) {
-        return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
+    MixerChannelPtr channel = std::dynamic_pointer_cast<MixerChannel>(output);
+    if (!channel) {
+        LOGE() << "Invalid audio output, only MixerChannel is available.";
+        return make_ret(Err::InvalidAudioOutput);
     }
 
-    IF_ASSERT_FAILED(m_outputSpec.sampleRate > 0) {
-        return RetVal<MixerChannelPtr>::make_ret(Ret::Code::InternalError);
-    }
-
-    MixerChannelPtr channel = std::make_shared<MixerChannel>(trackId, m_outputSpec, this);
+    channel->setPlayheadPosition(m_playhead);
 
     AuxChannelInfo aux;
     aux.channel = channel;
 
     m_auxChannelInfoList.emplace_back(std::move(aux));
 
-    RetVal<MixerChannelPtr> result;
-    result.val = channel;
-    result.ret = make_ret(Ret::Code::Ok);
-
-    return result;
+    return make_ok();
 }
 
 Ret Mixer::removeChannel(const TrackId trackId)
@@ -367,10 +355,18 @@ void Mixer::setIsActive(bool arg)
     }
 }
 
-void Mixer::setPlayhead(std::shared_ptr<IPlayhead> playhead)
+void Mixer::setPlayhead(PlayheadPtr playhead)
 {
     ONLY_AUDIO_ENGINE_THREAD;
     m_playhead = playhead;
+
+    for (auto& track : m_tracks) {
+        track.channel->setPlayheadPosition(playhead);
+    }
+
+    for (auto& aux : m_auxChannelInfoList) {
+        aux.channel->setPlayheadPosition(playhead);
+    }
 }
 
 AudioOutputParams Mixer::masterOutputParams() const
@@ -389,7 +385,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
     }
 
     m_masterFxProcessors.clear();
-    m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxChain, m_outputSpec);
+    m_masterFxProcessors = audioFactory()->makeMasterFxList(params.fxChain);
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
         fx->setOutputSpec(m_outputSpec);

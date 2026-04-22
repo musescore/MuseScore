@@ -28,9 +28,8 @@
 #include "global/async/asyncable.h"
 
 #include "global/modularity/ioc.h"
-#include "../isynthresolver.h"
-#include "../ifxresolver.h"
 #include "iaudioengine.h"
+#include "iaudiofactory.h"
 #include "../iaudioengineconfiguration.h"
 #include "../iengineplayer.h"
 
@@ -46,10 +45,9 @@ namespace muse::audio::engine {
 class Mixer;
 class EnginePlayback : public IEnginePlayback, public IGetTracks, public async::Asyncable
 {
-    GlobalInject<synth::ISynthResolver> synthResolver;
-    GlobalInject<fx::IFxResolver> fxResolver;
     GlobalInject<IAudioEngineConfiguration> configuration;
     GlobalInject<IAudioEngine> audioEngine;
+    GlobalInject<IAudioFactory> audioFactory;
 
 public:
     EnginePlayback() = default;
@@ -128,7 +126,6 @@ private:
     std::shared_ptr<IAudioContext> audioContext() const;
     void ensureAudioContextSubscriptions();
 
-    TrackId newTrackId() const;
     void doAddTrack(const TrackPtr& track);
 
     void onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess);

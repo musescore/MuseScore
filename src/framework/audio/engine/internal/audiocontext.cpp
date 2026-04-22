@@ -96,14 +96,14 @@ async::Channel<AudioOutputParams> AudioContext::masterOutputParamsChanged() cons
     return m_mixer->masterOutputParamsChanged();
 }
 
-RetVal<MixerChannelPtr> AudioContext::addChannel(const TrackId trackId, ITrackAudioInputPtr source)
+Ret AudioContext::addChannel(ITrackAudioOutputPtr output)
 {
-    return m_mixer->addChannel(trackId, source);
+    return m_mixer->addChannel(output);
 }
 
-RetVal<MixerChannelPtr> AudioContext::addAuxChannel(const TrackId trackId)
+Ret AudioContext::addAuxChannel(ITrackAudioOutputPtr output)
 {
-    return m_mixer->addAuxChannel(trackId);
+    return m_mixer->addAuxChannel(output);
 }
 
 Ret AudioContext::removeChannel(const TrackId trackId)
