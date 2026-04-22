@@ -26,7 +26,7 @@
 
 #include "global/concurrency/concurrent.h"
 #include "io/buffer.h"
-#include "io/file.h"
+#include "io/filestream.h"
 
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
@@ -145,6 +145,11 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
         m_audioWriter = nullptr;
     }
 
+    if (m_audioFile) {
+        m_audioFile->close();
+        m_audioFile.reset();
+    }
+
     muse::Ret result = m_writeRet;
 
     encoder->finishEncode();
@@ -163,7 +168,7 @@ muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, 
             result = m_audioRet;
         }
 
-        muse::io::File::remove(tempAudioPath);
+        fileSystem()->remove(tempAudioPath);
     }
 
     encoder->close();
@@ -252,11 +257,11 @@ void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t
     audioOpts[OptionKey::LEADING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.leadingSec));
     audioOpts[OptionKey::TRAILING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.trailingSec));
 
-    muse::io::Buffer audioDevice;
-    audioDevice.setMeta("file_path", audioPath.toStdString());
-    audioDevice.open(muse::io::IODevice::WriteOnly);
+    m_audioFile = std::make_unique<muse::io::FileStream>(audioPath);
+    m_audioFile->setMeta("file_path", audioPath.toStdString());
+    m_audioFile->open(muse::io::IODevice::WriteOnly);
 
-    m_audioWriter->write(notation, audioDevice, audioOpts);
+    m_audioWriter->write(notation, *m_audioFile, audioOpts);
 }
 
 muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
@@ -493,14 +498,7 @@ bool VideoWriter::generateTrailingFrames(muse::media::IVideoEncoderPtr encoder, 
     }
 
     static const muse::io::path_t RESOURCE_PATH = ":/videoexport/internal/resources/video_made_with.mp4";
-
-    muse::io::File resource(RESOURCE_PATH);
-    if (!resource.open(muse::io::File::ReadOnly)) {
-        return true;
-    }
-
-    muse::ByteArray videoData = resource.readAll();
-    resource.close();
+    muse::ByteArray videoData = fileSystem()->readFile(RESOURCE_PATH).val;
 
     encoder->encodeVideo(videoData, trailingFrameCount);
 

@@ -22,7 +22,11 @@
 
 #pragma once
 
+#include <memory>
+
 #include "async/asyncable.h"
+
+#include "io/filestream.h"
 
 #include "engraving/style/style.h"
 
@@ -116,6 +120,7 @@ private:
     muse::Ret m_writeRet;
 
     project::INotationWriterPtr m_audioWriter;
+    std::unique_ptr<muse::io::FileStream> m_audioFile;
     bool m_audioCompleted = false;
     muse::Ret m_audioRet;
 };
