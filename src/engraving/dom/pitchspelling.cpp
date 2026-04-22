@@ -1109,7 +1109,7 @@ int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& no
             r = 4;
         } else if (ss == "la") {
             r = 5;
-        } else if (ss == "si") {
+        } else if (ss == "si" || ss == "ti") { // accept "ti" too, silently turn into "si"
             r = 6;
         } else {
             return Tpc::TPC_INVALID;
