@@ -58,7 +58,7 @@ public:
     PropertyItem* direction() const;
     PropertyItem* tiePlacement() const;
     PropertyItem* minLength() const;
-    PropertyItem* maskOverTimeAndKeySigs() const;
+    PropertyItem* maskSlurTie() const;
 
     bool isLaissezVib() const;
 
@@ -85,7 +85,7 @@ private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_tiePlacement = nullptr;
     PropertyItem* m_minLength = nullptr;
-    PropertyItem* m_maskOverTimeAndKeySigs = nullptr;
+    PropertyItem* m_maskSlurTie = nullptr;
 
     bool m_isTiePlacementAvailable = false;
     bool m_isMinLengthAvailable = false;

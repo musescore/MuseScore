@@ -46,8 +46,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
-    bool maskSlurs = ctx.conf().styleB(Sid::maskSlursOverTimeAndKeySignatures);
-    bool maskTies = ctx.conf().styleB(Sid::maskTiesOverTimeAndKeySignatures);
+    bool maskSlurs = ctx.conf().styleB(Sid::maskSlurs);
+    bool maskTies = ctx.conf().styleB(Sid::maskTies);
 
     for (const System* system : page->systems()) {
         std::vector<TextBase*> allSystemText = collectAllSystemText(system);
@@ -85,7 +85,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                     continue;
                 }
-                AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::SLURTIE_MASK).value<AutoOnOff>();
+                AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
                 if (slurTieMaskOverride == AutoOnOff::ON
                     || (slurTieMaskOverride == AutoOnOff::AUTO
                         && ((maskSlurs && spannerSeg->isSlurSegment())
@@ -372,7 +372,7 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     Spanner* spanner = slurTieSegment->spanner();
     std::vector<const EngravingItem*> itemsToMaskOver;
     for (const Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
-        if (!seg->isType(SegmentType::KeySig | SegmentType::TimeSig)
+        if (!seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
             || seg->system() != slurTieSegment->system()) {
             continue;
         }
@@ -387,7 +387,6 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
 
     Shape mask;
-    const double spatium = slurTieSegment->spatium();
     const double maskPadding = slurTieSegment->midWidth();
     const double collisionPadding = maskPadding;
 

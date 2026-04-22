@@ -226,7 +226,7 @@ EngravingObject* SlurTieSegment::propertyDelegate(Pid pid) const
     switch (pid) {
     case Pid::SLUR_STYLE_TYPE:
     case Pid::SLUR_DIRECTION:
-    case Pid::SLURTIE_MASK:
+    case Pid::MASK_SLURTIE:
         return slurTie();
     default: break;
     }
@@ -350,7 +350,7 @@ SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
     m_slurDirection = DirectionV::AUTO;
     m_up            = true;
     m_styleType     = SlurStyleType::Solid;
-    m_maskOverTimeAndKeySigs = AutoOnOff::AUTO;
+    m_maskSlurTie   = AutoOnOff::AUTO;
 }
 
 SlurTie::SlurTie(const SlurTie& t)
@@ -359,7 +359,7 @@ SlurTie::SlurTie(const SlurTie& t)
     m_up            = t.m_up;
     m_slurDirection = t.m_slurDirection;
     m_styleType     = t.m_styleType;
-    m_maskOverTimeAndKeySigs = t.m_maskOverTimeAndKeySigs;
+    m_maskSlurTie   = t.m_maskSlurTie;
 }
 
 //---------------------------------------------------------
@@ -390,8 +390,8 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
         return styleType();
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(slurDirection());
-    case Pid::SLURTIE_MASK:
-        return maskOverTimeAndKeySigs();
+    case Pid::MASK_SLURTIE:
+        return maskSlurTie();
     default:
         return Spanner::getProperty(propertyId);
     }
@@ -410,8 +410,8 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SLUR_DIRECTION:
         setSlurDirection(v.value<DirectionV>());
         break;
-    case Pid::SLURTIE_MASK:
-        setMaskOverTimeAndKeySigs(v.value<AutoOnOff>());
+    case Pid::MASK_SLURTIE:
+        setMaskSlurTie(v.value<AutoOnOff>());
         break;
     default:
         return Spanner::setProperty(propertyId, v);
@@ -431,7 +431,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
         return SlurStyleType::Solid;
     case Pid::SLUR_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
-    case Pid::SLURTIE_MASK:
+    case Pid::MASK_SLURTIE:
         return AutoOnOff::AUTO;
     default:
         return Spanner::propertyDefault(id);
@@ -456,7 +456,7 @@ void SlurTie::reset()
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::SLUR_STYLE_TYPE);
-    undoResetProperty(Pid::SLURTIE_MASK);
+    undoResetProperty(Pid::MASK_SLURTIE);
 }
 
 muse::TranslatableString SlurTie::subtypeUserName() const

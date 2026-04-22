@@ -89,9 +89,9 @@ PropertyItem* SlurAndTieSettingsModel::minLength() const
     return m_minLength;
 }
 
-PropertyItem* SlurAndTieSettingsModel::maskOverTimeAndKeySigs() const
+PropertyItem* SlurAndTieSettingsModel::maskSlurTie() const
 {
-    return m_maskOverTimeAndKeySigs;
+    return m_maskSlurTie;
 }
 
 bool SlurAndTieSettingsModel::isLaissezVib() const
@@ -132,7 +132,7 @@ void SlurAndTieSettingsModel::createProperties()
     m_direction = buildPropertyItem(mu::engraving::Pid::SLUR_DIRECTION);
     m_tiePlacement = buildPropertyItem(mu::engraving::Pid::TIE_PLACEMENT);
     m_minLength = buildPropertyItem(mu::engraving::Pid::MIN_LENGTH);
-    m_maskOverTimeAndKeySigs = buildPropertyItem(mu::engraving::Pid::SLURTIE_MASK);
+    m_maskSlurTie = buildPropertyItem(mu::engraving::Pid::MASK_SLURTIE);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
@@ -144,7 +144,7 @@ void SlurAndTieSettingsModel::loadProperties()
     loadPropertyItem(m_direction);
     loadPropertyItem(m_tiePlacement);
     loadPropertyItem(m_minLength);
-    loadPropertyItem(m_maskOverTimeAndKeySigs);
+    loadPropertyItem(m_maskSlurTie);
     updateIsTiePlacementAvailable();
     updateIsMinLengthAvailable();
     updateisLineStyleAvailable();
@@ -156,7 +156,7 @@ void SlurAndTieSettingsModel::resetProperties()
     m_direction->resetToDefault();
     m_tiePlacement->resetToDefault();
     m_minLength->resetToDefault();
-    m_maskOverTimeAndKeySigs->resetToDefault();
+    m_maskSlurTie->resetToDefault();
 }
 
 void SlurAndTieSettingsModel::updateIsTiePlacementAvailable()

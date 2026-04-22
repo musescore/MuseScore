@@ -41,8 +41,8 @@ SlursAndTiesPageModel::SlursAndTiesPageModel(QObject* parent)
     StyleId::tieDotsPlacement,
     StyleId::minLaissezVibLength,
     StyleId::laissezVibUseSmuflSym,
-    StyleId::maskSlursOverTimeAndKeySignatures,
-    StyleId::maskTiesOverTimeAndKeySignatures
+    StyleId::maskSlurs,
+    StyleId::maskTies
 })
 {
 }
@@ -127,12 +127,12 @@ StyleItem* SlursAndTiesPageModel::laissezVibUseSmuflSym() const
     return styleItem(StyleId::laissezVibUseSmuflSym);
 }
 
-StyleItem* SlursAndTiesPageModel::maskSlursOverTimeAndKeySignatures() const
+StyleItem* SlursAndTiesPageModel::maskSlurs() const
 {
-    return styleItem(StyleId::maskSlursOverTimeAndKeySignatures);
+    return styleItem(StyleId::maskSlurs);
 }
 
-StyleItem* SlursAndTiesPageModel::maskTiesOverTimeAndKeySignatures() const
+StyleItem* SlursAndTiesPageModel::maskTies() const
 {
-    return styleItem(StyleId::maskTiesOverTimeAndKeySignatures);
+    return styleItem(StyleId::maskTies);
 }
