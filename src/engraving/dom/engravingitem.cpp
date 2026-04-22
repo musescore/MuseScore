@@ -1502,7 +1502,10 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Staff* destinationStaff = destinationItem->staff();
 
     if (sourceScore == destinationScore) {
-        const bool diffStaff = sourceStaff != destinationStaff;
+        // Linked Staff objects in the same score both report staff() == nullptr,
+        // so treat them as different staves for same-score propagation.
+        bool diffStaff = sourceStaff != destinationStaff
+                         || (isStaff() && destinationItem->isStaff());
         const bool visiblePositionOrColor = propertyId == Pid::VISIBLE || propertyId == Pid::COLOR
                                             || propertyGroup(propertyId) == PropertyGroup::POSITION;
         const bool hasParens = propertyId == Pid::HAS_PARENTHESES && isNote() && toNote(this)->ghost()
