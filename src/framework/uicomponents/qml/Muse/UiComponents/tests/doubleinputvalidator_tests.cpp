@@ -158,4 +158,52 @@ TEST_F(DoubleInputValidatorTests, ValidateCommaLocale) {
     // Restore previous locale
     QLocale::setDefault(prev);
 }
+
+TEST_F(DoubleInputValidatorTests, ValidateSmallRange) {
+    struct Input
+    {
+        QString str;
+        QValidator::State expectedState;
+        QString fixedStr = {};
+    };
+
+    QLocale prev = QLocale();
+    QLocale::setDefault(QLocale("en_US"));
+
+    m_validator->setTop(1.0);
+    m_validator->setBottom(0.0);
+    m_validator->setDecimal(2);
+
+    std::vector<Input> inputs = {
+        { "0", QValidator::Acceptable },
+        { "1", QValidator::Acceptable },
+        { "0.5", QValidator::Acceptable },
+        { "0.99", QValidator::Acceptable },
+        { "-0.1", QValidator::Intermediate, "0" }, // below bottom, clamp to 0
+        { "2", QValidator::Intermediate, "1" },    // above top, clamp to 1
+        { "1.", QValidator::Intermediate, "1" },
+        { "0.0", QValidator::Intermediate, "0" },
+        { "10", QValidator::Invalid },             // too many integer digits
+        { "1.123", QValidator::Invalid },          // more than 2 decimal places
+        { "abc", QValidator::Invalid },
+        { "", QValidator::Intermediate, "0" }
+    };
+
+    int pos = 0;
+    for (Input& input : inputs) {
+        EXPECT_EQ(m_validator->validate(input.str, pos), input.expectedState);
+
+        if (QValidator::Invalid == input.expectedState) {
+            continue;
+        }
+
+        QString fixInput = input.str;
+        m_validator->fixup(fixInput);
+
+        QString expectedStr = QValidator::Acceptable == input.expectedState ? input.str : input.fixedStr;
+        EXPECT_EQ(expectedStr, fixInput);
+    }
+
+    QLocale::setDefault(prev);
+}
 }
