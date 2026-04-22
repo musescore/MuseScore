@@ -85,7 +85,11 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                     continue;
                 }
-                if ((maskSlurs && spannerSeg->isSlurSegment()) || (maskTies && spannerSeg->isTieSegment())) {
+                AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::SLURTIE_MASK).value<AutoOnOff>();
+                if (slurTieMaskOverride == AutoOnOff::ON
+                    || (slurTieMaskOverride == AutoOnOff::AUTO
+                        && ((maskSlurs && spannerSeg->isSlurSegment())
+                            || (maskTies && spannerSeg->isTieSegment())))) {
                     computeSlurTieMasks(toSlurTieSegment(spannerSeg));
                 }
             }
@@ -171,17 +175,16 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
     for (size_t i = 0; i < mask.size(); ++i) {
         ShapeElement& el = mask.elements()[i];
 
-        if (el.top() - itemShape.top() < minFragmentLength) {
+        if (std::abs(el.top() - itemShape.top()) < minFragmentLength) {
             el.adjust(0.0, -minFragmentLength, 0.0, 0.0);
         }
-        if (itemShape.bottom() - el.bottom() < minFragmentLength) {
+        if (std::abs(itemShape.bottom() - el.bottom()) < minFragmentLength) {
             el.adjust(0.0, 0.0, 0.0, minFragmentLength);
         }
-
-        if (el.left() + itemShape.left() < minFragmentLength) {
+        if (std::abs(el.left() + itemShape.left()) < minFragmentLength) {
             el.adjust(-minFragmentLength, 0.0, 0.0, 0.0);
         }
-        if (itemShape.right() - el.right() < minFragmentLength) {
+        if (std::abs(itemShape.right() - el.right()) < minFragmentLength) {
             el.adjust(0.0, 0.0, minFragmentLength, 0.0);
         }
 
@@ -386,15 +389,15 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     Shape mask;
     const double spatium = slurTieSegment->spatium();
     const double collisionPadding = 0.2 * spatium;
-    const double maskPadding = 0.1 * spatium;
+    const double maskPadding = slurTieSegment->midWidth();
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
-        if (!slurTieShape.intersects(item->ldata()->bbox().translated(itemPos).padded(collisionPadding))) {
+        Shape itemShape = item->shape().translated(itemPos);
+        if (!slurTieShape.bbox().intersects(itemShape.bbox().padded(collisionPadding))) {
             continue;
         }
 
-        Shape itemShape = item->shape().translated(itemPos);
         Shape filteredItemShape = createFilteredItemShape(itemShape, slurTieShape, collisionPadding);
         if (filteredItemShape.empty()) {
             continue;
@@ -412,10 +415,10 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     // Ensure that we don't leave tiny tie/slur fragments. If two masking
     // elements are too close to each other we extend them to join.
     slurTieShape.translate(-slurTiePos);
-    const double minFragmentLengh = 0.5 * spatium;
+    const double minFragmentLengh = spatium;
     cleanupMask(slurTieShape, mask, minFragmentLengh);
 
-    slurTieSegment->mutldata()->setMask(mask);
+    slurTieSegment->mutldata()->setMask(mask.bbox()); // bbox to break the tie/slur only once, regardless of the mask elements in between
 }
 
 Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)

@@ -100,6 +100,22 @@ Column {
         ]
     }
 
+    FlatRadioButtonGroupPropertyView {
+        id: maskSection
+        titleText: qsTrc("inspector", "Mask over time and key signatures")
+        propertyItem: root.model ? root.model.maskOverTimeAndKeySigs : null
+        visible: true
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: tiePlacementSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO },
+            { text: qsTrc("inspector", "On"), value: CommonTypes.AUTO_ON_OFF_ON },
+            { text: qsTrc("inspector", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF }
+        ]
+    }
+
     SpinBoxPropertyView {
         id: minLengthSection
 
@@ -114,6 +130,7 @@ Column {
 
         navigationName: "Minimum length"
         navigationPanel: root.navigationPanel
-        navigationRowStart: tiePlacementSection.navigationRowEnd + 1
+        navigationRowStart: maskSection.navigationRowEnd + 1
     }
+
 }

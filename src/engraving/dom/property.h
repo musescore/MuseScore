@@ -491,6 +491,7 @@ enum class Pid : short {
 
     TIE_PLACEMENT,
     MIN_LENGTH,
+    SLURTIE_MASK,
 
     PARTIAL_SPANNER_DIRECTION,
 

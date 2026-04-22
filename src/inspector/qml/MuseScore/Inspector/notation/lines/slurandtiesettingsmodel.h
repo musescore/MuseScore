@@ -36,6 +36,7 @@ class SlurAndTieSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * direction READ direction CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * tiePlacement READ tiePlacement CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * minLength READ minLength CONSTANT)
+    Q_PROPERTY(mu::inspector::PropertyItem * maskOverTimeAndKeySigs READ maskOverTimeAndKeySigs CONSTANT)
     Q_PROPERTY(bool isTiePlacementAvailable READ isTiePlacementAvailable NOTIFY isTiePlacementAvailableChanged)
     Q_PROPERTY(bool isMinLengthAvailable READ isMinLengthAvailable NOTIFY isMinLengthAvailableChanged)
     Q_PROPERTY(bool isLineStyleAvailable READ isLineStyleAvailable NOTIFY isLineStyleAvailableChanged)
@@ -57,6 +58,7 @@ public:
     PropertyItem* direction() const;
     PropertyItem* tiePlacement() const;
     PropertyItem* minLength() const;
+    PropertyItem* maskOverTimeAndKeySigs() const;
 
     bool isLaissezVib() const;
 
@@ -84,6 +86,7 @@ private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_tiePlacement = nullptr;
     PropertyItem* m_minLength = nullptr;
+    PropertyItem* m_maskOverTimeAndKeySigs = nullptr;
 
     bool m_isTiePlacementAvailable = false;
     bool m_isMinLengthAvailable = false;
