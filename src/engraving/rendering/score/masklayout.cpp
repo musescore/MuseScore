@@ -388,8 +388,8 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
 
     Shape mask;
     const double spatium = slurTieSegment->spatium();
-    const double collisionPadding = 0.2 * spatium;
     const double maskPadding = slurTieSegment->midWidth();
+    const double collisionPadding = maskPadding;
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
@@ -403,7 +403,6 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
             continue;
         }
 
-        filteredItemShape.pad(maskPadding);
         mask.add(filteredItemShape.translate(-slurTiePos));
     }
 
@@ -412,13 +411,17 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
         return;
     }
 
-    // Ensure that we don't leave tiny tie/slur fragments. If two masking
-    // elements are too close to each other we extend them to join.
     slurTieShape.translate(-slurTiePos);
-    const double minFragmentLengh = spatium;
-    cleanupMask(slurTieShape, mask, minFragmentLengh);
 
-    slurTieSegment->mutldata()->setMask(mask.bbox()); // bbox to break the tie/slur only once, regardless of the mask elements in between
+    // Use the mask's bbox to break the slur/tie only once, regardless of the mask elements in between:
+    RectF maskBbox = mask.bbox();
+
+    // Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
+    // or not masked at all, so we extend the mask vertically to encompass the slur/tie's full height):
+    maskBbox.adjust(0.0, slurTieShape.top() - mask.top(), 0.0, slurTieShape.bottom() - mask.bottom());
+    maskBbox.pad(maskPadding);
+
+    slurTieSegment->mutldata()->setMask(maskBbox);
 }
 
 Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
