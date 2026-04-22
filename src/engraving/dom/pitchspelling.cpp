@@ -1128,6 +1128,7 @@ int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& no
             break;
         case 'a':   r = 5;
             break;
+        case 'h':   // allow for German 'h' too, silently turn into 'b'
         case 'b':   r = 6;
             break;
         default:    return Tpc::TPC_INVALID;
