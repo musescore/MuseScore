@@ -625,7 +625,8 @@ Ret NotationProject::writeToDevice(QIODevice* device)
 }
 
 Ret NotationProject::saveScore(const muse::io::path_t& path, const std::string& fileSuffix,
-                               bool generateBackup, bool createThumbnail, bool isAutosave)
+                               bool generateBackup, bool createThumbnail, bool isAutosave,
+                               const write::WriteContext* ctx)
 {
     if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
         return exportProject(path, fileSuffix);
@@ -633,11 +634,12 @@ Ret NotationProject::saveScore(const muse::io::path_t& path, const std::string& 
 
     MscIoMode ioMode = mscIoModeBySuffix(fileSuffix);
 
-    return doSave(path, ioMode, generateBackup, createThumbnail, isAutosave);
+    return doSave(path, ioMode, generateBackup, createThumbnail, isAutosave, ctx);
 }
 
 Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode,
-                            bool generateBackup, bool createThumbnail, bool isAutosave)
+                            bool generateBackup, bool createThumbnail, bool isAutosave,
+                            const write::WriteContext* ctx)
 {
     TRACEFUNC;
 
@@ -688,7 +690,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         params.device = maybeOutBuf.get();
 
         MscWriter msczWriter(params);
-        Ret ret = writeProject(msczWriter, createThumbnail);
+        Ret ret = writeProject(msczWriter, createThumbnail, ctx);
         msczWriter.close();
 
         if (!ret) {
@@ -852,45 +854,13 @@ muse::Ret NotationProject::writeProject(const muse::io::path_t& path, const writ
         return make_ret(notation::Err::UnknownError);
     }
 
-    // Check writable
-    if (fileSystem()->exists(path) && !fileSystem()->isWritable(path)) {
-        LOGE() << "failed save, not writable path: " << path;
-        return make_ret(notation::Err::UnknownError);
-    }
-
-    // Write project
     std::string suffix = io::suffix(path);
-    MscWriter::Params params;
-    params.filePath = path;
-    params.mode = mscIoModeBySuffix(suffix);
-    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+
+    if (mscIoModeBySuffix(suffix) == MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    std::unique_ptr<Buffer> maybeOutBuf;
-    if (params.mode != MscIoMode::Dir) {
-        maybeOutBuf = std::make_unique<Buffer>();
-        params.device = maybeOutBuf.get();
-    }
-
-    MscWriter msczWriter(params);
-    Ret ret = writeProject(msczWriter, true, ctx);
-    if (!ret) {
-        return ret;
-    }
-
-    if (maybeOutBuf) {
-        ret = fileSystem()->writeFile(path, maybeOutBuf->data());
-        if (!ret) {
-            return ret;
-        }
-    }
-
-    QFile::setPermissions(path.toQString(),
-                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
-
-    LOGI() << "success save file: " << path;
-    return ret;
+    return saveScore(path, suffix, false /*generateBackup*/, false /*createThumbnail*/, false /*isAutosave*/, ctx);
 }
 
 Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, const write::WriteContext* ctx)
