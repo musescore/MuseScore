@@ -83,7 +83,7 @@ private:
 
     const TimePosition& playbackPosition() const override;
 
-    void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);
+    void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel);
     void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
@@ -91,6 +91,7 @@ private:
     void processMasterFx(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
 
+    void updateNonMutedTrackCount();
     bool useMultithreading() const;
 
     void updateShouldProcessMasterFxDuringSilence();
@@ -107,7 +108,15 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
-    std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
+    struct TrackData {
+        TrackId trackId;
+        MixerChannelPtr channel;
+        std::vector<float> buffer;
+        bool processed = false;
+    };
+
+    std::vector<TrackData> m_tracks;
+
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 
     struct AuxChannelInfo {
