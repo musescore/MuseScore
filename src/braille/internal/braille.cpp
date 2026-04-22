@@ -2837,6 +2837,11 @@ QString Braille::brailleTuplet(Tuplet* tuplet, DurationElement* el)
         return QString();
     }
 
+    if (tuplet->ratio().numerator() == 3) {
+        // Special handling for triplets.
+        return QString("2"); // '⠆' (dots 2-3)
+    }
+
     return QString("_") + QString::number(tuplet->ratio().numerator()) + QString("'");
 }
 

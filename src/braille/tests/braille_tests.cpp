@@ -123,6 +123,12 @@ TEST_F(Braille_Tests, keySigs) {
 TEST_F(Braille_Tests, timeSignature) {
     brailleSaveTest("testTimeSig_Example_7.1_MBC2015");
 }
+TEST_F(Braille_Tests, triplets) {
+    brailleSaveTest("testTriplets_Example_8.4_MBC2015");
+}
+TEST_F(Braille_Tests, tuplets) {
+    brailleSaveTest("testTuplets_Example_8.5_MBC2015");
+}
 TEST_F(Braille_Tests, chords1) {
     brailleSaveTest("testChords_Example_9.1.MBC2015");
 }
