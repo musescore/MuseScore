@@ -235,8 +235,6 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         ctx.mutDom().undo(new ChangeMMRest(firstMeasure, mmrMeasure));
     }
     mmrMeasure->setTimesig(firstMeasure->timesig());
-    mmrMeasure->setPageBreak(lastMeasure->pageBreak());
-    mmrMeasure->setLineBreak(lastMeasure->lineBreak());
     mmrMeasure->setRepeatCount(lastMeasure->repeatCount());
     mmrMeasure->setMMRestCount(numMeasuresInMMRest);
     mmrMeasure->setMeasureNumber(firstMeasure->measureNumber());
@@ -245,7 +243,6 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 
     mmrMeasure->setRepeatStart(firstMeasure->repeatStart() || lastMeasure->repeatStart());
     mmrMeasure->setRepeatEnd(firstMeasure->repeatEnd() || lastMeasure->repeatEnd());
-    mmrMeasure->setSectionBreak(lastMeasure->sectionBreak());
 
     Segment* chordRestSeg = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
