@@ -202,24 +202,34 @@ void VstPluginInstance::rescanParams()
     }
 
     m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
-    m_controllerStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
-
     m_componentStateBuffer.setSize(0);
+
+    Steinberg::tresult res = component->getState(&m_componentStateBuffer);
+    if (res != Steinberg::kResultOk && res != Steinberg::kNotImplemented) {
+        LOGW() << "Component state scan failed: " << m_resourceId;
+        return;
+    }
+
+    m_controllerStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
     m_controllerStateBuffer.setSize(0);
+
+    res = controller->getState(&m_controllerStateBuffer);
+    if (res != Steinberg::kResultOk && res != Steinberg::kNotImplemented) {
+        LOGW() << "Controller state scan failed: " << m_resourceId;
+        return;
+    }
 
     muse::audio::AudioUnitConfig updatedConfig;
 
-    if (component->getState(&m_componentStateBuffer) == Steinberg::kResultOk
-        && m_componentStateBuffer.getSize() > 0) {
+    if (m_componentStateBuffer.getSize() > 0) {
         updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(m_componentStateBuffer.getData(), m_componentStateBuffer.getSize()));
     }
 
-    if (controller->getState(&m_controllerStateBuffer) == Steinberg::kResultOk
-        && m_controllerStateBuffer.getSize() > 0) {
+    if (m_controllerStateBuffer.getSize() > 0) {
         updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(m_controllerStateBuffer.getData(), m_controllerStateBuffer.getSize()));
     }
 
-    m_pluginSettingsChanges.send(std::move(updatedConfig));
+    m_pluginSettingsChanges.send(updatedConfig);
 }
 
 void VstPluginInstance::stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const
@@ -341,9 +351,11 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
     try {
         if (componentState != config.end() && !componentState->second.empty()) {
             stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-            component->setState(&m_componentStateBuffer);
-            m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
-            controller->setComponentState(&m_componentStateBuffer);
+
+            if (component->setState(&m_componentStateBuffer) == Steinberg::kResultOk) {
+                m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+                controller->setComponentState(&m_componentStateBuffer);
+            }
         }
     } catch (...) {
         LOGW() << "Component state restore failed: " << m_resourceId;
