@@ -1270,40 +1270,6 @@ AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId&
     return result;
 }
 
-InstrumentTrackIdSet PlaybackController::availableInstrumentTracks() const
-{
-    InstrumentTrackIdSet result;
-
-    for (const auto& pair : m_instrumentTrackIdMap) {
-        result.insert(pair.first);
-    }
-
-    return result;
-}
-
-void PlaybackController::removeNonExistingTracks()
-{
-    for (const InstrumentTrackId& instrumentTrackId : availableInstrumentTracks()) {
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
-            continue;
-        }
-
-        if (!masterNotationParts()->partExists(instrumentTrackId.partId)) {
-            removeTrack(instrumentTrackId);
-            continue;
-        }
-
-        const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
-        const InstrumentTrackIdSet& idSet = part->instrumentTrackIdSet();
-
-        if (idSet.find(instrumentTrackId) == idSet.cend()) {
-            removeTrack(instrumentTrackId);
-        }
-    }
-
-    updateSoloMuteStates();
-}
-
 void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
@@ -1481,15 +1447,7 @@ void PlaybackController::setupSequenceTracks()
 
     //! HACK - ideally we would use "this" (PlaybackController) instead of m_seqAsyncReceiver for the following
     //! subscription, but we've already subscribed to onItemChanged for a different reason in setNotation...
-    partList.onItemChanged(&m_seqAsyncReceiver, [this, onAddFinished](const Part* part) {
-        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
-            auto search = m_instrumentTrackIdMap.find(trackId);
-            if (search == m_instrumentTrackIdMap.cend()) {
-                removeNonExistingTracks();
-                addTrack(trackId, onAddFinished);
-            }
-        }
-
+    partList.onItemChanged(&m_seqAsyncReceiver, [this](const Part*) {
         updateSoloMuteStates();
     });
 

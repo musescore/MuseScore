@@ -699,6 +699,7 @@ void PlaybackModel::reloadMetronomeEvents()
 bool PlaybackModel::hasToReloadTracks(const ScoreChanges& changes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES {
+        ElementType::PART,
         ElementType::PLAYTECH_ANNOTATION,
         ElementType::CAPO,
         ElementType::DYNAMIC,

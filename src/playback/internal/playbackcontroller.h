@@ -223,8 +223,6 @@ private:
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);
     muse::audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& instrumentTrackId) const;
-    engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
-    void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
