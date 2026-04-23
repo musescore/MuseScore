@@ -51,6 +51,11 @@ EventAudioSource::~EventAudioSource()
     m_playbackData.offStream.disconnect(this);
 }
 
+TrackId EventAudioSource::trackId() const
+{
+    return m_trackId;
+}
+
 bool EventAudioSource::isActive() const
 {
     ONLY_AUDIO_ENGINE_THREAD;

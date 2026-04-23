@@ -31,7 +31,7 @@
 #include "../iengineplayer.h"
 #include "../iplayhead.h"
 
-#include "igettracks.h"
+#include "igettracksource.h"
 
 namespace muse::audio::engine {
 class EnginePlayer : public IEnginePlayer, public IPlayhead, public async::Asyncable
@@ -39,7 +39,7 @@ class EnginePlayer : public IEnginePlayer, public IPlayhead, public async::Async
     GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
-    explicit EnginePlayer(IGetTracks* getTracks);
+    explicit EnginePlayer(IGetTrackSource* getTracks);
 
     async::Promise<Ret> prepareToPlay() override;
 
@@ -86,7 +86,7 @@ private:
     using AllTracksReadyCallback = std::function<void ()>;
     void prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback);
 
-    IGetTracks* m_getTracks = nullptr;
+    IGetTrackSource* m_getTracks = nullptr;
 
     ValCh<PlaybackStatus> m_status;
 

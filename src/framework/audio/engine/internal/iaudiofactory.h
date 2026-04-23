@@ -42,20 +42,7 @@ public:
     virtual SoundPresetList availableSoundPresets(const AudioResourceMeta& resourceMeta) const = 0;
     virtual AudioResourceMetaList availableOutputResources() const = 0;
 
-    // Make tracks
-    virtual RetVal<ITrackAudioOutputPtr> makeMixerChannel(const TrackId trackId, const ITrackAudioInputPtr& source) const = 0;
-    virtual RetVal<ITrackAudioOutputPtr> makeMixerAuxChannel(const TrackId trackId) const = 0;
-
-    virtual RetVal<EventTrackPtr> makeEventTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
-                                                 const AudioParams& params,
-                                                 std::function<void(const TrackId)> onOffStreamReceived) const = 0;
-
-    virtual RetVal<SoundTrackPtr> makeSoundTrack(const std::string& trackName, io::IODevice* playbackData,
-                                                 const AudioParams& params) const = 0;
-
-    virtual RetVal<EventTrackPtr> makeAuxTrack(const std::string& trackName, const AudioOutputParams& outputParams) const = 0;
-
-    // Make synths
+    // Make audio sources
     virtual RetVal<synth::ISynthesizerPtr> makeSynth(const TrackId trackId, const AudioInputParams& params,
                                                      const PlaybackSetupData& setupData) const = 0;
 
@@ -65,6 +52,15 @@ public:
     // created synth instances are registered in an internal registry (see VST).
     // This method clears this registry.
     virtual void clearSynthSources() = 0;
+
+    virtual RetVal<ITrackAudioInputPtr> makeEventSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
+                                                        const AudioInputParams& params,
+                                                        const std::function<void(const TrackId)> onOffStreamReceived = nullptr) const = 0;
+
+    // Make output (mixer channel)
+    virtual RetVal<ITrackAudioOutputPtr> makeMixerChannel(const TrackId trackId, const AudioOutputParams& params,
+                                                          const ITrackAudioInputPtr& source) const = 0;
+    virtual RetVal<ITrackAudioOutputPtr> makeMixerAuxChannel(const TrackId trackId, const AudioOutputParams& params) const = 0;
 
     // Make FX
     virtual std::vector<IFxProcessorPtr> makeMasterFxList(const AudioFxChain& fxChain) const = 0;

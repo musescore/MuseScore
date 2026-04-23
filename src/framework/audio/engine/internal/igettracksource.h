@@ -20,22 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_IGETTRACKS_H
-#define MUSE_AUDIO_IGETTRACKS_H
+#pragma once
 
 #include "audio/common/audiotypes.h"
 
 #include "track.h"
 
 namespace muse::audio::engine {
-class IGetTracks
+class IGetTrackSource
 {
 public:
-    virtual ~IGetTracks() = default;
+    virtual ~IGetTrackSource() = default;
 
-    virtual TrackPtr track(const TrackId id) const = 0;
-    virtual const TracksMap& allTracks() const = 0;
+    virtual ITrackAudioInputPtr trackSource(const TrackId trackId) const = 0;
+    virtual std::vector<ITrackAudioInputPtr> allTracksSources() const = 0;
 };
 }
-
-#endif // MUSE_AUDIO_IGETTRACKS_H

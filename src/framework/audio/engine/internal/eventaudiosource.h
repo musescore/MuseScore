@@ -42,6 +42,8 @@ public:
 
     ~EventAudioSource() override;
 
+    TrackId trackId() const override;
+
     bool isActive() const override;
     void setIsActive(const bool active) override;
 

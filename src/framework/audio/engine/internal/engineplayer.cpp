@@ -32,7 +32,7 @@ using namespace muse::audio;
 using namespace muse::audio::engine;
 using namespace muse::async;
 
-EnginePlayer::EnginePlayer(IGetTracks* getTracks)
+EnginePlayer::EnginePlayer(IGetTrackSource* getTracks)
     : m_getTracks(getTracks)
 {
     m_status.set(PlaybackStatus::Stopped);
@@ -284,10 +284,8 @@ void EnginePlayer::seekAllTracks(const secs_t newPosition)
         return;
     }
 
-    for (const auto& pair : m_getTracks->allTracks()) {
-        if (pair.second->inputHandler) {
-            pair.second->inputHandler->seek(secsToMicrosecs(newPosition), m_flushSoundOnSeek);
-        }
+    for (const auto& source : m_getTracks->allTracksSources()) {
+        source->seek(secsToMicrosecs(newPosition), m_flushSoundOnSeek);
     }
 }
 
@@ -297,10 +295,8 @@ void EnginePlayer::flushAllTracks()
         return;
     }
 
-    for (const auto& pair : m_getTracks->allTracks()) {
-        if (pair.second->inputHandler) {
-            pair.second->inputHandler->flush();
-        }
+    for (const auto& source : m_getTracks->allTracksSources()) {
+        source->flush();
     }
 }
 
@@ -312,19 +308,15 @@ void EnginePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyC
         return;
     }
 
-    std::vector<TrackPtr> notYetReadyToPlayTracks;
+    std::vector<ITrackAudioInputPtr> notYetReadyToPlayTracks;
     m_notYetReadyToPlayTrackIdSet.clear();
 
-    for (const auto& pair : m_getTracks->allTracks()) {
-        if (!pair.second->inputHandler) {
-            continue;
-        }
+    for (const auto& source : m_getTracks->allTracksSources()) {
+        source->prepareToPlay();
 
-        pair.second->inputHandler->prepareToPlay();
-
-        if (!pair.second->inputHandler->readyToPlay()) {
-            notYetReadyToPlayTracks.push_back(pair.second);
-            m_notYetReadyToPlayTrackIdSet.insert(pair.first);
+        if (!source->readyToPlay()) {
+            notYetReadyToPlayTracks.push_back(source);
+            m_notYetReadyToPlayTrackIdSet.insert(source->trackId());
         }
     }
 
@@ -333,20 +325,20 @@ void EnginePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyC
         return;
     }
 
-    for (const TrackPtr& track : notYetReadyToPlayTracks) {
-        const TrackId trackId = track->id;
-
-        track->inputHandler->readyToPlayChanged().onNotify(this, [this, trackId, allTracksReadyCallback]() {
+    for (const auto& source : notYetReadyToPlayTracks) {
+        TrackId trackId = source->trackId();
+        source->readyToPlayChanged().onNotify(this, [this, trackId, allTracksReadyCallback]() {
             muse::remove(m_notYetReadyToPlayTrackIdSet, trackId);
 
             if (m_notYetReadyToPlayTrackIdSet.empty()) {
                 allTracksReadyCallback();
             }
 
-            const TrackPtr ptr = m_getTracks->track(trackId);
-            if (ptr && ptr->inputHandler) {
-                ptr->inputHandler->readyToPlayChanged().disconnect(this);
+            ITrackAudioInputPtr source = m_getTracks->trackSource(trackId);
+            IF_ASSERT_FAILED(source) {
+                return;
             }
+            source->readyToPlayChanged().disconnect(this);
         }, Asyncable::Mode::SetReplace);
     }
 }

@@ -30,13 +30,6 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
-TrackId AudioFactory::newTrackId() const
-{
-    static TrackId lastId = 0;
-    ++lastId;
-    return lastId;
-}
-
 AudioResourceMetaList AudioFactory::availableInputResources() const
 {
     return synthResolver()->resolveAvailableResources();
@@ -50,85 +43,6 @@ SoundPresetList AudioFactory::availableSoundPresets(const AudioResourceMeta& res
 AudioResourceMetaList AudioFactory::availableOutputResources() const
 {
     return fxResolver()->resolveAvailableResources();
-}
-
-RetVal<ITrackAudioOutputPtr> AudioFactory::makeMixerChannel(const TrackId trackId, const ITrackAudioInputPtr& source) const
-{
-    auto channel = std::make_shared<MixerChannel>(trackId, audioEngine()->outputSpec(), source, nullptr);
-    return RetVal<ITrackAudioOutputPtr>::make_ok(channel);
-}
-
-RetVal<ITrackAudioOutputPtr> AudioFactory::makeMixerAuxChannel(const TrackId trackId) const
-{
-    auto channel = std::make_shared<MixerChannel>(trackId, audioEngine()->outputSpec(), nullptr);
-    return RetVal<ITrackAudioOutputPtr>::make_ok(channel);
-}
-
-RetVal<EventTrackPtr> AudioFactory::makeEventTrack(const std::string& trackName,
-                                                   const mpe::PlaybackData& playbackData,
-                                                   const AudioParams& params,
-                                                   std::function<void(const TrackId)> onOffStreamReceived) const
-{
-    if (!playbackData.setupData.isValid()) {
-        return RetVal<EventTrackPtr>::make_ret(Err::InvalidSetupData);
-    }
-
-    TrackId trackId = newTrackId();
-
-    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(trackId, playbackData, onOffStreamReceived);
-    source->setOutputSpec(audioEngine()->outputSpec());
-
-    RetVal<ITrackAudioOutputPtr> channel = makeMixerChannel(trackId, source);
-    if (!channel.ret) {
-        return RetVal<EventTrackPtr>::make_ret(channel.ret);
-    }
-
-    EventTrackPtr trackPtr = std::make_shared<EventTrack>();
-    trackPtr->id = trackId;
-    trackPtr->name = trackName;
-    trackPtr->setPlaybackData(playbackData);
-    trackPtr->inputHandler = source;
-    trackPtr->outputHandler = channel.val;
-    trackPtr->setInputParams(params.in);
-    trackPtr->setOutputParams(params.out);
-
-    return RetVal<EventTrackPtr>::make_ok(trackPtr);
-}
-
-RetVal<SoundTrackPtr> AudioFactory::makeSoundTrack(const std::string& trackName,
-                                                   io::IODevice* playbackData,
-                                                   const AudioParams& params) const
-{
-    if (!playbackData) {
-        return RetVal<SoundTrackPtr>::make_ret(Err::InvalidAudioFilePath);
-    }
-
-    TrackId trackId = newTrackId();
-    SoundTrackPtr trackPtr = std::make_shared<SoundTrack>();
-    trackPtr->id = trackId;
-    trackPtr->name = trackName;
-    trackPtr->setPlaybackData(playbackData);
-    trackPtr->setInputParams(params.in);
-    trackPtr->setOutputParams(params.out);
-
-    return RetVal<SoundTrackPtr>::make_ok(trackPtr);
-}
-
-RetVal<EventTrackPtr> AudioFactory::makeAuxTrack(const std::string& trackName, const AudioOutputParams& outputParams) const
-{
-    TrackId trackId = newTrackId();
-    RetVal<ITrackAudioOutputPtr> channel = makeMixerAuxChannel(trackId);
-    if (!channel.ret) {
-        return RetVal<EventTrackPtr>::make_ret(channel.ret);
-    }
-
-    EventTrackPtr trackPtr = std::make_shared<EventTrack>();
-    trackPtr->id = trackId;
-    trackPtr->name = trackName;
-    trackPtr->outputHandler = channel.val;
-    trackPtr->setOutputParams(outputParams);
-
-    return RetVal<EventTrackPtr>::make_ok(trackPtr);
 }
 
 RetVal<synth::ISynthesizerPtr> AudioFactory::makeSynth(const TrackId trackId, const AudioInputParams& params,
@@ -153,6 +67,31 @@ RetVal<synth::ISynthesizerPtr> AudioFactory::makeDefaultSynth(const TrackId trac
 void AudioFactory::clearSynthSources()
 {
     synthResolver()->clearSources();
+}
+
+RetVal<ITrackAudioInputPtr> AudioFactory::makeEventSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
+                                                          const AudioInputParams& params,
+                                                          const std::function<void(const TrackId)> onOffStreamReceived) const
+{
+    EventAudioSourcePtr source = std::make_shared<EventAudioSource>(trackId, playbackData, onOffStreamReceived);
+    source->setOutputSpec(audioEngine()->outputSpec());
+    source->applyInputParams(params);
+    return RetVal<ITrackAudioInputPtr>::make_ok(source);
+}
+
+RetVal<ITrackAudioOutputPtr> AudioFactory::makeMixerChannel(const TrackId trackId, const AudioOutputParams& params,
+                                                            const ITrackAudioInputPtr& source) const
+{
+    auto channel = std::make_shared<MixerChannel>(trackId, audioEngine()->outputSpec(), source, nullptr);
+    channel->applyOutputParams(params);
+    return RetVal<ITrackAudioOutputPtr>::make_ok(channel);
+}
+
+RetVal<ITrackAudioOutputPtr> AudioFactory::makeMixerAuxChannel(const TrackId trackId, const AudioOutputParams& params) const
+{
+    auto channel = std::make_shared<MixerChannel>(trackId, audioEngine()->outputSpec(), nullptr);
+    channel->applyOutputParams(params);
+    return RetVal<ITrackAudioOutputPtr>::make_ok(channel);
 }
 
 std::vector<IFxProcessorPtr> AudioFactory::makeMasterFxList(const AudioFxChain& fxChain) const

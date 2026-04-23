@@ -34,7 +34,7 @@
 #include "../iengineplayer.h"
 
 #include "track.h"
-#include "igettracks.h"
+#include "igettracksource.h"
 
 namespace muse::audio::soundtrack {
 class SoundTrackWriter;
@@ -43,7 +43,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 namespace muse::audio::engine {
 class Mixer;
-class EnginePlayback : public IEnginePlayback, public IGetTracks, public async::Asyncable
+class EnginePlayback : public IEnginePlayback, public IGetTrackSource, public async::Asyncable
 {
     GlobalInject<IAudioEngineConfiguration> configuration;
     GlobalInject<IAudioEngine> audioEngine;
@@ -123,16 +123,32 @@ public:
 
 private:
 
+    struct Track
+    {
+        TrackId id = INVALID_TRACK_ID;
+        TrackType type = Undefined;
+        TrackName name;
+        ITrackAudioInputPtr source = nullptr;
+        ITrackAudioOutputPtr output = nullptr;
+
+        bool isValid() const
+        {
+            return id != -1 && type != Undefined && source && output;
+        }
+    };
+
     std::shared_ptr<IAudioContext> audioContext() const;
     void ensureAudioContextSubscriptions();
 
-    void doAddTrack(const TrackPtr& track);
+    TrackId newTrackId() const;
+    void doAddTrack(const Track& track);
+    const Track* track(const TrackId id) const;
 
     void onShouldProcessDuringSilenceChanged(const TrackId trackId, bool shouldProcess);
 
     // IGetTracks
-    TrackPtr track(const TrackId id) const override;
-    const TracksMap& allTracks() const override;
+    ITrackAudioInputPtr trackSource(const TrackId trackId) const override;
+    std::vector<ITrackAudioInputPtr> allTracksSources() const override;
 
     bool hasPendingChunks(const TrackId id) const;
     void listenInputProcessing(std::function<void(const Ret&)> completed);
@@ -140,13 +156,13 @@ private:
 
     Ret doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format);
 
+    std::vector<Track> m_tracks;
     async::Channel<TrackId> m_trackAdded;
     async::Channel<TrackId> m_trackRemoved;
     async::Channel<TrackId, AudioInputParams> m_inputParamsChanged;
     async::Channel<TrackId, AudioOutputParams> m_outputParamsChanged;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
-    TracksMap m_tracks;
     IEnginePlayerPtr m_player = nullptr;
     TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
     std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
