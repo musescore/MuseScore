@@ -37,7 +37,6 @@ public:
 class IPlayhead : public IPlayheadPosition
 {
 public:
-    virtual ~IPlayhead() = default;
 
     virtual void forward(const TimePosition& delta) = 0;
 };

@@ -67,8 +67,8 @@ private:
     const TrackList& allTracks() const override;
     ms_Track addTrack() override;
 
-    muse::audio::msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
+    muse::audio::TimePosition playbackPosition() const override;
+    void setPlaybackPosition(const muse::audio::TimePosition& position) override;
     bool isActive() const;
     void setIsActive(bool active);
 
@@ -82,7 +82,6 @@ private:
 
     void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
-    void setCurrentPosition(const muse::audio::samples_t samples);
     void doCurrentSetPosition();
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
 
@@ -113,8 +112,7 @@ private:
     using RenderingStateChangedChannel = async::Channel<ms_RenderingRangeList, int>;
     RenderingStateChangedChannel m_renderingStateChanged;
 
-    muse::audio::samples_t m_currentPosition = 0;
-    muse::audio::sample_rate_t m_samplerSampleRate = 0;
+    muse::audio::TimePosition m_currentPosition;
 
     audio::OutputSpec m_outputSpec;
 

@@ -95,21 +95,21 @@ TimePosition EnginePlayer::proc_onTimeChanged(const TimePosition& delta)
         }
 
         m_countDown = 0.;
-        m_timeEvent.send(TimeEvent::CountDownEnded); // forwarding an event to the engine thread
+        m_timeEvent.send(TimeEvent { TimeEventType::CountDownEnded, m_currentPosition }); // forwarding an event to the engine thread
     }
 
     // Check: Loop
-    const TimePosition newTime = TimePosition::fromSamples(m_currentPosition.samples() + delta.samples(), delta.sampleRate());
+    const TimePosition newTime = m_currentPosition.forwarded(delta);
     if (m_timeLoopStart < m_timeLoopEnd && newTime.time() >= m_timeLoopEnd) {
         //! TODO Seek may be necessary to call this directly within the PROC thread.
-        m_timeEvent.send(TimeEvent::LoopEnded); // forwarding an event to the engine thread
+        m_timeEvent.send(TimeEvent { TimeEventType::LoopEnded, newTime }); // forwarding an event to the engine thread
         const secs_t overshoot = newTime.time() - m_timeLoopEnd;
         return TimePosition::fromTime(m_timeLoopStart + overshoot, delta.sampleRate());
     }
 
     // Check: Duration
     if (newTime.time() >= m_timeDuration) {
-        m_timeEvent.send(TimeEvent::PlaybackEnded); // forwarding an event to the engine thread
+        m_timeEvent.send(TimeEvent { TimeEventType::PlaybackEnded, newTime }); // forwarding an event to the engine thread
         return TimePosition::fromTime(m_timeDuration, delta.sampleRate());
     }
 
@@ -124,15 +124,17 @@ const TimePosition& EnginePlayer::currentPosition() const
 void EnginePlayer::onTimeEvent(const TimeEvent event)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    switch (event) {
-    case TimeEvent::CountDownEnded:
+    switch (event.type) {
+    case TimeEventType::CountDownEnded:
         m_isActive.set(m_status.val == PlaybackStatus::Running);
         break;
-    case TimeEvent::LoopEnded:
-        seekAllTracks(m_currentPosition.time());
+    case TimeEventType::LoopEnded:
+        seekAllTracks(event.position);
         break;
-    case TimeEvent::PlaybackEnded:
+    case TimeEventType::PlaybackEnded:
         pause();
+        break;
+    default:
         break;
     }
 }
@@ -162,7 +164,7 @@ void EnginePlayer::play(const secs_t delay)
     m_status.set(PlaybackStatus::Running);
 }
 
-void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
+void EnginePlayer::seek(const TimePosition& position, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -172,14 +174,18 @@ void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
     //     return;
     // }
 
+    IF_ASSERT_FAILED(position.isValid()) {
+        return;
+    }
+
     IF_ASSERT_FAILED(m_trackSource) {
         return;
     }
 
     m_flushSoundOnSeek = flushSound;
-    m_currentPosition = TimePosition::fromTime(newPosition, m_trackSource->sampleRate());
+    m_currentPosition = position;
     m_timeChanged.send(m_currentPosition.time());
-    seekAllTracks(newPosition);
+    seekAllTracks(position);
     m_flushSoundOnSeek = true;
 }
 
@@ -193,7 +199,7 @@ void EnginePlayer::stop()
 
     m_status.set(PlaybackStatus::Stopped);
     m_countDown = 0.;
-    seek(0.);
+    seek(TimePosition::zero(m_currentPosition.sampleRate()));
     m_notYetReadyToPlayTrackIdSet.clear();
 }
 
@@ -218,7 +224,7 @@ void EnginePlayer::resume(const secs_t delay)
     }
 
     m_countDown = delay;
-    seek(m_currentPosition.time());
+    seek(m_currentPosition);
     m_status.set(PlaybackStatus::Running);
 }
 
@@ -291,14 +297,14 @@ Channel<bool> EnginePlayer::isActiveChanged() const
     return m_isActive.ch;
 }
 
-void EnginePlayer::seekAllTracks(const secs_t newPosition)
+void EnginePlayer::seekAllTracks(const TimePosition& position)
 {
     IF_ASSERT_FAILED(m_trackSource) {
         return;
     }
 
     for (const auto& source : m_trackSource->allTracksSources()) {
-        source->seek(secsToMicrosecs(newPosition), m_flushSoundOnSeek);
+        source->seek(position, m_flushSoundOnSeek);
     }
 }
 

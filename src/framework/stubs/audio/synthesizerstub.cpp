@@ -80,12 +80,12 @@ async::Channel<AudioInputParams> SynthesizerStub::paramsChanged() const
     return ch;
 }
 
-msecs_t SynthesizerStub::playbackPosition() const
+TimePosition SynthesizerStub::playbackPosition() const
 {
-    return 0;
+    return TimePosition();
 }
 
-void SynthesizerStub::setPlaybackPosition(const msecs_t)
+void SynthesizerStub::setPlaybackPosition(const TimePosition&)
 {
 }
 

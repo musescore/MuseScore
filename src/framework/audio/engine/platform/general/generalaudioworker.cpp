@@ -37,7 +37,7 @@ using namespace muse::audio::engine;
 
 static uint64_t toWinTime(const msecs_t msecs)
 {
-    return msecs * 10000;
+    return msecs.raw() * 10000;
 }
 
 GeneralAudioWorker::GeneralAudioWorker()

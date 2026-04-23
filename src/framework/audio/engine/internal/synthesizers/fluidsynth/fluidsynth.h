@@ -58,8 +58,8 @@ public:
 
     void flushSound() override; // all channels
 
-    msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const msecs_t newPosition) override;
+    TimePosition playbackPosition() const override;
+    void setPlaybackPosition(const TimePosition& position) override;
 
     unsigned int audioChannelsCount() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;

@@ -134,8 +134,6 @@ void MuseSamplerWrapper::setOutputSpec(const audio::OutputSpec& spec)
         if (!initSampler(spec.sampleRate, spec.samplesPerChannel)) {
             return;
         }
-
-        m_samplerSampleRate = spec.sampleRate;
     }
 
     m_outputSpec = spec;
@@ -184,7 +182,7 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
             return 0;
         }
     } else {
-        if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition) != ms_Result_OK) {
+        if (m_samplerLib->process(m_sampler, m_bus, m_currentPosition.samples()) != ms_Result_OK) {
             return 0;
         }
     }
@@ -192,7 +190,7 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
     extractOutputSamples(samplesPerChannel, buffer);
 
     if (active) {
-        m_currentPosition += samplesPerChannel;
+        m_currentPosition.forward(samplesPerChannel);
     }
 
     return samplesPerChannel;
@@ -286,16 +284,33 @@ ms_Track MuseSamplerWrapper::addTrack()
     return track;
 }
 
-msecs_t MuseSamplerWrapper::playbackPosition() const
+muse::audio::TimePosition MuseSamplerWrapper::playbackPosition() const
 {
-    return samplesToMsecs(m_currentPosition, m_outputSpec.sampleRate);
+    return m_currentPosition;
 }
 
-void MuseSamplerWrapper::setPlaybackPosition(const msecs_t newPosition)
+void MuseSamplerWrapper::setPlaybackPosition(const muse::audio::TimePosition& position)
 {
-    m_sequencer.setPlaybackPosition(newPosition);
+    IF_ASSERT_FAILED(position.isValid()) {
+        return;
+    }
 
-    setCurrentPosition(microSecsToSamples(newPosition, m_outputSpec.sampleRate));
+    m_sequencer.setPlaybackPosition(muse::secs_to_msecs(position.time()));
+
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    if (m_currentPosition == position) {
+        return;
+    }
+
+    m_currentPosition = position;
+    m_pendingSetPosition = true;
+
+    if (isActive() || m_instrument.isOnline) {
+        doCurrentSetPosition();
+    }
 }
 
 bool MuseSamplerWrapper::isActive() const
@@ -605,28 +620,10 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
     }
 }
 
-void MuseSamplerWrapper::setCurrentPosition(const samples_t samples)
-{
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
-        return;
-    }
-
-    if (m_currentPosition == samples) {
-        return;
-    }
-
-    m_currentPosition = samples;
-    m_pendingSetPosition = true;
-
-    if (isActive() || m_instrument.isOnline) {
-        doCurrentSetPosition();
-    }
-}
-
 void MuseSamplerWrapper::doCurrentSetPosition()
 {
     //! NOTE: very CPU-intensive operation; should be called as infrequently as possible
-    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+    m_samplerLib->setPosition(m_sampler, m_currentPosition.samples());
     m_pendingSetPosition = false;
 }
 

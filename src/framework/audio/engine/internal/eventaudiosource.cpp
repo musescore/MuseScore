@@ -130,7 +130,7 @@ samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
     return m_synth->process(buffer, samplesPerChannel);
 }
 
-void EventAudioSource::seek(const msecs_t newPositionMsecs, const bool flushSound)
+void EventAudioSource::seek(const TimePosition& position, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -138,11 +138,11 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs, const bool flushSoun
         return;
     }
 
-    if (m_synth->playbackPosition() == newPositionMsecs) {
+    if (m_synth->playbackPosition() == position) {
         return;
     }
 
-    m_synth->setPlaybackPosition(newPositionMsecs);
+    m_synth->setPlaybackPosition(position);
 
     if (flushSound) {
         m_synth->flushSound();

@@ -31,10 +31,10 @@
 #include "../iaudioengineconfiguration.h"
 
 #include "igettracksource.h"
-#include "iengineplayer.h"
 #include "mixer.h"
 
 namespace muse::audio::engine {
+class EnginePlayer;
 class AudioContext : public IAudioContext, public IGetTrackSource, public async::Asyncable
 {
     GlobalInject<IAudioEngine> audioEngine;
@@ -138,7 +138,6 @@ private:
     const Track* track(const TrackId id) const;
 
     // IGetTrackSource
-    sample_rate_t sampleRate() const override;
     ITrackAudioInputPtr trackSource(const TrackId trackId) const override;
     std::vector<ITrackAudioInputPtr> allTracksSources() const override;
     // -----
@@ -151,7 +150,7 @@ private:
     modularity::IoCID m_ctxId = 0;
 
     OutputSpec m_outputSpec;
-    IEnginePlayerPtr m_player = nullptr;
+    std::shared_ptr<EnginePlayer> m_player;
     std::shared_ptr<Mixer> m_mixer;
 
     std::vector<Track> m_tracks;

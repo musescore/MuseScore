@@ -46,7 +46,7 @@ public:
 
     virtual TrackId trackId() const = 0;
 
-    virtual void seek(const msecs_t newPositionMsecs, const bool flushSound = true) = 0;
+    virtual void seek(const TimePosition& position, const bool flushSound = true) = 0;
     virtual void flush() = 0;
 
     virtual const AudioInputParams& inputParams() const = 0;
