@@ -181,7 +181,7 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
         if (std::abs(itemShape.bottom() - el.bottom()) < minFragmentLength) {
             el.adjust(0.0, 0.0, 0.0, minFragmentLength);
         }
-        if (std::abs(el.left() + itemShape.left()) < minFragmentLength) {
+        if (std::abs(el.left() - itemShape.left()) < minFragmentLength) {
             el.adjust(-minFragmentLength, 0.0, 0.0, 0.0);
         }
         if (std::abs(itemShape.right() - el.right()) < minFragmentLength) {
@@ -371,8 +371,11 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
 
     Spanner* spanner = slurTieSegment->spanner();
     std::vector<const EngravingItem*> itemsToMaskOver;
-    for (const Segment* seg = spanner->startSegment(); seg && seg != spanner->endSegment(); seg = seg->next1()) {
-        if (!seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
+    const Segment* startSeg = spanner->startSegment();
+    const Segment* endSeg = spanner->endSegment();
+    for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
+        if (!seg->enabled()
+            || !seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
             || seg->system() != slurTieSegment->system()) {
             continue;
         }
