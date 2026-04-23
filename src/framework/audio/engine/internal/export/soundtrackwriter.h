@@ -43,7 +43,6 @@ namespace muse::audio::soundtrack {
 class SoundTrackWriter : public async::Asyncable
 {
     muse::GlobalInject<rpc::IRpcChannel> rpcChannel;
-    muse::GlobalInject<engine::IAudioEngine> audioEngine;
 
 public:
     SoundTrackWriter(io::IODevice& dstDevice, const SoundTrackFormat& format, const secs_t totalDuration, engine::IAudioSourcePtr source);

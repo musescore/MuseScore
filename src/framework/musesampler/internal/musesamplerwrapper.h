@@ -41,6 +41,7 @@ public:
     MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
     ~MuseSamplerWrapper() override;
 
+    void setMode(const muse::audio::RenderMode mode) override;
     void setOutputSpec(const audio::OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
@@ -62,16 +63,14 @@ private:
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     const mpe::PlaybackData& playbackData() const override;
 
-    void updateRenderingMode(const muse::audio::RenderMode mode) override;
-
     // IMuseSamplerTracks
     const TrackList& allTracks() const override;
     ms_Track addTrack() override;
 
     muse::audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
-    bool isActive() const override;
-    void setIsActive(bool active) override;
+    bool isActive() const;
+    void setIsActive(bool active);
 
     bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
 

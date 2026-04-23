@@ -112,12 +112,12 @@ bool SynthesizerStub::isValid() const
     return false;
 }
 
-bool SynthesizerStub::isActive() const
+RenderMode SynthesizerStub::mode() const
 {
-    return false;
+    return RenderMode::Undefined;
 }
 
-void SynthesizerStub::setIsActive(bool)
+void SynthesizerStub::setMode(const RenderMode)
 {
 }
 

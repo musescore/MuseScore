@@ -47,30 +47,15 @@ AudioContext::AudioContext(const modularity::IoCID& ctxId)
 
 Ret AudioContext::init(const RenderConstraints& consts)
 {
-    OutputSpec outputSpec = audioEngine()->outputSpec();
-
     m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
-    m_mixer->setOutputSpec(outputSpec);
     m_mixer->setPlayhead(std::dynamic_pointer_cast<IPlayhead>(m_player));
-    m_mixer->setIsActive(m_player->isActive());
-    m_mixer->setIsIdle(audioEngine()->mode() == RenderMode::IdleMode);
+
+    OutputSpec outputSpec = audioEngine()->outputSpec();
+    setOutputSpec(outputSpec);
+    setMode(RenderMode::IdleMode);
 
     m_player->isActiveChanged().onReceive(this, [this](bool isActive) {
-        m_mixer->setIsActive(isActive);
-    });
-
-    audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
-        m_prevActiveTrackId = INVALID_TRACK_ID;
-
-        if (mode == RenderMode::IdleMode) {
-            m_mixer->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
-        }
-
-        m_mixer->setIsIdle(mode == RenderMode::IdleMode);
-    });
-
-    audioEngine()->outputSpecChanged().onReceive(this, [this](const OutputSpec& outputSpec) {
-        m_mixer->setOutputSpec(outputSpec);
+        setMode(isActive ? RenderMode::RealTimeMode : RenderMode::IdleMode);
     });
 
     return make_ret(Ret::Code::Ok);
@@ -98,6 +83,24 @@ void AudioContext::deinit()
     m_inputParamsChanged = async::Channel<TrackId, AudioInputParams>();
 
     async_disconnectAll();
+}
+
+// Config
+void AudioContext::setMode(const RenderMode mode)
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    if (mode == RenderMode::IdleMode) {
+        m_mixer->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
+    }
+    m_mixer->setIsIdle(mode == RenderMode::IdleMode);
+    m_mixer->setMode(mode);
+}
+
+void AudioContext::setOutputSpec(const OutputSpec& outputSpec)
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    m_outputSpec = outputSpec;
+    m_mixer->setOutputSpec(outputSpec);
 }
 
 // Setup tracks
@@ -347,6 +350,12 @@ RetVal<TrackName> AudioContext::trackName(const TrackId trackId) const
     }
 
     return RetVal<TrackName>::make_ret((int)Err::InvalidTrackId, "no track");
+}
+
+sample_rate_t AudioContext::sampleRate() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    return m_outputSpec.sampleRate;
 }
 
 ITrackAudioInputPtr AudioContext::trackSource(const TrackId trackId) const
@@ -746,7 +755,7 @@ Ret AudioContext::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackForm
     using namespace muse::audio::soundtrack;
 
     const secs_t totalDuration = m_player->duration();
-    auto writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, m_mixer->mixedSource());
+    auto writer = std::make_shared<SoundTrackWriter>(dstDevice, format, totalDuration, m_mixer);
 
     writer->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string /*title*/) {
         m_saveSoundTracksProgress.progress.send(current, total, SaveSoundTrackStage::WritingSoundTrack);
@@ -759,7 +768,18 @@ Ret AudioContext::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackForm
         }
     });
 
+    setMode(RenderMode::OfflineMode);
     Ret ret = writer->write();
+
+    //! NOTE Restore source (mixer) state
+    // Changes to the source and audio engine state
+    // must be performed via execOperation - so that synchronization with the audio driver process works
+    IAudioEngine::Operation func = [this]() {
+        m_mixer->setOutputSpec(audioEngine()->outputSpec());
+        setMode(RenderMode::IdleMode);
+    };
+    audioEngine()->execOperation(OperationType::LongOperation, func);
+
     m_player->seek(0);
 
     m_saveSoundTracksProgress.aborted.disconnect(this);

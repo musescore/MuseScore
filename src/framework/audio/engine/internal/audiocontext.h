@@ -47,6 +47,10 @@ public:
     Ret init(const RenderConstraints& consts) override;
     void deinit() override;
 
+    // Config
+    void setMode(const RenderMode newMode) override;
+    void setOutputSpec(const OutputSpec& outputSpec) override;
+
     // Tracks
     RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, io::IODevice* playbackData, const AudioParams& params) override;
     RetVal2<TrackId, AudioParams> addTrack(const std::string& trackName, const mpe::PlaybackData& playbackData,
@@ -134,6 +138,7 @@ private:
     const Track* track(const TrackId id) const;
 
     // IGetTrackSource
+    sample_rate_t sampleRate() const override;
     ITrackAudioInputPtr trackSource(const TrackId trackId) const override;
     std::vector<ITrackAudioInputPtr> allTracksSources() const override;
     // -----
@@ -145,6 +150,7 @@ private:
 
     modularity::IoCID m_ctxId = 0;
 
+    OutputSpec m_outputSpec;
     IEnginePlayerPtr m_player = nullptr;
     std::shared_ptr<Mixer> m_mixer;
 

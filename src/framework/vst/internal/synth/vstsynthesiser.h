@@ -57,8 +57,7 @@ public:
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     const mpe::PlaybackData& playbackData() const override;
 
-    bool isActive() const override;
-    void setIsActive(const bool isActive) override;
+    void setMode(const muse::audio::RenderMode mode) override;
 
     muse::audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
@@ -70,7 +69,6 @@ public:
     muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
 
 private:
-    void updateRenderingMode(const audio::RenderMode mode) override;
 
     void toggleVolumeGain(const bool isActive);
     audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);

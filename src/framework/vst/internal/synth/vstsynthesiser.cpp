@@ -89,15 +89,6 @@ void VstSynthesiser::init(const OutputSpec& spec)
     });
 }
 
-void VstSynthesiser::updateRenderingMode(const RenderMode mode)
-{
-    if (mode == RenderMode::OfflineMode) {
-        m_vstAudioClient->setProcessMode(VstProcessMode::kOffline);
-    } else {
-        m_vstAudioClient->setProcessMode(VstProcessMode::kRealtime);
-    }
-}
-
 void VstSynthesiser::toggleVolumeGain(const bool isActive)
 {
     static constexpr muse::audio::gain_t NON_ACTIVE_GAIN = 0.5f;
@@ -153,21 +144,25 @@ const mpe::PlaybackData& VstSynthesiser::playbackData() const
     return m_sequencer.playbackData();
 }
 
-bool VstSynthesiser::isActive() const
+void VstSynthesiser::setMode(const muse::audio::RenderMode mode)
 {
-    return m_sequencer.isActive();
-}
-
-void VstSynthesiser::setIsActive(const bool isActive)
-{
-    if (m_sequencer.isActive() == isActive) {
+    if (m_mode == mode) {
         return;
     }
 
+    AbstractSynthesizer::setMode(mode);
+
+    bool isActive = isModeActive(mode);
     m_sequencer.setActive(isActive);
     toggleVolumeGain(isActive);
     m_vstAudioClient->setIsPlaying(isActive);
     m_vstAudioClient->setIsActive(isActive);
+
+    if (mode == RenderMode::OfflineMode) {
+        m_vstAudioClient->setProcessMode(VstProcessMode::kOffline);
+    } else {
+        m_vstAudioClient->setProcessMode(VstProcessMode::kRealtime);
+    }
 }
 
 muse::audio::msecs_t VstSynthesiser::playbackPosition() const
@@ -180,7 +175,7 @@ void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
     m_sequencer.setPlaybackPosition(newPosition);
     m_currentPositionSamples = microSecsToSamples(newPosition, m_outputSpec.sampleRate);
 
-    if (isActive()) {
+    if (m_sequencer.isActive()) {
         m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
     }
 }

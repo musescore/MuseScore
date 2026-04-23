@@ -44,9 +44,8 @@ public:
 
     TrackId trackId() const override;
 
-    bool isActive() const override;
-    void setIsActive(const bool active) override;
-
+    void setMode(const RenderMode mode) override;
+    RenderMode mode() const override;
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
@@ -72,7 +71,7 @@ public:
 private:
     struct SynthCtx
     {
-        bool isActive = false;
+        RenderMode mode = RenderMode::Undefined;
         msecs_t playbackPosition = -1;
 
         bool isValid() const

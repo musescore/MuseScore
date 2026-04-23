@@ -33,10 +33,20 @@ AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params)
     : m_params(params)
 {
     ONLY_AUDIO_ENGINE_THREAD;
+}
 
-    audioEngine()->modeChanged().onReceive(this, [this](RenderMode mode) {
-        updateRenderingMode(mode);
-    });
+void AbstractSynthesizer::setMode(const RenderMode mode)
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    m_mode = mode;
+}
+
+RenderMode AbstractSynthesizer::mode() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    return m_mode;
 }
 
 const AudioInputParams& AbstractSynthesizer::params() const
@@ -82,11 +92,6 @@ async::Notification AbstractSynthesizer::readyToPlayChanged() const
     return m_readyToPlayChanged;
 }
 
-void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-}
-
 bool AbstractSynthesizer::hasPendingChunks() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
@@ -109,13 +114,6 @@ InputProcessingProgress AbstractSynthesizer::inputProcessingProgress() const
 void AbstractSynthesizer::clearCache()
 {
     ONLY_AUDIO_ENGINE_THREAD;
-}
-
-RenderMode AbstractSynthesizer::currentRenderMode() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-
-    return audioEngine()->mode();
 }
 
 muse::audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const

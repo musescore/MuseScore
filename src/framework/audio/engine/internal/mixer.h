@@ -70,10 +70,9 @@ public:
     void setTracksToProcessWhenIdle(const std::unordered_set<TrackId>& trackIds);
 
     // IAudioSource
+    void setMode(const RenderMode mode) override;
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
-
-    void setIsActive(bool arg) override;
 
     samples_t process(float* outBuffer, samples_t samplesPerChannel) override;
 

@@ -57,8 +57,8 @@ public:
     void flushSound() override;
 
     bool isValid() const override;
-    bool isActive() const override;
-    void setIsActive(bool arg) override;
+    RenderMode mode() const override;
+    void setMode(const RenderMode mode) override;
 
     bool hasPendingChunks() const override;
     void processInput() override;

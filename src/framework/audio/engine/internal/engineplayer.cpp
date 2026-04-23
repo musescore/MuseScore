@@ -33,7 +33,7 @@ using namespace muse::audio::engine;
 using namespace muse::async;
 
 EnginePlayer::EnginePlayer(IGetTrackSource* getTracks)
-    : m_getTracks(getTracks)
+    : m_trackSource(getTracks)
 {
     m_status.set(PlaybackStatus::Stopped);
     m_isActive.set(false);
@@ -159,7 +159,6 @@ void EnginePlayer::play(const secs_t delay)
     }
 
     m_countDown = delay;
-    audioEngine()->setMode(RenderMode::RealTimeMode);
     m_status.set(PlaybackStatus::Running);
 }
 
@@ -173,8 +172,12 @@ void EnginePlayer::seek(const secs_t newPosition, const bool flushSound)
     //     return;
     // }
 
+    IF_ASSERT_FAILED(m_trackSource) {
+        return;
+    }
+
     m_flushSoundOnSeek = flushSound;
-    m_currentPosition = TimePosition::fromTime(newPosition, audioEngine()->outputSpec().sampleRate);
+    m_currentPosition = TimePosition::fromTime(newPosition, m_trackSource->sampleRate());
     m_timeChanged.send(m_currentPosition.time());
     seekAllTracks(newPosition);
     m_flushSoundOnSeek = true;
@@ -188,7 +191,6 @@ void EnginePlayer::stop()
         return;
     }
 
-    audioEngine()->setMode(RenderMode::IdleMode);
     m_status.set(PlaybackStatus::Stopped);
     m_countDown = 0.;
     seek(0.);
@@ -203,7 +205,6 @@ void EnginePlayer::pause()
         return;
     }
 
-    audioEngine()->setMode(RenderMode::IdleMode);
     m_status.set(PlaybackStatus::Paused);
     m_notYetReadyToPlayTrackIdSet.clear();
 }
@@ -218,7 +219,6 @@ void EnginePlayer::resume(const secs_t delay)
 
     m_countDown = delay;
     seek(m_currentPosition.time());
-    audioEngine()->setMode(RenderMode::RealTimeMode);
     m_status.set(PlaybackStatus::Running);
 }
 
@@ -293,22 +293,22 @@ Channel<bool> EnginePlayer::isActiveChanged() const
 
 void EnginePlayer::seekAllTracks(const secs_t newPosition)
 {
-    IF_ASSERT_FAILED(m_getTracks) {
+    IF_ASSERT_FAILED(m_trackSource) {
         return;
     }
 
-    for (const auto& source : m_getTracks->allTracksSources()) {
+    for (const auto& source : m_trackSource->allTracksSources()) {
         source->seek(secsToMicrosecs(newPosition), m_flushSoundOnSeek);
     }
 }
 
 void EnginePlayer::flushAllTracks()
 {
-    IF_ASSERT_FAILED(m_getTracks) {
+    IF_ASSERT_FAILED(m_trackSource) {
         return;
     }
 
-    for (const auto& source : m_getTracks->allTracksSources()) {
+    for (const auto& source : m_trackSource->allTracksSources()) {
         source->flush();
     }
 }
@@ -317,14 +317,14 @@ void EnginePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyC
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
-    IF_ASSERT_FAILED(m_getTracks) {
+    IF_ASSERT_FAILED(m_trackSource) {
         return;
     }
 
     std::vector<ITrackAudioInputPtr> notYetReadyToPlayTracks;
     m_notYetReadyToPlayTrackIdSet.clear();
 
-    for (const auto& source : m_getTracks->allTracksSources()) {
+    for (const auto& source : m_trackSource->allTracksSources()) {
         source->prepareToPlay();
 
         if (!source->readyToPlay()) {
@@ -347,7 +347,7 @@ void EnginePlayer::prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyC
                 allTracksReadyCallback();
             }
 
-            ITrackAudioInputPtr source = m_getTracks->trackSource(trackId);
+            ITrackAudioInputPtr source = m_trackSource->trackSource(trackId);
             IF_ASSERT_FAILED(source) {
                 return;
             }

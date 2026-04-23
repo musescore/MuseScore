@@ -63,8 +63,8 @@ public:
 
     AudioSignalChanges audioSignalChanges() const override;
 
-    bool isActive() const override;
-    void setIsActive(bool arg) override;
+    RenderMode mode() const override;
+    void setMode(const RenderMode mode) override;
 
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
@@ -78,6 +78,7 @@ private:
 
     TrackId m_trackId = -1;
 
+    RenderMode m_mode = RenderMode::Undefined;
     OutputSpec m_outputSpec;
     AudioOutputParams m_params;
 

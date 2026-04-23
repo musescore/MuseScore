@@ -32,6 +32,7 @@ class IGetTrackSource
 public:
     virtual ~IGetTrackSource() = default;
 
+    virtual sample_rate_t sampleRate() const = 0;
     virtual ITrackAudioInputPtr trackSource(const TrackId trackId) const = 0;
     virtual std::vector<ITrackAudioInputPtr> allTracksSources() const = 0;
 };
