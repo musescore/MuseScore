@@ -180,6 +180,9 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 #endif
 
+        makeItem("video", QT_TRANSLATE_NOOP("preferences", "Video"), IconCode::Code::VIDEO,
+                 "Preferences/VideoPreferencesPage.qml"),
+
         makeItem("percussion", QT_TRANSLATE_NOOP("preferences", "Percussion"), IconCode::Code::PERCUSSION,
                  "Preferences/PercussionPreferencesPage.qml"),
 

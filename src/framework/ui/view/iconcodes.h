@@ -539,6 +539,8 @@ enum class Code : char16_t {
     FILLED_ARROW_LEFT = 0xF4BE,
     FILLED_ARROW_RIGHT = 0xF4BF,
 
+    VIDEO = 0xF4C2,
+
     NONE = 0xFFFF
 };
 
