@@ -26,9 +26,10 @@
 #include "global/modularity/ioc.h"
 #include "audio/common/rpc/irpcchannel.h"
 #include "iaudioengine.h"
-#include "../iengineplayback.h"
 #include "../isoundfontrepository.h"
 #include "../iaudioengineconfiguration.h"
+
+#include "iaudiocontext.h"
 
 namespace muse::audio::engine {
 class EngineRpcController : public async::Asyncable
@@ -37,7 +38,6 @@ class EngineRpcController : public async::Asyncable
     GlobalInject<synth::ISoundFontRepository> soundFontRepository;
     GlobalInject<rpc::IRpcChannel> channel;
     GlobalInject<IAudioEngine> audioEngine;
-    GlobalInject<IEnginePlayback> playback;
 
 public:
     EngineRpcController() = default;
@@ -46,6 +46,8 @@ public:
     void deinit();
 
 private:
+
+    std::shared_ptr<IAudioContext> audioContext() const;
 
     void onLongMethod(rpc::Method method, const rpc::Handler& h);
     void onQuickMethod(rpc::Method method, const rpc::Handler& h);

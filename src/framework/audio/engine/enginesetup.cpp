@@ -31,7 +31,6 @@
 
 #include "internal/audioengine.h"
 #include "internal/audiofactory.h"
-#include "internal/engineplayback.h"
 #include "internal/transporteventsdispatcher.h"
 
 using namespace muse::audio::engine;
@@ -57,7 +56,6 @@ void EngineGlobalSetup::registerExports()
     m_fxResolver = std::make_shared<fx::FxResolver>();
     m_soundFontRepository = std::make_shared<synth::SoundFontRepository>();
     m_audioEngine = std::make_shared<AudioEngine>();
-    m_playback = std::make_shared<EnginePlayback>();
     m_transportEventsDispatcher = std::make_shared<TransportEventsDispatcher>();
 
     globalIoc()->registerExport<IAudioFactory>(mname, new AudioFactory());
@@ -66,7 +64,6 @@ void EngineGlobalSetup::registerExports()
     globalIoc()->registerExport<fx::IFxResolver>(mname, m_fxResolver);
     globalIoc()->registerExport<synth::ISoundFontRepository>(mname, m_soundFontRepository);
     globalIoc()->registerExport<IAudioEngine>(mname, m_audioEngine);
-    globalIoc()->registerExport<IEnginePlayback>(mname, m_playback);
     globalIoc()->registerExport<ITransportEventsDispatcher>(mname, m_transportEventsDispatcher);
 }
 
@@ -84,7 +81,6 @@ void EngineGlobalSetup::onDeinit()
     globalIoc()->unregister<synth::ISoundFontRepository>(mname);
     globalIoc()->unregister<fx::IFxResolver>(mname);
     globalIoc()->unregister<IAudioEngine>(mname);
-    globalIoc()->unregister<IEnginePlayback>(mname);
     globalIoc()->unregister<ITransportEventsDispatcher>(mname);
     globalIoc()->unregister<IAudioFactory>(mname);
 }

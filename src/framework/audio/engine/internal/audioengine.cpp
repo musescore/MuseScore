@@ -65,8 +65,6 @@ Ret AudioEngine::init(const OutputSpec& outputSpec, const RenderConstraints& con
     m_outputSpec = outputSpec;
     m_renderConsts = consts;
 
-    m_context->init(outputSpec, consts);
-
     setMode(RenderMode::IdleMode);
 
     m_operationType = OperationType::NoOperation;
@@ -132,9 +130,6 @@ void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
            << ", audioChannelCount: " << outputSpec.audioChannelCount;
 
     m_outputSpec = outputSpec;
-
-    m_context->setOutputSpec(outputSpec);
-
     m_outputSpecChanged.send(outputSpec);
 }
 
@@ -164,22 +159,6 @@ void AudioEngine::setMode(const RenderMode newMode)
     }
 
     m_mode = newMode;
-
-    switch (m_mode) {
-    case RenderMode::RealTimeMode:
-        m_context->setIsIdle(false);
-        break;
-    case RenderMode::IdleMode:
-        m_context->setIsIdle(true);
-        break;
-    case RenderMode::OfflineMode:
-        m_context->setIsIdle(false);
-        break;
-    case RenderMode::Undefined:
-        UNREACHABLE;
-        break;
-    }
-
     m_modeChanged.send(m_mode);
 }
 
