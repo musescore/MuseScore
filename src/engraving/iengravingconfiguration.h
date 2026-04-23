@@ -55,11 +55,6 @@ public:
     virtual Color defaultColor() const = 0;
     virtual Color scoreInversionColor() const = 0;
     virtual Color lassoColor() const = 0;
-    virtual Color warningColor() const = 0;
-    virtual Color warningSelectedColor() const = 0;
-    virtual Color criticalColor() const = 0;
-    virtual Color criticalBackgroundColor() const = 0;
-    virtual Color criticalSelectedColor() const = 0;
     virtual Color thumbnailBackgroundColor() const = 0;
     virtual Color noteBackgroundColor() const = 0;
     virtual Color fontPrimaryColor() const = 0;
@@ -79,6 +74,15 @@ public:
 
     virtual Color formattingColor() const = 0;
     virtual muse::async::Channel<Color> formattingColorChanged() const = 0;
+
+    virtual Color warningColor() const = 0;
+    virtual Color warningSelectedColor() const = 0;
+    virtual muse::async::Channel<Color> warningColorChanged() const = 0;
+
+    virtual Color criticalColor() const = 0;
+    virtual Color criticalBackgroundColor() const = 0;
+    virtual Color criticalSelectedColor() const = 0;
+    virtual muse::async::Channel<Color> criticalColorChanged() const = 0;
 
     virtual Color invisibleColor() const = 0;
     virtual muse::async::Channel<Color> invisibleColorChanged() const = 0;

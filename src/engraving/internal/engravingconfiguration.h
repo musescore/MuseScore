@@ -61,11 +61,6 @@ public:
     Color defaultColor() const override;
     Color scoreInversionColor() const override;
     Color lassoColor() const override;
-    Color warningColor() const override;
-    Color warningSelectedColor() const override;
-    Color criticalColor() const override;
-    Color criticalBackgroundColor() const override;
-    Color criticalSelectedColor() const override;
     Color thumbnailBackgroundColor() const override;
     Color noteBackgroundColor() const override;
     Color fontPrimaryColor() const override;
@@ -87,6 +82,15 @@ public:
 
     Color formattingColor() const override;
     muse::async::Channel<Color> formattingColorChanged() const override;
+
+    Color warningColor() const override;
+    Color warningSelectedColor() const override;
+    muse::async::Channel<Color> warningColorChanged() const override;
+
+    Color criticalColor() const override;
+    Color criticalBackgroundColor() const override;
+    Color criticalSelectedColor() const override;
+    muse::async::Channel<Color> criticalColorChanged() const override;
 
     Color frameColor() const override;
     muse::async::Channel<Color> frameColorChanged() const override;
@@ -122,6 +126,8 @@ private:
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
+    muse::async::Channel<Color> m_warningColorChanged;
+    muse::async::Channel<Color> m_criticalColorChanged;
     muse::async::Channel<Color> m_frameColorChanged;
     muse::async::Channel<Color> m_invisibleColorChanged;
     muse::async::Channel<Color> m_unlinkedColorChanged;
