@@ -3990,9 +3990,7 @@ void Score::cmdDeleteSelection()
                                                staff2track(selection().staffStart()), staff2track(selection().staffEnd()),
                                                selectionFilter(), selection().rangeContainsMultiNoteChords());
     } else {
-        // deleteItem modifies selection().elements() list,
-        // so we need a local copy:
-        std::vector<EngravingItem*> el = selection().elements();
+        std::list<EngravingItem*> el = selection().uniqueElements();
 
         // keep track of linked elements that are deleted implicitly
         // so we don't try to delete them twice if they are also in selection

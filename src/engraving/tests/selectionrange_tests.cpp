@@ -327,3 +327,55 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete06_partialnestedtuplets.mscx"),
                                             SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
 }
+
+TEST_F(Engraving_SelectionRangeTests, deleteSelectionListElements)
+{
+    MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + u"list-delete-crash.mscx");
+    EXPECT_TRUE(score);
+
+    std::vector<EngravingItem*> notes;
+    std::vector<EngravingItem*> harmonies;
+    std::vector<EngravingItem*> rests;
+
+    auto collectAndCheckCount = [&](size_t noteCount, size_t harmonyCount, size_t restCount) {
+        notes.clear();
+        harmonies.clear();
+        rests.clear();
+
+        score->scanElements([&](EngravingItem* item) {
+            if (item->isNote()) {
+                notes.push_back(item);
+            } else if (item->isHarmony()) {
+                harmonies.push_back(item);
+            } else if (item->isRest()) {
+                rests.push_back(item);
+            }
+        });
+
+        EXPECT_EQ(noteCount, notes.size());
+        EXPECT_EQ(harmonyCount, harmonies.size());
+        EXPECT_EQ(restCount, rests.size());
+    };
+
+    collectAndCheckCount(4, 2, 33);
+
+    score->select(notes.front(), SelectType::SINGLE);
+    score->select(notes.back(), SelectType::RANGE);
+    score->deselect(harmonies.front());
+    score->selection().setState(SelState::LIST);
+
+    EXPECT_EQ(18, score->selection().elements().size());
+    EXPECT_EQ(13, score->selection().uniqueElements().size());
+
+    score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    collectAndCheckCount(0, 2, 36);
+
+    score->undoRedo(true, nullptr);
+
+    collectAndCheckCount(4, 2, 33);
+
+    delete score;
+}
