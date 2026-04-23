@@ -36,6 +36,7 @@
 #include "engraving/dom/durationtype.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/expression.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
@@ -50,13 +51,16 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/system.h"
+#include "engraving/dom/systemtext.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
@@ -1326,7 +1330,15 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
     //Render everything that is in Voice 1
     for (auto seg = measure->first(); seg; seg = seg->next()) {
         for (EngravingItem* annotation : seg->annotations()) {
-            if (annotation->isTempoText()) {
+            if (annotation->isExpression()) {
+                beiz->addEngravingItem(annotation, brailleExpressionText(toExpression(annotation), staffCount));           // Expression text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+            } else if (annotation->isRehearsalMark()) {
+                beiz->addEngravingItem(annotation, brailleRehearsalMark(toRehearsalMark(annotation), staffCount));           // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.  // Rehearsal marks are not rendered in the staff they are attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+            } else if (annotation->isStaffText()) {
+                beiz->addEngravingItem(annotation, brailleStaffText(toStaffText(annotation), staffCount));          // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+            } else if (annotation->isSystemText()) {
+                beiz->addEngravingItem(annotation, brailleSystemText(toSystemText(annotation), staffCount));
+            } else if (annotation->isTempoText()) {
                 beiz->addEngravingItem(annotation, brailleTempoText(toTempoText(annotation), staffCount));
             }
             if (annotation->track() == staffCount * VOICES) {
@@ -2666,6 +2678,50 @@ QString Braille::brailleRest(Rest* rest)
     result += fermata;
 
     return result;
+}
+
+QString Braille::brailleExpressionText(Expression* expression, int staffIdx)
+{
+    if ((!expression) || (expression->plainText().isEmpty())) {
+        return QString();
+    }
+
+    // Expression text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+    resetOctave(expression->staffIdx());
+    return ">" + TextToUEBBraille().braille(expression->plainText());
+}
+
+QString Braille::brailleRehearsalMark(RehearsalMark* rehearsalMark, int staffIdx)
+{
+    if ((!rehearsalMark) || (rehearsalMark->plainText().isEmpty())) {
+        return QString();
+    }
+
+    resetOctave(rehearsalMark->staffIdx());
+    // Need a reference
+    return ">" + TextToUEBBraille().braille(rehearsalMark->plainText());
+}
+
+QString Braille::brailleStaffText(StaffText* staffText, int staffIdx)
+{
+    if (!staffText || staffText->plainText().isEmpty()) {
+        return QString();
+    }
+
+    // Staff text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+    resetOctave(staffText->staffIdx());
+    return ">" + TextToUEBBraille().braille(staffText->plainText());
+}
+
+QString Braille::brailleSystemText(SystemText* systemText, int staffIdx)
+{
+    if (!systemText || systemText->plainText().isEmpty()) {
+        return QString();
+    }
+
+    // System text is not rendered in the staff it is attached to, but in the first staff. See 11.1.1. Page 87. Music Braille Code 2015.
+    resetOctave(systemText->staffIdx());
+    return ">" + TextToUEBBraille().braille(systemText->plainText());
 }
 
 QString Braille::brailleTempoText(TempoText* tempoText, int staffIdx)
