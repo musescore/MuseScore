@@ -100,7 +100,7 @@ Ret Mixer::addChannel(ITrackAudioOutputPtr output)
             channel->setMode(mode());
             ITrackAudioInputPtr source = std::static_pointer_cast<ITrackAudioInput>(channel->source());
             if (source) {
-                source->seek(secsToMicrosecs(playbackPosition().time()));
+                source->seek(playbackPosition());
             }
         }
     });

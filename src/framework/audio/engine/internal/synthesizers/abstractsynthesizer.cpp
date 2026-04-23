@@ -123,5 +123,5 @@ muse::audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samples
 
 samples_t AbstractSynthesizer::microSecsToSamples(const msecs_t msec, const samples_t sampleRate) const
 {
-    return (msec / 1000000.f) * sampleRate;
+    return (msec.raw() / 1000000.f) * sampleRate;
 }

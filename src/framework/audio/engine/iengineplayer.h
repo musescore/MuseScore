@@ -37,7 +37,7 @@ public:
     virtual async::Promise<Ret> prepareToPlay() = 0;
 
     virtual void play(const secs_t delay = 0) = 0;
-    virtual void seek(const secs_t newPosition, const bool flushSound = true) = 0;
+    virtual void seek(const TimePosition& position, const bool flushSound = true) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
     virtual void resume(const secs_t delay = 0) = 0;

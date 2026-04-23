@@ -48,11 +48,13 @@ AudioContext::AudioContext(const modularity::IoCID& ctxId)
 Ret AudioContext::init(const RenderConstraints& consts)
 {
     m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
-    m_mixer->setPlayhead(std::dynamic_pointer_cast<IPlayhead>(m_player));
+    m_mixer->setPlayhead(std::static_pointer_cast<IPlayhead>(m_player));
 
     OutputSpec outputSpec = audioEngine()->outputSpec();
     setOutputSpec(outputSpec);
     setMode(ProcessMode::Idle);
+
+    m_player->seek(TimePosition::zero(outputSpec.sampleRate));
 
     m_player->isActiveChanged().onReceive(this, [this](bool isActive) {
         setMode(isActive ? ProcessMode::Playing : ProcessMode::Idle);
@@ -101,6 +103,7 @@ void AudioContext::setOutputSpec(const OutputSpec& outputSpec)
     ONLY_AUDIO_ENGINE_THREAD;
     m_outputSpec = outputSpec;
     m_mixer->setOutputSpec(outputSpec);
+    m_player->seek(TimePosition::zero(outputSpec.sampleRate));
 }
 
 // Setup tracks
@@ -249,6 +252,7 @@ void AudioContext::doAddTrack(const Track& track)
     const TrackId trackId = track.id;
 
     if (track.source) {
+        track.source->seek(m_player->currentPosition());
         track.source->inputParamsChanged().onReceive(this, [this, trackId](const AudioInputParams& params) {
             m_inputParamsChanged.send(trackId, params);
         });
@@ -350,12 +354,6 @@ RetVal<TrackName> AudioContext::trackName(const TrackId trackId) const
     }
 
     return RetVal<TrackName>::make_ret((int)Err::InvalidTrackId, "no track");
-}
-
-sample_rate_t AudioContext::sampleRate() const
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-    return m_outputSpec.sampleRate;
 }
 
 ITrackAudioInputPtr AudioContext::trackSource(const TrackId trackId) const
@@ -564,7 +562,7 @@ void AudioContext::play(const secs_t delay)
 void AudioContext::seek(const secs_t newPosition, const bool flushSound)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    m_player->seek(newPosition, flushSound);
+    m_player->seek(TimePosition::fromTime(newPosition, m_outputSpec.sampleRate), flushSound);
 }
 
 void AudioContext::stop()
@@ -635,7 +633,7 @@ async::Promise<Ret> AudioContext::saveSoundTrack(io::IODevice& dstDevice, const 
 
 #ifdef MUSE_MODULE_AUDIO_EXPORT
         m_player->stop();
-        m_player->seek(0);
+        m_player->seek(TimePosition::zero(m_outputSpec.sampleRate));
 
         const bool lazyProcessingWasEnabled = configuration()->isLazyProcessingOfOnlineSoundsEnabled();
         configuration()->setIsLazyProcessingOfOnlineSoundsEnabled(false);
@@ -780,7 +778,7 @@ Ret AudioContext::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackForm
     };
     audioEngine()->execOperation(OperationType::LongOperation, func);
 
-    m_player->seek(0);
+    m_player->seek(TimePosition::zero(m_outputSpec.sampleRate));
 
     m_saveSoundTracksProgress.aborted.disconnect(this);
 

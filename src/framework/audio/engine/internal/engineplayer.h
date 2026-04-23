@@ -40,7 +40,7 @@ public:
     async::Promise<Ret> prepareToPlay() override;
 
     void play(const secs_t delay = 0) override;
-    void seek(const secs_t newPosition, const bool flushSound = true) override;
+    void seek(const TimePosition& position, const bool flushSound = true) override;
     void stop() override;
     void pause() override;
     void resume(const secs_t delay = 0) override;
@@ -59,26 +59,33 @@ public:
     secs_t playbackPosition() const override;
     async::Channel<secs_t> playbackPositionChanged() const override;
 
+    // IPlayhead interface
+    void forward(const TimePosition& delta) override;
+    const TimePosition& currentPosition() const override;
+
 private:
 
     void onStatusChanged(const PlaybackStatus status);
 
     // Processing thread functions
-    // IPlayhead interface
-    void forward(const TimePosition& delta) override;
-    const TimePosition& currentPosition() const override;
-
     TimePosition proc_onTimeChanged(const TimePosition& delta);
     // ----------------------------
 
-    enum class TimeEvent {
+    enum class TimeEventType {
+        Undefined,
         PlaybackEnded,
         CountDownEnded,
         LoopEnded,
     };
+
+    struct TimeEvent {
+        TimeEventType type = TimeEventType::Undefined;
+        TimePosition position;
+    };
+
     void onTimeEvent(const TimeEvent event);
 
-    void seekAllTracks(const secs_t newPosition);
+    void seekAllTracks(const TimePosition& position);
     void flushAllTracks();
 
     using AllTracksReadyCallback = std::function<void ()>;

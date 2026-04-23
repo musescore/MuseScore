@@ -51,7 +51,7 @@ public:
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
-    void seek(const msecs_t newPositionMsecs, const bool flushSound = true) override;
+    void seek(const TimePosition& position, const bool flushSound = true) override;
     void flush() override;
 
     const AudioInputParams& inputParams() const override;
@@ -72,12 +72,8 @@ private:
     struct SynthCtx
     {
         ProcessMode mode = ProcessMode::Undefined;
-        msecs_t playbackPosition = -1;
-
-        bool isValid() const
-        {
-            return playbackPosition >= 0;
-        }
+        TimePosition playbackPosition;
+        bool isValid() const { return mode != ProcessMode::Undefined; }
     };
 
     void setupSource();

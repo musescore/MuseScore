@@ -47,8 +47,8 @@ public:
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
-    msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const msecs_t newPosition) override;
+    TimePosition playbackPosition() const override;
+    void setPlaybackPosition(const TimePosition& position) override;
 
     void prepareToPlay() override;
     bool readyToPlay() const override;

@@ -41,14 +41,14 @@
 #include "log.h"
 
 namespace muse::audio {
-using msecs_t = int64_t;
+using msecs_t = muse::msecs_t;
 using secs_t = muse::secs_t;
 
-inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms / 1000.0); }
-inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us / 1000000.0); }
+inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms.raw() / 1000.0); }
+inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us.raw() / 1000000.0); }
 
-inline msecs_t secsToMilisecs(secs_t s) { return msecs_t(s * 1000.0); }
-inline msecs_t secsToMicrosecs(secs_t s) { return msecs_t(s * 1000000.0); }
+inline msecs_t secsToMilisecs(secs_t s) { return msecs_t(s.raw() * 1000.0); }
+inline msecs_t secsToMicrosecs(secs_t s) { return msecs_t(s.raw() * 1000000.0); }
 
 using samples_t = uint64_t;
 using sample_rate_t = uint64_t;
@@ -113,6 +113,49 @@ struct TimePosition {
 
     inline bool operator!=(const TimePosition& other) const { return !this->operator==(other); }
 
+    inline bool isValid() const { return m_sampleRate > 0; }
+
+    inline void forward(samples_t delta)
+    {
+        IF_ASSERT_FAILED(m_sampleRate > 0) {
+            return;
+        }
+        m_samples += delta;
+        m_time += static_cast<double>(delta) / m_sampleRate;
+    }
+
+    inline void forward(const TimePosition& delta)
+    {
+        IF_ASSERT_FAILED(delta.sampleRate() == m_sampleRate) {
+            return;
+        }
+        forward(delta.samples());
+    }
+
+    inline TimePosition forwarded(samples_t delta) const
+    {
+        IF_ASSERT_FAILED(m_sampleRate > 0) {
+            return TimePosition();
+        }
+        return TimePosition(m_samples + delta, m_sampleRate);
+    }
+
+    inline TimePosition forwarded(const TimePosition& delta) const
+    {
+        IF_ASSERT_FAILED(delta.sampleRate() == m_sampleRate) {
+            return TimePosition();
+        }
+        return forwarded(delta.samples());
+    }
+
+    static inline TimePosition zero(sample_rate_t sampleRate)
+    {
+        IF_ASSERT_FAILED(sampleRate > 0) {
+            return TimePosition();
+        }
+        return TimePosition(0, sampleRate);
+    }
+
     static inline TimePosition fromSamples(samples_t samples, sample_rate_t sampleRate)
     {
         IF_ASSERT_FAILED(sampleRate > 0) {
@@ -144,7 +187,7 @@ private:
 
     samples_t m_samples = 0;
     sample_rate_t m_sampleRate = 0;
-    secs_t m_time = 0.0; //cache
+    secs_t m_time = 0.0; // cache
 };
 
 struct RenderConstraints {

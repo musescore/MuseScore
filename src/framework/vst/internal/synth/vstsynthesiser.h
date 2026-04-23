@@ -59,8 +59,8 @@ public:
 
     void setMode(const muse::audio::ProcessMode mode) override;
 
-    muse::audio::msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
+    muse::audio::TimePosition playbackPosition() const override;
+    void setPlaybackPosition(const muse::audio::TimePosition& position) override;
 
     // IAudioSource
     void setOutputSpec(const audio::OutputSpec& spec) override;
@@ -86,7 +86,7 @@ private:
     bool m_inited = false;
     bool m_useDynamicEvents = false;
 
-    audio::samples_t m_currentPositionSamples = 0;
+    audio::TimePosition m_currentPosition;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;

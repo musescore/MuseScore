@@ -41,7 +41,7 @@ static constexpr bool FLUID_DEBUG = false;
 
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;
-static constexpr msecs_t MIN_NOTE_LENGTH = 10;
+static constexpr msecs_t MIN_NOTE_LENGTH = msecs_t::make(10);
 
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
@@ -381,14 +381,18 @@ void FluidSynth::flushSound()
     m_flushSoundRequested = true;
 }
 
-msecs_t FluidSynth::playbackPosition() const
+TimePosition FluidSynth::playbackPosition() const
 {
-    return m_sequencer.playbackPosition();
+    return TimePosition::fromTime(muse::msecs_to_secs(m_sequencer.playbackPosition()), m_outputSpec.sampleRate);
 }
 
-void FluidSynth::setPlaybackPosition(const msecs_t newPosition)
+void FluidSynth::setPlaybackPosition(const TimePosition& position)
 {
-    m_sequencer.setPlaybackPosition(newPosition);
+    IF_ASSERT_FAILED(position.isValid()) {
+        return;
+    }
+
+    m_sequencer.setPlaybackPosition(muse::secs_to_msecs(position.time()));
 
     if (m_sequencer.isActive()) {
         setExpressionLevel(m_sequencer.currentExpressionLevel());
