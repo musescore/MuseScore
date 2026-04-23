@@ -185,7 +185,7 @@ void VstPluginInstance::rescanParams()
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
-    if (m_updatingState) {
+    if (!m_isLoaded || m_updatingState) {
         return;
     }
 
