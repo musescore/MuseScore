@@ -1571,7 +1571,6 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
     segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
-    segment->mutldata()->setMask(Shape());
 
     const Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick()); // Why is this here?? (M.S.)
@@ -1632,7 +1631,6 @@ TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContex
     segment->setTrack(item->track());
     segment->setSystem(system);
     segment->resetAdjustmentOffset();
-    segment->mutldata()->setMask(Shape());
 
     if (chord) {
         segment->setStaffMove(static_cast<int>(chord->vStaffIdx() - segment->staffIdx()));
@@ -3163,7 +3161,6 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, const PointF& p1, const Poi
     ldata->setIsSkipDraw(false);
 
     ldata->setPos(PointF());
-    ldata->setMask(Shape());
     item->ups(Grip::START).p = p1;
     item->ups(Grip::END).p   = p2;
     item->setExtraHeight(0.0);

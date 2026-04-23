@@ -466,7 +466,7 @@ void Spanner::add(EngravingItem* e)
     ls->setSelected(selected());
     ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
-    ls->setZ(z());
+    ls->EngravingItem::setZ(z());
     m_segments.push_back(ls);
     e->added();
 }
