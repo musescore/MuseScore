@@ -85,6 +85,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
                     continue;
                 }
+                spannerSeg->mutldata()->setMask(Shape());
                 AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
                 if (slurTieMaskOverride == AutoOnOff::ON
                     || (slurTieMaskOverride == AutoOnOff::AUTO
