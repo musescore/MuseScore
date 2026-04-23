@@ -144,7 +144,7 @@ const mpe::PlaybackData& VstSynthesiser::playbackData() const
     return m_sequencer.playbackData();
 }
 
-void VstSynthesiser::setMode(const muse::audio::RenderMode mode)
+void VstSynthesiser::setMode(const muse::audio::ProcessMode mode)
 {
     if (m_mode == mode) {
         return;
@@ -152,13 +152,13 @@ void VstSynthesiser::setMode(const muse::audio::RenderMode mode)
 
     AbstractSynthesizer::setMode(mode);
 
-    bool isActive = isModeActive(mode);
+    bool isActive = isModePlaying(mode);
     m_sequencer.setActive(isActive);
     toggleVolumeGain(isActive);
     m_vstAudioClient->setIsPlaying(isActive);
     m_vstAudioClient->setIsActive(isActive);
 
-    if (mode == RenderMode::OfflineMode) {
+    if (mode == ProcessMode::PlayingOffline) {
         m_vstAudioClient->setProcessMode(VstProcessMode::kOffline);
     } else {
         m_vstAudioClient->setProcessMode(VstProcessMode::kRealtime);

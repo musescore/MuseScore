@@ -37,7 +37,7 @@ public:
     virtual void deinit() = 0;
 
     // Config
-    virtual void setMode(const RenderMode newMode) = 0;
+    virtual void setMode(const ProcessMode newMode) = 0;
     virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
 
     // Tracks

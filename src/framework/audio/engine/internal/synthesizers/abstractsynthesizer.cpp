@@ -35,14 +35,14 @@ AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params)
     ONLY_AUDIO_ENGINE_THREAD;
 }
 
-void AbstractSynthesizer::setMode(const RenderMode mode)
+void AbstractSynthesizer::setMode(const ProcessMode mode)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     m_mode = mode;
 }
 
-RenderMode AbstractSynthesizer::mode() const
+ProcessMode AbstractSynthesizer::mode() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 

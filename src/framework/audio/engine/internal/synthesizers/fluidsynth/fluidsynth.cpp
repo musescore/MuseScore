@@ -259,7 +259,7 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     return ret == FLUID_OK;
 }
 
-void FluidSynth::setMode(const RenderMode mode)
+void FluidSynth::setMode(const ProcessMode mode)
 {
     if (m_mode == mode) {
         return;
@@ -267,7 +267,7 @@ void FluidSynth::setMode(const RenderMode mode)
 
     AbstractSynthesizer::setMode(mode);
 
-    m_sequencer.setActive(isModeActive(mode));
+    m_sequencer.setActive(isModePlaying(mode));
     toggleExpressionController();
 }
 

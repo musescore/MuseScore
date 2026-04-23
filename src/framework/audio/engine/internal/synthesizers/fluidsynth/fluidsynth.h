@@ -65,7 +65,7 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
-    void setMode(const RenderMode mode) override;
+    void setMode(const ProcessMode mode) override;
     void setOutputSpec(const OutputSpec& spec) override;
 
     bool isValid() const override;

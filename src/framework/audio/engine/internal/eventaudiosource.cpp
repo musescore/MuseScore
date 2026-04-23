@@ -58,7 +58,7 @@ TrackId EventAudioSource::trackId() const
     return m_trackId;
 }
 
-void EventAudioSource::setMode(const RenderMode mode)
+void EventAudioSource::setMode(const ProcessMode mode)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -74,12 +74,12 @@ void EventAudioSource::setMode(const RenderMode mode)
     m_synth->flushSound();
 }
 
-RenderMode EventAudioSource::mode() const
+ProcessMode EventAudioSource::mode() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
     if (!m_synth) {
-        return RenderMode::Undefined;
+        return ProcessMode::Undefined;
     }
 
     return m_synth->mode();
@@ -202,7 +202,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     if (ctx.isValid()) {
         restoreSynthCtx(ctx);
     } else {
-        m_synth->setMode(RenderMode::IdleMode);
+        m_synth->setMode(ProcessMode::Idle);
     }
 
     m_params = m_synth->params();

@@ -530,16 +530,16 @@ struct SoundPreset
 
 using SoundPresetList = std::vector<SoundPreset>;
 
-enum class RenderMode {
-    Undefined = -1,
-    RealTimeMode,
-    IdleMode,
-    OfflineMode
+enum class ProcessMode {
+    Undefined = 0,
+    Idle,
+    Playing,
+    PlayingOffline
 };
 
-inline bool isModeActive(RenderMode mode)
+inline bool isModePlaying(ProcessMode mode)
 {
-    return mode == RenderMode::RealTimeMode || mode == RenderMode::OfflineMode;
+    return mode == ProcessMode::Playing || mode == ProcessMode::PlayingOffline;
 }
 
 //! NOTE When commands arrive at the engine, it exec them.
