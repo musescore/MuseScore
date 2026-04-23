@@ -66,10 +66,6 @@ void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
             undoStaffTextExcludeFromPart(score);
         }
     }
-
-    if (mscVersion < 500) {
-        migrateOffset500(score);
-    }
 }
 
 void EngravingCompat::correctPedalEndPoints(MasterScore* score)
@@ -334,6 +330,11 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
+
+    if (mscVersion < 500) {
+        migrateOffset500(score);
+        needRelayout = true;
     }
 
     if (needRelayout) {

@@ -1103,7 +1103,7 @@ void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
     }
 
     // We need additional context for items with voice assignment properties
-    // Migrate in EngravingCompat before layout
+    // Migrate in EngravingCompat after layout
     if (item->hasVoiceAssignmentProperties()) {
         return;
     }
