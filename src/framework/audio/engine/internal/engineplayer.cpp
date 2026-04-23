@@ -36,6 +36,7 @@ EnginePlayer::EnginePlayer(IGetTrackSource* getTracks)
     : m_getTracks(getTracks)
 {
     m_status.set(PlaybackStatus::Stopped);
+    m_isActive.set(false);
 
     m_status.ch.onReceive(this, [this](const PlaybackStatus status) {
         onStatusChanged(status);
@@ -54,10 +55,10 @@ void EnginePlayer::onStatusChanged(const PlaybackStatus status)
         //! NOTE If there is no countdown, activate the mixer.
         //! Otherwise, it will become active when the countdown ends.
         if (m_countDown.is_zero()) {
-            audioEngine()->context()->setIsActive(true);
+            m_isActive.set(true);
         }
     } else {
-        audioEngine()->context()->setIsActive(false);
+        m_isActive.set(false);
         flushAllTracks();
     }
 }
@@ -125,7 +126,7 @@ void EnginePlayer::onTimeEvent(const TimeEvent event)
     ONLY_AUDIO_ENGINE_THREAD;
     switch (event) {
     case TimeEvent::CountDownEnded:
-        audioEngine()->context()->setIsActive(m_status.val == PlaybackStatus::Running);
+        m_isActive.set(m_status.val == PlaybackStatus::Running);
         break;
     case TimeEvent::LoopEnded:
         seekAllTracks(m_currentPosition.time());
@@ -276,6 +277,18 @@ Channel<PlaybackStatus> EnginePlayer::playbackStatusChanged() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
     return m_status.ch;
+}
+
+bool EnginePlayer::isActive() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    return m_isActive.val;
+}
+
+Channel<bool> EnginePlayer::isActiveChanged() const
+{
+    ONLY_AUDIO_ENGINE_THREAD;
+    return m_isActive.ch;
 }
 
 void EnginePlayer::seekAllTracks(const secs_t newPosition)

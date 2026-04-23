@@ -44,6 +44,8 @@ public:
 
     virtual PlaybackStatus playbackStatus() const = 0;
     virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual bool isActive() const = 0;
+    virtual async::Channel<bool> isActiveChanged() const = 0;
 
     virtual secs_t duration() const = 0;
     virtual void setDuration(const secs_t duration) = 0;

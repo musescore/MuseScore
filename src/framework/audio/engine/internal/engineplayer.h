@@ -51,6 +51,8 @@ public:
 
     PlaybackStatus playbackStatus() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
+    bool isActive() const override;
+    async::Channel<bool> isActiveChanged() const override;
 
     secs_t duration() const override;
     void setDuration(const secs_t duration) override;
@@ -89,6 +91,7 @@ private:
     IGetTrackSource* m_getTracks = nullptr;
 
     ValCh<PlaybackStatus> m_status;
+    ValCh<bool> m_isActive;
 
     TimePosition m_currentPosition;
     async::Channel<secs_t> m_timeChanged;

@@ -92,7 +92,7 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     // Setup audio engine
     audioEngine()->init(outputSpec, consts);
 
-    playback()->init();
+    audioEngine()->context()->init(consts);
 
     transportEventsDispatcher()->init();
 }
@@ -100,9 +100,9 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
 void EngineController::deinit()
 {
     //! AUDIO THREAD
-    playback()->deinit();
-    audioEngine()->deinit();
     m_rpcController->deinit();
+    audioEngine()->context()->deinit();
+    audioEngine()->deinit();
 }
 
 OutputSpec EngineController::outputSpec() const

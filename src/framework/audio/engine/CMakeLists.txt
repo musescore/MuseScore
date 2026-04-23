@@ -37,7 +37,6 @@ else()
         
         iaudioengineconfiguration.h
         ienginecontroller.h
-        iengineplayback.h
         iaudiosource.h
         iplayhead.h
         iengineplayer.h
@@ -63,8 +62,6 @@ else()
         internal/audioengineconfiguration.h
         internal/enginecontroller.cpp
         internal/enginecontroller.h
-        internal/engineplayback.cpp
-        internal/engineplayback.h
         internal/enginerpccontroller.cpp
         internal/enginerpccontroller.h
         internal/mixer.cpp
