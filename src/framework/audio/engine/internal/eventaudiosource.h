@@ -44,8 +44,8 @@ public:
 
     TrackId trackId() const override;
 
-    void setMode(const RenderMode mode) override;
-    RenderMode mode() const override;
+    void setMode(const ProcessMode mode) override;
+    ProcessMode mode() const override;
     void setOutputSpec(const OutputSpec& spec) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
@@ -71,7 +71,7 @@ public:
 private:
     struct SynthCtx
     {
-        RenderMode mode = RenderMode::Undefined;
+        ProcessMode mode = ProcessMode::Undefined;
         msecs_t playbackPosition = -1;
 
         bool isValid() const

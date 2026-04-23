@@ -52,10 +52,10 @@ Ret AudioContext::init(const RenderConstraints& consts)
 
     OutputSpec outputSpec = audioEngine()->outputSpec();
     setOutputSpec(outputSpec);
-    setMode(RenderMode::IdleMode);
+    setMode(ProcessMode::Idle);
 
     m_player->isActiveChanged().onReceive(this, [this](bool isActive) {
-        setMode(isActive ? RenderMode::RealTimeMode : RenderMode::IdleMode);
+        setMode(isActive ? ProcessMode::Playing : ProcessMode::Idle);
     });
 
     return make_ret(Ret::Code::Ok);
@@ -86,13 +86,13 @@ void AudioContext::deinit()
 }
 
 // Config
-void AudioContext::setMode(const RenderMode mode)
+void AudioContext::setMode(const ProcessMode mode)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-    if (mode == RenderMode::IdleMode) {
+    if (mode == ProcessMode::Idle) {
         m_mixer->setTracksToProcessWhenIdle(m_tracksToProcessWhenIdle);
     }
-    m_mixer->setIsIdle(mode == RenderMode::IdleMode);
+    m_mixer->setIsIdle(mode == ProcessMode::Idle);
     m_mixer->setMode(mode);
 }
 
@@ -768,7 +768,7 @@ Ret AudioContext::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackForm
         }
     });
 
-    setMode(RenderMode::OfflineMode);
+    setMode(ProcessMode::PlayingOffline);
     Ret ret = writer->write();
 
     //! NOTE Restore source (mixer) state
@@ -776,7 +776,7 @@ Ret AudioContext::doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackForm
     // must be performed via execOperation - so that synchronization with the audio driver process works
     IAudioEngine::Operation func = [this]() {
         m_mixer->setOutputSpec(audioEngine()->outputSpec());
-        setMode(RenderMode::IdleMode);
+        setMode(ProcessMode::Idle);
     };
     audioEngine()->execOperation(OperationType::LongOperation, func);
 

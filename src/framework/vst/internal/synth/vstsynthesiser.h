@@ -57,7 +57,7 @@ public:
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     const mpe::PlaybackData& playbackData() const override;
 
-    void setMode(const muse::audio::RenderMode mode) override;
+    void setMode(const muse::audio::ProcessMode mode) override;
 
     muse::audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;

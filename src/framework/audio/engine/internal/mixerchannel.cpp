@@ -93,7 +93,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setOutputSpec(m_outputSpec);
-        fx->setPlaying(isModeActive(mode()));
+        fx->setPlaying(isModePlaying(mode()));
 
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
@@ -149,13 +149,13 @@ AudioSignalChanges MixerChannel::audioSignalChanges() const
     return m_audioSignalNotifier.audioSignalChanges;
 }
 
-RenderMode MixerChannel::mode() const
+ProcessMode MixerChannel::mode() const
 {
     ONLY_AUDIO_ENGINE_THREAD;
     return m_mode;
 }
 
-void MixerChannel::setMode(const RenderMode mode)
+void MixerChannel::setMode(const ProcessMode mode)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -166,7 +166,7 @@ void MixerChannel::setMode(const RenderMode mode)
     }
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
-        fx->setPlaying(isModeActive(mode));
+        fx->setPlaying(isModePlaying(mode));
     }
 }
 

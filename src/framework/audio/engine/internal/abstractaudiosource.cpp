@@ -25,12 +25,12 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
-void AbstractAudioSource::setMode(const RenderMode mode)
+void AbstractAudioSource::setMode(const ProcessMode mode)
 {
     m_mode = mode;
 }
 
-RenderMode AbstractAudioSource::mode() const
+ProcessMode AbstractAudioSource::mode() const
 {
     return m_mode;
 }

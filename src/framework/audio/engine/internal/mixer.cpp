@@ -95,7 +95,7 @@ Ret Mixer::addChannel(ITrackAudioOutputPtr output)
         updateNonMutedTrackCount();
 
         if (channel->muted()) {
-            channel->setMode(RenderMode::IdleMode);
+            channel->setMode(ProcessMode::Idle);
         } else {
             channel->setMode(mode());
             ITrackAudioInputPtr source = std::static_pointer_cast<ITrackAudioInput>(channel->source());
@@ -331,7 +331,7 @@ bool Mixer::useMultithreading() const
 #endif
 }
 
-void Mixer::setMode(const RenderMode mode)
+void Mixer::setMode(const ProcessMode mode)
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
@@ -350,7 +350,7 @@ void Mixer::setMode(const RenderMode mode)
     }
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
-        fx->setPlaying(isModeActive(mode));
+        fx->setPlaying(isModePlaying(mode));
     }
 }
 
@@ -388,7 +388,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {
         fx->setOutputSpec(m_outputSpec);
-        fx->setPlaying(isModeActive(m_mode));
+        fx->setPlaying(isModePlaying(m_mode));
 
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_masterParams.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);

@@ -112,12 +112,12 @@ bool SynthesizerStub::isValid() const
     return false;
 }
 
-RenderMode SynthesizerStub::mode() const
+ProcessMode SynthesizerStub::mode() const
 {
-    return RenderMode::Undefined;
+    return ProcessMode::Undefined;
 }
 
-void SynthesizerStub::setMode(const RenderMode)
+void SynthesizerStub::setMode(const ProcessMode)
 {
 }
 

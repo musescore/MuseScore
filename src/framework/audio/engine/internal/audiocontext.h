@@ -48,7 +48,7 @@ public:
     void deinit() override;
 
     // Config
-    void setMode(const RenderMode newMode) override;
+    void setMode(const ProcessMode newMode) override;
     void setOutputSpec(const OutputSpec& outputSpec) override;
 
     // Tracks

@@ -93,7 +93,7 @@ Ret SoundTrackWriter::write()
     }
 
     m_source->setOutputSpec(m_encoderPtr->format().outputSpec);
-    m_source->setMode(RenderMode::OfflineMode);
+    m_source->setMode(ProcessMode::PlayingOffline);
 
     DEFER {
         if (!m_isAborted) {
