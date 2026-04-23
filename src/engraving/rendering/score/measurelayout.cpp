@@ -416,7 +416,8 @@ void MeasureLayout::changeAnnotationsParent(Segment* oldParent, Segment* newPare
     if (!oldParent || !newParent) {
         return;
     }
-    for (EngravingItem* e : oldParent->annotations()) {
+    std::vector<EngravingItem*> annotations = oldParent->annotations();
+    for (EngravingItem* e : annotations) {
         // look at elements in underlying measure
         if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
             continue;

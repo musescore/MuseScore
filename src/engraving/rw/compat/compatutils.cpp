@@ -1116,6 +1116,7 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
             for (EngravingItem* el : measureEls) {
                 el->unlink();
                 score->removeElement(el);
+                delete el;
             }
 
             // Remove annotations
@@ -1124,6 +1125,7 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
                 for (EngravingItem* annotation : annotations) {
                     annotation->unlink();
                     score->removeElement(annotation);
+                    delete annotation;
                 }
                 if (seg.isChordRestType()) {
                     continue;
@@ -1136,6 +1138,7 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
                     }
                     el->unlink();
                     score->removeElement(el);
+                    delete el;
                 }
             }
         }

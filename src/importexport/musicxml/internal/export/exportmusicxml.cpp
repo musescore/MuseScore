@@ -8552,7 +8552,10 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
         Segment* annotationSeg = startMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
         if (annotationSeg) {
             for (track_idx_t track = strack; track < etrack; ++track) {
-                annotations(this, strack, etrack, track, track2staff(track), annotationSeg);
+                const staff_idx_t xmlStaff = staves > 1
+                                             ? (track2staff(track) - track2staff(strack) + 1)
+                                             : 0;
+                annotations(this, strack, etrack, track, xmlStaff, annotationSeg);
             }
         }
     }
