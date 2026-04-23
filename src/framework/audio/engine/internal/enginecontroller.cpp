@@ -90,7 +90,7 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     consts.minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
 
     // Setup audio engine
-    audioEngine()->init(outputSpec, consts);
+    audioEngine()->init(outputSpec);
 
     audioEngine()->context()->init(consts);
 

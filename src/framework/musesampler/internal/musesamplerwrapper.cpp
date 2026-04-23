@@ -97,9 +97,35 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
     m_samplerLib->destroy(m_sampler);
 }
 
+void MuseSamplerWrapper::setMode(const muse::audio::RenderMode mode)
+{
+    AbstractSynthesizer::setMode(mode);
+
+    if (!m_samplerLib || !m_sampler) {
+        return;
+    }
+
+    m_sequencer.updateMainStream();
+
+    const bool isOffline = m_mode == RenderMode::OfflineMode;
+
+    if (!isOffline && m_offlineModeStarted) {
+        m_samplerLib->stopOfflineMode(m_sampler);
+        m_offlineModeStarted = false;
+    }
+
+    if (isOffline && !m_offlineModeStarted) {
+        LOGI() << "Start offline mode, sampleRate: " << m_outputSpec.sampleRate;
+        m_samplerLib->startOfflineMode(m_sampler, m_outputSpec.sampleRate);
+        m_offlineModeStarted = true;
+    }
+
+    setIsActive(isModeActive(mode));
+}
+
 void MuseSamplerWrapper::setOutputSpec(const audio::OutputSpec& spec)
 {
-    const bool isOffline = currentRenderMode() == RenderMode::OfflineMode;
+    const bool isOffline = m_mode == RenderMode::OfflineMode;
     const bool shouldReinitSampler = !m_sampler
                                      || (m_outputSpec.sampleRate != spec.sampleRate && !isOffline)
                                      || (m_outputSpec.samplesPerChannel != spec.samplesPerChannel && !isOffline);
@@ -114,11 +140,7 @@ void MuseSamplerWrapper::setOutputSpec(const audio::OutputSpec& spec)
 
     m_outputSpec = spec;
 
-    if (isOffline && !m_offlineModeStarted) {
-        LOGI() << "Start offline mode, sampleRate: " << spec.sampleRate;
-        m_samplerLib->startOfflineMode(m_sampler, spec.sampleRate);
-        m_offlineModeStarted = true;
-    }
+    setMode(m_mode);
 }
 
 unsigned int MuseSamplerWrapper::audioChannelsCount() const
@@ -157,7 +179,7 @@ samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel
         }
     }
 
-    if (currentRenderMode() == RenderMode::OfflineMode) {
+    if (m_mode == RenderMode::OfflineMode) {
         if (m_samplerLib->processOffline(m_sampler, m_bus) != ms_Result_OK) {
             return 0;
         }
@@ -241,22 +263,6 @@ const mpe::PlaybackData& MuseSamplerWrapper::playbackData() const
     ONLY_AUDIO_ENGINE_THREAD;
 
     return m_sequencer.playbackData();
-}
-
-void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
-{
-    ONLY_AUDIO_ENGINE_THREAD;
-
-    if (!m_samplerLib || !m_sampler) {
-        return;
-    }
-
-    m_sequencer.updateMainStream();
-
-    if (mode != RenderMode::OfflineMode && m_offlineModeStarted) {
-        m_samplerLib->stopOfflineMode(m_sampler);
-        m_offlineModeStarted = false;
-    }
 }
 
 const TrackList& MuseSamplerWrapper::allTracks() const

@@ -40,7 +40,7 @@ class IAudioEngine : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
-    virtual Ret init(const OutputSpec& outputSpec, const RenderConstraints& consts) = 0;
+    virtual Ret init(const OutputSpec& outputSpec) = 0;
     virtual void deinit() = 0;
 
     virtual std::shared_ptr<IAudioContext> context(const modularity::IoCID& ctxId = 0) const = 0;
@@ -49,10 +49,6 @@ public:
     virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
     virtual OutputSpec outputSpec() const = 0;
     virtual async::Channel<OutputSpec> outputSpecChanged() const = 0;
-
-    virtual RenderMode mode() const = 0;
-    virtual void setMode(const RenderMode newMode) = 0;
-    virtual async::Channel<RenderMode> modeChanged() const = 0;
 
     using Operation = std::function<void ()>;
     virtual void execOperation(OperationType type, const Operation& func) = 0;

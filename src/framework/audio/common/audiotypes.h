@@ -537,6 +537,11 @@ enum class RenderMode {
     OfflineMode
 };
 
+inline bool isModeActive(RenderMode mode)
+{
+    return mode == RenderMode::RealTimeMode || mode == RenderMode::OfflineMode;
+}
+
 //! NOTE When commands arrive at the engine, it exec them.
 //! These can be quick commands like changing the volume,
 //! or longer commands like add a new track.

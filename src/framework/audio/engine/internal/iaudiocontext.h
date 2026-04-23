@@ -25,7 +25,6 @@
 #include "global/async/promise.h"
 #include "global/async/channel.h"
 #include "audio/common/audiotypes.h"
-#include "../iaudiosource.h"
 
 namespace muse::audio::engine {
 class IAudioContext
@@ -33,8 +32,13 @@ class IAudioContext
 public:
     virtual ~IAudioContext() = default;
 
+    // Init
     virtual Ret init(const RenderConstraints& consts) = 0;
     virtual void deinit() = 0;
+
+    // Config
+    virtual void setMode(const RenderMode newMode) = 0;
+    virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
 
     // Tracks
     virtual RetVal2<TrackId, AudioParams> addTrack(const TrackName& trackName, io::IODevice* playbackData, const AudioParams& params) = 0;

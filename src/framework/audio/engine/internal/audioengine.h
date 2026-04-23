@@ -38,7 +38,7 @@ public:
     AudioEngine();
     ~AudioEngine();
 
-    Ret init(const OutputSpec& outputSpec, const RenderConstraints& consts) override;
+    Ret init(const OutputSpec& outputSpec) override;
     void deinit() override;
 
     std::shared_ptr<IAudioContext> context(const modularity::IoCID& ctxId) const override;
@@ -47,10 +47,6 @@ public:
     void setOutputSpec(const OutputSpec& outputSpec) override;
     OutputSpec outputSpec() const override;
     async::Channel<OutputSpec> outputSpecChanged() const override;
-
-    RenderMode mode() const override;
-    void setMode(const RenderMode newMode) override;
-    async::Channel<RenderMode> modeChanged() const override;
 
     void execOperation(OperationType type, const Operation& func) override;
     OperationType operation() const override;
@@ -70,14 +66,9 @@ private:
     OutputSpec m_outputSpec;
     async::Channel<OutputSpec> m_outputSpecChanged;
 
-    std::atomic<RenderMode> m_mode = RenderMode::Undefined;
-    async::Channel<RenderMode> m_modeChanged;
-
     std::atomic<bool> m_processing = false;
     std::atomic<OperationType> m_operationType = OperationType::Undefined;
     std::mutex m_quickOperationWaitMutex;
-
-    RenderConstraints m_renderConsts;
 };
 }
 
