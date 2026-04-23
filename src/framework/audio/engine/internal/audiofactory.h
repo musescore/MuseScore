@@ -38,31 +38,29 @@ class AudioFactory : public IAudioFactory
 
 public:
 
+    // Available resources
     AudioResourceMetaList availableInputResources() const override;
     SoundPresetList availableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
     AudioResourceMetaList availableOutputResources() const override;
 
-    RetVal<ITrackAudioOutputPtr> makeMixerChannel(const TrackId trackId, const ITrackAudioInputPtr& source) const override;
-    RetVal<ITrackAudioOutputPtr> makeMixerAuxChannel(const TrackId trackId) const override;
-
-    RetVal<EventTrackPtr> makeEventTrack(const std::string& trackName, const mpe::PlaybackData& playbackData, const AudioParams& params,
-                                         std::function<void(const TrackId)> onOffStreamReceived) const override;
-
-    RetVal<SoundTrackPtr> makeSoundTrack(const std::string& trackName, io::IODevice* playbackData,
-                                         const AudioParams& params) const override;
-
-    RetVal<EventTrackPtr> makeAuxTrack(const std::string& trackName, const AudioOutputParams& outputParams) const override;
-
+    // Make audio sources
     RetVal<synth::ISynthesizerPtr> makeSynth(const TrackId trackId, const AudioInputParams& params,
                                              const PlaybackSetupData& setupData) const override;
     RetVal<synth::ISynthesizerPtr> makeDefaultSynth(const TrackId trackId) const override;
     void clearSynthSources() override;
 
+    RetVal<ITrackAudioInputPtr> makeEventSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
+                                                const AudioInputParams& params,
+                                                const std::function<void(const TrackId)> onOffStreamReceived = nullptr) const override;
+
+    // Make output (mixer channel)
+    RetVal<ITrackAudioOutputPtr> makeMixerChannel(const TrackId trackId, const AudioOutputParams& params,
+                                                  const ITrackAudioInputPtr& source) const override;
+    RetVal<ITrackAudioOutputPtr> makeMixerAuxChannel(const TrackId trackId, const AudioOutputParams& params) const override;
+
+    // Make FX
     std::vector<IFxProcessorPtr> makeMasterFxList(const AudioFxChain& fxChain) const override;
     std::vector<IFxProcessorPtr> makeTrackFxList(const TrackId trackId, const AudioFxChain& fxChain) const override;
     void clearAllFx() override;
-
-private:
-    TrackId newTrackId() const;
 };
 }

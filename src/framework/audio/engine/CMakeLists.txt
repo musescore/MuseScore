@@ -52,6 +52,7 @@ else()
         internal/iaudioengine.h
         internal/iaudiocontext.h
         internal/iaudiofactory.h
+        internal/igettracksource.h
         internal/audioengine.cpp
         internal/audioengine.h
         internal/audiocontext.cpp
@@ -64,7 +65,6 @@ else()
         internal/enginecontroller.h
         internal/engineplayback.cpp
         internal/engineplayback.h
-        internal/igettracks.h
         internal/enginerpccontroller.cpp
         internal/enginerpccontroller.h
         internal/mixer.cpp
