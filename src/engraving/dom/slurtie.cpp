@@ -228,9 +228,9 @@ EngravingObject* SlurTieSegment::propertyDelegate(Pid pid) const
     case Pid::SLUR_DIRECTION:
     case Pid::MASK_SLURTIE:
         return slurTie();
-    default: break;
+    default:
+        return SpannerSegment::propertyDelegate(pid);
     }
-    return nullptr;
 }
 
 //---------------------------------------------------------
