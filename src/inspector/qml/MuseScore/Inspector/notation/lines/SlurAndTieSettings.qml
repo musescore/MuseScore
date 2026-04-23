@@ -104,9 +104,9 @@ Column {
         id: maskSection
         titleText: qsTrc("inspector", "Mask over time and key signatures")
         propertyItem: root.model ? root.model.maskSlurTie : null
-        visible: true
 
         navigationPanel: root.navigationPanel
+        navigationName: "Mask"
         navigationRowStart: tiePlacementSection.navigationRowEnd + 1
 
         model: [
