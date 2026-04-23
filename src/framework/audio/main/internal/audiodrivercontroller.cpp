@@ -218,16 +218,17 @@ void AudioDriverController::changeCurrentAudioApi(const std::string& name)
     IAudioDriverPtr driver = createDriver(name);
     setNewDriver(driver);
     m_audioDriver->init();
-    LOGI() << "Used " << m_audioDriver->name() << " audio driver";
+    LOGI() << "Used audio driver: " << m_audioDriver->name();
 
     // reset to default
     IAudioDriver::Spec spec = defaultSpec();
     spec.callback = m_callback;
 
     if (!spec.deviceId.empty()) {
+        spec.deviceId = DEFAULT_DEVICE_ID;
         m_audioDriver->open(spec, nullptr);
     } else {
-        LOGW() << "no devices for " << name;
+        LOGW() << "No devices for " << name;
     }
 
     configuration()->setCurrentAudioApi(name);

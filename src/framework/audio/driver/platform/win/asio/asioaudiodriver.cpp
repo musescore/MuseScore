@@ -427,7 +427,12 @@ bool AsioAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    const char* name = spec.deviceId.c_str();
+    AudioDeviceID deviceId = spec.deviceId;
+    if (deviceId == DEFAULT_DEVICE_ID) {
+        deviceId = defaultDevice();
+    }
+
+    const char* name = deviceId.c_str();
     bool ok = s_adata.drivers->loadDriver(const_cast<char*>(name));
     if (!ok) {
         LOGE() << "failed load driver: " << name;
