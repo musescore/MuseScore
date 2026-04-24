@@ -34,7 +34,7 @@ using namespace muse::audio;
 using namespace muse::audio::rpc;
 using namespace muse::async;
 
-void Playback::init()
+async::Promise<Ret> Playback::init()
 {
     ONLY_AUDIO_MAIN_THREAD;
 
@@ -84,6 +84,40 @@ void Playback::init()
         }
         m_masterOutputParamsChanged.send(params);
     });
+
+    return async::make_promise<Ret>([this](auto resolve, auto /*reject*/) {
+        ONLY_AUDIO_MAIN_THREAD;
+
+        auto initContext = [this, resolve]() {
+            Msg msg = rpc::make_request(MsgCode::ContextInit);
+            channel()->send(msg, [this, resolve](const Msg& res) {
+                ONLY_AUDIO_MAIN_THREAD;
+                Ret ret;
+                IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                    return;
+                }
+                m_inited.set(ret.success());
+                (void)resolve(ret);
+            });
+        };
+
+        LOGD() << "isAudioStarted: " << startAudioController()->isAudioStarted();
+        if (startAudioController()->isAudioStarted()) {
+            initContext();
+        } else {
+            startAudioController()->isAudioStartedChanged().onReceive(this, [this, initContext](bool arg) {
+                LOGD() << "isAudioStartedChanged: " << arg;
+                if (arg) {
+                    initContext();
+                } else {
+                    LOGE() << "audio not started";
+                }
+                startAudioController()->isAudioStartedChanged().disconnect(this);
+            });
+        }
+
+        return Promise<Ret>::dummy_result();
+    }, PromiseType::AsyncByPromise);
 }
 
 void Playback::deinit()
@@ -95,53 +129,26 @@ void Playback::deinit()
     channel()->onNotification(MsgCode::InputParamsChanged, nullptr);
     channel()->onNotification(MsgCode::OutputParamsChanged, nullptr);
     channel()->onNotification(MsgCode::MasterOutputParamsChanged, nullptr);
-}
 
-bool Playback::isAudioStarted() const
-{
-    return startAudioController()->isAudioStarted();
-}
-
-async::Channel<bool> Playback::isAudioStartedChanged() const
-{
-    return startAudioController()->isAudioStartedChanged();
-}
-
-Promise<bool> Playback::initPlayback()
-{
-    ONLY_AUDIO_MAIN_THREAD;
-
-    return async::make_promise<bool>([this](auto resolve, auto /*reject*/) {
-        ONLY_AUDIO_MAIN_THREAD;
-
-        LOGD() << "isAudioStarted: " << startAudioController()->isAudioStarted();
-        if (startAudioController()->isAudioStarted()) {
-            (void)resolve(true);
-        } else {
-            startAudioController()->isAudioStartedChanged().onReceive(this, [this, resolve](bool arg) {
-                LOGD() << "isAudioStartedChanged: " << arg;
-                if (arg) {
-                    (void)resolve(true);
-                } else {
-                    LOGE() << "audio not started";
-                }
-                startAudioController()->isAudioStartedChanged().disconnect(this);
-            });
-        }
-
-        return Promise<bool>::dummy_result();
-    }, PromiseType::AsyncByPromise);
-}
-
-void Playback::deinitPlayback()
-{
-    ONLY_AUDIO_MAIN_THREAD;
     m_saveSoundTrackProgressStream = SaveSoundTrackProgress();
+
+    channel()->send(rpc::make_request(MsgCode::ContextDeinit));
+    m_inited.set(false);
+}
+
+bool Playback::isInited() const
+{
+    return m_inited.val;
+}
+
+async::Channel<bool> Playback::initedChanged() const
+{
+    return m_inited.ch;
 }
 
 IPlayerPtr Playback::player() const
 {
-    std::shared_ptr<Player> p = std::make_shared<Player>();
+    std::shared_ptr<Player> p = std::make_shared<Player>(iocContext());
     p->init();
     return p;
 }

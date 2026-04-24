@@ -36,7 +36,7 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
-AudioContext::AudioContext(const modularity::IoCID& ctxId)
+AudioContext::AudioContext(const AudioCtxId& ctxId)
     : m_ctxId(ctxId)
 {
     UNUSED(m_ctxId); // just for information
@@ -45,9 +45,9 @@ AudioContext::AudioContext(const modularity::IoCID& ctxId)
     m_mixer = std::make_shared<Mixer>();
 }
 
-Ret AudioContext::init(const RenderConstraints& consts)
+Ret AudioContext::init()
 {
-    m_mixer->init(consts.desiredAudioThreadNumber, consts.minTrackCountForMultithreading);
+    m_mixer->init();
     m_mixer->setPlayhead(std::static_pointer_cast<IPlayhead>(m_player));
 
     OutputSpec outputSpec = audioEngine()->outputSpec();

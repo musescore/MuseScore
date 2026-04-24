@@ -42,9 +42,9 @@ class AudioContext : public IAudioContext, public IGetTrackSource, public async:
     GlobalInject<IAudioEngineConfiguration> configuration;
 
 public:
-    AudioContext(const modularity::IoCID& ctxId);
+    AudioContext(const AudioCtxId& ctxId);
 
-    Ret init(const RenderConstraints& consts) override;
+    Ret init() override;
     void deinit() override;
 
     // Config
@@ -147,7 +147,7 @@ private:
     size_t tracksBeingProcessedCount() const;
     Ret doSaveSoundTrack(io::IODevice& dstDevice, const SoundTrackFormat& format);
 
-    modularity::IoCID m_ctxId = 0;
+    AudioCtxId m_ctxId = 0;
 
     OutputSpec m_outputSpec;
     std::shared_ptr<EnginePlayer> m_player;

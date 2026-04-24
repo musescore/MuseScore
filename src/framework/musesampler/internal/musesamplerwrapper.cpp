@@ -295,7 +295,10 @@ void MuseSamplerWrapper::setPlaybackPosition(const muse::audio::TimePosition& po
         return;
     }
 
-    m_sequencer.setPlaybackPosition(muse::secs_to_msecs(position.time()));
+    //! NOTE Don't trust that msecs_t is used everywhere here,
+    // in fact, usecs_t (microseconds) is stored there.
+    const usecs_t usecs = muse::secs_to_usecs(position.time());
+    m_sequencer.setPlaybackPosition(msecs_t(usecs.raw()));
 
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;

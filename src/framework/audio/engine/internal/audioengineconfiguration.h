@@ -42,9 +42,6 @@ public:
 
     AudioInputParams defaultAudioInputParams() const override;
 
-    size_t desiredAudioThreadNumber() const override;
-    size_t minTrackCountForMultithreading() const override;
-
 private:
 
     AudioEngineConfig m_conf;

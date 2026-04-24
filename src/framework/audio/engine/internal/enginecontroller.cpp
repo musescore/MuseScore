@@ -85,14 +85,8 @@ void EngineController::init(const OutputSpec& outputSpec, const AudioEngineConfi
     synthResolver()->init(configuration()->defaultAudioInputParams(), outputSpec);
     // ------------------------------------------------------------
 
-    RenderConstraints consts;
-    consts.desiredAudioThreadNumber = configuration()->desiredAudioThreadNumber();
-    consts.minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
-
     // Setup audio engine
     audioEngine()->init(outputSpec);
-
-    audioEngine()->context()->init(consts);
 
     transportEventsDispatcher()->init();
 }
@@ -101,7 +95,6 @@ void EngineController::deinit()
 {
     //! AUDIO THREAD
     m_rpcController->deinit();
-    audioEngine()->context()->deinit();
     audioEngine()->deinit();
 }
 

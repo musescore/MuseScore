@@ -25,6 +25,7 @@
 #include "global/defer.h"
 
 #include "audio/common/audiosanitizer.h"
+#include "audio/common/audioerrors.h"
 
 #include "audiocontext.h"
 
@@ -38,7 +39,6 @@ static constexpr int MAX_SUPPORTED_AUDIO_CHANNELS = 2;
 
 AudioEngine::AudioEngine()
 {
-    m_context = std::make_shared<AudioContext>(0);
 }
 
 AudioEngine::~AudioEngine()
@@ -76,43 +76,53 @@ void AudioEngine::deinit()
     ONLY_AUDIO_ENGINE_THREAD;
     if (m_inited) {
         m_inited = false;
-        m_context = nullptr;
+
+        for (auto& p : m_contexts) {
+            p.second->deinit();
+        }
+        m_contexts.clear();
     }
 }
 
-std::shared_ptr<IAudioContext> AudioEngine::context(const modularity::IoCID& ctxId) const
+RetVal<std::shared_ptr<IAudioContext> > AudioEngine::addAudioContext(const AudioCtxId& ctxId)
 {
-    UNUSED(ctxId);
-    return m_context;
-/*
+    ONLY_AUDIO_ENGINE_THREAD;
+
+    using RetType = RetVal<std::shared_ptr<IAudioContext> >;
+
+    if (m_contexts.find(ctxId) != m_contexts.end()) {
+        return RetType::make_ret(Err::AudioContextAlreadyExists);
+    }
+    auto ctx = std::make_shared<AudioContext>(ctxId);
+    Ret ret = ctx->init();
+    if (ret) {
+        m_contexts[ctxId] = ctx;
+    }
+
+    return RetType::make_ok(ctx);
+}
+
+std::shared_ptr<IAudioContext> AudioEngine::context(const AudioCtxId& ctxId) const
+{
     auto it = m_contexts.find(ctxId);
     if (it != m_contexts.end()) {
         return it->second;
     }
-    auto context = std::make_shared<AudioContext>(ctxId);
-    m_contexts[ctxId] = context;
-    return context;
-*/
+    return nullptr;
 }
 
-void AudioEngine::destroyContext(const modularity::IoCID& ctxId)
+void AudioEngine::destroyContext(const AudioCtxId& ctxId)
 {
-    UNUSED(ctxId);
-/*
     auto it = m_contexts.find(ctxId);
     if (it != m_contexts.end()) {
+        it->second->deinit();
         m_contexts.erase(it);
     }
-*/
 }
 
 void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
 {
     ONLY_AUDIO_ENGINE_THREAD;
-
-    IF_ASSERT_FAILED(m_context) {
-        return;
-    }
 
     IF_ASSERT_FAILED(outputSpec.audioChannelCount <= MAX_SUPPORTED_AUDIO_CHANNELS) {
         return;
@@ -128,7 +138,9 @@ void AudioEngine::setOutputSpec(const OutputSpec& outputSpec)
 
     m_outputSpec = outputSpec;
 
-    m_context->setOutputSpec(outputSpec);
+    for (auto& p : m_contexts) {
+        p.second->setOutputSpec(outputSpec);
+    }
 
     m_outputSpecChanged.send(outputSpec);
 }
@@ -195,13 +207,23 @@ samples_t AudioEngine::process(float* buffer, samples_t samplesPerChannel)
     }
     case OperationType::NoOperation: {
         // normal playing
-        return m_context->process(buffer, samplesPerChannel);
+        //! TODO mix all contexts audio
+        samples_t totalProcessedSamples = 0;
+        for (auto& p : m_contexts) {
+            totalProcessedSamples = p.second->process(buffer, samplesPerChannel);
+        }
+        return totalProcessedSamples;
     }
     case OperationType::QuickOperation: {
         // wait
         LOGD() << "wait end of quick operation";
         std::scoped_lock<std::mutex> lock(m_quickOperationWaitMutex);
-        return m_context->process(buffer, samplesPerChannel);
+        //! TODO mix all contexts audio
+        samples_t totalProcessedSamples = 0;
+        for (auto& p : m_contexts) {
+            totalProcessedSamples = p.second->process(buffer, samplesPerChannel);
+        }
+        return totalProcessedSamples;
     }
     case OperationType::LongOperation: {
         return fillSilent(buffer, samplesPerChannel);

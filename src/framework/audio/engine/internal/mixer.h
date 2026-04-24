@@ -49,7 +49,7 @@ class Mixer : public AbstractAudioSource, public async::Asyncable, public std::e
 public:
     ~Mixer() override;
 
-    void init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultithreading);
+    void init();
 
     IAudioSourcePtr mixedSource();
 
@@ -99,7 +99,6 @@ private:
 
     TaskScheduler* m_taskScheduler = nullptr;
 
-    size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;
 
     AudioOutputParams m_masterParams;

@@ -33,6 +33,8 @@ public:
     ContextRpcChannel(const muse::modularity::ContextPtr& ctx, std::shared_ptr<IContextRpcChannelController> controller)
         : Contextable(ctx), m_controller(controller) {}
 
+    ~ContextRpcChannel();
+
     inline CtxId contextId() const
     {
         assert(iocContext());
@@ -56,5 +58,6 @@ public:
 
 private:
     std::shared_ptr<IContextRpcChannelController> m_controller;
+    std::set<StreamId> m_streams;
 };
 }

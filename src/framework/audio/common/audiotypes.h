@@ -39,8 +39,9 @@
 #include "log.h"
 
 namespace muse::audio {
-using msecs_t = muse::msecs_t;
 using secs_t = muse::secs_t;
+using msecs_t = muse::msecs_t;
+using usecs_t = muse::usecs_t;
 
 inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms.raw() / 1000.0); }
 inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us.raw() / 1000000.0); }
@@ -55,6 +56,8 @@ using volume_db_t = db_t;
 using volume_dbfs_t = db_t;
 using gain_t = float;
 using balance_t = float;
+
+using AudioCtxId = uint8_t;
 
 using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
@@ -93,12 +96,6 @@ struct OutputSpec {
     }
 
     inline bool operator!=(const OutputSpec& other) const { return !this->operator==(other); }
-};
-
-struct RenderConstraints {
-    // mixer
-    size_t desiredAudioThreadNumber = 0;
-    size_t minTrackCountForMultithreading = 0;
 };
 
 enum class SoundTrackType {

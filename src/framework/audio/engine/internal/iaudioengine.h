@@ -26,7 +26,6 @@
 #include "modularity/imoduleinterface.h"
 
 #include "global/async/channel.h"
-#include "global/modularity/ioc.h"
 
 #include "audio/common/audiotypes.h"
 
@@ -43,8 +42,9 @@ public:
     virtual Ret init(const OutputSpec& outputSpec) = 0;
     virtual void deinit() = 0;
 
-    virtual std::shared_ptr<IAudioContext> context(const modularity::IoCID& ctxId = 0) const = 0;
-    virtual void destroyContext(const modularity::IoCID& ctxId) = 0;
+    virtual RetVal<std::shared_ptr<IAudioContext> > addAudioContext(const AudioCtxId& ctxId) = 0;
+    virtual std::shared_ptr<IAudioContext> context(const AudioCtxId& ctxId) const = 0;
+    virtual void destroyContext(const AudioCtxId& ctxId) = 0;
 
     virtual void setOutputSpec(const OutputSpec& outputSpec) = 0;
     virtual OutputSpec outputSpec() const = 0;

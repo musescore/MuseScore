@@ -33,7 +33,7 @@ public:
     virtual ~IAudioContext() = default;
 
     // Init
-    virtual Ret init(const RenderConstraints& consts) = 0;
+    virtual Ret init() = 0;
     virtual void deinit() = 0;
 
     // Config

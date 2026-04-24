@@ -43,6 +43,9 @@ enum class MsgCode {
     EngineRunning, // notification
     EngineDeinit,
 
+    ContextInit,
+    ContextDeinit,
+
     // Config
     EngineConfigChanged,
 
@@ -138,6 +141,9 @@ inline std::string to_string(MsgCode m)
     case MsgCode::EngineRunning: return "EngineRunning";
     case MsgCode::EngineInit: return "EngineInit";
     case MsgCode::EngineDeinit: return "EngineDeinit";
+
+    case MsgCode::ContextInit: return "ContextInit";
+    case MsgCode::ContextDeinit: return "ContextDeinit";
 
     // Config
     case MsgCode::EngineConfigChanged: return "EngineConfigChanged";

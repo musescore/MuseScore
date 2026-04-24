@@ -383,7 +383,7 @@ void FluidSynth::flushSound()
 
 TimePosition FluidSynth::playbackPosition() const
 {
-    return TimePosition::fromTime(muse::msecs_to_secs(m_sequencer.playbackPosition()), m_outputSpec.sampleRate);
+    return TimePosition::fromTime(muse::usecs_to_secs(m_sequencer.playbackPosition().raw()), m_outputSpec.sampleRate);
 }
 
 void FluidSynth::setPlaybackPosition(const TimePosition& position)
@@ -392,7 +392,10 @@ void FluidSynth::setPlaybackPosition(const TimePosition& position)
         return;
     }
 
-    m_sequencer.setPlaybackPosition(muse::secs_to_msecs(position.time()));
+    //! NOTE Don't trust that msecs_t is used everywhere here,
+    // in fact, usecs_t (microseconds) is stored there.
+    const usecs_t usecs = muse::secs_to_usecs(position.time());
+    m_sequencer.setPlaybackPosition(msecs_t(usecs.raw()));
 
     if (m_sequencer.isActive()) {
         setExpressionLevel(m_sequencer.currentExpressionLevel());

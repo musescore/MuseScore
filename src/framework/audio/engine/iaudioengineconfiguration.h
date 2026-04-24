@@ -43,8 +43,5 @@ public:
     virtual async::Channel<bool> isLazyProcessingOfOnlineSoundsEnabledChanged() const = 0;
 
     virtual AudioInputParams defaultAudioInputParams() const = 0;
-
-    virtual size_t desiredAudioThreadNumber() const = 0;
-    virtual size_t minTrackCountForMultithreading() const = 0;
 };
 }

@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_SEQUENCER_H
-#define MUSE_AUDIO_SEQUENCER_H
+#pragma once
 
 #include "../iplayback.h"
 #include "global/async/asyncable.h"
+#include "global/types/retval.h"
 
 #include "modularity/ioc.h"
 #include "common/rpc/icontextrpcchannel.h"
@@ -44,16 +44,11 @@ public:
     Playback(const muse::modularity::ContextPtr& ctx)
         : Contextable(ctx) {}
 
-    void init();
-    void deinit();
-
-    // 0. Check is audio system started
-    bool isAudioStarted() const override;
-    async::Channel<bool> isAudioStartedChanged() const override;
-
-    // 1. Init playback (temporary)
-    async::Promise<bool> initPlayback() override;
-    void deinitPlayback() override;
+    // 1. Init
+    async::Promise<Ret> init() override;
+    bool isInited() const override;
+    async::Channel<bool> initedChanged() const override;
+    void deinit() override;
 
     // 2. Setup tracks
     async::Promise<TrackIdList> trackIdList() const override;
@@ -109,6 +104,8 @@ public:
 
 private:
 
+    ValCh<bool> m_inited;
+
     async::Channel<TrackId> m_trackAdded;
     async::Channel<TrackId> m_trackRemoved;
     async::Channel<TrackId, AudioInputParams> m_inputParamsChanged;
@@ -120,5 +117,3 @@ private:
     mutable rpc::StreamId m_saveSoundTrackProgressStreamId = 0;
 };
 }
-
-#endif // MUSE_AUDIO_SEQUENCER_H

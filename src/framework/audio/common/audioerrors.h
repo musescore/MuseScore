@@ -61,6 +61,7 @@ enum class Err {
     UnknownPluginType = 351,
     InvalidAudioOutput = 352,
     InvalidSynth = 353,
+    AudioContextAlreadyExists = 354,
 
     // clock
     InvalidTimeLoop = 360,

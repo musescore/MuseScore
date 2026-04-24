@@ -41,8 +41,9 @@ public:
     Ret init(const OutputSpec& outputSpec) override;
     void deinit() override;
 
-    std::shared_ptr<IAudioContext> context(const modularity::IoCID& ctxId) const override;
-    void destroyContext(const modularity::IoCID& ctxId) override;
+    RetVal<std::shared_ptr<IAudioContext> > addAudioContext(const AudioCtxId& ctxId) override;
+    std::shared_ptr<IAudioContext> context(const AudioCtxId& ctxId) const override;
+    void destroyContext(const AudioCtxId& ctxId) override;
 
     void setOutputSpec(const OutputSpec& outputSpec) override;
     OutputSpec outputSpec() const override;
@@ -59,9 +60,7 @@ private:
 
     std::atomic<bool> m_inited = false;
 
-    // Temporarily one context, for the transition phase
-    std::shared_ptr<AudioContext> m_context;
-    //mutable std::map<modularity::IoCID, std::shared_ptr<AudioContext> > m_contexts;
+    std::map<AudioCtxId, std::shared_ptr<AudioContext> > m_contexts;
 
     OutputSpec m_outputSpec;
     async::Channel<OutputSpec> m_outputSpecChanged;

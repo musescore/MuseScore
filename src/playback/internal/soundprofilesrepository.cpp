@@ -40,15 +40,15 @@ void SoundProfilesRepository::init()
     museProfile.name = config()->museSoundsProfileName();
     m_profilesMap.emplace(museProfile.name, std::move(museProfile));
 
-    if (playback()->isAudioStarted()) {
+    if (playback()->isInited()) {
         refresh();
         return;
     }
 
-    playback()->isAudioStartedChanged().onReceive(this, [this](bool started) {
-        if (started) {
+    playback()->initedChanged().onReceive(this, [this](bool inited) {
+        if (inited) {
             refresh();
-            playback()->isAudioStartedChanged().disconnect(this);
+            playback()->initedChanged().disconnect(this);
         }
     });
 }

@@ -47,7 +47,7 @@ public:
 
 private:
 
-    std::shared_ptr<IAudioContext> audioContext() const;
+    std::shared_ptr<IAudioContext> audioContext(rpc::CtxId ctxId) const;
 
     void onLongRequest(rpc::MsgCode code, const rpc::Handler& h);
     void onQuickRequest(rpc::MsgCode code, const rpc::Handler& h);
