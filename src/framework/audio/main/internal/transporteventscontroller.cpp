@@ -32,7 +32,7 @@ void TransportEventsController::init()
 {
     ONLY_AUDIO_MAIN_THREAD;
 
-    channel()->onMethod(Method::TransportEventReceived, [this](const Msg& msg) {
+    channel()->onNotification(MsgCode::TransportEventReceived, [this](const Msg& msg) {
         ONLY_AUDIO_MAIN_THREAD;
 
         TransportEvent event;
@@ -48,7 +48,7 @@ void TransportEventsController::deinit()
 {
     ONLY_AUDIO_MAIN_THREAD;
 
-    channel()->onMethod(Method::TransportEventReceived, nullptr);
+    channel()->onNotification(MsgCode::TransportEventReceived, nullptr);
 }
 
 void TransportEventsController::onEventReceived(const TransportEvent& event)

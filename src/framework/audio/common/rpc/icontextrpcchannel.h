@@ -32,7 +32,8 @@ public:
     virtual ~IContextRpcChannel() = default;
 
     virtual void send(const Msg& msg, const Handler& onResponse = nullptr) = 0;
-    virtual void onMethod(Method method, Handler h) = 0;
+    virtual void onRequest(MsgCode code, Handler h) = 0;
+    virtual void onNotification(MsgCode code, Handler h) = 0;
 
     // stream (async/channel)
     template<typename ... Types>

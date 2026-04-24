@@ -38,10 +38,10 @@ void ContextRpcChannel::send(const Msg& msg, const Handler& onResponse)
     globalChannel()->send(m, h);
 }
 
-void ContextRpcChannel::onMethod(Method method, Handler h)
+void ContextRpcChannel::onRequest(MsgCode code, Handler h)
 {
     if (h) {
-        globalChannel()->onMethod(method, [this, h](const Msg& msg) {
+        globalChannel()->onRequest(code, [this, h](const Msg& msg) {
             if (msg.ctxId == contextId()) {
                 h(msg);
             } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
@@ -50,7 +50,23 @@ void ContextRpcChannel::onMethod(Method method, Handler h)
         });
     } else {
         // reset
-        globalChannel()->onMethod(method, nullptr);
+        globalChannel()->onRequest(code, nullptr);
+    }
+}
+
+void ContextRpcChannel::onNotification(MsgCode code, Handler h)
+{
+    if (h) {
+        globalChannel()->onNotification(code, [this, h](const Msg& msg) {
+            if (msg.ctxId == contextId()) {
+                h(msg);
+            } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
+                h(msg);
+            }
+        });
+    } else {
+        // reset
+        globalChannel()->onNotification(code, nullptr);
     }
 }
 

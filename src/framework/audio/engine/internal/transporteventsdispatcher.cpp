@@ -41,7 +41,7 @@ void TransportEventsDispatcher::init()
 
     m_eventsReceived.onReceive(this, [this](const TransportEvents& events) {
         for (const TransportEvent& event : events) {
-            rpcChannel()->send(rpc::make_request(Method::TransportEventReceived, RpcPacker::pack(event)));
+            rpcChannel()->send(rpc::make_notification(MsgCode::TransportEventReceived, RpcPacker::pack(event)));
         }
     });
 }
