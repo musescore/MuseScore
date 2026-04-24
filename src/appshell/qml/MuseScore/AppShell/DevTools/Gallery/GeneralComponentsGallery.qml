@@ -1108,7 +1108,7 @@ Rectangle {
             valueTitle: "Age"
 
             model: ListModel {
-                ListElement {
+                 ListElement {
                     name: "Alex"
                     age: 12
                     valueType: "Int"
@@ -1116,13 +1116,8 @@ Rectangle {
                     max: 15
                 }
                 ListElement {
-                    name: "Tony"
-                    age: 15
-                    valueType: "Int"
-                }
-                ListElement {
-                    name: "Fred"
-                    age: 10
+                    name: "Anna"
+                    age: 11
                     valueType: "Int"
                 }
                 ListElement {
@@ -1131,8 +1126,13 @@ Rectangle {
                     valueType: "Int"
                 }
                 ListElement {
-                    name: "Anna"
-                    age: 11
+                    name: "Fred"
+                    age: 10
+                    valueType: "Int"
+                }
+                ListElement {
+                    name: "Tony"
+                    age: 15
                     valueType: "Int"
                 }
             }
@@ -1152,7 +1152,13 @@ Rectangle {
                 id: tableModel
             }
 
-            model: tableModel
+            TableSortFilterProxyModel {
+                id: tableProxy
+
+                sourceModel: tableModel
+            }
+
+            model: tableProxy
 
             headerCapitalization: Font.Capitalize
 
@@ -1162,6 +1168,14 @@ Rectangle {
                 }
 
                 return null
+            }
+
+            sortOrderProvider: function(column) {
+                return tableProxy.columnSortOrder(column)
+            }
+
+            onHorizontalHeaderClicked: function (column) {
+                tableProxy.toggleColumnSort(column)
             }
 
             Component {

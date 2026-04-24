@@ -39,6 +39,7 @@ TableViewDelegate {
 
     property bool isSelected: false
     property bool evenMargins: false
+    property bool displayTruncatedTextOnHover: false
 
     property alias navigation: listItem.navigation
 
@@ -517,6 +518,7 @@ TableViewDelegate {
                             text: root.cellType === TableViewCellType.List ? root.itemData.current : val
                             textFormat: Text.PlainText
                             horizontalAlignment: Text.AlignLeft
+                            displayTruncatedTextOnHover: root.displayTruncatedTextOnHover
                         }
                     }
                 }

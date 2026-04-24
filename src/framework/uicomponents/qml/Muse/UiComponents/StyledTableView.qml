@@ -34,8 +34,11 @@ Item {
     property alias model: tableView.model
     property var sourceComponentCallback
 
+    property var sortOrderProvider: null
+
     property bool showVerticalHeader: false
     property bool horizontalHeaderNavigationEnabled: true
+    property bool displayTruncatedTextOnHover: false
 
     property var currentEditedCell: null
 
@@ -77,13 +80,21 @@ Item {
     }
 
     signal handleItem(var index, var item)
+    signal horizontalHeaderClicked(int column)
 
     QtObject {
         id: prv
 
+        property int sortRevision: 0
         property real valueItemWidth: 126
         property real spacing: 4
         property real sideMargin: 30
+    }
+
+    Connections {
+        target: root.model
+        ignoreUnknownSignals: true
+        function onSortChanged() { prv.sortRevision++ }
     }
 
     Rectangle {
@@ -118,6 +129,8 @@ Item {
 
             headerCapitalization: root.headerCapitalization
 
+            sortOrder: root.sortOrderProvider ? (prv.sortRevision, root.sortOrderProvider(index)) : ColumnSortOrder.Unsorted
+
             navigation.panel: root.navigationPanel
             navigation.row: 0
             navigation.column: index * 100 // * 100 - some extra space for cell controls
@@ -135,6 +148,10 @@ Item {
 
             onFormatChangeRequested: function(formatId) {
                 display.currentFormatId = formatId
+            }
+
+            onClicked: {
+                root.horizontalHeaderClicked(index)
             }
         }
     }
@@ -237,6 +254,7 @@ Item {
             preferredWidth: hHeaderData.preferredWidth
 
             sourceComponentCallback: root.sourceComponentCallback
+            displayTruncatedTextOnHover: root.displayTruncatedTextOnHover
 
             isSelected: tableView.selectionModel.hasSelection && tableView.selectionModel.isSelected(tableView.model.index(row, column))
             evenMargins: showVerticalHeader

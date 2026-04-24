@@ -38,7 +38,7 @@ void TestTableViewModel::load()
     QVector<TableViewCell*> row1 = {
         makeCell(Val("Text 1")),
         makeCell(Val(ValList { Val("Item 1"), Val("Item 2") }), Val("Item 1")),
-        makeCell(Val("00h00m00.000 s")),
+        makeCell(Val("12h34m56.789 s")),
         makeCell(Val(0.0)),
         makeCell(Val("00h00m00.000 s")),
     };
@@ -67,6 +67,14 @@ void TestTableViewModel::load()
     setTable(table);
 }
 
+bool TestTableViewModel::doCellValueChangeRequested(int row, int column, const Val& value)
+{
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+    Q_UNUSED(value);
+    return true;
+}
+
 MenuItemList TestTableViewModel::makeAvailableFormats()
 {
     MenuItemList items;
@@ -76,7 +84,7 @@ MenuItemList TestTableViewModel::makeAvailableFormats()
 
     ui::UiAction action;
 
-    action.code = "defaul";
+    action.code = "default";
     action.title = TranslatableString::untranslatable("Default");
     MenuItem* item1 = new MenuItem(action);
     item1->setState(enabledState);
@@ -87,7 +95,7 @@ MenuItemList TestTableViewModel::makeAvailableFormats()
     action.title = TranslatableString::untranslatable("Accent");
     MenuItem* item2 = new MenuItem(action);
     item2->setState(enabledState);
-    item1->setSelectable(true);
+    item2->setSelectable(true);
     items << item2;
 
     return items;

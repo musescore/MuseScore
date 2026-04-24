@@ -38,6 +38,8 @@ Item {
 
     property int headerCapitalization: Font.AllUppercase
 
+    property int sortOrder: ColumnSortOrder.Unsorted
+
     property NavigationControl navigation: NavigationControl {
         name: root.objectName !== "" ? root.objectName : "TableViewColumn"
         enabled: root.enabled && root.visible
@@ -96,6 +98,16 @@ Item {
             opacity: ui.theme.buttonOpacityNormal
         }
 
+        StyledIconLabel {
+            id: sorterIcon
+            Layout.alignment: Qt.AlignVCenter
+
+            visible: root.sortOrder !== ColumnSortOrder.Unsorted
+            iconCode: root.sortOrder === ColumnSortOrder.Ascending ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_UP
+
+            opacity: ui.theme.buttonOpacityNormal
+        }
+
         MenuButton {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: 16
@@ -139,6 +151,11 @@ Item {
 
             PropertyChanges {
                 target: titleLabel
+                opacity: ui.theme.buttonOpacityHover
+            }
+
+            PropertyChanges {
+                target: sorterIcon
                 opacity: ui.theme.buttonOpacityHover
             }
         }
