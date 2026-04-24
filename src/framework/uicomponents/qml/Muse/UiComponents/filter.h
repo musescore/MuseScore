@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,41 @@
 
 #pragma once
 
-#include <QString>
+#include <QObject>
 
 #include <QtQmlIntegration/qqmlintegration.h>
 
-#include "sorter.h"
+class QModelIndex;
 
 namespace muse::uicomponents {
-class SorterValue : public Sorter
+class SortFilterProxyModel;
+
+class Filter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
+    /// Determines whether the SortFilterProxyModel should react asynchronously to the `dataChanged` signal.
+    Q_PROPERTY(bool async READ async WRITE setAsync NOTIFY dataChanged)
 
-    QML_ELEMENT
+    QML_ELEMENT;
+    QML_UNCREATABLE("")
 
 public:
-    explicit SorterValue(QObject* parent = nullptr);
+    explicit Filter(QObject* parent = nullptr);
 
-    bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) override;
+    virtual bool acceptsRow(int sourceRow, const QModelIndex& sourceParent, const SortFilterProxyModel&) = 0;
 
-    QString roleName() const;
+    bool enabled() const;
+    void setEnabled(bool enabled);
 
-public slots:
-    void setRoleName(QString roleName);
+    bool async() const;
+    void setAsync(bool async);
+
+signals:
+    void dataChanged();
 
 private:
-    QString m_roleName;
+    bool m_enabled = true;
+    bool m_async = false;
 };
 }
