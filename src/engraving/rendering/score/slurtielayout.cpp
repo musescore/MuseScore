@@ -2683,7 +2683,10 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 
     computeMidThickness(tieSeg, tieLengthInSp);
 
-    PointF tieThickness(0.0, tieSeg->ldata()->midThickness());
+    PointF tieThickness(0.0, 0.0);
+    if (tieSeg->tie()->styleType() == SlurStyleType::Solid) {
+        tieThickness.setY(tieSeg->ldata()->midThickness());
+    }
 
     const PointF bezier1Offset = t.map(tieSeg->ups(Grip::BEZIER1).off);
     const PointF bezier2Offset = t.map(tieSeg->ups(Grip::BEZIER2).off);
@@ -2843,7 +2846,11 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
 
     // Set slur thickness
     computeMidThickness(slurSeg, p2.x() / slurSeg->spatium());
-    PointF thick(0.0, slurSeg->ldata()->midThickness());
+
+    PointF thick(0.0, 0.0);
+    if (slurSeg->slur()->styleType() == SlurStyleType::Solid) {
+        thick.setY(slurSeg->ldata()->midThickness());
+    }
 
     // Set path
     PainterPath path = PainterPath();
@@ -3216,7 +3223,10 @@ void SlurTieLayout::fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthIn
         double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
         const PointF point = b.pointAtPercent(percent);
         RectF re = RectF(startPoint, point).normalized();
-        double approxThicknessAtPercent = (1 - 2 * std::abs(0.5 - percent)) * midThickness;
+        double approxThicknessAtPercent = midThickness;
+        if (slurTieSeg->slurTie()->styleType() == SlurStyleType::Solid) {
+            approxThicknessAtPercent *= (1 - 2 * std::abs(0.5 - percent));
+        }
         if (re.height() < approxThicknessAtPercent) {
             double adjust = (approxThicknessAtPercent - re.height()) * .5;
             re.adjust(0.0, -adjust, 0.0, adjust);
