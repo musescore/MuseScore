@@ -368,7 +368,7 @@ Progress LanguagesService::update(const QString& languageCode)
 
     downloadServerLanguagesInfo(
         effectiveLanguageCode,
-        [this, languageCode, progress]( const RetVal<QJsonObject>& res) mutable {
+        [this, effectiveLanguageCode, progress]( const RetVal<QJsonObject>& res) mutable {
         if (!res.ret) {
             LOGE() << "Failed to download server languages info: " << res.ret.toString();
             progress.finish(res.ret);
@@ -376,9 +376,10 @@ Progress LanguagesService::update(const QString& languageCode)
         }
 
         QJsonObject serverLanguagesInfo = res.val;
-        QStringList languagesToUpdate = this->languagesToUpdate(languageCode, serverLanguagesInfo);
+        QStringList languagesToUpdate = this->languagesToUpdate(effectiveLanguageCode, serverLanguagesInfo);
 
         if (languagesToUpdate.isEmpty()) {
+            m_languageUpdateInProgress = false;
             progress.finish(make_ret(Err::AlreadyUpToDate));
             return;
         }
