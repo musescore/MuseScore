@@ -4868,17 +4868,19 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
-    // Brackets may be deleted and replaced
+    // Brackets get deleted during layout with their system, so the best we can do to maintain
+    // the bracket selected is to store their indices and use them to find the new ones
     bool isBracket = m_editData.element->isBracket();
-    const mu::engraving::System* system = nullptr;
     size_t bracketIndex = muse::nidx;
+    size_t systemIndex = muse::nidx;
 
     if (isBracket) {
-        const mu::engraving::Bracket* bracket = mu::engraving::toBracket(m_editData.element);
-        system = bracket->system();
+        const Bracket* bracket = toBracket(m_editData.element);
+        System* system = bracket->system();
 
         if (system) {
             bracketIndex = muse::indexOf(system->brackets(), bracket);
+            systemIndex = muse::indexOf(score()->systems(), system);
         }
     } else if (m_editData.element->isHarmony()) {
         if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
@@ -4892,10 +4894,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
     }
 
     if (handleKeyPress(event)) {
-        if (isBracket && system && bracketIndex != muse::nidx) {
-            mu::engraving::EngravingItem* bracket = system->brackets().at(bracketIndex);
-            m_editData.element = bracket;
-            select({ bracket }, SelectType::SINGLE);
+        if (isBracket && bracketIndex != muse::nidx && systemIndex != muse::nidx) {
+            // Try to restore selected bracket
+            System* system = systemIndex < score()->systems().size() ? score()->systems().at(systemIndex) : nullptr;
+            EngravingItem* bracket = system && bracketIndex < system->brackets().size() ? system->brackets().at(bracketIndex) : nullptr;
+            if (bracket) {
+                m_editData.element = bracket;
+                select({ bracket }, SelectType::SINGLE);
+            }
         }
 
         if (isGripEditStarted()) {

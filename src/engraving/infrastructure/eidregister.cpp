@@ -56,6 +56,26 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 #endif
 }
 
+void EIDRegister::removeItem(const EngravingObject* item)
+{
+    // NOTE: needed only when elements are removed during read (e.g. broken spanners)
+
+    auto itemIter = m_itemToEid.find(const_cast<EngravingObject*>(item));
+    IF_ASSERT_FAILED(itemIter != m_itemToEid.end()) {
+        return;
+    }
+
+    EID eid = (*itemIter).second;
+    DO_ASSERT(eid.isValid());
+
+    m_itemToEid.erase(itemIter);
+
+    auto eidIter = m_eidToItem.find(eid);
+    DO_ASSERT(eidIter != m_eidToItem.end());
+
+    m_eidToItem.erase(eidIter);
+}
+
 EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
     auto iter = m_eidToItem.find(eid);
