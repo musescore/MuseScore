@@ -132,7 +132,7 @@ public:
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
 
-    virtual void moveLyrics(MoveDirection d) = 0;
+    virtual void moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& elements) = 0;
     virtual void expandSelection(ExpandSelectionMode mode) = 0;
     virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
     virtual void selectTopStaff() = 0;
@@ -140,8 +140,8 @@ public:
     virtual void moveSegmentSelection(MoveDirection d) = 0;
 
     // Move/nudge elements
-    virtual void movePitch(MoveDirection d, PitchMode mode) = 0;
-    virtual void nudge(MoveDirection d, bool quickly) = 0;
+    virtual void movePitch(MoveDirection d, PitchMode mode, const std::vector<EngravingItem*>& elements) = 0;
+    virtual void nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& elements) = 0;
     virtual void nudgeAnchors(MoveDirection d) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
     virtual void swapChordRest(MoveDirection d) = 0;

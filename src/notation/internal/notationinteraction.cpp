@@ -4239,72 +4239,74 @@ inline mu::engraving::DirectionV toDirection(MoveDirection d)
     return d == MoveDirection::Up ? mu::engraving::DirectionV::UP : mu::engraving::DirectionV::DOWN;
 }
 
-void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
+void NotationInteraction::movePitch(MoveDirection d, PitchMode mode, const std::vector<EngravingItem*>& selectedElements)
 {
     IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
         return;
     }
-    EngravingItem* selected = score()->selection().element();
-    if (selected && selected->isRest()) {
-        if (noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
-            // The rest won't be visible - don't try to move it...
-            return;
-        }
-        startEdit(TranslatableString("undoableAction", "Change vertical position"));
-        score()->cmdMoveRest(toRest(selected), toDirection(d));
-    } else {
-        startEdit(TranslatableString("undoableAction", "Change pitch"));
-        EditNote::upDown(score(), MoveDirection::Up == d, mode);
-    }
-
-    apply();
-}
-
-void NotationInteraction::moveLyrics(MoveDirection d)
-{
-    EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el && el->isLyrics()) {
-        return;
-    }
-    startEdit(TranslatableString("undoableAction", "Move lyrics"));
-    score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
-    apply();
-}
-
-void NotationInteraction::nudge(MoveDirection d, bool quickly)
-{
-    EngravingItem* el = score()->selection().element();
-    IF_ASSERT_FAILED(el && (el->isTextBase() || el->isArticulationFamily())) {
+    if (selectedElements.empty()) {
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Nudge element"));
-
-    qreal step = quickly ? mu::engraving::MScore::nudgeStep10 : mu::engraving::MScore::nudgeStep;
-    step = step * el->spatium();
-
-    switch (d) {
-    case MoveDirection::Undefined: {
-        IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
-            return;
+    for (EngravingItem* selected : selectedElements) {
+        if (selected && selected->isRest()) {
+            if (selected->staff()->isTabStaff(selected->tick())) {
+                continue;
+            }
+            score()->cmdMoveRest(toRest(selected), toDirection(d));
         }
-    } break;
-    case MoveDirection::Left:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
-        break;
-    case MoveDirection::Right:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
-        break;
-    case MoveDirection::Up:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
-        break;
-    case MoveDirection::Down:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
-        break;
+    }
+    EditNote::upDown(score(), MoveDirection::Up == d, mode);
+}
+
+void NotationInteraction::moveLyrics(MoveDirection d, const std::vector<EngravingItem*>& selectedElements)
+{
+    IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+        return;
+    }
+    if (selectedElements.empty()) {
+        return;
     }
 
-    apply();
+    for (EngravingItem* el : selectedElements) {
+        if (el && el->isLyrics()) {
+            score()->cmdMoveLyrics(toLyrics(el), toDirection(d));
+        }
+    }
+}
 
+void NotationInteraction::nudge(MoveDirection d, bool quickly, const std::vector<EngravingItem*>& selectedElements)
+{
+    if (selectedElements.empty()) {
+        return;
+    }
+    IF_ASSERT_FAILED(d != MoveDirection::Undefined) {
+        return;
+    }
+    for (EngravingItem* el : selectedElements) {
+        if (!el) {
+            continue;
+        }
+        double step = quickly ? mu::engraving::MScore::nudgeStep10 : mu::engraving::MScore::nudgeStep;
+        step = step * el->spatium();
+
+        switch (d) {
+        case MoveDirection::Left:
+            el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
+            break;
+        case MoveDirection::Right:
+            el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
+            break;
+        case MoveDirection::Up:
+            el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
+            break;
+        case MoveDirection::Down:
+            el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
+            break;
+        case MoveDirection::Undefined:
+            UNREACHABLE;
+        }
+    }
     notifyAboutDragChanged();
 }
 
@@ -4314,7 +4316,6 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Nudge"));
     double vRaster = getVRaster();
     double hRaster = getHRaster();
 
@@ -4351,8 +4352,6 @@ void NotationInteraction::nudgeAnchors(MoveDirection d)
         m_editData.element->drag(m_editData);
         m_editData.element->endDrag(m_editData);
     }
-
-    apply();
 }
 
 bool NotationInteraction::isTextSelected() const
