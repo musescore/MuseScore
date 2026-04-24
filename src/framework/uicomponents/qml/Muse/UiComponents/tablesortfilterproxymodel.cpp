@@ -81,8 +81,13 @@ void TableSortFilterProxyModel::toggleColumnSort(int column)
             m_sortPipeline.erase(m_sortPipeline.begin());
         }
     } else if (it == m_sortPipeline.end() - 1) {
-        // Only toggle sort order if this column is already the primary sort key
-        it->ascending = !it->ascending;
+        // Only Cycle through sort order if this column is already the primary sort key
+        if (!it->ascending) {
+            // descending -> unsorted state transition ; just remove from the sort pipeline.
+            m_sortPipeline.erase(it);
+        } else {
+            it->ascending = false;
+        }
     } else {
         const bool ascending = it->ascending;
         m_sortPipeline.erase(it);
