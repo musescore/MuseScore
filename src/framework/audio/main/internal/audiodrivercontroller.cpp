@@ -388,7 +388,7 @@ void AudioDriverController::updateOutputSpec()
     }
 
     IAudioDriver::Spec activeSpec = m_audioDriver->activeSpec();
-    rpcChannel()->send(rpc::make_request(Method::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
+    rpcChannel()->send(rpc::make_request(MsgCode::SetOutputSpec, RpcPacker::pack(activeSpec.output)));
 }
 
 std::vector<samples_t> AudioDriverController::availableOutputDeviceBufferSizes() const

@@ -35,7 +35,8 @@ public:
     void process() override;
 
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
-    void onMethod(Method method, Handler h) override;
+    void onRequest(MsgCode code, Handler h) override;
+    void onNotification(MsgCode code, Handler h) override;
     void listenAll(Handler h) override;
 
     void addStream(std::shared_ptr<IRpcStream> s) override;
@@ -47,12 +48,12 @@ private:
 
     void receive(const ByteArray& data);
     void receive(const Msg& msg);
-    void receive(const StreamMsg& msg);
 
     struct RpcData {
         // msgs
         Handler listenerAll;
-        std::map<Method, Handler> onMethods;
+        std::map<MsgCode, Handler> onRequests;
+        std::map<MsgCode, Handler> onNotifications;
         std::map<CallId, Handler> onResponses;
 
         // stream

@@ -54,7 +54,7 @@ void EngineRpcController::init()
     ONLY_AUDIO_RPC_THREAD;
 
     // AudioEngine
-    onLongMethod(Method::SetOutputSpec, [this](const Msg& msg) {
+    onLongRequest(MsgCode::SetOutputSpec, [this](const Msg& msg) {
         OutputSpec spec;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, spec)) {
             return;
@@ -63,7 +63,7 @@ void EngineRpcController::init()
     });
 
     // Soundfont
-    onLongMethod(Method::LoadSoundFonts, [this](const Msg& msg) {
+    onLongRequest(MsgCode::LoadSoundFonts, [this](const Msg& msg) {
         std::vector<synth::SoundFontUri> uris;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uris)) {
             return;
@@ -72,7 +72,7 @@ void EngineRpcController::init()
         soundFontRepository()->loadSoundFonts(uris);
     });
 
-    onLongMethod(Method::AddSoundFont, [this](const Msg& msg) {
+    onLongRequest(MsgCode::AddSoundFont, [this](const Msg& msg) {
         synth::SoundFontUri uri;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uri)) {
             return;
@@ -81,7 +81,7 @@ void EngineRpcController::init()
         soundFontRepository()->addSoundFont(uri);
     });
 
-    onLongMethod(Method::AddSoundFontData, [this](const Msg& msg) {
+    onLongRequest(MsgCode::AddSoundFontData, [this](const Msg& msg) {
         synth::SoundFontUri uri;
         ByteArray data;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, uri, data)) {
@@ -92,7 +92,7 @@ void EngineRpcController::init()
     });
 
     // Engine Conf
-    onLongMethod(Method::EngineConfigChanged, [this](const Msg& msg) {
+    onLongRequest(MsgCode::EngineConfigChanged, [this](const Msg& msg) {
         AudioEngineConfig conf;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, conf)) {
             return;
@@ -104,33 +104,33 @@ void EngineRpcController::init()
     // AudioContext
     // Notification
     audioContext()->trackAdded().onReceive(this, [this](TrackId trackId) {
-        channel()->send(rpc::make_notification(Method::TrackAdded, RpcPacker::pack(trackId)));
+        channel()->send(rpc::make_notification(MsgCode::TrackAdded, RpcPacker::pack(trackId)));
     });
 
     audioContext()->trackRemoved().onReceive(this, [this](TrackId trackId) {
-        channel()->send(rpc::make_notification(Method::TrackRemoved, RpcPacker::pack(trackId)));
+        channel()->send(rpc::make_notification(MsgCode::TrackRemoved, RpcPacker::pack(trackId)));
     });
 
     audioContext()->inputParamsChanged().onReceive(this, [this](TrackId trackId, const AudioInputParams& params) {
-        channel()->send(rpc::make_notification(Method::InputParamsChanged, RpcPacker::pack(trackId, params)));
+        channel()->send(rpc::make_notification(MsgCode::InputParamsChanged, RpcPacker::pack(trackId, params)));
     });
 
     audioContext()->outputParamsChanged().onReceive(this, [this](TrackId trackId, const AudioOutputParams& params) {
-        channel()->send(rpc::make_notification(Method::OutputParamsChanged, RpcPacker::pack(trackId, params)));
+        channel()->send(rpc::make_notification(MsgCode::OutputParamsChanged, RpcPacker::pack(trackId, params)));
     });
 
     audioContext()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
-        channel()->send(rpc::make_notification(Method::MasterOutputParamsChanged, RpcPacker::pack(params)));
+        channel()->send(rpc::make_notification(MsgCode::MasterOutputParamsChanged, RpcPacker::pack(params)));
     });
 
     // Tracks
-    onQuickMethod(Method::GetTrackIdList, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetTrackIdList, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         RetVal<TrackIdList> ret = audioContext()->trackIdList();
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onQuickMethod(Method::GetTrackName, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetTrackName, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -140,7 +140,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onLongMethod(Method::AddTrackWithPlaybackData, [this](const Msg& msg) {
+    onLongRequest(MsgCode::AddTrackWithPlaybackData, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackName trackName;
         mpe::PlaybackData playbackData;
@@ -222,7 +222,7 @@ void EngineRpcController::init()
         }
     });
 
-    onLongMethod(Method::AddTrackWithIODevice, [this](const Msg& msg) {
+    onLongRequest(MsgCode::AddTrackWithIODevice, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackName trackName;
         uint64_t devicePtr = 0;
@@ -236,7 +236,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onLongMethod(Method::AddAuxTrack, [this](const Msg& msg) {
+    onLongRequest(MsgCode::AddAuxTrack, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackName trackName;
         AudioOutputParams outputParams;
@@ -247,7 +247,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onLongMethod(Method::RemoveTrack, [this](const Msg& msg) {
+    onLongRequest(MsgCode::RemoveTrack, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -256,12 +256,12 @@ void EngineRpcController::init()
         audioContext()->removeTrack(trackId);
     });
 
-    onLongMethod(Method::RemoveAllTracks, [this](const Msg&) {
+    onLongRequest(MsgCode::RemoveAllTracks, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->removeAllTracks();
     });
 
-    onQuickMethod(Method::GetAvailableInputResources, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetAvailableInputResources, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         AudioResourceMetaList list = audioContext()->availableInputResources();
         //! NOTE The list can be large.
@@ -270,7 +270,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(rpc::Options { list.size() * 300 }, list)));
     });
 
-    onQuickMethod(Method::GetAvailableSoundPresets, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetAvailableSoundPresets, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         AudioResourceMeta meta;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, meta)) {
@@ -280,7 +280,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(list)));
     });
 
-    onQuickMethod(Method::GetInputParams, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetInputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -290,7 +290,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onLongMethod(Method::SetInputParams, [this](const Msg& msg) {
+    onLongRequest(MsgCode::SetInputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         AudioInputParams params;
@@ -300,7 +300,7 @@ void EngineRpcController::init()
         audioContext()->setInputParams(trackId, params);
     });
 
-    onLongMethod(Method::ProcessInput, [this](const Msg& msg) {
+    onLongRequest(MsgCode::ProcessInput, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -310,7 +310,7 @@ void EngineRpcController::init()
         audioContext()->processInput(trackId);
     });
 
-    onQuickMethod(Method::GetInputProcessingProgress, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetInputProcessingProgress, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -326,7 +326,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret.ret, ret.val.isStarted, streamId)));
     });
 
-    onLongMethod(Method::ClearCache, [this](const Msg& msg) {
+    onLongRequest(MsgCode::ClearCache, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -336,20 +336,20 @@ void EngineRpcController::init()
         audioContext()->clearCache(trackId);
     });
 
-    onLongMethod(Method::ClearSources, [this](const Msg&) {
+    onLongRequest(MsgCode::ClearSources, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->clearSources();
     });
 
     // Play
-    onQuickMethod(Method::PrepareToPlay, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::PrepareToPlay, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->prepareToPlay().onResolve(this, [this, msg](const Ret& ret) {
             channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
         });
     });
 
-    onQuickMethod(Method::Play, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::Play, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         secs_t delay = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, delay)) {
@@ -358,7 +358,7 @@ void EngineRpcController::init()
         audioContext()->play(delay);
     });
 
-    onQuickMethod(Method::Seek, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::Seek, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         secs_t newPosition = 0;
         bool flushSound = false;
@@ -368,17 +368,17 @@ void EngineRpcController::init()
         audioContext()->seek(newPosition, flushSound);
     });
 
-    onQuickMethod(Method::Stop, [this](const Msg&) {
+    onQuickRequest(MsgCode::Stop, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->stop();
     });
 
-    onQuickMethod(Method::Pause, [this](const Msg&) {
+    onQuickRequest(MsgCode::Pause, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->pause();
     });
 
-    onQuickMethod(Method::Resume, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::Resume, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         secs_t delay = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, delay)) {
@@ -387,7 +387,7 @@ void EngineRpcController::init()
         audioContext()->resume(delay);
     });
 
-    onQuickMethod(Method::SetDuration, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::SetDuration, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         secs_t duration = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, duration)) {
@@ -396,7 +396,7 @@ void EngineRpcController::init()
         audioContext()->setDuration(duration);
     });
 
-    onQuickMethod(Method::SetLoop, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::SetLoop, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         secs_t from = 0;
         secs_t to = 0;
@@ -407,12 +407,12 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onQuickMethod(Method::ResetLoop, [this](const Msg&) {
+    onQuickRequest(MsgCode::ResetLoop, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->resetLoop();
     });
 
-    onQuickMethod(Method::GetPlaybackStatus, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetPlaybackStatus, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
 
         PlaybackStatus status = audioContext()->playbackStatus();
@@ -421,7 +421,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(status, streamId)));
     });
 
-    onQuickMethod(Method::GetPlaybackPosition, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetPlaybackPosition, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
 
         secs_t pos = audioContext()->playbackPosition();
@@ -432,7 +432,7 @@ void EngineRpcController::init()
 
     // Output
 
-    onQuickMethod(Method::GetOutputParams, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetOutputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -442,7 +442,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onQuickMethod(Method::SetOutputParams, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::SetOutputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         AudioOutputParams params;
@@ -452,13 +452,13 @@ void EngineRpcController::init()
         audioContext()->setOutputParams(trackId, params);
     });
 
-    onQuickMethod(Method::GetMasterOutputParams, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetMasterOutputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         RetVal<AudioOutputParams> ret = audioContext()->masterOutputParams();
         channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
     });
 
-    onQuickMethod(Method::SetMasterOutputParams, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::SetMasterOutputParams, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         AudioOutputParams params;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, params)) {
@@ -467,18 +467,18 @@ void EngineRpcController::init()
         audioContext()->setMasterOutputParams(params);
     });
 
-    onQuickMethod(Method::ClearMasterOutputParams, [this](const Msg&) {
+    onQuickRequest(MsgCode::ClearMasterOutputParams, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->clearMasterOutputParams();
     });
 
-    onQuickMethod(Method::GetAvailableOutputResources, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetAvailableOutputResources, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         AudioResourceMetaList list = audioContext()->availableOutputResources();
         channel()->send(rpc::make_response(msg, RpcPacker::pack(list)));
     });
 
-    onQuickMethod(Method::GetSignalChanges, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetSignalChanges, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         TrackId trackId = 0;
         IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, trackId)) {
@@ -498,7 +498,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(res)));
     });
 
-    onQuickMethod(Method::GetMasterSignalChanges, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetMasterSignalChanges, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         RetVal<AudioSignalChanges> ret = audioContext()->masterSignalChanges();
         StreamId streamId = 0;
@@ -513,7 +513,7 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(res)));
     });
 
-    onLongMethod(Method::SaveSoundTrack, [this](const Msg& msg) {
+    onLongRequest(MsgCode::SaveSoundTrack, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         SoundTrackFormat format;
         uintptr_t dstDevicePtr = 0;
@@ -526,12 +526,12 @@ void EngineRpcController::init()
         });
     });
 
-    onLongMethod(Method::AbortSavingAllSoundTracks, [this](const Msg&) {
+    onLongRequest(MsgCode::AbortSavingAllSoundTracks, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->abortSavingAllSoundTracks();
     });
 
-    onQuickMethod(Method::GetSaveSoundTrackProgress, [this](const Msg& msg) {
+    onQuickRequest(MsgCode::GetSaveSoundTrackProgress, [this](const Msg& msg) {
         ONLY_AUDIO_RPC_THREAD;
         SaveSoundTrackProgress ch = audioContext()->saveSoundTrackProgressChanged();
         ch.onReceive(this, [this](int64_t current, int64_t total, SaveSoundTrackStage stage) {
@@ -547,36 +547,36 @@ void EngineRpcController::init()
         channel()->send(rpc::make_response(msg, RpcPacker::pack(m_saveSoundTrackProgressStreamId)));
     });
 
-    onQuickMethod(Method::ClearAllFx, [this](const Msg&) {
+    onQuickRequest(MsgCode::ClearAllFx, [this](const Msg&) {
         ONLY_AUDIO_RPC_THREAD;
         audioContext()->clearAllFx();
     });
 }
 
-void EngineRpcController::onLongMethod(rpc::Method method, const rpc::Handler& h)
+void EngineRpcController::onLongRequest(rpc::MsgCode code, const rpc::Handler& h)
 {
-    onMethod(OperationType::LongOperation, method, h);
+    onRequest(OperationType::LongOperation, code, h);
 }
 
-void EngineRpcController::onQuickMethod(rpc::Method method, const Handler& h)
+void EngineRpcController::onQuickRequest(rpc::MsgCode code, const Handler& h)
 {
-    onMethod(OperationType::QuickOperation, method, h);
+    onRequest(OperationType::QuickOperation, code, h);
 }
 
-void EngineRpcController::onMethod(OperationType type, rpc::Method method, const Handler& handler)
+void EngineRpcController::onRequest(OperationType type, rpc::MsgCode code, const Handler& handler)
 {
-    m_usedMethods.push_back(method);
+    m_usedRequests.push_back(code);
 
-    channel()->onMethod(method, [this, type, method, handler](const Msg& msg) {
-        IAudioEngine::Operation func = [this, method, handler, msg]() {
+    channel()->onRequest(code, [this, type, code, handler](const Msg& msg) {
+        IAudioEngine::Operation func = [this, code, handler, msg]() {
             if (m_terminated) {
                 return;
             }
 
-            UNUSED(method);
+            UNUSED(code);
             BEGIN_METHOD_DURATION
             handler(msg);
-            END_METHOD_DURATION(method)
+            END_METHOD_DURATION(code)
         };
         audioEngine()->execOperation(type, func);
     });
@@ -594,8 +594,8 @@ void EngineRpcController::deinit()
     audioContext()->outputParamsChanged().disconnect(this);
     audioContext()->masterOutputParamsChanged().disconnect(this);
 
-    for (const Method& m : m_usedMethods) {
-        channel()->onMethod(m, nullptr);
+    for (const MsgCode& m : m_usedRequests) {
+        channel()->onRequest(m, nullptr);
     }
-    m_usedMethods.clear();
+    m_usedRequests.clear();
 }

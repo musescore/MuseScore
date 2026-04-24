@@ -49,11 +49,11 @@ private:
 
     std::shared_ptr<IAudioContext> audioContext() const;
 
-    void onLongMethod(rpc::Method method, const rpc::Handler& h);
-    void onQuickMethod(rpc::Method method, const rpc::Handler& h);
-    void onMethod(OperationType type, rpc::Method method, const rpc::Handler& h);
+    void onLongRequest(rpc::MsgCode code, const rpc::Handler& h);
+    void onQuickRequest(rpc::MsgCode code, const rpc::Handler& h);
+    void onRequest(OperationType type, rpc::MsgCode code, const rpc::Handler& h);
 
-    std::vector<rpc::Method> m_usedMethods;
+    std::vector<rpc::MsgCode> m_usedRequests;
     std::atomic<bool> m_terminated = false;
 
     struct PendingTrack {

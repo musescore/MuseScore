@@ -35,7 +35,8 @@ public:
 
     // IContextRpcChannel
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
-    void onMethod(Method method, Handler h) override;
+    void onRequest(MsgCode code, Handler h) override;
+    void onNotification(MsgCode code, Handler h) override;
 
     // IStreamRpcChannel
     void addStream(std::shared_ptr<IRpcStream> s) override;

@@ -42,7 +42,7 @@ void Player::init()
             m_playbackStatus = st;
         });
 
-        Msg msg = rpc::make_request(Method::GetPlaybackStatus);
+        Msg msg = rpc::make_request(MsgCode::GetPlaybackStatus);
         channel()->send(msg, [this](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             PlaybackStatus status = PlaybackStatus::Stopped;
@@ -62,7 +62,7 @@ void Player::init()
             m_playbackPosition = newPos;
         });
 
-        Msg msg = rpc::make_request(Method::GetPlaybackPosition);
+        Msg msg = rpc::make_request(MsgCode::GetPlaybackPosition);
         channel()->send(msg, [this](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             secs_t pos = 0.0;
@@ -83,7 +83,7 @@ async::Promise<Ret> Player::prepareToPlay()
     ONLY_AUDIO_MAIN_THREAD;
     return async::make_promise<Ret>([this](auto resolve, auto) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(Method::PrepareToPlay);
+        Msg msg = rpc::make_request(MsgCode::PrepareToPlay);
         channel()->send(msg, [resolve](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             Ret ret;
@@ -101,7 +101,7 @@ async::Promise<Ret> Player::prepareToPlay()
 void Player::play(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::Play, RpcPacker::pack(delay));
+    Msg msg = rpc::make_request(MsgCode::Play, RpcPacker::pack(delay));
     channel()->send(msg);
 }
 
@@ -113,35 +113,35 @@ void Player::seek(const secs_t newPosition, const bool flushSound)
         return;
     }
 
-    Msg msg = rpc::make_request(Method::Seek, RpcPacker::pack(newPosition, flushSound));
+    Msg msg = rpc::make_request(MsgCode::Seek, RpcPacker::pack(newPosition, flushSound));
     channel()->send(msg);
 }
 
 void Player::stop()
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::Stop);
+    Msg msg = rpc::make_request(MsgCode::Stop);
     channel()->send(msg);
 }
 
 void Player::pause()
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::Pause);
+    Msg msg = rpc::make_request(MsgCode::Pause);
     channel()->send(msg);
 }
 
 void Player::resume(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::Resume, RpcPacker::pack(delay));
+    Msg msg = rpc::make_request(MsgCode::Resume, RpcPacker::pack(delay));
     channel()->send(msg);
 }
 
 void Player::setDuration(const secs_t duration)
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::SetDuration, RpcPacker::pack(duration));
+    Msg msg = rpc::make_request(MsgCode::SetDuration, RpcPacker::pack(duration));
     channel()->send(msg);
 }
 
@@ -150,7 +150,7 @@ async::Promise<bool> Player::setLoop(const secs_t from, const secs_t to)
     ONLY_AUDIO_MAIN_THREAD;
     return async::make_promise<bool>([this, from, to](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(Method::SetLoop, RpcPacker::pack(from, to));
+        Msg msg = rpc::make_request(MsgCode::SetLoop, RpcPacker::pack(from, to));
         channel()->send(msg, [resolve, reject](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             Ret ret;
@@ -171,7 +171,7 @@ async::Promise<bool> Player::setLoop(const secs_t from, const secs_t to)
 void Player::resetLoop()
 {
     ONLY_AUDIO_MAIN_THREAD;
-    Msg msg = rpc::make_request(Method::ResetLoop);
+    Msg msg = rpc::make_request(MsgCode::ResetLoop);
     channel()->send(msg);
 }
 

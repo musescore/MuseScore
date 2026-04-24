@@ -68,10 +68,10 @@ void GeneralSoundFontController::loadSoundFonts(const std::vector<io::path_t>& p
     for (const io::path_t& p : paths) {
         uris.push_back(synth::SoundFontUri::fromLocalFile(p));
     }
-    channel()->send(rpc::make_request(Method::LoadSoundFonts, RpcPacker::pack(uris)));
+    channel()->send(rpc::make_request(MsgCode::LoadSoundFonts, RpcPacker::pack(uris)));
 }
 
 void GeneralSoundFontController::addSoundFont(const synth::SoundFontUri& uri)
 {
-    channel()->send(rpc::make_request(Method::AddSoundFont, RpcPacker::pack(uri)));
+    channel()->send(rpc::make_request(MsgCode::AddSoundFont, RpcPacker::pack(uri)));
 }
