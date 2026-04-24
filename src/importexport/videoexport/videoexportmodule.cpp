@@ -21,6 +21,8 @@
  */
 #include "videoexportmodule.h"
 
+#include <QFontDatabase>
+
 #include "modularity/ioc.h"
 
 #include "internal/videoexportconfiguration.h"
@@ -51,5 +53,12 @@ void VideoExportModule::resolveImports()
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mp4" }, std::make_shared<VideoWriter>(iocContext()));
+    }
+}
+
+void VideoExportModule::onInit(const muse::IApplication::RunMode&)
+{
+    if (QFontDatabase::addApplicationFont(":/videoexport/internal/resources/MuseSans-Medium.ttf") == -1) {
+        LOGE() << "Unable load MuseSans font: `:/videoexport/internal/resources/MuseSans-Medium.ttf`";
     }
 }
