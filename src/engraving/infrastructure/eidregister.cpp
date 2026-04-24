@@ -61,7 +61,9 @@ void EIDRegister::removeItem(const EngravingObject* item)
     // NOTE: needed only when elements are removed during read (e.g. broken spanners)
 
     auto itemIter = m_itemToEid.find(const_cast<EngravingObject*>(item));
-    DO_ASSERT(itemIter != m_itemToEid.end());
+    IF_ASSERT_FAILED(itemIter != m_itemToEid.end()) {
+        return;
+    }
 
     EID eid = (*itemIter).second;
     DO_ASSERT(eid.isValid());

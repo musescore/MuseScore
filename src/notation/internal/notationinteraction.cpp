@@ -4869,7 +4869,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.s = event->text();
 
     // Brackets get deleted during layout with their system, so the best we can do to maintain
-    // the bracket selected is to store their indices and use them find the new ones
+    // the bracket selected is to store their indices and use them to find the new ones
     bool isBracket = m_editData.element->isBracket();
     size_t bracketIndex = muse::nidx;
     size_t systemIndex = muse::nidx;
