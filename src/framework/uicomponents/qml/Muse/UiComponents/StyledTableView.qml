@@ -34,6 +34,8 @@ Item {
     property alias model: tableView.model
     property var sourceComponentCallback
 
+    property var sortOrderProvider: null
+
     property bool showVerticalHeader: false
     property bool horizontalHeaderNavigationEnabled: true
     property bool displayTruncatedTextOnHover: false
@@ -83,9 +85,16 @@ Item {
     QtObject {
         id: prv
 
+        property int sortRevision: 0
         property real valueItemWidth: 126
         property real spacing: 4
         property real sideMargin: 30
+    }
+
+    Connections {
+        target: root.model
+        ignoreUnknownSignals: true
+        function onSortChanged() { prv.sortRevision++ }
     }
 
     Rectangle {
@@ -119,6 +128,8 @@ Item {
             availableFormats: display.availableFormats
 
             headerCapitalization: root.headerCapitalization
+
+            sortOrder: root.sortOrderProvider ? (prv.sortRevision, root.sortOrderProvider(index)) : ColumnSortOrder.Unsorted
 
             navigation.panel: root.navigationPanel
             navigation.row: 0

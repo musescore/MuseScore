@@ -29,6 +29,19 @@
 #include <vector>
 
 namespace muse::uicomponents {
+namespace ColumnSortOrder {
+Q_NAMESPACE;
+QML_ELEMENT;
+
+enum class Type {
+    Unsorted = -1,
+    Ascending = 0,
+    Descending = 1
+};
+
+Q_ENUM_NS(Type)
+}
+
 /**
  * @brief Table-aware sort/filter proxy.
  *
@@ -56,9 +69,11 @@ public:
     Q_INVOKABLE void clearSort();
     Q_INVOKABLE void invalidateFilters();
     Q_INVOKABLE int mapRowToSource(int proxyRow) const;
+    Q_INVOKABLE ColumnSortOrder::Type columnSortOrder(int column) const;
 
 signals:
     void rowCountChanged();
+    void sortChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;

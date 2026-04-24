@@ -118,6 +118,16 @@ int TableSortFilterProxyModel::mapRowToSource(int proxyRow) const
     return idx.isValid() ? idx.row() : -1;
 }
 
+ColumnSortOrder::Type TableSortFilterProxyModel::columnSortOrder(int column) const
+{
+    const auto it = std::find_if(m_sortPipeline.begin(), m_sortPipeline.end(),
+                                 [column](const SortKey& k) { return k.column == column; });
+    if (it == m_sortPipeline.end()) {
+        return ColumnSortOrder::Type::Unsorted;
+    }
+    return it->ascending ? ColumnSortOrder::Type::Ascending : ColumnSortOrder::Type::Descending;
+}
+
 void TableSortFilterProxyModel::reapplySort()
 {
     if (!sourceModel()) {
@@ -125,11 +135,12 @@ void TableSortFilterProxyModel::reapplySort()
     }
     if (m_sortPipeline.empty()) {
         sort(-1);
-        return;
+    } else {
+        invalidate();
+        //! Note: trigger a sort - what column and order we specify doesn't matter. The ordering is determined by the sort pipeline in `lessThan()`
+        sort(0, Qt::AscendingOrder);
     }
-    invalidate();
-    //! Note: trigger a sort - what column and order we specify doesn't matter. The ordering is determined by the sort pipeline in `lessThan()`
-    sort(0, Qt::AscendingOrder);
+    emit sortChanged();
 }
 
 bool TableSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
