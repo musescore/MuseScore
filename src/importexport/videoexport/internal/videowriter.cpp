@@ -21,6 +21,8 @@
  */
 #include "videowriter.h"
 
+#include <cmath>
+
 #include <QPainter>
 #include <QThread>
 
@@ -459,20 +461,39 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
     Font titleFont(Font::FontFamily(u"Edwin"), Font::Type::Text);
     titleFont.setPointSizeF(scaledFontPointSize(128.0));
 
-    Font subFont(titleFont);
-    subFont.setPointSizeF(scaledFontPointSize(48.0));
+    Font subtitleFont(titleFont);
+    subtitleFont.setPointSizeF(scaledFontPointSize(48.0));
 
     muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
 
+    const double maxTextWidth = frameRect.width() * 0.9;
+    const double textLeft = (frameRect.width() - maxTextWidth) / 2.0;
+
+    auto lineCount = [&](const FontMetrics& fm, const muse::String& text) {
+        if (text.isEmpty()) {
+            return 0;
+        }
+        double textWidth = fm.horizontalAdvance(text);
+        return std::max(1, static_cast<int>(std::ceil(textWidth / maxTextWidth)));
+    };
+
     FontMetrics titleFontMetrics(titleFont);
-    muse::RectF titleBBox = titleFontMetrics.boundingRect(title);
+    const int titleLines = lineCount(titleFontMetrics, title);
+    const double titleHeight = titleLines * titleFontMetrics.lineSpacing();
+
+    FontMetrics subtitleFontMetrics(subtitleFont);
+    const int subtitleLines = lineCount(subtitleFontMetrics, subtitle);
+    const double subtitleHeight = subtitleLines * subtitleFontMetrics.lineSpacing();
 
     double centerY = frameRect.center().y();
-    double titleBottom = centerY + titleBBox.height() / 2.0;
+    double titleTop = centerY - titleHeight / 2.0;
+    muse::RectF titleRect(textLeft, titleTop, maxTextWidth, titleHeight);
 
     const double subtitleOffset = config.height / 20.0;
-    double subtitleTop = titleBottom + subtitleOffset;
-    muse::RectF subtitleRect(0.0, subtitleTop, frameRect.width(), 80.0);
+    double subtitleTop = titleRect.bottom() + subtitleOffset;
+    muse::RectF subtitleRect(textLeft, subtitleTop, maxTextWidth, subtitleHeight);
+
+    const int textFlags = AlignCenter | TextWordWrap;
 
     for (int f = 0; f < leadingFrameCount; f++) {
         if (m_abort) {
@@ -486,11 +507,11 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         painter.fillRect(frameRect, Color::BLACK);
         painter.setPen(Color::WHITE);
         painter.setFont(titleFont);
-        painter.drawText(frameRect, AlignCenter, title);
+        painter.drawText(titleRect, textFlags, title);
 
         if (!subtitle.isEmpty()) {
-            painter.setFont(subFont);
-            painter.drawText(subtitleRect, AlignCenter, subtitle);
+            painter.setFont(subtitleFont);
+            painter.drawText(subtitleRect, textFlags, subtitle);
         }
 
         encoder->encodeImage(frame);
