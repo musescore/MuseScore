@@ -35,6 +35,7 @@
 #include "platform/general/generalsoundfontinstallscenario.h"
 #endif
 
+#include "audio/common/rpc/contextrpcchannelcontroller.h"
 #include "audio/common/rpc/contextrpcchannel.h"
 
 #include "internal/audioconfiguration.h"
@@ -88,6 +89,7 @@ void AudioModule::registerExports()
     globalIoc()->registerExport<IAudioConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IAudioThreadSecurer>(mname, std::make_shared<AudioThreadSecurer>());
     globalIoc()->registerExport<rpc::IRpcChannel>(mname, m_rpcChannel);
+    globalIoc()->registerExport<rpc::IContextRpcChannelController>(mname, new rpc::ContextRpcChannelController());
     globalIoc()->registerExport<IAudioDriverController>(mname, m_audioDriverController);
     globalIoc()->registerExport<ISoundFontController>(mname, m_soundFontController);
     globalIoc()->registerExport<IStartAudioController>(mname, m_startAudioController);
@@ -156,10 +158,13 @@ void AudioContext::registerExports()
 
     ioc()->registerExport<IPlayback>(mname, m_mainPlayback);
 
-    //! NOTE The RPC channel itself is one global one.
+    //! NOTE The real RPC channel itself is one global one.
     // But for each context there is a wrapper
     // that adds the context ID to messages and filters by context.
-    ioc()->registerExport<rpc::IContextRpcChannel>(mname, std::make_shared<rpc::ContextRpcChannel>(iocContext()));
+    auto rpcCtxController = globalIoc()->resolve<rpc::IContextRpcChannelController>(mname);
+    if (rpcCtxController) {
+        ioc()->registerExport<rpc::IContextRpcChannel>(mname, new rpc::ContextRpcChannel(iocContext(), rpcCtxController));
+    }
 }
 
 void AudioContext::resolveImports()
