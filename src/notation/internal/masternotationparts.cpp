@@ -201,8 +201,11 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
         parts->replaceInstrument(instrumentKey, newInstrument, newStaffType);
     }
 
+    mu::engraving::Interval newTranspose = newInstrument.transpose();
     // this also transposes all linked parts
-    engraving::Transpose::transpositionChanged(score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    if (oldTranspose != newTranspose) {
+        engraving::Transpose::transpositionChanged(score(), part, Part::MAIN_INSTRUMENT_TICK, oldTranspose);
+    }
 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
