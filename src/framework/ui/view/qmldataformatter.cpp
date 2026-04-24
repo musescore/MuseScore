@@ -33,6 +33,7 @@ QmlDataFormatter::QmlDataFormatter(QObject* parent)
 QString QmlDataFormatter::formatReal(double value, int decimals) const
 {
     QLocale locale;
+    locale.setNumberOptions(QLocale::OmitGroupSeparator);
     QString formatted = locale.toString(value, 'f', decimals);
     if (decimals > 0) {
         // Remove trailing zeros after the decimal separator
