@@ -39,8 +39,9 @@
 #include "log.h"
 
 namespace muse::audio {
-using msecs_t = muse::msecs_t;
 using secs_t = muse::secs_t;
+using msecs_t = muse::msecs_t;
+using usecs_t = muse::usecs_t;
 
 inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms.raw() / 1000.0); }
 inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us.raw() / 1000000.0); }
