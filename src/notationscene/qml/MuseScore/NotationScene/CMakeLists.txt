@@ -151,6 +151,8 @@ qt_add_qml_module(notationscene_qml
         styledialog/restspagemodel.h
         styledialog/slursandtiespagemodel.cpp
         styledialog/slursandtiespagemodel.h
+        styledialog/stavesharingpagemodel.cpp
+        styledialog/stavesharingpagemodel.h
         styledialog/styleitem.cpp
         styledialog/styleitem.h
         styledialog/tupletcenteringselectormodel.cpp
@@ -224,6 +226,7 @@ qt_add_qml_module(notationscene_qml
         styledialog/SelectableStyledImage.qml
         styledialog/SlursAndTiesPage.qml
         styledialog/SlursSection.qml
+        styledialog/StaveSharingPage.qml
         styledialog/StyleControlRowWithReset.qml
         styledialog/StyleDialogPage.qml
         styledialog/StyledImage.qml

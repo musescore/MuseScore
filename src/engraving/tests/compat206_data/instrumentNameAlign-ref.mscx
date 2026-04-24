@@ -35,8 +35,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">align</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -91,8 +92,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -142,8 +144,9 @@
         </Instrument>
       </Part>
     <Part id="3">
+      <eid>G_G</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -195,8 +198,9 @@
         </Instrument>
       </Part>
     <Part id="4">
+      <eid>I_I</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -249,21 +253,21 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>G_G</eid>
+        <eid>K_K</eid>
         <voice>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>I_I</eid>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>J_J</eid>
+            <eid>N_N</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -272,18 +276,18 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>O_O</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>L_L</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>M_M</eid>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -292,18 +296,18 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>R_R</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>O_O</eid>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>P_P</eid>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -312,18 +316,18 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>Q_Q</eid>
+            <eid>U_U</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>R_R</eid>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>S_S</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>

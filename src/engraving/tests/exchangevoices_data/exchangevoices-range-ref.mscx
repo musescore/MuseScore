@@ -77,6 +77,7 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>p_p</eid>
       <Staff>
         <eid>o_o</eid>
         <StaffType group="pitched">
@@ -132,7 +133,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -162,7 +163,7 @@
               </next>
             </Spanner>
           <Rest>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -341,7 +342,7 @@
         <eid>l_l</eid>
         <voice>
           <Rest>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

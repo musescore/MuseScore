@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="5.00">
   <Score>
-    <eid>K_K</eid>
+    <eid>L_L</eid>
     <name>Flute</name>
     <Division>480</Division>
     <Style>
@@ -13,9 +13,10 @@
     <showMargins>0</showMargins>
     <metaTag name="partName">Flute</metaTag>
     <Part id="1">
+      <eid>M_M</eid>
       <Staff>
-        <eid>L_L</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>N_N</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -39,41 +40,41 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>M_M</eid>
-        <linkedTo>D_D</linkedTo>
+        <eid>O_O</eid>
+        <linkedTo>E_E</linkedTo>
         <Text>
-          <eid>N_N</eid>
+          <eid>P_P</eid>
           <style>instrument_excerpt</style>
           <text>Flute</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>O_O</eid>
+        <eid>Q_Q</eid>
         <voice>
           <KeySig>
-            <eid>P_P</eid>
-            <linkedTo>F_F</linkedTo>
+            <eid>R_R</eid>
+            <linkedTo>G_G</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>Q_Q</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>S_S</eid>
+            <linkedTo>H_H</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>R_R</eid>
-            <linkedTo>H_H</linkedTo>
+            <eid>T_T</eid>
+            <linkedTo>I_I</linkedTo>
             </Dynamic>
           <Chord>
-            <eid>S_S</eid>
-            <linkedTo>I_I</linkedTo>
+            <eid>U_U</eid>
+            <linkedTo>J_J</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
-              <linkedTo>J_J</linkedTo>
+              <eid>V_V</eid>
+              <linkedTo>K_K</linkedTo>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>

@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -75,8 +76,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -133,80 +135,80 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             <actualKey>3</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>I_I</eid>
+        <eid>K_K</eid>
         <voice>
           <KeySig>
-            <eid>J_J</eid>
+            <eid>L_L</eid>
             <concertKey>-4</concertKey>
             <actualKey>-1</actualKey>
             </KeySig>
           <Rest>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>N_N</eid>
         <voice>
           <KeySig>
-            <eid>M_M</eid>
+            <eid>O_O</eid>
             <concertKey>0</concertKey>
             <actualKey>3</actualKey>
             </KeySig>
           <Rest>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>Q_Q</eid>
         <voice>
           <KeySig>
-            <eid>P_P</eid>
+            <eid>R_R</eid>
             <concertKey>-1</concertKey>
             <actualKey>2</actualKey>
             </KeySig>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>T_T</eid>
         <voice>
           <KeySig>
-            <eid>S_S</eid>
+            <eid>U_U</eid>
             <custom>1</custom>
             <mode>none</mode>
             </KeySig>
           <Rest>
-            <eid>T_T</eid>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -217,29 +219,15 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>U_U</eid>
+            <eid>W_W</eid>
             <concertKey>0</concertKey>
             <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <eid>W_W</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <KeySig>
-            <eid>X_X</eid>
-            <concertKey>-4</concertKey>
-            <actualKey>-2</actualKey>
-            </KeySig>
           <Rest>
             <eid>Y_Y</eid>
             <durationType>measure</durationType>
@@ -251,8 +239,8 @@
         <voice>
           <KeySig>
             <eid>Z_Z</eid>
-            <concertKey>0</concertKey>
-            <actualKey>2</actualKey>
+            <concertKey>-4</concertKey>
+            <actualKey>-2</actualKey>
             </KeySig>
           <Rest>
             <eid>a_a</eid>
@@ -265,8 +253,8 @@
         <voice>
           <KeySig>
             <eid>b_b</eid>
-            <concertKey>-1</concertKey>
-            <actualKey>1</actualKey>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
             </KeySig>
           <Rest>
             <eid>c_c</eid>
@@ -279,11 +267,25 @@
         <voice>
           <KeySig>
             <eid>d_d</eid>
+            <concertKey>-1</concertKey>
+            <actualKey>1</actualKey>
+            </KeySig>
+          <Rest>
+            <eid>e_e</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <KeySig>
+            <eid>f_f</eid>
             <custom>1</custom>
             <mode>none</mode>
             </KeySig>
           <Rest>
-            <eid>e_e</eid>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

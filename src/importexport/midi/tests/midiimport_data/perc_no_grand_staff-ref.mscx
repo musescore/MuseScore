@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="percussion">
           <name>perc1Line</name>
           <lines>1</lines>
@@ -98,8 +99,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="percussion">
           <name>perc5Line</name>
           <keysig>0</keysig>
@@ -387,40 +389,40 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>H_H</eid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Rest>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>12/8</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>H_H</eid>
+        <eid>J_J</eid>
         <voice>
           <Rest>
-            <eid>I_I</eid>
+            <eid>K_K</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>J_J</eid>
+            <eid>L_L</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>L_L</eid>
+              <eid>N_N</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <velocity>80</velocity>
@@ -433,12 +435,12 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>M_M</eid>
+            <eid>O_O</eid>
             <sigN>12</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Rest>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>12/8</duration>
             </Rest>
@@ -447,12 +449,12 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>Q_Q</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>P_P</eid>
+              <eid>R_R</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <head>cross</head>
@@ -460,30 +462,18 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>Q_Q</eid>
+            <eid>S_S</eid>
             <l1>-22</l1>
             <l2>-26</l2>
             </Beam>
-          <Chord>
-            <eid>R_R</eid>
-            <durationType>eighth</durationType>
-            <StemDirection>up</StemDirection>
-            <Note>
-              <eid>S_S</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              <velocity>80</velocity>
-              </Note>
-            </Chord>
           <Chord>
             <eid>T_T</eid>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>U_U</eid>
-              <pitch>42</pitch>
-              <tpc>20</tpc>
-              <head>cross</head>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
@@ -499,27 +489,27 @@
               <velocity>80</velocity>
               </Note>
             </Chord>
-          <Rest>
-            <eid>X_X</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Beam>
-            <eid>Y_Y</eid>
-            <l1>-24</l1>
-            <l2>-24</l2>
-            </Beam>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>a_a</eid>
+              <eid>Y_Y</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <head>cross</head>
               <velocity>80</velocity>
               </Note>
             </Chord>
+          <Rest>
+            <eid>Z_Z</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Beam>
+            <eid>a_a</eid>
+            <l1>-24</l1>
+            <l2>-24</l2>
+            </Beam>
           <Chord>
             <eid>b_b</eid>
             <durationType>eighth</durationType>
@@ -532,31 +522,31 @@
               <velocity>80</velocity>
               </Note>
             </Chord>
-          <Beam>
-            <eid>d_d</eid>
-            <l1>-22</l1>
-            <l2>-26</l2>
-            </Beam>
           <Chord>
-            <eid>e_e</eid>
+            <eid>d_d</eid>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
-              <eid>f_f</eid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
+              <eid>e_e</eid>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <head>cross</head>
               <velocity>80</velocity>
               </Note>
             </Chord>
+          <Beam>
+            <eid>f_f</eid>
+            <l1>-22</l1>
+            <l2>-26</l2>
+            </Beam>
           <Chord>
             <eid>g_g</eid>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
               <eid>h_h</eid>
-              <pitch>42</pitch>
-              <tpc>20</tpc>
-              <head>cross</head>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
@@ -572,39 +562,51 @@
               <velocity>80</velocity>
               </Note>
             </Chord>
+          <Chord>
+            <eid>k_k</eid>
+            <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <eid>l_l</eid>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <head>cross</head>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
           </voice>
         <voice>
           <Chord>
-            <eid>k_k</eid>
+            <eid>m_m</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>l_l</eid>
+              <eid>n_n</eid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>m_m</eid>
+            <eid>o_o</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>n_n</eid>
+            <eid>p_p</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>o_o</eid>
+              <eid>q_q</eid>
               <pitch>35</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>p_p</eid>
+            <eid>r_r</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>

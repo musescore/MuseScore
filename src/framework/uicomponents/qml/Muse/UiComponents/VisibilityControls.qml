@@ -36,6 +36,7 @@ RowLayout {
 
     property alias title: titleLabel.text
     property bool isRootControl: true
+    property alias useVisibilityToggle: visibilityBox.useToggle
 
     property alias useVisibilityButton: visibilityBox.visible
     property alias isVisible: visibilityBox.isVisible
@@ -123,9 +124,9 @@ RowLayout {
             anchors.verticalCenter: expandButton.verticalCenter
 
             horizontalAlignment: Text.AlignLeft
-            opacity: root.isVisible ? 1 : 0.75
+            opacity: root.isVisible && enabled ? 1 : 0.75
 
-            font: root.isRootControl && root.isVisible ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+            font: root.isRootControl && root.isVisible && enabled ? ui.theme.bodyBoldFont : ui.theme.bodyFont
         }
     }
 }

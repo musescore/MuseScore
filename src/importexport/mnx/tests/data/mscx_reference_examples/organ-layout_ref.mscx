@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -34,13 +35,13 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
       <Staff>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -101,66 +102,66 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Clef>
           <KeySig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <l1>2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>Q_Q</eid>
+                <eid>R_R</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>T_T</eid>
+                <eid>U_U</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -169,45 +170,45 @@
           </voice>
         <voice>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <pitch>58</pitch>
               <tpc>12</tpc>
               </Note>
             </Chord>
           <Beam>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <l1>68</l1>
             <l2>64</l2>
             </Beam>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>b_b</eid>
+                <eid>c_c</eid>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -219,16 +220,16 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             </Rest>
@@ -239,20 +240,20 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <eid>k_k</eid>
+              <eid>l_l</eid>
               <pitch>51</pitch>
               <tpc>11</tpc>
               </Note>

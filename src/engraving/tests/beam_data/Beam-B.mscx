@@ -35,6 +35,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Beam Test</metaTag>
     <Part id="1">
+      <eid>iE_iE</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">

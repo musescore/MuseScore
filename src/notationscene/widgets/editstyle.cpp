@@ -66,6 +66,7 @@ static const QStringList ALL_PAGE_CODES {
     "measure-number",
     "system",
     "instrument-names",
+    "stave-sharing",
     "clefs-key-and-time-signatures",
     "accidentals",
     "barlines",
@@ -1009,7 +1010,16 @@ void EditStyle::classBegin()
         QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/InstrumentNamesPage.qml")));
     instrNamesPage.widget->setMinimumSize(224, 400);
     pageInstrumentNames->layout()->addWidget(instrNamesPage.widget);
-    //connect(instrNamesPage.view->rootObject(), SIGNAL(goToTextStylePage(int)), this, SLOT(goToTextStylePage(int)));
+
+    // ====================================================
+    // Stave sharing page (QML)
+    // ====================================================
+
+    auto staveSharingPage = createQmlWidget(
+        PageStaveSharing,
+        QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/StaveSharingPage.qml")));
+    staveSharingPage.widget->setMinimumSize(224, 400);
+    PageStaveSharing->layout()->addWidget(staveSharingPage.widget);
 
     // ====================================================
     // Figured Bass

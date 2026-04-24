@@ -147,6 +147,7 @@ class RehearsalMark;
 class Rest;
 class Score;
 class Segment;
+class SharedPart;
 class SLine;
 class Slur;
 class SlurSegment;
@@ -449,6 +450,7 @@ public:
     CONVERT(Score,         SCORE)
     CONVERT(Staff,         STAFF)
     CONVERT(Part,          PART)
+    CONVERT(SharedPart,    SHARED_PART)
     CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
     CONVERT(Lasso,         LASSO)
     CONVERT(Sticking,      STICKING)
@@ -768,6 +770,7 @@ CONVERT(SystemText)
 CONVERT(BracketItem)
 CONVERT(Staff)
 CONVERT(Part)
+CONVERT(SharedPart)
 CONVERT(Lasso)
 CONVERT(BagpipeEmbellishment)
 CONVERT(Sticking)

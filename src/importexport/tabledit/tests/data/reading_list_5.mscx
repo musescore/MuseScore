@@ -23,16 +23,17 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
-        <linkedTo>C_C</linkedTo>
+        <eid>E_E</eid>
+        <linkedTo>D_D</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -78,33 +79,33 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>G_G</eid>
         <startRepeat/>
         <endRepeat>2</endRepeat>
         <voice>
           <KeySig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -114,16 +115,16 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>O_O</eid>
+                <eid>P_P</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
@@ -133,7 +134,7 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -142,17 +143,17 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>Q_Q</eid>
-            <linkedTo>G_G</linkedTo>
+            <eid>R_R</eid>
+            <linkedTo>H_H</linkedTo>
             <concertKey>0</concertKey>
             </KeySig>
           <Chord>
-            <eid>R_R</eid>
-            <linkedTo>J_J</linkedTo>
+            <eid>S_S</eid>
+            <linkedTo>K_K</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>S_S</eid>
-              <linkedTo>K_K</linkedTo>
+              <eid>T_T</eid>
+              <linkedTo>L_L</linkedTo>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -164,12 +165,12 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>T_T</eid>
-            <linkedTo>M_M</linkedTo>
+            <eid>U_U</eid>
+            <linkedTo>N_N</linkedTo>
             <durationType>whole</durationType>
             <Note>
-              <eid>U_U</eid>
-              <linkedTo>N_N</linkedTo>
+              <eid>V_V</eid>
+              <linkedTo>O_O</linkedTo>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -178,8 +179,8 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>V_V</eid>
-            <linkedTo>P_P</linkedTo>
+            <eid>W_W</eid>
+            <linkedTo>Q_Q</linkedTo>
             </BarLine>
           </voice>
         </Measure>

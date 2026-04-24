@@ -40,6 +40,8 @@ qt_add_qml_module(instrumentsscene_qml
         internal/layoutpanelutils.h
         internal/parttreeitem.cpp
         internal/parttreeitem.h
+        internal/sharedparttreeitem.cpp
+        internal/sharedparttreeitem.h
         internal/roottreeitem.cpp
         internal/roottreeitem.h
         internal/staffcontroltreeitem.cpp

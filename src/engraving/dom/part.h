@@ -35,6 +35,7 @@ class Read206;
 namespace mu::engraving {
 class Staff;
 class Score;
+class SharedPart;
 class InstrumentTemplate;
 
 //---------------------------------------------------------
@@ -57,7 +58,7 @@ class InstrumentTemplate;
 //   @P volume          int
 //---------------------------------------------------------
 
-class Part final : public EngravingObject
+class Part : public EngravingObject
 {
     OBJECT_ALLOCATOR(engraving, Part)
     DECLARE_CLASSOF(ElementType::PART)
@@ -66,7 +67,7 @@ public:
     static const Fraction MAIN_INSTRUMENT_TICK;
     static const int DEFAULT_COLOR = 0x3399ff;
 
-    Part(Score* score = nullptr);
+    Part(Score* score = nullptr, ElementType type = ElementType::PART);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
     const muse::ID& id() const;
@@ -128,8 +129,8 @@ public:
 
     void insertStaff(Staff*, staff_idx_t idx);
     void removeStaff(Staff*);
-    bool show() const { return m_show; }
-    void setShow(bool val) { m_show = val; }
+    bool show() const;
+    virtual void setShow(bool val) { m_show = val; }
     bool soloist() const { return m_soloist; }
     void setSoloist(bool val) { m_soloist = val; }
 
@@ -159,7 +160,7 @@ public:
     HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
     Fraction currentHarpDiagramTick(const Fraction&) const;
 
-    String partName() const;
+    virtual String partName() const;
 
     int color() const { return m_color; }
     void setColor(int value) { m_color = value; }
@@ -199,8 +200,11 @@ public:
 
     const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
 
+    SharedPart* sharedPart() const { return m_sharedPart; }
+
 private:
     friend class read206::Read206;
+    friend class SharedPart;
 
     InstrumentList m_instruments;
     std::vector<Staff*> m_staves;
@@ -219,5 +223,7 @@ private:
     PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
     std::map<int, StringTunings*> m_stringTunings;
+
+    SharedPart* m_sharedPart = nullptr;
 };
 }

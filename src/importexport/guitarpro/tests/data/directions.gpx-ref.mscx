@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -51,49 +52,45 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Marker>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>repeat_right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
         <voice>
           <KeySig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Rest>
-            <eid>L_L</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>M_M</eid>
             <durationType>quarter</durationType>
@@ -102,15 +99,19 @@
             <eid>N_N</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>O_O</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>P_P</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>P_P</eid>
+        <eid>Q_Q</eid>
         <Jump>
-          <eid>Q_Q</eid>
+          <eid>R_R</eid>
           <style>repeat_right</style>
           <text>D.C.</text>
           <jumpTo>start</jumpTo>
@@ -119,33 +120,29 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <voice>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Rest>
-            <eid>W_W</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>X_X</eid>
             <durationType>quarter</durationType>
@@ -154,15 +151,19 @@
             <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>Z_Z</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>a_a</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>b_b</eid>
         <Jump>
-          <eid>b_b</eid>
+          <eid>c_c</eid>
           <style>repeat_right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
@@ -171,33 +172,29 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>e_e</eid>
+        <eid>f_f</eid>
         <voice>
           <Chord>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>h_h</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Rest>
-            <eid>h_h</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>i_i</eid>
             <durationType>quarter</durationType>
@@ -206,15 +203,19 @@
             <eid>j_j</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>k_k</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>l_l</eid>
+        <eid>m_m</eid>
         <Jump>
-          <eid>m_m</eid>
+          <eid>n_n</eid>
           <style>repeat_right</style>
           <text>D.C. al Doppia Coda</text>
           <jumpTo>start</jumpTo>
@@ -223,33 +224,29 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>o_o</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>o_o</eid>
+            <eid>p_p</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>p_p</eid>
+        <eid>q_q</eid>
         <voice>
           <Chord>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>r_r</eid>
+              <eid>s_s</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>5</fret>
               <string>2</string>
               </Note>
             </Chord>
-          <Rest>
-            <eid>s_s</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>t_t</eid>
             <durationType>quarter</durationType>
@@ -258,15 +255,19 @@
             <eid>u_u</eid>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
+          <Rest>
             <eid>v_v</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <BarLine>
+            <eid>w_w</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>w_w</eid>
+        <eid>x_x</eid>
         <Jump>
-          <eid>x_x</eid>
+          <eid>y_y</eid>
           <style>repeat_right</style>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
@@ -275,32 +276,32 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>y_y</eid>
+            <eid>z_z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>0_0</eid>
+        <eid>1_1</eid>
         <voice>
           <Rest>
-            <eid>1_1</eid>
+            <eid>2_2</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>2_2</eid>
+            <eid>3_3</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>3_3</eid>
+        <eid>4_4</eid>
         <Jump>
-          <eid>4_4</eid>
+          <eid>5_5</eid>
           <style>repeat_right</style>
           <text>D.S. al Coda</text>
           <jumpTo>segno</jumpTo>
@@ -309,32 +310,32 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>5_5</eid>
+            <eid>6_6</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>6_6</eid>
+            <eid>7_7</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>7_7</eid>
+        <eid>8_8</eid>
         <voice>
           <Rest>
-            <eid>8_8</eid>
+            <eid>9_9</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>9_9</eid>
+            <eid>+_+</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>+_+</eid>
+        <eid>/_/</eid>
         <Jump>
-          <eid>/_/</eid>
+          <eid>AB_AB</eid>
           <style>repeat_right</style>
           <text>D.S. al Doppia Coda</text>
           <jumpTo>segno</jumpTo>
@@ -343,32 +344,32 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>AB_AB</eid>
+            <eid>BB_BB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>BB_BB</eid>
+            <eid>CB_CB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>CB_CB</eid>
+        <eid>DB_DB</eid>
         <voice>
           <Rest>
-            <eid>DB_DB</eid>
+            <eid>EB_EB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>EB_EB</eid>
+            <eid>FB_FB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>FB_FB</eid>
+        <eid>GB_GB</eid>
         <Jump>
-          <eid>GB_GB</eid>
+          <eid>HB_HB</eid>
           <style>repeat_right</style>
           <text>D.S. al Fine</text>
           <jumpTo>segno</jumpTo>
@@ -377,32 +378,32 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>HB_HB</eid>
+            <eid>IB_IB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>IB_IB</eid>
+            <eid>JB_JB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>JB_JB</eid>
+        <eid>KB_KB</eid>
         <voice>
           <Rest>
-            <eid>KB_KB</eid>
+            <eid>LB_LB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>LB_LB</eid>
+            <eid>MB_MB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>MB_MB</eid>
+        <eid>NB_NB</eid>
         <Jump>
-          <eid>NB_NB</eid>
+          <eid>OB_OB</eid>
           <style>repeat_right</style>
           <text>Dal Doppio Segno</text>
           <jumpTo>varsegno</jumpTo>
@@ -411,45 +412,45 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>OB_OB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
             <eid>PB_PB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>QB_QB</eid>
-        <voice>
-          <Rest>
-            <eid>RB_RB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>QB_QB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>RB_RB</eid>
+        <voice>
+          <Rest>
             <eid>SB_SB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>TB_TB</eid>
-        <voice>
-          <Rest>
-            <eid>UB_UB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>VB_VB</eid>
+            <eid>TB_TB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>WB_WB</eid>
+        <eid>UB_UB</eid>
+        <voice>
+          <Rest>
+            <eid>VB_VB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <eid>WB_WB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>XB_XB</eid>
         <Jump>
-          <eid>XB_XB</eid>
+          <eid>YB_YB</eid>
           <style>repeat_right</style>
           <text>D.D.S. al Coda</text>
           <jumpTo>varsegno</jumpTo>
@@ -458,45 +459,45 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>YB_YB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
             <eid>ZB_ZB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>aB_aB</eid>
-        <voice>
-          <Rest>
-            <eid>bB_bB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>aB_aB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>bB_bB</eid>
+        <voice>
+          <Rest>
             <eid>cB_cB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>dB_dB</eid>
-        <voice>
-          <Rest>
-            <eid>eB_eB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>fB_fB</eid>
+            <eid>dB_dB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>gB_gB</eid>
+        <eid>eB_eB</eid>
+        <voice>
+          <Rest>
+            <eid>fB_fB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <eid>gB_gB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>hB_hB</eid>
         <Jump>
-          <eid>hB_hB</eid>
+          <eid>iB_iB</eid>
           <style>repeat_right</style>
           <text>D.D.S. al Doppia Coda</text>
           <jumpTo>varsegno</jumpTo>
@@ -505,45 +506,45 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>iB_iB</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
             <eid>jB_jB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>kB_kB</eid>
-        <voice>
-          <Rest>
-            <eid>lB_lB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <eid>kB_kB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>lB_lB</eid>
+        <voice>
+          <Rest>
             <eid>mB_mB</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>nB_nB</eid>
-        <voice>
-          <Rest>
-            <eid>oB_oB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>pB_pB</eid>
+            <eid>nB_nB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>qB_qB</eid>
+        <eid>oB_oB</eid>
+        <voice>
+          <Rest>
+            <eid>pB_pB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <eid>qB_qB</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>rB_rB</eid>
         <Jump>
-          <eid>rB_rB</eid>
+          <eid>sB_sB</eid>
           <style>repeat_right</style>
           <text>D.D.S. al Fine</text>
           <jumpTo>varsegno</jumpTo>
@@ -552,32 +553,32 @@
           </Jump>
         <voice>
           <Rest>
-            <eid>sB_sB</eid>
+            <eid>tB_tB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>tB_tB</eid>
+            <eid>uB_uB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>uB_uB</eid>
+        <eid>vB_vB</eid>
         <voice>
           <Rest>
-            <eid>vB_vB</eid>
+            <eid>wB_wB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>wB_wB</eid>
+            <eid>xB_xB</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>xB_xB</eid>
+        <eid>yB_yB</eid>
         <Marker>
-          <eid>yB_yB</eid>
+          <eid>zB_zB</eid>
           <style>repeat_right</style>
           <text>Da Coda</text>
           <label>coda</label>
@@ -585,32 +586,32 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>zB_zB</eid>
+            <eid>0B_0B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>0B_0B</eid>
+            <eid>1B_1B</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>1B_1B</eid>
+        <eid>2B_2B</eid>
         <voice>
           <Rest>
-            <eid>2B_2B</eid>
+            <eid>3B_3B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>3B_3B</eid>
+            <eid>4B_4B</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>4B_4B</eid>
+        <eid>5B_5B</eid>
         <Marker>
-          <eid>5B_5B</eid>
+          <eid>6B_6B</eid>
           <style>repeat_right</style>
           <text>Da Doppia Coda</text>
           <label>coda</label>
@@ -618,32 +619,32 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>6B_6B</eid>
+            <eid>7B_7B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>7B_7B</eid>
+            <eid>8B_8B</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>8B_8B</eid>
+        <eid>9B_9B</eid>
         <voice>
           <Rest>
-            <eid>9B_9B</eid>
+            <eid>+B_+B</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>+B_+B</eid>
+            <eid>/B_/B</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>/B_/B</eid>
+        <eid>AC_AC</eid>
         <Marker>
-          <eid>AC_AC</eid>
+          <eid>BC_BC</eid>
           <style>repeat_left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
@@ -651,32 +652,32 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>BC_BC</eid>
+            <eid>CC_CC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>CC_CC</eid>
+            <eid>DC_DC</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>DC_DC</eid>
+        <eid>EC_EC</eid>
         <voice>
           <Rest>
-            <eid>EC_EC</eid>
+            <eid>FC_FC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>FC_FC</eid>
+            <eid>GC_GC</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>GC_GC</eid>
+        <eid>HC_HC</eid>
         <Marker>
-          <eid>HC_HC</eid>
+          <eid>IC_IC</eid>
           <style>repeat_left</style>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
@@ -684,19 +685,19 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>IC_IC</eid>
+            <eid>JC_JC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>JC_JC</eid>
+            <eid>KC_KC</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>KC_KC</eid>
+        <eid>LC_LC</eid>
         <Marker>
-          <eid>LC_LC</eid>
+          <eid>MC_MC</eid>
           <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
@@ -704,19 +705,19 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>MC_MC</eid>
+            <eid>NC_NC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <eid>NC_NC</eid>
+            <eid>OC_OC</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>OC_OC</eid>
+        <eid>PC_PC</eid>
         <Marker>
-          <eid>PC_PC</eid>
+          <eid>QC_QC</eid>
           <style>repeat_left</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
@@ -724,7 +725,7 @@
           </Marker>
         <voice>
           <Rest>
-            <eid>QC_QC</eid>
+            <eid>RC_RC</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

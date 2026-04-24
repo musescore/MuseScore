@@ -21,8 +21,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -86,92 +87,92 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <eid>F_F</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>G_G</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <eid>H_H</eid>
-            <durationType>16th</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <Rest>
             <eid>I_I</eid>
-            <durationType>32nd</durationType>
+            <durationType>16th</durationType>
             </Rest>
           <Rest>
             <eid>J_J</eid>
+            <durationType>32nd</durationType>
+            </Rest>
+          <Rest>
+            <eid>K_K</eid>
             <durationType>64th</durationType>
             </Rest>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>128th</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>128th</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <Rest>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>16th</durationType>
             </Rest>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>128th</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>84</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
               </Note>
             </Chord>
           <Rest>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>128th</durationType>
             </Rest>
           <Rest>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>64th</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>32nd</durationType>
             </Rest>
           <Rest>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>

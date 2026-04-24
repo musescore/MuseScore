@@ -31,6 +31,7 @@ FocusScope {
     property alias text: label.text
     property string accessibleText: text
     property bool isVisible: true
+    property bool useToggle: false
 
     property alias navigation: eyeButton.navigation
 
@@ -45,6 +46,7 @@ FocusScope {
 
         FlatButton {
             id: eyeButton
+            visible: !root.useToggle
 
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: width
@@ -65,6 +67,15 @@ FocusScope {
                              + (root.isVisible ? qsTrc("ui", "Visible") : qsTrc("ui", "Hidden"))
 
             onClicked: {
+                root.visibleToggled()
+            }
+        }
+
+        ToggleButton {
+            id: toggleButton
+            visible: root.useToggle
+            checked: root.isVisible
+            onToggled: {
                 root.visibleToggled()
             }
         }

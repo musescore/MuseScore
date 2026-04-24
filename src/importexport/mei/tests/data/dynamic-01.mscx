@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -43,34 +44,34 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Dynamics</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -78,13 +79,13 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             <direction>up</direction>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             </Dynamic>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -92,18 +93,18 @@
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             </Dynamic>
           <Beam>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <l1>-20</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -111,13 +112,13 @@
           <Dynamic>
             <subtype>sffz</subtype>
             <velocity>126</velocity>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             </Dynamic>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -126,22 +127,22 @@
             <subtype>sfz</subtype>
             <velocity>112</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </Dynamic>
           <Chord>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>X_X</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>Z_Z</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -152,13 +153,13 @@
             <subtype>pp</subtype>
             <velocity>33</velocity>
             <direction>down</direction>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             </Dynamic>
           <Chord>
-            <eid>a_a</eid>
+            <eid>b_b</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>b_b</eid>
+              <eid>c_c</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -166,19 +167,19 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>c_c</eid>
+        <eid>d_d</eid>
         <voice>
           <Dynamic>
             <subtype>mp</subtype>
             <velocity>64</velocity>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <text>sempre <sym>dynamicMezzo</sym><sym>dynamicPiano</sym> e <br/>dolce</text>
             </Dynamic>
           <Chord>
-            <eid>e_e</eid>
+            <eid>f_f</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>g_g</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -186,24 +187,24 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
-            <eid>g_g</eid>
+            <eid>h_h</eid>
             <text><sym>dynamicPiano</sym> e sempre<br/>dolce</text>
             </Dynamic>
           <Chord>
-            <eid>h_h</eid>
+            <eid>i_i</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>i_i</eid>
+              <eid>j_j</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>k_k</eid>
+              <eid>l_l</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -211,31 +212,31 @@
           <Dynamic>
             <subtype>ff</subtype>
             <velocity>112</velocity>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             <text>molto <sym>dynamicForte</sym><sym>dynamicForte</sym></text>
             </Dynamic>
           <Chord>
-            <eid>m_m</eid>
+            <eid>n_n</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>n_n</eid>
+              <eid>o_o</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
-              <eid>o_o</eid>
+              <eid>p_p</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
-              <eid>p_p</eid>
+              <eid>q_q</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>oS4Ysr4ch2P_oS4Ysr4ch2P</eid>
       <Staff>
-        <eid>oS4Ysr4ch2P_oS4Ysr4ch2P</eid>
+        <eid>pS4Ysr4ch2P_pS4Ysr4ch2P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -303,7 +304,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>pS4Ysr4ch2P_pS4Ysr4ch2P</eid>
+              <eid>qS4Ysr4ch2P_qS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>jAo+n27Ee1P_+MSxHsOg3NO</eid>
@@ -325,7 +326,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>qS4Ysr4ch2P_qS4Ysr4ch2P</eid>
+              <eid>rS4Ysr4ch2P_rS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>Zi+RI3ATXwI_Lx97oxlJNNF</eid>
@@ -338,7 +339,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>rS4Ysr4ch2P_rS4Ysr4ch2P</eid>
+              <eid>sS4Ysr4ch2P_sS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>RqjConSLohI_+RfikuxVAmI</eid>
@@ -361,7 +362,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>sS4Ysr4ch2P_sS4Ysr4ch2P</eid>
+              <eid>tS4Ysr4ch2P_tS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>d/JbHDNm1gO_dqMkqqSAZJD</eid>
@@ -406,7 +407,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>tS4Ysr4ch2P_tS4Ysr4ch2P</eid>
+              <eid>uS4Ysr4ch2P_uS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>xF4UhPg5u4F_xkF+JKUkfjN</eid>
@@ -428,7 +429,7 @@
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>uS4Ysr4ch2P_uS4Ysr4ch2P</eid>
+              <eid>vS4Ysr4ch2P_vS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>tTyD1tP+uWC_BEKm1Iy6T1G</eid>
@@ -478,7 +479,7 @@
             <durationType>whole</durationType>
             <Articulation>
               <subtype>fermataAbove</subtype>
-              <eid>vS4Ysr4ch2P_vS4Ysr4ch2P</eid>
+              <eid>wS4Ysr4ch2P_wS4Ysr4ch2P</eid>
               </Articulation>
             <Note>
               <eid>N0NQZ9Qd6XJ_IkKN0Wx2r9M</eid>

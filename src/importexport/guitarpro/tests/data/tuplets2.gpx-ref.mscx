@@ -18,8 +18,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -52,72 +53,72 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <Text>
-          <eid>E_E</eid>
+          <eid>F_F</eid>
           <style>title</style>
           <text>Nardis</text>
           </Text>
         <Text>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text>Ralph Towner<br/>solo concert</text>
           </Text>
         <Text>
-          <eid>G_G</eid>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Music by Miles Davis</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>H_H</eid>
+        <eid>I_I</eid>
         <voice>
           <KeySig>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <concertKey>1</concertKey>
             <mode>major</mode>
             </KeySig>
           <StaffText>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <text>Free time</text>
             </StaffText>
           <TimeSig>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2.666667</tempo>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 160</text>
             </Tempo>
           <Rest>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             </BarLine>
           </voice>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             </Dynamic>
           <Beam>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <l1>22</l1>
             <l2>26</l2>
             </Beam>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -125,10 +126,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -136,10 +137,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>V_V</eid>
+              <eid>W_W</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -147,10 +148,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -158,15 +159,15 @@
               </Note>
             </Chord>
           <Beam>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <l1>30</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -174,10 +175,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>d_d</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -185,10 +186,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>d_d</eid>
+            <eid>e_e</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>e_e</eid>
+              <eid>f_f</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -196,13 +197,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>f_f</eid>
+            <eid>g_g</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>g_g</eid>
+              <eid>h_h</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>h_h</eid>
+                  <eid>i_i</eid>
                   </Tie>
                 <next>
                   <location>
@@ -220,32 +221,32 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>i_i</eid>
+        <eid>j_j</eid>
         <voice>
           <Rest>
-            <eid>j_j</eid>
+            <eid>k_k</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         <voice>
           <Chord>
-            <eid>l_l</eid>
+            <eid>m_m</eid>
             <durationType>quarter</durationType>
             <Spanner type="HammerOnPullOff">
               <HammerOnPullOff>
-                <eid>m_m</eid>
+                <eid>n_n</eid>
                 <HammerOnPullOffSegment no="0">
                   <HammerOnPullOffText idx="0">
-                    <eid>n_n</eid>
+                    <eid>o_o</eid>
                     <style>hammer_on_pull_off</style>
                     </HammerOnPullOffText>
-                  <eid>o_o</eid>
+                  <eid>p_p</eid>
                   </HammerOnPullOffSegment>
                 </HammerOnPullOff>
               <next>
@@ -255,7 +256,7 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>p_p</eid>
+              <eid>q_q</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -271,7 +272,7 @@
               </Note>
             </Chord>
           <Tuplet>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -281,12 +282,12 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <l1>40</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <prev>
@@ -296,7 +297,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>t_t</eid>
+              <eid>u_u</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -304,17 +305,17 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>u_u</eid>
+            <eid>v_v</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <HammerOnPullOff>
-                <eid>v_v</eid>
+                <eid>w_w</eid>
                 <HammerOnPullOffSegment no="0">
                   <HammerOnPullOffText idx="0">
-                    <eid>w_w</eid>
+                    <eid>x_x</eid>
                     <style>hammer_on_pull_off</style>
                     </HammerOnPullOffText>
-                  <eid>x_x</eid>
+                  <eid>y_y</eid>
                   </HammerOnPullOffSegment>
                 </HammerOnPullOff>
               <next>
@@ -324,7 +325,7 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>y_y</eid>
+              <eid>z_z</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -332,7 +333,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <prev>
@@ -342,7 +343,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>0_0</eid>
+              <eid>1_1</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -351,7 +352,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>1_1</eid>
+            <eid>2_2</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -361,26 +362,26 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>2_2</eid>
+            <eid>3_3</eid>
             <l1>52</l1>
             <l2>56</l2>
             </Beam>
           <Chord>
-            <eid>3_3</eid>
+            <eid>4_4</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <HammerOnPullOff>
-                <eid>4_4</eid>
+                <eid>5_5</eid>
                 <HammerOnPullOffSegment no="0">
                   <HammerOnPullOffText idx="0">
-                    <eid>5_5</eid>
-                    <style>hammer_on_pull_off</style>
-                    </HammerOnPullOffText>
-                  <HammerOnPullOffText idx="1">
                     <eid>6_6</eid>
                     <style>hammer_on_pull_off</style>
                     </HammerOnPullOffText>
-                  <eid>7_7</eid>
+                  <HammerOnPullOffText idx="1">
+                    <eid>7_7</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>8_8</eid>
                   </HammerOnPullOffSegment>
                 </HammerOnPullOff>
               <next>
@@ -390,10 +391,10 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>8_8</eid>
+              <eid>9_9</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>9_9</eid>
+                <eid>+_+</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -402,10 +403,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>+_+</eid>
+            <eid>/_/</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>/_/</eid>
+              <eid>AB_AB</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -413,7 +414,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>AB_AB</eid>
+            <eid>BB_BB</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <prev>
@@ -423,7 +424,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>BB_BB</eid>
+              <eid>CB_CB</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -432,7 +433,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>CB_CB</eid>
+            <eid>DB_DB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -442,26 +443,26 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>DB_DB</eid>
+            <eid>EB_EB</eid>
             <l1>64</l1>
             <l2>68</l2>
             </Beam>
           <Chord>
-            <eid>EB_EB</eid>
+            <eid>FB_FB</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <HammerOnPullOff>
-                <eid>FB_FB</eid>
+                <eid>GB_GB</eid>
                 <HammerOnPullOffSegment no="0">
                   <HammerOnPullOffText idx="0">
-                    <eid>GB_GB</eid>
-                    <style>hammer_on_pull_off</style>
-                    </HammerOnPullOffText>
-                  <HammerOnPullOffText idx="1">
                     <eid>HB_HB</eid>
                     <style>hammer_on_pull_off</style>
                     </HammerOnPullOffText>
-                  <eid>IB_IB</eid>
+                  <HammerOnPullOffText idx="1">
+                    <eid>IB_IB</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>JB_JB</eid>
                   </HammerOnPullOffSegment>
                 </HammerOnPullOff>
               <next>
@@ -471,7 +472,7 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>JB_JB</eid>
+              <eid>KB_KB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -479,10 +480,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>KB_KB</eid>
+            <eid>LB_LB</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>LB_LB</eid>
+              <eid>MB_MB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -490,7 +491,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>MB_MB</eid>
+            <eid>NB_NB</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <prev>
@@ -500,7 +501,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>NB_NB</eid>
+              <eid>OB_OB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -511,42 +512,42 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>OB_OB</eid>
+        <eid>PB_PB</eid>
         <voice>
           <TimeSig>
-            <eid>PB_PB</eid>
+            <eid>QB_QB</eid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>QB_QB</eid>
+            <eid>RB_RB</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>5/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
-            <eid>RB_RB</eid>
+            <eid>SB_SB</eid>
             </BarLine>
           </voice>
         <voice>
           <Beam>
-            <eid>SB_SB</eid>
+            <eid>TB_TB</eid>
             <l1>76</l1>
             <l2>80</l2>
             </Beam>
           <Chord>
-            <eid>TB_TB</eid>
+            <eid>UB_UB</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <HammerOnPullOff>
-                <eid>UB_UB</eid>
+                <eid>VB_VB</eid>
                 <HammerOnPullOffSegment no="0">
                   <HammerOnPullOffText idx="0">
-                    <eid>VB_VB</eid>
+                    <eid>WB_WB</eid>
                     <style>hammer_on_pull_off</style>
                     </HammerOnPullOffText>
-                  <eid>WB_WB</eid>
+                  <eid>XB_XB</eid>
                   </HammerOnPullOffSegment>
                 </HammerOnPullOff>
               <next>
@@ -556,7 +557,7 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>XB_XB</eid>
+              <eid>YB_YB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -564,7 +565,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>YB_YB</eid>
+            <eid>ZB_ZB</eid>
             <durationType>eighth</durationType>
             <Spanner type="HammerOnPullOff">
               <prev>
@@ -574,7 +575,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>ZB_ZB</eid>
+              <eid>aB_aB</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -582,10 +583,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>aB_aB</eid>
+            <eid>bB_bB</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>bB_bB</eid>
+              <eid>cB_cB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -593,32 +594,32 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>cB_cB</eid>
+            <eid>dB_dB</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>dB_dB</eid>
+            <eid>eB_eB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>eB_eB</eid>
+            <eid>fB_fB</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>fB_fB</eid>
+              <eid>gB_gB</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>4</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>gB_gB</eid>
+              <eid>hB_hB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>hB_hB</eid>
+              <eid>iB_iB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -628,40 +629,40 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>iB_iB</eid>
+        <eid>jB_jB</eid>
         <voice>
           <TimeSig>
-            <eid>jB_jB</eid>
+            <eid>kB_kB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
-            <eid>kB_kB</eid>
+            <eid>lB_lB</eid>
             </Dynamic>
           <Chord>
-            <eid>lB_lB</eid>
+            <eid>mB_mB</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>mB_mB</eid>
+              <eid>nB_nB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>nB_nB</eid>
+              <eid>oB_oB</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>oB_oB</eid>
+              <eid>pB_pB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>pB_pB</eid>
+                <eid>qB_qB</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>24</tpc>
@@ -670,20 +671,20 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>qB_qB</eid>
+            <eid>rB_rB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>rB_rB</eid>
+              <eid>sB_sB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>sB_sB</eid>
+              <eid>tB_tB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>tB_tB</eid>
+                <eid>uB_uB</eid>
                 </Accidental>
               <pitch>51</pitch>
               <tpc>23</tpc>
@@ -691,10 +692,10 @@
               <string>3</string>
               </Note>
             <Note>
-              <eid>uB_uB</eid>
+              <eid>vB_vB</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>vB_vB</eid>
+                <eid>wB_wB</eid>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -703,28 +704,28 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>wB_wB</eid>
+            <eid>xB_xB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>xB_xB</eid>
+            <eid>yB_yB</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
-            <eid>yB_yB</eid>
+            <eid>zB_zB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <StaffText>
-            <eid>zB_zB</eid>
+            <eid>0B_0B</eid>
             <text>Arm.12</text>
             </StaffText>
           <Chord>
-            <eid>0B_0B</eid>
+            <eid>1B_1B</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1B_1B</eid>
+              <eid>2B_2B</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <head>diamond</head>

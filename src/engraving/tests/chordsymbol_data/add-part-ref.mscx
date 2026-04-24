@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -70,16 +71,16 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>E_E</eid>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -88,26 +89,26 @@
               <name>7</name>
               <root>14</root>
               </harmonyInfo>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             </Harmony>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
     <Score>
-      <eid>K_K</eid>
+      <eid>L_L</eid>
       <name>Classical Guitar</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -128,9 +129,10 @@
       <metaTag name="workNumber"></metaTag>
       <metaTag name="workTitle"></metaTag>
       <Part id="1">
+        <eid>M_M</eid>
         <Staff>
-          <eid>L_L</eid>
-          <linkedTo>C_C</linkedTo>
+          <eid>N_N</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
@@ -180,20 +182,20 @@
           <height>10</height>
           <boxAutoSize>0</boxAutoSize>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>M_M</eid>
+          <eid>O_O</eid>
           </VBox>
         <Measure>
-          <eid>N_N</eid>
+          <eid>P_P</eid>
           <voice>
             <Clef>
               <concertClefType>G8vb</concertClefType>
               <transposingClefType>G8vb</transposingClefType>
               <isHeader>1</isHeader>
-              <eid>O_O</eid>
+              <eid>Q_Q</eid>
               </Clef>
             <TimeSig>
-              <eid>P_P</eid>
-              <linkedTo>F_F</linkedTo>
+              <eid>R_R</eid>
+              <linkedTo>G_G</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
@@ -202,23 +204,23 @@
                 <name>7</name>
                 <root>14</root>
                 </harmonyInfo>
-              <eid>Q_Q</eid>
-              <linkedTo>G_G</linkedTo>
+              <eid>S_S</eid>
+              <linkedTo>H_H</linkedTo>
               </Harmony>
             <Chord>
-              <eid>R_R</eid>
-              <linkedTo>H_H</linkedTo>
+              <eid>T_T</eid>
+              <linkedTo>I_I</linkedTo>
               <durationType>half</durationType>
               <Note>
-                <eid>S_S</eid>
-                <linkedTo>I_I</linkedTo>
+                <eid>U_U</eid>
+                <linkedTo>J_J</linkedTo>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Rest>
-              <eid>T_T</eid>
-              <linkedTo>J_J</linkedTo>
+              <eid>V_V</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>half</durationType>
               </Rest>
             </voice>

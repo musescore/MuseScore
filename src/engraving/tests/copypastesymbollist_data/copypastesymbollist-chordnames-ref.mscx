@@ -24,8 +24,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>ewWBozxlBkP_ewWBozxlBkP</eid>
       <Staff>
-        <eid>ewWBozxlBkP_ewWBozxlBkP</eid>
+        <eid>fwWBozxlBkP_fwWBozxlBkP</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -275,7 +276,7 @@
             <harmonyInfo>
               <root>14</root>
               </harmonyInfo>
-            <eid>fwWBozxlBkP_fwWBozxlBkP</eid>
+            <eid>gwWBozxlBkP_gwWBozxlBkP</eid>
             </Harmony>
           <Chord>
             <eid>EW+EV/6ibML_looyEGEasO</eid>
@@ -322,7 +323,7 @@
             <harmonyInfo>
               <root>16</root>
               </harmonyInfo>
-            <eid>gwWBozxlBkP_gwWBozxlBkP</eid>
+            <eid>hwWBozxlBkP_hwWBozxlBkP</eid>
             </Harmony>
           <Beam>
             <eid>L3tpA2VAiQI_Qixdh0CZDbD</eid>
@@ -415,7 +416,7 @@
             <harmonyInfo>
               <root>14</root>
               </harmonyInfo>
-            <eid>hwWBozxlBkP_hwWBozxlBkP</eid>
+            <eid>iwWBozxlBkP_iwWBozxlBkP</eid>
             </Harmony>
           <Chord>
             <eid>iaNZpJ6UlrB_cuf9Jz55/SJ</eid>
@@ -433,7 +434,7 @@
             <harmonyInfo>
               <root>15</root>
               </harmonyInfo>
-            <eid>iwWBozxlBkP_iwWBozxlBkP</eid>
+            <eid>jwWBozxlBkP_jwWBozxlBkP</eid>
             </Harmony>
           </voice>
         </Measure>
@@ -444,7 +445,7 @@
             <harmonyInfo>
               <root>14</root>
               </harmonyInfo>
-            <eid>jwWBozxlBkP_jwWBozxlBkP</eid>
+            <eid>kwWBozxlBkP_kwWBozxlBkP</eid>
             </Harmony>
           <Chord>
             <eid>zP+yfWHUnLL_88bvbs/oSBH</eid>

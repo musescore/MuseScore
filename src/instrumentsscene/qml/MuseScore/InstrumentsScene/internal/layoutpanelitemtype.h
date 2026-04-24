@@ -32,6 +32,7 @@ QML_ELEMENT;
 enum ItemType {
     UNDEFINED = -1,
     ROOT,
+    SHARED_PART,
     PART,
     INSTRUMENT,
     STAFF,

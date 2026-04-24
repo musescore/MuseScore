@@ -41,9 +41,10 @@ class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Contextabl
     muse::ContextInject<muse::IInteractive> interactive { this };
 
 public:
-    PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent,
+                 LayoutPanelItemType::ItemType type = LayoutPanelItemType::ItemType::PART);
 
-    void init(const notation::Part* masterPart);
+    virtual void init(const notation::Part* masterPart);
 
     const notation::Part* part() const;
 
@@ -62,10 +63,11 @@ public:
     Q_INVOKABLE void replaceInstrument();
     Q_INVOKABLE void resetAllFormatting();
 
-private:
+protected:
+    void listenVisibilityChanged();
     void onScoreChanged(const mu::engraving::ScoreChanges& changes) override;
 
-    void listenVisibilityChanged();
+private:
     void createAndAddPart(const muse::ID& masterPartId);
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;

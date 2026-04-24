@@ -25,6 +25,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">testpart1</metaTag>
     <Part id="1">
+      <eid>vC_vC</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
@@ -70,6 +71,7 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>wC_wC</eid>
       <Staff>
         <eid>D_D</eid>
         <StaffType group="pitched">

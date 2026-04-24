@@ -84,6 +84,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Stave sharing</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Clefs, key &amp; time signatures</string>
        </property>
       </item>
@@ -261,7 +266,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -296,8 +301,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>654</width>
-                <height>723</height>
+                <width>660</width>
+                <height>913</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -4838,6 +4843,9 @@
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="PageStaveSharing">
+       <layout class="QVBoxLayout" name="verticalLayout_57"/>
       </widget>
       <widget class="QWidget" name="PageClefsKeyTimeSigs">
        <layout class="QVBoxLayout" name="verticalLayout_27">

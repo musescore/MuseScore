@@ -48,11 +48,13 @@ using namespace mu::engraving;
 
 static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
 
-NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
+NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+                             INotationStylePtr style)
+    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction), m_style(style)
 {
     m_getScore->scoreInited().onNotify(this, [this]() {
         listenUndoStackChanges();
+        listenStyleChanges();
     });
 }
 
@@ -310,6 +312,15 @@ void NotationParts::listenUndoStackChanges()
             }
         }
     });
+}
+
+void NotationParts::listenStyleChanges()
+{
+    if (!score()) {
+        return;
+    }
+
+    m_style->styleChanged().onNotify(this, [this]() { updatePartsAndSystemObjectStaves(); });
 }
 
 void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreChanges& changes)

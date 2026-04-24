@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,22 +84,22 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </VBox>
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             </Clef>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
               <direction>down</direction>
-              <eid>G_G</eid>
+              <eid>H_H</eid>
               </HairPin>
             <next>
               <location>
@@ -107,10 +108,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>J_J</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -134,7 +135,7 @@
             <HairPin>
               <subtype>1</subtype>
               <direction>down</direction>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               </HairPin>
             <next>
               <location>
@@ -161,7 +162,7 @@
               </prev>
             </Spanner>
           <BarLine>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -22,8 +22,9 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -35,7 +36,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -70,84 +71,84 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>16th</durationType>
             </Rest>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>J_J</eid>
+              <eid>K_K</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <eid>M_M</eid>
-            <durationType>16th</durationType>
-            </Rest>
           <Rest>
             <eid>N_N</eid>
             <durationType>16th</durationType>
             </Rest>
-          <Chord>
+          <Rest>
             <eid>O_O</eid>
             <durationType>16th</durationType>
+            </Rest>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>16th</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
-            <eid>T_T</eid>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>V_V</eid>
+            <eid>W_W</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -159,49 +160,49 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             </Clef>
           <TimeSig>
-            <eid>X_X</eid>
+            <eid>Y_Y</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>Y_Y</eid>
-            <durationType>16th</durationType>
-            </Rest>
-          <Chord>
             <eid>Z_Z</eid>
             <durationType>16th</durationType>
+            </Rest>
+          <Chord>
+            <eid>a_a</eid>
+            <durationType>16th</durationType>
             <Note>
-              <eid>a_a</eid>
+              <eid>b_b</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>b_b</eid>
+            <eid>c_c</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
-            <eid>c_c</eid>
+            <eid>d_d</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>d_d</eid>
+              <eid>e_e</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>e_e</eid>
-            <durationType>16th</durationType>
-            </Rest>
-          <Rest>
             <eid>f_f</eid>
-            <durationType>eighth</durationType>
+            <durationType>16th</durationType>
             </Rest>
           <Rest>
             <eid>g_g</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>h_h</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

@@ -84,8 +84,9 @@
       <unsorted/>
       </Order>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -97,7 +98,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -128,10 +129,10 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <voice>
           <TimeSig>
-            <eid>F_F</eid>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -146,19 +147,19 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>G_G</eid>
+            <eid>H_H</eid>
             <style>harp_pedal_text_diagram</style>
             <text>E<sym>csymAccidentalNatural</sym> F<sym>csymAccidentalNatural</sym> G<sym>csymAccidentalNatural</sym> A<sym>csymAccidentalNatural</sym> <br/>D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAccidentalNatural</sym> </text>
             </HarpPedalDiagram>
           <Rest>
-            <eid>H_H</eid>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>I_I</eid>
+        <eid>J_J</eid>
         <voice>
           <HarpPedalDiagram>
             <isDiagram>0</isDiagram>
@@ -171,19 +172,19 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>J_J</eid>
-            <style>harp_pedal_text_diagram</style>
-            <text>F<sym>csymAccidentalSharp</sym> <br/>C<sym>csymAccidentalSharp</sym> </text>
-            </HarpPedalDiagram>
-          <Rest>
             <eid>K_K</eid>
+            <style>harp_pedal_text_diagram</style>
+            <text>F<sym>csymAccidentalSharp</sym> <br/>C<sym>csymAccidentalSharp</sym> </text>
+            </HarpPedalDiagram>
+          <Rest>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>L_L</eid>
+        <eid>M_M</eid>
         <voice>
           <HarpPedalDiagram>
             <isDiagram>0</isDiagram>
@@ -196,19 +197,19 @@
               <string name="5">1</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <style>harp_pedal_text_diagram</style>
             <text>F<sym>csymAccidentalSharp</sym> <br/>C<sym>csymAccidentalSharp</sym> </text>
             </HarpPedalDiagram>
           <Rest>
-            <eid>N_N</eid>
+            <eid>O_O</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>O_O</eid>
+        <eid>P_P</eid>
         <voice>
           <HarpPedalDiagram>
             <isDiagram>0</isDiagram>
@@ -221,12 +222,12 @@
               <string name="5">2</string>
               <string name="6">1</string>
               </pedalState>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <style>harp_pedal_text_diagram</style>
             <text>G<sym>csymAccidentalSharp</sym> <br/></text>
             </HarpPedalDiagram>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -237,19 +238,10 @@
       <Measure>
         <voice>
           <TimeSig>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <eid>S_S</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Rest>
             <eid>T_T</eid>
             <durationType>measure</durationType>
@@ -270,6 +262,15 @@
         <voice>
           <Rest>
             <eid>V_V</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

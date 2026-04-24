@@ -42,6 +42,7 @@
 #include "dom/note.h"
 #include "dom/part.h"
 #include "dom/score.h"
+#include "dom/sharedpart.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
 #include "dom/text.h"
@@ -196,6 +197,10 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             Part* part = new Part(score);
             TRead::read(part, e, ctx);
             score->appendPart(part);
+        } else if (tag == "SharedPart") {
+            SharedPart* sharedPart = new SharedPart(score);
+            TRead::read(sharedPart, e, ctx);
+            score->appendPart(sharedPart);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
                    || (tag == "TextLine")

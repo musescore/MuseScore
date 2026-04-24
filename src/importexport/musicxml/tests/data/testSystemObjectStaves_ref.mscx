@@ -54,8 +54,9 @@
       <Instance staffId="4"/>
       </SystemObjects>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -124,8 +125,9 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -189,8 +191,9 @@
         </Instrument>
       </Part>
     <Part id="3">
+      <eid>G_G</eid>
       <Staff>
-        <eid>E_E</eid>
+        <eid>H_H</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -255,8 +258,9 @@
         </Instrument>
       </Part>
     <Part id="4">
+      <eid>I_I</eid>
       <Staff>
-        <eid>F_F</eid>
+        <eid>J_J</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -268,7 +272,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff>
-        <eid>G_G</eid>
+        <eid>K_K</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -334,73 +338,43 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <eid>H_H</eid>
+        <eid>L_L</eid>
         <Text>
-          <eid>I_I</eid>
+          <eid>M_M</eid>
           <style>title</style>
           <text><font size="22"/>Untitled score</text>
           </Text>
         <Text>
-          <eid>J_J</eid>
+          <eid>N_N</eid>
           <style>subtitle</style>
           <text><font size="14"/>Subtitle</text>
           </Text>
         <Text>
-          <eid>K_K</eid>
+          <eid>O_O</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
-        <eid>L_L</eid>
+        <eid>P_P</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>M_M</eid>
+            <eid>Q_Q</eid>
             </Clef>
           <TimeSig>
-            <eid>N_N</eid>
+            <eid>R_R</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.333333</tempo>
             <followText>1</followText>
-            <eid>O_O</eid>
+            <eid>S_S</eid>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
-          <Rest>
-            <eid>P_P</eid>
-            <durationType>measure</durationType>
-            <duration>1/1</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <eid>Q_Q</eid>
-        <voice>
-          <RehearsalMark>
-            <eid>R_R</eid>
-            <text><font size="14"/><b>A</b></text>
-            </RehearsalMark>
-          <Spanner type="GradualTempoChange">
-            <GradualTempoChange>
-              <tempoChangeType>ritardando</tempoChangeType>
-              <beginHookHeight>1.9</beginHookHeight>
-              <endHookType>0</endHookType>
-              <endHookHeight>1.9</endHookHeight>
-              <beginText>rit</beginText>
-              <beginTextOffset x="0" y="0"/>
-              <eid>S_S</eid>
-              </GradualTempoChange>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
             <eid>T_T</eid>
             <durationType>measure</durationType>
@@ -411,9 +385,39 @@
       <Measure>
         <eid>U_U</eid>
         <voice>
+          <RehearsalMark>
+            <eid>V_V</eid>
+            <text><font size="14"/><b>A</b></text>
+            </RehearsalMark>
+          <Spanner type="GradualTempoChange">
+            <GradualTempoChange>
+              <tempoChangeType>ritardando</tempoChangeType>
+              <beginHookHeight>1.9</beginHookHeight>
+              <endHookType>0</endHookType>
+              <endHookHeight>1.9</endHookHeight>
+              <beginText>rit</beginText>
+              <beginTextOffset x="0" y="0"/>
+              <eid>W_W</eid>
+              </GradualTempoChange>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Rest>
+            <eid>X_X</eid>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Y_Y</eid>
+        <voice>
           <Tempo>
             <tempo>2</tempo>
-            <eid>V_V</eid>
+            <eid>Z_Z</eid>
             <text>Allegro</text>
             </Tempo>
           <Spanner type="GradualTempoChange">
@@ -424,17 +428,17 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>W_W</eid>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <RehearsalMark>
-            <eid>X_X</eid>
+            <eid>b_b</eid>
             <text><b></b><font size="5.7"/><i>m</i></text>
             </RehearsalMark>
           <BarLine>
             <subtype>end</subtype>
-            <eid>Y_Y</eid>
+            <eid>c_c</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -446,15 +450,15 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>Z_Z</eid>
+            <eid>d_d</eid>
             </Clef>
           <TimeSig>
-            <eid>a_a</eid>
+            <eid>e_e</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>b_b</eid>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -463,7 +467,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>c_c</eid>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -472,13 +476,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>d_d</eid>
+            <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>e_e</eid>
+            <eid>i_i</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -490,20 +494,20 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>f_f</eid>
+            <eid>j_j</eid>
             </Clef>
           <KeySig>
-            <eid>g_g</eid>
+            <eid>k_k</eid>
             <concertKey>0</concertKey>
             <actualKey>2</actualKey>
             </KeySig>
           <TimeSig>
-            <eid>h_h</eid>
+            <eid>l_l</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>i_i</eid>
+            <eid>m_m</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -512,7 +516,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>j_j</eid>
+            <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -521,13 +525,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>k_k</eid>
+            <eid>o_o</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>l_l</eid>
+            <eid>p_p</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -539,22 +543,22 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>m_m</eid>
+            <eid>q_q</eid>
             </Clef>
           <TimeSig>
-            <eid>n_n</eid>
+            <eid>r_r</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.333333</tempo>
             <followText>1</followText>
-            <eid>o_o</eid>
-            <linkedTo>O_O</linkedTo>
+            <eid>s_s</eid>
+            <linkedTo>S_S</linkedTo>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
           <Rest>
-            <eid>p_p</eid>
+            <eid>t_t</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -563,8 +567,8 @@
       <Measure>
         <voice>
           <RehearsalMark>
-            <eid>q_q</eid>
-            <linkedTo>R_R</linkedTo>
+            <eid>u_u</eid>
+            <linkedTo>V_V</linkedTo>
             <text><font size="14"/><b>A</b></text>
             </RehearsalMark>
           <Spanner type="GradualTempoChange">
@@ -575,8 +579,8 @@
               <endHookHeight>1.9</endHookHeight>
               <beginText>rit</beginText>
               <beginTextOffset x="0" y="0"/>
-              <eid>r_r</eid>
-              <linkedTo>S_S</linkedTo>
+              <eid>v_v</eid>
+              <linkedTo>W_W</linkedTo>
               </GradualTempoChange>
             <next>
               <location>
@@ -585,7 +589,7 @@
               </next>
             </Spanner>
           <Rest>
-            <eid>s_s</eid>
+            <eid>w_w</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -595,8 +599,8 @@
         <voice>
           <Tempo>
             <tempo>2</tempo>
-            <eid>t_t</eid>
-            <linkedTo>V_V</linkedTo>
+            <eid>x_x</eid>
+            <linkedTo>Z_Z</linkedTo>
             <text>Allegro</text>
             </Tempo>
           <Spanner type="GradualTempoChange">
@@ -607,18 +611,18 @@
               </prev>
             </Spanner>
           <Rest>
-            <eid>u_u</eid>
+            <eid>y_y</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <RehearsalMark>
-            <eid>v_v</eid>
-            <linkedTo>X_X</linkedTo>
+            <eid>z_z</eid>
+            <linkedTo>b_b</linkedTo>
             <text><b></b><font size="5.7"/><i>m</i></text>
             </RehearsalMark>
           <BarLine>
             <subtype>end</subtype>
-            <eid>w_w</eid>
+            <eid>0_0</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -630,15 +634,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>x_x</eid>
+            <eid>1_1</eid>
             </Clef>
           <TimeSig>
-            <eid>y_y</eid>
+            <eid>2_2</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>z_z</eid>
+            <eid>3_3</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -647,7 +651,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>0_0</eid>
+            <eid>4_4</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -656,13 +660,13 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>1_1</eid>
+            <eid>5_5</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <eid>2_2</eid>
+            <eid>6_6</eid>
             </BarLine>
           </voice>
         </Measure>
