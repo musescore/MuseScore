@@ -39,8 +39,8 @@ enum class MsgCode {
     Undefined = 0,
 
     // Init / Deinit
-    EngineRunning,
     EngineInit,
+    EngineRunning, // notification
     EngineDeinit,
 
     // Config

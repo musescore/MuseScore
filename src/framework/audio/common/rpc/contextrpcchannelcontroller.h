@@ -22,39 +22,34 @@
 
 #pragma once
 
-#include "icontextrpcchannel.h"
+#include <map>
+
 #include "global/modularity/ioc.h"
+#include "irpcchannel.h"
+
+#include "icontextrpcchannel.h"
 
 namespace muse::audio::rpc {
-class ContextRpcChannel : public IContextRpcChannel, public Contextable
+class ContextRpcChannelController : public IContextRpcChannelController
 {
     GlobalInject<IRpcChannel> globalChannel;
+
 public:
-    ContextRpcChannel(const muse::modularity::ContextPtr& ctx, std::shared_ptr<IContextRpcChannelController> controller)
-        : Contextable(ctx), m_controller(controller) {}
+    ContextRpcChannelController() = default;
 
-    inline CtxId contextId() const
-    {
-        assert(iocContext());
-        assert(iocContext()->id != -1);
-        if (!iocContext()) {
-            return 0;
-        }
-        return static_cast<CtxId>(iocContext()->id);
-    }
-
-    // IContextRpcChannel
     void send(const Msg& msg, const Handler& onResponse = nullptr) override;
-    void onRequest(MsgCode code, Handler h) override;
-    void onNotification(MsgCode code, Handler h) override;
+    void onRequest(CtxId ctxId, MsgCode code, Handler h) override;
+    void onNotification(CtxId ctxId, MsgCode code, Handler h) override;
 
-    // IStreamRpcChannel
+    //! NOTE Streams have unique IDs, so there is no need use context ID for them.
     void addStream(std::shared_ptr<IRpcStream> s) override;
     void removeStream(StreamId id) override;
     void sendStream(const StreamMsg& msg) override;
     void onStream(StreamId id, StreamHandler h) override;
 
 private:
-    std::shared_ptr<IContextRpcChannelController> m_controller;
+
+    std::map<MsgCode, std::map<CtxId, Handler> > m_onRequests;
+    std::map<MsgCode, std::map<CtxId, Handler> > m_onNotifications;
 };
 }

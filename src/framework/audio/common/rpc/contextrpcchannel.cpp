@@ -26,69 +26,38 @@ using namespace muse::audio::rpc;
 
 void ContextRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
-    Msg m = msg;
-    m.ctxId = contextId();
-    Handler h;
-    if (onResponse) {
-        h = [this, onResponse](const Msg& msg) {
-            DO_ASSERT(msg.ctxId == contextId());
-            onResponse(msg);
-        };
-    }
-    globalChannel()->send(m, h);
+    m_controller->send(msg, onResponse);
 }
 
 void ContextRpcChannel::onRequest(MsgCode code, Handler h)
 {
-    if (h) {
-        globalChannel()->onRequest(code, [this, h](const Msg& msg) {
-            if (msg.ctxId == contextId()) {
-                h(msg);
-            } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
-                h(msg);
-            }
-        });
-    } else {
-        // reset
-        globalChannel()->onRequest(code, nullptr);
-    }
+    m_controller->onRequest(contextId(), code, h);
 }
 
 void ContextRpcChannel::onNotification(MsgCode code, Handler h)
 {
-    if (h) {
-        globalChannel()->onNotification(code, [this, h](const Msg& msg) {
-            if (msg.ctxId == contextId()) {
-                h(msg);
-            } else if (msg.type == MsgType::Notification) { // Notifications are not contextual yet
-                h(msg);
-            }
-        });
-    } else {
-        // reset
-        globalChannel()->onNotification(code, nullptr);
-    }
+    m_controller->onNotification(contextId(), code, h);
 }
 
 void ContextRpcChannel::addStream(std::shared_ptr<IRpcStream> s)
 {
     s->setCtxId(contextId());
-    globalChannel()->addStream(s);
+    m_controller->addStream(s);
 }
 
 void ContextRpcChannel::removeStream(StreamId id)
 {
-    globalChannel()->removeStream(id);
+    m_controller->removeStream(id);
 }
 
 void ContextRpcChannel::sendStream(const StreamMsg& msg)
 {
     //! NOTE The context ID is already set in the stream.
     DO_ASSERT(msg.ctxId == contextId());
-    globalChannel()->sendStream(msg);
+    m_controller->sendStream(msg);
 }
 
 void ContextRpcChannel::onStream(StreamId id, StreamHandler h)
 {
-    globalChannel()->onStream(id, h);
+    m_controller->onStream(id, h);
 }

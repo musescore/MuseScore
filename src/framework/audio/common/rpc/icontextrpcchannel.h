@@ -22,9 +22,26 @@
 
 #pragma once
 
+#include "global/modularity/imoduleinterface.h"
 #include "irpcchannel.h"
 
 namespace muse::audio::rpc {
+class IContextRpcChannelController : MODULE_GLOBAL_INTERFACE
+{
+    INTERFACE_ID(IContextRpcChannelController)
+public:
+    virtual ~IContextRpcChannelController() = default;
+
+    virtual void send(const Msg& msg, const Handler& onResponse = nullptr) = 0;
+    virtual void onRequest(CtxId ctxId, MsgCode code, Handler h) = 0;
+    virtual void onNotification(CtxId ctxId, MsgCode code, Handler h) = 0;
+
+    virtual void addStream(std::shared_ptr<IRpcStream> s) = 0;
+    virtual void removeStream(StreamId id) = 0;
+    virtual void sendStream(const StreamMsg& msg) = 0;
+    virtual void onStream(StreamId id, StreamHandler h) = 0;
+};
+
 class IContextRpcChannel : MODULE_CONTEXT_INTERFACE, public IStreamRpcChannel
 {
     INTERFACE_ID(IContextRpcChannel)
