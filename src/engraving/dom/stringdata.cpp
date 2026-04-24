@@ -246,6 +246,9 @@ void StringData::fretChords(Chord* chord) const
         nString = nNewString = note->string();
         nFret   = nNewFret   = note->fret();
         note->setFretConflict(false);           // assume no conflicts on this note
+        if (note->deadNote()) {
+            continue;
+        }
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             const CapoParams& capo = note->staff()->capo(note->tick());
@@ -509,6 +512,12 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
     return fret;
 }
 
+//---------------------------------------------------------
+//   sortChordNotesUseSameString
+//    Tries to keep each note on its currently assigned string when the
+//    chord's pitches are transposed, updating only the fret.
+//---------------------------------------------------------
+
 void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const
 {
     int capoFret = chord->staff()->capo(chord->tick()).fretPosition;
@@ -516,6 +525,9 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
     bool anyReset = false;
     for (Note* note : chord->notes()) {
         if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+            continue;
+        }
+        if (note->deadNote()) {
             continue;
         }
         if (note->string() < 0 || note->fret() < 0) {
@@ -536,6 +548,9 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
     if (anyReset) {
         for (Note* note : chord->notes()) {
             if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+                continue;
+            }
+            if (note->deadNote()) {
                 continue;
             }
             note->setString(INVALID_STRING_INDEX);
@@ -576,8 +591,8 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         int pitch = getPitch(string, noteFret, pitchOffsetAt(chord->staff(), chord->tick(), string));
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
-        if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || noteFret <= INVALID_FRET_INDEX
-                                          || (pitchIsValid(pitch) && pitch != note->pitch()))) {
+        if (!note->deadNote() && !note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || noteFret <= INVALID_FRET_INDEX
+                                                               || (pitchIsValid(pitch) && pitch != note->pitch()))) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
         }
