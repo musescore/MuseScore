@@ -682,6 +682,10 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
+        if (hitStaffIndex == muse::nidx) {
+            // Prevent note input actions when click does not hit a valid staff
+            return;
+        }
         handleClickInNoteInputMode(event);
         return;
     }

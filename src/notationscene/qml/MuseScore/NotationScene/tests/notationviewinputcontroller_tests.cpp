@@ -21,6 +21,7 @@
  */
 #include <gmock/gmock.h>
 
+#include "mocks/actionsdispatchermock.h"
 #include "mocks/controlledviewmock.h"
 #include "notation/tests/mocks/notationconfigurationmock.h"
 #include "notation/tests/mocks/notationinteractionmock.h"
@@ -75,6 +76,9 @@ public:
         m_playbackController = std::make_shared<NiceMock<playback::PlaybackControllerMock> >();
         m_controller->playbackController.set(m_playbackController);
 
+        m_dispatcher = std::make_shared<NiceMock<muse::actions::ActionsDispatcherMock> >();
+        m_controller->dispatcher.set(m_dispatcher);
+
         setNoWaylandForLinux();
     }
 
@@ -91,6 +95,7 @@ public:
     std::shared_ptr<NotationSelectionMock> m_selection;
     std::shared_ptr<NotationSelectionRangeMock> m_selectionRange;
     std::shared_ptr<playback::PlaybackControllerMock> m_playbackController;
+    std::shared_ptr<muse::actions::ActionsDispatcherMock> m_dispatcher;
     playback::IPlaybackController::PlayParams m_playParams;
 
     mutable QList<QInputEvent*> m_events;
@@ -941,5 +946,103 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPointF(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Left_Click_No_Hit_Staff
+ * @details The user left-clicks in note input mode, but does not hit a staff.
+ *          No put-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Left_Click_No_Hit_Staff)
+{
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    //! [GIVEN] No staff is hit (hitStaff returns nullptr)
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(nullptr));
+
+    //! [THEN] Should not dispatch any put-note action
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _)).Times(0);
+
+    //! [WHEN] User left-clicks in note input mode but does not hit a staff
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Left_Click_With_Hit_Staff
+ * @details The user left-clicks in note input mode and hits a staff.
+ *          The put-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Left_Click_With_Hit_Staff)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] User clicks on a valid staff
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, true });
+
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.staff));
+
+    //! [THEN] Should call dispatcher for "put-note"
+    EXPECT_CALL(*m_dispatcher, dispatch("put-note", _)).Times(1);
+
+    //! [WHEN] User left-clicks in note input mode and hits a staff
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Right_Click_No_Hit_Staff
+ * @details The user right-clicks in note input mode, but does not hit a staff.
+ *          No remove-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Right_Click_No_Hit_Staff)
+{
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    //! [GIVEN] No staff is hit (hitStaff returns nullptr)
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(nullptr));
+
+    //! [THEN] Should not dispatch any action
+    EXPECT_CALL(*m_dispatcher, dispatch(_, _)).Times(0);
+
+    //! [WHEN] User right-clicks in note input mode but does not hit a staff
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Note_Input_Mode_Right_Click_With_Hit_Staff
+ * @details The user right-clicks in note input mode and hits a staff.
+ *          The remove-note action should be dispatched.
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Note_Input_Mode_Right_Click_With_Hit_Staff)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] User right-clicks on a valid staff
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, true });
+
+    //! [GIVEN] Note input mode is active
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(true));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.staff));
+
+    //! [THEN] Should call dispatcher for "remove-note"
+    EXPECT_CALL(*m_dispatcher, dispatch("remove-note", _)).Times(1);
+
+    //! [WHEN] User right-clicks in note input mode and hits a staff
     m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPointF(100, 100)));
 }
