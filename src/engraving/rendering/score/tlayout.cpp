@@ -4342,6 +4342,16 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
         }
     }
     cueNoteChord->mutldata()->setPosX(minDist);
+
+    if (cueNote->visible() && cueNote->addToSkyline()) {
+        SysStaff* staff = item->system()->staff(item->staffIdx());
+        Skyline& skyline = staff->skyline();
+        Segment* seg = parentChord->segment();
+        Measure* meas = seg->measure();
+        PointF p(seg->pos() + meas->pos());
+
+        skyline.add(cueNoteChord->shape().translate(cueNoteChord->pos() + p + cueNoteChord->staffOffset()));
+    }
 }
 
 void TLayout::layoutOttava(Ottava* item, LayoutContext& ctx)

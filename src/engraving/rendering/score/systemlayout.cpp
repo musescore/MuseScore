@@ -1234,6 +1234,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         ChordLayout::layoutArticulations(c, ctx);
         ChordLayout::layoutArticulations2(c, ctx);
         ChordLayout::layoutChordBaseFingering(c, system, ctx);
+        Ornament* ornament = c->findOrnament();
+        if (ornament && ornament->showCueNote()) {
+            TLayout::layoutOrnamentCueNote(ornament, ctx);
+        }
     }
 
     layoutTuplets(elementsToLayout.chordRests, ctx);
@@ -1664,15 +1668,6 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                                 }
                                 if (!graceAfter.empty()) {
                                     skyline.add(graceAfter.shape().translate(graceAfter.pos() + p + offset));
-                                }
-
-                                // If present, add ornament cue note to skyline
-                                Ornament* ornament = chord->findOrnament();
-                                if (ornament) {
-                                    Chord* cue = ornament->cueNoteChord();
-                                    if (cue && cue->upNote()->visible()) {
-                                        skyline.add(cue->shape().translate(cue->pos() + p + cue->staffOffset()));
-                                    }
                                 }
 
                                 // Don't include cross-staff arpeggios
