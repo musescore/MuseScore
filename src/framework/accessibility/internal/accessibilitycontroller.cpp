@@ -36,6 +36,7 @@
 #include "accessiblewindowinterface.h"
 #include "iqaccessibleinterfaceregister.h"
 
+#include "global/async/async.h"
 #include "log.h"
 
 // #define MUSE_MODULE_ACCESSIBILITY_TRACE
@@ -48,9 +49,6 @@
 using namespace muse;
 using namespace muse::modularity;
 using namespace muse::accessibility;
-
-AccessibleObject* s_rootObject = nullptr;
-std::shared_ptr<IQAccessibleInterfaceRegister> s_accessibleInterfaceRegister = nullptr;
 
 static void updateHandlerNoop(QAccessibleEvent*)
 {
@@ -72,12 +70,42 @@ AccessibilityController::~AccessibilityController()
 
 QAccessibleInterface* AccessibilityController::accessibleInterface(QObject* window)
 {
-    return static_cast<QAccessibleInterface*>(new AccessibleWindowInterface(window, s_rootObject));
+    QWindow* qwindow = qobject_cast<QWindow*>(window);
+    if (!qwindow) {
+        return nullptr;
+    }
+
+    auto appRoot = globalIoc()->resolve<IAccessibleAppRootObject>("accessibility");
+    if (!appRoot) {
+        return nullptr;
+    }
+
+    AccessibleObject* windowRoot = nullptr;
+    QWindow* w = qwindow;
+    while (w) {
+        windowRoot = appRoot->windowRoot(w);
+        if (windowRoot) {
+            break;
+        }
+        w = w->transientParent();
+    }
+
+    if (!windowRoot) {
+        return nullptr;
+    }
+
+    return static_cast<QAccessibleInterface*>(new AccessibleWindowInterface(window, windowRoot));
 }
 
 void AccessibilityController::deinit()
 {
     m_pretendFocusTimer.stop();
+
+    QWindow* window = mainWindow()->qWindow();
+    if (window) {
+        appRootObject()->unregisterWindow(window);
+    }
+
     unreg(this);
 }
 
@@ -86,30 +114,40 @@ void AccessibilityController::setAccessibilityEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
+bool AccessibilityController::isEnabled() const
 {
-    if (!s_accessibleInterfaceRegister) {
-        s_accessibleInterfaceRegister = globalIoc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
+    if (!appRootObject()->isAccessibilityActive()) {
+        return false;
     }
 
-    auto interfaceGetter = s_accessibleInterfaceRegister->interfaceGetter(classname);
-    if (interfaceGetter) {
-        return interfaceGetter(object);
+    if (!navigationController()) {
+        return false;
     }
 
-    return AccessibleStub::accessibleInterface(object);
+    return navigationController()->activeSection() != nullptr;
 }
 
 void AccessibilityController::init()
 {
-    QAccessible::installFactory(muAccessibleFactory);
-
     reg(this);
     const Item& self = findItem(this);
-    s_rootObject = self.object;
 
-    QAccessible::installRootObjectHandler(nullptr);
-    QAccessible::setRootObject(s_rootObject);
+    // init() is called when the window is being created, and is not available yet,
+    // delay the registration
+    async::Async::call(this, [this, windowRoot = self.object]() {
+        QWindow* w = mainWindow()->qWindow();
+        if (w) {
+            appRootObject()->registerWindow(w, windowRoot);
+
+            // Clean-up system-default interface that Qt may create during window construction,
+            // so all next calls return correct interface
+            QAccessibleInterface* cached = QAccessible::queryAccessibleInterface(w);
+            if (cached && !dynamic_cast<AccessibleWindowInterface*>(cached)) {
+                QAccessible::deleteAccessibleInterface(QAccessible::uniqueId(cached));
+            }
+        }
+        m_treeConnected = true;
+    });
 
     auto dispatcher = actionsDispatcher();
     if (!dispatcher) {
@@ -417,7 +455,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
 
 void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool arg)
 {
-    if (!configuration()->isAccessibleEnabled()) {
+    if (!isEnabled()) {
         return;
     }
 
@@ -488,6 +526,10 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
 void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 {
+    if (!m_treeConnected) {
+        return;
+    }
+
 #ifdef MUSE_MODULE_ACCESSIBILITY_TRACE
     AccessibleObject* obj = qobject_cast<AccessibleObject*>(ev->object());
     MYLOG() << "object: " << obj->item()->accessibleName() << ", event: " << int(ev->type());
@@ -500,7 +542,7 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 
 void AccessibilityController::cancelPreviousReading()
 {
-    if (!configuration()->isAccessibleActive()) {
+    if (!appRootObject()->isAccessibilityActive()) {
         return;
     }
 
@@ -569,7 +611,7 @@ bool AccessibilityController::needsRevoicing(const QAccessibleInterface& iface, 
 
 void AccessibilityController::triggerRevoicing(const Item& current)
 {
-    if (current.item != m_lastFocused || !configuration()->isAccessibleActive()) {
+    if (current.item != m_lastFocused || !appRootObject()->isAccessibilityActive()) {
         return;
     }
 
@@ -746,11 +788,15 @@ QAccessibleInterface* AccessibilityController::parentIface(const IAccessible* it
     }
 
     if (it.item->accessibleRole() == IAccessible::Role::Application) {
-        if (!qApp->isQuitLockEnabled()) {
-            return QAccessible::queryAccessibleInterface(interactive()->topWindow());
-        } else {
-            return QAccessible::queryAccessibleInterface(qApp->focusWindow());
+        QWindow* w = item->accessibleWindow();
+        if (!w) {
+            w = mainWindow()->qWindow();
         }
+        if (w) {
+            return QAccessible::queryAccessibleInterface(w);
+        }
+
+        return nullptr;
     }
 
     return it.iface;
@@ -795,7 +841,7 @@ int AccessibilityController::indexOfChild(const IAccessible* item, const QAccess
     for (size_t i = 0; i < count; ++i) {
         const IAccessible* ch = item->accessibleChild(i);
         const Item& chIt = findItem(ch);
-        IF_ASSERT_FAILED(chIt.isValid()) {
+        if (!chIt.isValid()) {
             continue;
         }
 

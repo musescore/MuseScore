@@ -26,6 +26,9 @@
 
 #include "accessibilitycontroller.h"
 
+#include "modularity/ioc.h"
+#include "../iaccessibleapprootobject.h"
+
 #include "translation.h"
 #include "log.h"
 
@@ -71,27 +74,60 @@ QRect AccessibleWindowInterface::rect() const
 
 QAccessibleInterface* AccessibleWindowInterface::parent() const
 {
+    auto appRoot = muse::modularity::globalIoc()->resolve<IAccessibleAppRootObject>("accessibility");
+    if (m_window && appRoot && appRoot->windowRoot(m_window)) {
+        return QAccessible::queryAccessibleInterface(appRoot->asQObject());
+    }
     return nullptr;
 }
 
 int AccessibleWindowInterface::childCount() const
 {
-    int count = m_children->controller().lock()->childCount(m_children->item());
+    if (!m_children) {
+        return 0;
+    }
+
+    auto controller = m_children->controller().lock();
+    if (!controller) {
+        return 0;
+    }
+
+    int count = controller->childCount(m_children->item());
     MYLOG() << "item: " << m_children->item()->accessibleName() << ", childCount: " << count;
     return count;
 }
 
 QAccessibleInterface* AccessibleWindowInterface::child(int index) const
 {
-    QAccessibleInterface* iface = m_children->controller().lock()->child(m_children->item(), index);
-    MYLOG() << "item: " << m_children->item()->accessibleName() << ", child: " << index << " " << iface->text(QAccessible::Name);
+    if (!m_children) {
+        return nullptr;
+    }
+
+    auto controller = m_children->controller().lock();
+    if (!controller) {
+        return nullptr;
+    }
+
+    QAccessibleInterface* iface = controller->child(m_children->item(), index);
+    MYLOG() << "item: " << m_children->item()->accessibleName() << ", child: " << index << " " <<
+        (iface ? iface->text(QAccessible::Name) : "null");
     return iface;
 }
 
 int AccessibleWindowInterface::indexOfChild(const QAccessibleInterface* iface) const
 {
-    int idx = m_children->controller().lock()->indexOfChild(m_children->item(), iface);
-    MYLOG() << "item: " << m_children->item()->accessibleName() << ", indexOfChild: " << iface->text(QAccessible::Name) << " = " << idx;
+    if (!m_children) {
+        return -1;
+    }
+
+    auto controller = m_children->controller().lock();
+    if (!controller) {
+        return -1;
+    }
+
+    int idx = controller->indexOfChild(m_children->item(), iface);
+    MYLOG() << "item: " << m_children->item()->accessibleName() << ", indexOfChild: " <<
+        (iface ? iface->text(QAccessible::Name) : "null") << " = " << idx;
     return idx;
 }
 
@@ -103,7 +139,16 @@ QAccessibleInterface* AccessibleWindowInterface::childAt(int, int) const
 
 QAccessibleInterface* AccessibleWindowInterface::focusChild() const
 {
-    QAccessibleInterface* child = m_children->controller().lock()->focusedChild(m_children->item());
+    if (!m_children) {
+        return nullptr;
+    }
+
+    auto controller = m_children->controller().lock();
+    if (!controller) {
+        return nullptr;
+    }
+
+    QAccessibleInterface* child = controller->focusedChild(m_children->item());
     MYLOG() << "item: " << m_children->item()->accessibleName() << ", focused child: " << (child ? child->text(QAccessible::Name) : "null");
     return child;
 }

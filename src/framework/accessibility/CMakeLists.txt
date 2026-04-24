@@ -24,9 +24,8 @@ target_sources(muse_accessibility PRIVATE
     accessibilitymodule.cpp
     accessibilitymodule.h
     iaccessible.h
+    iaccessibleapprootobject.h
     iaccessibilitycontroller.h
-    iaccessibilityconfiguration.h
-    iaccessibilitycontextconfiguration.h
     iqaccessibleinterfaceregister.h
 
     api/accessibilityapi.cpp
@@ -34,6 +33,10 @@ target_sources(muse_accessibility PRIVATE
 
     internal/accessibilitycontroller.cpp
     internal/accessibilitycontroller.h
+    internal/accessibleapprootobject.cpp
+    internal/accessibleapprootobject.h
+    internal/accessibleapprootinterface.cpp
+    internal/accessibleapprootinterface.h
     internal/accessibleobject.cpp
     internal/accessibleobject.h
     internal/accessiblestub.cpp
@@ -42,10 +45,6 @@ target_sources(muse_accessibility PRIVATE
     internal/accessibleiteminterface.h
     internal/accessiblewindowinterface.cpp
     internal/accessiblewindowinterface.h
-    internal/accessibilityconfiguration.cpp
-    internal/accessibilityconfiguration.h
-    internal/accessibilitycontextconfiguration.cpp
-    internal/accessibilitycontextconfiguration.h
     internal/qaccessibleinterfaceregister.cpp
     internal/qaccessibleinterfaceregister.h
 )

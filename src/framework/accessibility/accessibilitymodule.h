@@ -28,7 +28,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace muse::accessibility {
-class AccessibilityConfiguration;
 class AccessibilityController;
 class AccessibilityModule : public modularity::IModuleSetup
 {
@@ -42,9 +41,6 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
 
     modularity::IContextSetup* newContext(const muse::modularity::ContextPtr& ctx) const override;
-
-private:
-    std::shared_ptr<AccessibilityConfiguration> m_configuration;
 };
 
 class AccessibilityContext : public modularity::IContextSetup

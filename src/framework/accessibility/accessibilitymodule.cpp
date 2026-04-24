@@ -21,12 +21,16 @@
  */
 #include "accessibilitymodule.h"
 
+#include <QAccessible>
+
 #include "modularity/ioc.h"
 
+#include "iaccessibleapprootobject.h"
 #include "internal/accessibilitycontroller.h"
-#include "internal/accessibilityconfiguration.h"
-#include "internal/accessibilitycontextconfiguration.h"
+#include "internal/accessibleapprootobject.h"
+#include "internal/accessiblestub.h"
 #include "internal/qaccessibleinterfaceregister.h"
+#include "iqaccessibleinterfaceregister.h"
 
 #include "global/api/iapiregister.h"
 #include "api/accessibilityapi.h"
@@ -43,10 +47,8 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
-    m_configuration = std::make_shared<AccessibilityConfiguration>();
-
-    globalIoc()->registerExport<IAccessibilityConfiguration>(mname, m_configuration);
     globalIoc()->registerExport<IQAccessibleInterfaceRegister>(mname, new QAccessibleInterfaceRegister());
+    globalIoc()->registerExport<IAccessibleAppRootObject>(mname, new AccessibleAppRootObject());
 }
 
 void AccessibilityModule::resolveImports()
@@ -57,6 +59,7 @@ void AccessibilityModule::resolveImports()
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
 #endif
         accr->registerInterfaceGetter("muse::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
+        accr->registerInterfaceGetter("muse::accessibility::AccessibleAppRootObject", AccessibleAppRootObject::accessibleInterface);
     }
 }
 
@@ -70,9 +73,27 @@ void AccessibilityModule::registerApi()
     }
 }
 
+static QAccessibleInterface* accessibleFactory(const QString& classname, QObject* object)
+{
+    auto accr = globalIoc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
+    if (accr) {
+        auto interfaceGetter = accr->interfaceGetter(classname);
+        if (interfaceGetter) {
+            return interfaceGetter(object);
+        }
+    }
+
+    return AccessibleStub::accessibleInterface(object);
+}
+
 void AccessibilityModule::onInit(const IApplication::RunMode&)
 {
-    m_configuration->init();
+    QAccessible::installFactory(accessibleFactory);
+
+    auto appRoot = globalIoc()->resolve<IAccessibleAppRootObject>(mname);
+    if (appRoot) {
+        appRoot->init();
+    }
 }
 
 IContextSetup* AccessibilityModule::newContext(const muse::modularity::ContextPtr& ctx) const
@@ -87,8 +108,6 @@ void AccessibilityContext::registerExports()
     // It probably needs to be split into two separate classes.
     m_controller = std::make_shared<AccessibilityController>(iocContext());
     ioc()->registerExport<IAccessibilityController>(mname, m_controller);
-
-    ioc()->registerExport<IAccessibilityContextConfiguration>(mname, new AccessibilityContextConfiguration(iocContext()));
 }
 
 void AccessibilityContext::onPreInit(const IApplication::RunMode&)

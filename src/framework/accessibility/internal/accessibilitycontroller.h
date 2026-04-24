@@ -33,12 +33,13 @@
 #include "global/iapplication.h"
 
 #include "modularity/ioc.h"
-#include "../iaccessibilitycontextconfiguration.h"
+#include "../iaccessibleapprootobject.h"
 #include "../iaccessibilitycontroller.h"
 #include "accessibleobject.h"
 #include "actions/iactionsdispatcher.h"
 #include "interactive/iinteractive.h"
 #include "ui/imainwindow.h"
+#include "ui/inavigationcontroller.h"
 #include "ui/iuiactionsregister.h"
 
 class QAccessibleInterface;
@@ -53,12 +54,12 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
-
     GlobalInject<IApplication> application;
-    ContextInject<IAccessibilityContextConfiguration> configuration = { this };
+    GlobalInject<IAccessibleAppRootObject> appRootObject;
     ContextInject<actions::IActionsDispatcher> actionsDispatcher = { this };
     ContextInject<IInteractive> interactive = { this };
     ContextInject<ui::IMainWindow> mainWindow = { this };
+    ContextInject<ui::INavigationController> navigationController = { this };
     ContextInject<ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
@@ -83,6 +84,8 @@ public:
 
     bool needToVoicePanelInfo() const override;
     QString currentPanelAccessibleName() const override;
+
+    bool isEnabled() const override;
 
     void setIgnoreQtAccessibilityEvents(bool ignore) override;
 
@@ -188,6 +191,7 @@ private:
 
     bool m_inited = false;
     bool m_enabled = false;
+    bool m_treeConnected = false;
 
     bool m_ignorePanelChangingVoice = false;
     bool m_needToVoicePanelInfo = false;
