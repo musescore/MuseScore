@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QQuickItem>
+#include <QAbstractNativeEventFilter>
 #include <QTimer>
 #include <qqmlintegration.h>
 
@@ -30,7 +31,7 @@
 
 namespace muse::vst {
 class RunLoop;
-class VstView : public QQuickItem, public Steinberg::IPlugFrame, public muse::Contextable
+class VstView : public QQuickItem, public QAbstractNativeEventFilter, public Steinberg::IPlugFrame, public muse::Contextable
 {
     Q_OBJECT
 
@@ -84,6 +85,8 @@ signals:
     void minimumWidthChanged();
 
 private:
+    bool nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result) override;
+
     struct ScreenMetrics {
         QSize availableSize;
         double devicePixelRatio = 0.0;
@@ -105,7 +108,11 @@ private:
     // different padding properties it exposes.
     QWindow* m_vstWindow = nullptr;
 
+    void* m_plugViewHandle = nullptr;
+    void* m_rootHandle = nullptr;
+
     bool m_resizeViewCalled = false;
+    bool m_updatePending = false;
 
     QScreen* m_currentScreen = nullptr;
     ScreenMetrics m_screenMetrics;
