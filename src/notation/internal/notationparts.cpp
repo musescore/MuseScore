@@ -549,7 +549,8 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 
     startEdit(actionName);
 
-    mu::engraving::EditPart::setStaffVisible(score(), staff, visible);
+    config.visible = visible;
+    doSetStaffConfig(staff, config);
 
     if (visible) {
         EditSystemLocks::removeSystemLocksContainingMMRests(score());
