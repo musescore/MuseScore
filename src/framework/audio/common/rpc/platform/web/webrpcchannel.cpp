@@ -101,7 +101,7 @@ void WebRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
     RPCLOG() << "ctxId: " << msg.ctxId
              << ", callId: " << msg.callId
-             << ", method: " << to_string(msg.code)
+             << ", code: " << to_string(msg.code)
              << ", type: " << to_string(msg.type)
              << ", data.size: " << msg.data.size();
 
