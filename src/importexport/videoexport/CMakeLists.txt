@@ -39,4 +39,5 @@ qt_add_resources(iex_videoexport iex_videoexport_resources
         /videoexport
     FILES
         internal/resources/video_made_with.mp4
+        internal/resources/MuseSans-Medium.ttf
 )
