@@ -36,21 +36,7 @@ public:
     {
     }
 
-    bool init()
-    {
-        if (!initialize()) {
-            return false;
-        }
-
-        IF_ASSERT_FAILED(controller) {
-            return false;
-        }
-
-        controller->queryInterface(Steinberg::Vst::IMidiMapping_iid, (void**)&midiMapping);
-
-        return true;
-    }
-
+private:
     PluginMidiMappingPtr midiMapping;
 };
 
@@ -65,7 +51,7 @@ VstPluginProvider::~VstPluginProvider()
 
 bool VstPluginProvider::init()
 {
-    return m_impl->init();
+    return m_impl->initialize();
 }
 
 PluginComponentPtr VstPluginProvider::component() const
@@ -80,5 +66,8 @@ PluginControllerPtr VstPluginProvider::controller() const
 
 PluginMidiMappingPtr VstPluginProvider::midiMapping() const
 {
+    if (!m_impl->midiMapping && m_impl->controller) {
+        m_impl->controller->queryInterface(Steinberg::Vst::IMidiMapping_iid, (void**)&m_impl->midiMapping);
+    }
     return m_impl->midiMapping;
 }
