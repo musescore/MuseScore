@@ -152,7 +152,6 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     m_instrument = *it->second;
-    m_orgInstrument = m_instrument;
 
     m_instrumentKey.instrumentId = m_instrument.id();
     m_instrumentKey.partId = part->id();
@@ -662,8 +661,7 @@ void EditStaff::applyPartProperties()
         interval.flip();
     }
 
-    Instrument prevInstrument = m_instrument;
-
+    Instrument prevInstrument = instrument();
     m_instrument.setTranspose(interval);
     m_instrument.setMinPitchA(m_minPitchA);
     m_instrument.setMaxPitchA(m_maxPitchA);
@@ -700,8 +698,11 @@ void EditStaff::applyPartProperties()
     size_t staffIdxInPart = muse::indexOf(part->staves(), m_orgStaff);
     DO_ASSERT(staffIdxInPart != muse::nidx);
 
+    bool instrumentChanged = false;
+
     if (m_instrument.id() != prevInstrument.id()) {
         masterNotationParts()->replaceInstrument(m_instrumentKey, m_instrument);
+        instrumentChanged = true;
     } else if (m_instrument != prevInstrument) {
         bool groupNameChanged = name.useCustomGroupName() != prevInstrument.instrumentLabel().useCustomGroupName()
                                 || name.customNameLongGroup() != prevInstrument.instrumentLabel().customNameLongGroup()
@@ -712,6 +713,7 @@ void EditStaff::applyPartProperties()
                                                            name.customNameShortGroup());
         }
         notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
+        instrumentChanged = true;
     }
 
     SharpFlat newSharpFlat = SharpFlat(preferSharpFlat->currentIndex());
@@ -722,6 +724,10 @@ void EditStaff::applyPartProperties()
 
     if (part->preferSharpFlat() != newSharpFlat) {
         notationParts()->setPartSharpFlat(m_instrumentKey.partId, newSharpFlat);
+    }
+
+    if (instrumentChanged) {
+        m_instrumentKey.instrumentId = m_instrument.id();
     }
 }
 

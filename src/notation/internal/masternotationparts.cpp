@@ -191,7 +191,7 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     startGlobalEdit(TranslatableString("undoableAction", "Replace instrument"));
 
     Part* part = partModifiable(instrumentKey.partId);
-    bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey, part);
+    bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey);
 
     mu::engraving::Interval oldTranspose = part ? part->instrument()->transpose() : mu::engraving::Interval(0, 0);
 
