@@ -105,6 +105,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
+    virtual EngravingObject* propertyDelegate(Pid) const override;
     virtual void reset() override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     void move(const PointF& s) override;
@@ -150,6 +151,7 @@ protected:
 //   @@ SlurTie
 //   @P lineType       int  (0 - solid, 1 - dotted, 2 - dashed, 3 - wide dashed)
 //   @P slurDirection  enum (Direction.AUTO, Direction.DOWN, Direction.UP)
+//   @P maskSlurTie    enum (AutoOnOff.AUTO, AutoOnOff.ON, AutoOnOff.OFF)
 //-------------------------------------------------------------------
 
 class SlurTie : public Spanner
@@ -178,6 +180,9 @@ public:
     int subtype() const override { return static_cast<int>(m_styleType) + 1; }
     TranslatableString subtypeUserName() const override;
 
+    AutoOnOff maskSlurTie() const { return m_maskSlurTie; }
+    void setMaskSlurTie(AutoOnOff val) { m_maskSlurTie = val; }
+
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -197,5 +202,6 @@ protected:
 private:
 
     SlurStyleType m_styleType = SlurStyleType::Undefined;
+    AutoOnOff m_maskSlurTie = AutoOnOff::AUTO;
 };
 }

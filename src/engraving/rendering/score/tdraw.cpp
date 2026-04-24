@@ -3096,6 +3096,10 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
         return;
     }
 
+    painter->save();
+
+    setMask(item, painter);
+
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(), opt);
     if (!opt.isPrinting && item->ldata()->allJumpPointsInactive) {
         penColor.setAlpha(std::min(penColor.alpha(), 85));
@@ -3136,6 +3140,8 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
     }
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());
+
+    painter->restore();
 }
 
 void TDraw::draw(const TimeSig* item, Painter* painter, const PaintOptions& opt)

@@ -176,6 +176,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.minHangingTieLength
             }
+
+            CheckBox {
+                id: maskTiesCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask ties where they overlap other items")
+                checked: root.pageModel.maskTies.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskTies.value = !maskTiesCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskTies
+            }
         }
 
         ColumnLayout {

@@ -46,6 +46,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
+    bool maskSlurs = ctx.conf().styleB(Sid::maskSlurs);
+    bool maskTies = ctx.conf().styleB(Sid::maskTies);
 
     for (const System* system : page->systems()) {
         std::vector<TextBase*> allSystemText = collectAllSystemText(system);
@@ -74,6 +76,22 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
                 StaffLines* staffLines = measure->staffLines(staffIdx);
                 if (staffType->isTabStaff()) {
                     maskTABStringLinesForFrets(staffLines, ctx);
+                }
+            }
+        }
+
+        if (maskSlurs || maskTies) {
+            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+                if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
+                    continue;
+                }
+                spannerSeg->mutldata()->setMask(Shape());
+                AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
+                if (slurTieMaskOverride == AutoOnOff::ON
+                    || (slurTieMaskOverride == AutoOnOff::AUTO
+                        && ((maskSlurs && spannerSeg->isSlurSegment())
+                            || (maskTies && spannerSeg->isTieSegment())))) {
+                    computeSlurTieMasks(toSlurTieSegment(spannerSeg));
                 }
             }
         }
@@ -128,13 +146,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
 
         Shape textShape = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
 
-        Shape filteredTextShape;
-        filteredTextShape.elements().reserve(textShape.elements().size());
-        for (const ShapeElement& el : textShape.elements()) {
-            if (barlineShape.intersects(el.padded(collisionPadding))) {
-                filteredTextShape.add(el);
-            }
-        }
+        Shape filteredTextShape = createFilteredItemShape(textShape, barlineShape, collisionPadding);
         if (filteredTextShape.empty()) {
             continue;
         }
@@ -164,17 +176,16 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
     for (size_t i = 0; i < mask.size(); ++i) {
         ShapeElement& el = mask.elements()[i];
 
-        if (el.top() - itemShape.top() < minFragmentLength) {
+        if (std::abs(el.top() - itemShape.top()) < minFragmentLength) {
             el.adjust(0.0, -minFragmentLength, 0.0, 0.0);
         }
-        if (itemShape.bottom() - el.bottom() < minFragmentLength) {
+        if (std::abs(itemShape.bottom() - el.bottom()) < minFragmentLength) {
             el.adjust(0.0, 0.0, 0.0, minFragmentLength);
         }
-
-        if (el.left() + itemShape.left() < minFragmentLength) {
+        if (std::abs(el.left() - itemShape.left()) < minFragmentLength) {
             el.adjust(-minFragmentLength, 0.0, 0.0, 0.0);
         }
-        if (itemShape.right() - el.right() < minFragmentLength) {
+        if (std::abs(itemShape.right() - el.right()) < minFragmentLength) {
             el.adjust(0.0, 0.0, minFragmentLength, 0.0);
         }
 
@@ -353,4 +364,78 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     }
 
     staffLines->mutldata()->setMask(mask);
+}
+
+void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
+{
+    TRACEFUNC;
+
+    Spanner* spanner = slurTieSegment->spanner();
+    std::vector<const EngravingItem*> itemsToMaskOver;
+    const Segment* startSeg = spanner->startSegment();
+    const Segment* endSeg = spanner->endSegment();
+    for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
+        if (!seg->enabled()
+            || !seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
+            || seg->system() != slurTieSegment->system()) {
+            continue;
+        }
+        for (const EngravingItem* item : seg->elist()) {
+            if (item) {
+                itemsToMaskOver.push_back(item);
+            }
+        }
+    }
+
+    PointF slurTiePos = slurTieSegment->pagePos();
+    Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
+
+    Shape mask;
+    const double spatium = slurTieSegment->spatium();
+    const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::minNoteDistance)].defaultValue.toDouble();
+    const double collisionPadding = maskPadding;
+
+    for (const EngravingItem* item : itemsToMaskOver) {
+        PointF itemPos = item->pagePos();
+        Shape itemShape = item->shape().translated(itemPos);
+        if (!slurTieShape.bbox().intersects(itemShape.bbox().padded(collisionPadding))) {
+            continue;
+        }
+
+        Shape filteredItemShape = createFilteredItemShape(itemShape, slurTieShape, collisionPadding);
+        if (filteredItemShape.empty()) {
+            continue;
+        }
+
+        mask.add(filteredItemShape.translate(-slurTiePos));
+    }
+
+    if (mask.empty()) {
+        slurTieSegment->mutldata()->setMask(mask);
+        return;
+    }
+
+    slurTieShape.translate(-slurTiePos);
+
+    // Use the mask's bbox to break the slur/tie only once, regardless of the mask elements in between:
+    RectF maskBbox = mask.bbox();
+
+    // Avoid the slur/tie line being partially masked (i.e. it should always be either fully "cut",
+    // or not masked at all, so we extend the mask vertically to encompass the slur/tie's full height):
+    maskBbox.adjust(0.0, slurTieShape.top() - mask.top(), 0.0, slurTieShape.bottom() - mask.bottom());
+    maskBbox.pad(maskPadding);
+
+    slurTieSegment->mutldata()->setMask(maskBbox);
+}
+
+Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
+{
+    Shape filteredItemShape;
+    filteredItemShape.elements().reserve(overlyingItemShape.elements().size());
+    for (const ShapeElement& el : overlyingItemShape.elements()) {
+        if (maskedItemShape.intersects(el.padded(collisionPadding))) {
+            filteredItemShape.add(el);
+        }
+    }
+    return filteredItemShape;
 }
