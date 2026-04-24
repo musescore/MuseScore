@@ -64,10 +64,8 @@ VstViewDialog::~VstViewDialog()
 void VstViewDialog::deinit()
 {
     if (m_view) {
-        m_view->setFrame(nullptr);
-#ifndef Q_OS_MAC
         m_view->removed();
-#endif
+        m_view->setFrame(nullptr);
         m_view = nullptr;
     }
 
@@ -199,7 +197,9 @@ void VstViewDialog::showEvent(QShowEvent* ev)
 
 void VstViewDialog::closeEvent(QCloseEvent* ev)
 {
-    deinit();
+    if (m_instance) {
+        m_instance->loadingCompleted().disconnect(this);
+    }
 
     TopLevelDialog::closeEvent(ev);
 }
