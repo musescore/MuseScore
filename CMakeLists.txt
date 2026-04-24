@@ -21,7 +21,7 @@
 if (APPLE)
     cmake_minimum_required(VERSION 3.26...3.31) # Min. required for Swift-C++ interop
 else()
-    cmake_minimum_required(VERSION 3.22...3.31) # Min. required by Qt 6.10
+    cmake_minimum_required(VERSION 3.22...3.31) # Min. required by Qt 6.11
 endif()
 
 project(MuseScore LANGUAGES C CXX)
