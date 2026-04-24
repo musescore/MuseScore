@@ -38,7 +38,6 @@ private:
     bool event(QEvent* event) override;
     void draw(QPainter* painter);
 
-    QString m_message;
     QSvgRenderer* m_backgroundRenderer = nullptr;
 };
 }

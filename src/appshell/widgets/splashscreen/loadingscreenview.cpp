@@ -38,7 +38,6 @@ static const QString imagePath(":/resources/LoadingScreen.svg");
 static constexpr QSize loadingScreenSize(810, 406);
 
 static const QColor messageColor("#F1F1EE");
-static constexpr QRectF messageRect(48, 230, 0, 0);
 
 static const QString website("www.musescore.org");
 static constexpr QRectF websiteRect(loadingScreenSize.width() - 48, loadingScreenSize.height() - 48, 0, 0);
@@ -52,8 +51,6 @@ LoadingScreenView::LoadingScreenView(QWidget* parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
     resize(loadingScreenSize);
-
-    m_message = muse::qtrc("appshell", "Loading…\u200e");
 }
 
 bool LoadingScreenView::event(QEvent* event)
@@ -80,8 +77,6 @@ void LoadingScreenView::draw(QPainter* painter)
 
     QPen pen(messageColor);
     painter->setPen(pen);
-
-    painter->drawText(messageRect, Qt::AlignTop | Qt::AlignLeft | Qt::TextDontClip, m_message);
 
     Qt::AlignmentFlag alignment = layoutDirection() == Qt::RightToLeft ? Qt::AlignLeft : Qt::AlignRight;
 
