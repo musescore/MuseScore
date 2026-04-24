@@ -25,7 +25,10 @@
 
 #include "../editing/elementeditdata.h"
 
+#include "style/style.h"
+
 #include "chord.h"
+#include "note.h"
 #include "hook.h"
 #include "tremolosinglechord.h"
 
@@ -51,16 +54,19 @@ EngravingItem* Stem::elementBase() const
     return parentItem();
 }
 
+/*! Virtual staff index, accounting for cross-staff chord movement. */
 staff_idx_t Stem::vStaffIdx() const
 {
-    return staffIdx() + chord()->staffMove();
+    return staffIdx() + (chord() ? chord()->staffMove() : 0);
 }
 
+/*! True if the parent chord's stem points upward. */
 bool Stem::up() const
 {
     return chord() ? chord()->up() : true;
 }
 
+/*! Sets the unstemmed (default) stem length, stored as an absolute value. */
 void Stem::setBaseLength(Spatium baseLength)
 {
     m_baseLength = Spatium(std::abs(baseLength.val()));
@@ -126,6 +132,7 @@ bool Stem::acceptDrop(EditData& data) const
     return false;
 }
 
+/*! Handles a drop event: attaches single-chord tremolos to the parent chord. */
 EngravingItem* Stem::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
@@ -143,6 +150,7 @@ EngravingItem* Stem::drop(EditData& data)
     return 0;
 }
 
+/*! Returns the current value of the given stem property. */
 PropertyValue Stem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -159,6 +167,7 @@ PropertyValue Stem::getProperty(Pid propertyId) const
     }
 }
 
+/*! Applies @p v to the stem property identified by @p propertyId and triggers a relayout. */
 bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
@@ -184,6 +193,12 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+/*!
+ * Default stem properties.
+ * For @c Pid::COLOR, returns the sentinel @c configuration()->defaultColor() when
+ * @c Sid::colorApplyToStem is on so that resetting restores the "inherit from note" state;
+ * @c Stem::color() resolves the sentinel to the top note's color at draw time.
+ */
 PropertyValue Stem::propertyDefault(Pid id) const
 {
     switch (id) {
@@ -191,7 +206,29 @@ PropertyValue Stem::propertyDefault(Pid id) const
         return 0.0_sp;
     case Pid::STEM_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
+    case Pid::COLOR:
+        if (chord() && !chord()->notes().empty()) {
+            if (chord()->upNote()->style().styleV(Sid::colorApplyToStem).toBool()) {
+                return PropertyValue::fromValue(configuration()->defaultColor());
+            }
+        }
+    // fall through
     default:
         return EngravingItem::propertyDefault(id);
     }
+}
+
+/*!
+ * Draw color when using the score default: follows the top note's color if stems inherit note color.
+ */
+Color Stem::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        if (chord() && !chord()->notes().empty()) {
+            if (chord()->upNote()->style().styleV(Sid::colorApplyToStem).toBool()) {
+                return chord()->upNote()->color();
+            }
+        }
+    }
+    return m_color;
 }

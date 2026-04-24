@@ -23,9 +23,13 @@
 /**
  \file
  Implementation of classes Note and ShadowNote.
+
+ @c Note::color() defaults use @c notecoloringscheme.h.
 */
 
 #include "note.h"
+
+#include "../types/notecoloringscheme.h"
 
 #include <cassert>
 
@@ -1527,6 +1531,12 @@ void Note::setVisible(bool v)
     }
 }
 
+/*!
+ * Validates and finalises note state after being read from a file: pitch clamping, TPC repair, etc.
+ *
+ * @param ctxTick Tick used for staff/key lookups when repairing pitch/TPC.
+ * @param pasteMode When @c true, skips some consistency checks meant for file load only.
+ */
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
@@ -1592,11 +1602,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
                 }
             }
         }
-    }
-
-    const StaffType* st = staffType();
-    if (st && st->isTabStaff() && st->fretUseTextStyle() && color() == configuration()->defaultColor()) {
-        setColor(propertyDefault(Pid::COLOR).value<Color>());
     }
 }
 
@@ -2990,6 +2995,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
 //   localSpatiumChanged
 //---------------------------------------------------------
 
+/*! Propagates a spatium change to child dots, attached elements, and incoming spanners. */
 void Note::localSpatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::localSpatiumChanged(oldValue, newValue);
@@ -3010,6 +3016,11 @@ void Note::localSpatiumChanged(double oldValue, double newValue)
 //   getProperty
 //---------------------------------------------------------
 
+/*! Returns the current value of the given note property.
+ * @c Pid::COLOR returns the raw stored color (@c m_color), not the themed rendering color
+ * from @c Note::color(), so that @c undoChangeProperty() compares against the actual
+ * persisted value rather than the auto-computed theme swatch.
+ */
 PropertyValue Note::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -3059,6 +3070,8 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return m_hasParens ? ParenthesesMode::BOTH : ParenthesesMode::NONE;
     case Pid::HIDE_GENERATED_PARENTHESES:
         return m_hideGeneratedParens;
+    case Pid::COLOR:
+        return PropertyValue::fromValue(m_color);
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         if (chord()) {
@@ -3074,6 +3087,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
+/*! Applies @p v to the note property identified by @p propertyId, triggers layout, and marks playback dirty where relevant. */
 bool Note::setProperty(Pid propertyId, const PropertyValue& v)
 {
     Measure* m = chord() ? chord()->measure() : nullptr;
@@ -3194,6 +3208,63 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+/*!
+ * Swatch index (0–11) into @c Sid::noteColor0 … @c Sid::noteColor11 for the current @c Sid::noteColorTheme.
+ * Uses the same pitch/TPC basis as @c Note::color() for multi-color themes (when @c m_color is the sentinel).
+ *
+ * @param note Note providing pitch, TPC, staff key, tick, and @c Sid::colorNotesByConcertPitch.
+ * @return Index added to @c Sid::noteColor0 to obtain the style color id (always 0 for @c OneColor).
+ *
+ * @details
+ * - @c AbsolutePitchSimple: diatonic step from TPC (@c tpc2step), seven effective swatches.
+ * - @c AbsolutePitchChromatic: MIDI chroma from effective pitch (concert vs written per style).
+ * - @c MoveableDoSimple: scale degree 0–6 from TPC and local key (@c tpc2degree).
+ * - @c MoveableDoChromatic: chroma relative to the key tonic (@c tonicPitchClassFromKey + offset).
+ */
+static int noteColoringSwatchIndex(const Note* note)
+{
+    NoteColoringScheme scheme = static_cast<NoteColoringScheme>(note->style().styleV(Sid::noteColorTheme).toInt());
+    bool byConcertPitch = note->style().styleV(Sid::colorNotesByConcertPitch).toBool();
+    int colorTpc = byConcertPitch ? note->tpc1() : note->tpc2();
+    int colorEpitch = note->pitch() - (byConcertPitch ? 0 : note->transposition()) + note->linkedOttavaPitchOffset();
+
+    switch (scheme) {
+    case NoteColoringScheme::OneColor:
+        return 0;
+    case NoteColoringScheme::AbsolutePitchSimple:
+        if (colorTpc == Tpc::TPC_INVALID) {
+            return 0;
+        }
+        return tpc2step(colorTpc);
+    case NoteColoringScheme::AbsolutePitchChromatic: {
+        int idx = colorEpitch % 12;
+        return idx < 0 ? idx + 12 : idx;
+    }
+    case NoteColoringScheme::MoveableDoSimple:
+    case NoteColoringScheme::MoveableDoChromatic: {
+        Key key = Key::C;
+        if (note->staff()) {
+            key = byConcertPitch ? note->staff()->concertKey(note->tick()) : note->staff()->key(note->tick());
+        }
+        if (scheme == NoteColoringScheme::MoveableDoSimple) {
+            if (colorTpc == Tpc::TPC_INVALID) {
+                return 0;
+            }
+            int idx = tpc2degree(colorTpc, key);
+            return idx < 0 ? idx + 7 : idx;
+        }
+        int pC = colorEpitch % 12;
+        if (pC < 0) {
+            pC += 12;
+        }
+        int tonicPitchClass = tonicPitchClassFromKey(static_cast<int>(key));
+        return (pC - tonicPitchClass + 12) % 12;
+    }
+    default:
+        return 0;
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -3245,13 +3316,8 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
             }
         }
         return EngravingItem::propertyDefault(propertyId);
-    case Pid::COLOR: {
-        const StaffType* st = staffType();
-        if (st && st->isTabStaff() && st->fretUseTextStyle()) {
-            return style().styleV(Sid::tabFretNumberColor);
-        }
-        return EngravingItem::propertyDefault(propertyId);
-    }
+    case Pid::COLOR:
+        return PropertyValue::fromValue(configuration()->defaultColor());
     case Pid::HIDE_GENERATED_PARENTHESES:
         return false;
     default:
@@ -3260,12 +3326,34 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     return EngravingItem::propertyDefault(propertyId);
 }
 
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+Color Note::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        const StaffType* st = staffType();
+        if (st && st->isTabStaff() && st->fretUseTextStyle()) {
+            return style().styleV(Sid::tabFretNumberColor).value<Color>();
+        }
+
+        NoteColoringScheme scheme = static_cast<NoteColoringScheme>(style().styleV(Sid::noteColorTheme).toInt());
+
+        if (scheme == NoteColoringScheme::OneColor) {
+            return style().styleV(Sid::defaultNoteColor).value<Color>();
+        }
+
+        int colorIdx = noteColoringSwatchIndex(this);
+
+        Sid colorSid = static_cast<Sid>(static_cast<int>(Sid::noteColor0) + colorIdx);
+        return style().styleV(colorSid).value<Color>();
+    }
+    return m_color;
+}
+
 void Note::styleChanged()
 {
-    const StaffType* st = staffType();
-    if (st && st->isTabStaff() && st->fretUseTextStyle()) {
-        setProperty(Pid::COLOR, style().styleV(Sid::tabFretNumberColor));
-    }
     EngravingItem::styleChanged();
 }
 

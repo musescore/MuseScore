@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include "ui/view/widgetdialog.h"
 
 #include "ui_editstyle.h"
@@ -36,10 +38,25 @@
 #include "engraving/style/textstyle.h"
 
 #include "inotationsceneconfiguration.h"
+#include "engraving/types/notecoloringscheme.h"
 
+class QCheckBox;
+class QComboBox;
+class QGroupBox;
+class QLabel;
+class QPushButton;
 class QQuickView;
+class QRadioButton;
+class QWidget;
 
 namespace mu::notation {
+/*!
+ * Full score and part style dialog: binds @c Ui::EditStyleBase widgets to @c engraving::StyleId values.
+ *
+ * The Notes page adds a programmatic Color @c QGroupBox (presets, schemes, swatches, apply-to, concert pitch,
+ * reset) in @c classBegin(), then wraps the whole Notes tab (flags, color, notes,
+ * alignment) in a @c QScrollArea so widget content scrolls like other native Style pages.
+ */
 class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
@@ -58,6 +75,7 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
 public:
     EditStyle(QWidget* = nullptr);
 
+    //! Wires style widgets, including the dynamic note-color UI on the Notes page.
     void classBegin() override;
 
     QString currentPageCode() const;
@@ -83,14 +101,16 @@ private:
     void keyPressEvent(QKeyEvent* event) override;
 
     void retranslate();
+    //! Retranslates labels and swatch captions in the note-color section after language change.
+    void retranslateNoteColorSection();
     void setHeaderFooterMacroInfoText();
     void adjustPagesStackSize(int currentPageIndex);
 
     bool isBoolStyleRepresentedByButtonGroup(StyleId id);
 
     struct WidgetAndView {
-        QWidget* widget = nullptr;
-        QQuickView* view = nullptr;
+        QWidget* widget = nullptr;      //!< Container placed in the page layout.
+        QQuickView* view = nullptr;    //!< Quick scene for QML content, if used.
     };
 
     WidgetAndView createQmlWidget(QWidget* parent, const QUrl& source);
@@ -101,10 +121,10 @@ private:
     typedef QWidget* EditStyle::* EditStylePage;
 
     struct StyleWidget {
-        StyleId idx = StyleId::NOSTYLE;
-        bool showPercent = false;
-        QObject* widget = nullptr;
-        QToolButton* reset = nullptr;
+        StyleId idx = StyleId::NOSTYLE;     //!< Style key written to the score.
+        bool showPercent = false;           //!< Spin boxes show 0–100 when true.
+        QObject* widget = nullptr;          //!< Bound control (combo, checkbox, color label, …).
+        QToolButton* reset = nullptr;       //!< Resets @p idx to default when present.
     };
 
     QVector<StyleWidget> styleWidgets;
@@ -116,6 +136,36 @@ private:
     std::vector<QComboBox*> verticalPlacementComboBoxes;
 
     QPushButton* buttonApplyToAllParts = nullptr;
+
+    /**
+     * @name Note color (Edit Style)
+     * Widgets for the note-color preset, scheme, swatches, apply-to options, and concert pitch.
+     **/
+    ///@{
+    QGroupBox* m_noteColorGroup = nullptr;                 //!< Container group box for all note-color widgets.
+    QLabel* m_noteColorPresetLabel = nullptr;              //!< "Preset:" caption.
+    QLabel* m_noteColorSchemeLabel = nullptr;              //!< "Coloring scheme:" caption.
+    QComboBox* m_noteColorPresetCombo = nullptr;           //!< Default / Boomwhackers / Figurenotes / Custom.
+    QComboBox* m_noteColorSchemeCombo = nullptr;           //!< @c NoteColoringScheme selector.
+    QLabel* m_noteColorSwatchColorLabel = nullptr;         //!< Caption above the default color swatch.
+    QWidget* m_noteColorSwatchesContainer = nullptr;       //!< Holds the 12 per-pitch color labels.
+    QLabel* m_noteColorSchemeDescription = nullptr;        //!< Scheme-specific explanatory text.
+    QGroupBox* m_noteColorApplyToGroupBox = nullptr;       //!< "Apply color to:" check-box group.
+    QCheckBox* m_noteColorCbAccidental = nullptr;          //!< Bound to @c Sid::colorApplyToAccidental.
+    QCheckBox* m_noteColorCbStem = nullptr;                //!< Bound to @c Sid::colorApplyToStem.
+    QCheckBox* m_noteColorCbArticulation = nullptr;        //!< Bound to @c Sid::colorApplyToArticulation.
+    QCheckBox* m_noteColorCbDot = nullptr;                 //!< Bound to @c Sid::colorApplyToDot.
+    QCheckBox* m_noteColorCbBeam = nullptr;                //!< Bound to @c Sid::colorApplyToBeam.
+    QCheckBox* m_noteColorCbFlag = nullptr;                //!< Bound to @c Sid::colorApplyToFlag.
+    QGroupBox* m_noteColorPitchGroupBox = nullptr;         //!< Written vs concert pitch radio group.
+    QRadioButton* m_noteColorRbWritten = nullptr;          //!< Color by written (displayed) pitch.
+    QRadioButton* m_noteColorRbConcert = nullptr;          //!< Color by concert (sounding) pitch.
+    QPushButton* m_noteColorResetBtn = nullptr;            //!< Reverts every note-color style to defaults.
+    //! Rebuilds note-color controls from current style (queued after @c setValues()).
+    std::function<void()> m_syncNoteColorUi;
+    //! Last @c noteColorTheme when remapping 7- vs 12-swatch columns on scheme change; synced in @c m_syncNoteColorUi.
+    mu::engraving::NoteColoringScheme m_lastNoteColoringScheme = mu::engraving::NoteColoringScheme::OneColor;
+    ///@}
 
     void unhandledType(const StyleWidget);
     PropertyValue getValue(StyleId idx);

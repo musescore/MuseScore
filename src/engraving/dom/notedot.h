@@ -30,10 +30,9 @@ class Factory;
 class Note;
 class Rest;
 
-//---------------------------------------------------------
-//   @@ NoteDot
-//---------------------------------------------------------
-
+/*!
+ * Augmentation dot attached to a @c Note or @c Rest; shares placement and style with its parent.
+ */
 class NoteDot final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, NoteDot)
@@ -41,16 +40,28 @@ class NoteDot final : public EngravingItem
 
 public:
 
+    //! @return Heap copy of this dot (palette / editing).
     NoteDot* clone() const override { return new NoteDot(*this); }
+    //! @return Product of the parent element’s scale and @c Sid::dotMag.
     double mag() const override;
 
+    //! @return Parent as @c Note, or @c nullptr if parent is a rest.
     Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
+    //! @return Parent as @c Rest, or @c nullptr if parent is a note.
     Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }
+    //! @return The parent note or rest (see @c parentItem()).
     EngravingItem* elementBase() const override;
+
+    //! Default @c Pid::COLOR: sentinel (so resets keep inheritance) when dots inherit themed color.
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    //! Draw color: parent @c Note::color() or rest equivalent when inheriting.
+    Color color() const override;
 
 private:
     friend class Factory;
+    //! Constructed only via @c Factory; attaches to @p parent note.
     NoteDot(Note* parent);
+    //! Constructed only via @c Factory; attaches to @p parent rest.
     NoteDot(Rest* parent);
 };
 } // namespace mu::engraving

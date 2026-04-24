@@ -492,6 +492,14 @@ PropertyValue Accidental::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
+/*!
+ * Default accidental properties.
+ * When @p propertyId is @c Pid::COLOR and @c Sid::colorApplyToAccidental is set, returns the
+ * sentinel @c configuration()->defaultColor() so that resetting restores the "inherit from note"
+ * state instead of snapshotting the currently-themed color. @c Accidental::color() resolves the
+ * sentinel to the parent note's themed color at draw time.
+ * Otherwise falls back to @c EngravingItem::propertyDefault().
+ */
 PropertyValue Accidental::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
@@ -500,9 +508,32 @@ PropertyValue Accidental::propertyDefault(Pid propertyId) const
     case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
     case Pid::ACCIDENTAL_ROLE:    return AccidentalRole::AUTO;
     case Pid::ACCIDENTAL_STACKING_ORDER_OFFSET: return 0;
+    case Pid::COLOR:
+        if (note() && note()->style().styleV(Sid::colorApplyToAccidental).toBool()) {
+            return PropertyValue::fromValue(configuration()->defaultColor());
+        }
+        return EngravingItem::propertyDefault(propertyId);
     default:
         return EngravingItem::propertyDefault(propertyId);
     }
+}
+
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+/*!
+ * Draw color for this accidental when it still uses the score default: follows the parent
+ * note color when accidentals inherit coloring.
+ */
+Color Accidental::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        if (note() && note()->style().styleV(Sid::colorApplyToAccidental).toBool()) {
+            return note()->color();
+        }
+    }
+    return m_color;
 }
 
 //---------------------------------------------------------

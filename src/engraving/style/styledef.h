@@ -45,6 +45,8 @@ Q_NAMESPACE;
  * Enumerates the list of score style settings
  * @memberof Engraving
  * @enum
+ *
+ * Note-color keys include @c noteColorTheme, @c colorNotesByConcertPitch, and related definitions in @c notecoloringscheme.h and Edit Style.
  */
 enum class Sid : short {
     NOSTYLE = -1,
@@ -2225,6 +2227,28 @@ enum class Sid : short {
     palmMuteBeginFilledArrowWidth,
     palmMuteEndFilledArrowHeight,
     palmMuteEndFilledArrowWidth,
+
+    noteColorTheme,                //!< @c NoteColoringScheme: one color, absolute pitch (diatonic/chromatic), or moveable-do (diatonic/chromatic).
+    defaultNoteColor,              //!< Fallback note color when using a single-color scheme.
+    noteColor0,                    //!< Swatch 0 in the twelve-color note palette.
+    noteColor1,                    //!< Swatch 1 in the twelve-color note palette.
+    noteColor2,                    //!< Swatch 2 in the twelve-color note palette.
+    noteColor3,                    //!< Swatch 3 in the twelve-color note palette.
+    noteColor4,                    //!< Swatch 4 in the twelve-color note palette.
+    noteColor5,                    //!< Swatch 5 in the twelve-color note palette.
+    noteColor6,                    //!< Swatch 6 in the twelve-color note palette.
+    noteColor7,                    //!< Swatch 7 in the twelve-color note palette.
+    noteColor8,                    //!< Swatch 8 in the twelve-color note palette.
+    noteColor9,                    //!< Swatch 9 in the twelve-color note palette.
+    noteColor10,                   //!< Swatch 10 in the twelve-color note palette.
+    noteColor11,                   //!< Swatch 11 in the twelve-color note palette.
+    colorApplyToAccidental,        //!< When set, note coloring also tints accidentals.
+    colorApplyToStem,              //!< When set, note coloring also tints stems.
+    colorApplyToArticulation,      //!< When set, note coloring also tints articulations.
+    colorApplyToDot,               //!< When set, note coloring also tints augmentation dots.
+    colorApplyToBeam,              //!< When set, note coloring also tints beams.
+    colorApplyToFlag,              //!< When set, note coloring also tints note flags.
+    colorNotesByConcertPitch,      //!< Use concert pitch for key/degree coloring when transposing instruments differ.
 
     STYLES
 };
