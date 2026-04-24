@@ -336,7 +336,7 @@ class Score : public apiv1::ScoreElement, public muse::Contextable
      * @q_property {Boolean}
      * @since 4.6
      */
-    Q_PROPERTY(bool markIrregularMeasures READ showSoundFlags WRITE setMarkIrregularMeasures)
+    Q_PROPERTY(bool markIrregularMeasures READ markIrregularMeasures WRITE setMarkIrregularMeasures)
 
     /** APIDOC
      * Whether instrument names are displayed
