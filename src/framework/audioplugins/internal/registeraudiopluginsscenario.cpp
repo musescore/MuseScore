@@ -56,23 +56,27 @@ PluginScanResult RegisterAudioPluginsScenario::scanPlugins() const
 
     PluginScanResult result;
 
-    std::map<io::path_t, audio::AudioResourceId> registered;
+    //! NOTE: A single plugin path can map to multiple resource IDs (multi-component bundles),
+    //! so we track all IDs per path.
+    std::map<io::path_t, std::vector<audio::AudioResourceId> > pathToIds;
     for (const auto& info : knownPluginsRegister()->pluginInfoList()) {
-        registered[info.path] = info.meta.id;
+        pathToIds[info.path].push_back(info.meta.id);
     }
 
     for (const auto& scanner : scannerRegister()->scanners()) {
         for (const auto& path : scanner->scanPlugins()) {
-            if (auto it = registered.find(path); it != registered.end()) {
-                registered.erase(it);
+            if (auto it = pathToIds.find(path); it != pathToIds.end()) {
+                pathToIds.erase(it);
             } else {
                 result.newPluginPaths.push_back(path);
             }
         }
     }
 
-    for (const auto& [path, id] : registered) {
-        result.missingPluginIds.push_back(id);
+    for (const auto& [path, ids] : pathToIds) {
+        for (const auto& id : ids) {
+            result.missingPluginIds.push_back(id);
+        }
     }
 
     return result;
