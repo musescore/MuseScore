@@ -65,6 +65,7 @@ option(MUSE_MODULE_INTERACTIVE_SYNC_SUPPORTED "Sync interactive supported" ON)
 
 declare_muse_module_opt(LANGUAGES ON)
 declare_muse_module_opt(LEARN ON)
+declare_muse_module_opt(MEDIA ON)
 declare_muse_module_opt(MIDI ON)
 declare_muse_module_opt(MIDIREMOTE ON)
 declare_muse_module_opt(MPE ON)

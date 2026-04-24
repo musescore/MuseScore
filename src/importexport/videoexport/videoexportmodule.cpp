@@ -26,7 +26,7 @@
 #include "internal/videoexportconfiguration.h"
 #include "internal/videowriter.h"
 
-#include "project/iprojectrwregister.h"
+#include "project/inotationwritersregister.h"
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
@@ -46,8 +46,8 @@ void VideoExportModule::registerExports()
 
 void VideoExportModule::resolveImports()
 {
-    auto projectRWreg = globalIoc()->resolve<IProjectRWRegister>(moduleName());
-    if (projectRWreg) {
-        projectRWreg->regWriter({ "mp4" }, std::make_shared<VideoWriter>());
+    auto writers = globalIoc()->resolve<INotationWritersRegister>(moduleName());
+    if (writers) {
+        writers->reg({ "mp4" }, std::make_shared<VideoWriter>(globalCtx()));
     }
 }

@@ -56,8 +56,8 @@ qt_add_qml_module(preferences_qml
         saveandpublishpreferencesmodel.h
         scorepreferencesmodel.cpp
         scorepreferencesmodel.h
-        updatepreferencesmodel.cpp
-        updatepreferencesmodel.h
+        videopreferencesmodel.cpp
+        videopreferencesmodel.h
     QML_FILES
         AccentColorsList.qml
         AdvancedPreferencesPage.qml
@@ -77,7 +77,7 @@ qt_add_qml_module(preferences_qml
         ScorePreferencesPage.qml
         ShortcutsPreferencesPage.qml
         ThemeSamplesList.qml
-        UpdatePreferencesPage.qml
+        VideoPreferencesPage.qml
 
         internal/AccentColorsSection.qml
         internal/AdvancedTopSection.qml
@@ -127,6 +127,7 @@ qt_add_qml_module(preferences_qml
         internal/UiFontSection.qml
         internal/WelcomeDialogSection.qml
         internal/ZoomSection.qml
+        internal/FFmpegSection.qml
     IMPORTS
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml

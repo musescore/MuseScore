@@ -114,6 +114,10 @@
 #cmakedefine MUSE_MODULE_LEARN_TESTS 1
 #cmakedefine MUSE_MODULE_LEARN_API 1
 
+#cmakedefine MUSE_MODULE_MEDIA 1
+#cmakedefine MUSE_MODULE_MEDIA_TESTS 1
+#cmakedefine MUSE_MODULE_MEDIA_API 1
+
 #cmakedefine MUSE_MODULE_MIDI 1
 #cmakedefine MUSE_MODULE_MIDI_TESTS 1
 #cmakedefine MUSE_MODULE_MIDI_API 1

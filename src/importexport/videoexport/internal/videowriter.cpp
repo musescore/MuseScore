@@ -21,17 +21,26 @@
  */
 #include "videowriter.h"
 
-#include "videoencoder.h"
+#include <QPainter>
+#include <QThread>
+
+#include "global/concurrency/concurrent.h"
+#include "io/buffer.h"
+#include "io/filestream.h"
 
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/masterscore.h"
 
+#include "notation/imasternotation.h"
+#include "notation/notationtypes.h"
+
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
 
-#include "log.h"
+#include "draw/fontmetrics.h"
 
-#include <QPainter>
+#include "defer.h"
+#include "log.h"
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
@@ -39,7 +48,39 @@ using namespace mu::notation;
 using namespace muse::draw;
 using namespace muse::midi;
 
-std::vector<IProjectWriter::UnitType> VideoWriter::supportedUnitTypes() const
+static muse::String notationTitle(const INotationPtr notation)
+{
+    muse::String title;
+    mu::engraving::Score* score = notation->elements()->msScore();
+    mu::engraving::Score* masterScore = notation->masterNotation()->masterScore();
+
+    if (const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::TITLE)) {
+        title = text->plainText();
+    }
+
+    if (title.isEmpty()) {
+        if (const mu::engraving::Text* text = masterScore->getText(mu::engraving::TextStyleType::TITLE)) {
+            title = text->plainText();
+        }
+    }
+
+    if (title.isEmpty()) {
+        title = masterScore->metaTag(u"workTitle");
+    }
+
+    return title;
+}
+
+static muse::String notationSubtitle(const INotationPtr notation)
+{
+    if (notation->isMaster()) {
+        return muse::String();
+    }
+
+    return notation->name();
+}
+
+std::vector<INotationWriter::UnitType> VideoWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
@@ -50,13 +91,92 @@ bool VideoWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr, QIODevice&, const Options&)
+muse::Ret VideoWriter::write(INotationPtr notation, muse::io::IODevice& device, const Options& options)
 {
-    NOT_SUPPORTED;
-    return make_ret(muse::Ret::Code::NotSupported);
+    std::string filePath = device.meta("file_path");
+    IF_ASSERT_FAILED(!filePath.empty()) {
+        return make_ret(muse::Ret::Code::InternalError);
+    }
+
+    bool withAudio = muse::value(options, OptionKey::WITH_AUDIO, muse::Val(true)).toBool();
+
+    Config cfg = makeConfig();
+
+    muse::io::path_t finalPath(filePath);
+    muse::io::path_t tempAudioPath = finalPath + ".tmp_audio.aac";
+
+    auto encoder = videoEncodeResolver()->currentVideoEncoder();
+
+    muse::media::IVideoEncoder::Options encoderOptions;
+    encoderOptions.format = "mp4";
+    encoderOptions.width = cfg.width;
+    encoderOptions.height = cfg.height;
+    encoderOptions.bitrate = cfg.bitrate;
+    encoderOptions.gop = cfg.fps / 2;
+    encoderOptions.fps = cfg.fps;
+
+    if (!encoder->open(finalPath, encoderOptions)) {
+        LOGE() << "failed to open video encoder";
+        return make_ret(muse::Ret::Code::UnknownError);
+    }
+
+    m_isCompleted = false;
+    m_audioCompleted = false;
+    m_abort = false;
+    m_writeRet = muse::Ret();
+    m_audioRet = muse::Ret();
+
+    startVideoExport(encoder, notation, cfg);
+
+    if (withAudio) {
+        startAudioExport(notation, tempAudioPath, cfg);
+    } else {
+        m_audioCompleted = true;
+        m_audioRet = muse::make_ok();
+    }
+
+    while (!m_isCompleted || !m_audioCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
+
+    if (m_audioWriter) {
+        m_audioWriter->progress()->finished().disconnect(this);
+        m_audioWriter = nullptr;
+    }
+
+    if (m_audioFile) {
+        m_audioFile->close();
+        m_audioFile.reset();
+    }
+
+    muse::Ret result = m_writeRet;
+
+    encoder->finishEncode();
+
+    // Release the device's file handle before add audio replaces the file
+    device.close();
+
+    if (withAudio) {
+        if (result && m_audioRet) {
+            if (!encoder->addAudio(tempAudioPath)) {
+                result = make_ret(muse::Ret::Code::UnknownError);
+            }
+        } else if (!result) {
+            // keep video error
+        } else {
+            result = m_audioRet;
+        }
+
+        fileSystem()->remove(tempAudioPath);
+    }
+
+    encoder->close();
+
+    return result;
 }
 
-muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t& filePath, const Options&)
+VideoWriter::Config VideoWriter::makeConfig() const
 {
     Config cfg;
 
@@ -107,26 +227,81 @@ muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t
     cfg.leadingSec = configuration()->leadingSec();
     cfg.trailingSec = configuration()->trailingSec();
 
-    muse::Ret ret = generatePagedOriginalVideo(project, filePath, cfg);
-    return ret;
+    return cfg;
 }
 
-muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config)
+void VideoWriter::startVideoExport(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& cfg)
 {
-    // --score-video -o ./simple5.mp4 ./simple5.mscz
+    muse::Concurrent::run([this, encoder, notation, cfg]() {
+        doGenerate(encoder, notation, cfg);
+    });
+}
 
-    VideoEncoder encoder;
-    if (!encoder.open(filePath, config.width, config.height, config.bitrate, config.fps / 2, config.fps)) {
-        LOGE() << "failed open encoder";
-        return make_ret(muse::Ret::Code::UnknownError);
+void VideoWriter::startAudioExport(INotationPtr notation, const muse::io::path_t& audioPath, const Config& cfg)
+{
+    m_audioWriter = writers()->writer("aac");
+    if (!m_audioWriter) {
+        LOGE() << "aac writer not found";
+        m_audioRet = make_ret(muse::Ret::Code::InternalError);
+        m_audioCompleted = true;
+        return;
     }
 
-    IMasterNotationPtr masterNotation = project->masterNotation();
+    m_audioWriter->progress()->finished().onReceive(this, [this](const muse::ProgressResult& res) {
+        m_audioRet = res.ret;
+        m_audioCompleted = true;
+    });
 
-    engraving::MasterScore* score = masterNotation->notation()->elements()->msScore()->masterScore();
+    Options audioOpts;
+    audioOpts[OptionKey::WAIT_FOR_COMPLETION] = muse::Val(false);
+    audioOpts[OptionKey::LEADING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.leadingSec));
+    audioOpts[OptionKey::TRAILING_SILENCE_SEC] = muse::Val(static_cast<double>(cfg.trailingSec));
 
-    // Setup Score view
-    masterNotation->notation()->setViewMode(notation::ViewMode::PAGE);
+    m_audioFile = std::make_unique<muse::io::FileStream>(audioPath);
+    m_audioFile->setMeta("file_path", audioPath.toStdString());
+    m_audioFile->open(muse::io::IODevice::WriteOnly);
+
+    m_audioWriter->write(notation, *m_audioFile, audioOpts);
+}
+
+muse::Ret VideoWriter::writeList(const INotationPtrList&, muse::io::IODevice&, const Options&)
+{
+    NOT_SUPPORTED;
+    return make_ret(muse::Ret::Code::NotSupported);
+}
+
+muse::Progress* VideoWriter::progress()
+{
+    return &m_progress;
+}
+
+void VideoWriter::abort()
+{
+    m_abort = true;
+
+    if (m_audioWriter) {
+        m_audioWriter->abort();
+    }
+}
+
+std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, Config& config)
+{
+    ScoreRestoreData result;
+    engraving::Score* score = notation->elements()->msScore();
+
+    result.style = score->style();
+
+    result.layoutMode = score->layoutMode();
+
+    result.showFrames = score->showFrames();
+    result.showInstrumentNames = score->showInstrumentNames();
+    result.showInvisible = score->isShowInvisible();
+    result.showPageborders = score->showPageborders();
+    result.showUnprintable = score->showUnprintable();
+    result.showVBox = score->layoutOptions().isShowVBox;
+
+    score->setLayoutMode(engraving::LayoutMode::PAGE);
+
     score->setShowFrames(false);
     score->setShowInstrumentNames(false);
     score->setShowInvisible(false);
@@ -136,13 +311,12 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     score->doLayout();
 
-    PageList pages = masterNotation->notation()->elements()->pages();
+    PageList pages = notation->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
-        return make_ret(muse::Ret::Code::UnknownError);
+        restoreScore(notation, result);
+        return std::nullopt;
     }
-
-    double CANVAS_DPI = 300;
 
     const Page* page = pages.front();
     if (score->staves().size() > 3) {
@@ -151,11 +325,11 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
         double margin = 100.0;
         double ttboxHeight = ttbox.height() + margin * 2;
         double scale = config.height / ttboxHeight;
-        CANVAS_DPI = scale * engraving::DPI;
+        config.canvasDpi = scale * engraving::DPI;
     }
 
-    score->style().set(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
-    score->style().set(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
+    score->style().set(engraving::Sid::pageHeight, config.height / config.canvasDpi);
+    score->style().set(engraving::Sid::pageWidth, config.width / config.canvasDpi);
     score->style().set(engraving::Sid::pagePrintableWidth, score->style().styleD(engraving::Sid::pageWidth)
                        - score->style().styleD(engraving::Sid::pageOddLeftMargin)
                        - score->style().styleD(engraving::Sid::pageEvenLeftMargin));
@@ -174,32 +348,177 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
     score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
+    score->doLayout();
     score->update();
 
+    return result;
+}
+
+void VideoWriter::restoreScore(INotationPtr notation, const ScoreRestoreData& data)
+{
+    engraving::Score* score = notation->elements()->msScore();
+
+    score->style() = data.style;
+
+    score->setShowFrames(data.showFrames);
+    score->setShowInstrumentNames(data.showInstrumentNames);
+    score->setShowInvisible(data.showInvisible);
+    score->setShowPageborders(data.showPageborders);
+    score->setShowUnprintable(data.showUnprintable);
+    score->setShowVBox(data.showVBox);
+
+    score->setLayoutMode(data.layoutMode);
+
+    score->setLayoutAll();
+    score->update();
+}
+
+void VideoWriter::doGenerate(muse::media::IVideoEncoderPtr encoder, INotationPtr notation, const Config& config)
+{
+    Config actualConfig = config;
+    auto restoreData = prepareScore(notation, actualConfig);
+    if (!restoreData) {
+        m_writeRet = make_ret(muse::Ret::Code::UnknownError);
+        m_isCompleted = true;
+        return;
+    }
+
+    DEFER {
+        restoreScore(notation, restoreData.value());
+        m_isCompleted = true;
+    };
+
     // Setup painting
-    QImage frame(config.width, config.height, QImage::Format_RGB32);
-    frame.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
-    frame.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / engraving::INCH));
+    QImage frame(actualConfig.width, actualConfig.height, QImage::Format_RGB32);
+    frame.setDotsPerMeterX(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
+    frame.setDotsPerMeterY(std::lrint((actualConfig.canvasDpi * 1000) / engraving::INCH));
 
     QPainter qp(&frame);
     qp.setRenderHint(QPainter::Antialiasing, true);
     qp.setRenderHint(QPainter::TextAntialiasing, true);
-    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
 
     Painter painter(&qp, "video_writer");
 
-    auto painting = masterNotation->notation()->painting();
-
     // Setup duration
-    INotationPlaybackPtr playback = masterNotation->playback();
+    INotationPlaybackPtr playback = notation->masterNotation()->playback();
     float totalPlayTimeSec = playback->totalPlayTime();
 
-    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
+    int leadingFrameCount = static_cast<int>(actualConfig.leadingSec * actualConfig.fps);
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * actualConfig.fps);
+    int trailingFrameCount = static_cast<int>(actualConfig.trailingSec * actualConfig.fps);
+    int totalFrameCount = leadingFrameCount + scoreFrameCount + trailingFrameCount;
+    LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec" << " frame count " << totalFrameCount;
 
-    int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
+    m_progress.start();
 
-    //! NOTE: After setting the score above, the number of pages may change - get them again
-    pages = masterNotation->notation()->elements()->pages();
+    // Add score title
+    if (!generateLeadingFrames(encoder, notation, painter, frame, actualConfig, totalFrameCount)) {
+        return;
+    }
+
+    // Add score frames
+    if (!generateScoreFrames(encoder, notation, painter, frame, actualConfig, totalPlayTimeSec, leadingFrameCount, totalFrameCount)) {
+        return;
+    }
+
+    // Add "Made with MuseScore"
+    if (!generateTrailingFrames(encoder, actualConfig)) {
+        return;
+    }
+
+    m_writeRet = muse::make_ok();
+    m_progress.finish(muse::make_ok());
+}
+
+bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, INotationPtr notation,
+                                        Painter& painter, QImage& frame,
+                                        const Config& config, int totalFrameCount)
+{
+    int leadingFrameCount = static_cast<int>(config.leadingSec * config.fps);
+    if (leadingFrameCount <= 0) {
+        return true;
+    }
+
+    muse::String title = notationTitle(notation);
+    muse::String subtitle = notationSubtitle(notation);
+
+    auto scaledFontPointSize = [&config](double basePixelSize) {
+        double pixelSize = basePixelSize * config.height / 1080.0;
+        return pixelSize * 72.0 / engraving::DPI;
+    };
+
+    Font titleFont(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    titleFont.setPointSizeF(scaledFontPointSize(128.0));
+
+    Font subFont(titleFont);
+    subFont.setPointSizeF(scaledFontPointSize(48.0));
+
+    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
+
+    FontMetrics titleFontMetrics(titleFont);
+    muse::RectF titleBBox = titleFontMetrics.boundingRect(title);
+
+    double centerY = frameRect.center().y();
+    double titleBottom = centerY + titleBBox.height() / 2.0;
+
+    const double subtitleOffset = config.height / 20.0;
+    double subtitleTop = titleBottom + subtitleOffset;
+    muse::RectF subtitleRect(0.0, subtitleTop, frameRect.width(), 80.0);
+
+    for (int f = 0; f < leadingFrameCount; f++) {
+        if (m_abort) {
+            m_writeRet = make_ret(muse::Ret::Code::Cancel);
+            m_progress.finish(m_writeRet);
+            return false;
+        }
+
+        m_progress.progress(f, totalFrameCount);
+
+        painter.fillRect(frameRect, Color::BLACK);
+        painter.setPen(Color::WHITE);
+        painter.setFont(titleFont);
+        painter.drawText(frameRect, AlignCenter, title);
+
+        if (!subtitle.isEmpty()) {
+            painter.setFont(subFont);
+            painter.drawText(subtitleRect, AlignCenter, subtitle);
+        }
+
+        encoder->encodeImage(frame);
+    }
+
+    return true;
+}
+
+bool VideoWriter::generateTrailingFrames(muse::media::IVideoEncoderPtr encoder, const Config& config)
+{
+    int trailingFrameCount = static_cast<int>(config.trailingSec * config.fps);
+    if (trailingFrameCount <= 0) {
+        return true;
+    }
+
+    static const muse::io::path_t RESOURCE_PATH = ":/videoexport/internal/resources/video_made_with.mp4";
+    muse::ByteArray videoData = fileSystem()->readFile(RESOURCE_PATH).val;
+
+    encoder->encodeVideo(videoData, trailingFrameCount);
+
+    return true;
+}
+
+bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INotationPtr notation,
+                                      Painter& painter, QImage& frame,
+                                      const Config& config, float totalPlayTimeSec,
+                                      int leadingFrameCount, int totalFrameCount)
+{
+    int scoreFrameCount = static_cast<int>(totalPlayTimeSec * config.fps);
+    if (scoreFrameCount <= 0) {
+        return true;
+    }
+
+    PageList pages = notation->elements()->pages();
+    auto painting = notation->painting();
+    INotationPlaybackPtr playback = notation->masterNotation()->playback();
+    muse::RectF frameRect = muse::RectF::fromQRectF(QRectF(frame.rect()));
 
     auto pageByTick = [](const PageList& pages, tick_t tick) -> const Page* {
         for (const Page* p : pages) {
@@ -210,17 +529,21 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
         return nullptr;
     };
 
-    const Color CURSOR_COLOR = Color(0, 0, 255, 50);
+    const Color CURSOR_COLOR = Color(2, 109, 203, 127);
 
-    PlaybackCursor cursor(application()->iocContext());
-    cursor.setNotation(masterNotation->notation());
+    PlaybackCursor cursor(iocContext());
+    cursor.setNotation(notation);
 
-    for (int f = 0; f < frameCount; f++) {
-        float currentTimeSec = (qreal)f / config.fps;
-        currentTimeSec -= config.leadingSec;
-        if (currentTimeSec <= 0) {
-            currentTimeSec = 0;
+    for (int f = 0; f < scoreFrameCount; f++) {
+        if (m_abort) {
+            m_writeRet = make_ret(muse::Ret::Code::Cancel);
+            m_progress.finish(m_writeRet);
+            return false;
         }
+
+        m_progress.progress(leadingFrameCount + f, totalFrameCount);
+
+        float currentTimeSec = static_cast<float>(f) / config.fps;
         if (currentTimeSec > totalPlayTimeSec) {
             currentTimeSec = totalPlayTimeSec;
         }
@@ -233,9 +556,9 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
         }
 
         INotationPainting::Options opt;
-        opt.fromPage = page->pageNumber();
+        opt.fromPage = static_cast<int>(page->pageNumber());
         opt.toPage = opt.fromPage;
-        opt.deviceDpi = CANVAS_DPI;
+        opt.deviceDpi = config.canvasDpi;
 
         painter.fillRect(frameRect, Color::WHITE);
 
@@ -249,10 +572,8 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
         painter.fillRect(cursorAbsRect, CURSOR_COLOR);
 
-        encoder.encodeImage(frame);
+        encoder->encodeImage(frame);
     }
 
-    encoder.close();
-
-    return muse::make_ok();
+    return true;
 }

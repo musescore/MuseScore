@@ -49,6 +49,7 @@ bool IODevice::open(IODevice::OpenMode mode)
 
 void IODevice::close()
 {
+    doClose();
     m_mode = Unknown;
 }
 

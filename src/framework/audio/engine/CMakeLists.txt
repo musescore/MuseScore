@@ -187,6 +187,8 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         internal/export/flacencoder.h
         internal/export/wavencoder.cpp
         internal/export/wavencoder.h
+        internal/export/aacencoder.cpp
+        internal/export/aacencoder.h
     )
     if(MUE_COMPILE_USE_SYSTEM_LAME)
         set(MUE_LAME_INCLUDE_DIR "" CACHE PATH "Path to directory containing lame/lame.h (optional)")
@@ -221,6 +223,16 @@ if (MUSE_MODULE_AUDIO_EXPORT)
 
     include(../cmake/SetupFlac.cmake)
     target_link_libraries(muse_audio_engine PRIVATE ${FLAC_TARGETS})
+
+    target_link_libraries(muse_audio_engine PRIVATE fdk-aac)
+
+    get_property(fdk_aac_src_dir GLOBAL PROPERTY fdk-aac_SOURCE_DIR)
+    target_include_directories(muse_audio_engine SYSTEM PRIVATE
+        ${fdk_aac_src_dir}
+        ${fdk_aac_src_dir}/libAACdec/include
+        ${fdk_aac_src_dir}/libAACenc/include
+        ${fdk_aac_src_dir}/libSYS/include
+    )
 endif() # MUSE_MODULE_AUDIO_EXPORT
 
 target_link_libraries(muse_audio_engine PRIVATE muse_audio_common)

@@ -121,6 +121,10 @@ if (MUSE_MODULE_LEARN)
     add_subdirectory(learn)
 endif()
 
+if (MUSE_MODULE_MEDIA)
+    add_subdirectory(media)
+endif()
+
 if (MUSE_MODULE_EXTENSIONS)
     add_subdirectory(extensions)
 endif()

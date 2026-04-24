@@ -91,7 +91,8 @@ muse::Progress* AbstractAudioWriter::progress()
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                                         io::IODevice& dstDevice,
-                                        const SoundTrackFormat& format)
+                                        const SoundTrackFormat& format,
+                                        const Options& options)
 {
     //! NOTE Temporary fix for the context injection
     m_iocContext = notation->iocContext();
@@ -111,11 +112,24 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
 
-    doWrite(dstDevice, format);
+    SoundTrackFormat actualFormat = format;
 
-    while (!m_isCompleted) {
-        application()->processEvents();
-        QThread::yieldCurrentThread();
+    double leadingSilenceSec = muse::value(options, OptionKey::LEADING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec)
+                                          ? static_cast<msecs_t>(leadingSilenceSec) : 0;
+
+    double trailingSilenceSec = muse::value(options, OptionKey::TRAILING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
+                                           ? static_cast<msecs_t>(trailingSilenceSec) : 0;
+
+    doWrite(dstDevice, actualFormat);
+
+    const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
+    if (waitForCompletion) {
+        while (!m_isCompleted) {
+            application()->processEvents();
+            QThread::yieldCurrentThread();
+        }
     }
 
     playbackController()->setIsExportingAudio(false);

@@ -35,8 +35,14 @@ FileStream::FileStream(const path_t& filePath)
 
 FileStream::~FileStream()
 {
+    doClose();
+}
+
+void FileStream::doClose()
+{
     if (m_streamId != INVALID_STREAM_ID) {
         fileSystem()->closeStream(m_streamId);
+        m_streamId = INVALID_STREAM_ID;
     }
 }
 

@@ -96,7 +96,7 @@ option(MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE "Build importexport audioexport modul
 option(MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE "Build importexport imagesexport module" ON)
 option(MUE_BUILD_IMPEXP_GUITARPRO_MODULE "Build importexport guitarpro module" ON)
 option(MUE_BUILD_IMPEXP_MEI_MODULE "Build importexport mei module" ON)
-option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" OFF)
+option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" ON)
 option(MUE_BUILD_IMPEXP_TABLEDIT_MODULE "Build importexport tabledit module" ON)
 option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 
@@ -209,6 +209,8 @@ endif(MUSE_COMPILE_USE_COMPILER_CACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
+set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
 
 if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})

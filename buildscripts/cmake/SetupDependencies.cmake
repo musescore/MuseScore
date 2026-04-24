@@ -79,3 +79,7 @@ endfunction()
 if (MUSE_MODULE_DOCKWINDOW_KDDOCKWIDGETS_V2)
     populate(kddockwidgets "kddockwidgets/2.4")
 endif()
+
+if (MUSE_MODULE_AUDIO_EXPORT)
+    populate(fdk-aac "fdk-aac/2.0.3")
+endif()

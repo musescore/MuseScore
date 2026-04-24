@@ -90,6 +90,16 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      muse::qtrc("project/export", "FLAC audio"),
                                      muse::qtrc("project/export", "FLAC audio files"),
                                      "AudioSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "aac" },
+                                     muse::qtrc("project/export", "AAC audio"),
+                                     muse::qtrc("project/export", "AAC audio files"),
+                                     "AacSettingsPage.qml"),
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+        ExportType::makeWithSuffixes({ "mp4" },
+                                     muse::qtrc("project/export", "MP4 video"),
+                                     muse::qtrc("project/export", "MP4 video"),
+                                     "Mp4SettingsPage.qml"),
+#endif
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
                                      muse::qtrc("project/export", "MIDI file"),
                                      muse::qtrc("project/export", "MIDI files"),
@@ -119,6 +129,12 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
 
 ExportDialogModel::~ExportDialogModel()
 {
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    if (videoEncoderResolver()) {
+        disableVideoExportSettingMode();
+    }
+#endif
+
     m_selectionModel->deleteLater();
 }
 
@@ -166,6 +182,15 @@ void ExportDialogModel::init()
 
     selectCurrentNotation();
     selectSavedNotations();
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    videoEncoderResolver()->loadedFFmpegChanged().onNotify(this, [this]() {
+        emit isFFmpegAvailableChanged();
+        emit ffmpegDirChanged();
+    });
+    emit isFFmpegAvailableChanged();
+    emit ffmpegDirChanged();
+#endif
 }
 
 QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
@@ -289,6 +314,10 @@ void ExportDialogModel::setExportType(const ExportType& type)
     emit selectedExportTypeChanged(type.toMap());
     emit availableSampleFormatsChanged();
     emit selectedSampleFormatChanged();
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    updateVideoExportSettingMode();
+#endif
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
@@ -555,6 +584,62 @@ void ExportDialogModel::setSvgIllustratorCompat(bool compat)
 
     imageExportConfiguration()->setExportSvgWithIllustratorCompat(compat);
     emit svgIllustratorCompatChanged(compat);
+}
+
+QStringList ExportDialogModel::availableVideoResolutions() const
+{
+    const std::vector<std::string>& resolutions = videoExportConfiguration()->availableResolutions();
+    QStringList result;
+    for (const std::string& res : resolutions) {
+        result << QString::fromStdString(res);
+    }
+    return result;
+}
+
+QString ExportDialogModel::videoResolution() const
+{
+    return QString::fromStdString(videoExportConfiguration()->resolution());
+}
+
+void ExportDialogModel::setVideoResolution(const QString& resolution)
+{
+    if (resolution == videoResolution()) {
+        return;
+    }
+
+    videoExportConfiguration()->setResolution(resolution.toStdString());
+    emit videoResolutionChanged(resolution);
+}
+
+bool ExportDialogModel::isFFmpegAvailable() const
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    return videoEncoderResolver()->loadedFFmpegVersion() != muse::media::FFMPEG_INVALID_VERSION;
+#else
+    return false;
+#endif
+}
+
+QString ExportDialogModel::ffmpegDir() const
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    return videoEncoderResolver()->loadedFFmpegDir().toQString();
+#else
+    return QString();
+#endif
+}
+
+void ExportDialogModel::setFFmpegDir(const QString& dir)
+{
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    if (ffmpegDir() == dir) {
+        return;
+    }
+
+    videoEncoderResolver()->loadFFmpeg(dir);
+#else
+    Q_UNUSED(dir);
+#endif
 }
 
 QList<int> ExportDialogModel::availableSampleRates() const
@@ -844,3 +929,16 @@ void ExportDialogModel::setSelectedSampleFormat(int format)
     audioExportConfiguration()->setExportSampleFormat(m_selectedExportType.suffixes[0], audioFormat);
     emit selectedSampleFormatChanged();
 }
+
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+void ExportDialogModel::updateVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(m_selectedExportType.id == QLatin1String("mp4"));
+}
+
+void ExportDialogModel::disableVideoExportSettingMode()
+{
+    videoEncoderResolver()->setIsSettingMode(false);
+}
+
+#endif
