@@ -249,6 +249,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Jianpu</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Text styles</string>
        </property>
       </item>
@@ -12772,6 +12777,246 @@ followed by dashes</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="PageJianpu">
+       <layout class="QVBoxLayout" name="verticalLayout_jianpu">
+        <item>
+         <widget class="QGroupBox" name="groupBox_jianpu">
+          <property name="title">
+           <string>Jianpu</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_jianpu">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_jianpu_1">
+             <property name="text">
+              <string>Vertical distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuNumberVerticalDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuNumberVerticalDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="jianpuNumberVerticalDistanceReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_jianpu_1">
+             <property name="text">
+              <string>Octave dot diameter:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuOctaveDotDiameter</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuOctaveDotDiameter">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="jianpuOctaveDotDiameterReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_jianpu_2">
+             <property name="text">
+              <string>Octave dot distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuOctaveDotDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuOctaveDotDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="jianpuOctaveDotDistanceReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_jianpu_3">
+             <property name="text">
+              <string>Diminution beam thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuDiminutionBeamThickness</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuDiminutionBeamThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="jianpuDiminutionBeamThicknessReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_jianpu_4">
+             <property name="text">
+              <string>Diminution beam distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuDiminutionBeamDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuDiminutionBeamDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="jianpuDiminutionBeamDistanceReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_jianpu_5">
+             <property name="text">
+              <string>Duration line thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>jianpuDurationLineThickness</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDoubleSpinBox" name="jianpuDurationLineThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>9.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="jianpuDurationLineThicknessReset">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_jianpu">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_jianpu">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="PageTextStyles">
        <layout class="QGridLayout" name="gridLayout_41">
         <item row="0" column="0">
@@ -14070,6 +14315,12 @@ followed by dashes</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
+  <tabstop>jianpuNumberVerticalDistance</tabstop>
+  <tabstop>jianpuOctaveDotDiameter</tabstop>
+  <tabstop>jianpuOctaveDotDistance</tabstop>
+  <tabstop>jianpuDiminutionBeamThickness</tabstop>
+  <tabstop>jianpuDiminutionBeamDistance</tabstop>
+  <tabstop>jianpuDurationLineThickness</tabstop>
  </tabstops>
  <resources/>
  <connections/>

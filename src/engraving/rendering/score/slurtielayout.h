@@ -99,6 +99,7 @@ private:
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
     static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type);
+    static void correctForJianpu(Tie* item, SlurTiePos& sPos);
     static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
     static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);
     static void adjustXforLedgerLines(TieSegment* tieSegment, bool start, Chord* chord, Note* note, const PointF& chordSystemPos,

@@ -115,6 +115,11 @@ TEST_F(Engraving_BeamTests, wideBeams)
     beam("wideBeams.mscx");
 }
 
+TEST_F(Engraving_BeamTests, jianpuBeam)
+{
+    beam("jianpuBeam.mscx");
+}
+
 TEST_F(Engraving_BeamTests, flatBeams)
 {
     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flatBeams.mscx");
