@@ -124,6 +124,9 @@ public:
     virtual muse::async::Notification dropChanged() const = 0;
 
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual bool canReapplyLastPaletteElement() const = 0;
+    virtual uint64_t lastPaletteElementSequence() const = 0;
+    virtual bool reapplyLastPaletteElement() = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
     virtual void undoRedoToIndex(size_t idx) = 0;

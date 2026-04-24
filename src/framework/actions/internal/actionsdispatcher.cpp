@@ -133,6 +133,13 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
         LOGW() << "More than one client can handle the action, this is not a typical situation.";
     }
 
+    // Track repeatable actions
+    if (isRepeatable(actionCode)) {
+        m_lastRepeatableAction = actionCode;
+        m_lastRepeatableData = data;
+        m_lastRepeatableSequence = nextActionSequence();
+    }
+
     // Notify that we have performed an action.
     m_postDispatch.send(actionCode);
 }
@@ -185,4 +192,90 @@ ActionCodeList ActionsDispatcher::actionList() const
         list.push_back(p.first);
     }
     return list;
+}
+
+ActionCode ActionsDispatcher::lastRepeatableAction() const
+{
+    return m_lastRepeatableAction;
+}
+
+uint64_t ActionsDispatcher::lastRepeatableActionSequence() const
+{
+    return m_lastRepeatableSequence;
+}
+
+void ActionsDispatcher::repeatLastAction()
+{
+    if (m_lastRepeatableAction.empty()) {
+        LOGI() << "no repeatable action to repeat";
+        return;
+    }
+
+    dispatch(m_lastRepeatableAction, m_lastRepeatableData);
+}
+
+bool ActionsDispatcher::isRepeatable(const ActionCode& code) const
+{
+    // Query-style action codes (e.g., "action://...") cannot be safely
+    // re-dispatched with ActionData, so never treat them as repeatable.
+    if (ActionQuery(code).isValid()) {
+        return false;
+    }
+
+    static const std::unordered_set<ActionCode> repeatableActions = {
+        // Articulations
+        "add-marcato", "add-sforzato", "add-tenuto", "add-staccato",
+        // Ornaments
+        "add-turn", "add-turn-inverted", "add-turn-slash",
+        "add-turn-up", "add-turn-inverted-up",
+        "add-trill", "add-short-trill", "add-mordent", "add-haydn",
+        "add-tremblement", "add-prall-mordent", "add-shake",
+        "add-shake-muffat", "add-tremblement-couperin",
+        // Bowing
+        "add-up-bow", "add-down-bow",
+        // Slurs, ties, lines
+        "add-slur", "tie", "chord-tie", "lv", "hammer-on-pull-off",
+        // Hairpins, ottava
+        "add-hairpin", "add-hairpin-reverse", "add-8va", "add-8vb",
+        "add-dynamic", "add-noteline",
+        // Accidentals
+        "sharp2-post", "sharp-post", "nat-post", "flat-post", "flat2-post",
+        "flat2", "flat", "nat", "sharp", "sharp2",
+        // Brackets
+        "add-brackets", "add-parentheses", "add-braces",
+        // Beam modes
+        "beam-auto", "beam-none", "beam-break-left",
+        "beam-break-inner-8th", "beam-break-inner-16th", "beam-join",
+        // Grace notes
+        "acciaccatura", "appoggiatura", "grace4", "grace16", "grace32",
+        "grace8after", "grace16after", "grace32after",
+        // Layout breaks
+        "system-break", "page-break", "section-break",
+        // Visibility
+        "toggle-visible", "set-visible", "unset-visible",
+        // Flip
+        "flip", "flip-horizontally",
+        // Enharmonic
+        "enh-both", "enh-current",
+        // Transposition
+        "transpose-up", "transpose-down",
+        // Text
+        "system-text", "staff-text", "expression-text",
+        "rehearsalmark-text", "tempo", "fingering-text",
+        "sticking-text", "chord-text", "roman-numeral-text",
+        "nashville-number-text", "lyrics",
+        // Guitar bends
+        "standard-bend", "pre-bend", "grace-note-bend", "slight-bend",
+        "dive", "pre-dive", "dip", "scoop",
+        // Pitch
+        "pitch-up", "pitch-down", "pitch-up-octave", "pitch-down-octave",
+        "pitch-up-diatonic", "pitch-down-diatonic",
+        // Misc
+        "toggle-autoplace", "autoplace-enabled", "rest",
+        "toggle-snap-to-previous", "toggle-snap-to-next",
+        "mirror-note", "toggle-mmrest", "toggle-hide-empty",
+        "full-measure-rest",
+    };
+
+    return repeatableActions.find(code) != repeatableActions.end();
 }

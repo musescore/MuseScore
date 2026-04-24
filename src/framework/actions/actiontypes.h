@@ -41,6 +41,12 @@ inline bool containsAction(const ActionCodeList& list, const ActionCode& actionC
     return std::find(list.cbegin(), list.cend(), actionCode) != list.cend();
 }
 
+inline uint64_t nextActionSequence()
+{
+    static uint64_t counter = 0;
+    return ++counter;
+}
+
 inline static ActionCode codeFromQString(const QString& s)
 {
     return s.toStdString();
