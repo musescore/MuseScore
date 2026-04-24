@@ -186,6 +186,16 @@ void PaintDebugger::drawText(const RectF& rect, int flags, const String& text)
     m_real->drawText(rect, flags, text);
 }
 
+bool PaintDebugger::canDrawHtml() const
+{
+    return m_real->canDrawHtml();
+}
+
+void PaintDebugger::drawHtml(const PointF& point, const String& htmlText)
+{
+    m_real->drawHtml(point, htmlText);
+}
+
 void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)
 {
     m_real->drawSymbol(point, ucs4Code);

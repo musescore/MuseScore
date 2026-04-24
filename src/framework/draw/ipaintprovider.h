@@ -77,6 +77,9 @@ public:
     virtual void drawText(const PointF& point, const String& text) = 0;
     virtual void drawText(const RectF& rect, int flags, const String& text) = 0;
 
+    virtual bool canDrawHtml() const = 0;
+    virtual void drawHtml(const PointF& point, const String& htmlText) = 0;
+
     virtual void drawSymbol(const PointF& point, char32_t ucs4Code) = 0;
 
     virtual void drawPixmap(const PointF& point, const Pixmap& pm) = 0;
