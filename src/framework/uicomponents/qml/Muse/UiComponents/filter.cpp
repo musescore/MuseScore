@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,33 +20,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <QString>
-
-#include <QtQmlIntegration/qqmlintegration.h>
-
-#include "sorter.h"
+#include "filter.h"
 
 namespace muse::uicomponents {
-class SorterValue : public Sorter
+Filter::Filter(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-    Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
+}
 
-    QML_ELEMENT
+void Filter::invalidate()
+{
+}
 
-public:
-    explicit SorterValue(QObject* parent = nullptr);
+bool Filter::enabled() const
+{
+    return m_enabled;
+}
 
-    bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) override;
+void Filter::setEnabled(const bool enabled)
+{
+    if (m_enabled == enabled) {
+        return;
+    }
 
-    QString roleName() const;
+    m_enabled = enabled;
+    emit dataChanged();
+}
 
-public slots:
-    void setRoleName(QString roleName);
+bool Filter::async() const
+{
+    return m_async;
+}
 
-private:
-    QString m_roleName;
-};
+void Filter::setAsync(const bool async)
+{
+    if (m_async == async) {
+        return;
+    }
+
+    m_async = async;
+    emit dataChanged();
+}
 }

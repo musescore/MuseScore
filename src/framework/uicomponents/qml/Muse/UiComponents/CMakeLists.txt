@@ -42,8 +42,14 @@ qt_add_qml_module(muse_uicomponents_qml
         filepickermodel.h
         filteredflyoutmodel.cpp
         filteredflyoutmodel.h
+        filter.cpp
+        filter.h
         filtervalue.cpp
         filtervalue.h
+        fuzzyfilter.cpp
+        fuzzyfilter.h
+        fuzzyscoresorter.cpp
+        fuzzyscoresorter.h
         iconview.cpp
         iconview.h
         internal/focuslistener.cpp
@@ -74,6 +80,8 @@ qt_add_qml_module(muse_uicomponents_qml
         selectableitemlistmodel.h
         selectmultipledirectoriesmodel.cpp
         selectmultipledirectoriesmodel.h
+        sorter.cpp
+        sorter.h
         sortervalue.cpp
         sortervalue.h
         sortfilterproxymodel.cpp
