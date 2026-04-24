@@ -53,7 +53,7 @@ public:
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return m_tremoloType; }
 
-    double minHeight() const;
+    Spatium minHeight() const;
     void reset() override;
 
     double chordMag() const;

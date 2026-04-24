@@ -612,7 +612,7 @@ int Staff::lines(Fraction* tick)
 
 qreal Staff::lineDistance(Fraction* tick)
 {
-    return staff()->lineDistance(tick->fraction());
+    return staff()->lineDistance(tick->fraction()).val();
 }
 
 bool Staff::isLinesInvisible(Fraction* tick)
