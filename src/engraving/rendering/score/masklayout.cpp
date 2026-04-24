@@ -391,7 +391,8 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     Shape slurTieShape = slurTieSegment->shape().translated(slurTiePos);
 
     Shape mask;
-    const double maskPadding = slurTieSegment->midWidth();
+    const double spatium = slurTieSegment->spatium();
+    const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::minNoteDistance)].defaultValue.toDouble();
     const double collisionPadding = maskPadding;
 
     for (const EngravingItem* item : itemsToMaskOver) {
