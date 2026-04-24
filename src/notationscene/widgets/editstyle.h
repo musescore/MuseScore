@@ -38,6 +38,7 @@
 #include "engraving/style/textstyle.h"
 
 #include "inotationsceneconfiguration.h"
+#include "engraving/types/notecoloringscheme.h"
 
 class QCheckBox;
 class QComboBox;
@@ -155,12 +156,15 @@ private:
     QCheckBox* m_noteColorCbArticulation = nullptr;        //!< Bound to @c Sid::colorApplyToArticulation.
     QCheckBox* m_noteColorCbDot = nullptr;                 //!< Bound to @c Sid::colorApplyToDot.
     QCheckBox* m_noteColorCbBeam = nullptr;                //!< Bound to @c Sid::colorApplyToBeam.
+    QCheckBox* m_noteColorCbFlag = nullptr;                //!< Bound to @c Sid::colorApplyToFlag.
     QGroupBox* m_noteColorPitchGroupBox = nullptr;         //!< Written vs concert pitch radio group.
     QRadioButton* m_noteColorRbWritten = nullptr;          //!< Color by written (displayed) pitch.
     QRadioButton* m_noteColorRbConcert = nullptr;          //!< Color by concert (sounding) pitch.
     QPushButton* m_noteColorResetBtn = nullptr;            //!< Reverts every note-color style to defaults.
     //! Rebuilds note-color controls from current style (queued after @c setValues()).
     std::function<void()> m_syncNoteColorUi;
+    //! Last @c noteColorTheme when remapping 7- vs 12-swatch columns on scheme change; synced in @c m_syncNoteColorUi.
+    mu::engraving::NoteColoringScheme m_lastNoteColoringScheme = mu::engraving::NoteColoringScheme::OneColor;
     ///@}
 
     void unhandledType(const StyleWidget);

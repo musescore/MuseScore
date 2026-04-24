@@ -25,6 +25,7 @@
 #include "style/style.h"
 
 #include "chord.h"
+#include "note.h"
 
 #include "log.h"
 
@@ -98,4 +99,40 @@ SymId Hook::symIdForHookIndex(int index, bool straight)
     }
 
     return SymId::noSym;
+}
+
+/*!
+ * Default hook (flag) properties.
+ * For @c Pid::COLOR, returns the sentinel @c configuration()->defaultColor() when
+ * @c Sid::colorApplyToFlag is on so that resetting restores the "inherit from note" state;
+ * @c Hook::color() resolves the sentinel to the top note's color at draw time.
+ */
+PropertyValue Hook::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::COLOR:
+        if (chord() && !chord()->notes().empty()) {
+            if (chord()->upNote()->style().styleV(Sid::colorApplyToFlag).toBool()) {
+                return PropertyValue::fromValue(configuration()->defaultColor());
+            }
+        }
+    // fall through
+    default:
+        return Symbol::propertyDefault(id);
+    }
+}
+
+/*!
+ * Draw color when using the score default: follows the top note's color if flags inherit note color.
+ */
+Color Hook::color() const
+{
+    if (m_color == configuration()->defaultColor()) {
+        if (chord() && !chord()->notes().empty()) {
+            if (chord()->upNote()->style().styleV(Sid::colorApplyToFlag).toBool()) {
+                return chord()->upNote()->color();
+            }
+        }
+    }
+    return m_color;
 }

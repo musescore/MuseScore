@@ -2247,6 +2247,7 @@ enum class Sid : short {
     colorApplyToArticulation,      //!< When set, note coloring also tints articulations.
     colorApplyToDot,               //!< When set, note coloring also tints augmentation dots.
     colorApplyToBeam,              //!< When set, note coloring also tints beams.
+    colorApplyToFlag,              //!< When set, note coloring also tints note flags.
     colorNotesByConcertPitch,      //!< Use concert pitch for key/degree coloring when transposing instruments differ.
 
     STYLES

@@ -82,6 +82,21 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::ui;
 
+namespace {
+//! Seven diatonic steps (C…B, Do…Ti) to the parallel chromatic swatch row (pitch class, epitch%12 order).
+const int DIATONIC_7_TO_CHROMA_12[7] = { 0, 2, 4, 5, 7, 9, 11 };
+
+bool isSevenSwatchScheme(NoteColoringScheme s)
+{
+    return s == NoteColoringScheme::AbsolutePitchSimple || s == NoteColoringScheme::MoveableDoSimple;
+}
+
+bool isTwelveSwatchScheme(NoteColoringScheme s)
+{
+    return s == NoteColoringScheme::AbsolutePitchChromatic || s == NoteColoringScheme::MoveableDoChromatic;
+}
+} // namespace
+
 static const QStringList ALL_PAGE_CODES {
     "score",
     "spacing",
@@ -861,7 +876,8 @@ void EditStyle::classBegin()
     // ====================================================
     /*!
      * \internal Builds the Notes-page Color @c QGroupBox: preset and scheme combos, twelve swatches, apply-to
-     * checkboxes, concert-pitch radios, and reset. Lambdas keep preset
+     * checkboxes, concert-pitch radios, and reset. Content is capped at 616px (three 200px columns,
+     * 8px gutters). Lambdas keep preset
      * labels in sync with palette state. After this block, @c PageNotes is rebuilt: layout items from the UI
      * are cleared (widgets are not destroyed), and flag, color, notes, and alignment groups are stacked inside
      * a single @c QScrollArea child so the tab scrolls when @c pageStack minimum height is tight.
@@ -884,7 +900,16 @@ void EditStyle::classBegin()
 
         m_noteColorGroup = new QGroupBox(muse::qtrc("notation/editstyle", "Color"));
         m_noteColorGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        QVBoxLayout* vbl = new QVBoxLayout(m_noteColorGroup);
+        QVBoxLayout* outerVbl = new QVBoxLayout(m_noteColorGroup);
+        QWidget* noteColorContent = new QWidget(m_noteColorGroup);
+        // Preset / Coloring scheme / Color: 200px + 8px + 200px + 8px + 200px = 616px interior
+        static constexpr int noteColorColumnW = 200;
+        static constexpr int noteColorGutterW = 8;
+        static constexpr int noteColorContentMaxW = 3 * noteColorColumnW + 2 * noteColorGutterW;
+        noteColorContent->setFixedWidth(noteColorContentMaxW);
+        noteColorContent->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+        QVBoxLayout* vbl = new QVBoxLayout(noteColorContent);
+        vbl->setContentsMargins(0, 0, 0, 0);
 
         m_noteColorPresetCombo = new QComboBox();
         m_noteColorPresetCombo->addItem(muse::qtrc("notation/editstyle", "Default"), static_cast<int>(NoteColorPreset::Default));
@@ -904,75 +929,120 @@ void EditStyle::classBegin()
         m_noteColorSchemeCombo->addItem(muse::qtrc("notation/editstyle", "Moveable do (chromatic)"),
                                         static_cast<int>(NoteColoringScheme::MoveableDoChromatic));
 
+        m_noteColorPresetCombo->setFixedWidth(noteColorColumnW);
+        m_noteColorPresetCombo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        m_noteColorSchemeCombo->setFixedWidth(noteColorColumnW);
+        m_noteColorSchemeCombo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
         styleWidgets.append({ StyleId::noteColorTheme, false, m_noteColorSchemeCombo, nullptr });
 
-        QGridLayout* glTop = new QGridLayout();
+        QWidget* presetTopCol = new QWidget(noteColorContent);
+        presetTopCol->setFixedWidth(noteColorColumnW);
+        presetTopCol->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+        QVBoxLayout* vlPresetTop = new QVBoxLayout(presetTopCol);
+        vlPresetTop->setContentsMargins(0, 0, 0, 0);
+        vlPresetTop->setSpacing(4);
         m_noteColorPresetLabel = new QLabel(muse::qtrc("notation/editstyle", "Preset:"));
-        glTop->addWidget(m_noteColorPresetLabel, 0, 0);
-        m_noteColorPresetCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        glTop->addWidget(m_noteColorPresetCombo, 1, 0);
+        m_noteColorPresetLabel->setWordWrap(true);
+        vlPresetTop->addWidget(m_noteColorPresetLabel);
+        vlPresetTop->addWidget(m_noteColorPresetCombo);
 
+        QWidget* schemeTopCol = new QWidget(noteColorContent);
+        schemeTopCol->setFixedWidth(noteColorColumnW);
+        schemeTopCol->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+        QVBoxLayout* vlSchemeTop = new QVBoxLayout(schemeTopCol);
+        vlSchemeTop->setContentsMargins(0, 0, 0, 0);
+        vlSchemeTop->setSpacing(4);
         m_noteColorSchemeLabel = new QLabel(muse::qtrc("notation/editstyle", "Coloring scheme:"));
-        glTop->addWidget(m_noteColorSchemeLabel, 0, 1);
-        m_noteColorSchemeCombo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        glTop->addWidget(m_noteColorSchemeCombo, 1, 1);
+        m_noteColorSchemeLabel->setWordWrap(true);
+        vlSchemeTop->addWidget(m_noteColorSchemeLabel);
+        vlSchemeTop->addWidget(m_noteColorSchemeCombo);
 
+        // Third column always occupies 200px; for non-One color schemes the label and swatch are hidden (Preset/Scheme stay fixed width).
+        QWidget* noteColorColorColumn = new QWidget(noteColorContent);
+        noteColorColorColumn->setFixedWidth(noteColorColumnW);
+        noteColorColorColumn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+        QVBoxLayout* vlColorTop = new QVBoxLayout(noteColorColorColumn);
+        vlColorTop->setContentsMargins(0, 0, 0, 0);
+        vlColorTop->setSpacing(4);
         m_noteColorSwatchColorLabel = new QLabel(muse::qtrc("notation/editstyle", "Color:"));
-        glTop->addWidget(m_noteColorSwatchColorLabel, 0, 2);
-        Awl::ColorLabel* defaultColorLabel = new Awl::ColorLabel(m_noteColorGroup);
-        defaultColorLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        defaultColorLabel->setFixedHeight(32);
-        defaultColorLabel->setMinimumWidth(100);
+        vlColorTop->addWidget(m_noteColorSwatchColorLabel);
+        Awl::ColorLabel* defaultColorLabel = new Awl::ColorLabel(noteColorColorColumn);
+        defaultColorLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        defaultColorLabel->setFixedSize(noteColorColumnW, 32);
         styleWidgets.append({ StyleId::defaultNoteColor, false, defaultColorLabel, nullptr });
-        glTop->addWidget(defaultColorLabel, 1, 2);
+        vlColorTop->addWidget(defaultColorLabel);
 
-        vbl->addLayout(glTop);
+        QWidget* noteColorTopRow = new QWidget(noteColorContent);
+        QHBoxLayout* hlTop = new QHBoxLayout(noteColorTopRow);
+        hlTop->setContentsMargins(0, 0, 0, 0);
+        hlTop->setSpacing(0);
+        hlTop->addWidget(presetTopCol);
+        hlTop->addSpacing(noteColorGutterW);
+        hlTop->addWidget(schemeTopCol);
+        hlTop->addSpacing(noteColorGutterW);
+        hlTop->addWidget(noteColorColorColumn);
 
-        m_noteColorSchemeDescription = new QLabel(m_noteColorGroup);
+        vbl->addWidget(noteColorTopRow, 0, Qt::AlignLeft);
+
+        m_noteColorSchemeDescription = new QLabel(noteColorContent);
         m_noteColorSchemeDescription->setWordWrap(true);
+        m_noteColorSchemeDescription->setFixedWidth(noteColorContentMaxW);
         vbl->addWidget(m_noteColorSchemeDescription);
 
-        m_noteColorSwatchesContainer = new QWidget();
+        m_noteColorSwatchesContainer = new QWidget(noteColorContent);
+        m_noteColorSwatchesContainer->setFixedWidth(noteColorContentMaxW);
+        m_noteColorSwatchesContainer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         QHBoxLayout* hlSwatches = new QHBoxLayout(m_noteColorSwatchesContainer);
         hlSwatches->setContentsMargins(0, 0, 0, 0);
 
-        QWidget* gridWidget = new QWidget();
+        QWidget* gridWidget = new QWidget(m_noteColorSwatchesContainer);
         QGridLayout* glColors = new QGridLayout(gridWidget);
         glColors->setContentsMargins(0, 0, 0, 0);
         glColors->setSpacing(8);
         hlSwatches->addWidget(gridWidget);
         vbl->addWidget(m_noteColorSwatchesContainer);
 
-        m_noteColorApplyToGroupBox = new QGroupBox(muse::qtrc("notation/editstyle", "Apply color to:"));
-        m_noteColorApplyToGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        m_noteColorApplyToGroupBox = new QGroupBox(muse::qtrc("notation/editstyle", "Apply color to:"), noteColorContent);
+        m_noteColorApplyToGroupBox->setFixedWidth(noteColorContentMaxW);
+        m_noteColorApplyToGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         QGridLayout* glApplyTo = new QGridLayout(m_noteColorApplyToGroupBox);
+        glApplyTo->setHorizontalSpacing(noteColorGutterW);
+        glApplyTo->setColumnMinimumWidth(0, noteColorColumnW);
+        glApplyTo->setColumnMinimumWidth(1, noteColorColumnW);
+        glApplyTo->setColumnMinimumWidth(2, noteColorColumnW);
         m_noteColorCbAccidental = new QCheckBox(muse::qtrc("notation/editstyle", "Accidentals"));
         m_noteColorCbStem = new QCheckBox(muse::qtrc("notation/editstyle", "Stems"));
         m_noteColorCbArticulation = new QCheckBox(muse::qtrc("notation/editstyle", "Articulations"));
-        m_noteColorCbDot = new QCheckBox(muse::qtrc("notation/editstyle", "Dots"));
+        m_noteColorCbDot = new QCheckBox(muse::qtrc("notation/editstyle", "Augmentation dots"));
         m_noteColorCbBeam = new QCheckBox(muse::qtrc("notation/editstyle", "Beams"));
+        m_noteColorCbFlag = new QCheckBox(muse::qtrc("notation/editstyle", "Flags"));
 
         styleWidgets.append({ StyleId::colorApplyToAccidental, false, m_noteColorCbAccidental, nullptr });
         styleWidgets.append({ StyleId::colorApplyToStem, false, m_noteColorCbStem, nullptr });
         styleWidgets.append({ StyleId::colorApplyToArticulation, false, m_noteColorCbArticulation, nullptr });
         styleWidgets.append({ StyleId::colorApplyToDot, false, m_noteColorCbDot, nullptr });
         styleWidgets.append({ StyleId::colorApplyToBeam, false, m_noteColorCbBeam, nullptr });
+        styleWidgets.append({ StyleId::colorApplyToFlag, false, m_noteColorCbFlag, nullptr });
 
         glApplyTo->addWidget(m_noteColorCbAccidental, 0, 0);
-        glApplyTo->addWidget(m_noteColorCbStem, 0, 1);
-        glApplyTo->addWidget(m_noteColorCbArticulation, 0, 2);
+        glApplyTo->addWidget(m_noteColorCbArticulation, 0, 1);
+        glApplyTo->addWidget(m_noteColorCbFlag, 0, 2);
         glApplyTo->addWidget(m_noteColorCbDot, 1, 0);
         glApplyTo->addWidget(m_noteColorCbBeam, 1, 1);
-        glApplyTo->setColumnStretch(0, 1);
-        glApplyTo->setColumnStretch(1, 1);
-        glApplyTo->setColumnStretch(2, 1);
+        glApplyTo->addWidget(m_noteColorCbStem, 1, 2);
+        glApplyTo->setColumnStretch(0, 0);
+        glApplyTo->setColumnStretch(1, 0);
+        glApplyTo->setColumnStretch(2, 0);
         vbl->addWidget(m_noteColorApplyToGroupBox);
 
-        m_noteColorPitchGroupBox = new QGroupBox(muse::qtrc("notation/editstyle", "Color notes on transposing instruments based on:"));
-        m_noteColorPitchGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        m_noteColorPitchGroupBox = new QGroupBox(
+            muse::qtrc("notation/editstyle", "Color notes on transposing instruments based on:"), noteColorContent);
+        m_noteColorPitchGroupBox->setFixedWidth(noteColorContentMaxW);
+        m_noteColorPitchGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         m_noteColorRbWritten = new QRadioButton(muse::qtrc("notation/editstyle", "Written pitch"));
         m_noteColorRbConcert = new QRadioButton(muse::qtrc("notation/editstyle", "Concert pitch"));
-        QButtonGroup* bgPitch = new QButtonGroup(m_noteColorGroup);
+        QButtonGroup* bgPitch = new QButtonGroup(noteColorContent);
         bgPitch->addButton(m_noteColorRbWritten, 0);
         bgPitch->addButton(m_noteColorRbConcert, 1);
 
@@ -983,11 +1053,13 @@ void EditStyle::classBegin()
         vlPitch->addWidget(m_noteColorRbConcert);
         vbl->addWidget(m_noteColorPitchGroupBox);
 
-        m_noteColorResetBtn = new QPushButton(muse::qtrc("notation/editstyle", "Reset all color settings"));
+        m_noteColorResetBtn = new QPushButton(muse::qtrc("notation/editstyle", "Reset all color settings"), noteColorContent);
         QHBoxLayout* hlReset = new QHBoxLayout();
         hlReset->addStretch();
         hlReset->addWidget(m_noteColorResetBtn);
         vbl->addLayout(hlReset);
+
+        outerVbl->addWidget(noteColorContent, 0, Qt::AlignLeft);
 
         const StyleId colorSids[] = {
             StyleId::noteColor0, StyleId::noteColor1,  StyleId::noteColor2,
@@ -1151,12 +1223,14 @@ void EditStyle::classBegin()
                 defaultColorLabel->setVisible(true);
                 m_noteColorResetBtn->setVisible(true);
                 m_noteColorSchemeDescription->setVisible(false);
+                m_noteColorPitchGroupBox->setVisible(false);
             } else {
                 m_noteColorSwatchesContainer->setVisible(true);
                 m_noteColorSwatchColorLabel->setVisible(false);
                 defaultColorLabel->setVisible(false);
                 m_noteColorResetBtn->setVisible(true);
                 m_noteColorSchemeDescription->setVisible(true);
+                m_noteColorPitchGroupBox->setVisible(true);
 
                 int numSwatches = swatchCountForScheme(schemeMode);
                 const QString* names = (schemeMode == NoteColoringScheme::AbsolutePitchSimple) ? absoluteSimpleNames
@@ -1177,16 +1251,16 @@ void EditStyle::classBegin()
 
                 if (schemeMode == NoteColoringScheme::AbsolutePitchSimple) {
                     m_noteColorSchemeDescription->setText(muse::qtrc("notation/editstyle",
-                                                                     "Each natural note gets a color. Applying accidentals does not change the color. Enharmonics will be different colors."));
+                                                                     "Color notes by their letter name. Accidentals do not affect the color."));
                 } else if (schemeMode == NoteColoringScheme::AbsolutePitchChromatic) {
                     m_noteColorSchemeDescription->setText(muse::qtrc("notation/editstyle",
-                                                                     "Color each chromatic pitch based on note name. Enharmonics will be the same color."));
+                                                                     "Color notes by their chromatic pitch. Enharmonic equivalents get the same color."));
                 } else if (schemeMode == NoteColoringScheme::MoveableDoSimple) {
                     m_noteColorSchemeDescription->setText(muse::qtrc("notation/editstyle",
-                                                                     "Each scale degree gets a color. Applying accidentals does not change the color. Enharmonics will be different colors."));
+                                                                     "Color notes by scale degree with respect to key signatures. Accidentals do not affect the color."));
                 } else if (schemeMode == NoteColoringScheme::MoveableDoChromatic) {
                     m_noteColorSchemeDescription->setText(muse::qtrc("notation/editstyle",
-                                                                     "Color notes based on scale degree, including chromatic pitches. Enharmonics will be the same color."));
+                                                                     "Color notes by scale degree with respect to key signatures. Enharmonic equivalents get the same color."));
                 }
             }
         };
@@ -1198,9 +1272,44 @@ void EditStyle::classBegin()
          * @c valueChanged(noteColorTheme) here or the style would be updated twice per change.
          */
         connect(m_noteColorSchemeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int idx) {
-            NoteColoringScheme scheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->itemData(idx).toInt());
-            updateSwatchesUI(scheme);
+            const NoteColoringScheme newScheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->itemData(idx).toInt());
+            const NoteColoringScheme oldScheme = m_lastNoteColoringScheme;
+            if (oldScheme != newScheme) {
+                if (isSevenSwatchScheme(oldScheme) && isTwelveSwatchScheme(newScheme)) {
+                    QColor d7[7];
+                    for (int i = 0; i < 7; ++i) {
+                        d7[i] = colorLabels[i]->color();
+                    }
+                    for (int j = 0; j < 12; ++j) {
+                        colorLabels[j]->blockSignals(true);
+                        colorLabels[j]->setColor(QColor(Qt::black));
+                        colorLabels[j]->blockSignals(false);
+                        valueChanged(static_cast<int>(colorSids[j]));
+                    }
+                    for (int i = 0; i < 7; ++i) {
+                        const int t = DIATONIC_7_TO_CHROMA_12[i];
+                        colorLabels[t]->blockSignals(true);
+                        colorLabels[t]->setColor(d7[i]);
+                        colorLabels[t]->blockSignals(false);
+                        valueChanged(static_cast<int>(colorSids[t]));
+                    }
+                } else if (isTwelveSwatchScheme(oldScheme) && isSevenSwatchScheme(newScheme)) {
+                    QColor c12[12];
+                    for (int j = 0; j < 12; ++j) {
+                        c12[j] = colorLabels[j]->color();
+                    }
+                    for (int i = 0; i < 7; ++i) {
+                        const QColor c = c12[DIATONIC_7_TO_CHROMA_12[i]];
+                        colorLabels[i]->blockSignals(true);
+                        colorLabels[i]->setColor(c);
+                        colorLabels[i]->blockSignals(false);
+                        valueChanged(static_cast<int>(colorSids[i]));
+                    }
+                }
+            }
+            updateSwatchesUI(newScheme);
             updatePresetFromState();
+            m_lastNoteColoringScheme = newScheme;
         });
 
         /*!
@@ -1235,6 +1344,7 @@ void EditStyle::classBegin()
                 m_noteColorRbWritten->setChecked(true);
                 valueChanged(static_cast<int>(StyleId::colorNotesByConcertPitch));
                 updatePresetFromState();
+                m_lastNoteColoringScheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt());
             } else if (preset == NoteColorPreset::Boomwhackers || preset == NoteColorPreset::FigureNotes) {
                 for (int i = 0; i < 12; ++i) {
                     colorLabels[i]->blockSignals(true);
@@ -1256,6 +1366,7 @@ void EditStyle::classBegin()
                 }
                 valueChanged(static_cast<int>(StyleId::colorNotesByConcertPitch));
                 updatePresetFromState();
+                m_lastNoteColoringScheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt());
             }
             valueChanged(static_cast<int>(StyleId::noteColorTheme));
         });
@@ -1284,6 +1395,7 @@ void EditStyle::classBegin()
             }
             valueChanged(static_cast<int>(StyleId::noteColorTheme));
             updateSwatchesUI(NoteColoringScheme::OneColor);
+            m_lastNoteColoringScheme = NoteColoringScheme::OneColor;
 
             m_noteColorCbAccidental->blockSignals(true);
             m_noteColorCbAccidental->setChecked(defaultStyleValue(StyleId::colorApplyToAccidental).toBool());
@@ -1305,6 +1417,10 @@ void EditStyle::classBegin()
             m_noteColorCbBeam->setChecked(defaultStyleValue(StyleId::colorApplyToBeam).toBool());
             m_noteColorCbBeam->blockSignals(false);
             valueChanged(static_cast<int>(StyleId::colorApplyToBeam));
+            m_noteColorCbFlag->blockSignals(true);
+            m_noteColorCbFlag->setChecked(defaultStyleValue(StyleId::colorApplyToFlag).toBool());
+            m_noteColorCbFlag->blockSignals(false);
+            valueChanged(static_cast<int>(StyleId::colorApplyToFlag));
 
             m_noteColorRbWritten->blockSignals(true);
             m_noteColorRbWritten->setChecked(true);
@@ -1325,6 +1441,7 @@ void EditStyle::classBegin()
         m_syncNoteColorUi = [=]() {
             updatePresetFromState();
             updateSwatchesUI(static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt()));
+            m_lastNoteColoringScheme = static_cast<NoteColoringScheme>(m_noteColorSchemeCombo->currentData().toInt());
         };
 
         /*! Defer first sync until the event loop so note-color widgets are fully constructed. */
@@ -1936,8 +2053,9 @@ void EditStyle::retranslateNoteColorSection()
     m_noteColorCbAccidental->setText(muse::qtrc("notation/editstyle", "Accidentals"));
     m_noteColorCbStem->setText(muse::qtrc("notation/editstyle", "Stems"));
     m_noteColorCbArticulation->setText(muse::qtrc("notation/editstyle", "Articulations"));
-    m_noteColorCbDot->setText(muse::qtrc("notation/editstyle", "Dots"));
+    m_noteColorCbDot->setText(muse::qtrc("notation/editstyle", "Augmentation dots"));
     m_noteColorCbBeam->setText(muse::qtrc("notation/editstyle", "Beams"));
+    m_noteColorCbFlag->setText(muse::qtrc("notation/editstyle", "Flags"));
 
     m_noteColorPitchGroupBox->setTitle(muse::qtrc("notation/editstyle", "Color notes on transposing instruments based on:"));
     m_noteColorRbWritten->setText(muse::qtrc("notation/editstyle", "Written pitch"));

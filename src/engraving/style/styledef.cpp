@@ -2232,6 +2232,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(colorApplyToArticulation,                   false),
     styleDef(colorApplyToDot,                            true),
     styleDef(colorApplyToBeam,                           false),
+    styleDef(colorApplyToFlag,                           false),
     styleDef(colorNotesByConcertPitch,                   false),
 } };
 
