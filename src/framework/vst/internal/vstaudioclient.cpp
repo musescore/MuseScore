@@ -67,10 +67,10 @@ VstAudioClient::VstAudioClient(const modularity::ContextPtr& iocCtx)
 
 VstAudioClient::~VstAudioClient()
 {
-    if (m_pluginComponent) {
-        m_pluginComponent->setActive(false);
-        m_pluginComponent->terminate();
-    }
+    // Do not call setActive(false) or terminate() here.
+    // The component lifecycle is managed by VstPluginInstance,
+    // which defers cleanup to the main thread so that any open
+    // editor view is destroyed first (required by ZENOLOGY).
 }
 
 void VstAudioClient::init(AudioPluginType type, IVstPluginInstancePtr instance)
@@ -137,7 +137,7 @@ void VstAudioClient::setIsPlaying(const bool newPlaying)
         m_processContext.state &= ~playingFlag;
     }
 
-    m_needUpdateState = true;
+    m_needUpdateState = m_isActive;
 }
 
 void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
@@ -149,6 +149,7 @@ void VstAudioClient::setOutputSpec(const audio::OutputSpec& spec)
     m_processData.numSamples = static_cast<Steinberg::int32>(spec.samplesPerChannel);
     m_outputSpec = spec;
     m_needUnprepareProcessData = true;
+    m_needUpdateState = false;
 
     updateProcessSetup();
 }
@@ -161,6 +162,7 @@ void VstAudioClient::setProcessMode(VstProcessMode mode)
 
     m_processMode = mode;
     m_needUnprepareProcessData = true;
+    m_needUpdateState = false;
 
     updateProcessSetup();
 }

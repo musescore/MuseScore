@@ -92,7 +92,10 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setOutputSpec(m_outputSpec);
-        fx->setPlaying(isActive());
+
+        if (m_audioSource) {
+            fx->setPlaying(m_audioSource->isActive());
+        }
 
         fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
             m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
