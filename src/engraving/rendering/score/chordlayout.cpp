@@ -372,7 +372,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
         note->updateFrettingForTiesAndBends();
-        note->setDotRelativeLine(0);
+        ChordLayout::setDotRelativeLine(note, 0, ctx);
         TLayout::layoutNote(note, note->mutldata());
         // set headWidth to max fret text width
         double fretWidth = note->ldata()->bbox().width();
@@ -2463,7 +2463,7 @@ double ChordLayout::centerX(const Chord* chord)
 //   placeDots
 //---------------------------------------------------------
 
-void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes)
+void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes, LayoutContext& ctx)
 {
     Chord* chord = nullptr;
     for (Chord* c : chords) {
@@ -2472,7 +2472,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             break;
         } else {
             for (Note* note : c->notes()) {
-                note->setDotRelativeLine(0); // this manages the deletion of dots
+                ChordLayout::setDotRelativeLine(note, 0, ctx); // this manages the deletion of dots
             }
         }
     }
@@ -2505,7 +2505,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
                 }
                 // set y for this note
                 if (note == otherNote) {
-                    note->setDotRelativeLine(dotMove);
+                    ChordLayout::setDotRelativeLine(note, dotMove, ctx);
                     finished = true;
                     anchoredDots.push_back(note->line() + dotMove);
                     alreadyAdded[otherNote->line() + dotMove] = otherNote;
@@ -2528,7 +2528,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
                     }
                     // set y for this note
                     if (note == otherNote) {
-                        note->setDotRelativeLine(dotMove);
+                        ChordLayout::setDotRelativeLine(note, dotMove, ctx);
                         finished = true;
                         anchoredDots.push_back(note->line() + dotMove);
                         break;
@@ -2541,23 +2541,75 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             IF_ASSERT_FAILED(finished) {
                 // this should never happen
                 // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
-                note->setDotRelativeLine(0);
+                ChordLayout::setDotRelativeLine(note, 0, ctx);
             }
         } else {
             // on a space; usually this means the dot is on this same line, but there is an exception
             // for a unison within the same chord.
             for (Note* otherNote : note->chord()->notes()) {
                 if (note == otherNote) {
-                    note->setDotRelativeLine(0); // same space as notehead
+                    ChordLayout::setDotRelativeLine(note, 0, ctx); // same space as notehead
                     break;
                 }
                 if (note->line() == otherNote->line()) {
                     bool adjustDown = (note->chord()->voice() & 1) && !note->chord()->up();
-                    note->setDotRelativeLine(adjustDown ? 2 : -2);
+                    ChordLayout::setDotRelativeLine(note, adjustDown ? 2 : -2, ctx);
                     break;
                 }
             }
         }
+    }
+}
+
+void ChordLayout::setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx)
+{
+    double y = dotMove / 2.0;
+    if (note->staff()->isTabStaff(note->chord()->tick())) {
+        // with TAB's, dotPosX is not set:
+        // get dot X from width of fret text and use TAB default spacing
+        const Staff* st = note->staff();
+        const StaffType* tab = st->staffTypeForElement(note);
+        if (tab->stemThrough()) {
+            // if fret mark on lines, use standard processing
+            if (!tab->onLines()) {
+                // if fret marks above lines, raise the dots by half line distance
+                y = -0.5;
+            } else if (dotMove == 0) {
+                bool oddVoice = note->voice() & 1;
+                y = oddVoice ? 0.5 : -0.5;
+            } else {
+                y = 0.5;
+            }
+        }
+        // if stems beside staff, do nothing
+        else {
+            return;
+        }
+    }
+    y *= note->spatium() * note->staff()->lineDistance(note->tick());
+
+    // apply to dots
+
+    int cdots = static_cast<int>(note->chord()->dots());
+    int ndots = static_cast<int>(note->dots().size());
+
+    int n = cdots - ndots;
+    for (int i = 0; i < n; ++i) {
+        NoteDot* dot = Factory::createNoteDot(note);
+        dot->setParent(note);
+        dot->setTrack(note->track());      // needed to know the staff it belongs to (and detect tablature)
+        dot->setVisible(note->visible());
+        ctx.mutDom().undoAddElement(dot);
+    }
+    if (n < 0) {
+        for (int i = 0; i < -n; ++i) {
+            ctx.mutDom().undoRemoveElement(note->dots().back());
+        }
+    }
+
+    for (NoteDot* dot : note->dots()) {
+        TLayout::layoutNoteDot(dot, dot->mutldata());
+        dot->mutldata()->setPosY(y);
     }
 }
 
@@ -2701,7 +2753,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
     }
 
     // Now, we can resolve note conflicts as a superchord
-    placeDots(chords, notes);
+    placeDots(chords, notes, ctx);
 
     // Calculate the chords' dotPosX, and find the leftmost point for accidental layout
     for (Chord* chord : chords) {
@@ -3167,7 +3219,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // with TAB's, dot Y is not calculated during layoutChords3(),
             // as layoutChords3() is not even called for TAB's;
             // setDotRelativeLine() actually also manages creation/deletion of NoteDot's
-            item->setDotRelativeLine(0);
+            ChordLayout::setDotRelativeLine(item, 0, ctx);
 
             // use TAB default note-to-dot spacing
             dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X.toAbsolute(item->spatium());
