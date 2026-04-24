@@ -82,7 +82,6 @@ public:
 private:
     std::shared_ptr<AudioActionsController> m_actionsController;
     std::shared_ptr<TransportEventsController> m_transportEventsController;
-    std::shared_ptr<Playback> m_mainPlayback;
 
     bool m_audioInited = false;
 };

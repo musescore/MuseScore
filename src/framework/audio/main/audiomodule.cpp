@@ -149,14 +149,13 @@ modularity::IContextSetup* AudioModule::newContext(const muse::modularity::Conte
 void AudioContext::registerExports()
 {
     m_actionsController = std::make_shared<AudioActionsController>(iocContext());
-    m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_transportEventsController = std::make_shared<TransportEventsController>(iocContext());
 
 #ifndef Q_OS_WASM
     ioc()->registerExport<ISoundFontInstallScenario>(mname, new GeneralSoundFontInstallScenario(iocContext()));
 #endif
 
-    ioc()->registerExport<IPlayback>(mname, m_mainPlayback);
+    ioc()->registerExport<IPlayback>(mname, new Playback(iocContext()));
 
     //! NOTE The real RPC channel itself is one global one.
     // But for each context there is a wrapper
@@ -184,12 +183,10 @@ void AudioContext::onInit(const IApplication::RunMode& mode)
     m_audioInited = true;
 
     m_actionsController->init();
-    m_mainPlayback->init();
     m_transportEventsController->init();
 }
 
 void AudioContext::onDeinit()
 {
-    m_mainPlayback->deinit();
     m_transportEventsController->deinit();
 }

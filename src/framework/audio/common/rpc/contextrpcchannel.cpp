@@ -24,9 +24,18 @@
 
 using namespace muse::audio::rpc;
 
+ContextRpcChannel::~ContextRpcChannel()
+{
+    for (auto id : m_streams) {
+        m_controller->removeStream(id);
+    }
+}
+
 void ContextRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
-    m_controller->send(msg, onResponse);
+    Msg newMsg = msg;
+    newMsg.ctxId = contextId();
+    m_controller->send(newMsg, onResponse);
 }
 
 void ContextRpcChannel::onRequest(MsgCode code, Handler h)
@@ -42,11 +51,13 @@ void ContextRpcChannel::onNotification(MsgCode code, Handler h)
 void ContextRpcChannel::addStream(std::shared_ptr<IRpcStream> s)
 {
     s->setCtxId(contextId());
+    m_streams.insert(s->streamId());
     m_controller->addStream(s);
 }
 
 void ContextRpcChannel::removeStream(StreamId id)
 {
+    m_streams.erase(id);
     m_controller->removeStream(id);
 }
 

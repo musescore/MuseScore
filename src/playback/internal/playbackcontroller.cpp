@@ -144,8 +144,8 @@ void PlaybackController::init()
 
         m_loadingProgress.start();
 
-        playback()->initPlayback().onResolve(this, [this](const bool& success) {
-            if (success) {
+        playback()->init().onResolve(this, [this](const Ret& ret) {
+            if (ret) {
                 setupPlayback();
             }
         });
@@ -1058,7 +1058,7 @@ void PlaybackController::resetPlayback()
 
     m_currentTick = 0;
 
-    playback()->deinitPlayback();
+    playback()->deinit();
 
     m_instrumentTrackIdMap.clear();
     m_auxTrackIdMap.clear();

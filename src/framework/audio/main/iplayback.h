@@ -47,13 +47,11 @@ public:
 
     // A quick guide how to playback something:
 
-    // 0. Check is audio system started
-    virtual bool isAudioStarted() const = 0;
-    virtual async::Channel<bool> isAudioStartedChanged() const = 0;
-
-    // 1. Init playback (temporary)
-    virtual async::Promise<bool> initPlayback() = 0;
-    virtual void deinitPlayback() = 0;
+    // 1. Init
+    virtual async::Promise<Ret> init() = 0;
+    virtual bool isInited() const = 0;
+    virtual async::Channel<bool> initedChanged() const = 0;
+    virtual void deinit() = 0;
 
     // 2. Setup tracks
     virtual async::Promise<TrackIdList> trackIdList() const = 0;

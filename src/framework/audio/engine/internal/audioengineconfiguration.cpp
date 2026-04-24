@@ -93,14 +93,3 @@ AudioInputParams AudioEngineConfiguration::defaultAudioInputParams() const
 
     return result;
 }
-
-size_t AudioEngineConfiguration::desiredAudioThreadNumber() const
-{
-    return 0;
-}
-
-size_t AudioEngineConfiguration::minTrackCountForMultithreading() const
-{
-    // Start mutlithreading-processing only when there are more or equal number of tracks
-    return 2;
-}

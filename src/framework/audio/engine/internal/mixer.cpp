@@ -39,30 +39,26 @@ using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::engine;
 
+constexpr size_t MIN_TRACK_COUNT_FOR_MULTITHREADING = 2;
+
 Mixer::~Mixer()
 {
     ONLY_AUDIO_MAIN_OR_ENGINE_THREAD;
     delete m_taskScheduler;
 }
 
-void Mixer::init(size_t desiredAudioThreadNumber, size_t minTrackCountForMultithreading)
+void Mixer::init()
 {
     ONLY_AUDIO_ENGINE_THREAD;
 
 #ifdef MUSE_THREADS_SUPPORT
-    m_taskScheduler = new TaskScheduler(static_cast<thread_pool_size_t>(desiredAudioThreadNumber));
+    m_taskScheduler = new TaskScheduler();
 
     if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
         LOGE() << "Unable to change audio threads priority";
     }
 
     AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
-
-    m_minTrackCountForMultithreading = minTrackCountForMultithreading;
-
-#else
-    UNUSED(desiredAudioThreadNumber);
-    UNUSED(minTrackCountForMultithreading);
 #endif
 }
 
@@ -315,12 +311,12 @@ void Mixer::updateNonMutedTrackCount()
 bool Mixer::useMultithreading() const
 {
 #ifdef MUSE_THREADS_SUPPORT
-    if (m_nonMutedTrackCount < m_minTrackCountForMultithreading) {
+    if (m_nonMutedTrackCount < MIN_TRACK_COUNT_FOR_MULTITHREADING) {
         return false;
     }
 
     if (m_isIdle) {
-        if (m_tracksToProcessWhenIdle.size() < m_minTrackCountForMultithreading) {
+        if (m_tracksToProcessWhenIdle.size() < MIN_TRACK_COUNT_FOR_MULTITHREADING) {
             return false;
         }
     }

@@ -28,15 +28,16 @@
 #include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "audio/common/rpc/irpcchannel.h"
+#include "audio/common/rpc/icontextrpcchannel.h"
 
 namespace muse::audio {
-class Player : public IPlayer, public async::Asyncable
+class Player : public IPlayer, public Contextable, public async::Asyncable
 {
-    GlobalInject<rpc::IRpcChannel> channel;
+    ContextInject<rpc::IContextRpcChannel> channel = { this };
 
 public:
-    Player() = default;
+    Player(const muse::modularity::ContextPtr& ctx)
+        : Contextable(ctx) {}
 
     void init();
 
