@@ -474,7 +474,7 @@ static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = f
     }
 
     if (withHelp) {
-        message += "\n\n" + muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.org.");
+        message += "\n\n" + muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.com.");
     }
 
     return message;
@@ -606,14 +606,14 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
               .arg(u"https://musescore.com").toStdString();
         break;
     default:
-        msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.org.");
+        msg = muse::trc("project/cloud", "Please try again later, or get help for this problem on MuseScore.com.");
         break;
     }
 
     IInteractive::Result result = interactive()->warningSync(title, msg, buttons, defaultButtonCode);
     switch (result.button()) {
     case helpBtnCode:
-        platformInteractive()->openUrl(configuration()->supportForumUrl());
+        platformInteractive()->openUrl(configuration()->dotComBugReportUrl());
         break;
     case saveLocallyBtnCode:
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
