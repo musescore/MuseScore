@@ -26,6 +26,8 @@
 
 #include "global/async/notification.h"
 
+#include "audio/common/timeposition.h"
+
 namespace muse::audio::synth {
 class ISynthesizer : public engine::IAudioSource
 {

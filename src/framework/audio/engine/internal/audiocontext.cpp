@@ -54,8 +54,6 @@ Ret AudioContext::init(const RenderConstraints& consts)
     setOutputSpec(outputSpec);
     setMode(ProcessMode::Idle);
 
-    m_player->seek(TimePosition::zero(outputSpec.sampleRate));
-
     m_player->isActiveChanged().onReceive(this, [this](bool isActive) {
         setMode(isActive ? ProcessMode::Playing : ProcessMode::Idle);
     });
@@ -103,7 +101,13 @@ void AudioContext::setOutputSpec(const OutputSpec& outputSpec)
     ONLY_AUDIO_ENGINE_THREAD;
     m_outputSpec = outputSpec;
     m_mixer->setOutputSpec(outputSpec);
-    m_player->seek(TimePosition::zero(outputSpec.sampleRate));
+
+    TimePosition currentPosition = m_player->currentPosition();
+    if (currentPosition.isValid()) {
+        m_player->seek(TimePosition::fromTime(currentPosition.time(), outputSpec.sampleRate));
+    } else {
+        m_player->seek(TimePosition::zero(outputSpec.sampleRate));
+    }
 }
 
 // Setup tracks
