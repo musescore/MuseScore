@@ -805,6 +805,11 @@ void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
 {
+    std::vector<int> legacyFingering;
+    std::vector<int> fullFingering;
+    bool hasLegacyFingering = false;
+    bool hasFullFingering = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
@@ -862,11 +867,22 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
                 d->add(h);
             }
         } else if (readProperty(d, tag, e, ctx, Pid::FRET_SHOW_FINGERINGS)) {
-        } else if (readProperty(d, tag, e, ctx, Pid::FRET_FINGERING)) {
+        } else if (tag == "fretFingeringEx") {
+            fullFingering = TConv::fromXml(e.readText(), std::vector<int>());
+            hasFullFingering = true;
+        } else if (tag == "fretFingering") {
+            legacyFingering = TConv::fromXml(e.readText(), std::vector<int>());
+            hasLegacyFingering = true;
         } else if (TRead::readProperty(d, tag, e, ctx, Pid::EXCLUDE_VERTICAL_ALIGN)) {
         } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
         }
+    }
+
+    if (hasFullFingering) {
+        d->setFingering(fullFingering);
+    } else if (hasLegacyFingering) {
+        d->setFingering(legacyFingering);
     }
 }
 

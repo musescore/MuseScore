@@ -1320,6 +1320,44 @@ String FretDiagram::screenReaderInfo() const
     return res;
 }
 
+int FretDiagram::fingeringFromChar(Char c)
+{
+    switch (c.unicode()) {
+    case '1': return int(FretDiagram::FingeringValue::ONE);
+    case '2': return int(FretDiagram::FingeringValue::TWO);
+    case '3': return int(FretDiagram::FingeringValue::THREE);
+    case '4': return int(FretDiagram::FingeringValue::FOUR);
+    case '5': return int(FretDiagram::FingeringValue::FIVE);
+    case 'T': return int(FretDiagram::FingeringValue::THUMB_UPPER);
+    case 't': return int(FretDiagram::FingeringValue::THUMB_LOWER);
+    case 'P': return int(FretDiagram::FingeringValue::PULGAR_UPPER);
+    case 'p': return int(FretDiagram::FingeringValue::PULGAR_LOWER);
+
+    default:
+        return int(FretDiagram::FingeringValue::NONE);
+    }
+}
+
+String FretDiagram::fingeringToString(int v)
+{
+    if (v >= 1 && v <= 5) {
+        return String::number(v);
+    }
+
+    switch (static_cast<FretDiagram::FingeringValue>(v)) {
+    case FretDiagram::FingeringValue::THUMB_UPPER:
+        return String(u"T");
+    case FretDiagram::FingeringValue::THUMB_LOWER:
+        return String(u"t");
+    case FretDiagram::FingeringValue::PULGAR_UPPER:
+        return String(u"P");
+    case FretDiagram::FingeringValue::PULGAR_LOWER:
+        return String(u"p");
+    default:
+        return String();
+    }
+}
+
 void FretDiagram::setFingering(std::vector<int> v)
 {
     m_fingering = std::move(v);
