@@ -458,8 +458,9 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         return pixelSize * 72.0 / engraving::DPI;
     };
 
-    Font titleFont(Font::FontFamily(u"Edwin"), Font::Type::Text);
+    Font titleFont(Font::FontFamily(u"Muse Sans"), Font::Type::Text);
     titleFont.setPointSizeF(scaledFontPointSize(128.0));
+    titleFont.setWeight(Font::Weight::Medium);
 
     Font subtitleFont(titleFont);
     subtitleFont.setPointSizeF(scaledFontPointSize(48.0));
