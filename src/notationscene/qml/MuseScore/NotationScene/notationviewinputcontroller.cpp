@@ -28,7 +28,6 @@
 #include <QQuickItem>
 #include <QTimer>
 #include <QtMath>
-
 #include "defer.h"
 #include "log.h"
 
@@ -337,6 +336,14 @@ PointF NotationViewInputController::findZoomFocusPoint() const
         // No selection: zoom at the center of the view
         resultX = m_view->width() / 2;
         resultY = m_view->height() / 2;
+    } else if (selection->state() == mu::engraving::SelState::LIST) {
+        RectF rectResult;
+        for (const mu::engraving::EngravingItem* element : selection->elements()) {
+            rectResult = rectResult.united(element->canvasBoundingRect());
+        }
+        PointF result = m_view->fromLogical(rectResult.center());
+        resultX = result.x();
+        resultY = result.y();
     } else {
         // Selection: zoom at the center of the selection
         PointF result = m_view->fromLogical(selection->canvasBoundingRect().center());
