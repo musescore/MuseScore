@@ -717,19 +717,13 @@
         <Measure>
           <eid>WB_WB</eid>
           <voice>
-            <Clef>
-              <concertClefType>G</concertClefType>
-              <transposingClefType>G</transposingClefType>
-              <isHeader>1</isHeader>
-              <eid>XB_XB</eid>
-              </Clef>
             <TimeSig>
-              <eid>YB_YB</eid>
+              <eid>XB_XB</eid>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>ZB_ZB</eid>
+              <eid>YB_YB</eid>
               <linkedTo>n_n</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -737,16 +731,17 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>aB_aB</eid>
+          <eid>ZB_ZB</eid>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
-            <Tempo>
-              <tempo>1.66667</tempo>
-              <eid>bB_bB</eid>
-              <text>𝅘𝅥 = 100</text>
-              </Tempo>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
+              <eid>aB_aB</eid>
+              </Clef>
             <Rest>
-              <eid>cB_cB</eid>
+              <eid>bB_bB</eid>
               <linkedTo>o_o</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -755,16 +750,15 @@
           </Measure>
         <Measure len="8/4">
           <multiMeasureRest>4</multiMeasureRest>
-          <eid>dB_dB</eid>
+          <eid>cB_cB</eid>
           <voice>
             <Tempo>
               <tempo>1.66667</tempo>
-              <eid>eB_eB</eid>
-              <linkedTo>bB_bB</linkedTo>
+              <eid>dB_dB</eid>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Rest>
-              <eid>fB_fB</eid>
+              <eid>eB_eB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>8/4</duration>
@@ -772,10 +766,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>gB_gB</eid>
+          <eid>fB_fB</eid>
           <voice>
             <Rest>
-              <eid>hB_hB</eid>
+              <eid>gB_gB</eid>
               <linkedTo>p_p</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -783,10 +777,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>iB_iB</eid>
+          <eid>hB_hB</eid>
           <voice>
             <Rest>
-              <eid>jB_jB</eid>
+              <eid>iB_iB</eid>
               <linkedTo>q_q</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>
@@ -794,10 +788,10 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>kB_kB</eid>
+          <eid>jB_jB</eid>
           <voice>
             <Rest>
-              <eid>lB_lB</eid>
+              <eid>kB_kB</eid>
               <linkedTo>r_r</linkedTo>
               <durationType>measure</durationType>
               <duration>2/4</duration>

@@ -469,7 +469,6 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
 
     Measure* part2M1MM = part2->firstMeasureMM()->nextMeasureMM();
     EXPECT_TRUE(part2M1MM->isMMRest());
-    Measure* part2M1Underlying = part2M1MM->mmRestFirst();
 
     Measure* part2M2 = part2M1MM->nextMeasureMM();
     EXPECT_FALSE(part2M2->isMMRest());
@@ -494,7 +493,6 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     EXPECT_TRUE(part1M1MMREndSeg);
 
     // Check part1 m2 (mmr) has NO beginning ts
-    // Ensure segments are removed correctly from underlying measures in ModifyDom::sortMeasureSegments
     Segment* part1M2MMREndSeg = part2M1MM->findSegmentR(SegmentType::TimeSigAnnounce, part1M2MM->ticks());
     EXPECT_FALSE(part1M2MMREndSeg);
 
@@ -503,19 +501,12 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     score->undoChangeStyleVal(Sid::changesBetweenEndStartRepeat, false);
     score->endCmd();
 
-    // Check part2 m1 (mmr & underlying) ts is 6/8
-    // Ensure segments are copied correctly to underlying measures in ModifyDom::sortMeasureSegments
+    // Check part2 m1 (mmr) ts is 6/8
     Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigType, part2M1MM->ticks());
     EXPECT_TRUE(part2M1MMRTimeSigSeg);
     TimeSig* topTimeSig = toTimeSig(part2M1MMRTimeSigSeg->element(0));
     EXPECT_TRUE(topTimeSig);
     EXPECT_EQ(topTimeSig->sig(), Fraction(6, 8));
-
-    Segment* part2M1UnderlyingTimeSigSeg = part2M1Underlying->findSegmentR(SegmentType::TimeSigType, part2M1Underlying->ticks());
-    EXPECT_TRUE(part2M1UnderlyingTimeSigSeg);
-    TimeSig* underlyingTimeSig = toTimeSig(part2M1UnderlyingTimeSigSeg->element(0));
-    EXPECT_TRUE(underlyingTimeSig);
-    EXPECT_EQ(underlyingTimeSig->sig(), Fraction(6, 8));
 }
 
 TEST_F(Engraving_TimesigTests, endOfMeasureTie) {

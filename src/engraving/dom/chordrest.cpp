@@ -205,9 +205,18 @@ EngravingItem* ChordRest::drop(EditData& data)
         // TODO: insert automatically in all staves?
 
         Segment* seg = m->undoGetSegment(SegmentType::Breath, endTick());
-        b->setParent(seg);
-        score()->undoAddElement(b);
-        return e;
+
+        if (seg->element(b->track())) {
+            // Already a breath present, change its symbol
+            Breath* existingBreath = toBreath(seg->element(b->track()));
+            existingBreath->undoChangeProperty(Pid::SYMBOL, b->symId());
+            delete b;
+            return existingBreath;
+        } else {
+            b->setParent(seg);
+            score()->undoAddElement(b);
+            return e;
+        }
     }
 
     case ElementType::BAR_LINE:

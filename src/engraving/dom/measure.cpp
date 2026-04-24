@@ -584,8 +584,8 @@ bool Measure::showMeasureNumberInAutoMode() const
         // Show either if
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is excluded from numbering.
-        return isFirstInSystem()
-               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->isFirstInSystem());
+        return (system() && isFirstInSystem())
+               || (prevMeasure && prevMeasure->excludeFromNumbering() && prevMeasure->system() && prevMeasure->isFirstInSystem());
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure

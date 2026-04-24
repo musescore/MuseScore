@@ -572,13 +572,8 @@
         <Measure>
           <eid>q_q</eid>
           <voice>
-            <TimeSig>
-              <eid>r_r</eid>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Rest>
-              <eid>s_s</eid>
+              <eid>r_r</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -586,54 +581,49 @@
           </Measure>
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
-          <eid>t_t</eid>
+          <eid>s_s</eid>
           <voice>
             <TimeSig>
-              <eid>u_u</eid>
+              <eid>t_t</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>v_v</eid>
+              <eid>u_u</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>w_w</eid>
+              <eid>v_v</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>x_x</eid>
+          <eid>w_w</eid>
           <voice>
             <Rest>
-              <eid>y_y</eid>
+              <eid>x_x</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>z_z</eid>
+          <eid>y_y</eid>
           <voice>
             <Rest>
-              <eid>0_0</eid>
+              <eid>z_z</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
-            <BarLine>
-              <subtype>end</subtype>
-              <eid>1_1</eid>
-              <linkedTo>w_w</linkedTo>
-              </BarLine>
             </voice>
           </Measure>
         </Staff>
       </Score>
     <Score>
-      <eid>2_2</eid>
+      <eid>0_0</eid>
       <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
@@ -710,7 +700,7 @@
       <metaTag name="partName">Flute 1</metaTag>
       <Part id="2">
         <Staff>
-          <eid>3_3</eid>
+          <eid>1_1</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -765,49 +755,60 @@
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>4_4</eid>
+          <eid>2_2</eid>
           <Text>
-            <eid>5_5</eid>
+            <eid>3_3</eid>
             <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
-            <eid>6_6</eid>
+            <eid>4_4</eid>
             <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
-            <eid>7_7</eid>
+            <eid>5_5</eid>
             <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
-            <eid>8_8</eid>
+            <eid>6_6</eid>
             <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
-            <eid>9_9</eid>
+            <eid>7_7</eid>
             <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
-            <eid>+_+</eid>
+            <eid>8_8</eid>
             <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
-            <eid>AB_AB</eid>
+            <eid>+_+</eid>
             <style>instrument_excerpt</style>
             <text>Flute 1</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>/_/</eid>
+          <voice>
+            <Rest>
+              <eid>AB_AB</eid>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
           <eid>BB_BB</eid>
           <voice>
             <TimeSig>
@@ -817,61 +818,40 @@
               </TimeSig>
             <Rest>
               <eid>DB_DB</eid>
-              <durationType>measure</durationType>
-              <duration>4/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="12/4">
-          <multiMeasureRest>3</multiMeasureRest>
-          <eid>EB_EB</eid>
-          <voice>
-            <TimeSig>
-              <eid>FB_FB</eid>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
-            <Rest>
-              <eid>GB_GB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>HB_HB</eid>
+              <eid>EB_EB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>IB_IB</eid>
+          <eid>FB_FB</eid>
           <voice>
             <Rest>
-              <eid>JB_JB</eid>
+              <eid>GB_GB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>KB_KB</eid>
+          <eid>HB_HB</eid>
           <voice>
             <Rest>
-              <eid>LB_LB</eid>
+              <eid>IB_IB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
-            <BarLine>
-              <subtype>end</subtype>
-              <eid>MB_MB</eid>
-              <linkedTo>HB_HB</linkedTo>
-              </BarLine>
             </voice>
           </Measure>
         </Staff>
       </Score>
     <Score>
-      <eid>NB_NB</eid>
+      <eid>JB_JB</eid>
       <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
@@ -948,7 +928,7 @@
       <metaTag name="partName">Flute 2</metaTag>
       <Part id="3">
         <Staff>
-          <eid>OB_OB</eid>
+          <eid>KB_KB</eid>
           <linkedTo>E_E</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -1003,58 +983,53 @@
           <height>36.9323</height>
           <boxAutoSize>0</boxAutoSize>
           <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-          <eid>PB_PB</eid>
+          <eid>LB_LB</eid>
           <Text>
-            <eid>QB_QB</eid>
+            <eid>MB_MB</eid>
             <style>user_1</style>
             <text>Title</text>
             </Text>
           <Text>
-            <eid>RB_RB</eid>
+            <eid>NB_NB</eid>
             <style>user_7</style>
             <text>Text7</text>
             </Text>
           <Text>
-            <eid>SB_SB</eid>
+            <eid>OB_OB</eid>
             <style>user_2</style>
             <text>Text 2</text>
             </Text>
           <Text>
-            <eid>TB_TB</eid>
+            <eid>PB_PB</eid>
             <style>user_3</style>
             <text>Text3</text>
             </Text>
           <Text>
-            <eid>UB_UB</eid>
+            <eid>QB_QB</eid>
             <style>user_4</style>
             <text>Text4</text>
             </Text>
           <Text>
-            <eid>VB_VB</eid>
+            <eid>RB_RB</eid>
             <style>user_5</style>
             <text>Text5</text>
             </Text>
           <Text>
-            <eid>WB_WB</eid>
+            <eid>SB_SB</eid>
             <style>user_6</style>
             <text>Text6</text>
             </Text>
           <Text>
-            <eid>XB_XB</eid>
+            <eid>TB_TB</eid>
             <style>instrument_excerpt</style>
             <text>Flute 2</text>
             </Text>
           </VBox>
         <Measure>
-          <eid>YB_YB</eid>
+          <eid>UB_UB</eid>
           <voice>
-            <TimeSig>
-              <eid>ZB_ZB</eid>
-              <sigN>4</sigN>
-              <sigD>4</sigD>
-              </TimeSig>
             <Rest>
-              <eid>aB_aB</eid>
+              <eid>VB_VB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1062,48 +1037,43 @@
           </Measure>
         <Measure len="12/4">
           <multiMeasureRest>3</multiMeasureRest>
-          <eid>bB_bB</eid>
+          <eid>WB_WB</eid>
           <voice>
             <TimeSig>
-              <eid>cB_cB</eid>
+              <eid>XB_XB</eid>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
-              <eid>dB_dB</eid>
+              <eid>YB_YB</eid>
               <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
             <BarLine>
               <subtype>end</subtype>
-              <eid>eB_eB</eid>
+              <eid>ZB_ZB</eid>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>fB_fB</eid>
+          <eid>aB_aB</eid>
           <voice>
             <Rest>
-              <eid>gB_gB</eid>
+              <eid>bB_bB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
             </voice>
           </Measure>
         <Measure>
-          <eid>hB_hB</eid>
+          <eid>cB_cB</eid>
           <voice>
             <Rest>
-              <eid>iB_iB</eid>
+              <eid>dB_dB</eid>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
-            <BarLine>
-              <subtype>end</subtype>
-              <eid>jB_jB</eid>
-              <linkedTo>eB_eB</linkedTo>
-              </BarLine>
             </voice>
           </Measure>
         </Staff>

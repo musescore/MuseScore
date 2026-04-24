@@ -558,7 +558,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             }
         }
 
-        if (item->isRest()) {
+        if (item->isRestFamily()) {
             continue;
         }
 

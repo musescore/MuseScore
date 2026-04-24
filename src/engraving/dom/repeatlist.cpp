@@ -64,11 +64,11 @@ void RepeatSegment::addMeasures(Measure const* const m)
 {
     if (!m_measureList.empty()) {
         // Add up to the current measure, final measure is added outside of this condition
-        Measure const* lastMeasure = m_measureList.back()->nextMeasure();
+        Measure const* lastMeasure = m_measureList.back()->nextMeasureMM();
         if (lastMeasure && (lastMeasure->tick() < m->tick())) {     // Ensure provided reference is later than current last
-            while (lastMeasure != m) {
+            while (lastMeasure && lastMeasure != m) {
                 m_measureList.push_back(lastMeasure);
-                lastMeasure = lastMeasure->nextMeasure();
+                lastMeasure = lastMeasure->nextMeasureMM();
             }
         }
         //else { // Possibly clip compared to current last measure }
@@ -356,7 +356,7 @@ void RepeatList::flatten()
     muse::DeleteAll(*this);
     clear();
 
-    Measure* m = m_score->firstMeasure();
+    Measure* m = m_score->firstMeasureMM();
     if (!m) {
         return;
     }
@@ -364,7 +364,7 @@ void RepeatList::flatten()
     RepeatSegment* s = new RepeatSegment(1);
     do {
         s->addMeasure(m);
-        m = m->nextMeasure();
+        m = m->nextMeasureMM();
     } while (m);
     push_back(s);
 
@@ -436,7 +436,7 @@ void RepeatList::collectRepeatListElements()
 
     // Section breaks may occur on non-Measure frames, so must search list of all MeasureBases
     // unwinding itself will only use actual Measures
-    MeasureBase* mb = m_score->firstMeasure();
+    MeasureBase* mb = m_score->firstMeasureMM();
     // First measure of a section/score is always used as a reference REPEAT_START point
     // even if it doesn't have a start repeat
     startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb, toMeasure(mb));
@@ -480,7 +480,7 @@ void RepeatList::collectRepeatListElements()
                 Volta* remainder = voltasToMerge.back()->clone();
                 if (volta->startMeasure() != remainder->startMeasure()) {
                     // First part is not empty
-                    voltasToMerge.back()->setEndElement(volta->startMeasure()->prevMeasure());
+                    voltasToMerge.back()->setEndElement(volta->startMeasure()->prevMeasureMM());
                     remainder->setStartElement(volta->startMeasure());
                     // Store it
                     preProcessedVoltas.push_back(voltasToMerge.back());
@@ -506,7 +506,7 @@ void RepeatList::collectRepeatListElements()
                 preProcessedVoltas.push_back(remainder);
                 if (volta->endMeasure() != remainder->endMeasure()) {
                     // volta extends past the end of remainder -> move its startpoint after remainder
-                    volta->setStartElement(remainder->endMeasure()->nextMeasure());
+                    volta->setStartElement(remainder->endMeasure()->nextMeasureMM());
                 } else {         // volta matched remainder endpoint, nothing left to merge from
                     preProcessedVoltas.splice(preProcessedVoltas.cend(), voltasToMerge);
                     delete volta;
@@ -521,7 +521,7 @@ void RepeatList::collectRepeatListElements()
     }
 
     volta = nullptr;
-    for (; mb; mb = mb->next()) {
+    for (; mb; mb = mb->nextMM()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
             sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
@@ -531,7 +531,7 @@ void RepeatList::collectRepeatListElements()
                 if (volta != nullptr) {
                     //if (volta->endMeasure()->tick() < m->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
-                    sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, m->prevMeasure()));
+                    sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, m->prevMeasureMM()));
                     //volta = nullptr; // No need, replaced immediately further down
                     //      }
                     //else { // Overlapping voltas; this should not happen as preProcessedVoltas should've dealt with this already }
@@ -550,7 +550,7 @@ void RepeatList::collectRepeatListElements()
                         // assume the previous volta was supposed to end before us (open volta case) -> insert the end
                         // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point
                         //          Consider splitting the volta or ignoring this repeat all together
-                        sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, m->prevMeasure()));
+                        sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, m->prevMeasureMM()));
                         volta = nullptr;
                     }
                     //else { // Volta and Start Repeat coincide on the same measure, see test::repeat56.mscx }
@@ -643,7 +643,7 @@ void RepeatList::collectRepeatListElements()
             }
         }
         // Section break (or end of score)
-        if (mb->sectionBreak() || !mb->nextMeasure()) {
+        if (mb->sectionBreak() || !mb->nextMeasureMM()) {
             if (sectionEndMeasureBase != nullptr) {
                 if (volta != nullptr) {
                     //if (volta->endMeasure()->tick() < mb->tick()) {
@@ -663,16 +663,16 @@ void RepeatList::collectRepeatListElements()
                 m_rlElements.push_back(sectionRLElements);
             }
             // prepare for new section
-            if (mb->nextMeasure()) {
+            if (Measure* nextMeas = mb->nextMeasureMM()) {
                 sectionRLElements = RepeatListElementList();
                 // First measure of a section/score is always used as a reference REPEAT_START point
                 // even if it doesn't have a start repeat
                 startFromRepeatMeasure
-                    = new RepeatListElement(RepeatListElementType::REPEAT_START, mb->nextMeasure(), toMeasure(mb->nextMeasure()));
+                    = new RepeatListElement(RepeatListElementType::REPEAT_START, nextMeas, toMeasure(nextMeas));
                 sectionRLElements.push_back(startFromRepeatMeasure);
                 // Loop will forward one measureBase, so return one now
                 // this logic aids in skipping multiple frames between sections
-                mb = mb->nextMeasure()->prev();
+                mb = nextMeas->prevMM();
             } else {
                 // no more measures -> done
                 break;
@@ -839,7 +839,7 @@ void RepeatList::unwind()
     clear();
     m_jumpsTaken.clear();
 
-    if (!m_score->firstMeasure()) {
+    if (!m_score->firstMeasureMM()) {
         return;
     }
 
@@ -898,7 +898,7 @@ void RepeatList::unwind()
                     } while ((*repeatListElementIt)->repeatListElementType != RepeatListElementType::VOLTA_END);
                     activeVolta = nullptr;
                     // Start next rs on the following measure
-                    Measure const* const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasure();
+                    Measure const* const possibleNextMeasure = (*repeatListElementIt)->measure->nextMeasureMM();
                     if (possibleNextMeasure == nullptr) {
                         rs = nullptr;                   // end of score, but will still encounter section break, notify it
                     } else {
