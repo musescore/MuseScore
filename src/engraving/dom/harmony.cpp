@@ -1609,13 +1609,6 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::OFFSET: {
-        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-        if (fd && fd->visible()) {
-            v = PropertyValue::fromValue(PointF(0.0, 0.0));
-            break;
-        }
-    }
     // fall-through
     default:
         v = TextBase::propertyDefault(id);
@@ -1635,21 +1628,6 @@ bool Harmony::positionRelativeToNoteheadRest() const
 
 Sid Harmony::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
-        const FretDiagram* fd = explicitParent() && explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
-
-        if (fd && fd->visible()) {
-            return Sid::NOSTYLE;
-        } else if (textStyleType() == TextStyleType::HARMONY_A) {
-            return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_B) {
-            return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_ROMAN) {
-            return placeAbove() ? Sid::romanNumeralPosAbove : Sid::romanNumeralPosBelow;
-        } else if (textStyleType() == TextStyleType::HARMONY_NASHVILLE) {
-            return placeAbove() ? Sid::nashvilleNumberPosAbove : Sid::nashvilleNumberPosBelow;
-        }
-    }
     if (pid == Pid::PLACEMENT) {
         switch (m_harmonyType) {
         case HarmonyType::STANDARD:

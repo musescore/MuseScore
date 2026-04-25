@@ -1845,7 +1845,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::v
             }
         }
         for (SpannerSegment* ss : segments) {
-            if (!ss->isStyled(Pid::OFFSET)) {
+            if (!ss->offset().isNull()) {
                 continue;
             }
             const double& staffY = ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];

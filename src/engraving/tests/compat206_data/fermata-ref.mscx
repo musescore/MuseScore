@@ -146,8 +146,8 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             <timeStretch>3</timeStretch>
-            <offset x="-2.05234" y="-4.89487"/>
             <eid>N_N</eid>
+            <offset x="-2.05234" y="-4.89487"/>
             </Fermata>
           <Chord>
             <eid>O_O</eid>

@@ -53,8 +53,6 @@ public:
     void symbolLine(SymId start, SymId fill, SymId end);
 
 private:
-    virtual Sid getPropertyStyle(Pid) const override;
-
     SymIdList m_symbols;
 };
 
@@ -91,9 +89,6 @@ public:
     TranslatableString subtypeUserName() const override;
 
 private:
-
-    Sid getPropertyStyle(Pid) const override;
-
     VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
 };
 } // namespace mu::engraving

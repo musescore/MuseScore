@@ -440,24 +440,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
     }
-    if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
-        // first set property, then set offset for above/below if styled
-        changeProperties(this, id, v, ps);
-
-        if (isStyled(Pid::OFFSET)) {
-            // TODO: maybe it just makes more sense to do this in EngravingItem::undoChangeProperty,
-            // but some of the overrides call ScoreElement explicitly
-            double sp;
-            if (isEngravingItem()) {
-                sp = toEngravingItem(this)->spatium();
-            } else {
-                sp = style().spatium();
-            }
-            setProperty(Pid::OFFSET, style().styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
-            EngravingItem* e = toEngravingItem(this);
-            e->setOffsetChanged(false);
-        }
-    } else if (id == Pid::TEXT_STYLE) {
+    if (id == Pid::TEXT_STYLE) {
         //
         // change a list of properties
         //

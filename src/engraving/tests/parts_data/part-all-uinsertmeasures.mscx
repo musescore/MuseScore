@@ -1335,6 +1335,7 @@
                 </harmonyInfo>
               <eid>WD_WD</eid>
               <linkedTo>f_f</linkedTo>
+              <offset x="0" y="-3.22581"/>
               </Harmony>
             <Chord>
               <eid>XD_XD</eid>

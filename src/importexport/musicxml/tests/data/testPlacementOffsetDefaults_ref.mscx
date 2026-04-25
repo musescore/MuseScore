@@ -174,7 +174,7 @@
             <duration>1/1</duration>
             <Lyrics>
               <eid>P_P</eid>
-              <offset x="0.571501" y="3"/>
+              <offset x="0.571501" y="0"/>
               <text>lyrics</text>
               </Lyrics>
             </Rest>
@@ -208,8 +208,8 @@
             <duration>1/1</duration>
             <Lyrics>
               <eid>W_W</eid>
+              <offset x="0.571501" y="0"/>
               <placement>above</placement>
-              <offset x="0.571501" y="-2"/>
               <text>lyrics</text>
               </Lyrics>
             </Rest>

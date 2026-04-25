@@ -46,7 +46,6 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 static const ElementStyle fermataStyle {
-    { Sid::fermataPosAbove, Pid::OFFSET },
     { Sid::fermataMinDistance, Pid::MIN_DISTANCE },
 };
 
@@ -234,18 +233,6 @@ void Fermata::resetProperty(Pid id)
 }
 
 //---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Fermata::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
-    }
-    return EngravingObject::getPropertyStyle(pid);
-}
-
-//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -299,6 +286,11 @@ FermataType Fermata::fermataType() const
 String Fermata::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::translatedUserNameForSymId(symId()));
+}
+
+Sid Fermata::defaultPosSid() const
+{
+    return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
 }
 
 void Fermata::added()

@@ -101,7 +101,7 @@
               <eid>F_F</eid>
               <Segment>
                 <subtype>0</subtype>
-                <offset x="0" y="2.8"/>
+                <offset x="0" y="0"/>
                 <off2 x="-10.5" y="0"/>
                 <eid>G_G</eid>
                 </Segment>

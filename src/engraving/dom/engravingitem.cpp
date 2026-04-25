@@ -291,6 +291,29 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
+Sid EngravingItem::defaultPosSid() const
+{
+    return Sid::NOSTYLE;
+}
+
+PointF EngravingItem::defaultPos() const
+{
+    Sid styleId = defaultPosSid();
+
+    if (styleId == Sid::NOSTYLE) {
+        return PointF();
+    }
+
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
+}
+
 PlacementV EngravingItem::placement() const
 {
     return flag(ElementFlag::PLACE_ABOVE) && !isSystemObjectBelowBottomStaff() ? PlacementV::ABOVE : PlacementV::BELOW;
@@ -1370,8 +1393,6 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t refTrack) const
 void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
 {
     PlacementV oldPlacement = placement();
-    bool offsetIsStyled = isStyled(Pid::OFFSET);
-
     PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
@@ -1424,9 +1445,6 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
 
     if (newPlacement != oldPlacement) {
         setPlacement(newPlacement);
-        if (offsetIsStyled) {
-            resetProperty(Pid::OFFSET);
-        }
     }
 }
 
@@ -1585,10 +1603,6 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        PropertyValue v = EngravingObject::propertyDefault(pid);
-        if (v.isValid()) {        // if it's a styled property
-            return v;
-        }
         return PropertyValue::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {

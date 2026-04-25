@@ -91,6 +91,11 @@ void MeasureNumberLayout::layoutMeasureNumber(MeasureNumber* item, MeasureNumber
         ldata->moveX(-itemBBox.right());
     }
 
+    Staff* staff = item->staff();
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
+
+    ldata->move(defaultPos);
+
     checkBarlineCollisions(item, barlineSeg, hPlacement, ldata);
 }
 
@@ -114,6 +119,11 @@ void MeasureNumberLayout::layoutMMRestRange(MMRestRange* item, MMRestRange::Layo
     } else {
         ldata->setPosX(measureStartEnd.x1 - itemBBox.left());
     }
+
+    Staff* staff = item->staff();
+    PointF defaultPos = item->defaultPos() * (staff ? staff->staffMag(item->tick()) : 1.0);
+
+    ldata->move(defaultPos);
 }
 
 void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
@@ -132,7 +142,7 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
         if (staff && staff->lines(item->tick()) == 1) {
             yoff += 2.0 * item->spatium();
         } else {
-            yoff += item->staff()->staffHeight();
+            yoff += item->staff() ? item->staff()->staffHeight() : 0.0;
         }
 
         ldata->setPosY(yoff);
@@ -145,11 +155,6 @@ void MeasureNumberLayout::layoutMeasureNumberBase(MeasureNumberBase* item, Measu
         }
 
         ldata->setPosY(yoff);
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        PointF offset = item->propertyDefault(Pid::OFFSET).value<PointF>() * item->staff()->staffMag(item->tick());
-        item->setOffset(offset);
     }
 }
 

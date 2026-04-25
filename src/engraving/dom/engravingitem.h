@@ -224,6 +224,9 @@ public:
     void setSizeIsSpatiumDependent(bool v) { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }
     bool offsetIsSpatiumDependent() const override;
 
+    virtual PointF defaultPos() const;
+    virtual Sid defaultPosSid() const;
+
     PlacementV placement() const;
     void setPlacement(PlacementV val) { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
     bool placeAbove() const { return placement() == PlacementV::ABOVE; }

@@ -192,4 +192,9 @@ Sid WhammyBar::getPropertyStyle(Pid id) const
     }
     return TextLineBase::getPropertyStyle(id);
 }
+
+Sid WhammyBar::defaultPosSid() const
+{
+    return placeAbove() ? Sid::whammyBarPosAbove : Sid::whammyBarPosBelow;
+}
 }

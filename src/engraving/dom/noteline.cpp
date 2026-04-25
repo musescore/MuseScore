@@ -63,14 +63,6 @@ static const ElementStyle noteLineStyle {
     { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
 
-Sid NoteLineSegment::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return Sid::NOSTYLE;
-    }
-    return TextLineBaseSegment::getPropertyStyle(pid);
-}
-
 NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
     : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
 {
@@ -85,17 +77,6 @@ EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
     }
 
     return TextLineBaseSegment::propertyDelegate(pid);
-}
-
-Sid NoteLine::getPropertyStyle(Pid pid) const
-{
-    switch (pid) {
-    case Pid::OFFSET:
-        return Sid::NOSTYLE;
-    default:
-        break;
-    }
-    return TextLineBase::getPropertyStyle(pid);
 }
 
 NoteLine::NoteLine(EngravingItem* parent)
@@ -171,8 +152,6 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return true;
     case Pid::NOTELINE_PLACEMENT:
         return NoteLineEndPlacement::OFFSET_ENDS;
-    case Pid::OFFSET:
-        return PointF();
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return 0.5_sp;
     case Pid::SYSTEM_FLAG:
@@ -220,5 +199,10 @@ void NoteLine::reset()
 {
     undoResetProperty(Pid::NOTELINE_PLACEMENT);
     TextLineBase::reset();
+}
+
+Sid NoteLine::defaultPosSid() const
+{
+    return Sid::NOSTYLE;
 }
 } // namespace mu::engraving

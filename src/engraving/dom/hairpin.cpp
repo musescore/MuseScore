@@ -68,7 +68,6 @@ static const ElementStyle hairpinStyle {
     { Sid::hairpinLineWidth,                   Pid::LINE_WIDTH },
     { Sid::hairpinHeight,                      Pid::HAIRPIN_HEIGHT },
     { Sid::hairpinContHeight,                  Pid::HAIRPIN_CONT_HEIGHT },
-    { Sid::hairpinPosBelow,                    Pid::OFFSET },
     { Sid::hairpinLineStyle,                   Pid::LINE_STYLE },
     { Sid::hairpinLineDashLineLen,             Pid::DASH_LINE_LEN },
     { Sid::hairpinLineDashGapLen,              Pid::DASH_GAP_LEN },
@@ -273,11 +272,6 @@ EngravingObject* HairpinSegment::propertyDelegate(Pid pid) const
 Sid HairpinSegment::getPropertyStyle(Pid pid) const
 {
     switch (pid) {
-    case Pid::OFFSET:
-        if (hairpin()->isLineType()) {
-            return spanner()->placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
-        }
-        return spanner()->placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
     case Pid::BEGIN_TEXT:
         switch (hairpin()->hairpinType()) {
         default:
@@ -472,11 +466,6 @@ TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible, bool 
 Sid Hairpin::getPropertyStyle(Pid pid) const
 {
     switch (pid) {
-    case Pid::OFFSET
-        : if (isLineType()) {
-            return placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
-        }
-        return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
     case Pid::BEGIN_TEXT:
         switch (hairpinType()) {
         default:
@@ -602,7 +591,6 @@ void Hairpin::setHairpinType(HairpinType val)
 //---------------------------------------------------------
 
 static const ElementStyle hairpinSegmentStyle {
-    { Sid::hairpinPosBelow, Pid::OFFSET },
     { Sid::hairpinMinDistance, Pid::MIN_DISTANCE },
 };
 
@@ -846,5 +834,13 @@ muse::TranslatableString Hairpin::subtypeUserName() const
     default:
         return TranslatableString("engraving/hairpintype", "Custom");
     }
+}
+
+Sid Hairpin::defaultPosSid() const
+{
+    if (isLineType()) {
+        return placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
+    }
+    return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
 }
 }

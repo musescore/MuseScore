@@ -689,10 +689,6 @@ void Segment::add(EngravingItem* el)
     assert(track < score()->ntracks());
     assert(el->score() == score());
     assert(score()->nstaves() * VOICES == m_elist.size());
-    // make sure offset is correct for staff
-    if (el->isStyled(Pid::OFFSET)) {
-        el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
 
     switch (el->type()) {
     case ElementType::MEASURE_REPEAT:

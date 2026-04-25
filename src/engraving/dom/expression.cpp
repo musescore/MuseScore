@@ -155,10 +155,9 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setPlacement(staffText->placement());
         setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     }
-    if (staffText->offset() != propertyDefault(Pid::OFFSET).value<PointF>()) {
+    if (!staffText->offset().isNull()) {
         setOffset(staffText->offset());
         setSnapToDynamics(false);
-        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
     }
     if (staffText->frameType() != FrameType::NO_FRAME) {
@@ -182,7 +181,7 @@ void Expression::reset()
     undoResetProperty(Pid::CENTER_BETWEEN_STAVES);
     TextBase::reset();
     Dynamic* snappedDyn = snappedDynamic();
-    if (snappedDyn && snappedDyn->getProperty(Pid::OFFSET) != snappedDyn->propertyDefault(Pid::OFFSET)) {
+    if (snappedDyn && !snappedDyn->offset().isNull()) {
         snappedDyn->reset();
     }
 }

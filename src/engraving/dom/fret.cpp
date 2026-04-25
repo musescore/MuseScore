@@ -1181,15 +1181,6 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
     return EngravingItem::propertyDefault(pid);
 }
 
-void FretDiagram::setVisible(bool f)
-{
-    EngravingItem::setVisible(f);
-
-    if (m_harmony && m_harmony->isStyled(Pid::OFFSET)) {
-        m_harmony->resetProperty(Pid::OFFSET);
-    }
-}
-
 void FretDiagram::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);

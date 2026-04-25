@@ -65,6 +65,8 @@ protected:
     void added() override;
     void removed() override;
 
+    Sid defaultPosSid() const override;
+
 private:
     void requestToRebuildTempo();
 
@@ -94,7 +96,6 @@ public:
     void endEdit(EditData& editData) override;
     void added() override;
     void removed() override;
-    Sid getPropertyStyle(Pid id) const override;
 
     GradualTempoChangeSegment* findElementToSnapBefore() const;
     TempoText* findElementToSnapAfter() const;

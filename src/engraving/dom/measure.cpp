@@ -858,18 +858,12 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::MEASURE_NUMBER:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMeasureNumber(toMeasureNumber(e));
         }
         break;
 
     case ElementType::MMREST_RANGE:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMMRangeText(toMMRestRange(e));
         }
         break;

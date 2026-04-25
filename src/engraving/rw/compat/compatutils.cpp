@@ -1089,3 +1089,35 @@ void CompatUtils::convertPre470ImageSize(Image* image)
         image->setSize(image->size() * (DPI / PRE_470_DPI));
     }
 }
+
+PointF CompatUtils::getAdjustedOffset(EngravingItem* item, PointF offset)
+{
+    PointF defaultOffset = item->defaultPos();
+    return offset - defaultOffset;
+}
+
+void CompatUtils::migrateOffset500(EngravingItem* item, PropertyValue& offset)
+{
+    if (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) {
+        return;
+    }
+
+    // We need additional context for items with voice assignment properties
+    // Migrate in EngravingCompat after layout
+    if (item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    offset = getAdjustedOffset(item, offset.value<PointF>());
+}
+
+void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
+{
+    if (mscVersion > 301 || item->offset().isNull()) {
+        return;
+    }
+
+    PropertyValue offset = item->getProperty(Pid::OFFSET);
+    compat::CompatUtils::migrateOffset500(item, offset);
+    item->setProperty(Pid::OFFSET, offset);
+}

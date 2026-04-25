@@ -515,6 +515,10 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
         v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
+    if (pid == Pid::OFFSET && ctx.mscVersion() < 500) {
+        compat::CompatUtils::migrateOffset500(item, v);
+    }
+
     if (!ctx.shouldSkipProperty(pid)) {
         item->setProperty(pid, v);
         if (item->isStyled(pid)) {
@@ -3708,8 +3712,8 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "Segment") {
         LineSegment* ls = l->createLineSegment(l->score()->dummy()->system());
         ls->setTrack(l->track());     // needed in read to get the right staff mag
-        TRead::read(ls, e, ctx);
         l->add(ls);
+        TRead::read(ls, e, ctx);
         ls->setVisible(l->visible());
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::DIAGONAL)) {
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::ANCHOR)) {
@@ -3769,8 +3773,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
             s->add(s->newSlurTieSegment(s->score()->dummy()->system()));
         }
         SlurTieSegment* sts = s->newSlurTieSegment(s->score()->dummy()->system());
-        TRead::read(sts, e, ctx);
         s->add(sts);
+        TRead::read(sts, e, ctx);
     } else if (!readProperties(toSpanner(s), e, ctx)) {
         return false;
     }

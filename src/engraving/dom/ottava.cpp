@@ -71,7 +71,6 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaLineStyle,                    Pid::LINE_STYLE },
     { Sid::ottavaDashLineLen,                  Pid::DASH_LINE_LEN },
     { Sid::ottavaDashGapLen,                   Pid::DASH_GAP_LEN },
-    { Sid::ottavaPosAbove,                     Pid::OFFSET },
     { Sid::ottavaFontSpatiumDependent,         Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
     { Sid::ottavaEndLineArrowHeight,           Pid::END_LINE_ARROW_HEIGHT },
     { Sid::ottavaEndLineArrowWidth,            Pid::END_LINE_ARROW_WIDTH },
@@ -156,20 +155,6 @@ void Ottava::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
     }
 }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid OttavaSegment::getPropertyStyle(Pid pid) const
-{
-    switch (pid) {
-    case Pid::OFFSET:
-        return spanner()->placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
-    default:
-        return TextLineBaseSegment::getPropertyStyle(pid);
-    }
-}
-
 Sid Ottava::getPropertyStyle(Pid pid) const
 {
     static_assert(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
@@ -216,8 +201,6 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 
     size_t idx = size_t(m_ottavaType) * 3 + (m_numbersOnly ? 0 : ss.size() / 2);
     switch (pid) {
-    case Pid::OFFSET:
-        return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
     case Pid::PLACEMENT:
         return ss[idx];
     case Pid::BEGIN_TEXT:
@@ -281,7 +264,6 @@ int Ottava::pitchShift() const
 //---------------------------------------------------------
 
 static const ElementStyle ottavaSegmentStyle {
-    { Sid::ottavaPosAbove, Pid::OFFSET },
     { Sid::ottavaMinDistance, Pid::MIN_DISTANCE },
 };
 
@@ -464,5 +446,10 @@ PointF Ottava::linePos(Grip grip, System** system) const
 void Ottava::doComputeEndElement()
 {
     setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track())));
+}
+
+Sid Ottava::defaultPosSid() const
+{
+    return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
 }
 }

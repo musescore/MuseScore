@@ -80,6 +80,8 @@ public:
 
     String accessibleInfo() const override;
 
+    Sid defaultPosSid() const override;
+
 protected:
     void added() override;
     void removed() override;
@@ -88,8 +90,6 @@ private:
 
     friend class Factory;
     Fermata(EngravingItem* parent);
-
-    Sid getPropertyStyle(Pid) const override;
 
     SymId m_symId = SymId::noSym;
     double m_timeStretch = -1.0;

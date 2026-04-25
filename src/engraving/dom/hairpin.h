@@ -179,6 +179,9 @@ public:
     int subtype() const override { return int(m_hairpinType); }
     TranslatableString subtypeUserName() const override;
 
+protected:
+    Sid defaultPosSid() const override;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;

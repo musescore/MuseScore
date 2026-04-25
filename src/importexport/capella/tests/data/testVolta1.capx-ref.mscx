@@ -65,10 +65,12 @@
             </TimeSig>
           <StaffText>
             <eid>H_H</eid>
+            <offset x="0" y="0.024053"/>
             <text>Volta 1</text>
             </StaffText>
           <StaffText>
             <eid>I_I</eid>
+            <offset x="0" y="0.024053"/>
             <text>MuseScore testfile</text>
             </StaffText>
           <Chord>
@@ -152,6 +154,7 @@
         <voice>
           <StaffText>
             <eid>V_V</eid>
+            <offset x="0" y="0.024053"/>
             <text>Leon Vinken</text>
             </StaffText>
           <Spanner type="Volta">

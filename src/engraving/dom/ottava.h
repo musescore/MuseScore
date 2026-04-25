@@ -85,7 +85,6 @@ class OttavaSegment final : public TextLineBaseSegment
     DECLARE_CLASSOF(ElementType::OTTAVA_SEGMENT)
 
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-    Sid getPropertyStyle(Pid) const override;
 
 public:
     OttavaSegment(Ottava* sp, System* parent);
@@ -142,6 +141,7 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
 protected:
+    Sid defaultPosSid() const override;
     void doComputeEndElement() override;
 
 private:

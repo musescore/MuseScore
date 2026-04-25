@@ -290,6 +290,34 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
     }
 }
 
+static void doMigrateOffset500(EngravingItem* item)
+{
+    if (item->offset().isNull()
+        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) || !item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    item->setOffset(CompatUtils::getAdjustedOffset(item, item->offset()));
+}
+
+void EngravingCompat::migrateOffset500(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->spannerList()) {
+            if (!sp->hasVoiceAssignmentProperties()) {
+                continue;
+            }
+            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+            doMigrateOffset500(sp);
+            for (SpannerSegment* seg : sp->spannerSegments()) {
+                doMigrateOffset500(seg);
+            }
+        }
+
+        score->scanElements(doMigrateOffset500);
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     bool needRelayout = false;
@@ -302,6 +330,11 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
+
+    if (mscVersion < 500) {
+        migrateOffset500(score);
+        needRelayout = true;
     }
 
     if (needRelayout) {

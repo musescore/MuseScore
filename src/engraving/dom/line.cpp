@@ -713,11 +713,6 @@ void LineSegment::dragGrip(EditData& ed)
     case Grip::START:         // Resize the begin of element (left grip)
         setOffset(offset() + deltaResize);
         m_offset2 -= deltaResize;
-
-        if (isStyled(Pid::OFFSET)) {
-            setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-        }
-
         rebaseAnchors(ed, ed.curGrip);
         break;
     case Grip::END:         // Resize the end of element (right grip)
@@ -729,9 +724,6 @@ void LineSegment::dragGrip(EditData& ed)
         const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
         setOffsetChanged(true);
-        if (isStyled(Pid::OFFSET)) {
-            setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-        }
         rebaseAnchors(ed, ed.curGrip);
     }
     break;
@@ -819,11 +811,6 @@ RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
     setOffsetChanged(true);
-
-    if (isStyled(Pid::OFFSET)) {
-        setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-    }
-
     rebaseAnchors(ed, Grip::MIDDLE);
 
     return canvasBoundingRect();

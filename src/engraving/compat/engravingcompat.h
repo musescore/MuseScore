@@ -42,6 +42,7 @@ private:
     static void adjustVBoxDistances(MasterScore* masterScore);
     static void pre470TextCompat(MasterScore* masterScore);
     static void migrateNoteParens(MasterScore* masterScore);
+    static void migrateOffset500(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
     static bool setLyricLineVisibility(MasterScore* masterScore);

@@ -143,7 +143,6 @@
       <copyrightFramePadding>0</copyrightFramePadding>
       <copyrightFrameWidth>0</copyrightFrameWidth>
       <pageNumberFontSize>11</pageNumberFontSize>
-      <pageNumberOffset x="0" y="0"/>
       <pageNumberFramePadding>0</pageNumberFramePadding>
       <pageNumberFrameWidth>0</pageNumberFrameWidth>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
@@ -208,8 +207,8 @@
           </Text>
         <Text>
           <eid>F_F</eid>
-          <style>frame</style>
           <offset x="55" y="0.5"/>
+          <style>frame</style>
           <text>éééàè</text>
           </Text>
         </VBox>
@@ -225,8 +224,8 @@
           </Text>
         <Text>
           <eid>I_I</eid>
-          <style>frame</style>
           <offset x="55" y="0.5"/>
+          <style>frame</style>
           <text>àéùééé</text>
           </Text>
         </VBox>

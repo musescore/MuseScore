@@ -139,6 +139,9 @@ void TextLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData*
         ldata->setShape(shape.transform(t));
         ldata->highResShape.mut_value().transform(t);
     }
+
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
 }
 
 void TextLayout::layoutBaseTextBase1(TextBase* item, const LayoutContext&)

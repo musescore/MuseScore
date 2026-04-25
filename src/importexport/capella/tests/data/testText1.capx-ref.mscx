@@ -55,10 +55,12 @@
             </TimeSig>
           <StaffText>
             <eid>G_G</eid>
+            <offset x="0" y="0.024053"/>
             <text>Test text 1</text>
             </StaffText>
           <StaffText>
             <eid>H_H</eid>
+            <offset x="0" y="0.024053"/>
             <text>This is the subtitle</text>
             </StaffText>
           <Chord>
@@ -208,6 +210,7 @@
             </Chord>
           <StaffText>
             <eid>o_o</eid>
+            <offset x="0" y="0.024053"/>
             <text>MuseScore testfile<br/>Leon Vinken</text>
             </StaffText>
           <Chord>

@@ -1974,10 +1974,6 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     ldata->setIsSkipDraw(false);
     ldata->setPos(PointF());
 
-    if (item->isStyled(Pid::OFFSET)) {
-        const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-
     double x = 0.0;
     double y = item->placeAbove() ? 0.0 : item->staff()->staffHeight(item->tick());
     const Segment* s = item->segment();
@@ -2014,23 +2010,10 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
     ldata->setShape(Shape(item->symBbox(item->symId()), item));
     x -= 0.5 * ldata->bbox().width();
 
-    if (item->isStyled(Pid::OFFSET)) {
-        y += item->offset().y();
-    }
-    Shape staffShape = item->segment()->staffShape(item->staffIdx());
-    staffShape.removeTypes({ ElementType::FERMATA });
-    if (item->placeAbove()) {
-        double minDist = ldata->shape().minVerticalDistance(staffShape) + item->absoluteFromSpatium(item->minDistance());
-        y = std::min(y, -minDist);
-    } else {
-        double minDist = staffShape.minVerticalDistance(ldata->shape()) + item->absoluteFromSpatium(item->minDistance());
-        y = std::max(y, minDist);
-    }
-    if (item->isStyled(Pid::OFFSET)) {
-        y -= item->offset().y();
-    }
-
     ldata->setPos(x, y);
+
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
 
     if (item->autoplace()) {
         const Segment* s2 = item->segment();
@@ -2854,6 +2837,7 @@ void TLayout::manageTempoChangeSnapping(GradualTempoChangeSegment* item, LayoutC
 void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
+    ldata->setPosY(0.0);
 
     auto extendLineToSnappedItemAfter = [item](EngravingItem* itemAfter) {
         assert(itemAfter->isGradualTempoChangeSegment() || itemAfter->isTempoText());
@@ -2891,10 +2875,6 @@ void TLayout::doLayoutGradualTempoChangeSegment(GradualTempoChangeSegment* item,
     }
 
     layoutTextLineBaseSegment(item, ctx);
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
@@ -3098,10 +3078,6 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         item->setPos(PointF());
         item->roffset() = PointF();
         return;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->hairpin()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     // rebase vertical offset on drag
@@ -4401,9 +4377,6 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
     PedalSegment::LayoutData* ldata = item->mutldata();
 
     layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
 
     Text* endText = item->endText();
     if (endText && !endText->empty() && ldata->npoints > 0) { // Rosette
@@ -5750,9 +5723,6 @@ void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     TextLineSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
@@ -5927,6 +5897,9 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->text()->setSize(item->text()->size() * item->defaultSpatium() / item->spatium());
         item->endText()->setSize(item->endText()->size() * item->defaultSpatium() / item->spatium());
     }
+
+    PointF defaultPos = tl->defaultPos();
+    ldata->move(defaultPos);
 
     PointF pp1;
     PointF pp2(item->pos2());
@@ -6404,6 +6377,9 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     const double yOff = item->staffOffsetY();
     ldata->moveY(yOff);
 
+    PointF defaultPos = item->defaultPos();
+    ldata->move(defaultPos);
+
     bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
     Ornament* ornament = trill->ornament();
     if (ornament) {
@@ -6464,10 +6440,6 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
                              SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
         }
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = trill->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
@@ -6571,10 +6543,6 @@ void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
         break;
     default:
         break;
-    }
-
-    if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());

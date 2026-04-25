@@ -440,8 +440,8 @@
               <eid>s_s</eid>
               <Fingering>
                 <eid>t_t</eid>
-                <style>guitar_fingering_rh</style>
                 <offset x="0.658281" y="-1.50188"/>
+                <style>guitar_fingering_rh</style>
                 <text>p</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -463,8 +463,6 @@
         <voice>
           <Expression>
             <eid>x_x</eid>
-            <snapToDynamics>0</snapToDynamics>
-            <offset x="0" y="3.5"/>
             <text>technique</text>
             </Expression>
           <Rest>
@@ -484,8 +482,8 @@
               <eid>1_1</eid>
               <Fingering>
                 <eid>2_2</eid>
-                <style>string_number</style>
                 <offset x="0.658281" y="-6.50188"/>
+                <style>string_number</style>
                 <text>0</text>
                 </Fingering>
               <Fingering>

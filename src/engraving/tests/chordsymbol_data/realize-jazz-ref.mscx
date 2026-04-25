@@ -171,9 +171,9 @@
               <root>12</root>
               </harmonyInfo>
             <eid>Q_Q</eid>
+            <offset x="1.66488" y="0.20811"/>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
             <harmonyVoicing>3</harmonyVoicing>
-            <offset x="1.66488" y="-2.29189"/>
             </Harmony>
           <Chord>
             <eid>R_R</eid>
@@ -468,9 +468,9 @@
               <root>14</root>
               </harmonyInfo>
             <eid>GB_GB</eid>
+            <offset x="-1.66488" y="0"/>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
             <harmonyVoicing>3</harmonyVoicing>
-            <offset x="-1.66488" y="-2.5"/>
             </Harmony>
           <Chord>
             <eid>HB_HB</eid>
@@ -956,9 +956,9 @@
               <root>15</root>
               </harmonyInfo>
             <eid>cC_cC</eid>
+            <offset x="-2.70543" y="-0.10405"/>
             <harmonyVoiceLiteral>0</harmonyVoiceLiteral>
             <harmonyVoicing>3</harmonyVoicing>
-            <offset x="-2.70543" y="-2.60405"/>
             </Harmony>
           <Chord>
             <eid>dC_dC</eid>

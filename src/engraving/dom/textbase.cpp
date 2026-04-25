@@ -2834,41 +2834,19 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 //   offsetSid
 //---------------------------------------------------------
 
-Sid TextBase::offsetSid() const
+Sid TextBase::defaultPosSid() const
 {
-    TextStyleType defaultTid = propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>();
-    if (textStyleType() != defaultTid) {
-        return Sid::NOSTYLE;
+    const OffsetSids offsets = textStyle(textStyleType())->offsetSids;
+    return placeAbove() ? offsets.above : offsets.below;
+}
+
+PointF TextBase::defaultPos() const
+{
+    if (parent()->isTextLineBaseSegment()) {
+        return PointF();
     }
-    bool above = placeAbove();
-    switch (textStyleType()) {
-    case TextStyleType::DYNAMICS:
-        return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
-    case TextStyleType::EXPRESSION:
-        return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
-    case TextStyleType::LYRICS_ODD:
-    case TextStyleType::LYRICS_EVEN:
-        return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
-    case TextStyleType::REHEARSAL_MARK:
-        return above ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
-    case TextStyleType::STAFF:
-        return above ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
-    case TextStyleType::STICKING:
-        return above ? Sid::stickingPosAbove : Sid::stickingPosBelow;
-    case TextStyleType::SYSTEM:
-        return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
-    case TextStyleType::TEMPO:
-        return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
-    case TextStyleType::MEASURE_NUMBER:
-        return above ? Sid::measureNumberPosAbove : Sid::measureNumberPosBelow;
-    case TextStyleType::MEASURE_NUMBER_ALTERNATE:
-        return above ? Sid::measureNumberAlternatePosAbove : Sid::measureNumberAlternatePosBelow;
-    case TextStyleType::MMREST_RANGE:
-        return above ? Sid::mmRestRangePosAbove : Sid::mmRestRangePosBelow;
-    default:
-        break;
-    }
-    return Sid::NOSTYLE;
+
+    return EngravingItem::defaultPos();
 }
 
 //---------------------------------------------------------
@@ -2986,12 +2964,6 @@ void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const 
 
 Sid TextBase::getPropertyStyle(Pid id) const
 {
-    if (id == Pid::OFFSET) {
-        Sid sid = offsetSid();
-        if (sid != Sid::NOSTYLE) {
-            return sid;
-        }
-    }
     for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return p.sid;

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="5.00">
+  <programVersion>5.0.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>iNVTKizPfeL_Na8NCefMx8J</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <Style>
+      <pageWidth>3.85827</pageWidth>
+      <pageHeight>1.1811</pageHeight>
+      <pagePrintableWidth>3.70079</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787402</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787402</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.0787402</pageOddTopMargin>
+      <pageOddBottomMargin>0.0787402</pageOddBottomMargin>
+      <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
+    </Style>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2026-03-06</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+      </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+      </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+      </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+      </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+      </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+      </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+      </section>
+    </Order>
+    <Part id="1">
+      <Staff>
+        <eid>P/eFmb9lDvE_PeKX8Pf+TaP</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+        </StaffType>
+      </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+        </Channel>
+      </Instrument>
+    </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>CK6eXHEQhvI_iAHFpnzKtJK</eid>
+        <voice>
+          <KeySig>
+            <eid>/H6rX+zO+WO_mmLM/3DPzOI</eid>
+            <concertKey>0</concertKey>
+          </KeySig>
+          <TimeSig>
+            <eid>MTO6/QDXbwP_MIAdr9KMeJP</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+          </TimeSig>
+          <Expression>
+            <eid>jiez/v+5/XJ_1m9WGkuLIaN</eid>
+            <snapToDynamics>0</snapToDynamics>
+            <text>expression</text>
+          </Expression>
+          <Expression>
+            <direction>up</direction>
+            <eid>RTU3fI7NeoH_kfnUclpHawG</eid>
+            <snapToDynamics>0</snapToDynamics>
+            <text>expression</text>
+          </Expression>
+          <Rest>
+            <eid>LtyeAnb16mF_PGuIDPoe3nN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>FlL/NX00iiJ_byYc3TP9ItL</eid>
+        <voice>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <snapBefore>0</snapBefore>
+              <snapAfter>0</snapAfter>
+              <eid>Lz2zxh3ZHsE_PX3+/1LbHDM</eid>
+            </HairPin>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <direction>up</direction>
+              <snapBefore>0</snapBefore>
+              <snapAfter>0</snapAfter>
+              <eid>g6GkswO8l8K_Kro/I/eWfPB</eid>
+            </HairPin>
+            <next>
+              <location>
+                <measures>1</measures>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>w7D+1q5phFL_jTPvlHpVo5D</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>iB/GisSI5UE_i3pIjGJeXIB</eid>
+        <voice>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            <eid>2zNSZGrSVSM_//awvq7XUfL</eid>
+          </Dynamic>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            <direction>up</direction>
+            <eid>rpR/ZyRmfHD_CoP6G2gZR2D</eid>
+          </Dynamic>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+              </location>
+            </prev>
+          </Spanner>
+          <Rest>
+            <eid>1kCpOKMB0NI_GDnexI4eJqE</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+        </voice>
+      </Measure>
+      <Measure>
+        <eid>e1gSdK1yOxC_Nz9sGur42DO</eid>
+        <voice>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>2</subtype>
+              <eid>Ar83OOycfoO_1O7VFDxOCLK</eid>
+            </HairPin>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+              </location>
+            </next>
+          </Spanner>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>2</subtype>
+              <direction>up</direction>
+              <eid>RG9fa0lvNXD_iM2Nf4BMfoH</eid>
+            </HairPin>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+              </location>
+            </next>
+          </Spanner>
+          <Rest>
+            <eid>v0hbUkGHgyP_h8rldg8BXkE</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+          </Rest>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+              </location>
+            </prev>
+          </Spanner>
+        </voice>
+      </Measure>
+    </Staff>
+  </Score>
+</museScore>
