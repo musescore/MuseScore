@@ -728,8 +728,12 @@ void TDraw::draw(const BarLine* item, Painter* painter, const PaintOptions& opt)
     break;
 
     case BarLineType::BROKEN: {
-        double lw = item->style().styleAbsolute(Sid::barWidth) * item->mag();
-        painter->setPen(Pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap));
+        double lw = item->style().styleAbsolute(Sid::dashBarWidth) * item->mag();
+        double dl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarDash) * item->mag() / lw;
+        double gl = RealIsNull(lw) ? 0.0 : item->style().styleAbsolute(Sid::dashBarGap) * item->mag() / lw;
+        Pen pen(item->curColor(opt), lw, PenStyle::DashLine, PenCapStyle::FlatCap);
+        pen.setDashPattern({ dl, gl });
+        painter->setPen(pen);
         painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;

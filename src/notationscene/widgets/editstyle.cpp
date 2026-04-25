@@ -423,6 +423,9 @@ void EditStyle::classBegin()
 
         { StyleId::barWidth,                false, barWidth,                resetBarWidth },
         { StyleId::endBarWidth,             false, endBarWidth,             resetEndBarWidth },
+        { StyleId::dashBarWidth,            false, dashBarWidth,            resetDashBarWidth },
+        { StyleId::dashBarDash,             false, dashBarDash,             resetDashBarDash },
+        { StyleId::dashBarGap,              false, dashBarGap,              resetDashBarGap },
         { StyleId::endBarDistance,          false, endBarDistance,          resetEndBarDistance },
         { StyleId::doubleBarWidth,          false, doubleBarWidth,          resetDoubleBarWidth },
         { StyleId::doubleBarDistance,       false, doubleBarDistance,       resetDoubleBarDistance },
