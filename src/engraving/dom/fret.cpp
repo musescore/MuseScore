@@ -1072,6 +1072,36 @@ void FretDiagram::scanElements(std::function<void(EngravingItem*)> func)
 //   getProperty
 //---------------------------------------------------------
 
+void FretDiagram::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::EXCLUDE_VERTICAL_ALIGN) {
+        EngravingItem::undoChangeProperty(id, v, ps);
+
+        bool val = v.toBool();
+        Harmony* h = harmony();
+        if (h && h->excludeVerticalAlign() != val) {
+            h->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+        }
+        Segment* parentSeg = segment();
+        if (!parentSeg) {
+            return;
+        }
+
+        for (EngravingItem* item : parentSeg->annotations()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
+                continue;
+            }
+
+            if (item->excludeVerticalAlign() != val) {
+                item->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+            }
+        }
+        return;
+    }
+
+    EngravingItem::undoChangeProperty(id, v, ps);
+}
+
 PropertyValue FretDiagram::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -1128,26 +1158,7 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         setFingering(v.value<std::vector<int> >());
         break;
     case Pid::EXCLUDE_VERTICAL_ALIGN: {
-        bool val = v.toBool();
-        setExcludeVerticalAlign(val);
-        Harmony* h = harmony();
-        if (h && h->excludeVerticalAlign() != val) {
-            h->setExcludeVerticalAlign(val);
-        }
-        Segment* parentSeg = segment();
-        if (!parentSeg) {
-            break;
-        }
-
-        for (EngravingItem* item : parentSeg->annotations()) {
-            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
-                continue;
-            }
-
-            if (item->excludeVerticalAlign() != val) {
-                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
-            }
-        }
+        setExcludeVerticalAlign(v.toBool());
         break;
     }
     default:

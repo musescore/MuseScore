@@ -6733,6 +6733,23 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 }
             }
+
+            // Match vertical align settings of exiting items
+            if (ne->isHarmony() || ne->isFretDiagram()) {
+                bool exclude = ne->excludeVerticalAlign();
+                for (EngravingItem* item : seg->annotations()) {
+                    if ((!item->isFretDiagram() && !item->isHarmony())
+                        || item->staffIdx() != ne->staffIdx()) {
+                        continue;
+                    }
+
+                    exclude = item->excludeVerticalAlign();
+                    break;
+                }
+                if (exclude != ne->excludeVerticalAlign()) {
+                    ne->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, exclude);
+                }
+            }
         } else if (element->isSlur()
                    || element->isHairpin()
                    || element->isOttava()

@@ -700,10 +700,9 @@ void Segment::add(EngravingItem* el)
         setEmpty(false);
         break;
 
+    //fallthrough
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
-    //fallthrough
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
