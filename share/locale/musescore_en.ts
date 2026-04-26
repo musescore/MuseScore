@@ -5913,21 +5913,6 @@ followed by dashes</translation>
         <translation type="unfinished">Redo ‘%1’</translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="39"/>
-        <source>1. Worker mode</source>
-        <translation type="unfinished">1. Worker mode</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="45"/>
-        <source>2. Driver mode</source>
-        <translation type="unfinished">2. Driver mode</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/audio/main/internal/audiouiactions.cpp" line="51"/>
-        <source>3. Worker RPC mode</source>
-        <translation type="unfinished">3. Worker RPC mode</translation>
-    </message>
-    <message>
         <location filename="../../src/framework/testflow/internal/testflowactions.cpp" line="37"/>
         <source>Show &amp;scripts…</source>
         <translation type="unfinished">Show &amp;scripts…</translation>
@@ -6041,21 +6026,6 @@ followed by dashes</translation>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="97"/>
         <source>Show actions list</source>
         <translation type="unfinished">Show actions list</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="102"/>
-        <source>Test query action</source>
-        <translation type="unfinished">Test query action</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="107"/>
-        <source>Test query action with params 1</source>
-        <translation type="unfinished">Test query action with params 1</translation>
-    </message>
-    <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="112"/>
-        <source>Test query action with params 2</source>
-        <translation type="unfinished">Test query action with params 2</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
@@ -10498,42 +10468,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">&amp;MuseSampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="566"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="565"/>
         <source>A&amp;ctions</source>
         <translation type="unfinished">A&amp;ctions</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="567"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="566"/>
         <source>&amp;Accessibility</source>
         <translation type="unfinished">&amp;Accessibility</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="568"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="567"/>
         <source>&amp;Engraving</source>
         <translation type="unfinished">&amp;Engraving</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="569"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="568"/>
         <source>E&amp;xtensions</source>
         <translation type="unfinished">E&amp;xtensions</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="569"/>
         <source>&amp;Testflow</source>
         <translation type="unfinished">&amp;Testflow</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="573"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="572"/>
         <source>&amp;VST</source>
         <translation type="unfinished">&amp;VST</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="576"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="575"/>
         <source>&amp;Audio</source>
         <translation type="unfinished">&amp;Audio</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="580"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="579"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
         <translation type="unfinished">&amp;Diagnostics</translation>
@@ -22580,12 +22550,12 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Checking for updates…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="519"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="520"/>
         <source>Downloading %1…</source>
         <translation type="unfinished">Downloading %1…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="534"/>
+        <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="535"/>
         <source>Unpacking %1…</source>
         <translation type="unfinished">Unpacking %1…</translation>
     </message>
@@ -23837,7 +23807,7 @@ Fret %1 on strings %2</translation>
 <context>
     <name>iex_audio</name>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="128"/>
+        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="131"/>
         <source>Processing online sounds…</source>
         <translation type="unfinished">Processing online sounds…</translation>
     </message>
@@ -29121,41 +29091,41 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Zoom menu</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="704"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="703"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
         <translation type="unfinished">Insert &amp;after selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="703"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="702"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="368"/>
         <source>Insert &amp;before selection…</source>
         <translation type="unfinished">Insert &amp;before selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="700"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="699"/>
         <source>&amp;Insert one measure before selection</source>
         <translation type="unfinished">&amp;Insert one measure before selection</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="701"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="700"/>
         <source>Insert &amp;one measure at end of score</source>
         <translation type="unfinished">Insert &amp;one measure at end of score</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="706"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="705"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="370"/>
         <source>Insert at &amp;start of score…</source>
         <translation type="unfinished">Insert at &amp;start of score…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="707"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="706"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
         <translation type="unfinished">Insert at &amp;end of score…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="721"/>
+        <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="720"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="685"/>
         <source>Insert at end of score</source>
         <translation type="unfinished">Insert at end of score</translation>
@@ -34998,28 +34968,28 @@ failed.</translation>
         <translation type="unfinished">Get more sounds</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="392"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="393"/>
         <source>SoundFonts</source>
         <translation type="unfinished">SoundFonts</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="435"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="436"/>
         <source>Bank %1, preset %2</source>
         <translation type="unfinished">Bank %1, preset %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="490"/>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="555"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="491"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="556"/>
         <source>Choose automatically</source>
         <translation type="unfinished">Choose automatically</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="536"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="537"/>
         <source>Preset %1</source>
         <translation type="unfinished">Preset %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="546"/>
+        <location filename="../../src/playback/qml/MuseScore/Playback/inputresourceitem.cpp" line="547"/>
         <source>Bank %1</source>
         <translation type="unfinished">Bank %1</translation>
     </message>
@@ -37776,12 +37746,12 @@ failed.</translation>
         <translation type="unfinished">Share</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="994"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="964"/>
         <source>File “%1” could not be opened for validation. %2</source>
         <translation type="unfinished">File “%1” could not be opened for validation. %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1005"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="975"/>
         <source>“%1” is corrupted or damaged.</source>
         <translation type="unfinished">“%1” is corrupted or damaged.</translation>
     </message>
@@ -39737,7 +39707,7 @@ failed.</translation>
         <translation type="unfinished">Toggle ‘Apply sound flag to all staves’</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1266"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="1236"/>
         <source>Edit project properties</source>
         <translation type="unfinished">Edit project properties</translation>
     </message>
