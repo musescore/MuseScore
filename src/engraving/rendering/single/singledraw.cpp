@@ -506,7 +506,7 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
 
-    Color c(negativeFret ? config->criticalColor() : item->curColor(opt));
+    Color c(negativeFret && !opt.isPrinting ? config->criticalColor() : item->curColor(opt));
     painter->setPen(c);
     bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
 
