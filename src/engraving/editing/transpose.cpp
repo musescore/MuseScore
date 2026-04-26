@@ -538,6 +538,10 @@ Interval Transpose::keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 bool Transpose::transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
                               Interval interval)
 {
+    if (note->deadNote()) {
+        return true;
+    }
+
     if (mode == TransposeMode::DIATONICALLY) {
         return note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
     }
