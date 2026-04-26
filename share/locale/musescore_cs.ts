@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="57"/>
         <source>Spacing</source>
-        <translation>Rozmístění</translation>
+        <translation>Rozestup</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="62"/>
@@ -1650,7 +1650,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="577"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Zobrazit svorky, když je jen 1 osnova</translation>
+        <translation>Zobrazit svorky, když je jen jedna osnova</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="587"/>
@@ -1665,7 +1665,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="600"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation>Skrýt název nástroje, když je jen 1</translation>
+        <translation>Skrýt, když je jen jeden nástroj</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="609"/>
@@ -1753,7 +1753,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="969"/>
         <source>Vertical spacing</source>
-        <translation>Svislé rozmístění</translation>
+        <translation>Svislý rozestup</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="998"/>
@@ -1922,7 +1922,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2023"/>
         <source>Horizontal spacing</source>
-        <translation>Vodorovné rozmístění</translation>
+        <translation>Vodorovný rozestup</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2041"/>
@@ -2087,7 +2087,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2702"/>
         <source>System density:</source>
-        <translation>Hustota notového systému:</translation>
+        <translation>Hustota notového zápisu:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2709"/>
@@ -2097,7 +2097,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2722"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>Obnovit rozmístění</translation>
+        <translation>Obnovit rozestupy</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2732"/>
@@ -2132,7 +2132,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2889"/>
         <source>Spacing ratio:</source>
-        <translation>Poměr rozmístění taktů:</translation>
+        <translation>Poměr rozestupu:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="2899"/>
@@ -9442,7 +9442,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
         <source>Pause playback</source>
-        <translation type="unfinished"/>
+        <translation>Pozastavit přehrávání</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="64"/>
@@ -9658,7 +9658,7 @@ u nepravidelných rytmických skupin</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="83"/>
         <source>Save to cloud</source>
-        <translation>Ukládání na server</translation>
+        <translation>Ukládání do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
@@ -10459,7 +10459,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="33"/>
         <source>Enjoy free cloud storage</source>
-        <translation>Využívejte bezplatné serverové úložiště</translation>
+        <translation>Využívejte bezplatný cloud</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
@@ -11407,7 +11407,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="210"/>
         <source>Toggle partial tie</source>
-        <translation>Přepnout otevřenou ligaturu</translation>
+        <translation>Přepnout rozdělenou ligaturu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="3869"/>
@@ -11433,12 +11433,12 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8012"/>
         <source>Reset incoming partial slur</source>
-        <translation>Obnovit vlevo otevřenou ligaturu</translation>
+        <translation>Obnovit levou část rozdělené ligatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="8022"/>
         <source>Reset outgoing partial slur</source>
-        <translation>Obnovit vpravo otevřenou ligaturu</translation>
+        <translation>Obnovit pravou část rozdělené ligatury</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="66"/>
@@ -11663,12 +11663,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>partial tie segment(s)</source>
-        <translation><numerusform>otevřená ligatura</numerusform><numerusform>otevřené ligatury</numerusform><numerusform>otevřených ligatur</numerusform><numerusform>otevřené ligatury</numerusform></translation>
+        <translation><numerusform>segment rozdělené ligatury</numerusform><numerusform>segmenty rozdělené ligatury</numerusform><numerusform>segmentů rozdělené ligatury</numerusform><numerusform>segmentu rozdělené ligatury</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <source>Partial tie segment(s)</source>
-        <translation><numerusform>Otevřená ligatura</numerusform><numerusform>Otevřené ligatury</numerusform><numerusform>Otevřených ligatur</numerusform><numerusform>Otevřené ligatury</numerusform></translation>
+        <translation><numerusform>Segment rozdělené ligatury</numerusform><numerusform>Segmenty rozdělené ligatury</numerusform><numerusform>Segmentů rozdělené ligatury</numerusform><numerusform>Segmentu rozdělené ligatury</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -11903,12 +11903,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>partial tie(s)</source>
-        <translation><numerusform>otevřená ligatura</numerusform><numerusform>otevřené ligatury</numerusform><numerusform>otevřených ligatur</numerusform><numerusform>otevřené ligatury</numerusform></translation>
+        <translation><numerusform>rozdělená ligatura</numerusform><numerusform>rozdělené ligatury</numerusform><numerusform>rozdělených ligatur</numerusform><numerusform>rozdělené ligatury</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Partial tie(s)</source>
-        <translation><numerusform>Otevřená ligatura</numerusform><numerusform>Otevřené ligatury</numerusform><numerusform>Otevřených ligatur</numerusform><numerusform>Otevřené ligatury</numerusform></translation>
+        <translation><numerusform>Rozdělená ligatura</numerusform><numerusform>Rozdělené ligatury</numerusform><numerusform>Rozdělených ligatur</numerusform><numerusform>Rozdělené ligatury</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
@@ -12384,12 +12384,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="437"/>
         <source>partial extension line segment(s)</source>
-        <translation><numerusform>segment otevřené výdržové čáry</numerusform><numerusform>segmenty otevřené výdržové čáry</numerusform><numerusform>segmentů otevřené výdržové čáry</numerusform><numerusform>segmentu otevřené výdržové čáry</numerusform></translation>
+        <translation><numerusform>segment rozdělené výdržové čáry</numerusform><numerusform>segmenty rozdělené výdržové čáry</numerusform><numerusform>segmentů rozdělené výdržové čáry</numerusform><numerusform>segmentu rozdělené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="438"/>
         <source>Partial extension line segment(s)</source>
-        <translation><numerusform>Segment otevřené výdržové čáry</numerusform><numerusform>Segmenty otevřené výdržové čáry</numerusform><numerusform>Segmentů otevřené výdržové čáry</numerusform><numerusform>Segmentu otevřené výdržové čáry</numerusform></translation>
+        <translation><numerusform>Segment rozdělené výdržové čáry</numerusform><numerusform>Segmenty rozdělené výdržové čáry</numerusform><numerusform>Segmentů rozdělené výdržové čáry</numerusform><numerusform>Segmentu rozdělené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="440"/>
@@ -12735,12 +12735,12 @@ Pražec %1 na strunách %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="542"/>
         <source>partial extension line(s)</source>
-        <translation><numerusform>otevřená výdržová čára</numerusform><numerusform>otevřené výdržové čáry</numerusform><numerusform>otevřených výdržových čar</numerusform><numerusform>otevřené výdržové čáry</numerusform></translation>
+        <translation><numerusform>rozdělená výdržová čára</numerusform><numerusform>rozdělené výdržové čáry</numerusform><numerusform>rozdělených výdržových čar</numerusform><numerusform>rozdělené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="543"/>
         <source>Partial extension line(s)</source>
-        <translation><numerusform>Otevřená výdržová čára</numerusform><numerusform>Otevřené výdržové čáry</numerusform><numerusform>Otevřených výdržových čar</numerusform><numerusform>Otevřené výdržové čáry</numerusform></translation>
+        <translation><numerusform>Rozdělená výdržová čára</numerusform><numerusform>Rozdělené výdržové čáry</numerusform><numerusform>Rozdělených výdržových čar</numerusform><numerusform>Rozdělené výdržové čáry</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
@@ -13852,7 +13852,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/partialtiepopupmodel.cpp" line="218"/>
         <source>Remove partial tie</source>
-        <translation>Odstranit otevřenou ligaturu</translation>
+        <translation>Odstranit rozdělenou ligaturu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="778"/>
@@ -13862,7 +13862,7 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="779"/>
         <source>Long</source>
-        <translation>Čtyřcelá (longa)</translation>
+        <translation>Dlouhý</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.cpp" line="780"/>
@@ -18020,22 +18020,22 @@ Pražec %1 na strunách %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="508"/>
         <source>cutaway</source>
-        <translation type="unfinished"/>
+        <translation>cutaway</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="509"/>
         <source>hide system barline</source>
-        <translation type="unfinished"/>
+        <translation>hide system barline</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="510"/>
         <source>merge matching rests</source>
-        <translation type="unfinished"/>
+        <translation>merge matching rests</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="511"/>
         <source>reflect transposition</source>
-        <translation type="unfinished"/>
+        <translation>reflect transposition</translation>
     </message>
 </context>
 <context>
@@ -25305,7 +25305,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Zobrazit svorky, když je jen 1 osnova</translation>
+        <translation>Zobrazit svorky, když je jen jedna osnova</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="54"/>
@@ -25775,7 +25775,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/lyricslinesettingsmodel.cpp" line="38"/>
         <source>Partial lyrics line</source>
-        <translation>Část linky zpěvního textu</translation>
+        <translation>Rozdělená linka zpěvního textu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/notelinesettingsmodel.cpp" line="32"/>
@@ -25905,7 +25905,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="60"/>
         <source>Tie (partial)</source>
-        <translation>Ligatura (otevřená)</translation>
+        <translation>Ligatura (rozdělená)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/slurandtiesettingsmodel.cpp" line="65"/>
@@ -27660,12 +27660,12 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="239"/>
         <source>String spacing:</source>
-        <translation>Rozmístění strun:</translation>
+        <translation>Rozestup strun:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="246"/>
         <source>Fret spacing:</source>
-        <translation>Rozmístění pražců:</translation>
+        <translation>Rozestup pražců:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/GlissandoSection.qml" line="50"/>
@@ -29655,7 +29655,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="143"/>
         <source>Partial slurs across repeats and breaks:</source>
-        <translation>Otevřené ligatury přes repetice a zalomení:</translation>
+        <translation>Rozdělené ligatury přes repetice a zalomení:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="153"/>
@@ -29989,7 +29989,7 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="177"/>
         <source>Align</source>
-        <translation>Zarovnat:</translation>
+        <translation>Zarovnat</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="184"/>
@@ -30016,17 +30016,17 @@ Kromě toho nabízí Mastering MuseScore podpůrnou komunitu hudebníků s prost
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="235"/>
         <source>Above system</source>
-        <translation>Nad systém</translation>
+        <translation>Nad systémem</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="236"/>
         <source>Below system</source>
-        <translation>Pod systém</translation>
+        <translation>Pod systémem</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="237"/>
         <source>At system marking positions</source>
-        <translation>V polohách značek systému</translation>
+        <translation>V polohách systémových značek</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="238"/>
@@ -31055,13 +31055,13 @@ se nezdařil:</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1213"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1879"/>
         <source>Pedal (with ped and line)</source>
-        <translation>Pedál (s ped a čárou)</translation>
+        <translation>Pedál (Ped. a linka)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1220"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>Pedal (with ped and asterisk)</source>
-        <translation>Pedál (s ped a hvězdičkou)</translation>
+        <translation>Pedál (Ped. a hvězdička)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1228"/>
@@ -31689,7 +31689,7 @@ se nezdařil:</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="100"/>
         <source>Open only one palette at a time</source>
         <extracomment>This is the name of a setting that can be turned on or off. &quot;Open&quot; is a verb here.</extracomment>
-        <translation>Otevřít najednou jen 1 paletu</translation>
+        <translation>Otevřít najednou jen jednu paletu</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/palettespanelcontextmenumodel.cpp" line="132"/>
@@ -34287,12 +34287,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/SaveToCloudSection.qml" line="31"/>
         <source>Save to cloud</source>
-        <translation>Ukládání na server</translation>
+        <translation>Ukládání do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/SaveToCloudSection.qml" line="41"/>
         <source>Generate MP3 audio for private cloud scores</source>
-        <translation>Vytvořit MP3 nahrávku pro soukromé notové zápisy v serverovém úložišti</translation>
+        <translation>Vytvořit MP3 nahrávku pro soukromé notové zápisy v cloudu</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ScrollPagesSection.qml" line="32"/>
@@ -34657,7 +34657,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation>Notové zápisy se zde zobrazí, když uložíte soubor do serverového úložiště nebo notový zápis zveřejníte na &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
+        <translation>Notové zápisy se zde zobrazí, když uložíte soubor do cloudu nebo notový zápis zveřejníte na &lt;a href=&quot;%1&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="154"/>
@@ -34948,7 +34948,7 @@ se nezdařilo: %2</translation>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1523"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1615"/>
         <source>Your score cannot be uploaded to the cloud</source>
-        <translation>Váš notový zápis se nepodařilo nahrát do serverového úložiště</translation>
+        <translation>Váš notový zápis se nepodařilo nahrát do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1526"/>
@@ -35361,7 +35361,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="72"/>
         <source>Bit rate:</source>
-        <translation type="unfinished"/>
+        <translation>Vzorkovací kmitočet:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="83"/>
@@ -35776,7 +35776,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation type="unfinished"/>
+        <translation>K exportu do tohoto formátu je potřebná instalace FFmpeg. Tuto možnost můžete nastavit také v nabídce Předvolby &gt; Video.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -35786,7 +35786,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="77"/>
         <source>Choose FFmpeg library folder</source>
-        <translation type="unfinished"/>
+        <translation>Vyberte složku s knihovnou FFmpeg</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="80"/>
@@ -35801,7 +35801,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="140"/>
         <source>Each selected part will be exported as a separate video file.</source>
-        <translation type="unfinished"/>
+        <translation>Každý vybraný part bude exportován jako samostatný video soubor.</translation>
     </message>
 </context>
 <context>
@@ -35815,7 +35815,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Vezměte prosím na vědomí, že vzhled vašeho notového zápisu se změní kvůli vylepšením, která jsme provedli ve výchozím nastavení pro trámce, ligatury, legatové obloučky, systémové prvky a vodorovné rozmístění.</translation>
+        <translation>Vezměte prosím na vědomí, že vzhled vašeho notového zápisu se změní kvůli vylepšením, která jsme provedli ve výchozím nastavení pro trámce, ligatury, legatové obloučky, systémové prvky a vodorovné rozestupy.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
@@ -36250,7 +36250,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>To the cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>Do cloudu (zdarma)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
@@ -36260,12 +36260,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to the cloud</source>
-        <translation>Uložit do serverového úložiště</translation>
+        <translation>Uložit do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
         <source>Save to the cloud (free)</source>
-        <translation>Uložit do serverového úložiště (zdarma)</translation>
+        <translation>Uložit do cloudu (zdarma)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
@@ -36452,7 +36452,7 @@ se nezdařilo: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1026"/>
         <source>Log in to MuseScore.com to save this score to the cloud.</source>
-        <translation>Přihlaste se k musescore.com a uložte tento notový zápis do serverového úložiště.</translation>
+        <translation>Přihlaste se k musescore.com a uložte tento notový zápis do cloudu.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="236"/>
@@ -36501,7 +36501,7 @@ se nezdařilo: %2</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="411"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1471"/>
         <source>Unable to connect to the cloud</source>
-        <translation>Nelze se spojit se serverovým úložištěm</translation>
+        <translation>Nelze se připojit ke cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="425"/>
@@ -36516,7 +36516,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="536"/>
         <source>Your score could not be saved to the cloud</source>
-        <translation>Váš notový zápis se nepodařilo uložit do serverového úložiště</translation>
+        <translation>Váš notový zápis se nepodařilo uložit do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="539"/>
@@ -36526,7 +36526,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="540"/>
         <source>Your score cannot be saved to the cloud</source>
-        <translation>Váš notový zápis nelze uložit do serverového úložiště</translation>
+        <translation>Váš notový zápis nelze uložit do cloudu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
@@ -36579,7 +36579,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1396"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on MuseScore.com.</source>
-        <translation>Všechny uložené změny se nyní aktualizují do serverového úložiště. Tento soubor můžete spravovat ve správci notových zápisů na stránkách musescore.com.</translation>
+        <translation>Všechny uložené změny se nyní aktualizují v cloudu. Tento soubor můžete spravovat ve správci notových zápisů na stránkách MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1472"/>
@@ -38038,7 +38038,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6912"/>
         <source>Add partial lyrics dash</source>
-        <translation type="unfinished"/>
+        <translation>Vložit pomlčku pro rozdělený zpěvní text</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7116"/>

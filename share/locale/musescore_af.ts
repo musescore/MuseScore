@@ -35958,7 +35958,7 @@ oop te maak, het misluk: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="190"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>Wenk: jy kan ook mate byvoeg en verwyder na die skepping van jou partituur</translation>
+        <translation>Wenk: mate kan ook bygevoeg en verwyder word ná die partituur gemaak is</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>

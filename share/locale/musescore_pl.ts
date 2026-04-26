@@ -10048,7 +10048,7 @@ Polskie tłumaczenie MuseScore Studio: Grzegorz Pruchniakowski.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation>Prawa autorskie © 1999-2026 MuseScore Limited.
+        <translation>Prawa autorskie © 1999-2026 MuseScore Limited i Inni.
 Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License wersja 3&lt;/a&gt;.</translation>
     </message>
     <message>

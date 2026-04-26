@@ -915,7 +915,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="897"/>
         <source>Stems and beams</source>
-        <translation>Hastes e barras de ligação</translation>
+        <translation>Hastes e barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="947"/>
@@ -1129,7 +1129,7 @@
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="112"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="6004"/>
         <source>Beams</source>
-        <translation>Barras de ligação</translation>
+        <translation>Barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="117"/>
@@ -1152,7 +1152,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="132"/>
         <source>Slurs &amp; ties</source>
-        <translation>Ligaduras de expressão e de prolongamento</translation>
+        <translation>Ligaduras de expressão e de prolongação</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="137"/>
@@ -1270,7 +1270,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="237"/>
         <source>Fretboard diagrams</source>
-        <translation>Diagramas de escala</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="242"/>
@@ -3419,7 +3419,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9709"/>
         <source>Trill cue note</source>
-        <translation>Trinado de notas pequenas</translation>
+        <translation>Trinado de deixas</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9715"/>
@@ -3789,12 +3789,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12377"/>
         <source>Show ties and repeat fret marks</source>
-        <translation>Exibir ligaduras de prolongamento e marcas de repetição de casa</translation>
+        <translation>Exibir ligaduras de prolongação e marcas de repetição de casa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12384"/>
         <source>Show ties only</source>
-        <translation>Exibir apenas ligaduras de prolongamento</translation>
+        <translation>Exibir apenas ligaduras de prolongação</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12391"/>
@@ -3804,7 +3804,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12401"/>
         <source>Parentheses indicating ties</source>
-        <translation>Parênteses indicando ligadura de prolongamento</translation>
+        <translation>Parênteses indicando ligadura de prolongação</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12407"/>
@@ -5205,7 +5205,7 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols and fretboard diagrams</source>
-        <translation>Transpor cifras e diagramas escala.</translation>
+        <translation>Transpor cifras e diagramas de acorde.</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="523"/>
@@ -6518,12 +6518,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="444"/>
         <source>Add &amp;fretboard diagram</source>
-        <translation>Adicionar &amp;diagrama de escala</translation>
+        <translation>Adicionar &amp;diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="445"/>
         <source>Add fretboard diagram</source>
-        <translation>Adicionar diagrama de escala</translation>
+        <translation>Adicionar diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="451"/>
@@ -6964,12 +6964,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="751"/>
         <source>Insert &amp;fretboard diagram legend</source>
-        <translation>Inserir &amp;legenda do diagrama de escala</translation>
+        <translation>Inserir &amp;legenda do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="752"/>
         <source>Insert fretboard diagram legend</source>
-        <translation>Inserir legenda do diagrama de escala</translation>
+        <translation>Inserir legenda do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="758"/>
@@ -7004,12 +7004,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="779"/>
         <source>&amp;Fretboard diagram legend</source>
-        <translation>&amp;Legenda do diagrama de escala</translation>
+        <translation>&amp;Legenda do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="780"/>
         <source>Insert fretboard diagram legend at end of score</source>
-        <translation>Inserir legenda do diagrama de escala no final da partitura</translation>
+        <translation>Inserir legenda do diagrama de acorde no final da partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="786"/>
@@ -7112,24 +7112,24 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="863"/>
         <source>Break inner beams (8th)</source>
-        <translation>Quebrar barras de ligação internas (colcheia)</translation>
+        <translation>Quebrar barras internas (colcheia)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="864"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Quebrar barras de ligação internas (colheia)</translation>
+        <translation>Quebrar barras internas (colheia)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="870"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="871"/>
         <source>Break inner beams (16th)</source>
-        <translation>Quebrar barras de ligação internas (semicolcheia)</translation>
+        <translation>Quebrar barras internas (semicolcheia)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="877"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="878"/>
         <source>Join beams</source>
-        <translation>Unir barras de ligação</translation>
+        <translation>Unir barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="884"/>
@@ -7615,12 +7615,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1404"/>
         <source>Figured &amp;bass</source>
-        <translation>Baixo cifrado</translation>
+        <translation>&amp;Baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1405"/>
         <source>Add text: figured bass</source>
-        <translation>Adicionar texto: baixo cifrado</translation>
+        <translation>Adicionar texto: baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1410"/>
@@ -7765,12 +7765,12 @@ seguidas de traços</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1494"/>
         <source>Reset &amp;beams</source>
-        <translation>Redefinir &amp;barras de ligação</translation>
+        <translation>Redefinir &amp;barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1495"/>
         <source>Reset beams to default grouping</source>
-        <translation>Redefinir barras de ligação para o agrupamento padrão</translation>
+        <translation>Redefinir barras para o agrupamento padrão</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1500"/>
@@ -8071,55 +8071,55 @@ seguidas de traços</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1734"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: longa (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: longa (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1740"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: breve (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: breve (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1746"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1747"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: semibreve (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: semibreve (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1752"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1753"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: mínima (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: mínima (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1758"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1759"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: semínima (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: semínima (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1764"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1765"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: colcheia (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: colcheia (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1771"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: semicolcheia (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: semicolcheia (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1776"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1777"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: fusa (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: fusa (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1782"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1783"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation>Avançar cursor: semifusa (cifras/baixo cifrado)</translation>
+        <translation>Avançar cursor: semifusa (cifras/baixo contínuo)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1788"/>
@@ -8827,25 +8827,25 @@ seguidas de traços</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2245"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2322"/>
         <source>128th note</source>
-        <translation>Nota quartifusa</translation>
+        <translation>Nota 128º</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2246"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2323"/>
         <source>Set duration: 128th note</source>
-        <translation>Duração definida: nota quartifusa</translation>
+        <translation>Duração definida: nota 128º</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2252"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2329"/>
         <source>256th note</source>
-        <translation>Nota quinquefusa</translation>
+        <translation>Nota 256º</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2253"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2330"/>
         <source>Set duration: 256th note</source>
-        <translation>Duração definida: nota quinquefusa</translation>
+        <translation>Duração definida: nota 256º</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2259"/>
@@ -9146,13 +9146,13 @@ seguidas de traços</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2555"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2556"/>
         <source>Pre-bend</source>
-        <translation>Pre-bend</translation>
+        <translation>Pré-bend</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2562"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2563"/>
         <source>Grace note bend</source>
-        <translation>Bend de nota ornamental</translation>
+        <translation>Nota ornamental do bend</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2569"/>
@@ -10231,7 +10231,7 @@ Publicado debaixo da licença &lt;a href=&quot;%1&quot;&gt;GNU General Public Li
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="341"/>
         <source>&amp;Chords and fretboard diagrams</source>
-        <translation>A&amp;cordes e diagramas de escala</translation>
+        <translation>A&amp;cordes e diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="345"/>
@@ -10245,7 +10245,7 @@ Publicado debaixo da licença &lt;a href=&quot;%1&quot;&gt;GNU General Public Li
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="177"/>
         <source>Fretboard diagram legend</source>
-        <translation>Legenda do diagrama de escala</translation>
+        <translation>Legenda do diagrama de acorde</translation>
     </message>
 </context>
 <context>
@@ -11991,22 +11991,22 @@ Casa %1 nas cordas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="320"/>
         <source>figured bass</source>
-        <translation><numerusform>baixo cifrado</numerusform><numerusform>baixos cifrados</numerusform><numerusform>baixo(s) cifrado(s)</numerusform></translation>
+        <translation><numerusform>baixo contínuo</numerusform><numerusform>baixos contínuos</numerusform><numerusform>baixo(s) contínuo(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="321"/>
         <source>Figured bass</source>
-        <translation><numerusform>Baixo cifrado</numerusform><numerusform>Baixos cifrados</numerusform><numerusform>Baixo(s) cifrado(s)</numerusform></translation>
+        <translation><numerusform>Baixo contínuo</numerusform><numerusform>Baixos contínuo</numerusform><numerusform>Baixo(s) contínuo(s)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="323"/>
         <source>figured bass item(s)</source>
-        <translation><numerusform>item de baixo cifrado</numerusform><numerusform>itens de baixo cifrado</numerusform><numerusform>item(ns) de baixo cifrado</numerusform></translation>
+        <translation><numerusform>item de baixo cifrado</numerusform><numerusform>itens de baixo cifrado</numerusform><numerusform>item(ns) de baixo contínuo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="324"/>
         <source>Figured bass item(s)</source>
-        <translation><numerusform>Item de baixo cifrado</numerusform><numerusform>Itens de baixo cifrado</numerusform><numerusform>Item(ns) de baixo cifrado</numerusform></translation>
+        <translation><numerusform>Item de baixo cifrado</numerusform><numerusform>Itens de baixo cifrado</numerusform><numerusform>Item(ns) de baixo contínuo</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="326"/>
@@ -12182,12 +12182,12 @@ Casa %1 nas cordas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="377"/>
         <source>fretboard diagram(s)</source>
-        <translation><numerusform>diagrama de escala</numerusform><numerusform>diagramas de escala</numerusform><numerusform>diagrama(s) de escala</numerusform></translation>
+        <translation><numerusform>diagrama de acorde</numerusform><numerusform>diagramas de acorde</numerusform><numerusform>diagrama(s) de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="378"/>
         <source>Fretboard diagram(s)</source>
-        <translation><numerusform>Diagrama de escala</numerusform><numerusform>Diagramas de escala</numerusform><numerusform>Diagrama(s) de escala</numerusform></translation>
+        <translation><numerusform>Diagrama de acorde</numerusform><numerusform>Diagramas de acorde</numerusform><numerusform>Diagrama(s) de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="380"/>
@@ -12823,12 +12823,12 @@ Casa %1 nas cordas %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
         <source>fretboard diagram frame(s)</source>
-        <translation><numerusform>quadro de diagrama de escala</numerusform><numerusform>quadros de diagrama de escala</numerusform><numerusform>quadro(s) de diagrama de escala</numerusform></translation>
+        <translation><numerusform>quadro de diagrama de acorde</numerusform><numerusform>quadros de diagrama de acorde</numerusform><numerusform>quadro(s) de diagrama de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
         <source>Fretboard diagram frame(s)</source>
-        <translation><numerusform>Quadro de diagrama de escala</numerusform><numerusform>Quadros de diagrama de escala</numerusform><numerusform>Quadro(s) de diagrama de escala</numerusform></translation>
+        <translation><numerusform>Quadro de diagrama de escala</numerusform><numerusform>Quadros de diagrama de escala</numerusform><numerusform>Quadro(s) de diagrama de acorde</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="578"/>
@@ -13251,12 +13251,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1750"/>
         <source>Fretboard diagram fingering</source>
-        <translation>Digitação do diagrama de escala</translation>
+        <translation>Digitação do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1752"/>
         <source>Fretboard diagram fret number</source>
-        <translation>Número da casa do diagrama de escala</translation>
+        <translation>Número da casa do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1753"/>
@@ -13485,12 +13485,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
         <source>256th</source>
-        <translation>quinquefusa</translation>
+        <translation>256º</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
         <source>128th</source>
-        <translation>quartifusa</translation>
+        <translation>128º</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
@@ -16920,7 +16920,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="237"/>
         <source>ornament show cue note</source>
-        <translation>ornamento mostrar nota guia</translation>
+        <translation>exibir ornamento em deixas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="238"/>
@@ -17113,12 +17113,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="283"/>
         <source>fretboard diagram fingering visible</source>
-        <translation>dedilhado visível no diagrama de escala </translation>
+        <translation>dedilhado visível no diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="284"/>
         <source>fretboard diagram fingering</source>
-        <translation>dedilhado do diagrama de escala </translation>
+        <translation>dedilhado do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
@@ -19553,12 +19553,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4254"/>
         <source>Combining flag 5 (128th) below</source>
-        <translation>Combinar bandeirola 5 (quartifusa) abaixo</translation>
+        <translation>Combinar bandeirola 5 (128º) abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4255"/>
         <source>Combining flag 5 (128th) above</source>
-        <translation>Combinar bandeirola 5 (quartifusa) acima</translation>
+        <translation>Combinar bandeirola 5 (128º) acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4256"/>
@@ -19573,12 +19573,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4258"/>
         <source>Combining flag 6 (256th) below</source>
-        <translation>Combinar bandeirola 6 (quinquefusa) abaixo</translation>
+        <translation>Combinar bandeirola 6 (256º) abaixo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4259"/>
         <source>Combining flag 6 (256th) above</source>
-        <translation>Combinar bandeirola 6 (quinquefusa) acima</translation>
+        <translation>Combinar bandeirola 6 (256º) acima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4260"/>
@@ -19788,7 +19788,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4855"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
-        <translation>Nota quartifusa com haste para cima</translation>
+        <translation>Nota 128º com haste para cima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4857"/>
@@ -19798,7 +19798,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4859"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
-        <translation>Nota quinquefusa com haste para cima</translation>
+        <translation>Nota 256º com haste para cima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4861"/>
@@ -19968,7 +19968,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5721"/>
         <source>128th (semihemidemisemiquaver) rest</source>
-        <translation>Pausa de quartifusa</translation>
+        <translation>Pausa de 128º</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5722"/>
@@ -19978,7 +19978,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5723"/>
         <source>256th rest</source>
-        <translation>Pausa de quinquefusa</translation>
+        <translation>Pausa de 256º</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5724"/>
@@ -20168,12 +20168,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6138"/>
         <source>Combining flag 5 (128th) below straight</source>
-        <translation>Combinar bandeirola 5 (quartifusa) abaixo em linha reta</translation>
+        <translation>Combinar bandeirola 5 (128º) abaixo em linha reta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6139"/>
         <source>Combining flag 5 (128th) above straight</source>
-        <translation>Combinar bandeirola 5 (quartifusa) acima em linha reta</translation>
+        <translation>Combinar bandeirola 5 (128º) acima em linha reta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6140"/>
@@ -20188,12 +20188,12 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6142"/>
         <source>Combining flag 6 (256th) below straight</source>
-        <translation>Combinar bandeirola 6 (quinquefusa) abaixo em linha reta</translation>
+        <translation>Combinar bandeirola 6 (256º) abaixo em linha reta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6143"/>
         <source>Combining flag 6 (256th) above straight</source>
-        <translation>Combinar bandeirola 6 (quinquefusa) acima em linha reta</translation>
+        <translation>Combinar bandeirola 6 (256º) acima em linha reta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6144"/>
@@ -22768,7 +22768,7 @@ Casa %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="319"/>
         <source>128th</source>
-        <translation>quartifusa</translation>
+        <translation>128º</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="324"/>
@@ -23771,17 +23771,17 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (8th)</source>
-        <translation>Quebrar barras de ligação internas (colcheia)</translation>
+        <translation>Quebrar barras internas (colcheia)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
         <source>Break inner beams (16th)</source>
-        <translation>Quebrar barras de ligação internas (semicolcheia)</translation>
+        <translation>Quebrar barras internas (semicolcheia)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="66"/>
         <source>Join beams</source>
-        <translation>Unir barras de ligação</translation>
+        <translation>Unir barras</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="68"/>
@@ -23983,7 +23983,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="167"/>
         <source>Add fretboard diagram</source>
-        <translation>Adicionar diagrama de escala</translation>
+        <translation>Adicionar diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
@@ -24299,7 +24299,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="149"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
-        <translation>Você selecionou múltiplos diagramas de escala. Selecione um único diagrama para editar suas configurações.</translation>
+        <translation>Você selecionou múltiplos diagramas de acorde. Selecione um único diagrama para editar suas configurações.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="57"/>
@@ -24684,7 +24684,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="82"/>
         <source>Feathered beams</source>
-        <translation>Barras de ligação graduadas</translation>
+        <translation>Barras graduadas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/beams/BeamSettings.qml" line="96"/>
@@ -25017,7 +25017,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="197"/>
         <source>Cue note visibility</source>
-        <translation>Visibilidade da nota pequena</translation>
+        <translation>Visibilidade da deixa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="218"/>
@@ -25693,7 +25693,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/fretframesettingsproxymodel.cpp" line="35"/>
         <source>Fretboard diagram legend</source>
-        <translation>Legenda do diagrama de escala</translation>
+        <translation>Legenda do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/horizontalframesettingsmodel.cpp" line="35"/>
@@ -25713,7 +25713,7 @@ compasso anacrústico</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="36"/>
         <source>Fretboard diagram</source>
-        <translation>Diagrama de escala</translation>
+        <translation>Diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/images/imagesettingsmodel.cpp" line="35"/>
@@ -27394,7 +27394,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="127"/>
         <source>Flatten all beams</source>
-        <translation>Nivelar todas as barras de ligação</translation>
+        <translation>Nivelar todas as barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="138"/>
@@ -27404,7 +27404,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="151"/>
         <source>Draw inner stems through beams</source>
-        <translation>Desenhar hastes internas através de barras de ligação</translation>
+        <translation>Desenhar hastes internas através de barras</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BeamsPage.qml" line="152"/>
@@ -27466,12 +27466,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="654"/>
         <source>Alignment to fretboard diagram:</source>
-        <translation>Alinhamento com o diagrama de escala:</translation>
+        <translation>Alinhamento com o diagrama de acorde:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="690"/>
         <source>Min. space to fretboard diagram:</source>
-        <translation>Espaçamento min. para o diagrama de escala:</translation>
+        <translation>Espaçamento min. para o diagrama de acorde:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="729"/>
@@ -27512,7 +27512,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="48"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="85"/>
         <source>Fretboard diagrams</source>
-        <translation>Diagramas de escala</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/FretboardsPage.qml" line="56"/>
@@ -28154,12 +28154,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="178"/>
         <source>Some fretboard diagrams could not be transposed</source>
-        <translation type="unfinished"/>
+        <translation>Alguns diagramas de acorde não podem ser transpostos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="179"/>
         <source>Fretboard diagrams that could not be transposed have been left blank. You can undo this action if required.</source>
-        <translation type="unfinished"/>
+        <translation>Os diagramas de acorde que não puderam ser transpostos foram deixados em branco. Você pode desfazer essa ação, se necessário.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="183"/>
@@ -28575,12 +28575,12 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="594"/>
         <source>Chords and fretboard diagrams</source>
-        <translation>Acordes e diagramas de escala</translation>
+        <translation>Acordes e diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="742"/>
         <source>Fretboard diagram legend</source>
-        <translation>Legenda do diagrama de escala</translation>
+        <translation>Legenda do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/partlistmodel.cpp" line="129"/>
@@ -28695,7 +28695,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="71"/>
         <source>Ties</source>
-        <translation>Ligaduras de prolongamento</translation>
+        <translation>Ligaduras de prolongação</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="73"/>
@@ -29193,17 +29193,17 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="289"/>
         <source>Grace note bends/dives on tablature</source>
-        <translation>Bends/dives em notas ornamentais na tablatura</translation>
+        <translation>Ornamentos nos Bends/dives na tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="296"/>
         <source>Use cue sized fret numbers</source>
-        <translation type="unfinished"/>
+        <translation>Usar números de trastes de tamanho pequeno</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="307"/>
         <source>Align pre-bends and pre-dives</source>
-        <translation>Alinhar pre-bends e pre-dives</translation>
+        <translation>Alinhar pré-bends e pré-dives</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="314"/>
@@ -29311,7 +29311,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="625"/>
         <source>Vertically align chord symbols and fretboard diagrams on the same system</source>
-        <translation>Alinhar verticalmente as cifras e os diagramas escala no mesmo sistema</translation>
+        <translation>Alinhar verticalmente as cifras e os diagramas de acorde no mesmo sistema</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="667"/>
@@ -29668,7 +29668,7 @@ Além disso, o Mastering MuseScore conta com uma comunidade de músicos, com esp
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="38"/>
         <source>Ties</source>
-        <translation>Ligaduras de prolongamento</translation>
+        <translation>Ligaduras de prolongação</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="137"/>
@@ -31446,7 +31446,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1675"/>
         <source>Fretboard diagrams</source>
-        <translation>Diagramas de escala</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1688"/>
@@ -34027,12 +34027,12 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="35"/>
         <source>Fretboard diagrams</source>
-        <translation>Diagramas de escala</translation>
+        <translation>Diagramas de acorde</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation>Nunca preencher automaticamente os diagramas de escala ao alterar as cifras</translation>
+        <translation>Nunca preencher automaticamente os diagramas de acorde ao alterar as cifras</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
@@ -34537,12 +34537,12 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/importpreferencesmodel.cpp" line="103"/>
         <source>128th</source>
-        <translation>quartifusa</translation>
+        <translation>128º</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/importpreferencesmodel.cpp" line="104"/>
         <source>256th</source>
-        <translation>quinquefusa</translation>
+        <translation>256º</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/importpreferencesmodel.cpp" line="105"/>
@@ -35456,7 +35456,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="92"/>
         <source>Export beams</source>
-        <translation type="unfinished"/>
+        <translation>Exportar barras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
@@ -37289,7 +37289,7 @@ falhou: %2</translation>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="749"/>
         <location filename="../../src/engraving/dom/figuredbass.cpp" line="769"/>
         <source>Regenerate figured bass text</source>
-        <translation>Regenerar texto de baixo cifrado</translation>
+        <translation>Regenerar texto de baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="185"/>
@@ -37425,17 +37425,17 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/fretframe/fretframechordssettingsmodel.cpp" line="130"/>
         <source>Reset fretboard diagram legend chords list</source>
-        <translation>Redefinir legenda da lista de acordes do diagrama de escala</translation>
+        <translation>Redefinir legenda da lista de acordes do diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/fretcanvas.cpp" line="273"/>
         <source>Edit fretboard diagram</source>
-        <translation>Editar diagrama de escala</translation>
+        <translation>Editar diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/fretdiagrams/internal/fretcanvas.cpp" line="382"/>
         <source>Clear fretboard diagram</source>
-        <translation>Limpar diagrama de escala</translation>
+        <translation>Limpar diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="54"/>
@@ -37606,7 +37606,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3393"/>
         <source>Add chord symbol to fretboard diagram</source>
-        <translation>Adicionar cifra ao diagrama de escala</translation>
+        <translation>Adicionar cifra ao diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3961"/>
@@ -37700,7 +37700,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5167"/>
         <source>Add fretboard diagram legend</source>
-        <translation>Adicionar legenda do diagrama de escala</translation>
+        <translation>Adicionar legenda do diagrama de acorde</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5168"/>
@@ -37898,7 +37898,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6284"/>
         <source>Add figured bass</source>
-        <translation>Adicionar baixo cifrado</translation>
+        <translation>Adicionar baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6299"/>
@@ -38003,7 +38003,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6526"/>
         <source>Reset beams</source>
-        <translation>Redefinir barras de ligação</translation>
+        <translation>Redefinir barras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6543"/>
@@ -38056,12 +38056,12 @@ falhou: %2</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7363"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7409"/>
         <source>Navigate to next figured bass</source>
-        <translation>Navegar para próximo baixo cifrado</translation>
+        <translation>Navegar para próximo baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7457"/>
         <source>Navigate to figured bass</source>
-        <translation>Navegar para baixo figurado</translation>
+        <translation>Navegar para baixo contínuo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7755"/>
@@ -38084,7 +38084,7 @@ falhou: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="8039"/>
         <source>Add fretboard diagram</source>
-        <translation>Adicionar diagrama de escala</translation>
+        <translation>Adicionar diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="8180"/>

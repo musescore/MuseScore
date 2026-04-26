@@ -920,7 +920,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="947"/>
         <source>Repeat:</source>
-        <translation>Toista:</translation>
+        <translation>Kertaus:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="963"/>
@@ -2530,7 +2530,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4966"/>
         <source>Left (start) repeat signs</source>
-        <translation>Vasen (alku) kertausmerkit</translation>
+        <translation>Vasemmat kertausmerkit (alku)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4995"/>
@@ -3749,7 +3749,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12123"/>
         <source>Turns</source>
-        <translation>Korukuviot</translation>
+        <translation>Kaksoishele</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12151"/>
@@ -11872,12 +11872,12 @@ Otenauha %1 kielissä %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
         <source>measure repeat(s)</source>
-        <translation><numerusform>tahdin toisto(t)</numerusform><numerusform>tahdin toisto(t)</numerusform></translation>
+        <translation><numerusform>tahdin toisto(t)</numerusform><numerusform>tahdin kertaukset</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Measure repeat(s)</source>
-        <translation><numerusform>Tahdin toisto(t)</numerusform><numerusform>Tahdin toisto(t)</numerusform></translation>
+        <translation><numerusform>Tahdin toisto(t)</numerusform><numerusform>Tahdin kertaukset</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
@@ -13147,7 +13147,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>Repeat play count</source>
-        <translation>Toista toistokerrat</translation>
+        <translation>Kertauksen toistokerrat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
@@ -20431,7 +20431,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3170"/>
         <source>Prallprall line</source>
-        <translation>Jatkuva trilliviiva</translation>
+        <translation>Pitkä trilliviiva</translation>
     </message>
 </context>
 <context>
@@ -24584,7 +24584,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="72"/>
         <source>Text when continuing to a new system</source>
-        <translation>Teksti, kun jatkat uuteen järjestelmään</translation>
+        <translation>Teksti, kun jatkat uuteen viivastoryhmään</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="93"/>
@@ -25574,7 +25574,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/playback/internal/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Hengitykset ja tauot</translation>
+        <translation>Hengitykset ja paussit</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/general/playback/internal/fermataplaybackmodel.cpp" line="34"/>
@@ -27780,7 +27780,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="147"/>
         <source>Repeat play count text</source>
-        <translation>Toista toistokertojen teksti</translation>
+        <translation>Kertauksen toistokertojen teksti</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="174"/>
@@ -29582,7 +29582,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml" line="163"/>
         <source>Show for single repeats (e.g. “x2”)</source>
-        <translation>Näytä yksittäisille toistoille (esim. ”x2”)</translation>
+        <translation>Näytä yksittäisissä kertauksissa (esim. ”x2”)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/repeatplaycounttextmodel.cpp" line="45"/>
@@ -29659,7 +29659,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="153"/>
         <source>Follow contour of notes</source>
-        <translation>Myötäile nuottien kulkua</translation>
+        <translation>Seuraa nuottien ääriviivaa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="154"/>
@@ -31022,7 +31022,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="952"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Hengitykset ja tauot</translation>
+        <translation>Hengitykset ja paussit</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="999"/>
@@ -34175,7 +34175,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect</source>
-        <translation>Kun syötät dynamiikan ja hiuspinnien pitäisi vaikuttaa</translation>
+        <translation>Syötettynä dynamiikkamerkkien ja hiusneulojen tulisi vaikuttaa</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
