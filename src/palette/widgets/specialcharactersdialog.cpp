@@ -667,6 +667,9 @@ void SpecialCharactersDialog::populateCommon()
     m_pCommon->clear();
 
     auto paletteScore = paletteScoreProvider()->paletteScore();
+    if (!paletteScore) {
+        return;
+    }
 
     for (char32_t id : unicodeAccidentals) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(paletteScore->dummy());
@@ -701,6 +704,9 @@ void SpecialCharactersDialog::populateSmufl()
     std::vector<SymId> symIds = std::next(Smufl::smuflRanges().begin(), row)->second;
 
     auto paletteScore = paletteScoreProvider()->paletteScore();
+    if (!paletteScore) {
+        return;
+    }
     for (SymId symId : symIds) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(paletteScore->dummy());
         s->setSym(symId, paletteScore->engravingFont());
@@ -719,6 +725,9 @@ void SpecialCharactersDialog::populateUnicode()
     m_pUnicode->clear();
 
     auto paletteScore = paletteScoreProvider()->paletteScore();
+    if (!paletteScore) {
+        return;
+    }
     for (char32_t code = range.first; code <= range.last; ++code) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(paletteScore->dummy());
         fs->setCode(code);
