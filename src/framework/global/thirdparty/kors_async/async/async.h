@@ -99,27 +99,35 @@ private:
 
     QueueData* queueData(const std::thread::id& sendTh, const std::thread::id& receiveTh)
     {
-        std::scoped_lock lock(m_mutex);
-        for (QueueData* d : m_queues) {
-            if (d->sendTh == sendTh && d->receiveTh == receiveTh) {
-                return d;
+        // lookup
+        {
+            std::scoped_lock lock(m_mutex);
+            for (QueueData* d : m_queues) {
+                if (d->sendTh == sendTh && d->receiveTh == receiveTh) {
+                    return d;
+                }
             }
         }
 
-        QueueData* d = new QueueData();
-        d->sendTh = sendTh;
-        d->receiveTh = receiveTh;
-        m_queues.push_back(d);
+        // create new
+        QueueData* d = nullptr;
+        {
+            std::scoped_lock lock(m_mutex);
+            d = new QueueData();
+            d->sendTh = sendTh;
+            d->receiveTh = receiveTh;
+            m_queues.push_back(d);
 
-        d->queue.port2()->onMessage([d](const CallMsg& m) {
-            if (m.receiver) {
-                if (d->isConnected(m.receiver)) {
+            d->queue.port2()->onMessage([d](const CallMsg& m) {
+                if (m.receiver) {
+                    if (d->isConnected(m.receiver)) {
+                        m.func->call(nullptr);
+                    }
+                } else {
                     m.func->call(nullptr);
                 }
-            } else {
-                m.func->call(nullptr);
-            }
-        });
+            });
+        }
 
         QueuePool::instance()->regPort(sendTh, d->queue.port1());           // send
         QueuePool::instance()->regPort(receiveTh, d->queue.port2());        // receive
