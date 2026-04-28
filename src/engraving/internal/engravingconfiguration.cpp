@@ -498,3 +498,8 @@ void EngravingConfiguration::setMaxScaledImageDim(int maxDim)
 {
     m_maxScaledImageDim = maxDim;
 }
+
+bool EngravingConfiguration::keepDeadNotesUnchangedOnTranspose() const
+{
+    return false;
+}
