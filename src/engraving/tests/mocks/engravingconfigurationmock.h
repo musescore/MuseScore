@@ -110,5 +110,6 @@ public:
 
     MOCK_METHOD(int, maxScaledImageDim, (), (const, override));
     MOCK_METHOD(void, setMaxScaledImageDim, (int), (override));
+    MOCK_METHOD(bool, keepDeadNotesUnchangedOnTranspose, (), (const, override));
 };
 }
