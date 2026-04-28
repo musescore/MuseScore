@@ -147,5 +147,6 @@ public:
 
     virtual int maxScaledImageDim() const = 0;
     virtual void setMaxScaledImageDim(int maxDim) = 0;
+    virtual bool keepDeadNotesUnchangedOnTranspose() const = 0;
 };
 }
