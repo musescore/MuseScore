@@ -625,8 +625,6 @@ ControlElementPosition MeiImporter::findStart(const libmei::Element& meiElement,
         return pos;
     }
 
-    pos.measure = measure;
-
     if (startIdAtt->HasStartid()) {
         std::string startId = this->xmlIdFrom(startIdAtt->GetStartid());
         // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
@@ -636,11 +634,9 @@ ControlElementPosition MeiImporter::findStart(const libmei::Element& meiElement,
             return pos;
         }
         pos.chordRest = m_startIdChordRests.at(startId);
-        if (pos.chordRest) {
-            pos.measure = pos.chordRest->measure();
-            pos.tick = pos.chordRest->tick();
-            pos.track = pos.chordRest->track();
-        }
+        pos.measure = pos.chordRest->measure();
+        pos.tick = pos.chordRest->tick();
+        pos.track = pos.chordRest->track();
     } else {
         // No @startid, try a lookup based on the @tstamp. This is only for files not written via MuseScore
         const libmei::AttTimestampLog* timestampLogAtt = dynamic_cast<const libmei::AttTimestampLog*>(&meiElement);
@@ -658,6 +654,7 @@ ControlElementPosition MeiImporter::findStart(const libmei::Element& meiElement,
             staffIdentAtt->GetStaff().at(0)) : 0;
         const int layer = (layerIdentAtt && layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
 
+        pos.measure = measure;
         pos.tick = measure->tick() + tstampFraction;
         pos.track = staffIdx * VOICES + layer;
         pos.chordRest = measure->findChordRest(pos.tick, pos.track);
@@ -686,11 +683,9 @@ ControlElementPosition MeiImporter::findEnd(pugi::xml_node controlNode, Spanner*
             return pos;
         }
         pos.chordRest = m_endIdChordRests.at(endId);
-        if (pos.chordRest) {
-            pos.measure = pos.chordRest->measure();
-            pos.tick = pos.chordRest->tick();
-            pos.track = pos.chordRest->track();
-        }
+        pos.measure = pos.chordRest->measure();
+        pos.tick = pos.chordRest->tick();
+        pos.track = pos.chordRest->track();
     } else {
         // No @endid, try a lookup based on the @tstamp2. This is only for files not written via MuseScore
         libmei::InstTimestamp2Log timestamp2LogAtt;
