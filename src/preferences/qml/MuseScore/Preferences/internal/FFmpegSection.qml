@@ -50,7 +50,7 @@ BaseSection {
             Layout.fillWidth: true
             height: 24
 
-            spacing: 24
+            spacing: 8
 
             FilePicker {
                 id: ffmpegDirPicker
