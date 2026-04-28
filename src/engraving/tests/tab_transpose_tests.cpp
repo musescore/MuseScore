@@ -115,6 +115,7 @@ protected:
         if (m_mock) {
             ON_CALL(*m_mock, preferSameStringForTranspose()).WillByDefault(::testing::Return(false));
             ON_CALL(*m_mock, negativeFretsAllowed()).WillByDefault(::testing::Return(false));
+            ON_CALL(*m_mock, keepDeadNotesUnchangedOnTranspose()).WillByDefault(::testing::Return(false));
         }
     }
 
@@ -123,6 +124,12 @@ protected:
         ASSERT_NE(m_mock, nullptr);
         ON_CALL(*m_mock, preferSameStringForTranspose()).WillByDefault(::testing::Return(preferSameStringForTranspose));
         ON_CALL(*m_mock, negativeFretsAllowed()).WillByDefault(::testing::Return(negativeFretsAllowed));
+    }
+
+    void setKeepDeadNotes(bool keep)
+    {
+        ASSERT_NE(m_mock, nullptr);
+        ON_CALL(*m_mock, keepDeadNotesUnchangedOnTranspose()).WillByDefault(::testing::Return(keep));
     }
 
     ECMock* m_mock = nullptr;
@@ -196,11 +203,13 @@ static void assertDeadNotesUnchangedByTransposeImpl(MasterScore* score)
     }
 }
 
-// Dead notes must be completely ignored during transpose — their string,
-// fret, and pitch must not change. Verify for both the typical configuration
-// (flags false) and the alternate behavior (flags true).
+// When keepDeadNotesUnchangedOnTranspose is enabled, dead notes must be
+// completely ignored — their string, fret, and pitch must not change.
+// Verify across both fretting-flag combinations.
 TEST_F(Engraving_TabTransposeTests, deadNotesUnchangedByTranspose)
 {
+    setKeepDeadNotes(true);
+
     struct FlagCase {
         bool preferSameString;
         bool negativeFretsAllowed;
@@ -216,4 +225,43 @@ TEST_F(Engraving_TabTransposeTests, deadNotesUnchangedByTranspose)
         assertDeadNotesUnchangedByTransposeImpl(score);
         delete score;
     }
+}
+
+// With the default configuration (keepDeadNotesUnchangedOnTranspose disabled),
+// dead notes are transposed like any other note
+TEST_F(Engraving_TabTransposeTests, deadNotesTransposedWithNormalFlow)
+{
+    // keepDeadNotesUnchangedOnTranspose defaults to false — no explicit setup needed.
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "dead_notes.mscx");
+    ASSERT_TRUE(score);
+
+    auto notesBefore = collectTabNotes(score);
+    std::vector<int> deadPitchesBefore;
+    for (const auto& n : notesBefore) {
+        if (n.dead) {
+            deadPitchesBefore.push_back(n.pitch);
+        }
+    }
+    ASSERT_EQ(deadPitchesBefore.size(), 2u) << "fixture must contain 2 dead notes";
+
+    constexpr int kSemitones = 2;
+    transposeScore(score, kSemitones);
+
+    auto notesAfter = collectTabNotes(score);
+    std::vector<int> deadPitchesAfter;
+    for (const auto& n : notesAfter) {
+        if (n.dead) {
+            deadPitchesAfter.push_back(n.pitch);
+        }
+    }
+    ASSERT_EQ(deadPitchesAfter.size(), 2u);
+
+    std::sort(deadPitchesBefore.begin(), deadPitchesBefore.end());
+    std::sort(deadPitchesAfter.begin(),  deadPitchesAfter.end());
+    for (size_t i = 0; i < deadPitchesBefore.size(); ++i) {
+        EXPECT_EQ(deadPitchesAfter[i], deadPitchesBefore[i] + kSemitones)
+            << "dead note pitch should change with default (MuseScore) configuration";
+    }
+
+    delete score;
 }
