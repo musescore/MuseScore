@@ -316,6 +316,12 @@ static void doMigrateOffset500(EngravingItem* item)
         return;
     }
 
+    // In versions <5 any adjustment to offset meant we couldn't centre items between staves
+    item->setProperty(Pid::CENTER_BETWEEN_STAVES, AutoOnOff::OFF);
+    if (item->isStyled(Pid::CENTER_BETWEEN_STAVES)) {
+        item->setPropertyFlags(Pid::CENTER_BETWEEN_STAVES, PropertyFlags::UNSTYLED);
+    }
+
     item->setOffset(CompatUtils::getAdjustedOffset(item, item->offset()));
 }
 
