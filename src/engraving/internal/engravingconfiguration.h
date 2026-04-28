@@ -123,6 +123,7 @@ public:
     bool specificSlursLayoutWorkaround() const override;
     bool preferSameStringForTranspose() const override;
     void setPreferSameStringForTranspose(bool preferSameString) override;
+    bool keepDeadNotesUnchangedOnTranspose() const override;
 
     int maxScaledImageDim() const override;
     void setMaxScaledImageDim(int maxDim) override;
