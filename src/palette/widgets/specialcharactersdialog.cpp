@@ -720,7 +720,12 @@ void SpecialCharactersDialog::populateSmufl()
 
 void SpecialCharactersDialog::populateUnicode()
 {
-    int row = m_lwu->currentItem()->data(Qt::UserRole).toInt();
+    QListWidgetItem* current = m_lwu->currentItem();
+    if (!current) {
+        return;
+    }
+
+    int row = current->data(Qt::UserRole).toInt();
     const UnicodeRange& range = unicodeRanges[row];
     m_pUnicode->clear();
 
