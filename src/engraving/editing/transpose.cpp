@@ -538,7 +538,7 @@ Interval Transpose::keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 bool Transpose::transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
                               Interval interval)
 {
-    if (note->deadNote()) {
+    if (note->deadNote() && note->configuration()->keepDeadNotesUnchangedOnTranspose()) {
         return true;
     }
 
