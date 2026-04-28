@@ -488,3 +488,8 @@ bool EngravingConfiguration::preferSameStringForTranspose() const
 void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameString*/)
 {
 }
+
+bool EngravingConfiguration::keepDeadNotesUnchangedOnTranspose() const
+{
+    return false;
+}
