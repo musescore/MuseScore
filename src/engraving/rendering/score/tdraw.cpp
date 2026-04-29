@@ -132,7 +132,7 @@
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
-#include "dom/systemlock.h"
+#include "dom/rangelock.h"
 #include "dom/soundflag.h"
 
 #include "dom/tapping.h"

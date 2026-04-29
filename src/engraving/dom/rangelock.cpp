@@ -25,65 +25,65 @@
 #include "page.h"
 #include "score.h"
 #include "system.h"
-#include "systemlock.h"
+#include "rangelock.h"
 
 #include "log.h"
 
 using namespace muse::draw;
 
 namespace mu::engraving {
-bool SystemLock::contains(const MeasureBase* mb) const
+bool RangeLock::contains(const MeasureBase* mb) const
 {
     return m_startMB->isBeforeOrEqual(mb) && mb->isBeforeOrEqual(m_endMB);
 }
 
-void SystemLocks::add(const SystemLock* lock)
+void RangeLocks::add(const RangeLock* lock)
 {
-    m_systemLocks.emplace(lock->startMB(), lock);
+    m_rangeLocks.emplace(lock->startMB(), lock);
 
 #ifndef NDEBUG
     sanityCheck();
 #endif
 }
 
-void SystemLocks::remove(const SystemLock* lock)
+void RangeLocks::remove(const RangeLock* lock)
 {
-    m_systemLocks.erase(lock->startMB());
+    m_rangeLocks.erase(lock->startMB());
 
 #ifndef NDEBUG
     sanityCheck();
 #endif
 }
 
-const SystemLock* SystemLocks::lockStartingAt(const MeasureBase* mb) const
+const RangeLock* RangeLocks::lockStartingAt(const MeasureBase* mb) const
 {
-    auto iter = m_systemLocks.find(mb);
-    return iter != m_systemLocks.end() ? iter->second : nullptr;
+    auto iter = m_rangeLocks.find(mb);
+    return iter != m_rangeLocks.end() ? iter->second : nullptr;
 }
 
-const SystemLock* SystemLocks::lockContaining(const MeasureBase* mb) const
+const RangeLock* RangeLocks::lockContaining(const MeasureBase* mb) const
 {
-    if (m_systemLocks.empty()) {
+    if (m_rangeLocks.empty()) {
         return nullptr;
     }
 
-    auto iter = m_systemLocks.lower_bound(mb);
-    if (iter != m_systemLocks.begin()
-        && (iter == m_systemLocks.end() || mb->isBefore(iter->second->startMB()))) {
+    auto iter = m_rangeLocks.lower_bound(mb);
+    if (iter != m_rangeLocks.begin()
+        && (iter == m_rangeLocks.end() || mb->isBefore(iter->second->startMB()))) {
         --iter;
     }
 
-    const SystemLock* lock = iter->second;
+    const RangeLock* lock = iter->second;
 
     return lock->contains(mb) ? lock : nullptr;
 }
 
-std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const
+std::vector<const RangeLock*> RangeLocks::locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const
 {
-    std::vector<const SystemLock*> result;
+    std::vector<const RangeLock*> result;
 
-    for (auto& pair : m_systemLocks) {
-        const SystemLock* lock = pair.second;
+    for (auto& pair : m_rangeLocks) {
+        const RangeLock* lock = pair.second;
         if (start->isBeforeOrEqual(lock->startMB()) && lock->endMB()->isBeforeOrEqual(end)) {
             result.push_back(lock);
         }
@@ -95,33 +95,33 @@ std::vector<const SystemLock*> SystemLocks::locksContainedInRange(const MeasureB
     return result;
 }
 
-std::vector<const SystemLock*> SystemLocks::allLocks() const
+std::vector<const RangeLock*> RangeLocks::allLocks() const
 {
-    std::vector <const SystemLock* > locks;
-    locks.reserve(m_systemLocks.size());
-    for (auto& pair : m_systemLocks) {
+    std::vector <const RangeLock* > locks;
+    locks.reserve(m_rangeLocks.size());
+    for (auto& pair : m_rangeLocks) {
         locks.push_back(pair.second);
     }
     return locks;
 }
 
 #ifndef NDEBUG
-void SystemLocks::sanityCheck()
+void RangeLocks::sanityCheck()
 {
-    for (auto iter = m_systemLocks.begin(); iter != m_systemLocks.end();) {
+    for (auto iter = m_rangeLocks.begin(); iter != m_rangeLocks.end();) {
         auto curIter = iter;
         auto nextIter = ++iter;
-        if (nextIter == m_systemLocks.end()) {
+        if (nextIter == m_rangeLocks.end()) {
             break;
         }
 
         const MeasureBase* curMB = curIter->first;
-        const SystemLock* curSysLock = curIter->second;
+        const RangeLock* curSysLock = curIter->second;
 
         DO_ASSERT(curSysLock->startMB() == curMB);
 
         const MeasureBase* nextMB = nextIter->first;
-        const SystemLock* nextSysLock = nextIter->second;
+        const RangeLock* nextSysLock = nextIter->second;
 
         DO_ASSERT(nextSysLock->startMB() == nextMB);
         DO_ASSERT(curMB->isBefore(nextMB));
@@ -129,20 +129,20 @@ void SystemLocks::sanityCheck()
     }
 }
 
-void SystemLocks::dump()
+void RangeLocks::dump()
 {
-    for (auto& pair : m_systemLocks) {
-        const SystemLock* sl = pair.second;
+    for (auto& pair : m_rangeLocks) {
+        const RangeLock* sl = pair.second;
         const Measure* startMeasure = sl->startMB()->isMeasure() ? toMeasure(sl->startMB()) : sl->startMB()->prevMeasure();
         const Measure* endMeasure = sl->endMB()->isMeasure() ? toMeasure(sl->endMB()) : sl->endMB()->prevMeasure();
-        LOGD() << "SystemLock --- Start measure: " << (startMeasure ? startMeasure->measureNumber() : -1)
+        LOGD() << "RangeLock --- Start measure: " << (startMeasure ? startMeasure->measureNumber() : -1)
                << ", End Measure: " << (endMeasure ? endMeasure->measureNumber() : -1);
     }
 }
 
 #endif
 
-SystemLockIndicator::SystemLockIndicator(System* parent, const SystemLock* lock)
+SystemLockIndicator::SystemLockIndicator(System* parent, const RangeLock* lock)
     : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
 
 void SystemLockIndicator::setSelected(bool v)
