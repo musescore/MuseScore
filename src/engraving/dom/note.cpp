@@ -4178,7 +4178,7 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line, bool start)
 
 bool Note::negativeFretUsed() const
 {
-    return configuration()->negativeFretsAllowed() && m_fret < 0;
+    return configuration()->negativeFretsAllowed() && m_fret < 0 && m_string != INVALID_STRING_INDEX;
 }
 
 int Note::stringOrLine() const

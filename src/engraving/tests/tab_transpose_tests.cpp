@@ -135,6 +135,18 @@ protected:
     ECMock* m_mock = nullptr;
 };
 
+// Helpers for same-string / negative-fret tests
+
+static const TabNote* findNoteByString(const std::vector<TabNote>& notes, int string)
+{
+    for (const auto& n : notes) {
+        if (n.string == string) {
+            return &n;
+        }
+    }
+    return nullptr;
+}
+
 static void assertDeadNotesUnchangedByTransposeImpl(MasterScore* score)
 {
     ASSERT_TRUE(score);
@@ -261,6 +273,113 @@ TEST_F(Engraving_TabTransposeTests, deadNotesTransposedWithNormalFlow)
     for (size_t i = 0; i < deadPitchesBefore.size(); ++i) {
         EXPECT_EQ(deadPitchesAfter[i], deadPitchesBefore[i] + kSemitones)
             << "dead note pitch should change with default (MuseScore) configuration";
+    }
+
+    delete score;
+}
+
+// Not tested: capo STANDARD_ONLY/TAB_ONLY transpose mode interaction with
+// hasNonNegativeAlternative. That path requires a fixture with an active capo
+// whose fret offset shifts the pitch enough to change the convertPitch result,
+// plus mock support for CapoParams.transposeMode — disproportionate complexity
+// for a GuitarPro-specific edge case.
+
+// Transpose +1: notes on strings 2 and 3 (fret 5 each) should stay on their
+// original strings with fret bumped to 6.
+TEST_F(Engraving_TabTransposeTests, preferSameStringKeepsOriginalStrings)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "same_string.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, 1);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+
+    const TabNote* str2 = findNoteByString(notes, 2);
+    const TabNote* str3 = findNoteByString(notes, 3);
+
+    ASSERT_NE(str2, nullptr) << "note should remain on string 2";
+    EXPECT_EQ(str2->fret, 6);
+    ASSERT_NE(str3, nullptr) << "note should remain on string 3";
+    EXPECT_EQ(str3->fret, 6);
+
+    delete score;
+}
+
+// Transpose -1: string 3/fret 9 → fret 8 (valid), string 5/fret 0 → fret -1.
+// The note on string 3 must NOT be displaced to another string just because
+// its chord-mate landed on a negative fret.
+TEST_F(Engraving_TabTransposeTests, validFretNotDisplacedByNegativeFretInChord)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "valid_fret_not_displaced.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -1);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+
+    const TabNote* str3 = findNoteByString(notes, 3);
+    const TabNote* str5 = findNoteByString(notes, 5);
+
+    ASSERT_NE(str3, nullptr) << "note should remain on string 3";
+    EXPECT_EQ(str3->fret, 8);
+    ASSERT_NE(str5, nullptr) << "note should remain on string 5";
+    EXPECT_EQ(str5->fret, -1);
+
+    delete score;
+}
+
+// A note already at a negative fret must still have its fret updated on a
+// subsequent transpose; it must not be "frozen" at the old negative value.
+// Two consecutive -1 transposes: str5/fret0 → fret-1 → fret-2 (NOT stays at -1).
+TEST_F(Engraving_TabTransposeTests, negativeFretUpdatesOnFurtherTranspose)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "valid_fret_not_displaced.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -1);
+    transposeScore(score, -1);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+
+    const TabNote* str3 = findNoteByString(notes, 3);
+    const TabNote* str5 = findNoteByString(notes, 5);
+
+    ASSERT_NE(str3, nullptr) << "note should remain on string 3";
+    EXPECT_EQ(str3->fret, 7);
+    ASSERT_NE(str5, nullptr) << "note should remain on string 5";
+    EXPECT_EQ(str5->fret, -2);
+
+    delete score;
+}
+
+// Transpose -6: both notes land on negative frets on their original strings,
+// but valid (non-negative) frets exist on lower strings. The detection pass
+// resets the chord and fretChords places both notes with non-negative frets.
+TEST_F(Engraving_TabTransposeTests, noNegativeFretWhenLowerStringAvailable)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "same_string.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -6);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+    for (size_t i = 0; i < notes.size(); ++i) {
+        EXPECT_GE(notes[i].fret, 0)
+            << "note " << i << " got negative fret " << notes[i].fret
+            << " but lower strings are available";
     }
 
     delete score;
