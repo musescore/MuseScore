@@ -29,16 +29,16 @@ class Measure;
 class MeasureBase;
 class Score;
 class System;
-class SystemLock;
 class Transaction;
+class RangeLock;
 
 enum class LayoutBreakType : unsigned char;
 
 class EditSystemLocks
 {
 public:
-    static void undoAddSystemLock(Transaction& tx, Score* score, const SystemLock* lock);
-    static void undoRemoveSystemLock(Transaction& tx, const SystemLock* lock);
+    static void undoAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock);
+    static void undoRemoveSystemLock(Transaction& tx, Score* score, const RangeLock* lock);
     static void undoRemoveAllLocks(Transaction& tx, Score* score);
 
     static void toggleSystemLock(Transaction& tx, Score* score, const std::vector<System*>& systems);
@@ -53,7 +53,7 @@ public:
     static void applyLockToSelection(Transaction& tx, Score* score);
 
     static void removeSystemLocksOnAddLayoutBreak(Transaction& tx, Score* score, LayoutBreakType breakType, const MeasureBase* measure);
-    static void removeLayoutBreaksOnAddSystemLock(Transaction& tx, Score* score, const SystemLock* lock);
+    static void removeLayoutBreaksOnAddSystemLock(Transaction& tx, Score* score, const RangeLock* lock);
     static void removeSystemLocksOnRemoveMeasures(Transaction& tx, Score* score, const MeasureBase* m1, const MeasureBase* m2);
     static void removeSystemLocksContainingMMRests(Transaction& tx, Score* score);
     static void updateSystemLocksOnCreateMMRests(Transaction& tx, Score* score, Measure* first, Measure* last);

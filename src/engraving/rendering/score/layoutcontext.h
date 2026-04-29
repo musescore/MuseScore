@@ -63,7 +63,7 @@ class Score;
 class Spanner;
 class SpannerMap;
 class System;
-class SystemLocks;
+class RangeLocks;
 class Staff;
 class Measure;
 class ChordRest;
@@ -178,7 +178,7 @@ public:
 
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
 
-    const SystemLocks* systemLocks() const;
+    const RangeLocks* systemLocks() const;
 
     const PaddingTable& paddingTable() const;
 

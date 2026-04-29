@@ -38,7 +38,7 @@ class MeasureBase;
 class Page;
 class SpannerSegment;
 class StaffVisibilityIndicator;
-class SystemLock;
+class RangeLock;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -214,7 +214,7 @@ public:
     void setHasStaffVisibilityIndicator(bool has);
 
     bool isLocked() const;
-    const SystemLock* systemLock() const;
+    const RangeLock* systemLock() const;
 
     const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
     void addLockIndicator(SystemLockIndicator* sli);

@@ -638,20 +638,20 @@ bool MeasureBase::isBefore(const MeasureBase* other) const
     return false;
 }
 
-const SystemLock* MeasureBase::systemLock() const
+const RangeLock* MeasureBase::systemLock() const
 {
     return score()->systemLocks()->lockContaining(this);
 }
 
 bool MeasureBase::isStartOfSystemLock() const
 {
-    const SystemLock* lock = score()->systemLocks()->lockStartingAt(this);
+    const RangeLock* lock = score()->systemLocks()->lockStartingAt(this);
     return lock != nullptr;
 }
 
 bool MeasureBase::isEndOfSystemLock() const
 {
-    const SystemLock* lock = systemLock();
+    const RangeLock* lock = systemLock();
     return lock && lock->endMB() == this;
 }
 

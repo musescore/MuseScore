@@ -316,7 +316,7 @@ bool System::isLocked() const
     return m_ml.front()->isStartOfSystemLock();
 }
 
-const SystemLock* System::systemLock() const
+const RangeLock* System::systemLock() const
 {
     return m_ml.front()->systemLock();
 }

@@ -28,7 +28,7 @@
 namespace mu::engraving {
 class Instrument;
 class RootItem;
-class SystemLock;
+class RangeLock;
 class TremoloSingleChord;
 class TremoloTwoChord;
 
@@ -120,7 +120,7 @@ public:
 
     static StaffVisibilityIndicator* createStaffVisibilityIndicator(System* parent, bool isAccessibleEnabled = true);
 
-    static SystemLockIndicator* createSystemLockIndicator(System* parent, const SystemLock* lock, bool isAccessibleEnabled = true);
+    static SystemLockIndicator* createSystemLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
     static SystemLockIndicator* copySystemLockIndicator(const SystemLockIndicator& src);
 
     static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);

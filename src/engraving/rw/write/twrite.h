@@ -368,7 +368,7 @@ private:
     static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeSystemLock(const SystemLock* systemLock, XmlWriter& xml);
+    static void writeSystemLock(const RangeLock* systemLock, XmlWriter& xml);
 
     static muse::String lineBreakToTag(const String& str);
     static void writeProperties(const StaffLabel& item, XmlWriter& xml);

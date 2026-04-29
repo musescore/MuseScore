@@ -35,7 +35,7 @@ class LayoutBreak;
 class Measure;
 class Score;
 class System;
-class SystemLock;
+class RangeLock;
 
 //---------------------------------------------------------
 //   Repeat
@@ -160,7 +160,7 @@ public:
     bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
     bool isAfterOrEqual(const MeasureBase* other) const { return !isBefore(other); }
 
-    const SystemLock* systemLock() const;
+    const RangeLock* systemLock() const;
     bool isStartOfSystemLock() const;
     bool isEndOfSystemLock() const;
 

@@ -144,8 +144,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
-    const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
-                                   ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
+    const RangeLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
+                                  ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
 
     if (systemLock) {
         StaveSharingLayout::updateStaveSharingForFullSystem(systemLock->startMB(), systemLock->endMB(), ctx);
@@ -506,7 +506,7 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     assert(lockIndicators.size() <= 1);
     system->deleteLockIndicators();
 
-    const SystemLock* lock = system->systemLock();
+    const RangeLock* lock = system->systemLock();
     if (!lock) {
         return;
     }

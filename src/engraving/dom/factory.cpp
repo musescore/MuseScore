@@ -102,7 +102,7 @@
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "systemlock.h"
+#include "rangelock.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tapping.h"
@@ -747,7 +747,7 @@ CREATE_ITEM_IMPL(TimeTickAnchor, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(StaffVisibilityIndicator, System, isAccessibleEnabled)
 
-SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
 {
     SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
     sli->setAccessibleEnabled(isAccessibleEnabled);

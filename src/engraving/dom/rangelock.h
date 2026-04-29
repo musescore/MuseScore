@@ -28,10 +28,10 @@
 #include "measurebase.h"
 
 namespace mu::engraving {
-class SystemLock
+class RangeLock
 {
 public:
-    SystemLock(MeasureBase* start, MeasureBase* end)
+    RangeLock(MeasureBase* start, MeasureBase* end)
         : m_startMB(start), m_endMB(end)
     {
         assert(m_startMB->isMeasure() || m_startMB->isHBox());
@@ -49,19 +49,19 @@ private:
     MeasureBase* m_endMB;
 };
 
-class SystemLocks
+class RangeLocks
 {
 public:
-    void add(const SystemLock* lock);
-    void remove(const SystemLock* lock);
-    void removeLockStartingAt(const MeasureBase* mb) { m_systemLocks.erase(mb); }
-    void clear() { m_systemLocks.clear(); }
+    void add(const RangeLock* lock);
+    void remove(const RangeLock* lock);
+    void removeLockStartingAt(const MeasureBase* mb) { m_rangeLocks.erase(mb); }
+    void clear() { m_rangeLocks.clear(); }
 
-    const SystemLock* lockStartingAt(const MeasureBase* mb) const;
-    const SystemLock* lockContaining(const MeasureBase* mb) const;
-    std::vector<const SystemLock*> locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const;
+    const RangeLock* lockStartingAt(const MeasureBase* mb) const;
+    const RangeLock* lockContaining(const MeasureBase* mb) const;
+    std::vector<const RangeLock*> locksContainedInRange(const MeasureBase* start, const MeasureBase* end) const;
 
-    std::vector<const SystemLock*> allLocks() const;
+    std::vector<const RangeLock*> allLocks() const;
 
 private:
 #ifndef NDEBUG
@@ -77,7 +77,7 @@ private:
         }
     };
 
-    std::map<const MeasureBase*, const SystemLock*, Ordering> m_systemLocks;
+    std::map<const MeasureBase*, const RangeLock*, Ordering> m_rangeLocks;
 };
 
 class SystemLockIndicator : public IndicatorIcon
@@ -86,17 +86,17 @@ class SystemLockIndicator : public IndicatorIcon
     DECLARE_CLASSOF(ElementType::SYSTEM_LOCK_INDICATOR)
 
 public:
-    SystemLockIndicator(System* parent, const SystemLock* lock);
+    SystemLockIndicator(System* parent, const RangeLock* lock);
 
     void setSelected(bool v) override;
 
-    const SystemLock* systemLock() const { return m_systemLock; }
+    const RangeLock* systemLock() const { return m_systemLock; }
 
     char16_t iconCode() const override { return 0xF487; }
 
     String formatBarsAndBeats() const override;
 
 private:
-    const SystemLock* m_systemLock = nullptr;
+    const RangeLock* m_systemLock = nullptr;
 };
 } // namespace mu::engraving

@@ -3749,7 +3749,7 @@ void TLayout::layoutIndicatorIcon(const IndicatorIcon* item, IndicatorIcon::Layo
         endMB = sli->systemLock()->endMB();
         if (item->selected()) {
             // Draw the range rect...
-            const SystemLock* lock = sli->systemLock();
+            const RangeLock* lock = sli->systemLock();
 
             double xStart = lock->startMB()->x();
             double xEnd = lock->endMB()->x() + lock->endMB()->width();

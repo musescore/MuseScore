@@ -450,13 +450,13 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
 
 void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 {
-    std::vector<const SystemLock*> locks = score->systemLocks()->allLocks();
+    std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
     if (locks.empty()) {
         return;
     }
 
     xml.startElement("SystemLocks");
-    for (const SystemLock* sl : locks) {
+    for (const RangeLock* sl : locks) {
         writeSystemLock(sl, xml);
     }
     xml.endElement();
@@ -525,7 +525,7 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
     }
 }
 
-void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
+void TWrite::writeSystemLock(const RangeLock* systemLock, XmlWriter& xml)
 {
     xml.startElement("systemLock");
 
