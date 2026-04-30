@@ -42,6 +42,7 @@ class TDuration;
 
 namespace mu::iex::mnxio {
 // MNX values -> MuseScore values
+extern engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient);
 extern engraving::BarLineType toMuseScoreBarLineType(mnx::BarlineType blt);
 extern engraving::BeamMode toMuseScoreBeamMode(int lowestBeamStart);
 extern engraving::BracketType toMuseScoreBracketType(mnx::LayoutSymbol lys);
@@ -72,6 +73,7 @@ extern std::optional<mnx::JumpType> toMnxJumpType(engraving::JumpType jt);
 extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engraving::Interval& keyTransposition);
 extern mnx::LayoutSymbol toMnxLayoutSymbol(engraving::BracketType bracketType);
 extern mnx::LyricLineType toMnxLyricLineType(engraving::LyricsSyllabic ls);
+extern mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor);
 extern mnx::LineType toMnxSlurLineType(engraving::SlurStyleType sst);
 extern std::optional<mnx::NoteValue::Required> toMnxNoteValue(const engraving::TDuration& duration);
 extern std::optional<mnx::OttavaAmount> toMnxOttavaAmount(engraving::OttavaType ottavaType);

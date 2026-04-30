@@ -35,6 +35,7 @@
 #endif
 
 namespace mu::engraving {
+class Articulation;
 class Chord;
 class ChordRest;
 class EngravingObject;
@@ -123,6 +124,8 @@ private:
     void createDynamics(const mnx::part::Measure& mnxMeasure, engraving::Measure* measure);
 
     // markings
+    engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,
+                                             engraving::SymId symId, const char* name);
     void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
     void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr);
