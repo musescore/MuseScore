@@ -41,7 +41,7 @@ using namespace mu::palette;
 
 void SymbolDialog::createSymbolPalette()
 {
-    m_symbolsWidget = new PaletteWidget(this);
+    m_symbolsWidget = new PaletteWidget(this, true /*setIocContext*/);
     createSymbols();
 }
 

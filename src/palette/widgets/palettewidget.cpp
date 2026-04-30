@@ -74,10 +74,14 @@ using namespace mu::engraving;
 using namespace muse::draw;
 using namespace muse::actions;
 
-PaletteWidget::PaletteWidget(QWidget* parent)
+PaletteWidget::PaletteWidget(QWidget* parent, bool setIocContext)
     : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
-    m_palette = std::make_shared<Palette>(iocContext());
+    if (setIocContext) {
+        m_palette = std::make_shared<Palette>(iocContext());
+    } else {
+        m_palette = std::make_shared<Palette>(nullptr);
+    }
 
     //! NOTE: need for accessibility
     m_palette->setParent(this);
@@ -86,6 +90,11 @@ PaletteWidget::PaletteWidget(QWidget* parent)
 
     setReadOnly(false);
     setMouseTracking(true);
+}
+
+void PaletteWidget::setIocContext()
+{
+    m_palette->setContext(iocContext());
 }
 
 void PaletteWidget::setPalette(PalettePtr palette)
