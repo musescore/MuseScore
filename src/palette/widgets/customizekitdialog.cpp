@@ -154,8 +154,6 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
 
-    QTreeWidgetItem* itemToSelect = loadPitchesList();
-
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));
     }
@@ -259,9 +257,6 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     connect(customGbox, &QGroupBox::toggled, this, &CustomizeKitDialog::customGboxToggled);
     connect(quarterCmb, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::customQuarterChanged);
 
-    Q_ASSERT(pitchList->topLevelItemCount() > 0);
-    pitchList->setCurrentItem(itemToSelect ? itemToSelect : pitchList->topLevelItem(0));
-
     quarterCmb->setAccessibleName(quarterLbl->text() + " " + quarterCmb->currentText());
     halfCmb->setAccessibleName(halfLbl->text() + " " + halfCmb->currentText());
     wholeCmb->setAccessibleName(wholeLbl->text() + " " + wholeCmb->currentText());
@@ -279,6 +274,13 @@ void CustomizeKitDialog::componentComplete()
     }
 
     initDrumsetAndKey();
+
+    QTreeWidgetItem* itemToSelect = loadPitchesList();
+    itemToSelect = itemToSelect ? itemToSelect : pitchList->topLevelItem(0);
+
+    if (itemToSelect) {
+        pitchList->setCurrentItem(itemToSelect);
+    }
 }
 
 //---------------------------------------------------------
