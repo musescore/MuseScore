@@ -64,7 +64,7 @@ void MasterPalette::addPalette(PalettePtr palette)
 {
     TRACEFUNC;
 
-    PaletteWidget* widget = new PaletteWidget(this);
+    PaletteWidget* widget = new PaletteWidget(this, true /*setIocContext*/);
     widget->setReadOnly(true);
     widget->setPalette(palette);
 

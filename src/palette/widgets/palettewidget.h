@@ -82,7 +82,7 @@ class PaletteWidget : public QWidget, public muse::async::Asyncable, public muse
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 
 public:
-    PaletteWidget(QWidget* parent = nullptr);
+    PaletteWidget(QWidget* parent = nullptr, bool setIocContext = false);
 
     void setPalette(PalettePtr palette);
 
@@ -177,6 +177,8 @@ public:
 
     const PaintOptions& paintOptions() const;
     void setPaintOptions(const PaintOptions& options);
+
+    void setIocContext();
 
 signals:
     void changed();

@@ -59,6 +59,9 @@ private slots:
 
 public:
     NoteGroups(QWidget* parent);
+
+    void classBegin();
+
     void setSig(engraving::Fraction sig, const engraving::Groups&, const QString& zText, const QString& nText);
     engraving::Groups groups();
 };

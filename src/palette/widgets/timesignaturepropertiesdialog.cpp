@@ -56,8 +56,10 @@ TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
     delete m_editedTimeSig;
 }
 
-void TimeSignaturePropertiesDialog::componentComplete()
+void TimeSignaturePropertiesDialog::classBegin()
 {
+    groups->classBegin();
+
     QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
     int musicalFontSize = uiConfiguration()->musicalFontSize();
 
