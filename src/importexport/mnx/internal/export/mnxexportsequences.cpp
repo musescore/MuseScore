@@ -168,6 +168,51 @@ static void createLyrics(mnx::sequence::Event& mnxEvent, const ChordRest* cr,
 }
 
 //---------------------------------------------------------
+//   createMarking
+//   export a single marking from an Articulation instance
+//---------------------------------------------------------
+
+static std::optional<mnx::sequence::EventMarkingBase> createMarking(const Articulation* a,
+                                                                    mnx::sequence::EventMarkings mnxMarkings)
+{
+    const SymId sym = a->symId();
+
+    switch (sym) {
+    case SymId::articAccentAbove:
+    case SymId::articAccentBelow:
+        return mnxMarkings.ensure_accent();
+    case SymId::articSoftAccentAbove:
+    case SymId::articSoftAccentBelow:
+        return mnxMarkings.ensure_softAccent();
+    case SymId::articStaccatoAbove:
+    case SymId::articStaccatoBelow:
+        return mnxMarkings.ensure_staccato();
+    case SymId::articStaccatissimoAbove:
+    case SymId::articStaccatissimoBelow:
+        return mnxMarkings.ensure_staccatissimo();
+    case SymId::articStaccatissimoStrokeAbove:
+    case SymId::articStaccatissimoStrokeBelow:
+        return mnxMarkings.ensure_spiccato();
+    case SymId::articStressAbove:
+    case SymId::articStressBelow:
+        return mnxMarkings.ensure_stress();
+    case SymId::articUnstressAbove:
+    case SymId::articUnstressBelow:
+        return mnxMarkings.ensure_unstress();
+    case SymId::articMarcatoAbove:
+    case SymId::articMarcatoBelow:
+        return mnxMarkings.ensure_strongAccent();
+    case SymId::articTenutoAbove:
+    case SymId::articTenutoBelow:
+        return mnxMarkings.ensure_tenuto();
+    default:
+        break;
+    }
+
+    return std::nullopt;
+}
+
+//---------------------------------------------------------
 //   createMarkings
 //   export articulations, breath marks, single-note
 //   tremolo
@@ -179,80 +224,15 @@ static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         return;
     }
 
-    auto pointingFromAnchor = [](ArticulationAnchor anchor) -> std::optional<mnx::MarkingUpDown> {
-        switch (anchor) {
-        case ArticulationAnchor::TOP: return mnx::MarkingUpDown::Up;
-        case ArticulationAnchor::BOTTOM: return mnx::MarkingUpDown::Down;
-        case ArticulationAnchor::AUTO:
-        default:
-            return std::nullopt;
-        }
-    };
-
     if (cr->isChord()) {
         const Chord* chord = toChord(cr);
         for (Articulation* a : chord->articulations()) {
-            auto mnxMarkings = mnxEvent.ensure_markings();
             IF_ASSERT_FAILED(a) {
                 continue;
             }
-            const SymId sym = a->symId();
-            const auto pointing = pointingFromAnchor(a->anchor());
-
-            switch (sym) {
-            case SymId::articAccentAbove:
-            case SymId::articAccentBelow: {
-                auto acc = mnxMarkings.ensure_accent();
-                if (pointing) {
-                    acc.set_pointing(*pointing);
-                }
-                break;
-            }
-            case SymId::articSoftAccentAbove:
-            case SymId::articSoftAccentBelow: {
-                auto sa = mnxMarkings.ensure_softAccent();
-                break;
-            }
-            case SymId::articStaccatoAbove:
-            case SymId::articStaccatoBelow: {
-                auto st = mnxMarkings.ensure_staccato();
-                break;
-            }
-            case SymId::articStaccatissimoAbove:
-            case SymId::articStaccatissimoBelow: {
-                auto st = mnxMarkings.ensure_staccatissimo();
-                break;
-            }
-            case SymId::articStaccatissimoStrokeAbove:
-            case SymId::articStaccatissimoStrokeBelow: {
-                auto sp = mnxMarkings.ensure_spiccato();
-                break;
-            }
-            case SymId::articStressAbove:
-            case SymId::articStressBelow: {
-                auto st = mnxMarkings.ensure_stress();
-                break;
-            }
-            case SymId::articUnstressAbove:
-            case SymId::articUnstressBelow: {
-                auto un = mnxMarkings.ensure_unstress();
-                break;
-            }
-            case SymId::articMarcatoAbove:
-            case SymId::articMarcatoBelow: {
-                auto sa = mnxMarkings.ensure_strongAccent();
-                if (pointing) {
-                    sa.set_pointing(*pointing);
-                }
-                break;
-            }
-            case SymId::articTenutoAbove:
-            case SymId::articTenutoBelow: {
-                auto tn = mnxMarkings.ensure_tenuto();
-                break;
-            }
-            default:
-                break;
+            auto mnxMarkings = mnxEvent.ensure_markings();
+            if (auto marking = createMarking(a, mnxMarkings)) {
+                marking->set_or_clear_orient(toMnxOrientation(a->anchor()));
             }
         }
 
