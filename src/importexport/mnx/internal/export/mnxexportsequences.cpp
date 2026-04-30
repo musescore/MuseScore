@@ -181,6 +181,12 @@ static std::optional<mnx::sequence::EventMarkingBase> createMarking(const Articu
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
         return mnxMarkings.ensure_accent();
+    case SymId::stringsDownBow:
+    case SymId::stringsDownBowTurned:
+        return mnxMarkings.ensure_bowDirection(mnx::MarkingUpDown::Down);
+    case SymId::stringsUpBow:
+    case SymId::stringsUpBowTurned:
+        return mnxMarkings.ensure_bowDirection(mnx::MarkingUpDown::Up);
     case SymId::articSoftAccentAbove:
     case SymId::articSoftAccentBelow:
         return mnxMarkings.ensure_softAccent();
