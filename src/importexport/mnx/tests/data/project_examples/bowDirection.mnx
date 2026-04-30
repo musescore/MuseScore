@@ -1,0 +1,351 @@
+{
+    "global": {
+        "measures": [
+            {
+                "id": "m1",
+                "key": {
+                    "fifths": 0
+                },
+                "time": {
+                    "count": 4,
+                    "unit": 4
+                }
+            },
+            {
+                "id": "m2"
+            }
+        ]
+    },
+    "layouts": [
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "labelref": "name",
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S0-Sys1"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-ScrVw"
+        },
+        {
+            "content": [
+                {
+                    "sources": [
+                        {
+                            "part": "P1",
+                            "staff": 1
+                        }
+                    ],
+                    "type": "staff"
+                }
+            ],
+            "id": "S1-Sys1"
+        }
+    ],
+    "mnx": {
+        "_x": {
+            "schemaVersion": {
+                "value": "https://w3c-cg.github.io/mnx/docs/mnx-schema.json/version/15"
+            }
+        },
+        "support": {
+            "useBeams": true
+        },
+        "version": 15
+    },
+    "parts": [
+        {
+            "id": "P1",
+            "measures": [
+                {
+                    "clefs": [
+                        {
+                            "clef": {
+                                "glyph": "gClef",
+                                "sign": "G",
+                                "staffPosition": -2
+                            }
+                        }
+                    ],
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev125",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "down"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev125n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev137",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "up"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev137n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        },
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev135",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "down"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev135n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "F"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "half"
+                                    },
+                                    "id": "ev136",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "up"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev136n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "E"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "voice": "s1layer2"
+                        }
+                    ]
+                },
+                {
+                    "sequences": [
+                        {
+                            "content": [
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev127",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "down",
+                                            "orient": "above"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev127n1",
+                                            "pitch": {
+                                                "octave": 5,
+                                                "step": "C"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev128",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev129",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "up",
+                                            "orient": "above"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev129n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev130",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev131",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "down",
+                                            "orient": "below"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev131n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "A"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev132",
+                                    "rest": {}
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev133",
+                                    "markings": {
+                                        "bowDirection": {
+                                            "direction": "up",
+                                            "orient": "below"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev133n1",
+                                            "pitch": {
+                                                "octave": 4,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "duration": {
+                                        "base": "eighth"
+                                    },
+                                    "id": "ev134",
+                                    "rest": {}
+                                }
+                            ],
+                            "voice": "s1layer1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "scores": [
+        {
+            "layout": "S0-ScrVw",
+            "name": "SCORE",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S0-Sys1",
+                            "measure": "m1"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "layout": "S1-ScrVw",
+            "name": "Part 1",
+            "pages": [
+                {
+                    "systems": [
+                        {
+                            "layout": "S1-Sys1",
+                            "measure": "m1"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

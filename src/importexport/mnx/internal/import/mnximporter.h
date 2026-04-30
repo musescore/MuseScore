@@ -127,6 +127,7 @@ private:
     engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,
                                              engraving::SymId symId, const char* name);
     void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
+    void importBowDirection(const mnx::sequence::BowDirection& bowDirection, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
     void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr);
     void importSoftAccent(const mnx::sequence::SoftAccent& softAccent, engraving::ChordRest* cr);
