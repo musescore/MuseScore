@@ -40,6 +40,24 @@ using namespace mu::engraving;
 
 namespace mu::iex::mnxio {
 namespace {
+const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAnchorTable = {
+    { mnx::Orientation::Auto,       ArticulationAnchor::AUTO },
+    { mnx::Orientation::Below,      ArticulationAnchor::BOTTOM },
+    { mnx::Orientation::Above,      ArticulationAnchor::TOP },
+};
+} // namespace
+
+engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+{
+    return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
+}
+
+mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor)
+{
+    return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
+}
+
+namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
     { mnx::BarlineType::Dashed,     BarLineType::DASHED },
