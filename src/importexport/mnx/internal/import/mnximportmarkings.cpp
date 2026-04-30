@@ -78,6 +78,9 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
     if (const auto accent = markings.accent()) {
         importAccent(accent.value(), cr);
     }
+    if (const auto bowDirection = markings.bowDirection()) {
+        importBowDirection(bowDirection.value(), cr);
+    }
     if (const auto breath = markings.breath()) {
         importBreath(breath.value(), cr);
     }
@@ -118,6 +121,23 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
 void MnxImporter::importAccent(const mnx::sequence::Accent& accent, ChordRest* cr)
 {
     addArticulation(cr, accent, SymId::articAccentAbove, "accent");
+}
+
+//---------------------------------------------------------
+//   importBowDirection
+//   Import MNX bow direction marking.
+//---------------------------------------------------------
+
+void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirection, ChordRest* cr)
+{
+    switch (bowDirection.direction()) {
+    case mnx::MarkingUpDown::Down:
+        addArticulation(cr, bowDirection, SymId::stringsDownBow, "downBow");
+        break;
+    case mnx::MarkingUpDown::Up:
+        addArticulation(cr, bowDirection, SymId::stringsUpBow, "upBow");
+        break;
+    }
 }
 
 //---------------------------------------------------------
