@@ -40,12 +40,14 @@ class Chord;
 class ChordRest;
 class EngravingObject;
 class EngravingItem;
+class Fermata;
 class Instrument;
 class Measure;
 class Note;
 class Part;
 class Rest;
 class Score;
+class Segment;
 class Staff;
 class TremoloTwoChord;
 class Tuplet;
@@ -126,6 +128,7 @@ private:
     // markings
     engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,
                                              engraving::SymId symId, const char* name);
+    engraving::Fermata* addFermata(engraving::Segment* seg, const mnx::Fermata& mnxFermata);
     void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
     void importBowDirection(const mnx::sequence::BowDirection& bowDirection, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
@@ -139,6 +142,7 @@ private:
     void importTenuto(const mnx::sequence::Tenuto& tenuto, engraving::ChordRest* cr);
     void importTremolo(const mnx::sequence::SingleNoteTremolo& tremolo, engraving::ChordRest* cr);
     void importUnstress(const mnx::sequence::Unstress& unstress, engraving::ChordRest* cr);
+    void importFermata(const mnx::Fermata& mnxFermata, engraving::ChordRest* cr);
 
     // utility funcs
     engraving::staff_idx_t mnxPartStaffToStaffIdx(const mnx::Part& mnxPart, int staffNum);

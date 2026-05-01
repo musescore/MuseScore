@@ -51,6 +51,7 @@ extern engraving::ClefType toMuseScoreClefType(const mnx::part::Clef& mnxClef);
 extern engraving::DynamicType toMuseScoreDynamicType(const engraving::String& glyph);
 extern engraving::DurationType toMuseScoreDurationType(mnx::NoteValueBase nvb);
 extern engraving::TDuration toMuseScoreDuration(mnx::NoteValue nv);
+extern engraving::SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol);
 extern engraving::Fraction toMuseScoreFraction(const mnx::FractionValue& fraction);
 extern engraving::JumpType toMuseScoreJumpType(mnx::JumpType jt);
 extern engraving::Key toMuseScoreKey(int fifths);

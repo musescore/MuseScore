@@ -31,6 +31,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/types/symid.h"
@@ -62,6 +63,30 @@ Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::E
     setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(mu::iex::mnxio::toMuseScoreArticulationAnchor(marking.orient())));
     cr->add(articulation);
     return articulation;
+}
+
+//---------------------------------------------------------
+//   createFermata
+//   Helper to create a fermata. Caller must add it to
+//   segment.
+//---------------------------------------------------------
+
+Fermata* MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata)
+{
+    Fermata* fermata = Factory::createFermata(seg ? seg : m_score->dummy()->segment());
+    fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
+    switch (mnxFermata.orient()) {
+    case mnx::Orientation::Above:
+        setAndStyleProperty(fermata, Pid::PLACEMENT, PlacementV::ABOVE);
+        break;
+    case mnx::Orientation::Below:
+        setAndStyleProperty(fermata, Pid::PLACEMENT, PlacementV::BELOW);
+        break;
+    case mnx::Orientation::Auto:
+        // do nothing here on purpose
+        break;
+    }
+    return fermata;
 }
 
 //---------------------------------------------------------
@@ -262,5 +287,27 @@ void MnxImporter::importTremolo(const mnx::sequence::SingleNoteTremolo& tremolo,
 void MnxImporter::importUnstress(const mnx::sequence::Unstress& unstress, ChordRest* cr)
 {
     addArticulation(cr, unstress, SymId::articUnstressAbove, "unstress");
+}
+
+//---------------------------------------------------------
+//   importFermata
+//   Import MNX fermata
+//---------------------------------------------------------
+
+void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::ChordRest* cr)
+{
+    Segment* seg = cr->segment();
+    Fermata* fermata = addFermata(seg, mnxFermata);
+    fermata->setTrack(cr->track());
+    IF_ASSERT_FAILED(fermata) {
+        LOGE() << "unable to import fermata for cr";
+        return;
+    }
+    if (!seg) {
+        DO_ASSERT(cr->isGrace());
+        cr->addFermata(fermata); // store for later move to segment
+    } else {
+        seg->add(fermata);
+    }
 }
 } // namespace mu::iex::mnxio

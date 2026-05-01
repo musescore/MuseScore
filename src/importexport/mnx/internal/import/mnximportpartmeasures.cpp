@@ -760,6 +760,9 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
             activeTremolo->add(cr);
         }
     }
+    if (event.fermata()) {
+        importFermata(event.fermata().value(), cr);
+    }
     m_mnxEventToCR.emplace(event.pointer().to_string(), cr);
     return cr;
 }
@@ -781,7 +784,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
 
     mnx::util::SequenceWalkHooks hooks;
     hooks.onFullMeasure = [&](const mnx::Sequence&,
-                              const mnx::sequence::FullMeasureRest&,
+                              const mnx::sequence::FullMeasureRest& mnxFullMeasureRest,
                               const mnx::FractionValue& startTick,
                               const mnx::FractionValue&,
                               mnx::util::SequenceWalkContext&) {
@@ -797,6 +800,9 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         rest->setTicks(measure->stretchedLen(staff));
         segment->add(rest);
+        if (mnxFullMeasureRest.fermata()) {
+            importFermata(mnxFullMeasureRest.fermata().value(), rest);
+        }
         lastCR = rest;
         insertedCR = true;
         return true;
