@@ -87,6 +87,7 @@
 
 #include "editchord.h"
 #include "editnote.h"
+#include "editpagelocks.h"
 #include "editproperty.h"
 #include "editspanner.h"
 #include "editstaff.h"
@@ -3923,6 +3924,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->lineBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove page break if appropriate
@@ -3934,6 +3936,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->pageBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove line break if appropriate
@@ -3945,6 +3948,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             val = !mb->sectionBreak();
             if (val) {
                 EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
+                EditPageLocks::removePageLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             break;

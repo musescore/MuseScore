@@ -30,6 +30,7 @@ namespace mu::engraving {
 class MeasureBase;
 class Score;
 class System;
+class Page;
 }
 
 namespace mu::notation {
@@ -62,6 +63,7 @@ public:
     mu::engraving::MeasureBase* startMeasureBase() const override;
     mu::engraving::MeasureBase* endMeasureBase() const override;
     std::vector<mu::engraving::System*> selectedSystems() const override;
+    std::vector<mu::engraving::Page*> selectedPages() const override;
 
     bool elementsSelected(const mu::engraving::ElementTypeSet& types) const override;
 

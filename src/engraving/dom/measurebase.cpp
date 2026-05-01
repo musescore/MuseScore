@@ -138,6 +138,43 @@ System* MeasureBase::nextNonVBoxSystem() const
     return nextSystem != curSystem ? nextSystem : nullptr;
 }
 
+Page* MeasureBase::page() const
+{
+    return system() ? system()->page() : nullptr;
+}
+
+Page* MeasureBase::prevPage() const
+{
+    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
+    Page* curPage = system() ? system()->page() : nullptr;
+    IF_ASSERT_FAILED(curPage) {
+        return nullptr;
+    }
+
+    Page* prevPage = curPage;
+    for (const MeasureBase* mb = this; mb && prevPage == curPage; mb = mmRests ? mb->prevMM() : mb->prev()) {
+        prevPage = mb->system()->page();
+    }
+
+    return prevPage != curPage ? prevPage : nullptr;
+}
+
+Page* MeasureBase::nextPage() const
+{
+    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
+    Page* curPage = system() ? system()->page() : nullptr;
+    IF_ASSERT_FAILED(curPage) {
+        return nullptr;
+    }
+
+    Page* nextPage = curPage;
+    for (const MeasureBase* mb = this; mb && nextPage == curPage; mb = mmRests ? mb->nextMM() : mb->next()) {
+        nextPage = mb->system()->page();
+    }
+
+    return nextPage != curPage ? nextPage : nullptr;
+}
+
 //---------------------------------------------------------
 //   add
 ///   Add new EngravingItem \a el to MeasureBase
@@ -655,6 +692,23 @@ bool MeasureBase::isEndOfSystemLock() const
     return lock && lock->endMB() == this;
 }
 
+const RangeLock* MeasureBase::pageLock() const
+{
+    return score()->pageLocks()->lockContaining(this);
+}
+
+bool MeasureBase::isStartOfPageLock() const
+{
+    const RangeLock* lock = score()->pageLocks()->lockStartingAt(this);
+    return lock != nullptr;
+}
+
+bool MeasureBase::isEndOfPageLock() const
+{
+    const RangeLock* lock = pageLock();
+    return lock && lock->endMB() == this;
+}
+
 //---------------------------------------------------------
 //   sectionBreakElement
 //---------------------------------------------------------
@@ -897,6 +951,39 @@ Measure* MeasureBaseList::measureByTick(int tick) const
         if (mb->isMeasure()) {
             return toMeasure(mb);
         }
+    }
+
+    return nullptr;
+}
+
+MeasureBase* MeasureBaseList::measureBaseByTick(int tick) const
+{
+    if (empty() || tick > m_last->endTick().ticks()) {
+        return nullptr;
+    }
+
+    auto it = m_tickIndex.upper_bound(tick);
+
+    if (it == m_tickIndex.begin()) {
+        MeasureBase* mb = it->second;
+
+        return mb;
+    }
+
+    --it;
+    for (;; --it) {
+        if (it == m_tickIndex.begin()) {
+            MeasureBase* mb = it->second;
+
+            return mb;
+        }
+
+        MeasureBase* mb = it->second;
+        if (!mb) {
+            break;
+        }
+
+        return mb;
     }
 
     return nullptr;

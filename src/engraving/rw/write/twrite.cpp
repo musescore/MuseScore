@@ -448,6 +448,20 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     xml.tagProperty(pid, p, d);
 }
 
+void TWrite::writePageLocks(const Score* score, XmlWriter& xml)
+{
+    std::vector<const RangeLock*> locks = score->pageLocks()->allLocks();
+    if (locks.empty()) {
+        return;
+    }
+
+    xml.startElement("PageLocks");
+    for (const RangeLock* sl : locks) {
+        writePageLock(sl, xml);
+    }
+    xml.endElement();
+}
+
 void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 {
     std::vector<const RangeLock*> locks = score->systemLocks()->allLocks();
@@ -523,6 +537,16 @@ void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteCon
         DO_ASSERT(eidOfMainElement.isValid());
         xml.tag("linkedTo", eidOfMainElement.toStdString());
     }
+}
+
+void TWrite::writePageLock(const RangeLock* pageLock, XmlWriter& xml)
+{
+    xml.startElement("pageLock");
+
+    xml.tag("startMeasure", pageLock->startMB()->eid().toStdString());
+    xml.tag("endMeasure", pageLock->endMB()->eid().toStdString());
+
+    xml.endElement();
 }
 
 void TWrite::writeSystemLock(const RangeLock* systemLock, XmlWriter& xml)

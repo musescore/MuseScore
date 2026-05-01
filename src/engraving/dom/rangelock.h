@@ -34,8 +34,6 @@ public:
     RangeLock(MeasureBase* start, MeasureBase* end)
         : m_startMB(start), m_endMB(end)
     {
-        assert(m_startMB->isMeasure() || m_startMB->isHBox());
-        assert(m_endMB->isMeasure() || m_endMB->isHBox());
         assert(m_startMB->isBefore(m_endMB) || m_startMB == m_endMB);
     }
 
@@ -66,7 +64,7 @@ public:
 private:
 #ifndef NDEBUG
     void sanityCheck();
-    void dump();
+    void dump() const;
 #endif
 
     struct Ordering

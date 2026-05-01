@@ -270,6 +270,9 @@ Score::~Score()
     muse::DeleteAll(m_systemLocks.allLocks());
     m_systemLocks.clear();
 
+    muse::DeleteAll(m_pageLocks.allLocks());
+    m_pageLocks.clear();
+
     muse::DeleteAll(m_parts);
     m_parts.clear();
 
@@ -6041,6 +6044,22 @@ void Score::addSystemLock(const RangeLock* lock)
 void Score::removeSystemLock(const RangeLock* lock)
 {
     m_systemLocks.remove(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::addPageLock(const RangeLock* lock)
+{
+    m_pageLocks.add(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::removePageLock(const RangeLock* lock)
+{
+    m_pageLocks.remove(lock);
 
     lock->startMB()->triggerLayout();
     lock->endMB()->triggerLayout();

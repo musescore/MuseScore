@@ -108,6 +108,7 @@
 #include "editkeysig.h"
 #include "editmeasures.h"
 #include "editnote.h"
+#include "editpagelocks.h"
 #include "editpart.h"
 #include "editproperty.h"
 #include "editscoreproperties.h"
@@ -7445,6 +7446,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     }
 
     EditSystemLocks::removeSystemLocksOnRemoveMeasures(tx, this, m1, m2);
+    EditPageLocks::removePageLocksOnRemoveMeasures(tx, this, m1, m2);
 
     undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }

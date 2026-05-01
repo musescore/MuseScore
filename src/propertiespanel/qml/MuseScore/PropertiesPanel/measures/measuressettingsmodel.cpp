@@ -22,6 +22,7 @@
 #include "measuressettingsmodel.h"
 
 #include "engraving/dom/score.h"
+#include "engraving/dom/page.h"
 
 #include "translation.h"
 
@@ -41,9 +42,12 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, const muse::modula
 void MeasuresSettingsModel::loadProperties()
 {
     updateAllSystemsAreLocked();
+    updateAllPagesAreLocked();
     updateScoreIsInPageView();
     updateIsMakeIntoSystemAvailable();
+    updateIsMakeIntoPageAvailable();
     updateSystemCount();
+    updatePageCount();
 }
 
 bool MeasuresSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
@@ -54,6 +58,48 @@ bool MeasuresSettingsModel::shouldUpdateOnEmptyPropertyAndStyleIdSets() const
 void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
 {
     loadProperties();
+}
+
+void MeasuresSettingsModel::moveMeasureDownPage()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->moveMeasureToNextPage();
+}
+
+void MeasuresSettingsModel::moveMeasureUpPage()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->moveMeasureToPrevPage();
+}
+
+QString MeasuresSettingsModel::shortcutMoveMeasureUpPage() const
+{
+    return shortcutsForActionCode("move-measure-to-prev-page");
+}
+
+QString MeasuresSettingsModel::shortcutMoveMeasureDownPage() const
+{
+    return shortcutsForActionCode("move-measure-to-next-page");
+}
+
+QString MeasuresSettingsModel::shortcutMakeIntoPage() const
+{
+    return shortcutsForActionCode("make-into-page");
+}
+
+void MeasuresSettingsModel::makeIntoPage()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->makeIntoPage();
 }
 
 bool MeasuresSettingsModel::isEmpty() const
@@ -91,7 +137,7 @@ void MeasuresSettingsModel::deleteSelectedMeasures()
     currentNotation()->interaction()->removeSelectedMeasures();
 }
 
-void MeasuresSettingsModel::moveMeasureUp()
+void MeasuresSettingsModel::moveMeasureUpSystem()
 {
     if (!currentNotation()) {
         return;
@@ -100,12 +146,12 @@ void MeasuresSettingsModel::moveMeasureUp()
     currentNotation()->interaction()->moveMeasureToPrevSystem();
 }
 
-QString MeasuresSettingsModel::shortcutMoveMeasureUp() const
+QString MeasuresSettingsModel::shortcutMoveMeasureUpSystem() const
 {
     return shortcutsForActionCode("move-measure-to-prev-system");
 }
 
-void MeasuresSettingsModel::moveMeasureDown()
+void MeasuresSettingsModel::moveMeasureDownSystem()
 {
     if (!currentNotation()) {
         return;
@@ -114,7 +160,7 @@ void MeasuresSettingsModel::moveMeasureDown()
     currentNotation()->interaction()->moveMeasureToNextSystem();
 }
 
-QString MeasuresSettingsModel::shortcutMoveMeasureDown() const
+QString MeasuresSettingsModel::shortcutMoveMeasureDownSystem() const
 {
     return shortcutsForActionCode("move-measure-to-next-system");
 }
@@ -133,9 +179,28 @@ QString MeasuresSettingsModel::shortcutToggleSystemLock() const
     return shortcutsForActionCode("toggle-system-lock");
 }
 
+void MeasuresSettingsModel::togglePageLock()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->togglePageLock();
+}
+
+QString MeasuresSettingsModel::shortcutTogglePageLock() const
+{
+    return shortcutsForActionCode("toggle-page-lock");
+}
+
 bool MeasuresSettingsModel::allSystemsAreLocked() const
 {
     return m_allSystemsAreLocked;
+}
+
+bool MeasuresSettingsModel::allPagesAreLocked() const
+{
+    return m_allPagesAreLocked;
 }
 
 void MeasuresSettingsModel::updateAllSystemsAreLocked()
@@ -160,6 +225,28 @@ void MeasuresSettingsModel::updateAllSystemsAreLocked()
     }
 }
 
+void MeasuresSettingsModel::updateAllPagesAreLocked()
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    std::vector<Page*> pages = selection()->selectedPages();
+
+    bool allLocked = true;
+    for (Page* page : pages) {
+        if (!page->isLocked()) {
+            allLocked = false;
+            break;
+        }
+    }
+
+    if (m_allPagesAreLocked != allLocked) {
+        m_allPagesAreLocked = allLocked;
+        emit allPagesAreLockedChanged(m_allPagesAreLocked);
+    }
+}
+
 bool MeasuresSettingsModel::scoreIsInPageView() const
 {
     return m_scoreIsInPageView;
@@ -170,9 +257,19 @@ bool MeasuresSettingsModel::isMakeIntoSystemAvailable() const
     return m_isMakeIntoSystemAvailable;
 }
 
+bool MeasuresSettingsModel::isMakeIntoPageAvailable() const
+{
+    return m_isMakeIntoPageAvailable;
+}
+
 int MeasuresSettingsModel::systemCount() const
 {
     return static_cast<int>(m_systemCount);
+}
+
+int MeasuresSettingsModel::pageCount() const
+{
+    return static_cast<int>(m_pageCount);
 }
 
 void MeasuresSettingsModel::updateScoreIsInPageView()
@@ -208,6 +305,16 @@ void MeasuresSettingsModel::updateIsMakeIntoSystemAvailable()
     }
 }
 
+void MeasuresSettingsModel::updateIsMakeIntoPageAvailable()
+{
+    bool available = !isEmpty();
+
+    if (m_isMakeIntoPageAvailable != available) {
+        m_isMakeIntoPageAvailable = available;
+        emit isMakeIntoPageAvailableChanged(m_isMakeIntoPageAvailable);
+    }
+}
+
 void MeasuresSettingsModel::updateSystemCount()
 {
     if (isEmpty()) {
@@ -218,6 +325,19 @@ void MeasuresSettingsModel::updateSystemCount()
     if (count != m_systemCount) {
         m_systemCount = count;
         emit systemCountChanged(static_cast<int>(count));
+    }
+}
+
+void MeasuresSettingsModel::updatePageCount()
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    size_t count = selection()->selectedPages().size();
+    if (count != m_pageCount) {
+        m_pageCount = count;
+        emit pageCountChanged(static_cast<int>(count));
     }
 }
 

@@ -22,6 +22,7 @@
 #include "layoutcontext.h"
 
 #include "editing/addremoveelement.h"
+#include "editing/editpagelocks.h"
 #include "editing/editsystemlocks.h"
 #include "editing/mscoreview.h"
 #include "editing/transaction/transaction.h"
@@ -384,6 +385,14 @@ const RangeLocks* DomAccessor::systemLocks() const
     return score()->systemLocks();
 }
 
+const RangeLocks* DomAccessor::pageLocks() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->pageLocks();
+}
+
 const PaddingTable& DomAccessor::paddingTable() const
 {
     return score()->paddingTable();
@@ -480,12 +489,13 @@ void DomAccessor::removeElement(EngravingItem* item)
     score()->removeElement(item);
 }
 
-void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
+void DomAccessor::updateLocksOnCreateMMRest(Measure* first, Measure* last)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
     Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditPageLocks::updatePageLocksOnCreateMMRests(tx, score(), first, last);
     EditSystemLocks::updateSystemLocksOnCreateMMRests(tx, score(), first, last);
 }
 
