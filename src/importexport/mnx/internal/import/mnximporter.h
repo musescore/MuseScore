@@ -129,10 +129,12 @@ private:
     engraving::Articulation* addArticulation(engraving::ChordRest* cr, const mnx::sequence::EventMarkingBase& marking,
                                              engraving::SymId symId, const char* name);
     engraving::Fermata* addFermata(engraving::Segment* seg, const mnx::Fermata& mnxFermata);
-    void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
+    void importMarkings(const mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr,
+                        engraving::Measure* measure = nullptr);
     void importBowDirection(const mnx::sequence::BowDirection& bowDirection, engraving::ChordRest* cr);
     void importAccent(const mnx::sequence::Accent& accent, engraving::ChordRest* cr);
-    void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr);
+    void importBreath(const mnx::sequence::BreathMark& breath, engraving::ChordRest* cr,
+                      engraving::Measure* measure = nullptr);
     void importSoftAccent(const mnx::sequence::SoftAccent& softAccent, engraving::ChordRest* cr);
     void importSpiccato(const mnx::sequence::Spiccato& spiccato, engraving::ChordRest* cr);
     void importStaccatissimo(const mnx::sequence::Staccatissimo& staccatissimo, engraving::ChordRest* cr);

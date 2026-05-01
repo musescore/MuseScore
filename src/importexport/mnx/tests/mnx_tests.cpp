@@ -502,6 +502,7 @@ MNX_PROJECT_FILE_TEST_DISABLED(barlineTypesOriginal) // the original file is jus
 MNX_PROJECT_FILE_TEST(barlineTypesWithShort)
 MNX_PROJECT_FILE_TEST(bcl)
 MNX_PROJECT_FILE_TEST(beamsOverBarlines)
+MNX_PROJECT_FILE_TEST(breathMark)
 MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)

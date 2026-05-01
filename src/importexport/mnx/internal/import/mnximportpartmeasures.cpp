@@ -746,7 +746,7 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
     } else {
         cr->setTicks(cr->actualDurationType().fraction());
     }
-    importMarkings(event, cr);
+    importMarkings(event, cr, measure);
     if (!event.isGrace()) {
         segment->add(cr);
         if (!activeTuplets.empty()) {

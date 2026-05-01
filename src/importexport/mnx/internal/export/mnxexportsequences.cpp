@@ -246,19 +246,6 @@ void static processAnnotations(EventType& mnxEvent, ChordRest* cr)
                 }
                 mnxEvent.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
             }
-            if constexpr(std::is_same_v<EventType, mnx::sequence::Event>) {
-                if (ann->isBreath()) {
-                    const Breath* breath = toBreath(ann);
-                    IF_ASSERT_FAILED(breath) {
-                        break;
-                    }
-                    auto mnxMarkings = mnxEvent.ensure_markings();
-                    auto mnxBreath = mnxMarkings.ensure_breath();
-                    if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
-                        mnxBreath.set_symbol(breathSym.value());
-                    }
-                }
-            }
         }
     }
 }
@@ -294,6 +281,15 @@ void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
                 auto mnxMarkings = mnxEvent.ensure_markings();
                 mnxMarkings.ensure_tremolo(marks);
             }
+        }
+    }
+
+    if (Breath* breath = cr->hasBreathMark()) {
+        auto mnxMarkings = mnxEvent.ensure_markings();
+        auto mnxBreath = mnxMarkings.ensure_breath();
+        mnxBreath.set_or_clear_orient(toMnxOrientation(breath->placement()));
+        if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
+            mnxBreath.set_symbol(breathSym.value());
         }
     }
 
