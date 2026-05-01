@@ -759,9 +759,6 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
             activeTremolo->add(cr);
         }
     }
-    if (event.fermata()) {
-        importFermata(event.fermata().value(), cr);
-    }
     m_mnxEventToCR.emplace(event.pointer().to_string(), cr);
     return cr;
 }
@@ -868,6 +865,9 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
         }
         updateLyricLineUsageForEvent(event, sequence, measure, curTrackIdx, startTick);
         if (ChordRest* cr = importEvent(event, curTrackIdx, measure, startTick, activeTuplets, activeTremolo)) {
+            if (event.fermata()) {
+                importFermata(event.fermata().value(), cr);
+            }
             lastCR = cr;
             insertedCR = true;
             for (const auto& key : pendingNext) {
@@ -926,14 +926,21 @@ void MnxImporter::importGraceEvents(const mnx::Sequence& sequence, Measure* meas
                         gc->setNoteType(duraTypeToGraceNoteType(d.type(), useLeft));
                         gc->setShowStemSlash(grace.slash());
                     }
+                    Chord* graceParent = nullptr;
                     if (useRight) {
-                        Chord* graceParent = toChord(rightNeighbor);
+                        graceParent = toChord(rightNeighbor);
                         gc->setGraceIndex(graceParent->graceNotesBefore().size());
                         graceParent->add(gc);
                     } else if (useLeft) {
-                        Chord* graceParent = toChord(leftNeighbor);
+                        graceParent = toChord(leftNeighbor);
                         gc->setGraceIndex(0);
                         graceParent->add(gc);
+                    }
+                    if (event.fermata()) {
+                        DO_ASSERT_X(graceParent, "no parent found for grace note");
+                        if (graceParent) {
+                            importFermata(event.fermata().value(), graceParent);
+                        }
                     }
                 }
             }

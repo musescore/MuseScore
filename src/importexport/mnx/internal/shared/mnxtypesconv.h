@@ -69,6 +69,8 @@ extern engraving::TupletNumberType toMuseScoreTupletNumberType(mnx::TupletDispla
 extern mnx::BarlineType toMnxBarLineType(engraving::BarLineType blt);
 extern std::optional<mnx::BreathMarkSymbol> toMnxBreathMarkSym(engraving::SymId sym);
 extern std::optional<mnx::part::Clef::Required> toMnxClef(engraving::ClefType clefType);
+extern mnx::FermataDuration toMnxFermataDuration(engraving::FermataType fermataType);
+extern mnx::FermataSymbol toMnxFermataSymbol(engraving::SymId sym);
 extern mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction);
 extern std::optional<mnx::JumpType> toMnxJumpType(engraving::JumpType jt);
 extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engraving::Interval& keyTransposition);
