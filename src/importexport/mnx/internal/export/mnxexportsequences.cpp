@@ -245,6 +245,10 @@ void static processAnnotations(EventType& mnxEvent, ChordRest* cr)
                     continue;
                 }
                 mnxEvent.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+                /// @note MNX currently can only store one barline fermata per measure stack.
+                /// To keep the loop clean for future expansion, this code deliberately
+                /// exports the last one found. We can revisit this if/when MNX provides
+                /// more clarity around barline fermatas.
             }
         }
     }
