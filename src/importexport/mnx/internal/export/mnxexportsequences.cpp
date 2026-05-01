@@ -219,12 +219,57 @@ static std::optional<mnx::sequence::EventMarkingBase> createMarking(const Articu
 }
 
 //---------------------------------------------------------
+//   processAnnotations
+//   template function to process annotations for both
+//   events and full measure rests
+//---------------------------------------------------------
+
+template<typename EventType>
+void static processAnnotations(EventType& mnxEvent, ChordRest* cr)
+{
+    // Grace notes are parented to their main chord, not directly to a segment.
+    // Segment-anchored annotations such as fermatas belong to the main chord's
+    // segment and must not be re-exported from each grace note event.
+    if (cr->isGrace()) {
+        return;
+    }
+
+    if (Segment* seg = cr->segment()) {
+        for (EngravingItem* ann : seg->annotations()) {
+            if (!ann || ann->track() != cr->track()) {
+                continue;
+            }
+            if (ann->isFermata()) {
+                const Fermata* fermata = toFermata(ann);
+                IF_ASSERT_FAILED(fermata) {
+                    continue;
+                }
+                mnxEvent.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+            }
+            if constexpr(std::is_same_v<EventType, mnx::sequence::Event>) {
+                if (ann->isBreath()) {
+                    const Breath* breath = toBreath(ann);
+                    IF_ASSERT_FAILED(breath) {
+                        break;
+                    }
+                    auto mnxMarkings = mnxEvent.ensure_markings();
+                    auto mnxBreath = mnxMarkings.ensure_breath();
+                    if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
+                        mnxBreath.set_symbol(breathSym.value());
+                    }
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   createMarkings
 //   export articulations, breath marks, single-note
 //   tremolo
 //---------------------------------------------------------
 
-static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
+void MnxExporter::createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
 {
     IF_ASSERT_FAILED(cr) {
         return;
@@ -252,22 +297,7 @@ static void createMarkings(mnx::sequence::Event& mnxEvent, ChordRest* cr)
         }
     }
 
-    if (Segment* seg = cr->segment()) {
-        for (EngravingItem* ann : seg->annotations()) {
-            if (!ann || ann->type() != ElementType::BREATH || ann->track() != cr->track()) {
-                continue;
-            }
-            const Breath* breath = toBreath(ann);
-            if (!breath) {
-                continue;
-            }
-            auto mnxMarkings = mnxEvent.ensure_markings();
-            auto mnxBreath = mnxMarkings.ensure_breath();
-            if (const auto breathSym = toMnxBreathMarkSym(breath->symId())) {
-                mnxBreath.set_symbol(breathSym.value());
-            }
-        }
-    }
+    processAnnotations(mnxEvent, cr);
 }
 
 //---------------------------------------------------------
@@ -1060,6 +1090,7 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
                                     LOGW() << "Skipping MNX fullMeasure staffPosition export; invalid staff step.";
                                 }
                             }
+                            processAnnotations(fullMeasure, rest);
                         } else {
                             /// @todo If MNX adds explicit rest visibility, export hidden (non-gap) full-measure rests; keep omitting gap rests.
                             // Hidden/gap measure rests should not generate a sequence.
@@ -1080,7 +1111,7 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
     if (mnxSequences.size() == 1) {
         auto onlySequence = mnxSequences.at(0);
         const auto fullMeasure = onlySequence.fullMeasure();
-        if (fullMeasure && onlySequence.content().empty() && !fullMeasure->staffPosition()) {
+        if (fullMeasure && onlySequence.content().empty() && fullMeasure->empty()) {
             mnxSequences.erase(0);
         }
     }

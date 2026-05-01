@@ -39,6 +39,7 @@ class ChordRest;
 class EID;
 class EngravingItem;
 class EngravingObject;
+class Fermata;
 class GraceNotesGroup;
 class Instrument;
 class Measure;
@@ -68,6 +69,7 @@ public:
     std::optional<mnx::sequence::Event> mnxEventFromCR(const engraving::ChordRest* cr);
     size_t mnxMeasureIndexFromMeasure(const engraving::Measure* measure) const;
     std::pair<size_t, int> mnxPartStaffFromStaffIdx(engraving::staff_idx_t staffIdx) const;
+    static mnx::Fermata mnxFermataFromFermata(const engraving::Fermata* fermata);
 
 private:
     enum class ContentContext {
@@ -119,6 +121,7 @@ private:
     void createTies(mnx::sequence::NoteBase& mnxNote, engraving::Note* note);
     const engraving::Tuplet* findTopTuplet(engraving::ChordRest* chordRest, const ExportContext& ctx) const;
     void exportDrumsetKit(const engraving::Part* part, const engraving::Instrument* instrument, mnx::Part& mnxPart);
+    void createMarkings(mnx::sequence::Event& mnxEvent, engraving::ChordRest* cr);
 
     void exportSpanners();
 
