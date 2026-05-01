@@ -867,6 +867,11 @@ public:
     void removeSystemLock(const RangeLock* lock);
     void clearSystemLocks() { m_systemLocks.clear(); }
 
+    const RangeLocks* pageLocks() const { return &m_pageLocks; }
+    void addPageLock(const RangeLock* lock);
+    void removePageLock(const RangeLock* lock);
+    void clearPageLocks() { m_pageLocks.clear(); }
+
     void rebuildFretBox();
 
     const std::map<size_t, std::array<SystemDivider*, 2> > systemDividers() const { return m_systemDividers; }
@@ -959,6 +964,8 @@ private:
     std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
     RangeLocks m_systemLocks;
+
+    RangeLocks m_pageLocks;
 
     SpannerMap m_spanner;
     std::set<Spanner*> m_unmanagedSpanner;

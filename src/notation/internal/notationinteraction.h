@@ -252,6 +252,11 @@ public:
     void toggleScoreLock() override;
     void makeIntoSystem() override;
     void applySystemLock() override;
+    void moveMeasureToPrevPage() override;
+    void moveMeasureToNextPage() override;
+    void togglePageLock() override;
+    void makeIntoPage() override;
+    void applyPageLock() override;
 
     void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;

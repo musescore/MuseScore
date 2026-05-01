@@ -116,20 +116,20 @@ void RangeLocks::sanityCheck()
         }
 
         const MeasureBase* curMB = curIter->first;
-        const RangeLock* curSysLock = curIter->second;
+        const RangeLock* curLock = curIter->second;
 
-        DO_ASSERT(curSysLock->startMB() == curMB);
+        DO_ASSERT(curLock->startMB() == curMB);
 
         const MeasureBase* nextMB = nextIter->first;
-        const RangeLock* nextSysLock = nextIter->second;
+        const RangeLock* nextLock = nextIter->second;
 
-        DO_ASSERT(nextSysLock->startMB() == nextMB);
+        DO_ASSERT(nextLock->startMB() == nextMB);
         DO_ASSERT(curMB->isBefore(nextMB));
-        DO_ASSERT(curSysLock->endMB()->isBefore(nextSysLock->startMB()));
+        DO_ASSERT(curLock->endMB()->isBefore(nextLock->startMB()));
     }
 }
 
-void RangeLocks::dump()
+void RangeLocks::dump() const
 {
     for (auto& pair : m_rangeLocks) {
         const RangeLock* sl = pair.second;

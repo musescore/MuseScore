@@ -66,6 +66,7 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
+#include "system.h"
 #include "tie.h"
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
@@ -364,7 +365,7 @@ MeasureBase* Selection::startMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -377,17 +378,14 @@ MeasureBase* Selection::startMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickStart();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    return m_score->tick2measureBase(tickStart());
 }
 
 MeasureBase* Selection::endMeasureBase() const
 {
     EngravingItem* selectionElement = element();
     if (selectionElement) {
-        if (selectionElement->isHBox()) {
+        if (selectionElement->isBox()) {
             return toMeasureBase(selectionElement);
         }
         MeasureBase* mb = selectionElement->findMeasureBase();
@@ -400,10 +398,7 @@ MeasureBase* Selection::endMeasureBase() const
         return nullptr;
     }
 
-    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
-    Fraction refTick = tickEnd() - Fraction::eps();
-
-    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+    return m_score->tick2measureBase(tickEnd() - Fraction::eps());
 }
 
 std::vector<System*> Selection::selectedSystems() const
@@ -429,6 +424,25 @@ std::vector<System*> Selection::selectedSystems() const
     }
 
     return systems;
+}
+
+std::vector<Page*> mu::engraving::Selection::selectedPages() const
+{
+    EngravingItem* el = element();
+    // if (el && (el->pageLockIndicator())) { TODO
+    //     return { const_cast<System*>(toIndicatorIcon(el)->system()) };
+    // }
+
+    std::vector<System*> systems = selectedSystems();
+    std::vector<Page*> pages;
+    for (System* system : systems) {
+        Page* page = system->page();
+        if (page && std::find(pages.begin(), pages.end(), page) == pages.end()) {
+            pages.push_back(page);
+        }
+    }
+
+    return pages;
 }
 
 void Selection::deselectAll()

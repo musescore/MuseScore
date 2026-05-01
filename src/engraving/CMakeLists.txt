@@ -144,6 +144,8 @@ target_sources(engraving PRIVATE
     editing/editmeasures.h
     editing/editnote.cpp
     editing/editnote.h
+    editing/editpagelocks.cpp
+    editing/editpagelocks.h
     editing/editparentheses.cpp
     editing/editparentheses.h
     editing/editpart.cpp

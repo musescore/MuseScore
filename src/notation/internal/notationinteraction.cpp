@@ -117,6 +117,7 @@
 #include "engraving/editing/editstretch.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/edittimesig.h"
+#include "engraving/editing/editpagelocks.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
@@ -6191,6 +6192,55 @@ void NotationInteraction::applySystemLock()
 {
     transaction(TranslatableString("undoableAction", "Apply system lock to selection"), [&](auto& tx) {
         EditSystemLocks::applyLockToSelection(tx, score());
+    });
+}
+
+void NotationInteraction::moveMeasureToPrevPage()
+{
+    MeasureBase* m = score()->selection().endMeasureBase();
+    if (!m) {
+        return;
+    }
+    transaction(TranslatableString("undoableAction", "Move measure to previous page"), [&](auto& tx) {
+        EditPageLocks::moveMeasureToPrevPage(tx, score(), m);
+    });
+}
+
+void NotationInteraction::moveMeasureToNextPage()
+{
+    MeasureBase* m = score()->selection().startMeasureBase();
+    if (!m) {
+        return;
+    }
+    transaction(TranslatableString("undoableAction", "Move measure to next page"), [&](auto& tx) {
+        EditPageLocks::moveMeasureToNextPage(tx, score(), m);
+    });
+}
+
+void NotationInteraction::togglePageLock()
+{
+    transaction(TranslatableString("undoableAction", "Lock/unlock selected page(s)"), [&](auto& tx) {
+        EditPageLocks::togglePageLock(tx, score(), selection()->selectedPages());
+    });
+}
+
+void NotationInteraction::makeIntoPage()
+{
+    MeasureBase* first = score()->selection().startMeasureBase();
+    MeasureBase* last = score()->selection().endMeasureBase();
+    if (!first || !last) {
+        return;
+    }
+
+    transaction(TranslatableString("undoableAction", "Create page from selection"), [&](auto& tx) {
+        EditPageLocks::makeIntoPage(tx, score(), first, last);
+    });
+}
+
+void NotationInteraction::applyPageLock()
+{
+    transaction(TranslatableString("undoableAction", "Apply page lock to selection"), [&](auto& tx) {
+        EditPageLocks::applyLockToSelection(tx, score());
     });
 }
 

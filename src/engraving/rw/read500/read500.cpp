@@ -186,6 +186,8 @@ bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                     e.skipCurrentElement();
                 }
             }
+        } else if (tag == "PageLocks") {
+            TRead::readPageLocks(score, e);
         } else if (tag == "SystemLocks") {
             TRead::readSystemLocks(score, e);
         } else if (tag == "SystemDividers") {

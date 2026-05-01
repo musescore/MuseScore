@@ -36,6 +36,7 @@ class Factory;
 class System;
 class Text;
 class Measure;
+class RangeLock;
 
 class Score;
 class MeasureBase;
@@ -57,6 +58,9 @@ public:
     std::vector<System*>& systems() { return m_systems; }
     System* system(size_t idx) { return m_systems[idx]; }
     const System* system(size_t idx) const { return m_systems.at(idx); }
+
+    MeasureBase* firstMeasureBase() const;
+    MeasureBase* lastMeasureBase() const;
 
     void appendSystem(System* s);
 
@@ -84,6 +88,9 @@ public:
     Text* footerText(int index) const { return m_footerTexts.at(index); }
     void setHeaderText(int index, Text* t) { m_headerTexts.at(index) = t; }
     void setFooterText(int index, Text* t) { m_footerTexts.at(index) = t; }
+
+    bool isLocked() const;
+    const RangeLock* pageLock() const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;

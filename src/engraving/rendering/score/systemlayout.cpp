@@ -263,8 +263,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
-            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
-                        || (next && next->isStartOfSystemLock());
+            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock() || mb->isEndOfPageLock()
+                        || (next && next->isStartOfSystemLock()) || (next && next->isStartOfPageLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:

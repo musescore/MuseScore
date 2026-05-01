@@ -317,6 +317,7 @@ public:
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
+    static void writePageLocks(const Score* score, XmlWriter& xml);
     static void writeSystemLocks(const Score* score, XmlWriter& xml);
     static void writeSystemDividers(const Score* score, XmlWriter& xml, WriteContext& ctx);
 
@@ -368,6 +369,7 @@ private:
     static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void writePageLock(const RangeLock* pageLock, XmlWriter& xml);
     static void writeSystemLock(const RangeLock* systemLock, XmlWriter& xml);
 
     static muse::String lineBreakToTag(const String& str);

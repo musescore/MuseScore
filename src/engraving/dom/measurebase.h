@@ -82,6 +82,9 @@ public:
     System* system() const { return toSystem(explicitParent()); }
     System* prevNonVBoxSystem() const;
     System* nextNonVBoxSystem() const;
+    Page* page() const;
+    Page* prevPage() const;
+    Page* nextPage() const;
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     virtual void scanElements(std::function<void(EngravingItem*)> func) override;
@@ -164,6 +167,10 @@ public:
     bool isStartOfSystemLock() const;
     bool isEndOfSystemLock() const;
 
+    const RangeLock* pageLock() const;
+    bool isStartOfPageLock() const;
+    bool isEndOfPageLock() const;
+
 protected:
     MeasureBase(const ElementType& type, System* system = 0);
     MeasureBase(const MeasureBase&);
@@ -203,6 +210,7 @@ public:
     void updateTickIndex();
 
     Measure* measureByTick(int tick) const;
+    MeasureBase* measureBaseByTick(int tick) const;
     std::vector<MeasureBase*> measureBasesAtTick(int tick) const;
 
 private:

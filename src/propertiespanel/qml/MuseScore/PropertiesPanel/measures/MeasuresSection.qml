@@ -119,10 +119,10 @@ PropertiesPanelSection {
                     text: qsTrc("propertiespanel", "Previous")
 
                     toolTipTitle: qsTrc("propertiespanel", "Move measure(s) to previous system")
-                    toolTipShortcut: root.model?.shortcutMoveMeasureUp ?? ""
+                    toolTipShortcut: root.model?.shortcutMoveMeasureUpSystem ?? ""
 
                     onClicked: {
-                        root.model?.moveMeasureUp?.()
+                        root.model?.moveMeasureUpSystem?.()
                     }
                 }
 
@@ -133,17 +133,17 @@ PropertiesPanelSection {
 
                     navigation.panel: root.navigationPanel
                     navigation.name: "SystemDown"
-                    navigation.row: upSystem.navigation.row + 1
+                    navigation.row: upPage.navigation.row + 1
 
                     orientation: Qt.Horizontal
                     icon: IconCode.ARROW_DOWN
                     text: qsTrc("propertiespanel", "Next")
 
                     toolTipTitle: qsTrc("propertiespanel", "Move measure(s) to next system")
-                    toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
+                    toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDownSystem : ""
 
                     onClicked: {
-                        root.model?.moveMeasureDown?.()
+                        root.model?.moveMeasureDownSystem?.()
                     }
                 }
             }
@@ -199,6 +199,122 @@ PropertiesPanelSection {
 
             onClicked: {
                 root.model?.makeIntoSystem?.()
+            }
+        }
+
+            Column {
+            width: parent.width
+            spacing: 8
+
+            StyledTextLabel {
+                width: parent.width
+                visible: root.model ? root.model.scoreIsInPageView : false
+                horizontalAlignment: Qt.AlignLeft
+                text: qsTrc("inspector", "Move to page")
+            }
+
+            Row {
+                id: movePageLayout
+
+                visible: root.model ? root.model.scoreIsInPageView : false
+
+                width: parent.width
+                spacing: 4
+
+                FlatButton {
+                    id: upPage
+
+                    width: (movePageLayout.width - movePageLayout.spacing) / 2
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "PageUp"
+                    navigation.row: deleteButton.navigation.row + 1
+
+                    orientation: Qt.Horizontal
+                    icon: IconCode.ARROW_UP
+                    text: qsTrc("inspector", "Previous")
+
+                    toolTipTitle: qsTrc("inspector", "Move measure(s) to previous page")
+                    toolTipShortcut: root.model?.shortcutMoveMeasureUpPage ?? ""
+
+                    onClicked: {
+                        root.model?.moveMeasureUpPage?.()
+                    }
+                }
+
+                FlatButton {
+                    id: downPage
+
+                    width: (movePageLayout.width - movePageLayout.spacing) / 2
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "PageDown"
+                    navigation.row: upPage.navigation.row + 1
+
+                    orientation: Qt.Horizontal
+                    icon: IconCode.ARROW_DOWN
+                    text: qsTrc("inspector", "Next")
+
+                    toolTipTitle: qsTrc("inspector", "Move measure(s) to next page")
+                    toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDownPage : ""
+
+                    onClicked: {
+                        root.model?.moveMeasureDownPage?.()
+                    }
+                }
+            }
+        }
+
+        FlatButton {
+            id: togglePageLock
+            visible: root.model ? root.model.scoreIsInPageView : false
+            
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "PageLock"
+            navigation.row: downPage.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            icon: root.model && root.model.allPagesAreLocked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+            text: root.model ? (root.model.allPagesAreLocked ? root.model.pageCount > 1 ? qsTrc("inspector", "Unlock selected pages")
+                                                                                            : qsTrc("inspector", "Unlock selected page")
+                                                               : root.model.pageCount > 1 ? qsTrc("inspector", "Lock selected pages")
+                                                                                            : qsTrc("inspector", "Lock selected page"))
+                             : ""
+
+            toolTipTitle: qsTrc("inspector", "Lock/unlock selected page(s)")
+            toolTipDescription: qsTrc("inspector", "Keep measures on the selected page(s) together and prevent them from reflowing to the next page")
+            toolTipShortcut: root.model ? root.model.shortcutToggleSystemLock : ""
+
+            accentButton: root.model ? root.model.allPagesAreLocked : false
+
+            onClicked: {
+                root.model?.togglePageLock?.()
+            }
+        }
+
+        FlatButton {
+            id: makeIntoOnePage
+            visible: root.model ? root.model.scoreIsInPageView : false
+            enabled: root.model ? root.model.isMakeIntoPageAvailable : false
+
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "MakePage"
+            navigation.row: togglePageLock.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            //icon: TODO maybe
+            text: qsTrc("inspector", "Create page from selection")
+
+            toolTipTitle: qsTrc("inspector", "Create page from selection")
+            toolTipDescription: qsTrc("inspector", "Create a page containing only the selected measure(s)")
+            toolTipShortcut: root.model ? root.model.shortcutMakeIntoPage : ""
+
+            onClicked: {
+                root.model?.makeIntoPage?.()
             }
         }
     }

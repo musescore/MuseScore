@@ -193,6 +193,11 @@ public:
     MOCK_METHOD(void, toggleScoreLock, (), (override));
     MOCK_METHOD(void, makeIntoSystem, (), (override));
     MOCK_METHOD(void, applySystemLock, (), (override));
+    MOCK_METHOD(void, moveMeasureToPrevPage, (), (override));
+    MOCK_METHOD(void, moveMeasureToNextPage, (), (override));
+    MOCK_METHOD(void, togglePageLock, (), (override));
+    MOCK_METHOD(void, makeIntoPage, (), (override));
+    MOCK_METHOD(void, applyPageLock, (), (override));
 
     MOCK_METHOD(void, addRemoveSystemLocks, (AddRemoveSystemLockType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
