@@ -95,14 +95,7 @@ mnx::Fermata MnxExporter::mnxFermataFromFermata(const Fermata* fermata)
     mnx::Fermata result;
     result.set_or_clear_duration(toMnxFermataDuration(fermata->fermataType()));
     result.set_or_clear_symbol(toMnxFermataSymbol(fermata->symId()));
-    switch (fermata->placement()) {
-    case PlacementV::ABOVE:
-        result.set_orient(mnx::Orientation::Above);
-        break;
-    case PlacementV::BELOW:
-        result.set_orient(mnx::Orientation::Below);
-        break;
-    }
+    result.set_or_clear_orient(toMnxOrientation(fermata->placement()));
     return result;
 }
 

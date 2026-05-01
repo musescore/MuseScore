@@ -94,7 +94,7 @@ Fermata* MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata)
 //   Import all articulations/markings for an MNX event.
 //---------------------------------------------------------
 
-void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr)
+void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr, Measure* measure)
 {
     if (!mnxEvent.markings()) {
         return;
@@ -107,7 +107,7 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
         importBowDirection(bowDirection.value(), cr);
     }
     if (const auto breath = markings.breath()) {
-        importBreath(breath.value(), cr);
+        importBreath(breath.value(), cr, measure);
     }
     if (const auto softAccent = markings.softAccent()) {
         importSoftAccent(softAccent.value(), cr);
@@ -170,12 +170,33 @@ void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirec
 //   Import MNX breath mark.
 //---------------------------------------------------------
 
-void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr)
+void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, Measure* measure)
 {
-    Segment* segment = cr->measure()->getSegment(SegmentType::Breath, cr->endTick());
+    Measure* targetMeasure = measure;
+    if (!targetMeasure) {
+        Segment* chordRestSegment = cr ? cr->segment() : nullptr;
+        targetMeasure = chordRestSegment ? chordRestSegment->measure() : nullptr;
+    }
+    IF_ASSERT_FAILED(targetMeasure) {
+        LOGE() << "cr has no measure when importing breath mark";
+        return;
+    }
+
+    Segment* segment = targetMeasure->getSegment(SegmentType::Breath, cr->endTick());
     Breath* breathMark = Factory::createBreath(segment);
     breathMark->setTrack(cr->track());
     breathMark->setSymId(toMuseScoreBreathMarkSym(breath.symbol()));
+    switch (breath.orient()) {
+    case mnx::Orientation::Above:
+        setAndStyleProperty(breathMark, Pid::PLACEMENT, PlacementV::ABOVE);
+        break;
+    case mnx::Orientation::Below:
+        setAndStyleProperty(breathMark, Pid::PLACEMENT, PlacementV::BELOW);
+        break;
+    case mnx::Orientation::Auto:
+        // Preserve MuseScore's default voice-dependent placement.
+        break;
+    }
     segment->add(breathMark);
 }
 
