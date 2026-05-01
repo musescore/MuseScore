@@ -47,12 +47,12 @@ const std::unordered_map<mnx::Orientation, ArticulationAnchor> articulationAncho
 };
 } // namespace
 
-engraving::ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
+ArticulationAnchor toMuseScoreArticulationAnchor(mnx::Orientation orient)
 {
     return muse::value(articulationAnchorTable, orient, ArticulationAnchor::AUTO);
 }
 
-mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor)
+mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
 {
     return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
 }
@@ -360,6 +360,24 @@ std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration
 }
 
 namespace {
+const std::map<mnx::FermataSymbol, SymId> fermataSymTable {
+    { mnx::FermataSymbol::Normal,       SymId::fermataAbove },
+    { mnx::FermataSymbol::Angled,       SymId::fermataShortAbove },
+    { mnx::FermataSymbol::Square,       SymId::fermataLongAbove },
+    { mnx::FermataSymbol::DoubleAngled, SymId::fermataVeryShortAbove },
+    { mnx::FermataSymbol::DoubleSquare, SymId::fermataVeryLongAbove },
+    { mnx::FermataSymbol::DoubleDot,    SymId::fermataLongHenzeAbove },
+    { mnx::FermataSymbol::HalfCurve,    SymId::fermataShortHenzeAbove },
+    { mnx::FermataSymbol::Curlew,       SymId::curlewSign },
+};
+} // namespace
+
+SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol)
+{
+    return muse::value(fermataSymTable, fermataSymbol, SymId::fermataAbove);
+}
+
+namespace {
 /// @todo Grow this table as MNX grows it.
 static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
@@ -589,7 +607,7 @@ Fraction toMuseScoreFraction(const mnx::FractionValue& fraction)
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
-mnx::FractionValue toMnxFractionValue(const engraving::Fraction& fraction)
+mnx::FractionValue toMnxFractionValue(const Fraction& fraction)
 {
     return mnx::FractionValue(fraction.numerator(), fraction.denominator());
 }
