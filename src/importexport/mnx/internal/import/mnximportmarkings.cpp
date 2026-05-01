@@ -74,6 +74,8 @@ Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::E
 Fermata* MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata)
 {
     Fermata* fermata = Factory::createFermata(seg ? seg : m_score->dummy()->segment());
+    /// @note MNX decouples fermata symbol from duration, but MuseScore does not currently model
+    /// an independently round-trippable fermata duration separate from the fermata subtype/symbol.
     fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
     switch (mnxFermata.orient()) {
     case mnx::Orientation::Above:
@@ -323,11 +325,11 @@ void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::Chord
         return;
     }
     Fermata* fermata = addFermata(seg, mnxFermata);
-    fermata->setTrack(cr->track());
     IF_ASSERT_FAILED(fermata) {
         LOGE() << "unable to import fermata for cr";
         return;
     }
+    fermata->setTrack(cr->track());
     seg->add(fermata);
 }
 } // namespace mu::iex::mnxio
