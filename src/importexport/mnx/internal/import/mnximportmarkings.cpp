@@ -297,17 +297,16 @@ void MnxImporter::importUnstress(const mnx::sequence::Unstress& unstress, ChordR
 void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::ChordRest* cr)
 {
     Segment* seg = cr->segment();
+    IF_ASSERT_FAILED(seg) {
+        LOGE() << "cr has no segement when importing fermata";
+        return;
+    }
     Fermata* fermata = addFermata(seg, mnxFermata);
     fermata->setTrack(cr->track());
     IF_ASSERT_FAILED(fermata) {
         LOGE() << "unable to import fermata for cr";
         return;
     }
-    if (!seg) {
-        DO_ASSERT(cr->isGrace());
-        cr->addFermata(fermata); // store for later move to segment
-    } else {
-        seg->add(fermata);
-    }
+    seg->add(fermata);
 }
 } // namespace mu::iex::mnxio

@@ -360,7 +360,7 @@ std::optional<mnx::NoteValue::Required> toMnxNoteValue(const TDuration& duration
 }
 
 namespace {
-const std::map<mnx::FermataSymbol, SymId> fermataSymTable {
+const std::unordered_map<mnx::FermataSymbol, SymId> symIdToFermataSym {
     { mnx::FermataSymbol::Normal,       SymId::fermataAbove },
     { mnx::FermataSymbol::Angled,       SymId::fermataShortAbove },
     { mnx::FermataSymbol::Square,       SymId::fermataLongAbove },
@@ -374,12 +374,54 @@ const std::map<mnx::FermataSymbol, SymId> fermataSymTable {
 
 SymId toMuseScoreFermataSymId(const mnx::FermataSymbol fermataSymbol)
 {
-    return muse::value(fermataSymTable, fermataSymbol, SymId::fermataAbove);
+    return muse::value(symIdToFermataSym, fermataSymbol, SymId::fermataAbove);
+}
+
+namespace {
+const std::unordered_map<FermataType, mnx::FermataDuration> fermataDuraTable {
+    { FermataType::Normal,      mnx::FermataDuration::Normal },
+    { FermataType::Long,        mnx::FermataDuration::Long },
+    { FermataType::LongHenze,   mnx::FermataDuration::Long },
+    { FermataType::Short,       mnx::FermataDuration::Short },
+    { FermataType::ShortHenze,  mnx::FermataDuration::Short },
+    { FermataType::VeryLong,    mnx::FermataDuration::VeryLong },
+    { FermataType::VeryShort,   mnx::FermataDuration::VeryShort },
+};
+} // namespace
+
+mnx::FermataDuration toMnxFermataDuration(FermataType fermataType)
+{
+    return muse::value(fermataDuraTable, fermataType, mnx::FermataDuration::Auto);
+}
+
+namespace {
+const std::unordered_map<SymId, mnx::FermataSymbol> fermataSymToSymId {
+    { SymId::fermataAbove,              mnx::FermataSymbol::Normal },
+    { SymId::fermataBelow,              mnx::FermataSymbol::Normal },
+    { SymId::fermataShortAbove,         mnx::FermataSymbol::Angled },
+    { SymId::fermataShortBelow,         mnx::FermataSymbol::Angled },
+    { SymId::fermataLongAbove,          mnx::FermataSymbol::Square, },
+    { SymId::fermataLongBelow,          mnx::FermataSymbol::Square, },
+    { SymId::fermataVeryShortAbove,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryShortBelow,     mnx::FermataSymbol::DoubleAngled },
+    { SymId::fermataVeryLongAbove,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataVeryLongBelow,      mnx::FermataSymbol::DoubleSquare },
+    { SymId::fermataLongHenzeAbove,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataLongHenzeBelow,     mnx::FermataSymbol::DoubleDot },
+    { SymId::fermataShortHenzeAbove,    mnx::FermataSymbol::HalfCurve },
+    { SymId::fermataShortHenzeBelow,    mnx::FermataSymbol::HalfCurve },
+    { SymId::curlewSign,                mnx::FermataSymbol::Curlew },
+};
+} // namespace
+
+mnx::FermataSymbol toMnxFermataSymbol(SymId sym)
+{
+    return muse::value(fermataSymToSymId, sym, mnx::FermataSymbol::Normal);
 }
 
 namespace {
 /// @todo Grow this table as MNX grows it.
-static const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
+const std::unordered_map<mnx::JumpType, JumpType> jumpTable = {
     { mnx::JumpType::DsAlFine,      JumpType::DS_AL_FINE },
     { mnx::JumpType::Segno,         JumpType::DSS },
 };
@@ -396,7 +438,7 @@ std::optional<mnx::JumpType> toMnxJumpType(JumpType jt)
 }
 
 namespace {
-static const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
+const std::unordered_map<mnx::LyricLineType, LyricsSyllabic> lineTypeTable = {
     { mnx::LyricLineType::Whole,        LyricsSyllabic::SINGLE },
     { mnx::LyricLineType::Start,        LyricsSyllabic::BEGIN },
     { mnx::LyricLineType::Middle,       LyricsSyllabic::MIDDLE },

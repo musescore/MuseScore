@@ -506,6 +506,7 @@ MNX_PROJECT_FILE_TEST(bowDirection)
 MNX_PROJECT_FILE_TEST(clarinet38)
 MNX_PROJECT_FILE_TEST(clarinet38MissingTime)
 MNX_PROJECT_FILE_TEST(enharmonicPart)
+MNX_PROJECT_FILE_TEST(fermata)
 MNX_PROJECT_FILE_TEST(graceBeamed)
 MNX_PROJECT_FILE_TEST(key56Wrapped56Edited)
 MNX_PROJECT_FILE_TEST_DISABLED(key56Wrapped56Unedited) // the unedited file is just for creating the edited file.
