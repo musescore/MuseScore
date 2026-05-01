@@ -304,15 +304,17 @@ static void exportMeasureElements(mnx::global::Measure& mnxMeasure, const Measur
     }
 
     if (const BarLine* barLine = measure->endBarLine()) {
-        for (const EngravingItem* item : barLine->segment()->annotations()) {
-            IF_ASSERT_FAILED(item) {
-                continue;
-            }
-            if (item->isFermata()) {
-                const Fermata* fermata = toFermata(item);
-                DO_ASSERT(fermata);
-                if (fermata) {
-                    mnxMeasure.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+        if (const Segment* seg = barLine->segment()) {
+            for (const EngravingItem* item : seg->annotations()) {
+                IF_ASSERT_FAILED(item) {
+                    continue;
+                }
+                if (item->isFermata()) {
+                    const Fermata* fermata = toFermata(item);
+                    DO_ASSERT(fermata);
+                    if (fermata) {
+                        mnxMeasure.set_fermata(MnxExporter::mnxFermataFromFermata(fermata));
+                    }
                 }
             }
         }
