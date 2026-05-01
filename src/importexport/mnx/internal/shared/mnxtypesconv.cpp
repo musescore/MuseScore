@@ -59,7 +59,7 @@ mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
 
 mnx::Orientation toMnxOrientation(PlacementV placement)
 {
-    switch (placement){
+    switch (placement) {
     case PlacementV::ABOVE: return mnx::Orientation::Above;
     case PlacementV::BELOW: return mnx::Orientation::Below;
     }
