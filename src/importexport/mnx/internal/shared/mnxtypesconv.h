@@ -77,6 +77,7 @@ extern int toMnxKeyFifthsFlipValue(engraving::PreferSharpFlat prefer, const engr
 extern mnx::LayoutSymbol toMnxLayoutSymbol(engraving::BracketType bracketType);
 extern mnx::LyricLineType toMnxLyricLineType(engraving::LyricsSyllabic ls);
 extern mnx::Orientation toMnxOrientation(engraving::ArticulationAnchor anchor);
+extern mnx::Orientation toMnxOrientation(engraving::PlacementV placement);
 extern mnx::LineType toMnxSlurLineType(engraving::SlurStyleType sst);
 extern std::optional<mnx::NoteValue::Required> toMnxNoteValue(const engraving::TDuration& duration);
 extern std::optional<mnx::OttavaAmount> toMnxOttavaAmount(engraving::OttavaType ottavaType);

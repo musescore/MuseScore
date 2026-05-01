@@ -57,6 +57,14 @@ mnx::Orientation toMnxOrientation(ArticulationAnchor anchor)
     return muse::key(articulationAnchorTable, anchor, mnx::Orientation::Auto);
 }
 
+mnx::Orientation toMnxOrientation(PlacementV placement)
+{
+    switch (placement){
+    case PlacementV::ABOVE: return mnx::Orientation::Above;
+    case PlacementV::BELOW: return mnx::Orientation::Below;
+    }
+}
+
 namespace {
 const std::unordered_map<mnx::BarlineType, BarLineType> barLineTypeTable = {
     { mnx::BarlineType::Regular,    BarLineType::NORMAL },
