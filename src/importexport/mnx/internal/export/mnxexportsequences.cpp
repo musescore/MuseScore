@@ -1106,8 +1106,9 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
         }
     }
 
-    // Avoid cluttering output with unnecessary full-measure rests.
-    // Keep a solitary full-measure sequence only when it carries explicit placement data.
+    // Avoid cluttering the output with unnecessary full-measure rests.
+    // Keep a solitary full-measure sequence only when the full measure rest
+    // carries additional information, such as a staff position or fermata.
     if (mnxSequences.size() == 1) {
         auto onlySequence = mnxSequences.at(0);
         const auto fullMeasure = onlySequence.fullMeasure();
