@@ -291,6 +291,13 @@ void StringData::fretChords(Chord* chord) const
             }
         }
 
+        // Still two notes on one string: try a free string with fret <0 or >maxFrets.
+        if (note->configuration()->negativeFretsAllowed()
+            && note->displayFret() == Note::DisplayFretOption::NoHarmonic
+            && bUsed[nNewString] > 1) {
+            tryResolveStringConflictWithOutOfRangeFret(note, strings, bUsed, nNewString, nNewFret);
+        }
+
         // TODO : try to optimize used fret range, avoiding excessively open positions
 
         // if fretting did change, store as a fret change
@@ -516,6 +523,54 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 }
 
 //---------------------------------------------------------
+//   tryResolveStringConflictWithOutOfRangeFret
+//    After in-range conflict resolution fails: assign an unused string using raw
+//    fret (may be <0 or >maxFrets). Chooses smallest distance to [0, maxFrets];
+//    ties break toward lower string index.
+//---------------------------------------------------------
+
+bool StringData::tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed,
+                                                            int& nNewString, int& nNewFret) const
+{
+    int bestString = -1;
+    int bestDistance = INT32_MAX;
+    int bestRawFret = 0;
+
+    for (int s = 0; s < numStrings; s++) {
+        if (bUsed[static_cast<size_t>(s)] >= 1) {
+            continue;
+        }
+        const int openPitch = m_stringTable.at(m_stringTable.size() - s - 1).pitch;
+        const int rawFret = note->pitch() + pitchOffsetAt(note->staff(), note->tick(), s) - openPitch;   // not clamped to 0..m_frets
+        int distance;
+        if (rawFret < 0) {
+            distance = -rawFret;
+        } else if (rawFret > m_frets) {
+            distance = rawFret - m_frets;
+        } else {
+            continue;   // only out-of-range frets here; in-range tried above in fretChords
+        }
+
+        if (distance < bestDistance
+            || (distance == bestDistance && (bestString < 0 || s < bestString))) {
+            bestDistance = distance;
+            bestRawFret = rawFret;
+            bestString = s;
+        }
+    }
+
+    if (bestString < 0) {
+        return false;
+    }
+
+    bUsed[static_cast<size_t>(nNewString)]--;
+    bUsed[static_cast<size_t>(bestString)]++;
+    nNewFret = bestRawFret;
+    nNewString = bestString;
+    return true;
+}
+
+//---------------------------------------------------------
 //   sortChordNotesUseSameString
 //    Tries to keep each note on its currently assigned string when the
 //    chord's pitches are transposed, updating only the fret.
@@ -640,7 +695,12 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         }
 
         int key = string * 100000;
-        key += -(note->pitch() + pitchOffset) * 100 + *count;       // disambiguate notes of equal pitch
+        if (string == INVALID_STRING_INDEX && note->configuration()->negativeFretsAllowed()) {
+            // No string assigned yet: lower note first, then higher (transpose in one go or in steps must match).
+            key += (note->pitch() + pitchOffset) * 100 + *count;
+        } else {
+            key += -(note->pitch() + pitchOffset) * 100 + *count;   // disambiguate notes of equal pitch
+        }
         sortedNotes.insert({ key, note });
         (*count)++;
     }
