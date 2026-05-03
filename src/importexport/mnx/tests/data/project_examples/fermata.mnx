@@ -32,9 +32,7 @@
                 "id": "m5"
             },
             {
-                "fermata": {
-                    "orient": "above"
-                },
+                "fermata": {},
                 "id": "m6"
             },
             {
@@ -397,9 +395,7 @@
                                     "duration": {
                                         "base": "half"
                                     },
-                                    "fermata": {
-                                        "orient": "above"
-                                    },
+                                    "fermata": {},
                                     "id": "ev125",
                                     "notes": [
                                         {
@@ -427,9 +423,7 @@
                                     "duration": {
                                         "base": "half"
                                     },
-                                    "fermata": {
-                                        "orient": "below"
-                                    },
+                                    "fermata": {},
                                     "id": "ev127",
                                     "notes": [
                                         {
@@ -686,7 +680,6 @@
                             "fullMeasure": {
                                 "fermata": {
                                     "duration": "veryLong",
-                                    "orient": "above",
                                     "symbol": "doubleSquare"
                                 }
                             }
@@ -710,7 +703,6 @@
                                     },
                                     "fermata": {
                                         "duration": "short",
-                                        "orient": "above",
                                         "symbol": "halfCurve"
                                     },
                                     "id": "ev137",
