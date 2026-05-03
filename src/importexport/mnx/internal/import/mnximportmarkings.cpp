@@ -60,35 +60,29 @@ Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::E
     }
     Articulation* articulation = Factory::createArticulation(cr);
     articulation->setSymId(symId);
-    setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(mu::iex::mnxio::toMuseScoreArticulationAnchor(marking.orient())));
+    setAndStyleProperty(articulation, Pid::ARTICULATION_ANCHOR, int(toMuseScoreArticulationAnchor(marking.orient())));
     cr->add(articulation);
     return articulation;
 }
 
 //---------------------------------------------------------
 //   createFermata
-//   Helper to create a fermata. Caller must add it to
-//   segment.
+//   Helper to create and add a fermata to a segment.
 //---------------------------------------------------------
 
-Fermata* MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata)
+void MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata, track_idx_t track)
 {
-    Fermata* fermata = Factory::createFermata(seg ? seg : m_score->dummy()->segment());
+    IF_ASSERT_FAILED(seg) {
+        LOGE() << "Null segment passed to addFermata";
+        return;
+    }
+    Fermata* fermata = Factory::createFermata(seg);
+    fermata->setTrack(track);
     /// @note MNX decouples fermata symbol from duration, but MuseScore does not currently model
     /// an independently round-trippable fermata duration separate from the fermata subtype/symbol.
     fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
-    switch (mnxFermata.orient()) {
-    case mnx::Orientation::Above:
-        setAndStyleProperty(fermata, Pid::PLACEMENT, PlacementV::ABOVE);
-        break;
-    case mnx::Orientation::Below:
-        setAndStyleProperty(fermata, Pid::PLACEMENT, PlacementV::BELOW);
-        break;
-    case mnx::Orientation::Auto:
-        // do nothing here on purpose
-        break;
-    }
-    return fermata;
+    setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.orient(), fermata));
+    seg->add(fermata);
 }
 
 //---------------------------------------------------------
@@ -96,7 +90,7 @@ Fermata* MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata)
 //   Import all articulations/markings for an MNX event.
 //---------------------------------------------------------
 
-void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr, Measure* measure)
+void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
 {
     if (!mnxEvent.markings()) {
         return;
@@ -109,7 +103,7 @@ void MnxImporter::importMarkings(const mnx::sequence::Event& mnxEvent, ChordRest
         importBowDirection(bowDirection.value(), cr);
     }
     if (const auto breath = markings.breath()) {
-        importBreath(breath.value(), cr, measure);
+        importBreath(breath.value(), cr, eventEndTick, measure);
     }
     if (const auto softAccent = markings.softAccent()) {
         importSoftAccent(softAccent.value(), cr);
@@ -172,7 +166,7 @@ void MnxImporter::importBowDirection(const mnx::sequence::BowDirection& bowDirec
 //   Import MNX breath mark.
 //---------------------------------------------------------
 
-void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, Measure* measure)
+void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRest* cr, const Fraction& eventEndTick, Measure* measure)
 {
     Measure* targetMeasure = measure;
     if (!targetMeasure) {
@@ -184,21 +178,11 @@ void MnxImporter::importBreath(const mnx::sequence::BreathMark& breath, ChordRes
         return;
     }
 
-    Segment* segment = targetMeasure->getSegment(SegmentType::Breath, cr->endTick());
+    Segment* segment = targetMeasure->getSegmentR(SegmentType::Breath, eventEndTick);
     Breath* breathMark = Factory::createBreath(segment);
     breathMark->setTrack(cr->track());
     breathMark->setSymId(toMuseScoreBreathMarkSym(breath.symbol()));
-    switch (breath.orient()) {
-    case mnx::Orientation::Above:
-        setAndStyleProperty(breathMark, Pid::PLACEMENT, PlacementV::ABOVE);
-        break;
-    case mnx::Orientation::Below:
-        setAndStyleProperty(breathMark, Pid::PLACEMENT, PlacementV::BELOW);
-        break;
-    case mnx::Orientation::Auto:
-        // Preserve MuseScore's default voice-dependent placement.
-        break;
-    }
+    setAndStyleProperty(breathMark, Pid::PLACEMENT, toMuseScorePlacementV(breath.orient(), breathMark));
     segment->add(breathMark);
 }
 
@@ -324,12 +308,6 @@ void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::Chord
         LOGE() << "cr has no segement when importing fermata";
         return;
     }
-    Fermata* fermata = addFermata(seg, mnxFermata);
-    IF_ASSERT_FAILED(fermata) {
-        LOGE() << "unable to import fermata for cr";
-        return;
-    }
-    fermata->setTrack(cr->track());
-    seg->add(fermata);
+    addFermata(seg, mnxFermata, cr->track());
 }
 } // namespace mu::iex::mnxio
