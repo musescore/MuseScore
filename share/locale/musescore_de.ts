@@ -6831,13 +6831,13 @@ niemals linksbündig ausrichten</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="655"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="656"/>
         <source>Move measure to previous system</source>
-        <translation>Takt zu vorigem System verschieben</translation>
+        <translation>Takt in voriges System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="662"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="663"/>
         <source>Move measure to next system</source>
-        <translation>Takt zu nächstem System verschieben</translation>
+        <translation>Takt in nächstes System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="669"/>
@@ -10736,8 +10736,8 @@ Soll sie überschrieben werden?</translation>
         <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1095"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3425"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3437"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3436"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3448"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2540"/>
         <source>Start of %1</source>
         <translation>Anfang von %1</translation>
@@ -10746,8 +10746,8 @@ Soll sie überschrieben werden?</translation>
         <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1098"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3429"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3445"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3440"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3456"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2555"/>
         <source>End of %1</source>
         <translation>Ende von %1</translation>
@@ -11036,7 +11036,7 @@ Bund %1 auf Saiten %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3370"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="506"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="518"/>
         <source>Voice: %1</source>
@@ -11050,19 +11050,19 @@ Bund %1 auf Saiten %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
         <source>Beat slash</source>
         <translation>Schrägstriche auf Taktschlägen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
         <source>Rhythm slash</source>
         <translation>Schrägstriche im Rhythmus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3350"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3390"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Saite: %2; Bund: %3</translation>
     </message>
@@ -11072,40 +11072,40 @@ Bund %1 auf Saiten %2</translation>
         <translation>%1; Tonhöhe: %2; Länge: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3396"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 Kopf %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3398"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="521"/>
         <source>Cross-staff above</source>
         <translation>Notenzeilenübergreifend darüber</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3400"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="523"/>
         <source>Cross-staff below</source>
         <translation>Notenzeilenübergreifend darunter</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3393"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3404"/>
         <source>too low</source>
         <translation>zu tief</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3395"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3406"/>
         <source>too high</source>
         <translation>zu hoch</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3397"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3408"/>
         <source>too low for amateurs</source>
         <translation>zu tief für Laien</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3399"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
         <source>too high for amateurs</source>
         <translation>zu hoch für Laien</translation>
     </message>
@@ -22649,7 +22649,7 @@ Bund %1 auf Saiten %2</translation>
 <context>
     <name>iex_audio</name>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="132"/>
+        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="142"/>
         <source>Processing online sounds…</source>
         <translation>Verarbeite online Sounds…</translation>
     </message>
@@ -23474,7 +23474,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="97"/>
         <source>Move to system</source>
-        <translation>Zu System verschieben</translation>
+        <translation>In System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="119"/>
@@ -23484,7 +23484,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="121"/>
         <source>Move measure(s) to previous system</source>
-        <translation>Takt(e) zu vorigem System verschieben</translation>
+        <translation>Takt(e) in voriges System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="140"/>
@@ -23494,7 +23494,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="142"/>
         <source>Move measure(s) to next system</source>
-        <translation>Takt(e) zu nächstem System verschieben</translation>
+        <translation>Takt(e) in nächstes System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
@@ -37827,12 +37827,12 @@ musikalische Symbole</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5933"/>
         <source>Move measure to previous system</source>
-        <translation>Takt zu vorigem System verschieben</translation>
+        <translation>Takt in voriges System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5944"/>
         <source>Move measure to next system</source>
-        <translation>Takt zu nächstem System verschieben</translation>
+        <translation>Takt in nächstes System verschieben</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5951"/>

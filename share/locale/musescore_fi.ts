@@ -2363,7 +2363,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4249"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4472"/>
         <source>Horizontal alignment:</source>
-        <translation>Vaakatasaus:</translation>
+        <translation>Vaakakohdistus:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4259"/>
@@ -2590,7 +2590,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5298"/>
         <source>Alignment in chords</source>
-        <translation>Tasaus soinnuissa</translation>
+        <translation>Kohdistus soinnuissa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5304"/>
@@ -3384,7 +3384,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9624"/>
         <source>Articulation alignment when positioned at the stem</source>
-        <translation>Artikulaation tasaus varren kohdalle</translation>
+        <translation>Artikulaation kohdistus varren kohdalle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9630"/>
@@ -3684,7 +3684,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11760"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11763"/>
         <source>Alignment</source>
-        <translation>Tasaus</translation>
+        <translation>Kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="11769"/>
@@ -3920,12 +3920,12 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12801"/>
         <source>Align:</source>
-        <translation>Tasaus:</translation>
+        <translation>Kohdistus:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12765"/>
         <source>Reset &apos;Align&apos; values</source>
-        <translation>Palauta &apos;Tasaa&apos; -arvot</translation>
+        <translation>Palauta &apos;Kohdistus&apos; -arvot</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12831"/>
@@ -4250,7 +4250,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="303"/>
         <source>Play count:</source>
-        <translation>Toistokertojen määrä:</translation>
+        <translation>Toistokerrat:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/measureproperties.ui" line="348"/>
@@ -7969,7 +7969,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1651"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1652"/>
         <source>Repeat selection</source>
-        <translation>Toista valinta</translation>
+        <translation>Kertaa valinta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1657"/>
@@ -10736,8 +10736,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1030"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1095"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3425"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3437"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3436"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3448"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2540"/>
         <source>Start of %1</source>
         <translation>%1:n alkuun</translation>
@@ -10746,8 +10746,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1033"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1098"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3429"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3445"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3440"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3456"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2555"/>
         <source>End of %1</source>
         <translation>%2:n loppuun</translation>
@@ -11036,7 +11036,7 @@ Otenauha %1 kielissä %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3332"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3370"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="506"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="518"/>
         <source>Voice: %1</source>
@@ -11050,19 +11050,19 @@ Otenauha %1 kielissä %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
         <source>Beat slash</source>
         <translation>Komppiviiva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3346"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3375"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3386"/>
         <source>Rhythm slash</source>
         <translation>Rytmivinoviiva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3350"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3379"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3390"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Kieli: %2; Nauha: %3</translation>
     </message>
@@ -11072,52 +11072,52 @@ Otenauha %1 kielissä %2</translation>
         <translation>%1; Korkeus: %2; Kesto: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3385"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3396"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 pää %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3387"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3398"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="521"/>
         <source>Cross-staff above</source>
         <translation>Ristiin viivasto ylös</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3400"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="523"/>
         <source>Cross-staff below</source>
         <translation>Ristiin viivasto alas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3393"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3404"/>
         <source>too low</source>
         <translation>liian matala</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3395"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3406"/>
         <source>too high</source>
         <translation>liian korkea</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3397"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3408"/>
         <source>too low for amateurs</source>
         <translation>liian matala amatööreille</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3399"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3410"/>
         <source>too high for amateurs</source>
         <translation>liian korkea amatööreille</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="386"/>
         <source>Note input will remove measure repeat</source>
-        <translation>Nuotinsyöttö poistaa tahdin toiston</translation>
+        <translation>Nuotinsyöttö poistaa tahdin kertauksen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="387"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
-        <translation>Tämä tahti sisältää toiston. Jos kirjoitat nuotteja tähän, ne poistetaan. Haluatahtitko jatkaa?</translation>
+        <translation>Tämä tahti sisältää tahdin kertauksen. Jos kirjoitat nuotteja tähän, ne poistetaan. Haluatko jatkaa?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="101"/>
@@ -11387,7 +11387,7 @@ Otenauha %1 kielissä %2</translation>
         <source>start repeat</source>
         <comment>partial tie menu</comment>
         <extracomment>Used at %1 in the string &quot;Tie to %1 (m. %2)&quot;</extracomment>
-        <translation>aloita toisto</translation>
+        <translation>aloita kertaus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tiejumppointlist.cpp" line="143"/>
@@ -11416,7 +11416,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/editing/cmd.cpp" line="3870"/>
         <source>Continue with inserting measure repeat?</source>
-        <translation>Jatketaanko tahdin toiston lisäämistä?</translation>
+        <translation>Jatketaanko tahdin kertauksen lisäämistä?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/editing/edit.cpp" line="289"/>
@@ -13152,12 +13152,12 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
         <source>Repeat text left</source>
-        <translation>Toistoteksti vasemmalla</translation>
+        <translation>Kertausteksti vasen</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1724"/>
         <source>Repeat text right</source>
-        <translation>Toistoteksti oikealla</translation>
+        <translation>Kertausteksti oikea</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
@@ -16570,7 +16570,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="150"/>
         <source>horizontal alignment</source>
-        <translation>vaakatasaus</translation>
+        <translation>vaakakohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="151"/>
@@ -16791,7 +16791,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="209"/>
         <source>continue at</source>
-        <translation>jatka kohtaan</translation>
+        <translation>jatka kohdasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="210"/>
@@ -16826,17 +16826,17 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="216"/>
         <source>repeat end</source>
-        <translation>toiston loppu</translation>
+        <translation>kertauksen loppu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="217"/>
         <source>repeat start</source>
-        <translation>toiston alku</translation>
+        <translation>kertauksen alku</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="218"/>
         <source>repeat jump</source>
-        <translation>toiston hyppy</translation>
+        <translation>kertauksen hyppy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="219"/>
@@ -16989,12 +16989,12 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="252"/>
         <source>vertical position of measure repeat number</source>
-        <translation>tahdin toistonumeron pystysijainti</translation>
+        <translation>tahdin kertausnumeron pystysijainti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="253"/>
         <source>repeat count</source>
-        <translation>toiston määrä</translation>
+        <translation>kertausten määrä</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="255"/>
@@ -17364,12 +17364,12 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="343"/>
         <source>align</source>
-        <translation>tasaus</translation>
+        <translation>kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="344"/>
         <source>text script align</source>
-        <translation>tekstimerkinnän tasaus</translation>
+        <translation>tekstimerkinnän kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="345"/>
@@ -17384,7 +17384,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="348"/>
         <source>begin text align</source>
-        <translation>aloitustekstin tasaus</translation>
+        <translation>aloitustekstin kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="349"/>
@@ -17489,7 +17489,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="370"/>
         <source>continue text align</source>
-        <translation>jatkuvan tekstin tasaus</translation>
+        <translation>jatkuvan tekstin kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="371"/>
@@ -17529,7 +17529,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="379"/>
         <source>end text align</source>
-        <translation>lopputekstin tasaus</translation>
+        <translation>lopputekstin kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="380"/>
@@ -17609,7 +17609,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="397"/>
         <source>use text alignment</source>
-        <translation>käytä tekstin tasausta</translation>
+        <translation>käytä tekstin kohdistusta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="398"/>
@@ -22648,7 +22648,7 @@ Otenauha %1 kielissä %2</translation>
 <context>
     <name>iex_audio</name>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="132"/>
+        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="142"/>
         <source>Processing online sounds…</source>
         <translation>Käsitellään online-ääniä…</translation>
     </message>
@@ -23705,7 +23705,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="106"/>
         <source>Play count</source>
-        <translation>Toistokertojen määrä</translation>
+        <translation>Toistokerrat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="144"/>
@@ -24026,7 +24026,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="109"/>
         <source>Alignment with notehead</source>
-        <translation>Tasaus nuotinpään kanssa</translation>
+        <translation>Kohdistus nuotinpään kanssa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="116"/>
@@ -24071,7 +24071,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="35"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="176"/>
         <source>Alignment</source>
-        <translation>Tasaus</translation>
+        <translation>Kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml" line="60"/>
@@ -24352,7 +24352,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="66"/>
         <source>Continue at</source>
-        <translation>Jatka kohtaan</translation>
+        <translation>Jatka kohdasta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="74"/>
@@ -24493,7 +24493,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="64"/>
         <source>Alignment with adjacent tempo text</source>
-        <translation>Tasaus viereisen tempotekstin kanssa</translation>
+        <translation>Kohdistus viereisen tempotekstin kanssa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="70"/>
@@ -24504,7 +24504,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="62"/>
         <source>Alignment with adjacent dynamics</source>
-        <translation>Tasaus viereisen dynamiikan kanssa</translation>
+        <translation>Kohdistus viereisen dynamiikan kanssa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="67"/>
@@ -25514,7 +25514,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="185"/>
         <source>Vertical alignment buttons</source>
-        <translation>Pystytasauksen painikkeet</translation>
+        <translation>Pystykohdistuksen painikkeet</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="243"/>
@@ -25539,7 +25539,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="304"/>
         <source>Horizontal alignment buttons</source>
-        <translation>Vaakatasauksen painikkeet</translation>
+        <translation>Vaakakohdistuksen painikkeet</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml" line="349"/>
@@ -25991,7 +25991,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/measurerepeats/measurerepeatsettingsmodel.cpp" line="33"/>
         <source>Measure repeat</source>
-        <translation>Tahdin toisto</translation>
+        <translation>Tahdin kertaus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/mmrests/mmrestsettingsmodel.cpp" line="35"/>
@@ -27462,12 +27462,12 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="640"/>
         <source>Alignment to notehead:</source>
-        <translation>Tasaus nuotinpäähän:</translation>
+        <translation>Kohdistus nuotinpäähän:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="654"/>
         <source>Alignment to fretboard diagram:</source>
-        <translation>Tasaus otetaulukon:</translation>
+        <translation>Kohdistus otetaulukkoon:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="690"/>
@@ -28013,7 +28013,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="106"/>
         <source>Cannot create measure repeat here</source>
-        <translation>Tässä ei voida tehdä tahdin toistoa</translation>
+        <translation>Tahdin kertausta ei voi luoda tähän</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="107"/>
@@ -28023,7 +28023,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="110"/>
         <source>Cannot split measure repeat</source>
-        <translation>Tahdin toistoa ei voida jakaa</translation>
+        <translation>Tahdin kertausta ei voi jakaa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="114"/>
@@ -28043,12 +28043,12 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="121"/>
         <source>Cannot remove time from measure repeat</source>
-        <translation>Aikaa ei voi poistaa tahdin toistosta</translation>
+        <translation>Aikaa ei voi poistaa tahdin kertauksesta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="122"/>
         <source>Please select the complete measure repeat and retry</source>
-        <translation>Valitse kokonainen tahdin toisto ja yritä uudelleen</translation>
+        <translation>Valitse kokonaisen tahdin kertaus ja yritä uudelleen</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="125"/>
@@ -29307,7 +29307,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="614"/>
         <source>Alignment</source>
-        <translation>Tasaus</translation>
+        <translation>Kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="625"/>
@@ -29317,7 +29317,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="667"/>
         <source>Exclude modifiers from horizontal alignment</source>
-        <translation>Jätä muokkaajat pois vaakatasauksesta</translation>
+        <translation>Jätä muokkaajat pois vaakakohdistuksesta</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="677"/>
@@ -29494,7 +29494,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="130"/>
         <source>Alignment</source>
-        <translation>Tasaus</translation>
+        <translation>Kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="137"/>
@@ -29773,12 +29773,12 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="258"/>
         <source>Alignment with barlines:</source>
-        <translation>Tasaus tahtiviivojen kanssa:</translation>
+        <translation>Kohdistus tahtiviivojen kanssa:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="259"/>
         <source>Alignment across staves:</source>
-        <translation>Tasaus viivastojen yli</translation>
+        <translation>Kohdistus viivastojen yli:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="296"/>
@@ -29803,7 +29803,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="424"/>
         <source>End-of-staff alignment:</source>
-        <translation>Tasaus viivaston loppuun:</translation>
+        <translation>Viivaston lopun kohdistus:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ClefKeyTimeSigPage.qml" line="428"/>
@@ -29921,7 +29921,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TupletCenteringSelector.qml" line="46"/>
         <source>Number alignment</source>
-        <translation>Numeron tasaus</translation>
+        <translation>Numeron kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TupletCenteringSelector.qml" line="54"/>
@@ -29987,7 +29987,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="177"/>
         <source>Align</source>
-        <translation>Tasaa</translation>
+        <translation>Kohdista</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="184"/>
@@ -30004,7 +30004,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="404"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="136"/>
         <source>Alignment</source>
-        <translation>Tasaus</translation>
+        <translation>Kohdistus</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/MeasureNumbersPage.qml" line="226"/>
@@ -37716,7 +37716,7 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5276"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5308"/>
         <source>Repeat selection</source>
-        <translation>Toista valinta</translation>
+        <translation>Kertaa valinta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5330"/>
