@@ -309,6 +309,37 @@ TEST_F(Engraving_TabTransposeTests, preferSameStringKeepsOriginalStrings)
     delete score;
 }
 
+// same_string_high: str2/fret 13, str3/fret 14 — same-string transpose; frets may exceed maxFrets.
+TEST_F(Engraving_TabTransposeTests, sameStringPreservesNotesAboveMaxFret)
+{
+    setFrettingFlags(true, true);
+
+    struct {
+        int semitones;
+        int fret2;
+        int fret3;
+    } const cases[] = {
+        { 6, 19, 20 },
+        { 7, 20, 21 },
+        { 12, 25, 26 },
+    };
+
+    for (const auto& c : cases) {
+        MasterScore* score = ScoreRW::readScore(DATA_DIR + "same_string_high.mscx");
+        ASSERT_TRUE(score) << "semitones=" << c.semitones;
+        transposeScore(score, c.semitones);
+        auto notes = collectTabNotes(score);
+        ASSERT_EQ(notes.size(), 2u) << "semitones=" << c.semitones;
+        const TabNote* str2 = findNoteByString(notes, 2);
+        const TabNote* str3 = findNoteByString(notes, 3);
+        ASSERT_NE(str2, nullptr) << "semitones=" << c.semitones;
+        ASSERT_NE(str3, nullptr) << "semitones=" << c.semitones;
+        EXPECT_EQ(str2->fret, c.fret2);
+        EXPECT_EQ(str3->fret, c.fret3);
+        delete score;
+    }
+}
+
 // Transpose -1: string 3/fret 9 → fret 8 (valid), string 5/fret 0 → fret -1.
 // The note on string 3 must NOT be displaced to another string just because
 // its chord-mate landed on a negative fret.
@@ -381,6 +412,100 @@ TEST_F(Engraving_TabTransposeTests, noNegativeFretWhenLowerStringAvailable)
             << "note " << i << " got negative fret " << notes[i].fret
             << " but lower strings are available";
     }
+
+    delete score;
+}
+
+// low_frets: two notes on str4/str5; after -7 both get the same negative fret on their original strings
+// (pitch 41 @ 45-4, pitch 36 @ 40-4). They must stay on different strings — no accidental merge onto one string.
+TEST_F(Engraving_TabTransposeTests, chordNotesOnDifferentStringsWithNegativeFrets)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "low_frets.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -7);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+    const TabNote* n4 = findNoteByString(notes, 4);
+    const TabNote* n5 = findNoteByString(notes, 5);
+    ASSERT_NE(n4, nullptr);
+    ASSERT_NE(n5, nullptr);
+    EXPECT_EQ(n4->fret, -4);
+    EXPECT_EQ(n5->fret, -4);
+
+    delete score;
+}
+
+// neg_fret_chord: path-independent assignment for -7 vs direct -8 (same strings, frets differ by one semitone step).
+TEST_F(Engraving_TabTransposeTests, negFretChordAssignmentIsPathIndependent)
+{
+    setFrettingFlags(true, true);
+
+    {
+        MasterScore* score = ScoreRW::readScore(DATA_DIR + "neg_fret_chord.mscx");
+        ASSERT_TRUE(score);
+        transposeScore(score, -7);
+
+        auto notes = collectTabNotes(score);
+        ASSERT_EQ(notes.size(), 3u);
+
+        const TabNote* n5 = findNoteByString(notes, 5);
+        const TabNote* n4 = findNoteByString(notes, 4);
+        const TabNote* n3 = findNoteByString(notes, 3);
+        ASSERT_NE(n5, nullptr) << "no note on string 5 at -7";
+        ASSERT_NE(n4, nullptr) << "no note on string 4 at -7";
+        ASSERT_NE(n3, nullptr) << "no note on string 3 at -7";
+        EXPECT_EQ(n5->fret, -7);
+        EXPECT_EQ(n4->fret,  2);
+        EXPECT_EQ(n3->fret,  0);
+
+        delete score;
+    }
+
+    {
+        MasterScore* score = ScoreRW::readScore(DATA_DIR + "neg_fret_chord.mscx");
+        ASSERT_TRUE(score);
+        transposeScore(score, -8);
+
+        auto notes = collectTabNotes(score);
+        ASSERT_EQ(notes.size(), 3u);
+
+        const TabNote* n5 = findNoteByString(notes, 5);
+        const TabNote* n4 = findNoteByString(notes, 4);
+        const TabNote* n3 = findNoteByString(notes, 3);
+        ASSERT_NE(n5, nullptr) << "no note on string 5 at -8";
+        ASSERT_NE(n4, nullptr) << "no note on string 4 at -8";
+        ASSERT_NE(n3, nullptr) << "no note on string 3 at -8";
+        EXPECT_EQ(n5->fret, -8);
+        EXPECT_EQ(n4->fret,  1);
+        EXPECT_EQ(n3->fret, -1);
+
+        delete score;
+    }
+}
+
+// high_frets: same-string +9; second fret can exceed maxFrets without changing strings.
+TEST_F(Engraving_TabTransposeTests, sameStringTransposeKeepsStringsWithFretAboveMax)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "high_frets.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, 9);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+
+    const TabNote* n0 = findNoteByString(notes, 0);
+    const TabNote* n1 = findNoteByString(notes, 1);
+    ASSERT_NE(n0, nullptr) << "note should remain on string 0";
+    ASSERT_NE(n1, nullptr) << "note should remain on string 1";
+    EXPECT_EQ(n0->fret, 23);
+    EXPECT_EQ(n1->fret, 29);
 
     delete score;
 }
