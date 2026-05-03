@@ -689,7 +689,7 @@ PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt)
 
 PlacementV toMuseScorePlacementV(const mnx::Orientation orient, const EngravingItem* item)
 {
-    switch(orient) {
+    switch (orient) {
     case mnx::Orientation::Above:
         return PlacementV::ABOVE;
     case mnx::Orientation::Below:
