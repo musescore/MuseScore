@@ -252,25 +252,40 @@
             <symbol>breathMarkTick</symbol>
             <eid>j_j</eid>
             </Breath>
-          <Rest>
+          <Chord>
             <eid>k_k</eid>
             <durationType>half</durationType>
-            </Rest>
-          </voice>
-        <voice>
-          <Chord>
-            <eid>l_l</eid>
-            <durationType>half</durationType>
             <Note>
-              <eid>m_m</eid>
+              <eid>l_l</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Rest>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            <eid>m_m</eid>
+            <placement>below</placement>
+            </Breath>
+          </voice>
+        <voice>
+          <Chord>
             <eid>n_n</eid>
             <durationType>half</durationType>
-            </Rest>
+            <Note>
+              <eid>o_o</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>p_p</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>q_q</eid>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>
