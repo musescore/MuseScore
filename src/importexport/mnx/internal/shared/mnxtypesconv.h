@@ -56,9 +56,12 @@ extern engraving::Fraction toMuseScoreFraction(const mnx::FractionValue& fractio
 extern engraving::JumpType toMuseScoreJumpType(mnx::JumpType jt);
 extern engraving::Key toMuseScoreKey(int fifths);
 extern engraving::LyricsSyllabic toMuseScoreLyricsSyllabic(mnx::LyricLineType llt);
-extern engraving::NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch, engraving::Key key, int octaveShift);
+extern engraving::NoteVal toMuseScoreNoteVal(const mnx::sequence::Pitch::Required& pitch,
+                                             engraving::Key key, int octaveShift);
 extern engraving::OttavaType toMuseScoreOttavaType(mnx::OttavaAmount ottavaAmount);
 extern engraving::PreferSharpFlat toMuseScorePreferSharpFlat(int keyFifthsFlipAt);
+extern engraving::PlacementV toMuseScorePlacementV(const mnx::Orientation orient,
+                                                   const engraving::EngravingItem* item);
 extern engraving::Fraction toMuseScoreRTick(const mnx::RhythmicPosition& position);
 extern engraving::SlurStyleType toMuseScoreSlurStyleType(mnx::LineType lineType);
 extern engraving::TremoloType toMuseScoreTremoloType(int numberOfBeams);
