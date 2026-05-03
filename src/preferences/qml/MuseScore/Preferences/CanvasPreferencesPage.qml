@@ -60,6 +60,12 @@ PreferencesPage {
             onMouseZoomPrecisionChangeRequested: function(zoomPrecision) {
                 preferencesModel.mouseZoomPrecision = zoomPrecision
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
@@ -78,6 +84,12 @@ PreferencesPage {
             onLimitScrollAreaChangeRequested: function(limit) {
                 preferencesModel.limitScrollArea = limit
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
@@ -90,6 +102,12 @@ PreferencesPage {
 
             onSelectionProximityChangeRequested: function(proximity) {
                 preferencesModel.selectionProximity = proximity
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }

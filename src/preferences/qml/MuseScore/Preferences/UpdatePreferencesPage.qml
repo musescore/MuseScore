@@ -53,6 +53,12 @@ PreferencesPage {
             onNeedCheckForNewAppVersionChangeRequested: function(check) {
                 updateModel.needCheckForNewAppVersion = check
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
     }
 }

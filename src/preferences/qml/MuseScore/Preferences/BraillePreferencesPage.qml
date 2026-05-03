@@ -51,6 +51,12 @@ PreferencesPage {
             onBraillePanelEnabledChangeRequested: function(val) {
                 preferencesModel.braillePanelEnabled = val;
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height));
+                }
+            }
         }
 
         SeparatorLine { }
