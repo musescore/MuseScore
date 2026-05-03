@@ -845,9 +845,7 @@ void MnxImporter::importGlobalMeasures()
         }
         if (const std::optional<mnx::Fermata>& mnxFermata = mnxMeasure.fermata()) {
             Segment* const segment = measure->getSegment(SegmentType::EndBarLine, measure->endTick());
-            Fermata* fermata = addFermata(segment, mnxFermata.value());
-            fermata->setTrack(0); /// @todo when MNX supports it, better track selection including multiples
-            segment->add(fermata);
+            addFermata(segment, mnxFermata.value(), 0);
         }
 
         /// @todo MNX currently offers no way to exclude a measure from having
