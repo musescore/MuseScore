@@ -42,6 +42,8 @@ target_sources(muse_global PRIVATE
     profiler.h
     dataformatter.cpp
     dataformatter.h
+    stringsearch.cpp
+    stringsearch.h
     stringutils.cpp
     stringutils.h
     ptrutils.h

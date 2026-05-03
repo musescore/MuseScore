@@ -19,28 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "sortervalue.h"
+
+#include "sortfilterproxymodel.h"
 
 using namespace muse::uicomponents;
 
 SorterValue::SorterValue(QObject* parent)
-    : QObject(parent)
+    : Sorter(parent)
 {
+}
+
+bool SorterValue::lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight,
+                           const SortFilterProxyModel& proxyModel)
+{
+    const int role = proxyModel.roleFromRoleName(m_roleName);
+    if (role == -1) {
+        return sourceLeft < sourceRight;
+    }
+
+    const QAbstractItemModel* sourceModel = proxyModel.sourceModel();
+    const QVariant leftData = sourceModel->data(sourceLeft, role);
+    const QVariant rightData = sourceModel->data(sourceRight, role);
+    const QPartialOrdering ordering = QVariant::compare(leftData, rightData);
+    if (ordering == QPartialOrdering::Unordered || ordering == QPartialOrdering::Equivalent) {
+        return sourceLeft < sourceRight;
+    }
+
+    return ordering == QPartialOrdering::Less;
 }
 
 QString SorterValue::roleName() const
 {
     return m_roleName;
-}
-
-Qt::SortOrder SorterValue::sortOrder() const
-{
-    return m_sortOrder;
-}
-
-bool SorterValue::enabled() const
-{
-    return m_enabled;
 }
 
 void SorterValue::setRoleName(QString roleName)
@@ -50,30 +62,5 @@ void SorterValue::setRoleName(QString roleName)
     }
 
     m_roleName = roleName;
-    emit dataChanged();
-}
-
-void SorterValue::setSortOrder(Qt::SortOrder sortOrder)
-{
-    if (m_sortOrder == sortOrder) {
-        return;
-    }
-
-    m_sortOrder = sortOrder;
-    emit dataChanged();
-}
-
-void SorterValue::setEnabled(bool enabled)
-{
-    if (m_enabled == enabled) {
-        return;
-    }
-
-    m_enabled = enabled;
-
-    if (!enabled) {
-        m_sortOrder = Qt::AscendingOrder;
-    }
-
     emit dataChanged();
 }

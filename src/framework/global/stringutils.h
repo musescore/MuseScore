@@ -19,19 +19,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_STRINGUTILS_H
-#define MUSE_GLOBAL_STRINGUTILS_H
+
+#pragma once
 
 #include <locale>
-#include <string>
-#include <vector>
 #include <sstream>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <vector>
 
 #include "types/string.h"
 
 namespace muse::strings {
 bool replace(std::string& source, const std::string& what, const std::string& to);
+
 void split(const std::string& str, std::vector<std::string>& out, const std::string& delim);
+
+template<typename CharT, typename Traits, typename Allocator, typename OutIt, typename StringViewLike,
+         typename = decltype(*std::declval<OutIt>(), ++std::declval<OutIt>())> // restrict this overload to iterators only
+void split(const std::basic_string<CharT, Traits, Allocator>& str,
+           OutIt out, const StringViewLike& delim)
+{
+    const std::basic_string_view<CharT, Traits> delimStr = delim;
+    const std::size_t delimLen = delimStr.length();
+    const std::size_t extra = delimLen == 0 ? 1 : 0;
+
+    std::size_t begin = 0;
+    std::size_t end = str.find(delimStr);
+    while (end != std::basic_string<CharT, Traits, Allocator>::npos) {
+        *out++ = str.substr(begin, end - begin);
+
+        begin = end + delimLen;
+        end = str.find(delimStr, begin + extra);
+    }
+
+    *out++ = str.substr(begin);
+}
+
 std::string join(const std::vector<std::string>& strs, const std::string& sep = ",");
 
 void ltrim(std::string& s);
@@ -58,5 +83,3 @@ bool lessThanCaseInsensitive(const String& lhs, const String& rhs);
 
 size_t levenshteinDistance(const std::string& s1, const std::string& s2);
 }
-
-#endif // MUSE_GLOBAL_STRINGUTILS_H

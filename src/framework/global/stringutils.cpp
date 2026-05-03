@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "stringutils.h"
 
-#include <cctype>
 #include <algorithm>
+#include <cctype>
+#include <iterator>
 
 bool muse::strings::replace(std::string& str, const std::string& from, const std::string& to)
 {
@@ -36,16 +38,7 @@ bool muse::strings::replace(std::string& str, const std::string& from, const std
 
 void muse::strings::split(const std::string& str, std::vector<std::string>& out, const std::string& delim)
 {
-    std::size_t current, previous = 0;
-    current = str.find(delim);
-    std::size_t delimLen = delim.length();
-
-    while (current != std::string::npos) {
-        out.push_back(str.substr(previous, current - previous));
-        previous = current + delimLen;
-        current = str.find(delim, previous);
-    }
-    out.push_back(str.substr(previous, current - previous));
+    split(str, std::back_inserter(out), delim);
 }
 
 std::string muse::strings::join(const std::vector<std::string>& strs, const std::string& sep)

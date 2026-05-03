@@ -22,8 +22,12 @@
 
 #include "uicontextconfiguration.h"
 
-#include <QScreen>
 #include <QApplication>
+#include <QScreen>
+
+#ifdef Q_OS_WIN
+#include <QOperatingSystemVersion>
+#endif
 
 using namespace muse::ui;
 

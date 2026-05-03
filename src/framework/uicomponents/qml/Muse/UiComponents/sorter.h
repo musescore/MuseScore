@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,40 @@
 
 #pragma once
 
-#include <QString>
+#include <QObject>
 
 #include <QtQmlIntegration/qqmlintegration.h>
 
-#include "sorter.h"
+class QModelIndex;
 
 namespace muse::uicomponents {
-class SorterValue : public Sorter
+class SortFilterProxyModel;
+
+class Sorter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
+    Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder NOTIFY dataChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
 
-    QML_ELEMENT
+    QML_ELEMENT;
+    QML_UNCREATABLE("")
 
 public:
-    explicit SorterValue(QObject* parent = nullptr);
+    explicit Sorter(QObject* parent = nullptr);
 
-    bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) override;
+    virtual bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) = 0;
 
-    QString roleName() const;
+    Qt::SortOrder sortOrder() const;
+    void setSortOrder(Qt::SortOrder sortOrder);
 
-public slots:
-    void setRoleName(QString roleName);
+    bool enabled() const;
+    void setEnabled(bool enabled);
+
+signals:
+    void dataChanged();
 
 private:
-    QString m_roleName;
+    Qt::SortOrder m_sortOrder = Qt::AscendingOrder;
+    bool m_enabled = false;
 };
 }

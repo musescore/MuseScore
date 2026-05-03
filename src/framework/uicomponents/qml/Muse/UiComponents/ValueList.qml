@@ -81,20 +81,17 @@ Item {
         property real spacing: 4
         property real sideMargin: 30
 
-        function toggleSorter(sorter) {
+        function toggleSorter(sorter: SorterValue) {
             if (!sorter.enabled) {
-                setSorterEnabled(sorter, true)
+                sorter.enabled = true;
+                sorter.sortOrder = Qt.AscendingOrder
             } else if (sorter.sortOrder === Qt.AscendingOrder) {
                 sorter.sortOrder = Qt.DescendingOrder
             } else {
-                setSorterEnabled(sorter, false)
+                sorter.enabled = false
             }
 
             selectionModel.clear()
-        }
-
-        function setSorterEnabled(sorter, enable) {
-            sorter.enabled = enable
         }
     }
 
@@ -187,7 +184,7 @@ Item {
                 }
 
                 prv.toggleSorter(keySorter)
-                prv.setSorterEnabled(valueSorter, false)
+                valueSorter.enabled = false
             }
         }
 
@@ -218,7 +215,7 @@ Item {
                 }
 
                 prv.toggleSorter(valueSorter)
-                prv.setSorterEnabled(keySorter, false)
+                keySorter.enabled = false
             }
         }
     }

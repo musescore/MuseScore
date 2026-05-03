@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,31 +22,33 @@
 
 #pragma once
 
-#include <QString>
+#include <QMetaObject>
+#include <QObject>
+#include <QPointer>
 
 #include <QtQmlIntegration/qqmlintegration.h>
 
+#include "fuzzyfilter.h"
 #include "sorter.h"
 
 namespace muse::uicomponents {
-class SorterValue : public Sorter
+class FuzzyScoreSorter : public Sorter
 {
     Q_OBJECT
-    Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
+    Q_PROPERTY(muse::uicomponents::FuzzyFilter * fuzzyFilter READ fuzzyFilter WRITE setFuzzyFilter NOTIFY dataChanged REQUIRED)
 
     QML_ELEMENT
 
 public:
-    explicit SorterValue(QObject* parent = nullptr);
+    explicit FuzzyScoreSorter(QObject* parent = nullptr);
 
     bool lessThan(const QModelIndex& sourceLeft, const QModelIndex& sourceRight, const SortFilterProxyModel&) override;
 
-    QString roleName() const;
-
-public slots:
-    void setRoleName(QString roleName);
+    FuzzyFilter* fuzzyFilter() const;
+    void setFuzzyFilter(FuzzyFilter*);
 
 private:
-    QString m_roleName;
+    QPointer<FuzzyFilter> m_fuzzyFilter;
+    QMetaObject::Connection m_filterChangedConnection;
 };
 }

@@ -39,10 +39,6 @@
 
 #include "imainwindow.h"
 
-#ifdef Q_OS_WIN
-#include <QOperatingSystemVersion>
-#endif
-
 #include "muse_framework_config.h"
 
 #include "log.h"
