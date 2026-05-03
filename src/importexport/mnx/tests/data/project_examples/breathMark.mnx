@@ -103,66 +103,6 @@
                 }
             ],
             "id": "S0-Sys2"
-        },
-        {
-            "content": [
-                {
-                    "barlineStyle": "unified",
-                    "content": [
-                        {
-                            "sources": [
-                                {
-                                    "part": "P1",
-                                    "staff": 1
-                                }
-                            ],
-                            "type": "staff"
-                        }
-                    ],
-                    "type": "group"
-                }
-            ],
-            "id": "S1-ScrVw"
-        },
-        {
-            "content": [
-                {
-                    "barlineStyle": "unified",
-                    "content": [
-                        {
-                            "sources": [
-                                {
-                                    "part": "P1",
-                                    "staff": 1
-                                }
-                            ],
-                            "type": "staff"
-                        }
-                    ],
-                    "type": "group"
-                }
-            ],
-            "id": "S1-Sys1"
-        },
-        {
-            "content": [
-                {
-                    "barlineStyle": "unified",
-                    "content": [
-                        {
-                            "sources": [
-                                {
-                                    "part": "P1",
-                                    "staff": 1
-                                }
-                            ],
-                            "type": "staff"
-                        }
-                    ],
-                    "type": "group"
-                }
-            ],
-            "id": "S1-Sys2"
         }
     ],
     "mnx": {
@@ -404,7 +344,21 @@
                                         "base": "half"
                                     },
                                     "id": "ev154",
-                                    "rest": {}
+                                    "markings": {
+                                        "breath": {
+                                            "orient": "below",
+                                            "symbol": "comma"
+                                        }
+                                    },
+                                    "notes": [
+                                        {
+                                            "id": "ev154n1",
+                                            "pitch": {
+                                                "octave": 3,
+                                                "step": "G"
+                                            }
+                                        }
+                                    ]
                                 }
                             ],
                             "staff": 2,
@@ -432,7 +386,15 @@
                                         "base": "half"
                                     },
                                     "id": "ev156",
-                                    "rest": {}
+                                    "notes": [
+                                        {
+                                            "id": "ev156n1",
+                                            "pitch": {
+                                                "octave": 2,
+                                                "step": "B"
+                                            }
+                                        }
+                                    ]
                                 }
                             ],
                             "staff": 2,
@@ -457,24 +419,6 @@
                         },
                         {
                             "layout": "S0-Sys2",
-                            "measure": "m2"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "layout": "S1-ScrVw",
-            "name": "Part 1",
-            "pages": [
-                {
-                    "systems": [
-                        {
-                            "layout": "S1-Sys1",
-                            "measure": "m1"
-                        },
-                        {
-                            "layout": "S1-Sys2",
                             "measure": "m2"
                         }
                     ]

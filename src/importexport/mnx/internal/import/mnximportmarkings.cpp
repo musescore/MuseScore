@@ -305,7 +305,7 @@ void MnxImporter::importFermata(const mnx::Fermata& mnxFermata, engraving::Chord
 {
     Segment* seg = cr->segment();
     IF_ASSERT_FAILED(seg) {
-        LOGE() << "cr has no segement when importing fermata";
+        LOGE() << "cr has no segment when importing fermata";
         return;
     }
     addFermata(seg, mnxFermata, cr->track());

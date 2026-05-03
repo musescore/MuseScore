@@ -2671,266 +2671,6 @@
       <sizeAlt>24</sizeAlt>
       <distanceFromStemEnd>7</distanceFromStemEnd>
     </articDef>
-    <beatChart cmper="1" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>344</totalWidth>
-        <minWidth>215</minWidth>
-        <allotWidth>284</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="1" inci="1" part="1" shared="false">
-      <endPos>52</endPos>
-    </beatChart>
-    <beatChart cmper="1" inci="2" part="1" shared="false">
-      <dur>512</dur>
-      <pos>52</pos>
-      <endPos>104</endPos>
-      <minPos>43</minPos>
-    </beatChart>
-    <beatChart cmper="1" inci="3" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>104</pos>
-      <endPos>156</endPos>
-      <minPos>86</minPos>
-    </beatChart>
-    <beatChart cmper="1" inci="4" part="1" shared="false">
-      <dur>1536</dur>
-      <pos>156</pos>
-      <endPos>208</endPos>
-      <minPos>129</minPos>
-    </beatChart>
-    <beatChart cmper="1" inci="5" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>208</pos>
-      <endPos>344</endPos>
-      <minPos>169</minPos>
-    </beatChart>
-    <beatChart cmper="2" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>220</totalWidth>
-        <minWidth>66</minWidth>
-        <allotWidth>66</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="2" inci="1" part="1" shared="false">
-      <endPos>220</endPos>
-      <minPos>7</minPos>
-    </beatChart>
-    <beatChart cmper="3" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>220</totalWidth>
-        <minWidth>66</minWidth>
-        <allotWidth>66</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="3" inci="1" part="1" shared="false">
-      <endPos>220</endPos>
-      <minPos>7</minPos>
-    </beatChart>
-    <beatChart cmper="4" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>212</minWidth>
-        <allotWidth>290</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="4" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-      <minPos>6</minPos>
-    </beatChart>
-    <beatChart cmper="4" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>55</minPos>
-    </beatChart>
-    <beatChart cmper="4" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>98</minPos>
-    </beatChart>
-    <beatChart cmper="4" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>141</minPos>
-    </beatChart>
-    <beatChart cmper="5" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>172</minWidth>
-        <allotWidth>172</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="5" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-    </beatChart>
-    <beatChart cmper="5" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>43</minPos>
-    </beatChart>
-    <beatChart cmper="5" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>86</minPos>
-    </beatChart>
-    <beatChart cmper="5" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>129</minPos>
-    </beatChart>
-    <beatChart cmper="6" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>172</minWidth>
-        <allotWidth>172</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="6" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-    </beatChart>
-    <beatChart cmper="6" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>43</minPos>
-    </beatChart>
-    <beatChart cmper="6" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>86</minPos>
-    </beatChart>
-    <beatChart cmper="6" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>129</minPos>
-    </beatChart>
-    <beatChart cmper="7" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>202</minWidth>
-        <allotWidth>226</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="7" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-      <minPos>6</minPos>
-    </beatChart>
-    <beatChart cmper="7" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>61</minPos>
-    </beatChart>
-    <beatChart cmper="7" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>116</minPos>
-    </beatChart>
-    <beatChart cmper="7" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>165</minPos>
-    </beatChart>
-    <beatChart cmper="8" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>184</minWidth>
-        <allotWidth>202</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="8" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-      <minPos>6</minPos>
-    </beatChart>
-    <beatChart cmper="8" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>55</minPos>
-    </beatChart>
-    <beatChart cmper="8" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>98</minPos>
-    </beatChart>
-    <beatChart cmper="8" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>141</minPos>
-    </beatChart>
-    <beatChart cmper="9" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>336</totalWidth>
-        <minWidth>172</minWidth>
-        <allotWidth>172</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="9" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-    </beatChart>
-    <beatChart cmper="9" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>43</minPos>
-    </beatChart>
-    <beatChart cmper="9" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>252</endPos>
-      <minPos>86</minPos>
-    </beatChart>
-    <beatChart cmper="9" inci="4" part="1" shared="false">
-      <dur>3072</dur>
-      <pos>252</pos>
-      <endPos>336</endPos>
-      <minPos>129</minPos>
-    </beatChart>
-    <beatChart cmper="10" inci="0" part="1" shared="false">
-      <control>
-        <totalDur>4096</totalDur>
-        <totalWidth>304</totalWidth>
-        <minWidth>159</minWidth>
-        <allotWidth>205</allotWidth>
-      </control>
-    </beatChart>
-    <beatChart cmper="10" inci="1" part="1" shared="false">
-      <endPos>84</endPos>
-      <minPos>6</minPos>
-    </beatChart>
-    <beatChart cmper="10" inci="2" part="1" shared="false">
-      <dur>1024</dur>
-      <pos>84</pos>
-      <endPos>168</endPos>
-      <minPos>61</minPos>
-    </beatChart>
-    <beatChart cmper="10" inci="3" part="1" shared="false">
-      <dur>2048</dur>
-      <pos>168</pos>
-      <endPos>304</endPos>
-      <minPos>113</minPos>
-    </beatChart>
     <channelPlayData cmper="65535">
       <volControlLevel>101</volControlLevel>
       <volControlSaveFlags>
@@ -13272,22 +13012,6 @@
       <startEntry>127</startEntry>
       <endEntry>130</endEntry>
     </frameSpec>
-    <frameSpec cmper="34" inci="0">
-      <startEntry>131</startEntry>
-      <endEntry>134</endEntry>
-    </frameSpec>
-    <frameSpec cmper="35" inci="0">
-      <startEntry>135</startEntry>
-      <endEntry>138</endEntry>
-    </frameSpec>
-    <frameSpec cmper="36" inci="0">
-      <startEntry>139</startEntry>
-      <endEntry>142</endEntry>
-    </frameSpec>
-    <frameSpec cmper="37" inci="0">
-      <startEntry>143</startEntry>
-      <endEntry>146</endEntry>
-    </frameSpec>
     <frameSpec cmper="38" inci="0">
       <startEntry>147</startEntry>
       <endEntry>148</endEntry>
@@ -14983,17 +14707,6 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
-    <instUsed cmper="0" inci="0" part="1" shared="false">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
     <instUsed cmper="1" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -15016,17 +14729,6 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
-    <instUsed cmper="1" inci="0" part="1" shared="false">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
     <instUsed cmper="2" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -15042,17 +14744,6 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-288</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
-    <instUsed cmper="2" inci="0" part="1" shared="false">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -15086,28 +14777,6 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-736</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
-    <instUsed cmper="65400" inci="0" part="1" shared="false">
-      <inst>32767</inst>
-      <trackType>staff</trackType>
-      <distFromTop>0</distFromTop>
-      <range>
-        <startMeas>1</startMeas>
-        <startEdu>0</startEdu>
-        <endMeas>32767</endMeas>
-        <endEdu>2147483647</endEdu>
-      </range>
-    </instUsed>
-    <instUsed cmper="65400" inci="1" part="1" shared="false">
-      <inst>1</inst>
-      <trackType>staff</trackType>
-      <distFromTop>-316</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -16027,10 +15696,7 @@
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
-    <measSpec cmper="1" part="1" shared="true">
-      <width>259</width>
-      <posMode>beatchartPlusPos</posMode>
-    </measSpec>
+    <measSpec cmper="1" part="1" shared="true"/>
     <measSpec cmper="2">
       <width>600</width>
       <beats>4</beats>
@@ -16042,6 +15708,7 @@
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
+    <measSpec cmper="2" part="1" shared="true"/>
     <measExprAssign cmper="2" inci="0">
       <textExprID>54</textExprID>
       <staffAssign>1</staffAssign>
@@ -16920,17 +16587,6 @@
       <margLeft>288</margLeft>
       <margBottom>288</margBottom>
       <margRight>-288</margRight>
-    </pageSpec>
-    <pageSpec cmper="1" part="1" shared="false">
-      <height>3168</height>
-      <width>2448</width>
-      <percent>100</percent>
-      <firstSystem>1</firstSystem>
-      <scaleContentOnly/>
-      <margTop>-180</margTop>
-      <margLeft>144</margLeft>
-      <margBottom>180</margBottom>
-      <margRight>-144</margRight>
     </pageSpec>
     <playDefs cmper="0">
       <smpteStartTime>0</smpteStartTime>
@@ -39078,18 +38734,6 @@
       <scaleContentOnly/>
       <distanceToPrev>-490</distanceToPrev>
     </staffSystemSpec>
-    <staffSystemSpec cmper="1" part="1" shared="false">
-      <startMeas>1</startMeas>
-      <endMeas>2</endMeas>
-      <horzPercent>84479</horzPercent>
-      <ssysPercent>100</ssysPercent>
-      <staffHeight>5248</staffHeight>
-      <top>-432</top>
-      <left>144</left>
-      <bottom>-200</bottom>
-      <scaleVert/>
-      <scaleContentOnly/>
-    </staffSystemSpec>
     <staffSystemSpec cmper="2">
       <startMeas>2</startMeas>
       <endMeas>3</endMeas>
@@ -39101,17 +38745,6 @@
       <scaleVert/>
       <scaleContentOnly/>
       <distanceToPrev>-216</distanceToPrev>
-    </staffSystemSpec>
-    <staffSystemSpec cmper="2" part="1" shared="false">
-      <startMeas>2</startMeas>
-      <endMeas>3</endMeas>
-      <horzPercent>40800</horzPercent>
-      <ssysPercent>85</ssysPercent>
-      <staffHeight>6144</staffHeight>
-      <bottom>-96</bottom>
-      <scaleVert/>
-      <scaleContentOnly/>
-      <distanceToPrev>-162</distanceToPrev>
     </staffSystemSpec>
     <repeatStaffListName cmper="1">
       <name>Staff List 1</name>
@@ -40751,20 +40384,7 @@
       <copies>1</copies>
       <printPart/>
     </partDef>
-    <partDef cmper="1">
-      <nameID>0</nameID>
-      <partOrder>1</partOrder>
-      <copies>1</copies>
-      <extractPart/>
-      <needsRecalc/>
-      <useAsSmpInst/>
-      <smartMusicInst>-1</smartMusicInst>
-    </partDef>
     <partGlobals cmper="65534">
-      <showTransposed/>
-      <studioViewIUlist>65400</studioViewIUlist>
-    </partGlobals>
-    <partGlobals cmper="65534" part="1" shared="false">
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
@@ -53179,6 +52799,12 @@
     <articAssign entnum="149" inci="0">
       <articDef>23</articDef>
       <avoidSlur/>
+    </articAssign>
+    <articAssign entnum="154" inci="0">
+      <articDef>23</articDef>
+      <horzOff>7</horzOff>
+      <avoidSlur/>
+      <overridePlacement/>
     </articAssign>
     <baselinesChords cmper1="0" cmper2="0">
       <basedisp>144</basedisp>
@@ -114304,26 +113930,6 @@
       <clefPercent>75</clefPercent>
       <frame1>33</frame1>
     </gfhold>
-    <gfhold cmper1="32767" cmper2="3">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>34</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="4">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>35</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="5">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>36</frame1>
-    </gfhold>
-    <gfhold cmper1="32767" cmper2="6">
-      <clefID>0</clefID>
-      <clefPercent>75</clefPercent>
-      <frame1>37</frame1>
-    </gfhold>
     <staffGroup cmper1="0" cmper2="1">
       <startInst>1</startInst>
       <endInst>2</endInst>
@@ -114332,18 +113938,6 @@
       <fullXadj>-48</fullXadj>
       <bracket>
         <id>3</id>
-        <bracPos>-12</bracPos>
-      </bracket>
-      <groupBarlineStyle>group</groupBarlineStyle>
-      <optimize>asGroup</optimize>
-    </staffGroup>
-    <staffGroup cmper1="0" cmper2="2" part="1" shared="false">
-      <startInst>1</startInst>
-      <endInst>1</endInst>
-      <startMeas>1</startMeas>
-      <endMeas>32767</endMeas>
-      <fullXadj>-48</fullXadj>
-      <bracket>
         <bracPos>-12</bracPos>
       </bracket>
       <groupBarlineStyle>group</groupBarlineStyle>
@@ -131510,199 +131104,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="130" prev="129" next="131">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="131" prev="130" next="132">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="132" prev="131" next="133">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="133" prev="132" next="134">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="134" prev="133" next="135">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="135" prev="134" next="136">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="136" prev="135" next="137">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="137" prev="136" next="138">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="138" prev="137" next="139">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="139" prev="138" next="140">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="140" prev="139" next="141">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="141" prev="140" next="142">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="142" prev="141" next="143">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="143" prev="142" next="144">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="144" prev="143" next="145">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="145" prev="144" next="146">
-      <dura>1024</dura>
-      <numNotes>1</numNotes>
-      <isValid/>
-      <isNote/>
-      <sorted/>
-      <note id="1">
-        <harmLev>6</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
-    </entry>
-    <entry entnum="146" prev="145" next="0">
+    <entry entnum="130" prev="129" next="0">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -131802,6 +131204,7 @@
       <isValid/>
       <isNote/>
       <beam/>
+      <upStem/>
       <sorted/>
       <note id="1">
         <harmLev>-1</harmLev>
@@ -131811,11 +131214,18 @@
     </entry>
     <entry entnum="154" prev="153" next="0">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
-      <floatRest/>
+      <isNote/>
+      <articDetail/>
       <beam/>
+      <upStem/>
       <sorted/>
+      <note id="1">
+        <harmLev>-3</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
     <entry entnum="155" prev="150" next="156">
       <dura>2048</dura>
@@ -131832,10 +131242,17 @@
     </entry>
     <entry entnum="156" prev="155" next="0">
       <dura>2048</dura>
-      <numNotes>0</numNotes>
+      <numNotes>1</numNotes>
       <isValid/>
-      <floatRest/>
+      <isNote/>
+      <articDetail/>
       <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>-8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>
