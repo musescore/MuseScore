@@ -33,12 +33,15 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/editdata.h"
 #include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
 using namespace mu::engraving;
+
+static constexpr double POSITION_ERROR = 1e-6;
 
 static const String CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
 
@@ -138,6 +141,43 @@ TEST_F(Engraving_ChordSymbolTests, testAddLink)
     score->undoAddElement(harmony);
     score->doLayout();
     test_post(score, u"add-link");
+}
+
+TEST_F(Engraving_ChordSymbolTests, harmonyEditKeepsDisplayPosition)
+{
+    MasterScore* score = test_pre(u"add-link");
+    ASSERT_TRUE(score);
+
+    Segment* seg = score->firstSegment(SegmentType::ChordRest);
+    ASSERT_TRUE(seg);
+    ChordRest* cr = seg->cr(0);
+    ASSERT_TRUE(cr);
+
+    Harmony* harmony = new Harmony(cr->segment());
+    harmony->setHarmony(u"C");
+    harmony->setTrack(cr->track());
+    harmony->setParent(cr->segment());
+    score->undoAddElement(harmony);
+    score->doLayout();
+
+    const double x = harmony->canvasPos().x();
+    const double y = harmony->canvasPos().y();
+
+    EditData ed;
+    harmony->startEdit(ed);
+
+    EXPECT_NEAR(harmony->canvasPos().x(), x, POSITION_ERROR);
+    EXPECT_NEAR(harmony->canvasPos().y(), y, POSITION_ERROR);
+
+    ed.s = String(u"7");
+    harmony->cursor()->moveCursorToEnd();
+    harmony->edit(ed);
+
+    EXPECT_NEAR(harmony->canvasPos().x(), x, POSITION_ERROR);
+    EXPECT_NEAR(harmony->canvasPos().y(), y, POSITION_ERROR);
+
+    harmony->endEdit(ed);
+    delete score;
 }
 
 TEST_F(Engraving_ChordSymbolTests, testAddPart)
