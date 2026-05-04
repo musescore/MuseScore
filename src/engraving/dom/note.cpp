@@ -2205,6 +2205,16 @@ static bool hasAlteredUnison(Note* note)
 
 void Note::updateAccidental(AccidentalState* as)
 {
+    if (deadNote() && configuration()->keepDeadNotesUnchangedOnTranspose()) {
+        if (m_accidental) {
+            score()->undoRemoveElement(m_accidental);
+        }
+        int eAbsLine = absStep(tpc(), epitch());
+        as->setAccidentalVal(eAbsLine, tpc2alter(tpc()), false);
+        updateRelLine(eAbsLine, true);
+        return;
+    }
+
     int absLine = absStep(tpc(), epitch());
 
     // Ensure m_centOffset and microtonal accidental match (they can mismatch when switching from TAB)
