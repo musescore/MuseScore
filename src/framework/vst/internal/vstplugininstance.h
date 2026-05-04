@@ -60,8 +60,6 @@ public:
     PluginComponentPtr component() const override;
     PluginMidiMappingPtr midiMapping() const override;
 
-    bool isAbleForInput() const;
-
     void updatePluginConfig(const muse::audio::AudioUnitConfig& config) override;
     void refreshConfig() override;
 
@@ -84,7 +82,6 @@ private:
 
     PluginModulePtr m_module = nullptr;
     std::unique_ptr<VstPluginProvider> m_pluginProvider;
-    ClassInfo m_classInfo;
 
     Steinberg::FUnknownPtr<VstComponentHandler> m_componentHandlerPtr = nullptr;
 
@@ -94,6 +91,8 @@ private:
 
     std::atomic_bool m_isLoaded = false;
     async::Notification m_loadingCompleted;
+
+    std::thread::id m_mainThreadId;
 
     mutable std::mutex m_mutex;
 };

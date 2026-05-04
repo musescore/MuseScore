@@ -96,7 +96,7 @@ VstPluginInstance::~VstPluginInstance()
 
         provider.reset();
         module.reset();
-    }, threadSecurer()->mainThreadId());
+    }, m_mainThreadId);
 }
 
 const muse::audio::AudioResourceId& VstPluginInstance::resourceId() const
@@ -126,6 +126,8 @@ void VstPluginInstance::load()
 
         std::lock_guard lock(m_mutex);
 
+        m_mainThreadId = std::this_thread::get_id();
+
         m_module = modulesRepo()->pluginModule(m_resourceId);
         if (!m_module) {
             modulesRepo()->addPluginModule(m_resourceId);
@@ -145,7 +147,6 @@ void VstPluginInstance::load()
             }
 
             m_pluginProvider = std::make_unique<VstPluginProvider>(factory, classInfo);
-            m_classInfo = classInfo;
             break;
         }
 
@@ -370,30 +371,13 @@ PluginMidiMappingPtr VstPluginInstance::midiMapping() const
     return m_pluginProvider->midiMapping();
 }
 
-bool VstPluginInstance::isAbleForInput() const
-{
-    ONLY_AUDIO_THREAD(threadSecurer);
-
-    std::lock_guard lock(m_mutex);
-
-    auto search = std::find_if(m_classInfo.subCategories().begin(),
-                               m_classInfo.subCategories().end(), [](const std::string& subCategoryStr) {
-        return subCategoryStr == PluginSubCategory::Synth
-               || subCategoryStr == PluginSubCategory::Piano
-               || subCategoryStr == PluginSubCategory::Drum
-               || subCategoryStr == PluginSubCategory::External;
-    });
-
-    return search != m_classInfo.subCategories().cend();
-}
-
 void VstPluginInstance::updatePluginConfig(const audio::AudioUnitConfig& config)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     Async::call(this, [this, config]() {
         setPluginConfig(config);
-    }, threadSecurer()->mainThreadId());
+    }, m_mainThreadId);
 }
 
 void VstPluginInstance::refreshConfig()
@@ -409,12 +393,7 @@ bool VstPluginInstance::isValid() const
 
     std::lock_guard lock(m_mutex);
 
-    if (!m_module
-        || !m_pluginProvider) {
-        return false;
-    }
-
-    return true;
+    return m_module && m_pluginProvider;
 }
 
 bool VstPluginInstance::isLoaded() const
