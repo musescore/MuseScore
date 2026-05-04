@@ -2912,15 +2912,14 @@ QString Braille::brailleHairpinBefore(ChordRest* chordRest, const std::vector<Ha
     return result;
 }
 
-bool Braille::hasImmediateHairpinStartOnNextCR(ChordRest* chordRest, Hairpin* endingHairpin)
+bool Braille::hasImmediateHairpinStartOnNextCR(ChordRest* chordRest)
 {
-    if (!chordRest || !endingHairpin || endingHairpin->endCR() != chordRest
-        || !chordRest->segment() || !chordRest->segment()->next1()) {
+    if (!chordRest || !chordRest->segment() || !chordRest->segment()->next1()) {
         return false;
     }
 
     ChordRest* nextCR = chordRest->segment()->next1()->nextChordRest(chordRest->track());
-    if (!nextCR || nextCR->measure() != chordRest->measure()) {
+    if (!nextCR) {
         return false;
     }
 
@@ -2929,14 +2928,10 @@ bool Braille::hasImmediateHairpinStartOnNextCR(ChordRest* chordRest, Hairpin* en
         return false;
     }
 
-    // Check if there's a related hairpin starting on the immediate next ChordRest
+    // Check if there's a hairpin starting on the next ChordRest
     std::vector<Hairpin*> nextCRHairpins = hairpins(nextCR);
     for (Hairpin* hairpin : nextCRHairpins) {
-        if (!hairpin || hairpin->startCR() != nextCR) {
-            continue;
-        }
-
-        if (hairpin == endingHairpin || hairpin->hairpinType() == endingHairpin->hairpinType()) {
+        if (hairpin && hairpin->startCR() == nextCR) {
             return true;
         }
     }
@@ -2959,7 +2954,7 @@ QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hai
         if (!hairpin || chordRest->endTick() != hairpin->tick2()) {
             continue;
         }
-        if (hasImmediateHairpinStartOnNextCR(chordRest, hairpin)) {
+        if (hasImmediateHairpinStartOnNextCR(chordRest)) {
             continue;
         }
         switch (hairpin->hairpinType()) {
