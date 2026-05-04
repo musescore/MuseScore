@@ -345,7 +345,8 @@ PluginControllerPtr VstPluginInstance::controller() const
 
 PluginComponentPtr VstPluginInstance::component() const
 {
-    ONLY_AUDIO_THREAD(threadSecurer);
+    // TODO: Audio engine or process thread
+    // ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
