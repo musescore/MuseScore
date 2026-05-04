@@ -232,6 +232,7 @@ private:
 
     QString brailleHairpinBefore(ChordRest* chordRest, const std::vector<Hairpin*>& hairpin);
     bool hasImmediateHairpinStartOnNextCR(ChordRest* chordRest);
+    bool hasImmediateDynamicOnNextCR(ChordRest* chordRest);
     QString brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hairpin*>& hairpin);
     QString brailleSlurBefore(ChordRest* chordRest, const std::vector<Slur*>& slur);
     QString brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& slur);

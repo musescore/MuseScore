@@ -2939,6 +2939,30 @@ bool Braille::hasImmediateHairpinStartOnNextCR(ChordRest* chordRest)
     return false;
 }
 
+bool Braille::hasImmediateDynamicOnNextCR(ChordRest* chordRest)
+{
+    if (!chordRest || !chordRest->segment() || !chordRest->segment()->next1()) {
+        return false;
+    }
+
+    ChordRest* nextCR = chordRest->segment()->next1()->nextChordRest(chordRest->track());
+    if (!nextCR) {
+        return false;
+    }
+
+    if (nextCR->tick() != chordRest->tick() + chordRest->actualTicks()) {
+        return false;
+    }
+
+    for (EngravingItem* annotation : nextCR->segment()->annotations()) {
+        if (annotation->isDynamic() && annotation->staffIdx() == chordRest->staffIdx()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hairpin*>& hairpins)
 {
     if (!chordRest) {
@@ -2954,7 +2978,7 @@ QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hai
         if (!hairpin || chordRest->endTick() != hairpin->tick2()) {
             continue;
         }
-        if (hasImmediateHairpinStartOnNextCR(chordRest)) {
+        if (hasImmediateHairpinStartOnNextCR(chordRest) || hasImmediateDynamicOnNextCR(chordRest)) {
             continue;
         }
         switch (hairpin->hairpinType()) {
