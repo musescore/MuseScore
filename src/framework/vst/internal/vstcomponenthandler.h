@@ -22,6 +22,8 @@
 #ifndef MUSE_VST_VSTCOMPONENTHANDLER_H
 #define MUSE_VST_VSTCOMPONENTHANDLER_H
 
+#include <atomic>
+
 #include "async/notification.h"
 #include "async/channel.h"
 
@@ -35,12 +37,17 @@ public:
     VstAdvancedHandler(async::Notification notifier);
     virtual ~VstAdvancedHandler() = default;
 
+    void setSuppressNotify(bool suppress);
+    bool suppressNotify() const;
+
     Steinberg::tresult setDirty(Steinberg::TBool state) override;
     Steinberg::tresult requestOpenEditor(Steinberg::FIDString name) override;
     Steinberg::tresult startGroupEdit() override;
     Steinberg::tresult finishGroupEdit() override;
+
 private:
     async::Notification m_paramsChanged;
+    std::atomic_bool m_suppressNotify = false;
 };
 
 class VstComponentHandler : public IComponentHandler
@@ -52,6 +59,10 @@ public:
 
     async::Channel<PluginParamId, PluginParamValue> pluginParamChanged() const;
     async::Notification pluginParamsChanged() const;
+
+    // Suppress pluginParamsChanged() while applying config programmatically,
+    // to avoid triggering a rescan of the state we are currently writing
+    void setSuppressNotify(bool suppress);
 
 private:
     Steinberg::tresult beginEdit(Steinberg::Vst::ParamID id) override;

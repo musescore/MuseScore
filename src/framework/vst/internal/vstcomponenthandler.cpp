@@ -55,6 +55,11 @@ Notification VstComponentHandler::pluginParamsChanged() const
     return m_paramsChangedNotify;
 }
 
+void VstComponentHandler::setSuppressNotify(bool suppress)
+{
+    m_advancedHandler->setSuppressNotify(suppress);
+}
+
 Steinberg::tresult VstComponentHandler::beginEdit(Steinberg::Vst::ParamID /*id*/)
 {
     return Steinberg::kResultOk;
@@ -62,14 +67,18 @@ Steinberg::tresult VstComponentHandler::beginEdit(Steinberg::Vst::ParamID /*id*/
 
 Steinberg::tresult VstComponentHandler::performEdit(Steinberg::Vst::ParamID id, Steinberg::Vst::ParamValue valueNormalized)
 {
-    m_paramChanged.send(std::move(id), std::move(valueNormalized));
+    if (!m_advancedHandler->suppressNotify()) {
+        m_paramChanged.send(id, valueNormalized);
+    }
 
     return Steinberg::kResultOk;
 }
 
 Steinberg::tresult VstComponentHandler::endEdit(Steinberg::Vst::ParamID /*id*/)
 {
-    m_paramsChangedNotify.notify();
+    if (!m_advancedHandler->suppressNotify()) {
+        m_paramsChangedNotify.notify();
+    }
 
     return Steinberg::kResultOk;
 }
@@ -84,9 +93,21 @@ VstAdvancedHandler::VstAdvancedHandler(async::Notification notifier)
 {
 }
 
+void VstAdvancedHandler::setSuppressNotify(bool suppress)
+{
+    m_suppressNotify.store(suppress, std::memory_order_relaxed);
+}
+
+bool VstAdvancedHandler::suppressNotify() const
+{
+    return m_suppressNotify.load(std::memory_order_relaxed);
+}
+
 Steinberg::tresult VstAdvancedHandler::setDirty(Steinberg::TBool /*state*/)
 {
-    m_paramsChanged.notify();
+    if (!suppressNotify()) {
+        m_paramsChanged.notify();
+    }
 
     return Steinberg::kResultOk;
 }
@@ -103,7 +124,9 @@ Steinberg::tresult VstAdvancedHandler::startGroupEdit()
 
 Steinberg::tresult VstAdvancedHandler::finishGroupEdit()
 {
-    m_paramsChanged.notify();
+    if (!suppressNotify()) {
+        m_paramsChanged.notify();
+    }
 
     return Steinberg::kResultOk;
 }

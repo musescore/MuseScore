@@ -75,8 +75,9 @@ public:
     async::Channel<muse::audio::AudioUnitConfig> pluginSettingsChanged() const override;
 
 private:
-    void rescanParams();
     void syncControllerToComponentState();
+    void rescanParams();
+    void setPluginConfig(const muse::audio::AudioUnitConfig& config);
 
     VstPluginInstanceId m_id = 0;
     muse::audio::AudioResourceId m_resourceId;
@@ -93,8 +94,6 @@ private:
 
     std::atomic_bool m_isLoaded = false;
     async::Notification m_loadingCompleted;
-
-    std::atomic_bool m_updatingState = false;
 
     mutable std::mutex m_mutex;
 };

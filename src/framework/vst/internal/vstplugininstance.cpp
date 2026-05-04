@@ -56,10 +56,20 @@ VstPluginInstance::VstPluginInstance(const muse::audio::AudioResourceId& resourc
     ONLY_AUDIO_THREAD(threadSecurer);
 
     m_id = ++s_lastId;
+
+    m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
+        Async::call(this, [this]() {
+            rescanParams();
+        }, m_mainThreadId);
+    });
 }
 
 VstPluginInstance::~VstPluginInstance()
 {
+    //! NOTE: Signal early so any rescanParams() already queued to the main thread
+    //! returns before touching members (mutex, provider, etc.)
+    m_isLoaded = false;
+
     muse::audio::AudioResourceId resourceId = m_resourceId;
     std::shared_ptr<VstPluginProvider> provider = std::move(m_pluginProvider);
     PluginModulePtr module = std::move(m_module);
@@ -157,10 +167,6 @@ void VstPluginInstance::load()
         controller->setComponentHandler(m_componentHandlerPtr);
         syncControllerToComponentState();
 
-        m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
-            rescanParams();
-        });
-
         m_isLoaded = true;
         m_loadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
@@ -198,7 +204,7 @@ void VstPluginInstance::rescanParams()
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
-    if (!m_isLoaded || m_updatingState) {
+    if (!m_isLoaded) {
         return;
     }
 
@@ -245,6 +251,65 @@ void VstPluginInstance::rescanParams()
     }
 
     m_pluginSettingsChanges.send(updatedConfig);
+}
+
+void VstPluginInstance::setPluginConfig(const audio::AudioUnitConfig& config)
+{
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    if (!m_isLoaded) {
+        return;
+    }
+
+    std::lock_guard lock(m_mutex);
+
+    if (!m_pluginProvider) {
+        LOGE() << "Plugin provider is not initialized";
+        return;
+    }
+
+    PluginControllerPtr controller = m_pluginProvider->controller();
+    PluginComponentPtr component = m_pluginProvider->component();
+
+    if (!controller || !component) {
+        LOGE() << "Unable to update settings for VST plugin";
+        return;
+    }
+
+    auto componentState = config.find(COMPONENT_STATE_KEY.data());
+    auto controllerState = config.find(CONTROLLER_STATE_KEY.data());
+
+    if (componentState == config.end() && controllerState == config.end()) {
+        return;
+    }
+
+    m_componentHandlerPtr->setSuppressNotify(true);
+    DEFER {
+        m_componentHandlerPtr->setSuppressNotify(false);
+    };
+
+    try {
+        if (componentState != config.end() && !componentState->second.empty()) {
+            stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
+
+            if (component->setState(&m_componentStateBuffer) == Steinberg::kResultOk) {
+                m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+                controller->setComponentState(&m_componentStateBuffer);
+            }
+        }
+    } catch (...) {
+        LOGW() << "Component state restore failed: " << m_resourceId;
+    }
+
+    try {
+        if (controllerState != config.end() && !controllerState->second.empty()) {
+            stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()),
+                                  controllerState->second.size());
+            controller->setState(&m_controllerStateBuffer);
+        }
+    } catch (...) {
+        LOGW() << "Controller state restore failed: " << m_resourceId;
+    }
 }
 
 PluginViewPtr VstPluginInstance::createView() const
@@ -321,59 +386,13 @@ bool VstPluginInstance::isAbleForInput() const
     return search != m_classInfo.subCategories().cend();
 }
 
-void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& config)
+void VstPluginInstance::updatePluginConfig(const audio::AudioUnitConfig& config)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
-    std::lock_guard lock(m_mutex);
-
-    if (!m_pluginProvider) {
-        LOGE() << "Plugin provider is not initialized";
-        return;
-    }
-
-    PluginControllerPtr controller = m_pluginProvider->controller();
-    PluginComponentPtr component = m_pluginProvider->component();
-
-    if (!controller || !component) {
-        LOGE() << "Unable to update settings for VST plugin";
-        return;
-    }
-
-    auto componentState = config.find(COMPONENT_STATE_KEY.data());
-    auto controllerState = config.find(CONTROLLER_STATE_KEY.data());
-
-    if (componentState == config.end() && controllerState == config.end()) {
-        return;
-    }
-
-    m_updatingState = true;
-    DEFER {
-        m_updatingState = false;
-    };
-
-    try {
-        if (componentState != config.end() && !componentState->second.empty()) {
-            stateBufferFromString(m_componentStateBuffer, const_cast<char*>(componentState->second.c_str()), componentState->second.size());
-
-            if (component->setState(&m_componentStateBuffer) == Steinberg::kResultOk) {
-                m_componentStateBuffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
-                controller->setComponentState(&m_componentStateBuffer);
-            }
-        }
-    } catch (...) {
-        LOGW() << "Component state restore failed: " << m_resourceId;
-    }
-
-    try {
-        if (controllerState != config.end() && !controllerState->second.empty()) {
-            stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(controllerState->second.data()),
-                                  controllerState->second.size());
-            controller->setState(&m_controllerStateBuffer);
-        }
-    } catch (...) {
-        LOGW() << "Controller state restore failed: " << m_resourceId;
-    }
+    Async::call(this, [this, config]() {
+        setPluginConfig(config);
+    }, threadSecurer()->mainThreadId());
 }
 
 void VstPluginInstance::refreshConfig()
