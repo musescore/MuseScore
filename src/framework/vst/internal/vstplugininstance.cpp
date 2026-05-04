@@ -39,16 +39,23 @@ static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
 static VstPluginInstanceId s_lastId = 0;
 
+static void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize)
+{
+    if (strSize == 0) {
+        return;
+    }
+
+    buffer.setSize(0);
+    buffer.write(strData, static_cast<Steinberg::int32>(strSize), nullptr);
+    buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
+}
+
 VstPluginInstance::VstPluginInstance(const muse::audio::AudioResourceId& resourceId, const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     m_id = ++s_lastId;
-
-    m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
-        rescanParams();
-    });
 }
 
 VstPluginInstance::~VstPluginInstance()
@@ -150,6 +157,10 @@ void VstPluginInstance::load()
         controller->setComponentHandler(m_componentHandlerPtr);
         syncControllerToComponentState();
 
+        m_componentHandlerPtr->pluginParamsChanged().onNotify(this, [this]() {
+            rescanParams();
+        });
+
         m_isLoaded = true;
         m_loadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
@@ -157,6 +168,8 @@ void VstPluginInstance::load()
 
 void VstPluginInstance::syncControllerToComponentState()
 {
+    ONLY_MAIN_THREAD(threadSecurer);
+
     // Synchronize controller to the component's default state.
     // Some plugins (e.g. Roland Cloud ZENOLOGY) rely on this to
     // fully initialize internal data structures; without it the
@@ -183,11 +196,13 @@ void VstPluginInstance::syncControllerToComponentState()
 
 void VstPluginInstance::rescanParams()
 {
-    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+    ONLY_MAIN_THREAD(threadSecurer);
 
     if (!m_isLoaded || m_updatingState) {
         return;
     }
+
+    std::lock_guard lock(m_mutex);
 
     if (!m_pluginProvider) {
         LOGE() << "Plugin provider is not initialized";
@@ -230,17 +245,6 @@ void VstPluginInstance::rescanParams()
     }
 
     m_pluginSettingsChanges.send(updatedConfig);
-}
-
-void VstPluginInstance::stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const
-{
-    if (strSize == 0) {
-        return;
-    }
-
-    buffer.setSize(0);
-    buffer.write(strData, static_cast<Steinberg::int32>(strSize), nullptr);
-    buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
 
 PluginViewPtr VstPluginInstance::createView() const
@@ -375,8 +379,6 @@ void VstPluginInstance::updatePluginConfig(const muse::audio::AudioUnitConfig& c
 void VstPluginInstance::refreshConfig()
 {
     ONLY_MAIN_THREAD(threadSecurer);
-
-    std::lock_guard lock(m_mutex);
 
     rescanParams();
 }

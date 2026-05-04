@@ -76,7 +76,6 @@ public:
 
 private:
     void rescanParams();
-    void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const;
     void syncControllerToComponentState();
 
     VstPluginInstanceId m_id = 0;
