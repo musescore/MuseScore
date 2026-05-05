@@ -5609,7 +5609,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = u"change";
             break;
         case HookType::NONE:
-            pedalType = pd->lineVisible() ? u"resume" : u"start";
+            pedalType = (pd->lineVisible() && pd->beginText().isEmpty()) ? u"resume" : u"start";
             break;
         default:
             pedalType = u"start";
@@ -5619,10 +5619,11 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = u"sostenuto";
         }
     } else {
-        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
+        switch (pd->endHookType()) {
+        case HookType::NONE:
+            pedalType = (pd->lineVisible() && pd->endText().isEmpty()) ? u"discontinue" : u"stop";
+        default:
             pedalType = u"stop";
-        } else {
-            pedalType = u"discontinue";
         }
         // "change" type is handled only on the beginning of pedal lines
 
