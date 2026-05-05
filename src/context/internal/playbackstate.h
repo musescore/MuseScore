@@ -34,6 +34,7 @@ public:
 
     void setPlayer(muse::audio::IPlayerPtr player);
 
+    bool isPlaying() const override;
     muse::audio::PlaybackStatus playbackStatus() const override;
     muse::async::Channel<muse::audio::PlaybackStatus> playbackStatusChanged() const override;
 

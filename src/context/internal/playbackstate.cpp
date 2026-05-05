@@ -51,6 +51,11 @@ void PlaybackState::setPlayer(audio::IPlayerPtr player)
     });
 }
 
+bool PlaybackState::isPlaying() const
+{
+    return playbackStatus() == audio::PlaybackStatus::Running;
+}
+
 audio::PlaybackStatus PlaybackState::playbackStatus() const
 {
     return m_player ? m_player->playbackStatus() : audio::PlaybackStatus::Stopped;
