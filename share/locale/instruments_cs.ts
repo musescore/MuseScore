@@ -10240,14 +10240,14 @@
         <source>Lead Pan</source>
         <comment>soprano-steel-drums shortName</comment>
         <extracomment>shortName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Lead oc. b.</translation>
+        <translation>Oc. b. (lead)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
         <source>Double tenor steel pans.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Double tenor).</translation>
+        <translation>Ocelové bubny (double tenor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3453"/>
@@ -10268,14 +10268,14 @@
         <source>Dbl. T. Pans</source>
         <comment>alto-steel-drums shortName</comment>
         <extracomment>shortName for Double Tenor Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>2-t. oc. b.</translation>
+        <translation>Oc. b. (2-t.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
         <source>Double second steel pans.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Double second).</translation>
+        <translation>Ocelové bubny (double second).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3462"/>
@@ -10296,42 +10296,42 @@
         <source>Dbl. Sec. Pans</source>
         <comment>tenor-steel-drums shortName</comment>
         <extracomment>shortName for Double Second Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>2-sec. oc. b.</translation>
+        <translation>Oc. b. (2-sec.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3469"/>
         <source>Guitar steel pans.</source>
         <comment>guitar-steel-drums description</comment>
         <extracomment>description for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Guitar).</translation>
+        <translation>Ocelové bubny (guitar).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3471"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums trackName</comment>
         <extracomment>trackName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Guitar)</translation>
+        <translation>Ocelové bubny (guitar)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3473"/>
         <source>Guitar Steel Pans</source>
         <comment>guitar-steel-drums longName</comment>
         <extracomment>longName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Guitar)</translation>
+        <translation>Ocelové bubny (guitar)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3475"/>
         <source>Gtr. Pans</source>
         <comment>guitar-steel-drums shortName</comment>
         <extracomment>shortName for Guitar Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Guit. oc. b.</translation>
+        <translation>Oc. b. (guit.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3478"/>
         <source>Three cello steel pans.</source>
         <comment>cello-steel-drums description</comment>
         <extracomment>description for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Triple cello).</translation>
+        <translation>Ocelové bubny (triple cello).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3480"/>
@@ -10352,14 +10352,14 @@
         <source>3 Cello Pans</source>
         <comment>cello-steel-drums shortName</comment>
         <extracomment>shortName for Triple Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>3-c. oc. b.</translation>
+        <translation>Oc. b. (3-c.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3487"/>
         <source>Four cello steel pans.</source>
         <comment>cello-steel-drums-four description</comment>
         <extracomment>description for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ocelové bubny (Four cello).</translation>
+        <translation>Ocelové bubny (four cello).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3489"/>
@@ -10380,7 +10380,7 @@
         <source>4 Cello Pans</source>
         <comment>cello-steel-drums-four shortName</comment>
         <extracomment>shortName for Four Cello Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4-c. o. b.</translation>
+        <translation>O. b. (4-c.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3496"/>
@@ -10408,7 +10408,7 @@
         <source>T.B. Pans</source>
         <comment>tenor-bass-steel-drums shortName</comment>
         <extracomment>shortName for Tenor Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>T-b. oc. b.</translation>
+        <translation>Oc. b. (T-b.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3505"/>
@@ -10464,7 +10464,7 @@
         <source>B. Pans</source>
         <comment>bass-steel-drums shortName</comment>
         <extracomment>shortName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B. oc. b.</translation>
+        <translation>B. oc. (bas.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6285"/>
@@ -14195,7 +14195,7 @@
         <source>Show Tenors</source>
         <comment>marching-show-tenors longName</comment>
         <extracomment>longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Přeh. t. bub.</translation>
+        <translation>Přehl. t. bub.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4714"/>
