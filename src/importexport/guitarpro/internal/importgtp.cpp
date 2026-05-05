@@ -2831,7 +2831,7 @@ static int autotrack(mu::engraving::Score* score)
                 auto startTrack = score->parts()[availableTracks[i]]->startTrack();
                 auto endTrack   = score->parts()[availableTracks[i]]->endTrack();
                 for (auto track      = startTrack; track < endTrack; ++track) {
-                    auto e = seg->elementAt(track);
+                    auto e = seg->element(track);
                     if (e && e->type() == mu::engraving::ElementType::CHORD) {
                         minIndexes[i] = segmentIndex;
                         founded = true;
