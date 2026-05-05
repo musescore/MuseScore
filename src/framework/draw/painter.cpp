@@ -444,6 +444,21 @@ void Painter::drawText(const PointF& point, const String& text)
     }
 }
 
+bool Painter::canDrawHtml() const
+{
+    return m_provider->canDrawHtml();
+}
+
+void Painter::drawHtml(const PointF& point, const String& htmlText)
+{
+    applyFontSizeScaling();
+
+    m_provider->drawHtml(point, htmlText);
+    if (extended) {
+        extended->drawHtml(point, htmlText);
+    }
+}
+
 void Painter::drawText(const RectF& rect, int flags, const String& text)
 {
     applyFontSizeScaling();

@@ -133,6 +133,9 @@ public:
 
     void drawText(const RectF& rect, int flags, const String& text);
 
+    bool canDrawHtml() const;
+    void drawHtml(const PointF& point, const String& htmlText);
+
     void drawSymbol(const PointF& point, char32_t ucs4Code);
 
     void fillRect(const RectF& rect, const Brush& brush);
