@@ -5131,7 +5131,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             } else if (lineEnd == "both") {
                 textLine->setBeginHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
-                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+                textLine->setBeginHookType(HookType::ARROW_FILLED);
             } else if (lineEnd == "none") {
                 textLine->setBeginHookType(HookType::NONE);
             }
@@ -5192,7 +5192,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             } else if (lineEnd == "both") {
                 textLine->setEndHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
-                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+                textLine->setEndHookType(HookType::ARROW_FILLED);
             } else if (lineEnd == "none") {
                 textLine->setEndHookType(HookType::NONE);
             }
