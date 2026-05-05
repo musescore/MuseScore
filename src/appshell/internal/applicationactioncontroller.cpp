@@ -308,7 +308,7 @@ void ApplicationActionController::openAccessibilityStatementPage()
 void ApplicationActionController::openPreferencesDialog()
 {
     const context::IPlaybackStatePtr state = globalContext()->playbackState();
-    if (state->playbackStatus() == audio::PlaybackStatus::Running) {
+    if (state->isPlaying()) {
         dispatcher()->dispatch("stop");
 
         async::Channel<audio::PlaybackStatus> statusChanged = state->playbackStatusChanged();

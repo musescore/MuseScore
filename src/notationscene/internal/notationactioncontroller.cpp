@@ -591,7 +591,7 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
         return false;
     }
 
-    if (playbackController()->isPlaying()) {
+    if (globalContext()->playbackState()->isPlaying()) {
         if (!muse::contains(m_isAllowedDuringPlayback, code)) {
             return false;
         }
@@ -714,8 +714,8 @@ void NotationActionController::resetState()
 {
     TRACEFUNC;
 
-    if (playbackController()->isPlaying()) {
-        playbackController()->reset();
+    if (globalContext()->playbackState()->isPlaying()) {
+        dispatcher()->dispatch("stop");
     }
 
     auto noteInput = currentNotationNoteInput();
@@ -1151,7 +1151,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
-        if (playbackController()->isPlaying()) {
+        if (globalContext()->playbackState()->isPlaying()) {
             MeasureBeat beat = playbackController()->currentBeat();
             int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
@@ -2244,7 +2244,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 bool NotationActionController::toggleNoteInputAllowed() const
 {
-    if (playbackController()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
+    if (globalContext()->playbackState()->isPlaying() || qApp->applicationState() != Qt::ApplicationActive) {
         return false;
     }
 

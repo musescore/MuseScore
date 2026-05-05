@@ -710,8 +710,8 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
         return true;
     }
 
-    if (playbackController()->isPlaying()) {
-        playbackController()->reset();
+    if (globalContext()->playbackState()->isPlaying()) {
+        dispatcher()->dispatch("stop");
     }
 
     bool result = true;

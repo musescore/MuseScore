@@ -58,11 +58,11 @@ void PlaybackToolBarModel::setupConnections()
         emit isPlayAllowedChanged();
     });
 
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+    globalContext()->playbackState()->playbackStatusChanged().onReceive(this, [this](audio::PlaybackStatus) {
         onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
-    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](secs_t secs, midi::tick_t) {
+    globalContext()->playbackState()->playbackPositionChanged().onReceive(this, [this](secs_t secs) {
         updatePlayPosition(secs);
     });
 
@@ -224,7 +224,7 @@ UiAction PlaybackToolBarModel::playAction() const
 {
     UiAction action = uiActionsRegister()->action(PLAY_ACTION_CODE);
 
-    bool isPlaying = playbackController()->isPlaying();
+    bool isPlaying = globalContext()->playbackState()->isPlaying();
     action.iconCode =  isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
 
     return action;
