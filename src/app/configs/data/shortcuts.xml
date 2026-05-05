@@ -899,6 +899,10 @@
     <seq>R</seq>
     </SC>
   <SC>
+    <key>repeat-last-action</key>
+    <seq>Shift+R</seq>
+    </SC>
+  <SC>
     <key>enh-both</key>
     <seq>J</seq>
     </SC>

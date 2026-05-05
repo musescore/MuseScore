@@ -55,6 +55,10 @@ public:
     virtual bool isReg(Actionable* client) const = 0;
     virtual ActionCodeList actionList() const = 0;
 
+    virtual ActionCode lastRepeatableAction() const = 0;
+    virtual uint64_t lastRepeatableActionSequence() const = 0;
+    virtual void repeatLastAction() = 0;
+
     void reg(Actionable* client, const ActionCode& action, const ActionCallBack& call)
     {
         reg(client, action, [call](const ActionCode&, const ActionData&) { call(); });

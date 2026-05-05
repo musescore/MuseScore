@@ -23,6 +23,7 @@
 #define MUSE_ACTIONS_ACTIONSDISPATCHER_H
 
 #include <map>
+#include <unordered_set>
 
 #include "../iactionsdispatcher.h"
 #include "async/asyncable.h"
@@ -48,6 +49,10 @@ public:
     bool isReg(Actionable* client) const override;
     ActionCodeList actionList() const override;
 
+    ActionCode lastRepeatableAction() const override;
+    uint64_t lastRepeatableActionSequence() const override;
+    void repeatLastAction() override;
+
 private:
 
     using CallBacks = std::map<ActionCode, ActionCallBackWithNameAndData>;
@@ -57,7 +62,13 @@ private:
 
     void dump() const; // for debug
 
+    bool isRepeatable(const ActionCode& code) const;
+
     std::map<ActionCode, Clients > m_clients;
+
+    ActionCode m_lastRepeatableAction;
+    ActionData m_lastRepeatableData;
+    uint64_t m_lastRepeatableSequence = 0;
 
     async::Channel<ActionCode> m_preDispatch;
     async::Channel<ActionCode> m_postDispatch;

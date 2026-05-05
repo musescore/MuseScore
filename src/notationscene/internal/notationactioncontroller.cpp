@@ -245,6 +245,18 @@ void NotationActionController::init()
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
     registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
 
+    registerAction("repeat-last-action", [this]() {
+        uint64_t actionSeq = dispatcher()->lastRepeatableActionSequence();
+        auto notation = currentNotation();
+        uint64_t paletteSeq = notation ? notation->interaction()->lastPaletteElementSequence() : 0;
+
+        if (paletteSeq > actionSeq && notation && notation->interaction()->canReapplyLastPaletteElement()) {
+            notation->interaction()->reapplyLastPaletteElement();
+        } else {
+            dispatcher()->repeatLastAction();
+        }
+    });
+
     registerAction("select-similar", &Controller::selectAllSimilarElements, &Controller::hasSelection);
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
