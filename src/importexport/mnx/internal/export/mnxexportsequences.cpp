@@ -503,8 +503,8 @@ bool MnxExporter::createRest(mnx::sequence::Event& mnxEvent, ChordRest* chordRes
         if (Rest* rest = toRest(chordRest)) {
             const Staff* staff = rest->staff();
             if (staff && rest->ldata() && rest->ldata()->isSetPos()) {
-                const double lineDist = staff->lineDistance(rest->tick());
-                const double staffStep = lineDist * rest->spatium() * 0.5; // half-space
+                const Spatium lineDist = staff->lineDistance(rest->tick());
+                const double staffStep = lineDist.toAbsolute(rest->spatium()) * 0.5; // half-space
                 if (staffStep > 0.0) {
                     const int middleLine = staff->middleLine(rest->tick());
                     const double y = rest->pos().y();
@@ -1063,8 +1063,8 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
                         if (rest->visible() && !rest->isGap()) {
                             auto fullMeasure = mnxSequence.ensure_fullMeasure();
                             if (m_exportRestPositions && rest->staff() && rest->ldata() && rest->ldata()->isSetPos()) {
-                                const double lineDist = rest->staff()->lineDistance(rest->tick());
-                                const double staffStep = lineDist * rest->spatium() * 0.5; // half-space
+                                const Spatium lineDist = rest->staff()->lineDistance(rest->tick());
+                                const double staffStep = lineDist.toAbsolute(rest->spatium()) * 0.5; // half-space
                                 if (staffStep > 0.0) {
                                     const int middleLine = rest->staff()->middleLine(rest->tick());
                                     const double y = rest->pos().y();

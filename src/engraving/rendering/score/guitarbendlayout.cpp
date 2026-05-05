@@ -302,7 +302,7 @@ void GuitarBendLayout::avoidBadStaffLineIntersection(GuitarBendSegment* item, Po
 {
     int upSign = item->guitarBend()->ldata()->up() ? -1 : 1;
     double spatium = item->spatium();
-    double lineDist = spatium * item->staff()->lineDistance(item->tick());
+    double lineDist = item->staff()->lineDistance(item->tick()).toAbsolute(spatium);
     double closestStaffLineY = lineDist * round(point.y() / lineDist);
 
     bool isInsideStaff = closestStaffLineY >= 0 && closestStaffLineY <= 4 * spatium;
@@ -470,7 +470,8 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     double spatium = bend->spatium();
     const MStyle& style = item->style();
     const double verticalPad = 0.25 * spatium;
-    const double distAboveTab = style.styleD(Sid::guitarBendHeightAboveTABStaff) * spatium * item->staff()->lineDistance(item->tick());
+    const double distAboveTab = style.styleD(Sid::guitarBendHeightAboveTABStaff) * item->staff()->lineDistance(item->tick()).toAbsolute(
+        spatium);
     const double arrowWidth = style.styleAbsolute(Sid::guitarBendArrowWidth);
     const double arrowHeight = style.styleAbsolute(Sid::guitarBendArrowHeight);
     const double lineWidth = item->lineWidth();

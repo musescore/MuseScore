@@ -188,7 +188,7 @@ public:
 
     int lines(const Fraction&) const;
     void setLines(const Fraction&, int lines);
-    double lineDistance(const Fraction&) const;
+    Spatium lineDistance(const Fraction&) const;
 
     bool isLinesInvisible(const Fraction&) const;
     void setIsLinesInvisible(const Fraction&, bool val);

@@ -47,17 +47,17 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     const Staff* staff = item->staff();
 
     double spatium = item->spatium();
-    double lineDistance = (staff ? staff->lineDistance(item->tick()) : 1.0);
+    Spatium lineDistance = (staff ? staff->lineDistance(item->tick()) : 1.0_sp);
 
     const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
     const StaffType* tab = (staffType && staffType->isTabStaff()) ? staffType : nullptr;
 
     bool isBesideTabStaff = tab && !tab->stemless() && !tab->stemThrough();
     if (isBesideTabStaff) {
-        return tabStemLength(item, tab) * spatium;
+        return tabStemLength(item, tab).toAbsolute(spatium);
     }
 
-    int defaultStemLength = style.styleD(Sid::stemLength) * 4;
+    int defaultStemLength = style.styleS(Sid::stemLength).val() * 4;
     defaultStemLength += stemLengthBeamAddition(item, ctx);
     if (tab) {
         defaultStemLength *= 1.5;
@@ -66,8 +66,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     // eg. slashed noteheads etc
     double extraHeight = (ldata->up ? item->upNote()->stemUpSE().y() : item->downNote()->stemDownNW().y()) / item->intrinsicMag()
                          / spatium;
-    int shortestStem = style.styleB(Sid::useWideBeams) ? 12 : (style.styleD(Sid::shortestStem) + std::abs(extraHeight)) * 4;
-    int quarterSpacesPerLine = std::floor(lineDistance * 2);
+    int shortestStem = style.styleB(Sid::useWideBeams) ? 12 : (style.styleS(Sid::shortestStem).val() + std::abs(extraHeight)) * 4;
+    int quarterSpacesPerLine = std::floor(lineDistance.val() * 2);
     int chordHeight = (item->downLine() - item->upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
 
@@ -129,24 +129,24 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
         double stemStart = startNote->ldata()->pos().y();
         double stemEndMag = stemStart + (finalStemLength * upValue);
         double topLine = 0.0;
-        lineDistance *= spatium;
-        double bottomLine = lineDistance * (staffLineCount - 1.0);
+        double lineDistanceAbs = lineDistance.toAbsolute(spatium);
+        double bottomLine = lineDistanceAbs * (staffLineCount - 1.0);
         double target = 0.0;
-        double midLine = middleLine / 4.0 * lineDistance;
-        if (muse::RealIsEqualOrMore(lineDistance / spatium, 1.0)) {
+        double midLine = middleLine / 4.0 * lineDistanceAbs;
+        if (lineDistance >= 1.0_sp) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * spatium) {
                 target = ldata->up ? topLine : bottomLine;
             } else {
                 double twoSpIn = ldata->up ? bottomLine - (2 * spatium) : topLine + (2 * spatium);
-                target = muse::RealIsEqual(lineDistance / spatium, 1.0) ? midLine : twoSpIn;
+                target = lineDistance == 1.0_sp ? midLine : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines
             if (staffLineCount < 3) {
                 target = ldata->up ? topLine : bottomLine;
             } else {
-                target = ldata->up ? bottomLine - (2 * lineDistance) : topLine + (2 * lineDistance);
+                target = ldata->up ? bottomLine - (2 * lineDistanceAbs) : topLine + (2 * lineDistanceAbs);
             }
         }
         extraLength = 0.0;
@@ -229,7 +229,7 @@ PointF StemLayout::stemPos(const Chord* item)
     const Staff* staff = item->staff();
     const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
     if (staffType && staffType->isTabStaff()) {
-        return item->pagePos() + rendering::score::StemLayout::tabStemPos(item, staffType) * item->spatium();
+        return item->pagePos() + StemLayout::tabStemPos(item, staffType).toAbsolute(item->spatium());
     }
 
     if (item->ldata()->up) {
@@ -256,27 +256,27 @@ PointF StemLayout::stemPos(const Rest* item)
 //          returns the vertical position of stem start point
 //---------------------------------------------------------
 
-double StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
+Spatium StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
 {
     if (st->stemThrough()) {            // does not make sense for "stems through staves" setting; just return top line vert. position
-        return 0.0;
+        return 0.0_sp;
     }
 
     // if stems beside staff, position are fixed, but take into account delta for half notes
-    double delta                                 // displacement for half note stems (if used)
+    Spatium delta                                 // displacement for half note stems (if used)
         =   // if half notes have not a short stem OR not a half note => 0
           (st->minimStyle() != TablatureMinimStyle::SHORTER || item->durationType().type() != DurationType::V_HALF)
-          ? 0.0
+          ? 0.0_sp
           :           // if stem is up, displace of half stem length down (positive)
           // if stem is down, displace of half stem length up (negative)
           (item->up()
            ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * 0.5;
     // if fret marks above lines and chordRest is up, move half a line distance up
     if (!st->onLines() && item->up()) {
-        delta -= st->lineDistance().val() * 0.5;
+        delta -= st->lineDistance() * 0.5;
     }
-    double y
-        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+    Spatium y
+        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
           + delta;
     return y;
 }
@@ -286,13 +286,13 @@ double StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
 //          return length of stem
 //---------------------------------------------------------
 
-double StemLayout::tabStemLength(const Chord* item, const StaffType* st)
+Spatium StemLayout::tabStemLength(const Chord* item, const StaffType* st)
 {
-    double stemLen;
+    Spatium stemLen;
     // if stems are through staff, length should be computed by relevant chord algorithm;
     // here, just return default length (= 1 'octave' = 3.5 line spaces)
     if (st->stemThrough()) {
-        return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * st->lineDistance().val();
+        return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU.val() * st->lineDistance();
     }
     // if stems beside staff, length is fixed, but take into account shorter half note stems
     else {
@@ -309,18 +309,18 @@ double StemLayout::tabStemLength(const Chord* item, const StaffType* st)
 //    return position of note at other side of beam
 //---------------------------------------------------------
 
-PointF StemLayout::tabStemPos(const Chord* item, const StaffType* st)
+PointSp StemLayout::tabStemPos(const Chord* item, const StaffType* st)
 {
-    double y = 0.0;
+    Spatium y = 0.0_sp;
     if (st->stemThrough()) {
         // if stems are through staff, stem goes from farthest note string
-        y = (item->up() ? item->downString() : item->upString()) * st->lineDistance().val();
+        y = (item->up() ? item->downString() : item->upString()) * st->lineDistance();
     } else {
         // if stems are beside staff, stem start point has a fixed vertical position,
         // according to TAB parameters and stem up/down
         y = tabRestStemPosY(item, st);
     }
-    return PointF(0.5 * item->score()->noteHeadWidth() * item->mag() / item->spatium(), y);
+    return PointSp(Spatium::fromAbsolute(item->score()->noteHeadWidth(), item->spatium()) * item->mag() * 0.5, y);
 }
 
 int StemLayout::stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx)
@@ -424,7 +424,7 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = item->tremoloSingleChord()->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(item->tremoloSingleChord()->minHeight() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
+        minStemLength += ceil(item->tremoloSingleChord()->minHeight().val() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = style.styleAbsolute(Sid::tremoloOutSidePadding) / spatium * 4.0;
         int noteSidePadding = style.styleAbsolute(Sid::tremoloNoteSidePadding) / spatium * 4.0;
 

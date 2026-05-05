@@ -604,7 +604,7 @@ void BarLine::dragGrip(EditData& ed)
 
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
 
-    double lineDist = staff()->lineDistance(tick()) * spatium();
+    double lineDist = staff()->lineDistance(tick()).toAbsolute(spatium());
     calcY();
 
     // min for bottom grip is 1 line below top grip

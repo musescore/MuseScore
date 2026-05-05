@@ -58,7 +58,7 @@ void TappingLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, Lay
 
     if (tabStaff) {
         // Slightly increase vertical padding on TAB staves
-        item->setMinDistance(item->staff()->lineDistance(item->tick()) * style.styleS(Sid::articulationMinDistance));
+        item->setMinDistance(item->staff()->lineDistance(item->tick()).val() * style.styleS(Sid::articulationMinDistance));
     }
 }
 

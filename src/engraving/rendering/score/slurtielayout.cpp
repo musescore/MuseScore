@@ -2371,7 +2371,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     bool up = tieSegment->tie()->up();
     int upSign = up ? -1 : 1;
 
-    const double staffLineDist = staff->lineDistance(tick) * spatium;
+    const double staffLineDist = staff->lineDistance(tick).toAbsolute(spatium);
     const double staffLineThickness = tieSegment->style().styleAbsolute(Sid::staffLineWidth) * staff->staffMag(tick);
 
     // 1. Check for bad end point protrusion
@@ -2525,7 +2525,7 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
 
         Fraction tick = thisTie->tick();
         double yMidPoint = 0.5 * (thisTieOuterY + nextTieInnerY);
-        double halfLineDist = 0.5 * staff->lineDistance(tick) * spatium;
+        double halfLineDist = 0.5 * staff->lineDistance(tick).toAbsolute(spatium);
         int midLine = round(yMidPoint / halfLineDist);
         bool insideStaff = midLine >= -1 && midLine <= 2 * (staff->lines(tick) - 1) + 1;
         if (insideStaff) {
