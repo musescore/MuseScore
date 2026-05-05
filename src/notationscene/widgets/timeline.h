@@ -30,6 +30,7 @@
 #include "notation/inotation.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
+#include "playback/iplaybackcontroller.h"
 
 #include <vector>
 #include <QGraphicsView>
@@ -112,6 +113,7 @@ class Timeline : public QGraphicsView, public muse::Contextable, public muse::as
 
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
     enum class ItemType {
@@ -121,7 +123,7 @@ public:
     };
     Q_ENUM(ItemType)
 
-    Timeline(QSplitter* splitter);
+    Timeline(QSplitter* splitter, const muse::modularity::ContextPtr& iocCtx);
 
     bool handleEvent(QEvent* event);
 
@@ -268,6 +270,8 @@ private:
     engraving::Staff* numToStaff(int staff);
     void toggleShow(int staff);
     QString cursorIsOn(const QPoint& cursorPos);
+
+    void seekSelection();
 };
 }
 
