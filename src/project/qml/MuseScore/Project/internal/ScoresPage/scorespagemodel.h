@@ -66,6 +66,8 @@ public:
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
+    Q_INVOKABLE void revealInFileBrowser(const QString& scorePath);
+    Q_INVOKABLE void viewOnline(int scoreId);
     Q_INVOKABLE void openScoreManager();
 
 signals:

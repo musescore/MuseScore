@@ -46,6 +46,11 @@ void RecentScoresModel::load()
     });
 }
 
+void RecentScoresModel::removeRecentScore(const QString& scorePath)
+{
+    recentFilesController()->removeRecentFile(scorePath);
+}
+
 void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 {
     if (m_items == items) {
