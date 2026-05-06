@@ -222,7 +222,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="resume" line="yes" sign="yes" color="#FF85FF"/>
+          <pedal type="start" line="yes" sign="yes" color="#FF85FF"/>
           </direction-type>
         </direction>
       <note>

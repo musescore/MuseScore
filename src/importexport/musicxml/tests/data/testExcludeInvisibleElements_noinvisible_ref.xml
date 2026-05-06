@@ -370,7 +370,7 @@
     <measure number="7">
       <direction placement="below">
         <direction-type>
-          <pedal type="resume" line="yes" sign="yes"/>
+          <pedal type="start" line="yes" sign="yes"/>
           </direction-type>
         </direction>
       <note>
