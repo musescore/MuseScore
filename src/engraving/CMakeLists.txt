@@ -175,6 +175,7 @@ target_sources(engraving PRIVATE
     editing/transpose.h
 
     rw/ireader.h
+    rw/ireader.cpp
     rw/iwriter.h
     rw/rwregister.cpp
     rw/rwregister.h

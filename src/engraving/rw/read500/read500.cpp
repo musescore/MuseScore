@@ -115,6 +115,110 @@ muse::Ret Read500::readScoreFile(Score* score, XmlReader& e, rw::ReadInOutData* 
     return muse::make_ok();
 }
 
+//---------------------------------------------------------
+//   readUninitExcerptData
+///   Read the contents of an uninitialised excerpt (name, tracks, parts)
+///   from within a <Score> element that starts with <initialised>false.
+//---------------------------------------------------------
+
+static void readUninitExcerptData(Excerpt* excerpt, MasterScore* masterScore, XmlReader& e)
+{
+    TracksMap tracksMap;
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "initialised") {
+            e.readText();  // consume the "false" value
+        } else if (tag == "name") {
+            excerpt->setName(e.readText(), false);
+        } else if (tag == "Tracklist") {
+            track_idx_t sTrack = static_cast<track_idx_t>(e.intAttribute("sTrack", -1));
+            track_idx_t dstTrack = static_cast<track_idx_t>(e.intAttribute("dstTrack", -1));
+            if (sTrack != muse::nidx && dstTrack != muse::nidx) {
+                tracksMap.insert({ sTrack, dstTrack });
+            }
+            e.readNext();
+        } else if (tag == "initialPartId") {
+            excerpt->setInitialPartId(ID(e.readText().toStdString()));
+        } else if (tag == "Part") {
+            ID partId(static_cast<uint64_t>(e.intAttribute("id", 0)));
+            for (Part* part : masterScore->parts()) {
+                if (part->id() == partId) {
+                    excerpt->parts().push_back(part);
+                    break;
+                }
+            }
+            e.readNext();
+        } else {
+            e.unknown();
+        }
+    }
+
+    if (!tracksMap.empty()) {
+        excerpt->setTracksMapping(tracksMap);
+    }
+}
+
+//---------------------------------------------------------
+//   readExcerptScoreFile
+///   Read an excerpt, determining whether it is uninitialised or regular.
+///   For uninitialised excerpts, populates only name/parts/tracks.
+///   For regular excerpts, creates a Score, applies style, reads content.
+//---------------------------------------------------------
+
+muse::Ret Read500::readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterScore,
+                                        const muse::ByteArray& excerptData,
+                                        const muse::String& fileName,
+                                        rw::ReadInOutData* out,
+                                        const ApplyStyleFn& applyStyleFn)
+{
+    // Check if this is an uninitialised excerpt by scanning for the marker
+    {
+        XmlReader probe(excerptData);
+        while (probe.readNextStartElement()) {
+            if (probe.name() == "museScore") {
+                while (probe.readNextStartElement()) {
+                    if (probe.name() == "Score") {
+                        if (probe.readNextStartElement() && probe.name() == "initialised") {
+                            if (probe.readText() == "false") {
+                                // Uninitialised excerpt: read the rest of the data
+                                readUninitExcerptData(excerpt, masterScore, probe);
+                                return muse::make_ok();
+                            }
+                        }
+                        break;
+                    } else {
+                        probe.skipCurrentElement();
+                    }
+                }
+                break;
+            } else {
+                probe.skipCurrentElement();
+            }
+        }
+    }
+
+    // Regular excerpt: create Score, apply style, then read using readScoreFile
+    Score* partScore = masterScore->createScore();
+    excerpt->setExcerptScore(partScore);
+
+    if (applyStyleFn) {
+        applyStyleFn(partScore);
+    }
+
+    XmlReader xml(excerptData);
+    xml.setDocName(fileName);
+
+    muse::Ret ret = readScoreFile(partScore, xml, out);
+    if (!ret) {
+        return ret;
+    }
+
+    partScore->linkMeasures(masterScore);
+
+    return muse::make_ok();
+}
+
 bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
 {
     std::vector<int> sysStaves;

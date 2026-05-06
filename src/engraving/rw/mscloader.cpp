@@ -53,74 +53,6 @@ using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-//---------------------------------------------------------
-//   readUninitExcerpt
-///   Read an uninitialised excerpt (no excerptScore).
-///   Returns nullptr if not an uninitialised excerpt.
-//---------------------------------------------------------
-
-static Excerpt* readUninitExcerpt(MasterScore* masterScore, const ByteArray& excerptData, const String& fileName)
-{
-    Excerpt* excerpt = nullptr;
-    TracksMap tracksMap;
-
-    XmlReader xml(excerptData);
-    while (xml.readNextStartElement()) {
-        if (xml.name() == "museScore") {
-            while (xml.readNextStartElement()) {
-                if (xml.name() == "Score") {
-                    while (xml.readNextStartElement()) {
-                        const AsciiStringView tag = xml.name();
-                        if (tag == "initialised") {
-                            if (xml.readText() == "false") {
-                                excerpt = new Excerpt(masterScore);
-                                excerpt->setFileName(fileName);
-                            } else {
-                                return nullptr;
-                            }
-                        } else if (!excerpt) {
-                            // Not uninitialised: first element must be <initialised>
-                            return nullptr;
-                        } else if (tag == "name") {
-                            excerpt->setName(xml.readText(), false);
-                        } else if (tag == "Tracklist") {
-                            track_idx_t sTrack = static_cast<track_idx_t>(xml.intAttribute("sTrack", -1));
-                            track_idx_t dstTrack = static_cast<track_idx_t>(xml.intAttribute("dstTrack", -1));
-                            if (sTrack != muse::nidx && dstTrack != muse::nidx) {
-                                tracksMap.insert({ sTrack, dstTrack });
-                            }
-                            xml.readNext();
-                        } else if (tag == "initialPartId") {
-                            excerpt->setInitialPartId(ID(xml.readText().toStdString()));
-                        } else if (tag == "Part") {
-                            ID partId(static_cast<uint64_t>(xml.intAttribute("id", 0)));
-                            for (Part* part : masterScore->parts()) {
-                                if (part->id() == partId) {
-                                    excerpt->parts().push_back(part);
-                                    break;
-                                }
-                            }
-                            xml.readNext();
-                        } else {
-                            xml.unknown();
-                        }
-                    }
-                } else {
-                    xml.skipCurrentElement();
-                }
-            }
-        } else {
-            xml.skipCurrentElement();
-        }
-    }
-
-    if (excerpt && !tracksMap.empty()) {
-        excerpt->setTracksMapping(tracksMap);
-    }
-
-    return excerpt;
-}
-
 static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
 {
     if (!ignoreVersionError) {
@@ -228,30 +160,8 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
         for (const String& excerptFileName : excerptFileNames) {
             ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
-            // Try to read as uninitialised excerpt first
-            if (Excerpt* ex = readUninitExcerpt(masterScore, excerptData, excerptFileName)) {
-                masterScore->addExcerpt(ex, muse::nidx, false);
-                continue;
-            }
-
-            // Regular excerpt with full score
-            Score* partScore = masterScore->createScore();
-
-            compat::ReadStyleHook::setupDefaultStyle(partScore);
-
             Excerpt* ex = new Excerpt(masterScore);
-            ex->setExcerptScore(partScore);
             ex->setFileName(excerptFileName);
-
-            ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
-            auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
-            partScore->style().read(&excerptStyleBuf);
-
-            XmlReader xml(excerptData);
-            xml.setDocName(excerptFileName);
-
-            ReadInOutData partReadInData;
-            partReadInData.links = inOut->links;
 
             RetVal<IReaderPtr> reader = makeReader(masterScore->mscVersion(), ignoreVersionError);
             if (!reader.ret) {
@@ -259,26 +169,37 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
                 break;
             }
 
-            ret = reader.val->readScoreFile(partScore, xml, &partReadInData);
+            ReadInOutData partReadInData;
+            partReadInData.links = inOut->links;
+
+            // Style callback: applied between Score creation and content reading
+            auto applyStyleFn = [&mscReader, &excerptFileName](Score* partScore) {
+                compat::ReadStyleHook::setupDefaultStyle(partScore);
+                ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
+                auto excerptStyleBuf = Buffer::opened(IODevice::ReadOnly, &excerptStyleData);
+                partScore->style().read(&excerptStyleBuf);
+            };
+
+            ret = reader.val->readExcerptScoreFile(ex, masterScore, excerptData,
+                                                   excerptFileName, &partReadInData,
+                                                   applyStyleFn);
             if (!ret) {
                 break;
             }
 
-            partScore->linkMeasures(masterScore);
-
-            if (ex->name().empty()) {
-                // If no excerpt name tag was found while reading, try the "partName" meta tag
-                const String nameFromMeta = partScore->metaTag(u"partName");
+            // For regular excerpts, set name from meta if needed
+            if (ex->excerptScore() && ex->name().empty()) {
+                const String nameFromMeta = ex->excerptScore()->metaTag(u"partName");
 
                 if (nameFromMeta.empty()) {
-                    // If that's also empty, fall back to the filename
                     ex->setName(excerptFileName, /*saveAndNotify=*/ false);
                 } else {
                     ex->setName(nameFromMeta, /*saveAndNotify=*/ false);
                 }
             }
 
-            masterScore->addExcerpt(ex);
+            bool isUninit = !ex->excerptScore();
+            masterScore->addExcerpt(ex, muse::nidx, !isUninit);
         }
     }
 
