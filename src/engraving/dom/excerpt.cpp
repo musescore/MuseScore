@@ -579,7 +579,7 @@ void MasterScore::initExcerpt(Excerpt* excerpt)
 
 void MasterScore::initParts(Excerpt* excerpt)
 {
-    // For lightweight excerpts (no excerptScore), parts and tracksMapping
+    // For uninitialised excerpts (no excerptScore), parts and tracksMapping
     // are already set from the file read, so we can skip this function
     if (!excerpt->excerptScore()) {
         return;

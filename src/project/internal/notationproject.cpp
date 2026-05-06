@@ -914,7 +914,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         return make_ret(Ret::Code::Ok);
     }
 
-    // Write excerpt view settings and solo-mute state (skip lightweight excerpts)
+    // Write excerpt view settings and solo-mute state (skip uninitialised excerpts)
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         if (!excerpt->isInited()) {
             continue;
