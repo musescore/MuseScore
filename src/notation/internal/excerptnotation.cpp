@@ -31,6 +31,7 @@
 
 #include "inotationundostack.h"
 #include "masternotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::notation;
 

@@ -182,7 +182,7 @@ muse::Ret Read500::readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterSco
                 while (probe.readNextStartElement()) {
                     if (probe.name() == "Score") {
                         if (probe.readNextStartElement() && probe.name() == "initialised") {
-                            if (probe.readText() == "false") {
+                            if (probe.readText().toInt() == 0) {
                                 // Uninitialised excerpt: read the rest of the data
                                 readUninitExcerptData(excerpt, masterScore, probe);
                                 return muse::make_ok();
