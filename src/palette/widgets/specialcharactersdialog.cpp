@@ -480,6 +480,13 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     connect(m_lws, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateSmufl);
     connect(m_lwu, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateUnicode);
+}
+
+void SpecialCharactersDialog::classBegin()
+{
+    m_pCommon->setIocContext();
+    m_pSmufl->setIocContext();
+    m_pUnicode->setIocContext();
 
     // others are done in setFont
     populateSmufl();
