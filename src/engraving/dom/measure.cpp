@@ -45,7 +45,7 @@
 #include "barline.h"
 #include "beam.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "chord.h"
 #include "clef.h"
 #include "durationelement.h"

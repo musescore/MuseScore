@@ -26,7 +26,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/chord.h"
 #include "dom/chordrest.h"
 #include "dom/durationelement.h"

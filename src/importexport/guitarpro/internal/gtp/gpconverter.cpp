@@ -8,7 +8,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/bend.h"
 #include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"

@@ -24,7 +24,7 @@
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/instrtemplate.h"
 #include "dom/part.h"
 #include "dom/score.h"
