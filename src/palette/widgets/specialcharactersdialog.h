@@ -53,6 +53,8 @@ private slots:
     void populateUnicode();
 
 private:
+    void classBegin() override;
+
     void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
 
