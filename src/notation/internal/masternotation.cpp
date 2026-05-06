@@ -160,7 +160,7 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score, bool disabl
         m_notationPlayback->init();
     }
 
-    initExcerptNotations(score->excerpts());
+    createExcerptNotations(score->excerpts());
 }
 
 void MasterNotation::setMasterScore(mu::engraving::MasterScore* score, bool disablePlayback)
@@ -839,7 +839,7 @@ const ExcerptNotationList& MasterNotation::potentialExcerpts() const
     return m_potentialExcerpts;
 }
 
-void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts)
+void MasterNotation::createExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts)
 {
     TRACEFUNC;
 

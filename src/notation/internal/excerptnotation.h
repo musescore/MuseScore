@@ -60,6 +60,5 @@ public:
 
 private:
     mu::engraving::Excerpt* m_excerpt = nullptr;
-    bool m_inited = false;
 };
 }
