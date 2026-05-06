@@ -71,7 +71,7 @@ AppWindow {
         }
 
         onCloseWindowRequested: {
-            root.close()
+            Qt.callLater(root.close)
         }
     }
 
