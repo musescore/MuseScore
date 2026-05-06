@@ -33,6 +33,7 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/editing/editexcerpt.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/excerpt.h"
@@ -627,8 +628,8 @@ void MasterNotation::promotePotentialExcerptToUninit(engraving::Excerpt* excerpt
         return;
     }
 
-    // Add to masterScore as uninitialised excerpt
-    masterScore()->addExcerpt(excerpt, muse::nidx, false);
+    // Add to masterScore as uninitialised excerpt via undo stack
+    masterScore()->undo(new mu::engraving::AddExcerpt(excerpt, false));
 
     // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts
     auto it = std::find_if(m_potentialExcerpts.begin(), m_potentialExcerpts.end(),

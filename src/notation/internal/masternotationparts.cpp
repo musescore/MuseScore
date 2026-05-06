@@ -219,12 +219,11 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
             }
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
 
-            if (!excerpt->excerptScore()) {
-                // Uninitialised excerpt - rename directly without undo
-                excerpt->setName(newName);
-            } else {
-                excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
-            }
+            // Use masterScore undo stack for uninitialised excerpts, excerptScore for initialised
+            mu::engraving::Score* undoScore = excerpt->excerptScore()
+                                              ? excerpt->excerptScore()
+                                              : static_cast<mu::engraving::Score*>(score()->masterScore());
+            undoScore->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
         }
     }
 

@@ -35,9 +35,10 @@ class AddExcerpt : public UndoableCommand
 
     Excerpt* excerpt = nullptr;
     bool deleteExcerpt = false;
+    bool m_initIfNeeded = true;
 
 public:
-    AddExcerpt(Excerpt* ex);
+    AddExcerpt(Excerpt* ex, bool initIfNeeded = true);
     ~AddExcerpt() override;
 
     void undo() override;
@@ -56,6 +57,7 @@ class RemoveExcerpt : public UndoableCommand
     Excerpt* excerpt = nullptr;
     size_t index = muse::nidx;
     bool deleteExcerpt = false;
+    bool m_initIfNeeded = true;
 
 public:
     RemoveExcerpt(Excerpt* ex);
