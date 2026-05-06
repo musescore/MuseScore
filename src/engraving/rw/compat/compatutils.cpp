@@ -1202,9 +1202,12 @@ void CompatUtils::createUninitExcerptsForParts(MasterScore* masterScore)
         }
     }
 
-    // Find parts without an excerpt
+    // Find parts without an excerpt. Shared parts never get one of their own.
     std::vector<Part*> partsWithoutExcerpt;
     for (Part* part : masterScore->parts()) {
+        if (part->isSharedPart()) {
+            continue;
+        }
         if (coveredPartIds.find(part->id()) == coveredPartIds.end()) {
             partsWithoutExcerpt.push_back(part);
         }

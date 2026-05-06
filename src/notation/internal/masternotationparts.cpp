@@ -252,9 +252,17 @@ void MasterNotationParts::onPartsAdded(const std::vector<Part*>& parts)
 {
     mu::engraving::MasterScore* master = score()->masterScore();
 
-    // Create uninitialised excerpts for newly added parts
+    // Create uninitialised excerpts for newly added parts. Shared parts never get one of their own.
+    std::vector<mu::engraving::Part*> partsNeedingExcerpt;
+    partsNeedingExcerpt.reserve(parts.size());
+    for (mu::engraving::Part* part : parts) {
+        if (!part->isSharedPart()) {
+            partsNeedingExcerpt.push_back(part);
+        }
+    }
+
     std::vector<mu::engraving::Excerpt*> newExcerpts
-        = mu::engraving::Excerpt::createExcerptsFromParts(parts, master);
+        = mu::engraving::Excerpt::createExcerptsFromParts(partsNeedingExcerpt, master);
 
     for (mu::engraving::Excerpt* excerpt : newExcerpts) {
         master->undo(new mu::engraving::AddExcerpt(excerpt, false));
