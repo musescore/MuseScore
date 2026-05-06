@@ -264,12 +264,17 @@ void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
             continue;
         }
 
-        bool deleteExcerpt = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
+        // Only remove uninitialised (single-part) excerpts whose part was removed
+        if (excerpt->inited()) {
+            continue;
+        }
+
+        bool shouldRemove = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
             return part->id() == initialPartId;
         }) != parts.cend();
 
-        if (deleteExcerpt) {
-            master->deleteExcerpt(excerpt);
+        if (shouldRemove) {
+            master->undo(new mu::engraving::RemoveExcerpt(excerpt));
         }
     }
 }
