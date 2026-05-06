@@ -193,6 +193,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 
     if (masterScore->mscVersion() < 500) {
         removeMMRestElements(masterScore);
+        createUninitExcerptsForParts(masterScore);
     }
 }
 
@@ -1180,5 +1181,34 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
                 }
             }
         }
+    }
+}
+
+void CompatUtils::createUninitExcerptsForParts(MasterScore* masterScore)
+{
+    // Collect parts that already have an excerpt (matched by initialPartId)
+    std::set<ID> coveredPartIds;
+    for (const Excerpt* excerpt : masterScore->excerpts()) {
+        if (excerpt->initialPartId().isValid()) {
+            coveredPartIds.insert(excerpt->initialPartId());
+        }
+    }
+
+    // Find parts without an excerpt
+    std::vector<Part*> partsWithoutExcerpt;
+    for (Part* part : masterScore->parts()) {
+        if (coveredPartIds.find(part->id()) == coveredPartIds.end()) {
+            partsWithoutExcerpt.push_back(part);
+        }
+    }
+
+    if (partsWithoutExcerpt.empty()) {
+        return;
+    }
+
+    // Create uninitialised excerpts (no excerptScore) for uncovered parts
+    std::vector<Excerpt*> newExcerpts = Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore);
+    for (Excerpt* excerpt : newExcerpts) {
+        masterScore->addExcerpt(excerpt, muse::nidx, false);
     }
 }
