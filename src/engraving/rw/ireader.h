@@ -70,12 +70,9 @@ public:
     /// populates the Excerpt with name/parts/tracks only. If it is a regular excerpt,
     /// creates a Score, calls applyStyleFn so the caller can apply the style, then reads
     /// the full score content.
-    using ApplyStyleFn = std::function<void(Score*)>;
-    virtual muse::Ret readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterScore,
-                                           const muse::ByteArray& excerptData,
-                                           const muse::String& fileName,
-                                           rw::ReadInOutData* out,
-                                           const ApplyStyleFn& applyStyleFn);
+    using ApplyStyleFn = std::function<void (Score*)>;
+    virtual muse::Ret readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterScore, const muse::ByteArray& excerptData,
+                                           const muse::String& fileName, rw::ReadInOutData* out, const ApplyStyleFn& applyStyleFn);
 
     using Supported = std::variant<std::monostate,
                                    Accidental*,
