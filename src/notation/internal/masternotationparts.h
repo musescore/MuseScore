@@ -64,6 +64,9 @@ private:
     mu::engraving::Excerpt* findExcerpt(const muse::ID& initialPartId) const;
 
     ExcerptNotationList m_excerpts;
+    bool m_skipExcerptCreation = false;
+
+    friend class MasterNotation;
 };
 }
 

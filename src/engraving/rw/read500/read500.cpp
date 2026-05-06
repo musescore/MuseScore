@@ -127,9 +127,7 @@ static void readUninitExcerptData(Excerpt* excerpt, MasterScore* masterScore, Xm
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
-        if (tag == "initialised") {
-            e.readText();  // consume the "false" value
-        } else if (tag == "name") {
+        if (tag == "name") {
             excerpt->setName(e.readText(), false);
         } else if (tag == "Tracklist") {
             track_idx_t sTrack = static_cast<track_idx_t>(e.intAttribute("sTrack", -1));
@@ -137,9 +135,9 @@ static void readUninitExcerptData(Excerpt* excerpt, MasterScore* masterScore, Xm
             if (sTrack != muse::nidx && dstTrack != muse::nidx) {
                 tracksMap.insert({ sTrack, dstTrack });
             }
-            e.readNext();
+            e.skipCurrentElement();
         } else if (tag == "initialPartId") {
-            excerpt->setInitialPartId(ID(e.readText().toStdString()));
+            excerpt->setInitialPartId(ID(e.readInt()));
         } else if (tag == "Part") {
             ID partId(static_cast<uint64_t>(e.intAttribute("id", 0)));
             for (Part* part : masterScore->parts()) {
@@ -148,7 +146,7 @@ static void readUninitExcerptData(Excerpt* excerpt, MasterScore* masterScore, Xm
                     break;
                 }
             }
-            e.readNext();
+            e.skipCurrentElement();
         } else {
             e.unknown();
         }
@@ -198,25 +196,8 @@ muse::Ret Read500::readExcerptScoreFile(Excerpt* excerpt, MasterScore* masterSco
         }
     }
 
-    // Regular excerpt: create Score, apply style, then read using readScoreFile
-    Score* partScore = masterScore->createScore();
-    excerpt->setExcerptScore(partScore);
-
-    if (applyStyleFn) {
-        applyStyleFn(partScore);
-    }
-
-    XmlReader xml(excerptData);
-    xml.setDocName(fileName);
-
-    muse::Ret ret = readScoreFile(partScore, xml, out);
-    if (!ret) {
-        return ret;
-    }
-
-    partScore->linkMeasures(masterScore);
-
-    return muse::make_ok();
+    // Regular excerpt: delegate to base implementation
+    return IReader::readExcerptScoreFile(excerpt, masterScore, excerptData, fileName, out, applyStyleFn);
 }
 
 bool Read500::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)

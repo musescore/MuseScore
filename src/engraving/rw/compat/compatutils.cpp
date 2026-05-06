@@ -1183,9 +1183,12 @@ void CompatUtils::removeMMRestElements(MasterScore* masterScore)
 
 void CompatUtils::createUninitExcerptsForParts(MasterScore* masterScore)
 {
-    // Collect parts that already have an excerpt (matched by initialPartId)
+    // Collect parts that already have an excerpt
     std::set<ID> coveredPartIds;
     for (const Excerpt* excerpt : masterScore->excerpts()) {
+        for (const Part* part : excerpt->parts()) {
+            coveredPartIds.insert(part->id());
+        }
         if (excerpt->initialPartId().isValid()) {
             coveredPartIds.insert(excerpt->initialPartId());
         }

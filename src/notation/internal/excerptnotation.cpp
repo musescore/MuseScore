@@ -46,7 +46,7 @@ ExcerptNotation::~ExcerptNotation()
 
 void ExcerptNotation::init()
 {
-    if (m_excerpt->inited()) {
+    if (score()) {
         return;
     }
 
@@ -61,12 +61,10 @@ void ExcerptNotation::deinit()
 
     // Delete the excerptScore and reset to uninitialised state
     mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
-    if (excerptScore) {
-        setScore(nullptr);
-        m_excerpt->setExcerptScore(nullptr);
-        m_excerpt->setInited(false);
-        delete excerptScore;
-    }
+    setScore(nullptr);
+    m_excerpt->setExcerptScore(nullptr);
+    m_excerpt->setInited(false);
+    delete excerptScore;
 }
 
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)

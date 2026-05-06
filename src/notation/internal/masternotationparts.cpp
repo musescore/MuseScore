@@ -210,6 +210,9 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
         if (excerpt) {
             StringList allExcerptLowerNames;
             for (const mu::engraving::Excerpt* ex : score()->masterScore()->excerpts()) {
+                if (ex == excerpt) {
+                    continue;
+                }
                 allExcerptLowerNames.push_back(ex->name().toLower());
             }
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
@@ -242,6 +245,11 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
 
 void MasterNotationParts::onPartsAdded(const std::vector<Part*>& parts)
 {
+    // During initial score setup, addExcerptsToMasterScore handles excerpt creation
+    if (m_skipExcerptCreation) {
+        return;
+    }
+
     mu::engraving::MasterScore* master = score()->masterScore();
 
     // Create uninitialised excerpts for newly added parts
