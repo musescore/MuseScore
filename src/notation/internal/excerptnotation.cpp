@@ -108,13 +108,9 @@ void ExcerptNotation::setName(const QString& name)
     m_excerpt->setName(name);
 
     if (changed) {
-        // For potential excerpts, promote to uninitialised excerpt so they get saved
-        if (!m_excerpt->inited() && m_masterNotation) {
-            m_masterNotation->promotePotentialExcerptToUninit(m_excerpt);
-            // Mark project as unsaved so asterisk appears and save confirmation is shown
-            if (m_masterNotation->project()) {
-                m_masterNotation->project()->markAsUnsaved();
-            }
+        // Mark project as unsaved so asterisk appears and save confirmation is shown
+        if (m_masterNotation && m_masterNotation->project()) {
+            m_masterNotation->project()->markAsUnsaved();
         }
         notifyAboutNotationChanged();
     }

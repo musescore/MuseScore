@@ -112,8 +112,6 @@ MasterNotation::MasterNotation(project::INotationProject* project, const muse::m
 MasterNotation::~MasterNotation()
 {
     m_parts = nullptr;
-
-    unloadExcerpts(m_potentialExcerpts);
 }
 
 mu::project::INotationProject* MasterNotation::project() const
@@ -608,35 +606,6 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     }
 }
 
-void MasterNotation::promotePotentialExcerptToUninit(engraving::Excerpt* excerpt)
-{
-    if (!excerpt) {
-        return;
-    }
-
-    // Check if already in masterScore->excerpts()
-    const std::vector<mu::engraving::Excerpt*>& msExcerpts = masterScore()->excerpts();
-    if (std::find(msExcerpts.begin(), msExcerpts.end(), excerpt) != msExcerpts.end()) {
-        return;
-    }
-
-    // Add to masterScore as uninitialised excerpt via undo stack
-    masterScore()->undo(new mu::engraving::AddExcerpt(excerpt, false));
-
-    // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts
-    auto it = std::find_if(m_potentialExcerpts.begin(), m_potentialExcerpts.end(),
-                           [excerpt](const IExcerptNotationPtr& en) {
-        return get_impl(en)->excerpt() == excerpt;
-    });
-
-    if (it != m_potentialExcerpts.end()) {
-        m_excerpts.push_back(*it);
-        m_potentialExcerpts.erase(it);
-        m_excerptsChanged.notify();
-        static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(m_excerpts);
-    }
-}
-
 void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;
@@ -645,8 +614,6 @@ void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
     m_excerptsChanged.notify();
 
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
-
-    updatePotentialExcerpts();
 }
 
 void MasterNotation::updateExcerpts()
@@ -694,46 +661,6 @@ void MasterNotation::updateExcerpts()
     masterScore()->setExcerptsChanged(false);
 }
 
-void MasterNotation::updatePotentialExcerpts() const
-{
-    TRACEFUNC;
-
-    auto findExcerptByPart = [](const ExcerptNotationList& excerpts, const Part* part) {
-        return std::find_if(excerpts.cbegin(), excerpts.cend(), [part](const IExcerptNotationPtr& notation) {
-            return get_impl(notation)->excerpt()->initialPartId() == part->id();
-        });
-    };
-
-    ExcerptNotationList potentialExcerpts;
-    std::vector<Part*> partsWithoutExcerpt;
-
-    for (Part* part : score()->parts()) {
-        if (findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
-            continue;
-        }
-
-        if (!m_potentialExcerptsForcedDirty) {
-            auto it = findExcerptByPart(m_potentialExcerpts, part);
-            if (it != m_potentialExcerpts.cend()) {
-                potentialExcerpts.push_back(*it);
-                continue;
-            }
-        }
-
-        partsWithoutExcerpt.push_back(part);
-    }
-
-    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore());
-
-    for (mu::engraving::Excerpt* excerpt : excerpts) {
-        auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
-        potentialExcerpts.push_back(excerptNotation);
-    }
-
-    m_potentialExcerpts = std::move(potentialExcerpts);
-    m_potentialExcerptsForcedDirty = false;
-}
-
 bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) const
 {
     for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
@@ -748,7 +675,6 @@ bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) cons
 void MasterNotation::onPartsChanged()
 {
     m_hasPartsChanged.notify();
-    m_potentialExcerptsForcedDirty = true;
 }
 
 IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
@@ -817,13 +743,6 @@ void MasterNotation::initNotationSoloMuteState(const INotationPtr notation)
             excerptSoloMuteState->setTrackSoloMuteState(chordsId, state);
         }
     }
-}
-
-const ExcerptNotationList& MasterNotation::potentialExcerpts() const
-{
-    updatePotentialExcerpts();
-
-    return m_potentialExcerpts;
 }
 
 void MasterNotation::createExcerptNotations(const std::vector<mu::engraving::Excerpt*>& excerpts)

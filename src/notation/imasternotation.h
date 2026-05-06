@@ -54,7 +54,6 @@ public:
 
     virtual const ExcerptNotationList& excerpts() const = 0;
     virtual muse::async::Notification excerptsChanged() const = 0;
-    virtual const ExcerptNotationList& potentialExcerpts() const = 0;
 
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void deinitExcerpts(const ExcerptNotationList& excerpts) = 0;
