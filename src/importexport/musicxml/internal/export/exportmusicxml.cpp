@@ -5623,6 +5623,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
         switch (pd->endHookType()) {
         case HookType::NONE:
             pedalType = (pd->lineVisible() && pd->endText().isEmpty()) ? u"discontinue" : u"stop";
+            break;
         default:
             pedalType = u"stop";
         }
