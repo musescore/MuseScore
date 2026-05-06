@@ -57,6 +57,7 @@ private:
     void startGlobalEdit(const muse::TranslatableString& actionName);
     void endGlobalEdit();
 
+    void onPartsAdded(const std::vector<Part*>& parts) override;
     void onPartsRemoved(const std::vector<Part*>& parts) override;
 
     std::vector<INotationPartsPtr> excerptsParts() const;

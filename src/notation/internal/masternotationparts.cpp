@@ -245,6 +245,19 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
     endGlobalEdit();
 }
 
+void MasterNotationParts::onPartsAdded(const std::vector<Part*>& parts)
+{
+    mu::engraving::MasterScore* master = score()->masterScore();
+
+    // Create uninitialised excerpts for newly added parts
+    std::vector<mu::engraving::Excerpt*> newExcerpts
+        = mu::engraving::Excerpt::createExcerptsFromParts(parts, master);
+
+    for (mu::engraving::Excerpt* excerpt : newExcerpts) {
+        master->undo(new mu::engraving::AddExcerpt(excerpt, false));
+    }
+}
+
 void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
 {
     mu::engraving::MasterScore* master = score()->masterScore();
