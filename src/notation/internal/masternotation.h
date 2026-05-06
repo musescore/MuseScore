@@ -83,7 +83,7 @@ private:
 
     void initAfterSettingScore(const engraving::MasterScore* score, bool disablePlayback = false);
 
-    void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
+    void createExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);
     void doSetExcerpts(const ExcerptNotationList& excerpts);
     void updateExcerpts();
