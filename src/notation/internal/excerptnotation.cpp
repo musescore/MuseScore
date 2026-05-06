@@ -48,18 +48,16 @@ ExcerptNotation::~ExcerptNotation()
 
 void ExcerptNotation::init()
 {
-    if (m_inited) {
+    if (m_excerpt->inited()) {
         return;
     }
 
     setScore(m_excerpt->excerptScore());
-
-    m_inited = true;
 }
 
 void ExcerptNotation::deinit()
 {
-    if (!m_inited) {
+    if (!m_excerpt->inited()) {
         return;
     }
 
@@ -71,13 +69,10 @@ void ExcerptNotation::deinit()
         m_excerpt->setInited(false);
         delete excerptScore;
     }
-
-    m_inited = false;
 }
 
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 {
-    m_inited = false;
     m_excerpt = newExcerpt;
 
     init();
@@ -87,7 +82,7 @@ void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 
 bool ExcerptNotation::isInited() const
 {
-    return m_inited;
+    return m_excerpt->inited();
 }
 
 bool ExcerptNotation::isCustom() const
@@ -117,7 +112,7 @@ void ExcerptNotation::setName(const QString& name)
 
     if (changed) {
         // For potential excerpts, promote to uninitialised excerpt so they get saved
-        if (!m_inited && m_masterNotation) {
+        if (!m_excerpt->inited() && m_masterNotation) {
             m_masterNotation->promotePotentialExcerptToUninit(m_excerpt);
             // Mark project as unsaved so asterisk appears and save confirmation is shown
             if (m_masterNotation->project()) {
