@@ -77,5 +77,6 @@ private:
     static void convertTextLineToNoteAnchoredLine(MasterScore* masterScore);
     static void convertLaissezVibArticToTie(MasterScore* masterScore);
     static void removeMMRestElements(MasterScore* masterScore);
+    static void createUninitExcerptsForParts(MasterScore* masterScore);
 };
 }
