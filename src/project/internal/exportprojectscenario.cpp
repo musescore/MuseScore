@@ -122,30 +122,17 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     bool isCreatingOnlyOneFile = guessIsCreatingOnlyOneFile(notations, unitType);
     bool isExportingOnlyOneScore = notations.size() == 1;
 
-    // The user might have selected not-yet-inited excerpts
-    // Check both potentialExcerpts and regular excerpts (which may be uninitialised)
+    // The user might have selected uninitialised excerpts that need init for export
     ExcerptNotationList excerptsToInit;
-    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
-    ExcerptNotationList regularExcerpts = masterNotation()->excerpts();
+    ExcerptNotationList allExcerpts = masterNotation()->excerpts();
 
     for (const INotationPtr& notation : notations) {
-        // Check in potential excerpts
-        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
-            return excerpt->notation() == notation;
-        });
-
-        if (it != potentialExcerpts.cend()) {
-            excerptsToInit.push_back(*it);
-            continue;
-        }
-
-        // Check in regular excerpts for uninitialised ones
-        auto it2 = std::find_if(regularExcerpts.cbegin(), regularExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+        auto it = std::find_if(allExcerpts.cbegin(), allExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
             return excerpt->notation() == notation && !excerpt->isInited();
         });
 
-        if (it2 != regularExcerpts.cend()) {
-            excerptsToInit.push_back(*it2);
+        if (it != allExcerpts.cend()) {
+            excerptsToInit.push_back(*it);
         }
     }
 
@@ -288,14 +275,14 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
         if (notations.size() == 1) {
             INotationPtr notation = notations.front();
 
-            // Check if it is not a potential (not-yet-initialized) excerpt
-            ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+            // Check if it is an initialised excerpt (not an uninitialised one)
+            ExcerptNotationList allExcerpts = masterNotation()->excerpts();
 
-            auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
-                    return excerpt->notation() == notation;
+            auto it = std::find_if(allExcerpts.cbegin(), allExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+                    return excerpt->notation() == notation && !excerpt->isInited();
                 });
 
-            if (it == potentialExcerpts.cend()) {
+            if (it == allExcerpts.cend()) {
                 ViewMode viewMode = notation->painting()->viewMode();
                 notation->painting()->setViewMode(ViewMode::PAGE);
 

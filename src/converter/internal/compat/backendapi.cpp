@@ -794,23 +794,22 @@ void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
 
 ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterNotation)
 {
-    initPotentialExcerpts(masterNotation);
+    // Init any uninitialised excerpts for export
+    ExcerptNotationList excerptsToInit;
+    for (const IExcerptNotationPtr& excerpt : masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            excerptsToInit.push_back(excerpt);
+        }
+    }
+    if (!excerptsToInit.empty()) {
+        masterNotation->initExcerpts(excerptsToInit);
+        renderExcerptsContents(masterNotation);
+    }
 
     ExcerptNotationList excerpts = masterNotation->excerpts();
-    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
-    excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
-
     masterNotation->sortExcerpts(excerpts);
 
     return excerpts;
-}
-
-void BackendApi::initPotentialExcerpts(notation::IMasterNotationPtr masterNotation)
-{
-    ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
-
-    masterNotation->initExcerpts(potentialExcerpts);
-    renderExcerptsContents(masterNotation);
 }
 
 Ret BackendApi::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)
