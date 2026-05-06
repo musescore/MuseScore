@@ -271,7 +271,9 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
 
     undoStack()->lock();
 
+    static_cast<MasterNotationParts*>(m_parts.get())->m_skipExcerptCreation = true;
     parts()->setParts(scoreOptions.parts, scoreOptions.order);
+    static_cast<MasterNotationParts*>(m_parts.get())->m_skipExcerptCreation = false;
 
     score->checkChordList();
     score->updateSwing();

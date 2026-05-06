@@ -785,6 +785,9 @@ void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
     //! NOTE: Due to optimization, only the master score is layouted
     //!       Let's layout all the scores of the excerpts
     for (const IExcerptNotationPtr& excerpt : masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         Score* score = excerpt->notation()->elements()->msScore();
         if (!score->autoLayoutEnabled()) {
             score->doLayout();
@@ -803,6 +806,9 @@ ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterN
     }
     if (!excerptsToInit.empty()) {
         masterNotation->initExcerpts(excerptsToInit);
+        for (const IExcerptNotationPtr& excerpt : excerptsToInit) {
+            excerpt->notation()->setViewMode(ViewMode::PAGE);
+        }
         renderExcerptsContents(masterNotation);
     }
 
