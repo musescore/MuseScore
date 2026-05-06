@@ -100,14 +100,13 @@ MeasureBase::~MeasureBase()
 
 System* MeasureBase::prevNonVBoxSystem() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     System* curSystem = system();
     IF_ASSERT_FAILED(curSystem) {
         return nullptr;
     }
 
     System* prevSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && prevSystem == curSystem; mb = mmRests ? mb->prevMM() : mb->prev()) {
+    for (const MeasureBase* mb = this; mb && prevSystem == curSystem; mb = mb->prevMM()) {
         if (mb->isMeasure() || mb->isHBox()) {
             prevSystem = mb->system();
         } else {
@@ -120,14 +119,13 @@ System* MeasureBase::prevNonVBoxSystem() const
 
 System* MeasureBase::nextNonVBoxSystem() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     System* curSystem = system();
     IF_ASSERT_FAILED(curSystem) {
         return nullptr;
     }
 
     System* nextSystem = curSystem;
-    for (const MeasureBase* mb = this; mb && nextSystem == curSystem; mb = mmRests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = this; mb && nextSystem == curSystem; mb = mb->nextMM()) {
         if (mb->isMeasure() || mb->isHBox()) {
             nextSystem = mb->system();
         } else {
@@ -145,14 +143,13 @@ Page* MeasureBase::page() const
 
 Page* MeasureBase::prevPage() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     Page* curPage = system() ? system()->page() : nullptr;
     IF_ASSERT_FAILED(curPage) {
         return nullptr;
     }
 
     Page* prevPage = curPage;
-    for (const MeasureBase* mb = this; mb && prevPage == curPage; mb = mmRests ? mb->prevMM() : mb->prev()) {
+    for (const MeasureBase* mb = this; mb && prevPage == curPage; mb = mb->prevMM()) {
         prevPage = mb->system()->page();
     }
 
@@ -161,14 +158,13 @@ Page* MeasureBase::prevPage() const
 
 Page* MeasureBase::nextPage() const
 {
-    bool mmRests = score()->style().styleB(Sid::createMultiMeasureRests);
     Page* curPage = system() ? system()->page() : nullptr;
     IF_ASSERT_FAILED(curPage) {
         return nullptr;
     }
 
     Page* nextPage = curPage;
-    for (const MeasureBase* mb = this; mb && nextPage == curPage; mb = mmRests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = this; mb && nextPage == curPage; mb = mb->nextMM()) {
         nextPage = mb->system()->page();
     }
 

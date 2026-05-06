@@ -414,9 +414,8 @@ std::vector<System*> Selection::selectedSystems() const
         return {};
     }
 
-    bool mmrests = score()->style().styleB(Sid::createMultiMeasureRests);
     std::vector<System*> systems;
-    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mb->nextMM()) {
         System* sys = mb->system();
         if ((mb->isMeasure() || mb->isHBox()) && (systems.empty() || sys != systems.back())) {
             systems.push_back(sys);
