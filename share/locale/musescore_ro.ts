@@ -10043,7 +10043,8 @@ Această acțiune nu poate fi anulată.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2026 MuseScore Limited și alții.
+Publicat sub licența &lt;a href=&quot;%1&quot;&gt;GNU General Public License versiunea 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -33739,7 +33740,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio driver</source>
-        <translation type="unfinished"/>
+        <translation>Driver audio</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -34624,7 +34625,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="64"/>
         <source>No audio devices available</source>
-        <translation type="unfinished"/>
+        <translation>Niciun dispozitiv audio disponibil</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
@@ -35755,12 +35756,12 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
         <source>Use page layout</source>
-        <translation type="unfinished"/>
+        <translation>Folosește aspectul paginii</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
         <source>Reflow to fit video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Rearanjează pentru a potrivi rezoluția video</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
@@ -35809,7 +35810,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
         <source>Video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Rezoluție video</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="165"/>
