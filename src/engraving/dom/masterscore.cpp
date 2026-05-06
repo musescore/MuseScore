@@ -229,22 +229,12 @@ const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) c
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex, size_t index)
+void MasterScore::addExcerpt(Excerpt* ex, size_t index, bool initIfNeeded)
 {
-    if (!ex->inited()) {
+    if (initIfNeeded && !ex->inited()) {
         initParts(ex);
     }
 
-    excerpts().insert(excerpts().begin() + (index == muse::nidx ? excerpts().size() : index), ex);
-    setExcerptsChanged(true);
-}
-
-//---------------------------------------------------------
-//   addLightweightExcerpt
-//---------------------------------------------------------
-
-void MasterScore::addLightweightExcerpt(Excerpt* ex, size_t index)
-{
     excerpts().insert(excerpts().begin() + (index == muse::nidx ? excerpts().size() : index), ex);
     setExcerptsChanged(true);
 }

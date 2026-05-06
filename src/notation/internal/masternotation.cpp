@@ -628,7 +628,7 @@ void MasterNotation::promotePotentialExcerptToUninit(engraving::Excerpt* excerpt
     }
 
     // Add to masterScore as uninitialised excerpt
-    masterScore()->addLightweightExcerpt(excerpt);
+    masterScore()->addExcerpt(excerpt, muse::nidx, false);
 
     // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts
     auto it = std::find_if(m_potentialExcerpts.begin(), m_potentialExcerpts.end(),
