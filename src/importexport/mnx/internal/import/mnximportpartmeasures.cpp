@@ -28,7 +28,7 @@
 
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"

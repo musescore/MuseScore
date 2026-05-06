@@ -22,7 +22,7 @@
 
 #include "editproperty.h"
 
-#include "../dom/bracketItem.h"
+#include "../dom/bracketitem.h"
 #include "../dom/score.h"
 #include "../dom/staff.h"
 #include "../dom/textline.h"

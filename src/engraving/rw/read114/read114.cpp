@@ -44,7 +44,7 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/box.h"
-#include "dom/bracketItem.h"
+#include "dom/bracketitem.h"
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/clef.h"

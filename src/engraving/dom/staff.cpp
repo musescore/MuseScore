@@ -26,7 +26,7 @@
 
 #include "barline.h"
 #include "bracket.h"
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "chord.h"
 #include "clef.h"
 #include "cleflist.h"
@@ -349,20 +349,6 @@ void Staff::setBracketType(size_t idx, BracketType val)
 }
 
 //---------------------------------------------------------
-//   swapBracket
-//---------------------------------------------------------
-
-void Staff::swapBracket(size_t oldIdx, size_t newIdx)
-{
-    size_t idx = std::max(oldIdx, newIdx);
-    fillBrackets(idx);
-    m_brackets[oldIdx]->setColumn(newIdx);
-    m_brackets[newIdx]->setColumn(oldIdx);
-    muse::swapItemsAt(m_brackets, oldIdx, newIdx);
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
 //   changeBracketColumn
 //---------------------------------------------------------
 
@@ -443,32 +429,7 @@ void Staff::insertBracket(BracketItem* b)
     }
 }
 
-//---------------------------------------------------------
-//   innerBracket
-//    Return type inner bracket.
-//    The bracket type determines the staff distance.
-//---------------------------------------------------------
-
-BracketType Staff::innerBracket() const
 {
-    staff_idx_t staffIdx = idx();
-
-    BracketType t = BracketType::NO_BRACKET;
-    size_t level = 1000;
-    for (size_t i = 0; i < score()->nstaves(); ++i) {
-        Staff* staff = score()->staff(i);
-        for (size_t k = 0; k < staff->brackets().size(); ++k) {
-            const BracketItem* bi = staff->brackets().at(k);
-            if (bi->bracketType() != BracketType::NO_BRACKET) {
-                if (i < staffIdx && ((i + bi->bracketSpan()) > staffIdx) && k < level) {
-                    t = bi->bracketType();
-                    level = k;
-                    break;
-                }
-            }
-        }
-    }
-    return t;
 }
 
 bool Staff::playbackVoice(int voice) const
@@ -550,44 +511,6 @@ bool Staff::reflectTranspositionInLinkedTab() const
 void Staff::setReflectTranspositionInLinkedTab(bool reflect)
 {
     m_reflectTranspositionInLinkedTab = reflect;
-}
-
-//---------------------------------------------------------
-//   cleanupBrackets
-//---------------------------------------------------------
-
-void Staff::cleanupBrackets()
-{
-    staff_idx_t index = idx();
-    size_t n = score()->nstaves();
-    for (size_t i = 0; i < m_brackets.size(); ++i) {
-        if (m_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
-            continue;
-        }
-        size_t span = m_brackets[i]->bracketSpan();
-        if (span > (n - index)) {
-            span = n - index;
-            m_brackets[i]->setBracketSpan(span);
-        }
-    }
-    for (size_t i = 0; i < m_brackets.size(); ++i) {
-        if (m_brackets[i]->bracketType() == BracketType::NO_BRACKET) {
-            continue;
-        }
-        size_t span = m_brackets[i]->bracketSpan();
-        if (span <= 1) {
-            m_brackets[i] = Factory::createBracketItem(score()->dummy());
-            m_brackets[i]->setStaff(this);
-        } else {
-            // delete all other brackets with same span
-            for (size_t k = i + 1; k < m_brackets.size(); ++k) {
-                if (span == m_brackets[k]->bracketSpan()) {
-                    m_brackets[k] = Factory::createBracketItem(score()->dummy());
-                    m_brackets[k]->setStaff(this);
-                }
-            }
-        }
-    }
 }
 
 //---------------------------------------------------------

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "bracketItem.h"
+#include "bracketitem.h"
 
 #include "property.h"
 #include "score.h"

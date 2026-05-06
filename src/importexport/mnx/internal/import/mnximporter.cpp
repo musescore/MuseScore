@@ -26,7 +26,7 @@
 #include "internal/shared/mnxtypesconv.h"
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/drumset.h"

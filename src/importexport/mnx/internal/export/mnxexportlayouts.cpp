@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"

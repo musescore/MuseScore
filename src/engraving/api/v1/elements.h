@@ -29,7 +29,7 @@
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
