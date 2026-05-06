@@ -66,7 +66,7 @@ public:
 
     void setExcerptIsOpen(const INotationPtr excerptNotation, bool open) override;
 
-    void promotePotentialExcerptToLightweight(engraving::Excerpt* excerpt);
+    void promotePotentialExcerptToUninit(engraving::Excerpt* excerpt);
 
     INotationPartsPtr parts() const override;
     bool hasParts() const override;

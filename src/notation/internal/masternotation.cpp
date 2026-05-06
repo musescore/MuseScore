@@ -68,7 +68,7 @@ static IExcerptNotationPtr createExcerptNotation(MasterNotation* master, mu::eng
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(master, excerpt, iocCtx);
 
-    // Only init if excerpt has a score (non-lightweight)
+    // Only init if excerpt has a score (not uninitialised)
     if (excerpt->excerptScore()) {
         excerptNotation->init();
     }
@@ -607,7 +607,7 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     }
 }
 
-void MasterNotation::promotePotentialExcerptToLightweight(engraving::Excerpt* excerpt)
+void MasterNotation::promotePotentialExcerptToUninit(engraving::Excerpt* excerpt)
 {
     if (!excerpt) {
         return;
@@ -619,7 +619,7 @@ void MasterNotation::promotePotentialExcerptToLightweight(engraving::Excerpt* ex
         return;
     }
 
-    // Add to masterScore as lightweight excerpt
+    // Add to masterScore as uninitialised excerpt
     masterScore()->addLightweightExcerpt(excerpt);
 
     // Find the ExcerptNotation in m_potentialExcerpts and move it to m_excerpts

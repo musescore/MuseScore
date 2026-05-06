@@ -60,7 +60,7 @@ void ExcerptNotation::deinit()
         return;
     }
 
-    // Delete the excerptScore and reset to lightweight state
+    // Delete the excerptScore and reset to uninitialised state
     mu::engraving::Score* excerptScore = m_excerpt->excerptScore();
     if (excerptScore) {
         setScore(nullptr);
@@ -113,9 +113,9 @@ void ExcerptNotation::setName(const QString& name)
     m_excerpt->setName(name);
 
     if (changed) {
-        // For potential excerpts, promote to lightweight excerpt so they get saved
+        // For potential excerpts, promote to uninitialised excerpt so they get saved
         if (!m_inited && m_masterNotation) {
-            m_masterNotation->promotePotentialExcerptToLightweight(m_excerpt);
+            m_masterNotation->promotePotentialExcerptToUninit(m_excerpt);
             // Mark project as unsaved so asterisk appears and save confirmation is shown
             if (m_masterNotation->project()) {
                 m_masterNotation->project()->markAsUnsaved();

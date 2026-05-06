@@ -54,12 +54,12 @@ using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
 //---------------------------------------------------------
-//   readLightweightExcerpt
-///   Read a lightweight excerpt (no full excerptScore).
-///   Returns nullptr if not a lightweight excerpt.
+//   readUninitExcerpt
+///   Read an uninitialised excerpt (no excerptScore).
+///   Returns nullptr if not an uninitialised excerpt.
 //---------------------------------------------------------
 
-static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray& excerptData, const String& fileName)
+static Excerpt* readUninitExcerpt(MasterScore* masterScore, const ByteArray& excerptData, const String& fileName)
 {
     Excerpt* excerpt = nullptr;
     TracksMap tracksMap;
@@ -71,15 +71,15 @@ static Excerpt* readLightweightExcerpt(MasterScore* masterScore, const ByteArray
                 if (xml.name() == "Score") {
                     while (xml.readNextStartElement()) {
                         const AsciiStringView tag = xml.name();
-                        if (tag == "lightweight") {
-                            if (xml.readText().toInt() != 0) {
+                        if (tag == "initialised") {
+                            if (xml.readText() == "false") {
                                 excerpt = new Excerpt(masterScore);
                                 excerpt->setFileName(fileName);
                             } else {
                                 return nullptr;
                             }
                         } else if (!excerpt) {
-                            // Not lightweight - first element must be <lightweight>
+                            // Not uninitialised: first element must be <initialised>
                             return nullptr;
                         } else if (tag == "name") {
                             excerpt->setName(xml.readText(), false);
@@ -228,8 +228,8 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
         for (const String& excerptFileName : excerptFileNames) {
             ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
-            // Try to read as lightweight excerpt first
-            if (Excerpt* ex = readLightweightExcerpt(masterScore, excerptData, excerptFileName)) {
+            // Try to read as uninitialised excerpt first
+            if (Excerpt* ex = readUninitExcerpt(masterScore, excerptData, excerptFileName)) {
                 masterScore->addLightweightExcerpt(ex);
                 continue;
             }

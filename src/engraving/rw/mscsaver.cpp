@@ -51,12 +51,12 @@ using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
 //---------------------------------------------------------
-//   writeLightweightExcerpt
-///   Write an excerpt that has no excerptScore (potential excerpt)
-///   in a lightweight XML format that preserves name, parts, and tracks
+//   writeUninitExcerpt
+///   Write an uninitialised excerpt (no excerptScore) in a minimal
+///   XML format that preserves name, parts, and tracks
 //---------------------------------------------------------
 
-static void writeLightweightExcerpt(Excerpt* excerpt, MscWriter& mscWriter)
+static void writeUninitExcerpt(Excerpt* excerpt, MscWriter& mscWriter)
 {
     ByteArray excerptData;
     Buffer excerptBuf(&excerptData);
@@ -69,8 +69,8 @@ static void writeLightweightExcerpt(Excerpt* excerpt, MscWriter& mscWriter)
         xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
         xml.startElement("Score");
 
-        // Mark as lightweight excerpt
-        xml.element("lightweight", 1);  // Use int, not bool
+        // Mark as uninitialised excerpt
+        xml.element("initialised", false);
 
         // Write name if not empty
         if (!excerpt->name().empty()) {
@@ -180,9 +180,9 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 Excerpt* excerpt = excerpts.at(excerptIndex);
                 excerpt->updateFileName(excerptIndex);
 
-                // Lightweight excerpts have no excerptScore - write minimal XML directly
+                // Uninitialised excerpts have no excerptScore - write minimal XML directly
                 if (!excerpt->excerptScore()) {
-                    writeLightweightExcerpt(excerpt, mscWriter);
+                    writeUninitExcerpt(excerpt, mscWriter);
                     continue;
                 }
 
@@ -203,9 +203,9 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool createTh
                 Excerpt* excerpt = excerpts.at(excerptIndex);
                 excerpt->updateFileName(excerptIndex);
 
-                // Lightweight excerpts have no excerptScore - write minimal XML directly
+                // Uninitialised excerpts have no excerptScore - write minimal XML directly
                 if (!excerpt->excerptScore()) {
-                    writeLightweightExcerpt(excerpt, mscWriter);
+                    writeUninitExcerpt(excerpt, mscWriter);
                     continue;
                 }
 

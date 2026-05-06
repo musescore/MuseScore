@@ -215,7 +215,7 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
 
             if (!excerpt->excerptScore()) {
-                // Lightweight excerpt - rename directly without undo
+                // Uninitialised excerpt - rename directly without undo
                 excerpt->setName(newName);
             } else {
                 excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
@@ -332,7 +332,7 @@ std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
     std::vector<INotationPartsPtr> result;
 
     for (const IExcerptNotationPtr& excerpt : m_excerpts) {
-        // Skip lightweight excerpts (not initialized, no score)
+        // Skip uninitialised excerpts (no score)
         if (!excerpt->isInited()) {
             continue;
         }
