@@ -33,6 +33,8 @@
 #include "global/concurrency/concurrent.h"
 #endif
 
+#include "log.h"
+
 using namespace mu::project;
 using namespace muse;
 using namespace muse::async;
@@ -99,6 +101,8 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
 
 void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const RecentFile& after)
 {
+    TRACEFUNC;
+
     bool moved = false;
     RecentFilesList newList = m_recentFilesList;
 
@@ -111,6 +115,33 @@ void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const
     }
 
     if (moved) {
+        setRecentFilesList(newList, true);
+    }
+}
+
+void RecentFilesController::removeRecentFile(const muse::io::path_t& path)
+{
+    if (path.empty()) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    RecentFilesList newList;
+    newList.reserve(m_recentFilesList.size());
+
+    bool removed = false;
+
+    for (const RecentFile& file : m_recentFilesList) {
+        if (file.path == path) {
+            removed = true;
+            continue;
+        }
+
+        newList.push_back(file);
+    }
+
+    if (removed) {
         setRecentFilesList(newList, true);
     }
 }

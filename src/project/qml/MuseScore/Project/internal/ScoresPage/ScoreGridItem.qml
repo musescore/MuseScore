@@ -39,10 +39,14 @@ FocusScope {
     property bool isNoResultsFound: false
     property bool isCloud: false
     property int cloudScoreId: 0
+    property bool showRemoveFromRecentFiles: false
 
     property alias navigation: navCtrl
 
     signal clicked()
+    signal revealInFileBrowserRequested(string scorePath)
+    signal viewOnlineRequested(int scoreId)
+    signal removeFromRecentFilesRequested(string scorePath)
 
     NavigationControl {
         id: navCtrl
@@ -67,9 +71,62 @@ FocusScope {
 
         enabled: root.enabled
         hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        onClicked: {
+        onClicked: function(mouse) {
+            navCtrl.requestActiveByInteraction()
+
+            if (mouse.button === Qt.RightButton) {
+                if (contextMenuLoader.items.length > 0) {
+                    contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                }
+                return
+            }
+
             root.clicked()
+        }
+    }
+
+    ContextMenuLoader {
+        id: contextMenuLoader
+
+        items: {
+            if (root.isCreateNew || root.isNoResultsFound) {
+                return []
+            }
+
+            let items = [
+                { id: "open", title: qsTrc("project", "Open") }
+            ]
+
+            if (root.isCloud) {
+                items.push({ id: "view-online", title: qsTrc("project", "View online") })
+            } else {
+                items.push({ id: "reveal-in-file-browser", title: qsTrc("project", "Reveal in file browser") })
+            }
+
+            if (root.showRemoveFromRecentFiles) {
+                items.push({ id: "remove-from-recent-files", title: qsTrc("project", "Remove from recent files list") })
+            }
+
+            return items
+        }
+
+        onHandleMenuItem: function(itemId) {
+            switch (itemId) {
+            case "open":
+                root.clicked()
+                break
+            case "view-online":
+                root.viewOnlineRequested(root.cloudScoreId)
+                break
+            case "reveal-in-file-browser":
+                root.revealInFileBrowserRequested(root.path)
+                break
+            case "remove-from-recent-files":
+                root.removeFromRecentFilesRequested(root.path)
+                break
+            }
         }
     }
 

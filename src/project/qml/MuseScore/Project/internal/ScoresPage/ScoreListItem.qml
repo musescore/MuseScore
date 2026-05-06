@@ -38,6 +38,11 @@ ListItemBlank {
     property real itemInset: 12
     property real columnSpacing: 44
     property alias showBottomBorder: bottomBorder.visible
+    property bool showRemoveFromRecentFiles: false
+
+    signal revealInFileBrowserRequested(string scorePath)
+    signal viewOnlineRequested(int scoreId)
+    signal removeFromRecentFilesRequested(string scorePath)
 
     implicitHeight: 64
 
@@ -49,6 +54,60 @@ ListItemBlank {
     }
 
     focusBorder.anchors.bottomMargin: bottomBorder.visible ? bottomBorder.height : 0
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: root.visible && root.enabled
+        acceptedButtons: Qt.RightButton
+        onClicked: function(mouse) {
+            if (contextMenuLoader.items.length > 0) {
+                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+            }
+        }
+    }
+
+    ContextMenuLoader {
+        id: contextMenuLoader
+
+        items: {
+            if ((root.score.isCreateNew ?? false) || (root.score.isNoResultsFound ?? false)) {
+                return []
+            }
+
+            let items = [
+                { id: "open", title: qsTrc("project", "Open") }
+            ]
+
+            if (root.score.isCloud ?? false) {
+                items.push({ id: "view-online", title: qsTrc("project", "View online") })
+            } else {
+                items.push({ id: "reveal-in-file-browser", title: qsTrc("project", "Reveal in file browser") })
+            }
+
+            if (root.showRemoveFromRecentFiles) {
+                items.push({ id: "remove-from-recent-files", title: qsTrc("project", "Remove from recent files list") })
+            }
+
+            return items
+        }
+
+        onHandleMenuItem: function(itemId) {
+            switch (itemId) {
+            case "open":
+                root.clicked(null)
+                break
+            case "view-online":
+                root.viewOnlineRequested(root.score.scoreId ?? 0)
+                break
+            case "reveal-in-file-browser":
+                root.revealInFileBrowserRequested(root.score.path ?? "")
+                break
+            case "remove-from-recent-files":
+                root.removeFromRecentFilesRequested(root.score.path ?? "")
+                break
+            }
+        }
+    }
 
     RowLayout {
         anchors.fill: parent
