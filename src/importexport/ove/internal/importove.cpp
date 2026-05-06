@@ -68,7 +68,7 @@
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/jump.h"
-#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/bracketitem.h"
 #include "engraving/editing/transpose.h"
 
 #include "modularity/ioc.h"

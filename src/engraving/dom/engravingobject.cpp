@@ -30,7 +30,7 @@
 #include "style/textstyle.h"
 #include "types/typesconv.h"
 
-#include "bracketItem.h"
+#include "bracketitem.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "score.h"

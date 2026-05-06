@@ -85,13 +85,11 @@ public:
     void setBracketType(size_t idx, BracketType val);
     void setBracketSpan(size_t idx, size_t val);
     void setBracketVisible(size_t idx, bool v);
-    void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
     void insertBracket(BracketItem* b);
     const std::vector<BracketItem*>& brackets() const { return m_brackets; }
     std::vector<BracketItem*>& brackets() { return m_brackets; }
-    void cleanupBrackets();
     size_t bracketLevels() const;
 
     ClefList& clefList() { return m_clefs; }
@@ -226,8 +224,6 @@ public:
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-
-    BracketType innerBracket() const;
 
     bool playbackVoice(int voice) const;
     void setPlaybackVoice(int voice, bool val);
