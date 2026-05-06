@@ -80,16 +80,16 @@ public:
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
 
-    BracketType bracketType(size_t idx) const;
-    size_t bracketSpan(size_t idx) const;
-    void setBracketType(size_t idx, BracketType val);
-    void setBracketSpan(size_t idx, size_t val);
-    void setBracketVisible(size_t idx, bool v);
+    BracketType bracketType(size_t bracketIdx) const;
+    size_t bracketSpan(size_t bracketIdx) const;
+    void setBracketType(size_t bracketIdx, BracketType val);
+    void setBracketSpan(size_t bracketIdx, size_t val);
+    void setBracketVisible(size_t bracketIdx, bool v);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
     void insertBracket(BracketItem* b);
-    const std::vector<BracketItem*>& brackets() const { return m_brackets; }
-    std::vector<BracketItem*>& brackets() { return m_brackets; }
+    const std::vector<BracketItem*>& brackets() const;
+    std::vector<BracketItem*>& brackets();
     size_t bracketLevels() const;
 
     ClefList& clefList() { return m_clefs; }
@@ -269,9 +269,6 @@ private:
     Staff(Part* parent);
     Staff(const Staff& staff);
 
-    void fillBrackets(size_t idx);
-    void cleanBrackets();
-
     double staffMag(const StaffType*) const;
 
     friend class Excerpt;
@@ -287,7 +284,6 @@ private:
     KeyList m_keys;
     std::map<int, TimeSig*> m_timesigs;
 
-    std::vector<BracketItem*> m_brackets;
     bool m_barLineSpan = false;          // true - span barline to next staff
     int m_barLineFrom = 0;              // line of start staff to draw the barline from (0 = staff top line, ...)
     int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
