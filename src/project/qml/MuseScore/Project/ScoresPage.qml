@@ -280,6 +280,14 @@ FocusScope {
             onOpenScoreRequested: function(scorePath, displayName) {
                 Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                Qt.callLater(scoresPageModel.revealInFileBrowser, scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                Qt.callLater(scoresPageModel.viewOnline, scoreId)
+            }
         }
     }
 
@@ -305,6 +313,14 @@ FocusScope {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 Qt.callLater(scoresPageModel.openScore, scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                Qt.callLater(scoresPageModel.revealInFileBrowser, scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                Qt.callLater(scoresPageModel.viewOnline, scoreId)
             }
 
             Connections {

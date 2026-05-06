@@ -36,6 +36,7 @@ Item {
     property list<ColumnItem> columns
     property alias showNewScoreItem: newScoreItem.visible
     property string searchText
+    property bool allowRemoveFromRecentFiles: false
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -46,6 +47,9 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal revealInFileBrowserRequested(var scorePath)
+    signal viewOnlineRequested(var scoreId)
+    signal removeFromRecentFilesRequested(var scorePath)
 
     component ColumnItem : QtObject {
         property string header
@@ -102,7 +106,8 @@ Item {
             navigation.column: 0
 
             score: {
-                "name": qsTrc("project", "New score")
+                "name": qsTrc("project", "New score"),
+                "isCreateNew": true
             }
 
             thumbnailComponent: Rectangle {
@@ -212,6 +217,7 @@ Item {
                         itemInset: view.itemInset
                         implicitHeight: view.rowHeight
                         columnSpacing: view.columnSpacing
+                        showRemoveFromRecentFiles: root.allowRemoveFromRecentFiles
 
                         mouseArea.enabled: !Boolean(score.isProcessing)
 
@@ -223,6 +229,18 @@ Item {
                             if (!Boolean(score.isProcessing)) {
                                 root.openScoreRequested(score.path, score.name)
                             }
+                        }
+
+                        onRevealInFileBrowserRequested: function(scorePath) {
+                            root.revealInFileBrowserRequested(scorePath)
+                        }
+
+                        onViewOnlineRequested: function(scoreId) {
+                            root.viewOnlineRequested(scoreId)
+                        }
+
+                        onRemoveFromRecentFilesRequested: function(scorePath) {
+                            root.removeFromRecentFilesRequested(scorePath)
                         }
                     }
                 }

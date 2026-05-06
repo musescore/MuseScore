@@ -35,6 +35,7 @@ Item {
     property string searchText
 
     property bool isNoResultsMessageAllowed: true
+    property bool allowRemoveFromRecentFiles: false
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -45,6 +46,9 @@ Item {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
+    signal revealInFileBrowserRequested(var scorePath)
+    signal viewOnlineRequested(var scoreId)
+    signal removeFromRecentFilesRequested(var scorePath)
 
     clip: true
 
@@ -164,6 +168,7 @@ Item {
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
+                showRemoveFromRecentFiles: root.allowRemoveFromRecentFiles
 
                 onClicked: {
                     if (isCreateNew) {
@@ -171,6 +176,18 @@ Item {
                     } else if (!isNoResultsFound && !isProcessing) {
                         root.openScoreRequested(score.path, score.name)
                     }
+                }
+
+                onRevealInFileBrowserRequested: function(scorePath) {
+                    root.revealInFileBrowserRequested(scorePath)
+                }
+
+                onViewOnlineRequested: function(scoreId) {
+                    root.viewOnlineRequested(scoreId)
+                }
+
+                onRemoveFromRecentFilesRequested: function(scorePath) {
+                    root.removeFromRecentFilesRequested(scorePath)
                 }
             }
         }

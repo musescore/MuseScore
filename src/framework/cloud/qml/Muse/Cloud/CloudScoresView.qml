@@ -84,6 +84,14 @@ ScoresView {
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
             }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
+            }
         }
     }
 
@@ -108,6 +116,14 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
+            }
+
+            onRevealInFileBrowserRequested: function(scorePath) {
+                root.revealInFileBrowserRequested(scorePath)
+            }
+
+            onViewOnlineRequested: function(scoreId) {
+                root.viewOnlineRequested(scoreId)
             }
         }
     }
