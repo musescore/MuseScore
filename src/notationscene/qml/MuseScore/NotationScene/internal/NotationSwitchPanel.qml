@@ -125,7 +125,7 @@ Rectangle {
                 }
 
                 onHandleContextMenuItem: function(itemId) {
-                    notationSwitchModel.handleContextMenuItem(index, itemId)
+                    Qt.callLater(notationSwitchModel.handleContextMenuItem, index, itemId)
                 }
             }
         }
