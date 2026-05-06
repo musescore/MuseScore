@@ -230,7 +230,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
 
             // Try to read as uninitialised excerpt first
             if (Excerpt* ex = readUninitExcerpt(masterScore, excerptData, excerptFileName)) {
-                masterScore->addLightweightExcerpt(ex);
+                masterScore->addExcerpt(ex, muse::nidx, false);
                 continue;
             }
 
