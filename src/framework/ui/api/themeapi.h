@@ -74,7 +74,7 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
      * @readonly
      * @q_property {Color}
      */
-    Q_PROPERTY(QColor backgroundQuarternaryColor READ backgroundQuarternaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundQuaternaryColor READ backgroundQuaternaryColor NOTIFY themeChanged)
 
     /** APIDOC
      * @readonly
@@ -272,7 +272,7 @@ public:
     QColor backgroundPrimaryColor() const;
     QColor backgroundSecondaryColor() const;
     QColor backgroundTertiaryColor() const;
-    QColor backgroundQuarternaryColor() const;
+    QColor backgroundQuaternaryColor() const;
     QColor popupBackgroundColor() const;
     QColor textFieldColor() const;
     QColor accentColor() const;
@@ -357,7 +357,7 @@ private:
     QColor m_backgroundPrimaryColor;
     QColor m_backgroundSecondaryColor;
     QColor m_backgroundTertiaryColor;
-    QColor m_backgroundQuarternaryColor;
+    QColor m_backgroundQuaternaryColor;
     QColor m_popupBackgroundColor;
     QColor m_textFieldColor;
     QColor m_accentColor;
