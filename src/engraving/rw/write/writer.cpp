@@ -297,7 +297,7 @@ bool Writer::writeUninitExcerpt(Excerpt* excerpt, io::IODevice* device)
     xml.startElement("Score");
 
     // Mark as uninitialised excerpt
-    xml.element("initialised", false);
+    xml.element("initialised", 0);
 
     // Write name if not empty
     if (!excerpt->name().empty()) {

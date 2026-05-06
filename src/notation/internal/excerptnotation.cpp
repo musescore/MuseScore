@@ -28,6 +28,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/editing/editexcerpt.h"
 #include "masternotation.h"
+#include "project/inotationproject.h"
 
 using namespace mu::notation;
 

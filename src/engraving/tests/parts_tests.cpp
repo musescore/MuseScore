@@ -47,6 +47,7 @@
 
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
+#include "engraving/rw/compat/compatutils.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/rw/mscsaver.h"
 #include "engraving/rw/xmlreader.h"
@@ -1446,13 +1447,10 @@ TEST_F(Engraving_PartsTests, renamePotentialExcerpt)
     // This test verifies that excerpt names are preserved through save/reload.
     //
     // Background (Issue #31656): In the Parts dialog, each instrument shows
-    // as a "potential excerpt" that can be renamed before being opened.
-    // The fix requires saving potential excerpts in an uninitialised format
-    // (without full excerptScore) so that custom names persist.
+    // as an excerpt that can be renamed before being opened. Uninitialised
+    // excerpts are saved in a minimal format so custom names persist.
     //
-    // This test uses an initialized excerpt as a baseline. The uninitialised
-    // excerpt implementation will enable this same flow for uninitialized
-    // excerpts without requiring them to be opened first.
+    // This test uses an initialized excerpt as a baseline.
 
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
@@ -1531,8 +1529,7 @@ TEST_F(Engraving_PartsTests, saveUninitExcerpt)
     excerpt->setName(customName, false);
 
     // Add excerpt to score without initializing (uninitialised, no excerptScore created)
-    // initParts will be called but now handles null excerptScore
-    score->addExcerpt(excerpt);
+    score->addExcerpt(excerpt, muse::nidx, false);
 
     // Verify it's an uninitialised excerpt (no excerptScore)
     ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be uninitialised (no excerptScore)";
@@ -1548,16 +1545,25 @@ TEST_F(Engraving_PartsTests, saveUninitExcerpt)
     }
 
     {
-        MscWriter::Params writerParams;
-        writerParams.filePath = tempFile;
-        writerParams.mode = MscIoMode::Zip;
+        ByteArray msczData;
+        {
+            Buffer buf(&msczData);
+            MscWriter::Params writerParams;
+            writerParams.device = &buf;
+            writerParams.filePath = tempFile;
+            writerParams.mode = MscIoMode::Zip;
 
-        MscWriter mscWriter(writerParams);
-        ASSERT_TRUE(mscWriter.open()) << "Failed to open MscWriter";
+            MscWriter mscWriter(writerParams);
+            mscWriter.open();
 
-        MscSaver saver(score->iocContext());
-        bool saveOk = saver.writeMscz(score, mscWriter, false);  // no thumbnail
-        ASSERT_TRUE(saveOk) << "Failed to save score with uninitialised excerpt";
+            MscSaver saver(score->iocContext());
+            bool saveOk = saver.writeMscz(score, mscWriter, false);  // no thumbnail
+            ASSERT_TRUE(saveOk) << "Failed to save score with uninitialised excerpt";
+        }
+
+        File file(tempFile);
+        ASSERT_TRUE(file.open(IODevice::WriteOnly)) << "Failed to open temp file for writing";
+        file.write(msczData);
     }
 
     delete score;
@@ -1592,7 +1598,13 @@ TEST_F(Engraving_PartsTests, saveUninitExcerpt)
 
     // Verify that uninitialised excerpts don't have extra files and XML is minimal
     {
+        File tempFileIn(tempFile);
+        ASSERT_TRUE(tempFileIn.open(IODevice::ReadOnly));
+        ByteArray fileData = tempFileIn.readAll();
+        Buffer readBuf(&fileData);
+
         MscReader::Params readerParams;
+        readerParams.device = &readBuf;
         readerParams.filePath = tempFile;
         readerParams.mode = MscIoMode::Zip;
 
@@ -1692,23 +1704,38 @@ TEST_F(Engraving_PartsTests, uninitExcerptAfterInitDeinit)
     }
 
     {
-        MscWriter::Params writerParams;
-        writerParams.filePath = tempFile;
-        writerParams.mode = MscIoMode::Zip;
+        ByteArray msczData;
+        {
+            Buffer buf(&msczData);
+            MscWriter::Params writerParams;
+            writerParams.device = &buf;
+            writerParams.filePath = tempFile;
+            writerParams.mode = MscIoMode::Zip;
 
-        MscWriter mscWriter(writerParams);
-        ASSERT_TRUE(mscWriter.open()) << "Failed to open MscWriter";
+            MscWriter mscWriter(writerParams);
+            mscWriter.open();
 
-        MscSaver saver(score->iocContext());
-        bool saveOk = saver.writeMscz(score, mscWriter, false);
-        ASSERT_TRUE(saveOk) << "Failed to save score";
+            MscSaver saver(score->iocContext());
+            bool saveOk = saver.writeMscz(score, mscWriter, false);
+            ASSERT_TRUE(saveOk) << "Failed to save score";
+        }
+
+        File file(tempFile);
+        ASSERT_TRUE(file.open(IODevice::WriteOnly)) << "Failed to open temp file for writing";
+        file.write(msczData);
     }
 
     delete score;
 
     // Verify the saved file has uninitialised excerpt
     {
+        File tempFileIn(tempFile);
+        ASSERT_TRUE(tempFileIn.open(IODevice::ReadOnly));
+        ByteArray fileData = tempFileIn.readAll();
+        Buffer readBuf(&fileData);
+
         MscReader::Params readerParams;
+        readerParams.device = &readBuf;
         readerParams.filePath = tempFile;
         readerParams.mode = MscIoMode::Zip;
 
@@ -1742,4 +1769,53 @@ TEST_F(Engraving_PartsTests, uninitExcerptAfterInitDeinit)
 
     delete reloadedScore;
     std::filesystem::remove(std::filesystem::path(tempFile.toStdString()));
+}
+
+//---------------------------------------------------------
+//   compatCreateUninitExcerpts
+///   Test that the compat migration creates uninitialised excerpts
+///   for parts that don't have associated excerpts yet.
+///   Related: https://github.com/musescore/MuseScore/issues/31656
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, compatCreateUninitExcerpts)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    size_t numParts = score->parts().size();
+    ASSERT_GT(numParts, 0u) << "Score should have at least one part";
+
+    // Score is version 5.00 and has no excerpts initially
+    ASSERT_TRUE(score->excerpts().empty()) << "Fresh score should have no excerpts";
+
+    // Run the compat migration manually
+    mu::engraving::compat::CompatUtils::createUninitExcerptsForParts(score);
+
+    // Should have created one uninitialised excerpt per part
+    ASSERT_EQ(score->excerpts().size(), numParts) << "Should have one excerpt per part";
+
+    for (size_t i = 0; i < numParts; ++i) {
+        Excerpt* excerpt = score->excerpts().at(i);
+        Part* part = score->parts().at(i);
+
+        // Each excerpt should be uninitialised (no excerptScore)
+        EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should be uninitialised";
+
+        // Each excerpt should reference the correct part
+        EXPECT_EQ(excerpt->initialPartId(), part->id()) << "Excerpt should reference its part";
+        EXPECT_EQ(excerpt->parts().size(), 1u) << "Excerpt should have one part";
+        if (!excerpt->parts().empty()) {
+            EXPECT_EQ(excerpt->parts().front(), part) << "Excerpt's part should match score's part";
+        }
+
+        // Name should be set from part name
+        EXPECT_FALSE(excerpt->name().empty()) << "Excerpt should have a name";
+    }
+
+    // Running migration again should not create duplicates
+    mu::engraving::compat::CompatUtils::createUninitExcerptsForParts(score);
+    EXPECT_EQ(score->excerpts().size(), numParts) << "Running migration twice should not create duplicates";
+
+    delete score;
 }
