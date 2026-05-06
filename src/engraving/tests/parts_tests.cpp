@@ -1663,7 +1663,7 @@ TEST_F(Engraving_PartsTests, uninitExcerptAfterInitDeinit)
     excerpt->setName(customName, false);
 
     // Add as uninitialised excerpt
-    score->addLightweightExcerpt(excerpt);
+    score->addExcerpt(excerpt, muse::nidx, false);
 
     // Verify it's uninitialised
     ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should start as uninitialised";
