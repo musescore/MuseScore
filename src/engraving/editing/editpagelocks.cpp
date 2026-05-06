@@ -184,12 +184,10 @@ void EditPageLocks::toggleScoreLock(Transaction& tx, Score* score)
 
 void EditPageLocks::addRemovePageLocks(Transaction& tx, Score* score, int interval, bool lock)
 {
-    const bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-
     MeasureBase* startMeasure = score->selection().startMeasureBase();
     MeasureBase* endMeasure = score->selection().endMeasureBase();
     if (!endMeasure) {
-        endMeasure = mmrests ? score->lastMeasureMM() : score->lastMeasure();
+        endMeasure = score->lastMeasureMM();
     }
 
     if (!startMeasure || !endMeasure) {
@@ -222,7 +220,7 @@ void EditPageLocks::addRemovePageLocks(Transaction& tx, Score* score, int interv
 
     int count = 0;
     MeasureBase* lockStart = nullptr;
-    for (MeasureBase* mb = startMeasure; mb; mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (MeasureBase* mb = startMeasure; mb; mb = mb->nextMM()) {
         if (count == 0) {
             lockStart = mb;
         }
@@ -240,15 +238,13 @@ void EditPageLocks::addRemovePageLocks(Transaction& tx, Score* score, int interv
 
 void EditPageLocks::makeIntoPage(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last)
 {
-    bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-
     const RangeLock* lockContainingfirst = score->pageLocks()->lockContaining(first);
     const RangeLock* lockContaininglast = score->pageLocks()->lockContaining(last);
 
     if (lockContainingfirst) {
         undoRemovePageLock(tx, score, lockContainingfirst);
         if (lockContainingfirst->startMB()->isBefore(first)) {
-            MeasureBase* oneBeforeFirst = mmrests ? first->prevMM() : first->prev();
+            MeasureBase* oneBeforeFirst = first->prevMM();
             RangeLock* newLockBefore = new RangeLock(lockContainingfirst->startMB(), oneBeforeFirst);
             undoAddPageLock(tx, score, newLockBefore);
         }
@@ -259,7 +255,7 @@ void EditPageLocks::makeIntoPage(Transaction& tx, Score* score, MeasureBase* fir
             undoRemovePageLock(tx, score, lockContaininglast);
         }
         if (last->isBefore(lockContaininglast->endMB())) {
-            MeasureBase* oneAfterLast = mmrests ? last->nextMM() : last->next();
+            MeasureBase* oneAfterLast = last->nextMM();
             RangeLock* newLockAfter = new RangeLock(oneAfterLast, lockContaininglast->endMB());
             undoAddPageLock(tx, score, newLockAfter);
         }
@@ -295,8 +291,7 @@ void EditPageLocks::moveMeasureToPrevPage(Transaction& tx, Score* score, Measure
     if (curPageLock) {
         undoRemovePageLock(tx, score, curPageLock);
         if (curPageLock->endMB() != m) {
-            const bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-            MeasureBase* nextMB = mmrests ? m->nextMM() : m->next();
+            MeasureBase* nextMB = m->nextMM();
             RangeLock* newLockOnCurPage = new RangeLock(nextMB, curPageLock->endMB());
             undoAddPageLock(tx, score, newLockOnCurPage);
         }
@@ -318,8 +313,7 @@ void EditPageLocks::moveMeasureToNextPage(Transaction& tx, Score* score, Measure
     }
 
     if (!refMeasureIsStartOfPage) {
-        bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-        MeasureBase* prevMeas = mmrests ? m->prevMM() : m->prev();
+        MeasureBase* prevMeas = m->prevMM();
         RangeLock* pageLock = new RangeLock(startMeas, prevMeas);
         undoAddPageLock(tx, score, pageLock);
     }
@@ -397,8 +391,7 @@ void EditPageLocks::removePageLocksOnAddLayoutBreak(Transaction& tx, Score* scor
 
 void EditPageLocks::removeLayoutBreaksOnAddPageLock(Transaction&, Score* score, const RangeLock* lock)
 {
-    bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->nextMM()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);
         mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         if (mb != lock->endMB()) {
