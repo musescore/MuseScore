@@ -104,6 +104,61 @@ staff_idx_t Staff::idx() const
     return muse::indexOf(score()->staves(), (Staff*)this);
 }
 
+BracketType Staff::bracketType(size_t bracketIdx) const
+{
+    return score()->bracketType(idx(), bracketIdx);
+}
+
+size_t Staff::bracketSpan(size_t bracketIdx) const
+{
+    return score()->bracketSpan(idx(), bracketIdx);
+}
+
+void Staff::setBracketType(size_t bracketIdx, BracketType val)
+{
+    score()->setBracketType(idx(), bracketIdx, val);
+}
+
+void Staff::setBracketSpan(size_t bracketIdx, size_t val)
+{
+    score()->setBracketSpan(idx(), bracketIdx, val);
+}
+
+void Staff::setBracketVisible(size_t bracketIdx, bool v)
+{
+    score()->setBracketVisible(idx(), bracketIdx, v);
+}
+
+void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
+{
+    score()->changeBracketColumn(idx(), oldColumn, newColumn);
+}
+
+void Staff::addBracket(BracketItem* bi)
+{
+    score()->addBracket(idx(), bi);
+}
+
+void Staff::insertBracket(BracketItem* b)
+{
+    score()->insertBracket(idx(), b);
+}
+
+const std::vector<BracketItem*>& Staff::brackets() const
+{
+    return score()->brackets(idx());
+}
+
+std::vector<BracketItem*>& Staff::brackets()
+{
+    return score()->brackets(idx());
+}
+
+size_t Staff::bracketLevels() const
+{
+    return score()->bracketLevels(idx());
+}
+
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
@@ -285,153 +340,6 @@ String Staff::individualStaffNameShort(const Fraction& tick) const
     return staffType(tick)->shortName();
 }
 
-//---------------------------------------------------------
-//   fillBrackets
-//    make sure index idx is valid
-//---------------------------------------------------------
-
-void Staff::fillBrackets(size_t idx)
-{
-    for (size_t i = m_brackets.size(); i <= idx; ++i) {
-        BracketItem* bi = Factory::createBracketItem(score()->dummy());
-        bi->setStaff(this);
-        bi->setColumn(i);
-        m_brackets.push_back(bi);
-    }
-}
-
-//---------------------------------------------------------
-//   cleanBrackets
-//    remove NO_BRACKET entries from the end of list
-//---------------------------------------------------------
-
-void Staff::cleanBrackets()
-{
-    while (!m_brackets.empty() && (m_brackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = muse::takeLast(m_brackets);
-        delete bi;
-    }
-}
-
-//---------------------------------------------------------
-//   bracket
-//---------------------------------------------------------
-
-BracketType Staff::bracketType(size_t idx) const
-{
-    if (idx < m_brackets.size()) {
-        return m_brackets[idx]->bracketType();
-    }
-    return BracketType::NO_BRACKET;
-}
-
-//---------------------------------------------------------
-//   bracketSpan
-//---------------------------------------------------------
-
-size_t Staff::bracketSpan(size_t idx) const
-{
-    if (idx < m_brackets.size()) {
-        return m_brackets[idx]->bracketSpan();
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   setBracket
-//---------------------------------------------------------
-
-void Staff::setBracketType(size_t idx, BracketType val)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setBracketType(val);
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
-//   changeBracketColumn
-//---------------------------------------------------------
-
-void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
-{
-    if (oldColumn == newColumn) {
-        return;
-    }
-
-    size_t idx = std::max(oldColumn, newColumn);
-    fillBrackets(idx);
-    int step = newColumn > oldColumn ? 1 : -1;
-    for (size_t i = oldColumn; i != newColumn; i += step) {
-        size_t oldIdx = i;
-        size_t newIdx = i + step;
-        m_brackets[oldIdx]->setColumn(newIdx);
-        m_brackets[newIdx]->setColumn(oldIdx);
-        muse::swapItemsAt(m_brackets, oldIdx, newIdx);
-    }
-    cleanBrackets();
-}
-
-//---------------------------------------------------------
-//   setBracketSpan
-//---------------------------------------------------------
-
-void Staff::setBracketSpan(size_t idx, size_t val)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setBracketSpan(val);
-}
-
-void Staff::setBracketVisible(size_t idx, bool v)
-{
-    fillBrackets(idx);
-    m_brackets[idx]->setVisible(v);
-}
-
-//---------------------------------------------------------
-//   addBracket
-//---------------------------------------------------------
-
-void Staff::addBracket(BracketItem* b)
-{
-    b->setStaff(this);
-    if (!m_brackets.empty() && m_brackets[0]->bracketType() == BracketType::NO_BRACKET) {
-        m_brackets[0] = b;
-    } else {
-        //
-        // create new bracket level
-        //
-        for (Staff* s : score()->staves()) {
-            if (s == this) {
-                s->m_brackets.push_back(b);
-            } else {
-                BracketItem* bi = Factory::createBracketItem(score()->dummy());
-                bi->setStaff(this);
-                s->m_brackets.push_back(bi);
-            }
-        }
-    }
-}
-
-void Staff::insertBracket(BracketItem* b)
-{
-    b->setStaff(this);
-    size_t column = b->column();
-    if (column < m_brackets.size()) {
-        if (m_brackets[column]) {
-            delete m_brackets[column];
-        }
-        m_brackets[column] = b;
-    } else if (column == m_brackets.size()) {
-        m_brackets.push_back(b);
-    } else {
-        fillBrackets(column - 1);
-        m_brackets.push_back(b);
-    }
-}
-
-{
-}
-
 bool Staff::playbackVoice(int voice) const
 {
     return m_playbackVoice[voice];
@@ -511,19 +419,6 @@ bool Staff::reflectTranspositionInLinkedTab() const
 void Staff::setReflectTranspositionInLinkedTab(bool reflect)
 {
     m_reflectTranspositionInLinkedTab = reflect;
-}
-
-//---------------------------------------------------------
-//   bracketLevels
-//---------------------------------------------------------
-
-size_t Staff::bracketLevels() const
-{
-    size_t columns = 0;
-    for (auto bi : m_brackets) {
-        columns = std::max(columns, bi->column());
-    }
-    return columns;
 }
 
 //---------------------------------------------------------
@@ -1355,7 +1250,7 @@ void Staff::setScore(Score* score)
 {
     EngravingItem::setScore(score);
 
-    for (BracketItem* bracket: m_brackets) {
+    for (BracketItem* bracket: brackets()) {
         bracket->setScore(score);
     }
 }
