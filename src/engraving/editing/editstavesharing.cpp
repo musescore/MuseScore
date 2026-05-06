@@ -35,20 +35,10 @@ namespace mu::engraving {
 
 void EditStaveSharing::toggleStaveSharing(Score* score, bool on)
 {
-    std::vector<SharedPart*> sharedParts = score->sharedParts();
+    score->undoChangeStyleVal(Sid::enableStaveSharing, on);
 
-    if (on) {
-        if (sharedParts.size() == 0) {
-            cmdCreateSharedStaves(score);
-        } else {
-            for (SharedPart* p : sharedParts) {
-                p->undoChangeProperty(Pid::SHARED_PART_ENABLED, true);
-            }
-        }
-    } else {
-        for (SharedPart* p : sharedParts) {
-            p->undoChangeProperty(Pid::SHARED_PART_ENABLED, false);
-        }
+    if (on && score->sharedParts().empty()) {
+        cmdCreateSharedStaves(score);
     }
 
     score->update();

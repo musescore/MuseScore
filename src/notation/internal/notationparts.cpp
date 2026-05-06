@@ -49,11 +49,13 @@ using namespace mu::engraving;
 
 static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
 
-NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
+NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+                             INotationStylePtr style)
+    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction), m_style(style)
 {
     m_getScore->scoreInited().onNotify(this, [this]() {
         listenUndoStackChanges();
+        listenStyleChanges();
     });
 }
 
@@ -371,6 +373,15 @@ void NotationParts::updatePartsAndSystemObjectStaves(const mu::engraving::ScoreC
     for (Staff* staff: addedStaves) {
         notifyAboutStaffAdded(staff);
     }
+}
+
+void NotationParts::listenStyleChanges()
+{
+    if (!score()) {
+        return;
+    }
+
+    m_style->styleChanged().onNotify(this, [this]{ m_sharedPartsChanged.notify(); });
 }
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
@@ -886,17 +897,6 @@ void NotationParts::toggleStaveSharing(bool on)
     EditStaveSharing::toggleStaveSharing(score(), on);
 
     apply();
-}
-
-bool NotationParts::hasEnabledSharedParts() const
-{
-    for (const Part* part : score()->parts()) {
-        if (part->isSharedPart() && part->getProperty(Pid::SHARED_PART_ENABLED).toBool()) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 Notification NotationParts::sharedPartsChanged() const

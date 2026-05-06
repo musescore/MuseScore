@@ -43,7 +43,7 @@ void SharedPartTreeItem::init(const notation::Part* part)
 
     setSettingsAvailable(false);
     setIsExpandable(true);
-    setIsEnabled(part->getProperty(Pid::SHARED_PART_ENABLED).toBool());
+    setIsEnabled(engraving::toSharedPart(part)->enabled());
 
     m_ignoreEnabledChanged = false;
 }
@@ -53,7 +53,7 @@ void SharedPartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges& sc)
     PartTreeItem::onScoreChanged(sc);
 
     m_ignoreEnabledChanged = true;
-    setIsEnabled(part()->getProperty(Pid::SHARED_PART_ENABLED).toBool());
+    setIsEnabled(engraving::toSharedPart(part())->enabled());
     m_ignoreEnabledChanged = false;
 }
 

@@ -1039,7 +1039,7 @@ void LayoutPanelTreeModel::updateIsAddingSystemMarkingsAvailable()
 
 void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
 {
-    bool enabled = m_notation->parts()->hasEnabledSharedParts();
+    bool enabled = m_notation->style()->styleValue(StyleId::enableStaveSharing).toBool();
     if (enabled == m_isStaveSharingEnabled) {
         return;
     }

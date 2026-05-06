@@ -112,8 +112,13 @@ bool SharedPart::setProperty(Pid pid, const PropertyValue& v)
     return true;
 }
 
+bool SharedPart::enabled() const
+{
+    return m_enabled && style().styleB(Sid::enableStaveSharing);
+}
+
 bool SharedPart::show() const
 {
-    return m_show && m_enabled;
+    return m_show && m_enabled && style().styleB(Sid::enableStaveSharing);
 }
 }

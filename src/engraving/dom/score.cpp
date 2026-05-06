@@ -2398,6 +2398,10 @@ void Score::cmdRemovePart(Part* part)
     }
 
     undoRemovePart(part, muse::indexOf(m_parts, part));
+
+    if (sharedParts().empty()) {
+        undoChangeStyleVal(Sid::enableStaveSharing, false);
+    }
 }
 
 //---------------------------------------------------------

@@ -252,7 +252,7 @@ void Part::removeStaff(Staff* staff)
 
 bool Part::show() const
 {
-    bool sharedPartEnabled = m_sharedPart && m_sharedPart->getProperty(Pid::SHARED_PART_ENABLED).toBool();
+    bool sharedPartEnabled = m_sharedPart && m_sharedPart->enabled();
     return m_show && !sharedPartEnabled;
 }
 

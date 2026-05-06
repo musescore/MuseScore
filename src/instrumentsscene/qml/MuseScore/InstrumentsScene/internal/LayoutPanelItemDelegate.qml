@@ -289,6 +289,7 @@ FocusableControl {
         ToggleButton {
             id: sharedPartToggle
             visible: root.type === LayoutPanelItemType.SHARED_PART
+            enabled: root.treeView.model.isStaveSharingEnabled
             checked: root.item && root.item.isEnabled
             onToggled: function() {
                 if (root.isSelected) {

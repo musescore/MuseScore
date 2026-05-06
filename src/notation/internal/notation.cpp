@@ -57,8 +57,8 @@ Notation::Notation(MasterNotation* master, const muse::modularity::ContextPtr& i
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack, iocContext());
     m_accessibility = std::make_shared<NotationAccessibility>(this);
-    m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
+    m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack, m_style);
     m_elements = std::make_shared<NotationElements>(this);
 
     m_interaction->noteInput()->noteAdded().onNotify(this, [this]() {

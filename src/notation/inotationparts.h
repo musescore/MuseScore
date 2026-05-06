@@ -99,7 +99,6 @@ public:
     virtual void moveSystemObjectLayerAboveBottomStaff() = 0;
 
     virtual void toggleStaveSharing(bool on) = 0;
-    virtual bool hasEnabledSharedParts() const = 0;
 
     virtual muse::async::Notification partsChanged() const = 0;
     virtual muse::async::Notification scoreOrderChanged() const = 0;

@@ -44,6 +44,7 @@ public:
     PropertyValue propertyDefault(Pid pid) const override;
     bool setProperty(Pid pid, const PropertyValue& v) override;
 
+    bool enabled() const;
     bool show() const override;
 
 private:

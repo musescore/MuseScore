@@ -30,7 +30,7 @@ namespace mu::notation {
 class MasterNotationParts : public NotationParts
 {
 public:
-    MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack);
+    MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack, INotationStylePtr style);
 
     void setExcerpts(ExcerptNotationList excerpts);
 
