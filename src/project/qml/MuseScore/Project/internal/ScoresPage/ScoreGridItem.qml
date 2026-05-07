@@ -87,47 +87,18 @@ FocusScope {
         }
     }
 
-    ContextMenuLoader {
+    ScoreItemContextMenu {
         id: contextMenuLoader
 
-        items: {
-            if (root.isCreateNew || root.isNoResultsFound) {
-                return []
-            }
+        isCreateNew: root.isCreateNew
+        isNoResultsFound: root.isNoResultsFound
+        isCloud: root.isCloud
+        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
 
-            let items = [
-                { id: "open", title: qsTrc("project", "Open") }
-            ]
-
-            if (root.isCloud) {
-                items.push({ id: "view-online", title: qsTrc("project", "View online") })
-            } else {
-                items.push({ id: "reveal-in-file-browser", title: qsTrc("project", "Reveal in file browser") })
-            }
-
-            if (root.showRemoveFromRecentFiles) {
-                items.push({ id: "remove-from-recent-files", title: qsTrc("project", "Remove from recent files list") })
-            }
-
-            return items
-        }
-
-        onHandleMenuItem: function(itemId) {
-            switch (itemId) {
-            case "open":
-                root.clicked()
-                break
-            case "view-online":
-                root.viewOnlineRequested(root.cloudScoreId)
-                break
-            case "reveal-in-file-browser":
-                root.revealInFileBrowserRequested(root.path)
-                break
-            case "remove-from-recent-files":
-                root.removeFromRecentFilesRequested(root.path)
-                break
-            }
-        }
+        onOpenRequested: root.clicked()
+        onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
+        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
+        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
     }
 
     Column {
