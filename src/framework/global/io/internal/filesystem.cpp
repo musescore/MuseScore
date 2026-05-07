@@ -317,13 +317,14 @@ Ret FileSystem::removeFile(const io::path_t& path)
     QFile file(path.toQString());
     if (!file.remove()) {
         // Read-only files prevent directory deletion on Windows, retry with Write permission.
-        LOGW() << "Failed to delete file. Setting write permission and trying again...";
+        LOGW() << "Failed to delete file: " << file.errorString()
+               << "\nSetting write permission and trying again...";
         if (!file.setPermissions(file.permissions() | QFile::WriteUser)) {
-            LOGE() << "Failed to set write permission for file";
+            LOGE() << "Failed to set write permission for file: " << file.errorString();
             return make_ret(Err::FSRemoveError);
         }
         if (!file.remove()) {
-            LOGE() << "Second delete attempt failed";
+            LOGE() << "Second delete attempt failed: " << file.errorString();
             return make_ret(Err::FSRemoveError);
         }
 

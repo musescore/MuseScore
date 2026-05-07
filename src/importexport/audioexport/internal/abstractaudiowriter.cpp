@@ -80,6 +80,7 @@ Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const
 void AbstractAudioWriter::abort()
 {
     playback()->abortSavingAllSoundTracks();
+    m_writeRet = make_ret(Ret::Code::Cancel);
     m_isCompleted = true;
 }
 
