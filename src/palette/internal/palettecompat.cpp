@@ -398,7 +398,8 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
     }
 
     if (!containsChordBrackets) {
-        addChordBrackets(linesPalette, paletteScore, 27);
+        int defaultPosition = std::min(27, linesPalette.cellsCount());
+        addChordBrackets(linesPalette, paletteScore, defaultPosition);
     }
 }
 
