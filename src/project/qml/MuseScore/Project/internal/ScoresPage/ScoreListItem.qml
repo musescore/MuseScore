@@ -66,47 +66,18 @@ ListItemBlank {
         }
     }
 
-    ContextMenuLoader {
+    ScoreItemContextMenu {
         id: contextMenuLoader
 
-        items: {
-            if ((root.score.isCreateNew ?? false) || (root.score.isNoResultsFound ?? false)) {
-                return []
-            }
+        isCreateNew: root.score.isCreateNew ?? false
+        isNoResultsFound: root.score.isNoResultsFound ?? false
+        isCloud: root.score.isCloud ?? false
+        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
 
-            let items = [
-                { id: "open", title: qsTrc("project", "Open") }
-            ]
-
-            if (root.score.isCloud ?? false) {
-                items.push({ id: "view-online", title: qsTrc("project", "View online") })
-            } else {
-                items.push({ id: "reveal-in-file-browser", title: qsTrc("project", "Reveal in file browser") })
-            }
-
-            if (root.showRemoveFromRecentFiles) {
-                items.push({ id: "remove-from-recent-files", title: qsTrc("project", "Remove from recent files list") })
-            }
-
-            return items
-        }
-
-        onHandleMenuItem: function(itemId) {
-            switch (itemId) {
-            case "open":
-                root.clicked(null)
-                break
-            case "view-online":
-                root.viewOnlineRequested(root.score.scoreId ?? 0)
-                break
-            case "reveal-in-file-browser":
-                root.revealInFileBrowserRequested(root.score.path ?? "")
-                break
-            case "remove-from-recent-files":
-                root.removeFromRecentFilesRequested(root.score.path ?? "")
-                break
-            }
-        }
+        onOpenRequested: root.clicked(null)
+        onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
+        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
+        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
     }
 
     RowLayout {
