@@ -66,7 +66,7 @@ FocusScope {
     }
 
     MouseArea {
-        id: mouseArea
+        id: rootMouseArea
         anchors.fill: parent
 
         enabled: root.enabled
@@ -77,28 +77,14 @@ FocusScope {
             navCtrl.requestActiveByInteraction()
 
             if (mouse.button === Qt.RightButton) {
-                if (contextMenuLoader.items.length > 0) {
-                    contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                if (contextMenu.menuModel.length > 0) {
+                    contextMenu.show(Qt.point(mouse.x, mouse.y), root)
                 }
                 return
             }
 
             root.clicked()
         }
-    }
-
-    ScoreItemContextMenu {
-        id: contextMenuLoader
-
-        isCreateNew: root.isCreateNew
-        isNoResultsFound: root.isNoResultsFound
-        isCloud: root.isCloud
-        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
-
-        onOpenRequested: root.clicked()
-        onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
-        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
-        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
     }
 
     Column {
@@ -126,7 +112,7 @@ FocusScope {
 
                     sourceComponent: {
                         if (root.isCreateNew) {
-                            return addComp
+                            return createNewComp
                         }
 
                         if (root.isNoResultsFound) {
@@ -161,7 +147,7 @@ FocusScope {
                 states: [
                     State {
                         name: "NORMAL"
-                        when: !mouseArea.containsMouse && !mouseArea.pressed
+                        when: !rootMouseArea.containsMouse && !rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -171,7 +157,7 @@ FocusScope {
 
                     State {
                         name: "HOVERED"
-                        when: mouseArea.containsMouse && !mouseArea.pressed
+                        when: rootMouseArea.containsMouse && !rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -182,7 +168,7 @@ FocusScope {
 
                     State {
                         name: "PRESSED"
-                        when: mouseArea.pressed
+                        when: rootMouseArea.pressed
 
                         PropertyChanges {
                             target: thumbnail
@@ -199,6 +185,35 @@ FocusScope {
                     color: "#08000000"
                     cornerRadius: thumbnail.radius + glowRadius
                 }
+            }
+
+            ScoreItemMenuButton {
+                id: contextMenu
+
+                anchors.top: parent.top
+                anchors.topMargin: 8
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                visible: menuModel.length > 0
+                         && (rootMouseArea.containsMouse
+                             || mouseArea.containsMouse
+                             || root.navigation.active
+                             || navigation.active
+                             || isMenuOpenedByButton)
+
+                isCreateNew: root.isCreateNew
+                isNoResultsFound: root.isNoResultsFound
+                isCloud: root.isCloud
+                showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
+
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
+                navigation.column: root.navigation.column + 1
+
+                onOpenRequested: root.clicked()
+                onViewOnlineRequested: root.viewOnlineRequested(root.cloudScoreId)
+                onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.path)
+                onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.path)
             }
 
             Loader {
@@ -236,7 +251,7 @@ FocusScope {
 
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
-                        navigation.column: root.navigation.column + 1
+                        navigation.column: root.navigation.column + 2
                     }
 
                     CloudScoreIndicatorButton {
@@ -247,7 +262,7 @@ FocusScope {
 
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
-                        navigation.column: root.navigation.column + 2
+                        navigation.column: root.navigation.column + 3
 
                         onClicked: {
                             if (isProgress) {
@@ -292,7 +307,7 @@ FocusScope {
     }
 
     Component {
-        id: addComp
+        id: createNewComp
 
         Rectangle {
             anchors.fill: parent
