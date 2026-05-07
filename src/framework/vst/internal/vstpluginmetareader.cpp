@@ -49,26 +49,49 @@ RetVal<AudioResourceMetaList> VstPluginMetaReader::readMeta(const io::path_t& pl
     }
 
     const auto& factory = module->getFactory();
-    AudioResourceMetaList result;
 
+    std::vector<ClassInfo> audioEffects;
     for (const ClassInfo& classInfo : factory.classInfos()) {
-        if (classInfo.category() != kVstAudioEffectClass) {
-            continue;
+        if (classInfo.category() == kVstAudioEffectClass) {
+            audioEffects.push_back(classInfo);
+        }
+    }
+
+    if (audioEffects.empty()) {
+        return make_ret(Err::NoAudioEffect);
+    }
+
+    std::string baseName = io::completeBasename(pluginPath).toStdString();
+    bool multiComponent = audioEffects.size() > 1;
+
+    AudioResourceMetaList result;
+    std::set<std::string> usedIds;
+
+    for (size_t i = 0; i < audioEffects.size(); ++i) {
+        const ClassInfo& classInfo = audioEffects[i];
+
+        std::string id;
+        if (multiComponent) {
+            id = classInfo.name();
+            if (id.empty()) {
+                id = baseName + " " + std::to_string(i + 1);
+            }
+            if (muse::contains(usedIds, id)) {
+                id = classInfo.ID().toString();
+            }
+            usedIds.insert(id);
+        } else {
+            id = baseName;
         }
 
         muse::audio::AudioResourceMeta meta;
-        meta.id = io::completeBasename(pluginPath).toStdString();
+        meta.id = std::move(id);
         meta.type = muse::audio::AudioResourceType::VstPlugin;
         meta.attributes.emplace(muse::audio::CATEGORIES_ATTRIBUTE, String::fromStdString(classInfo.subCategoriesString()));
         meta.vendor = classInfo.vendor();
         meta.hasNativeEditorSupport = true;
 
         result.emplace_back(std::move(meta));
-        break;
-    }
-
-    if (result.empty()) {
-        return make_ret(Err::NoAudioEffect);
     }
 
     return RetVal<AudioResourceMetaList>::make_ok(result);
