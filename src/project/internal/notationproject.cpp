@@ -255,6 +255,9 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     m_masterNotation->notation()->soloMuteState()->read(reader);
     const int mscVersion = m_masterNotation->mscVersion();
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (!excerpt->isInited()) {
+            continue;
+        }
         const INotationPtr excerptNotation = excerpt->notation();
         if (!excerpt->hasFileName() || mscVersion < 440) {
             m_masterNotation->initNotationSoloMuteState(excerptNotation);

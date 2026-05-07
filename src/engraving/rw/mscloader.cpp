@@ -199,6 +199,11 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, rw
 
             bool isUninit = !ex->excerptScore();
             masterScore->addExcerpt(ex, muse::nidx, !isUninit);
+
+            // Mark as inited after addExcerpt() so initParts() runs first
+            if (!isUninit) {
+                ex->setInited(true);
+            }
         }
     }
 
