@@ -29,6 +29,7 @@
 #include "global/async/channel.h"
 
 #include "iprojectaudiosettings.h"
+#include "iprojectvideosettings.h"
 #include "notation/imasternotation.h"
 #include "types/projecttypes.h"
 
@@ -80,6 +81,7 @@ public:
 
     virtual notation::IMasterNotationPtr masterNotation() const = 0;
     virtual IProjectAudioSettingsPtr audioSettings() const = 0;
+    virtual IProjectVideoSettingsPtr videoSettings() const = 0;
 };
 
 using INotationProjectPtr = std::shared_ptr<INotationProject>;

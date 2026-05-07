@@ -47,6 +47,7 @@
 #include "notation/internal/masternotation.h"
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
+#include "projectvideosettings.h"
 #include "projectfileinfoprovider.h"
 #include "projecterrors.h"
 
@@ -92,6 +93,7 @@ QString NotationProject::scoreDefaultTitle()
 NotationProject::~NotationProject()
 {
     m_projectAudioSettings = nullptr;
+    m_projectVideoSettings = nullptr;
     m_masterNotation = nullptr;
     m_engravingProject = nullptr;
 }
@@ -104,6 +106,7 @@ void NotationProject::setupProject()
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation(this, iocContext()));
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings(iocContext()));
+    m_projectVideoSettings = std::make_shared<ProjectVideoSettings>();
 }
 
 Ret NotationProject::load(const muse::io::path_t& path, const OpenParams& openParams, const std::string& format_)
@@ -229,6 +232,12 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
         }
     }
 
+    // Load video settings
+    ret = m_projectVideoSettings->read(reader);
+    if (!ret) {
+        m_projectVideoSettings->makeDefault();
+    }
+
     // Load cloud info
     {
         m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
@@ -328,6 +337,7 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const OpenParams& op
 
     // Setup audio settings
     m_projectAudioSettings->makeDefault();
+    m_projectVideoSettings->makeDefault();
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
@@ -374,6 +384,7 @@ Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Setup audio settings
     m_projectAudioSettings->makeDefault();
+    m_projectVideoSettings->makeDefault();
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
@@ -901,6 +912,13 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool createThumbnail, c
         return ret;
     }
 
+    // Write master video settings
+    ret = m_projectVideoSettings->write(msczWriter);
+    if (!ret) {
+        LOGE() << "failed write project video settings, err: " << ret.toString();
+        return ret;
+    }
+
     // Write master view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
 
@@ -1094,6 +1112,11 @@ void NotationProject::listenIfNeedSaveChanges()
         markAsUnsaved();
         m_hasNonUndoStackChanges = true;
     });
+
+    m_projectVideoSettings->settingsChanged().onNotify(this, [this]() {
+        markAsUnsaved();
+        m_hasNonUndoStackChanges = true;
+    });
 }
 
 void NotationProject::markAsSaved(const muse::io::path_t& path)
@@ -1258,4 +1281,9 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
 IProjectAudioSettingsPtr NotationProject::audioSettings() const
 {
     return m_projectAudioSettings;
+}
+
+IProjectVideoSettingsPtr NotationProject::videoSettings() const
+{
+    return m_projectVideoSettings;
 }
