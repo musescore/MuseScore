@@ -277,17 +277,17 @@ void MasterNotationParts::onPartsRemoved(const std::vector<Part*>& parts)
             continue;
         }
 
-        // Only remove uninitialised (single-part) excerpts whose part was removed
-        if (excerpt->inited()) {
-            continue;
-        }
-
         bool shouldRemove = std::find_if(parts.cbegin(), parts.cend(), [initialPartId](const Part* part) {
             return part->id() == initialPartId;
         }) != parts.cend();
 
         if (shouldRemove) {
-            master->undo(new mu::engraving::RemoveExcerpt(excerpt));
+            if (excerpt->inited()) {
+                // deleteExcerpt unlinks staves before pushing RemoveExcerpt onto the undo stack
+                master->deleteExcerpt(excerpt);
+            } else {
+                master->undo(new mu::engraving::RemoveExcerpt(excerpt));
+            }
         }
     }
 }
