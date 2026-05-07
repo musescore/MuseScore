@@ -72,6 +72,7 @@ void ExcerptNotation::deinit()
 
 void ExcerptNotation::reinit(engraving::Excerpt* newExcerpt)
 {
+    setScore(nullptr);
     m_excerpt = newExcerpt;
 
     init();
