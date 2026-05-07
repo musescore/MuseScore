@@ -60,24 +60,10 @@ ListItemBlank {
         enabled: root.visible && root.enabled
         acceptedButtons: Qt.RightButton
         onClicked: function(mouse) {
-            if (contextMenuLoader.items.length > 0) {
-                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+            if (contextMenu.menuModel.length > 0) {
+                contextMenu.show(Qt.point(mouse.x, mouse.y), root)
             }
         }
-    }
-
-    ScoreItemContextMenu {
-        id: contextMenuLoader
-
-        isCreateNew: root.score.isCreateNew ?? false
-        isNoResultsFound: root.score.isNoResultsFound ?? false
-        isCloud: root.score.isCloud ?? false
-        showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
-
-        onOpenRequested: root.clicked(null)
-        onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
-        onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
-        onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
     }
 
     RowLayout {
@@ -114,6 +100,34 @@ ListItemBlank {
                 text: root.score.name ?? ""
                 font: ui.theme.largeBodyFont
                 horizontalAlignment: Text.AlignLeft
+            }
+
+            ScoreItemMenuButton {
+                id: contextMenu
+
+                isCreateNew: root.score.isCreateNew ?? false
+                isNoResultsFound: root.score.isNoResultsFound ?? false
+                isCloud: root.score.isCloud ?? false
+                showRemoveFromRecentFiles: root.showRemoveFromRecentFiles
+
+                Layout.alignment: Qt.AlignTrailing | Qt.AlignVCenter
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: 20
+                visible: menuModel.length > 0
+                         && (root.mouseArea.containsMouse 
+                             || mouseArea.containsMouse
+                             || root.navigation.active 
+                             || navigation.active 
+                             || isMenuOpenedByButton)
+
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
+                navigation.column: 1
+
+                onOpenRequested: root.clicked(null)
+                onViewOnlineRequested: root.viewOnlineRequested(root.score.scoreId ?? 0)
+                onRevealInFileBrowserRequested: root.revealInFileBrowserRequested(root.score.path ?? "")
+                onRemoveFromRecentFilesRequested: root.removeFromRecentFilesRequested(root.score.path ?? "")
             }
 
             Loader {
