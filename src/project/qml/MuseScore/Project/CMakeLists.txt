@@ -98,9 +98,15 @@ qt_add_qml_module(project_qml
         internal/Properties/PropertyItem.qml
         internal/SaveToCloud/SaveLocationOption.qml
         internal/ScoresPage/CloudScoreIndicatorButton.qml
+        internal/ScoresPage/CloudScoresGridView.qml
+        internal/ScoresPage/CloudScoresListView.qml
+        internal/ScoresPage/CloudScoresView.qml
         internal/ScoresPage/RecentScoresView.qml
         internal/ScoresPage/ScoreGridItem.qml
         internal/ScoresPage/ScoreListItem.qml
+        internal/ScoresPage/ScoresGridView.qml
+        internal/ScoresPage/ScoresListView.qml
+        internal/ScoresPage/ScoresView.qml
         internal/ScoresPage/ScoreThumbnail.qml
         Message.qml
         MigrationDialog.qml
@@ -108,10 +114,7 @@ qt_add_qml_module(project_qml
         ProjectPropertiesDialog.qml
         ProjectUploadedDialog.qml
         SaveToCloudDialog.qml
-        ScoresGridView.qml
-        ScoresListView.qml
         ScoresPage.qml
-        ScoresView.qml
         UploadProgressDialog.qml
     RESOURCES
         internal/Migration/migration.png
@@ -125,6 +128,7 @@ qt_add_qml_module(project_qml
         resources/AudioCom_Waveform.png
         resources/PublishScores.png
     IMPORTS
+        TARGET muse_cloud_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET notationscene_qml

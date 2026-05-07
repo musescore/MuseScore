@@ -25,9 +25,6 @@ import QtQuick.Layouts
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
-import Muse.Cloud
-
-import "internal/ScoresPage"
 
 FocusScope {
     id: root

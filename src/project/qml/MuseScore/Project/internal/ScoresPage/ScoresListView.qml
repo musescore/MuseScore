@@ -27,8 +27,6 @@ import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
 
-import "internal/ScoresPage"
-
 Item {
     id: root
 
