@@ -35,6 +35,7 @@ target_sources(project PRIVATE
     inotationwriter.h
     inotationwritersregister.h
     iprojectaudiosettings.h
+    iprojectvideosettings.h
     iprojectfilescontroller.h
     iprojectconfiguration.h
     irecentfilescontroller.h
@@ -53,6 +54,8 @@ target_sources(project PRIVATE
     internal/projectcreator.h
     internal/projectaudiosettings.cpp
     internal/projectaudiosettings.h
+    internal/projectvideosettings.cpp
+    internal/projectvideosettings.h
     internal/notationreadersregister.cpp
     internal/notationreadersregister.h
     internal/notationwritersregister.cpp
