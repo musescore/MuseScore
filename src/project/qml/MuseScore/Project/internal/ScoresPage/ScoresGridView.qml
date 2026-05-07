@@ -149,7 +149,7 @@ Item {
 
                 navigation.panel: navPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
-                navigation.column: (model.index - (navigation.row * view.columns)) * 3 // * 3 because of controls inside ScoreItem
+                navigation.column: (model.index - (navigation.row * view.columns)) * 4 // * 4 because of controls inside ScoreItem
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         view.positionViewAtIndex(index, GridView.Contain)
