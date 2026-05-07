@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v6
+        with:
+          submodules: recursive
       - name: Check PR author
         id: check_author
         run: |

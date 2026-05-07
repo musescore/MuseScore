@@ -18,9 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Framework, should be first to work pch
-add_subdirectory(framework)
-
 # Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)

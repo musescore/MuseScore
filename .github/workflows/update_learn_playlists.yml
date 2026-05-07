@@ -41,7 +41,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
-
+        with:
+          submodules: recursive
       - name: Update playlist info on s3
         run: |
           if [ '${{ inputs.mode }}' == 'stable' ]; then

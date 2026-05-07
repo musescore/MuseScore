@@ -25,6 +25,7 @@
 
 #include <unordered_map>
 #include <string_view>
+#include <cstdint>
 
 namespace mu::engraving {
 class Drumset;

@@ -9,12 +9,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../..)
-set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
+set(MUSE_FRAMEWORK_PATH ${MU_ROOT}/muse_framework)
+set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
 
 set(CMAKE_MODULE_PATH
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
-    ${MU_ROOT}/src/framework/cmake
+    ${MUSE_FRAMEWORK_SRC_PATH}/cmake
     ${CMAKE_MODULE_PATH}
 )
 
@@ -23,19 +24,20 @@ include(GetPlatformInfo)
 
 include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
+    ${MU_ROOT}/src
     ${MU_ROOT}/thirdparty/dtl
 )
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
 set(MUSE_QT_SUPPORT OFF)
-include(${MU_ROOT}/src/framework/cmake/MuseSetupConfiguration.cmake)
+include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 
 set(GLOBAL_NO_INTERNAL ON)
-add_subdirectory(${MU_ROOT}/src/framework/global global)
+add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH}/global global)
 
 set(DRAW_NO_INTERNAL ON)
-add_subdirectory(${MU_ROOT}/src/framework/draw draw)
+add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH}/draw draw)
 
 set(ENGRAVING_NO_INTERNAL ON)
 set(ENGRAVING_NO_ACCESSIBILITY ON)
@@ -55,8 +57,8 @@ add_executable(engraving_app
 target_include_directories(engraving_app PUBLIC
     ${MU_ROOT}
     ${MU_ROOT}/src
-    ${MU_ROOT}/src/framework
-    ${MU_ROOT}/src/framework/global
+    ${MUSE_FRAMEWORK_SRC_PATH}
+    ${MUSE_FRAMEWORK_SRC_PATH}/global
 )
 
 target_link_libraries(engraving_app

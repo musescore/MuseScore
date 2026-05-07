@@ -32,16 +32,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(MUSE_FRAMEWORK_PATH ${CMAKE_CURRENT_LIST_DIR}/muse_framework)
+set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
+
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake
-    ${CMAKE_CURRENT_LIST_DIR}/src/framework/cmake
+    ${MUSE_FRAMEWORK_SRC_PATH}/cmake
     ${CMAKE_MODULE_PATH}
     )
-
-set(MUSE_FRAMEWORK_PATH ${CMAKE_CURRENT_LIST_DIR})
-set(MUSE_FRAMEWORK_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/framework)
 
 ###########################################
 # Setup option and build settings
@@ -192,7 +192,6 @@ else()
     include(SetupConfigure)
 endif()
 
-set(MUSE_FRAMEWORK_SRC_PATH ${PROJECT_SOURCE_DIR}/src/framework)
 set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
@@ -236,6 +235,7 @@ if (MUSE_ENABLE_UNIT_TESTS)
 endif()
 
 add_subdirectory(share)
+add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH})
 add_subdirectory(src)
 
 
