@@ -69,7 +69,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v6
         with:
-        submodules: recursive
+          submodules: recursive
       - name: Generate build number
         id: make_build_number
         run: |
