@@ -16,7 +16,7 @@ build.tooldata
 build.qtc
 build-*
 build
-muse_framework
+muse
 win32build
 win32install
 win64build
