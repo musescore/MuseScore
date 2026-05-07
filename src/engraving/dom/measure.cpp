@@ -2908,12 +2908,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
+        score()->setPlaylistDirty();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);
