@@ -1213,4 +1213,14 @@ int bestEnharmonicFit(const std::vector<int> tpcs, Key key)
 
     return closestTpc;
 }
+
+int key2Tpc(Key key)
+{
+    return (int)key + KEY_TO_TPC_OFFSET;
+}
+
+Key tpc2Key(int tpc)
+{
+    return Key(tpc - KEY_TO_TPC_OFFSET);
+}
 }
