@@ -601,6 +601,15 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
         return;
     }
 
+    if (open) {
+        ExcerptNotation* excerptImpl = dynamic_cast<ExcerptNotation*>(excerptNotation.get());
+        if (excerptImpl && !excerptImpl->isInited()) {
+            masterScore()->initExcerpt(excerptImpl->excerpt());
+            excerptImpl->init();
+            initNotationSoloMuteState(excerptNotation);
+        }
+    }
+
     excerptNotation->setIsOpen(open);
 
     if (open) {

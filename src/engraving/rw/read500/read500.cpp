@@ -139,11 +139,14 @@ static void readUninitExcerptData(Excerpt* excerpt, MasterScore* masterScore, Xm
         } else if (tag == "initialPartId") {
             excerpt->setInitialPartId(ID(e.readInt()));
         } else if (tag == "Part") {
-            ID partId(static_cast<uint64_t>(e.intAttribute("id", 0)));
-            for (Part* part : masterScore->parts()) {
-                if (part->id() == partId) {
-                    excerpt->parts().push_back(part);
-                    break;
+            int rawId = e.intAttribute("id", -1);
+            if (rawId > 0) {
+                ID partId(static_cast<uint64_t>(rawId));
+                for (Part* part : masterScore->parts()) {
+                    if (part->id() == partId) {
+                        excerpt->parts().push_back(part);
+                        break;
+                    }
                 }
             }
             e.skipCurrentElement();

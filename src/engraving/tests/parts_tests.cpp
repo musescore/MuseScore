@@ -45,6 +45,7 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/editing/editexcerpt.h"
 #include "engraving/infrastructure/mscreader.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/rw/compat/compatutils.h"
@@ -1816,6 +1817,330 @@ TEST_F(Engraving_PartsTests, compatCreateUninitExcerpts)
     // Running migration again should not create duplicates
     mu::engraving::compat::CompatUtils::createUninitExcerptsForParts(score);
     EXPECT_EQ(score->excerpts().size(), numParts) << "Running migration twice should not create duplicates";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   uninitExcerptRenameUndoable
+///   Test that renaming an uninitialised excerpt via ChangeExcerptTitle
+///   on the master score undo stack is undoable.
+///   This covers the mechanism used by ExcerptNotation::undoSetName
+///   when score() is null (no excerptScore yet).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, uninitExcerptRenameUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an uninitialised excerpt (no excerptScore)
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    const String originalName = u"Original Name";
+    excerpt->setName(originalName);
+    score->masterScore()->excerpts().push_back(excerpt);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt must be uninitialised";
+
+    // Rename via master score undo stack (same mechanism as ExcerptNotation::undoSetName)
+    const String newName = u"Renamed Part";
+    EditData ed;
+    score->startCmd(TranslatableString::untranslatable("Rename part"));
+    score->undo(new ChangeExcerptTitle(excerpt, newName));
+    score->endCmd();
+
+    EXPECT_EQ(excerpt->name(), newName) << "Name should be updated after rename";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Excerpt should still be uninitialised after rename";
+
+    // Undo: name should revert
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(excerpt->name(), originalName) << "Name should revert after undo";
+
+    // Redo: name should come back
+    score->undoStack()->redo(&ed);
+    EXPECT_EQ(excerpt->name(), newName) << "Name should be restored after redo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   reinitExcerptScoreUpdated
+///   Test the underlying mechanism of resetExcerpt():
+///   deleteExcerpt() + initAndAddExcerpt() leaves the new
+///   excerpt properly initialised with a fresh score.
+///   This exercises the engraving-level half of Bug 1
+///   (ExcerptNotation::reinit() must also call setScore(nullptr)
+///   before init() so the notation layer picks up the new score).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, reinitExcerptScoreUpdated)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialise an excerpt
+    Excerpt* oldExcerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    oldExcerpt->parts().push_back(part);
+    oldExcerpt->setName(u"Old Part");
+    score->initAndAddExcerpt(oldExcerpt, false);
+
+    ASSERT_TRUE(oldExcerpt->inited()) << "Excerpt must be initialised";
+    Score* oldScore = oldExcerpt->excerptScore();
+    ASSERT_NE(oldScore, nullptr) << "Old excerpt must have a score";
+
+    // Simulate resetExcerpt(): delete old, create new
+    score->startCmd(TranslatableString::untranslatable("Reset part"));
+    score->deleteExcerpt(oldExcerpt);
+
+    Excerpt* newExcerpt = new Excerpt(*oldExcerpt, false);
+    score->initAndAddExcerpt(newExcerpt, false);
+    score->endCmd();
+
+    ASSERT_TRUE(newExcerpt->inited()) << "New excerpt must be initialised";
+    Score* newScore = newExcerpt->excerptScore();
+    ASSERT_NE(newScore, nullptr) << "New excerpt must have a score";
+    EXPECT_NE(newScore, oldScore) << "New score must be a different object from the old one";
+
+    // Old excerpt should no longer be in the master list
+    const auto& excerpts = score->excerpts();
+    bool oldStillPresent = std::find(excerpts.begin(), excerpts.end(), oldExcerpt) != excerpts.end();
+    EXPECT_FALSE(oldStillPresent) << "Old excerpt should not be in the master list after deleteExcerpt";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   deleteInitedExcerptIsUndoable
+///   Test that deleteExcerpt() on an initialised excerpt is
+///   undoable: after undo the excerpt is restored with its
+///   score intact.  This covers the undo path used by
+///   onPartsRemoved() for initialised excerpts (Bug 2 fix).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, deleteInitedExcerptIsUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Create and initialise an excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    Part* part = score->parts().front();
+    excerpt->parts().push_back(part);
+    excerpt->setName(u"Part A");
+    score->initAndAddExcerpt(excerpt, false);
+    ASSERT_TRUE(excerpt->inited());
+    ASSERT_NE(excerpt->excerptScore(), nullptr);
+
+    const size_t countBefore = score->excerpts().size();
+
+    // Delete it (goes through undo stack via RemoveExcerpt)
+    score->startCmd(TranslatableString::untranslatable("Remove part"));
+    score->deleteExcerpt(excerpt);
+    score->endCmd();
+
+    EXPECT_EQ(score->excerpts().size(), countBefore - 1) << "Excerpt should be removed after deleteExcerpt";
+
+    // Undo: excerpt comes back
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt should be restored after undo";
+    bool restored = std::find(score->excerpts().begin(), score->excerpts().end(), excerpt) != score->excerpts().end();
+    EXPECT_TRUE(restored) << "The same excerpt object should be back in the list";
+    EXPECT_TRUE(excerpt->inited()) << "Restored excerpt should still be initialised";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   reorderUninitExcerptStaysUninit
+///   Test that moving an uninitialised excerpt within the
+///   master score's list does not initialise it.
+///   This covers the engraving half of Bug 3 (setExcerpts()
+///   must not call initExcerpt() during a reorder).
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, reorderUninitExcerptStaysUninit)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Add two uninitialised excerpts
+    Excerpt* excerptA = new Excerpt(score);
+    excerptA->parts().push_back(score->parts().at(0));
+    excerptA->setName(u"Part A");
+    score->addExcerpt(excerptA, muse::nidx, /*initIfNeeded=*/ false);
+
+    Excerpt* excerptB = new Excerpt(score);
+    if (score->parts().size() > 1) {
+        excerptB->parts().push_back(score->parts().at(1));
+    } else {
+        excerptB->parts().push_back(score->parts().at(0));
+    }
+    excerptB->setName(u"Part B");
+    score->addExcerpt(excerptB, muse::nidx, /*initIfNeeded=*/ false);
+
+    ASSERT_EQ(excerptA->excerptScore(), nullptr) << "A must start uninitialised";
+    ASSERT_EQ(excerptB->excerptScore(), nullptr) << "B must start uninitialised";
+
+    // Reorder: move A to position 1 (swap)
+    std::vector<Excerpt*>& list = score->excerpts();
+    size_t idxA = muse::indexOf(list, excerptA);
+    muse::moveItem(list, idxA, 1);
+
+    // Both must still be uninitialised — reordering must not trigger initExcerpt
+    EXPECT_EQ(excerptA->excerptScore(), nullptr) << "A must still be uninitialised after reorder";
+    EXPECT_EQ(excerptB->excerptScore(), nullptr) << "B must still be uninitialised after reorder";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   loadedExcerptsAreInited
+///   Test that excerpts read from a file are marked as
+///   inited so that isInited() returns true.
+///   Covers the mscloader.cpp fix (Bug 4): without it,
+///   Excerpt::inited() was always false for loaded files,
+///   disabling Reset and other isInited()-gated actions.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, loadedExcerptsAreInited)
+{
+    // input-from-parts.mscz has four fully-initialised excerpts (Flute, Oboe, etc.)
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"input-from-parts.mscz");
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->excerpts().empty()) << "File must contain excerpts";
+
+    for (Excerpt* excerpt : score->excerpts()) {
+        EXPECT_TRUE(excerpt->inited())
+            << "Loaded excerpt '" << excerpt->name().toStdString() << "' must have inited() == true";
+        EXPECT_NE(excerpt->excerptScore(), nullptr)
+            << "Loaded excerpt '" << excerpt->name().toStdString() << "' must have a score";
+    }
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   addUninitExcerptUndoRedoPreservesUninitState
+///   Test that AddExcerpt(initIfNeeded=false) preserves the
+///   uninitialised state across undo/redo.
+///   Covers the m_initIfNeeded flag added to AddExcerpt and
+///   RemoveExcerpt in commit 925b296ecb.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, addUninitExcerptUndoRedoPreservesUninitState)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    const size_t countBefore = score->excerpts().size();
+
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    excerpt->setName(u"Uninit Part");
+
+    // Add as uninitialised via undo stack
+    score->startCmd(TranslatableString::untranslatable("Add uninit excerpt"));
+    score->undo(new AddExcerpt(excerpt, /*initIfNeeded=*/ false));
+    score->endCmd();
+
+    ASSERT_EQ(score->excerpts().size(), countBefore + 1);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must be uninitialised after add";
+
+    // Undo: excerpt removed
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt must be gone after undo";
+
+    // Redo: excerpt comes back still uninitialised
+    score->undoStack()->redo(&ed);
+    ASSERT_EQ(score->excerpts().size(), countBefore + 1);
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after redo";
+    EXPECT_FALSE(excerpt->inited()) << "inited() must be false after redo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   removeUninitExcerptIsUndoable
+///   Test that removing an uninitialised excerpt via
+///   RemoveExcerpt is undoable and restores it as uninitialised.
+///   Covers the onPartsRemoved() change in commit 84a40cbb86.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, removeUninitExcerptIsUndoable)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    // Add an uninitialised excerpt
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    excerpt->setName(u"Uninit Part");
+    score->addExcerpt(excerpt, muse::nidx, /*initIfNeeded=*/ false);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr);
+
+    const size_t countBefore = score->excerpts().size();
+
+    // Remove it via undo command (same path as onPartsRemoved)
+    score->startCmd(TranslatableString::untranslatable("Remove uninit excerpt"));
+    score->undo(new RemoveExcerpt(excerpt));
+    score->endCmd();
+
+    EXPECT_EQ(score->excerpts().size(), countBefore - 1) << "Excerpt must be removed";
+
+    // Undo: comes back uninitialised
+    EditData ed;
+    score->undoStack()->undo(&ed);
+
+    EXPECT_EQ(score->excerpts().size(), countBefore) << "Excerpt must be restored";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must be restored as uninitialised";
+    EXPECT_FALSE(excerpt->inited()) << "inited() must remain false after undo";
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   renameUninitExcerptViaUndoScore
+///   Test that renaming an uninitialised excerpt using the
+///   master score's undo stack (as replaceInstrument does)
+///   is undoable.
+///   Covers the replaceInstrument() fix in commit 925b296ecb.
+//---------------------------------------------------------
+
+TEST_F(Engraving_PartsTests, renameUninitExcerptViaUndoScore)
+{
+    MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
+    ASSERT_TRUE(score);
+
+    Excerpt* excerpt = new Excerpt(score);
+    excerpt->parts().push_back(score->parts().front());
+    const String originalName = u"Original";
+    excerpt->setName(originalName);
+    score->addExcerpt(excerpt, muse::nidx, /*initIfNeeded=*/ false);
+    ASSERT_EQ(excerpt->excerptScore(), nullptr) << "Must start uninitialised";
+
+    // Rename via master score undo stack (same path as replaceInstrument for uninit excerpts)
+    const String newName = u"Renamed";
+    score->startCmd(TranslatableString::untranslatable("Rename uninit excerpt"));
+    score->undo(new ChangeExcerptTitle(excerpt, newName));
+    score->endCmd();
+
+    EXPECT_EQ(excerpt->name(), newName) << "Name must be updated";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after rename";
+
+    // Undo: name reverts
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    EXPECT_EQ(excerpt->name(), originalName) << "Name must revert after undo";
+    EXPECT_EQ(excerpt->excerptScore(), nullptr) << "Must still be uninitialised after undo";
+
+    // Redo: name comes back
+    score->undoStack()->redo(&ed);
+    EXPECT_EQ(excerpt->name(), newName) << "Name must be restored after redo";
 
     delete score;
 }
