@@ -123,15 +123,21 @@ void ExcerptNotation::undoSetName(const QString& name)
     }
 
     if (!score()) {
-        setName(name);
+        if (!m_masterNotation) {
+            setName(name);
+            return;
+        }
+        //: Means: "edit the name of a part score"
+        m_masterNotation->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
+        m_masterNotation->masterScore()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
+        m_masterNotation->undoStack()->commitChanges();
+        notifyAboutNotationChanged();
         return;
     }
 
     //: Means: "edit the name of a part score"
     undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
-
     score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
-
     undoStack()->commitChanges();
     notifyAboutNotationChanged();
 }
