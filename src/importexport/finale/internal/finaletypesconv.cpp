@@ -1986,12 +1986,12 @@ SymId unparenthesisedNoteHead(const std::string& symName)
     return muse::value(noteHeadTable, symName, SymId::noSym);
 }
 
-DirectionV toMuseScoreStemDirection(others::Staff::StemDirection dir)
+DirectionV toMuseScoreStemDirection(StemDirection dir)
 {
-    static const std::unordered_map<others::Staff::StemDirection, DirectionV> directionTable = {
-        { others::Staff::StemDirection::Default,    DirectionV::AUTO },
-        { others::Staff::StemDirection::AlwaysUp,   DirectionV::UP },
-        { others::Staff::StemDirection::AlwaysDown, DirectionV::DOWN },
+    static const std::unordered_map<StemDirection, DirectionV> directionTable = {
+        { StemDirection::Default,    DirectionV::AUTO },
+        { StemDirection::AlwaysUp,   DirectionV::UP },
+        { StemDirection::AlwaysDown, DirectionV::DOWN },
     };
     return muse::value(directionTable, dir, DirectionV::AUTO);
 }

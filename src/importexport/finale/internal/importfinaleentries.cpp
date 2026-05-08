@@ -361,8 +361,8 @@ static bool isFixedChord(EntryInfoPtr entryInfoPtr)
     // staff override of stem direction
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         auto staff = next.createCurrentStaff();
-        if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp
-            || staff->stemDirection == others::Staff::StemDirection::AlwaysDown) {
+        if (staff->stemDirection == StemDirection::AlwaysUp
+            || staff->stemDirection == StemDirection::AlwaysDown) {
             return true;
         }
     }
