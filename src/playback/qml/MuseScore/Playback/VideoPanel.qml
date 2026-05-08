@@ -38,6 +38,7 @@ Item {
 
     readonly property int contentMargin: 8
     readonly property bool compactMode: width < 620
+    readonly property int controlsHeight: controlsColumn.implicitHeight
 
     clip: true
 
@@ -95,11 +96,11 @@ Item {
         columnSpacing: 12
 
         Rectangle {
-            Layout.preferredWidth: 230
-            Layout.maximumWidth: 280
-            Layout.fillWidth: root.compactMode
-            Layout.fillHeight: !root.compactMode
-            Layout.preferredHeight: root.compactMode ? 96 : -1
+            Layout.preferredWidth: root.compactMode ? -1 : Math.max(320, root.width * 0.45)
+            Layout.maximumWidth: root.compactMode ? 16777215 : 720
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.preferredHeight: root.compactMode ? Math.max(140, root.height - root.controlsHeight - (root.contentMargin * 2) - 8) : -1
             Layout.minimumHeight: 72
 
             radius: 4
@@ -170,6 +171,8 @@ Item {
         }
 
         ColumnLayout {
+            id: controlsColumn
+
             Layout.fillWidth: true
             Layout.fillHeight: !root.compactMode
             Layout.minimumWidth: 0
