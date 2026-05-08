@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QObject>
+#include <QUrl>
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
@@ -37,6 +38,7 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
 
     Q_PROPERTY(bool hasVideo READ hasVideo NOTIFY videoSettingsChanged)
     Q_PROPERTY(QString videoPath READ videoPath WRITE setVideoPath NOTIFY videoSettingsChanged)
+    Q_PROPERTY(QUrl videoUrl READ videoUrl NOTIFY videoSettingsChanged)
     Q_PROPERTY(int offsetMs READ offsetMs WRITE setOffsetMs NOTIFY videoSettingsChanged)
     Q_PROPERTY(int volumePercent READ volumePercent WRITE setVolumePercent NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY videoSettingsChanged)
@@ -54,6 +56,7 @@ public:
 
     bool hasVideo() const;
     QString videoPath() const;
+    QUrl videoUrl() const;
     void setVideoPath(const QString& path);
 
     int offsetMs() const;

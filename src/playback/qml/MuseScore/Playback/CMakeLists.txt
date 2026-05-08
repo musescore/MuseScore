@@ -85,9 +85,12 @@ qt_add_qml_module(playback_qml
         SoundProfilesDialog.qml
         VideoPanel.qml
     IMPORTS
+        QtMultimedia
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET notationscene_qml
 )
+
+target_link_libraries(playback_qml PRIVATE Qt6::Multimedia)
 
 fixup_qml_module_dependencies(playback_qml)

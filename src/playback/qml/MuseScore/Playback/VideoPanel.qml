@@ -24,6 +24,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Layouts
+import QtMultimedia
 
 import Muse.Ui
 import Muse.UiComponents
@@ -35,6 +36,8 @@ Item {
     property NavigationSection navigationSection: null
     property int contentNavigationPanelOrderStart: 0
 
+    clip: true
+
     VideoPanelModel {
         id: videoModel
     }
@@ -45,39 +48,74 @@ Item {
 
     RowLayout {
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 16
+        anchors.margins: 8
+        spacing: 12
 
         Rectangle {
-            Layout.preferredWidth: 280
+            Layout.preferredWidth: 230
+            Layout.maximumWidth: 280
             Layout.fillHeight: true
-            Layout.minimumHeight: 136
+            Layout.minimumHeight: 72
 
             radius: 4
-            color: ui.theme.backgroundSecondaryColor
+            color: "#111111"
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
+            clip: true
+
+            Video {
+                id: video
+
+                anchors.fill: parent
+                anchors.margins: 1
+                source: videoModel.videoUrl
+                muted: videoModel.muted
+                volume: videoModel.volumePercent / 100
+                fillMode: VideoOutput.PreserveAspectFit
+                visible: videoModel.hasVideo
+
+                onSourceChanged: {
+                    stop()
+                }
+            }
 
             ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 12
-                spacing: 8
+                anchors.centerIn: parent
+                width: Math.min(parent.width - 24, 200)
+                spacing: 6
+                visible: !videoModel.hasVideo
 
                 StyledIconLabel {
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 12
                     iconCode: IconCode.PLAY
-                    font.pixelSize: 34
-                    opacity: videoModel.hasVideo ? 1.0 : 0.45
+                    font.pixelSize: 24
+                    opacity: 0.45
                 }
 
                 StyledTextLabel {
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
-                    text: videoModel.hasVideo ? videoModel.videoPath : qsTrc("playback", "No video attached")
-                    maximumLineCount: 3
-                    wrapMode: Text.WrapAnywhere
-                    displayTruncatedTextOnHover: true
+                    text: qsTrc("playback", "No video attached")
+                    maximumLineCount: 2
+                    wrapMode: Text.WordWrap
+                }
+            }
+
+            FlatButton {
+                anchors.centerIn: parent
+                width: 44
+                height: 44
+                visible: videoModel.hasVideo && video.playbackState !== MediaPlayer.PlayingState
+                icon: IconCode.PLAY_FILL
+                buttonType: FlatButton.IconOnly
+                transparent: true
+                iconColor: "white"
+                toolTipTitle: qsTrc("playback", "Play video")
+                navigation.panel: navigationPanel
+                navigation.order: root.contentNavigationPanelOrderStart + 1
+
+                onClicked: {
+                    video.play()
                 }
             }
         }
@@ -85,7 +123,52 @@ Item {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 12
+            Layout.minimumWidth: 360
+            spacing: 8
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 8
+
+                FlatButton {
+                    Layout.preferredWidth: 36
+                    Layout.preferredHeight: 30
+                    enabled: videoModel.hasVideo
+                    icon: video.playbackState === MediaPlayer.PlayingState ? IconCode.PAUSE : IconCode.PLAY
+                    buttonType: FlatButton.IconOnly
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 2
+
+                    onClicked: {
+                        if (video.playbackState === MediaPlayer.PlayingState) {
+                            video.pause()
+                        } else {
+                            video.play()
+                        }
+                    }
+                }
+
+                StyledSlider {
+                    Layout.fillWidth: true
+                    from: 0
+                    to: Math.max(video.duration, 1)
+                    stepSize: 100
+                    value: video.position
+                    enabled: videoModel.hasVideo && video.seekable
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 3
+
+                    onMoved: {
+                        video.seek(value)
+                    }
+                }
+
+                StyledTextLabel {
+                    Layout.preferredWidth: 92
+                    horizontalAlignment: Text.AlignRight
+                    text: videoModel.hasVideo ? Math.floor(video.position / 1000) + " / " + Math.floor(video.duration / 1000) + " s" : ""
+                }
+            }
 
             FilePicker {
                 Layout.fillWidth: true
@@ -94,7 +177,7 @@ Item {
                 filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
                 buttonType: FlatButton.Horizontal
                 navigation: navigationPanel
-                navigationRowOrderStart: root.contentNavigationPanelOrderStart
+                navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
 
                 onPathEdited: function(newPath) {
                     videoModel.videoPath = newPath
@@ -112,7 +195,7 @@ Item {
                     text: qsTrc("playback", "-100 ms")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 2
+                    navigation.order: root.contentNavigationPanelOrderStart + 6
 
                     onClicked: {
                         videoModel.nudgeOffset(-100)
@@ -124,7 +207,7 @@ Item {
                     currentText: videoModel.offsetMs.toString()
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 3
+                    navigation.order: root.contentNavigationPanelOrderStart + 7
 
                     onTextEditingFinished: function(newTextValue) {
                         var parsedValue = parseInt(newTextValue)
@@ -142,7 +225,7 @@ Item {
                     text: qsTrc("playback", "+100 ms")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 4
+                    navigation.order: root.contentNavigationPanelOrderStart + 8
 
                     onClicked: {
                         videoModel.nudgeOffset(100)
@@ -158,7 +241,7 @@ Item {
                     checked: videoModel.muted
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 5
+                    navigation.order: root.contentNavigationPanelOrderStart + 9
 
                     onClicked: {
                         videoModel.muted = !videoModel.muted
@@ -178,7 +261,7 @@ Item {
                     value: videoModel.volumePercent
                     enabled: videoModel.hasVideo && !videoModel.muted
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 6
+                    navigation.order: root.contentNavigationPanelOrderStart + 10
 
                     onMoved: {
                         videoModel.volumePercent = value
@@ -189,10 +272,6 @@ Item {
                     text: videoModel.volumePercent + "%"
                     enabled: videoModel.hasVideo
                 }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
 
                 Item {
                     Layout.fillWidth: true
@@ -202,9 +281,10 @@ Item {
                     text: qsTrc("playback", "Clear")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 7
+                    navigation.order: root.contentNavigationPanelOrderStart + 11
 
                     onClicked: {
+                        video.stop()
                         videoModel.clearVideo()
                     }
                 }
