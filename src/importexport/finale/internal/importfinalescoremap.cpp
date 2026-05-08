@@ -530,6 +530,25 @@ void FinaleParser::importBrackets()
             }
         }
 
+        // Section name if applicable
+        if (groupInfo.info.calcIsSingleInstrumentSection(1)) {
+            if (staffGroup->fullNameId || staffGroup->abbrvNameId) {
+                const String fullNameStr = nameFromEnigmaText(*this, u"longInstrument", staffGroup->getFullNameCtx());
+                const String abrvNameStr = nameFromEnigmaText(*this, u"shortInstrument", staffGroup->getAbbreviatedNameCtx());
+                for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan; idx++) {
+                    Staff* s = m_score->staff(idx);
+                    IF_ASSERT_FAILED(s && s->part() && s->part()->instrument()) {
+                        continue;
+                    }
+                    InstrumentLabel& label = s->part()->instrument()->instrumentLabel();
+                    label.setAllowGroupName(true);
+                    label.setUseCustomGroupName(true);
+                    label.setCustomNameLongGroup(fullNameStr);
+                    label.setCustomNameShortGroup(abrvNameStr);
+                }
+            }
+        }
+
         // Barline defaults (these will be overridden later, but good to have nice defaults)
         if (staffGroup->ownBarline && staffGroup->barlineType == others::Measure::BarlineType::Tick) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan; idx++) {
