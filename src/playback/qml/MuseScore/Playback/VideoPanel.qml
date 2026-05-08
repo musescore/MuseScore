@@ -216,7 +216,7 @@ Item {
                 path: videoModel.videoPath
                 dialogTitle: qsTrc("playback", "Choose video")
                 filter: qsTrc("playback", "Video files (*.mp4 *.mov *.m4v *.avi *.mkv *.webm);;All files (*)")
-                buttonType: FlatButton.Horizontal
+                buttonType: FlatButton.IconOnly
                 navigation: navigationPanel
                 navigationRowOrderStart: root.contentNavigationPanelOrderStart + 4
 

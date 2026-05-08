@@ -49,7 +49,7 @@ ColumnLayout {
     spacing: 0
 
     function resizePanelToContentHeight() {
-        if (contentColumn.completed && implicitHeight > 0) {
+        if (contentRow.completed && implicitHeight > 0) {
             root.resizeRequested(width, implicitHeight)
         }
     }
@@ -117,6 +117,14 @@ ColumnLayout {
         }
     }
 
+    VideoPanelModel {
+        id: videoMixerModel
+    }
+
+    Component.onCompleted: {
+        videoMixerModel.load()
+    }
+
     MixerPanelContextMenuModel {
         id: contextMenuModel
 
@@ -131,10 +139,10 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        contentWidth: contentColumn.width + 1 // for trailing separator
-        contentHeight: Math.max(contentColumn.height, height)
+        contentWidth: contentRow.width + 1 // for trailing separator
+        contentHeight: Math.max(contentRow.height, height)
 
-        implicitHeight: contentColumn.height
+        implicitHeight: contentRow.height
 
         interactive: (height < contentHeight || width < contentWidth) && !flickable.resourcePickingActive
 
@@ -174,14 +182,15 @@ ColumnLayout {
             spacing: prv.channelItemWidth
 
             Repeater {
-                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + 1 : mixerPanelModel.count
+                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + (videoMixerModel.hasVideo ? 2 : 1)
+                                                             : mixerPanelModel.count + (videoMixerModel.hasVideo ? 1 : 0)
 
                 SeparatorLine { orientation: Qt.Vertical }
             }
         }
 
-        Column {
-            id: contentColumn
+        Row {
+            id: contentRow
 
             anchors.bottom: parent.bottom
             width: childrenRect.width
@@ -190,167 +199,294 @@ ColumnLayout {
             property bool completed: false
 
             Component.onCompleted: {
-                contentColumn.completed = true
+                contentRow.completed = true
             }
 
-            MixerSoundSection {
-                id: soundSection
+            Column {
+                id: contentColumn
 
-                visible: contextMenuModel.soundSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: 8
+                width: childrenRect.width
+                spacing: 0
 
-                model: mixerPanelModel
+                MixerSoundSection {
+                    id: soundSection
 
-                navigationRowStart: 1
-                needReadChannelName: prv.isPanelActivated
+                    visible: contextMenuModel.soundSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: 8
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    model: mixerPanelModel
+
+                    navigationRowStart: 1
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerFxSection {
+                    id: fxSection
+
+                    visible: contextMenuModel.audioFxSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 100
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerAuxSendsSection {
+                    id: auxSendsSection
+
+                    visible: contextMenuModel.auxSendsSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+
+                    channelItemWidth: prv.channelItemWidth
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 200
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerBalanceSection {
+                    id: balanceSection
+
+                    visible: contextMenuModel.balanceSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 300
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerVolumeSection {
+                    id: volumeSection
+
+                    visible: contextMenuModel.volumeSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 400
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerFaderSection {
+                    id: faderSection
+
+                    visible: contextMenuModel.faderSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: -3
+                    spacingBelow: -2
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 500
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerMuteAndSoloSection {
+                    id: muteAndSoloSection
+
+                    visible: contextMenuModel.muteAndSoloSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 600
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerTitleSection {
+                    id: titleSection
+
+                    visible: contextMenuModel.titleSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
+                    spacingAbove: 2
+                    spacingBelow: 0
+
+                    model: mixerPanelModel
+
+                    navigationRowStart: 700
+                    needReadChannelName: prv.isPanelActivated
+
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
                 }
             }
 
-            MixerFxSection {
-                id: fxSection
+            Column {
+                id: videoMixerChannel
 
-                visible: contextMenuModel.audioFxSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                visible: videoMixerModel.hasVideo
+                width: visible ? prv.channelItemWidth : 0
+                spacing: 0
 
-                model: mixerPanelModel
-
-                navigationRowStart: 100
-                needReadChannelName: prv.isPanelActivated
-
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                Item {
+                    width: parent.width
+                    height: soundSection.visible ? soundSection.height : 0
                 }
-            }
 
-            MixerAuxSendsSection {
-                id: auxSendsSection
-
-                visible: contextMenuModel.auxSendsSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-
-                channelItemWidth: prv.channelItemWidth
-
-                model: mixerPanelModel
-
-                navigationRowStart: 200
-                needReadChannelName: prv.isPanelActivated
-
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                Item {
+                    width: parent.width
+                    height: fxSection.visible ? fxSection.height : 0
                 }
-            }
 
-            MixerBalanceSection {
-                id: balanceSection
-
-                visible: contextMenuModel.balanceSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-
-                model: mixerPanelModel
-
-                navigationRowStart: 300
-                needReadChannelName: prv.isPanelActivated
-
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                Item {
+                    width: parent.width
+                    height: auxSendsSection.visible ? auxSendsSection.height : 0
                 }
-            }
 
-            MixerVolumeSection {
-                id: volumeSection
-
-                visible: contextMenuModel.volumeSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-
-                model: mixerPanelModel
-
-                navigationRowStart: 400
-                needReadChannelName: prv.isPanelActivated
-
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                Item {
+                    width: parent.width
+                    height: balanceSection.visible ? balanceSection.height : 0
                 }
-            }
 
-            MixerFaderSection {
-                id: faderSection
+                Item {
+                    width: parent.width
+                    height: volumeSection.visible ? volumeSection.height : 0
 
-                visible: contextMenuModel.faderSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: -3
-                spacingBelow: -2
+                    RowLayout {
+                        anchors.centerIn: parent
+                        width: parent.width - 12
+                        spacing: 4
 
-                model: mixerPanelModel
+                        StyledSlider {
+                            Layout.fillWidth: true
+                            from: 0
+                            to: 100
+                            stepSize: 1
+                            value: videoMixerModel.volumePercent
+                            enabled: videoMixerModel.hasVideo && !videoMixerModel.muted
+                            navigation.panel: videoNavigationPanel
+                            navigation.row: 1
+                            navigation.accessible.name: qsTrc("playback", "Video volume") + " " + videoMixerModel.volumePercent + "%"
 
-                navigationRowStart: 500
-                needReadChannelName: prv.isPanelActivated
+                            onMoved: {
+                                videoMixerModel.volumePercent = value
+                            }
+                        }
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                        StyledTextLabel {
+                            Layout.preferredWidth: 32
+                            horizontalAlignment: Text.AlignRight
+                            text: videoMixerModel.volumePercent + "%"
+                            font: ui.theme.captionFont
+                        }
+                    }
                 }
-            }
 
-            MixerMuteAndSoloSection {
-                id: muteAndSoloSection
-
-                visible: contextMenuModel.muteAndSoloSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-
-                model: mixerPanelModel
-
-                navigationRowStart: 600
-                needReadChannelName: prv.isPanelActivated
-
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                Item {
+                    width: parent.width
+                    height: faderSection.visible ? faderSection.height : 0
                 }
-            }
 
-            MixerTitleSection {
-                id: titleSection
+                Item {
+                    width: parent.width
+                    height: muteAndSoloSection.visible ? muteAndSoloSection.height : 0
 
-                visible: contextMenuModel.titleSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                spacingAbove: 2
-                spacingBelow: 0
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 6
 
-                model: mixerPanelModel
+                        FlatToggleButton {
+                            height: 20
+                            width: 20
+                            icon: IconCode.MUTE
+                            checked: videoMixerModel.muted
+                            enabled: videoMixerModel.hasVideo
+                            navigation.panel: videoNavigationPanel
+                            navigation.row: 2
+                            navigation.accessible.name: qsTrc("playback", "Video mute")
 
-                navigationRowStart: 700
-                needReadChannelName: prv.isPanelActivated
+                            onToggled: {
+                                videoMixerModel.muted = !checked
+                            }
+                        }
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                        FlatToggleButton {
+                            height: 20
+                            width: 20
+                            icon: IconCode.SOLO
+                            checked: videoMixerModel.solo
+                            enabled: videoMixerModel.hasVideo
+                            navigation.panel: videoNavigationPanel
+                            navigation.row: 3
+                            navigation.accessible.name: qsTrc("playback", "Video solo")
+
+                            onToggled: {
+                                videoMixerModel.solo = !videoMixerModel.solo
+                            }
+                        }
+                    }
                 }
-            }
 
-            VideoMixerSection {
-                id: videoMixerSection
+                Rectangle {
+                    width: parent.width
+                    height: titleSection.visible ? titleSection.height : 0
+                    color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
+                    border.color: ui.theme.accentColor
+                    border.width: 1
 
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
-                navigationSection: root.navigationSection
-                navigationOrder: root.contentNavigationPanelOrderStart + 900
+                    StyledTextLabel {
+                        anchors.centerIn: parent
+                        width: parent.width - 12
+                        text: qsTrc("playback", "Video")
+                        font: ui.theme.bodyBoldFont
+                    }
+                }
+
+                NavigationPanel {
+                    id: videoNavigationPanel
+                    name: "VideoMixerPanel"
+                    section: root.navigationSection
+                    order: root.contentNavigationPanelOrderStart + mixerPanelModel.count + 1
+                    direction: NavigationPanel.Horizontal
+                }
             }
         }
     }
