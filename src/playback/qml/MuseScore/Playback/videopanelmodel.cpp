@@ -23,6 +23,7 @@
 #include "videopanelmodel.h"
 
 #include <algorithm>
+#include <cmath>
 
 using namespace mu::playback;
 using namespace mu::project;
@@ -34,6 +35,8 @@ VideoPanelModel::VideoPanelModel(QObject* parent)
 
 void VideoPanelModel::load()
 {
+    listenPlaybackController();
+
     context()->currentProjectChanged().onNotify(this, [this]() {
         listenCurrentProject();
         emit videoSettingsChanged();
@@ -145,6 +148,16 @@ void VideoPanelModel::setMuted(bool muted)
     updateAttachment(updated);
 }
 
+bool VideoPanelModel::scorePlaying() const
+{
+    return playbackController()->isPlaying();
+}
+
+int VideoPanelModel::scorePlaybackPositionMs() const
+{
+    return m_scorePlaybackPositionMs;
+}
+
 IProjectVideoSettingsPtr VideoPanelModel::videoSettings() const
 {
     INotationProjectPtr project = context()->currentProject();
@@ -177,4 +190,21 @@ void VideoPanelModel::listenCurrentProject()
     settings->settingsChanged().onNotify(this, [this]() {
         emit videoSettingsChanged();
     }, Asyncable::Mode::SetReplace);
+}
+
+void VideoPanelModel::listenPlaybackController()
+{
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        emit playbackSyncChanged();
+    });
+
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](muse::audio::secs_t pos, muse::midi::tick_t) {
+        const int positionMs = std::max(0, static_cast<int>(std::lround(pos * 1000.0)));
+        if (m_scorePlaybackPositionMs == positionMs) {
+            return;
+        }
+
+        m_scorePlaybackPositionMs = positionMs;
+        emit playbackSyncChanged();
+    });
 }
