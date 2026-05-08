@@ -61,6 +61,18 @@ Item {
             return
         }
 
+        if (videoModel.scorePlaybackPositionMs + videoModel.offsetMs < 0) {
+            if (video.position !== 0) {
+                video.seek(0)
+            }
+
+            if (video.playbackState === MediaPlayer.PlayingState) {
+                video.pause()
+            }
+
+            return
+        }
+
         var targetPosition = targetVideoPositionMs()
         if (forceSeek || Math.abs(video.position - targetPosition) > syncToleranceMs) {
             video.seek(targetPosition)
