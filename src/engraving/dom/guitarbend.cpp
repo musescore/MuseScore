@@ -289,7 +289,7 @@ Note* GuitarBend::createEndNote(Note* startNote, GuitarBendType bendType)
         endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
         Chord* endChord = endSegment ? toChord(endSegment->element(track)) : nullptr;
         endNote = endChord ? endChord->upNote() : nullptr;
-    } else { // isChord
+    } else if (item->isChord()) {
         Chord* chord = toChord(item);
         endNote = score->addNote(chord, noteVal);
     }
