@@ -86,7 +86,7 @@ extern int mensurStricheSpanFrom(int height);
 extern engraving::FretDotType toFretDotType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::FretMarkerType toFretMarkerType(musx::dom::details::FretboardDiagram::Shape shape);
 extern engraving::SymId unparenthesisedNoteHead(const std::string& symName);
-extern engraving::DirectionV toMuseScoreStemDirection(musx::dom::others::Staff::StemDirection dir);
+extern engraving::DirectionV toMuseScoreStemDirection(musx::dom::StemDirection dir);
 
 // Unit conversion
 // Efix: 64 per Evpu
