@@ -275,44 +275,7 @@ Item {
             }
 
             RowLayout {
-                spacing: 12
-
-                CheckBox {
-                    text: qsTrc("playback", "Mute")
-                    checked: videoModel.muted
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 9
-
-                    onClicked: {
-                        videoModel.muted = !videoModel.muted
-                    }
-                }
-
-                StyledTextLabel {
-                    text: qsTrc("playback", "Volume")
-                    enabled: videoModel.hasVideo
-                }
-
-                StyledSlider {
-                    Layout.preferredWidth: 180
-                    from: 0
-                    to: 100
-                    stepSize: 1
-                    value: videoModel.volumePercent
-                    enabled: videoModel.hasVideo && !videoModel.muted
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 10
-
-                    onMoved: {
-                        videoModel.volumePercent = value
-                    }
-                }
-
-                StyledTextLabel {
-                    text: videoModel.volumePercent + "%"
-                    enabled: videoModel.hasVideo
-                }
+                Layout.fillWidth: true
 
                 Item {
                     Layout.fillWidth: true
@@ -322,7 +285,7 @@ Item {
                     text: qsTrc("playback", "Clear")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 11
+                    navigation.order: root.contentNavigationPanelOrderStart + 9
 
                     onClicked: {
                         video.stop()

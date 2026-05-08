@@ -68,6 +68,7 @@ TEST(ProjectVideoSettingsTests, WriteAndReadAttachment)
     attachment.offsetMs = -1250;
     attachment.volume = 0.75f;
     attachment.muted = true;
+    attachment.solo = true;
 
     source.setAttachment(attachment);
     EXPECT_TRUE(source.write(writer));

@@ -342,6 +342,16 @@ ColumnLayout {
                     prv.setNavigateControlIndex(index)
                 }
             }
+
+            VideoMixerSection {
+                id: videoMixerSection
+
+                headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
+                navigationSection: root.navigationSection
+                navigationOrder: root.contentNavigationPanelOrderStart + 900
+            }
         }
     }
 

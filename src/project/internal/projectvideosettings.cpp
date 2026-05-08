@@ -99,6 +99,7 @@ VideoAttachmentSettings ProjectVideoSettings::attachmentFromJson(const QJsonObje
     result.offsetMs = object.value("offsetMs").toInt();
     result.volume = static_cast<float>(object.value("volume").toDouble(1.0));
     result.muted = object.value("muted").toBool(false);
+    result.solo = object.value("solo").toBool(false);
     return result;
 }
 
@@ -109,5 +110,6 @@ QJsonObject ProjectVideoSettings::attachmentToJson(const VideoAttachmentSettings
     object["offsetMs"] = attachment.offsetMs;
     object["volume"] = attachment.volume;
     object["muted"] = attachment.muted;
+    object["solo"] = attachment.solo;
     return object;
 }
