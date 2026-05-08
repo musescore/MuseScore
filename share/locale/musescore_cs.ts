@@ -10044,7 +10044,8 @@ Tuto akci nelze vrátit zpět.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Kopírovací práva © 1999-2026 MuseScore Limited a ostatní.
+Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10145,7 +10146,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation>Videonávody</translation>
+        <translation>Obrazové návody</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
@@ -10473,7 +10474,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation type="unfinished"/>
+        <translation>Obsahuje nové základní nástroje pro notový zápis, významná vylepšení přehrávání, ukládání videa, dvojí notový zápis pro kytaru a funkce pro zrychlení vaší práce.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -33321,7 +33322,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="597"/>
         <source>Audio is processed in the background while you work. To trigger processing yourself, turn off automatic processing in Preferences &gt; Audio &amp; MIDI &gt; Online sounds.</source>
-        <translation>Zvukový záznam je zpracováván na pozadí, zatímco vy pracujete. Chcete-li zpracování spustit sami, vypněte automatické zpracování v nabídce Předvolby &gt; Audio a MIDI &gt; Online zvukové knihovny.</translation>
+        <translation>Zvukový záznam je zpracováván na pozadí, zatímco vy pracujete. Chcete-li zpracování spustit sami, vypněte automatické zpracování v nabídce Nastavení → Audio a MIDI → Online zvukové knihovny.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/NotationPage/NotationPage.qml" line="611"/>
@@ -33740,7 +33741,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio driver</source>
-        <translation type="unfinished"/>
+        <translation>Zvukový ovladač</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -34625,12 +34626,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="64"/>
         <source>No audio devices available</source>
-        <translation type="unfinished"/>
+        <translation>Nejsou dostupná žádná zvuková zařízení</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Pro vybraný zvukový ovladač nejsou dostupná žádná zvuková zařízení. MuseScore Studio místo toho použije výchozí zvukový ovladač. Chcete-li použít %1, ověřte, zda je vaše zařízení správně nastaveno. Poté MuseScore Studio opět spusťe a zkuste to znovu.</translation>
     </message>
 </context>
 <context>
@@ -35444,7 +35445,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="34"/>
         <source>Enable to export the staff line of every rest. Disable to let the importing app decide.</source>
-        <translation>Zapnutím nastavíte vyvedení vertikální pozice všech pomlk. Při vypnutí rozhodne o vertikálním umístění pomlk importující aplikace.</translation>
+        <translation>Zapnutím nastavíte vyvedení svislého umístění všech pomlk. Při vypnutí rozhodne o svislém umístění pomlk zavádějící aplikace.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="38"/>
@@ -35756,12 +35757,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
         <source>Use page layout</source>
-        <translation type="unfinished"/>
+        <translation>Použít rozvržení strany</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
         <source>Reflow to fit video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Přizpůsobit rozlišení videa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
@@ -35790,7 +35791,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
         <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
-        <translation>K exportu do tohoto formátu je potřebná instalace FFmpeg. Tuto možnost můžete nastavit také v nabídce Předvolby &gt; Video.</translation>
+        <translation>K vyvedení do tohoto formátu je potřebná instalace FFmpeg. Tuto možnost můžete nastavit také v nabídce Nastavení → Video.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
@@ -35810,12 +35811,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
         <source>Video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Rozlišení videa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="165"/>
         <source>Each selected part will be exported as a separate video file.</source>
-        <translation>Každý vybraný part bude exportován jako samostatný video soubor.</translation>
+        <translation>Každý vybraný part bude vyveden jako samostatný video soubor.</translation>
     </message>
 </context>
 <context>
