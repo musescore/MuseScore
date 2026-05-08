@@ -49,7 +49,7 @@ ColumnLayout {
     spacing: 0
 
     function resizePanelToContentHeight() {
-        if (contentRow.completed && implicitHeight > 0) {
+        if (contentColumn.completed && implicitHeight > 0) {
             root.resizeRequested(width, implicitHeight)
         }
     }
@@ -117,14 +117,6 @@ ColumnLayout {
         }
     }
 
-    VideoPanelModel {
-        id: videoMixerModel
-    }
-
-    Component.onCompleted: {
-        videoMixerModel.load()
-    }
-
     MixerPanelContextMenuModel {
         id: contextMenuModel
 
@@ -139,10 +131,10 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        contentWidth: contentRow.width + 1 // for trailing separator
-        contentHeight: Math.max(contentRow.height, height)
+        contentWidth: contentColumn.width + 1 // for trailing separator
+        contentHeight: Math.max(contentColumn.height, height)
 
-        implicitHeight: contentRow.height
+        implicitHeight: contentColumn.height
 
         interactive: (height < contentHeight || width < contentWidth) && !flickable.resourcePickingActive
 
@@ -182,15 +174,14 @@ ColumnLayout {
             spacing: prv.channelItemWidth
 
             Repeater {
-                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + (videoMixerModel.hasVideo ? 2 : 1)
-                                                             : mixerPanelModel.count + (videoMixerModel.hasVideo ? 1 : 0)
+                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + 1 : mixerPanelModel.count
 
                 SeparatorLine { orientation: Qt.Vertical }
             }
         }
 
-        Row {
-            id: contentRow
+        Column {
+            id: contentColumn
 
             anchors.bottom: parent.bottom
             width: childrenRect.width
@@ -199,14 +190,8 @@ ColumnLayout {
             property bool completed: false
 
             Component.onCompleted: {
-                contentRow.completed = true
+                contentColumn.completed = true
             }
-
-            Column {
-                id: contentColumn
-
-                width: childrenRect.width
-                spacing: 0
 
                 MixerSoundSection {
                     id: soundSection
@@ -357,137 +342,6 @@ ColumnLayout {
                         prv.setNavigateControlIndex(index)
                     }
                 }
-            }
-
-            Column {
-                id: videoMixerChannel
-
-                visible: videoMixerModel.hasVideo
-                width: visible ? prv.channelItemWidth : 0
-                spacing: 0
-
-                Item {
-                    width: parent.width
-                    height: soundSection.visible ? soundSection.height : 0
-                }
-
-                Item {
-                    width: parent.width
-                    height: fxSection.visible ? fxSection.height : 0
-                }
-
-                Item {
-                    width: parent.width
-                    height: auxSendsSection.visible ? auxSendsSection.height : 0
-                }
-
-                Item {
-                    width: parent.width
-                    height: balanceSection.visible ? balanceSection.height : 0
-                }
-
-                Item {
-                    width: parent.width
-                    height: volumeSection.visible ? volumeSection.height : 0
-
-                    RowLayout {
-                        anchors.centerIn: parent
-                        width: parent.width - 12
-                        spacing: 4
-
-                        StyledSlider {
-                            Layout.fillWidth: true
-                            from: 0
-                            to: 100
-                            stepSize: 1
-                            value: videoMixerModel.volumePercent
-                            enabled: videoMixerModel.hasVideo && !videoMixerModel.muted
-                            navigation.panel: videoNavigationPanel
-                            navigation.row: 1
-                            navigation.accessible.name: qsTrc("playback", "Video volume") + " " + videoMixerModel.volumePercent + "%"
-
-                            onMoved: {
-                                videoMixerModel.volumePercent = value
-                            }
-                        }
-
-                        StyledTextLabel {
-                            Layout.preferredWidth: 32
-                            horizontalAlignment: Text.AlignRight
-                            text: videoMixerModel.volumePercent + "%"
-                            font: ui.theme.captionFont
-                        }
-                    }
-                }
-
-                Item {
-                    width: parent.width
-                    height: faderSection.visible ? faderSection.height : 0
-                }
-
-                Item {
-                    width: parent.width
-                    height: muteAndSoloSection.visible ? muteAndSoloSection.height : 0
-
-                    Row {
-                        anchors.centerIn: parent
-                        spacing: 6
-
-                        FlatToggleButton {
-                            height: 20
-                            width: 20
-                            icon: IconCode.MUTE
-                            checked: videoMixerModel.muted
-                            enabled: videoMixerModel.hasVideo
-                            navigation.panel: videoNavigationPanel
-                            navigation.row: 2
-                            navigation.accessible.name: qsTrc("playback", "Video mute")
-
-                            onToggled: {
-                                videoMixerModel.muted = !checked
-                            }
-                        }
-
-                        FlatToggleButton {
-                            height: 20
-                            width: 20
-                            icon: IconCode.SOLO
-                            checked: videoMixerModel.solo
-                            enabled: videoMixerModel.hasVideo
-                            navigation.panel: videoNavigationPanel
-                            navigation.row: 3
-                            navigation.accessible.name: qsTrc("playback", "Video solo")
-
-                            onToggled: {
-                                videoMixerModel.solo = !videoMixerModel.solo
-                            }
-                        }
-                    }
-                }
-
-                Rectangle {
-                    width: parent.width
-                    height: titleSection.visible ? titleSection.height : 0
-                    color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
-                    border.color: ui.theme.accentColor
-                    border.width: 1
-
-                    StyledTextLabel {
-                        anchors.centerIn: parent
-                        width: parent.width - 12
-                        text: qsTrc("playback", "Video")
-                        font: ui.theme.bodyBoldFont
-                    }
-                }
-
-                NavigationPanel {
-                    id: videoNavigationPanel
-                    name: "VideoMixerPanel"
-                    section: root.navigationSection
-                    order: root.contentNavigationPanelOrderStart + mixerPanelModel.count + 1
-                    direction: NavigationPanel.Horizontal
-                }
-            }
         }
     }
 

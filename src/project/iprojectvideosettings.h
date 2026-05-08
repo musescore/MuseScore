@@ -33,6 +33,7 @@ struct VideoAttachmentSettings
     muse::io::path_t path;
     int offsetMs = 0;
     float volume = 1.f;
+    float balance = 0.f;
     bool muted = false;
     bool solo = false;
 
@@ -46,6 +47,7 @@ struct VideoAttachmentSettings
         return path == other.path
                && offsetMs == other.offsetMs
                && volume == other.volume
+               && balance == other.balance
                && muted == other.muted
                && solo == other.solo;
     }

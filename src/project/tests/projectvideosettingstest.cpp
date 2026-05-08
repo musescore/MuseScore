@@ -67,6 +67,7 @@ TEST(ProjectVideoSettingsTests, WriteAndReadAttachment)
     attachment.path = "media/reference-picture.mp4";
     attachment.offsetMs = -1250;
     attachment.volume = 0.75f;
+    attachment.balance = -0.25f;
     attachment.muted = true;
     attachment.solo = true;
 

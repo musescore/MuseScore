@@ -132,6 +132,28 @@ void VideoPanelModel::setVolumePercent(int volumePercent)
     updateAttachment(updated);
 }
 
+int VideoPanelModel::balance() const
+{
+    return std::clamp(static_cast<int>(attachment().balance * 100.f + (attachment().balance >= 0.f ? 0.5f : -0.5f)), -100, 100);
+}
+
+void VideoPanelModel::setBalance(int balance)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid()) {
+        return;
+    }
+
+    balance = std::clamp(balance, -100, 100);
+    const float scaledBalance = static_cast<float>(balance) / 100.f;
+    if (updated.balance == scaledBalance) {
+        return;
+    }
+
+    updated.balance = scaledBalance;
+    updateAttachment(updated);
+}
+
 bool VideoPanelModel::muted() const
 {
     return attachment().muted;
