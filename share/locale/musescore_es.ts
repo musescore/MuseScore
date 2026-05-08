@@ -30127,7 +30127,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="162"/>
         <source>After key signature</source>
-        <translation type="unfinished"/>
+        <translation>Después de la armadura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/VoltasPage.qml" line="168"/>

@@ -3296,7 +3296,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9384"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="9403"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Palauta &apos;Viivan tyyli&apos; -arvo</translation>
+        <translation>Palauta &apos;Viivatyyli&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="7931"/>
@@ -7515,7 +7515,7 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1344"/>
         <source>St&amp;aff text</source>
-        <translation>Viivaston &amp;teksti</translation>
+        <translation>Viivasto&amp;teksti</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1345"/>
@@ -10043,7 +10043,8 @@ saat uusia versioita ja lisätietoja.</translation>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999–2026 MuseScore Limited ja muut.
+Julkaistu &lt;a href=&quot;%1&quot;&gt;GNU General Public License -lisenssin version 3&lt;/a&gt; mukaisesti.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10058,7 +10059,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="72"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</translation>
+        <translation>Copyright © 2004–2021 MusicXML-spesifikaation tekijät (Contributors to the MusicXML Specification). Julkaisija: Music Notation Community Group -yhteisö W3C:n Community Final Specification Agreement (FSA) -sopimuksen mukaisesti:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="96"/>
@@ -10472,7 +10473,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation type="unfinished"/>
+        <translation>Sisältää tärkeitä uusia nuotinkirjoitustyökaluja, merkittäviä parannuksia toistoon, videoviennin, dive-merkinnät kitaralle sekä työnkulkua nopeuttavia ominaisuuksia.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -23836,7 +23837,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="119"/>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="45"/>
         <source>Line style</source>
-        <translation>Viivan tyyli</translation>
+        <translation>Viivatyyli</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="127"/>
@@ -33738,7 +33739,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio driver</source>
-        <translation type="unfinished"/>
+        <translation>Ääniajuri</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -34623,12 +34624,12 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="64"/>
         <source>No audio devices available</source>
-        <translation type="unfinished"/>
+        <translation>Äänilaitteita ei ole saatavilla</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Valitulle ääniajulle ei löydy käytettävissä olevia äänilaitteita. MuseScore Studio käyttää sen sijaan oletusääniajuriaan. Jos haluat käyttää ajuria %1, varmista, että laitteistosi on määritetty oikein, käynnistä MuseScore Studio uudelleen ja yritä uudelleen.</translation>
     </message>
 </context>
 <context>
@@ -35756,12 +35757,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
         <source>Use page layout</source>
-        <translation type="unfinished"/>
+        <translation>Käytä sivuasettelua</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
         <source>Reflow to fit video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Muotoile videon tarkkuuteen sopivaksi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
@@ -35810,7 +35811,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
         <source>Video resolution</source>
-        <translation type="unfinished"/>
+        <translation>Videon tarkkuus</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="165"/>
