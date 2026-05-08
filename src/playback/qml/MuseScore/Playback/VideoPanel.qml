@@ -36,6 +36,9 @@ Item {
     property NavigationSection navigationSection: null
     property int contentNavigationPanelOrderStart: 0
 
+    readonly property int contentMargin: 8
+    readonly property bool compactMode: width < 620
+
     clip: true
 
     VideoPanelModel {
@@ -83,15 +86,20 @@ Item {
         }
     }
 
-    RowLayout {
+    GridLayout {
         anchors.fill: parent
-        anchors.margins: 8
-        spacing: 12
+        anchors.margins: root.contentMargin
+
+        columns: root.compactMode ? 1 : 2
+        rowSpacing: 8
+        columnSpacing: 12
 
         Rectangle {
             Layout.preferredWidth: 230
             Layout.maximumWidth: 280
-            Layout.fillHeight: true
+            Layout.fillWidth: root.compactMode
+            Layout.fillHeight: !root.compactMode
+            Layout.preferredHeight: root.compactMode ? 96 : -1
             Layout.minimumHeight: 72
 
             radius: 4
@@ -163,8 +171,8 @@ Item {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.minimumWidth: 360
+            Layout.fillHeight: !root.compactMode
+            Layout.minimumWidth: 0
             spacing: 8
 
             RowLayout {
@@ -205,7 +213,7 @@ Item {
                 }
 
                 StyledTextLabel {
-                    Layout.preferredWidth: 92
+                    Layout.preferredWidth: root.compactMode ? 64 : 92
                     horizontalAlignment: Text.AlignRight
                     text: videoModel.hasVideo ? Math.floor(video.position / 1000) + " / " + Math.floor(video.duration / 1000) + " s" : ""
                 }
@@ -226,6 +234,7 @@ Item {
             }
 
             RowLayout {
+                Layout.fillWidth: true
                 spacing: 8
 
                 StyledTextLabel {
@@ -233,7 +242,7 @@ Item {
                 }
 
                 FlatButton {
-                    text: qsTrc("playback", "-100 ms")
+                    text: root.compactMode ? qsTrc("playback", "-100") : qsTrc("playback", "-100 ms")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
                     navigation.order: root.contentNavigationPanelOrderStart + 6
@@ -244,7 +253,7 @@ Item {
                 }
 
                 TextInputField {
-                    Layout.preferredWidth: 88
+                    Layout.preferredWidth: root.compactMode ? 64 : 88
                     currentText: videoModel.offsetMs.toString()
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
@@ -263,7 +272,7 @@ Item {
                 }
 
                 FlatButton {
-                    text: qsTrc("playback", "+100 ms")
+                    text: root.compactMode ? qsTrc("playback", "+100") : qsTrc("playback", "+100 ms")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
                     navigation.order: root.contentNavigationPanelOrderStart + 8
