@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+
 # Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)

@@ -570,8 +570,8 @@ DockPage {
             objectName: root.pageModel.videoPanelName()
             title: qsTrc("appshell", "Video")
 
-            height: 260
-            minimumHeight: root.horizontalPanelMinHeight
+            height: 150
+            minimumHeight: 96
             maximumHeight: root.horizontalPanelMaxHeight
 
             minimumWidth: root.panelMinDimension

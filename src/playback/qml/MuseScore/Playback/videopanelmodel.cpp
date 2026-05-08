@@ -68,6 +68,12 @@ QString VideoPanelModel::videoPath() const
     return attachment().path.toQString();
 }
 
+QUrl VideoPanelModel::videoUrl() const
+{
+    const QString path = videoPath();
+    return path.isEmpty() ? QUrl() : QUrl::fromLocalFile(path);
+}
+
 void VideoPanelModel::setVideoPath(const QString& path)
 {
     IProjectVideoSettingsPtr settings = videoSettings();
