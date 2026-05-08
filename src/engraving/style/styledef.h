@@ -305,6 +305,7 @@ enum class Sid : short {
     lastSystemFillLimit,
 
     enableStaveSharing,
+    allowVoiceCrossing,
 
     hairpinPlacement,
     hairpinPosAbove,

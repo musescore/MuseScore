@@ -538,6 +538,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("show-gap-rests"),
             makeMenuItem("show-line-attach-points"),
             makeMenuItem("mark-empty-staff-visibility-overrides"),
+            makeMenuItem("show-both-origin-and-combined"),
             makeMenuItem("mark-corrupted-measures"),
             makeMenuItem("check-for-score-corruptions")
         };

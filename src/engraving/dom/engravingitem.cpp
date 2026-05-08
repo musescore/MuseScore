@@ -1325,6 +1325,54 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    if (originItem->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->type() == originItem->type()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->m_sharedItem == nullptr && originItem->m_originItems.empty()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(!(originItem->m_sharedItem && originItem->m_sharedItem != sharedItem)) {
+        disconnectSharedItem(originItem->m_sharedItem, originItem);
+    }
+
+    originItem->m_sharedItem = sharedItem;
+
+    std::vector<EngravingItem*>& curOriginItems = sharedItem->m_originItems;
+    auto it = std::lower_bound(curOriginItems.begin(), curOriginItems.end(), originItem, [](EngravingItem* item1, EngravingItem* item2) {
+        return item1->track() < item2->track();
+    });
+
+    curOriginItems.insert(it, originItem);
+}
+
+void EngravingItem::disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    IF_ASSERT_FAILED(originItem->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    originItem->m_sharedItem = nullptr;
+
+    DO_ASSERT(muse::remove(sharedItem->m_originItems, originItem));
+}
+
+void EngravingItem::disconnectAllOriginItems(EngravingItem* sharedItem)
+{
+    for (EngravingItem* originItem : sharedItem->originItems()) {
+        originItem->m_sharedItem = nullptr;
+    }
+
+    sharedItem->m_originItems.clear();
+}
+
 bool EngravingItem::isBefore(const EngravingItem* item) const
 {
     if (!item) {

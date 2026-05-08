@@ -2763,6 +2763,13 @@ const UiActionList NotationUiActions::s_engravingDebuggingActions = {
              TranslatableString("action", "Show gap rests"),
              Checkable::Yes
              ),
+    UiAction("show-both-origin-and-combined",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show both origin and combined staves"),
+             TranslatableString("action", "Show both origin and combined staves"),
+             Checkable::Yes
+             ),
     UiAction("check-for-score-corruptions",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

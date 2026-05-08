@@ -672,6 +672,12 @@ public:
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 
+    EngravingItem* sharedItem() const { return m_sharedItem; }
+    const std::vector<EngravingItem*>& originItems() const { return m_originItems; }
+    static void connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
+    static void disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
+    static void disconnectAllOriginItems(EngravingItem* sharedItem);
+
     virtual bool isBefore(const EngravingItem* item) const;
 
     //! --- Old Interface ---
@@ -747,6 +753,9 @@ private:
     Parenthesis* m_rightParenthesis = nullptr;
     void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
     void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
+
+    EngravingItem* m_sharedItem = nullptr;
+    std::vector<EngravingItem*> m_originItems;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;
