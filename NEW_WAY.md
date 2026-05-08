@@ -17,6 +17,19 @@ But I believe we can handle it!
 It's more a description of the experience we're currently gaining.
 After we gain enough experience, we'll describe the process.*
 
+## How do we feel about MF
+
+There are at least two approaches to MF:
+
+1. MF is a separate product (like Qt).
+In this case, it develops independently, has versioning and release cycles, is stable (it doesn't break in minor versions), has its own testing system, including a sample application, and so on. 
+
+2. MF is simply a shared component of two products, MuseScore and Audacity. Any change is made to improve one or both products. Any change takes into account the impact on these two products.
+
+
+We're currently choosing the second approach.
+But in the future, it's entirely possible we'll move toward the first approach.
+
 ## Local development 
 
 We're in the process of transitioning to a new development process...
