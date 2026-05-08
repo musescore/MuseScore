@@ -31772,7 +31772,7 @@ failed.</translation>
         <translation type="unfinished">Line (left arrowhead)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="424"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="425"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1686"/>
         <source>Blank</source>
         <translation type="unfinished">Blank</translation>
@@ -32032,21 +32032,21 @@ failed.</translation>
         <translation type="unfinished">Palm mute</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="486"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="487"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1328"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1913"/>
         <source>Chord bracket</source>
         <translation type="unfinished">Chord bracket</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="487"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="488"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1329"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1914"/>
         <source>Chord bracket (play with left hand)</source>
         <translation type="unfinished">Chord bracket (play with left hand)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecompat.cpp" line="488"/>
+        <location filename="../../src/palette/internal/palettecompat.cpp" line="489"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1915"/>
         <source>Chord bracket (play with right hand)</source>
