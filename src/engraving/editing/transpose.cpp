@@ -730,11 +730,64 @@ Key Transpose::transposeKey(Key key, const Interval& interval, PreferSharpFlat p
 
 int Transpose::transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats)
 {
-    int deltaTpc = (interval.chromatic * TPC_DELTA_SEMITONE) - (interval.diatonic * TPC_DELTA_ENHARMONIC);
-    if (!tpcIsValid(tpc) || deltaTpc == 0) { // perfect unison & perfect octave
+    if (tpc == Tpc::TPC_INVALID) { // perfect unison & perfect octave
         return tpc;
     }
-    return clampEnharmonic(tpc + deltaTpc, useDoubleSharpsFlats);
+
+    int minAlter;
+    int maxAlter;
+    if (useDoubleSharpsFlats) {
+        minAlter = -2;
+        maxAlter = 2;
+    } else {
+        minAlter = -1;
+        maxAlter = 1;
+    }
+    int steps     = interval.diatonic;
+    int semitones = interval.chromatic;
+
+// LOGD("transposeTpc tpc %d steps %d semitones %d", tpc, steps, semitones);
+    if (semitones == 0 && steps == 0) {
+        return tpc;
+    }
+
+    int step;
+    int alter;
+    int pitch = tpc2pitch(tpc);
+
+    for (int k = 0; k < 10; ++k) {
+        step = tpc2step(tpc) + steps;
+        while (step < 0) {
+            step += 7;
+        }
+        step   %= 7;
+        int p1 = tpc2pitch(step2tpc(step, AccidentalVal::NATURAL));
+        alter  = semitones - (p1 - pitch);
+        // alter  = p1 + semitones - pitch;
+
+//            if (alter < 0) {
+//                  alter *= -1;
+//                  alter = 12 - alter;
+//                  }
+        while (alter < 0) {
+            alter += 12;
+        }
+
+        alter %= 12;
+        if (alter > 6) {
+            alter -= 12;
+        }
+        if (alter > maxAlter) {
+            ++steps;
+        } else if (alter < minAlter) {
+            --steps;
+        } else {
+            break;
+        }
+//            LOGD("  again alter %d steps %d, step %d", alter, steps, step);
+    }
+//      LOGD("  = step %d alter %d  tpc %d", step, alter, step2tpc(step, alter));
+    return step2tpc(step, AccidentalVal(alter));
 }
 
 //---------------------------------------------------------
