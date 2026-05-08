@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXPECTED_URL: https://github.com/musescore/muse_framework.git
+      EXPECTED_BRANCH: main
     steps:
     - name: Clone repository
       uses: actions/checkout@v6
@@ -23,7 +24,7 @@ jobs:
           exit 1
         fi
 
-    - name: Verify muse_framework commit is in upstream
+    - name: Verify muse_framework commit matches upstream HEAD
       run: |
         SHA=$(git ls-tree HEAD muse | awk '{print $3}')
         if [ -z "${SHA}" ]; then
@@ -32,8 +33,11 @@ jobs:
         fi
         echo "Pinned commit: ${SHA}"
         TMP=$(mktemp -d)
-        git clone --quiet --filter=tree:0 --no-checkout --single-branch --branch main "${EXPECTED_URL}" "${TMP}"
-        if ! git -C "${TMP}" merge-base --is-ancestor "${SHA}" origin/main; then
-          echo "::error::muse_framework is pinned to ${SHA}, which is not on the main branch of ${EXPECTED_URL}"
+        git clone --quiet --filter=tree:0 --no-checkout --single-branch --branch "${EXPECTED_BRANCH}" "${EXPECTED_URL}" "${TMP}"
+        UPSTREAM_HEAD=$(git -C "${TMP}" rev-parse origin/${EXPECTED_BRANCH}^{commit})
+        echo "Upstream ${EXPECTED_BRANCH} HEAD: ${UPSTREAM_HEAD}"
+        if [ "${SHA}" != "${UPSTREAM_HEAD}" ]; then
+          echo "::error::muse_framework is pinned to ${SHA}, expected ${UPSTREAM_HEAD} (HEAD of ${EXPECTED_BRANCH} in ${EXPECTED_URL})"
+          echo "please ensure the submodule is up to date by running `git submodule update --init --remote ./muse`"
           exit 1
         fi
