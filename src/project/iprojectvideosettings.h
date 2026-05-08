@@ -34,6 +34,7 @@ struct VideoAttachmentSettings
     int offsetMs = 0;
     float volume = 1.f;
     bool muted = false;
+    bool solo = false;
 
     bool isValid() const
     {
@@ -45,7 +46,8 @@ struct VideoAttachmentSettings
         return path == other.path
                && offsetMs == other.offsetMs
                && volume == other.volume
-               && muted == other.muted;
+               && muted == other.muted
+               && solo == other.solo;
     }
 
     bool operator!=(const VideoAttachmentSettings& other) const

@@ -43,6 +43,7 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(int offsetMs READ offsetMs WRITE setOffsetMs NOTIFY videoSettingsChanged)
     Q_PROPERTY(int volumePercent READ volumePercent WRITE setVolumePercent NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY videoSettingsChanged)
+    Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool scorePlaying READ scorePlaying NOTIFY playbackSyncChanged)
     Q_PROPERTY(int scorePlaybackPositionMs READ scorePlaybackPositionMs NOTIFY playbackSyncChanged)
 
@@ -71,6 +72,9 @@ public:
 
     bool muted() const;
     void setMuted(bool muted);
+
+    bool solo() const;
+    void setSolo(bool solo);
 
     bool scorePlaying() const;
     int scorePlaybackPositionMs() const;

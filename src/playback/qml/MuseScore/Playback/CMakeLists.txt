@@ -69,6 +69,7 @@ qt_add_qml_module(playback_qml
         internal/MixerSoundSection.qml
         internal/MixerTitleSection.qml
         internal/MixerVolumeSection.qml
+        internal/VideoMixerSection.qml
         internal/PlaybackSpeedPopup.qml
         internal/PlaybackSpeedSlider.qml
         internal/PlaybackToolBarActions.qml

@@ -148,6 +148,25 @@ void VideoPanelModel::setMuted(bool muted)
     updateAttachment(updated);
 }
 
+bool VideoPanelModel::solo() const
+{
+    return attachment().solo;
+}
+
+void VideoPanelModel::setSolo(bool solo)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid() || updated.solo == solo) {
+        return;
+    }
+
+    updated.solo = solo;
+    if (solo) {
+        updated.muted = false;
+    }
+    updateAttachment(updated);
+}
+
 bool VideoPanelModel::scorePlaying() const
 {
     return playbackController()->isPlaying();
