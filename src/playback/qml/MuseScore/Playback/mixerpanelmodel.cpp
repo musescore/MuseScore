@@ -364,7 +364,6 @@ void MixerPanelModel::setupConnections()
             outParams.muted = attachment.muted;
             outParams.solo = attachment.solo;
             loadOutputParams(item, std::move(outParams));
-            applyVideoSoloToPlayback();
         }, Asyncable::Mode::SetReplace);
     }
 }
@@ -596,7 +595,6 @@ MixerChannelItem* MixerPanelModel::buildVideoChannelItem()
     outParams.muted = attachment.muted;
     outParams.solo = attachment.solo;
     loadOutputParams(item, std::move(outParams));
-    applyVideoSoloToPlayback();
 
     connect(item, &MixerChannelItem::controlParamsChanged, this, [this](const AudioOutputParams& params) {
         IProjectVideoSettingsPtr settings = videoSettings();
@@ -632,7 +630,6 @@ MixerChannelItem* MixerPanelModel::buildVideoChannelItem()
             updated.muted = false;
         }
         settings->setAttachment(updated);
-        applyVideoSoloToPlayback();
     });
 
     return item;
@@ -699,21 +696,6 @@ void MixerPanelModel::loadOutputParams(MixerChannelItem* item, AudioOutputParams
 
     item->loadOutputParams(std::move(params));
     updateOutputResourceItemCount();
-}
-
-void MixerPanelModel::applyVideoSoloToPlayback()
-{
-    if (!audioSettings() || !playback()) {
-        return;
-    }
-
-    AudioOutputParams masterParams = audioSettings()->masterAudioOutputParams();
-    IProjectVideoSettingsPtr settings = videoSettings();
-    if (settings && settings->attachment().isValid() && settings->attachment().solo) {
-        masterParams.muted = true;
-    }
-
-    playback()->setMasterControlParams(masterParams.control());
 }
 
 void MixerPanelModel::updateOutputResourceItemCount()

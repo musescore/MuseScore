@@ -110,7 +110,6 @@ private:
     MixerChannelItem* findChannelItem(const muse::audio::TrackId& trackId) const;
 
     void loadOutputParams(MixerChannelItem* item, project::AudioOutputParams&& params);
-    void applyVideoSoloToPlayback();
     void updateOutputResourceItemCount();
 
     project::INotationProjectPtr currentProject() const;

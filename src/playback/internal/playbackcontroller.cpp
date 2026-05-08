@@ -1040,6 +1040,35 @@ mu::project::IProjectAudioSettingsPtr PlaybackController::audioSettings() const
     return globalContext()->currentProject()->audioSettings();
 }
 
+mu::project::IProjectVideoSettingsPtr PlaybackController::videoSettings() const
+{
+    if (!globalContext()->currentProject()) {
+        return nullptr;
+    }
+
+    return globalContext()->currentProject()->videoSettings();
+}
+
+void PlaybackController::updateMasterControlParams()
+{
+    if (!globalContext()->currentProject() || !playback()) {
+        return;
+    }
+
+    IProjectAudioSettingsPtr audioSettingsPtr = audioSettings();
+    IF_ASSERT_FAILED(audioSettingsPtr) {
+        return;
+    }
+
+    AudioOutputParams params = audioSettingsPtr->masterAudioOutputParams();
+    IProjectVideoSettingsPtr videoSettingsPtr = videoSettings();
+    if (videoSettingsPtr && videoSettingsPtr->attachment().isValid() && videoSettingsPtr->attachment().solo) {
+        params.muted = true;
+    }
+
+    playback()->setMasterControlParams(params.control());
+}
+
 void PlaybackController::resetPlayback()
 {
     if (currentPlayer()) {
@@ -1352,7 +1381,7 @@ void PlaybackController::setupPlayback()
     const AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->setMasterFxChainParams(masterOutputParams.fxChain);
     playback()->setMasterAuxSendsParams(masterOutputParams.auxSends);
-    playback()->setMasterControlParams(masterOutputParams.control());
+    updateMasterControlParams();
 
     subscribeOnAudioParamsChanges();
     setupTracks();
@@ -1471,6 +1500,12 @@ void PlaybackController::setupTracks()
         this, [this](aux_channel_idx_t, const notation::INotationSoloMuteState::SoloMuteState&) {
         updateSoloMuteStates();
     });
+
+    if (videoSettings()) {
+        videoSettings()->settingsChanged().onNotify(this, [this]() {
+            updateMasterControlParams();
+        }, Asyncable::Mode::SetReplace);
+    }
 
     m_isPlayAllowedChanged.notify();
 }
