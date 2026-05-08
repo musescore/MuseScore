@@ -103,16 +103,16 @@ Item {
         anchors.fill: parent
         anchors.margins: root.contentMargin
 
-        columns: root.compactMode ? 1 : 2
+        columns: 1
         rowSpacing: 8
         columnSpacing: 12
 
         Rectangle {
-            Layout.preferredWidth: root.compactMode ? -1 : Math.max(320, root.width * 0.45)
-            Layout.maximumWidth: root.compactMode ? 16777215 : 720
+            Layout.preferredWidth: -1
+            Layout.maximumWidth: 16777215
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredHeight: root.compactMode ? Math.max(140, root.height - root.controlsHeight - (root.contentMargin * 2) - 8) : -1
+            Layout.preferredHeight: Math.max(140, root.height - root.controlsHeight - (root.contentMargin * 2) - 8)
             Layout.minimumHeight: 72
 
             radius: 4
@@ -186,7 +186,7 @@ Item {
             id: controlsColumn
 
             Layout.fillWidth: true
-            Layout.fillHeight: !root.compactMode
+            Layout.fillHeight: false
             Layout.minimumWidth: 0
             spacing: 8
 
