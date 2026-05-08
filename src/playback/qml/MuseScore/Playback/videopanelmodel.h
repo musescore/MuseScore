@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "project/iprojectvideosettings.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::playback {
 class VideoPanelModel : public QObject, public muse::Contextable, public muse::async::Asyncable
@@ -42,10 +43,13 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(int offsetMs READ offsetMs WRITE setOffsetMs NOTIFY videoSettingsChanged)
     Q_PROPERTY(int volumePercent READ volumePercent WRITE setVolumePercent NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY videoSettingsChanged)
+    Q_PROPERTY(bool scorePlaying READ scorePlaying NOTIFY playbackSyncChanged)
+    Q_PROPERTY(int scorePlaybackPositionMs READ scorePlaybackPositionMs NOTIFY playbackSyncChanged)
 
     QML_ELEMENT
 
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::Inject<IPlaybackController> playbackController = { this };
 
 public:
     explicit VideoPanelModel(QObject* parent = nullptr);
@@ -68,13 +72,20 @@ public:
     bool muted() const;
     void setMuted(bool muted);
 
+    bool scorePlaying() const;
+    int scorePlaybackPositionMs() const;
+
 signals:
     void videoSettingsChanged();
+    void playbackSyncChanged();
 
 private:
     project::IProjectVideoSettingsPtr videoSettings() const;
     project::VideoAttachmentSettings attachment() const;
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
     void listenCurrentProject();
+    void listenPlaybackController();
+
+    int m_scorePlaybackPositionMs = 0;
 };
 }

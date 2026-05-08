@@ -42,8 +42,45 @@ Item {
         id: videoModel
     }
 
+    readonly property int syncToleranceMs: 180
+
     Component.onCompleted: {
         videoModel.load()
+    }
+
+    function targetVideoPositionMs() {
+        return Math.max(0, Math.min(video.duration, videoModel.scorePlaybackPositionMs + videoModel.offsetMs))
+    }
+
+    function syncVideoToScore(forceSeek) {
+        if (!videoModel.hasVideo || video.duration <= 0) {
+            return
+        }
+
+        var targetPosition = targetVideoPositionMs()
+        if (forceSeek || Math.abs(video.position - targetPosition) > syncToleranceMs) {
+            video.seek(targetPosition)
+        }
+
+        if (videoModel.scorePlaying) {
+            if (targetPosition < video.duration && video.playbackState !== MediaPlayer.PlayingState) {
+                video.play()
+            }
+        } else if (video.playbackState === MediaPlayer.PlayingState) {
+            video.pause()
+        }
+    }
+
+    Connections {
+        target: videoModel
+
+        function onPlaybackSyncChanged() {
+            root.syncVideoToScore(false)
+        }
+
+        function onVideoSettingsChanged() {
+            root.syncVideoToScore(true)
+        }
     }
 
     RowLayout {
@@ -76,6 +113,10 @@ Item {
 
                 onSourceChanged: {
                     stop()
+                }
+
+                onDurationChanged: {
+                    root.syncVideoToScore(true)
                 }
             }
 
