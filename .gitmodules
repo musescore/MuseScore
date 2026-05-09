@@ -1,3 +1,4 @@
 [submodule "muse_framework"]
 	path = muse
-	url = https://github.com/musescore/muse_framework.git
+	url = https://github.com/juli27/muse_framework.git
+	branch = refactorSFPM
