@@ -9209,6 +9209,8 @@ static void addChordLine(const Notation& notation, Note* note,
                          MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
+    const String lineType = notation.attribute(u"line-type");
+    const String lineShape = notation.attribute(u"line-shape");
     if (!chordLineType.empty()) {
         if (note) {
             ChordLine* const chordline = Factory::createChordLine(note->chord());
@@ -9220,6 +9222,14 @@ static void addChordLine(const Notation& notation, Note* note,
                 chordline->setChordLineType(ChordLineType::PLOP);
             } else if (chordLineType == u"scoop") {
                 chordline->setChordLineType(ChordLineType::SCOOP);
+            }
+            if (lineShape == u"straight") {
+                chordline->setStraight(true);
+            }
+            if (lineType == u"wavy") {
+                chordline->setWavy(true);
+            } else if (lineType != u"solid") {
+                logger->logError(String(u"unsupported line-type: %1").arg(lineType), xmlreader);
             }
             chordline->setVisible(notation.visible());
             colorItem(chordline, Color::fromString(notation.attribute(u"color")));
