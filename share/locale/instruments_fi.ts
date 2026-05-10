@@ -21014,7 +21014,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="53"/>
         <source>Jazz Lead Sheet</source>
-        <translation>Jazz Lead Sheet</translation>
+        <translation>Jazz-lead sheet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="54"/>
