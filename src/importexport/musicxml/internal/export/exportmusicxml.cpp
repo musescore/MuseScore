@@ -3360,6 +3360,12 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             }
             if (!subtype.empty()) {
                 subtype += color2xml(cl);
+                if (cl->isStraight()) {
+                    subtype += u" line-shape=\"straight\"";
+                }
+                if (cl->isWavy()) {
+                    subtype += u" line-type=\"wavy\"";
+                }
                 notations.tag(xml, cl, "articulations");
                 xml.tagRaw(subtype);
             }
