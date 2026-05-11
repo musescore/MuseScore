@@ -7805,31 +7805,34 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         // handle brackets
         for (size_t i = 0; i < part->nstaves(); i++) {
             Staff* st = part->staff(i);
-            if (st) {
-                for (size_t j = 0; j < st->bracketLevels() + 1; j++) {
-                    if (st->bracketType(j) != BracketType::NO_BRACKET) {
-                        bracketFound = true;
-                        if (i == 0) {
-                            // OK, found bracket in first staff of part
-                            // filter out implicit brackets
-                            if (!(st->bracketSpan(j) == part->nstaves()
-                                  && st->bracketType(j) == BracketType::BRACE)) {
-                                // filter out brackets starting in the last part
-                                // as they cannot span multiple parts
-                                if (idx < parts.size() - 1) {
-                                    // add others
-                                    int number = findPartGroupNumber(partGroupEnd);
-                                    if (number < MAX_PART_GROUPS) {
-                                        const BracketItem* bi = st->brackets().at(j);
-                                        partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
-                                        partGroupEnd[number] = static_cast<int>(staffCount + st->bracketSpan(j));
-                                    }
-                                }
-                            }
-                        } else {
-                            // bracket in other staff not supported in MusicXML
-                            LOGD("bracket starting in staff %zu not supported", i + 1);
-                        }
+            if (!st) {
+                continue;
+            }
+            const staff_idx_t staffIdx = st->idx();
+            for (size_t j = 0; j < score->bracketLevels(st) + 1; j++) {
+                if (score->bracketType(st, j) == BracketType::NO_BRACKET) {
+                    continue;
+                }
+                bracketFound = true;
+                if (i != 0) {
+                    // bracket in other staff not supported in MusicXML
+                    LOGD("bracket starting in staff %zu not supported", i + 1);
+                    continue;
+                }
+                // OK, found bracket in first staff of part
+                // filter out implicit brackets
+                if (score->bracketSpan(st, j) == part->nstaves() && score->bracketType(st, j) == BracketType::BRACE) {
+                    continue;
+                }
+                // filter out brackets starting in the last part
+                // as they cannot span multiple parts
+                if (idx < parts.size() - 1) {
+                    // add others
+                    int number = findPartGroupNumber(partGroupEnd);
+                    if (number < MAX_PART_GROUPS) {
+                        const BracketItem* bi = score->brackets(st).at(j);
+                        partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
+                        partGroupEnd[number] = static_cast<int>(staffCount + score->bracketSpan(st, j));
                     }
                 }
             }

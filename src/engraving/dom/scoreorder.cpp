@@ -409,7 +409,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
         size_t braceSpan { 0 };
         for (Staff* staff : part->staves()) {
             // Create copy, because the original is modified while we are iterating over it
-            std::vector<BracketItem*> brackets = staff->brackets();
+            std::vector<BracketItem*> brackets = score->brackets(staff);
 
             for (BracketItem* bi : brackets) {
                 if (bi->bracketType() == BracketType::GROUP) {

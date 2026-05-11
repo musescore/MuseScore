@@ -398,6 +398,11 @@ const PaddingTable& DomAccessor::paddingTable() const
     return score()->paddingTable();
 }
 
+const std::vector<BracketItem*>& DomAccessor::brackets(const Staff* staff) const
+{
+    return score()->brackets(staff);
+}
+
 ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track)
 {
     IF_ASSERT_FAILED(score()) {

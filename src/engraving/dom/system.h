@@ -206,7 +206,7 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    size_t getBracketsColumnsCount();
+    size_t getBracketsColumnsCount() const;
 
     void resetShortestLongestChordRest();
 

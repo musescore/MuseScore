@@ -70,10 +70,10 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        staff()->setBracketType(column(), BracketType(v.toInt())); // change bracket type global
+        score()->setBracketType(startStaff(), column(), BracketType(v.toInt())); // change bracket type global
         break;
     case Pid::BRACKET_COLUMN:
-        staff()->changeBracketColumn(column(), static_cast<size_t>(v.toInt()));
+        score()->changeBracketColumn(startStaff(), column(), static_cast<size_t>(v.toInt()));
         break;
     case Pid::BRACKET_SPAN:
         m_bracketSpan = static_cast<size_t>(v.toInt());
@@ -121,14 +121,14 @@ PropertyValue BracketItem::propertyDefault(Pid id) const
 
 bool BracketItem::intersects(const BracketItem* other) const
 {
-    staff_idx_t firstOfOther = other->staff()->idx();
+    staff_idx_t firstOfOther = other->startStaff()->idx();
     staff_idx_t lastOfOther = firstOfOther + other->bracketSpan() - 1;
     return intersects(firstOfOther, lastOfOther);
 }
 
 bool BracketItem::intersects(staff_idx_t first, staff_idx_t last) const
 {
-    staff_idx_t firstOfThis = staff()->idx();
+    staff_idx_t firstOfThis = m_startStaff->idx();
     staff_idx_t lastOfThis = firstOfThis + bracketSpan() - 1;
     return firstOfThis <= last && lastOfThis >= first;
 }

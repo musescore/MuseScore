@@ -50,8 +50,8 @@ public:
     BracketType bracketType() const { return m_bracketType; }
     void setBracketSpan(size_t v) { m_bracketSpan = v; }
     void setBracketType(BracketType v) { m_bracketType = v; }
-    Staff* staff() const { return m_staff; }
-    void setStaff(Staff* s) { m_staff = s; }
+    Staff* startStaff() const { return m_startStaff; }
+    void setStartStaff(Staff* staff) { m_startStaff = staff; }
     size_t column() const { return m_column; }
     void setColumn(size_t v) { m_column = v; }
 
@@ -76,7 +76,8 @@ private:
     BracketType m_bracketType = BracketType::NO_BRACKET;
     size_t m_column = 0;
     size_t m_bracketSpan = 0;
-    Staff* m_staff = nullptr;
+    Staff* m_startStaff = nullptr;
+    Staff* m_endStaff = nullptr;
 
     StaffLabel m_name = StaffLabel(muse::mtrc("systemBrackets", "GROUP"), muse::mtrc("systemBrackets", "GR.", "Short for GROUP"));
     bool m_showText = true;

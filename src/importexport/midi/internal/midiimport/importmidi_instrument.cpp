@@ -646,22 +646,23 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             part->setStaves(1);
         }
 
+        Staff* staff = part->staff(0);
         if (part->nstaves() == 1) {
             if (track.mtrack->drumTrack()) {
-                part->staff(0)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                 if (!instr) {
                     part->instrument()->setDrumset(smDrumset);
                 }
             }
         } else {
             if (!instr) {
-                part->staff(0)->setBarLineSpan(true);
-                part->staff(0)->setBracketType(0, BracketType::BRACE);
+                staff->setBarLineSpan(true);
+                score->setBracketType(staff, 0, BracketType::BRACE);
             } else {
-                part->staff(0)->setBarLineSpan(instr->barlineSpan[0]);
-                part->staff(0)->setBracketType(0, instr->bracket[0]);
+                staff->setBarLineSpan(instr->barlineSpan[0]);
+                score->setBracketType(staff, 0, instr->bracket[0]);
             }
-            part->staff(0)->setBracketSpan(0, 2);
+            score->setBracketSpan(staff, 0, 2);
         }
 
         if (instr) {
