@@ -616,25 +616,29 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
     IF_ASSERT_FAILED(staff) {
         return false;
     }
+    const staff_idx_t staffIdx = staff->idx();
 
-    for (size_t j = 0; j < staff->bracketLevels() + 1; j++) {
-        if (staff->bracketType(j) != BracketType::NO_BRACKET) {
-            libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(staff->bracketType(j), staff->barLineSpan());
-            // mark at which staff we will need to close the staffGrp
-            int end = static_cast<int>(staff->idx() + staff->bracketSpan(j)) - 1;
-            // Something is wrong, maybe a staff was delete in the MuseScore file?
-            if (end >= static_cast<int>(ends.size())) {
-                continue;
-            }
-            ends.at(end)++;
-            //
-            m_currentNode = m_currentNode.append_child();
-            meiStaffGrp.Write(m_currentNode);
-            // If we have a part and reached the latest level, write the label and labelAbbr
-            if (staffGrpPart && j == staff->bracketLevels()) {
-                this->writeLabel(m_currentNode, staffGrpPart);
-                this->writeInstrDef(m_currentNode, staffGrpPart);
-            }
+    for (size_t j = 0; j < m_score->bracketLevels(staff) + 1; j++) {
+        BracketType bracketType = m_score->bracketType(staff, j);
+        if (bracketType == BracketType::NO_BRACKET) {
+            continue;
+        }
+
+        libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(bracketType, staff->barLineSpan());
+        // mark at which staff we will need to close the staffGrp
+        int end = static_cast<int>(staffIdx + m_score->bracketSpan(staff, j)) - 1;
+        // Something is wrong, maybe a staff was delete in the MuseScore file?
+        if (end >= static_cast<int>(ends.size())) {
+            continue;
+        }
+        ends.at(end)++;
+        //
+        m_currentNode = m_currentNode.append_child();
+        meiStaffGrp.Write(m_currentNode);
+        // If we have a part and reached the latest level, write the label and labelAbbr
+        if (staffGrpPart && j == m_score->bracketLevels(staff)) {
+            this->writeLabel(m_currentNode, staffGrpPart);
+            this->writeInstrDef(m_currentNode, staffGrpPart);
         }
     }
     return true;

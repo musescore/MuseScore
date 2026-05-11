@@ -2373,7 +2373,7 @@ class Staff : public ScoreElement
 
     /// List of bracket items for this staff.
     /// \since MuseScore 4.6
-    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> brackets READ brackets)
+    // Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> brackets READ brackets) TODO deprecated
 
 public:
     /// \cond MS_INTERNAL
@@ -2387,7 +2387,7 @@ public:
     int idx() { return int(staff()->idx()); }
     bool show() { return staff()->show(); }
     Staff* primaryStaff() { return wrap<Staff>(staff()->primaryStaff()); }
-    QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); }
+    // QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); } TODO deprecated
     /// \endcond
 
     /// The current clef type at a given tick in the score, one of

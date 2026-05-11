@@ -104,61 +104,6 @@ staff_idx_t Staff::idx() const
     return muse::indexOf(score()->staves(), (Staff*)this);
 }
 
-BracketType Staff::bracketType(size_t bracketIdx) const
-{
-    return score()->bracketType(idx(), bracketIdx);
-}
-
-size_t Staff::bracketSpan(size_t bracketIdx) const
-{
-    return score()->bracketSpan(idx(), bracketIdx);
-}
-
-void Staff::setBracketType(size_t bracketIdx, BracketType val)
-{
-    score()->setBracketType(idx(), bracketIdx, val);
-}
-
-void Staff::setBracketSpan(size_t bracketIdx, size_t val)
-{
-    score()->setBracketSpan(idx(), bracketIdx, val);
-}
-
-void Staff::setBracketVisible(size_t bracketIdx, bool v)
-{
-    score()->setBracketVisible(idx(), bracketIdx, v);
-}
-
-void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
-{
-    score()->changeBracketColumn(idx(), oldColumn, newColumn);
-}
-
-void Staff::addBracket(BracketItem* bi)
-{
-    score()->addBracket(idx(), bi);
-}
-
-void Staff::insertBracket(BracketItem* b)
-{
-    score()->insertBracket(idx(), b);
-}
-
-const std::vector<BracketItem*>& Staff::brackets() const
-{
-    return score()->brackets(idx());
-}
-
-std::vector<BracketItem*>& Staff::brackets()
-{
-    return score()->brackets(idx());
-}
-
-size_t Staff::bracketLevels() const
-{
-    return score()->bracketLevels(idx());
-}
-
 //---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
@@ -1200,8 +1145,8 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
         stt->setSmall(false);
     } else {
         stt->setSmall(t->smallStaff[cidx]);
-        setBracketType(0, t->bracket[cidx]);
-        setBracketSpan(0, t->bracketSpan[cidx]);
+        score()->setBracketType(this, 0, t->bracket[cidx]);
+        score()->setBracketSpan(this, 0, t->bracketSpan[cidx]);
         setBarLineSpan(t->barlineSpan[cidx]);
     }
     setDefaultClefType(t->clefType(cidx));
@@ -1244,15 +1189,6 @@ const ID& Staff::id() const
 void Staff::setId(const ID& id)
 {
     m_id = id;
-}
-
-void Staff::setScore(Score* score)
-{
-    EngravingItem::setScore(score);
-
-    for (BracketItem* bracket: brackets()) {
-        bracket->setScore(score);
-    }
 }
 
 //---------------------------------------------------------

@@ -68,6 +68,7 @@ class Staff;
 class Measure;
 class ChordRest;
 class Segment;
+class BracketItem;
 struct PaddingTable;
 
 class UndoableCommand;
@@ -182,6 +183,8 @@ public:
     const RangeLocks* pageLocks() const;
 
     const PaddingTable& paddingTable() const;
+
+    const std::vector<BracketItem*>& brackets(const Staff* staff) const;
 
     // Mutable access
     std::vector<Page*>& pages();

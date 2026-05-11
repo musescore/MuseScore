@@ -4903,10 +4903,10 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
     // Make sure this brackets won't overlap with others sharing same column.
     // If overlaps are found, move the other brackets outwards (i.e. increase column).
     for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
-        const std::vector<BracketItem*>& brackets = m_staves.at(staffIdx)->brackets();
+        const std::vector<BracketItem*>& scoreBrackets = brackets(this->staff(staffIdx));
 
         bool collision = false;
-        for (BracketItem* b : brackets) {
+        for (BracketItem* b : scoreBrackets) {
             if (b->bracketType() != BracketType::NO_BRACKET && b->bracketType() != BracketType::GROUP
                 && b->column() == level) {
                 collision = true;
@@ -4918,14 +4918,14 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
             continue;
         }
 
-        for (int i = static_cast<int>(brackets.size()) - 1; i >= static_cast<int>(level); --i) {
-            if (i >= static_cast<int>(brackets.size())) {
+        for (int i = static_cast<int>(scoreBrackets.size()) - 1; i >= static_cast<int>(level); --i) {
+            if (i >= static_cast<int>(scoreBrackets.size())) {
                 // This might theoretically happen when a lot of brackets get cleaned up
                 // after changing the column of the first bracket we see
                 continue;
             }
 
-            BracketItem* bi = brackets[i];
+            BracketItem* bi = scoreBrackets[i];
             if (bi->column() > level) {
                 continue;
             }

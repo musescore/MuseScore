@@ -680,7 +680,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                 }
                 addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                 addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
-                for (const BracketItem* bi : staff->brackets()) {
+                for (const BracketItem* bi : ctx.dom().brackets(staff)) {
                     if (bi->bracketType() == BracketType::NORMAL) {
                         addSpaceAroundNormalBracket |= int(staff->idx()) > (endNormalBracket - 1);
                         endNormalBracket = std::max(endNormalBracket, int(staff->idx() + bi->bracketSpan()));

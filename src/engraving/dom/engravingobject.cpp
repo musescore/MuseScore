@@ -385,7 +385,7 @@ static void changeProperty(EngravingObject* e, Pid t, const PropertyValue& st, P
     if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
         if (e->isBracketItem()) {
             BracketItem* bi = toBracketItem(e);
-            e->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
+            e->score()->undo(new ChangeBracketProperty(bi->startStaff(), bi->column(), t, st, ps));
         } else {
             e->score()->undo(new ChangeProperty(e, t, st, ps));
         }
