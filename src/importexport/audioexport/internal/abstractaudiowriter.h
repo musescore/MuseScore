@@ -68,6 +68,8 @@ private:
     muse::Progress m_progress;
     bool m_isCompleted = false;
     muse::Ret m_writeRet;
+
+    notation::INotationPtr m_notationForRestore;
 };
 }
 
