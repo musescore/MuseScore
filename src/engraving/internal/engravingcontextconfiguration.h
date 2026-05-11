@@ -26,13 +26,13 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuicontextconfiguration.h"
-#include "accessibility/iaccessibilitycontextconfiguration.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
 namespace mu::engraving {
 class EngravingContextConfiguration : public IEngravingContextConfiguration, public muse::Contextable
 {
     muse::ContextInject<muse::ui::IUiContextConfiguration> uiConfiguration = { this };
-    muse::ContextInject<muse::accessibility::IAccessibilityContextConfiguration> accessibilityConfiguration = { this };
+    muse::ContextInject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
 
 public:
     EngravingContextConfiguration(const muse::modularity::ContextPtr& iocCtx)

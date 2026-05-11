@@ -35,9 +35,9 @@ double EngravingContextConfiguration::guiScaling() const
 
 bool EngravingContextConfiguration::isAccessibleEnabled() const
 {
-    if (!accessibilityConfiguration()) {
+    if (!accessibilityController()) {
         return false;
     }
 
-    return accessibilityConfiguration()->isAccessibleEnabled();
+    return accessibilityController()->isEnabled();
 }
