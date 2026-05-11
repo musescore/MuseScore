@@ -554,6 +554,8 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::VERSE && verse() != v.toInt()) {
+        PartialLyricsLine* prevPartial = findPrevPartialLyricsLineDash(this);
+
         for (Lyrics* l : chordRest()->lyrics()) {
             if (l->verse() == v.toInt()) {
                 // verse already exists, swap
@@ -565,6 +567,10 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             }
         }
         TextBase::undoChangeProperty(id, v, ps);
+        if (prevPartial && prevPartial->verse() != v.toInt()) {
+            // Skip logic to update Lyrics by calling parent class
+            prevPartial->LyricsLine::undoChangeProperty(id, v, ps);
+        }
         return;
     } else if (id == Pid::VISIBLE && separator()) {
         separator()->undoChangeProperty(Pid::VISIBLE, v.toBool(), ps);
