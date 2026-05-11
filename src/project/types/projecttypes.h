@@ -126,7 +126,7 @@ struct CloudAudioInfo {
 
 struct ExportInfo {
     QString id;
-    muse::io::path_t exportPath;
+    muse::io::path_t exportDirPath;
     INotationWriter::UnitType unitType;
     std::vector<notation::INotationWeakPtr> notations;
 };

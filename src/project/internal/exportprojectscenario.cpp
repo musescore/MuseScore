@@ -48,7 +48,7 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
 }
 
 RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultPath) const
+                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultDirPath) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -84,8 +84,12 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
         }
     }
 
-    if (defaultPath == "") {
+    muse::io::path_t defaultPath;
+    if (defaultDirPath == "") {
         defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
+    } else {
+        defaultPath = defaultDirPath.appendingComponent(io::filename(project->path(), false) + filenameAddition)
+                      .appendingSuffix(exportType.suffixes.front().toStdString());
     }
 
     RetVal<muse::io::path_t> exportPath;

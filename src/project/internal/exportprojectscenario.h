@@ -56,7 +56,7 @@ public:
 
     muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
                                                  INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
-                                                 muse::io::path_t defaultPath = "") const override;
+                                                 muse::io::path_t defaultDirPath = "") const override;
 
     bool exportScores(notation::INotationPtrList notations, const muse::io::path_t destinationPath,
                       INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
