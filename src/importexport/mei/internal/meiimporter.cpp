@@ -1312,14 +1312,14 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
                         child.node().child("grpSym").attribute("symbol").value()));
             }
 
-            staff->setBracketType(column, bracketSt.bracketType);
+            m_score->setBracketType(staff, column, bracketSt.bracketType);
 
             int childStaffSpan = 0;
             // Recursive call
             success = success && this->readStaffGrps(child.node(), childStaffSpan, column + 1, idx);
 
             // Now we know the spanning of the group
-            staff->setBracketSpan(column, childStaffSpan);
+            m_score->setBracketSpan(staff, column, childStaffSpan);
             // We can also set the barline spanning - staff by staff since this is what MuseScore seems to do by default
             if (bracketSt.barLineSpan > 0) {
                 size_t staffIdxStart = idx - static_cast<size_t>(childStaffSpan);

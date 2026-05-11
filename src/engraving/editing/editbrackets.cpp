@@ -22,7 +22,7 @@
 
 #include "editbrackets.h"
 
-#include "../dom/staff.h"
+#include "../dom/score.h"
 
 using namespace mu::engraving;
 
@@ -32,14 +32,14 @@ using namespace mu::engraving;
 
 void AddBracket::redo(EditData*)
 {
-    staff->setBracketType(level, bracketType);
-    staff->setBracketSpan(level, span);
+    staff->score()->setBracketType(staff, level, bracketType);
+    staff->score()->setBracketSpan(staff, level, span);
     staff->triggerLayout();
 }
 
 void AddBracket::undo(EditData*)
 {
-    staff->setBracketType(level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff, level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
@@ -49,13 +49,13 @@ void AddBracket::undo(EditData*)
 
 void RemoveBracket::redo(EditData*)
 {
-    staff->setBracketType(level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff, level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->setBracketType(level, bracketType);
-    staff->setBracketSpan(level, span);
+    staff->score()->setBracketType(staff, level, bracketType);
+    staff->score()->setBracketSpan(staff, level, span);
     staff->triggerLayout();
 }

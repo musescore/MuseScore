@@ -70,8 +70,6 @@ public:
     const ID& id() const;
     void setId(const ID& id);
 
-    void setScore(Score* score) override;
-
     bool isTop() const;
     String partName() const;
     staff_idx_t rstaff() const;
@@ -79,18 +77,6 @@ public:
 
     Part* part() const { return m_part; }
     void setPart(Part* p) { m_part = p; }
-
-    BracketType bracketType(size_t bracketIdx) const;
-    size_t bracketSpan(size_t bracketIdx) const;
-    void setBracketType(size_t bracketIdx, BracketType val);
-    void setBracketSpan(size_t bracketIdx, size_t val);
-    void setBracketVisible(size_t bracketIdx, bool v);
-    void changeBracketColumn(size_t oldColumn, size_t newColumn);
-    void addBracket(BracketItem*);
-    void insertBracket(BracketItem* b);
-    const std::vector<BracketItem*>& brackets() const;
-    std::vector<BracketItem*>& brackets();
-    size_t bracketLevels() const;
 
     ClefList& clefList() { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
