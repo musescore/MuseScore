@@ -9234,7 +9234,7 @@ static void addChordLine(const Notation& notation, Note* note,
             }
             if (lineType == u"wavy") {
                 chordline->setWavy(true);
-            } else if (lineType != u"solid") {
+            } else if (!lineType.empty() && lineType != u"solid") {
                 logger->logError(String(u"unsupported line-type: %1").arg(lineType), xmlreader);
             }
             chordline->setVisible(notation.visible());
