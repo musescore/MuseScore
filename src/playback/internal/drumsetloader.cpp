@@ -41,7 +41,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
     }
 
     // restore the default drumset when changing from MuseSounds to MS Basic / VST
-    if (resourceMeta.type != AudioResourceType::MuseSamplerSoundPack) {
+    if (!isResourceType(resourceMeta, AudioResourceType::MuseSamplerSoundPack)) {
         const InstrumentTemplate& templ = instrumentsRepository()->instrumentTemplate(trackId.instrumentId);
         if (!templ.useDrumset) {
             return;
@@ -56,7 +56,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
         return;
     }
 
-    int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+    int instrumentId = muse::audio::intAttribute(resourceMeta, u"museUID");
 
     auto it = m_drumsetCache.find(instrumentId);
     if (it != m_drumsetCache.end()) {
