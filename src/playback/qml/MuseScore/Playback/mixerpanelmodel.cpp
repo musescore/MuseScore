@@ -503,11 +503,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     });
 
     AudioOutputParams outParams = audioSettings()->auxOutputParams(index);
-    if (MixerChannelItem* existingItem = findChannelItem(trackId)) {
-        loadOutputParams(existingItem, std::move(outParams));
-    } else {
-        loadOutputParams(item, std::move(outParams));
-    }
+    loadOutputParams(item, std::move(outParams));
 
     playback()->signalChanges(trackId)
     .onResolve(this, [this, trackId](AudioSignalChanges signalChanges) {
@@ -545,9 +541,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     item->setTitle(muse::qtrc("playback", "Master"));
 
     AudioOutputParams outParams = audioSettings()->masterAudioOutputParams();
-    if (m_masterChannelItem && item == m_masterChannelItem) {
-        loadOutputParams(item, std::move(outParams));
-    }
+    loadOutputParams(item, std::move(outParams));
 
     playback()->masterSignalChanges()
     .onResolve(this, [this, item](AudioSignalChanges signalChanges) {
