@@ -63,6 +63,8 @@ mnx::Orientation toMnxOrientation(PlacementV placement)
     case PlacementV::ABOVE: return mnx::Orientation::Above;
     case PlacementV::BELOW: return mnx::Orientation::Below;
     }
+    ASSERT_X("invalid placement value");
+    return mnx::Orientation::Auto;
 }
 
 namespace {
