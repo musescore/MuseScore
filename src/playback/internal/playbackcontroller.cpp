@@ -491,7 +491,8 @@ bool PlaybackController::shouldLoadDrumset(const engraving::InstrumentTrackId& i
         return false;
     }
 
-    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
+    return isResourceType(oldMeta, AudioResourceType::MuseSamplerSoundPack)
+           || isResourceType(newMeta, AudioResourceType::MuseSamplerSoundPack);
 }
 
 void PlaybackController::addSoundFlagsIfNeed(const std::vector<EngravingItem*>& selection)

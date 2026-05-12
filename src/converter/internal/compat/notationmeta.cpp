@@ -378,9 +378,9 @@ QJsonArray NotationMeta::tracksJsonArray(notation::INotationPtr notation)
         QJsonObject jsonTrack;
         jsonTrack.insert("instrumentId", trackId.instrumentId.toQString());
         jsonTrack.insert("partId", trackId.partId.toQString());
-        jsonTrack.insert("type", audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
+        jsonTrack.insert("type", audio::audioResourceTypeToString(inputParams.resourceMeta.type).toQString());
 
-        audio::AudioSourceType sourceType = sourceTypeFromResourceType(inputParams.resourceMeta.type);
+        audio::AudioSourceType sourceType = audio::sourceTypeFromResourceType(inputParams.resourceMeta.type);
         if (sourceType != audio::AudioSourceType::Fluid) {
             if (sourceType == audio::AudioSourceType::MuseSampler) {
                 jsonTrack.insert("vendor", QString::fromStdString(inputParams.resourceMeta.attributeVal(

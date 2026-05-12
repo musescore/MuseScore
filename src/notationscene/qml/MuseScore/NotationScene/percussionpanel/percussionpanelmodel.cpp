@@ -553,7 +553,8 @@ void PercussionPanelModel::resetLayout()
     }
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
-    const bool isMuseSamplerDrumset = resourceMeta.type == muse::audio::AudioResourceType::MuseSamplerSoundPack;
+    const bool isMuseSamplerDrumset = muse::audio::isResourceType(resourceMeta,
+                                                                  muse::audio::AudioResourceType::MuseSamplerSoundPack);
 
     Drumset defaultDrumset = isMuseSamplerDrumset ? museSamplerDefaultDrumset() : standardDefaultDrumset();
 
@@ -593,7 +594,7 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
 
     const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
 
-    const int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
+    const int instrumentId = muse::audio::intAttribute(resourceMeta, u"museUID");
 
     const muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
     IF_ASSERT_FAILED(!drumMapping.empty()) {
