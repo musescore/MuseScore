@@ -66,7 +66,7 @@ Articulation* MnxImporter::addArticulation(ChordRest* cr, const mnx::sequence::E
 }
 
 //---------------------------------------------------------
-//   createFermata
+//   addFermata
 //   Helper to create and add a fermata to a segment.
 //---------------------------------------------------------
 
@@ -80,6 +80,8 @@ void MnxImporter::addFermata(Segment* seg, const mnx::Fermata& mnxFermata, track
     fermata->setTrack(track);
     /// @note MNX decouples fermata symbol from duration, but MuseScore does not currently model
     /// an independently round-trippable fermata duration separate from the fermata subtype/symbol.
+    /// Therefore, we ignore the `duration` value in MNX in favor of the `symbol` to determine
+    /// the Fermata's symbol.
     fermata->setSymIdAndTimeStretch(toMuseScoreFermataSymId(mnxFermata.symbol()));
     setAndStyleProperty(fermata, Pid::PLACEMENT, toMuseScorePlacementV(mnxFermata.orient(), fermata));
     seg->add(fermata);
