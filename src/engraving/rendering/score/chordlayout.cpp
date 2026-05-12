@@ -166,12 +166,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         }
     }
 
-    for (EngravingItem* e : item->el()) {
-        if (e->isChordBracket()) {
-            TLayout::layoutItem(e, ctx);
-        }
-    }
-
     // A chord can have its own arpeggio and also be part of another arpeggio's span.  We need to lay out both of these arpeggios properly
     Arpeggio* oldSpanArp = item->spanArpeggio();
     Arpeggio* newSpanArp = nullptr;
@@ -296,7 +290,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     }
 
     for (EngravingItem* e : item->el()) {
-        if (e->isSlur()) {       // we cannot at this time as chordpositions are not fixed
+        // Cannot layout slurs as chord positions are not fixed
+        // Chord brackets should be the outermost element
+        if (e->isSlur() || e->isChordBracket()) {
             continue;
         }
         TLayout::layoutItem(e, ctx);
@@ -340,6 +336,12 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     createParenGroups(item);
     ParenthesisLayout::layoutChordParentheses(item, ctx);
+
+    for (EngravingItem* e : item->el()) {
+        if (e->isChordBracket()) {
+            TLayout::layoutItem(e, ctx);
+        }
+    }
 
     fillShape(item, item->mutldata(), ctx.conf());
 }
