@@ -1001,7 +1001,7 @@ static void resizeTitleBox(VBox* vbox)
         score->renderer()->layoutItem(e);
     }
 
-    const int padding = vbox->sizeIsSpatiumDependent() ? vbox->style().spatium() : vbox->style().defaultSpatium();
+    const double padding = vbox->sizeIsSpatiumDependent() ? vbox->style().spatium() : vbox->style().defaultSpatium();
 
     for (EngravingItem* e : elist) {
         if (e->isText()) {
