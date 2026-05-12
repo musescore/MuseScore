@@ -44,5 +44,7 @@ cat $ARTIFACTS_DIR/playlist.json
 
 echo "=== Make playlist for YouTube ==="
 
+pip install requests
+
 HERE="$(cd "$(dirname "$0")" && pwd)"
 python3 $HERE/make_youtube_playlist_info.py ${YOUTUBE_API_KEY} ${YOUTUBE_PLAYLIST_ID} ${ARTIFACTS_DIR}/playlist.json
