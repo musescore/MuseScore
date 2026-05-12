@@ -53,7 +53,6 @@ jobs:
         UPSTREAM_HEAD=$(git -C "${TMP}" rev-parse origin/${EXPECTED_BRANCH}^{commit})
         echo "Upstream ${EXPECTED_BRANCH} HEAD: ${UPSTREAM_HEAD}"
         if [ "${SHA}" != "${UPSTREAM_HEAD}" ]; then
-          echo "::error::muse_framework is pinned to ${SHA}, expected ${UPSTREAM_HEAD} (HEAD of ${EXPECTED_BRANCH} in ${EXPECTED_URL})"
-          echo "please ensure the submodule is up to date by running `git submodule update --init --remote ./muse`"
+          echo "::error::muse_framework is pinned to ${SHA}, expected ${UPSTREAM_HEAD} (HEAD of ${EXPECTED_BRANCH} in ${EXPECTED_URL})%0Aplease ensure the submodule is up to date by running \`git submodule update --init --remote ./muse\`"
           exit 1
         fi
