@@ -1008,10 +1008,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
 
 GlissandoHandler::GlissandoHandler()
 {
-    for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-        m_glissNote[i] = 0;
-        m_slideNote[i] = 0;
-    }
+    reset();
 }
 
 void GlissandoHandler::reset()
