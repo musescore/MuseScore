@@ -1381,6 +1381,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         systemTick = mtick;
     }
+    score->spell(); // Call respell-pitches to correct accidentals
 
     //
     // fill empty measures with rests
