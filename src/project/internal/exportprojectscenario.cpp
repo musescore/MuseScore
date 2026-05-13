@@ -418,7 +418,16 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
 
         if (!ret || outputFile.hasError()) {
             if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-                fileSystem()->remove(scorePath);
+                // On Windows, remove() may fail immediately after close()
+                // because the file lock has not been released yet
+                for (int i = 0; i < 10; ++i) {
+                    if (fileSystem()->remove(scorePath)) {
+                        return ret;
+                    }
+
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
+
                 return ret;
             }
 
