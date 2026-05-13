@@ -12,10 +12,11 @@ jobs:
       uses: actions/checkout@v6
       with:
         submodules: recursive
-    - name: Fetch Muse CI scripts
-      run: |
-        cmake -P ./buildscripts/ci/checkcodestyle/ci_fetch.cmake
 
-    - name: Test coding style
+    - name: Test MSS coding style
       run: |
-        cmake -P ./buildscripts/ci/checkcodestyle/_deps/checkcodestyle.cmake ./src/
+        cmake -P ./muse/buildscripts/ci/checkcodestyle/checkcodestyle.cmake ./src/
+
+    - name: Test MF coding style
+      run: |
+        cmake -P ./muse/buildscripts/ci/checkcodestyle/checkcodestyle.cmake ./muse/framework/  
