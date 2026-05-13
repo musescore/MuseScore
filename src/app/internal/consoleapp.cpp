@@ -245,7 +245,8 @@ int MuseScoreConsoleApp::processConverter(const MuseScoreCmdOptions::ConverterTa
         ret = converter()->exportScoreElements(task.inputFile, task.outputFile, openParams);
     } break;
     case ConvertType::ExportScoreVideo: {
-        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, openParams);
+        bool withAudio = !task.params[MuseScoreCmdOptions::ParamKey::NoAudio].toBool();
+        ret = converter()->exportScoreVideo(task.inputFile, task.outputFile, openParams, withAudio);
     } break;
     case ConvertType::SourceUpdate: {
         std::string scoreSource = task.params[MuseScoreCmdOptions::ParamKey::ScoreSource].toString().toStdString();

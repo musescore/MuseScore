@@ -45,6 +45,7 @@ struct MuseScoreCmdOptions : public muse::CmdOptions {
         ExtensionUri,
         PageNumber,
         ScoreRegion,
+        NoAudio,
     };
 
     struct {
