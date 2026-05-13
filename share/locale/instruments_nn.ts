@@ -16680,14 +16680,14 @@
         <source>Classical Guitar</source>
         <comment>guitar-nylon trackName</comment>
         <extracomment>trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klassisk gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5518"/>
         <source>Classical Guitar</source>
         <comment>guitar-nylon longName</comment>
         <extracomment>longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klassisk gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5520"/>
@@ -16792,7 +16792,7 @@
         <source>Classical Guitar</source>
         <comment>guitar-nylon-tablature longName</comment>
         <extracomment>longName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Klassisk gitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5554"/>
@@ -21083,7 +21083,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>Classical Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Klassisk orkester</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
