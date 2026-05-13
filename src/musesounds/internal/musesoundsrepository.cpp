@@ -96,18 +96,19 @@ void MuseSoundsRepository::init()
     device->setData(jsonData);
     auto receivedData = std::make_shared<QBuffer>();
 
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    if (!m_networkManager) {
+        m_networkManager = networkManagerCreator()->makeNetworkManager();
+    }
+
     RetVal<Progress> progress = m_networkManager->post(url, device, receivedData, headers);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
-        m_networkManager = nullptr;
         return;
     }
 
     progress.val.finished().onReceive(this, [this, receivedData](const muse::ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            m_networkManager = nullptr;
             return;
         }
 
@@ -124,7 +125,6 @@ void MuseSoundsRepository::init()
 
         m_soundsСatalogs = result.val;
         m_soundsСatalogsChanged.notify();
-        m_networkManager = nullptr;
     });
 }
 
