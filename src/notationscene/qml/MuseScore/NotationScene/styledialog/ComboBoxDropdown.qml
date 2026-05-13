@@ -138,6 +138,24 @@ ComboBox {
             }
         }
 
+        popup: Popup {
+            width: comboDropdown.width
+            height: Math.min(contentItem.implicitHeight, comboDropdown.Window.height)
+
+            padding: 0
+
+            background: Rectangle {
+                color: ui.theme.popupBackgroundColor
+            }
+
+            contentItem: StyledListView {
+                implicitHeight: contentHeight
+
+                model: comboDropdown.delegateModel
+                currentIndex: comboDropdown.highlightedIndex
+            }
+        }
+
         Component.onCompleted: function() {
             if (!styleItem) {
                 return;
