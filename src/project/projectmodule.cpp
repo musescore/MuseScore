@@ -37,7 +37,6 @@
 
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
-#include "internal/projectrwregister.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -71,10 +70,8 @@ void ProjectModule::registerExports()
     globalIoc()->registerExport<IProjectCreator>(mname, new ProjectCreator());
     globalIoc()->registerExport<IMscMetaReader>(mname, new MscMetaReader());
 
-    //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     globalIoc()->registerExport<INotationReadersRegister>(mname, new NotationReadersRegister());
     globalIoc()->registerExport<INotationWritersRegister>(mname, new NotationWritersRegister());
-    globalIoc()->registerExport<IProjectRWRegister>(mname, new ProjectRWRegister());
 }
 
 void ProjectModule::resolveImports()

@@ -28,7 +28,6 @@
 #include "modularity/ioc.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
-#include "project/iprojectrwregister.h"
 #include "context/iglobalcontext.h"
 #include "extensions/iextensionsprovider.h"
 
@@ -39,7 +38,6 @@ class ConverterController : public IConverterController, public muse::Contextabl
 {
     muse::GlobalInject<project::IProjectCreator> notationCreator;
     muse::GlobalInject<project::INotationWritersRegister> writers;
-    muse::GlobalInject<project::IProjectRWRegister> projectRW;
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
