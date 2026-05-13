@@ -49,7 +49,7 @@ TimeEditor::TimeEditor(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = new PaletteWidget(this);
+    sp = new PaletteWidget(this, true /*setIocContext*/);
     sp->setPalette(PaletteCreator(iocContext()).newTimePalette());
     sp->setReadOnly(false);
     sp->setSelectable(true);

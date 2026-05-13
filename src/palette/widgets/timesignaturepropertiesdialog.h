@@ -48,7 +48,7 @@ public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
     ~TimeSignaturePropertiesDialog() override;
 
-    void componentComplete() override;
+    void classBegin() override;
 
 private slots:
     void accept() override;
