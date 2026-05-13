@@ -40,8 +40,6 @@ target_sources(project PRIVATE
     irecentfilescontroller.h
     imscmetareader.h
     iprojectautosaver.h
-    iprojectrwregister.h
-    iprojectwriter.h
 
     types/projecttypes.h
     types/projectmeta.h
@@ -87,8 +85,6 @@ target_sources(project PRIVATE
     internal/projectmigrator.h
     internal/projectfileinfoprovider.cpp
     internal/projectfileinfoprovider.h
-    internal/projectrwregister.cpp
-    internal/projectrwregister.h
 )
 
 if (OS_IS_MAC)
