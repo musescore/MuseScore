@@ -37625,7 +37625,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3393"/>
         <source>Add chord symbol to fretboard diagram</source>
-        <translation>Lisää sointu otetaulukkoon</translation>
+        <translation>Lisää sointumerkki otetaulukkoon</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3961"/>

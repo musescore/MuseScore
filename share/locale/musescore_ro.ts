@@ -9959,7 +9959,7 @@ Această acțiune nu va șterge niciuna din partiturile tale.</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="92"/>
         <source>Publish</source>
-        <translation>Publică</translation>
+        <translation>Publicare</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/maintoolbarmodel.cpp" line="95"/>
@@ -10474,7 +10474,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation type="unfinished"/>
+        <translation>Include unelte noi esențiale de gravare, îmbunătățiri majore la redare, exportare video, notație dive pentru chitară și funcții ce îți accelerează modul de lucru.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -34630,7 +34630,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Driver-ul audio selectat nu are niciun dispozitiv audio disponibil. MuseScore Studio va folosi în loc driver-ul audio implicit. Pentru a folosi %1, asigură-te că hardware-ul tău este configurat corect, apoi repornește MuseScore Studio și încearcă din nou.</translation>
     </message>
 </context>
 <context>

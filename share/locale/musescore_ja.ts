@@ -3464,7 +3464,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10506"/>
         <source>Min. margin to other staves:</source>
-        <translation>他の譜表への最小のマージン:</translation>
+        <translation>他の譜表への最小の余白:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10532"/>
@@ -3474,7 +3474,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10554"/>
         <source>Min. margin to current staff:</source>
-        <translation>現在の譜表への最小のマージン:</translation>
+        <translation>現在の譜表への最小の余白:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="10592"/>
@@ -4125,7 +4125,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/widgets/keyedit.ui" line="131"/>
         <source>Add time signature to master palette</source>
-        <translation>拍子記号をマスターパレットに追加</translation>
+        <translation>マスターパレットに拍子記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/keyedit.ui" line="134"/>
@@ -4836,7 +4836,7 @@ followed by dashes</source>
     <message>
         <location filename="../../src/palette/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
-        <translation>マスターパレットに拍子記号を追加　</translation>
+        <translation>マスターパレットに拍子記号を追加</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/timedialog.ui" line="296"/>
@@ -10043,7 +10043,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="141"/>
         <source>Copyright © 1999-2026 MuseScore Limited and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2026 MuseScore Limited and others.
+&lt;a href=&quot;%1&quot;&gt;GNU一般公衆ライセンスバージョン3&lt;/a&gt; の下で公開。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutMusicXMLDialog.qml" line="33"/>
@@ -10472,7 +10473,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="35"/>
         <source>Includes essential new engraving tools, major improvements to playback, video export, dive notation for guitar, and features to speed up your workflow.</source>
-        <translation type="unfinished"/>
+        <translation>主要な新しい浄書ツール、再生機能の大幅な改善、動画エクスポート、ギター用のダイブ記譜、およびワークフローを高速化する機能が含まれています。</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/welcomedialogmodel.cpp" line="37"/>
@@ -33738,7 +33739,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioApiSection.qml" line="42"/>
         <source>Audio driver</source>
-        <translation type="unfinished"/>
+        <translation>オーディオドライバー</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/AudioEngineSection.qml" line="31"/>
@@ -34623,12 +34624,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="64"/>
         <source>No audio devices available</source>
-        <translation type="unfinished"/>
+        <translation>利用可能なオーディオデバイスがありません</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/audiomidipreferencesmodel.cpp" line="65"/>
         <source>The selected audio driver does not have any available audio devices. MuseScore Studio will use the default audio driver instead. To use %1, ensure your hardware is set up correctly, then restart MuseScore Studio and try again.</source>
-        <translation type="unfinished"/>
+        <translation>選択されたオーディオドライバーには、使用可能なオーディオデバイスがありません。MuseScore Studio は代わりにデフォルトのオーディオドライバーを使用します。%1 を使用するには、ハードウェアが正しくセットアップされていることを確認してから、MuseScore Studio を再起動して再度お試しください。</translation>
     </message>
 </context>
 <context>
@@ -35754,12 +35755,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="621"/>
         <source>Use page layout</source>
-        <translation type="unfinished"/>
+        <translation>ページレイアウトを使用</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="622"/>
         <source>Reflow to fit video resolution</source>
-        <translation type="unfinished"/>
+        <translation>動画の解像度に合わせて再配置</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="850"/>
@@ -35808,7 +35809,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
         <source>Video resolution</source>
-        <translation type="unfinished"/>
+        <translation>動画解像度</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="165"/>
