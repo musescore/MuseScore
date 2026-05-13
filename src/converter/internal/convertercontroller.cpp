@@ -490,12 +490,13 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
     return make_ok();
 }
 
-Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
+                                             const project::INotationWriter::Options& options) const
 {
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
 
     outBuf.setMeta("file_path", out.toStdString());
-    Ret ret = writer->write(notation, outBuf);
+    Ret ret = writer->write(notation, outBuf, options);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
@@ -703,7 +704,8 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
     return BackendApi::exportScoreElements(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams,
+                                          bool withAudio)
 {
     TRACEFUNC;
 
@@ -713,7 +715,7 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
     }
 
     std::string suffix = io::suffix(out);
-    auto writer = projectRW()->writer(suffix);
+    auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
@@ -724,13 +726,17 @@ Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse
         return make_ret(Err::InFileFailedLoad);
     }
 
-    ret = writer->write(notationProject, out);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
+    globalContext()->setCurrentProject(notationProject);
 
-    return make_ret(Ret::Code::Ok);
+    DEFER {
+        globalContext()->setCurrentProject(nullptr);
+    };
+
+    const INotationWriter::Options options {
+        { INotationWriter::OptionKey::WITH_AUDIO, Val(withAudio) },
+    };
+
+    return convertFullNotation(writer, notationProject->masterNotation()->notation(), out, options);
 }
 
 Ret ConverterController::updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode)

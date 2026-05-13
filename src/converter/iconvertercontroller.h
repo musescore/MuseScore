@@ -58,7 +58,8 @@ public:
 
     virtual muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
+                                       bool withAudio = true) = 0;
 
     virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };

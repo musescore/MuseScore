@@ -67,7 +67,8 @@ public:
 
     muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
 
-    muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) override;
+    muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
+                               bool withAudio = true) override;
 
     muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) override;
 
@@ -109,7 +110,8 @@ private:
     muse::Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
     muse::Ret convertPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const size_t pageNum,
                           const muse::io::path_t& filePath, const muse::io::path_t& dirPath = {}) const;
-    muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
+    muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
+                                  const project::INotationWriter::Options& options = {}) const;
 
     muse::Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                      const muse::io::path_t& out) const;
