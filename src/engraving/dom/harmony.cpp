@@ -685,6 +685,19 @@ NoteCaseType Harmony::bassRenderCase() const
     return noteCase;
 }
 
+bool Harmony::collectForDrawing() const
+{
+    if (!visible() && !score()->isShowInvisible()) {
+        return false;
+    }
+
+    if (Segment* parentSeg = getParentSeg()) {
+        return systemFlag() || (parentSeg->measure() && parentSeg->measure()->visible(staffIdx()));
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
