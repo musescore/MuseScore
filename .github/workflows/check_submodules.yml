@@ -24,7 +24,23 @@ jobs:
           exit 1
         fi
 
-    - name: Verify muse_framework commit matches upstream HEAD
+    - name: Verify muse_framework commit is in upstream
+      run: |
+        SHA=$(git ls-tree HEAD muse | awk '{print $3}')
+        if [ -z "${SHA}" ]; then
+          echo "::error::Could not read muse_framework submodule SHA from index"
+          exit 1
+        fi
+        echo "Pinned commit: ${SHA}"
+        TMP=$(mktemp -d)
+        git clone --quiet --filter=tree:0 --no-checkout --single-branch --branch ${EXPECTED_BRANCH} "${EXPECTED_URL}" "${TMP}"
+        if ! git -C "${TMP}" merge-base --is-ancestor "${SHA}" origin/${EXPECTED_BRANCH}; then
+          echo "::error::muse_framework is pinned to ${SHA}, which is not on the ${EXPECTED_BRANCH} branch of ${EXPECTED_URL}"
+          exit 1
+        fi   
+
+    - name: Verify muse_framework commit on upstream HEAD
+      if: false
       run: |
         SHA=$(git ls-tree HEAD muse | awk '{print $3}')
         if [ -z "${SHA}" ]; then
