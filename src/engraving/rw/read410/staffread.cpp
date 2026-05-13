@@ -54,7 +54,8 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 //
                 Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
                 Fraction timeSigForThisMeasure = ctx.timeSigForNextMeasure();
-                Fraction f(timeSigForThisMeasure != Fraction(0, 1) ? ctx.timeSigForNextMeasure() : m ? m->timesig() : Fraction(4, 4));
+                Fraction f(timeSigForThisMeasure
+                           != Fraction(0, 1) ? ctx.timeSigForNextMeasure() : m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
 
@@ -68,7 +69,8 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                     score->checkSpanner(ctx.tick(), ctx.tick() + measure->ticks(), /*removeOrphans*/ false);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->endTick());
-                    if (timeSigForThisMeasure != Fraction(0, 1) && ctx.timeSigForNextMeasure() == timeSigForThisMeasure) {
+                    if (timeSigForThisMeasure
+                        != Fraction(0, 1) && ctx.timeSigForNextMeasure() == timeSigForThisMeasure) {
                         ctx.setTimeSigForNextMeasure(Fraction(0, 1));
                     }
                 } else {

@@ -235,7 +235,8 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         }
 
         event->acceptProposedAction();
-        dragElement = static_cast<Accidental*>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
+        dragElement = static_cast<Accidental*>(Factory::createItem(type,
+                                                                   paletteScoreProvider()->paletteScore()->dummy()));
         dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
@@ -345,7 +346,8 @@ KeyEditor::KeyEditor(QWidget* parent)
     m_accidentalsPaletteWidget = new PaletteWidget(this, true /*setIocContext*/);
     m_accidentalsPaletteWidget->setPalette(PaletteCreator(iocContext()).newAccidentalsPalette());
     qreal adj = m_accidentalsPaletteWidget->mag();
-    m_accidentalsPaletteWidget->setGridSize(m_accidentalsPaletteWidget->gridWidth() / adj, m_accidentalsPaletteWidget->gridHeight() / adj);
+    m_accidentalsPaletteWidget->setGridSize(
+        m_accidentalsPaletteWidget->gridWidth() / adj, m_accidentalsPaletteWidget->gridHeight() / adj);
     m_accidentalsPaletteWidget->setMag(1.0);
 
     PaletteScrollArea* accidentalsPaletteArea = new PaletteScrollArea(m_accidentalsPaletteWidget);

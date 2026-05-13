@@ -36,9 +36,11 @@ namespace mu::iex::guitarpro {
 static void fillChordDurationsFromBendDiagram(BendDataContextSplitChord& bendDataCtx, Fraction totalDuration,
                                               const ImportedBendInfo& importedInfo);
 
-static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord);
+static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo,
+                                int noteIndexInChord);
 
-void BendDataCollectorSplitChord::storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues)
+void BendDataCollectorSplitChord::storeBendData(const mu::engraving::Note* note,
+                                                const mu::engraving::PitchValues& pitchValues)
 {
     if (!pitchValues.empty()) {
         m_bendInfoForNote[note->track()][note->tick()][note] = BendInfoConverter::fillBendInfo(note, pitchValues);
@@ -55,7 +57,8 @@ BendDataContextSplitChord BendDataCollectorSplitChord::collectBendDataContext()
     return bendDataCtx;
 }
 
-static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord)
+static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo,
+                                int noteIndexInChord)
 {
     if (importedInfo.segments.empty()) {
         return;
@@ -256,7 +259,8 @@ static void splitBendChordDurations(BendDataContextSplitChord& bendDataCtx, Frac
                                     const ImportedBendInfo& importedInfo)
 {
     const Chord* chord = importedInfo.note->chord();
-    bendDataCtx.bendChordDurations[chord->track()][chord->tick().ticks()] = splittedDurations(importedInfo, totalDuration);
+    bendDataCtx.bendChordDurations[chord->track()][chord->tick().ticks()] = splittedDurations(importedInfo,
+                                                                                              totalDuration);
 }
 
 static void fillChordDurationsFromBendDiagram(BendDataContextSplitChord& bendDataCtx, Fraction totalDuration,

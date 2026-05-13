@@ -364,7 +364,8 @@ TEST_F(Engraving_NoteTests, graceAfterSlashSave)
 
     EXPECT_TRUE(gc->showStemSlash());
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"graceAfterSlashSave-test.mscx", NOTE_DATA_DIR + u"graceAfterSlashSave-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"graceAfterSlashSave-test.mscx",
+                                            NOTE_DATA_DIR + u"graceAfterSlashSave-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -420,7 +421,8 @@ TEST_F(Engraving_NoteTests, tpcTranspose)
     score->cmdConcertPitchChanged(true);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose-test.mscx", NOTE_DATA_DIR + u"tpc-transpose-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose-test.mscx",
+                                            NOTE_DATA_DIR + u"tpc-transpose-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -445,7 +447,8 @@ TEST_F(Engraving_NoteTests, tpcTranspose2)
 
     printf("================\n");
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose2-test.mscx", NOTE_DATA_DIR + u"tpc-transpose2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"tpc-transpose2-test.mscx",
+                                            NOTE_DATA_DIR + u"tpc-transpose2-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -511,7 +514,8 @@ TEST_F(Engraving_NoteTests, alteredUnison)
     EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::FLAT);
     EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
     c = m->findChord(Fraction(1, 4), 0);
-    EXPECT_TRUE(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
+    EXPECT_TRUE(c->downNote()->accidental()
+                && c->downNote()->accidental()->accidentalType() == AccidentalType::NATURAL);
     EXPECT_TRUE(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == AccidentalType::SHARP);
 }
 

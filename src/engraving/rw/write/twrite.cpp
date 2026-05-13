@@ -858,9 +858,11 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE, Pid::SIZE_SPATIUM_DEPENDENT
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE,
+        Pid::SIZE_SPATIUM_DEPENDENT
     }) {
-        bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
+        bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT)
+                     || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
     }
     if (item->isVBoxBase()) {
@@ -1105,7 +1107,8 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
     //    REST  - BeamMode::NONE
     //    CHORD - BeamMode::AUTO
     //
-    if ((item->isRest() && item->beamMode() != BeamMode::NONE) || (item->isChord() && item->beamMode() != BeamMode::AUTO)) {
+    if ((item->isRest() && item->beamMode() != BeamMode::NONE)
+        || (item->isChord() && item->beamMode() != BeamMode::AUTO)) {
         xml.tag("BeamMode", TConv::toXml(item->beamMode()));
     }
     writeProperty(item, xml, Pid::SMALL);
@@ -1170,7 +1173,8 @@ static Fraction fraction(bool clipboardmode, const EngravingItem* current, const
     return tick;
 }
 
-void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track,
+void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current,
+                               track_idx_t track,
                                Fraction tick)
 {
     Fraction frac = fraction(ctx.clipboardmode(), current, tick);
@@ -1178,7 +1182,8 @@ void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, co
     w.write();
 }
 
-void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track, Fraction tick)
+void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current,
+                             track_idx_t track, Fraction tick)
 {
     Fraction frac = fraction(ctx.clipboardmode(), current, tick);
     if (frac == s->score()->endTick()) {
@@ -1342,7 +1347,8 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
     for (const auto& spp : *textStyle(item->textStyleType())) {
         if (item->isStyled(spp.pid)
             || (spp.pid == Pid::FONT_SIZE && item->getProperty(spp.pid).toDouble() == TextBase::UNDEFINED_FONT_SIZE)
-            || (spp.pid == Pid::FONT_FACE && item->getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
+            || (spp.pid == Pid::FONT_FACE
+                && item->getProperty(spp.pid).value<String>() == TextBase::UNDEFINED_FONT_FAMILY)) {
             continue;
         }
         writeProperty(item, xml, spp.pid);
@@ -2015,7 +2021,8 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
             if (e.channel() == 0) {
                 xml.tag("controller", { { "ctrl", e.controller() }, { "value", e.value() } });
             } else {
-                xml.tag("controller", { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
+                xml.tag("controller",
+                        { { "channel", e.channel() }, { "ctrl", e.controller() }, { "value", e.value() } });
             }
         }
         break;
@@ -2278,7 +2285,8 @@ void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(item, xml, ctx);
 
     for (auto id :
-         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION,
+         { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE,
+           Pid::FIRST_SYSTEM_INDENTATION,
            Pid::SHOW_COURTESY }) {
         writeProperty(item, xml, id);
     }
@@ -2457,7 +2465,8 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         xml.endElement();
     }
     for (Pid id : { Pid::PITCH, Pid::CENT_OFFSET, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
-                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
+                    Pid::HEAD_SCHEME, Pid::HEAD_GROUP, Pid::USER_VELOCITY, Pid::PLAY, Pid::TUNING, Pid::FRET,
+                    Pid::STRING,
                     Pid::GHOST, Pid::DEAD, Pid::HEAD_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
         writeProperty(item, xml, id);
     }
@@ -3504,7 +3513,8 @@ void TWrite::write(const WhammyBar* item, XmlWriter& xml, WriteContext& ctx)
 //    Returns true if <voice> tag was written.
 //---------------------------------------------------------
 
-static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, const Fraction& startTick, track_idx_t track,
+static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, const Fraction& startTick,
+                           track_idx_t track,
                            int* lastTrackWrittenPtr)
 {
     bool voiceTagWritten = false;
@@ -3692,7 +3702,8 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         }
                         if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
                             if (needMove) {
-                                voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
+                                voiceTagWritten
+                                    |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
                                 needMove = false;
                             }
                             writeSpannerStart(s, xml, ctx, segment, track);
@@ -3718,7 +3729,8 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             if (e->generated()) {
                 continue;
             }
-            if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest && !timeSigWritten
+            if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest
+                && !timeSigWritten
                 && !crWritten) {
                 // Ensure that <voice> tag is open
                 voiceTagWritten |= writeVoiceMove(xml, ctx, segment, startTick, track, &lastTrackWritten);
@@ -3772,7 +3784,8 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         if (clip) {
             for (Spanner* s : spanners) {
                 Fraction spannerEndTick = s->tick2();
-                bool spannerEndingAtEdgeOfClipZone = spannerEndTick == endTick && !s->isSlur() && s->effectiveTrack2() == track
+                bool spannerEndingAtEdgeOfClipZone = spannerEndTick == endTick && !s->isSlur()
+                                                     && s->effectiveTrack2() == track
                                                      && s->tick() >= sseg->tick();
                 if (!spannerEndingAtEdgeOfClipZone) {
                     continue;

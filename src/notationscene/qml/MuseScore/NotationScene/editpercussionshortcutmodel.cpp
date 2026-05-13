@@ -188,7 +188,8 @@ QString EditPercussionShortcutModel::getConflictWarningText() const
     }
 
     const QString originTitle = m_originDrum.value("title").toString();
-    return informationText() + "<br><br>" + qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
+    return informationText() + "<br><br>"
+           + qtrc("shortcuts", "Are you sure you want to assign it to <b>%1</b> instead?")
            .arg(originTitle);
 }
 

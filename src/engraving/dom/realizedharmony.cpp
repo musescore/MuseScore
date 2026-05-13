@@ -132,7 +132,8 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
         //for now this range is between 5*12 and 6*12
         PitchMap intervals = getIntervals(rootTpc, literal);
         for (const auto& p : intervals) {
-            notes.insert({ (rootPitch + (p.first % 128)) % PITCH_DELTA_OCTAVE + DEFAULT_OCTAVE * PITCH_DELTA_OCTAVE, p.second });
+            notes.insert({ (rootPitch + (p.first % 128)) % PITCH_DELTA_OCTAVE + DEFAULT_OCTAVE * PITCH_DELTA_OCTAVE,
+                           p.second });
         }
     }
     break;
@@ -343,9 +344,11 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                 String extType = s.left(cutoff);
                 if (extType == "" || extType == "major") {         //alteration
                     if (deg == 9) {
-                        ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH, tpcInterval(rootTpc, deg, alter) });
+                        ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH,
+                                     tpcInterval(rootTpc, deg, alter) });
                     } else {
-                        ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, deg, alter) });
+                        ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD,
+                                     tpcInterval(rootTpc, deg, alter) });
                     }
                     if (deg == 5) {
                         alt5 = true;
@@ -353,14 +356,16 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                     omit |= 1 << deg;
                     modded = true;
                 } else if (extType == "sus") {
-                    ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_3RD, tpcInterval(rootTpc, deg, alter) });
+                    ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_3RD, tpcInterval(rootTpc, deg,
+                                                                                                    alter) });
                     omit |= 1 << 3;
                     modded = true;
                 } else if (extType == "no") {
                     omit |= 1 << deg;
                     modded = true;
                 } else if (extType == "add") {
-                    ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, deg, alter) });
+                    ret.insert({ step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, deg,
+                                                                                                    alter) });
                     omit |= 1 << deg;
                     modded = true;
                 }
@@ -540,7 +545,8 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
 ///
 ///   enforceMaxEquals - enforce the max as a goal so that the max is how many notes is inserted
 //---------------------------------------------------
-RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, size_t max,
+RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch,
+                                                            size_t max,
                                                             bool enforceMaxAsGoal) const
 {
     PitchMap ret;

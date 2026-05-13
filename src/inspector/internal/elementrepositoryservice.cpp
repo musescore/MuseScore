@@ -72,7 +72,8 @@ void ElementRepositoryService::updateElementList(const QList<EngravingItem*>& ne
     m_elementsUpdated.send(m_rawElementList);
 }
 
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(const mu::engraving::ElementType elementType) const
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(
+    const mu::engraving::ElementType elementType) const
 {
     switch (elementType) {
     case mu::engraving::ElementType::CHORD: return findChords();
@@ -122,8 +123,9 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     }
 }
 
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(const mu::engraving::ElementType elementType,
-                                                                                  std::function<bool(const mu::engraving::EngravingItem*)> filterFunc)
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(
+    const mu::engraving::ElementType elementType,
+    std::function<bool(const mu::engraving::EngravingItem*)> filterFunc)
 const
 {
     QList<mu::engraving::EngravingItem*> resultList;
@@ -144,7 +146,8 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::takeAllElements()
     return m_exposedElementList;
 }
 
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::exposeRawElements(const QList<mu::engraving::EngravingItem*>& rawElementList)
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::exposeRawElements(
+    const QList<mu::engraving::EngravingItem*>& rawElementList)
 const
 {
     QList<mu::engraving::EngravingItem*> resultList;
@@ -342,7 +345,8 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
     mu::engraving::ElementType segmentType = lineTypeToSegmentType[lineType];
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        if (element->type() == segmentType || (lineType == ElementType::TEXTLINE_BASE && element->isTextLineBaseSegment())) {
+        if (element->type() == segmentType
+            || (lineType == ElementType::TEXTLINE_BASE && element->isTextLineBaseSegment())) {
             const mu::engraving::SpannerSegment* segment = mu::engraving::toSpannerSegment(element);
             mu::engraving::Spanner* line = segment ? segment->spanner() : nullptr;
 

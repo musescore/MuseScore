@@ -98,7 +98,8 @@ std::vector<ScoreRangeUtilities::RangeSection> ScoreRangeUtilities::splitRangeBy
     const Segment* startSegment = rangeStartSegment;
     const Fraction rangeEndTick = rangeEndSegment->tick();
 
-    for (const Segment* segment = startSegment; segment && segment != rangeEndSegment && segment->tick() < rangeEndTick;) {
+    for (const Segment* segment = startSegment; segment && segment != rangeEndSegment && segment->tick() < rangeEndTick;
+         ) {
         const System* currentSegmentSystem = segment->measure()->system();
 
         const Segment* nextSegment = segment->next1MMenabled();
@@ -143,7 +144,8 @@ std::vector<ScoreRangeUtilities::RangeSection> ScoreRangeUtilities::splitRangeBy
     return sections;
 }
 
-staff_idx_t ScoreRangeUtilities::firstVisibleStaffIdx(const Score* score, const System* system, staff_idx_t startStaffIndex)
+staff_idx_t ScoreRangeUtilities::firstVisibleStaffIdx(const Score* score, const System* system,
+                                                      staff_idx_t startStaffIndex)
 {
     for (staff_idx_t i = startStaffIndex; i < score->nstaves(); ++i) {
         if (system->staff(i)->show()) {

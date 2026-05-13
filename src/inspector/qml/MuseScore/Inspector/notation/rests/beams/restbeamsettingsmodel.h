@@ -36,7 +36,8 @@ class RestBeamSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QObject * beamModesModel READ beamModesModel CONSTANT)
 
 public:
-    explicit RestBeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit RestBeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                   IElementRepositoryService* repository);
 
     QObject* beamModesModel() const;
 

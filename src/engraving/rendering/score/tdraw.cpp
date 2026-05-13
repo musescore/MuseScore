@@ -239,7 +239,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
 
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter, opt);
         break;
-    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter, opt);
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter,
+                                                         opt);
         break;
     case ElementType::GUITAR_BEND_SEGMENT: draw(item_cast<const GuitarBendSegment*>(item), painter, opt);
         break;
@@ -688,10 +689,12 @@ static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Paint
 {
     if (reversed) {
         if (item->isTop()) {
-            item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), data->y1));
+            item->drawSymbol(SymId::reversedBracketTop, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketTop), data->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2));
+            item->drawSymbol(SymId::reversedBracketBottom, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2));
         }
     } else {
         if (item->isTop()) {
@@ -1188,7 +1191,8 @@ void TDraw::draw(const ChordLine* item, Painter* painter, const PaintOptions& op
         return;
     }
 
-    painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+    painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(),
+                        PenStyle::SolidLine));
     painter->setBrush(BrushStyle::NoBrush);
     if (!item->isWavy()) {
         painter->drawPath(ldata->path);
@@ -1208,7 +1212,8 @@ void TDraw::draw(const Clef* item, Painter* painter, const PaintOptions& opt)
         return;
     }
 
-    if (ldata->symId == SymId::noSym || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
+    if (ldata->symId == SymId::noSym
+        || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
         return;
     }
 
@@ -1293,10 +1298,12 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
-    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
+    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium),
+            PenStyle::SolidLine,
             PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(
+        ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1311,7 +1318,8 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
         }
 
         // if extended cont.line and no closing parenthesis: look at next FB element
-        if (item->contLine() > FiguredBassItem::ContLine::SIMPLE && item->parenth5() == FiguredBassItem::Parenthesis::NONE) {
+        if (item->contLine() > FiguredBassItem::ContLine::SIMPLE
+            && item->parenth5() == FiguredBassItem::Parenthesis::NONE) {
             FiguredBass* nextFB;
             // if there is a contiguous FB element
             if ((nextFB = item->figuredBass()->nextFiguredBass()) != 0) {
@@ -1581,7 +1589,8 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter, const PaintOpti
     double _spatium = item->spatium();
     const Glissando* glissando = item->glissando();
 
-    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(), opt));
+    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(),
+                           opt));
     pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
@@ -1733,7 +1742,8 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOpti
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (!RealIsNull(item->frameWidth().val())) {
             Color fColor = item->curColor(item->visible(), item->frameColor(), opt);
-            double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameWidthVal = item->frameWidth().val()
+                                   * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
             Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
@@ -1745,7 +1755,8 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter, const PaintOpti
         if (item->circle()) {
             painter->drawEllipse(ldata->frame);
         } else {
-            double frameRadius = item->frameRound().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameRadius = item->frameRound().val()
+                                 * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
             painter->drawRoundedRect(ldata->frame, frameRadius, frameRadius);
         }
     }
@@ -1981,7 +1992,8 @@ void TDraw::draw(const Harmony* item, Painter* painter, const PaintOptions& opt)
             painter->drawArc(ldata->frame, 0, 5760);
         } else {
             double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-            double frameRadius = item->frameRound().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameRadius = item->frameRound().val()
+                                 * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
             painter->drawRoundedRect(ldata->frame, frameRadius, frameRadius);
         }
     }
@@ -2054,7 +2066,8 @@ void TDraw::draw(const Image* item, Painter* painter, const PaintOptions& opt)
                 muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
-                if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
+                if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage()
+                    && !item->rasterImage()->isNull()) {
                     item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
                     item->setDirty(false);
                 }
@@ -2107,7 +2120,8 @@ void TDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& opt)
 
     painter->setPen(item->curColor(opt));
     double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
+    double step = _spatium
+                  * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
     int lines = item->staff() ? item->staff()->staffTypeForElement(item)->lines() : 5;
     double ledgerLineWidth = item->style().styleAbsolute(Sid::ledgerLineWidth) * item->mag();
     double ledgerExtraLen = item->style().styleS(Sid::ledgerLineLength).val() * _spatium;
@@ -2605,9 +2619,12 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
 
     // Draw stem and flag
     if (item->hasStem()) {
-        double x = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).x();
+        double x
+            = item->symSmuflAnchor(item->noteheadSymbol(),
+                                   up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).x();
         x += up ? -0.5 * lw : 0.5 * lw;
-        double y1 = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+        double y1 = item->symSmuflAnchor(
+            item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         double y2 = (up ? -3.5 : 3.5) * sp;
 
         if (item->hasFlag()) {
@@ -2891,7 +2908,8 @@ void TDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions
         const double spatium = item->spatium();
         const double lineWidth = spatium * .15;
 
-        const Pen pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+        const Pen pen(item->curColor(opt), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap,
+                      PenJoinStyle::RoundJoin);
         painter->setPen(pen);
         painter->setBrush(Brush(item->curColor(opt)));
 
@@ -2907,7 +2925,8 @@ void TDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions
         PainterPath path;
         path.moveTo(x, y);
         path.arcTo(x, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 180.0, 90.0);
-        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 270, 90);
+        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius,
+                   2 * cornerRadius, 270, 90);
         path.lineTo(x + width, y);
         path.moveTo(x + width / 2, y + topPartHeight);
         path.lineTo(x + width / 2, y + height);
@@ -2927,7 +2946,8 @@ void TDraw::draw(const Symbol* item, Painter* painter, const PaintOptions& opt)
     if (!item->isNoteDot() || !tabStaff) {
         painter->setPen(item->curColor(opt));
         if (item->scoreFont()) {
-            item->scoreFont()->draw(item->sym(), painter, item->magS() * item->symbolsSize(), PointF(), item->symAngle());
+            item->scoreFont()->draw(item->sym(), painter, item->magS() * item->symbolsSize(), PointF(),
+                                    item->symAngle());
         } else {
             item->drawSymbol(item->sym(), painter);
         }
@@ -3096,7 +3116,8 @@ void TDraw::draw(const TieSegment* item, Painter* painter, const PaintOptions& o
         return;
     }
 
-    Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>(), opt);
+    Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(
+                                        Pid::COLOR).value<Color>(), opt);
     if (!opt.isPrinting && item->ldata()->allJumpPointsInactive) {
         penColor.setAlpha(std::min(penColor.alpha(), 85));
     }

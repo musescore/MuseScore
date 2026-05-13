@@ -303,9 +303,12 @@ TEST_F(Engraving_TimesigTests, timesig_78216)
     Measure* m3 = m2->nextMeasure();
 
     // verify no timesig exists in segment of final tick of m1, m2, m3
-    EXPECT_FALSE(m1->findSegment(SegmentType::TimeSig, m1->endTick())) << "Should be no timesig at the end of measure 1.";
-    EXPECT_FALSE(m2->findSegment(SegmentType::TimeSig, m2->endTick())) << "Should be no timesig at the end of measure 2.";
-    EXPECT_FALSE(m3->findSegment(SegmentType::TimeSig, m3->endTick())) << "Should be no timesig at the end of measure 3.";
+    EXPECT_FALSE(m1->findSegment(SegmentType::TimeSig,
+                                 m1->endTick())) << "Should be no timesig at the end of measure 1.";
+    EXPECT_FALSE(m2->findSegment(SegmentType::TimeSig,
+                                 m2->endTick())) << "Should be no timesig at the end of measure 2.";
+    EXPECT_FALSE(m3->findSegment(SegmentType::TimeSig,
+                                 m3->endTick())) << "Should be no timesig at the end of measure 3.";
     delete score;
 }
 
@@ -424,7 +427,8 @@ TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
 
     // Check underlying measures in all scores are the lengths expected
 
-    std::array<Fraction, 5> expectedTimeSigs = { Fraction(4, 4), Fraction(4, 4), Fraction(3, 4), Fraction(4, 4), Fraction(4, 4) };
+    std::array<Fraction,
+               5> expectedTimeSigs = { Fraction(4, 4), Fraction(4, 4), Fraction(3, 4), Fraction(4, 4), Fraction(4, 4) };
 
     for (Score* partScore : score->scoreList()) {
         for (Measure* m = partScore->firstMeasure(); m; m = m->nextMeasure()) {
@@ -511,7 +515,8 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     EXPECT_TRUE(topTimeSig);
     EXPECT_EQ(topTimeSig->sig(), Fraction(6, 8));
 
-    Segment* part2M1UnderlyingTimeSigSeg = part2M1Underlying->findSegmentR(SegmentType::TimeSigType, part2M1Underlying->ticks());
+    Segment* part2M1UnderlyingTimeSigSeg = part2M1Underlying->findSegmentR(SegmentType::TimeSigType,
+                                                                           part2M1Underlying->ticks());
     EXPECT_TRUE(part2M1UnderlyingTimeSigSeg);
     TimeSig* underlyingTimeSig = toTimeSig(part2M1UnderlyingTimeSigSeg->element(0));
     EXPECT_TRUE(underlyingTimeSig);

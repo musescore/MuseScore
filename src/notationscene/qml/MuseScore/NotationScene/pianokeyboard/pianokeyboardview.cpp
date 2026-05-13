@@ -182,13 +182,15 @@ void PianoKeyboardView::updateKeyStateColors()
 
     QColor blackKeyTopPieceBaseColor(78, 78, 78);
     m_blackKeyTopPieceStateColors[KeyState::None] = blackKeyTopPieceBaseColor;
-    m_blackKeyTopPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.4);
+    m_blackKeyTopPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyTopPieceBaseColor, accentColor,
+                                                                                0.4);
     m_blackKeyTopPieceStateColors[KeyState::Selected] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.8);
     m_blackKeyTopPieceStateColors[KeyState::Played] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 1.0);
 
     QColor blackKeyBottomPieceBaseColor(56, 56, 58);
     m_blackKeyBottomPieceStateColors[KeyState::None] = blackKeyBottomPieceBaseColor;
-    m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.4);
+    m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBottomPieceBaseColor,
+                                                                                   accentColor, 0.4);
     m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.8);
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
 }

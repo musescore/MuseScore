@@ -30,7 +30,8 @@
 #include "modularity/ioc.h"
 
 namespace mu::notation {
-class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
+class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Contextable,
+    public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus);

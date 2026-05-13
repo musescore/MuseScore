@@ -728,7 +728,8 @@ QVariantList ExportDialogModel::musicXmlLayoutTypes() const
         //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::AllBreaks, muse::qtrc("project/export", "System and page breaks") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXmlLayoutType::ManualBreaks, muse::qtrc("project/export", "Manually added system and page breaks only") },
+        { MusicXmlLayoutType::ManualBreaks,
+          muse::qtrc("project/export", "Manually added system and page breaks only") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
         { MusicXmlLayoutType::None, muse::qtrc("project/export", "No system or page breaks") },
     };

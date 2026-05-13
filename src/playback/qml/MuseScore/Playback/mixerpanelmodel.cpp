@@ -134,7 +134,8 @@ void MixerPanelModel::reloadItems()
 
     const auto& instrumentTrackIdMap = controller()->instrumentTrackIdMap();
 
-    auto addInstrumentTrack = [this, &instrumentTrackIdMap](const InstrumentTrackId& instrumentTrackId, bool isPrimary = true) {
+    auto addInstrumentTrack
+        = [this, &instrumentTrackIdMap](const InstrumentTrackId& instrumentTrackId, bool isPrimary = true) {
         auto search = instrumentTrackIdMap.find(instrumentTrackId);
         if (search == instrumentTrackIdMap.cend()) {
             return;

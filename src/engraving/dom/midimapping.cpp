@@ -103,7 +103,8 @@ void MasterScore::checkMidiMapping()
 //   getNextFreeMidiMapping
 //---------------------------------------------------------
 
-int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p, int ch)
+int MasterScore::getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p,
+                                        int ch)
 {
     if (ch != -1 && p != -1) {
         return p * 16 + ch;
@@ -190,7 +191,8 @@ void MasterScore::reorderMidiMapping()
         for (const auto& pair : part->instruments()) {
             const Instrument* instr = pair.second;
             for (InstrChannel* channel : instr->channel()) {
-                if (m_midiMapping[sequenceNumber].part() == part && m_midiMapping[sequenceNumber].m_masterChannel == channel) {
+                if (m_midiMapping[sequenceNumber].part() == part
+                    && m_midiMapping[sequenceNumber].m_masterChannel == channel) {
                     sequenceNumber++;
                     continue;
                 }
@@ -285,12 +287,14 @@ int MasterScore::updateMidiMapping()
     return maxport;
 }
 
-void MasterScore::doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom,
+void MasterScore::doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels,
+                                      unsigned int& searchMidiMappingFrom,
                                       Part* part, InstrChannel* channel, bool useDrumset)
 {
     bool channelExists = false;
     for (const MidiMapping& mapping : m_midiMapping) {
-        const bool validChannelIndex = channel->channel() >= 0 && channel->channel() < static_cast<int>(m_midiMapping.size());
+        const bool validChannelIndex = channel->channel() >= 0
+                                       && channel->channel() < static_cast<int>(m_midiMapping.size());
         if (channel == mapping.m_masterChannel && validChannelIndex) {
             channelExists = true;
             break;

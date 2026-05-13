@@ -253,7 +253,8 @@ static String fingeringTextRH(int rightFinger)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch, muse::draw::Color color,
+static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch,
+                           muse::draw::Color color,
                            std::vector<mu::engraving::Note*>& tiedNotes)
 {
     LOGN("pitch %d", pitch);
@@ -306,7 +307,8 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     chord->add(cr);
 }
 
-static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color, bool visible = true)
+static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color,
+                    bool visible = true)
 {
     mu::engraving::Rest* rest = Factory::createRest(segment);
     if (rest) {
@@ -417,10 +419,12 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                 }
 
                 if (firstNote->rest) {
-                    LOGN("    - rest position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
+                    LOGN("    - rest position %d string %d fret %d", firstNote->position, firstNote->string,
+                         firstNote->fret);
                     addRest(segment, track, tDuration, length, toColor(voice));
                 } else {
-                    LOGN("    - note(s) position %d string %d fret %d", firstNote->position, firstNote->string, firstNote->fret);
+                    LOGN("    - note(s) position %d string %d fret %d", firstNote->position, firstNote->string,
+                         firstNote->fret);
                     mu::engraving::Chord* chord { Factory::createChord(segment) };
                     if (chord) {
                         chord->setTrack(track);
@@ -443,8 +447,10 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                             addNoteToChord(chord, note, stringOffset, pitch, toColor(voice), tiedNotes);
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
-                                int gracePitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->graceFret;
-                                addGraceNotesToChord(chord, gracePitch, note->graceFret, note->string - stringOffset - 1, toColor(voice));
+                                int gracePitch = 96 - instrument.tuning.at(note->string - stringOffset - 1)
+                                                 + note->graceFret;
+                                addGraceNotesToChord(chord, gracePitch, note->graceFret,
+                                                     note->string - stringOffset - 1, toColor(voice));
                             }
                         }
                         tupletHandler.addCr(measure, chord);
@@ -510,7 +516,8 @@ void TablEdit::createMeasures(const MeasureHandler& measureHandler)
         auto measure = Factory::createMeasure(score->dummy()->system());
         measure->setTick(tick);
         Fraction nominalLength{ tefMeasure.numerator, tefMeasure.denominator };
-        Fraction actualLength{ reducedActualLength(measureHandler.actualSize(tefMeasures, idx), tefMeasure.denominator) };
+        Fraction actualLength{ reducedActualLength(measureHandler.actualSize(tefMeasures, idx),
+                                                   tefMeasure.denominator) };
         measure->setTimesig(nominalLength);
         measure->setTicks(actualLength);
         measure->setEndBarLineType(BarLineType::NORMAL, 0);
@@ -751,7 +758,9 @@ void TablEdit::createScore()
 void TablEdit::createTempo()
 {
     mu::engraving::Measure* measure = score->firstMeasure();
-    mu::engraving::Segment* segment = measure->getSegment(mu::engraving::SegmentType::ChordRest, mu::engraving::Fraction(0, 1));
+    mu::engraving::Segment* segment = measure->getSegment(mu::engraving::SegmentType::ChordRest, mu::engraving::Fraction(
+                                                              0,
+                                                              1));
     mu::engraving::TempoText* tt = new mu::engraving::TempoText(segment);
     tt->setTempo(double(tefHeader.tempo) / 60.0);
     tt->setTrack(0);

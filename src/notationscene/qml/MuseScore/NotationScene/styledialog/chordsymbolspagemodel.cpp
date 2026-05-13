@@ -133,19 +133,44 @@ StyleItem* ChordSymbolsPageModel::extensionAdjust() const { return styleItem(Sty
 
 StyleItem* ChordSymbolsPageModel::modifierMag() const { return styleItem(StyleId::chordModifierMag); }
 StyleItem* ChordSymbolsPageModel::modifierAdjust() const { return styleItem(StyleId::chordModifierAdjust); }
-StyleItem* ChordSymbolsPageModel::verticallyStackModifiers() const { return styleItem(StyleId::verticallyStackModifiers); }
+StyleItem* ChordSymbolsPageModel::verticallyStackModifiers() const
+{
+    return styleItem(StyleId::verticallyStackModifiers);
+}
 
 StyleItem* ChordSymbolsPageModel::chordBassNoteStagger() const { return styleItem(StyleId::chordBassNoteStagger); }
 StyleItem* ChordSymbolsPageModel::chordBassNoteScale() const { return styleItem(StyleId::chordBassNoteScale); }
 
-StyleItem* ChordSymbolsPageModel::polychordDividerThickness() const { return styleItem(StyleId::polychordDividerThickness); }
-StyleItem* ChordSymbolsPageModel::polychordDividerSpacing() const { return styleItem(StyleId::polychordDividerSpacing); }
-StyleItem* mu::notation::ChordSymbolsPageModel::useSmuflSymbols() const { return styleItem(StyleId::harmonyParenUseSmuflSym); }
+StyleItem* ChordSymbolsPageModel::polychordDividerThickness() const
+{
+    return styleItem(StyleId::polychordDividerThickness);
+}
 
-StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const { return styleItem(StyleId::verticallyAlignChordSymbols); }
+StyleItem* ChordSymbolsPageModel::polychordDividerSpacing() const
+{
+    return styleItem(StyleId::polychordDividerSpacing);
+}
+
+StyleItem* mu::notation::ChordSymbolsPageModel::useSmuflSymbols() const
+{
+    return styleItem(StyleId::harmonyParenUseSmuflSym);
+}
+
+StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const
+{
+    return styleItem(StyleId::verticallyAlignChordSymbols);
+}
+
 StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordSymPosition); }
-StyleItem* ChordSymbolsPageModel::chordAlignmentToFretboard() const { return styleItem(StyleId::chordAlignmentToFretboard); }
-StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const { return styleItem(StyleId::chordAlignmentExcludeModifiers); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentToFretboard() const
+{
+    return styleItem(StyleId::chordAlignmentToFretboard);
+}
+
+StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const
+{
+    return styleItem(StyleId::chordAlignmentExcludeModifiers);
+}
 
 StyleItem* ChordSymbolsPageModel::chordSymbolSpelling() const { return styleItem(StyleId::chordSymbolSpelling); }
 QVariantList ChordSymbolsPageModel::possibleChordSymbolSpellings() const
@@ -171,7 +196,11 @@ QVariantList ChordSymbolsPageModel::possibleChordSymbolSpellings() const
     return options;
 }
 
-StyleItem* ChordSymbolsPageModel::automaticCapitalization() const { return styleItem(StyleId::automaticCapitalization); }
+StyleItem* ChordSymbolsPageModel::automaticCapitalization() const
+{
+    return styleItem(StyleId::automaticCapitalization);
+}
+
 StyleItem* ChordSymbolsPageModel::lowerCaseMinorChords() const { return styleItem(StyleId::lowerCaseMinorChords); }
 StyleItem* ChordSymbolsPageModel::lowerCaseBassNotes() const { return styleItem(StyleId::lowerCaseBassNotes); }
 StyleItem* ChordSymbolsPageModel::allCapsNoteNames() const { return styleItem(StyleId::allCapsNoteNames); }

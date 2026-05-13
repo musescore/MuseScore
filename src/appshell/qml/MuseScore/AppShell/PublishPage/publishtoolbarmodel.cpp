@@ -33,7 +33,8 @@ void PublishToolBarModel::load()
     AbstractToolBarModel::load();
 
     ToolBarItemList items;
-    const auto addItem = [this, &items](const muse::actions::ActionCode& code, const muse::TranslatableString& description = {}) {
+    const auto addItem
+        = [this, &items](const muse::actions::ActionCode& code, const muse::TranslatableString& description = {}) {
         auto* item = makeItem(code);
         item->setShowTitle(true);
 
@@ -45,8 +46,10 @@ void PublishToolBarModel::load()
     };
 
     addItem("print");
-    addItem("file-publish", muse::TranslatableString("project/save", "Share this score and its audio on MuseScore.com"));
-    addItem("file-share-audio", muse::TranslatableString("project/save", "Share the audio from this score on Audio.com"));
+    addItem("file-publish",
+            muse::TranslatableString("project/save", "Share this score and its audio on MuseScore.com"));
+    addItem("file-share-audio",
+            muse::TranslatableString("project/save", "Share the audio from this score on Audio.com"));
     addItem("file-export");
 
     setItems(items);

@@ -82,7 +82,8 @@ void ScoreAppearanceSettingsModel::onCurrentNotationChanged()
     emit showBracketsWhenSpanningSingleStaffChanged();
 }
 
-void ScoreAppearanceSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet& changedStyleIdSet)
+void ScoreAppearanceSettingsModel::onNotationChanged(const engraving::PropertyIdSet&,
+                                                     const engraving::StyleIdSet& changedStyleIdSet)
 {
     if (muse::contains(changedStyleIdSet, StyleId::hideEmptyStaves)) {
         emit hideEmptyStavesChanged();

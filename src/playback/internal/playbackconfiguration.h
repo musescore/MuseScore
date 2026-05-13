@@ -70,7 +70,8 @@ public:
     void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const override;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
 
-    muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
+    muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index,
+                                            muse::audio::AudioSourceType sourceType,
                                             const muse::String& instrumentSoundId) const override;
 
     bool muteHiddenInstruments() const override;

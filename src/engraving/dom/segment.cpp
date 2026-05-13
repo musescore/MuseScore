@@ -147,14 +147,16 @@ void Segment::removeElement(track_idx_t track)
 //---------------------------------------------------------
 
 Segment::Segment(Measure* m)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+    : EngravingItem(ElementType::SEGMENT,
+                    m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
     init();
 }
 
 Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
-    : EngravingItem(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+    : EngravingItem(ElementType::SEGMENT,
+                    m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
 //      assert(t >= Fraction(0,1));
@@ -1108,7 +1110,8 @@ bool Segment::isTupletSubdivisionOnStaff(staff_idx_t staffIdx) const
 
 bool Segment::isInsideTupletOnStaff(staff_idx_t staffIdx) const
 {
-    const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx, SegmentType::ChordRest);
+    const Segment* refCRSeg = isChordRestType() && hasElements(staffIdx) ? this : prev1WithElemsOnStaff(staffIdx,
+                                                                                                        SegmentType::ChordRest);
     if (!refCRSeg || refCRSeg->measure() != measure()) {
         return false;
     }
@@ -1461,7 +1464,8 @@ void Segment::clearAnnotations()
 void Segment::scanElements(std::function<void(EngravingItem*)> func)
 {
     bool scanAllTimeSigs = (isType(SegmentType::TimeSigType)
-                            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL);
+                            && style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
+                            != TimeSigPlacement::NORMAL);
     for (size_t track = 0; track < score()->nstaves() * VOICES; ++track) {
         size_t staffIdx = track / VOICES;
         bool thisMeasureVisible = measure()->visible(staffIdx) && score()->staff(staffIdx)->show();
@@ -1521,7 +1525,8 @@ EngravingItem* Segment::firstElementForNavigation(staff_idx_t staff) const
 EngravingItem* Segment::lastElementForNavigation(staff_idx_t staff) const
 {
     if (segmentType() == SegmentType::ChordRest) {
-        for (int voice = static_cast<int>(staff * VOICES + (VOICES - 1)); voice / static_cast<int>(VOICES) == static_cast<int>(staff);
+        for (int voice = static_cast<int>(staff * VOICES + (VOICES - 1));
+             voice / static_cast<int>(VOICES) == static_cast<int>(staff);
              voice--) {
             EngravingItem* el = element(voice);
             if (!el) {            //there is no chord or rest on this voice
@@ -2792,8 +2797,10 @@ bool Segment::hasTimeSigAboveStaves() const
 bool Segment::makeSpaceForTimeSigAboveStaves() const
 {
     bool makeSpace = style().styleB(Sid::timeSigCenterOnBarline)
-                     ? style().styleV(Sid::timeSigVSMarginCentered).value<TimeSigVSMargin>() == TimeSigVSMargin::CREATE_SPACE
-                     : style().styleV(Sid::timeSigVSMarginNonCentered).value<TimeSigVSMargin>() == TimeSigVSMargin::CREATE_SPACE;
+                     ? style().styleV(Sid::timeSigVSMarginCentered).value<TimeSigVSMargin>()
+                     == TimeSigVSMargin::CREATE_SPACE
+                     : style().styleV(Sid::timeSigVSMarginNonCentered).value<TimeSigVSMargin>()
+                     == TimeSigVSMargin::CREATE_SPACE;
     return hasTimeSigAboveStaves() && makeSpace;
 }
 
@@ -2901,7 +2908,8 @@ Fraction Segment::shortestChordRest() const
     for (auto elem : elist()) {
         if (!elem || !elem->staff()->show() || !elem->isChordRest() || (elem->isRest() && toRest(elem)->isGap())
             || (!elem->visible()
-                && measure()->hasVoices(elem->staffIdx(), measure()->tick(), measure()->ticks(), /*considerInvisible*/ true))) {
+                && measure()->hasVoices(elem->staffIdx(), measure()->tick(), measure()->ticks(),
+                                        /*considerInvisible*/ true))) {
             continue;
         }
         cur = toChordRest(elem)->actualTicks();
@@ -2941,7 +2949,8 @@ bool Segment::goesBefore(const Segment* nextSegment) const
     bool thisIsClef = isClefType();
     bool nextIsClef = nextSegment->isClefType();
     bool thisIsBarline = isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
-    bool nextIsBarline = nextSegment->isType(SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
+    bool nextIsBarline = nextSegment->isType(
+        SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine);
 
     bool thisIsStartRepeat = isStartRepeatBarLineType();
     bool nextIsStartRepeat = nextSegment->isStartRepeatBarLineType();
@@ -2953,7 +2962,8 @@ bool Segment::goesBefore(const Segment* nextSegment) const
     // Place non header clefs AFTER header clefs, key signatures, time signatures
     const bool firstSystemMeasure = meas->findSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
     bool thisIsHeader = isHeaderClefType() || (rtick() == Fraction(0, 1) && firstSystemMeasure && !thisIsClef);
-    bool nextIsHeader = nextSegment->isHeaderClefType() || (nextSegment->rtick() == Fraction(0, 1) && firstSystemMeasure && !nextIsClef);
+    bool nextIsHeader = nextSegment->isHeaderClefType()
+                        || (nextSegment->rtick() == Fraction(0, 1) && firstSystemMeasure && !nextIsClef);
 
     bool thisIsEndOfMeasure = endOfMeasureChange();
 
@@ -2967,10 +2977,12 @@ bool Segment::goesBefore(const Segment* nextSegment) const
     }
 
     // Place key signatures and time signatures in correct place when "Allow changes between end-start repeats" is enabled
-    if ((thisIsKeySig || thisIsTimeSig || thisIsClef) && nextIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+    if ((thisIsKeySig || thisIsTimeSig || thisIsClef) && nextIsStartRepeat && thisMeasureIsStartRepeat
+        && prevMeasureIsEndRepeat) {
         return style().styleB(Sid::changesBetweenEndStartRepeat);
     }
-    if ((nextIsKeySig || nextIsTimeSig || nextIsClef) && thisIsStartRepeat && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
+    if ((nextIsKeySig || nextIsTimeSig || nextIsClef) && thisIsStartRepeat && thisMeasureIsStartRepeat
+        && prevMeasureIsEndRepeat) {
         return !style().styleB(Sid::changesBetweenEndStartRepeat);
     }
 
@@ -2996,13 +3008,15 @@ bool Segment::goesBefore(const Segment* nextSegment) const
         return clefPos == ClefToBarlinePosition::AFTER;
     }
 
-    if (thisIsClef && (nextIsKeySig || nextIsTimeSig) && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
+    if (thisIsClef && (nextIsKeySig || nextIsTimeSig)
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
         && !nextIsHeader && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         // Between repeats
         return true;
     }
 
-    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
+    if ((thisIsKeySig || thisIsTimeSig) && nextIsClef
+        && rtick() == Fraction(0, 1) && nextSegment->rtick() == Fraction(0, 1)
         && !thisIsHeader && thisMeasureIsStartRepeat && prevMeasureIsEndRepeat) {
         // Between repeats
         return false;

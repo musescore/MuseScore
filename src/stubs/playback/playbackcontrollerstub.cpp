@@ -48,7 +48,8 @@ void PlaybackControllerStub::reset()
 {
 }
 
-muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
+muse::async::Channel<muse::audio::secs_t,
+                     muse::midi::tick_t> PlaybackControllerStub::currentPlaybackPositionChanged() const
 {
     return muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>();
 }
@@ -95,14 +96,16 @@ muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> PlaybackContro
     return {};
 }
 
-muse::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+muse::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(
+    const engraving::InstrumentTrackId&) const
 {
     return muse::async::Promise<muse::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
         return reject(int(muse::Ret::Code::UnknownError), "stub");
     });
 }
 
-const PlaybackControllerStub::SoloMuteState& PlaybackControllerStub::trackSoloMuteState(const engraving::InstrumentTrackId&) const
+const PlaybackControllerStub::SoloMuteState& PlaybackControllerStub::trackSoloMuteState(
+    const engraving::InstrumentTrackId&) const
 {
     static const SoloMuteState state;
     return state;

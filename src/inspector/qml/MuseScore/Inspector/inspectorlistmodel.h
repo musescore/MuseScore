@@ -37,7 +37,8 @@
 
 namespace mu::inspector {
 class IElementRepositoryService;
-class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
+class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable,
+    public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -68,7 +69,8 @@ private:
     void listenSelectionChanged();
     void listenScoreChanges();
 
-    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet& changedStyleIdSet);
+    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                        const mu::engraving::StyleIdSet& changedStyleIdSet);
 
     void updateElementList();
 
@@ -80,7 +82,8 @@ private:
     void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
                                         const QList<engraving::EngravingItem*>& selectedElementList);
 
-    void createModelsBySectionType(const InspectorSectionTypeSet& sectionTypes, const ElementKeySet& selectedElementKeySet = {});
+    void createModelsBySectionType(const InspectorSectionTypeSet& sectionTypes,
+                                   const ElementKeySet& selectedElementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet, bool isRangeSelection,
                             const QList<mu::engraving::EngravingItem*>& selectedElementList,
                             const InspectorSectionTypeSet& exclusions = {});

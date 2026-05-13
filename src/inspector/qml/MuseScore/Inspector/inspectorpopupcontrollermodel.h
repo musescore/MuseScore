@@ -39,7 +39,8 @@ Q_MOC_INCLUDE("uicomponents/qml/Muse/UiComponents/menuview.h")
 class QQuickItem;
 
 namespace mu::inspector {
-class InspectorPopupControllerModel : public QObject, public QQmlParserStatus, public muse::Contextable, public muse::async::Asyncable
+class InspectorPopupControllerModel : public QObject, public QQmlParserStatus, public muse::Contextable,
+    public muse::async::Asyncable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)

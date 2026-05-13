@@ -42,7 +42,8 @@ class OrnamentSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * intervalStep READ intervalStep CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * intervalType READ intervalType CONSTANT)
-    Q_PROPERTY(bool isFullIntervalChoiceAvailable READ isFullIntervalChoiceAvailable NOTIFY isFullIntervalChoiceAvailableChanged)
+    Q_PROPERTY(
+        bool isFullIntervalChoiceAvailable READ isFullIntervalChoiceAvailable NOTIFY isFullIntervalChoiceAvailableChanged)
     Q_PROPERTY(bool isPerfectStep READ isPerfectStep NOTIFY isPerfectStepChanged)
 
     Q_PROPERTY(mu::inspector::PropertyItem * showAccidental READ showAccidental CONSTANT)
@@ -51,7 +52,8 @@ class OrnamentSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * showCueNote READ showCueNote CONSTANT)
 
 public:
-    explicit OrnamentSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit OrnamentSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                   IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

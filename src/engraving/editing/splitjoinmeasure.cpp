@@ -317,7 +317,8 @@ void SplitJoinMeasure::joinMeasures(MasterScore* masterScore, const Fraction& ti
                         Segment* tSeg = timeSig->segment();
                         track_idx_t track = timeSig->track();
                         Measure* sNext = next ? linkedScore->tick2measure(next->tick()) : nullptr;
-                        Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
+                        Segment* nextTSeg
+                            = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
                         if (sNext && !nextTSeg->element(track)) {
                             TimeSig* nsig = Factory::copyTimeSig(*timeSig);
                             nsig->setScore(linkedScore);

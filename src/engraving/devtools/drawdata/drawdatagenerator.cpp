@@ -92,7 +92,8 @@ Ret DrawDataGenerator::processDir(const muse::io::path_t& scoreDir, const muse::
     return muse::make_ok();
 }
 
-Ret DrawDataGenerator::processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile, const GenOpt& opt)
+Ret DrawDataGenerator::processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile,
+                                   const GenOpt& opt)
 {
     DrawDataPtr drawData = genDrawData(scoreFile, opt);
     DrawDataRW::writeData(outFile, drawData);

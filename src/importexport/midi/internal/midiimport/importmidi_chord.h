@@ -123,7 +123,8 @@ ReducedFraction minNoteLen(const std::pair<const ReducedFraction, MidiChord>& ch
 ReducedFraction maxNoteLen(const std::pair<const ReducedFraction, MidiChord>& chord);
 
 const ReducedFraction& minAllowedDuration();
-ReducedFraction findMinDuration(const ReducedFraction& onTime, const QList<MidiChord>& midiChords, const ReducedFraction& length);
+ReducedFraction findMinDuration(const ReducedFraction& onTime, const QList<MidiChord>& midiChords,
+                                const ReducedFraction& length);
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord>& chords);
 void sortNotesByLength(std::multimap<ReducedFraction, MidiChord>& chords);
 
@@ -143,12 +144,13 @@ ReducedFraction findMaxChordLength(const std::multimap<ReducedFraction, MidiChor
 
 std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
 findChordsForTimeRange(
-    int voice, const ReducedFraction& onTime, const ReducedFraction& offTime, const std::multimap<ReducedFraction, MidiChord>& chords,
+    int voice, const ReducedFraction& onTime, const ReducedFraction& offTime, const std::multimap<ReducedFraction,
+                                                                                                  MidiChord>& chords,
     const ReducedFraction& maxChordLength);
 
 void setBarIndexes(
-    std::multimap<ReducedFraction, MidiChord>& chords, const ReducedFraction& basicQuant, const ReducedFraction& lastTick,
-    const engraving::TimeSigMap* sigmap);
+    std::multimap<ReducedFraction, MidiChord>& chords, const ReducedFraction& basicQuant,
+    const ReducedFraction& lastTick, const engraving::TimeSigMap* sigmap);
 
 #ifdef QT_DEBUG
 

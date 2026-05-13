@@ -40,8 +40,10 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, const muse::modulari
     setIcon(muse::ui::IconCode::Code::BRACKET);
     createProperties();
 
-    connect(this, &BracketSettingsModel::selectionChanged, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
-    connect(m_bracketSpanStaves, &PropertyItem::propertyModified, this, &BracketSettingsModel::maxBracketColumnPositionChanged);
+    connect(this, &BracketSettingsModel::selectionChanged, this,
+            &BracketSettingsModel::maxBracketColumnPositionChanged);
+    connect(m_bracketSpanStaves, &PropertyItem::propertyModified, this,
+            &BracketSettingsModel::maxBracketColumnPositionChanged);
 }
 
 void BracketSettingsModel::createProperties()

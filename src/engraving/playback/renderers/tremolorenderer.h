@@ -31,16 +31,16 @@ class TremoloRenderer : public RenderBase<TremoloRenderer>
 public:
     static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& ctx,
-                         muse::mpe::PlaybackEventList& result);
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType,
+                         const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
 private:
     using TremoloTimeCache = std::unordered_map<const Note*, muse::mpe::TimestampAndDuration>;
 
     static int stepDurationTicks(const Chord* chord, int tremoloLines);
-    static void buildAndAppendEvents(const Chord* chord, const muse::mpe::ArticulationType type, const int stepDurationTicks,
-                                     const int startTick, const RenderingContext& ctx, TremoloTimeCache& tremoloCache,
-                                     muse::mpe::PlaybackEventList& result);
+    static void buildAndAppendEvents(const Chord* chord, const muse::mpe::ArticulationType type,
+                                     const int stepDurationTicks, const int startTick, const RenderingContext& ctx,
+                                     TremoloTimeCache& tremoloCache, muse::mpe::PlaybackEventList& result);
     static const muse::mpe::TimestampAndDuration& tremoloTimeAndDuration(const Note* note, const RenderingContext& ctx,
                                                                          TremoloTimeCache& cache);
 };

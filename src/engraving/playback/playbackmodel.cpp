@@ -86,7 +86,8 @@ void PlaybackModel::load(Score* score)
 
         clearExpiredTracks();
         clearExpiredContexts(trackRange.trackFrom, trackRange.trackTo);
-        clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
+        clearExpiredEvents(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo,
+                           &trackChanges);
 
         const InstrumentTrackIdSet oldTracks = existingTrackIdSet();
         update(tickRange.tickFrom, tickRange.tickTo, trackRange.trackFrom, trackRange.trackTo, &trackChanges);
@@ -274,7 +275,8 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const St
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
+void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items,
+                                          muse::mpe::duration_t duration, bool flushSound)
 {
     if (items.empty()) {
         return;
@@ -472,7 +474,8 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
             //! NOTE: this assumes that the list has already been cleared in clearExpiredEvents
             //! Necessary to prevent event duplication (unchanged lists should not be modified)
             if (list.empty() || muse::contains(newEventTimestamps, pair.first)) {
-                list.insert(list.end(), std::make_move_iterator(pair.second.begin()), std::make_move_iterator(pair.second.end()));
+                list.insert(list.end(), std::make_move_iterator(pair.second.begin()),
+                            std::make_move_iterator(pair.second.end()));
                 newEventTimestamps.insert(pair.first);
             }
         }
@@ -483,7 +486,8 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     appendEvents(ctx->syllables(m_score));
 }
 
-void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
+void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment,
+                                   const std::set<staff_idx_t>& staffIdxSet,
                                    bool isFirstChordRestSegmentOfMeasure, ChangedTrackIdSet* trackChanges)
 {
     for (const EngravingItem* item : segment->annotations()) {
@@ -575,7 +579,8 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
     }
 }
 
-void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
+void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat,
+                                         const Measure* currentMeasure,
                                          const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges)
 {
     if (!measureRepeat || !currentMeasure) {
@@ -612,7 +617,8 @@ void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const Mea
     }
 }
 
-void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
+void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom,
+                                 const track_idx_t trackTo,
                                  ChangedTrackIdSet* trackChanges)
 {
     TRACEFUNC;
@@ -659,7 +665,8 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                     chordRestSegmentNum++;
                 }
 
-                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, chordRestSegmentNum == 0, trackChanges);
+                processSegment(tickPositionOffset, segment, staffToProcessIdxSet, chordRestSegmentNum == 0,
+                               trackChanges);
             }
 
             if (m_metronomeEnabled) {
@@ -688,7 +695,8 @@ void PlaybackModel::reloadMetronomeEvents()
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
-            m_renderer.renderMetronome(m_score, measure, tickPositionOffset, metronomeProfile, metronomeData.originEvents);
+            m_renderer.renderMetronome(m_score, measure, tickPositionOffset, metronomeProfile,
+                                       metronomeData.originEvents);
         }
     }
 
@@ -855,7 +863,8 @@ void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t track
     }
 }
 
-void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
+void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom,
+                                       const track_idx_t trackTo,
                                        ChangedTrackIdSet* trackChanges)
 {
     TRACEFUNC;

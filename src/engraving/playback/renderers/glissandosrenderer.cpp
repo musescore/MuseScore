@@ -97,7 +97,8 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, NominalNoteCt
     }
 }
 
-void GlissandosRenderer::renderContinuousGlissando(const Note*, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result)
+void GlissandosRenderer::renderContinuousGlissando(const Note*, NominalNoteCtx& ctx,
+                                                   muse::mpe::PlaybackEventList& result)
 {
     result.emplace_back(buildNoteEvent(ctx));
 }

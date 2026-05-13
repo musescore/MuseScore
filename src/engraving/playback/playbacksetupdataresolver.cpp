@@ -72,7 +72,8 @@ void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, P
     result = PIANO_SETUP_DATA;
 }
 
-void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* instrument, PlaybackSetupData& result) const
+void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* instrument,
+                                                             PlaybackSetupData& result) const
 {
     if (instrument->hasStrings()) {
         static const PlaybackSetupData GUITAR_SETUP_DATA = {

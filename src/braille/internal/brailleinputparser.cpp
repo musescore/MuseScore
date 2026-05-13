@@ -30,7 +30,8 @@ namespace mu::engraving {
 static BiePattern pattern_accord = { "accord", { &Braille_FullMeasureAccord } };
 
 static BiePattern pattern_accidentals = { "accidental",
-                                          { &Braille_NaturalAccidental, &Braille_SharpAccidental, &Braille_FlatAccidental } };
+                                          { &Braille_NaturalAccidental, &Braille_SharpAccidental,
+                                            &Braille_FlatAccidental } };
 
 static BiePattern pattern_octaves = { "octave",
                                       { &Braille_Octave0, &Braille_Octave1, &Braille_Octave2,

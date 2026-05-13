@@ -50,8 +50,8 @@
 #include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public muse::Contextable,
-    public muse::async::Asyncable, public muse::actions::Actionable
+class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView,
+    public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
     QML_ELEMENT;
@@ -212,7 +212,8 @@ protected:
 
     virtual void initZoomAndPosition();
 
-    virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
+    virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix,
+                                 bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();

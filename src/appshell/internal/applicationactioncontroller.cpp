@@ -65,7 +65,8 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "about-musicxml", this, &ApplicationActionController::openAboutMusicXMLDialog);
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
-    dispatcher()->reg(this, "accessibility-statement", this, &ApplicationActionController::openAccessibilityStatementPage);
+    dispatcher()->reg(this, "accessibility-statement", this,
+                      &ApplicationActionController::openAccessibilityStatementPage);
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
@@ -363,12 +364,14 @@ void ApplicationActionController::revertToFactorySettings()
         configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES, NOTIFY_OTHER_INSTANCES);
 
         std::string title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
-        std::string question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
+        std::string question
+            = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
 
         int restartBtn = int(IInteractive::Button::Apply);
         auto promise = interactive()->question(title, question,
                                                { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                 IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
+                                                 IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"),
+                                                                          true) },
                                                restartBtn);
 
         promise.onResolve(this, [this](const IInteractive::Result& res) {

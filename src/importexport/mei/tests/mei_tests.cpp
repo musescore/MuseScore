@@ -87,7 +87,8 @@ void Mei_Tests::meiReadTest(const char* file)
     delete score;
 
     // Compare the mei files
-    EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"));
+    EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei",
+                                        ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"));
 }
 
 TEST_F(Mei_Tests, mei_accid_01) {

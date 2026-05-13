@@ -535,7 +535,8 @@ String ChordRest::durationUserName() const
         dotString += muse::mtrc("engraving", "Triple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     case 4:
-        dotString += muse::mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(durationType().type()));
+        dotString
+            += muse::mtrc("engraving", "Quadruple dotted %1").arg(TConv::translatedUserName(durationType().type()));
         break;
     default:
         dotString += TConv::translatedUserName(durationType().type());
@@ -776,7 +777,8 @@ bool ChordRest::isGraceBefore() const
 {
     return isChord()
            && (toChord(this)->noteType() & (
-                   NoteType::ACCIACCATURA | NoteType::APPOGGIATURA | NoteType::GRACE4 | NoteType::GRACE16 | NoteType::GRACE32
+                   NoteType::ACCIACCATURA | NoteType::APPOGGIATURA | NoteType::GRACE4 | NoteType::GRACE16
+                   | NoteType::GRACE32
                    ));
 }
 
@@ -787,7 +789,8 @@ bool ChordRest::isGraceBefore() const
 bool ChordRest::isGraceAfter() const
 {
     return isChord()
-           && (toChord(this)->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER));
+           && (toChord(this)->noteType()
+               & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER));
 }
 
 //---------------------------------------------------------
@@ -1274,7 +1277,8 @@ void ChordRest::checkStaffMoveValidity()
     staff_idx_t minStaff = part()->startTrack() / VOICES;
     staff_idx_t maxStaff = part()->endTrack() / VOICES;
     bool isDestinationValid = targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
-                              && targetStaffType->group() == baseStaffType->group() && targetStaff->isLinked() == baseStaff->isLinked();
+                              && targetStaffType->group() == baseStaffType->group()
+                              && targetStaff->isLinked() == baseStaff->isLinked();
     if (!isDestinationValid) {
         LOGD("staffMove out of scope %zu + %d min %zu max %zu",
              staffIdx(), m_staffMove, minStaff, maxStaff);

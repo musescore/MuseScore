@@ -310,8 +310,9 @@ TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const 
                 {
                     String creationDate = page->score()->metaTag(u"creationDate");
                     if (creationDate.isEmpty()) {
-                        newFragments.back().text += page->score()->masterScore()->fileInfo()->birthTime().date().toString(
-                            muse::DateFormat::ISODate);
+                        newFragments.back().text
+                            += page->score()->masterScore()->fileInfo()->birthTime().date().toString(
+                                   muse::DateFormat::ISODate);
                     } else {
                         newFragments.back().text += muse::Date::fromStringISOFormat(creationDate).toString(
                             muse::DateFormat::ISODate);
@@ -426,7 +427,8 @@ CharFormat HeaderFooterLayout::formatForMacro(const LayoutContext& ctx, const St
     return format;
 }
 
-void HeaderFooterLayout::appendFormattedString(std::list<TextFragment>& fragments, const String& string, const CharFormat& defaultFormat,
+void HeaderFooterLayout::appendFormattedString(std::list<TextFragment>& fragments, const String& string,
+                                               const CharFormat& defaultFormat,
                                                const CharFormat& newFormat)
 {
     // If the default format equals the format for this macro, we don't need to create a new fragment...

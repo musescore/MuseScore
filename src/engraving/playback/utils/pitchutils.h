@@ -135,7 +135,8 @@ inline muse::mpe::pitch_level_t notePitchLevel(const int noteTpc, const int note
 
     double tuningFactor = tuningCents / 100.0;
 
-    muse::mpe::pitch_level_t result = muse::mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, tpc2alter(noteTpc)));
+    muse::mpe::pitch_level_t result
+        = muse::mpe::pitchLevel(pitchClass, actualOctave(noteOctave, pitchClass, tpc2alter(noteTpc)));
     result += tuningFactor * muse::mpe::PITCH_LEVEL_STEP;
 
     return result;

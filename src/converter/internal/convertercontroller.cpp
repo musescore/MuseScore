@@ -81,12 +81,14 @@ Ret ConverterController::batchConvert(const path_t& batchJobFile, const OpenPara
             progress->progress(current, total, job.in.toStdString());
         }
 
-        Ret ret = convertFile(job.in, job.out, openParams, soundProfile, job.tracksDiffPath, extensionUri, job.transposeOptions,
+        Ret ret = convertFile(job.in, job.out, openParams, soundProfile, job.tracksDiffPath, extensionUri,
+                              job.transposeOptions,
                               job.pageNum, job.visibleParts,
                               job.copyright);
         if (!ret) {
             errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
-                                .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(job.out.toString()));
+                                .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(
+                                    job.out.toString()));
         }
     }
 
@@ -250,7 +252,8 @@ Ret ConverterController::convertFile(const muse::io::path_t& in, const muse::io:
     return ret;
 }
 
-Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                                           const OpenParams& openParams)
 {
     TRACEFUNC;
 
@@ -276,7 +279,8 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
     return ret;
 }
 
-Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const muse::io::path_t& out)
+Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
+                                           const muse::io::path_t& out)
 {
     std::string suffix = io::suffix(out);
 
@@ -404,7 +408,8 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
     return rv;
 }
 
-Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
+Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation,
+                                            const muse::io::path_t& out,
                                             const muse::UriQuery& extensionUri)
 {
     //! NOTE First we do the extension, it can modify the notation (score)
@@ -442,7 +447,8 @@ bool ConverterController::isConvertPageByPage(const std::string& suffix) const
     return muse::contains(TYPES, suffix);
 }
 
-Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationPtr notation,
+                                           const muse::io::path_t& out) const
 {
     TRACEFUNC;
 
@@ -490,7 +496,8 @@ muse::Ret ConverterController::convertPage(INotationWriterPtr writer, INotationP
     return make_ok();
 }
 
-Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out) const
+Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation,
+                                             const muse::io::path_t& out) const
 {
     auto outBuf = Buffer::opened(IODevice::WriteOnly);
 
@@ -543,7 +550,8 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
     return make_ret(Ret::Code::Ok);
 }
 
-Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
+Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer,
+                                                 mu::notation::IMasterNotationPtr masterNotation,
                                                  const muse::io::path_t& out) const
 {
     TRACEFUNC;
@@ -595,7 +603,8 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
     return make_ret(Ret::Code::Ok);
 }
 
-muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const ConvertRegionJson& regionJson, const path_t& out) const
+muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const ConvertRegionJson& regionJson,
+                                          const path_t& out) const
 {
     RetVal<ConvertRegion> region = ConverterUtils::parseRegion(regionJson);
     if (!region.ret) {
@@ -642,7 +651,8 @@ muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const Con
     return project->save(out, SaveMode::SaveSelection);
 }
 
-Ret ConverterController::writeTracksDiff(INotationProjectPtr project, const QJsonArray& oldTracks, const path_t& path) const
+Ret ConverterController::writeTracksDiff(INotationProjectPtr project, const QJsonArray& oldTracks,
+                                         const path_t& path) const
 {
     TRACEFUNC;
 
@@ -666,28 +676,32 @@ Ret ConverterController::exportScoreMedia(const muse::io::path_t& in, const muse
     return BackendApi::exportScoreMedia(in, out, highlightConfigPath, openParams);
 }
 
-Ret ConverterController::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out,
+                                         const OpenParams& openParams)
 {
     TRACEFUNC;
 
     return BackendApi::exportScoreMeta(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                                          const OpenParams& openParams)
 {
     TRACEFUNC;
 
     return BackendApi::exportScoreParts(in, out, openParams);
 }
 
-Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
+                                              const OpenParams& openParams)
 {
     TRACEFUNC;
 
     return BackendApi::exportScorePartsPdfs(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out,
+                                              const std::string& optionsJson,
                                               const OpenParams& openParams)
 {
     TRACEFUNC;
@@ -703,7 +717,8 @@ Ret ConverterController::exportScoreElements(const muse::io::path_t& in, const m
     return BackendApi::exportScoreElements(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out,
+                                          const OpenParams& openParams)
 {
     TRACEFUNC;
 

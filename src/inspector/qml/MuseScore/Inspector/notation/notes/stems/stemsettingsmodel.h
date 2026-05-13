@@ -37,10 +37,12 @@ class StemSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * stemDirection READ stemDirection CONSTANT)
 
-    Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
+    Q_PROPERTY(
+        bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
 
 public:
-    explicit StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository);
 
     PropertyItem* thickness() const;
     PropertyItem* length() const;

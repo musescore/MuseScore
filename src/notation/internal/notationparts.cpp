@@ -446,7 +446,8 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     notifyAboutPartChanged(part);
 }
 
-void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKey>& instruments, bool useCustom, const QString& name,
+void NotationParts::setInstrumentGroupNameOptions(const std::vector<InstrumentKey>& instruments, bool useCustom,
+                                                  const QString& name,
                                                   const QString& shortName)
 {
     TRACEFUNC;
@@ -759,7 +760,8 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
     notifyAboutPartReplaced(part, newPart);
 }
 
-void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument, const StaffType* newStaffType)
+void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                                      const StaffType* newStaffType)
 {
     TRACEFUNC;
 
@@ -1013,7 +1015,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config, Fr
         return;
     }
 
-    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.cutaway,
+    score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance,
+                                                 config.cutaway,
                                                  config.hideSystemBarline, config.mergeMatchingRests,
                                                  config.reflectTranspositionInLinkedTab));
 
@@ -1163,7 +1166,8 @@ void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex,
     score()->undoInsertStaff(staff, destinationStaffIndex, createRest);
 }
 
-void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex)
+void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType,
+                              size_t cleffIndex)
 {
     TRACEFUNC;
 

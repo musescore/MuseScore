@@ -62,7 +62,8 @@ void TappingLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, Lay
     }
 }
 
-void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff, LayoutContext& ctx)
+void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff,
+                                          LayoutContext& ctx)
 {
     updateHalfSlurs(item, style, tabStaff, ctx);
 
@@ -192,7 +193,8 @@ void TappingLayout::layoutHalfSlur(Tapping* item, TappingHalfSlur* slur, LayoutC
     skyline.add(maskedShape.translated(slurSeg->pos()));
 }
 
-void TappingLayout::layoutRightHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff,
+void TappingLayout::layoutRightHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style,
+                                           bool tabStaff,
                                            LayoutContext& ctx)
 {
     RHTappingSymbol rhSym = tabStaff ? style.styleV(Sid::rhTappingSymbolTab).value<RHTappingSymbol>()

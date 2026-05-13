@@ -312,7 +312,8 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
         }
 
         if (!instrument.musicXmlId.empty()) {
-            const InstrumentTemplate* standardTempl = muse::value(standardInstrumentByMusicXmlId, instrument.musicXmlId, nullptr);
+            const InstrumentTemplate* standardTempl = muse::value(standardInstrumentByMusicXmlId, instrument.musicXmlId,
+                                                                  nullptr);
             if (standardTempl) {
                 templ->family = standardTempl->family;
                 templ->groupId = standardTempl->groupId;

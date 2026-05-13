@@ -56,7 +56,8 @@ static mpe::ArticulationType toArticulationType(TremoloType type)
     return mpe::ArticulationType::Undefined;
 }
 
-void TremoloSingleMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void TremoloSingleMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx,
+                                      mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == ElementType::TREMOLO_SINGLECHORD) {
         return;
@@ -80,8 +81,9 @@ void TremoloSingleMetaParser::doParse(const EngravingItem* item, const Rendering
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
-                                       - ctx.nominalTimestamp;
+    articulationMeta.overallDuration
+        = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
+          - ctx.nominalTimestamp;
 
     appendArticulationData(std::move(articulationMeta), result);
 }
@@ -122,8 +124,9 @@ void TremoloTwoMetaParser::doParse(const EngravingItem* item, const RenderingCon
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
-                                       - ctx.nominalTimestamp;
+    articulationMeta.overallDuration
+        = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
+          - ctx.nominalTimestamp;
 
     appendArticulationData(std::move(articulationMeta), result);
 }

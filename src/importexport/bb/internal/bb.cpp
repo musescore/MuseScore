@@ -354,7 +354,8 @@ bool BBFile::read(const QString& name)
                     track->setOutChannel(channel);
                     _tracks.append(track);
                 }
-                Fraction tick = Fraction::fromTicks(a[idx] + (a[idx + 1] << 8) + (a[idx + 2] << 16) + (a[idx + 3] << 24));
+                Fraction tick
+                    = Fraction::fromTicks(a[idx] + (a[idx + 1] << 8) + (a[idx + 2] << 16) + (a[idx + 3] << 24));
                 tick -= Fraction::fromTicks(4 * bbDivision);
                 if (tick >= endTick) {
                     LOGD("event tick %d > %d", tick.ticks(), endTick.ticks());

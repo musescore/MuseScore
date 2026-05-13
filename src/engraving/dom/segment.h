@@ -318,7 +318,8 @@ public:
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
     bool isCourtesySegment() const
     {
-        return m_segmentType & (SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType | SegmentType::CourtesyClefType);
+        return m_segmentType
+               & (SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType | SegmentType::CourtesyClefType);
     }
 
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }

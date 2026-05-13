@@ -102,7 +102,8 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
                 }
                 Ornament* ornament = toTrill(spanner)->ornament();
                 Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
-                if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
+                if (trillNote && trillNote->accidental()
+                    && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
                     int line = absStep(trillNote->tpc(), trillNote->epitch());
                     as.setForceRestateAccidental(line, true);
                 }
@@ -283,8 +284,10 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
 
     Measure* nextMeasure = toMeasure(nextMb);
 
-    const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
-                                            || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
+    const bool sigsShouldBeInThisMeasure
+        = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
+           || (measure->repeatJump()
+               && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
     std::vector<Segment*> segsToRemove;
 
     std::vector<Segment*> segsToMoveToNextMeasure;
@@ -415,7 +418,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                 if (underlyingSeg) {
                     underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
                     if (nextMeasure->isMMRest() && nextMeasure->mmRestFirst()) {
-                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(), Fraction(0, 1)));
+                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(),
+                                                                           Fraction(0, 1)));
                     } else {
                         ctx.mutDom().doUndoRemoveElement(underlyingSeg);
                     }

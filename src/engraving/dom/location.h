@@ -39,7 +39,8 @@ class Location
 {
 public:
     constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
-        : m_staff(staff), m_voice(voice), m_measure(measure), m_frac(frac), m_graceIndex(graceIndex), m_note(note), m_rel(rel)
+        : m_staff(staff), m_voice(voice), m_measure(measure), m_frac(frac), m_graceIndex(graceIndex), m_note(note),
+        m_rel(rel)
     {
     }
 

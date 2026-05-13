@@ -64,7 +64,8 @@ public:
     MOCK_METHOD(INotationSelectionFilterPtr, selectionFilter, (), (const, override));
 
     MOCK_METHOD(bool, isDragStarted, (), (const, override));
-    MOCK_METHOD(void, startDrag, (const std::vector<EngravingItem*>&, const muse::PointF&, const IsDraggable&), (override));
+    MOCK_METHOD(void, startDrag, (const std::vector<EngravingItem*>&, const muse::PointF&, const IsDraggable&),
+                (override));
     MOCK_METHOD(void, drag, (const muse::PointF&, const muse::PointF&, DragMode), (override));
     MOCK_METHOD(void, endDrag, (), (override));
     MOCK_METHOD(muse::async::Notification, dragChanged, (), (const, override));
@@ -77,7 +78,8 @@ public:
 
     MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
     MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
-    MOCK_METHOD(bool, startDropRange, (const Fraction&, const Fraction&, engraving::staff_idx_t, size_t, bool), (override));
+    MOCK_METHOD(bool, startDropRange, (const Fraction&, const Fraction&, engraving::staff_idx_t, size_t, bool),
+                (override));
     MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
     MOCK_METHOD(bool, updateDropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, updateDropRange, (const muse::PointF&, std::optional<bool>), (override));

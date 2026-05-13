@@ -35,7 +35,10 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, const muse
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(type);
-    setTitle(type == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector", "Articulation") : muse::qtrc("inspector", "Tapping"));
+    setTitle(type
+             == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector",
+                                                                   "Articulation") : muse::qtrc("inspector",
+                                                                                                "Tapping"));
     setIcon(muse::ui::IconCode::Code::ARTICULATION);
     createProperties();
 }
@@ -49,7 +52,8 @@ void ArticulationSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION);
 
-    QList<mu::engraving::EngravingItem*> tappings = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING);
+    QList<mu::engraving::EngravingItem*> tappings
+        = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING);
     for (mu::engraving::EngravingItem* tapping : tappings) {
         m_elementList.push_back(tapping);
     }
@@ -84,7 +88,8 @@ void ArticulationSettingsModel::updateIsPlacementAvailable()
         }
 
         Tapping* tapping = toTapping(item);
-        bool hasSymbol = tapping->hand() == TappingHand::RIGHT || tapping->lhShowItems() != LHTappingShowItems::HALF_SLUR;
+        bool hasSymbol = tapping->hand() == TappingHand::RIGHT
+                         || tapping->lhShowItems() != LHTappingShowItems::HALF_SLUR;
         if (hasSymbol) {
             available = true;
             break;

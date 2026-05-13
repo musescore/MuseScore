@@ -33,10 +33,12 @@ class PedalSettingsModel : public TextLineSettingsModel
     QML_UNCREATABLE("Not creatable from QML")
 
     Q_PROPERTY(mu::inspector::PropertyItem * lineType READ lineType CONSTANT)
-    Q_PROPERTY(bool isChangingLineVisibilityAllowed READ isChangingLineVisibilityAllowed NOTIFY isChangingLineVisibilityAllowedChanged)
+    Q_PROPERTY(
+        bool isChangingLineVisibilityAllowed READ isChangingLineVisibilityAllowed NOTIFY isChangingLineVisibilityAllowedChanged)
 
 public:
-    explicit PedalSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit PedalSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                IElementRepositoryService* repository);
 
     PropertyItem* lineType() const;
     bool isChangingLineVisibilityAllowed() const;

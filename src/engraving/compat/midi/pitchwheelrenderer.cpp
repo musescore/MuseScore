@@ -8,7 +8,8 @@ PitchWheelRenderer::PitchWheelRenderer(PitchWheelSpecs wheelSpec)
     : _wheelSpec(wheelSpec)
 {}
 
-void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, staff_idx_t staffIdx,
+void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel,
+                                               staff_idx_t staffIdx,
                                                MidiInstrumentEffect effect)
 {
     PitchWheelFunctions& functions =  _functions[channel];
@@ -130,7 +131,8 @@ int32_t PitchWheelRenderer::findNextStartTick(const std::vector<PitchWheelFuncti
     return tick;
 }
 
-int32_t PitchWheelRenderer::calculatePitchBend(const std::vector<PitchWheelFunction>& functions, int32_t tick) const noexcept
+int32_t PitchWheelRenderer::calculatePitchBend(const std::vector<PitchWheelFunction>& functions,
+                                               int32_t tick) const noexcept
 {
     int pitchValue = _wheelSpec.mLimit;
 
@@ -150,7 +152,8 @@ int32_t PitchWheelRenderer::calculatePitchBend(const std::vector<PitchWheelFunct
 // result           |--------------|
 // 3           |--------|            handleEndTick();
 // result      |-------------------|
-void PitchWheelRenderer::generateRanges(const std::vector<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges)
+void PitchWheelRenderer::generateRanges(const std::vector<PitchWheelFunction>& functions, std::map<int, int,
+                                                                                                   std::greater<> >& ranges)
 {
     // !NOTE ranges map is reversed. Use reverse iterators
     auto handleEndTick = [&](const PitchWheelFunction& func) {

@@ -90,7 +90,8 @@ EditStaffType::EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* p
     }
 
     // load a sample standard score in preview
-    mu::engraving::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle(iocContext());
+    mu::engraving::MasterScore* sc
+        = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle(iocContext());
     if (loadScore(sc, ":/resources/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -190,7 +191,8 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     for (const mu::engraving::StaffType& t : mu::engraving::StaffType::presets()) {
         if ((t.group() == mu::engraving::StaffGroup::STANDARD && bStandard)
             || (t.group() == mu::engraving::StaffGroup::PERCUSSION && bPerc)
-            || (t.group() == mu::engraving::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
+            || (t.group() == mu::engraving::StaffGroup::TAB && bTab
+                && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.staffTypeName(), idx);
         }
         idx++;
@@ -233,7 +235,8 @@ std::vector<QString> EditStaffType::textStyleNames() const
 {
     std::vector<QString> names;
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString styleName
+            = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
         names.push_back(styleName.qTranslated());
     }
     return names;
@@ -242,7 +245,8 @@ std::vector<QString> EditStaffType::textStyleNames() const
 TextStyleType EditStaffType::getTextStyle(const QString& styleName) const
 {
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString textStyleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString textStyleName
+            = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
 
         if (textStyleName.qTranslated() == styleName) {
             return tid;
@@ -539,7 +543,8 @@ void EditStaffType::setFromDlg()
         }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
-                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
+                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::
+                                   engraving::
                                    TablatureMinimStyle::
                                    SLASHED));
         staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER

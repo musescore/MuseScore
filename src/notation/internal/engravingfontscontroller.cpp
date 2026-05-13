@@ -162,14 +162,16 @@ void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool 
                << "\n    metadata path: " << metadataPath;
 
         muse::String fontNameStr = muse::String::fromQString(fontName);
-        engravingFonts()->addExternalFont(fontName.toStdString(), fontFamily.toStdString(), symbolFontPath, metadataPath);
+        engravingFonts()->addExternalFont(fontName.toStdString(), fontFamily.toStdString(), symbolFontPath,
+                                          metadataPath);
         fdb->addFont(FontDataKey(fontNameStr), symbolFontPath);
         fdb->addFont(FontDataKey(fontNameStr + u" Text"), textFontPath);
         fdb->insertSubstitution(fontNameStr + u" Text", u"Leland Text");
     }
 }
 
-muse::io::path_t EngravingFontsController::findFontPathPrivate(const QString& metadataDir, const QString& fontName) const
+muse::io::path_t EngravingFontsController::findFontPathPrivate(const QString& metadataDir,
+                                                               const QString& fontName) const
 {
     // Search in the folder where the metadata lives
 

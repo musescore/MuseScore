@@ -32,7 +32,8 @@ class AuxSendItem : public QObject
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
-    Q_PROPERTY(int audioSignalPercentage READ audioSignalPercentage WRITE setAudioSignalPercentage NOTIFY audioSignalPercentageChanged)
+    Q_PROPERTY(
+        int audioSignalPercentage READ audioSignalPercentage WRITE setAudioSignalPercentage NOTIFY audioSignalPercentageChanged)
 
     QML_ELEMENT;
     QML_UNCREATABLE("Must be created in C++ only")

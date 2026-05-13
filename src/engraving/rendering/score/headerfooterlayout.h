@@ -59,7 +59,7 @@ private:
 
     static TextBlock replaceTextMacros(const LayoutContext& ctx, const Page* page, const TextBlock& tb);
     static CharFormat formatForMacro(const LayoutContext& ctx, const String& macro);
-    static void appendFormattedString(std::list<TextFragment>& fragments, const String& s, const CharFormat& defaultFormat,
-                                      const CharFormat& macroFormat);
+    static void appendFormattedString(std::list<TextFragment>& fragments, const String& s,
+                                      const CharFormat& defaultFormat, const CharFormat& macroFormat);
 };
 }

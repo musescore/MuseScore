@@ -87,10 +87,13 @@ public:
 
     // Draw
     void draw(SymId id, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
-    void draw(SymId id, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
+    void draw(SymId id, muse::draw::Painter* p, const SizeF& mag, const PointF& pos,
+              const double angle = 0) const override;
 
-    void draw(const SymIdList& ids, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
-    void draw(const SymIdList& ids, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
+    void draw(const SymIdList& ids, muse::draw::Painter* p, double mag, const PointF& pos,
+              const double angle = 0) const override;
+    void draw(const SymIdList& ids, muse::draw::Painter* p, const SizeF& mag, const PointF& pos,
+              const double angle = 0) const override;
 
     void ensureLoad();
 

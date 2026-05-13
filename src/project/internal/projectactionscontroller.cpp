@@ -82,7 +82,9 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save", [this]() { saveProject(SaveMode::Save); });
     dispatcher()->reg(this, "file-save-as", [this]() { saveProject(SaveMode::SaveAs); });
     dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
-    dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
+    dispatcher()->reg(this, "file-save-selection", [this]() {
+        saveProject(SaveMode::SaveSelection, SaveLocationType::Local);
+    });
     dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::Save, SaveLocationType::Cloud); });
     dispatcher()->reg(this, "file-save-at", [this](const ActionData& args) { saveProjectAt(args); });
 
@@ -191,7 +193,8 @@ void ProjectActionsController::openProject(const ActionData& args)
 
 Ret ProjectActionsController::openProject(const ProjectFile& file)
 {
-    LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
+    LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " <<
+        file.displayNameOverride;
 
     if (file.isNull()) {
         auto promise = selectScoreOpeningFile();
@@ -362,7 +365,8 @@ Ret ProjectActionsController::doOpenProject(const muse::io::path_t& filePath)
     return doFinishOpenProject();
 }
 
-Ret ProjectActionsController::doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner)
+Ret ProjectActionsController::doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info,
+                                                 bool isOwner)
 {
     RetVal<INotationProjectPtr> rv = loadProject(filePath);
     if (!rv.ret) {
@@ -389,7 +393,8 @@ Ret ProjectActionsController::doOpenCloudProject(const muse::io::path_t& filePat
     return doFinishOpenProject();
 }
 
-muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride)
+muse::Ret ProjectActionsController::doOpenCloudProjectOffline(const muse::io::path_t& filePath,
+                                                              const QString& displayNameOverride)
 {
     RetVal<INotationProjectPtr> rv = loadProject(filePath);
     if (!rv.ret) {
@@ -439,7 +444,8 @@ Ret ProjectActionsController::doFinishOpenProject()
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)
+void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret,
+                                                           bool isOwner)
 {
     if (m_isProjectDownloading) {
         return;
@@ -460,7 +466,8 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
         return;
     }
 
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
+    std::string dialogText = muse::trc("project/save",
+                                       "Log in or create a free account on MuseScore.com to open this score.");
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
     if (!ret) {
         return;
@@ -504,7 +511,8 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     m_projectBeingDownloaded.scoreId = scoreId;
     m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, projectData, hash, secret);
 
-    m_projectBeingDownloaded.progress->finished().onReceive(this, [this, localPath, info, isOwner](const ProgressResult& res) {
+    m_projectBeingDownloaded.progress->finished().onReceive(this,
+                                                            [this, localPath, info, isOwner](const ProgressResult& res) {
         m_projectBeingDownloaded = {};
         m_projectBeingDownloadedChanged.notify();
 
@@ -553,7 +561,8 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     // Ensure logged in
-    std::string dialogText = muse::trc("project/save", "Log in or create a free account on MuseScore.com to open this score.");
+    std::string dialogText = muse::trc("project/save",
+                                       "Log in or create a free account on MuseScore.com to open this score.");
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(false, dialogText).ret;
     if (!ret) {
         return ret;
@@ -885,7 +894,8 @@ void ProjectActionsController::shareAudio(const AudioFile& existingAudio)
     isSharingFinished = false;
 }
 
-void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project, const CloudAudioInfo& info)
+void ProjectActionsController::uploadAudioToAudioCom(const AudioFile& audio, const INotationProjectPtr& project,
+                                                     const CloudAudioInfo& info)
 {
     m_uploadingAudioProgress = audioComService()->uploadAudio(audio.device, audio.format, info.name,
                                                               project->cloudAudioInfo().url, info.visibility,
@@ -957,7 +967,8 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePath, SaveMode saveMode, bool createBackup)
+bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePath, SaveMode saveMode,
+                                                  bool createBackup)
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -1246,7 +1257,8 @@ void ProjectActionsController::closeUploadProgressDialog()
     }
 }
 
-Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
+                                            bool publishMode)
 {
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
@@ -1270,7 +1282,8 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     // The method must not return until the saving is complete, to prevent the app from being quit prematurely
     QEventLoop eventLoop;
 
-    m_uploadingProjectProgress = museScoreComService()->uploadScore(projectData, info.name, info.visibility, info.sourceUrl,
+    m_uploadingProjectProgress = museScoreComService()->uploadScore(projectData, info.name, info.visibility,
+                                                                    info.sourceUrl,
                                                                     info.revisionId);
     showUploadProgressDialog();
     LOGD() << "Uploading project started";
@@ -1316,7 +1329,9 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
             }
 
             if (project->isCloudProject()) {
-                moveProject(project, configuration()->cloudProjectPath(muse::cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
+                moveProject(project,
+                            configuration()->cloudProjectPath(muse::cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()),
+                            true);
             }
         }
 
@@ -1337,7 +1352,8 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     return ret;
 }
 
-void ProjectActionsController::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
+void ProjectActionsController::uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl,
+                                                         const QUrl& urlToOpen,
                                                          bool isFirstSave,
                                                          bool publishMode)
 {
@@ -1349,7 +1365,9 @@ void ProjectActionsController::uploadAudioToMuseScoreCom(const AudioFile& audio,
         }
     });
 
-    m_uploadingAudioProgress->finished().onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
+    m_uploadingAudioProgress->finished().onReceive(this,
+                                                   [this, audio, urlToOpen, isFirstSave,
+                                                    publishMode](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         if (!res.ret) {
@@ -1392,7 +1410,8 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
         return;
     }
 
-    IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton, muse::trc("project/save", "View online"));
+    IInteractive::ButtonData viewOnlineBtn(IInteractive::Button::CustomButton,
+                                           muse::trc("project/save", "View online"));
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
     std::string msg = muse::trc("project/save", "All saved changes will now update to the cloud. "
@@ -1407,7 +1426,8 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     });
 }
 
-Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
+Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info,
+                                                    const AudioFile& audio, bool openEditUrl,
                                                     bool publishMode)
 {
     m_isProjectUploading = false;
@@ -1471,11 +1491,13 @@ void ProjectActionsController::warnCloudIsNotAvailable()
     }
 
     std::string title = muse::trc("project/save", "Unable to connect to the cloud");
-    std::string msg = muse::trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
+    std::string msg = muse::trc("project/save",
+                                "Your changes will be saved to a local file until the connection resumes.");
 
     auto result = interactive()->warning(title, msg,
                                          { IInteractive::Button::Ok }, IInteractive::Button::Ok,
-                                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+                                         IInteractive::Option::WithIcon
+                                         | IInteractive::Option::WithDontShowAgainCheckBox);
 
     result.onResolve(this, [this](const IInteractive::Result& res) {
         configuration()->setShowCloudIsNotAvailableWarning(res.showAgain());
@@ -1499,7 +1521,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret&
     }
 }
 
-bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
+bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location,
+                                                                   const std::string& errorText,
                                                                    bool newlyCreated)
 {
     switch (location.type) {
@@ -1533,7 +1556,8 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
 
-    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, muse::trc("project", "Save as…"), !canRevert /*accent*/);
+    IInteractive::ButtonData saveCopyBtn(IInteractive::Button::CustomButton, muse::trc("project", "Save as…"),
+                                         !canRevert /*accent*/);
     buttons.push_back(saveCopyBtn);
 
     int defaultBtn = saveCopyBtn.btn;
@@ -1575,7 +1599,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
 
-    IInteractive::ButtonData saveAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Save anyway"), !canRevert /*accent*/);
+    IInteractive::ButtonData saveAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Save anyway"),
+                                           !canRevert /*accent*/);
     buttons.push_back(saveAnywayBtn);
 
     int defaultBtn = saveAnywayBtn.btn;
@@ -1596,7 +1621,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const 
     return btn == saveAnywayBtn.btn;
 }
 
-bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText)
+bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location,
+                                                                               const std::string& errorText)
 {
     switch (location.type) {
     case SaveLocationType::Cloud:
@@ -1610,7 +1636,8 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(c
     }
 }
 
-void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
+void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location,
+                                                                  const std::string& errorText)
 {
     std::string title = location.isLocal()
                         ? muse::trc("project", "Your score cannot be saved")
@@ -1766,7 +1793,8 @@ bool ProjectActionsController::shouldRetryLoadAfterError(const Ret& ret, const m
 
 bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText)
 {
-    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"), true /*accent*/);
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"),
+                                           true /*accent*/);
 
     int btn = interactive()->warningSync(errorText, "", {
         interactive()->buttonData(IInteractive::Button::Cancel),
@@ -1778,20 +1806,23 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 
 void ProjectActionsController::warnFileTooNew(const muse::io::path_t& filepath)
 {
-    interactive()->error(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
+    interactive()->error(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(
+                                                                              filepath).toQString()).toStdString(),
                          muse::mtrc("project", "This file was saved using a newer version of MuseScore Studio. "
                                                "Please visit <a href=\"%1\">MuseScore.org</a> to obtain the latest version.")
                          .arg(u"https://musescore.org").toStdString());
 }
 
-bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
+bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName,
+                                                                     const std::string& errorText)
 {
     std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
     IInteractive::Text text;
     text.text = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.");
     text.detailedText = errorText;
 
-    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"), true /*accent*/);
+    IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"),
+                                           true /*accent*/);
 
     int btn = interactive()->warningSync(title, text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
@@ -1803,12 +1834,14 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
 
 void ProjectActionsController::warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText)
 {
-    std::string title = muse::mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
+    std::string title
+        = muse::mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
     IInteractive::Text text;
     text.text = muse::trc("project", "Get help for this issue on MuseScore.org.");
     text.detailedText = errorText;
 
-    IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"), true /*accent*/);
+    IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"),
+                                        true /*accent*/);
 
     interactive()->error(title, text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
@@ -1822,7 +1855,8 @@ void ProjectActionsController::warnProjectCriticallyCorrupted(const String& proj
 
 void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const muse::io::path_t& filepath)
 {
-    std::string title = muse::mtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toString()).toStdString();
+    std::string title
+        = muse::mtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toString()).toStdString();
     std::string body;
 
     switch (ret.code()) {
@@ -1901,13 +1935,17 @@ async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() co
                                       muse::trc("project", "MuseData files") + " (*.md)",
                                       muse::trc("project", "Capella files") + " (*.cap *.capx)",
                                       muse::trc("project", "BB files (experimental)") + " (*.mgu *.sgu)",
-                                      muse::trc("project", "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
-                                      muse::trc("project", "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
-                                      muse::trc("project", "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
+                                      muse::trc("project",
+                                                "Overture / Score Writer files (experimental)") + " (*.ove *.scw)",
+                                      muse::trc("project",
+                                                "Bagpipe Music Writer files (experimental)") + " (*.bmw *.bww)",
+                                      muse::trc("project",
+                                                "Guitar Pro files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)",
                                       muse::trc("project", "Power Tab Editor files (experimental)") + " (*.ptb)",
                                       muse::trc("project", "MEI files") + " (*.mei)",
                                       muse::trc("project", "TablEdit files (experimental)") + " (*.tef)",
-                                      muse::trc("project", "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
+                                      muse::trc("project",
+                                                "Uncompressed MuseScore folders (experimental)") + " (*.mscx)",
                                       muse::trc("project", "MuseScore developer files") + " (*.mscs)",
                                       muse::trc("project", "MuseScore backup files") + " (*.mscz~)" };
 

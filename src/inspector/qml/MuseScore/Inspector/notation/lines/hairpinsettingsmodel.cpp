@@ -95,7 +95,9 @@ void HairpinSettingsModel::resetProperties()
 
 void HairpinSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [](const mu::engraving::EngravingItem* element) -> bool {
+    m_elementList
+        = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN,
+                                           [](const mu::engraving::EngravingItem* element) -> bool {
         const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(
             element);
 
@@ -107,7 +109,8 @@ void HairpinSettingsModel::requestElements()
     });
 }
 
-void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
+void HairpinSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet,
+                                             const StyleIdSet& changedStyleIdSet)
 {
     HairpinLineSettingsModel::onNotationChanged(changedPropertyIdSet, changedStyleIdSet);
     loadProperties(changedPropertyIdSet);

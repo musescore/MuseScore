@@ -42,10 +42,12 @@ class GeneralSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PlaybackProxyModel * playbackProxyModel READ playbackProxyModel CONSTANT)
     Q_PROPERTY(mu::inspector::AppearanceSettingsModel * appearanceSettingsModel READ appearanceSettingsModel CONSTANT)
-    Q_PROPERTY(bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
+    Q_PROPERTY(
+        bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
 
 public:
-    explicit GeneralSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit GeneralSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                  IElementRepositoryService* repository);
 
     PropertyItem* isVisible() const;
     PropertyItem* isAutoPlaceAllowed() const;

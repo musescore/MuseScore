@@ -166,7 +166,8 @@ ElementPtr PaletteWidget::elementForCellAt(int idx) const
     return cell ? cell->element : nullptr;
 }
 
-PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag, const QPointF offset,
+PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag,
+                                            const QPointF offset,
                                             const QString& tag)
 {
     PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag, offset, tag);
@@ -177,7 +178,8 @@ PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const Q
     return cell;
 }
 
-PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF offset, const QString& tag)
+PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF offset,
+                                            const QString& tag)
 {
     PaletteCellPtr cell = m_palette->appendElement(element, name, mag, offset, tag);
 
@@ -880,7 +882,9 @@ void PaletteWidget::dropEvent(QDropEvent* event)
             rw::RWRegister::reader()->readItem(symbol.get(), xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<EngravingItem>(Factory::createItem(type, paletteScoreProvider()->paletteScore()->dummy()));
+            element
+                = std::shared_ptr<EngravingItem>(Factory::createItem(type,
+                                                                     paletteScoreProvider()->paletteScore()->dummy()));
             if (element) {
                 rw::RWRegister::reader()->readItem(element.get(), xml);
                 element->setTrack(0);
@@ -1004,7 +1008,8 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             painter.setPen(QColor(uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].toString()));
             painter.setBrush(QColor(Qt::transparent));
 
-            int borderWidth = uiConfiguration()->currentTheme().values[muse::ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
+            int borderWidth
+                = uiConfiguration()->currentTheme().values[muse::ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
             qreal border = borderWidth / 2;
 
             painter.drawRoundedRect(r.adjusted(border, border, -border, -border), borderWidth, borderWidth);

@@ -29,7 +29,8 @@ namespace mu::engraving {
 class SymbolsMetaParser : public MetaParserBase<SymbolsMetaParser>
 {
 public:
-    static muse::mpe::ArticulationTypeSet symbolToArticulations(SymId symId, OrnamentStyle ornamentStyle = OrnamentStyle::DEFAULT);
+    static muse::mpe::ArticulationTypeSet symbolToArticulations(SymId symId,
+                                                                OrnamentStyle ornamentStyle = OrnamentStyle::DEFAULT);
 
 private:
     friend MetaParserBase;

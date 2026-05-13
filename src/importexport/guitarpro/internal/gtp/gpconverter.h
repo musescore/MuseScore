@@ -25,7 +25,8 @@ class GPConverter : public muse::Contextable
     muse::GlobalInject<mu::engraving::IEngravingConfiguration> engravingConfiguration;
 
 public:
-    GPConverter(mu::engraving::Score* score, std::unique_ptr<GPDomModel>&& gpDom, const muse::modularity::ContextPtr& iocCtx);
+    GPConverter(mu::engraving::Score* score, std::unique_ptr<GPDomModel>&& gpDom,
+                const muse::modularity::ContextPtr& iocCtx);
 
     void convertGP();
 

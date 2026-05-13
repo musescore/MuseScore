@@ -36,7 +36,8 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
+void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above,
+                                        bool add)
 {
     // rebase vertical offset on drag
     double rebase = 0.0;
@@ -109,7 +110,8 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(item->tick());
+                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight(
+                    item->tick());
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     shape.translate(PointF(0.0, rebase));
                 }
@@ -125,7 +127,8 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     setOffsetChanged(item, ldata, false);
 }
 
-void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add)
+void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above,
+                                        bool add)
 {
     // rebase vertical offset on drag
     double rebase = 0.0;
@@ -184,7 +187,8 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight(item->tick());
+                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight(
+                    item->tick());
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     sh.translateY(rebase);
                 }
@@ -258,7 +262,8 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
                 double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight(item->tick());
+                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight(
+                    item->tick());
                 rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
             }
             ldata->moveY(yd);
@@ -285,7 +290,8 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
     }
     //OffsetChange saveChangedValue = _offsetChanged;
 
-    bool staffRelative = item->staff() && item->explicitParent() && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
+    bool staffRelative = item->staff() && item->explicitParent()
+                         && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
     if (staffRelative && item->propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
         // check if flipped
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
@@ -334,7 +340,8 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
 //    returns true if shape needs to be rebased
 //---------------------------------------------------------
 
-bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
+bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd,
+                                  double sp,
                                   double rebase, bool above, bool fix)
 {
     bool rc = false;
@@ -377,7 +384,8 @@ bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::Layo
     return rc;
 }
 
-void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute, const PointF& diff)
+void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute,
+                                 const PointF& diff)
 {
     if (v) {
         ldata->autoplace.offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
@@ -453,5 +461,6 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return true;
     }
 
-    return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
+    return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline
+           || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
 }

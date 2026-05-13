@@ -272,8 +272,10 @@ void AudioMidiPreferencesModel::setAutoProcessOnlineSoundsInBackground(bool valu
     audioConfiguration()->setAutoProcessOnlineSoundsInBackground(value);
 
     if (!value) {
-        if (playbackConfiguration()->onlineSoundsShowProgressBarMode() == playback::OnlineSoundsShowProgressBarMode::DuringPlayback) {
-            playbackConfiguration()->setOnlineSoundsShowProgressBarMode(playback::OnlineSoundsShowProgressBarMode::Always);
+        if (playbackConfiguration()->onlineSoundsShowProgressBarMode()
+            == playback::OnlineSoundsShowProgressBarMode::DuringPlayback) {
+            playbackConfiguration()->setOnlineSoundsShowProgressBarMode(
+                playback::OnlineSoundsShowProgressBarMode::Always);
         }
     }
 }
@@ -289,5 +291,6 @@ void AudioMidiPreferencesModel::setOnlineSoundsShowProgressBarMode(int mode)
         return;
     }
 
-    playbackConfiguration()->setOnlineSoundsShowProgressBarMode(static_cast<playback::OnlineSoundsShowProgressBarMode>(mode));
+    playbackConfiguration()->setOnlineSoundsShowProgressBarMode(static_cast<playback::OnlineSoundsShowProgressBarMode>(
+                                                                    mode));
 }

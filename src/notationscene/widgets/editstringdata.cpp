@@ -113,7 +113,8 @@ bool EditStringData::eventFilter(QObject* obj, QEvent* event)
 QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
 {
     return item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-           + (item->checkState() == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked", "checkstate"));
+           + (item->checkState()
+              == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked", "checkstate"));
 }
 
 INotationSelectionPtr EditStringData::currentNotationSelection() const

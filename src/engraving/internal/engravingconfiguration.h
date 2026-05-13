@@ -71,7 +71,8 @@ public:
     Color fontPrimaryColor() const override;
     Color voiceColor(voice_idx_t voiceIdx) const override;
 
-    Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
+    Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true,
+                         bool itemIsUnlinkedFromScore = false) const override;
     void setSelectionColor(voice_idx_t voiceIndex, Color color) override;
     muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const override;
 

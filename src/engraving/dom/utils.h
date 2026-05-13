@@ -67,7 +67,8 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
-extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
+extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr,
+                           const bool disableOverRepeats = true);
 
 extern int absStep(int pitch);
 extern int absStep(int tpc, int pitch);
@@ -88,8 +89,9 @@ extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStre
 
 extern bool dragPositionToMeasure(const PointF& pos, const Score* score, Measure** measure, staff_idx_t* staffIdx,
                                   const double spacingFactor = 0.5);
-extern bool dragPositionToSegment(const PointF& pos, const Measure* measure, const staff_idx_t staffIdx, Segment** segment,
-                                  const double spacingFactor = 0.5, const bool allowTimeAnchor = false);
+extern bool dragPositionToSegment(const PointF& pos, const Measure* measure, const staff_idx_t staffIdx,
+                                  Segment** segment, const double spacingFactor = 0.5,
+                                  const bool allowTimeAnchor = false);
 extern Segment* segmentOrChordRestSegmentAtSameTick(Segment* segment);
 
 extern double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx1);
@@ -97,7 +99,8 @@ extern double yStaffDifference(const System* system1, const System* system2, sta
 extern bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);
 extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);
 
-extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
+extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords,
+                                 std::vector<Rest*>& rests);
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
 extern std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves = {});
 extern std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const ChordRest* cr);

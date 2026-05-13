@@ -37,7 +37,8 @@ class MMRestSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool areNumberOptionsEnabled READ areNumberOptionsEnabled NOTIFY areNumberOptionsEnabledChanged)
 
 public:
-    explicit MMRestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit MMRestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                 IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

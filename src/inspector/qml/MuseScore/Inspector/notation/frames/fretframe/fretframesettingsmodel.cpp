@@ -51,7 +51,8 @@ void FretFrameSettingsModel::createProperties()
     m_chordsPerRow = buildPropertyItem(Pid::FRET_FRAME_CHORDS_PER_ROW);
 
     m_horizontalAlignment
-        = buildPropertyItem(mu::engraving::Pid::FRET_FRAME_H_ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        = buildPropertyItem(mu::engraving::Pid::FRET_FRAME_H_ALIGN,
+                            [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toInt());
 
         emit requestReloadPropertyItems();

@@ -51,7 +51,8 @@ static int curvePitchToBendAmount(int pitch)
     return fulls * 4 + quarts;
 }
 
-BendSettingsModel::BendSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+BendSettingsModel::BendSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
@@ -128,7 +129,8 @@ void BendSettingsModel::updateIsShowHoldLineAvailable()
             }
 
             GuitarBendSegment* seg = toGuitarBendSegment(item);
-            bool isAvail = seg->staffType() && seg->staffType()->isTabStaff() && seg->guitarBend()->bendType() != GuitarBendType::DIP;
+            bool isAvail = seg->staffType() && seg->staffType()->isTabStaff()
+                           && seg->guitarBend()->bendType() != GuitarBendType::DIP;
             if (!isAvail) {
                 available = false;
                 break;
@@ -209,7 +211,8 @@ void BendSettingsModel::updateIsDip()
 {
     bool isDip = true;
     for (EngravingItem* item : m_elementList) {
-        bool dip = item->isGuitarBendSegment() && toGuitarBendSegment(item)->guitarBend()->bendType() == GuitarBendType::DIP;
+        bool dip = item->isGuitarBendSegment()
+                   && toGuitarBendSegment(item)->guitarBend()->bendType() == GuitarBendType::DIP;
         if (!dip) {
             isDip = false;
             break;
@@ -277,7 +280,8 @@ void BendSettingsModel::loadBendCurve()
 
     const int startTime = bend->startTimeFactor() * CurvePoint::MAX_TIME;
     const int endTime = bend->endTimeFactor() * CurvePoint::MAX_TIME;
-    const int targetTime = bend->targetTimeFactor().has_value() ? bend->targetTimeFactor().value() * CurvePoint::MAX_TIME
+    const int targetTime = bend->targetTimeFactor().has_value() ? bend->targetTimeFactor().value()
+                           * CurvePoint::MAX_TIME
                            : endTime;
 
     QString startPointName = muse::qtrc("inspector", "Start point");
@@ -302,7 +306,8 @@ void BendSettingsModel::loadBendCurve()
                         CurvePoint(startTime, startPitch, { MoveDirection::Horizontal }, END_DASHED, startPointName),
                         CurvePoint(targetTime, endPitch, { MoveDirection::Both }, !END_DASHED, midPointName,
                                    !LIMIT_MOVE_VERTICALLY_BY_NEAREST_POINTS),
-                        CurvePoint(endTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, !END_DASHED, startPointName),
+                        CurvePoint(endTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, !END_DASHED,
+                                   startPointName),
                         CurvePoint(CurvePoint::MAX_TIME, 0, GENERATED, END_DASHED) };
         break;
     case GuitarBendType::SLIGHT_BEND:
@@ -455,7 +460,8 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
     beginCommand(muse::TranslatableString("undoableAction", "Edit bend curve"));
 
     if (targetPitchPoint.pitch != m_bendCurve.at(targetPitchPointIdx).pitch) {
-        bend->changeBendAmount(curvePitchToBendAmount(targetPitchPoint.pitch), curvePitchToBendAmount(startTimePoint.pitch));
+        bend->changeBendAmount(curvePitchToBendAmount(targetPitchPoint.pitch),
+                               curvePitchToBendAmount(startTimePoint.pitch));
     }
 
     const float startTimeFactor = static_cast<float>(startTimePoint.time) / CurvePoint::MAX_TIME;

@@ -865,7 +865,8 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     return halfsteps;
 }
 
-static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staff, const Fraction& tick, int& epitch, int& tpc)
+static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staff, const Fraction& tick, int& epitch,
+                                          int& tpc)
 {
     const bool concertPitch = staff->concertPitch();
 
@@ -1197,7 +1198,8 @@ bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff
     return true;
 }
 
-void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests)
+void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords,
+                          std::vector<Rest*>& rests)
 {
     if (!segment) {
         return;
@@ -1599,7 +1601,8 @@ bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
     const Score* score = endRepeatMeasure->score();
 
     for (const Measure* measure : measures) {
-        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
+        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(
+            measure->tick().ticks(), measure->endTick().ticks());
 
         for (auto& spanner : spanners) {
             if (spanner.value->isPartialLyricsLine() && spanner.start == measure->tick().ticks()) {
@@ -1765,7 +1768,8 @@ PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics)
             continue;
         }
         PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse()
+            || partialLine->placement() != lyrics->placement()) {
             continue;
         }
         return partialLine;

@@ -347,7 +347,9 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             gc->setDurationType(d);
             gc->setTicks(d.fraction());
             gc->setNoteType(NoteType::ACCIACCATURA);
-            gc->mutldata()->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
+            gc->mutldata()->setMag(note->chord()->staff()->staffMag(Fraction(0,
+                                                                             1))
+                                   * score->style().styleD(Sid::graceNoteMag));
             note->chord()->add(gc);
             addDynamic(gn, dynamic);
 
@@ -463,7 +465,8 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             note->chord()->add(harmonicNote);
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
-            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr));
+            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(),
+                                                                                               harmonicFret, nullptr));
             harmonicNote->setTpcFromPitch();
         }
     }
@@ -879,12 +882,14 @@ bool GuitarPro4::read(IODevice* io)
                     String name;
                     if ((header & 1) == 0) {
                         name = readDelphiString();
-                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name, false);
+                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name,
+                                  false);
                     } else {
                         skip(16);
                         name = readPascalString(21);
                         skip(4);
-                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name, true);
+                        readChord(segment, static_cast<int>(staffIdx * VOICES), static_cast<int>(numStrings), name,
+                                  true);
                         skip(32);
                     }
                 }
@@ -897,7 +902,8 @@ bool GuitarPro4::read(IODevice* io)
                     lyrics->setPlainText(str);
                 }
                 gpLyrics.beatCounter++;
-                if (gpLyrics.beatCounter >= gpLyrics.fromBeat && static_cast<size_t>(gpLyrics.lyricTrack) == staffIdx + 1) {
+                if (gpLyrics.beatCounter >= gpLyrics.fromBeat
+                    && static_cast<size_t>(gpLyrics.lyricTrack) == staffIdx + 1) {
                     size_t index = gpLyrics.beatCounter - gpLyrics.fromBeat;
                     if (index < gpLyrics.lyrics.size()) {
                         lyrics = Factory::createLyrics(score->dummy()->chord());
@@ -945,7 +951,8 @@ bool GuitarPro4::read(IODevice* io)
                 }
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
-                    if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                    if ((tuplet == 0)
+                        || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(tick);
                         tuplet->setTrack(cr->track());
@@ -1162,7 +1169,8 @@ bool GuitarPro4::read(IODevice* io)
                         for (auto e : nt->el()) {
                             if (e->isChordLine()) {
                                 auto cl = toChordLine(e);
-                                if (cl->chordLineType() == ChordLineType::PLOP || cl->chordLineType() == ChordLineType::SCOOP) {
+                                if (cl->chordLineType() == ChordLineType::PLOP
+                                    || cl->chordLineType() == ChordLineType::SCOOP) {
                                     br = true;
                                     break;
                                 }

@@ -513,7 +513,8 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     // Pre-4.4 compatibility: these items now use DIRECTION property
     if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
-        v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
+        v = v.value<PlacementV>()
+            == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
     if (pid == Pid::OFFSET) {
@@ -598,11 +599,13 @@ void TRead::readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
     EngravingObject* mainElement = eidRegister->itemFromEID(eid);
     IF_ASSERT_FAILED(mainElement) {
-        LOGE() << "Link failed: Main linked element not found for " << item->typeName() << " at " << ctx.tick().toString();
+        LOGE() << "Link failed: Main linked element not found for " << item->typeName() << " at " <<
+            ctx.tick().toString();
         return;
     }
     IF_ASSERT_FAILED(mainElement->type() == item->type()) {
-        LOGE() << "Link failed: Main element type (" << mainElement->typeName() << ") does not match linked item type (" <<
+        LOGE() << "Link failed: Main element type (" << mainElement->typeName() <<
+            ") does not match linked item type (" <<
             item->typeName() << ") at " << ctx.tick().toString();
         return;
     }
@@ -1052,10 +1055,14 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
         item->setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        item->setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), item->clefType(idx).transposingClef));
+        item->setClefType(idx,
+                          ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G),
+                                       item->clefType(idx).transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        item->setClefType(idx, ClefTypeList(item->clefType(idx).concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+        item->setClefType(idx,
+                          ClefTypeList(item->clefType(idx).concertClef,
+                                       TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else if (tag == "glissandoStyle") {
         item->setGlissandoStyle(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
     } else {
@@ -1917,7 +1924,8 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         TRead::read(accidental, xml, ctx);
         accidental->setTrack(ctx.track());
         accidental->setParent(o);
-        accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
+        accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(
+            accidental);
     } else if (tag == "Chord") {
         Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
         TRead::read(chord, xml, ctx);
@@ -3470,7 +3478,8 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     if (ctx.mscVersion() < 470) {
         compat::CompatUtils::setTextLineTextPositionFromAlign(o);
     }
-    if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
+    if (o->ottavaType() != OttavaType::OTTAVA_8VA
+        || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
     }
 }
@@ -3882,7 +3891,8 @@ void TRead::readNoteParenGroup(Chord* ch, XmlReader& e, ReadContext& ctx)
         Chord* mainChord = toChord(ch->links()->mainElement());
         Note* firstNote = notes.front();
         Note* mainNote = firstNote ? toNote(firstNote->findLinkedInStaff(mainChord->staff())) : nullptr;
-        const NoteParenthesisInfo* mainNoteParenInfo = mainChord && mainNote ? mainChord->findNoteParenthesisInfo(mainNote) : nullptr;
+        const NoteParenthesisInfo* mainNoteParenInfo = mainChord && mainNote ? mainChord->findNoteParenthesisInfo(
+            mainNote) : nullptr;
         Parenthesis* mainLeftParen = mainNoteParenInfo ? mainNoteParenInfo->leftParen() : nullptr;
         Parenthesis* mainRightParen = mainNoteParenInfo ? mainNoteParenInfo->rightParen() : nullptr;
 
@@ -4052,9 +4062,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
         s->setDefaultClefType(ClefTypeList(ct, ct));
     } else if (tag == "defaultConcertClef") {
-        s->setDefaultClefType(ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), s->defaultClefType().transposingClef));
+        s->setDefaultClefType(ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G),
+                                           s->defaultClefType().transposingClef));
     } else if (tag == "defaultTransposingClef") {
-        s->setDefaultClefType(ClefTypeList(s->defaultClefType().concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+        s->setDefaultClefType(ClefTypeList(s->defaultClefType().concertClef,
+                                           TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else if (tag == "invisible") {
         s->staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {

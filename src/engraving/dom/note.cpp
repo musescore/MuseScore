@@ -147,15 +147,19 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
 
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
-        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,
+        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,
+          SymId::noteShapeQuarterMoonBlack,
           SymId::noteShapeQuarterMoonDoubleWhole },
-        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack,
+        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite,
+          SymId::noteShapeIsoscelesTriangleBlack,
           SymId::noteShapeIsoscelesTriangleDoubleWhole },
         { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,
           SymId::noteShapeMoonLeftDoubleWhole },
-        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,
+        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,
+          SymId::noteShapeArrowheadLeftBlack,
           SymId::noteShapeArrowheadLeftDoubleWhole },
-        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack,
+        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite,
+          SymId::noteShapeTriangleRoundLeftBlack,
           SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
@@ -200,8 +204,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
         { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
 
-        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
-        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,
+          SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble,
+          SymId::noSym }
     },
     {    // up stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
@@ -264,15 +270,19 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
 
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
-        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,
+        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,
+          SymId::noteShapeQuarterMoonBlack,
           SymId::noteShapeQuarterMoonDoubleWhole },
-        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack,
+        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite,
+          SymId::noteShapeIsoscelesTriangleBlack,
           SymId::noteShapeIsoscelesTriangleDoubleWhole },
         { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,
           SymId::noteShapeMoonLeftDoubleWhole },
-        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,
+        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,
+          SymId::noteShapeArrowheadLeftBlack,
           SymId::noteShapeArrowheadLeftDoubleWhole },
-        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack,
+        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite,
+          SymId::noteShapeTriangleRoundLeftBlack,
           SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
@@ -317,8 +327,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
         { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
 
-        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
-        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,
+          SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble,
+          SymId::noSym }
     }
 };
 
@@ -1493,7 +1505,8 @@ bool Note::shouldForceShowFret() const
         }
     }
 
-    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend || hasTremoloBar()
+    return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || startUnconnectedBend
+           || hasTremoloBar()
            || hasVibratoLine() || chordHasDip;
 }
 
@@ -2098,9 +2111,11 @@ void Note::updateAccidental(AccidentalState* as)
         }
     } else {
         if (m_accidental) {
-            bool correct = muse::RealIsEqual(Accidental::subtype2centOffset(m_accidental->accidentalType()), m_centOffset);
+            bool correct = muse::RealIsEqual(Accidental::subtype2centOffset(
+                                                 m_accidental->accidentalType()), m_centOffset);
             if (!correct) {
-                m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE, static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
+                m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE,
+                                                 static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
             }
         } else {
             AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), quarterToneOffset());
@@ -2674,7 +2689,8 @@ RectF Note::drag(EditData& ed)
     }
 
     bool isSingleNoteSelection = score()->getSelectedElement() == this;
-    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & ControlModifier)) {
+    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection
+        && !(ed.modifiers & ControlModifier)) {
         horizontalDrag(ed);
     } else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch) {
         verticalDrag(ed);
@@ -3091,7 +3107,9 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setDeadNote(v.toBool());
         if (!staff()->isDrumStaff(tick())) {
             NoteHeadGroup head
-                = (m_deadNote && m_headGroup != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
+                = (m_deadNote
+                   && m_headGroup
+                   != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
             setHeadGroup(head);
         }
         break;
@@ -3120,7 +3138,8 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setFixedLine(v.toInt());
         break;
     case Pid::HAS_PARENTHESES:
-        if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
+        if (v.value<ParenthesesMode>() != ParenthesesMode::BOTH
+            && v.value<ParenthesesMode>() != ParenthesesMode::NONE) {
             ASSERT_X("Notes cannot set left & right parens individually");
         }
         m_hasParens = v.value<ParenthesesMode>() == ParenthesesMode::BOTH;
@@ -3306,7 +3325,8 @@ String Note::accessibleInfo() const
     }
 
     return muse::mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
-           .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
+           .arg(noteTypeUserName(), pitchName, duration, onofftime,
+                (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
@@ -3755,7 +3775,8 @@ std::vector<Note*> Note::findTiedNotes(Note* startNote, bool followPartialTies)
                 }
                 // ONLY backtrack when end point is a full tie eg. around a segno
                 const bool endTieIsFullTie = jumpPoint->endTie() && !jumpPoint->endTie()->isPartialTie();
-                Note* jumpPointNote = endTieIsFullTie ? jumpPoint->endTie()->startNote()->firstTiedNote() : jumpPoint->note();
+                Note* jumpPointNote
+                    = endTieIsFullTie ? jumpPoint->endTie()->startNote()->firstTiedNote() : jumpPoint->note();
                 std::vector<Note*> partialTieNotes = findTiedNotes(jumpPointNote, !endTieIsFullTie);
                 notes.insert(notes.end(), partialTieNotes.begin(), partialTieNotes.end());
             }

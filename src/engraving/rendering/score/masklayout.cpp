@@ -80,7 +80,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     }
 }
 
-void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System* system, const std::vector<TextBase*>& allSystemText,
+void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System* system,
+                                     const std::vector<TextBase*>& allSystemText,
                                      LayoutContext& ctx)
 {
     if (barlineSement->measure()->isLastInSystem() && barlineSement == barlineSement->measure()->lastEnabled()) {
@@ -119,14 +120,16 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
         const double collisionPadding = 0.2 * spatium * fontSizeScaleFactor;
         const bool hasFrame = text->frameType() != FrameType::NO_FRAME;
         const bool useHighResShape = !text->isDynamic() && !text->hasFrame();
-        const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * spatium * fontSizeScaleFactor, 0.1 * spatium, spatium);
+        const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * spatium * fontSizeScaleFactor, 0.1 * spatium,
+                                                               spatium);
 
         PointF textPos = text->pagePos();
         if (!barlineShape.intersects(text->ldata()->bbox().translated(textPos).padded(collisionPadding))) {
             continue;
         }
 
-        Shape textShape = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
+        Shape textShape
+            = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
 
         Shape filteredTextShape;
         filteredTextShape.elements().reserve(textShape.elements().size());

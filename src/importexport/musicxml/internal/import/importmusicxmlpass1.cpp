@@ -859,7 +859,8 @@ static TextStyleType creditWordTypeToTid(const String& type)
 //   creditWordTypeGuess
 //---------------------------------------------------------
 
-static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words,
+                                         const int pageWidth)
 {
     const double pw1 = pageWidth / 3;
     const double pw2 = pageWidth * 2 / 3;
@@ -896,7 +897,8 @@ static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vec
 //   tidForCreditWords
 //---------------------------------------------------------
 
-static TextStyleType tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static TextStyleType tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words,
+                                       const int pageWidth)
 {
     const TextStyleType tid = creditWordTypeToTid(word->type);
     if (tid != TextStyleType::DEFAULT) {
@@ -952,7 +954,9 @@ bool isLikelySubtitleText(const String& text, const bool caseInsensitive = true)
 bool isLikelyCreditText(const String& text, const bool caseInsensitive = true)
 {
     std::regex::flag_type caseOption = caseInsensitive ? std::regex::icase : std::regex::ECMAScript;
-    return text.trimmed().contains(std::wregex(L"^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)", caseOption))
+    return text.trimmed().contains(std::wregex(
+                                       L"^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)",
+                                       caseOption))
            || text.trimmed().contains(std::wregex(L"^(Traditional|Trad\\.)", caseOption));
 }
 
@@ -1216,7 +1220,8 @@ bool MusicXmlParserPass1::sibOrDolet() const
 
 bool MusicXmlParserPass1::dolet() const
 {
-    return m_exporterSoftware == MusicXmlExporterSoftware::DOLET6 || m_exporterSoftware == MusicXmlExporterSoftware::DOLET8;
+    return m_exporterSoftware == MusicXmlExporterSoftware::DOLET6
+           || m_exporterSoftware == MusicXmlExporterSoftware::DOLET8;
 }
 
 //---------------------------------------------------------
@@ -1291,7 +1296,8 @@ Err MusicXmlParserPass1::parse(const ByteArray& data)
     // Fixup timesig at tick = 0 if necessary
     fixupSigmap(m_logger, m_score, m_measureLength);
     // Create the measures
-    createMeasuresAndVboxes(m_score, m_measureLength, m_measureStart, m_systemStartMeasureNrs, m_pageStartMeasureNrs, m_credits,
+    createMeasuresAndVboxes(m_score, m_measureLength, m_measureStart, m_systemStartMeasureNrs, m_pageStartMeasureNrs,
+                            m_credits,
                             m_pageSize);
 
     return res;
@@ -1344,7 +1350,8 @@ Err MusicXmlParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
 {
     for (size_t i = 1; i < p->nstaves(); ++i) {
-        if (p->staff(0)->constStaffType(Fraction(0, 1))->group() != p->staff(i)->constStaffType(Fraction(0, 1))->group()) {
+        if (p->staff(0)->constStaffType(Fraction(0,
+                                                 1))->group() != p->staff(i)->constStaffType(Fraction(0, 1))->group()) {
             return false;
         }
     }
@@ -1527,7 +1534,8 @@ void MusicXmlParserPass1::identification()
                 } else if (m_e.name() == "software") {
                     String exporterString = m_e.readText().toLower();
                     setExporterSoftware(exporterString);
-                } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
+                } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam"
+                           && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();
                 } else {
@@ -3504,7 +3512,8 @@ void MusicXmlParserPass1::note(const String& partId,
         // do tuplet
         Fraction timeMod = mnd.timeMod();
         MusicXmlTupletState& tupletState = tupletStates[voice];
-        tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
+        tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop,
+                                          mnd.normalType(), missingPrev, missingCurr);
     }
 
     // store result
@@ -3585,9 +3594,11 @@ Fraction MusicXmlParserPass1::calcTicks(const int& intTicks, const int& _divisio
             for (int seenDenominator : m_seenDenominators) {
                 int seenDenominatorTicks = Fraction(1, seenDenominator).ticks();
                 if (std::abs(dura.ticks() % seenDenominatorTicks) <= m_maxDiff) {
-                    Fraction roundedDura = Fraction(std::round(dura.ticks() / double(seenDenominatorTicks)), seenDenominator);
+                    Fraction roundedDura = Fraction(std::round(
+                                                        dura.ticks() / double(seenDenominatorTicks)), seenDenominator);
                     roundedDura.reduce();
-                    m_logger->logError(String(u"calculated duration (%1) assumed to be a rounding error by proximity to (%2)")
+                    m_logger->logError(String(
+                                           u"calculated duration (%1) assumed to be a rounding error by proximity to (%2)")
                                        .arg(dura.toString(), roundedDura.toString()));
                     insertAdjustedDuration(dura, roundedDura);
                     dura = roundedDura;

@@ -43,7 +43,8 @@ public:
     static void fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
-    static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff, Segment* segment);
+    static void resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff,
+                                   Segment* segment);
     static void resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff, Segment* segment, LayoutContext& ctx,
                                   bool considerBeams = false);
 

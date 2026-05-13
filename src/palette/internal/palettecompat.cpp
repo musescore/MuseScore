@@ -177,7 +177,8 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
     if (item->isFretDiagram()) {
         FretDiagram* oldFretDiagram = toFretDiagram(item);
         String oldFretDiagramPattern = oldFretDiagram->patternFromDiagram();
-        std::vector<String> oldFretDiagramPatternHarmonies = oldFretDiagram->harmoniesFromPattern(oldFretDiagramPattern);
+        std::vector<String> oldFretDiagramPatternHarmonies
+            = oldFretDiagram->harmoniesFromPattern(oldFretDiagramPattern);
 
         String harmonyName = muse::value(FRET_DIAGRAMS_MIGRATION_MAP, oldFretDiagramPattern);
         if (harmonyName.empty() || muse::contains(oldFretDiagramPatternHarmonies, harmonyName)) {
@@ -317,7 +318,8 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
 
         auto rhTapping = Factory::makeTapping(paletteScore->dummy()->chord());
         rhTapping->setHand(TappingHand::RIGHT);
-        guitarPalette.insertElement(defaultPosition + 1, rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
+        guitarPalette.insertElement(defaultPosition + 1, rhTapping, QT_TRANSLATE_NOOP("palette",
+                                                                                      "Right-hand tapping"), 1.0);
     }
 
     if (!containsHammerOnPullOff) {
@@ -330,7 +332,8 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         auto capo = Factory::makeCapo(paletteScore->dummy()->segment());
         capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
         int defaultPosition = std::min(40, guitarPalette.cellsCount());
-        guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
+        guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"),
+                                    0.9)->setElementTranslated(true);
     }
 
     if (!containsStringTunings) {
@@ -359,7 +362,8 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
             continue;
         }
 
-        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
+        if (element->isActionIcon()
+            && toActionIcon(element.get())->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
             containsNoteAnchoredLine = true;
         }
 
@@ -381,7 +385,8 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
         auto rightArrowLine = Factory::makeTextLine(paletteScore->dummy());
         rightArrowLine->setDiagonal(true);
         rightArrowLine->setEndHookType(HookType::ARROW);
-        linesPalette.insertElement(defaultPosition, rightArrowLine, QT_TRANSLATE_NOOP("palette", "Line (right arrowhead)"));
+        linesPalette.insertElement(defaultPosition, rightArrowLine,
+                                   QT_TRANSLATE_NOOP("palette", "Line (right arrowhead)"));
     }
 
     if (!containsLeftArrowHead) {
@@ -389,7 +394,8 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
         auto leftArrowLine = Factory::makeTextLine(paletteScore->dummy());
         leftArrowLine->setDiagonal(true);
         leftArrowLine->setBeginHookType(HookType::ARROW);
-        linesPalette.insertElement(defaultPosition, leftArrowLine, QT_TRANSLATE_NOOP("palette", "Line (left arrowhead)"));
+        linesPalette.insertElement(defaultPosition, leftArrowLine,
+                                   QT_TRANSLATE_NOOP("palette", "Line (left arrowhead)"));
     }
 
     if (!containsNoteAnchoredLine) {
@@ -525,7 +531,8 @@ void PaletteCompat::removeOldItems(Palette& palette)
             cellsToRemove.emplace_back(cell);
         }
 
-        if (element->isHairpin() && toHairpin(element.get())->beginText() == u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>") {
+        if (element->isHairpin()
+            && toHairpin(element.get())->beginText() == u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>") {
             cellsToRemove.emplace_back(cell);
         }
         if (element->isCapo()) {

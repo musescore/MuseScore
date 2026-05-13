@@ -67,7 +67,8 @@ namespace Bww {
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(mu::engraving::VBox*& vbx, mu::engraving::Score* s, QString strTxt, mu::engraving::TextStyleType stl)
+static void addText(mu::engraving::VBox*& vbx, mu::engraving::Score* s, QString strTxt,
+                    mu::engraving::TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbx == 0) {
@@ -117,7 +118,9 @@ static void xmlSetPitch(mu::engraving::Note* n, char step, int alter, int octave
 static void setTempo(mu::engraving::Score* score, int tempo)
 {
     mu::engraving::Measure* measure = score->firstMeasure();
-    mu::engraving::Segment* segment = measure->getSegment(mu::engraving::SegmentType::ChordRest, mu::engraving::Fraction(0, 1));
+    mu::engraving::Segment* segment = measure->getSegment(mu::engraving::SegmentType::ChordRest, mu::engraving::Fraction(
+                                                              0,
+                                                              1));
     mu::engraving::TempoText* tt = new mu::engraving::TempoText(segment);
     tt->setTempo(double(tempo) / 60.0);
     tt->setTrack(0);
@@ -135,9 +138,10 @@ public:
     MsScWriter();
     void beginMeasure(const Bww::MeasureBeginFlags mbf);
     void endMeasure(const Bww::MeasureEndFlags mef);
-    void header(const QString title, const QString type, const QString composer, const QString footer, const unsigned int temp);
-    void note(const QString pitch, const QVector<Bww::BeamType> beamList, const QString type, const int dots, bool tieStart = false,
-              bool tieStop = false, StartStop triplet = StartStop::ST_NONE, bool grace = false);
+    void header(const QString title, const QString type, const QString composer, const QString footer,
+                const unsigned int temp);
+    void note(const QString pitch, const QVector<Bww::BeamType> beamList, const QString type, const int dots,
+              bool tieStart = false, bool tieStop = false, StartStop triplet = StartStop::ST_NONE, bool grace = false);
     void setScore(mu::engraving::Score* s) { score = s; }
     void tsig(const int beats, const int beat);
     void trailer();

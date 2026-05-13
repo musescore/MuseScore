@@ -36,7 +36,8 @@ class TranslatableString;
 }
 
 namespace mu::notation {
-class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
+    public muse::actions::Actionable
 {
     Q_OBJECT
 

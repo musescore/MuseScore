@@ -214,7 +214,8 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
 QString StringTuningsSettingsModel::currentPreset() const
 {
     QString preset
-        = m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_PRESET).value<String>().toQString() : "";
+        = m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_PRESET).value<String>()
+          .toQString() : "";
 
     if (preset.isEmpty()) {
         preset = customPreset();
@@ -270,7 +271,8 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
 
 int StringTuningsSettingsModel::currentNumberOfStrings() const
 {
-    return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt() : 0;
+    return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt()
+           : 0;
 }
 
 void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)

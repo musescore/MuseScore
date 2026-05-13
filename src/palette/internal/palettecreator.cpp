@@ -375,9 +375,11 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
             muse::TranslatableString userName;
         } spans[] = {
             { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineTick) },
-            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  muse::TranslatableString("engraving/sym", "Tick barline 2") },  // Not in SMuFL
+            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  muse::TranslatableString("engraving/sym",
+                                                                                         "Tick barline 2") },                   // Not in SMuFL
             { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SymNames::userNameForSymId(SymId::barlineShort) },
-            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, muse::TranslatableString("engraving/sym", "Short barline 2") }, // Not in SMuFL
+            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, muse::TranslatableString("engraving/sym",
+                                                                                         "Short barline 2") },                  // Not in SMuFL
         };
         for (auto span : spans) {
             auto b = Factory::makeBarLine(paletteScore()->dummy()->segment());
@@ -1076,7 +1078,8 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     static const std::vector<ClefType> clefsMaster  {
         ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
         ClefType::G8_VB_C, ClefType::G8_VB_P, ClefType::G_1, ClefType::C1, ClefType::C2, ClefType::C3,
-        ClefType::C4, ClefType::C4_8VB, ClefType::C5, ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
+        ClefType::C4, ClefType::C4_8VB, ClefType::C5, ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C,
+        ClefType::C4_F18C,
         ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
         ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
         ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
@@ -1401,12 +1404,14 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         TempoPattern("Presto",           "Presto",           187.0 / 60.0, false, true, false, false, false),
         TempoPattern("Prestissimo",      "Prestissimo",      200.0 / 60.0, false, true, false, false, true),
 
-        TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = dotted quarter note"),
-                     3.0 / 2.0, true, false, true, false, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted quarter note = quarter note"),
-                     2.0 / 3.0, true, false, true, false, false),
+        TempoPattern(
+            "<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",
+            QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = dotted quarter note"),
+            3.0 / 2.0, true, false, true, false, false),
+        TempoPattern(
+            "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
+            QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted quarter note = quarter note"),
+            2.0 / 3.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",
                      QT_TRANSLATE_NOOP("palette", "Metric modulation: half note = quarter note"),
                      1.0 / 2.0, true, false, true, false, false),
@@ -1419,9 +1424,10 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>",
                      QT_TRANSLATE_NOOP("palette", "Metric modulation: quarter note = quarter note"),
                      1.0 / 1.0, true, false, true, false, false),
-        TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted eighth note = quarter note"),
-                     4.0 / 3.0, true, false, true, false, false),
+        TempoPattern(
+            "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
+            QT_TRANSLATE_NOOP("palette", "Metric modulation: dotted eighth note = quarter note"),
+            4.0 / 3.0, true, false, true, false, false),
     };
 
     for (TempoPattern tp : tps) {
@@ -1558,7 +1564,8 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     static const std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
         { QT_TRANSLATE_NOOP("palette", "legato"),    PlayingTechniqueType::Legato },
         { QT_TRANSLATE_NOOP("palette", "pizz."),     PlayingTechniqueType::Pizzicato },
-        { QT_TRANSLATE_NOOP("palette", "arco"),      PlayingTechniqueType::Natural, false, muse::TranslatableString("palette", "Arco") },
+        { QT_TRANSLATE_NOOP("palette", "arco"),      PlayingTechniqueType::Natural, false, muse::TranslatableString(
+              "palette", "Arco") },
         { QT_TRANSLATE_NOOP("palette", "tremolo"),   PlayingTechniqueType::Tremolo, true },
         //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
         { QT_TRANSLATE_NOOP("palette", "mute"),      PlayingTechniqueType::Mute },
@@ -1669,7 +1676,8 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
 
     for (const TS& timeSignatureType : defaultPalette ? defaultTimeSignatureList : masterTimeSignatureList) {
         auto timeSignature = Factory::makeTimeSig(paletteScore()->dummy()->segment());
-        timeSignature->setSig(Fraction(timeSignatureType.numerator, timeSignatureType.denominator), timeSignatureType.type);
+        timeSignature->setSig(Fraction(timeSignatureType.numerator,
+                                       timeSignatureType.denominator), timeSignatureType.type);
         sp->appendElement(timeSignature, timeSignatureType.name);
     }
 
@@ -2031,7 +2039,8 @@ PalettePtr PaletteCreator::newHandbellsPalette(bool defaultPalette)
         auto artic = Factory::makeArticulation(paletteScore()->dummy()->chord());
         artic->setSymId(symId);
         sp->appendElement(artic, artic->subtypeUserName(),
-                          symId == SymId::handbellsGyro ? 0.7 : symId == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
+                          symId == SymId::handbellsGyro ? 0.7 : symId
+                          == SymId::handbellsMalletBellSuspended ? 1.4 : 1.0);
     }
 
     for (ArticulationTextType textType : handbellsTextTypes) {

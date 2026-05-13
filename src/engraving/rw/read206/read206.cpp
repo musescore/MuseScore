@@ -180,7 +180,8 @@ void Read206::readTimeSigMap(TimeSigMap* map, XmlReader& e, read400::ReadContext
 
 static std::map<String, std::map<Sid, PropertyValue> > excessTextStyles206;
 
-void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, std::map<String, std::map<Sid, PropertyValue> >& excessStyles)
+void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, std::map<String, std::map<Sid,
+                                                                                                        PropertyValue> >& excessStyles)
 {
     String family = u"FreeSerif";
     double size = 10;
@@ -387,8 +388,10 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
                 LOGD("User style index %d outside of range.", idx);
                 return;
             }
-            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
-                          Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
+            Sid sid[]
+                = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
+                    Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name,
+                    Sid::user12Name };
             style->set(sid[idx], name);
         }
     }
@@ -1227,7 +1230,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setTieBack(toTie(sp));
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent() && note->explicitParent()->isChord()) {
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent()
+                    && note->explicitParent()->isChord()) {
                     toChord(note->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 note->addSpannerBack(sp);
@@ -1617,7 +1621,8 @@ static void readTuplet206(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
             _number->setColor(tuplet->color());
             _number->setTrack(tuplet->track());
             // move property flags from _number
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
+            for (auto p :
+                 { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
                 tuplet->setPropertyFlags(p, _number->propertyFlags(p));
             }
         } else if (!Read206::readTupletProperties206(e, ctx, tuplet)) {
@@ -2974,7 +2979,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
 
             // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
-            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == m->tick() && !(m->prevMeasure() && m->prevMeasure()->repeatEnd())) {
+            if (ctx.tick()
+                != Fraction(0, 1) && ctx.tick() == m->tick() && !(m->prevMeasure() && m->prevMeasure()->repeatEnd())) {
                 clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
             }
 
@@ -3269,7 +3275,8 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Spatium>());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(
+                                                  Pid::BOTTOM_GAP).value<Spatium>());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3488,7 +3495,8 @@ bool Read206::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
-            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString()));
+            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).
+                                                                        toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

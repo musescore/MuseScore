@@ -114,7 +114,8 @@ qreal ContinuousPanel::width() const
     return m_width;
 }
 
-void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt)
+void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx,
+                            const engraving::rendering::PaintOptions& opt)
 {
     TRACEFUNC;
 
@@ -236,7 +237,8 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     ensureCacheSize(staffCount);
 
     if (!m_cachedMeasureNumberText) {
-        m_cachedMeasureNumberText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT, ACCESSIBILITY_DISABLED);
+        m_cachedMeasureNumberText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT,
+                                                                   ACCESSIBILITY_DISABLED);
         m_cachedMeasureNumberText->setFlag(engraving::ElementFlag::MOVABLE, false);
         m_cachedMeasureNumberText->setFamily(u"FreeSans");
         m_cachedMeasureNumberText->setSizeIsSpatiumDependent(true);
@@ -261,7 +263,8 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
 
             engraving::Text*& nameText = m_cachedStaffNameTexts[staffIdx];
             if (!nameText) {
-                nameText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT, ACCESSIBILITY_DISABLED);
+                nameText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT,
+                                                          ACCESSIBILITY_DISABLED);
                 nameText->setFlag(engraving::ElementFlag::MOVABLE, false);
                 nameText->setFamily(u"FreeSans");
                 nameText->setSizeIsSpatiumDependent(true);

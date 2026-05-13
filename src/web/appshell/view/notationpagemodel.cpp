@@ -265,7 +265,8 @@ void NotationPageModel::updatePercussionPanelVisibility()
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
     const bool autoClose = notationConfiguration()->autoClosePercussionPanel();
-    if (noteInput && !noteInput->isNoteInputMode() && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
+    if (noteInput && !noteInput->isNoteInputMode()
+        && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
         if (autoClose) {
             setPercussionPanelOpen(false);
         }

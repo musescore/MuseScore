@@ -97,7 +97,8 @@ public:
                    const PlayParams& params = PlayParams()) override;
     void playMetronome(int tick) override;
 
-    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx,
+                            int tick) override;
 
     void seekElement(const notation::EngravingItem* element, bool flushSound = true) override;
     void seekBeat(int measureIndex, int beatIndex, bool flushSound = true) override;
@@ -161,10 +162,13 @@ private:
     void onSelectionChanged();
     void seekRangeSelection();
 
-    void onAudioResourceChanged(const muse::audio::TrackId trackId, const mu::engraving::InstrumentTrackId& instrumentTrackId,
-                                const muse::audio::AudioResourceMeta& oldMeta, const muse::audio::AudioResourceMeta& newMeta);
+    void onAudioResourceChanged(const muse::audio::TrackId trackId,
+                                const mu::engraving::InstrumentTrackId& instrumentTrackId,
+                                const muse::audio::AudioResourceMeta& oldMeta,
+                                const muse::audio::AudioResourceMeta& newMeta);
 
-    bool shouldLoadDrumset(const engraving::InstrumentTrackId& instrumentTrackId, const muse::audio::AudioResourceMeta& oldMeta,
+    bool shouldLoadDrumset(const engraving::InstrumentTrackId& instrumentTrackId,
+                           const muse::audio::AudioResourceMeta& oldMeta,
                            const muse::audio::AudioResourceMeta& newMeta) const;
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
@@ -218,7 +222,8 @@ private:
     using TrackAddFinished = std::function<void ()>;
 
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
-    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title, const TrackAddFinished& onFinished);
+    void doAddTrack(const engraving::InstrumentTrackId& instrumentTrackId, const std::string& title,
+                    const TrackAddFinished& onFinished);
     void addAuxTrack(muse::audio::aux_channel_idx_t index, const TrackAddFinished& onFinished);
 
     void setTrackActivity(const engraving::InstrumentTrackId& instrumentTrackId, const bool isActive);

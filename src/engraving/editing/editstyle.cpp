@@ -41,13 +41,15 @@ static void changeChordStyle(Score* score)
     bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
     String msymbolFont = style.styleSt(Sid::musicalTextFont);
     ChordStylePreset preset = style.styleV(Sid::chordStyle).value<ChordStylePreset>();
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont,
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers,
+                                            mexcludeModsHAlign, msymbolFont,
                                             preset);
     if (score->style().styleB(Sid::chordsXmlFile)) {
         score->chordList()->read(u"chords.xml");
     }
     score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
-    score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
+    score->chordList()->setCustomChordList(style.styleV(
+                                               Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 
 //---------------------------------------------------------

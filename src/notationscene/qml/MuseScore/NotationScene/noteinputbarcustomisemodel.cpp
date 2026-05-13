@@ -47,7 +47,8 @@ void NoteInputBarCustomiseModel::load()
 
     QList<Item*> items;
 
-    ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
+    ToolConfig toolConfig = uiState()->toolConfig(NOTE_INPUT_TOOLBAR_NAME,
+                                                  NotationUiActions::defaultNoteInputBarConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
         const UiAction& action = actionsRegister()->action(item.action);
@@ -229,7 +230,8 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 
 NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeSeparatorItem()
 {
-    NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::SEPARATOR, this);
+    NoteInputBarCustomiseItem* item
+        = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::SEPARATOR, this);
     item->setTitle(QString("-------  %1  -------").arg(muse::qtrc("notation", "Separator line")));
     item->setChecked(true); //! NOTE Can't be unchecked
     return item;

@@ -101,13 +101,17 @@ void ChordLine::dragGrip(EditData& ed)
 
     // used to limit how grips can affect the slide, stops the user from being able to turn one kind of slide into another
     int slideBoundary = 5;
-    if ((m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::FALL) && m_lengthY < -slideBoundary) {
+    if ((m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::FALL)
+        && m_lengthY < -slideBoundary) {
         m_lengthY = -slideBoundary;
-    } else if ((m_chordLineType == ChordLineType::FALL || m_chordLineType == ChordLineType::DOIT) && m_lengthX < -slideBoundary) {
+    } else if ((m_chordLineType == ChordLineType::FALL || m_chordLineType == ChordLineType::DOIT)
+               && m_lengthX < -slideBoundary) {
         m_lengthX = -slideBoundary;
-    } else if ((m_chordLineType == ChordLineType::DOIT || m_chordLineType == ChordLineType::SCOOP) && m_lengthY > slideBoundary) {
+    } else if ((m_chordLineType == ChordLineType::DOIT || m_chordLineType == ChordLineType::SCOOP)
+               && m_lengthY > slideBoundary) {
         m_lengthY = slideBoundary;
-    } else if ((m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::PLOP) && m_lengthX > slideBoundary) {
+    } else if ((m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::PLOP)
+               && m_lengthX > slideBoundary) {
         m_lengthX = slideBoundary;
     }
 

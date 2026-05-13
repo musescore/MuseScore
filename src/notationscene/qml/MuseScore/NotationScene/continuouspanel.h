@@ -67,7 +67,8 @@ public:
     };
 
     qreal width() const;
-    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx, const engraving::rendering::PaintOptions& opt);
+    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx,
+               const engraving::rendering::PaintOptions& opt);
 
 private:
     void clearCache();

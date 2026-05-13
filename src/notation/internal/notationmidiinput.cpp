@@ -246,7 +246,8 @@ void NotationMidiInput::addNoteEventsToInputState()
     const staff_idx_t staffIdx = state.staffIdx();
     const bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
     const bool playPreviewNotes = configuration()->isPlayPreviewNotesInInputByDuration();
-    const bool useVelocityAndDuration = playPreviewNotes && configuration()->useMidiVelocityAndDurationDuringNoteInput();
+    const bool useVelocityAndDuration = playPreviewNotes
+                                        && configuration()->useMidiVelocityAndDurationDuringNoteInput();
 
     NoteValList notesOn;
     NoteValList notesOff;
@@ -270,7 +271,8 @@ void NotationMidiInput::addNoteEventsToInputState()
                 notesOff.push_back(score()->noteVal(event.note(), staffIdx, useWrittenPitch));
             }
             m_holdingNotesInInputByDuration = false;
-        } else if (opcode == muse::midi::Event::Opcode::ControlChange || opcode == muse::midi::Event::Opcode::PitchBend) {
+        } else if (opcode == muse::midi::Event::Opcode::ControlChange
+                   || opcode == muse::midi::Event::Opcode::PitchBend) {
             if (playPreviewNotes) {
                 controllers[opcode] = event; // keep only last received to prevent spam
             }
@@ -290,7 +292,8 @@ void NotationMidiInput::addNoteEventsToInputState()
         noteInput->setInputNotes(notesOn);
 
         if (playPreviewNotes) {
-            playbackController()->playNotes(notesOn, staffIdx, state.segment(), makeNoteOnParams(useVelocityAndDuration));
+            playbackController()->playNotes(notesOn, staffIdx, state.segment(),
+                                            makeNoteOnParams(useVelocityAndDuration));
         }
     }
 }
@@ -355,7 +358,8 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         }
     }
 
-    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord, configuration()->midiUseWrittenPitch().val);
+    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord,
+                                                 configuration()->midiUseWrittenPitch().val);
 
     sc->activeMidiPitches().push_back(inputEv);
 
@@ -490,7 +494,8 @@ void NotationMidiInput::stopRealtime()
 
 void NotationMidiInput::doRealtimeAdvance()
 {
-    if (!isRealtime() || !isNoteInputMode() || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
+    if (!isRealtime() || !isNoteInputMode()
+        || (!m_allowRealtimeRests && m_getScore->score()->activeMidiPitches().empty())) {
         if (m_realtimeTimer.isActive()) {
             stopRealtime();
         }

@@ -145,7 +145,8 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
     JsonObject obj = soundsDoc.rootObject();
     JsonObject data = !obj.empty() ? obj.value("data").toObject() : JsonObject();
     JsonObject productsSearch = !data.empty() ? data.value("product_pages_configuration").toObject() : JsonObject();
-    JsonArray catalogs = !productsSearch.empty() ? productsSearch.value("museScoreStudioPageSections").toArray() : JsonArray();
+    JsonArray catalogs
+        = !productsSearch.empty() ? productsSearch.value("museScoreStudioPageSections").toArray() : JsonArray();
 
     std::string museSoundsAppName = platformMuseSoundsAppName();
 

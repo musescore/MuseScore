@@ -260,7 +260,8 @@ public:
     DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      mu::engraving::apiv1::enums::Anchor)           // probably unavailable in 2.X
     /// Contains mu::engraving::MMRestRangeBracketType enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(MMRestRangeBracketType, mMRestRangeBracketTypeEnum, mu::engraving::apiv1::enums::MMRestRangeBracketType)
+    DECLARE_API_ENUM(MMRestRangeBracketType, mMRestRangeBracketTypeEnum,
+                     mu::engraving::apiv1::enums::MMRestRangeBracketType)
     /// Contains mu::engraving::TupletNumberType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TupletNumberType, tupletNumberTypeEnum, mu::engraving::apiv1::enums::TupletNumberType)
@@ -275,13 +276,15 @@ public:
     DECLARE_API_ENUM(GuitarBendType, guitarBendTypeEnum, mu::engraving::apiv1::enums::GuitarBendType)
     /// Contains mu::engraving::GuitarBendShowHoldLine enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(GuitarBendShowHoldLine, guitarBendShowHoldLineEnum, mu::engraving::apiv1::enums::GuitarBendShowHoldLine)
+    DECLARE_API_ENUM(GuitarBendShowHoldLine, guitarBendShowHoldLineEnum,
+                     mu::engraving::apiv1::enums::GuitarBendShowHoldLine)
     /// Contains mu::engraving::ClefType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(ClefType, clefTypeEnum, mu::engraving::apiv1::enums::ClefType)
     /// Contains mu::engraving::ClefToBarlinePosition enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(ClefToBarlinePosition, clefToBarlinePositionEnum, mu::engraving::apiv1::enums::ClefToBarlinePosition)
+    DECLARE_API_ENUM(ClefToBarlinePosition, clefToBarlinePositionEnum,
+                     mu::engraving::apiv1::enums::ClefToBarlinePosition)
     /// Contains mu::engraving::DynamicType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(DynamicType, dynamicTypeEnum, mu::engraving::apiv1::enums::DynamicType)
@@ -308,13 +311,16 @@ public:
     DECLARE_API_ENUM(IntervalType, intervalTypeEnum, mu::engraving::apiv1::enums::IntervalType)
     /// Contains mu::engraving::InstrumentLabelVisibility enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(InstrumentLabelVisibility, instrumentLabelVisibilityEnum, mu::engraving::apiv1::enums::InstrumentLabelVisibility)
+    DECLARE_API_ENUM(InstrumentLabelVisibility, instrumentLabelVisibilityEnum,
+                     mu::engraving::apiv1::enums::InstrumentLabelVisibility)
     /// Contains mu::engraving::OrnamentShowAccidental enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(OrnamentShowAccidental, ornamentShowAccidentalEnum, mu::engraving::apiv1::enums::OrnamentShowAccidental)
+    DECLARE_API_ENUM(OrnamentShowAccidental, ornamentShowAccidentalEnum,
+                     mu::engraving::apiv1::enums::OrnamentShowAccidental)
     /// Contains mu::engraving::PartialSpannerDirection enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(PartialSpannerDirection, partialSpannerDirectionEnum, mu::engraving::apiv1::enums::PartialSpannerDirection)
+    DECLARE_API_ENUM(PartialSpannerDirection, partialSpannerDirectionEnum,
+                     mu::engraving::apiv1::enums::PartialSpannerDirection)
     /// Contains mu::engraving::ChordStylePreset enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(ChordStylePreset, chordStylePresetEnum, mu::engraving::apiv1::enums::ChordStylePreset)
@@ -323,7 +329,8 @@ public:
     DECLARE_API_ENUM(PlayingTechniqueType, playingTechniqueTypeEnum, mu::engraving::apiv1::enums::PlayingTechniqueType)
     /// Contains mu::engraving::GradualTempoChangeType enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(GradualTempoChangeType, gradualTempoChangeTypeEnum, mu::engraving::apiv1::enums::GradualTempoChangeType)
+    DECLARE_API_ENUM(GradualTempoChangeType, gradualTempoChangeTypeEnum,
+                     mu::engraving::apiv1::enums::GradualTempoChangeType)
     /// Contains mu::engraving::ChangeMethod enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(ChangeMethod, changeMethodEnum, mu::engraving::apiv1::enums::ChangeMethod)
@@ -383,7 +390,8 @@ public:
     DECLARE_API_ENUM(ArticulationTextType, articulationTextTypeEnum, mu::engraving::apiv1::enums::ArticulationTextType)
     /// Contains mu::engraving::LyricsDashSystemStart enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(LyricsDashSystemStart, lyricsDashSystemStartEnum, mu::engraving::apiv1::enums::LyricsDashSystemStart)
+    DECLARE_API_ENUM(LyricsDashSystemStart, lyricsDashSystemStartEnum,
+                     mu::engraving::apiv1::enums::LyricsDashSystemStart)
     /// Contains mu::engraving::NoteLineEndPlacement enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(NoteLineEndPlacement, noteLineEndPlacementEnum, mu::engraving::apiv1::enums::NoteLineEndPlacement)
@@ -440,10 +448,12 @@ public:
     DECLARE_API_ENUM(ParenthesesMode, parenthesesModeEnum, mu::engraving::apiv1::enums::ParenthesesMode)
     /// Contains mu::engraving::RepeatPlayCountPreset enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(RepeatPlayCountPreset, repeatPlayCountPresetEnum, mu::engraving::apiv1::enums::RepeatPlayCountPreset)
+    DECLARE_API_ENUM(RepeatPlayCountPreset, repeatPlayCountPresetEnum,
+                     mu::engraving::apiv1::enums::RepeatPlayCountPreset)
     /// Contains mu::engraving::MeasureNumberPlacement enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(MeasureNumberPlacement, measureNumberPlacementEnum, mu::engraving::apiv1::enums::MeasureNumberPlacement)
+    DECLARE_API_ENUM(MeasureNumberPlacement, measureNumberPlacementEnum,
+                     mu::engraving::apiv1::enums::MeasureNumberPlacement)
     /// Contains mu::engraving::SymId enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(SymId, symIdEnum, mu::engraving::apiv1::enums::SymId)

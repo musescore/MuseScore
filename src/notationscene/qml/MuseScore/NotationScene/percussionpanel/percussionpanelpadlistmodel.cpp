@@ -157,7 +157,8 @@ void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
     removeEmptyRows();
 }
 
-mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset& defaultDrumset) const
+mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset& defaultDrumset)
+const
 {
     //! NOTE: The idea of this method is take a "default" (template) drumset, find matching drums in the current drumset, and evaluate/return
     //! the default panel layout based on this information. The reason we can't simply revert to the default drumset in its entirety is that
@@ -366,11 +367,13 @@ int PercussionPanelPadListModel::createModelIndexForPitch(int pitch) const
 
     const int modelIndex = panelRow * numColumns() + panelColumn;
 
-    const PercussionPanelPadModel* existingModel = modelIndex < m_padModels.size() ? m_padModels.at(modelIndex) : nullptr;
+    const PercussionPanelPadModel* existingModel = modelIndex
+                                                   < m_padModels.size() ? m_padModels.at(modelIndex) : nullptr;
     IF_ASSERT_FAILED(!existingModel) {
         const int existingDrumPitch = existingModel->pitch();
         LOGE() << "Percussion panel - error when trying to load pad for " << m_drumset->name(pitch) << "; pad for "
-               << m_drumset->name(existingDrumPitch) << " already exists at row " << panelRow << ", column " << panelColumn;
+               << m_drumset->name(existingDrumPitch) << " already exists at row " << panelRow << ", column " <<
+            panelColumn;
         return -1;
     }
 

@@ -75,7 +75,8 @@ void EngravingCompat::correctPedalEndPoints(MasterScore* score)
     for (auto pair : score->spanner()) {
         Spanner* spanner = pair.second;
         if (spanner->isPedal() && toPedal(spanner)->endHookType() == HookType::HOOK_45) {
-            ChordRest* endCR = score->findChordRestEndingBeforeTickInStaff(spanner->tick2(), track2staff(spanner->track()));
+            ChordRest* endCR
+                = score->findChordRestEndingBeforeTickInStaff(spanner->tick2(), track2staff(spanner->track()));
             if (endCR) {
                 for (EngravingObject* item : spanner->linkList()) {
                     toSpanner(item)->setTick2(endCR->tick());
@@ -128,7 +129,8 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
         Instrument* instrument = part ? part->instrument() : nullptr;
         const bool isVocalInstrument = instrument && instrument->isVocalInstrument();
         const bool directionIsDefault = item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION);
-        const PlacementV defaultPlacement = masterScore->style().styleV(item->getPropertyStyle(Pid::PLACEMENT)).value<PlacementV>();
+        const PlacementV defaultPlacement
+            = masterScore->style().styleV(item->getPropertyStyle(Pid::PLACEMENT)).value<PlacementV>();
         const bool defaultIsBelow = defaultPlacement == PlacementV::BELOW;
 
         if (isVocalInstrument && directionIsDefault && defaultIsBelow) {
@@ -168,7 +170,8 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
     // Reset the new incorrect 4.4.0 - 4.4.2 default size of 11 to the previous correct size of 18
     const double INCORRECT_DEFAULT_SIZE = 11.0;
     const double CORRECT_DEFAULT_SIZE = 18.0;
-    bool needsAdjustMarkerSize = masterScore->mscoreVersion().contains(u"4.4") && masterScore->mscoreVersion() != u"4.4.3";
+    bool needsAdjustMarkerSize = masterScore->mscoreVersion().contains(u"4.4")
+                                 && masterScore->mscoreVersion() != u"4.4.3";
     if (!needsAdjustMarkerSize || masterScore->style().styleD(Sid::repeatLeftFontSize) != INCORRECT_DEFAULT_SIZE) {
         return;
     }
@@ -293,7 +296,8 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
 static void doMigrateOffset500(EngravingItem* item)
 {
     if (item->offset().isNull()
-        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) || !item->hasVoiceAssignmentProperties()) {
+        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment())
+        || !item->hasVoiceAssignmentProperties()) {
         return;
     }
 
@@ -307,7 +311,8 @@ void EngravingCompat::migrateOffset500(MasterScore* masterScore)
             if (!sp->hasVoiceAssignmentProperties()) {
                 continue;
             }
-            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(
+                                                       Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
             doMigrateOffset500(sp);
             for (SpannerSegment* seg : sp->spannerSegments()) {
                 doMigrateOffset500(seg);

@@ -504,7 +504,8 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
         StaffGroup staffGroup = staff->staffType(oNote->chord()->tick())->group();
         // if not tab, check for instrument instead of staffType (for pitched to unpitched instrument changes)
         if (staffGroup != StaffGroup::TAB) {
-            staffGroup = staff->part()->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+            staffGroup
+                = staff->part()->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
         }
 
         switch (staffGroup) {
@@ -554,7 +555,8 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
                     return;
                 }
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff, oNote->tick()) && !oNote->bendBack()) {
+                if (newPitch + pitchOffset
+                    != stringData->getPitch(string, fret, staff, oNote->tick()) && !oNote->bendBack()) {
                     LOGD("upDown tab in-string: pitch mismatch");
                     return;
                 }

@@ -71,12 +71,14 @@ bool isTupletUseless(
 
 std::multimap<ReducedFraction, TupletData>::iterator
 removeTuplet(
-    const std::multimap<ReducedFraction, TupletData>::iterator& tupletIt, std::multimap<ReducedFraction, TupletData>& tuplets,
+    const std::multimap<ReducedFraction, TupletData>::iterator& tupletIt, std::multimap<ReducedFraction,
+                                                                                        TupletData>& tuplets,
     const ReducedFraction& maxChordLength, std::multimap<ReducedFraction, MidiChord>& chords);
 
 std::multimap<ReducedFraction, TupletData>::iterator
 removeTupletIfEmpty(
-    const std::multimap<ReducedFraction, TupletData>::iterator& tupletIt, std::multimap<ReducedFraction, TupletData>& tuplets,
+    const std::multimap<ReducedFraction, TupletData>::iterator& tupletIt, std::multimap<ReducedFraction,
+                                                                                        TupletData>& tuplets,
     const ReducedFraction& maxChordLength, std::multimap<ReducedFraction, MidiChord>& chords);
 
 const TupletInfo& tupletFromId(int id, const std::vector<TupletInfo>& tuplets);
@@ -90,15 +92,17 @@ findTupletIntervals(const std::vector<TupletInfo>& tuplets, const ReducedFractio
 
 std::vector<TupletData>
 findTupletsInBarForDuration(int voice, const ReducedFraction& barStartTick, const ReducedFraction& durationOnTime,
-                            const ReducedFraction& durationLen, const std::multimap<ReducedFraction, TupletData>& tupletEvents);
+                            const ReducedFraction& durationLen, const std::multimap<ReducedFraction,
+                                                                                    TupletData>& tupletEvents);
 
 std::vector<std::multimap<ReducedFraction, TupletData>::const_iterator>
-findTupletsForTimeRange(int voice, const ReducedFraction& onTime, const ReducedFraction& len, const std::multimap<ReducedFraction,
-                                                                                                                  TupletData>& tupletEvents,
-                        bool strictComparison);
+findTupletsForTimeRange(int voice, const ReducedFraction& onTime, const ReducedFraction& len,
+                        const std::multimap<ReducedFraction,
+                                            TupletData>& tupletEvents, bool strictComparison);
 
 std::multimap<ReducedFraction, TupletData>::const_iterator
-findTupletContainingTime(int voice, const ReducedFraction& time, const std::multimap<ReducedFraction, TupletData>& tupletEvents,
+findTupletContainingTime(int voice, const ReducedFraction& time, const std::multimap<ReducedFraction,
+                                                                                     TupletData>& tupletEvents,
                          bool strictComparison);
 
 // Find tuplets and set bar indexes
@@ -114,12 +118,14 @@ ReducedFraction findOnTimeBetweenChords(
 #ifdef QT_DEBUG
 
 bool areAllTupletsReferenced(
-    const std::multimap<ReducedFraction, MidiChord>& chords, const std::multimap<ReducedFraction, TupletData>& tupletEvents);
+    const std::multimap<ReducedFraction, MidiChord>& chords, const std::multimap<ReducedFraction,
+                                                                                 TupletData>& tupletEvents);
 
 bool areTupletReferencesValid(const std::multimap<ReducedFraction, MidiChord>& chords);
 
 bool isTupletRangeOk(
-    const std::pair<const ReducedFraction, MidiChord>& chord, const std::multimap<ReducedFraction, TupletData>& tuplets);
+    const std::pair<const ReducedFraction, MidiChord>& chord, const std::multimap<ReducedFraction,
+                                                                                  TupletData>& tuplets);
 
 bool areTupletRangesOk(
     const std::multimap<ReducedFraction, MidiChord>& chords, const std::multimap<ReducedFraction, TupletData>& tuplets);

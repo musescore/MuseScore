@@ -135,7 +135,8 @@ NotationRuler::LineType NotationRuler::lineType(int lineTicks, int inputTicks, s
     return lineIdx % 2 == 0 ? LineType::MainBeat : LineType::Subdivision;
 }
 
-void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& point, double spatium, voice_idx_t voiceIdx)
+void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& point, double spatium,
+                              voice_idx_t voiceIdx)
 {
     muse::RectF rect;
     Color color = configuration()->selectionColor(voiceIdx);

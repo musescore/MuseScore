@@ -166,7 +166,8 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     //const ArticulationAppliedData& articulationData = context.commonArticulations.at(preferredType);
     int overallDurationTicks = ctx.nominalDurationTicks;
     if (tremolo.two && tremolo.two->chord1() && tremolo.two->chord2()) {
-        overallDurationTicks = tremolo.two->chord1()->actualTicks().ticks() + tremolo.two->chord2()->actualTicks().ticks();
+        overallDurationTicks = tremolo.two->chord1()->actualTicks().ticks()
+                               + tremolo.two->chord2()->actualTicks().ticks();
     }
 
     int stepDurationTicks = 0;
@@ -206,7 +207,8 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
                 currentChord = secondTremoloChord;
             }
 
-            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
+            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks,
+                                 ctx.nominalPositionStartTick + i * stepDurationTicks,
                                  ctx, tremoloTimeCache, result);
         }
 
@@ -214,7 +216,8 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     }
 
     for (int i = 0; i < stepsCount; ++i) {
-        buildAndAppendEvents(chord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
+        buildAndAppendEvents(chord, preferredType, stepDurationTicks,
+                             ctx.nominalPositionStartTick + i * stepDurationTicks,
                              ctx, tremoloTimeCache, result);
     }
 }

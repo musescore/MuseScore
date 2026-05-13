@@ -63,7 +63,8 @@ public:
 
     MOCK_METHOD(muse::io::path_t, cloudProjectSavingPath, (int scoreId), (const, override));
 
-    MOCK_METHOD(muse::io::path_t, defaultSavingFilePath, (INotationProjectPtr, const std::string&, const std::string&), (const, override));
+    MOCK_METHOD(muse::io::path_t, defaultSavingFilePath, (INotationProjectPtr, const std::string&, const std::string&),
+                (const, override));
 
     MOCK_METHOD(SaveLocationType, lastUsedSaveLocationType, (), (const, override));
     MOCK_METHOD(void, setLastUsedSaveLocationType, (SaveLocationType), (override));

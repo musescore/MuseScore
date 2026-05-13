@@ -112,7 +112,8 @@ static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairp
     // Optimization: first check if there is a cached dynamic
     const EngravingItem* snappedItem = seg->ldata()->itemSnappedAfter();
     if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
-        snappedItem = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/, true /* requirePlayable */);
+        snappedItem
+            = toHairpinSegment(seg)->findElementToSnapAfter(false /*ignoreInvisible*/, true /* requirePlayable */);
         if (!snappedItem || !snappedItem->isDynamic() || !toDynamic(snappedItem)->playDynamic()) {
             return mu::engraving::DynamicType::OTHER;
         }
@@ -157,7 +158,8 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
     return it->second.level;
 }
 
-std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const Score* score, const int nominalPositionTick) const
+std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const Score* score,
+                                                                                    const int nominalPositionTick) const
 {
     auto it = findLessOrEqual(m_playTechniquesMap, nominalPositionTick);
     if (it == m_playTechniquesMap.cend()) {
@@ -200,7 +202,8 @@ std::map<timestamp_t, SoundPresetChangeEventList> PlaybackContext::soundPresets(
     return result;
 }
 
-SoundPresetChangeEventList PlaybackContext::soundPresets(const track_idx_t trackIdx, const int nominalPositionTick) const
+SoundPresetChangeEventList PlaybackContext::soundPresets(const track_idx_t trackIdx,
+                                                         const int nominalPositionTick) const
 {
     auto presetsIt = m_soundPresetsByTrack.find(trackIdx);
     if (presetsIt == m_soundPresetsByTrack.end()) {
@@ -452,7 +455,8 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 }
 
-void PlaybackContext::updateSoundPresetAndTextArticulationMap(const SoundFlagMap& flagsOnSegment, const int segmentPositionTick)
+void PlaybackContext::updateSoundPresetAndTextArticulationMap(const SoundFlagMap& flagsOnSegment,
+                                                              const int segmentPositionTick)
 {
     auto trackAccepted = [&flagsOnSegment](const SoundFlag* flag, track_idx_t trackIdx) {
         staff_idx_t staffIdx = track2staff(trackIdx);
@@ -537,7 +541,8 @@ void PlaybackContext::updateSyllableMap(const TextBase* text, const int segmentP
     }
 }
 
-void PlaybackContext::handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
+void PlaybackContext::handleSpanners(const ID partId, const Score* score, const int segmentStartTick,
+                                     const int segmentEndTick,
                                      const int tickPositionOffset)
 {
     const SpannerMap& spannerMap = score->spannerMap();
@@ -577,7 +582,8 @@ void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositi
     {
         const Segment* startSegment = hairpin->startSegment();
         const Dynamic* startDynamic = startSegment
-                                      ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
+                                      ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx,
+                                                                               trackIdx))
                                       : nullptr;
         if (startDynamic && startDynamic->playDynamic()) {
             const DynamicType dynamicType = startDynamic->dynamicType();
@@ -735,7 +741,8 @@ void PlaybackContext::handleSegmentElements(const RepeatSegment* repeat, const S
 }
 
 template<typename ItemsMap>
-static void copyItemsInRange(ItemsMap& source, const int rangeStartTick, const int rangeEndTick, const int newItemsOffsetTick)
+static void copyItemsInRange(ItemsMap& source, const int rangeStartTick, const int rangeEndTick,
+                             const int newItemsOffsetTick)
 {
     auto startIt = source.lower_bound(rangeStartTick);
     if (startIt == source.end()) {
@@ -762,7 +769,8 @@ static void copyItemsInRange(std::map<track_idx_t, ItemsMap>& source, const int 
     }
 }
 
-void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset)
+void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats,
+                                           const int tickPositionOffset)
 {
     for (const MeasureRepeat* mr : measureRepeats) {
         const Measure* currMeasure = mr->firstMeasureOfGroup();
@@ -802,7 +810,8 @@ void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat
     }
 }
 
-void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynamic_level_t dynamicLevel, const int positionTick)
+void PlaybackContext::applyDynamic(const EngravingItem* dynamicItem, const dynamic_level_t dynamicLevel,
+                                   const int positionTick)
 {
     const VoiceAssignment voiceAssignment = dynamicItem->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
     const track_idx_t dynamicTrackIdx = dynamicItem->track();

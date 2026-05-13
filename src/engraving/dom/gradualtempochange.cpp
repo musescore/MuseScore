@@ -296,7 +296,8 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
         return false;
     }
 
-    const RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
+    const RehearsalMark* rehearsalMark
+        = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
     if (!rehearsalMark) {
         return false;
     }
@@ -306,8 +307,9 @@ bool GradualTempoChange::adjustForRehearsalMark(bool start) const
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     const bool sameSide = placeAbove() == rehearsalMark->placeAbove();
-    const bool collision = muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), tempoChangePos) && muse::RealIsEqualOrLess(
-        rehearsalMarkBbox.top(), tempoChangePos);
+    const bool collision
+        = muse::RealIsEqualOrMore(rehearsalMarkBbox.bottom(), tempoChangePos) && muse::RealIsEqualOrLess(
+              rehearsalMarkBbox.top(), tempoChangePos);
 
     return sameSide && collision;
 }
@@ -321,13 +323,16 @@ PointF GradualTempoChange::linePos(Grip grip, System** system) const
     }
 
     const Segment* segment = start ? startSegment() : endSegment();
-    const RehearsalMark* rehearsalMark = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
+    const RehearsalMark* rehearsalMark
+        = toRehearsalMark(segment->findAnnotation(ElementType::REHEARSAL_MARK, track(), track()));
     RectF rehearsalMarkBbox = rehearsalMark ? rehearsalMark->ldata()->bbox().translated(rehearsalMark->pos()) : RectF();
 
     PointF rehearsalMarkPos = segment->pos() + segment->measure()->pos();
     rehearsalMarkBbox.translate(rehearsalMarkPos);
 
-    Text* text = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->endText();
+    Text* text
+        = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->
+          endText();
 
     const double sp = spatium();
 

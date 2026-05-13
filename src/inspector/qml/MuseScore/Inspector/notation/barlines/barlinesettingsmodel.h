@@ -40,12 +40,14 @@ class BarlineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * spanFrom READ spanFrom CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * spanTo READ spanTo CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * hasToShowTips READ hasToShowTips CONSTANT)
-    Q_PROPERTY(bool isRepeatStyleChangingAllowed READ isRepeatStyleChangingAllowed NOTIFY isRepeatStyleChangingAllowedChanged)
+    Q_PROPERTY(
+        bool isRepeatStyleChangingAllowed READ isRepeatStyleChangingAllowed NOTIFY isRepeatStyleChangingAllowedChanged)
     Q_PROPERTY(bool showPlayCountSettings READ showPlayCountSettings NOTIFY showPlayCountSettingsChanged FINAL)
     Q_PROPERTY(bool showPlayCount READ showPlayCount NOTIFY showPlayCountChanged FINAL)
 
 public:
-    explicit BarlineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit BarlineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                  IElementRepositoryService* repository);
 
     Q_INVOKABLE void applySpanPreset(const int presetType);
     Q_INVOKABLE void setSpanIntervalAsStaffDefault();

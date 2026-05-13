@@ -509,7 +509,8 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
 {
     InputResourceItem* newItem = new InputResourceItem(this);
 
-    connect(newItem, &InputResourceItem::inputParamsChangeRequested, this, [this, newItem](const AudioResourceMeta& newMeta) {
+    connect(newItem, &InputResourceItem::inputParamsChangeRequested, this,
+            [this, newItem](const AudioResourceMeta& newMeta) {
         if (askAboutChangingSound()) {
             newItem->setParamsRecourceMeta(newMeta);
         }
@@ -684,10 +685,11 @@ bool MixerChannelItem::askAboutChangingSound()
         IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sound"), true /*accent*/)
     };
 
-    IInteractive::Result result = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change this sound?"),
-                                                             muse::trc("playback",
-                                                                       "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
-                                                             buttons, changeBtn, options);
+    IInteractive::Result result
+        = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change this sound?"),
+                                     muse::trc("playback",
+                                               "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
+                                     buttons, changeBtn, options);
 
     if (result.button() == changeBtn) {
         if (!result.showAgain()) {

@@ -169,7 +169,8 @@ QString LRCWriter::formatTimestamp(double ms) const
            .arg(static_cast<int>(ms) % 1000 / 10, 2, 10, QLatin1Char('0'));
 }
 
-void LRCWriter::findTrackAndLyricToExport(const engraving::Score* score, mu::engraving::track_idx_t& trackNumber, int& lyricNumber)
+void LRCWriter::findTrackAndLyricToExport(const engraving::Score* score, mu::engraving::track_idx_t& trackNumber,
+                                          int& lyricNumber)
 {
     bool lyricsFound = false;
     trackNumber = 0;

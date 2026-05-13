@@ -89,7 +89,8 @@ public:
     virtual QQuickItem* asItem() = 0;
 };
 
-class NotationViewInputController : public muse::actions::Actionable, public muse::Contextable, public muse::async::Asyncable
+class NotationViewInputController : public muse::actions::Actionable, public muse::Contextable,
+    public muse::async::Asyncable
 {
 public:
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;

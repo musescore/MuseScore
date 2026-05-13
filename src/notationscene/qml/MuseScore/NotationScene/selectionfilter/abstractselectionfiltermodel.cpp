@@ -196,7 +196,8 @@ void AbstractSelectionFilterModel::onNotationChanged()
     }, Asyncable::Mode::SetReplace /* FIXME */);
 }
 
-void AbstractSelectionFilterModel::notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant)
+void AbstractSelectionFilterModel::notifyAboutDataChanged(const QModelIndex& index,
+                                                          const SelectionFilterTypesVariant& variant)
 {
     if (variant == getAllMask()) {
         emit dataChanged(this->index(0), this->index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });

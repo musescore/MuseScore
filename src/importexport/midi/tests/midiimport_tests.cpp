@@ -50,9 +50,10 @@ extern engraving::Err importMidi(engraving::MasterScore*, const QString& name);
 namespace MidiTuplet {
 bool isTupletAllowed(const TupletInfo& tupletInfo);
 std::vector<int> findTupletNumbers(const ReducedFraction& divLen, const ReducedFraction& barFraction);
-TupletInfo findTupletApproximation(const ReducedFraction& tupletLen, int tupletNumber, const ReducedFraction& quantValue,
-                                   const ReducedFraction& startTupletTime, const std::multimap<ReducedFraction,
-                                                                                               MidiChord>::iterator& startChordIt,
+TupletInfo findTupletApproximation(const ReducedFraction& tupletLen, int tupletNumber,
+                                   const ReducedFraction& quantValue, const ReducedFraction& startTupletTime,
+                                   const std::multimap<ReducedFraction,
+                                                       MidiChord>::iterator& startChordIt,
                                    const std::multimap<ReducedFraction,
                                                        MidiChord>::iterator& endChordIt);
 void splitFirstTupletChords(std::vector<TupletInfo>& tuplets, std::multimap<ReducedFraction, MidiChord>& chords);
@@ -60,7 +61,8 @@ std::set<int> findLongestUncommonGroup(const std::vector<TupletInfo>& tuplets, c
 }
 
 namespace Meter {
-MaxLevel maxLevelBetween(const ReducedFraction& startTickInBar, const ReducedFraction& endTickInBar, const DivisionInfo& divInfo);
+MaxLevel maxLevelBetween(const ReducedFraction& startTickInBar, const ReducedFraction& endTickInBar,
+                         const DivisionInfo& divInfo);
 
 MaxLevel findMaxLevelBetween(const ReducedFraction& startTickInBar, const ReducedFraction& endTickInBar,
                              const std::vector<DivisionInfo>& divsInfo);

@@ -42,7 +42,8 @@ class Notation : virtual public INotation, public IGetScore, public muse::Contex
     muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
-    explicit Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx, engraving::Score* score = nullptr);
+    explicit Notation(MasterNotation* master, const muse::modularity::ContextPtr& iocCtx,
+                      engraving::Score* score = nullptr);
     ~Notation() override;
 
     const muse::modularity::ContextPtr& iocContext() const override;

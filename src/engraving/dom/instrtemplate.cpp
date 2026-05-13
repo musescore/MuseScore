@@ -144,7 +144,8 @@ void InstrumentGroup::read(XmlReader& e)
             if (t == 0) {
                 t = new InstrumentTemplate;
                 // init with global articulation
-                t->midiArticulations.insert(t->midiArticulations.end(), midiArticulations.begin(), midiArticulations.end());
+                t->midiArticulations.insert(t->midiArticulations.end(), midiArticulations.begin(),
+                                            midiArticulations.end());
                 t->sequenceOrder = static_cast<int>(instrumentTemplates.size());
                 instrumentTemplates.push_back(t);
             }
@@ -877,7 +878,8 @@ const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
     return 0;
 }
 
-const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset, bool caseSensitive)
+const InstrumentTemplate* searchTemplateForInstrNameList(const std::vector<String>& nameList, bool useDrumset,
+                                                         bool caseSensitive)
 {
     const InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches

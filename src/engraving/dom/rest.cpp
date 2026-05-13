@@ -505,7 +505,8 @@ void Rest::setAccent(bool flag)
 String Rest::accessibleInfo() const
 {
     String voice = muse::mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
-    return muse::mtrc("engraving", "%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
+    return muse::mtrc("engraving", "%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(),
+                                                               durationUserName(), voice);
 }
 
 //---------------------------------------------------------

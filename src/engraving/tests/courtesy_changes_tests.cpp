@@ -144,7 +144,9 @@ TEST_F(Engraving_CourtesyChangesTests, placementBetweenRepeats) {
         }
     };
 
-    std::array<SegmentType, 4> segTypes = { SegmentType::Clef, SegmentType::KeySig, SegmentType::TimeSig, SegmentType::StartRepeatBarLine };
+    std::array<SegmentType,
+               4> segTypes
+        = { SegmentType::Clef, SegmentType::KeySig, SegmentType::TimeSig, SegmentType::StartRepeatBarLine };
     checkSegOrder(m1, segTypes);
 
     score->startCmd(TranslatableString::untranslatable("Courtesy changes"));

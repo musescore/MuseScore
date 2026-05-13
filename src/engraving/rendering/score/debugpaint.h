@@ -34,6 +34,7 @@ class DebugPaint
 {
 public:
     static void paintElementDebug(muse::draw::Painter& painter, const EngravingItem* item);
-    static void paintPageDebug(muse::draw::Painter& painter, const Page* page, const std::vector<EngravingItem*>& items);
+    static void paintPageDebug(muse::draw::Painter& painter, const Page* page,
+                               const std::vector<EngravingItem*>& items);
 };
 }

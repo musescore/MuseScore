@@ -41,7 +41,8 @@ public:
     static void substituteMusicFont(muse::draw::Font& font, double size);
 
 private:
-    static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata);
+    static void textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth,
+                                     TextBase::LayoutData* ldata);
     static void justifyLine(const TextBase* item, TextBlock* textBlock, double maxBlockWidth);
     static double musicSymbolBaseLineAdjust(const TextBlock* block, const TextBase* t, const TextFragment& f,
                                             const std::list<TextFragment>::iterator fi);

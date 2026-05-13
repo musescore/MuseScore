@@ -100,7 +100,8 @@ static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Sc
                 const auto& noteBendData = tickInfo.at(noteIndex);
                 GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::PRE_BEND, note);
                 IF_ASSERT_FAILED(bend) {
-                    LOGE() << "prebend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    LOGE() << "prebend wasn't created for track " << chord->track() << ", tick " <<
+                        chord->tick().ticks();
                     continue;
                 }
 
@@ -290,7 +291,8 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
                 while (tie) {
                     Note* nextNote = tie->endNote();
                     IF_ASSERT_FAILED(nextNote) {
-                        LOGE() << "bend import error: not found tied note for track " << track << ", tick " << tick.ticks();
+                        LOGE() << "bend import error: not found tied note for track " << track << ", tick " <<
+                            tick.ticks();
                         break;
                     }
 

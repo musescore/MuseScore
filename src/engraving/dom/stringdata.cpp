@@ -142,7 +142,8 @@ int StringData::getPitch(int string, int fret, const Staff* staff, const Fractio
 {
     const CapoParams& capo = staff->capo(tick);
     bool ignoredString = capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)string);
-    return ignoredString ? getPitch(string, fret, pitchOffsetAt(staff)) : getPitch(string, fret, pitchOffsetAt(staff, tick));
+    return ignoredString ? getPitch(string, fret, pitchOffsetAt(staff)) : getPitch(string, fret,
+                                                                                   pitchOffsetAt(staff, tick));
 }
 
 //---------------------------------------------------------
@@ -251,7 +252,8 @@ void StringData::fretChords(Chord* chord) const
             continue;
         }
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
-        if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
+        if (nString
+            == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
             const CapoParams& capo = note->staff()->capo(note->tick());
             // get a new fretting
             if (convertPitch(note->pitch(), pitchOffsetAt(chord->staff(), chord->tick()), &nNewString, &nNewFret,
@@ -282,7 +284,8 @@ void StringData::fretChords(Chord* chord) const
             for (int nTempString = 0; nTempString < strings; nTempString++) {
                 if (bUsed[nTempString] < 1
                     && (nTempFret=fret(note->pitch(), nTempString,
-                                       pitchOffsetAt(chord->staff(), chord->tick(), nTempString))) != INVALID_FRET_INDEX) {
+                                       pitchOffsetAt(chord->staff(), chord->tick(),
+                                                     nTempString))) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string
                     bUsed[nTempString]++;             // and occupy new string
                     nNewFret   = nTempFret;
@@ -456,7 +459,9 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;
-                int fretCorrection = (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
+                int fretCorrection
+                    = (capo.active
+                       && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
                 *fret = pitch - strg.pitch + fretCorrection;
                 return true;
             }

@@ -58,7 +58,8 @@ public:
 
 void Engraving_CopyPasteTests::copypaste(const char* idx)
 {
-    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
+    MasterScore* score
+        = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -91,7 +92,8 @@ void Engraving_CopyPasteTests::copypaste(const char* idx)
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
-                                            COPYPASTE_DATA_DIR + String(u"copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
+                                            COPYPASTE_DATA_DIR
+                                            + String(u"copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
     delete score;
 }
 
@@ -196,7 +198,8 @@ TEST_F(Engraving_CopyPasteTests, copypaste27)
 
 void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
 {
-    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
+    MasterScore* score
+        = ScoreRW::readScore(COPYPASTE_DATA_DIR + String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -227,7 +230,8 @@ void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
-                                            COPYPASTE_DATA_DIR + String(u"copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
+                                            COPYPASTE_DATA_DIR
+                                            + String(u"copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
     delete score;
 }
 
@@ -331,7 +335,8 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
 
     //paste to 16th rest
-    EngravingItem* dest = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
+    EngravingItem* dest
+        = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
 
     EXPECT_TRUE(dest->isRest());
     EXPECT_EQ(toChordRest(dest)->durationType(), DurationType::V_16TH);
@@ -415,7 +420,8 @@ void Engraving_CopyPasteTests::copypastestaff(const char* idx)
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste%1.mscx").arg(String::fromUtf8(idx)),
-                                            COPYPASTE_DATA_DIR + String("copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
+                                            COPYPASTE_DATA_DIR
+                                            + String("copypaste%1-ref.mscx").arg(String::fromUtf8(idx))));
     delete score;
 }
 
@@ -458,7 +464,8 @@ TEST_F(Engraving_CopyPasteTests, copypastePartial)
 
 void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
 {
-    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)));
+    MasterScore* score
+        = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)));
     EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
@@ -486,7 +493,8 @@ void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)),
-                                            COPYPASTE_DATA_DIR + String("copypaste_tuplet_%1-ref.mscx").arg(String::fromUtf8(idx))));
+                                            COPYPASTE_DATA_DIR
+                                            + String("copypaste_tuplet_%1-ref.mscx").arg(String::fromUtf8(idx))));
     delete score;
 }
 

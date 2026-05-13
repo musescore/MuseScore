@@ -48,7 +48,8 @@ static constexpr std::string_view ELEMENT_TAG("element");
 static constexpr std::string_view EVENTS_TAG("events");
 static constexpr std::string_view EVENT_TAG("event");
 
-static void writeElementPosition(XmlStreamWriter& writer, const std::string& id, const muse::PointF& pos, const muse::PointF& sPos,
+static void writeElementPosition(XmlStreamWriter& writer, const std::string& id, const muse::PointF& pos,
+                                 const muse::PointF& sPos,
                                  page_idx_t pageIndex)
 {
     XmlStreamWriter::Attributes attributes;
@@ -241,7 +242,8 @@ void PositionsWriter::writeEventsPositions(XmlStreamWriter& writer, const mu::en
         int startTick = repeatSegment->tick;
         int endTick = repeatSegment->endTick();
         int tickOffset = repeatSegment->utick - repeatSegment->tick;
-        for (Measure* measure = score->tick2measureMM(Fraction::fromTicks(startTick)); measure; measure = measure->nextMeasureMM()) {
+        for (Measure* measure = score->tick2measureMM(Fraction::fromTicks(startTick)); measure;
+             measure = measure->nextMeasureMM()) {
             if (m_elementType == ElementType::SEGMENT) {
                 writeMeasureEvents(writer, measure, tickOffset, elementIds);
             } else {

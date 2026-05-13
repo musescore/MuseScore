@@ -55,7 +55,8 @@ protected:
         return note;
     }
 
-    void testPartialTies(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
+    void testPartialTies(const String& score, const Fraction& startPointLocation,
+                         const std::vector<Fraction>& jumpPointLocations)
     {
         openScore(score, startPointLocation, jumpPointLocations);
 
@@ -74,7 +75,8 @@ protected:
         deleteStartTie();
     }
 
-    void openScore(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
+    void openScore(const String& score, const Fraction& startPointLocation,
+                   const std::vector<Fraction>& jumpPointLocations)
     {
         m_masterScore = ScoreRW::readScore(PARTIALTIE_DATA_DIR + score + u".mscx");
 
@@ -319,7 +321,8 @@ protected:
         EXPECT_FALSE(tieBeforeSegno->jumpPoint());
     }
 
-    void saveAndLoad(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
+    void saveAndLoad(const String& score, const Fraction& startPointLocation,
+                     const std::vector<Fraction>& jumpPointLocations)
     {
         // Save score
         const String savePath = score + u".mscx";
@@ -348,7 +351,8 @@ protected:
         }
     }
 
-    void testPartialTieListSelection(const String& score, const Fraction& startPointLocation, const Fraction& secondNoteLocation,
+    void testPartialTieListSelection(const String& score, const Fraction& startPointLocation,
+                                     const Fraction& secondNoteLocation,
                                      const std::vector<Fraction>& jumpPointLocations)
     {
         openScore(score, startPointLocation, jumpPointLocations);

@@ -111,8 +111,9 @@ private:
         RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
 
     void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,
-                     RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
-                     Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
+                     RepeatListElementList::const_iterator repeatListElementTargetIt, bool withRepeats,
+                     int* const playbackCount, Volta const** const activeVolta,
+                     RepeatListElement const** const startRepeatReference) const;
     void unwind();
     void flatten();
 

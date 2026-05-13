@@ -631,7 +631,8 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             }
             bool firstpart = true;
             while (duration > Fraction(0, 1)) {
-                if ((e->isRest() || e->isMeasureRepeat()) && (duration >= remains || e == back()) && (remains == m->ticks())) {
+                if ((e->isRest() || e->isMeasureRepeat()) && (duration >= remains || e == back())
+                    && (remains == m->ticks())) {
                     //
                     // handle full measure rest
                     //
@@ -1121,7 +1122,8 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                 m->score()->addElement(nbl);
             } else {
                 // We change BarLineType if necessary to keep END_START repeats if in the middle of a meassure
-                if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT) && middle) {
+                if ((nbl->barLineType() == BarLineType::END_REPEAT)
+                    && (bl->barLineType() == BarLineType::START_REPEAT) && middle) {
                     blt = BarLineType::END_START_REPEAT;
                 }
             }
@@ -1367,7 +1369,8 @@ void ScoreRange::restoreSpacers(Score* score, const Fraction& tick) const
     {
         // We only add an element if there isn't a previous one of the same Type (UP/DOWN)
         if ((s->spacerType() == SpacerType::UP && !m->vspacerUp(staffIdx))
-            || ((s->spacerType() == SpacerType::DOWN || s->spacerType() == SpacerType::FIXED) && !m->vspacerDown(staffIdx))) {
+            || ((s->spacerType() == SpacerType::DOWN || s->spacerType() == SpacerType::FIXED)
+                && !m->vspacerDown(staffIdx))) {
             Spacer* ns = Factory::createSpacer(m);
             ns->setSpacerType(s->spacerType());
             ns->setGap(s->gap());
@@ -1412,7 +1415,8 @@ bool ScoreRange::endOfMeasureElement(EngravingItem* e) const
     bool result = false;
 
     if (e->isMarker()
-        && ((muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
+        && ((muse::contains(Marker::RIGHT_MARKERS,
+                            toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
         result = true;
     } else if (e->isJump()) {
         result = true;

@@ -60,7 +60,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void ScoreHorizontalViewLayout::layoutHorizontalView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
+void ScoreHorizontalViewLayout::layoutHorizontalView(Score* score, LayoutContext& ctx, const Fraction& stick,
+                                                     const Fraction& etick)
 {
     ctx.mutState().setEndTick(etick);
 
@@ -444,7 +445,8 @@ void ScoreHorizontalViewLayout::layoutSegmentsWithDuration(Measure* m, const std
     m->setWidth(currentXPos);
 }
 
-std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segment* s, const std::vector<int>& visibleParts)
+std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segment* s,
+                                                                      const std::vector<int>& visibleParts)
 {
     if (!s->enabled()) {
         return { 0, 0 };

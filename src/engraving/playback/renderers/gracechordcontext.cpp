@@ -54,7 +54,8 @@ static duration_t graceNotesMaxAvailableDuration(const ArticulationType type, co
         }
     }
 
-    const duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
+    const duration_t minAcciacaturaDuration
+        = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
     return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }
 
@@ -68,7 +69,8 @@ static timestamp_t graceNotesStartTimestamp(const mpe::ArticulationType type, co
     return nominalTimestamp;
 }
 
-static timestamp_t principalNotesStartTimestamp(const mpe::ArticulationType type, const mpe::duration_t graceNotesDuration,
+static timestamp_t principalNotesStartTimestamp(const mpe::ArticulationType type,
+                                                const mpe::duration_t graceNotesDuration,
                                                 const mpe::timestamp_t nominalTimestamp)
 {
     if (type == ArticulationType::PreAppoggiatura
@@ -106,7 +108,8 @@ GraceChordCtx GraceChordCtx::buildCtx(const Chord* chord, const mpe::Articulatio
     const duration_t availableGraceNotesDuration = graceNotesMaxAvailableDuration(type, ctx, graceChords.size());
     const duration_t accumulatedGraceNotesDuration = graceNotesTotalDuration(graceChords, ctx.beatsPerSecond);
     const duration_t actualGraceNotesDuration = std::min(availableGraceNotesDuration, accumulatedGraceNotesDuration);
-    const timestamp_t principalChordTimestamp = principalNotesStartTimestamp(type, actualGraceNotesDuration, ctx.nominalTimestamp);
+    const timestamp_t principalChordTimestamp = principalNotesStartTimestamp(type, actualGraceNotesDuration,
+                                                                             ctx.nominalTimestamp);
     const duration_t principalChordDuration = ctx.nominalDuration - actualGraceNotesDuration;
 
     GraceChordCtx result { buildGraceRenderingCtx(ctx, principalChordTimestamp, principalChordDuration), {} };

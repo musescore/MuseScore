@@ -207,7 +207,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter, const Pai
 
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter, opt);
         break;
-    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter, opt);
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter,
+                                                         opt);
         break;
     case ElementType::GUITAR_BEND_SEGMENT: draw(item_cast<const GuitarBendSegment*>(item), painter, opt);
         break;
@@ -518,7 +519,8 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
         if (item->tieBackNonPartial() && !tab->showBackTied()) {
-            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
+            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system()
+                && item->el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
@@ -682,10 +684,12 @@ static void drawTips(const BarLine* item, Painter* painter, bool reversed, doubl
     const BarLine::LayoutData* ldata = item->ldata();
     if (reversed) {
         if (item->isTop()) {
-            item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), ldata->y1));
+            item->drawSymbol(SymId::reversedBracketTop, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketTop), ldata->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), ldata->y2));
+            item->drawSymbol(SymId::reversedBracketBottom, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketBottom), ldata->y2));
         }
     } else {
         if (item->isTop()) {
@@ -1069,7 +1073,8 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter, const PaintOption
     }
 
     if (!item->isWavy()) {
-        painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+        painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(),
+                            PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(ldata->path);
     } else {
@@ -1161,10 +1166,12 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
 
     painter->setFont(f);
     painter->setBrush(BrushStyle::NoBrush);
-    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
+    Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium),
+            PenStyle::SolidLine,
             PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(
+        ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1179,7 +1186,8 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter, const Paint
         }
 
         // if extended cont.line and no closing parenthesis: look at next FB element
-        if (item->contLine() > FiguredBassItem::ContLine::SIMPLE && item->parenth5() == FiguredBassItem::Parenthesis::NONE) {
+        if (item->contLine() > FiguredBassItem::ContLine::SIMPLE
+            && item->parenth5() == FiguredBassItem::Parenthesis::NONE) {
             FiguredBass* nextFB;
             // if there is a contiguous FB element
             if ((nextFB = item->figuredBass()->nextFiguredBass()) != 0) {
@@ -1557,7 +1565,8 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (!RealIsNull(item->frameWidth().val())) {
             Color fColor = item->curColor(item->visible(), item->frameColor(), opt);
-            double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameWidthVal = item->frameWidth().val()
+                                   * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
             Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
@@ -1569,7 +1578,8 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter, const Pain
         if (item->circle()) {
             painter->drawEllipse(ldata->frame);
         } else {
-            double frameRadius = item->frameRound().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameRadius = item->frameRound().val()
+                                 * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
             painter->drawRoundedRect(ldata->frame, frameRadius, frameRadius);
         }
     }
@@ -1832,7 +1842,8 @@ void SingleDraw::draw(const Harmony* item, Painter* painter, const PaintOptions&
             painter->drawArc(ldata->frame, 0, 5760);
         } else {
             double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-            double frameRadius = item->frameRound().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double frameRadius = item->frameRound().val()
+                                 * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
             painter->drawRoundedRect(ldata->frame, frameRadius, frameRadius);
         }
     }
@@ -1881,7 +1892,8 @@ void SingleDraw::draw(const Image* item, Painter* painter, const PaintOptions&)
             muse::Size ss = muse::Size(s.width() * t.m11(), s.height() * t.m22());
             t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
             painter->setWorldTransform(t);
-            if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
+            if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage()
+                && !item->rasterImage()->isNull()) {
                 item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
                 item->setDirty(false);
             }
@@ -1956,7 +1968,8 @@ void SingleDraw::draw(const KeySig* item, Painter* painter, const PaintOptions& 
     if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && ldata->keySymbols.empty()) {
         // empty custom or atonal key signature - draw something for palette
         painter->setPen(item->configuration()->scoreGreyColor());
-        item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
+        item->drawSymbol(SymId::timeSigX, painter,
+                         PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
 }
 
@@ -2135,7 +2148,8 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptio
     // Draw stem and flag
     if (item->hasStem()) {
         double x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
-        double y1 = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+        double y1 = item->symSmuflAnchor(
+            item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         double y2 = (up ? -3.5 : 3.5) * sp;
 
         if (item->hasFlag()) {

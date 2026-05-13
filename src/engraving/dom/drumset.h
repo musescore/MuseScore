@@ -131,7 +131,8 @@ public:
     DrumInstrument& drum(int i) { return m_drums[i]; }
     const DrumInstrument& drum(int i) const { return m_drums[i]; }
     void setDrum(int pitch, const DrumInstrument& di) { m_drums[pitch] = di; }
-    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, TremoloType tremType) const;
+    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations,
+                                      TremoloType tremType) const;
 
     static void initDrumset();
 

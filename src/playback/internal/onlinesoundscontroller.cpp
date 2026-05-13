@@ -139,7 +139,8 @@ void OnlineSoundsController::listenProcessingProgress(const TrackId trackId)
 
                     if (status.errorCode != 0 && status.errorCode != (int)Ret::Code::Cancel) {
                         m_onlineSoundsProcessingRet = retFromProcessingStatus(status);
-                        LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " << trackId;
+                        LOGE() << "Error during online sounds processing: " << status.errorText << ", track: " <<
+                            trackId;
 
                         if (status.errorCode == (int)Err::OnlineSoundsLimitReached) {
                             showLimitReachedErrorIfNeed(status);
@@ -177,9 +178,11 @@ void OnlineSoundsController::showOnlineSoundsProcessingError(const std::function
                                                     "<a href=\"%1\">Learn more here</a>.")
                              .arg(configuration()->onlineSoundsHandbookUrl()).toStdString();
 
-    auto promise = interactive()->warning(muse::trc("playback", "Some online sounds aren’t ready yet"), text,
+    auto promise = interactive()->warning(muse::trc("playback",
+                                                    "Some online sounds aren’t ready yet"), text,
                                           { IInteractive::Button::Ok }, IInteractive::Button::Ok,
-                                          IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+                                          IInteractive::Option::WithIcon
+                                          | IInteractive::Option::WithDontShowAgainCheckBox);
 
     promise.onResolve(this, [this, onShown](const IInteractive::Result& res) {
         if (!res.showAgain()) {

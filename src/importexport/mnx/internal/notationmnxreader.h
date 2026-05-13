@@ -33,11 +33,14 @@ public:
     NotationMnxReader(const muse::modularity::ContextPtr& iocCtx)
         : muse::Injectable(iocCtx) {}
 
-    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                   const Options& options = Options()) override;
 
 private:
-    muse::Ret importJson(mu::engraving::MasterScore* score, muse::ByteArray&& jsonData, const muse::io::path_t& path) const;
-    muse::Ret importMnx(mu::engraving::MasterScore* score, muse::ByteArray&& mnxData, const muse::io::path_t& path) const;
+    muse::Ret importJson(mu::engraving::MasterScore* score, muse::ByteArray&& jsonData,
+                         const muse::io::path_t& path) const;
+    muse::Ret importMnx(mu::engraving::MasterScore* score, muse::ByteArray&& mnxData,
+                        const muse::io::path_t& path) const;
     const IMnxConfiguration* mnxConfiguration() const;
 
     muse::GlobalInject<IMnxConfiguration> m_mnxConfiguration;

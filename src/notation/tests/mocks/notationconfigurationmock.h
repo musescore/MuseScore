@@ -130,7 +130,8 @@ public:
 
     MOCK_METHOD(bool, addAccidentalDotsArticulationsToNextNoteEntered, (), (const, override));
     MOCK_METHOD(void, setAddAccidentalDotsArticulationsToNextNoteEntered, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, addAccidentalDotsArticulationsToNextNoteEnteredChanged, (),
+                (const, override));
 
     MOCK_METHOD(muse::io::path_t, userMusicFontsPath, (), (const, override));
     MOCK_METHOD(void, setUserMusicFontsPath, (const muse::io::path_t&), (override));
@@ -142,7 +143,8 @@ public:
 
     MOCK_METHOD(bool, startNoteInputAtSelectedNoteRestWhenPressingMidiKey, (), (const, override));
     MOCK_METHOD(void, setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged, (),
+                (const, override));
 
     MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));

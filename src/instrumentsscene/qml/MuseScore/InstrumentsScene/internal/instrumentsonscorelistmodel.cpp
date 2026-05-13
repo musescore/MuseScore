@@ -256,7 +256,8 @@ QVariantList InstrumentsOnScoreListModel::instruments() const
         obj["partId"] = instrument->partId.toQString();
         obj["isSoloist"] = instrument->isSoloist;
         obj["isExistingPart"] = instrument->isExistingPart;
-        obj["instrumentId"] = instrument->isExistingPart ? instrument->id : instrument->instrumentTemplate.id.toQString();
+        obj["instrumentId"]
+            = instrument->isExistingPart ? instrument->id : instrument->instrumentTemplate.id.toQString();
 
         result << obj;
     }
@@ -321,7 +322,8 @@ void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, Instru
     instruments << newInstrument;
 }
 
-InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::modelIndexToItem(const QModelIndex& index) const
+InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::modelIndexToItem(const QModelIndex& index)
+const
 {
     return dynamic_cast<InstrumentItem*>(item(index));
 }

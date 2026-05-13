@@ -131,7 +131,8 @@ struct SymbolIcon {
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const muse::PointF& stPtPos = muse::PointF(xStShift, yStShift);
 
-        painter.setPen(Color(CustomizeKitDialog::uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].toString()));
+        painter.setPen(Color(CustomizeKitDialog::uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].
+                             toString()));
         painter.setBrush(Color::transparent);
 
         CustomizeKitDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
@@ -432,30 +433,44 @@ void CustomizeKitDialog::cancel()
 void CustomizeKitDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 {
     m_editedDrumset.drum(pitch).notehead = NoteHeadGroup::HEAD_CUSTOM;
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_WHOLE)] = static_cast<SymId>(wholeCmb->currentData().toInt());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_QUARTER)] = static_cast<SymId>(quarterCmb->currentData().toInt());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_HALF)] = static_cast<SymId>(halfCmb->currentData().toInt());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_BREVIS)] = static_cast<SymId>(doubleWholeCmb->currentData().toInt());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_WHOLE)]
+        = static_cast<SymId>(wholeCmb->currentData().toInt());
+    m_editedDrumset.drum(
+        pitch).noteheads[int(NoteHeadType::HEAD_QUARTER)] = static_cast<SymId>(quarterCmb->currentData().toInt());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_HALF)]
+        = static_cast<SymId>(halfCmb->currentData().toInt());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_BREVIS)]
+        = static_cast<SymId>(doubleWholeCmb->currentData().toInt());
 }
 
 void CustomizeKitDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 {
     if (customGroup) {
-        wholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_QUARTER))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch,
+                                                                                                  NoteHeadType::
+                                                                                                  HEAD_WHOLE))));
+        halfCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch,
+                                                                                                 NoteHeadType::HEAD_HALF))));
+        quarterCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch,
+                                                                                                    NoteHeadType::
+                                                                                                    HEAD_QUARTER))));
         doubleWholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(m_editedDrumset.noteHeads(pitch,
-                                                                                                        NoteHeadType::HEAD_BREVIS))));
+                                                                                                        NoteHeadType::
+                                                                                                        HEAD_BREVIS))));
     } else {
         const auto group = m_editedDrumset.drum(pitch).notehead;
         if (group == NoteHeadGroup::HEAD_INVALID) {
             return;
         }
 
-        wholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group, NoteHeadType::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group, NoteHeadType::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group, NoteHeadType::HEAD_QUARTER))));
-        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group, NoteHeadType::HEAD_BREVIS))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group,
+                                                                                       NoteHeadType::HEAD_WHOLE))));
+        halfCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group,
+                                                                                      NoteHeadType::HEAD_HALF))));
+        quarterCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group,
+                                                                                         NoteHeadType::HEAD_QUARTER))));
+        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(static_cast<int>(Note::noteHead(0, group,
+                                                                                             NoteHeadType::HEAD_BREVIS))));
     }
 }
 

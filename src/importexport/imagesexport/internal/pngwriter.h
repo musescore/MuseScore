@@ -36,7 +36,8 @@ class PngWriter : public AbstractImageWriter
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice,
+                    const Options& options = Options()) override;
 
 private:
     void convertImageToGrayscale(QImage& image);

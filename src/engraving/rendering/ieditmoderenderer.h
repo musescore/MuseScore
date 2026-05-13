@@ -40,7 +40,7 @@ class IEditModeRenderer : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IEditModeRenderer() = default;
 
-    virtual void drawItem(const EngravingItem* item, muse::draw::Painter* p, const EditData& ed, double currentViewScaling,
-                          const PaintOptions& opt) = 0;
+    virtual void drawItem(const EngravingItem* item, muse::draw::Painter* p, const EditData& ed,
+                          double currentViewScaling, const PaintOptions& opt) = 0;
 };
 }

@@ -222,7 +222,8 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score
 
                 StaffTextBase* text = toStaffTextBase(annotation);
                 PlayingTechniqueType type
-                    = muse::value(textToPlayTechniqueType, text->plainText().toLower(), PlayingTechniqueType::Undefined);
+                    = muse::value(textToPlayTechniqueType, text->plainText().toLower(),
+                                  PlayingTechniqueType::Undefined);
 
                 if (type == PlayingTechniqueType::Undefined) {
                     muse::String channelName = text->channelName(0).toLower();
@@ -255,7 +256,8 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score
         PlayingTechniqueType type = pair.second;
         Segment* parentSegment = oldPlayTech->segment();
 
-        PlayTechAnnotation* newPlayTech = Factory::createPlayTechAnnotation(parentSegment, type, oldPlayTech->textStyleType());
+        PlayTechAnnotation* newPlayTech = Factory::createPlayTechAnnotation(parentSegment, type,
+                                                                            oldPlayTech->textStyleType());
         newPlayTech->setXmlText(oldPlayTech->xmlText());
         newPlayTech->setTrack(oldPlayTech->track());
 

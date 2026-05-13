@@ -42,21 +42,24 @@ class ImportPreferencesModel : public QObject, public muse::Contextable, public 
     Q_OBJECT
     QML_ELEMENT;
 
-    Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
+    Q_PROPERTY(
+        QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)
 
     Q_PROPERTY(
         QString currentOvertureCharset READ currentOvertureCharset WRITE setCurrentOvertureCharset NOTIFY currentOvertureCharsetChanged)
 
     Q_PROPERTY(bool importLayout READ importLayout WRITE setImportLayout NOTIFY importLayoutChanged)
     Q_PROPERTY(bool importBreaks READ importBreaks WRITE setImportBreaks NOTIFY importBreaksChanged)
-    Q_PROPERTY(bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
+    Q_PROPERTY(
+        bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
     Q_PROPERTY(bool inferTextType READ inferTextType WRITE setInferTextType NOTIFY inferTextTypeChanged)
 
     Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
     Q_PROPERTY(bool mnxRequireExactSchemaValidation READ mnxRequireExactSchemaValidation WRITE setMnxRequireExactSchemaValidation
                NOTIFY mnxRequireExactSchemaValidationChanged)
 
-    Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
+    Q_PROPERTY(
+        int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
     Q_PROPERTY(bool roundTempo READ roundTempo WRITE setRoundTempo NOTIFY roundTempoChanged)
 
     Q_PROPERTY(

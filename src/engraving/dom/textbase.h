@@ -188,7 +188,8 @@ public:
 
     RectF cursorRect() const;
     RectF cursorCanvasRect() const;
-    bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
+    bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor,
+                      int count = 1);
     void selectWord();
     void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
     void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }

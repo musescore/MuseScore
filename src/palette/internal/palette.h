@@ -113,9 +113,10 @@ public:
     // TODO: Remove QString overload
     PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const muse::TranslatableString& name, qreal mag = 1.0,
-                                 const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, muse::actions::ActionCode code, double mag = 1.0);
+    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const muse::TranslatableString& name,
+                                 qreal mag = 1.0, const QPointF& offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, muse::actions::ActionCode code,
+                                    double mag = 1.0);
     // TODO: Remove QString overload
     PaletteCellPtr appendElement(engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");

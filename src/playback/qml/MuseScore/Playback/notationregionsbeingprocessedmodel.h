@@ -36,11 +36,13 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::playback {
-class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable, public muse::Contextable
+class NotationRegionsBeingProcessedModel : public QAbstractListModel, public muse::async::Asyncable,
+    public muse::Contextable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariant notationViewMatrix READ notationViewMatrix WRITE setNotationViewMatrix NOTIFY notationViewMatrixChanged)
+    Q_PROPERTY(
+        QVariant notationViewMatrix READ notationViewMatrix WRITE setNotationViewMatrix NOTIFY notationViewMatrixChanged)
 
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 

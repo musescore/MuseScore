@@ -52,7 +52,8 @@ bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
     return muse::contains(SUPPORTED_TYPES, spannerItem->type());
 }
 
-void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& spannerCtx, mpe::ArticulationMap& result)
+void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingContext& spannerCtx,
+                                 mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isSpanner()) {
         return;
@@ -63,7 +64,8 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         return;
     }
 
-    const int overallDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, spannerCtx.nominalDurationTicks);
+    const int overallDurationTicks
+        = SpannerFilter::spannerActualDurationTicks(spanner, spannerCtx.nominalDurationTicks);
 
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
     mpe::pitch_level_t overallPitchRange = 0;
@@ -122,7 +124,8 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         mpe::PitchClass startNotePitchClass = pitchClassFromTpc(startNoteTpc);
         mpe::PitchClass endNotePitchClass = pitchClassFromTpc(endNoteTpc);
 
-        mpe::octave_t startNoteOctave = actualOctave(startNote->playingOctave(), startNotePitchClass, tpc2alter(startNoteTpc));
+        mpe::octave_t startNoteOctave
+            = actualOctave(startNote->playingOctave(), startNotePitchClass, tpc2alter(startNoteTpc));
         mpe::octave_t endNoteOctave = actualOctave(endNote->playingOctave(), endNotePitchClass, tpc2alter(endNoteTpc));
 
         overallPitchRange = mpe::pitchLevelDiff(endNotePitchClass, endNoteOctave, startNotePitchClass, startNoteOctave);

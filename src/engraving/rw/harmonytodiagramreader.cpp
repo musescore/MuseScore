@@ -23,7 +23,8 @@
 
 using namespace mu::engraving::rw;
 
-std::unordered_map<muse::String, HarmonyToDiagramReader::FretDiagramInfo> HarmonyToDiagramReader::read(XmlReader& reader)
+std::unordered_map<muse::String, HarmonyToDiagramReader::FretDiagramInfo> HarmonyToDiagramReader::read(
+    XmlReader& reader)
 {
     std::unordered_map<String, HarmonyToDiagramReader::FretDiagramInfo> result;
 

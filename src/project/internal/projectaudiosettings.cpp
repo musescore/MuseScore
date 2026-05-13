@@ -208,7 +208,8 @@ void ProjectAudioSettings::setAuxSoloMuteState(aux_channel_idx_t index, const So
     m_settingsChanged.notify();
 }
 
-muse::async::Channel<aux_channel_idx_t, IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::auxSoloMuteStateChanged() const
+muse::async::Channel<aux_channel_idx_t,
+                     IProjectAudioSettings::SoloMuteState> ProjectAudioSettings::auxSoloMuteStateChanged() const
 {
     return m_auxSoloMuteStateChanged;
 }
@@ -301,7 +302,8 @@ Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     return make_ret(Ret::Code::Ok);
 }
 
-Ret ProjectAudioSettings::write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr)
+Ret ProjectAudioSettings::write(engraving::MscWriter& writer,
+                                notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr)
 {
     QJsonObject rootObj;
     rootObj["master"] = outputParamsToJson(m_masterOutputParams);

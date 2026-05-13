@@ -34,7 +34,8 @@ class ArpeggioPlaybackModel : public AbstractInspectorModel
 
     Q_PROPERTY(mu::inspector::PropertyItem * stretch READ stretch CONSTANT)
 public:
-    explicit ArpeggioPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit ArpeggioPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                   IElementRepositoryService* repository);
 
     PropertyItem* stretch() const;
 

@@ -576,7 +576,8 @@ bool Measure::showMeasureNumberInAutoMode() const
 
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
     // except, when showing numbers on each measure, and first measure is after anacrusis - then show always
-    if (isFirstInSection() || (prevMeasure->excludeFromNumbering() && prevMeasure->isFirstInSection() && interval != 1)) {
+    if (isFirstInSection()
+        || (prevMeasure->excludeFromNumbering() && prevMeasure->isFirstInSection() && interval != 1)) {
         return style().styleB(Sid::showMeasureNumberOne);
     }
 
@@ -606,7 +607,8 @@ bool Measure::showMeasureNumberOnStaff(staff_idx_t staffIdx) const
         return false;
     }
 
-    return showMeasureNumber() && score()->staff(staffIdx)->shouldShowMeasureNumbers() && !score()->allStavesInvisible();
+    return showMeasureNumber() && score()->staff(staffIdx)->shouldShowMeasureNumbers()
+           && !score()->allStavesInvisible();
 }
 
 //---------------------------------------------------------
@@ -1872,7 +1874,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
+                if (seg->segmentType()
+                    & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
                     seg->setRtick(nl);
                 }
             }
@@ -1913,12 +1916,14 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch,
                                                                         /*isRest=*/ true,
                                                                         /*rtickStart=*/ Fraction(0, 1),
-                                                                        /*nominal=*/ score()->sigmap()->timesig(tick().ticks()).nominal(),
+                                                                        /*nominal=*/ score()->sigmap()->timesig(tick().
+                                                                                                                ticks()).nominal(),
                                                                         /*measure=*/ this,
                                                                         /*maxDots=*/ 0,
                                                                         stretch);
                 if (durList.empty()) {
-                    LOGD("Could not make durations for: %d/%d", (nf * stretch).numerator(), (nf * stretch).denominator());
+                    LOGD("Could not make durations for: %d/%d", (nf * stretch).numerator(),
+                         (nf * stretch).denominator());
                     continue;
                 }
                 // set the existing rest to the first value of the duration list
@@ -2799,7 +2804,8 @@ Fraction Measure::snapNote(const Fraction& /*tick*/, const PointF p, int staff) 
 ///   \returns The segment that was found.
 //---------------------------------------------------------
 
-Segment* Measure::searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment,
+Segment* Measure::searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack,
+                                const Segment* preferredSegment,
                                 double spacingFactor) const
 {
     const track_idx_t lastTrack = etrack - 1;
@@ -3364,7 +3370,8 @@ double Measure::firstNoteRestSegmentX(bool leading) const
 
                 const double startBlMargin = style().styleAbsolute(Sid::barlineToLineStartDistance);
 
-                return std::min(endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
+                return std::min(
+                    endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
             } else {
                 return noteRestPos;
             }

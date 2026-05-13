@@ -94,7 +94,8 @@ public:
         return _portamento == true
                || (this->type() == ME_CONTROLLER
                    && (this->controller() == CTRL_PORTAMENTO || this->controller() == CTRL_PORTAMENTO_CONTROL
-                       || this->controller() == CTRL_PORTAMENTO_TIME_MSB || this->controller() == CTRL_PORTAMENTO_TIME_LSB));
+                       || this->controller() == CTRL_PORTAMENTO_TIME_MSB
+                       || this->controller() == CTRL_PORTAMENTO_TIME_LSB));
     }
 
 private:

@@ -112,7 +112,8 @@ void PaletteWorkspaceSetup::setup()
         paletteProvider()->setUserPaletteTree(tree);
 
         if (paletteScoreProvider()->paletteScore()->mscVersion() < engraving::Constants::MSC_VERSION) {
-            LOGD() << "Workspace file found with palette file version " << paletteScoreProvider()->paletteScore()->mscVersion() <<
+            LOGD() << "Workspace file found with palette file version " <<
+                paletteScoreProvider()->paletteScore()->mscVersion() <<
                 ". Migrating palette file to " << engraving::Constants::MSC_VERSION;
             saveData();
         }

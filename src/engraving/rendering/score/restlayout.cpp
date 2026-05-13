@@ -198,7 +198,8 @@ void RestLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segme
     resolveRestVSRest(rests, staff, segment, ctx);
 }
 
-void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff, Segment* segment)
+void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord*>& chords, const Staff* staff,
+                                    Segment* segment)
 {
     Fraction tick = segment->tick();
     int lines = staff->lines(tick);
@@ -256,7 +257,8 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
 
             rest->verticalClearance().setLocked(true);
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
-            bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
+            bool outBelowStaff = !restAbove
+                                 && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
             bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
             double yMove;
             if (useHalfSpaceSteps) {
@@ -433,7 +435,9 @@ void RestLayout::alignRests(const System* system, LayoutContext& ctx)
         for (Rest* rest : group) {
             double yCur = rest->ldata()->pos().y();
             double yResult = yOuterRest;
-            double restVertClearance = lineDist * (alignUpwards ? rest->verticalClearance().above() : rest->verticalClearance().below());
+            double restVertClearance = lineDist
+                                       * (alignUpwards ? rest->verticalClearance().above() : rest->verticalClearance().
+                                          below());
             double vertPadding = lineDist;
             restVertClearance = std::max(0.0, restVertClearance - vertPadding);
             double requiredMove = yOuterRest - yCur;
@@ -471,7 +475,8 @@ RestGroups RestLayout::computeRestGroups(const System* system, LayoutContext& ct
 
                 for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
                      segment = segment->next(SegmentType::ChordRest)) {
-                    if (interruptionPointsOnThisVoice.size() > 0 && segment->rtick() >= interruptionPointsOnThisVoice.front()) {
+                    if (interruptionPointsOnThisVoice.size() > 0
+                        && segment->rtick() >= interruptionPointsOnThisVoice.front()) {
                         restGroups.push_back(RestGroup());
                         interruptionPointsOnThisVoice.pop_front();
                     }
@@ -501,7 +506,8 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
     track_idx_t eTrack = sTrack + VOICES;
 
     // Compute all-voices interruptions
-    for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+    for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+         segment = segment->next(SegmentType::ChordRest)) {
         for (track_idx_t track = sTrack; track < eTrack; ++track) {
             EngravingItem* item = segment->element(track);
             if (!item) {
@@ -553,7 +559,8 @@ InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure,
     // Compute voice-spefic interruptions
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         track_idx_t track = sTrack + voice;
-        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             if (ChordRest* thisCR = toChordRest(segment->element(track))) {
                 if (thisCR->isRest()) {
                     const Segment* prevSegment = segment->prevWithElementsOnTrack(track);
@@ -696,7 +703,9 @@ int RestLayout::computeVoiceOffset(const Rest* item, Rest::LayoutData* ldata)
     ldata->mergedRests.clear();
     Segment* s = item->segment();
     Measure* measure = item->measure();
-    bool offsetVoices = s && measure && (item->voice() > 0 || measure->hasVoices(item->staffIdx(), item->tick(), item->actualTicks()));
+    bool offsetVoices = s && measure
+                        && (item->voice() > 0
+                            || measure->hasVoices(item->staffIdx(), item->tick(), item->actualTicks()));
     if (offsetVoices && item->voice() == 0) {
         // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
         EngravingItem* e = s->element(item->track() + 1);
@@ -768,7 +777,8 @@ int RestLayout::computeWholeOrBreveRestOffset(const Rest* item, int voiceOffset,
     int lineMove = 0;
     if (item->isWholeRest()) {
         bool moveToLineAbove = (lines > 5)
-                               || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
+                               || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2)
+                                   && !(voiceOffset == -2 || voiceOffset == 1));
         if (moveToLineAbove) {
             lineMove = -1;
         }

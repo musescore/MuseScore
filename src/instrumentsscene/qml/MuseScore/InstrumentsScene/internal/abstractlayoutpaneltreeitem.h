@@ -90,10 +90,11 @@ public:
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
 
-    virtual MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const;
+    virtual MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
+                                       int destinationRow) const;
 
-    virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
-                              bool updateNotation);
+    virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
+                              int destinationRow, bool updateNotation);
 
     virtual void moveChildrenOnScore(const MoveParams& params);
 

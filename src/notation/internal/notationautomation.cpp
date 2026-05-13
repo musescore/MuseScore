@@ -129,7 +129,8 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
         }
 
         const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-        const QVariantList staffLinesData = linesDataForSysStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
+        const QVariantList staffLinesData
+            = linesDataForSysStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
         if (staffLinesData.isEmpty()) {
             staffIdx = system->nextVisibleStaff(staffIdx);
             continue;

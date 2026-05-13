@@ -42,7 +42,8 @@
 
 using namespace mu::engraving;
 
-static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dstTrack, Segment* sourceSeg, const Fraction& lTick,
+static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dstTrack, Segment* sourceSeg,
+                         const Fraction& lTick,
                          bool link = true)
 {
     Score* sourceScore = sourceSeg->score();
@@ -263,7 +264,8 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
     }
 
     // Find and add corresponding slurs and hairpins
-    static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF, ElementType::HAIRPIN };
+    static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF,
+                                                          ElementType::HAIRPIN };
     auto spanners = sourceScore->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
     for (auto i = spanners.begin(); i < spanners.end(); i++) {
         Spanner* sp      = i->value;
@@ -358,7 +360,8 @@ void CloneVoice::cloneVoice(
             for (EngravingItem* annotation : annotations) {
                 if (annotation && annotation->track() == strack) {
                     if (annotation->hasVoiceAssignmentProperties()) {
-                        VoiceAssignment voiceAssignment = annotation->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+                        VoiceAssignment voiceAssignment
+                            = annotation->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
                         if (voiceAssignment != VoiceAssignment::CURRENT_VOICE_ONLY) {
                             continue;
                         }

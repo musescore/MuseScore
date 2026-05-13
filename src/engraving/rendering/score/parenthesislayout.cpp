@@ -86,7 +86,8 @@ void ParenthesisLayout::layoutChordParentheses(const Chord* chord, const LayoutC
     }
 }
 
-void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape, bool itemAddToSkyline,
+void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* rightParen, Shape& dummyItemShape,
+                                          bool itemAddToSkyline,
                                           const LayoutContext& ctx)
 {
     UNUSED(ctx);
@@ -124,13 +125,16 @@ void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* r
     const double parentWidth = dummyItemShape.bbox().width();
     const double itemRightX = itemLeftX + parentWidth;
 
-    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftLdata->pos()),
-                                                                             dummyItemShape, leftParen->spatium());
+    const double leftParenPadding
+        = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftLdata->pos()),
+                                                   dummyItemShape, leftParen->spatium());
     leftLdata->moveX(-leftParenPadding);
     dummyItemShape.add(leftParen->shape().translate(leftLdata->pos() + leftParen->staffOffset()));
 
-    const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummyItemShape, rightParen->shape().translated(
-                                                                                  rightLdata->pos()), rightParen->spatium());
+    const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummyItemShape,
+                                                                              rightParen->shape().translated(
+                                                                                  rightLdata->pos()),
+                                                                              rightParen->spatium());
     rightLdata->moveX(rightParenPadding);
 
     // If the right parenthesis has been padded against the left parenthesis, this means the parenthesis -> parenthesis padding distance
@@ -144,7 +148,8 @@ void ParenthesisLayout::layoutParentheses(Parenthesis* leftParen, Parenthesis* r
     }
 
     // Move parentheses to place item in the middle
-    const double leftParenX = leftLdata->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->midPointThickness;
+    const double leftParenX = leftLdata->pos().x() + leftParen->ldata()->bbox().x()
+                              + leftParen->ldata()->midPointThickness;
     const double rightParenX = rightLdata->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
                                - rightParen->ldata()->midPointThickness;
 

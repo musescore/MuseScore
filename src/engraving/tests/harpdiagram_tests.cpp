@@ -101,7 +101,8 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     // set first diagram all natural
     HarpPedalDiagram* diagram1 = Factory::createHarpPedalDiagram(s1);
     std::array<PedalPosition, HARP_STRING_NO> pedalState
-        = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+        = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+            PedalPosition::NATURAL,
             PedalPosition::NATURAL, PedalPosition::NATURAL };
     diagram1->setIsDiagram(false);
 
@@ -201,14 +202,16 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     EngravingItem* e = s2->firstElementForNavigation(0);
     e->drop(dd);
     score->undo(new ChangeHarpPedalState(diagram2,
-                                         { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+                                         { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+                                           PedalPosition::NATURAL,
                                            PedalPosition::NATURAL,
                                            PedalPosition::NATURAL, PedalPosition::NATURAL }));
     score->endCmd();
 
     // Check last diagram has updated
     expText
-        = u"E<sym>csymAccidentalFlat</sym> A<sym>csymAccidentalFlat</sym> \nD<sym>csymAccidentalFlat</sym> B<sym>csymAccidentalFlat</sym> ";
+        =
+            u"E<sym>csymAccidentalFlat</sym> A<sym>csymAccidentalFlat</sym> \nD<sym>csymAccidentalFlat</sym> B<sym>csymAccidentalFlat</sym> ";
 
     EXPECT_EQ(diagram1->xmlText(), expText);
 
@@ -236,14 +239,16 @@ TEST_F(Engraving_HarpDiagramTests, testmap)
 
     std::array<PedalPosition,
                HARP_STRING_NO> expState
-        = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::NATURAL,
+        = { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::FLAT, PedalPosition::FLAT,
+            PedalPosition::NATURAL,
             PedalPosition::NATURAL, PedalPosition::NATURAL };
     EXPECT_EQ(expState, h1->getPedalState());
 
     HarpPedalDiagram* h2 = p->nextHarpDiagram(s2->tick());
 
     expState
-        = { PedalPosition::FLAT, PedalPosition::NATURAL, PedalPosition::FLAT, PedalPosition::FLAT, PedalPosition::NATURAL,
+        = { PedalPosition::FLAT, PedalPosition::NATURAL, PedalPosition::FLAT, PedalPosition::FLAT,
+            PedalPosition::NATURAL,
             PedalPosition::NATURAL, PedalPosition::FLAT };
     EXPECT_EQ(expState, h2->getPedalState());
 

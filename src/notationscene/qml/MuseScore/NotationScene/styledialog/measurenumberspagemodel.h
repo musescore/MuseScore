@@ -36,8 +36,12 @@ class MeasureNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * measureNumberVPlacement READ measureNumberVPlacement CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberHPlacement READ measureNumberHPlacement CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberPlacementMode READ measureNumberPlacementMode CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * measureNumberPosAbove READ measureNumberPosAbove NOTIFY measureNumberPosAboveChanged FINAL)
-    Q_PROPERTY(mu::notation::StyleItem * measureNumberPosBelow READ measureNumberPosBelow NOTIFY measureNumberPosBelowChanged FINAL)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * measureNumberPosAbove READ measureNumberPosAbove NOTIFY measureNumberPosAboveChanged FINAL)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * measureNumberPosBelow READ measureNumberPosBelow NOTIFY measureNumberPosBelowChanged FINAL)
     Q_PROPERTY(mu::notation::StyleItem * measureNumberAlignToBarline READ measureNumberAlignToBarline CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * mmRestShowMeasureNumberRange READ mmRestShowMeasureNumberRange CONSTANT)

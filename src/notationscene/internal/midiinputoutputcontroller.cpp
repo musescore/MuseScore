@@ -106,7 +106,8 @@ void MidiInputOutputController::checkConnection(const muse::midi::MidiDeviceID& 
         return false;
     };
 
-    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(availableDevices, preferredDeviceId)) {
+    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId
+        && containsDevice(availableDevices, preferredDeviceId)) {
         Ret ret = connectCallback(preferredDeviceId);
         if (!ret) {
             LOGW() << "failed connect to device, deviceID: " << preferredDeviceId << ", err: " << ret.text();
@@ -152,7 +153,8 @@ void MidiInputOutputController::onMidiEventReceived(const muse::midi::tick_t tic
     }
 }
 
-muse::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const muse::midi::MidiDeviceList& devices) const
+muse::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const muse::midi::MidiDeviceList& devices)
+const
 {
     for (const muse::midi::MidiDevice& device : devices) {
         if (device.id == muse::midi::NONE_DEVICE_ID) {

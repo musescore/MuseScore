@@ -222,7 +222,8 @@ void Beam::move(const PointF& offset)
     }
 }
 
-void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken16, bool& isBroken32) const
+void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int level, bool& isBroken16,
+                          bool& isBroken32) const
 {
     BeamMode beamMode = cr->beamMode();
     if (cr->isRest() && (beamMode == BeamMode::MID || beamMode == BeamMode::BEGIN16 || beamMode == BeamMode::BEGIN32)) {

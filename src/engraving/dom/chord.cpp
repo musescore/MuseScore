@@ -351,7 +351,9 @@ Chord::Chord(const Chord& c, bool link)
         add(Factory::copyStemSlash(*(c.m_stemSlash)));
     }
     if (c.m_arpeggio) {
-        Arpeggio* a = c.m_arpeggio->isChordBracket() ? new ChordBracket(*toChordBracket(c.m_arpeggio)) : new Arpeggio(*(c.m_arpeggio));
+        Arpeggio* a
+            = c.m_arpeggio->isChordBracket() ? new ChordBracket(*toChordBracket(c.m_arpeggio)) : new Arpeggio(*(c.
+                                                                                                                m_arpeggio));
         add(a);
         if (link) {
             score()->undo(new Link(a, const_cast<Arpeggio*>(c.m_arpeggio)));
@@ -1049,7 +1051,8 @@ void Chord::setBeamExtension(double extension)
     if (m_stem) {
         double baseLength = m_stem->absoluteFromSpatium(m_stem->baseLength());
         m_stem->setBaseLength(std::max(Spatium::fromAbsolute(baseLength + extension, spatium()), 0.0_sp));
-        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->absoluteFromSpatium(m_stem->baseLength()));
+        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->absoluteFromSpatium(
+                                           m_stem->baseLength()));
     }
 }
 
@@ -1805,7 +1808,8 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
                 newArticulation->setSymId(id);
                 newArticulation->setAnchor(artic->anchor());
-                newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
+                newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR,
+                                                  artic->propertyFlags(Pid::ARTICULATION_ANCHOR));
                 if (!hasArticulation(newArticulation)) {
                     EditChord::toggleArticulation(score(), this, newArticulation);
                 } else {

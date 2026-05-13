@@ -135,7 +135,8 @@ void NotationPainting::doPaint(Painter* painter, const Options& opt)
     }
 }
 
-void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const RectF& pageRect, bool printPageBackground) const
+void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const RectF& pageRect,
+                                      bool printPageBackground) const
 {
     TRACEFUNC;
     if (score()->printing()) {

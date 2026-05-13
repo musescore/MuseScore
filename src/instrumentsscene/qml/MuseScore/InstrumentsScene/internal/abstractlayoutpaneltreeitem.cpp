@@ -183,7 +183,8 @@ void AbstractLayoutPanelTreeItem::setParentItem(AbstractLayoutPanelTreeItem* par
     m_parent = parent;
 }
 
-AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::childAtId(const ID& id, LayoutPanelItemType::ItemType type) const
+AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::childAtId(const ID& id,
+                                                                    LayoutPanelItemType::ItemType type) const
 {
     for (AbstractLayoutPanelTreeItem* item: m_children) {
         if (item->m_id == id && item->m_type == type) {

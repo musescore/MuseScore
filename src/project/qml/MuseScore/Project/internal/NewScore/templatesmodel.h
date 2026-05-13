@@ -35,8 +35,10 @@ class TemplatesModel : public QObject, public muse::Contextable
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)
 
-    Q_PROPERTY(int currentCategoryIndex READ currentCategoryIndex WRITE setCurrentCategoryIndex NOTIFY currentCategoryChanged)
-    Q_PROPERTY(int currentTemplateIndex READ currentTemplateIndex WRITE setCurrentTemplateIndex NOTIFY currentTemplateChanged)
+    Q_PROPERTY(
+        int currentCategoryIndex READ currentCategoryIndex WRITE setCurrentCategoryIndex NOTIFY currentCategoryChanged)
+    Q_PROPERTY(
+        int currentTemplateIndex READ currentTemplateIndex WRITE setCurrentTemplateIndex NOTIFY currentTemplateChanged)
 
     Q_PROPERTY(QString currentTemplatePath READ currentTemplatePath NOTIFY currentTemplateChanged)
 

@@ -50,9 +50,11 @@ TranslatableString nameOfNoteInputMethod(NoteInputMethod method)
     case NoteInputMethod::UNKNOWN:          break;
     case NoteInputMethod::BY_NOTE_NAME:     return TranslatableString("noteInputMethod", "Input by note name mode");
     case NoteInputMethod::BY_DURATION:      return TranslatableString("noteInputMethod", "Input by duration mode");
-    case NoteInputMethod::REPITCH:          return TranslatableString("noteInputMethod", "Re-pitch existing notes mode");
+    case NoteInputMethod::REPITCH:          return TranslatableString("noteInputMethod",
+                                                                      "Re-pitch existing notes mode");
     case NoteInputMethod::RHYTHM:           return TranslatableString("noteInputMethod", "Rhythm-only input mode");
-    case NoteInputMethod::REALTIME_AUTO:    return TranslatableString("noteInputMethod", "Metronome real-time input mode");
+    case NoteInputMethod::REALTIME_AUTO:    return TranslatableString("noteInputMethod",
+                                                                      "Metronome real-time input mode");
     case NoteInputMethod::REALTIME_MANUAL:  return TranslatableString("noteInputMethod", "Pedal real-time input mode");
     case NoteInputMethod::TIMEWISE:         return TranslatableString("noteInputMethod", "Insert mode (grow measures)");
         // No default case. We want a compiler warning if an enum value is not handled here.
@@ -72,7 +74,8 @@ static bool noteInputMethodAvailable(NoteInputMethod method, const Staff* staff,
 }
 
 NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack
-                                     , const modularity::ContextPtr& iocCtx)
+                                     ,
+                                     const modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_interaction->selectionChanged().onNotify(this, [this]() {
@@ -280,7 +283,8 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
 
     if (!el || (!el->isChordRest() && !el->isNote())) {
         // if no note/rest is selected, start with voice 0
-        engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
+        engraving::track_idx_t track = is.track()
+                                       == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -713,7 +717,8 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     if (chordRest) {
         Fraction ratio = options.ratio;
         if (options.autoBaseLen) {
-            ratio.setDenominator(mu::engraving::Tuplet::computeTupletDenominator(ratio.numerator(), inputState.ticks()));
+            ratio.setDenominator(mu::engraving::Tuplet::computeTupletDenominator(ratio.numerator(),
+                                                                                 inputState.ticks()));
         }
         score()->changeCRlen(chordRest, inputState.duration());
         score()->addTuplet(chordRest, ratio, options.numberType, options.bracketType);
@@ -815,7 +820,8 @@ muse::RectF NotationNoteInput::cursorRect() const
     if (prevSeg && prevSeg->measure() == segment->measure()) {
         const RectF prevSegContentRect = ::segmentContentRect(prevSeg, track);
         if (prevSegContentRect.width() > 0) {
-            const double centerBetweenPrevSegRightAndCurrSegLeft = (prevSeg->pagePos().x() + prevSegContentRect.right() + x) * 0.5;
+            const double centerBetweenPrevSegRightAndCurrSegLeft
+                = (prevSeg->pagePos().x() + prevSegContentRect.right() + x) * 0.5;
             sideMargin = std::min(sideMargin, x - centerBetweenPrevSegRightAndCurrSegLeft);
         }
     }

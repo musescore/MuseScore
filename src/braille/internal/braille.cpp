@@ -610,7 +610,8 @@ void BrailleEngravingItemList::log()
         if (!m_items[i].el()) {
             LOGD() << " - null {" << m_items[i].start() << "," << m_items[i].end() << "}";
         } else {
-            LOGD() << " -" << m_items[i].el()->accessibleInfo() << " {" << m_items[i].start() << "," << m_items[i].end() << "}";
+            LOGD() << " -" << m_items[i].el()->accessibleInfo() << " {" << m_items[i].start() << "," <<
+                m_items[i].end() << "}";
         }
     }
 }
@@ -989,7 +990,8 @@ void Braille::instruments(QIODevice& device)
     //Print staff number to instrument mapping.
     QTextStream out(&device);
     for (size_t i = 0; i < m_score->staves().size(); ++i) {
-        out << TextToUEBBraille().braille(QString("%1 %2").arg(i + 1).arg(m_score->staves()[i]->part()->instrumentName())) << Qt::endl;
+        out << TextToUEBBraille().braille(QString("%1 %2").arg(i + 1).arg(
+                                              m_score->staves()[i]->part()->instrumentName())) << Qt::endl;
     }
     out << Qt::endl;
     out.flush();
@@ -1083,7 +1085,8 @@ int Braille::notesInSlur(Slur* slur)
             Chord* chord = toChord(cr);
             bool skip = false;
             for (Note* note : chord->notes()) {
-                if (note->tieFor() && note->tieFor()->endNote()->chord() == segment->next1()->nextChordRest(chord->track())) {
+                if (note->tieFor()
+                    && note->tieFor()->endNote()->chord() == segment->next1()->nextChordRest(chord->track())) {
                     skip = true;
                     break;
                 }
@@ -1952,7 +1955,8 @@ QString Braille::brailleChordRootNote(Chord* chord, Note* rootNote)
     // c. the octave is only marked in a skip of a fourth or fifth when the second note is in a different octave from the first.
     else {
         int interval = computeInterval(m_context.previousNote[chord->staffIdx()], rootNote, false);
-        if (interval > 5 || (interval > 3 && (m_context.previousNote[chord->staffIdx()]->octave() != rootNote->octave()))) {
+        if (interval > 5
+            || (interval > 3 && (m_context.previousNote[chord->staffIdx()]->octave() != rootNote->octave()))) {
             octaveBraille = brailleOctave(octave);
         }
     }
@@ -2215,36 +2219,47 @@ QString Braille::brailleKeySig(KeySig* keySig)
         //Section 6.5. Page 61. Music Braille Code 2015.
         //Table 6. Page 5. Music Braille Code 2015.
         switch (keySig->key()) {
-        case Key::C_B: brailleKeySig = QString(TextToUEBBraille().braille("7") + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::C_B: brailleKeySig
+                = QString(TextToUEBBraille().braille("7") + brailleAccidentalType(AccidentalType::FLAT));
             break;
-        case Key::G_B: brailleKeySig = QString(TextToUEBBraille().braille("6") + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::G_B: brailleKeySig
+                = QString(TextToUEBBraille().braille("6") + brailleAccidentalType(AccidentalType::FLAT));
             break;
-        case Key::D_B: brailleKeySig = QString(TextToUEBBraille().braille("5") + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::D_B: brailleKeySig
+                = QString(TextToUEBBraille().braille("5") + brailleAccidentalType(AccidentalType::FLAT));
             break;
-        case Key::A_B: brailleKeySig = QString(TextToUEBBraille().braille("4") + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::A_B: brailleKeySig
+                = QString(TextToUEBBraille().braille("4") + brailleAccidentalType(AccidentalType::FLAT));
             break;
         case Key::E_B: brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(
                                                    AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
             break;
-        case Key::B_B: brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::B_B: brailleKeySig
+                = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
             break;
         case Key::F:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT));
             break;
         case Key::C:   return QString();
         case Key::G:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::D:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::D:   brailleKeySig
+                = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));
             break;
         case Key::A:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(
-                                                   AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));
+                                                   AccidentalType::SHARP)
+                                               + brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::E:   brailleKeySig = QString(TextToUEBBraille().braille("4") + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::E:   brailleKeySig
+                = QString(TextToUEBBraille().braille("4") + brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::B:   brailleKeySig = QString(TextToUEBBraille().braille("5") + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::B:   brailleKeySig
+                = QString(TextToUEBBraille().braille("5") + brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::F_S: brailleKeySig = QString(TextToUEBBraille().braille("6") + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::F_S: brailleKeySig
+                = QString(TextToUEBBraille().braille("6") + brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::C_S: brailleKeySig = QString(TextToUEBBraille().braille("7") + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::C_S: brailleKeySig
+                = QString(TextToUEBBraille().braille("7") + brailleAccidentalType(AccidentalType::SHARP));
             break;
         case Key::INVALID: return QString();
         case Key::NUM_OF:  return QString();     //TODO What is this?
@@ -2691,11 +2706,13 @@ QString Braille::brailleTempoText(TempoText* tempoText, int staffIdx)
         dots1 = brailleNote("C", t1.type(), t1.dots());
         if (x2 != -1) {
             dots2 = brailleNote("C", t2.type(), t2.dots());
-            QString result = BRAILLE_MUSIC_PARENTHESES + dots1 + BRAILLE_EQUALS_METRONOME + dots2 + BRAILLE_MUSIC_PARENTHESES;
+            QString result = BRAILLE_MUSIC_PARENTHESES + dots1 + BRAILLE_EQUALS_METRONOME + dots2
+                             + BRAILLE_MUSIC_PARENTHESES;
             result += " ";
             return result;
         } else {
-            QString result = BRAILLE_MUSIC_PARENTHESES + dots1 + BRAILLE_EQUALS_METRONOME + TextToUEBBraille().braille(secondPart)
+            QString result = BRAILLE_MUSIC_PARENTHESES + dots1 + BRAILLE_EQUALS_METRONOME + TextToUEBBraille().braille(
+                secondPart)
                              + BRAILLE_MUSIC_PARENTHESES;
             result += " ";
             return result;

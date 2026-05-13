@@ -42,5 +42,12 @@ StyleItem* VoltasPageModel::voltaLineWidth() const { return styleItem(StyleId::v
 StyleItem* VoltasPageModel::voltaLineStyle() const { return styleItem(StyleId::voltaLineStyle); }
 StyleItem* VoltasPageModel::voltaDashLineLen() const { return styleItem(StyleId::voltaDashLineLen); }
 StyleItem* VoltasPageModel::voltaDashGapLen() const { return styleItem(StyleId::voltaDashGapLen); }
-StyleItem* VoltasPageModel::voltaAlignStartBeforeKeySig() const { return styleItem(StyleId::voltaAlignStartBeforeKeySig); }
-StyleItem* VoltasPageModel::voltaAlignEndLeftOfBarline() const { return styleItem(StyleId::voltaAlignEndLeftOfBarline); }
+StyleItem* VoltasPageModel::voltaAlignStartBeforeKeySig() const
+{
+    return styleItem(StyleId::voltaAlignStartBeforeKeySig);
+}
+
+StyleItem* VoltasPageModel::voltaAlignEndLeftOfBarline() const
+{
+    return styleItem(StyleId::voltaAlignEndLeftOfBarline);
+}

@@ -167,14 +167,18 @@ std::vector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     const PointF pageOffset = p ? p->pos() : PointF();
     switch (grip) {
     case Grip::START:
-        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
+        result.push_back(LineF(leftAnchorPosition(y),
+                               gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
         break;
     case Grip::END:
-        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
+        result.push_back(LineF(rightAnchorPosition(y),
+                               gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     case Grip::MIDDLE:
-        result.push_back(LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
-        result.push_back(LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
+        result.push_back(LineF(leftAnchorPosition(y),
+                               gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset));
+        result.push_back(LineF(rightAnchorPosition(y),
+                               gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset));
         break;
     default:
         break;
@@ -598,7 +602,8 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 
     // don't change anchors on keyboard adjustment or if Ctrl is pressed
     // (Ctrl+Left/Right is handled elsewhere!)
-    if (ed.key == Key_Left || ed.key == Key_Right || ed.key == Key_Up || ed.key == Key_Down || ed.modifiers & ControlModifier) {
+    if (ed.key == Key_Left || ed.key == Key_Right || ed.key == Key_Up || ed.key == Key_Down
+        || ed.modifiers & ControlModifier) {
         return;
     }
 
@@ -607,7 +612,8 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
     const double xDistanceFromStartSegment = startSeg && startSeg->system() == system()
                                              ? (startSeg->x() + startSeg->measure()->x()) - ldata()->pos().x() : 0.0;
     const double xDistanceFromEndSegment = endSeg && endSeg->system() == system()
-                                           ? (endSeg->x() + endSeg->measure()->x()) - (ldata()->pos().x() + ipos2().x()) : 0.0;
+                                           ? (endSeg->x() + endSeg->measure()->x())
+                                           - (ldata()->pos().x() + ipos2().x()) : 0.0;
 
     switch (grip) {
     case Grip::START:
@@ -626,7 +632,8 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
         // while not setting line position to something
         // inappropriate.
         Segment* seg = findSegmentForGrip(grip, ed.pos
-                                          + (left ? PointF(xDistanceFromStartSegment, 0.0) : PointF(xDistanceFromEndSegment, 0.0)));
+                                          + (left ? PointF(xDistanceFromStartSegment,
+                                                           0.0) : PointF(xDistanceFromEndSegment, 0.0)));
         LineSegment* newLineSegment = rebaseAnchor(grip, seg);
 
         if (newLineSegment) {
@@ -853,7 +860,8 @@ void LineSegment::undoMoveStartEndAndSnappedItems(EditData& ed, bool moveStart, 
     }
     if (moveEnd) {
         Fraction tickDiff = s2->tick() - thisLine->tick2();
-        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter(); itemSnappedAfter && moveSnapped) {
+        if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter();
+            itemSnappedAfter && moveSnapped) {
             if (itemSnappedAfter->isTextBase()) {
                 MoveElementAnchors::moveSegment(itemSnappedAfter, s2, tickDiff);
             } else if (itemSnappedAfter->isLineSegment()) {

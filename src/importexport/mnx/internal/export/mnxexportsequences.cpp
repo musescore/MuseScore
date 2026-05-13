@@ -692,7 +692,8 @@ bool MnxExporter::appendEvent(mnx::ContentArray content, ExportContext& ctx, Cho
 {
     const TDuration duration = chordRest->durationType();
     IF_ASSERT_FAILED(duration.type() != DurationType::V_MEASURE) {
-        LOGW() << "appendEvent received V_MEASURE duration; full-measure rests must be exported via sequence.fullMeasure.";
+        LOGW() <<
+            "appendEvent received V_MEASURE duration; full-measure rests must be exported via sequence.fullMeasure.";
         return false;
     }
     const bool isRest = chordRest->isRest();
@@ -1084,7 +1085,8 @@ void MnxExporter::createSequences(const Part* part, const Measure* measure, mnx:
                 }
             }
 
-            ExportContext ctx(part, measure, mnxMeasure, static_cast<staff_idx_t>(staffIdx), voice, mnxSequence.staff());
+            ExportContext ctx(part, measure, mnxMeasure, static_cast<staff_idx_t>(staffIdx), voice,
+                              mnxSequence.staff());
             appendContent(mnxSequence.content(), ctx, chordRests, ContentContext::Sequence);
         }
     }

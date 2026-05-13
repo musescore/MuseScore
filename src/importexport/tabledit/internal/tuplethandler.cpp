@@ -63,7 +63,8 @@ Fraction TupletHandler::doTuplet(const TefNote* const tefNote)
         count = 0;
         totalLength = 0;
     }
-    LOGN("after inTuplet %d count %d totalLength %d res %d/%d", inTuplet, count, totalLength, res.numerator(), res.denominator());
+    LOGN("after inTuplet %d count %d totalLength %d res %d/%d", inTuplet, count, totalLength,
+         res.numerator(), res.denominator());
     return res;
 }
 

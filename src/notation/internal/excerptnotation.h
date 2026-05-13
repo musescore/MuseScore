@@ -29,7 +29,8 @@ namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation, public std::enable_shared_from_this<ExcerptNotation>
 {
 public:
-    explicit ExcerptNotation(MasterNotation* master, engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx);
+    explicit ExcerptNotation(MasterNotation* master, engraving::Excerpt* excerpt,
+                             const muse::modularity::ContextPtr& iocCtx);
 
     ~ExcerptNotation() override;
 

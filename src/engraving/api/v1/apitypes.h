@@ -2067,7 +2067,8 @@ enum class SymId {
     accidentalCombiningCloseCurlyBrace = int(mu::engraving::SymId::accidentalCombiningCloseCurlyBrace),
     accidentalCombiningLower17Schisma = int(mu::engraving::SymId::accidentalCombiningLower17Schisma),
     accidentalCombiningLower19Schisma = int(mu::engraving::SymId::accidentalCombiningLower19Schisma),
-    accidentalCombiningLower23Limit29LimitComma = int(mu::engraving::SymId::accidentalCombiningLower23Limit29LimitComma),
+    accidentalCombiningLower23Limit29LimitComma
+        = int(mu::engraving::SymId::accidentalCombiningLower23Limit29LimitComma),
     accidentalCombiningLower29LimitComma = int(mu::engraving::SymId::accidentalCombiningLower29LimitComma),
     accidentalCombiningLower31Schisma = int(mu::engraving::SymId::accidentalCombiningLower31Schisma),
     accidentalCombiningLower37Quartertone = int(mu::engraving::SymId::accidentalCombiningLower37Quartertone),
@@ -2078,7 +2079,8 @@ enum class SymId {
     accidentalCombiningOpenCurlyBrace = int(mu::engraving::SymId::accidentalCombiningOpenCurlyBrace),
     accidentalCombiningRaise17Schisma = int(mu::engraving::SymId::accidentalCombiningRaise17Schisma),
     accidentalCombiningRaise19Schisma = int(mu::engraving::SymId::accidentalCombiningRaise19Schisma),
-    accidentalCombiningRaise23Limit29LimitComma = int(mu::engraving::SymId::accidentalCombiningRaise23Limit29LimitComma),
+    accidentalCombiningRaise23Limit29LimitComma
+        = int(mu::engraving::SymId::accidentalCombiningRaise23Limit29LimitComma),
     accidentalCombiningRaise29LimitComma = int(mu::engraving::SymId::accidentalCombiningRaise29LimitComma),
     accidentalCombiningRaise31Schisma = int(mu::engraving::SymId::accidentalCombiningRaise31Schisma),
     accidentalCombiningRaise37Quartertone = int(mu::engraving::SymId::accidentalCombiningRaise37Quartertone),
@@ -2112,7 +2114,8 @@ enum class SymId {
     accidentalEnharmonicEquals = int(mu::engraving::SymId::accidentalEnharmonicEquals),
     accidentalEnharmonicTilde = int(mu::engraving::SymId::accidentalEnharmonicTilde),
     accidentalFilledReversedFlatAndFlat = int(mu::engraving::SymId::accidentalFilledReversedFlatAndFlat),
-    accidentalFilledReversedFlatAndFlatArrowDown = int(mu::engraving::SymId::accidentalFilledReversedFlatAndFlatArrowDown),
+    accidentalFilledReversedFlatAndFlatArrowDown
+        = int(mu::engraving::SymId::accidentalFilledReversedFlatAndFlatArrowDown),
     accidentalFilledReversedFlatAndFlatArrowUp = int(mu::engraving::SymId::accidentalFilledReversedFlatAndFlatArrowUp),
     accidentalFilledReversedFlatArrowDown = int(mu::engraving::SymId::accidentalFilledReversedFlatArrowDown),
     accidentalFilledReversedFlatArrowUp = int(mu::engraving::SymId::accidentalFilledReversedFlatArrowUp),
@@ -2248,7 +2251,8 @@ enum class SymId {
     accidentalThreeQuarterTonesSharpArrowUp = int(mu::engraving::SymId::accidentalThreeQuarterTonesSharpArrowUp),
     accidentalThreeQuarterTonesSharpBusotti = int(mu::engraving::SymId::accidentalThreeQuarterTonesSharpBusotti),
     accidentalThreeQuarterTonesSharpStein = int(mu::engraving::SymId::accidentalThreeQuarterTonesSharpStein),
-    accidentalThreeQuarterTonesSharpStockhausen = int(mu::engraving::SymId::accidentalThreeQuarterTonesSharpStockhausen),
+    accidentalThreeQuarterTonesSharpStockhausen
+        = int(mu::engraving::SymId::accidentalThreeQuarterTonesSharpStockhausen),
     accidentalTripleFlat = int(mu::engraving::SymId::accidentalTripleFlat),
     accidentalTripleSharp = int(mu::engraving::SymId::accidentalTripleSharp),
     accidentalTwoThirdTonesFlatFerneyhough = int(mu::engraving::SymId::accidentalTwoThirdTonesFlatFerneyhough),
@@ -3931,7 +3935,8 @@ enum class SymId {
     ornamentPrecompDescendingSlide = int(mu::engraving::SymId::ornamentPrecompDescendingSlide),
     ornamentPrecompDoubleCadenceLowerPrefix = int(mu::engraving::SymId::ornamentPrecompDoubleCadenceLowerPrefix),
     ornamentPrecompDoubleCadenceUpperPrefix = int(mu::engraving::SymId::ornamentPrecompDoubleCadenceUpperPrefix),
-    ornamentPrecompDoubleCadenceUpperPrefixTurn = int(mu::engraving::SymId::ornamentPrecompDoubleCadenceUpperPrefixTurn),
+    ornamentPrecompDoubleCadenceUpperPrefixTurn
+        = int(mu::engraving::SymId::ornamentPrecompDoubleCadenceUpperPrefixTurn),
     ornamentPrecompInvertedMordentUpperPrefix = int(mu::engraving::SymId::ornamentPrecompInvertedMordentUpperPrefix),
     ornamentPrecompMordentRelease = int(mu::engraving::SymId::ornamentPrecompMordentRelease),
     ornamentPrecompMordentUpperPrefix = int(mu::engraving::SymId::ornamentPrecompMordentUpperPrefix),

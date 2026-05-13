@@ -53,7 +53,8 @@ bool ShadowNote::isValid() const
     return m_noteheadSymbol != SymId::noSym;
 }
 
-void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, bool beyondScore, AccidentalType accidentalType,
+void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, bool beyondScore,
+                          AccidentalType accidentalType,
                           const std::set<SymId>& articulationIds)
 {
     m_noteheadSymbol = noteSymbol;

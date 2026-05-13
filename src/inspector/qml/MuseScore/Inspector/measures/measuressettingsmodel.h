@@ -43,7 +43,8 @@ class MeasuresSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(int systemCount READ systemCount NOTIFY systemCountChanged)
 
 public:
-    explicit MeasuresSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit MeasuresSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                   IElementRepositoryService* repository);
 
     void createProperties() override { }
     void loadProperties() override;

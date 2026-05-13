@@ -39,7 +39,8 @@ static NotationParts* get_impl(const INotationPartsPtr& parts)
     return static_cast<NotationParts*>(parts.get());
 }
 
-MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction,
+                                         INotationUndoStackPtr undoStack,
                                          INotationStylePtr style)
     : NotationParts(getScore, interaction, undoStack, style)
 {
@@ -157,7 +158,8 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     return true;
 }
 
-bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId)
+bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId,
+                                            const muse::ID& destinationPartId)
 {
     TRACEFUNC;
 

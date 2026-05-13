@@ -35,7 +35,8 @@ class IOpenSaveProjectScenario : MODULE_CONTEXT_INTERFACE
 
 public:
     virtual muse::RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                                       SaveLocationType preselectedType = SaveLocationType::Undefined) const = 0;
+                                                       SaveLocationType preselectedType = SaveLocationType::Undefined)
+    const = 0;
 
     virtual muse::RetVal<muse::io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const = 0;
     virtual muse::RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const = 0;

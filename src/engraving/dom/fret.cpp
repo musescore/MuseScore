@@ -101,7 +101,8 @@ static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
-static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
+static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType,
+                                         const ChordList* cl)
 {
     String s = harmony;
     NoteCaseType noteCase;
@@ -470,7 +471,8 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 //   undoSetFretDot
 //---------------------------------------------------------
 
-void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, FretDotType _dtype /*= FretDotType::NORMAl*/)
+void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/,
+                                 FretDotType _dtype /*= FretDotType::NORMAl*/)
 {
     for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
@@ -1088,7 +1090,8 @@ void FretDiagram::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFla
         }
 
         for (EngravingItem* item : parentSeg->annotations()) {
-            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this
+                || track2staff(item->track()) != staffIdx()) {
                 continue;
             }
 
@@ -1329,7 +1332,8 @@ void FretDiagram::setFingering(std::vector<int> v)
 
 FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram)
 {
-    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+    IF_ASSERT_FAILED(
+        !harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
         return nullptr;
     }
 

@@ -148,7 +148,8 @@ int MeasureHandler::offsetInMeasure(int tstart, const std::vector<TefMeasure>& t
 
 // find the smallest offset of any note in a pickup measure
 
-void MeasureHandler::updateGapLeft(std::vector<int>& gapLeft, const int position, const std::vector<TefMeasure>& tefMeasures)
+void MeasureHandler::updateGapLeft(std::vector<int>& gapLeft, const int position,
+                                   const std::vector<TefMeasure>& tefMeasures)
 {
     size_t index { measureIndex(position, tefMeasures) };
     if (index >= tefMeasures.size()) {
@@ -166,7 +167,8 @@ void MeasureHandler::updateGapLeft(std::vector<int>& gapLeft, const int position
 
 // find the largest end time of any note in a pickup measure
 
-void MeasureHandler::updateGapRight(std::vector<int>& gapRight, const TefNote& note, const std::vector<TefMeasure>& tefMeasures)
+void MeasureHandler::updateGapRight(std::vector<int>& gapRight, const TefNote& note,
+                                    const std::vector<TefMeasure>& tefMeasures)
 {
     auto pos { note.position };
     size_t index { measureIndex(pos, tefMeasures) };

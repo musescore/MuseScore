@@ -49,10 +49,10 @@ public:
         int numStaffLines = 0;
     };
 
-    static void paintPreview(std::shared_ptr<engraving::rendering::ISingleRenderer> render, mu::engraving::EngravingItem* element,
-                             PaintParams& params);
-    static void paintItem(std::shared_ptr<engraving::rendering::ISingleRenderer> render, mu::engraving::EngravingItem* element,
-                          PaintParams& params);
+    static void paintPreview(std::shared_ptr<engraving::rendering::ISingleRenderer> render,
+                             mu::engraving::EngravingItem* element, PaintParams& params);
+    static void paintItem(std::shared_ptr<engraving::rendering::ISingleRenderer> render,
+                          mu::engraving::EngravingItem* element, PaintParams& params);
 
 private:
     static double paintStaff(PaintParams& params);

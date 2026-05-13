@@ -54,12 +54,14 @@ QVariantList PercussionPreferencesModel::autoShowModes() const
 {
     static const QVariantList modes {
         QVariantMap {
-            { QStringLiteral("title"), muse::qtrc("notation/percussion", "When an unpitched percussion staff is selected") },
+            { QStringLiteral("title"), muse::qtrc("notation/percussion",
+                                                  "When an unpitched percussion staff is selected") },
             { QStringLiteral("value"), int(PercussionPanelAutoShowMode::UNPITCHED_STAFF) }
         },
 
         QVariantMap {
-            { QStringLiteral("title"), muse::qtrc("notation/percussion", "When inputting notation on an unpitched percussion staff") },
+            { QStringLiteral("title"), muse::qtrc("notation/percussion",
+                                                  "When inputting notation on an unpitched percussion staff") },
             { QStringLiteral("value"), int(PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) }
         },
 

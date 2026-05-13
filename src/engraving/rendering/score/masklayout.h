@@ -39,8 +39,8 @@ public:
     static void computeMasks(LayoutContext& ctx, Page* page);
 
 private:
-    static void computeBarlineMasks(const Segment* barlineSement, const System* system, const std::vector<TextBase*>& allSystemText,
-                                    LayoutContext& ctx);
+    static void computeBarlineMasks(const Segment* barlineSement, const System* system,
+                                    const std::vector<TextBase*>& allSystemText, LayoutContext& ctx);
     static void maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText);
     static std::vector<TextBase*> collectAllSystemText(const System* system);
 

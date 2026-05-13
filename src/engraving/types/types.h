@@ -403,7 +403,10 @@ struct DurationTypeWithDots
     DurationTypeWithDots(DurationType t, int d = 0)
         : type(t), dots(d) {}
 
-    inline bool operator ==(const DurationTypeWithDots& other) const { return other.type == type && other.dots == dots; }
+    inline bool operator ==(const DurationTypeWithDots& other) const
+    {
+        return other.type == type && other.dots == dots;
+    }
 };
 
 // --- Types ---
@@ -732,7 +735,11 @@ struct OrnamentInterval
     OrnamentInterval(IntervalStep s, IntervalType t)
         : step(s), type(t) {}
 
-    inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
+    inline bool operator ==(const OrnamentInterval& interval) const
+    {
+        return step == interval.step && type == interval.type;
+    }
+
     inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
 
     static bool isPerfectStep(IntervalStep step)

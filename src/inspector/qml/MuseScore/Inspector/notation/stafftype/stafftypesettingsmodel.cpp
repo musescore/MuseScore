@@ -42,7 +42,8 @@ void StaffTypeSettingsModel::createProperties()
     m_isSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
     m_verticalOffset = buildPropertyItem(mu::engraving::Pid::STAFF_YOFFSET);
     m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
+        onPropertyValueChanged(pid,
+                               newValue.toDouble() / 100);
     });
 
     m_lineCount = buildPropertyItem(mu::engraving::Pid::STAFF_LINES); // int

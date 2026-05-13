@@ -35,7 +35,8 @@ namespace mu::iex::musicxml {
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-MScoreTextToMusicXml::MScoreTextToMusicXml(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf)
+MScoreTextToMusicXml::MScoreTextToMusicXml(const String& tag, const String& attr, const CharFormat& defFmt,
+                                           const String& mtf)
     : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
 {
     // set MusicXML defaults
@@ -121,7 +122,8 @@ static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
  */
 
 bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int pos, const int len,
-                                 std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
+                                 std::list<TextFragment>& left, std::list<TextFragment>& mid,
+                                 std::list<TextFragment>& right)
 {
     //LOGD("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
     //LOGD("-> in");
@@ -237,13 +239,18 @@ String MScoreTextToMusicXml::updateFormat()
         newFormat.setFontFamily(musicalTextFont);
     }
     String res;
-    res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), u"font-weight=\"bold\"", u"font-weight=\"normal\"");
-    res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), u"font-style=\"italic\"", u"font-style=\"normal\"");
-    res += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), u"underline=\"1\"", u"underline=\"0\"");
-    res += attribute(newFormat.strike() != oldFormat.strike(), newFormat.strike(), u"line-through=\"1\"", u"line-though=\"0\"");
+    res += attribute(newFormat.bold() != oldFormat.bold(),
+                     newFormat.bold(), u"font-weight=\"bold\"", u"font-weight=\"normal\"");
+    res += attribute(newFormat.italic() != oldFormat.italic(),
+                     newFormat.italic(), u"font-style=\"italic\"", u"font-style=\"normal\"");
+    res += attribute(newFormat.underline() != oldFormat.underline(),
+                     newFormat.underline(), u"underline=\"1\"", u"underline=\"0\"");
+    res += attribute(newFormat.strike() != oldFormat.strike(),
+                     newFormat.strike(), u"line-through=\"1\"", u"line-though=\"0\"");
     res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true,
                      String(u"font-family=\"%1\"").arg(newFormat.fontFamily()), u"");
-    bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize() || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
+    bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize()
+                    || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
     res += attribute(needSize, true, String(u"font-size=\"%1\"").arg(newFormat.fontSize()), u"");
     //LOGD("updateFormat() res '%s'", muPrintable(res));
     oldFormat = newFormat;

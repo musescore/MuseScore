@@ -65,7 +65,8 @@ void MuseSamplerCheckUpdateScenario::showCriticalUpdateNotification()
 
 #ifdef Q_OS_LINUX
     muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
-                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"), true /*accent*/);
+                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"),
+                                             true /*accent*/);
 
     std::string msg = muse::trc("musesounds", "To apply this update, MuseScore Studio will need to close briefly and MuseSounds Manager will open. "
                                               "Your MuseSounds libraries won’t work until the update is complete.");
@@ -93,7 +94,8 @@ void MuseSamplerCheckUpdateScenario::showNewVersionNotification()
 
 #ifdef Q_OS_LINUX
     muse::IInteractive::ButtonData launchBtn(int(muse::IInteractive::Button::CustomButton) + 2,
-                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"), true /*accent*/);
+                                             muse::trc("musesounds", "Quit & launch MuseSounds Manager"),
+                                             true /*accent*/);
 
     std::string msg = muse::trc("musesounds", "To keep MuseSounds running smoothly, "
                                               "MuseScore Studio needs to close briefly so MuseSounds Manager can apply the update. "

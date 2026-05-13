@@ -102,7 +102,8 @@ private:
     bool readPb(pugi::xml_node pbNode);
     bool readSb(pugi::xml_node sbNode);
     bool readStaves(pugi::xml_node parentNode, engraving::Measure* measure, engraving::Fraction& measureTicks);
-    bool readLayers(pugi::xml_node parentNode, engraving::Measure* measure, int staffIdx, engraving::Fraction& measureTicks);
+    bool readLayers(pugi::xml_node parentNode, engraving::Measure* measure, int staffIdx,
+                    engraving::Fraction& measureTicks);
 
     /**
      * Methods for parsing MEI elements within a <layer>
@@ -123,7 +124,8 @@ private:
                   engraving::Chord* chord = nullptr);
     bool readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
-    bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision);
+    bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks,
+                 ElisionType elision);
     bool readTuplet(pugi::xml_node tupletNode, engraving::Measure* measure, int track, engraving::Fraction& ticks);
     bool readVerses(pugi::xml_node parentNode, engraving::Chord* chord);
     bool readVerse(pugi::xml_node verseNode, engraving::Chord* chord);
@@ -187,8 +189,8 @@ private:
     int getVoiceIndex(int staffIdx, int layerN);
     void addLog(const std::string& msg, pugi::xml_node node);
     bool isNode(pugi::xml_node node, const muse::String& name);
-    engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track, const libmei::Element& meiElement,
-                                       engraving::Fraction& ticks, bool isRest);
+    engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track,
+                                       const libmei::Element& meiElement, engraving::Fraction& ticks, bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
@@ -254,7 +256,8 @@ private:
     std::map<engraving::Arpeggio*, pugi::xml_node> m_openArpegMap;
 
     /** A map of a map for lyrics with extender that needs to be extended */
-    std::map<engraving::track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
+    std::map<engraving::track_idx_t,
+             std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
 
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;

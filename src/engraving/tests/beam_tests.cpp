@@ -227,7 +227,8 @@ TEST_F(Engraving_BeamTests, flipBeamStemDir)
     score->update();
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flipBeamStemDir-01.mscx", BEAM_DATA_DIR + u"flipBeamStemDir-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flipBeamStemDir-01.mscx",
+                                            BEAM_DATA_DIR + u"flipBeamStemDir-01-ref.mscx"));
 
     delete score;
 }

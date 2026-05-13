@@ -43,10 +43,10 @@ size_t toIntVoiceCount(MidiOperations::VoiceCount value);
 int voiceLimit();
 bool separateVoices(std::multimap<int, MTrack>& tracks, const engraving::TimeSigMap* sigmap);
 
-bool splitChordToVoice(std::multimap<ReducedFraction, MidiChord>::iterator& chordIt, const QSet<int>& notesToMove, int newVoice,
-                       std::multimap<ReducedFraction, MidiChord>& chords, std::multimap<ReducedFraction, MidiTuplet::TupletData>& tuplets,
-                       std::multimap<ReducedFraction, std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator>& insertedTuplets,
-                       const ReducedFraction& maxChordLength, bool allowParallelTuplets = false);
+bool splitChordToVoice(std::multimap<ReducedFraction, MidiChord>::iterator& chordIt, const QSet<int>& notesToMove,
+                       int newVoice, std::multimap<ReducedFraction, MidiChord>& chords, std::multimap<ReducedFraction,
+                                                                                                      MidiTuplet::TupletData>& tuplets, std::multimap<ReducedFraction, std::multimap<ReducedFraction,
+                                                                                                                                                                                     MidiTuplet::TupletData>::iterator>& insertedTuplets, const ReducedFraction& maxChordLength, bool allowParallelTuplets = false);
 
 #ifdef QT_DEBUG
 

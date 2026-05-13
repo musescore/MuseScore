@@ -60,8 +60,8 @@ public:
 
     const TDuration& duration() const { return m_duration; }
 
-    void setState(SymId noteSymbol, TDuration duration, bool isRest, bool beyondScore, AccidentalType accidentalType = AccidentalType::NONE,
-                  const std::set<SymId>& articulationIds = {});
+    void setState(SymId noteSymbol, TDuration duration, bool isRest, bool beyondScore,
+                  AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
 
     void drawArticulations(muse::draw::Painter* painter) const;
     void drawCloseArticulation(muse::draw::Painter* painter, const SymId& articulation, RectF& boundRect, bool up,

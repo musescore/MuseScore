@@ -162,7 +162,8 @@ void ReadingList::analyze()
                     m_status[m_list.at(2).first].ending = ending2;
                     const int measuresInEnding1 { m_list.at(0).last - m_list.at(1).last };
                     const size_t ending1Repeats { findExactMatchesFrom2nd(m_list) };
-                    LOGN("ending 1 end %d measures %d repeats %zu", m_list.at(0).last, measuresInEnding1, ending1Repeats);
+                    LOGN("ending 1 end %d measures %d repeats %zu", m_list.at(0).last, measuresInEnding1,
+                         ending1Repeats);
                     Ending ending1;
                     ending1.duration = measuresInEnding1;
                     ending1.number = 1;

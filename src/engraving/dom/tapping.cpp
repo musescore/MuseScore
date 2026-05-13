@@ -93,7 +93,8 @@ TranslatableString Tapping::typeUserName() const
 
 TranslatableString Tapping::subtypeUserName() const
 {
-    return m_hand == TappingHand::LEFT ? TranslatableString("engraving", "Left-hand") : TranslatableString("engraving", "Right-hand");
+    return m_hand == TappingHand::LEFT ? TranslatableString("engraving", "Left-hand") : TranslatableString("engraving",
+                                                                                                           "Right-hand");
 }
 
 TappingHalfSlur::TappingHalfSlur(EngravingItem* parent)

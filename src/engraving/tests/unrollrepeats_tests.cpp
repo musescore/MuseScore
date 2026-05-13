@@ -47,7 +47,8 @@ TEST_F(Engraving_UnrollRepeatsTests, DISABLED_clefKeyTs)
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + u"clef-key-ts-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"clef-key-ts-test.mscx",
+                                            UNROLLREPEATS_DATA_DIR + u"clef-key-ts-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -62,5 +63,6 @@ TEST_F(Engraving_UnrollRepeatsTests, DISABLED_pickupMeasure)
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + u"pickup-measure-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, u"pickup-measure-test.mscx",
+                                            UNROLLREPEATS_DATA_DIR + u"pickup-measure-ref.mscx"));
 }

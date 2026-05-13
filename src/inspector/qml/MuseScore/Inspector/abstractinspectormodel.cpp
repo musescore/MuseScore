@@ -224,7 +224,8 @@ void AbstractInspectorModel::updatemeasurementUnits()
     MeasurementUnits result = MeasurementUnits::UNITS_UNKNOWN;
 
     for (EngravingItem* item : m_elementList) {
-        MeasurementUnits itemUnits = item->offsetIsSpatiumDependent() ? MeasurementUnits::UNITS_SPATIUM : MeasurementUnits::UNITS_MM;
+        MeasurementUnits itemUnits
+            = item->offsetIsSpatiumDependent() ? MeasurementUnits::UNITS_SPATIUM : MeasurementUnits::UNITS_MM;
         if (result != MeasurementUnits::UNITS_UNKNOWN && itemUnits != result) {
             result = MeasurementUnits::UNITS_UNKNOWN;
             break;
@@ -278,7 +279,8 @@ ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
 
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
-    if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
+    if (elementKey.type == mu::engraving::ElementType::HAIRPIN
+        || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
         return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.subtype),
                                                  InspectorModelType::TYPE_UNDEFINED);
     }
@@ -376,7 +378,8 @@ static bool hasValidTextLineBaseSegment(const QList<mu::engraving::EngravingItem
     return false;
 }
 
-InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet,
+                                                                          bool isRange,
                                                                           const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     InspectorSectionTypeSet types;
@@ -388,7 +391,8 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
-        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList))
+            || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
 
@@ -468,7 +472,8 @@ void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid
     loadProperties();
 }
 
-void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
+void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items,
+                                              const mu::engraving::Pid pid,
                                               const QVariant& newValue)
 {
     if (items.empty()) {
@@ -502,7 +507,8 @@ void AbstractInspectorModel::onPropertyValueReset(const mu::engraving::Pid pid)
     loadProperties();
 }
 
-void AbstractInspectorModel::resetPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid)
+void AbstractInspectorModel::resetPropertyValue(const QList<engraving::EngravingItem*>& items,
+                                                const mu::engraving::Pid pid)
 {
     if (items.empty()) {
         return;
@@ -766,7 +772,8 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
+                                              ConvertPropertyValueFunc convertElementPropertyValueFunc)
 {
     loadPropertyItem(propertyItem, m_elementList, convertElementPropertyValueFunc);
 }

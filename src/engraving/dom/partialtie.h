@@ -46,7 +46,8 @@ class PartialTie : public Tie
     OBJECT_ALLOCATOR(engraving, PartialTie)
     DECLARE_CLASSOF(ElementType::PARTIAL_TIE);
 
-    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::OUTGOING)
+    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection,
+                PartialSpannerDirection::OUTGOING)
 
 public:
     PartialTie(Note* parent);

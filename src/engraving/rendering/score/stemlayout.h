@@ -58,13 +58,15 @@ public:
     static constexpr double STAFFTYPE_TAB_SLASH_2TOTHEIGHT
         = (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL + STAFFTYPE_TAB_SLASH_SLANTY);
     // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
-    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_UP = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
+    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_UP
+        = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
     // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
-    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_DN = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
+    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_DN
+        = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
 
     static double calcDefaultStemLength(Chord* item, const LayoutContext& ctx);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
-                               bool isFullSize);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing,
+                               bool useWideBeams, bool isFullSize);
 
     static double stemPosX(const ChordRest* item);
     static double stemPosX(const Chord* item);

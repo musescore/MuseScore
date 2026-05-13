@@ -78,7 +78,8 @@ private:
     size_t m_bracketSpan = 0;
     Staff* m_staff = nullptr;
 
-    StaffLabel m_name = StaffLabel(muse::mtrc("systemBrackets", "GROUP"), muse::mtrc("systemBrackets", "GR.", "Short for GROUP"));
+    StaffLabel m_name
+        = StaffLabel(muse::mtrc("systemBrackets", "GROUP"), muse::mtrc("systemBrackets", "GR.", "Short for GROUP"));
     bool m_showText = true;
     bool m_showBracket = true;
 };

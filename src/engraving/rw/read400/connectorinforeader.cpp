@@ -70,7 +70,8 @@ static Location readPositionInfo(ReadContext* ctx, int track)
 //---------------------------------------------------------
 
 ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, ReadContext* ctx, Score* current, int track)
-    : ConnectorInfo(current, readPositionInfo(ctx, track)), m_reader(&e), m_ctx(ctx), m_connector(nullptr), m_connectorReceiver(current)
+    : ConnectorInfo(current, readPositionInfo(ctx, track)), m_reader(&e), m_ctx(ctx), m_connector(nullptr),
+    m_connectorReceiver(current)
 {
     setCurrentUpdated(true);
 }
@@ -98,8 +99,9 @@ bool ConnectorInfoReader::read()
             if (tag == name) {
                 m_connector = Factory::createItemByName(tag, m_connectorReceiver->score()->dummy());
             } else {
-                LOGW("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
-                     tag.ascii(), name.ascii());
+                LOGW(
+                    "ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
+                    tag.ascii(), name.ascii());
             }
 
             if (!m_connector) {
@@ -389,7 +391,8 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
-                if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->explicitParent() && item->explicitParent()->isChord()) {
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->explicitParent()
+                    && item->explicitParent()->isChord()) {
                     toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);

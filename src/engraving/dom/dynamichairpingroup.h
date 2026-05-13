@@ -52,7 +52,8 @@ public:
     muse::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
-    static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const EngravingItem*)> isDragged);
+    static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs,
+                                                   std::function<bool(const EngravingItem*)> isDragged);
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
 
 private:

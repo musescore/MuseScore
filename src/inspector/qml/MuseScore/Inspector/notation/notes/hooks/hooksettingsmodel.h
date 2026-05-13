@@ -35,7 +35,8 @@ class HookSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * offset READ offset CONSTANT)
 
 public:
-    explicit HookSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit HookSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository);
 
     PropertyItem* offset() const;
 

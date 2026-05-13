@@ -124,9 +124,14 @@ void EngravingModule::resolveImports()
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     auto ir = globalIoc()->resolve<muse::interactive::IInteractiveUriRegister>(mname);
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore.Engraving", "EngravingElementsDialog");
-        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/undostack"), "MuseScore.Engraving", "EngravingUndoStackDialog");
-        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/style"), "MuseScore.Engraving", "EngravingStyleDialog");
+        ir->registerQmlUri(Uri(
+                               "musescore://diagnostics/engraving/elements"), "MuseScore.Engraving",
+                           "EngravingElementsDialog");
+        ir->registerQmlUri(Uri(
+                               "musescore://diagnostics/engraving/undostack"), "MuseScore.Engraving",
+                           "EngravingUndoStackDialog");
+        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/style"), "MuseScore.Engraving",
+                           "EngravingStyleDialog");
     }
 #endif
 }
@@ -174,7 +179,8 @@ void EngravingModule::onInit(const IApplication::RunMode&)
         fdb->addFont(FontDataKey(u"Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
 
         // MusicSymbol[Text]
-        auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
+        auto addMusicFont
+            = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
             fdb->addFont(FontDataKey(fontDataKey), filePath);
             m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
         };

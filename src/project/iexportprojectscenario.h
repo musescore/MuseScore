@@ -36,7 +36,8 @@ class IExportProjectScenario : MODULE_CONTEXT_INTERFACE
 public:
     virtual std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
-    virtual muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+    virtual muse::RetVal<muse::io::path_t> askExportPath(const notation::INotationPtrList& notations,
+                                                         const ExportType& exportType,
                                                          INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                                                          muse::io::path_t defaultPath = "") const = 0;
 

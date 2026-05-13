@@ -38,8 +38,10 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(project::INotationProjectPtr project, QIODevice& device, const Options& options = Options()) override;
-    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, QIODevice& device,
+                    const Options& options = Options()) override;
+    muse::Ret write(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                    const Options& options = Options()) override;
 
 private:
 
@@ -53,7 +55,8 @@ private:
         float trailingSec = 3.;
     };
 
-    muse::Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config);
+    muse::Ret generatePagedOriginalVideo(project::INotationProjectPtr project, const muse::io::path_t& filePath,
+                                         const Config& config);
 };
 }
 

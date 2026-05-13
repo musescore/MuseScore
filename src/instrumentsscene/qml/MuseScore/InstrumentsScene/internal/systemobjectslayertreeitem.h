@@ -37,7 +37,8 @@ class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
     QML_UNCREATABLE("Must be created in C++ only")
 
 public:
-    SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation,
+                               QObject* parent);
 
     void init(const mu::engraving::Staff* staff, const SystemObjectGroups& systemObjects);
 

@@ -92,7 +92,8 @@ bool NotationSoloMuteState::trackSoloMuteStateExists(const engraving::Instrument
     return search != m_trackSoloMuteStatesMap.end();
 }
 
-const INotationSoloMuteState::SoloMuteState& NotationSoloMuteState::trackSoloMuteState(const InstrumentTrackId& partId) const
+const INotationSoloMuteState::SoloMuteState& NotationSoloMuteState::trackSoloMuteState(const InstrumentTrackId& partId)
+const
 {
     auto search = m_trackSoloMuteStatesMap.find(partId);
 
@@ -123,7 +124,8 @@ void NotationSoloMuteState::removeTrackSoloMuteState(const engraving::Instrument
     }
 }
 
-muse::async::Channel<InstrumentTrackId, INotationSoloMuteState::SoloMuteState> NotationSoloMuteState::trackSoloMuteStateChanged() const
+muse::async::Channel<InstrumentTrackId,
+                     INotationSoloMuteState::SoloMuteState> NotationSoloMuteState::trackSoloMuteStateChanged() const
 {
     return m_trackSoloMuteStateChanged;
 }

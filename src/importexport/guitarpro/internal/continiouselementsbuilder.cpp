@@ -159,7 +159,8 @@ static bool shouldSplitByRests(mu::engraving::ElementType muType)
     }
 }
 
-void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementType muType, ImportType importType, bool elemExists,
+void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementType muType, ImportType importType,
+                                                       bool elemExists,
                                                        sub_type_t subType)
 {
     auto setStartCR = [](Spanner* elem, ChordRest* cr) {
@@ -184,7 +185,8 @@ void ContiniousElementsBuilder::buildContiniousElement(ChordRest* cr, ElementTyp
     auto& elem = elements[track];
     auto& lastTypeForTrack = m_lastImportTypes[muType][track][subType];
 
-    ContiniousElementState state = calculateState(cr->isRest(), elemExists, splitByRests, lastTypeForTrack != importType);
+    ContiniousElementState state
+        = calculateState(cr->isRest(), elemExists, splitByRests, lastTypeForTrack != importType);
 
     /// handling the continious element according to its state
     switch (state) {
@@ -335,8 +337,11 @@ void ContiniousElementsBuilder::addElementsToScore()
 }
 
 /// indicating the type of behaviour for continious element
-ContiniousElementsBuilder::ContiniousElementState ContiniousElementsBuilder::calculateState(bool isRest, bool elemExists, bool splitByRests,
-                                                                                            bool importTypeChanged) const
+ContiniousElementsBuilder::ContiniousElementState ContiniousElementsBuilder::calculateState(bool isRest,
+                                                                                            bool elemExists,
+                                                                                            bool splitByRests,
+                                                                                            bool importTypeChanged)
+const
 {
     ContiniousElementState state = ContiniousElementState::UNDEFINED;
 

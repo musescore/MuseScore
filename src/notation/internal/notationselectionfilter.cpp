@@ -27,7 +27,8 @@
 using namespace muse;
 using namespace mu::notation;
 
-NotationSelectionFilter::NotationSelectionFilter(const IGetScore* getScore, const std::function<void()>& selectionChangedCallback)
+NotationSelectionFilter::NotationSelectionFilter(const IGetScore* getScore,
+                                                 const std::function<void()>& selectionChangedCallback)
     : m_getScore(getScore), m_selectionChangedCallback(selectionChangedCallback)
 {
 }

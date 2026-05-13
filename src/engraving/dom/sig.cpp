@@ -99,7 +99,8 @@ BeatType TimeSigFrac::rtick2beatType(int rtick) const
 //    actual timeSig is different from the nominal timeSig.
 //---------------------------------------------------------
 
-BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick, bool saveLast) const
+BeatType TimeSigFrac::strongestBeatInRange(int rtick1, int rtick2, int* dUnitsCrossed, int* subbeatTick,
+                                           bool saveLast) const
 {
     assert(rtick2 > rtick1);
 

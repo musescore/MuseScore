@@ -41,7 +41,8 @@ class AccidentalSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isStackingOrderEnabled READ isStackingOrderEnabled NOTIFY isStackingOrderEnabledChanged)
 
 public:
-    explicit AccidentalSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit AccidentalSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

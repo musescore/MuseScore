@@ -34,7 +34,8 @@ public:
 private:
     friend MetaParserBase;
 
-    static void doParse(const EngravingItem* item, const RenderingContext& spannerCtx, muse::mpe::ArticulationMap& result);
+    static void doParse(const EngravingItem* item, const RenderingContext& spannerCtx,
+                        muse::mpe::ArticulationMap& result);
 };
 }
 

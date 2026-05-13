@@ -60,7 +60,11 @@ public:
     bool getPrintAbbr() const { return m_printAbbr; }
     std::map<int, int> staffNumberToIndex() const { return m_staffNumberToIndex; }
     int staffNumberToIndex(const int staffNumber) const;
-    void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { m_staffNumberToIndex.insert({ staffNumber, staffIndex }); }
+    void insertStaffNumberToIndex(const int staffNumber, const int staffIndex)
+    {
+        m_staffNumberToIndex.insert({ staffNumber, staffIndex });
+    }
+
     LyricNumberHandler& lyricNumberHandler() { return m_lyricNumberHandler; }
     const LyricNumberHandler& lyricNumberHandler() const { return m_lyricNumberHandler; }
     void setMaxStaff(const int staff);

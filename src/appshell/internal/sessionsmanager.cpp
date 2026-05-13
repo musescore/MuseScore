@@ -80,7 +80,8 @@ void SessionsManager::update()
     muse::io::path_t newProjectPath;
 
     if (auto project = globalContext()->currentProject()) {
-        newProjectPath = project->isNewlyCreated() ? projectConfiguration()->newProjectTemporaryPath() : project->path();
+        newProjectPath
+            = project->isNewlyCreated() ? projectConfiguration()->newProjectTemporaryPath() : project->path();
     }
 
     if (newProjectPath == m_lastOpenedProjectPath) {

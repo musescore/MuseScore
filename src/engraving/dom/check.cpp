@@ -84,12 +84,14 @@ void Score::checkScore()
                 if (lcr) {
                     Fraction timeStretch = st->timeStretch(lcr->tick());
                     Fraction f = cr->globalTicks() * timeStretch;
-                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "(" << lcr->typeName() << "+" << f.ticks() << ")-"
+                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "(" << lcr->typeName() << "+" << f.ticks() <<
+                        ")-"
                            << s->tick().ticks() << "(" << cr->typeName() << ") staffIdx " << staffIdx
                            << " measure " << cr->measure()->measureNumber()
                            << " (len = " << (cr->tick() - tick).ticks() << ")";
                 } else {
-                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "-" << s->tick().ticks() << "(" << cr->typeName() << ") "
+                    LOGD() << "Chord/Rest gap at tick " << tick.ticks() << "-" << s->tick().ticks() << "(" <<
+                        cr->typeName() << ") "
                            << "staffIdx " << staffIdx << " measure " << cr->measure()->measureNumber()
                            << "  (len = " << (cr->tick() - tick).ticks() << ")";
                 }
@@ -197,7 +199,8 @@ Ret Score::sanityCheckLocal()
 
             if (voices[0] != mLen) {
                 //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
-                errors << muse::mtrc("engraving", "<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
+                errors << muse::mtrc("engraving",
+                                     "<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
                 m->setCorrupted(staffIdx, true);
                 setHasCorruptedMeasures(true);
@@ -211,8 +214,10 @@ Ret Score::sanityCheckLocal()
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
                     //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
-                    errors << muse::mtrc("engraving", "<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
-                        .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
+                    errors << muse::mtrc("engraving",
+                                         "<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
+                        .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(
+                        voices[v].toString(), mLen.toString());
                     m->setCorrupted(staffIdx, true);
                     setHasCorruptedMeasures(true);
                 }
@@ -261,7 +266,8 @@ bool Score::checkKeys()
 //   fillGap
 //---------------------------------------------------------
 
-void Measure::fillGap(const Fraction& rtickStart, const Fraction& len, track_idx_t track, const Fraction& stretch, bool useGapRests)
+void Measure::fillGap(const Fraction& rtickStart, const Fraction& len, track_idx_t track, const Fraction& stretch,
+                      bool useGapRests)
 {
     LOGN("measure %6d pos %d, len %d/%d, stretch %d/%d track %zu",
          tick().ticks(),

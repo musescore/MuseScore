@@ -31,8 +31,10 @@ class Autoplace
 {
 public:
 
-    static void autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add);
-    static void autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above, bool add);
+    static void autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above,
+                                        bool add);
+    static void autoplaceMeasureElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool above,
+                                        bool add);
     static void autoplaceSegmentElement(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool add = true)
     {
         autoplaceSegmentElement(item, ldata, item->placeAbove(), add);
@@ -46,11 +48,11 @@ public:
     static void autoplaceSpannerSegment(const SpannerSegment* item, SpannerSegment::LayoutData* ldata, double spatium);
 
     static double rebaseOffset(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool nox = true);
-    static bool rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd, double sp,
-                                  double rebase, bool above, bool fix);
+    static bool rebaseMinDistance(const EngravingItem* item, EngravingItem::LayoutData* ldata, double& md, double& yd,
+                                  double sp, double rebase, bool above, bool fix);
 
-    static void setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute = true,
-                                 const PointF& diff = PointF());
+    static void setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v,
+                                 bool absolute = true, const PointF& diff = PointF());
 
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 };

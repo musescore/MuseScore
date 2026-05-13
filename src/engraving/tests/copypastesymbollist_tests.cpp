@@ -79,7 +79,8 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     score->doLayout();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypastesymbollist-%1.mscx").arg(name),
-                                            CPSYMBOLLIST_DATA_DIR + String("copypastesymbollist-%1-ref.mscx").arg(name)));
+                                            CPSYMBOLLIST_DATA_DIR
+                                            + String("copypastesymbollist-%1-ref.mscx").arg(name)));
     delete score;
 }
 

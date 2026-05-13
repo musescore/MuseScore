@@ -65,7 +65,9 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
     m_languageUpdateProgress = languagesService()->update(languageCode);
 
-    m_languageUpdateProgress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_languageUpdateProgress.progressChanged().onReceive(this,
+                                                         [this](int64_t current, int64_t total,
+                                                                const std::string& status) {
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
     });
 

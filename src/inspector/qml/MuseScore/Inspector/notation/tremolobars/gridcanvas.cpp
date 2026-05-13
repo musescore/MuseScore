@@ -191,7 +191,8 @@ void GridCanvas::paint(QPainter* painter)
     }
 
     // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
-    auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const mu::engraving::PitchValue& v) -> QPointF {
+    auto getPosition
+        = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const mu::engraving::PitchValue& v) -> QPointF {
         const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
         qreal y = 0;
         if (m_showNegativeRows) {                    // get the middle pos and add the top margin and half of the rows

@@ -107,7 +107,8 @@ muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
 
 bool MuseSoundsCheckUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
 {
-    return info.version == configuration()->lastShownMuseSoundsReleaseVersion() && !configuration()->museSoundsCheckForUpdateTestMode();
+    return info.version == configuration()->lastShownMuseSoundsReleaseVersion()
+           && !configuration()->museSoundsCheckForUpdateTestMode();
 }
 
 void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)

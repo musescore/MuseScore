@@ -142,7 +142,8 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeKeyWidthScalingItem(const muse
     return item;
 }
 
-MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const muse::TranslatableString& title, int numberOfKeys)
+MenuItem* PianoKeyboardPanelContextMenuModel::makeNumberOfKeysItem(const muse::TranslatableString& title,
+                                                                   int numberOfKeys)
 {
     UiAction action;
     action.title = title;

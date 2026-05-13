@@ -97,7 +97,8 @@ TEST(ProjectMscMetaReaderTests, testReadFromMetaAndBox)
 TEST(ProjectMscMetaReaderTests, testReadCloudInfo)
 {
     auto metaReader = std::make_shared<MscMetaReader>();
-    muse::RetVal<CloudProjectInfo> maybeCloudInfo = metaReader->readCloudProjectInfo(getDataPath("from_meta/from_meta.mscx"));
+    muse::RetVal<CloudProjectInfo> maybeCloudInfo
+        = metaReader->readCloudProjectInfo(getDataPath("from_meta/from_meta.mscx"));
     ASSERT_TRUE(maybeCloudInfo.ret);
 
     const CloudProjectInfo& cloudInfo = maybeCloudInfo.val;

@@ -380,7 +380,8 @@ TextBase* HairpinSegment::findStartDynamicOrExpression(bool ignoreInvisible) con
             }
             bool endsMatch = item->track() == hairpin()->track()
                              && item->placement() == placement()
-                             && item->getProperty(Pid::VOICE_ASSIGNMENT) == hairpin()->getProperty(Pid::VOICE_ASSIGNMENT);
+                             && item->getProperty(Pid::VOICE_ASSIGNMENT)
+                             == hairpin()->getProperty(Pid::VOICE_ASSIGNMENT);
             if (endsMatch) {
                 dynamicsAndExpr.push_back(toTextBase(item));
             }
@@ -437,7 +438,8 @@ TextBase* HairpinSegment::findEndDynamicOrExpression(bool ignoreInvisible, bool 
             }
             bool endsMatch = item->track() == hairpin()->track()
                              && item->placement() == placement()
-                             && item->getProperty(Pid::VOICE_ASSIGNMENT) == hairpin()->getProperty(Pid::VOICE_ASSIGNMENT);
+                             && item->getProperty(Pid::VOICE_ASSIGNMENT)
+                             == hairpin()->getProperty(Pid::VOICE_ASSIGNMENT);
             if (endsMatch) {
                 dynamicsAndExpr.push_back(toTextBase(item));
             }

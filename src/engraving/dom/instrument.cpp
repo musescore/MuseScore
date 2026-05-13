@@ -167,8 +167,9 @@ String Instrument::recognizeMusicXmlId() const
         return defaultMusicXmlId;
     }
 
-    const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
-                                                                                            m_useDrumset);
+    const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(
+        channel->bank(), channel->program(),
+        m_useDrumset);
 
     if (tmplMidiProgram && !tmplMidiProgram->musicXmlId.isEmpty()) {
         return tmplMidiProgram->musicXmlId;

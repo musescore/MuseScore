@@ -322,7 +322,8 @@ void BarLine::calcY()
                 }
 
                 if (!spanStaff) {
-                    double y2Next = offsetNext + (staffType1Next->lines() * 2 - 2 + to) * lineDistanceNext * .5 + lineWidthNext;
+                    double y2Next = offsetNext + (staffType1Next->lines() * 2 - 2 + to) * lineDistanceNext * .5
+                                    + lineWidthNext;
                     if (y2Next > y2) {
                         y2 = y2Next;
                     }
@@ -673,7 +674,8 @@ void BarLine::endDragGrip(EditData& ed)
     int newSpanFrom = 0;
     int newSpanTo = 0;
 
-    bool localDrag = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
+    bool localDrag = ed.control() || segment()->isBarLineType()
+                     || spanStaff() != score()->staff(staffIdx())->barLineSpan();
     if (localDrag) {
         Segment* s = segment();
         bool breakLast = staffIdx1 == staffIdx2;
@@ -876,7 +878,8 @@ PlayCountText* BarLine::playCountText() const
     if (!endBarSeg) {
         return nullptr;
     }
-    PlayCountText* playCountText = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track(), track()));
+    PlayCountText* playCountText
+        = toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track(), track()));
 
     return playCountText;
 }

@@ -36,15 +36,18 @@ class ThemesPageModel : public QObject, public muse::Contextable, public muse::a
     Q_OBJECT
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
-    Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
+    Q_PROPERTY(
+        bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
-    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
+    Q_PROPERTY(
+        bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
-    Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
+    Q_PROPERTY(
+        int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
     QML_ELEMENT
 

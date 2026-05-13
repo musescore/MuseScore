@@ -96,7 +96,8 @@ inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = {})
         text = muse::mtrc("engraving", "File “%1” is corrupted.").arg(filePath.toString());
         break;
     case Err::FileCriticallyCorrupted:
-        text = muse::mtrc("engraving", "File “%1” is critically corrupted and cannot be processed.").arg(filePath.toString());
+        text = muse::mtrc("engraving", "File “%1” is critically corrupted and cannot be processed.").arg(
+            filePath.toString());
         break;
     case Err::Undefined:
     case Err::UnknownError:

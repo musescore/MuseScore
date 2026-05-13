@@ -1329,7 +1329,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
 //   fromXml
 //---------------------------------------------------------
 
-String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, const String& useSymbols, const String& useParens,
+String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, const String& useSymbols,
+                            const String& useParens,
                             const std::vector<HDegree>& dl, const ChordList* cl)
 {
     String kind = rawKind;
@@ -1571,7 +1572,8 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc, size_t modifierIdx,
+double ChordList::position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc,
+                           size_t modifierIdx,
                            size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
@@ -1586,7 +1588,8 @@ double ChordList::position(const StringList& names, bool stackModifiers, bool su
         } else if (stackModifiers && nmodifiers > 1) {
             static constexpr double LINE_SPACING = 0.4;             // Space between modifiers in units of modiferHeight
             const double modifierHeight = m_mmag * m_stackedmmag;   // Modifier height in units of root capheight
-            const double stackHeight = (nmodifiers * modifierHeight) + ((nmodifiers - 1) * modifierHeight * LINE_SPACING); // Height of total modifier stack (bottom baseline to top capheight)
+            const double stackHeight = (nmodifiers * modifierHeight)
+                                       + ((nmodifiers - 1) * modifierHeight * LINE_SPACING);                               // Height of total modifier stack (bottom baseline to top capheight)
             const double base = stackHeight / 2;                            // Baseline of bottom modifier in the stack
             yAdj += base - modifierIdx * modifierHeight * (1 + LINE_SPACING);
         }
@@ -1688,7 +1691,8 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
 
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, stackModifier, superScriptModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifier, superScriptModifier, ctc, finalModIdx - modIdx,
+                                               modListSize) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1979,7 +1983,8 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag, bool stackModifiers,
+void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag,
+                                    bool stackModifiers,
                                     bool excludeModsHAlign, String symbolFont, const ChordStylePreset& preset)
 {
     m_stackModifiers = stackModifiers;
@@ -2311,7 +2316,8 @@ void ChordList::checkChordList(const MStyle& style)
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
         String symbolFont = style.styleSt(Sid::musicalTextFont);
         ChordStylePreset preset = style.styleV(Sid::chordStyle).value<ChordStylePreset>();
-        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign, symbolFont, preset);
+        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign, symbolFont,
+                            preset);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read(u"chords.xml");

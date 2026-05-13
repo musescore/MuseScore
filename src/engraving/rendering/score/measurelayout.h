@@ -80,8 +80,9 @@ public:
 
     static void layoutTimeTickAnchors(Measure* m, LayoutContext& ctx);
 
-    static MeasureStartEndPos getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg, const staff_idx_t staffIdx,
-                                                    const bool needsHeaderException, const bool modernMMRest, const LayoutContext& ctx);
+    static MeasureStartEndPos getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg,
+                                                    const staff_idx_t staffIdx, const bool needsHeaderException,
+                                                    const bool modernMMRest, const LayoutContext& ctx);
 
     static void updateKeySignatures(const Measure* measure, LayoutContext& ctx);
 
@@ -105,12 +106,12 @@ private:
 
     static void setClefSegVisibility(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
 
-    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
-                                   LayoutContext& ctx);
-    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
-                                  LayoutContext& ctx);
-    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick, const SegmentType segType,
-                                LayoutContext& ctx);
+    static void setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                   const SegmentType segType, LayoutContext& ctx);
+    static void setCourtesyKeySig(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                  const SegmentType segType, LayoutContext& ctx);
+    static void setCourtesyClef(Measure* m, const Fraction& refSigTick, const Fraction& courtesySigTick,
+                                const SegmentType segType, LayoutContext& ctx);
 
     static void removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx);
     static void removeRepeatCourtesyParenthesis(EngravingItem* item, const DirectionH direction = DirectionH::AUTO);

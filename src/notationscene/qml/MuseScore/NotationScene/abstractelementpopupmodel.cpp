@@ -60,7 +60,8 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_HARP_DIAGRAM, { mu::engraving::ElementType::HARP_DIAGRAM } },
     { PopupModelType::TYPE_CAPO, { mu::engraving::ElementType::CAPO } },
     { PopupModelType::TYPE_STRING_TUNINGS, { mu::engraving::ElementType::STRING_TUNINGS } },
-    { PopupModelType::TYPE_SOUND_FLAG, { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
+    { PopupModelType::TYPE_SOUND_FLAG,
+      { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
     { PopupModelType::TYPE_STAFF_VISIBILITY, { mu::engraving::ElementType::STAFF_VISIBILITY_INDICATOR } },
     { PopupModelType::TYPE_DYNAMIC, { mu::engraving::ElementType::DYNAMIC } },
     { PopupModelType::TYPE_TEXT,
@@ -77,7 +78,8 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::FIGURED_BASS,
         mu::engraving::ElementType::TEMPO_TEXT,
         mu::engraving::ElementType::PLAY_COUNT_TEXT } },
-    { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
+    { PopupModelType::TYPE_PARTIAL_TIE,
+      { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -214,7 +216,8 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
     updateNotation();
 }
 
-void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, mu::engraving::PropertyFlags flags)
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value,
+                                                   mu::engraving::PropertyFlags flags)
 {
     IF_ASSERT_FAILED(m_item) {
         return;

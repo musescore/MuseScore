@@ -27,7 +27,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-GradualTempoChangePlaybackModel::GradualTempoChangePlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+GradualTempoChangePlaybackModel::GradualTempoChangePlaybackModel(QObject* parent,
+                                                                 const muse::modularity::ContextPtr& iocCtx,
                                                                  IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {

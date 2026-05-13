@@ -90,7 +90,8 @@ static bool isLayerVisible(const SystemObjectGroups& groups)
     return false;
 }
 
-SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
+SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation,
+                                                       QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::SYSTEM_OBJECTS_LAYER, masterNotation, notation, parent)
 {
     setSettingsAvailable(true);

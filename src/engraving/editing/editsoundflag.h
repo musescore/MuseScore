@@ -34,7 +34,8 @@ class ChangeSoundFlag : public UndoCommand
     SoundFlag::PlayingTechniqueCode m_playingTechnique;
 
 public:
-    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::PlayingTechniqueCode& technique)
+    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets,
+                    const SoundFlag::PlayingTechniqueCode& technique)
         : m_soundFlag(soundFlag), m_presets(presets), m_playingTechnique(technique) {}
 
     void flip(EditData*) override;

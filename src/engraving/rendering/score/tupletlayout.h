@@ -45,7 +45,8 @@ private:
     static void computeDirection(Tuplet* item);
     static void computeStartEndCR(Tuplet* item, const ChordRest** cr1, const ChordRest** cr2);
     static void layoutBracket(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
-    static bool placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx);
+    static bool placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2,
+                                            LayoutContext& ctx);
     static bool isSymmetric(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2);
     static double computeRhythmicCenter(Tuplet* item, const ChordRest* endChord);
     static Fraction centerTick(Tuplet* item);

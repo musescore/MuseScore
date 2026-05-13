@@ -163,7 +163,8 @@ TEST_F(Engraving_SpannersTests, spanners02)
     MasterScore* score = ScoreRW::readScore(SPANNERS_DATA_DIR + u"glissando-crossstaff01.mscx");
     EXPECT_TRUE(score);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-crossstaff01.mscx", SPANNERS_DATA_DIR + u"glissando-crossstaff01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-crossstaff01.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-crossstaff01-ref.mscx"));
     delete score;
 }
 
@@ -237,7 +238,8 @@ TEST_F(Engraving_SpannersTests, spanners03)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-graces01.mscx", SPANNERS_DATA_DIR + u"glissando-graces01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-graces01.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-graces01-ref.mscx"));
     delete score;
 }
 
@@ -265,7 +267,8 @@ TEST_F(Engraving_SpannersTests, spanners04)
     score->undoInsertStaff(newStaff, 1, false);
     Excerpt::cloneStaff(oldStaff, newStaff);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning01.mscx", SPANNERS_DATA_DIR + u"glissando-cloning01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning01.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-cloning01-ref.mscx"));
     delete score;
 }
 
@@ -293,7 +296,8 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners05)
 
     score->Score::undo(new AddExcerpt(ex));
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning02.mscx", SPANNERS_DATA_DIR + u"glissando-cloning02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning02.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-cloning02-ref.mscx"));
     delete score;
 }
 
@@ -325,7 +329,8 @@ TEST_F(Engraving_SpannersTests, spanners06)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning03.mscx", SPANNERS_DATA_DIR + u"glissando-cloning03-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning03.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-cloning03-ref.mscx"));
     delete score;
 }
 
@@ -357,7 +362,8 @@ TEST_F(Engraving_SpannersTests, spanners07)
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning04.mscx", SPANNERS_DATA_DIR + u"glissando-cloning04-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning04.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-cloning04-ref.mscx"));
     delete score;
 }
 
@@ -555,7 +561,8 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners14)
 //      nscore->setName(parts.front()->partName());
 
     score->Score::undo(new AddExcerpt(ex));
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning05.mscx", SPANNERS_DATA_DIR + u"glissando-cloning05-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"glissando-cloning05.mscx",
+                                            SPANNERS_DATA_DIR + u"glissando-cloning05-ref.mscx"));
     delete score;
 }
 

@@ -69,7 +69,8 @@ public:
     QVariantMap timeSignature() const;
     int timeSignatureType() const;
 
-    Q_INVOKABLE QString timeSignatureAccessibleName(int timeSignatureType, int numerator = 0, int denominator = 1) const;
+    Q_INVOKABLE QString timeSignatureAccessibleName(int timeSignatureType, int numerator = 0,
+                                                    int denominator = 1) const;
 
     Q_INVOKABLE void setTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setTimeSignatureDenominator(int denominator);
@@ -125,7 +126,8 @@ private:
 
         KeySignature() = default;
         KeySignature(const QVariantMap& map);
-        KeySignature(const QString& titleMajor, const QString& titleMinor, muse::ui::IconCode::Code icon, notation::Key key);
+        KeySignature(const QString& titleMajor, const QString& titleMinor, muse::ui::IconCode::Code icon,
+                     notation::Key key);
 
         QVariantMap toMap() const;
     };

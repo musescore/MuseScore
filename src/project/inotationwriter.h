@@ -57,7 +57,8 @@ public:
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
-    virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) = 0;
+    virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device,
+                            const Options& options = Options()) = 0;
     virtual muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
                                 const Options& options = Options()) = 0;
 

@@ -109,7 +109,8 @@ void EngravingStyleModel::changeVal(int idx, QVariant newVal)
             TranslatableString::untranslatable(String::fromQString(newVal.value<QString>()))
             ));
 
-    context()->currentNotation()->style()->setStyleValue(sid, PropertyValue::fromQVariant(newVal, MStyle::valueType(sid)));
+    context()->currentNotation()->style()->setStyleValue(sid, PropertyValue::fromQVariant(newVal, MStyle::valueType(
+                                                                                              sid)));
 
     emit dataChanged(index(idx), index(idx));
 

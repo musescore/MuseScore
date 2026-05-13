@@ -83,7 +83,11 @@ public:
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
-    bool isToTheLeft() const { return m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::SCOOP; }
+    bool isToTheLeft() const
+    {
+        return m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::SCOOP;
+    }
+
     bool isBelow() const { return m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::FALL; }
 
     bool playChordLine() const { return m_playChordLine; }

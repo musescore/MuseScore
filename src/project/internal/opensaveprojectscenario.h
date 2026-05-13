@@ -50,7 +50,8 @@ public:
     }
 
     muse::RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                               SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
+                                               SaveLocationType preselectedType = SaveLocationType::Undefined) const
+    override;
 
     muse::RetVal<muse::io::path_t> askLocalPath(INotationProjectPtr project, SaveMode mode) const override;
     muse::RetVal<CloudProjectInfo> askCloudLocation(INotationProjectPtr project, SaveMode mode) const override;
@@ -71,7 +72,8 @@ private:
     /// \param isPublishShare:
     ///     false -> this is part of a "Save to cloud" action
     ///     true -> this is part of a "Publish" action
-    muse::RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
+    muse::RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode,
+                                                      bool isPublishShare) const;
 
     bool warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
 

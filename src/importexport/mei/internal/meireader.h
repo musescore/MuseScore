@@ -40,8 +40,10 @@ public:
     MeiReader(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
-    mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                   const Options& options = Options()) override;
+    mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                              const Options& options = Options());
 
 private:
     bool askToLoadDespiteWarnings(const muse::String& text, const muse::String& detailedText);

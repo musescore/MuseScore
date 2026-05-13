@@ -41,7 +41,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
+void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& ctx, const Fraction& stick,
+                                            const Fraction& etick)
 {
     LAYOUT_CALL();
 

@@ -276,14 +276,18 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
     bool outOfStaff      = style.styleB(Sid::tupletOutOfStaff);
     double vHeadDistance = style.styleAbsolute(Sid::tupletVHeadDistance) * item->mag();
     double vStemDistance = style.styleAbsolute(Sid::tupletVStemDistance) * item->mag();
-    double stemLeft      = (style.styleAbsolute(Sid::tupletStemLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
-                           * cr1->mag();
-    double stemRight     = (style.styleAbsolute(Sid::tupletStemRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
-                           * cr2->mag();
-    double noteLeft      = (style.styleAbsolute(Sid::tupletNoteLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
-                           * cr1->mag();
-    double noteRight     = (style.styleAbsolute(Sid::tupletNoteRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
-                           * cr2->mag();
+    double stemLeft
+        = (style.styleAbsolute(Sid::tupletStemLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+          * cr1->mag();
+    double stemRight
+        = (style.styleAbsolute(Sid::tupletStemRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+          * cr2->mag();
+    double noteLeft
+        = (style.styleAbsolute(Sid::tupletNoteLeftDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+          * cr1->mag();
+    double noteRight
+        = (style.styleAbsolute(Sid::tupletNoteRightDistance) - style.styleAbsolute(Sid::tupletBracketWidth) / 2)
+          * cr2->mag();
 
     int move = 0;
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -318,11 +322,13 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
     double rightNoteEdge = 0.0;
     if (cr1->isChord()) {
         const Chord* chord1 = toChord(cr1);
-        leftNoteEdge = chord1->up() ? chord1->downNote()->pageBoundingRect().left() : chord1->upNote()->pageBoundingRect().left();
+        leftNoteEdge
+            = chord1->up() ? chord1->downNote()->pageBoundingRect().left() : chord1->upNote()->pageBoundingRect().left();
     }
     if (cr2->isChord()) {
         const Chord* chord2 = toChord(cr2);
-        rightNoteEdge = chord2->up() ? chord2->downNote()->pageBoundingRect().right() : chord2->upNote()->pageBoundingRect().right();
+        rightNoteEdge
+            = chord2->up() ? chord2->downNote()->pageBoundingRect().right() : chord2->upNote()->pageBoundingRect().right();
     }
 
     if (item->isUp()) {
@@ -637,7 +643,8 @@ void TupletLayout::layoutBracket(Tuplet* item, const ChordRest* cr1, const Chord
     }
 }
 
-bool TupletLayout::placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2, LayoutContext& ctx)
+bool TupletLayout::placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2,
+                                               LayoutContext& ctx)
 {
     if (ctx.conf().styleB(Sid::tupletNumberRythmicCenter) && !isSymmetric(item, cr1, cr2)) {
         Fraction center = centerTick(item);
@@ -762,7 +769,8 @@ void TupletLayout::extendToEndOfDuration(Tuplet* item, const ChordRest* endCR)
 
     Fraction tickRatio = (lastTupletSubdivision - refSegment->tick()) / refSegment->ticks();
 
-    double xResult = refSegment->pagePos().x() + refSegment->width() * tickRatio.toDouble() + item->score()->noteHeadWidth();
+    double xResult = refSegment->pagePos().x() + refSegment->width() * tickRatio.toDouble()
+                     + item->score()->noteHeadWidth();
 
     const double padding = 0.6 * item->spatium();
 

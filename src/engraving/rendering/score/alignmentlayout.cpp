@@ -91,7 +91,8 @@ void AlignmentLayout::alignHopoLetters(const HammerOnPullOff* hopo, const System
     alignItemsGroup(itemsToAlign, system);
 }
 
-void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<EngravingItem*>& elements, const System* system)
+void AlignmentLayout::alignItemsWithTheirSnappingChain(const std::vector<EngravingItem*>& elements,
+                                                       const System* system)
 {
     std::set<EngravingItem*> alignedItems;
 
@@ -253,7 +254,8 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
     return curY;
 }
 
-void AlignmentLayout::scanConnectedItems(EngravingItem* item, const System* system, std::function<void(EngravingItem*)> func)
+void AlignmentLayout::scanConnectedItems(EngravingItem* item, const System* system,
+                                         std::function<void(EngravingItem*)> func)
 {
     func(item);
 

@@ -51,7 +51,8 @@ class MixerChannelItem : public QObject, public muse::async::Asyncable, public m
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
 
-    Q_PROPERTY(mu::playback::InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
+    Q_PROPERTY(
+        mu::playback::InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
     Q_PROPERTY(
         QList<mu::playback::OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
     Q_PROPERTY(QList<mu::playback::AuxSendItem*> auxSendItemList READ auxSendItemList NOTIFY auxSendItemListChanged)

@@ -31,7 +31,8 @@
 
 using namespace mu::engraving::rendering::score;
 
-void SegmentLayout::layoutMeasureIndependentElements(const Segment& segment, track_idx_t track, const LayoutContext& ctx)
+void SegmentLayout::layoutMeasureIndependentElements(const Segment& segment, track_idx_t track,
+                                                     const LayoutContext& ctx)
 {
     LAYOUT_CALL() << segment.typeName() << "(" << segment.eid() << ")";
 
@@ -77,7 +78,8 @@ void SegmentLayout::layoutMeasureIndependentElements(const Segment& segment, tra
     }
 }
 
-void SegmentLayout::setChordMag(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+void SegmentLayout::setChordMag(const Staff* staff, const Segment& segment, track_idx_t startTrack,
+                                track_idx_t endTrack,
                                 const LayoutConfiguration& conf)
 {
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(staff) << " " << segment.typeName() << "(" << segment.eid() << ")";
@@ -131,7 +133,8 @@ void SegmentLayout::checkStaffMoveValidity(const Segment& segment, track_idx_t s
     }
 }
 
-void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack,
+                                       track_idx_t endTrack,
                                        const LayoutConfiguration& conf)
 {
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(staff) << " " << segment.typeName() << "(" << segment.eid() << ")";
@@ -185,7 +188,8 @@ void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
     }
 }
 
-void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx)
+void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                    const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(segment.isJustType(SegmentType::ChordRest)) {
         return;
@@ -209,7 +213,8 @@ void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTra
     }
 }
 
-void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx)
+void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                     const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(segment.isJustType(SegmentType::ChordRest)) {
         return;

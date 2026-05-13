@@ -32,7 +32,8 @@ class DefaultStyle
 public:
     static DefaultStyle* instance();
 
-    void init(const muse::io::path_t& defaultStyleFilePath, const muse::io::path_t& partStyleFilePath, const SizeF& defaultPageSize);
+    void init(const muse::io::path_t& defaultStyleFilePath, const muse::io::path_t& partStyleFilePath,
+              const SizeF& defaultPageSize);
 
     static const MStyle& baseStyle();
 

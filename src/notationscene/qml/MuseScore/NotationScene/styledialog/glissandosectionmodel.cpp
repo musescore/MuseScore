@@ -38,7 +38,11 @@ GlissandoSectionModel::GlissandoSectionModel(QObject* parent)
 }
 
 StyleItem* GlissandoSectionModel::glissandoLineStyle() const { return styleItem(StyleId::glissandoLineStyle); }
-StyleItem* GlissandoSectionModel::glissandoLineStyleDashSize() const { return styleItem(StyleId::glissandoDashLineLen); }
+StyleItem* GlissandoSectionModel::glissandoLineStyleDashSize() const
+{
+    return styleItem(StyleId::glissandoDashLineLen);
+}
+
 StyleItem* GlissandoSectionModel::glissandoLineStyleGapSize()  const { return styleItem(StyleId::glissandoDashGapLen); }
 StyleItem* GlissandoSectionModel::glissandoLineWidth()  const { return styleItem(StyleId::glissandoLineWidth); }
 StyleItem* GlissandoSectionModel::glissandoShowText()  const { return styleItem(StyleId::glissandoShowText); }

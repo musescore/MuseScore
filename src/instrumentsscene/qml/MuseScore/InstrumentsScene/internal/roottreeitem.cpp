@@ -86,8 +86,10 @@ void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
     }
 
     if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-        auto systemObjectsLayerItem = dynamic_cast<SystemObjectsLayerTreeItem*>(childAtId(params.objectIdListToMove.front(),
-                                                                                          LayoutPanelItemType::SYSTEM_OBJECTS_LAYER));
+        auto systemObjectsLayerItem
+            = dynamic_cast<SystemObjectsLayerTreeItem*>(childAtId(params.objectIdListToMove.front(),
+                                                                  LayoutPanelItemType::
+                                                                  SYSTEM_OBJECTS_LAYER));
 
         const Staff* dstStaff = notation()->parts()->staff(params.destinationObjectId);
 
@@ -267,7 +269,8 @@ MoveParams RootTreeItem::buildPartsMoveParams(int sourceRow, int count, Abstract
             destinationRow_++;
             moveMode = INotationParts::InsertMode::Before;
         }
-    } while (isIndexInRange(destinationRow_, 0, childCount) && !isIndexInRange(destinationRow_, sourceRow, sourceRow + count));
+    } while (isIndexInRange(destinationRow_, 0,
+                            childCount) && !isIndexInRange(destinationRow_, sourceRow, sourceRow + count));
 
     if (destinationPartItem) {
         moveParams.destinationObjectId = destinationPartItem->id();

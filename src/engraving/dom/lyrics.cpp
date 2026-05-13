@@ -146,7 +146,8 @@ bool Lyrics::isMelisma() const
                 const ChordRest* trackNextCR = s ? s->nextChordRest(track) : nullptr;
                 if (trackNextCR) {
                     if (lyrTrack != track && lyrVoiceNextCR
-                        && !lyrVoiceNextCR->lyrics(m_verse, placement()) && lyrVoiceNextCR->tick() < trackNextCR->tick()) {
+                        && !lyrVoiceNextCR->lyrics(m_verse,
+                                                   placement()) && lyrVoiceNextCR->tick() < trackNextCR->tick()) {
                         // There is an intermediary note in a different voice, this is a melisma
                         return true;
                     }

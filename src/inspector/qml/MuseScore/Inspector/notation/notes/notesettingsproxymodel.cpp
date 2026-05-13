@@ -69,7 +69,8 @@ void NoteSettingsProxyModel::onElementsUpdated(const QList<mu::engraving::Engrav
     setDefaultSubModelType(defaultType);
 }
 
-InspectorModelType NoteSettingsProxyModel::resolveDefaultSubModelType(const QList<mu::engraving::EngravingItem*>& newElements) const
+InspectorModelType NoteSettingsProxyModel::resolveDefaultSubModelType(
+    const QList<mu::engraving::EngravingItem*>& newElements) const
 {
     InspectorModelType defaultModelType = InspectorModelType::TYPE_NOTEHEAD;
 

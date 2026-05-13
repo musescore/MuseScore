@@ -25,7 +25,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-GradualTempoChangeSettingsModel::GradualTempoChangeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+GradualTempoChangeSettingsModel::GradualTempoChangeSettingsModel(QObject* parent,
+                                                                 const muse::modularity::ContextPtr& iocCtx,
                                                                  IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, iocCtx, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {

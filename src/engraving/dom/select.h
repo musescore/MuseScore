@@ -162,7 +162,8 @@ public:
     void updateSelectedElements();
     bool measureRange(Measure** m1, Measure** m2) const;
     void extendRangeSelection(ChordRest* cr);
-    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick);
+    void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick,
+                              const Fraction& etick);
     bool rangeContainsMultiNoteChords() const;
 
 private:

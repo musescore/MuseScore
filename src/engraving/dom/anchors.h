@@ -32,7 +32,8 @@ class EditTimeTickAnchors
 {
 public:
     static void updateAnchors(const EngravingItem* item);
-    static void updateAnchors(Measure* measure, staff_idx_t staffIdx, const std::set<Fraction>& additionalAnchorRelTicks = {});
+    static void updateAnchors(Measure* measure, staff_idx_t staffIdx,
+                              const std::set<Fraction>& additionalAnchorRelTicks = {});
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
 };
@@ -60,7 +61,8 @@ private:
     static void doMoveHarmonyOrFretDiagramSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
 
     static void moveSnappedItems(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
-    static void rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg, Segment* oldSeg);
+    static void rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg,
+                                          Segment* oldSeg);
 };
 
 class TimeTickAnchor : public EngravingItem

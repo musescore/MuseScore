@@ -38,7 +38,8 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     QML_ELEMENT;
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
-    Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
+    Q_PROPERTY(
+        bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
 
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY themesChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
@@ -46,22 +47,26 @@ class AppearancePreferencesModel : public QObject, public muse::Contextable, pub
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
-    Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
+    Q_PROPERTY(
+        int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
     Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
     Q_PROPERTY(int bodyTextSize READ bodyTextSize WRITE setBodyTextSize NOTIFY bodyTextSizeChanged)
 
-    Q_PROPERTY(bool backgroundUseColor READ backgroundUseColor WRITE setBackgroundUseColor NOTIFY backgroundUseColorChanged)
+    Q_PROPERTY(
+        bool backgroundUseColor READ backgroundUseColor WRITE setBackgroundUseColor NOTIFY backgroundUseColorChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(
         QString backgroundWallpaperPath READ backgroundWallpaperPath WRITE setBackgroundWallpaperPath NOTIFY backgroundWallpaperPathChanged)
 
-    Q_PROPERTY(bool foregroundUseColor READ foregroundUseColor WRITE setForegroundUseColor NOTIFY foregroundUseColorChanged)
+    Q_PROPERTY(
+        bool foregroundUseColor READ foregroundUseColor WRITE setForegroundUseColor NOTIFY foregroundUseColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
-    Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
+    Q_PROPERTY(
+        bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
     Q_PROPERTY(
         bool isOnlyInvertInDarkTheme READ isOnlyInvertInDarkTheme WRITE setOnlyInvertInDarkTheme NOTIFY isOnlyInvertInDarkThemeChanged)
     Q_PROPERTY(bool isCurrentThemeDark READ isCurrentThemeDark NOTIFY themesChanged)

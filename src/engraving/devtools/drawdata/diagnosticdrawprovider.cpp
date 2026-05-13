@@ -41,7 +41,8 @@ using namespace mu::engraving;
 // ./vtest/scores/accidental-1.mscx -o ./work/1_accidental-1.exp.png
 // ./vtest/scores/emmentaler-text-3.mscx -o ./work/emmentaler-text-3.png
 
-Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile, const GenOpt& opt)
+Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile,
+                                             const GenOpt& opt)
 {
     LOGI() << "scoresDir: " << dirOrFile << ", outDir: " << outDirOrFile;
     DrawDataGenerator g;
@@ -53,7 +54,8 @@ Ret DiagnosticDrawProvider::generateDrawData(const muse::io::path_t& dirOrFile, 
     return g.processDir(dirOrFile, outDirOrFile, opt);
 }
 
-Ret DiagnosticDrawProvider::compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outDiff,
+Ret DiagnosticDrawProvider::compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test,
+                                            const muse::io::path_t& outDiff,
                                             const ComOpt& opt)
 {
     LOGI() << "ref: " << ref << ", test: " << test << ", outDiff: " << outDiff;

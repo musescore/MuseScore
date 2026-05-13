@@ -70,7 +70,8 @@ static constexpr int GP_INVALID_KEYSIG = 127;
 static constexpr int GP_VOLTA_BINARY = 1;
 static constexpr int GP_VOLTA_FLAGS = 2;
 
-mu::engraving::Err importGTP(mu::engraving::Score* score, const muse::String& filename, const char* data, unsigned int data_len);
+mu::engraving::Err importGTP(mu::engraving::Score* score, const muse::String& filename, const char* data,
+                             unsigned int data_len);
 
 enum class Repeat : char;
 
@@ -296,7 +297,8 @@ protected:
     void applyBeatEffects(mu::engraving::Chord*, int beatEffects, bool& hasVibratoLeftHand, bool& hasVibratoWTremBar);
     void readTremoloBar(int track, mu::engraving::Segment*);
     void readChord(mu::engraving::Segment* seg, int track, int numStrings, muse::String name, bool gpHeader);
-    void restsForEmptyBeats(mu::engraving::Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, const Fraction& tick);
+    void restsForEmptyBeats(mu::engraving::Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track,
+                            const Fraction& tick);
     void createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
     void addTextToNote(muse::String text, Note* note);
@@ -308,7 +310,8 @@ protected:
     void addRasgueado(ChordRest* cr, bool hasRasgueado);
     void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
     void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
-    void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
+    void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap,
+                          bool hasHarmonicSemi);
     void addTap(Chord*);
     void addSlap(Note*);
     void addPop(Note*);
@@ -425,7 +428,8 @@ class GuitarPro5 : public GuitarPro
     void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
     bool readTracks();
     void readMeasures(int startingTempo);
-    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
+    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets,
+                      bool mixChange);
     ReadNoteResult readNoteEffects(Note*);
     float naturalHarmonicFromFret(int fret);
     void addGlissandos();

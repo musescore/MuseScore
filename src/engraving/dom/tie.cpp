@@ -524,7 +524,8 @@ void Tie::changeTieType(Tie* oldTie, Note* endNote)
         return;
     }
 
-    Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(score->dummy()->note());
+    Tie* newTie = addPartialTie ? Factory::createPartialTie(score->dummy()->note()) : Factory::createTie(
+        score->dummy()->note());
 
     score->undoRemoveElement(oldTie);
 

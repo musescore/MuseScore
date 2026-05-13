@@ -49,7 +49,8 @@ static const ElementStyle tsStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Segment* parent)
-    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
+    : EngravingItem(ElementType::TIMESIG, parent,
+                    ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
     initElementStyle(&tsStyle);
 

@@ -35,7 +35,8 @@ InspectorModelWithVoiceAndPositionOptions::InspectorModelWithVoiceAndPositionOpt
 
 void InspectorModelWithVoiceAndPositionOptions::createProperties()
 {
-    m_voiceBasedPosition = buildPropertyItem(Pid::DIRECTION, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_voiceBasedPosition
+        = buildPropertyItem(Pid::DIRECTION, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         updateIsStaveCenteringAvailable();
     });

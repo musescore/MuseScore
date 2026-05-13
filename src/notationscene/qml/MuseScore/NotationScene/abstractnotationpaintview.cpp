@@ -428,7 +428,8 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
     onMatrixChanged(oldMatrix, m_matrix, false);
 }
 
-void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
+void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix,
+                                                bool overrideZoomType)
 {
     UNUSED(overrideZoomType);
 

@@ -32,7 +32,8 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable, public muse::Contextable
+class SearchPopupModel : public QObject, public QQmlParserStatus, public muse::actions::Actionable,
+    public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus);

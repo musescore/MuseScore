@@ -240,7 +240,8 @@ void NotationPageModel::doUpdatePercussionPanelVisibility()
 
     const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
     const bool autoClose = notationSceneConfiguration()->autoClosePercussionPanel();
-    if (noteInput && !noteInput->isNoteInputMode() && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
+    if (noteInput && !noteInput->isNoteInputMode()
+        && autoShowMode == PercussionPanelAutoShowMode::UNPITCHED_STAFF_NOTE_INPUT) {
         if (autoClose) {
             setPercussionPanelOpen(false);
         }
@@ -328,7 +329,8 @@ void NotationPageModel::doUpdateExtensionsToolBarVisibility()
         dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(EXTENSIONS_TOOLBAR_NAME, open));
     };
 
-    muse::extensions::ManifestList enabledExtensions = extensionsProvider()->manifestList(muse::extensions::Filter::Enabled);
+    muse::extensions::ManifestList enabledExtensions = extensionsProvider()->manifestList(
+        muse::extensions::Filter::Enabled);
     for (const muse::extensions::Manifest& m : enabledExtensions) {
         for (const muse::extensions::Action& a : m.actions) {
             if (!a.showOnToolbar) {

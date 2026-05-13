@@ -348,7 +348,11 @@ public:
 
     void drawPath(const QPainterPath& path);
     void drawPixmap(const QRectF& r, const QPixmap& pm, const QRectF& sr);
-    void drawPolygon(const QPoint* points, int pointCount, PolygonDrawMode mode) { QPaintEngine::drawPolygon(points, pointCount, mode); }
+    void drawPolygon(const QPoint* points, int pointCount, PolygonDrawMode mode)
+    {
+        QPaintEngine::drawPolygon(points, pointCount, mode);
+    }
+
     void drawPolygon(const QPointF* points, int pointCount, PolygonDrawMode mode);
     void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
@@ -1300,16 +1304,19 @@ void SvgPaintEngine::defineClipPath(const QPainterPath& clipPath)
     _curClipPathId++;
 
     if (_replaceClipPathWithMask) {
-        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_MASK_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
+        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_MASK_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT <<
+            SVG_SPACE;
     } else {
-        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_CLIP_PATH_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE << SVG_GT << SVG_SPACE;
+        stream() << SVG_DEFS_BEGIN << SVG_SPACE << SVG_CLIP_PATH_BEGIN << SVG_ID << _curClipPathId << SVG_QUOTE <<
+            SVG_GT << SVG_SPACE;
     }
 
     stream() << SVG_PATH;
     drawPathData(clipPath);
 
     if (_replaceClipPathWithMask) {
-        stream() << SVG_FILL_RULE << SVG_FILL << "white\"" << SVG_ELEMENT_END << SVG_MASK_END << SVG_DEFS_END << Qt::endl;
+        stream() << SVG_FILL_RULE << SVG_FILL << "white\"" << SVG_ELEMENT_END << SVG_MASK_END << SVG_DEFS_END <<
+            Qt::endl;
     } else {
         stream() << SVG_CLIP_RULE << SVG_ELEMENT_END << SVG_CLIP_PATH_END << SVG_DEFS_END << Qt::endl;
     }

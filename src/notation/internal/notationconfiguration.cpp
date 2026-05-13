@@ -37,10 +37,14 @@ using namespace muse::ui;
 
 static const std::string module_name("notation");
 
-static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/lightTheme_score_background_color");
-static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/darkTheme_score_background_color");
-static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_black_score_background_color");
-static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_white_score_background_color");
+static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name,
+                                                        "ui/canvas/background/lightTheme_score_background_color");
+static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name,
+                                                       "ui/canvas/background/darkTheme_score_background_color");
+static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name,
+                                                           "ui/canvas/background/hc_black_score_background_color");
+static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name,
+                                                           "ui/canvas/background/hc_white_score_background_color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
@@ -83,7 +87,8 @@ static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/pla
 static const Settings::Key IS_PLAY_CHORD_SYMBOLS_ENABLED(module_name, "application/playback/playChordSymbols");
 static const Settings::Key IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED(module_name,
                                                                               "application/playback/playPreviewNotesInInputByDuration");
-static const Settings::Key PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS(module_name, "application/playback/playPreviewNotesWithScoreDynamics");
+static const Settings::Key PLAY_PREVIEW_NOTES_WITH_SCORE_DYNAMICS(module_name,
+                                                                  "application/playback/playPreviewNotesWithScoreDynamics");
 static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
 static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playback/countInEnabled");
 
@@ -98,8 +103,10 @@ static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/d
 
 static const Settings::Key USER_INSTRUMENTS_PATH(module_name, "application/paths/userInstruments");
 
-static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToVerticalGrid");
-static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToHorizontalGrid");
+static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,
+                                                           "ui/application/raster/isSnappedToVerticalGrid");
+static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,
+                                                             "ui/application/raster/isSnappedToHorizontalGrid");
 static const Settings::Key HORIZONTAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/horizontal");
 static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/vertical");
 
@@ -255,7 +262,8 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY, Val(true));
-    settings()->valueChanged(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY).onReceive(this, [this](const Val&) {
+    settings()->valueChanged(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY).onReceive(this,
+                                                                                                      [this](const Val&) {
         m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged.notify();
     });
 
@@ -420,8 +428,10 @@ void NotationConfiguration::resetBackground()
 {
     settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, settings()->defaultValue(LIGHT_SCORE_BACKGROUND_COLOR));
     settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(DARK_SCORE_BACKGROUND_COLOR));
-    settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR));
-    settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR));
+    settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(
+                                   HC_BLACK_SCORE_BACKGROUND_COLOR));
+    settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(
+                                   HC_WHITE_SCORE_BACKGROUND_COLOR));
 
     settings()->setSharedValue(BACKGROUND_USE_COLOR, settings()->defaultValue(BACKGROUND_USE_COLOR));
 

@@ -171,7 +171,8 @@ bool Read400::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
-            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString());
+            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(
+                                                                             Sid::musicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -406,8 +407,9 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
             for (Measure* m = dst->measure(); m && m->tick() < oEndTick; m = m->nextMeasure()) {
                 Fraction mTimeStretch = dst->score()->staff(dstStaffIdx)->timeStretch(m->tick());
                 if (mTimeStretch != Fraction(1, 1)) {
-                    LOGD("Can't paste due to different time stretch ratios (src time stretch: 1/1, dst time stretch: %d/%d)",
-                         mTimeStretch.numerator(), mTimeStretch.denominator());
+                    LOGD(
+                        "Can't paste due to different time stretch ratios (src time stretch: 1/1, dst time stretch: %d/%d)",
+                        mTimeStretch.numerator(), mTimeStretch.denominator());
                     MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
                     return false;
                 }
@@ -451,7 +453,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (doScale) {
                         Fraction ticksScaled = tuplet->ticks() * scale;
                         if (!TDuration(ticksScaled).isValid()) {
-                            LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                            LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(),
+                                 ticksScaled.denominator());
                             return false;
                         }
                         tuplet->setTicks(ticksScaled);
@@ -513,7 +516,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         if (doScale) {
                             Fraction ticksScaled = cr->ticks() * scale;
                             if (!TDuration(ticksScaled).isValid()) {
-                                LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                LOGD("Can't paste: invalid duration %d/%d",
+                                     ticksScaled.numerator(), ticksScaled.denominator());
                                 return false;
                             }
                             cr->setTicks(ticksScaled);
@@ -532,7 +536,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 if (doScale) {
                                     Fraction ticksScaled = t->durationType().ticks() * scale;
                                     if (!TDuration(ticksScaled).isValid()) {
-                                        LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                        LOGD("Can't paste: invalid duration %d/%d",
+                                             ticksScaled.numerator(), ticksScaled.denominator());
                                         return false;
                                     }
                                     t->setDurationType(ticksScaled);
@@ -966,7 +971,8 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         } else {
                             score->undoAddElement(el);
                         }
-                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking" || tag == "HarpPedalDiagram") {
+                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking"
+                               || tag == "HarpPedalDiagram") {
                         EngravingItem* el = Factory::createItemByName(tag, score->dummy());
                         TRead::readItem(el, e, ctx);
                         el->setTrack(destTrack);
@@ -1031,7 +1037,8 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                                 nextSegm = nextSegm->next1(SegmentType::ChordRest);
                             }
                             if (!nextSegm || nextSegm->tick() > destTick1) {                    // no ChordRest segm at this tick
-                                nextSegm = Factory::createSegment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
+                                nextSegm
+                                    = Factory::createSegment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
                                 if (!nextSegm) {
                                     LOGD("PasteSymbols: can't find or create destination segment for FiguredBass");
                                     delete el;

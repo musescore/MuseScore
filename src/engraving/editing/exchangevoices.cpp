@@ -80,7 +80,8 @@ void ExchangeVoicesInMeasure::doExchange(track_idx_t srcTrack, track_idx_t dstTr
         Spanner* sp = i->value;
         Fraction spStart = sp->tick();
         Fraction spEnd = spStart + sp->ticks();
-        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
+        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(),
+             spEnd.ticks(), (spEnd - spStart).ticks(),
              start.ticks(), end.ticks());
         if (sp->isSlur() && (spStart >= start || spEnd < end)) {
             if (sp->track() == srcTrack && spStart >= start) {
@@ -128,7 +129,8 @@ void ExchangeVoices::exchangeVoicesInSelection(Score* score, voice_idx_t srcVoic
     }
 }
 
-void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t srcVoice, voice_idx_t dstVoice, staff_idx_t srcStaff,
+void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t srcVoice, voice_idx_t dstVoice,
+                                    staff_idx_t srcStaff,
                                     staff_idx_t dstStaff)
 {
     Fraction tick = measure->tick();
@@ -162,7 +164,8 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
                     std::vector<track_idx_t> testTracks = muse::values(tracks, tempTrack + trackDiff);
                     bool hasVoice = false;
                     for (track_idx_t testTrack : testTracks) {
-                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES && muse::contains(dstTrackList, testTrack)) {
+                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES
+                            && muse::contains(dstTrackList, testTrack)) {
                             hasVoice = true;
                             // voice is simply exchangeable now (deal directly)
                             score->undo(new ExchangeVoicesInMeasure(measure2, srcTrack2, testTrack, staffTrack / 4));
@@ -171,7 +174,8 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
 
                     // only source voice is in this staff
                     if (!hasVoice) {
-                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, srcTrack2, false, true);
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
+                                               measure2->first(), tempTrack, srcTrack2, false, true);
                         muse::remove(srcTrackList, srcTrack2);
                     }
                 }
@@ -186,20 +190,23 @@ void ExchangeVoices::exchangeVoices(Score* score, Measure* measure, voice_idx_t 
                     std::vector<track_idx_t> testTracks = muse::values(tracks, tempTrack - trackDiff);
                     bool hasVoice = false;
                     for (track_idx_t testTrack : testTracks) {
-                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES && muse::contains(srcTrackList, testTrack)) {
+                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES
+                            && muse::contains(srcTrackList, testTrack)) {
                             hasVoice = true;
                         }
                     }
 
                     // only destination voice is in this staff
                     if (!hasVoice) {
-                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, dstTrack2, false, true);
+                        CloneVoice::cloneVoice(measure->first(), measure2->endTick(),
+                                               measure2->first(), tempTrack, dstTrack2, false, true);
                         muse::remove(dstTrackList, dstTrack2);
                     }
                 }
             } else if (srcStaffTrack != staffTrack) {
                 // linked staff in same score (all voices present can be assumed)
-                score->undo(new ExchangeVoicesInMeasure(measure2, staffTrack + srcVoice, staffTrack + dstVoice, st->idx()));
+                score->undo(new ExchangeVoicesInMeasure(measure2, staffTrack + srcVoice, staffTrack + dstVoice,
+                                                        st->idx()));
             }
         }
     }

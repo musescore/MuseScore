@@ -91,7 +91,8 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::HOOK][ElementType::KEYSIG] = 1.15 * spatium;
     table[ElementType::HOOK][ElementType::TIMESIG] = 1.15 * spatium;
 
-    table[ElementType::NOTEDOT][ElementType::NOTE] = std::max(style.styleAbsolute(Sid::dotNoteDistance), style.styleAbsolute(
+    table[ElementType::NOTEDOT][ElementType::NOTE] = std::max(style.styleAbsolute(
+                                                                  Sid::dotNoteDistance), style.styleAbsolute(
                                                                   Sid::dotDotDistance));
     table[ElementType::NOTEDOT][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::NOTEDOT][ElementType::NOTE] - ledgerLength, ledgerPad);

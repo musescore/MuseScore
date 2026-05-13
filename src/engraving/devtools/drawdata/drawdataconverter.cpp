@@ -47,7 +47,8 @@ Ret DrawDataConverter::drawDataToPng(const muse::io::path_t& dataFile, const mus
     return saveAsPng(drawData.val, outFile);
 }
 
-Ret DrawDataConverter::drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile)
+Ret DrawDataConverter::drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile,
+                                     const muse::io::path_t& outFile)
 {
     RetVal<Diff> diff = DrawDataRW::readDiff(diffFile);
     if (!diff.ret) {

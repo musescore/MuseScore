@@ -73,7 +73,8 @@ protected:
 
     static ArticulationPattern buildTestArticulationPattern()
     {
-        ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
+        ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/,
+                                                                   0 /*timestampOffset*/),
                                                 PitchPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0),
                                                 ExpressionPattern(ArticulationMap::EXPECTED_SIZE, TEN_PERCENT, 0));
 

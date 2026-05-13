@@ -172,7 +172,8 @@ bool FiguredBassItem::parse(String& str)
     // prefix, digit, suffix and cont.line cannot be ALL empty
     // suffix cannot combine with empty digit
     if ((m_prefix != Modifier::NONE && m_suffix != Modifier::NONE)
-        || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE && m_contLine == ContLine::NONE)
+        || (m_prefix == Modifier::NONE && m_digit == FBIDigitNone && m_suffix == Modifier::NONE
+            && m_contLine == ContLine::NONE)
         || ((m_suffix == Modifier::CROSS || m_suffix == Modifier::BACKSLASH || m_suffix == Modifier::SLASH)
             && m_digit == FBIDigitNone)) {
         return false;
@@ -1076,28 +1077,36 @@ bool FiguredBassFont::read(XmlReader& e)
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
                 if (t == "simple") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)]
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)
+                    ]
                         = e.readText().at(0);
                 } else if (t == "crossed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)]
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)
+                    ]
                         = e.readText().at(0);
                 } else if (t == "backslashed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::BACKSLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::
+                                                                                   BACKSLASHED)]
                         = e.readText().at(0);
                 } else if (t == "slashed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)
+                    ]
                         = e.readText().at(0);
                 } else if (t == "simpleHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)]
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)
+                    ]
                         = e.readText().at(0);
                 } else if (t == "crossedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)]
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)
+                    ]
                         = e.readText().at(0);
                 } else if (t == "backslashedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::BACKSLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::
+                                                                                   BACKSLASHED)]
                         = e.readText().at(0);
                 } else if (t == "slashedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)
+                    ]
                         = e.readText().at(0);
                 } else {
                     e.unknown();

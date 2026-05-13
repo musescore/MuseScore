@@ -35,7 +35,8 @@ class KeySignatureSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * hasToShowCourtesy READ hasToShowCourtesy CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * mode READ mode CONSTANT)
 public:
-    explicit KeySignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit KeySignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

@@ -174,7 +174,8 @@ MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
         makeMenuItem("chord-text"),
         makeMenuItem("add-fretboard-diagram"),
         makeSeparator(),
-        makeMenuItem("insert-fretframe", TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
+        makeMenuItem("insert-fretframe", TranslatableString("appshell/menu/add/chordandfret",
+                                                            "Fretboard diagram legend"))
     };
 
     return items;
@@ -199,7 +200,8 @@ MenuItem* AppMenuModel::makeFileMenu()
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(TranslatableString("appshell/menu/file", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
+        makeMenu(TranslatableString("appshell/menu/file",
+                                    "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
         makeMenuItem("file-close"),
         makeSeparator(),
         makeMenuItem("file-save"),
@@ -316,7 +318,8 @@ MenuItem* AppMenuModel::makeViewMenu()
     };
 
 #ifdef MUSE_MODULE_WORKSPACE
-    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"),
+                          m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
 
     viewItems << makeSeparator()
@@ -409,7 +412,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeSeparator(),
         makeMenuItem("pitch-spell-sharps"),
         makeMenuItem("pitch-spell-flats"),
-        makeMenu(TranslatableString("appshell/menu/tools", "Enharmonic spelling"), enharmonicSpellingItems, "menu-enharmonic-spelling"),
+        makeMenu(TranslatableString("appshell/menu/tools",
+                                    "Enharmonic spelling"), enharmonicSpellingItems, "menu-enharmonic-spelling"),
         makeSeparator(),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
@@ -506,7 +510,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             museSamplerItems << makeMenuItem("musesampler-reload");
         }
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&MuseSampler"), museSamplerItems, "menu-musesampler");
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                             "&MuseSampler"), museSamplerItems, "menu-musesampler");
     }
 
     if (globalConfiguration()->devModeEnabled()) {
@@ -563,9 +568,12 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         };
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "&Accessibility"), accessibilityItems, "menu-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "&Engraving"), engravingItems, "menu-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-testflow");
 
 #ifdef MUSE_MODULE_VST
@@ -860,7 +868,8 @@ MenuItemList AppMenuModel::makePluginsItems()
         return l.translatedTitle() < r.translatedTitle();
     });
 
-    std::sort(pluginsWithoutCategories.begin(), pluginsWithoutCategories.end(), [](const MenuItem& l, const MenuItem& r) {
+    std::sort(pluginsWithoutCategories.begin(),
+              pluginsWithoutCategories.end(), [](const MenuItem& l, const MenuItem& r) {
         return l.translatedTitle() < r.translatedTitle();
     });
 

@@ -45,7 +45,8 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
+static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp,
+                                                   duration_t duration)
 {
     IF_ASSERT_FAILED(profile) {
         return {};
@@ -59,7 +60,8 @@ static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr
                           0);
 
     ArticulationMap articulations;
-    articulations.emplace(ArticulationType::Standard, mpe::ArticulationAppliedData(std::move(meta), 0, mpe::HUNDRED_PERCENT));
+    articulations.emplace(ArticulationType::Standard,
+                          mpe::ArticulationAppliedData(std::move(meta), 0, mpe::HUNDRED_PERCENT));
     articulations.preCalculateAverageData();
 
     return articulations;
@@ -167,15 +169,18 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
                                            voiceIdx,
                                            staffIdx,
                                            pitchLevel,
-                                           playbackCtx->appliableDynamicLevel(chordSymbol->track(), positionTickWithOffset),
+                                           playbackCtx->appliableDynamicLevel(chordSymbol->track(),
+                                                                              positionTickWithOffset),
                                            articulations,
                                            bps));
     }
 }
 
 void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp,
-                                               const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
-                                               const ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
+                                               const mpe::duration_t actualDuration,
+                                               const mpe::dynamic_level_t actualDynamicLevel,
+                                               const ArticulationsProfilePtr profile,
+                                               mpe::PlaybackEventsMap& result) const
 {
     if (!chordSymbol->isRealizable()) {
         return;
@@ -215,7 +220,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
 }
 
 void PlaybackEventsRenderer::renderMetronome(const Score* score, const Measure* measure, const int ticksPositionOffset,
-                                             const muse::mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
+                                             const muse::mpe::ArticulationsProfilePtr profile,
+                                             mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
@@ -249,7 +255,8 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const Measure* 
 }
 
 void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick, const mpe::timestamp_t actualTimestamp,
-                                             const muse::mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const
+                                             const muse::mpe::ArticulationsProfilePtr profile,
+                                             mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(score) {
         return;
@@ -263,9 +270,11 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
     result[actualTimestamp].emplace_back(std::move(event));
 }
 
-void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTick, const muse::mpe::timestamp_t actualTimestamp,
+void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTick,
+                                           const muse::mpe::timestamp_t actualTimestamp,
                                            const muse::mpe::ArticulationsProfilePtr profile,
-                                           muse::mpe::PlaybackEventsMap& result, muse::mpe::duration_t& countInDuration) const
+                                           muse::mpe::PlaybackEventsMap& result,
+                                           muse::mpe::duration_t& countInDuration) const
 {
     const Measure* measure = score->tick2measure(Fraction::fromTicks(startTick));
     if (!measure) {
@@ -314,7 +323,8 @@ void PlaybackEventsRenderer::renderCountIn(const Score* score, const int startTi
 }
 
 void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tickPositionOffset,
-                                              const mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx,
+                                              const mpe::ArticulationsProfilePtr profile,
+                                              const PlaybackContextPtr playbackCtx,
                                               PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(chord) {
@@ -342,7 +352,8 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::duration_t actualDuration,
                                                   const mpe::dynamic_level_t actualDynamicLevel,
                                                   const PlaybackContextPtr playbackCtx,
-                                                  const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
+                                                  const mpe::ArticulationsProfilePtr profile,
+                                                  mpe::PlaybackEventList& result) const
 {
     static const ArticulationMap articulations;
 

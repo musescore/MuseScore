@@ -668,7 +668,8 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
     bool ok;
     for (const GlyphWithAlternates& glyph : GLYPHS_WITH_ALTERNATES) {
         if (glyphsWithAlternatesObject.contains(glyph.key)) {
-            const JsonArray alternatesArray = glyphsWithAlternatesObject.value(glyph.key).toObject().value("alternates").toArray();
+            const JsonArray alternatesArray
+                = glyphsWithAlternatesObject.value(glyph.key).toObject().value("alternates").toArray();
 
             JsonValue val;
             for (size_t i = 0; i < alternatesArray.size(); ++i) {
@@ -754,7 +755,8 @@ void EngravingFont::loadGlyphsWithAnchors(const JsonObject& glyphsWithAnchors)
             const JsonArray arr = anchors.value(anchorId).toArray();
             const double x = arr.at(0).toDouble();
             const double y = arr.at(1).toDouble();
-            const double defaultSpatium = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
+            const double defaultSpatium
+                = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
             sym.smuflAnchors[search->second] = PointF(x, -y) * defaultSpatium;
         }
     }
@@ -1136,7 +1138,8 @@ void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& p
     draw(id, painter, SizeF(mag, mag), pos, angle);
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos, const double angle) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos,
+                         const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
@@ -1145,7 +1148,8 @@ void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, con
     }
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos, const double angle) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos,
+                         const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {

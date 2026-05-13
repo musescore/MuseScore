@@ -261,7 +261,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const OpenParams& open
     // Apply compat audio settings (needs to be done after notations are created)
     if (!openParams.disablePlayback && tryCompatAudio && !inOutData.settingsCompat.audioSettings.empty()) {
         for (const auto& audioCompat : inOutData.settingsCompat.audioSettings) {
-            notation::INotationSoloMuteState::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
+            notation::INotationSoloMuteState::SoloMuteState state
+                = { audioCompat.second.mute, audioCompat.second.solo };
             INotationSoloMuteStatePtr soloMuteStatePtr = m_masterNotation->notation()->soloMuteState();
             soloMuteStatePtr->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
         }
@@ -295,7 +296,8 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const OpenParams& op
     // The order of the steps matches the order in MS3
     // (see https://github.com/musescore/MuseScore/blob/2513676e512d29d554cb6c4d37d3efaf53ea2c5b/mscore/file.cpp#L2260)
 
-    io::path_t stylePath = openParams.stylePath.empty() ? notationConfiguration()->styleFileImportPath() : openParams.stylePath;
+    io::path_t stylePath
+        = openParams.stylePath.empty() ? notationConfiguration()->styleFileImportPath() : openParams.stylePath;
 
     // Load style if present
     if (!stylePath.empty()) {
@@ -726,7 +728,8 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                     }
                     fs->remove(savePathCopy);
                     QFile::setPermissions(targetMainFilePathCopy.toQString(),
-                                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+                                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup
+                                          | QFile::ReadOther);
                     LOGD() << "Autosave: background write complete: " << targetContainerPathCopy;
                 });
                 return make_ret(Ret::Code::Ok);
@@ -751,7 +754,8 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     // Step 4: replace to saved file
     {
         if (ioMode == MscIoMode::Dir) {
-            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" }, io::ScanMode::FilesAndFoldersInCurrentDir);
+            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" },
+                                                                         io::ScanMode::FilesAndFoldersInCurrentDir);
             if (!filesToBeMoved.ret) {
                 return filesToBeMoved.ret;
             }
@@ -802,8 +806,10 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
 
     // make file readable by all
     {
-        QFile::setPermissions(targetMainFilePath.toQString(),
-                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+        QFile::setPermissions(
+            targetMainFilePath.toQString(),
+            QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup
+            | QFile::ReadOther);
     }
 
     LOGI() << "success save file: " << targetContainerPath;
@@ -1135,7 +1141,8 @@ Ret NotationProject::canSave() const
 
     Ret ret = m_engravingProject->checkCorrupted();
     if (!ret) {
-        Err errorCode = m_engravingProject->isCorruptedUponLoading() ? Err::CorruptionUponOpenningError : Err::CorruptionError;
+        Err errorCode
+            = m_engravingProject->isCorruptedUponLoading() ? Err::CorruptionUponOpenningError : Err::CorruptionError;
         ret.setCode(static_cast<int>(errorCode));
     }
 
@@ -1233,7 +1240,8 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
     MasterScore* score = m_masterNotation->masterScore();
 
     if (undoable) {
-        m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction", "Edit project properties"));
+        m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction",
+                                                                                     "Edit project properties"));
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->notation()->undoStack()->commitChanges();
         m_masterNotation->notation()->notationChanged().send(muse::RectF());

@@ -33,10 +33,12 @@ public:
     static void layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx);
 
 private:
-    static void layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff, LayoutContext& ctx);
+    static void layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff,
+                                      LayoutContext& ctx);
     static void updateHalfSlurs(Tapping* item, const MStyle& style, bool tabStaff, LayoutContext& ctx);
     static void layoutHalfSlur(Tapping* item, TappingHalfSlur* slur, LayoutContext& ctx);
 
-    static void layoutRightHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff, LayoutContext& ctx);
+    static void layoutRightHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff,
+                                       LayoutContext& ctx);
 };
 }

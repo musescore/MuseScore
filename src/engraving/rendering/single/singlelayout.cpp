@@ -421,7 +421,8 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
 {
     Arpeggio::LayoutData* ldata = item->mutldata();
 
-    auto symbolLine = [](const std::shared_ptr<const IEngravingFont>& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
+    auto symbolLine
+        = [](const std::shared_ptr<const IEngravingFont>& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
     {
         data->symbols.clear();
 
@@ -448,14 +449,16 @@ void SingleLayout::layout(Arpeggio* item, const Context& ctx)
         symbolLine(font, ldata, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
-        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(),
+                             ldata->symsBBox.width()));
     } break;
 
     case ArpeggioType::UP: {
         symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
-        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(),
+                             ldata->symsBBox.width()));
     } break;
 
     case ArpeggioType::DOWN: {
@@ -583,8 +586,10 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 
         // draw the ledger line for high A
         if (line == -2) {
-            noteData.ledgerLine = LineF(x - headw * 1.5 - ldata->stemLineW * .5, y2, x + headw * .5 - ldata->stemLineW * .5, y2);
-            ldata->addBbox(RectF(x - headw * 1.5 - ldata->stemLineW * .5, y2 - ldata->stemLineW * 2, headw * 2, ldata->stemLineW));
+            noteData.ledgerLine = LineF(x - headw * 1.5 - ldata->stemLineW * .5, y2,
+                                        x + headw * .5 - ldata->stemLineW * .5, y2);
+            ldata->addBbox(RectF(x - headw * 1.5 - ldata->stemLineW * .5, y2 - ldata->stemLineW * 2, headw * 2,
+                                 ldata->stemLineW));
         }
 
         // move x to next note x position
@@ -613,7 +618,8 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
         double w = 0.0;
         switch (item->barLineType()) {
         case BarLineType::DOUBLE:
-            w = ctx.style().styleAbsolute(Sid::doubleBarWidth) * 2.0 + ctx.style().styleAbsolute(Sid::doubleBarDistance);
+            w = ctx.style().styleAbsolute(Sid::doubleBarWidth) * 2.0
+                + ctx.style().styleAbsolute(Sid::doubleBarDistance);
             break;
         case BarLineType::DOUBLE_HEAVY:
             w = ctx.style().styleAbsolute(Sid::endBarWidth) * 2.0 + ctx.style().styleAbsolute(Sid::endBarDistance);
@@ -778,7 +784,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double h = (-y + item->ldata()->h2()) * 2;
         ldata->setBbox(x, y, w, h);
 
-        ldata->bracketWidth = ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
+        ldata->bracketWidth = ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(
+            Sid::bracketDistance);
     }
     break;
     case BracketType::SQUARE:
@@ -804,7 +811,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
 
-        ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
+        ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(
+            Sid::bracketDistance);
     }
     break;
     case BracketType::GROUP:
@@ -1372,8 +1380,10 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                     SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
                     PointF cutout = item->symSmuflAnchor(sym, currentCutout);
                     double currentCutoutY = line * step + cutout.y();
-                    double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
-                    if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
+                    double previousCutoutY = previous.line * step
+                                             + item->symSmuflAnchor(previous.sym, previousCutout).y();
+                    if ((isAscending && currentCutoutY < previousCutoutY)
+                        || (!isAscending && currentCutoutY > previousCutoutY)) {
                         x -= Spatium::fromAbsolute(cutout.x(), spatium);
                     }
                 }
@@ -1809,9 +1819,11 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
         ldata->setBbox(numRect.translated(ldata->pz));       // translate bounding boxes to actual string positions
         ldata->addBbox(denRect.translated(ldata->pn));
         if (item->largeParentheses()) {
-            ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(),
+                                 spatium / 2,
                                  numRect.height() + denRect.height()));
-            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),
+                                 spatium / 2,
                                  numRect.height() + denRect.height()));
         }
     }
@@ -2117,7 +2129,8 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 // Assumes that l1p2 == l2p1 is the intersection between the lines.
 // If checkAngle is false, assumes that the lines are perpendicular,
 // and some calculations are saved.
-static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth,
+                               bool checkAngle)
 {
     PointF l1UnitVector = (l1p2 - l1p1).normalized();
     PointF l2UnitVector = (l2p1 - l2p2).normalized();
@@ -2293,7 +2306,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     const double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
 
     const bool alignBeginText = tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO;
-    const bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO;
+    const bool alignContinueText = tl->continueTextPlace() == TextPlace::LEFT
+                                   || tl->continueTextPlace() == TextPlace::AUTO;
     const bool alignEndText = tl->endTextPlace() == TextPlace::LEFT || tl->endTextPlace() == TextPlace::AUTO;
     const bool hasBeginText = !item->text()->empty() && isSingleOrBegin;
     const bool hasContinueText = !item->text()->empty() && !isSingleOrBegin;
@@ -2374,8 +2388,10 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         }
 
         const bool beginArrow = isSingleOrBegin
-                                && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
-        const bool endArrow = isSingleOrEnd && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
+                                && (tl->beginHookType() == HookType::ARROW_FILLED
+                                    || tl->beginHookType() == HookType::ARROW);
+        const bool endArrow = isSingleOrEnd
+                              && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
 
         if (beginArrow) {
             const bool filled = tl->beginHookType() == HookType::ARROW_FILLED;

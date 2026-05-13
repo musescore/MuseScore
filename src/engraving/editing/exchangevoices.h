@@ -32,7 +32,7 @@ class ExchangeVoices
 {
 public:
     static void exchangeVoicesInSelection(Score* score, voice_idx_t srcVoice, voice_idx_t dstVoice);
-    static void exchangeVoices(Score* score, Measure* measure, voice_idx_t srcVoice, voice_idx_t dstVoice, staff_idx_t srcStaff,
-                               staff_idx_t dstStaff);
+    static void exchangeVoices(Score* score, Measure* measure, voice_idx_t srcVoice, voice_idx_t dstVoice,
+                               staff_idx_t srcStaff, staff_idx_t dstStaff);
 };
 }

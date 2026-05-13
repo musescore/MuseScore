@@ -221,7 +221,8 @@ void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, 
     }
 }
 
-void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                                     mpe::PlaybackEventList& result)
 {
     NominalNoteCtx slightNoteCtx(note, ctx);
     slightNoteCtx.duration = 0; // aux notes have no duration
@@ -240,7 +241,8 @@ void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, c
     result.emplace_back(buildNoteEvent(slightNoteCtx));
 }
 
-void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                              mpe::PlaybackEventList& result)
 {
     NominalNoteCtx dipNoteCtx(note, ctx);
     dipNoteCtx.duration = 0; // aux notes have no duration
@@ -265,7 +267,8 @@ void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const Re
     }
 }
 
-void BendsRenderer::renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                                mpe::PlaybackEventList& result)
 {
     NominalNoteCtx scoopNoteCtx(note, ctx);
     scoopNoteCtx.duration = 0; // aux notes have no duration
@@ -323,7 +326,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const Re
 }
 
 mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
-                                             const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap)
+                                             const mpe::PlaybackEventList& bendNoteEvents,
+                                             const BendTimeFactorMap& timeFactorMap)
 {
     NominalNoteCtx noteCtx(startNote, startNoteCtx);
 
@@ -395,8 +399,10 @@ mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t noteTimestamp, m
         const mpe::percentage_t nominalOffsetPercent = static_cast<mpe::percentage_t>(ratio * 100.f) * mpe::ONE_PERCENT;
         const mpe::percentage_t nominalPercentDiff = nominalOffsetPercent - prevNominalOffsetPrecent;
 
-        const mpe::percentage_t actualOffsetStartPercent = prevNominalOffsetPrecent + nominalPercentDiff * factors.startFactor;
-        const mpe::percentage_t actualOffsetEndPercent = prevNominalOffsetPrecent + nominalPercentDiff * factors.endFactor;
+        const mpe::percentage_t actualOffsetStartPercent = prevNominalOffsetPrecent + nominalPercentDiff
+                                                           * factors.startFactor;
+        const mpe::percentage_t actualOffsetEndPercent = prevNominalOffsetPrecent + nominalPercentDiff
+                                                         * factors.endFactor;
 
         prevNominalOffsetPrecent = nominalOffsetPercent;
 

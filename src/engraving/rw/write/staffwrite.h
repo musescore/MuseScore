@@ -34,7 +34,7 @@ class StaffWrite
 {
 public:
 
-    static void writeStaff(const Staff* staff, XmlWriter& xml, WriteContext& ctx, MeasureBase* measureStart, MeasureBase* measureEnd,
-                           staff_idx_t staffStart, staff_idx_t staffIdx);
+    static void writeStaff(const Staff* staff, XmlWriter& xml, WriteContext& ctx, MeasureBase* measureStart,
+                           MeasureBase* measureEnd, staff_idx_t staffStart, staff_idx_t staffIdx);
 };
 }

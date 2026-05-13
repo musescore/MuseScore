@@ -119,9 +119,12 @@ TEST_F(Engraving_KeySigTests, keysig_78216)
     EXPECT_TRUE(m3);
 
     // verify no keysig exists in segment of final tick of m1, m2, m3
-    EXPECT_EQ(m1->findSegment(SegmentType::KeySig, m1->endTick()), nullptr) << "Should be no keysig at end of measure 1.";
-    EXPECT_EQ(m2->findSegment(SegmentType::KeySig, m2->endTick()), nullptr) << "Should be no keysig at end of measure 2.";
-    EXPECT_EQ(m3->findSegment(SegmentType::KeySig, m3->endTick()), nullptr) << "Should be no keysig at end of measure 3.";
+    EXPECT_EQ(m1->findSegment(SegmentType::KeySig, m1->endTick()),
+              nullptr) << "Should be no keysig at end of measure 1.";
+    EXPECT_EQ(m2->findSegment(SegmentType::KeySig, m2->endTick()),
+              nullptr) << "Should be no keysig at end of measure 2.";
+    EXPECT_EQ(m3->findSegment(SegmentType::KeySig, m3->endTick()),
+              nullptr) << "Should be no keysig at end of measure 3.";
 
     delete score;
 }
@@ -132,9 +135,11 @@ TEST_F(Engraving_KeySigTests, concertPitch)
     EXPECT_TRUE(score);
 
     score->cmdConcertPitchChanged(true);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + u"concert-pitch-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-01-test.mscx",
+                                            KEYSIG_DATA_DIR + u"concert-pitch-01-ref.mscx"));
     score->cmdConcertPitchChanged(false);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + u"concert-pitch-02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-02-test.mscx",
+                                            KEYSIG_DATA_DIR + u"concert-pitch-02-ref.mscx"));
 
     delete score;
 }
@@ -146,10 +151,14 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
-    Transpose::transpositionChanged(score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
+    Transpose::transpositionChanged(score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0,
+                                                                                                            1), Fraction(
+                                        16,
+                                        4));
     score1->update();
     score1->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, u"preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, u"preferSharpFlat-1-test.mscx",
+                                            KEYSIG_DATA_DIR + u"preferSharpFlat-1-ref.mscx"));
     delete score1;
 
     MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-2.mscx");
@@ -159,7 +168,8 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     // transpose augmented unison up
     Transpose::transpose(score2, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
     score2->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, u"preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, u"preferSharpFlat-2-test.mscx",
+                                            KEYSIG_DATA_DIR + u"preferSharpFlat-2-ref.mscx"));
     delete score2;
 }
 

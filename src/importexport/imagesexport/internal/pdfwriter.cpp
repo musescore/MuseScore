@@ -58,7 +58,8 @@ Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
     buf.open(QIODevice::WriteOnly);
 
     QPdfWriter pdfWriter(&buf);
-    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(), notation->painting()->pageSizeInch().toQSizeF());
+    preparePdfWriter(pdfWriter, notation->projectWorkTitleAndPartName(),
+                     notation->painting()->pageSizeInch().toQSizeF());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
@@ -110,7 +111,8 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
     buf.open(QIODevice::WriteOnly);
 
     QPdfWriter pdfWriter(&buf);
-    preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle(), firstNotation->painting()->pageSizeInch().toQSizeF());
+    preparePdfWriter(pdfWriter, firstNotation->projectWorkTitle(),
+                     firstNotation->painting()->pageSizeInch().toQSizeF());
 
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
@@ -153,7 +155,8 @@ void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, co
     pdfWriter.setCreator(QString("MuseScore Studio Version: ") + application()->version().toString().toQString());
     pdfWriter.setTitle(title);
     pdfWriter.setPageMargins(QMarginsF());
-    pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait, QMarginsF()));
+    pdfWriter.setPageLayout(QPageLayout(QPageSize(size, QPageSize::Inch), QPageLayout::Orientation::Portrait,
+                                        QMarginsF()));
 
     if (configuration()->exportPdfWithGrayscale()) {
         pdfWriter.setColorModel(QPdfWriter::ColorModel::Grayscale);

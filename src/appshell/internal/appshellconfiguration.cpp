@@ -40,7 +40,8 @@ static const std::string module_name("appshell");
 static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "application/hasCompletedFirstLaunchSetup");
 
 static const Settings::Key WELCOME_DIALOG_SHOW_ON_STARTUP_KEY(module_name, "application/welcomeDialogShowOnStartup");
-static const Settings::Key WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY(module_name, "application/welcomeDialogLastShownVersion");
+static const Settings::Key WELCOME_DIALOG_LAST_SHOWN_VERSION_KEY(module_name,
+                                                                 "application/welcomeDialogLastShownVersion");
 static const Settings::Key WELCOME_DIALOG_LAST_SHOWN_INDEX(module_name, "application/welcomeDialogLastShownIndex");
 
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
@@ -277,7 +278,8 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges,
+                                                    bool notifyOtherInstances) const
 {
     settings()->reset(keepDefaultSettings, notifyAboutChanges, notifyOtherInstances);
 }

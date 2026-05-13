@@ -301,7 +301,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 }
 
-void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
+void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests,
+                         SpannerSegmentType, int frag)
 {
     TRACEFUNC;
 
@@ -680,7 +681,8 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 firstCR = false;
                 // Handle cross-measure beams
                 BeamMode mode = cr->beamMode();
-                if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16 || mode == BeamMode::BEGIN32) {
+                if (mode == BeamMode::MID || mode == BeamMode::END || mode == BeamMode::BEGIN16
+                    || mode == BeamMode::BEGIN32) {
                     ChordRest* prevCR = ctx.mutDom().findCR(measure->tick() - Fraction::eps(), track);
                     if (prevCR) {
                         Beam* prevBeam = prevCR->beam();
@@ -693,7 +695,8 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                             if (prevCR->isChord()) {
                                 if (Hook* hook = toChord(prevCR)->hook()) {
                                     ctx.mutDom().doUndoRemoveElement(hook);
-                                    prevCR->segment()->staffShape(prevCR->vStaffIdx()).remove_if([hook](const ShapeElement& el) {
+                                    prevCR->segment()->staffShape(prevCR->vStaffIdx()).remove_if([hook](const
+                                                                                                        ShapeElement& el) {
                                         return el.item() == hook;
                                     });
                                 }
@@ -850,7 +853,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     const bool up = beam->up();
     const BeamMode restBeamMode = rest->beamMode();
     const bool firstRest = beam->elements().front() == rest
-                           && (restBeamMode == BeamMode::BEGIN || restBeamMode == BeamMode::BEGIN16 || restBeamMode == BeamMode::BEGIN32
+                           && (restBeamMode == BeamMode::BEGIN || restBeamMode == BeamMode::BEGIN16
+                               || restBeamMode == BeamMode::BEGIN32
                                || restBeamMode == BeamMode::MID);
 
     double restToBeamPadding;
@@ -993,7 +997,8 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                     // an 8th rest, for example, even though an 8th note would very obviously break the beam
                     // this is desired for BeamType::MID on rests.
                     if (level < lastChord->beams() && level < nextChord->beams()) {
-                        skipRest = (isBroken16 && level < 1) || (isBroken32 && level < 2) || (!isBroken16 && !isBroken32);
+                        skipRest = (isBroken16 && level < 1) || (isBroken32 && level < 2)
+                                   || (!isBroken16 && !isBroken32);
                     }
                 }
             }
@@ -1056,7 +1061,8 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
     } while (levelHasBeam);
 }
 
-bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter16Break, bool isAfter32Break)
+bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter16Break,
+                                     bool isAfter32Break)
 {
     // if first or last chord in beam group
     if (i == 0) {
@@ -1144,7 +1150,8 @@ bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int 
     return false;
 }
 
-static inline int computeStemLengthAdjustmentSteps(const ChordRest* cr, bool isStartOrEnd, bool isAbove, bool frenchStyleBeams,
+static inline int computeStemLengthAdjustmentSteps(const ChordRest* cr, bool isStartOrEnd, bool isAbove,
+                                                   bool frenchStyleBeams,
                                                    int level, int beamsAbove, int beamsBelow)
 {
     if (isAbove == cr->up()) { // beam segment on opposite side
@@ -1236,8 +1243,10 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             endY -= verticalOffset * item->growLeft();
         } else {
             // Feathered beams
-            double startProportionAlongX = (startX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
-            double endProportionAlongX = (endX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+            double startProportionAlongX = (startX - item->startAnchor().x())
+                                           / (item->endAnchor().x() - item->startAnchor().x());
+            double endProportionAlongX = (endX - item->startAnchor().x())
+                                         / (item->endAnchor().x() - item->startAnchor().x());
 
             double grow1 = startProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
             double grow2 = endProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
@@ -1282,13 +1291,16 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2;
         } else {
             bool isStartOrEnd = cr == startCr || cr == endCr;
-            int visualStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above, frenchStyleBeams,
+            int visualStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above,
+                                                                                   frenchStyleBeams,
                                                                                    level, beamsAbove, beamsBelow);
             if (visualStemLengthAdjustmentSteps != 0) {
                 double grow = item->growLeft();
                 if (!muse::RealIsEqual(item->growLeft(), item->growRight())) {
-                    double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
-                    double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+                    double anchorX = BeamTremoloLayout::chordBeamAnchorX(
+                        item->ldata(), chord, ChordBeamAnchorType::Middle);
+                    double proportionAlongX = (anchorX - item->startAnchor().x())
+                                              / (item->endAnchor().x() - item->startAnchor().x());
                     grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
                 }
 
@@ -1300,7 +1312,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                                                                                          /*frenchStyleBeams*/ false,
                                                                                          level, beamsAbove, beamsBelow);
                     chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2 + _up * grow
-                                                                * (bboxStemLengthAdjustmentSteps - visualStemLengthAdjustmentSteps)
+                                                                * (bboxStemLengthAdjustmentSteps
+                                                                   - visualStemLengthAdjustmentSteps)
                                                                 * item->beamDist();
                 }
                 BeamTremoloLayout::extendStem(item->ldata(), chord, visualStemLengthAdjustment);
@@ -1349,8 +1362,10 @@ void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, Chor
         endY -= verticalOffset * item->growLeft();
     } else {
         // Feathered beams
-        double startProportionAlongX = (startX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
-        double endProportionAlongX = (endX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+        double startProportionAlongX = (startX - item->startAnchor().x())
+                                       / (item->endAnchor().x() - item->startAnchor().x());
+        double endProportionAlongX = (endX - item->startAnchor().x())
+                                     / (item->endAnchor().x() - item->startAnchor().x());
 
         double grow1 = startProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
         double grow2 = endProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();

@@ -69,7 +69,8 @@ void WebApi::init()
         m_currentProject = globalContext()->currentProject();
 
         if (m_currentProject) {
-            m_currentProject->saveComplited().onReceive(this, [this](const muse::io::path_t& path, project::SaveMode mode) {
+            m_currentProject->saveComplited().onReceive(this,
+                                                        [this](const muse::io::path_t& path, project::SaveMode mode) {
                 onProjectSaved(path, mode);
             });
         }

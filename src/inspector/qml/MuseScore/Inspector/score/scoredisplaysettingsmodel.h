@@ -34,14 +34,19 @@ class ScoreDisplaySettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(bool shouldShowInvisible READ shouldShowInvisible WRITE setShouldShowInvisible NOTIFY shouldShowInvisibleChanged)
-    Q_PROPERTY(bool shouldShowFormatting READ shouldShowFormatting WRITE setShouldShowFormatting NOTIFY shouldShowFormattingChanged)
+    Q_PROPERTY(
+        bool shouldShowInvisible READ shouldShowInvisible WRITE setShouldShowInvisible NOTIFY shouldShowInvisibleChanged)
+    Q_PROPERTY(
+        bool shouldShowFormatting READ shouldShowFormatting WRITE setShouldShowFormatting NOTIFY shouldShowFormattingChanged)
     Q_PROPERTY(bool shouldShowFrames READ shouldShowFrames WRITE setShouldShowFrames NOTIFY shouldShowFramesChanged)
-    Q_PROPERTY(bool shouldShowPageMargins READ shouldShowPageMargins WRITE setShouldShowPageMargins NOTIFY shouldShowPageMarginsChanged)
-    Q_PROPERTY(bool shouldShowSoundFlags READ shouldShowSoundFlags WRITE setShouldShowSoundFlags NOTIFY shouldShowSoundFlagsChanged)
+    Q_PROPERTY(
+        bool shouldShowPageMargins READ shouldShowPageMargins WRITE setShouldShowPageMargins NOTIFY shouldShowPageMarginsChanged)
+    Q_PROPERTY(
+        bool shouldShowSoundFlags READ shouldShowSoundFlags WRITE setShouldShowSoundFlags NOTIFY shouldShowSoundFlagsChanged)
 
 public:
-    explicit ScoreDisplaySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit ScoreDisplaySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

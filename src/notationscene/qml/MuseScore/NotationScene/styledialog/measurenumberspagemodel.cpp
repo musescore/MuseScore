@@ -63,9 +63,20 @@ StyleItem* MeasureNumbersPageModel::showMeasureNumber() const { return styleItem
 StyleItem* MeasureNumbersPageModel::showMeasureNumberOne() const { return styleItem(StyleId::showMeasureNumberOne); }
 StyleItem* MeasureNumbersPageModel::measureNumberInterval() const { return styleItem(StyleId::measureNumberInterval); }
 StyleItem* MeasureNumbersPageModel::measureNumberSystem() const { return styleItem(StyleId::measureNumberSystem); }
-StyleItem* MeasureNumbersPageModel::measureNumberVPlacement() const { return styleItem(StyleId::measureNumberVPlacement); }
-StyleItem* MeasureNumbersPageModel::measureNumberHPlacement() const { return styleItem(StyleId::measureNumberHPlacement); }
-StyleItem* MeasureNumbersPageModel::measureNumberPlacementMode() const { return styleItem(StyleId::measureNumberPlacementMode); }
+StyleItem* MeasureNumbersPageModel::measureNumberVPlacement() const
+{
+    return styleItem(StyleId::measureNumberVPlacement);
+}
+
+StyleItem* MeasureNumbersPageModel::measureNumberHPlacement() const
+{
+    return styleItem(StyleId::measureNumberHPlacement);
+}
+
+StyleItem* MeasureNumbersPageModel::measureNumberPlacementMode() const
+{
+    return styleItem(StyleId::measureNumberPlacementMode);
+}
 
 StyleItem* MeasureNumbersPageModel::measureNumberPosAbove() const
 {
@@ -81,17 +92,31 @@ StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const
     return styleItem(ts->offsetSids.below);
 }
 
-StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
+StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const
+{
+    return styleItem(StyleId::measureNumberAlignToBarline);
+}
 
-StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const { return styleItem(StyleId::mmRestShowMeasureNumberRange); }
-StyleItem* MeasureNumbersPageModel::mmRestRangeBracketType() const { return styleItem(StyleId::mmRestRangeBracketType); }
+StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const
+{
+    return styleItem(StyleId::mmRestShowMeasureNumberRange);
+}
+
+StyleItem* MeasureNumbersPageModel::mmRestRangeBracketType() const
+{
+    return styleItem(StyleId::mmRestRangeBracketType);
+}
 
 StyleItem* MeasureNumbersPageModel::mmRestRangePosAbove() const { return styleItem(StyleId::mmRestRangePosAbove); }
 StyleItem* MeasureNumbersPageModel::mmRestRangePosBelow() const { return styleItem(StyleId::mmRestRangePosBelow); }
 StyleItem* MeasureNumbersPageModel::mmRestRangeVPlacement() const { return styleItem(StyleId::mmRestRangeVPlacement); }
 StyleItem* MeasureNumbersPageModel::mmRestRangeHPlacement() const { return styleItem(StyleId::mmRestRangeHPlacement); }
 
-StyleItem* MeasureNumbersPageModel::measureNumberTextStyle() const { return styleItem(StyleId::measureNumberTextStyle); }
+StyleItem* MeasureNumbersPageModel::measureNumberTextStyle() const
+{
+    return styleItem(StyleId::measureNumberTextStyle);
+}
+
 StyleItem* MeasureNumbersPageModel::mmRestRangeTextStyle() const { return styleItem(StyleId::mmRestRangeTextStyle); }
 
 StyleItem* MeasureNumbersPageModel::buildStyleItem(StyleId id) const

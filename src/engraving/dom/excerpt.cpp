@@ -735,7 +735,8 @@ static void updateSpatium(EngravingItem* oldElement, EngravingItem* newElement)
     }
 }
 
-static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* nm, track_idx_t track)
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* nm,
+                         track_idx_t track)
 {
     const auto handleTuplet = [&](Tuplet* tuplet) {
         tuplet->clear();
@@ -820,7 +821,8 @@ static void addBackSpanners(Note* on, Note* nn, Score* score)
     }
 }
 
-static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap,
+                                            Score* score)
 {
     for (Chord* oldGrace : originalGraceNotes) {
         Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
@@ -863,7 +865,8 @@ static void collectTieEndPoints(TieMap& tieMap)
 {
     for (auto& tie : tieMap) {
         Tie* newTie = toTie(tie.second);
-        if (newTie->type() == ElementType::TIE || (newTie->type() == ElementType::PARTIAL_TIE && toPartialTie(newTie)->isOutgoing())) {
+        if (newTie->type() == ElementType::TIE
+            || (newTie->type() == ElementType::PARTIAL_TIE && toPartialTie(newTie)->isOutgoing())) {
             newTie->updatePossibleJumpPoints();
         }
     }
@@ -1504,7 +1507,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (oldEl->isLayoutBreak()) {
                 continue;
             }
-            if ((oldEl->systemFlag() && dstStaffIdx != 0) || (!oldEl->systemFlag() && oldEl->staffIdx() != srcStaffIdx)) {
+            if ((oldEl->systemFlag() && dstStaffIdx != 0)
+                || (!oldEl->systemFlag() && oldEl->staffIdx() != srcStaffIdx)) {
                 continue;
             }
             bool alreadyCloned = oldEl->systemFlag() && oldEl->findLinkedInScore(score);
@@ -1601,7 +1605,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     addTies(on, nn, tieMap, score);
                     addBackSpanners(on, nn, score);
                     GuitarBend* bendBack = on->bendBack();
-                    Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
+                    Note* newStartNote
+                        = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
                     if (bendBack && newStartNote) {
                         GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
                         newBend->setScore(score);

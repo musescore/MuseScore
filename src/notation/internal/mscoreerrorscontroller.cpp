@@ -172,7 +172,8 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     case MsError::CANNOT_REPEAT_SELECTION:
         title = muse::trc("notation", "Can’t repeat this selection");
-        message = muse::trc("notation", "Make a list selection of notes or rests on the same beat or any range selection and retry.");
+        message = muse::trc("notation",
+                            "Make a list selection of notes or rests on the same beat or any range selection and retry.");
         break;
     case MsError::TRANSPOSE_NO_FRET_DIAGRAM:
         title = muse::trc("notation", "Some fretboard diagrams could not be transposed");

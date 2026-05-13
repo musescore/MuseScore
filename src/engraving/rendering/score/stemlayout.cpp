@@ -64,9 +64,11 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     }
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
-    double extraHeight = (ldata->up ? item->upNote()->stemUpSE().y() : item->downNote()->stemDownNW().y()) / item->intrinsicMag()
+    double extraHeight = (ldata->up ? item->upNote()->stemUpSE().y() : item->downNote()->stemDownNW().y())
+                         / item->intrinsicMag()
                          / spatium;
-    int shortestStem = style.styleB(Sid::useWideBeams) ? 12 : (style.styleD(Sid::shortestStem) + std::abs(extraHeight)) * 4;
+    int shortestStem
+        = style.styleB(Sid::useWideBeams) ? 12 : (style.styleD(Sid::shortestStem) + std::abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (item->downLine() - item->upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
@@ -84,7 +86,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
 
     if (ldata->up) {
         int stemEndPosition = item->upLine() * quarterSpacesPerLine - defaultStemLength;
-        double stemEndPositionMag = (double)item->upLine() * quarterSpacesPerLine - (defaultStemLength * item->intrinsicMag());
+        double stemEndPositionMag = (double)item->upLine() * quarterSpacesPerLine
+                                    - (defaultStemLength * item->intrinsicMag());
 
         if (stemEndPositionMag <= -shortStemStart) {
             int reduction = maxReduction(item, ctx, std::abs((int)floor(stemEndPositionMag) + shortStemStart));
@@ -99,7 +102,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
         stemLength = std::max(idealStemLength, minStemLengthQuarterSpaces);
     } else {
         int stemEndPosition = item->downLine() * quarterSpacesPerLine + defaultStemLength;
-        double stemEndPositionMag = (double)item->downLine() * quarterSpacesPerLine + (defaultStemLength * item->intrinsicMag());
+        double stemEndPositionMag = (double)item->downLine() * quarterSpacesPerLine
+                                    + (defaultStemLength * item->intrinsicMag());
 
         int downShortStemStart = (staffLineCount - 1) * (2 * quarterSpacesPerLine) + shortStemStart;
         if (stemEndPositionMag >= downShortStemStart) {
@@ -159,7 +163,8 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
     return finalStemLength + extraLength;
 }
 
-int StemLayout::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
+int StemLayout::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing,
+                                bool useWideBeams,
                                 bool isFullSize)
 {
     int beamOverlap = 8;
@@ -276,7 +281,8 @@ double StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
         delta -= st->lineDistance().val() * 0.5;
     }
     double y
-        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val()
+           + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
           + delta;
     return y;
 }
@@ -296,9 +302,11 @@ double StemLayout::tabStemLength(const Chord* item, const StaffType* st)
     }
     // if stems beside staff, length is fixed, but take into account shorter half note stems
     else {
-        bool shrt = (st->minimStyle() == TablatureMinimStyle::SHORTER) && (item->durationType().type() == DurationType::V_HALF);
+        bool shrt = (st->minimStyle() == TablatureMinimStyle::SHORTER)
+                    && (item->durationType().type() == DurationType::V_HALF);
         stemLen = (st->stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (item->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
+                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0)
+                  * (item->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
     }
     // scale length by scale of parent chord, but relative to scale of context staff
     return stemLen * item->mag() / item->staff()->staffMag(item->tick());
@@ -424,7 +432,8 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = item->tremoloSingleChord()->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(item->tremoloSingleChord()->minHeight() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
+        minStemLength
+            += ceil(item->tremoloSingleChord()->minHeight() / item->intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = style.styleAbsolute(Sid::tremoloOutSidePadding) / spatium * 4.0;
         int noteSidePadding = style.styleAbsolute(Sid::tremoloNoteSidePadding) / spatium * 4.0;
 
@@ -449,7 +458,8 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
         if (item->hook()) {
             bool straightFlags = style.styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = item->hook()->smuflAnchor().y() * (ldata->up ? 1 : -1);
-            int hookOffset = floor((item->hook()->height() / item->intrinsicMag() + smuflAnchor) / spatium * 4) - (straightFlags ? 0 : 2);
+            int hookOffset = floor((item->hook()->height() / item->intrinsicMag() + smuflAnchor) / spatium * 4)
+                             - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
             // so we constrain to a reasonable maximum for hook length
             hookOffset = std::min(hookOffset, 11);

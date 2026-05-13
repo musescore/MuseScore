@@ -75,7 +75,8 @@ public:
 
     virtual muse::io::path_t cloudProjectSavingPath(int scoreId = 0) const = 0;
 
-    virtual muse::io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+    virtual muse::io::path_t defaultSavingFilePath(INotationProjectPtr project,
+                                                   const std::string& filenameAddition = "",
                                                    const std::string& suffix = "") const = 0;
 
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;

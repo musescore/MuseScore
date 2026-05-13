@@ -389,7 +389,8 @@ void EditSystemLocks::applyLockToSelection(Score* score)
     }
 }
 
-void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Score* score, LayoutBreakType breakType, const MeasureBase* measure)
+void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Score* score, LayoutBreakType breakType,
+                                                        const MeasureBase* measure)
 {
     IF_ASSERT_FAILED(breakType != LayoutBreakType::NOBREAK) {
         return; // NOBREAK not allowed on locked measures
@@ -404,7 +405,8 @@ void EditSystemLocks::removeSystemLocksOnAddLayoutBreak(Score* score, LayoutBrea
 void EditSystemLocks::removeLayoutBreaksOnAddSystemLock(Score* score, const SystemLock* lock)
 {
     bool mmrests = score->style().styleB(Sid::createMultiMeasureRests);
-    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB());
+         mb = mmrests ? mb->nextMM() : mb->next()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);
         mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         if (mb != lock->endMB()) {

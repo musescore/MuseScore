@@ -395,17 +395,19 @@ private:
     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const size_t nrStavesInPart,
                const MeasurePrintContext& mpc);
     void measureLayout(const double distance);
-    void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
+    void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack,
+                           const track_idx_t etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(EngravingItem* el, const Measure* m, staff_idx_t sstaff, bool useDrumset);
-    void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack, const staff_idx_t partRelStaffNo,
-                            const bool useDrumset, const bool isLastStaffOfPart, FigBassMap& fbMap,
-                            std::set<const Spanner*>& spannersStopped);
+    void writeMeasureTracks(const Measure* const m, const int partIndex, const staff_idx_t strack,
+                            const staff_idx_t partRelStaffNo, const bool useDrumset, const bool isLastStaffOfPart,
+                            FigBassMap& fbMap, std::set<const Spanner*>& spannersStopped);
     void writeMeasureStaves(const Measure* m, const int partIndex, const staff_idx_t startStaff, const size_t nstaves,
                             const bool useDrumset, FigBassMap& fbMap, std::set<const Spanner*>& spannersStopped);
-    void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh, FigBassMap& fbMap,
-                      const MeasurePrintContext& mpc, std::set<const Spanner*>& spannersStopped);
-    void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
+    void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh,
+                      FigBassMap& fbMap, const MeasurePrintContext& mpc, std::set<const Spanner*>& spannersStopped);
+    void repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack,
+                              track_idx_t track);
     void repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void writeParts();
     bool shouldWritePageNo(const Page* page);
@@ -1128,7 +1130,8 @@ public:
 
 // find all trills in this measure and this part
 
-static void findTrills(const Measure* const measure, track_idx_t strack, track_idx_t etrack, TrillHash& trillStart, TrillHash& trillStop)
+static void findTrills(const Measure* const measure, track_idx_t strack, track_idx_t etrack, TrillHash& trillStart,
+                       TrillHash& trillStop)
 {
     // loop over all spanners in this measure
     Fraction stick = measure->tick();
@@ -1176,7 +1179,8 @@ void ExportMusicXml::calcDivMoveToTick(const Fraction& t, const Fraction& stretc
     Fraction stretchedTick { t + stretch * (tick() - t) };
 #ifdef DEBUG_TICK
     LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
-           << " m_tick (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
+           << " m_tick (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(
+        stretchedTick);
 #endif
     if (t < tick()) {
 #ifdef DEBUG_TICK
@@ -1410,7 +1414,8 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         // note size values in percent
         xml.tag("note-size", { { "type", "cue" } }, s.styleD(Sid::smallNoteMag) * 100);
         xml.tag("note-size", { { "type", "grace" } }, s.styleD(Sid::graceNoteMag) * 100);
-        xml.tag("note-size", { { "type", "grace-cue" } }, s.styleD(Sid::graceNoteMag) * s.styleD(Sid::smallNoteMag) * 100);
+        xml.tag("note-size", { { "type", "grace-cue" } }, s.styleD(Sid::graceNoteMag) * s.styleD(
+                    Sid::smallNoteMag) * 100);
         xml.endElement();
     }
 
@@ -1420,9 +1425,12 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
     // and LYRIC1 to get MusicXML defaults
 
     xml.tag("music-font", { { "font-family", s.styleSt(Sid::musicalSymbolFont) } });
-    xml.tag("word-font", { { "font-family", s.styleSt(Sid::staffTextFontFace) }, { "font-size", s.styleD(Sid::staffTextFontSize) } });
+    xml.tag("word-font",
+            { { "font-family", s.styleSt(Sid::staffTextFontFace) },
+                { "font-size", s.styleD(Sid::staffTextFontSize) } });
     xml.tag("lyric-font",
-            { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
+            { { "font-family", s.styleSt(Sid::lyricsOddFontFace) },
+                { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
     xml.endElement();
 }
 
@@ -1994,7 +2002,8 @@ static bool barlineHasFermata(const BarLine* const barline, const track_idx_t st
 //   writeBarlineFermata -- write fermata on barline
 //---------------------------------------------------------
 
-static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, const track_idx_t strack, const track_idx_t etrack)
+static void writeBarlineFermata(const BarLine* const barline, XmlWriter& xml, const track_idx_t strack,
+                                const track_idx_t etrack)
 {
     const Segment* seg = barline ? barline->segment() : 0;
     if (seg) {
@@ -2137,7 +2146,8 @@ void ExportMusicXml::moveToTick(const Fraction& t, const Fraction& stretch)
     Fraction stretchedTick { t + stretch * (tick() - t) };
 #ifdef DEBUG_TICK
     LOGD() << "t (target) " << fractionToStdString(t) << " stretch " << fractionToStdString(stretch)
-           << " tick() (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(stretchedTick);
+           << " tick() (current) " << fractionToStdString(m_tick) << " stretchedTick " << fractionToStdString(
+        stretchedTick);
 #endif
     if (t < m_tick) {
 #ifdef DEBUG_TICK
@@ -2762,7 +2772,8 @@ static void tupletActualAndNormal(const Tuplet* const t, XmlWriter& xml)
 //   <tuplet type="start" placement="above" bracket="no"/>
 // </notations>
 
-static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations, XmlWriter& xml)
+static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations,
+                        XmlWriter& xml)
 {
     notations.tag(xml, t);
     String tupletTag = u"tuplet type=\"start\"";
@@ -2964,7 +2975,8 @@ static void wavyLineStop(const Trill* tr, const int number, Notations& notations
 //   wavyLineStartStop
 //---------------------------------------------------------
 
-void ExportMusicXml::wavyLineStartStop(const ChordRest* cr, Notations& notations, TrillHash& trillStart, TrillHash& trillStop)
+void ExportMusicXml::wavyLineStartStop(const ChordRest* cr, Notations& notations, TrillHash& trillStart,
+                                       TrillHash& trillStop)
 {
     if (muse::contains(trillStart, cr) && muse::contains(trillStop, cr)) {
         const Trill* tr = trillStart.at(cr);
@@ -3986,7 +3998,8 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         || note->headScheme() == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
         static const std::regex nameparts("^note([A-Z][a-z]*)(Sharp|Flat)?");
         AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
-        StringList matches = String::fromAscii(noteheadName.ascii()).search(nameparts, { 1, 2 }, SplitBehavior::SkipEmptyParts);
+        StringList matches = String::fromAscii(noteheadName.ascii()).search(nameparts, { 1, 2 },
+                                                                            SplitBehavior::SkipEmptyParts);
         xml.startElement("notehead-text");
         xml.tag("display-text", matches.at(0));
         if (matches.size() > 1) {
@@ -4044,7 +4057,8 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, const Note* co
             addColorAttr(bend, bendAttrs);
             xml.startElement("bend", bendAttrs);
             xml.tag("bend-alter", String::number(max_pitch / PitchValue::PITCH_FOR_SEMITONE, 2));
-            xml.tag("with-bar", TConv::toXml(static_cast<TremoloBarType>(bend->getProperty(Pid::TREMOLOBAR_TYPE).toInt())));
+            xml.tag("with-bar",
+                    TConv::toXml(static_cast<TremoloBarType>(bend->getProperty(Pid::TREMOLOBAR_TYPE).toInt())));
             xml.endElement();
         }
     }
@@ -4116,7 +4130,8 @@ static void writeFingering(XmlWriter& xml, Notations& notations, const Note* con
 //   writeNotationSymbols
 //---------------------------------------------------------
 
-static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const ElementList& elist, bool excludeParentheses)
+static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const ElementList& elist,
+                                 bool excludeParentheses)
 {
     for (const EngravingItem* e : elist) {
         if (!e->isSymbol()) {
@@ -4441,7 +4456,8 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
         // no stem for whole notes and beyond
-        if (chord->noStem() || chord->measure()->stemless(chord->staffIdx()) || (chord->stem() && !chord->stem()->visible())) {
+        if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())
+            || (chord->stem() && !chord->stem()->visible())) {
             m_xml.tag("stem", "none");
         } else if (const Stem* stem = note->chord()->stem()) {
             String stemTag = u"stem";
@@ -4510,7 +4526,8 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         if (chord->arpeggio()) {
             arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), m_xml, notations, m_measArpeggios);
         } else if (chord->spanArpeggio()) {
-            arpeggiate(chord->spanArpeggio(), note == nl.front(), note == nl.back(), m_xml, notations, m_measArpeggios, /*spanArp=*/ true);
+            arpeggiate(chord->spanArpeggio(), note == nl.front(),
+                       note == nl.back(), m_xml, notations, m_measArpeggios, /*spanArp=*/ true);
         }
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->isGlissando()) {
@@ -4576,7 +4593,8 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     // Determine y position, but leave at zero in case of tablature staff
     // as no display-step or display-octave should be written for a tablature staff,
 
-    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
+    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4
+        && clef != ClefType::TAB4_SERIF) {
         double yOffsSp = -2 * rest->offset().y() / rest->spatium();              // positive = up, one spatium is two pitches
         yOffsSt = int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5);            // same rounded to int
 
@@ -4724,7 +4742,8 @@ static void directionETag(XmlWriter& xml, staff_idx_t staff, const int offset = 
 //   partGroupStart
 //---------------------------------------------------------
 
-static void partGroupStart(XmlWriter& xml, int number, const BracketItem* const bracket, const bool barlineSpan, const bool groupTime)
+static void partGroupStart(XmlWriter& xml, int number, const BracketItem* const bracket, const bool barlineSpan,
+                           const bool groupTime)
 {
     xml.startElement("part-group", { { "type", "start" }, { "number", number } });
     String br;
@@ -5349,8 +5368,12 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             tag += String(u" font-family=\"%1\"").arg(tlb->getProperty(isStart
                                                                        ? Pid::BEGIN_FONT_FACE
                                                                        : Pid::END_FONT_FACE).value<String>());
-            tag += String(u" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
-            tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
+            tag += String(u" font-size=\"%1\"").arg(tlb->getProperty(
+                                                        isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
+            tag
+                += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::
+                                                                          END_FONT_STYLE)
+                                                         .toInt()));
             tag += color2xml(tlb);
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);
             xml.tagRaw(tag, dynamicPosition == muse::nidx ? text : text.left(dynamicPosition));
@@ -5781,7 +5804,8 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         if (isDashes) {
             m_xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
         } else {
-            m_xml.tagRaw(String(u"bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, String::number(n + 1), lineEnd, rest));
+            m_xml.tagRaw(String(u"bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, String::number(n + 1),
+                                                                                            lineEnd, rest));
         }
         m_xml.endElement();
     }
@@ -5800,7 +5824,8 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 //   Writes a string that may contain <sym>...</sym> elements as words and symbol elements.
 //---------------------------------------------------------
 
-static void writeWordsAndSymbolsXml(mu::engraving::XmlWriter& xml, const mu::engraving::String& words, const mu::engraving::String& attrs)
+static void writeWordsAndSymbolsXml(mu::engraving::XmlWriter& xml, const mu::engraving::String& words,
+                                    const mu::engraving::String& attrs)
 {
     // Write symbols as separate elements, the rest as words.
     static const std::wregex symRegex(LR"(<sym>([^<>]+)</sym>)");
@@ -5815,7 +5840,8 @@ static void writeWordsAndSymbolsXml(mu::engraving::XmlWriter& xml, const mu::eng
         size_t matchLen = it->length();
         // Text before <sym>
         if (matchPos > lastPos) {
-            mu::engraving::String before = mu::engraving::String::fromStdWString(wwords.substr(lastPos, matchPos - lastPos));
+            mu::engraving::String before
+                = mu::engraving::String::fromStdWString(wwords.substr(lastPos, matchPos - lastPos));
             if (!before.trimmed().isEmpty()) {
                 xml.tagRaw(u"words" + attrs, before.trimmed());
             }
@@ -5997,8 +6023,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 // set the default words format
                 const String mtf = m_score->style().styleSt(Sid::musicalTextFont);
                 CharFormat defFmt;
-                defFmt.setFontFamily(m_score->style().styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace));
-                defFmt.setFontSize(m_score->style().styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize));
+                defFmt.setFontFamily(m_score->style().styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::
+                                                              lyricsOddFontFace));
+                defFmt.setFontSize(m_score->style().styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::
+                                                           lyricsOddFontSize));
                 // write formatted
                 MScoreTextToMusicXml mttm(u"text", attr, defFmt, mtf);
                 mttm.writeTextFragments(l->fragmentList(), m_xml);
@@ -6270,7 +6298,8 @@ static track_idx_t findTrackForAnnotations(track_idx_t track, Segment* seg)
 //  repeatAtMeasureStart -- write repeats at begin of measure
 //---------------------------------------------------------
 
-void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack, track_idx_t etrack,
+void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, track_idx_t strack,
+                                          track_idx_t etrack,
                                           track_idx_t track)
 {
     // loop over all segments
@@ -6324,7 +6353,8 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
 //  repeatAtMeasureStop -- write repeats at end of measure
 //---------------------------------------------------------
 
-void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track)
+void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack,
+                                         track_idx_t track)
 {
     for (EngravingItem* e : m->el()) {
         track_idx_t wtrack = muse::nidx;     // track to write jump
@@ -6433,10 +6463,13 @@ static void measureRepeat(XmlWriter& xml, Attributes& attr, const Measure* const
             xml.endElement();
         } else if (
             // no longer in measure repeats
-            m->prevMeasure() && ((m->prevMeasure()->isMeasureRepeatGroup(staffIdx) && !m->isMeasureRepeatGroup(staffIdx))
-                                 // or still in measure repeats, but now of different duration
-                                 || (m->prevMeasure()->measureRepeatElement(staffIdx) && m->measureRepeatElement(staffIdx)
-                                     && (m->measureRepeatNumMeasures(staffIdx) != m->prevMeasure()->measureRepeatNumMeasures(staffIdx))))) {
+            m->prevMeasure()
+            && ((m->prevMeasure()->isMeasureRepeatGroup(staffIdx) && !m->isMeasureRepeatGroup(staffIdx))
+                // or still in measure repeats, but now of different duration
+                || (m->prevMeasure()->measureRepeatElement(staffIdx)
+                    && m->measureRepeatElement(staffIdx)
+                    && (m->measureRepeatNumMeasures(staffIdx)
+                        != m->prevMeasure()->measureRepeatNumMeasures(staffIdx))))) {
             attr.doAttr(xml, true);
             xml.startElement("measure-style", styleAttrs);
             xml.tag("measure-repeat", { { "type", "stop" } }, "");
@@ -6522,7 +6555,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
 
 // Only handle common annotations, others are handled elsewhere
 
-static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
+static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track,
+                        staff_idx_t sstaff, Segment* seg)
 {
     for (const EngravingItem* e : seg->annotations()) {
         track_idx_t wtrack = muse::nidx;       // track to write annotation
@@ -6656,7 +6690,8 @@ static String Modifier2MusicXml(FiguredBassItem::Modifier prefix)
     return String();
 }
 
-static void writeMusicXml(const FiguredBassItem* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick)
+static void writeMusicXml(const FiguredBassItem* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick,
+                          int fbEndTick)
 {
     xml.startElement("figure");
 
@@ -6704,7 +6739,8 @@ static void writeMusicXml(const FiguredBassItem* item, XmlWriter& xml, bool isOr
     xml.endElement();
 }
 
-static void writeMusicXml(const FiguredBass* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration,
+static void writeMusicXml(const FiguredBass* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick,
+                          bool writeDuration,
                           int divisions)
 {
     XmlWriter::Attributes attrs;
@@ -6732,7 +6768,8 @@ static void writeMusicXml(const FiguredBass* item, XmlWriter& xml, bool isOrigin
 //  figuredBass
 //---------------------------------------------------------
 
-static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, track_idx_t track, const ChordRest* cr, FigBassMap& fbMap,
+static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, track_idx_t track, const ChordRest* cr,
+                        FigBassMap& fbMap,
                         int divisions)
 {
     Segment* seg = cr->segment();
@@ -6766,7 +6803,8 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     writeMusicXml(fb, xml, true, crEndTick.ticks(), fbEndTick.ticks(),
                                   writeDuration, divisions);
                     // Check for changing figures under a single note (each figure stored in a separate segment)
-                    for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
+                    for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL;
+                         segNext = segNext->next()) {
                         for (EngravingItem* annot : segNext->annotations()) {
                             if (annot->isFiguredBass() && annot->track() == track) {
                                 fb = toFiguredBass(annot);
@@ -6810,11 +6848,13 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
 //   calculate data
 // write start if in right track
 
-static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
+static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track,
+                         staff_idx_t sstaff, Segment* seg)
 {
     if (seg->isChordRestType() || seg->isTimeTickType()) {
         Fraction stick = seg->tick();
-        for (auto it = exp->score()->spanner().lower_bound(stick.ticks()); it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
+        for (auto it = exp->score()->spanner().lower_bound(stick.ticks());
+             it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
             Spanner* e = it->second;
 
             if (!exp->canWrite(e)) {
@@ -6886,7 +6926,8 @@ static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t et
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, const Fraction& tick2, staff_idx_t sstaff,
+static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, const Fraction& tick2,
+                        staff_idx_t sstaff,
                         std::set<const Spanner*>& stopped)
 {
     for (auto it : exp->score()->spanner()) {
@@ -7119,8 +7160,10 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     // for MusicXmlExportBreaks::MANUAL support is "no" because "yes" breaks Finale NotePad import
     IMusicXmlConfiguration::MusicXmlExportBreaksType breaksType = configuration()->exportBreaksType();
     if (configuration()->exportLayout() && breaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All) {
-        xml.tag("supports", { { "element", "print" }, { "attribute", "new-page" }, { "type", "yes" }, { "value", "yes" } });
-        xml.tag("supports", { { "element", "print" }, { "attribute", "new-system" }, { "type", "yes" }, { "value", "yes" } });
+        xml.tag("supports", { { "element", "print" }, { "attribute", "new-page" }, { "type", "yes" }, { "value",
+                                                                                                        "yes" } });
+        xml.tag("supports", { { "element", "print" }, { "attribute", "new-system" }, { "type", "yes" }, { "value",
+                                                                                                          "yes" } });
     } else {
         xml.tag("supports", { { "element", "print" }, { "attribute", "new-page" }, { "type", "no" } });
         xml.tag("supports", { { "element", "print" }, { "attribute", "new-system" }, { "type", "no" } });
@@ -7336,7 +7379,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
     if (mpc.pageStart) {
         bool exportPageNo = exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::All
-                            || (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual && mpc.pageStart
+                            || (exportBreaksType == IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual
+                                && mpc.pageStart
                                 && prevPageBreak);
         if (exportPageNo && mpc.writePageNo) {
             attributes.push_back({ "page-number", mpc.pageNumber });
@@ -7502,7 +7546,8 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
  Make sure clefs at end of measure get exported at start of next measure.
  */
 
-void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack)
+void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack,
+                                       const track_idx_t etrack)
 {
     Measure* prevMeasure = m->prevMeasure();
     Measure* mmR         = m->mmRest();         // the replacing measure in a multi-measure rest
@@ -7555,11 +7600,13 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
 
             Clef* cle = toClef(seg->element(st));
             if (cle) {
-                clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
+                clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick,
+                          int(cle->clefType()), cle->generated());
                 // output only clef changes, not generated clefs at line beginning
                 // exception: at tick=0, export clef anyway
                 if ((tick.isZero() || !cle->generated())
-                    && ((seg->measure() != m) || ((seg->segmentType() == SegmentType::HeaderClef) && !cle->otherClef()))) {
+                    && ((seg->measure() != m)
+                        || ((seg->segmentType() == SegmentType::HeaderClef) && !cle->otherClef()))) {
                     clefDebug("exportxml: clef exported");
                     String clefAttr = color2xml(cle);
                     if (!cle->visible()) {
@@ -7644,7 +7691,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
 
     xml.startElement("part-list");
     size_t staffCount = 0;                          // count sum of # staves in parts
-    const bool groupTime = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
+    const bool groupTime = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
+                           == TimeSigPlacement::ACROSS_STAVES;
     std::array<int, MAX_PART_GROUPS> partGroupEnd;  // staff where part group ends (bracketSpan is in staves, not parts)
     partGroupEnd.fill(-1);
     for (size_t idx = 0; idx < parts.size(); ++idx) {
@@ -7723,7 +7771,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         }
         if (!part->shortName().isEmpty()) {
             if (shortInstrumentColor != engravingConfiguration()->defaultColor()) {
-                shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
+                shortInstrumentAttributes.push_back({ "color",
+                                                      String::fromStdString(shortInstrumentColor.toString()) });
             }
             xml.tag("part-abbreviation", shortInstrumentAttributes,
                     MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u'♭', 'b').replace(u'♯', '#'));
@@ -7774,7 +7823,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                     midiPort = score->masterScore()->midiMapping(ii->second->channel(0)->channel())->port() + 1;
                 }
                 if (midiPort >= 1 && midiPort <= 16) {
-                    xml.tagRaw(String(u"midi-device %1 port=\"%2\"").arg(instrId(idx + 1, instNr + 1)).arg(midiPort), "");
+                    xml.tagRaw(String(u"midi-device %1 port=\"%2\"").arg(instrId(idx + 1, instNr + 1)).arg(midiPort),
+                               "");
                 } else {
                     xml.tagRaw(String(u"midi-device %1").arg(instrId(idx + 1, instNr + 1)), "");
                 }
@@ -7831,7 +7881,8 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
             clefDebug("exportxml: generated clef not exported");
         } else if (!el->generated() && tickIsInMiddleOfMeasure(ti, m)) {
             clef(sstaff, cle->clefType(), color2xml(cle) + visible);
-        } else if (!el->generated() && (ti == m->tick()) && (cle->segment()->segmentType() != SegmentType::HeaderClef)) {
+        } else if (!el->generated() && (ti == m->tick())
+                   && (cle->segment()->segmentType() != SegmentType::HeaderClef)) {
             clef(sstaff, cle->clefType(), color2xml(cle) + visible + String(u" after-barline=\"yes\""));
         } else {
             clefDebug("exportxml: clef not exported");
@@ -8062,7 +8113,8 @@ void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument, const 
  Write the annotations that could not be attached to notes.
  */
 
-static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack, const int staves, const Measure* const measure)
+static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack, const int staves,
+                                   const Measure* const measure)
 {
     for (Segment* segment = measure->first(); segment; segment = segment->next()) {
         if (segment->segmentType() == SegmentType::ChordRest) {
@@ -8072,7 +8124,8 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const track_idx_t strack
                         continue;
                     }
                     const track_idx_t wtrack = findTrackForAnnotations(element->track(), segment);           // track to write annotation
-                    if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack == muse::nidx) {
+                    if (strack <= element->track() && element->track() < (strack + VOICES * staves)
+                        && wtrack == muse::nidx) {
                         commonAnnotations(exp, element, staves > 1 ? 1 : 0);
                     }
                 }
@@ -8162,7 +8215,8 @@ static bool isFirstMeasureInSystem(const Measure* const measure)
 {
     const System* system = measure->coveringMMRestOrThis()->system();
     const Measure* firstMeasureInSystem = system->firstMeasure();
-    const Measure* realFirstMeasureInSystem = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
+    const Measure* realFirstMeasureInSystem
+        = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
     return measure == realFirstMeasureInSystem;
 }
 
@@ -8336,7 +8390,8 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                         // note: use mmRest1() to get at a possible multi-measure rest,
                         // as the covered measure would be positioned at 0,0.
                         tboxTextAsWords(tbox->text(), 0,
-                                        muse::PointF(tbox->text()->canvasPos() - m->coveringMMRestOrThis()->canvasPos()));
+                                        muse::PointF(tbox->text()->canvasPos()
+                                                     - m->coveringMMRestOrThis()->canvasPos()));
                     }
                     m_tboxesAboveWritten = true;
                 }
@@ -8428,7 +8483,8 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
 
         bool isLastStaffOfPart = (endStaff - 1 <= staffIdx); // for writing tboxes below
 
-        writeMeasureTracks(m, partIndex, staff2track(staffIdx), partRelStaffNo, useDrumset, isLastStaffOfPart, fbMap, spannersStopped);
+        writeMeasureTracks(m, partIndex, staff2track(
+                               staffIdx), partRelStaffNo, useDrumset, isLastStaffOfPart, fbMap, spannersStopped);
 
         // restore m and _tick before advancing to next staff in part
         m = origM;
@@ -8468,7 +8524,9 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->exportLayout()) {
-        measureTag += String(u" width=\"%1\"").arg(String::number(m->ldata()->bbox().width() / DPMM / m_millimeters * m_tenths, 2));
+        measureTag
+            += String(u" width=\"%1\"").arg(String::number(m->ldata()->bbox().width() / DPMM / m_millimeters * m_tenths,
+                                                           2));
     }
 
     m_xml.startElementRaw(measureTag);
@@ -8539,7 +8597,8 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     }
 
     // write data in the staves
-    writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
+    writeMeasureStaves(m, partIndex, track2staff(strack), staves,
+                       part->instrument()->useDrumset(), fbMap, spannersStopped);
 
     // write the annotations that could not be attached to notes
     annotationsWithoutNote(this, strack, static_cast<int>(staves), m);
@@ -8674,7 +8733,8 @@ void ExportMusicXml::writeParts()
                         const Measure* m2 = m->mmRestLast()->nextMeasure();
                         for (Measure* m1 = m->mmRestFirst(); m1 != m2; m1 = m1->nextMeasure()) {
                             if (m1->isMeasure()) {
-                                writeMeasure(m1, static_cast<int>(partIndex), staffCount, mnsh, fbMap, mpc, spannersStopped);
+                                writeMeasure(m1, static_cast<int>(partIndex), staffCount, mnsh, fbMap, mpc,
+                                             spannersStopped);
                                 mpc.measureWritten(m1);
                             }
                         }
@@ -9017,7 +9077,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
                 if (tpcIsValid(bassTpc)) {
                     XmlWriter::Attributes bassAttrs
-                        = { { "arrangement", m_score->style().styleB(Sid::chordBassNoteStagger) ? "diagonal" : "horizontal" } };
+                        = { { "arrangement",
+                        m_score->style().styleB(Sid::chordBassNoteStagger) ? "diagonal" : "horizontal" } };
                     m_xml.startElement("bass", bassAttrs);
                     m_xml.tag("bass-step", tpc2stepName(bassTpc));
                     alter = int(tpc2alter(bassTpc));

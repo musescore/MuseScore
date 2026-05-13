@@ -127,7 +127,8 @@ public:
 
     void setLayoutAll(staff_idx_t staff = muse::nidx, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2,
+                   const EngravingItem* e = nullptr);
 
     CmdState& cmdState() override { return m_cmdState; }
     const CmdState& cmdState() const override { return m_cmdState; }
@@ -151,7 +152,8 @@ public:
     void rebuildMidiMapping();
     void checkMidiMapping();
     bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
-    int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
+    int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1,
+                               int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
 //    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
     void rebuildAndUpdateExpressive(Synthesizer* synth);
@@ -176,11 +178,15 @@ public:
     Score* playbackScore() { return m_playbackScore; }
     const Score* playbackScore() const { return m_playbackScore; }
     InstrChannel* playbackChannel(const InstrChannel* c) { return m_midiMapping[c->channel()].articulation(); }
-    const InstrChannel* playbackChannel(const InstrChannel* c) const { return m_midiMapping[c->channel()].articulation(); }
+    const InstrChannel* playbackChannel(const InstrChannel* c) const
+    {
+        return m_midiMapping[c->channel()].articulation();
+    }
 
     MasterScore* unrollRepeats();
 
-    MeasureBase* insertMeasure(MeasureBase* beforeMeasure = nullptr, const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertMeasure(MeasureBase* beforeMeasure = nullptr,
+                               const InsertMeasureOptions& options = InsertMeasureOptions());
 
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
@@ -199,15 +205,16 @@ private:
     void removeDeletedMidiMapping();
 
     int updateMidiMapping();
-    void doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, Part* part,
-                             InstrChannel* channel, bool useDrumset);
+    void doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom,
+                             Part* part, InstrChannel* channel, bool useDrumset);
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
     friend class read114::Read114;
     friend class read400::Read400;
 
-    MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
+    MasterScore(const muse::modularity::ContextPtr& iocCtx,
+                std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
     MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
                 std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
 

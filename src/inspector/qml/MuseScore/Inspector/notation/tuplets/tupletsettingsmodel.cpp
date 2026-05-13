@@ -30,7 +30,8 @@ using namespace mu::inspector;
 
 using Icon = muse::ui::IconCode::Code;
 
-TupletSettingsModel::TupletSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+TupletSettingsModel::TupletSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                         IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository, mu::engraving::ElementType::TUPLET)
 {
     setModelType(InspectorModelType::TYPE_TUPLET);
@@ -78,7 +79,8 @@ QVariantList TupletSettingsModel::possibleBracketTypes() const
 
     QVariantList types {
         object(Type::AUTO_BRACKET, muse::qtrc("inspector", "Auto", "tuplet bracket type")),
-        object(Type::SHOW_BRACKET, muse::qtrc("inspector", "Bracket", "tuplet bracket type"), Icon::TUPLET_NUMBER_WITH_BRACKETS),
+        object(Type::SHOW_BRACKET, muse::qtrc("inspector", "Bracket",
+                                              "tuplet bracket type"), Icon::TUPLET_NUMBER_WITH_BRACKETS),
         object(Type::SHOW_NO_BRACKET, muse::qtrc("inspector", "None", "tuplet bracket type"), Icon::TUPLET_NUMBER_ONLY)
     };
 

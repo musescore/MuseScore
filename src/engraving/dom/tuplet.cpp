@@ -192,7 +192,8 @@ void Tuplet::resetNumberProperty()
 
 void Tuplet::resetNumberProperty(Text* number)
 {
-    for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::POSITION, Pid::SIZE_SPATIUM_DEPENDENT }) {
+    for (auto p :
+         { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::POSITION, Pid::SIZE_SPATIUM_DEPENDENT }) {
         number->resetProperty(p);
     }
 }
@@ -814,7 +815,8 @@ void Tuplet::addMissingElements()
 
     // calculate the tick where we would expect a tuplet of this duration to start
     // TODO: check:
-    expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
+    expectedTick = elements().front()->tick()
+                   - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
     if (expectedTick != elements().front()->tick()) {
         // try to fill a hole at the beginning of the tuplet
         Fraction firstAvailableTick = measure()->tick();

@@ -32,9 +32,11 @@ class EmptyStavesVisibilitySettingsModel : public AbstractInspectorModel
     QML_ELEMENT;
     QML_UNCREATABLE("Not creatable from QML")
 
-    Q_PROPERTY(bool canHideEmptyStavesInSelection READ canHideEmptyStavesInSelection NOTIFY canHideEmptyStavesInSelectionChanged)
+    Q_PROPERTY(
+        bool canHideEmptyStavesInSelection READ canHideEmptyStavesInSelection NOTIFY canHideEmptyStavesInSelectionChanged)
     Q_PROPERTY(bool canShowAllEmptyStaves READ canShowAllEmptyStaves NOTIFY canShowAllEmptyStavesChanged)
-    Q_PROPERTY(bool canResetEmptyStavesVisibility READ canResetEmptyStavesVisibility NOTIFY canResetEmptyStavesVisibilityChanged)
+    Q_PROPERTY(
+        bool canResetEmptyStavesVisibility READ canResetEmptyStavesVisibility NOTIFY canResetEmptyStavesVisibilityChanged)
 
 public:
     explicit EmptyStavesVisibilitySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,

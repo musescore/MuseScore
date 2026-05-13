@@ -202,11 +202,13 @@ public:
 
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 
-    static void layoutAccidental(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutAccidental(const Accidental* item, Accidental::LayoutData* ldata,
+                                 const LayoutConfiguration& conf);
     static void layoutActionIcon(const ActionIcon* item, ActionIcon::LayoutData* ldata);
     static void layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void layoutChordBracket(const ChordBracket* item, ChordBracket::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutChordBracket(const ChordBracket* item, ChordBracket::LayoutData* ldata,
+                                   const LayoutConfiguration& conf);
     static void layoutArticulation(Articulation* item, Articulation::LayoutData* ldata);
     static void fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata);
 
@@ -281,10 +283,13 @@ public:
 
     static void layoutMarker(Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // factory
-    static void layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx); // base class
+    static void layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata,
+                                      const LayoutContext& ctx);                                                          // base class
     static void layoutMeasureNumber(MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutMeasureRepeatExtender(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata,
+                                    const LayoutContext& ctx);
+    static void layoutMeasureRepeatExtender(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata,
+                                            const LayoutContext& ctx);
     static void layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutMMRestRange(MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx);
 
@@ -323,7 +328,8 @@ public:
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
     static void layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata);
     static void layoutStaffText(const StaffText* item, StaffText::LayoutData* ldata);
-    static void layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata,
+                                      const LayoutConfiguration& conf);
     static void layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutSticking(const Sticking* item, Sticking::LayoutData* ldata);
@@ -333,7 +339,8 @@ public:
     static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata);
 
-    static void layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata,
+                                    const LayoutContext& ctx);
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
     static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
@@ -357,7 +364,8 @@ public:
     static void layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata);
     static void layoutTrill(Trill* item, LayoutContext& ctx);
     static void layoutTrillSegment(TrillSegment* item, LayoutContext& ctx);
-    static void fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata,
+                                      const LayoutConfiguration& conf);
     static void layoutTripletFeel(const TripletFeel* item, TripletFeel::LayoutData* ldata);
     static void layoutTuplet(Tuplet* item, LayoutContext& ctx);
     static void fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata);
@@ -382,7 +390,8 @@ private:
 
     friend class SlurTieLayout;
 
-    static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata,
+                                      const LayoutContext& ctx);
 
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static double voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutContext& ctx);

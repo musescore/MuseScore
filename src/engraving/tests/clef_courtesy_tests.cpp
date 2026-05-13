@@ -100,7 +100,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
     EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 6 is NOT hidden.";
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy01.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy01.mscx",
+                                            CLEFCOURTESY_DATA_DIR + u"clef_courtesy01-ref.mscx"));
 
     Clef* clef = nullptr;
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
@@ -122,7 +123,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
 
     clefCourt = toClef(seg->element(0));
     EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
-    EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 3 is not hidden when showCourtesy is false.";
+    EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(),
+                     0.) << "Courtesy clef in measure 3 is not hidden when showCourtesy is false.";
 
     EXPECT_EQ(clef->clefType(), ClefType::G8_VA) << "Clef type in measure 4 is wrong";
     dropClef(clef, ClefType::G15_MA);
@@ -185,7 +187,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy02)
     EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 6.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 6 is NOT hidden.";
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy02.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy02.mscx",
+                                            CLEFCOURTESY_DATA_DIR + u"clef_courtesy02-ref.mscx"));
     delete score;
 }
 
@@ -220,7 +223,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy03)
     EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 1.";
     EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 1 is NOT hidden.";
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy03.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy03-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy03.mscx",
+                                            CLEFCOURTESY_DATA_DIR + u"clef_courtesy03-ref.mscx"));
     delete score;
 }
 
@@ -335,7 +339,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
                      0.) << "Courtesy clef in measure 3, track 0, is not hidden when showCourtesy is false.";
     clef = toClef(seg->element(4));
     EXPECT_TRUE(clef) << "No courtesy clef element in measure 3 for track 4.";
-    EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 3, track 4, is hidden when showCourtesy is true.";
+    EXPECT_GT(clef->ldata()->bbox().width(),
+              0) << "Courtesy clef in measure 3, track 4, is hidden when showCourtesy is true.";
 
     // drop clefs after a horizontal frame
     Measure* m3 = getMeasure(score, 8);
@@ -367,7 +372,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
                      0.) << "Courtesy clef in measure 7, track 4, is not hidden when showCourtesy is false.";
     clef = toClef(seg->element(0));
     EXPECT_TRUE(clef) << "No courtesy clef element in measure 7 for track 0.";
-    EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Courtesy clef in measure 7, track 0, is hidden when showCourtesy is true.";
+    EXPECT_GT(clef->ldata()->bbox().width(),
+              0) << "Courtesy clef in measure 7, track 0, is hidden when showCourtesy is true.";
 
     // for the section break case,
     // check the not required courtesy clef element is there but it is not shown
@@ -395,9 +401,11 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy04)
     }
     score->doLayout();
     score->endCmd();
-    EXPECT_GT(clef->ldata()->bbox().width(), 0) << "Clef change in measure 8, track 0, is hidden when showCourtesy is true.";
+    EXPECT_GT(clef->ldata()->bbox().width(),
+              0) << "Clef change in measure 8, track 0, is hidden when showCourtesy is true.";
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy04.mscx", CLEFCOURTESY_DATA_DIR + u"clef_courtesy04-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"clef_courtesy04.mscx",
+                                            CLEFCOURTESY_DATA_DIR + u"clef_courtesy04-ref.mscx"));
 
     delete score;
 }

@@ -47,14 +47,17 @@ private:
     static void computeUp(GuitarBend* item);
     static void computeIsInside(GuitarBend* item);
     static void avoidBadStaffLineIntersection(GuitarBendSegment* item, PointF& point);
-    static void adjustX(GuitarBendSegment* item, PointF& startPos, PointF& endPos, const Note* startNote, const Note* endNote);
+    static void adjustX(GuitarBendSegment* item, PointF& startPos, PointF& endPos, const Note* startNote,
+                        const Note* endNote);
     static void layoutSlightBend(GuitarBendSegment* item, LayoutContext&);
 
     // TAB layout
     static void layoutBendTabStaff(GuitarBendSegment* item, LayoutContext&);
-    static PointF computeStartPos(GuitarBendSegment* item, Note* startNote, double distAboveTab, double verticalPad, double arrowHeight);
-    static PointF computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad, double arrowHeight,
-                                double arrowWidth, const PointF& startPos, const PointF& prevEndPoint);
+    static PointF computeStartPos(GuitarBendSegment* item, Note* startNote, double distAboveTab, double verticalPad,
+                                  double arrowHeight);
+    static PointF computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad,
+                                double arrowHeight, double arrowWidth, const PointF& startPos,
+                                const PointF& prevEndPoint);
     static void checkConflictWithOtherBends(GuitarBendSegment* item);
     static bool startOnEndNote(GuitarBend* bend);
 };

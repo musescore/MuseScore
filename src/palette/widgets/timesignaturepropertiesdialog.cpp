@@ -224,7 +224,8 @@ void TimeSignaturePropertiesDialog::accept()
     // Change linked mmr timesigs too
     for (EngravingObject* obj : m_originTimeSig->linkList()) {
         TimeSig* timeSig = toTimeSig(obj);
-        if (timeSig == m_originTimeSig || (timeSig->track() == m_originTimeSig->track() && timeSig->score() == m_originTimeSig->score())) {
+        if (timeSig == m_originTimeSig
+            || (timeSig->track() == m_originTimeSig->track() && timeSig->score() == m_originTimeSig->score())) {
             timeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(m_editedTimeSig->timeSigType()));
             timeSig->undoChangeProperty(Pid::SHOW_COURTESY, m_editedTimeSig->showCourtesySig());
             timeSig->undoChangeProperty(Pid::NUMERATOR_STRING, m_editedTimeSig->numeratorString());
@@ -234,7 +235,8 @@ void TimeSignaturePropertiesDialog::accept()
     }
 
     if (m_editedTimeSig->sig() != m_originTimeSig->sig()) {
-        notation->interaction()->addTimeSignature(m_originTimeSig->measure(), m_originTimeSig->staffIdx(), m_editedTimeSig);
+        notation->interaction()->addTimeSignature(m_originTimeSig->measure(),
+                                                  m_originTimeSig->staffIdx(), m_editedTimeSig);
     }
 
     m_originTimeSig->triggerLayoutAll();

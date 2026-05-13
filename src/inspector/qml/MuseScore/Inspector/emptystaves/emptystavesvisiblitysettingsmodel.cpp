@@ -32,7 +32,8 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using mu::engraving::rendering::score::SystemLayout;
 
-EmptyStavesVisibilitySettingsModel::EmptyStavesVisibilitySettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+EmptyStavesVisibilitySettingsModel::EmptyStavesVisibilitySettingsModel(QObject* parent,
+                                                                       const muse::modularity::ContextPtr& iocCtx,
                                                                        IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
@@ -58,7 +59,8 @@ void EmptyStavesVisibilitySettingsModel::loadProperties()
     updateCanResetEmptyStavesVisibility();
 }
 
-void EmptyStavesVisibilitySettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&)
+void EmptyStavesVisibilitySettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet&,
+                                                           const mu::engraving::StyleIdSet&)
 {
     loadProperties();
 }

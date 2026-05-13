@@ -304,7 +304,8 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         if (tuple) {
             int track2 = staffIdx * 2 + voice;
             Tuplet* tuplet = tuplets[track2];
-            if ((tuplet == nullptr) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+            if ((tuplet == nullptr)
+                || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                 tuplet = Factory::createTuplet(measure);
                 tuplets[track2] = tuplet;
                 setTuplet(tuplet, tuple);
@@ -840,7 +841,8 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 }
             }
         } while ((beg = beg->next())
-                 || (mes->next() && mes->next()->isMeasure() && (mes = toMeasure(mes->next())) && (beg = mes->first())));
+                 || (mes->next() && mes->next()->isMeasure() && (mes = toMeasure(mes->next()))
+                     && (beg = mes->first())));
     }
 }
 
@@ -1023,7 +1025,8 @@ bool GuitarPro5::read(IODevice* io)
     for (auto n : slideList) {
         auto segment = n->chord()->segment();
         auto measure = segment->measure();
-        while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
+        while ((segment = segment->next1(SegmentType::ChordRest))
+               || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
             if (segment->segmentType() != SegmentType::ChordRest) {
                 continue;
             }
@@ -1036,7 +1039,8 @@ bool GuitarPro5::read(IODevice* io)
                         for (auto e : nt->el()) {
                             if (e->isChordLine()) {
                                 ChordLine* cl = toChordLine(e);
-                                if (cl->chordLineType() == ChordLineType::PLOP || cl->chordLineType() == ChordLineType::SCOOP) {
+                                if (cl->chordLineType() == ChordLineType::PLOP
+                                    || cl->chordLineType() == ChordLineType::SCOOP) {
                                     br = true;
                                     break;
                                 }
@@ -1337,7 +1341,9 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             harmonicNote->setFret(note->fret());
             harmonicNote->setHarmonicFret(harmonicFret + fret);
 
-            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
+            int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(),
+                                                                            overtoneFret + note->part()->capoFret(),
+                                                                            staff);
 
             harmonicNote->setPitch(clampPitch(pitch));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);
@@ -1512,7 +1518,8 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
         note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setDeadNote(true);
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber + note->part()->capoFret(), nullptr);
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string,
+                                                                    fretNumber + note->part()->capoFret(), nullptr);
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(pitch);
@@ -1559,7 +1566,8 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                             muse::remove(m_letRingForChords, chord2);
                         }
 
-                        if (m_harmonicNotes.find(note) != m_harmonicNotes.end() && m_harmonicNotes.find(note2) != m_harmonicNotes.end()) {
+                        if (m_harmonicNotes.find(note) != m_harmonicNotes.end()
+                            && m_harmonicNotes.find(note2) != m_harmonicNotes.end()) {
                             Note* startHarmonicNote = m_harmonicNotes.at(note2);
                             Note* endHarmonicNote = m_harmonicNotes.at(note);
 

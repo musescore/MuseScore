@@ -110,7 +110,10 @@ PointF MeasureRepeat::numberPosition(const RectF& numberBbox) const
     if (staffType() && staffType()->lines() == 1) {
         staffTop -= 2.0 * spatium();
     }
-    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + absoluteFromSpatium(m_numberPos) - 0.5 * numberBbox.height();
+    double y
+        = std::min(staffTop,
+                   -symBbox(ldata()->symId).height() / 2) + absoluteFromSpatium(m_numberPos) - 0.5
+          * numberBbox.height();
 
     return PointF(x, y);
 }
@@ -190,7 +193,8 @@ Fraction MeasureRepeat::ticks() const
 
 String MeasureRepeat::accessibleInfo() const
 {
-    return muse::mtrc("engraving", "%1; Duration: %Ln measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
+    return muse::mtrc("engraving", "%1; Duration: %Ln measure(s)", nullptr, numMeasures()).arg(
+        EngravingItem::accessibleInfo());
 }
 
 //---------------------------------------------------------

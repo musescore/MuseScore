@@ -342,7 +342,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                                     event.velo()));
                             } else {
                                 track.insert(CompatMidiRender::tick(context, item.first), MidiEvent(ME_NOTEON, channel,
-                                                                                                    event.pitch(), event.velo()));
+                                                                                                    event.pitch(),
+                                                                                                    event.velo()));
                             }
                         } else if (event.type() == ME_CONTROLLER) {
                             track.insert(CompatMidiRender::tick(context, item.first), MidiEvent(ME_CONTROLLER, channel,
@@ -350,7 +351,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                                 event.value()));
                         } else if (event.type() == ME_PITCHBEND) {
                             track.insert(CompatMidiRender::tick(context, item.first), MidiEvent(ME_PITCHBEND, channel,
-                                                                                                event.dataA(), event.dataB()));
+                                                                                                event.dataA(),
+                                                                                                event.dataB()));
                         } else {
                             LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                         }
@@ -366,7 +368,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
             // export Lyrics
             SegmentType st = SegmentType::ChordRest;
-            for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
+            for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick;
+                 seg = seg->next1(st)) {
                 for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
                     ChordRest* cr = toChordRest(seg->element(i));
                     if (cr) {

@@ -71,8 +71,9 @@ class PaletteCell : public QObject, public muse::Contextable
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     explicit PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
-    PaletteCell(const muse::modularity::ContextPtr& iocCtx, mu::engraving::ElementPtr e, const QString& _name, qreal _mag = 1.0,
-                const QPointF& offset = QPointF(), const QString& tag = "", QObject* parent = nullptr);
+    PaletteCell(const muse::modularity::ContextPtr& iocCtx, mu::engraving::ElementPtr e, const QString& _name,
+                qreal _mag = 1.0, const QPointF& offset = QPointF(), const QString& tag = "",
+                QObject* parent = nullptr);
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 

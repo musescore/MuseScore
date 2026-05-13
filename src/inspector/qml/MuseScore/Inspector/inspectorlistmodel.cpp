@@ -63,14 +63,16 @@ void InspectorListModel::init()
     });
 }
 
-void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
+void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet,
+                                                        bool isRangeSelection,
                                                         const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
     removeUnusedModels(selectedElementKeySet, isRangeSelection, selectedElementList);
 
-    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
-                                                                                                       isRangeSelection,
-                                                                                                       selectedElementList);
+    InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(
+        selectedElementKeySet,
+        isRangeSelection,
+        selectedElementList);
 
     createModelsBySectionType(buildingSectionTypeSet, selectedElementKeySet);
 
@@ -107,7 +109,8 @@ bool InspectorListModel::alwaysUpdateModelList(const QList<engraving::EngravingI
     return false;
 }
 
-void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
+void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
+                                        SelectionState selectionState)
 {
     TRACEFUNC;
 
@@ -258,13 +261,15 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
 }
 
 void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySet,
-                                            bool isRangeSelection, const QList<engraving::EngravingItem*>& selectedElementList,
+                                            bool isRangeSelection,
+                                            const QList<engraving::EngravingItem*>& selectedElementList,
                                             const InspectorSectionTypeSet& exclusions)
 {
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
-    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection,
+    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet,
+                                                                                                    isRangeSelection,
                                                                                                     selectedElementList);
 
     for (AbstractInspectorModel* model : m_modelList) {
@@ -291,7 +296,8 @@ void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySe
     }
 }
 
-bool InspectorListModel::isModelAllowed(const AbstractInspectorModel* model, const InspectorModelTypeSet& allowedModelTypes,
+bool InspectorListModel::isModelAllowed(const AbstractInspectorModel* model,
+                                        const InspectorModelTypeSet& allowedModelTypes,
                                         const InspectorSectionTypeSet& allowedSectionTypes) const
 {
     InspectorModelType modelType = model->modelType();

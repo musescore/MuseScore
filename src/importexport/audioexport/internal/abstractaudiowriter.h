@@ -48,7 +48,8 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice,
+                    const Options& options = Options()) override;
     muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
                         const Options& options = Options()) override;
 
@@ -56,7 +57,8 @@ public:
     void abort() override;
 
 protected:
-    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice,
+                             const muse::audio::SoundTrackFormat& format);
 
 private:
     void doWrite(muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);

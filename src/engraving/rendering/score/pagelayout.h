@@ -47,6 +47,7 @@ private:
     static void layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, System* system);
 
     static void layoutSystemDividers(LayoutContext& ctx, Page* page);
-    static void updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type, bool needsDivider);
+    static void updateSystemDivider(LayoutContext& ctx, System* system, System* nextSystem, SystemDividerType type,
+                                    bool needsDivider);
 };
 }

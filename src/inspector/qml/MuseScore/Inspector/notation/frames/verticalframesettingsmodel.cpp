@@ -43,7 +43,9 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, const mu
 void VerticalFrameSettingsModel::createProperties()
 {
     m_frameHeight = buildPropertyItem(Pid::BOX_HEIGHT,
-                                      [this](const Pid pid, const QVariant& newValue) { onFrameHeightSet(pid, newValue); },
+                                      [this](const Pid pid, const QVariant& newValue) {
+        onFrameHeightSet(pid, newValue);
+    },
                                       nullptr,
                                       [this](const Pid pid) { onFrameHeightReset(pid); });
     m_gapAbove = buildPropertyItem(Pid::TOP_GAP);

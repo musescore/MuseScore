@@ -42,7 +42,8 @@ class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Con
     muse::ContextInject<muse::dock::IDockWindowProvider> dockWindowProvider = { this };
 
 public:
-    ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller, const muse::modularity::ContextPtr& iocCtx);
+    ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller,
+                         const muse::modularity::ContextPtr& iocCtx);
 
     void init();
 

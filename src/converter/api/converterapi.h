@@ -48,6 +48,7 @@ public:
     Q_INVOKABLE QString basename(const QString& filePath) const;
 
     // convert
-    Q_INVOKABLE bool batch(const QString& outDir, const QString& job, const QString& uriQuery, QJSValue progress = QJSValue());
+    Q_INVOKABLE bool batch(const QString& outDir, const QString& job, const QString& uriQuery,
+                           QJSValue progress = QJSValue());
 };
 }

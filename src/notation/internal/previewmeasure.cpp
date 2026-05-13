@@ -125,7 +125,8 @@ void PreviewMeasure::paint(Painter* painter)
     }
 }
 
-void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double width, int lines, double lineDist, double lineWidth,
+void PreviewMeasure::paintStaffLines(Painter* painter, const PointF& pos, double width, int lines, double lineDist,
+                                     double lineWidth,
                                      QColor lineColor)
 {
     if (lines <= 0 || width <= 0) {

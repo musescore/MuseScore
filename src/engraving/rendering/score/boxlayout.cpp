@@ -303,7 +303,8 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
         double rowOffsetX = alignH == AlignH::HCENTER
                             ? (totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap)) / 2
                             : alignH == AlignH::RIGHT
-                            ? totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap) - rightMargin + spatium
+                            ? totalTableWidth - (itemsInRow * cellWidth + (itemsInRow - 1) * columnGap) - rightMargin
+                            + spatium
                             : leftMargin + spatium;
 
         double x = startX + rowOffsetX + col * (cellWidth + columnGap);
@@ -323,7 +324,8 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
 
         fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
 
-        bottomY = std::max(bottomY, fretDiagram->mutldata()->bbox().translated(fretDiagram->mutldata()->pos()).bottom());
+        bottomY
+            = std::max(bottomY, fretDiagram->mutldata()->bbox().translated(fretDiagram->mutldata()->pos()).bottom());
     }
 
     double height = bottomY + bottomMargin;

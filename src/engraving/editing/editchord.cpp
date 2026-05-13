@@ -144,12 +144,14 @@ void EditChord::removeChordParentheses(Chord* chord, std::vector<Note*> notes, b
         groupIt->second.push_back(n);
     }
 
-    for (auto pairIterator = notesByGroup.rbegin(); pairIterator != notesByGroup.rend(); pairIterator = std::next(pairIterator)) {
+    for (auto pairIterator = notesByGroup.rbegin(); pairIterator != notesByGroup.rend();
+         pairIterator = std::next(pairIterator)) {
         auto groupNotesPair = *pairIterator;
         const NoteParenthesisInfo* parenInfo = groupNotesPair.first;
         if (parenInfo->notes().size() == groupNotesPair.second.size()) {
             // All notes marked for paren removal, clear parentheses group
-            undoClearParenthesisGroup(chord, parenInfo->notes(), parenInfo->leftParen(), parenInfo->rightParen(), addToLinked);
+            undoClearParenthesisGroup(chord, parenInfo->notes(), parenInfo->leftParen(),
+                                      parenInfo->rightParen(), addToLinked);
             continue;
         }
 
@@ -262,7 +264,8 @@ void EditChord::undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthe
     }
 }
 
-void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
+void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen,
+                                          Parenthesis* rightParen,
                                           bool removeFromLinked)
 {
     if (!removeFromLinked) {
@@ -295,7 +298,8 @@ void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes
     }
 }
 
-void EditChord::doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen)
+void EditChord::doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen,
+                                     Parenthesis* rightParen)
 {
     NoteParenthesisInfo* parenInfo = new NoteParenthesisInfo(leftParen, rightParen, notes);
     if (leftParen->generated()) {

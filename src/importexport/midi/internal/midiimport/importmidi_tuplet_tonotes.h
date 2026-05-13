@@ -35,8 +35,8 @@ class ReducedFraction;
 namespace MidiTuplet {
 struct TupletData;
 
-void addElementToTuplet(int voice, const ReducedFraction& onTime, const ReducedFraction& len, engraving::DurationElement* el,
-                        std::multimap<ReducedFraction, TupletData>& tuplets);
+void addElementToTuplet(int voice, const ReducedFraction& onTime, const ReducedFraction& len,
+                        engraving::DurationElement* el, std::multimap<ReducedFraction, TupletData>& tuplets);
 
 void createTupletNotes(engraving::Staff* staff, const std::multimap<ReducedFraction, TupletData>& tuplets);
 

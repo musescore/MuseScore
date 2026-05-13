@@ -114,7 +114,8 @@ MasterScore* MusicXml_Tests::readScore(const String& fileName, bool isAbsolutePa
     return score;
 }
 
-bool MusicXml_Tests::saveCompareMusicXmlScore(MasterScore* score, const String& saveName, const String& compareWithLocalPath)
+bool MusicXml_Tests::saveCompareMusicXmlScore(MasterScore* score, const String& saveName,
+                                              const String& compareWithLocalPath)
 {
     EXPECT_TRUE(saveXml(score, saveName));
     return ScoreComp::compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
@@ -195,7 +196,8 @@ void MusicXml_Tests::musicXmlIoTestRefBreaks(const char* file)
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml",
+                                         XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
@@ -254,7 +256,8 @@ void MusicXml_Tests::musicXmlMscxExportTestRefBreaks(const char* file)
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml",
+                                         XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
@@ -278,11 +281,13 @@ void MusicXml_Tests::musicXmlMscxExportTestRefInvisibleElements(const char* file
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_invisible.xml", XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_invisible.xml",
+                                         XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_noinvisible.xml", XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_noinvisible.xml",
+                                         XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
 
     delete score;
 }
@@ -340,7 +345,8 @@ void MusicXml_Tests::musicXmlReadWriteTestCompr(const char* file)
     fixupScore(score);
     score->doLayout();
     // write and verify
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_mxl_read_write.xml", XML_IO_DATA_DIR + fileName + u".xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_mxl_read_write.xml",
+                                         XML_IO_DATA_DIR + fileName + u".xml"));
     delete score;
 }
 

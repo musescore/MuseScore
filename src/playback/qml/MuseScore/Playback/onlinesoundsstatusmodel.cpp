@@ -129,7 +129,8 @@ QString OnlineSoundsStatusModel::errorDescription() const
         if (m_ret.code() == (int)Err::OnlineSoundsLimitReached) {
             return formatLimitReachedError(m_ret);
         } else if (m_ret.code() != (int)muse::Ret::Code::Cancel) {
-            return muse::qtrc("playback", "Please check your connection, and make sure MuseHub is running and you are logged in.");
+            return muse::qtrc("playback",
+                              "Please check your connection, and make sure MuseHub is running and you are logged in.");
         }
     }
 
@@ -139,7 +140,8 @@ QString OnlineSoundsStatusModel::errorDescription() const
 void OnlineSoundsStatusModel::onOnlineSoundsChanged()
 {
     const std::map<TrackId, AudioResourceMeta>& onlineSounds = playbackController()->onlineSounds();
-    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
+    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap
+        = playbackController()->instrumentTrackIdMap();
 
     const bool wasEmpty = m_onlineTrackIdSet.empty();
     m_onlineTrackIdSet.clear();

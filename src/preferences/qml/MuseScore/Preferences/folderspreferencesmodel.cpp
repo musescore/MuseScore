@@ -88,11 +88,13 @@ void FoldersPreferencesModel::load()
 
     m_folders = {
         {
-            FolderType::Scores, muse::qtrc("preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            FolderType::Scores, muse::qtrc("preferences", "Scores"),
+            projectConfiguration()->userProjectsPath().toQString(),
             projectConfiguration()->userProjectsPath().toQString()
         },
         {
-            FolderType::Styles, muse::qtrc("preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            FolderType::Styles, muse::qtrc("preferences", "Styles"),
+            notationConfiguration()->userStylesPath().toQString(),
             notationConfiguration()->userStylesPath().toQString()
         },
         {
@@ -101,11 +103,13 @@ void FoldersPreferencesModel::load()
             notationConfiguration()->userInstrumentsFolder().toQString()
         },
         {
-            FolderType::Templates, muse::qtrc("preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, muse::qtrc("preferences", "Templates"),
+            projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, muse::qtrc("preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
+            FolderType::Plugins, muse::qtrc("preferences", "Plugins"),
+            extensionsConfiguration()->pluginsUserPath().toQString(),
             extensionsConfiguration()->pluginsUserPath().toQString()
         },
         {
@@ -120,7 +124,8 @@ void FoldersPreferencesModel::load()
         },
 #ifdef MUSE_MODULE_VST
         {
-            FolderType::VST3, muse::qtrc("preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            FolderType::VST3, muse::qtrc("preferences", "VST3"),
+            pathsToString(vstConfiguration()->userVstDirectories()),
             globalConfiguration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         }
 #endif

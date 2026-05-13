@@ -23,7 +23,8 @@
 
 using namespace mu::inspector;
 
-BeamModesModel::BeamModesModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+BeamModesModel::BeamModesModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     createProperties();
@@ -32,13 +33,15 @@ BeamModesModel::BeamModesModel(QObject* parent, const muse::modularity::ContextP
 void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(mu::engraving::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
+    m_isFeatheringAvailable
+        = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
     });                                                                                                                                         //@note readonly property, there is no need to modify it
 }
 
 void BeamModesModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CHORD) << m_repository->findElementsByType(
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::CHORD) <<
+                    m_repository->findElementsByType(
         mu::engraving::ElementType::REST);
 }
 

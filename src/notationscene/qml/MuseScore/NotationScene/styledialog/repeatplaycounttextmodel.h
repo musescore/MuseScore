@@ -30,7 +30,8 @@ class RepeatPlayCountTextModel : public AbstractStyleDialogModel
     Q_OBJECT
 
     Q_PROPERTY(mu::notation::StyleItem * repeatPlayCountShow READ repeatPlayCountShow CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * repeatPlayCountShowSingleRepeats READ repeatPlayCountShowSingleRepeats CONSTANT)
+    Q_PROPERTY(mu::notation::StyleItem
+               * repeatPlayCountShowSingleRepeats READ repeatPlayCountShowSingleRepeats CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * repeatTextPreset READ repeatTextPreset CONSTANT)
 
     QML_ELEMENT

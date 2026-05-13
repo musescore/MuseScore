@@ -49,7 +49,8 @@ Ret PrintProvider::printNotation(INotationPtr notation)
     QPrinter printerDev(QPrinter::HighResolution);
     QPageSize ps(QPageSize::id(pageSizeInch.toQSizeF(), QPageSize::Inch));
     printerDev.setPageSize(ps);
-    printerDev.setPageOrientation(pageSizeInch.width() > pageSizeInch.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+    printerDev.setPageOrientation(
+        pageSizeInch.width() > pageSizeInch.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
     //printerDev.setCreator("MuseScore Studio Version: " VERSION);
     printerDev.setFullPage(true);

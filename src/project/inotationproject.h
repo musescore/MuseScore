@@ -45,7 +45,8 @@ public:
     virtual QString displayName() const = 0;
     virtual muse::async::Notification displayNameChanged() const = 0;
 
-    virtual muse::Ret load(const muse::io::path_t& path, const OpenParams& params = {}, const std::string& format = "") = 0;
+    virtual muse::Ret load(const muse::io::path_t& path, const OpenParams& params = {},
+                           const std::string& format = "") = 0;
     virtual muse::Ret createNew(const ProjectCreateOptions& projectInfo) = 0;
 
     virtual bool isCloudProject() const = 0;
@@ -68,8 +69,9 @@ public:
     virtual bool needAutoSave() const = 0;
     virtual void setNeedAutoSave(bool val) = 0;
 
-    virtual muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
-                           bool createBackup = true) = 0;
+    virtual muse::Ret save(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
+        bool createBackup = true) = 0;
     virtual muse::Ret savePage(const muse::io::path_t& path, const size_t pageNum) = 0;
     virtual muse::async::Channel<muse::io::path_t, SaveMode> saveComplited() const = 0;
 

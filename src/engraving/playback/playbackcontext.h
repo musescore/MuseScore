@@ -46,8 +46,10 @@ class PlaybackContext
 public:
     muse::mpe::dynamic_level_t appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const;
 
-    std::pair<muse::mpe::timestamp_t, PlayingTechniqueType> playingTechnique(const Score* score, const int nominalPositionTick) const;
-    muse::mpe::timestamp_t findPlayingTechniqueTimestamp(const Score* score, PlayingTechniqueType type, const int startFromTick) const;
+    std::pair<muse::mpe::timestamp_t, PlayingTechniqueType> playingTechnique(const Score* score,
+                                                                             const int nominalPositionTick) const;
+    muse::mpe::timestamp_t findPlayingTechniqueTimestamp(const Score* score, PlayingTechniqueType type,
+                                                         const int startFromTick) const;
 
     std::map<muse::mpe::timestamp_t, muse::mpe::SoundPresetChangeEventList> soundPresets(const Score* score) const;
     muse::mpe::SoundPresetChangeEventList soundPresets(const track_idx_t trackIdx, const int nominalPositionTick) const;
@@ -102,7 +104,8 @@ private:
                                std::vector<const MeasureRepeat*>& foundMeasureRepeats);
     void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
 
-    void applyDynamic(const EngravingItem* dynamicItem, muse::mpe::dynamic_level_t dynamicLevel, const int positionTick);
+    void applyDynamic(const EngravingItem* dynamicItem, muse::mpe::dynamic_level_t dynamicLevel,
+                      const int positionTick);
 
     bool shouldSkipTrack(const track_idx_t trackIdx) const;
     bool hasOnlyOneLyricsVerse(const RepeatSegment* repeat, const track_idx_t track) const;

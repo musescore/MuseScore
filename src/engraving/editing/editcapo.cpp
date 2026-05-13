@@ -74,7 +74,8 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
                             Note* endNote = bend->endNote();
                             const StringData* stringData = ctx.stringData;
                             const int startString = startNote->string();
-                            const int startFret = stringData->fret(startNote->pitch(), startString, startNote->staff(), startNote->tick());
+                            const int startFret = stringData->fret(startNote->pitch(), startString,
+                                                                   startNote->staff(), startNote->tick());
                             if (startFret != startNote->fret()) {
                                 startNote->setFret(startFret);
                             }
@@ -103,7 +104,8 @@ void EditCapo::applyCapoTranspose(int startTick, int endTick, UpdateCtx& ctx)
 }
 
 // static
-void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff, int startTick,
+void EditCapo::updateNotationForCapoChange(const CapoParams& oldParams, const CapoParams& newParams, const Staff* staff,
+                                           int startTick,
                                            int endTick)
 {
     UpdateCtx ctx;
@@ -180,7 +182,8 @@ void EditCapo::updateString(Note* note, const UpdateCtx& ctx)
 }
 
 // static
-void EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
+void EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick,
+                                UpdateCtx& ctx)
 {
     switch (oldParams.transposeMode) {
     case CapoParams::TransposeMode::PLAYBACK_ONLY:
@@ -205,7 +208,8 @@ void EditCapo::handleModeChange(const CapoParams& oldParams, const CapoParams& n
 }
 
 // static
-void EditCapo::handleFretChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick, UpdateCtx& ctx)
+void EditCapo::handleFretChange(const CapoParams& oldParams, const CapoParams& newParams, int startTick, int endTick,
+                                UpdateCtx& ctx)
 {
     if (CapoParams::TransposeMode::STANDARD_ONLY == newParams.transposeMode) {
         ctx.noteOffset = newParams.fretPosition - oldParams.fretPosition;

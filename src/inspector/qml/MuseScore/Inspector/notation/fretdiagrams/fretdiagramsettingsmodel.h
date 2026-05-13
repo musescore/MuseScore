@@ -48,8 +48,10 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * verticalAlign READ verticalAlign CONSTANT)
 
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
-    Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
-    Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
+    Q_PROPERTY(
+        bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
+    Q_PROPERTY(
+        int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
     Q_PROPERTY(bool isInFretBox READ isInFretBox NOTIFY isInFretBoxChanged)
@@ -59,7 +61,8 @@ class FretDiagramSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QStringList fingerings READ fingerings NOTIFY fingeringsChanged)
 
 public:
-    explicit FretDiagramSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit FretDiagramSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                      IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

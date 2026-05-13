@@ -37,7 +37,8 @@ class BendsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * guitarDivesAboveStaff READ guitarDivesAboveStaff CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * useCueSizeFretForGraceBends READ useCueSizeFretForGraceBends CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * useFractionCharacters READ useFractionCharacters CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * alignPreBendAndPreDiveToGraceNote READ alignPreBendAndPreDiveToGraceNote CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem * alignPreBendAndPreDiveToGraceNote READ alignPreBendAndPreDiveToGraceNote CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * guitarDiveLineWidth READ guitarDiveLineWidth CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * guitarDiveLineWidthTab READ guitarDiveLineWidthTab CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * whammyBarText READ whammyBarText CONSTANT)

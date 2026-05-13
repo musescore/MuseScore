@@ -220,7 +220,8 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             TRead::read(&loc, e, ctx);
             ctx.setLocation(loc);
             if (loc.isTimeTick()) {
-                EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(), track2staff(ctx.track()));
+                EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(), track2staff(
+                                                              ctx.track()));
             }
         } else if (tag == "tick") {             // obsolete?
             LOGD() << "read midi tick";
@@ -562,7 +563,8 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             tuplet = tuplet->tuplet();
             if (oldTuplet->elements().empty()) {
                 // this should not happen and is a sign of input file corruption
-                LOGD("Measure:read: empty tuplet in measure index=%d, input file corrupted?", ctx.currentMeasureIndex());
+                LOGD("Measure:read: empty tuplet in measure index=%d, input file corrupted?",
+                     ctx.currentMeasureIndex());
                 if (tuplet) {
                     tuplet->remove(oldTuplet);
                 }

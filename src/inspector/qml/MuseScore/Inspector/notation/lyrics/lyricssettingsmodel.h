@@ -35,7 +35,8 @@ class LyricsSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * verse READ verse CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * avoidBarlines READ avoidBarlines CONSTANT)
 public:
-    explicit LyricsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit LyricsSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                 IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

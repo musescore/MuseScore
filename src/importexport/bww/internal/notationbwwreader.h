@@ -28,7 +28,8 @@ namespace mu::iex::bww {
 class NotationBwwReader : public project::INotationReader
 {
 public:
-    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                   const Options& options = Options()) override;
 };
 }
 

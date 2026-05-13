@@ -29,7 +29,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-StemSettingsModel::StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+StemSettingsModel::StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_STEM);
@@ -132,7 +133,8 @@ void StemSettingsModel::onStemDirectionChanged(DirectionV newDirection)
     updateNotation();
 }
 
-void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet& changedStyleIdSet)
+void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet,
+                                          const StyleIdSet& changedStyleIdSet)
 {
     if (muse::contains(changedPropertyIdSet, Pid::DURATION)
         || muse::contains(changedPropertyIdSet, Pid::DURATION_TYPE_WITH_DOTS)

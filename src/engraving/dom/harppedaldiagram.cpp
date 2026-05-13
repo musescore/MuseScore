@@ -101,13 +101,16 @@ void HarpPedalDiagram::setPlayableTpcs()
 }
 
 HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
-    : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::HARP_DIAGRAM, parent, TextStyleType::HARP_PEDAL_DIAGRAM,
+               ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&harpPedalDiagramStyle);
     m_pedalState
-        = std::array<PedalPosition, HARP_STRING_NO> { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
+        = std::array<PedalPosition, HARP_STRING_NO> { PedalPosition::NATURAL, PedalPosition::NATURAL,
                                                       PedalPosition::NATURAL,
-                                                      PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL };
+                                                      PedalPosition::NATURAL,
+                                                      PedalPosition::NATURAL, PedalPosition::NATURAL,
+                                                      PedalPosition::NATURAL };
     setPlayableTpcs();
 }
 
@@ -173,7 +176,8 @@ String HarpPedalDiagram::createDiagramText()
         // if no previous, the pedals are "unset" meaning the whole diagram will be displayed
 
         constexpr std::array<PedalPosition, HARP_STRING_NO> initState
-            = { PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET,
+            = { PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET, PedalPosition::UNSET,
+                PedalPosition::UNSET,
                 PedalPosition::UNSET, PedalPosition::UNSET };
         std::array<PedalPosition, HARP_STRING_NO> prevState;
         HarpPedalDiagram* prevDiagram = nullptr;
@@ -307,7 +311,8 @@ PropertyValue HarpPedalDiagram::propertyDefault(Pid id) const
 
 String HarpPedalDiagram::accessibleInfo() const
 {
-    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
+    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(
+        textStyleType());
     String s;
 
     for (size_t idx = 0; idx < m_pedalState.size(); idx++) {
@@ -336,7 +341,8 @@ String HarpPedalDiagram::accessibleInfo() const
 
 String HarpPedalDiagram::screenReaderInfo() const
 {
-    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
+    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(
+        textStyleType());
     String s;
 
     for (size_t idx = 0; idx < m_pedalState.size(); idx++) {

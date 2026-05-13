@@ -73,7 +73,8 @@ static void exportAndCompareWithRef(const std::string& name)
 
     {
         const std::string scoreFileName = name + ".mscx";
-        std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u'/' + String::fromUtf8(scoreFileName)));
+        std::unique_ptr<MasterScore> score(ScoreRW::readScore(MIDI_EXPORT_DATA_DIR + u'/'
+                                                              + String::fromUtf8(scoreFileName)));
         ASSERT_TRUE(score);
         score->doLayout();
         score->rebuildMidiMapping();
@@ -82,7 +83,8 @@ static void exportAndCompareWithRef(const std::string& name)
     }
 
     const std::string midiRefFileName = name + "-ref.mid";
-    const String midiRefPath = ScoreRW::rootPath() + u'/' + MIDI_EXPORT_DATA_DIR + u'/' + String::fromUtf8(midiRefFileName);
+    const String midiRefPath = ScoreRW::rootPath() + u'/' + MIDI_EXPORT_DATA_DIR + u'/' + String::fromUtf8(
+        midiRefFileName);
     if (ScoreComp::compareFiles(midiRefPath, String::fromUtf8(midiFileName))) {
         return;
     }
@@ -125,7 +127,8 @@ protected:
         const String writeFile = String(u"%1-%2-test-%3.mid").arg(file).arg(testName);
         const QString reference(MIDI_EXPORT_DATA_DIR + file + u"-%1-ref.mid");
 
-        EngravingItem* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, 0, 3);
+        EngravingItem* tempo
+            = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, 0, 3);
         ASSERT_TRUE(tempo && tempo->isTempoText());
 
         const int scoreTempo = 200;

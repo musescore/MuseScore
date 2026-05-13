@@ -61,7 +61,8 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 
 bool MeasureNumber::isSystemObjectBelowBottomStaff() const
 {
-    return style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>() == MeasureNumberPlacement::BELOW_SYSTEM
+    return style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>()
+           == MeasureNumberPlacement::BELOW_SYSTEM
            || EngravingItem::isSystemObjectBelowBottomStaff();
 }
 } // namespace MS

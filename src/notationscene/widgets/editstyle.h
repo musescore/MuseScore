@@ -45,7 +45,8 @@ class EditStyle : public muse::ui::WidgetDialog, private Ui::EditStyleBase
     Q_OBJECT
 
     Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
-    Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
+    Q_PROPERTY(
+        QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
 
     muse::GlobalInject<mu::notation::INotationSceneConfiguration> configuration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;

@@ -35,7 +35,8 @@ NotesInChordSelectionFilterModel::NotesInChordSelectionFilterModel(QObject* pare
 
 bool NotesInChordSelectionFilterModel::enabled() const
 {
-    const INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection
+        = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
     if (!selection || !selection->isRange()) {
         return false;
     }
@@ -81,7 +82,8 @@ bool NotesInChordSelectionFilterModel::isFiltered(const SelectionFilterTypesVari
         // TOP_NOTE is considered filtered if the associated index is filtered, OR if TOP_NOTE itself is filtered...
         const NotesInChordSelectionFilterTypes indexType = typeForNoteIdx(m_topNoteIdx);
         if (indexType != NotesInChordSelectionFilterTypes::NONE) {
-            return AbstractSelectionFilterModel::isFiltered(type) || AbstractSelectionFilterModel::isFiltered(indexType);
+            return AbstractSelectionFilterModel::isFiltered(type)
+                   || AbstractSelectionFilterModel::isFiltered(indexType);
         }
     }
     return AbstractSelectionFilterModel::isFiltered(variant);
@@ -201,7 +203,8 @@ NotesInChordSelectionFilterTypes NotesInChordSelectionFilterModel::typeForNoteId
 void NotesInChordSelectionFilterModel::updateTopNoteIdx()
 {
     const INotationSelectionFilterPtr filter = currentNotationSelectionFilter();
-    const INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
+    const INotationSelectionPtr selection
+        = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
     const INotationSelectionRangePtr range = selection ? selection->range() : nullptr;
     if (!filter || !range) {
         m_topNoteIdx = muse::nidx;

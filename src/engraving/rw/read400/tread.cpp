@@ -155,7 +155,8 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Page, PalmMute, Pedal, PlayTechAnnotation,
                                  Rasgueado, RehearsalMark, Rest,
                                  Ornament, Ottava,
-                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash,
+                                 Sticking,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
                                  TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
@@ -324,7 +325,8 @@ void TRead::readProperty(EngravingItem* item, XmlReader& xml, ReadContext& ctx, 
     // Pre-4.4 compatibility: these items now use DIRECTION property
     if (pid == Pid::PLACEMENT && item->hasVoiceAssignmentProperties()) {
         pid = Pid::DIRECTION;
-        v = v.value<PlacementV>() == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
+        v = v.value<PlacementV>()
+            == PlacementV::ABOVE ? PropertyValue(DirectionV::UP) : PropertyValue(DirectionV::DOWN);
     }
 
     if (pid == Pid::OFFSET && ctx.mscVersion() >= 302) {    // in 301 files "pos" is written before placement. Migrate offset after both have been read
@@ -419,12 +421,14 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
                 if (linked->type() == item->type()) {
                     item->linkTo(linked);
                 } else {
-                    LOGW("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                         item->typeName(), linked->typeName());
+                    LOGW(
+                        "EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
+                        item->typeName(), linked->typeName());
                 }
             }
             if (!item->links()) {
-                LOGW("EngravingItem::readProperties: could not link %s at staff %d", item->typeName(), mainLoc.staff() + 1);
+                LOGW("EngravingItem::readProperties: could not link %s at staff %d", item->typeName(),
+                     mainLoc.staff() + 1);
             }
         }
     } else if (tag == "tick") {
@@ -902,10 +906,14 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
         item->setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        item->setClefType(idx, ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), item->clefType(idx).transposingClef));
+        item->setClefType(idx,
+                          ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G),
+                                       item->clefType(idx).transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        item->setClefType(idx, ClefTypeList(item->clefType(idx).concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+        item->setClefType(idx,
+                          ClefTypeList(item->clefType(idx).concertClef,
+                                       TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else {
         return false;
     }
@@ -1774,7 +1782,8 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
         Accidental* accidental = Factory::createAccidental(o);
         TRead::read(accidental, xml, ctx);
         accidental->setParent(o);
-        accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
+        accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(
+            accidental);
     } else if (tag == "Chord") {
         Chord* chord = Factory::createChord(ctx.score()->dummy()->segment());
         TRead::read(chord, xml, ctx);
@@ -2485,7 +2494,8 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         ch->setDots(e.readInt());
     } else if (tag == "staffMove") {
         ch->setStaffMove(e.readInt());
-        if (ch->vStaffIdx() < ch->part()->staves().front()->idx() || ch->vStaffIdx() > ch->part()->staves().back()->idx()) {
+        if (ch->vStaffIdx() < ch->part()->staves().front()->idx()
+            || ch->vStaffIdx() > ch->part()->staves().back()->idx()) {
             ch->setStaffMove(0);
         }
     } else if (tag == "Spanner") {
@@ -3246,7 +3256,8 @@ void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
     }
     compat::CompatUtils::resetHookHeightSign(o);
     compat::CompatUtils::setTextLineTextPositionFromAlign(o);
-    if (o->ottavaType() != OttavaType::OTTAVA_8VA || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
+    if (o->ottavaType() != OttavaType::OTTAVA_8VA
+        || o->numbersOnly() != o->propertyDefault(Pid::NUMBERS_ONLY).toBool()) {
         o->styleChanged();
     }
 }
@@ -3824,9 +3835,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
         ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
         s->setDefaultClefType(ClefTypeList(ct, ct));
     } else if (tag == "defaultConcertClef") {
-        s->setDefaultClefType(ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), s->defaultClefType().transposingClef));
+        s->setDefaultClefType(ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G),
+                                           s->defaultClefType().transposingClef));
     } else if (tag == "defaultTransposingClef") {
-        s->setDefaultClefType(ClefTypeList(s->defaultClefType().concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
+        s->setDefaultClefType(ClefTypeList(s->defaultClefType().concertClef,
+                                           TConv::fromXml(e.readAsciiText(), ClefType::G)));
     } else if (tag == "small") {                // obsolete
         s->staffType(Fraction(0, 1))->setSmall(e.readInt());
     } else if (tag == "invisible") {

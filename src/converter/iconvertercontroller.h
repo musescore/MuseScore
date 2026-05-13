@@ -37,29 +37,38 @@ class IConverterController : MODULE_CONTEXT_INTERFACE
 public:
     virtual ~IConverterController() = default;
 
-    virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
-                                  const muse::String& soundProfile = {}, const muse::io::path_t& tracksDiffPath = {},
-                                  const muse::UriQuery& extensionUri = {}, const std::string& transposeOptionsJson = {},
+    virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
+                                  const OpenParams& openParams = {}, const muse::String& soundProfile = {},
+                                  const muse::io::path_t& tracksDiffPath = {}, const muse::UriQuery& extensionUri = {},
+                                  const std::string& transposeOptionsJson = {},
                                   const std::optional<ConvertTarget>& target = std::nullopt) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile, const OpenParams& openParams = {},
                                    const muse::String& soundProfile = {}, const muse::UriQuery& extensionUri = {},
                                    muse::ProgressPtr progress = nullptr) = 0;
 
-    virtual muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                                        const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {},
+    virtual muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
+                                       const OpenParams& openParams = {},
                                        const muse::io::path_t& highlightConfigPath = muse::io::path_t()) = 0;
-    virtual muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
-    virtual muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
-    virtual muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
-    virtual muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+    virtual muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out,
+                                      const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                                       const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
                                            const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out,
+                                           const std::string& optionsJson, const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out,
+                                          const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams = {}) = 0;
+    virtual muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out,
+                                       const OpenParams& openParams = {}) = 0;
 
-    virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
+    virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource,
+                                   bool forceMode = false) = 0;
 };
 }

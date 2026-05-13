@@ -206,7 +206,8 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     return true;
 }
 
-bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool selectionContainsMultiNoteChords) const
+bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord,
+                                       bool selectionContainsMultiNoteChords) const
 {
     if (totalNotesInChord == 1) {
         //! NOTE: Always include single notes when the selection consists solely of single notes...
@@ -245,7 +246,8 @@ bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord,
     return isFiltered(type);
 }
 
-bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart, const Fraction& selectionRangeEnd,
+bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart,
+                                      const Fraction& selectionRangeEnd,
                                       bool selectionContainsMultiNoteChords) const
 {
     // Tuplets are selectable if all of their contained elements are selectable...
@@ -270,7 +272,8 @@ bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& sele
             break;
         case ElementType::TUPLET: {
             // Recursive call...
-            if (!canSelectTuplet(toTuplet(element), selectionRangeStart, selectionRangeEnd, selectionContainsMultiNoteChords)) {
+            if (!canSelectTuplet(toTuplet(element), selectionRangeStart, selectionRangeEnd,
+                                 selectionContainsMultiNoteChords)) {
                 return false;
             }
             break;

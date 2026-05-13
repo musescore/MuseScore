@@ -322,7 +322,8 @@ private:
     static void drawTextBase(const TextBase* item, muse::draw::Painter* painter, const PaintOptions& opt);
     static void draw(const TextBlock& textBlock, const TextBase* item, muse::draw::Painter* painter);
     static void draw(const TextFragment& textFragment, const TextBase* item, muse::draw::Painter* painter);
-    static void drawTextLineBaseSegment(const TextLineBaseSegment* item, muse::draw::Painter* painter, const PaintOptions& opt);
+    static void drawTextLineBaseSegment(const TextLineBaseSegment* item, muse::draw::Painter* painter,
+                                        const PaintOptions& opt);
 
     static void setMask(const EngravingItem* item, muse::draw::Painter* painter);
 };

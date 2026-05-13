@@ -30,7 +30,8 @@ using namespace mu::inspector;
 
 using IconCode = muse::ui::IconCode::Code;
 
-VoltaSettingsModel::VoltaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+VoltaSettingsModel::VoltaSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, iocCtx, repository, mu::engraving::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
@@ -50,7 +51,8 @@ void VoltaSettingsModel::updateStartAndEndHookTypes()
     setPossibleStartHookTypes({});
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, muse::qtrc("inspector", "Normal", "volta hook type") },
+        { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, muse::qtrc("inspector", "Normal",
+                                                                                             "volta hook type") },
         { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS,
           muse::qtrc("inspector", "Hooked 90°", "volta hook type") }
     };

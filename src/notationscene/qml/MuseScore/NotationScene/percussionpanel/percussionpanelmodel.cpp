@@ -219,7 +219,8 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
             { "title", editLayoutTitle }, { "icon", editLayoutIcon }, { "enabled", true } },
 
         { { "id", RESET_LAYOUT_CODE },
-            { "title", muse::qtrc("notation/percussion", "Reset layout") }, { "icon", resetLayoutIcon }, { "enabled", true } },
+            { "title", muse::qtrc("notation/percussion", "Reset layout") }, { "icon", resetLayoutIcon },
+            { "enabled", true } },
     };
 
     return menuItems;
@@ -515,7 +516,8 @@ void PercussionPanelModel::writePitch(int pitch, const NoteAddingMode& addingMod
         return;
     }
 
-    interaction()->noteInput()->startNoteInput(notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
+    interaction()->noteInput()->startNoteInput(
+        notationConfiguration()->defaultNoteInputMethod(), /*focusNotation*/ false);
 
     NoteInputParams params;
     params.drumPitch = pitch;
@@ -531,7 +533,8 @@ void PercussionPanelModel::playPitch(int pitch)
     }
 
     const NoteInputState& inputState = interaction()->noteInput()->state();
-    std::shared_ptr<Chord> chord = PercussionUtilities(iocContext()).getDrumNoteForPreview(m_padListModel->drumset(), pitch);
+    std::shared_ptr<Chord> chord = PercussionUtilities(iocContext()).getDrumNoteForPreview(
+        m_padListModel->drumset(), pitch);
 
     chord->setParent(inputState.segment());
     chord->setTrack(inputState.track());
@@ -553,7 +556,8 @@ void PercussionPanelModel::resetLayout()
         return;
     }
 
-    const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
+    const muse::audio::AudioResourceMeta& resourceMeta
+        = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
     const bool isMuseSamplerDrumset = resourceMeta.type == muse::audio::AudioResourceType::MuseSamplerSoundPack;
 
     Drumset defaultDrumset = isMuseSamplerDrumset ? museSamplerDefaultDrumset() : standardDefaultDrumset();
@@ -592,7 +596,8 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
         return Drumset();
     }
 
-    const muse::audio::AudioResourceMeta& resourceMeta = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
+    const muse::audio::AudioResourceMeta& resourceMeta
+        = audioSettings()->trackInputParams(currentTrackId()).resourceMeta;
 
     const int instrumentId = resourceMeta.attributeVal(u"museUID").toInt();
 

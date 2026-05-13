@@ -36,7 +36,8 @@ class RestSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * alignWithOtherRests READ alignWithOtherRests CONSTANT)
 
 public:
-    explicit RestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit RestSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository);
 
     PropertyItem* alignWithOtherRests() const;
 

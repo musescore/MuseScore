@@ -11,7 +11,8 @@ public:
     GP7DomBuilder() = default;
 
 private:
-    std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(muse::XmlDomNode* trackNode, muse::XmlDomNode* versionNode) override;
+    std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(muse::XmlDomNode* trackNode,
+                                                            muse::XmlDomNode* versionNode) override;
 
     int readMidiChannel(muse::XmlDomNode* trackChildNode) const;
     int readMidiProgramm(muse::XmlDomNode* trackChildNode) const;

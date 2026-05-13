@@ -532,7 +532,8 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(),
+             sourceRowFirst.parent(), sourceRowFirst.row() - 1);
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -546,14 +547,16 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
+    std::sort(selectedIndexList.begin(),
+              selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
         return f.row() < s.row();
     });
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
     const QModelIndex& sourceRowLast = selectedIndexList.last();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(),
+             sourceRowFirst.parent(), sourceRowLast.row() + 1);
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -575,7 +578,8 @@ void LayoutPanelTreeModel::removeSelectedRows()
     removeRows(firstIndex.row(), selectedIndexList.size(), firstIndex.parent());
 }
 
-bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
+bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+                                    const QModelIndex& destinationParent,
                                     int destinationChild)
 {
     setLoadingBlocked(true);
@@ -874,7 +878,8 @@ void LayoutPanelTreeModel::updateRearrangementAvailability()
         return;
     }
 
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
+    std::sort(selectedIndexList.begin(),
+              selectedIndexList.end(), [](const QModelIndex& f, const QModelIndex& s) -> bool {
         return f.row() < s.row();
     });
 
@@ -928,7 +933,8 @@ void LayoutPanelTreeModel::updateMovingUpAvailability(bool isSelectionMovable, c
     setIsMovingUpAvailable(isSelectionMovable && isRowInBoundaries);
 }
 
-void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
+void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
+                                                        const QModelIndex& lastSelectedRowIndex)
 {
     const AbstractLayoutPanelTreeItem* parentItem = modelIndexToItem(lastSelectedRowIndex.parent());
     if (!parentItem) {
@@ -938,7 +944,8 @@ void LayoutPanelTreeModel::updateMovingDownAvailability(bool isSelectionMovable,
     // exclude the control item
     bool hasControlItem = parentItem->type() != LayoutPanelItemType::ROOT;
     const AbstractLayoutPanelTreeItem* curItem = modelIndexToItem(lastSelectedRowIndex);
-    bool lastSelectedIsSystemObjectLayer = curItem && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
+    bool lastSelectedIsSystemObjectLayer = curItem
+                                           && curItem->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER;
 
     if (lastSelectedRowIndex.row() == 0 && lastSelectedIsSystemObjectLayer) {
         // Selecting/moving the top system object layer not allowed
@@ -1080,7 +1087,8 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
 
     return interactive()->warningSync(
         muse::trc("layoutpanel", "Are you sure you want to delete the selected instrument(s)?", nullptr, count),
-        muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr, count),
+        muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr,
+                  count),
         { IInteractive::Button::No, IInteractive::Button::Yes }
         )
            .standardButton() == IInteractive::Button::Yes;

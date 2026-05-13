@@ -35,11 +35,13 @@ class IDiagnosticDrawProvider : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IDiagnosticDrawProvider() = default;
 
-    virtual muse::Ret generateDrawData(const muse::io::path_t& scoresDir, const muse::io::path_t& outDir, const GenOpt& opt = GenOpt()) = 0;
-    virtual muse::Ret compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outDiff,
-                                      const ComOpt& opt = ComOpt()) = 0;
+    virtual muse::Ret generateDrawData(const muse::io::path_t& scoresDir, const muse::io::path_t& outDir,
+                                       const GenOpt& opt = GenOpt()) = 0;
+    virtual muse::Ret compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test,
+                                      const muse::io::path_t& outDiff, const ComOpt& opt = ComOpt()) = 0;
     virtual muse::Ret drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile) = 0;
-    virtual muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile) = 0;
+    virtual muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile,
+                                    const muse::io::path_t& outFile) = 0;
 };
 }
 

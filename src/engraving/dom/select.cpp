@@ -637,7 +637,8 @@ void Selection::appendChordRest(ChordRest* cr)
 
 void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
-    if (!canSelectVoice(innermostTuplet->voice()) || muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
+    if (!canSelectVoice(innermostTuplet->voice())
+        || muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
         return;
     }
 
@@ -883,7 +884,8 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
 //    creating MM rests is pending).
 //---------------------------------------------------------
 
-void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart, staff_idx_t staffEnd)
+void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staff_idx_t staffStart,
+                              staff_idx_t staffEnd)
 {
     assert(staffEnd > staffStart && staffEnd <= m_score->nstaves());
 
@@ -1665,7 +1667,8 @@ void Selection::extendRangeSelection(ChordRest* cr)
 //    extending by a chord rest.
 //---------------------------------------------------------
 
-void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick)
+void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick,
+                                     const Fraction& etick)
 {
     bool activeSegmentIsStart = false;
     staff_idx_t activeStaff = m_activeTrack / VOICES;

@@ -178,7 +178,8 @@ int32_t GPDrumSetResolver::pitch(int32_t element,
         }
     }
 
-    LOGD() << "Absent drum " << "element: " << element << " variation: " << variation << " name: " << name << " key: " << 0;
+    LOGD() << "Absent drum " << "element: " << element << " variation: " << variation << " name: " << name <<
+        " key: " << 0;
 
     return 0;
 }

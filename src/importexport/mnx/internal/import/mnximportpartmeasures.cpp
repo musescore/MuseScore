@@ -664,7 +664,8 @@ ChordRest* MnxImporter::importEvent(const mnx::sequence::Event& event,
                                      && candidateStaff->isLinked() == baseStaff->isLinked()
                                      && staff2track(staffIdx) >= baseStaff->part()->startTrack()
                                      && staff2track(targetStaffIdxCandidate) < baseStaff->part()->endTrack()
-                                     && candidateStaff->staffType(eventTick)->group() == baseStaff->staffType(eventTick)->group();
+                                     && candidateStaff->staffType(eventTick)->group()
+                                     == baseStaff->staffType(eventTick)->group();
         if (canUseCandidate) {
             targetStaff = candidateStaff;
         } else {
@@ -1046,7 +1047,8 @@ void MnxImporter::createOttavas(const mnx::part::Measure& mnxMeasure, engraving:
                 LOGE() << "staff idx not found for part " << part->pointer().to_string();
                 continue;
             }
-            const auto mnxEndMeasure = mnxDocument().getEntityMap().get<mnx::global::Measure>(mnxOttava.end().measure());
+            const auto mnxEndMeasure
+                = mnxDocument().getEntityMap().get<mnx::global::Measure>(mnxOttava.end().measure());
             Measure* endMeasure = mnxMeasureToMeasure(mnxEndMeasure.calcArrayIndex());
             const Fraction endPos = toMuseScoreFraction(mnxOttava.end().position().fraction());
             const Fraction endTick = endMeasure->tick() + endPos;

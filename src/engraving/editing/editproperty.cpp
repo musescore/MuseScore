@@ -38,7 +38,8 @@ using namespace mu::engraving;
 
 void ChangeProperty::flip(EditData*)
 {
-    LOG_UNDO() << element->typeName() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
+    LOG_UNDO() << element->typeName() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) <<
+        "->" << property;
 
     PropertyValue v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);

@@ -124,7 +124,8 @@ QString AccessibleRoot::staffInfo() const
     return m_staffInfo;
 }
 
-void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem, const AccessibleItemWeakPtr oldAccessibleItem,
+void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleItem,
+                                     const AccessibleItemWeakPtr oldAccessibleItem,
                                      bool voiceStaffInfoChange)
 {
     m_staffInfo = "";

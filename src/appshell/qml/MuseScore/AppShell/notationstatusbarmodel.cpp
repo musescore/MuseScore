@@ -363,7 +363,8 @@ void NotationStatusBarModel::initAvailableZoomList()
 
     bool isCustomZoom = currZoomType == ZoomType::Percentage && !possibleZoomList.contains(currZoomPercentage);
     if (isCustomZoom) {
-        MenuItem* customZoom = buildZoomItem(ZoomType::Percentage, zoomPercentageTitle(currZoomPercentage), currZoomPercentage);
+        MenuItem* customZoom = buildZoomItem(ZoomType::Percentage, zoomPercentageTitle(
+                                                 currZoomPercentage), currZoomPercentage);
         customZoom->setSelected(true);
         m_availableZoomList << customZoom;
     }

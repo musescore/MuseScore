@@ -49,8 +49,8 @@ public:
     void paint(muse::draw::Painter* painter);
 
 private:
-    void paintStaffLines(muse::draw::Painter* painter, const muse::PointF& pos, double width, int lines, double lineDist, double lineWidth,
-                         QColor lineColor);
+    void paintStaffLines(muse::draw::Painter* painter, const muse::PointF& pos, double width, int lines,
+                         double lineDist, double lineWidth, QColor lineColor);
 
     const engraving::Score* m_score = nullptr;
 };

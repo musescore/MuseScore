@@ -481,7 +481,8 @@ private:
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 
-    void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+    void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes,
+                            std::vector<int>& anchoredDots);
 
     void addLineAttachPoint(PointF point, EngravingItem* line, bool start);
 

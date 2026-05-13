@@ -106,17 +106,21 @@ private:
 
     static void spaceMeasureGroup(const std::vector<Measure*>& measureGroup, HorizontalSpacingContext& ctx);
     static double getFirstSegmentXPos(Segment* segment, HorizontalSpacingContext& ctx);
-    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*>& segList, int startSegIdx, HorizontalSpacingContext& ctx);
+    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*>& segList, int startSegIdx,
+                                                      HorizontalSpacingContext& ctx);
     static bool ignoreSegmentForSpacing(const Segment* segment);
     static bool ignoreAllSegmentsForSpacing(const std::vector<SegmentPosition>& segmentPositions);
     static void spaceAgainstPreviousSegments(Segment* segment, std::vector<SegmentPosition>& prevSegPositions,
                                              HorizontalSpacingContext& ctx);
     static bool stopCheckingPreviousSegments(const SegmentPosition& prev, const SegmentPosition& curSegPos);
     static void checkLyricsAgainstLeftMargin(Segment* segment, double& x, HorizontalSpacingContext& ctx);
-    static void checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions, const HorizontalSpacingContext& ctx);
-    static double spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx);
+    static void checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions,
+                                              const HorizontalSpacingContext& ctx);
+    static double spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg,
+                                             const HorizontalSpacingContext& ctx);
     static void checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
-    static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
+    static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments,
+                                         const HorizontalSpacingContext& ctx);
     static void checkCollisionsWithCrossStaffStems(const Segment* thisSeg, const Segment* nextSeg, staff_idx_t staffIdx,
                                                    double& curMinDist);
 
@@ -144,7 +148,8 @@ private:
     static void computeLedgerRestPadding(const Rest* rest2, double& padding);
     static bool isSpecialLyricsPaddingType(ElementType type);
     static void computeLyricsPadding(const Lyrics* lyrics1, const EngravingItem* item2, double& padding);
-    static void computeChordBracketPadding(const EngravingItem* item1, const ChordBracket* chordBracket, double& padding);
+    static void computeChordBracketPadding(const EngravingItem* item1, const ChordBracket* chordBracket,
+                                           double& padding);
 
     static bool isSameVoiceKerningLimited(const EngravingItem* item);
     static bool isNeverKernable(const EngravingItem* item);
@@ -157,7 +162,7 @@ private:
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
     static KerningType computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2);
 
-    static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
-                                        bool systemEnd);
+    static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width,
+                                        bool systemHeaderGap, bool systemEnd);
 };
 }

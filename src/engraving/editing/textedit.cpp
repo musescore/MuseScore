@@ -558,7 +558,8 @@ bool TextBase::edit(EditData& ed)
         }
 
         case Key_Left:
-            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left, mm)
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::
+                                        Left, mm)
                 && isLyrics()) {
                 return false;
             }
@@ -569,7 +570,8 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Key_Right:
-            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right, mm)
+            if (!m_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::
+                                        Right, mm)
                 && isLyrics()) {
                 return false;
             }
@@ -1088,7 +1090,8 @@ void ChangeTextProperties::restoreSelection()
     tc.text()->cursor()->setColumn(tc.column());
 }
 
-ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal,
+                                           PropertyFlags flags_)
     : TextEditUndoCommand(*tc)
 {
     m_propertyId = propId;

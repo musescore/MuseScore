@@ -32,7 +32,8 @@ using namespace muse::audio;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& trackId, const AudioResourceMeta& resourceMeta)
+void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& trackId,
+                                const AudioResourceMeta& resourceMeta)
 {
     TRACEFUNC;
 

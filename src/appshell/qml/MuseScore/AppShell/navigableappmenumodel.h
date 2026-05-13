@@ -41,7 +41,8 @@ class NavigableAppMenuModel : public AppMenuModel
     Q_PROPERTY(QString openedMenuId READ openedMenuId WRITE setOpenedMenuId NOTIFY openedMenuIdChanged)
 
     Q_PROPERTY(QRect appMenuAreaRect READ appMenuAreaRect WRITE setAppMenuAreaRect NOTIFY appMenuAreaRectChanged)
-    Q_PROPERTY(QRect openedMenuAreaRect READ openedMenuAreaRect WRITE setOpenedMenuAreaRect NOTIFY openedMenuAreaRectChanged)
+    Q_PROPERTY(
+        QRect openedMenuAreaRect READ openedMenuAreaRect WRITE setOpenedMenuAreaRect NOTIFY openedMenuAreaRectChanged)
 
     Q_PROPERTY(QWindow * appWindow READ appWindow WRITE setAppWindow)
 

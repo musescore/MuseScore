@@ -194,7 +194,8 @@ void Cursor::rewindToFraction(Fraction* f)
         if (measure) {
             mu::engraving::TimeTickAnchor* anchor = mu::engraving::EditTimeTickAnchors::createTimeTickAnchor(measure,
                                                                                                              fraction - measure->tick(),
-                                                                                                             track2staff(track()));
+                                                                                                             track2staff(
+                                                                                                                 track()));
             mu::engraving::EditTimeTickAnchors::updateLayout(measure);
             seg = anchor->segment();
         } else {
@@ -525,7 +526,8 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
 
     if (!fRatio.isValid() || fRatio.isZero() || fRatio.negative()
         || !fDuration.isValid() || fDuration.isZero() || fDuration.negative()) {
-        LOGW("Cursor::addTuplet: invalid parameter values: %s, %s", qPrintable(fRatio.toString()), qPrintable(fDuration.toString()));
+        LOGW("Cursor::addTuplet: invalid parameter values: %s, %s", qPrintable(fRatio.toString()),
+             qPrintable(fDuration.toString()));
         return;
     }
 
@@ -534,7 +536,8 @@ void Cursor::addTuplet(Fraction* ratio, Fraction* duration)
     if (tupletTick + fDuration > tupletMeasure->endTick()) {
         LOGW(
             "Cursor::addTuplet: cannot add cross-measure tuplet (measure %d, rel.tick %s, duration %s)",
-            tupletMeasure->measureNumber() + 1, qPrintable(segment()->rtick().toString()), qPrintable(fDuration.toString()));
+            tupletMeasure->measureNumber() + 1, qPrintable(segment()->rtick().toString()),
+            qPrintable(fDuration.toString()));
 
         return;
     }

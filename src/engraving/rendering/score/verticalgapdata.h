@@ -46,7 +46,8 @@ public:
     SysStaff* sysStaff = nullptr;
     const Staff* staff = nullptr;
 
-    VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer, double y);
+    VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer,
+                    double y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);

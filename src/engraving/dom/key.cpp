@@ -237,7 +237,8 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
         }
         for (size_t i = 0; i < m_customKeyDefs.size(); ++i) {
             // check note and sym, don't care xAlt and octAlt
-            if (e.m_customKeyDefs[i].degree != m_customKeyDefs[i].degree || e.m_customKeyDefs[i].sym != m_customKeyDefs[i].sym) {
+            if (e.m_customKeyDefs[i].degree != m_customKeyDefs[i].degree
+                || e.m_customKeyDefs[i].sym != m_customKeyDefs[i].sym) {
                 return false;
             }
             // TODO: position matters // does it?

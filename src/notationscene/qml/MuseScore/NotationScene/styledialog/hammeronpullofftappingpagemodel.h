@@ -38,7 +38,9 @@ class HammerOnPullOffTappingPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * lhTappingSymbolTab READ lhTappingSymbolTab CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * lhTappingShowItemsNormalStave READ lhTappingShowItemsNormalStave CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * lhTappingShowItemsTab READ lhTappingShowItemsTab CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * lhTappingSlurTopAndBottomNoteOnTab READ lhTappingSlurTopAndBottomNoteOnTab CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * lhTappingSlurTopAndBottomNoteOnTab READ lhTappingSlurTopAndBottomNoteOnTab CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * rhTappingSymbolNormalStave READ rhTappingSymbolNormalStave CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * rhTappingSymbolTab READ rhTappingSymbolTab CONSTANT)

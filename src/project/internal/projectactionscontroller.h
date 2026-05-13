@@ -57,8 +57,8 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::Contextable,
-    public muse::actions::Actionable, public muse::async::Asyncable
+class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider,
+    public muse::Contextable, public muse::actions::Actionable, public muse::async::Asyncable
 {
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::mi::IMultiWindowsProvider> multiwindowsProvider;
@@ -98,7 +98,8 @@ public:
     bool closeOpenedProject(bool goToHome = true) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(
-        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
+        bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
@@ -120,7 +121,8 @@ private:
 
     void openProject(const muse::actions::ActionData& args);
     muse::Ret openProject(const muse::io::path_t& path, const QString& displayNameOverride = QString());
-    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
+    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(),
+                                     const QString& secret = QString(), bool isOwner = true);
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
 
@@ -134,7 +136,8 @@ private:
     muse::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     muse::Ret canSaveProject() const;
-    bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined,
+                     bool force = false);
     void saveProjectAt(const muse::actions::ActionData& args);
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
     bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
@@ -165,12 +168,12 @@ private:
     void closeUploadProgressDialog();
 
     muse::Ret uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode);
-    void uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave,
-                                   bool publishMode);
+    void uploadAudioToMuseScoreCom(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen,
+                                   bool isFirstSave, bool publishMode);
 
     void onProjectSuccessfullyUploaded(const QUrl& urlToOpen = QUrl(), bool isFirstSave = true);
-    muse::Ret onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
-                                    bool publishMode);
+    muse::Ret onProjectUploadFailed(const muse::Ret& ret, const CloudProjectInfo& info, const AudioFile& audio,
+                                    bool openEditUrl, bool publishMode);
 
     void onAudioSuccessfullyUploaded(const QUrl& urlToOpen);
     void onAudioUploadFailed(const muse::Ret& ret);
@@ -179,7 +182,8 @@ private:
 
     bool askIfUserAgreesToSaveProjectWithErrors(const muse::Ret& ret, const SaveLocation& location);
     void warnScoreWithoutPartsCannotBeSaved();
-    bool askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText, bool newlyCreated);
+    bool askIfUserAgreesToSaveCorruptedScore(const SaveLocation& location, const std::string& errorText,
+                                             bool newlyCreated);
     void warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert);
     bool askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText, bool canRevert);
     bool askIfUserAgreesToSaveCorruptedScoreUponOpenning(const SaveLocation& location, const std::string& errorText);

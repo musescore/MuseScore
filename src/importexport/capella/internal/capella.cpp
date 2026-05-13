@@ -585,7 +585,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setTicks(nn);
                 }
                 CAPELLA_TRACE("Tuplet(R) at %d: tupletDenominator: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
-                              tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging, ticks.ticks(), o->objects.size());
+                              tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging,
+                              ticks.ticks(), o->objects.size());
             }
 
             Fraction ft = m->ticks();
@@ -675,7 +676,8 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tuplet->setTicks(nn);
                 }
                 CAPELLA_TRACE("Tuplet(C) at %d: tupletDenominator: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
-                              tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging, ticks.ticks(), o->objects.size());
+                              tick.ticks(), o->tupletDenominator, o->tripartite, o->isProlonging,
+                              ticks.ticks(), o->objects.size());
             }
 
             Chord* chord = Factory::createChord(score->dummy()->segment());
@@ -815,7 +817,9 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
                 l->setVerse(v.num);
-                l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
+                l->initTextStyleType(
+                    l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD,
+                    /*preserveDifferent*/ true);
                 chord->add(l);
             }
 
@@ -1822,8 +1826,9 @@ void BasicDrawObj::read()
     nNotes      = range & 0x0fff;
     background  = range & 0x1000;
     pageRange   = (range >> 13) & 0x7;
-    CAPELLA_TRACE("BasicDrawObj::read modeX %d modeY %d distY %d flags %d nRefNote %d nNotes %d background %d pageRange %d",
-                  modeX, modeY, distY, flags, nRefNote, nNotes, background, pageRange);
+    CAPELLA_TRACE(
+        "BasicDrawObj::read modeX %d modeY %d distY %d flags %d nRefNote %d nNotes %d background %d pageRange %d",
+        modeX, modeY, distY, flags, nRefNote, nNotes, background, pageRange);
 }
 
 //---------------------------------------------------------
@@ -1880,7 +1885,8 @@ void BasicDurationalObj::read()
         objects = cap->readDrawObjectArray();
     }
     CAPELLA_TRACE("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d",
-                  nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite, isProlonging
+                  nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator,
+                  tripartite, isProlonging
                   );
 }
 
@@ -2835,7 +2841,8 @@ Err importCapella(MasterScore* score, const QString& name)
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
             MessageBox(score->iocContext()).warning(muse::trc("iex_capella", "Import Capella"),
-                                                    muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
+                                                    muse::qtrc("iex_capella", "Import failed: %1").arg(cf.error(
+                                                                                                           errNo)).toStdString(),
                                                     { MessageBox::Ok });
         }
         fp.close();

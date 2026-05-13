@@ -39,12 +39,14 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * bassScale READ bassScale CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * doNotStackModifiers READ doNotStackModifiers CONSTANT)
 
-    Q_PROPERTY(bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
+    Q_PROPERTY(
+        bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
     Q_PROPERTY(bool insideFretBox READ insideFretBox NOTIFY insideFretBoxChanged FINAL)
     Q_PROPERTY(bool showStackModifiers READ showStackModifiers NOTIFY showStackModifiersChanged FINAL)
 
 public:
-    explicit ChordSymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit ChordSymbolSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                      IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

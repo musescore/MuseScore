@@ -497,7 +497,8 @@ public:
 
     bool isSlur() const
     {
-        return type() == ElementType::SLUR || type() == ElementType::HAMMER_ON_PULL_OFF || type() == ElementType::TAPPING_HALF_SLUR;
+        return type() == ElementType::SLUR || type() == ElementType::HAMMER_ON_PULL_OFF
+               || type() == ElementType::TAPPING_HALF_SLUR;
     }
 
     bool isSlurSegment() const
@@ -571,7 +572,8 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo()
+               || isStringTunings();
     }
 
     bool isArticulationFamily() const

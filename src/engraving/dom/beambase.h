@@ -98,7 +98,10 @@ public:
     void doSetDirection(DirectionV val) { m_direction = val; }
     virtual void setDirection(DirectionV v) = 0;
 
-    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
+    inline int directionIdx() const
+    {
+        return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    }
 
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }

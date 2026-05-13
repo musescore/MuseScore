@@ -39,7 +39,8 @@ Diff DrawDataComparator::compare(const DrawDataPtr& ref, const DrawDataPtr& test
     return diff;
 }
 
-Ret DrawDataComparator::compare(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outdiff)
+Ret DrawDataComparator::compare(const muse::io::path_t& ref, const muse::io::path_t& test,
+                                const muse::io::path_t& outdiff)
 {
     RetVal<DrawDataPtr> refData = DrawDataRW::readData(ref);
     if (!refData.ret) {

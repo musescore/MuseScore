@@ -1392,7 +1392,9 @@ String Harmony::generateScreenReaderInfo() const
         }
         case HarmonyType::STANDARD:
         default:
-            rez = String(u"%1 %2").arg(rez, tpc2name(info->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez
+                = String(u"%1 %2").arg(rez, tpc2name(
+                                           info->rootTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
 
         if (!info->textName().isEmpty()) {
@@ -1412,7 +1414,9 @@ String Harmony::generateScreenReaderInfo() const
         }
 
         if (tpcIsValid(info->bassTpc())) {
-            rez = String(u"%1 / %2").arg(rez, tpc2name(info->bassTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez
+                = String(u"%1 / %2").arg(rez, tpc2name(
+                                             info->bassTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
     }
 
@@ -1480,7 +1484,8 @@ void Harmony::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
             return;
         }
         for (EngravingItem* item : parentSeg->annotations()) {
-            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this
+                || track2staff(item->track()) != staffIdx()) {
                 continue;
             }
 

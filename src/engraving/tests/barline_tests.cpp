@@ -427,7 +427,8 @@ TEST_F(Engraving_BarlineTests, deleteSkipBarlines)
 
     score->doLayout();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("barlinedelete.mscx"), BARLINE_DATA_DIR + String("barlinedelete-ref.mscx")));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("barlinedelete.mscx"),
+                                            BARLINE_DATA_DIR + String("barlinedelete-ref.mscx")));
 
     delete score;
 }

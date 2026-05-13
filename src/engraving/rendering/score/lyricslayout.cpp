@@ -103,7 +103,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::POSITION)) {
-            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables) && !(item->separator() && item->separator()->isEndMelisma())) {
+            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables)
+                && !(item->separator() && item->separator()->isEndMelisma())) {
                 item->setPosition(AlignH::HCENTER);
             } else {
                 item->setPosition(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>().horizontal);
@@ -274,7 +275,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     // When the end element is a timetick segment rather than a chordrest, the start element should be a chord with a following repeat
     ChordRest* startCR = lyricsLine->startElement()
-                         && lyricsLine->startElement()->isChordRest() ? toChordRest(lyricsLine->startElement()) : nullptr;
+                         && lyricsLine->startElement()->isChordRest() ? toChordRest(lyricsLine->startElement())
+                         : nullptr;
     bool hasFollowingJump = endCR ? endCR->hasFollowingJumpItem() : (startCR ? startCR->hasFollowingJumpItem() : false);
 
     if (!endLyrics && !isPartialLyricsLine && !hasFollowingJump) {
@@ -335,7 +337,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     double dashWidth = std::min(curLength, style.styleAbsolute(Sid::lyricsDashMaxLength));
 
-    LyricsDashSystemStart lyricsDashSystemStart = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
+    LyricsDashSystemStart lyricsDashSystemStart
+        = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
     bool dashesLeftAligned = lyricsDashSystemStart != LyricsDashSystemStart::STANDARD && !item->isSingleBeginType();
     double dashDist = curLength / (dashesLeftAligned || firstAndLastGapAreHalf ? dashCount : dashCount + 1);
     double xDash = 0.0;
@@ -351,7 +354,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
             } else {
                 xDash += dashDist;
             }
-            item->mutldata()->addDash(LineF(PointF(xDash - 0.5 * dashWidth, 0.0), PointF(xDash + 0.5 * dashWidth, 0.0)));
+            item->mutldata()->addDash(LineF(PointF(xDash - 0.5 * dashWidth, 0.0),
+                                            PointF(xDash + 0.5 * dashWidth, 0.0)));
         }
     }
 }
@@ -652,7 +656,8 @@ void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t 
     }
 }
 
-SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses, System* system)
+SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses,
+                                                System* system)
 {
     double systemX = system->pageX();
 
@@ -662,7 +667,8 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const Lyr
         const LyricsVerse& lyricsVerse = lyricsVerses.at(verse);
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             if (lyrics->addToSkyline()) {
-                Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
+                Shape lyricsShape
+                    = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
                 lyricsSkyline.add(lyricsShape);
             }
         }
@@ -676,7 +682,8 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const Lyr
     return lyricsSkyline;
 }
 
-void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses)
+void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff,
+                                             const LyricsVersesMap& lyricsVerses)
 {
     auto moveVerse = [&](int verse) {
         if (lyricsVerses.count(verse) > 0) {
@@ -701,7 +708,8 @@ void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool abov
     }
 }
 
-void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
+void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx,
+                                const LyricsVersesMap& lyricsVersesAbove,
                                 const LyricsVersesMap& lyricsVersesBelow)
 {
     double systemX = system->pageX();
@@ -751,7 +759,8 @@ double LyricsLayout::lyricsLineStartX(const LyricsLineSegment* item)
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
 
-    const LyricsDashSystemStart lyricsDashSystemStart = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
+    const LyricsDashSystemStart lyricsDashSystemStart
+        = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
     const bool leading = melisma || (lyricsDashSystemStart != LyricsDashSystemStart::UNDER_FIRST_NOTE);
 
     // Full melisma or dashes at beginning of system
@@ -834,7 +843,8 @@ void LyricsLayout::adjustLyricsLineYOffset(LyricsLineSegment* item, const Lyrics
 {
     const LyricsLine* lyricsLine = item->lyricsLine();
     ChordRest* endChordRest = lyricsLine->endElement()
-                              && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement()) : nullptr;
+                              && lyricsLine->endElement()->isChordRest() ? toChordRest(lyricsLine->endElement())
+                              : nullptr;
     const Lyrics* startLyrics = lyricsLine->lyrics();
     const bool melisma = lyricsLine->isEndMelisma();
 

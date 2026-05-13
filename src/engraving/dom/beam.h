@@ -86,7 +86,8 @@ public:
 
     void setDirection(DirectionV d) override;
 
-    void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
+    void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32,
+                        bool& isBroken64) const;
 
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);

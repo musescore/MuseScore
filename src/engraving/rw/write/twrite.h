@@ -311,7 +311,8 @@ public:
 
     static void write(const WhammyBar* item, XmlWriter& xml, WriteContext& ctx);
 
-    static void writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool);
+    static void writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg,
+                              Segment* eseg, bool, bool);
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
@@ -358,10 +359,10 @@ private:
     static void writeProperties(const TextLineBase* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const TextBase* item, XmlWriter& xml, WriteContext& ctx, bool writeText);
 
-    static void writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track,
-                                  Fraction frac = { -1, 1 });
-    static void writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track,
-                                Fraction frac = { -1, 1 });
+    static void writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current,
+                                  track_idx_t track, Fraction frac = { -1, 1 });
+    static void writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current,
+                                track_idx_t track, Fraction frac = { -1, 1 });
 
     static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);

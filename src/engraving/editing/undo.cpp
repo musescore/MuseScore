@@ -204,7 +204,8 @@ bool UndoCommand::hasFilteredChildren(UndoCommand::Filter f, const EngravingItem
 //   hasUnfilteredChildren
 //---------------------------------------------------------
 
-bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& filters, const EngravingItem* target) const
+bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& filters,
+                                        const EngravingItem* target) const
 {
     for (UndoCommand* cmd : m_childCommands) {
         bool filtered = false;

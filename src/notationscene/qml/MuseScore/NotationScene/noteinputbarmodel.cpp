@@ -379,7 +379,8 @@ void NoteInputBarModel::updateArticulationsState()
     };
 
     for (const ActionCode& actionCode: articulationActions) {
-        updateItemsStateChecked(actionCode, isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
+        updateItemsStateChecked(actionCode,
+                                isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
     }
 }
 
@@ -418,7 +419,8 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
     for (const EngravingItem* element : selectedElements) {
         if (element->hasVoiceAssignmentProperties()) {
             VoiceAssignment voiceAssignment = element->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
+            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT
+                || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
                 return INVALID_VOICE;
             }
         }

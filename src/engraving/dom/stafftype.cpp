@@ -84,7 +84,8 @@ StaffType::StaffType()
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
-                     bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines, bool invisible,
+                     bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig,
+                     bool showLedgerLines, bool invisible,
                      const Color& color)
     : m_group(sg), m_xmlName(xml), m_staffTypeName(name),
     m_invisible(invisible),
@@ -102,11 +103,14 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
-                     bool genClef, bool showBarLines, bool stemless, bool genTimesig, bool invisible, const Color& color,
-                     const String& durFontName, double durFontSize, double durFontUserY, double genDur, bool fretFontUseTextStyle,
+                     bool genClef, bool showBarLines, bool stemless, bool genTimesig, bool invisible,
+                     const Color& color,
+                     const String& durFontName, double durFontSize, double durFontUserY, double genDur,
+                     bool fretFontUseTextStyle,
                      const String& fretFontName, double fretFontSize, double fretFontUserY,
                      TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
-                     bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers,
+                     bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering,
+                     bool useNumbers,
                      bool showBackTied)
 {
     UNUSED(invisible);
@@ -318,7 +322,8 @@ bool StaffType::isCommonTabStaff() const
 
 bool StaffType::isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) const
 {
-    return (isCommonTabStaff() && !style().styleB(commonTabStyle)) || (isSimpleTabStaff() && !style().styleB(simpleTabStyle));
+    return (isCommonTabStaff() && !style().styleB(commonTabStyle))
+           || (isSimpleTabStaff() && !style().styleB(simpleTabStyle));
 }
 
 void StaffType::styleChanged()

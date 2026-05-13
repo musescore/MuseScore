@@ -103,7 +103,8 @@ TEST_F(Engraving_SelectionRangeTests, selRangeAndSpanners)
         }
 
         // Setup: Find start/end notes to make our range selection...
-        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             mu::engraving::EngravingItem* element = segment->element(0);
             if (!element || !element->isChord()) {
                 continue;
@@ -238,7 +239,8 @@ void Engraving_SelectionRangeTests::deleteVoice(int voice, String idx)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    VoicesSelectionFilterTypes voiceFilterType = VoicesSelectionFilterTypes((int)VoicesSelectionFilterTypes::FIRST_VOICE + voice);
+    VoicesSelectionFilterTypes voiceFilterType = VoicesSelectionFilterTypes(
+        (int)VoicesSelectionFilterTypes::FIRST_VOICE + voice);
     score->selectionFilter().setFiltered(voiceFilterType, false);
     score->select(m1, SelectType::RANGE);
 
@@ -271,7 +273,8 @@ TEST_F(Engraving_SelectionRangeTests, deleteSkipAnnotations)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes((int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
+    ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes(
+        (int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
     score->selectionFilter().setFiltered(annotationFilterType, false);
 
     score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
@@ -292,7 +295,8 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
     // In each measure, some notes have the 'x' notehead.
     // We make a range selection consisting of those 'x' noteheads, and delete the selection.
 
-    MasterScore* score = ScoreRW::readScore(SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets.mscx"));
+    MasterScore* score
+        = ScoreRW::readScore(SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets.mscx"));
     ASSERT_TRUE(score);
 
     for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
@@ -300,7 +304,8 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
 
         score->deselectAll();
 
-        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             mu::engraving::EngravingItem* element = segment->element(0);
             if (!element || !element->isChord()) {
                 continue;
@@ -325,7 +330,8 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
     }
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete06_partialnestedtuplets.mscx"),
-                                            SELRANGE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
+                                            SELRANGE_DATA_DIR
+                                            + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
 }
 
 TEST_F(Engraving_SelectionRangeTests, deleteSelectionListElements)

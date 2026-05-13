@@ -266,7 +266,8 @@ void EngravingElementsModel::load(const EngravingObjectSet& elements, Item* root
     }
 }
 
-const EngravingElementsModel::Item* EngravingElementsModel::findItem(const mu::engraving::EngravingObject* el, const Item* root) const
+const EngravingElementsModel::Item* EngravingElementsModel::findItem(const mu::engraving::EngravingObject* el,
+                                                                     const Item* root) const
 {
     if (root->element() == el) {
         return root;

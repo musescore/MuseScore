@@ -32,7 +32,8 @@ using namespace mu::notation;
 static const Segment* findSegmentFrom(const Score* score, const System* system,
                                       const int tickFrom, const staff_idx_t staffIdx)
 {
-    const Segment* segment = score->tick2leftSegment(Fraction::fromTicks(tickFrom), /*MM*/ true, SegmentType::ChordRest);
+    const Segment* segment
+        = score->tick2leftSegment(Fraction::fromTicks(tickFrom), /*MM*/ true, SegmentType::ChordRest);
     if (!segment || segment->system() != system) {
         return nullptr;
     }
@@ -264,7 +265,8 @@ void NotationRegionsBeingProcessedModel::listenViewModeChanges()
 
 void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId trackId)
 {
-    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
+    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap
+        = playbackController()->instrumentTrackIdMap();
     const InstrumentTrackId instrumentTrackId = muse::key(instrumentTrackIdMap, trackId);
     if (!instrumentTrackId.isValid()) {
         return;
@@ -303,7 +305,8 @@ void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId 
 
 void NotationRegionsBeingProcessedModel::stopListeningToProgress(const muse::audio::TrackId trackId)
 {
-    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = playbackController()->instrumentTrackIdMap();
+    const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap
+        = playbackController()->instrumentTrackIdMap();
     const InstrumentTrackId instrumentTrackId = muse::key(instrumentTrackIdMap, trackId);
     if (!instrumentTrackId.isValid()) {
         return;
@@ -319,7 +322,8 @@ void NotationRegionsBeingProcessedModel::onProgressStarted(const InstrumentTrack
     }
 }
 
-void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackId& instrumentTrackId, const ChunkInfoList& chunks)
+void NotationRegionsBeingProcessedModel::onChunksReceived(const InstrumentTrackId& instrumentTrackId,
+                                                          const ChunkInfoList& chunks)
 {
     const notation::IMasterNotationPtr master = globalContext()->currentMasterNotation();
     if (!master) {
@@ -475,7 +479,8 @@ QList<NotationRegionsBeingProcessedModel::RegionInfo> NotationRegionsBeingProces
     return regions;
 }
 
-std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Part* part, const std::vector<TickRange>& ranges) const
+std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Part* part,
+                                                                       const std::vector<TickRange>& ranges) const
 {
     std::vector<QRectF> result;
 

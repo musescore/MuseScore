@@ -40,7 +40,8 @@ class NotationPlayback : public INotationPlayback, public muse::async::Asyncable
     muse::GlobalInject<INotationConfiguration> configuration;
 
 public:
-    NotationPlayback(IGetScore* getScore, muse::async::Channel<muse::RectF> notationChanged, const muse::modularity::ContextPtr& iocCtx);
+    NotationPlayback(IGetScore* getScore, muse::async::Channel<muse::RectF> notationChanged,
+                     const muse::modularity::ContextPtr& iocCtx);
 
     void init() override;
     void reload() override;
@@ -56,10 +57,12 @@ public:
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
 
-    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) override;
+    void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration,
+                               bool flushSound) override;
     void triggerMetronome(muse::midi::tick_t tick) override;
     void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& countInDuration) override;
-    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx,
+                            int tick) override;
 
     engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const override;

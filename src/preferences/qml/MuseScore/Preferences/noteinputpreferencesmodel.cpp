@@ -48,7 +48,8 @@ void NoteInputPreferencesModel::load()
     });
 
     notationConfiguration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged().onNotify(this, [this]() {
-        emit startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(startNoteInputAtSelectedNoteRestWhenPressingMidiKey());
+        emit startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(
+            startNoteInputAtSelectedNoteRestWhenPressingMidiKey());
     });
 
     playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {

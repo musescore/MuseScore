@@ -294,7 +294,8 @@ async::Promise<TrackId, TrackParams> Playback::addTrack(const TrackName& trackNa
     return async::make_promise<TrackId, TrackParams>([this, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
 
-        ByteArray data = RpcPacker::pack(trackName, reinterpret_cast<uint64_t>(playbackData), params);
+        ByteArray data = RpcPacker::pack(trackName, reinterpret_cast<uint64_t>(playbackData),
+                                         params);
 
         Msg msg = rpc::make_request(ctxId(), MsgCode::AddTrackWithIODevice, data);
         channel()->send(msg, [resolve, reject](const Msg& res) {
@@ -324,7 +325,8 @@ async::Promise<TrackId, TrackParams> Playback::addTrack(const TrackName& trackNa
     return async::make_promise<TrackId, TrackParams>([this, trackName, playbackData, params](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
 
-        rpc::StreamId mainStreamId = channel()->addSendStream(StreamName::PlaybackDataMainStream, playbackData.mainStream);
+        rpc::StreamId mainStreamId
+            = channel()->addSendStream(StreamName::PlaybackDataMainStream, playbackData.mainStream);
         rpc::StreamId offStreamId = channel()->addSendStream(StreamName::PlaybackDataOffStream, playbackData.offStream);
 
         ByteArray data = RpcPacker::pack(trackName, playbackData, params, mainStreamId, offStreamId);
@@ -584,7 +586,9 @@ async::Promise<bool> Playback::saveSoundTrack(const SoundTrackFormat& format, io
     ONLY_AUDIO_MAIN_THREAD;
     return async::make_promise<bool>([this, format, &dstDevice](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(ctxId(), MsgCode::SaveSoundTrack, RpcPacker::pack(format, reinterpret_cast<uintptr_t>(&dstDevice)));
+        Msg msg
+            = rpc::make_request(ctxId(), MsgCode::SaveSoundTrack,
+                                RpcPacker::pack(format, reinterpret_cast<uintptr_t>(&dstDevice)));
         channel()->send(msg, [resolve, reject](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             Ret ret;

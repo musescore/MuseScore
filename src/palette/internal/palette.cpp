@@ -102,7 +102,8 @@ Palette::Type Palette::contentType() const
     return t;
 }
 
-PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag, const QPointF& offset,
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag,
+                                      const QPointF& offset,
                                       const QString& tag)
 {
     if (element) {
@@ -130,7 +131,8 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const muse
 PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, ActionCode code, double mag)
 {
     const muse::ui::UiAction& action = actionsRegister()->action(code);
-    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
+    QString name
+        = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
     auto icon = std::make_shared<ActionIcon>(paletteScoreProvider()->paletteScore()->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
@@ -138,7 +140,8 @@ PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, Action
     return insertElement(idx, icon, name, mag);
 }
 
-PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
@@ -156,7 +159,8 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
     return cell;
 }
 
-PaletteCellPtr Palette::appendElement(ElementPtr element, const muse::TranslatableString& name, qreal mag, const QPointF& offset,
+PaletteCellPtr Palette::appendElement(ElementPtr element, const muse::TranslatableString& name, qreal mag,
+                                      const QPointF& offset,
                                       const QString& tag)
 {
     return appendElement(element, name.str, mag, offset, tag);
@@ -630,7 +634,8 @@ Palette::Type Palette::guessType() const
         if (actionCode.contains("beam")) {
             return Type::Beam;
         }
-        if (actionCode.contains("grace") || actionCode.contains("acciaccatura") || actionCode.contains("appoggiatura")) {
+        if (actionCode.contains("grace") || actionCode.contains("acciaccatura")
+            || actionCode.contains("appoggiatura")) {
             return Type::GraceNote;
         }
         if (actionCode.contains("frame") || actionCode.contains("box") || actionCode.contains("measure")) {

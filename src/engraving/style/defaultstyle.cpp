@@ -57,7 +57,8 @@ static void applyPageSizeToStyle(MStyle* style, const SizeF& pageSize)
     style->set(Sid::pagePrintableWidth, newPrintableWidth);
 }
 
-void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath, const SizeF& defaultPageSize)
+void DefaultStyle::init(const path_t& defaultStyleFilePath, const path_t& partStyleFilePath,
+                        const SizeF& defaultPageSize)
 {
     m_baseStyle.precomputeValues();
 

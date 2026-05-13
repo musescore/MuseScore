@@ -47,7 +47,8 @@ static const QString MAX_KEY("max");
 
 using MusicalSymbolCode = MusicalSymbolCodes::Code;
 
-AdditionalInfoModel::KeySignature::KeySignature(const QString& titleMajor, const QString& titleMinor, IconCode::Code icon, Key key)
+AdditionalInfoModel::KeySignature::KeySignature(const QString& titleMajor, const QString& titleMinor,
+                                                IconCode::Code icon, Key key)
     : titleMajor(titleMajor), titleMinor(titleMinor), icon(icon), key(key)
 {
 }
@@ -324,15 +325,20 @@ QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) con
 {
     switch (static_cast<MusicalSymbolCode>(noteIcon)) {
     case MusicalSymbolCode::SEMIQUAVER:
-        return withDot ? muse::qtrc("project/newscore", "Dotted 16th note") : muse::qtrc("project/newscore", "16th note");
+        return withDot ? muse::qtrc("project/newscore", "Dotted 16th note") : muse::qtrc("project/newscore",
+                                                                                         "16th note");
     case MusicalSymbolCode::QUAVER:
-        return withDot ? muse::qtrc("project/newscore", "Dotted eighth note") : muse::qtrc("project/newscore", "Eighth note");
+        return withDot ? muse::qtrc("project/newscore", "Dotted eighth note") : muse::qtrc("project/newscore",
+                                                                                           "Eighth note");
     case MusicalSymbolCode::CROTCHET:
-        return withDot ? muse::qtrc("project/newscore", "Dotted quarter note") : muse::qtrc("project/newscore", "Quarter note");
+        return withDot ? muse::qtrc("project/newscore", "Dotted quarter note") : muse::qtrc("project/newscore",
+                                                                                            "Quarter note");
     case MusicalSymbolCode::MINIM:
-        return withDot ? muse::qtrc("project/newscore", "Dotted half note") : muse::qtrc("project/newscore", "Half note");
+        return withDot ? muse::qtrc("project/newscore", "Dotted half note") : muse::qtrc("project/newscore",
+                                                                                         "Half note");
     case MusicalSymbolCode::SEMIBREVE:
-        return withDot ? muse::qtrc("project/newscore", "Dotted whole note") : muse::qtrc("project/newscore", "Whole note");
+        return withDot ? muse::qtrc("project/newscore", "Dotted whole note") : muse::qtrc("project/newscore",
+                                                                                          "Whole note");
     default:
         break;
     }

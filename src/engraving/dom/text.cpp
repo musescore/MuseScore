@@ -58,7 +58,8 @@ static bool styleIsSelectable(TextStyleType style)
 //---------------------------------------------------------
 
 Text::Text(EngravingItem* parent, TextStyleType tid)
-    : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
+    : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(
+                   tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
 }

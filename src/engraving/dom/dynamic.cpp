@@ -78,14 +78,16 @@ const std::vector<Dyn> Dynamic::DYN_LIST = {
 
     { DynamicType::SF,      112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>" },
     { DynamicType::SFZ,     112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::SFF,     126, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFF,     126, -18, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     { DynamicType::SFFZ,    126, -18, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
     { DynamicType::SFFF,    127, -18, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     { DynamicType::SFFFZ,   127, -18, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::SFP,     112, -47, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::SFP,     112, -47, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
     { DynamicType::SFPP,    112, -79, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
 
@@ -288,7 +290,8 @@ HairpinSegment* Dynamic::findSnapBeforeHairpinAcrossSystemBreak() const
     }
 
     for (SpannerSegment* spannerSeg : prevSystem->spannerSegments()) {
-        if (!spannerSeg->isHairpinSegment() || spannerSeg->track() != track() || spannerSeg->spanner()->tick2() != tick()) {
+        if (!spannerSeg->isHairpinSegment() || spannerSeg->track() != track()
+            || spannerSeg->spanner()->tick2() != tick()) {
             continue;
         }
         HairpinSegment* hairpinSeg = toHairpinSegment(spannerSeg);
@@ -303,7 +306,8 @@ HairpinSegment* Dynamic::findSnapBeforeHairpinAcrossSystemBreak() const
 bool Dynamic::acceptDrop(EditData& ed) const
 {
     ElementType droppedType = ed.dropElement->type();
-    return droppedType == ElementType::DYNAMIC || droppedType == ElementType::EXPRESSION || droppedType == ElementType::HAIRPIN;
+    return droppedType == ElementType::DYNAMIC || droppedType == ElementType::EXPRESSION
+           || droppedType == ElementType::HAIRPIN;
 }
 
 EngravingItem* Dynamic::drop(EditData& ed)
@@ -378,7 +382,8 @@ void Dynamic::dragGrip(EditData& ed)
     const bool hasRightGrip = this->hasRightGrip();
 
     // Right grip (when two grips/when single grip)
-    if ((int(ed.curGrip) == 1 && hasLeftGrip && hasRightGrip) || (int(ed.curGrip) == 0 && !hasLeftGrip && hasRightGrip)) {
+    if ((int(ed.curGrip) == 1 && hasLeftGrip && hasRightGrip)
+        || (int(ed.curGrip) == 0 && !hasLeftGrip && hasRightGrip)) {
         m_rightDragOffset += ed.evtDelta.x();
         if (m_rightDragOffset < 0) {
             m_rightDragOffset = 0;

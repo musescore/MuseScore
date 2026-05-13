@@ -28,7 +28,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-ImageSettingsModel::ImageSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+ImageSettingsModel::ImageSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_IMAGE);

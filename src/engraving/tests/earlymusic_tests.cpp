@@ -82,7 +82,8 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_LONG);
     // verify score file did not change
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + u"mensurstrich01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx",
+                                            EARLYMUSIC_DATA_DIR + u"mensurstrich01-ref.mscx"));
 
     // UNDO AND VERIFY
     EditData ed;
@@ -95,6 +96,7 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
     EXPECT_EQ(dur.type(), DurationType::V_BREVE);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"mensurstrich01.mscx",
+                                            EARLYMUSIC_DATA_DIR + u"mensurstrich01.mscx"));
     delete score;
 }

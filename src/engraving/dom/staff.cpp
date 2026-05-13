@@ -234,7 +234,8 @@ void Staff::undoSetShowMeasureNumbers(bool show)
 
 bool Staff::shouldShowMeasureNumbers() const
 {
-    MeasureNumberPlacement placementMode = style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
+    MeasureNumberPlacement placementMode
+        = style().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
     switch (placementMode) {
     case MeasureNumberPlacement::ABOVE_SYSTEM:
         return score()->staves().front() == this;
@@ -243,7 +244,8 @@ bool Staff::shouldShowMeasureNumbers() const
     case MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES:
     {
         bool isTopStave = score()->staves().front() == this;
-        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff() && m_showMeasureNumbers == AutoOnOff::ON);
+        return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF)
+               || (isSystemObjectStaff() && m_showMeasureNumbers == AutoOnOff::ON);
     }
     case MeasureNumberPlacement::ON_ALL_STAVES:
         return show();
@@ -630,7 +632,8 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         case StaffGroup::TAB:
         {
             ClefType sct = ClefType(style().styleI(Sid::tabClef));
-            ct = staffType(tick)->lines() <= 4 ? ClefTypeList(sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(
+            ct = staffType(tick)->lines() <= 4 ? ClefTypeList(
+                sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(
                 sct == ClefType::TAB ? ClefType::TAB : ClefType::TAB_SERIF);
         }
         break;

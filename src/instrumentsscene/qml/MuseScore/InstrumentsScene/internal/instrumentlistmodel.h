@@ -124,7 +124,8 @@ private:
 
     void updateStateBySearch();
 
-    bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithCurrentGroup = true) const;
+    bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument,
+                              bool compareWithCurrentGroup = true) const;
     bool isInstrumentIndexValid(int index) const;
 
     void setCurrentGenre(const QString& genreId);

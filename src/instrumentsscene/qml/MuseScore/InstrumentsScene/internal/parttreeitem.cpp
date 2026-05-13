@@ -29,7 +29,8 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 
-PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)
+PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent,
+                           LayoutPanelItemType::ItemType type)
     : AbstractLayoutPanelTreeItem(type, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
     setIsSelectable(true);

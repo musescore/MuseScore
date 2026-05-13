@@ -37,7 +37,8 @@ class MasterPalette : public muse::uicomponents::TopLevelDialog, Ui::MasterPalet
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString selectedPaletteName READ selectedPaletteName WRITE setSelectedPaletteName NOTIFY selectedPaletteNameChanged)
+    Q_PROPERTY(
+        QString selectedPaletteName READ selectedPaletteName WRITE setSelectedPaletteName NOTIFY selectedPaletteNameChanged)
 
 public:
     explicit MasterPalette(QWidget* parent = nullptr);

@@ -111,7 +111,8 @@ muse::Ret VideoWriter::write(INotationProjectPtr project, const muse::io::path_t
     return ret;
 }
 
-muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath, const Config& config)
+muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, const muse::io::path_t& filePath,
+                                                  const Config& config)
 {
     // --score-video -o ./simple5.mp4 ./simple5.mscz
 

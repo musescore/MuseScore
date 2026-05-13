@@ -39,7 +39,8 @@
 #include "notation/inotation.h"
 
 namespace mu::notation {
-class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class NotationActionController : public muse::actions::Actionable, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::GlobalInject<INotationConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
@@ -75,7 +76,8 @@ public:
     muse::async::Notification currentMasterNotationChanged() const;
 
     using EngravingDebuggingOptions = engraving::IEngravingConfiguration::DebuggingOptions;
-    static const std::unordered_map<muse::actions::ActionCode, bool EngravingDebuggingOptions::*> engravingDebuggingActions;
+    static const std::unordered_map<muse::actions::ActionCode,
+                                    bool EngravingDebuggingOptions::*> engravingDebuggingActions;
 
 private:
     INotationPtr currentNotation() const;
@@ -232,7 +234,8 @@ private:
 
     void toggleAutomation();
 
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(const muse::actions::ActionData& data),
+    void registerAction(const muse::actions::ActionCode&,
+                        void (NotationActionController::*)(const muse::actions::ActionData& data),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
@@ -240,7 +243,8 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, std::function<void(const muse::actions::ActionData& data)>,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
-    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
+    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool),
+                        MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
                         muse::Ret (INotationInteraction::*)() const);
@@ -250,7 +254,8 @@ private:
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
 
     bool noteInputActionAllowed() const;
-    void registerNoteAction(const muse::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+    void registerNoteAction(const muse::actions::ActionCode&, NoteName,
+                            NoteAddingMode addingMode = NoteAddingMode::NextChord);
 
     void registerPadNoteAction(const muse::actions::ActionCode&, Pad padding);
     void registerTabPadNoteAction(const muse::actions::ActionCode&, Pad padding);
@@ -259,22 +264,26 @@ private:
         NoPlay, PlayNote, PlayChord
     };
 
-    void registerMoveSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction,
-                                     PlayMode playMode = PlayMode::NoPlay);
-    void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type, MoveDirection direction);
+    void registerMoveSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type,
+                                     MoveDirection direction, PlayMode playMode = PlayMode::NoPlay);
+    void registerAddToSelectionAction(const muse::actions::ActionCode& code, MoveSelectionType type,
+                                      MoveDirection direction);
     void registerExpandSelectionAction(const muse::actions::ActionCode& code, ExpandSelectionMode mode);
 
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
+    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(),
+                        bool (NotationActionController::*)() const);
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
+    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1,
+                        PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     template<typename P1>
     void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1), P1,
                         bool (NotationActionController::*)() const);
     template<typename P1, typename P2, typename Q1, typename Q2>
-    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2, PlayMode = PlayMode::NoPlay,
+    void registerAction(const muse::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), Q1, Q2,
+                        PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
     muse::async::Notification m_currentNotationNoteInputChanged;

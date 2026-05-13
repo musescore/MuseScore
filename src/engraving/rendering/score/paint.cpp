@@ -62,8 +62,10 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Sco
     //! NOTE To draw on the screen, no need to adjust the viewport,
     //! to draw on others (pdf, png, printer), we need to set the viewport
     if (opt.isSetViewport) {
-        painter->setViewport(RectF(0.0, 0.0, std::lrint(pageSize.width() * DEVICE_DPI), std::lrint(pageSize.height() * DEVICE_DPI)));
-        painter->setWindow(RectF(0.0, 0.0, std::lrint(pageSize.width() * engraving::DPI), std::lrint(pageSize.height() * engraving::DPI)));
+        painter->setViewport(RectF(0.0, 0.0, std::lrint(pageSize.width() * DEVICE_DPI),
+                                   std::lrint(pageSize.height() * DEVICE_DPI)));
+        painter->setWindow(RectF(0.0, 0.0, std::lrint(pageSize.width() * engraving::DPI),
+                                 std::lrint(pageSize.height() * engraving::DPI)));
     }
 
     // Setup score draw system
@@ -187,7 +189,8 @@ SizeF Paint::pageSizeInch(const Score* score)
     //! then the page sizes will differ from the standard sizes (in PAGE view mode)
     if (score->npages() > 0) {
         const Page* page = score->pages().front();
-        return SizeF(page->ldata()->bbox().width() / mu::engraving::DPI, page->ldata()->bbox().height() / mu::engraving::DPI);
+        return SizeF(page->ldata()->bbox().width() / mu::engraving::DPI,
+                     page->ldata()->bbox().height() / mu::engraving::DPI);
     }
 
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));

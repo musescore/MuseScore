@@ -96,8 +96,10 @@ void SystemObjectsLayerSettingsModel::setSystemObjectsGroupVisible(int index, bo
     SystemObjectsGroup& group = m_systemObjectGroups.at(idx);
 
     const muse::TranslatableString actionName = visible
-                                                ? muse::TranslatableString("undoableAction", "Make system marking(s) visible")
-                                                : muse::TranslatableString("undoableAction", "Make system marking(s) invisible");
+                                                ? muse::TranslatableString("undoableAction",
+                                                                           "Make system marking(s) visible")
+                                                : muse::TranslatableString("undoableAction",
+                                                                           "Make system marking(s) invisible");
 
     notation->undoStack()->prepareChanges(actionName);
 

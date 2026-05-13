@@ -563,9 +563,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
                    || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
         } else if (tag == "articulationAnchorDefault" && mscVersion < 410) {
-            set(Sid::articulationAnchorDefault, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+            set(Sid::articulationAnchorDefault,
+                (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "articulationAnchorLuteFingering" && mscVersion < 410) {
-            set(Sid::articulationAnchorLuteFingering, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+            set(Sid::articulationAnchorLuteFingering,
+                (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "articulationAnchorOther" && mscVersion < 410) {
             set(Sid::articulationAnchorOther, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
@@ -631,9 +633,12 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
             set(Sid::mmRestRangeHPlacement, hAlign);
         } else if (tag == "measureNumberAllStaves" || tag == "measureNumberAllStaffs" /*old typo*/) {
             bool allStaves = e.readBool();
-            set(Sid::measureNumberPlacementMode, allStaves ? MeasureNumberPlacement::ON_ALL_STAVES : MeasureNumberPlacement::ABOVE_SYSTEM);
+            set(Sid::measureNumberPlacementMode,
+                allStaves ? MeasureNumberPlacement::ON_ALL_STAVES : MeasureNumberPlacement::ABOVE_SYSTEM);
         } else if (String sTag = String::fromAscii(tag.ascii()); mscVersion < 470 && sTag.contains(u"FrameRound")) {
-            auto i = std::find_if(StyleDef::styleValues.begin(), StyleDef::styleValues.end(), [&](const StyleDef::StyleValue& s) {
+            auto i
+                = std::find_if(StyleDef::styleValues.begin(),
+                               StyleDef::styleValues.end(), [&](const StyleDef::StyleValue& s) {
                 return s.xmlName == tag;
             });
             if (i != StyleDef::styleValues.end()) {
@@ -659,8 +664,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
 
         // Make sure new position styles are initially the same as align values
         // Exclude text styles which had align & position separated in 4.6
-        compat::CompatUtils::setPositionStylesFromAlign(this, { Sid::chordSymbolAAlign, Sid::chordSymbolBAlign, Sid::romanNumeralAlign,
-                                                                Sid::nashvilleNumberAlign, Sid::repeatLeftAlign, Sid::repeatRightAlign });
+        compat::CompatUtils::setPositionStylesFromAlign(this, { Sid::chordSymbolAAlign, Sid::chordSymbolBAlign,
+                                                                Sid::romanNumeralAlign,
+                                                                Sid::nashvilleNumberAlign, Sid::repeatLeftAlign,
+                                                                Sid::repeatRightAlign });
 
         if (value(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::JAZZ) {
             set(Sid::harmonyParenUseSmuflSym, true);

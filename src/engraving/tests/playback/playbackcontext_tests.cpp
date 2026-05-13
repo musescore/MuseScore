@@ -228,11 +228,13 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_OnDifferentVoices)
 
     auto addDynToAllStavesAndVoices = [score, part, &expectedLayers](mpe::DynamicType dyn, int tick) {
         for (track_idx_t trackIdx = part->startTrack(); trackIdx < part->endTrack(); ++trackIdx) {
-            expectedLayers[static_cast<layer_idx_t>(trackIdx)][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
+            expectedLayers[static_cast<layer_idx_t>(trackIdx)][timestampFromTicks(score, tick)] = dynamicLevelFromType(
+                dyn);
         }
     };
 
-    auto addDynToStaffAndVoice = [score, &expectedLayers](mpe::DynamicType dyn, staff_idx_t staffIdx, voice_idx_t voiceIdx, int tick) {
+    auto addDynToStaffAndVoice
+        = [score, &expectedLayers](mpe::DynamicType dyn, staff_idx_t staffIdx, voice_idx_t voiceIdx, int tick) {
         layer_idx_t layerIdx = static_cast<layer_idx_t>(staff2track(staffIdx, voiceIdx));
         expectedLayers[layerIdx][timestampFromTicks(score, tick)] = dynamicLevelFromType(dyn);
     };
@@ -294,8 +296,10 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Overlap)
     constexpr mpe::dynamic_level_t ff = dynamicLevelFromType(mpe::DynamicType::ff);
     constexpr mpe::dynamic_level_t pp = dynamicLevelFromType(mpe::DynamicType::pp);
 
-    const std::map<int, int> ff_to_pp_curve = TConv::easingValueCurve(1920 - Fraction::eps().ticks(),
-                                                                      HAIRPIN_STEPS, static_cast<int>(pp - ff), ChangeMethod::NORMAL);
+    const std::map<int, int> ff_to_pp_curve = TConv::easingValueCurve(
+        1920 - Fraction::eps().ticks(),
+        HAIRPIN_STEPS, static_cast<int>(pp - ff),
+        ChangeMethod::NORMAL);
     for (const auto& pair : ff_to_pp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first);
         expectedDynamics.emplace(time, ff + static_cast<dynamic_level_t>(pair.second));
@@ -335,8 +339,10 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_Niente)
     constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
     constexpr mpe::dynamic_level_t n = dynamicLevelFromType(mpe::DynamicType::ppppppppp);
 
-    const std::map<int, int> f_to_n_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(n - f), ChangeMethod::NORMAL);
-    const std::map<int, int> n_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - n), ChangeMethod::NORMAL);
+    const std::map<int, int> f_to_n_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(n - f),
+                                                                    ChangeMethod::NORMAL);
+    const std::map<int, int> n_to_f_curve = TConv::easingValueCurve(1920, HAIRPIN_STEPS, static_cast<int>(f - n),
+                                                                    ChangeMethod::NORMAL);
 
     // 1st measure: Dim. al niente with 'n' dynamic
     for (const auto& pair : f_to_n_curve) {
@@ -398,10 +404,12 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     constexpr int compoundDynamicTicks = 384;
 
     // 1st and 2nd measures: fp -> f
-    const std::map<int, int> fp_curve = TConv::easingValueCurve(compoundDynamicTicks, COMPOUND_DYNAMIC_STEPS, static_cast<int>(p - f),
+    const std::map<int, int> fp_curve = TConv::easingValueCurve(compoundDynamicTicks, COMPOUND_DYNAMIC_STEPS,
+                                                                static_cast<int>(p - f),
                                                                 ChangeMethod::NORMAL);
     const std::map<int,
-                   int> p_to_f_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, HAIRPIN_STEPS, static_cast<int>(f - p),
+                   int> p_to_f_curve = TConv::easingValueCurve(measureTicks - compoundDynamicTicks, HAIRPIN_STEPS,
+                                                               static_cast<int>(f - p),
                                                                ChangeMethod::NORMAL);
 
     for (const auto& pair : fp_curve) {
@@ -425,8 +433,10 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_HairpinWithCompound)
     }
 
     // 4th and 5th measures: fp -> pp, then jump back to f
-    const std::map<int, int> p_to_pp_curve_shorted_by_one = TConv::easingValueCurve(measureTicks - compoundDynamicTicks - 1, HAIRPIN_STEPS,
-                                                                                    static_cast<int>(pp - p), ChangeMethod::NORMAL);
+    const std::map<int, int> p_to_pp_curve_shorted_by_one = TConv::easingValueCurve(
+        measureTicks - compoundDynamicTicks - 1, HAIRPIN_STEPS,
+        static_cast<int>(pp - p),
+        ChangeMethod::NORMAL);
 
     for (const auto& pair : fp_curve) {
         mpe::timestamp_t time = timestampFromTicks(score, pair.first + 3 * measureTicks);
@@ -567,7 +577,8 @@ TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
 {
     // [GIVEN] Score with 5 measures. The 1st measure is repeated. There also is a measure repeat on the last 2 measures
     // (so the previous 2 measures will be repeated)
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "play_techniques/play_techniques_measure_repeats.mscx");
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_CONTEXT_TEST_FILES_DIR + "play_techniques/play_techniques_measure_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());

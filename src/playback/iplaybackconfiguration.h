@@ -65,7 +65,8 @@ public:
     virtual void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const = 0;
     virtual muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
 
-    virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
+    virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index,
+                                                    muse::audio::AudioSourceType sourceType,
                                                     const muse::String& instrumentSoundId) const = 0;
 
     virtual bool muteHiddenInstruments() const = 0;

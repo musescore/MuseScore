@@ -143,8 +143,8 @@ private:
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes, LayoutContext& ctx);
 
     static void setDotRelativeLine(Note* note, int dotMove, LayoutContext& ctx);
-    static void setDotX(const std::vector<Chord*>& chords, const std::array<double, 3 * VOICES>& dotPos, const Staff* staff,
-                        const double upDotPosX, const double downDotPosX);
+    static void setDotX(const std::vector<Chord*>& chords, const std::array<double, 3 * VOICES>& dotPos,
+                        const Staff* staff, const double upDotPosX, const double downDotPosX);
 
     static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
 
@@ -157,15 +157,17 @@ private:
 
     static void updateLedgerLines(Chord* item, LayoutContext& ctx);
 
-    static ChordPosInfo calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
-                                              LayoutContext& ctx);
-    static void calculateMaxNoteWidths(ChordPosInfo& posInfo, const Fraction& tick, const Staff* staff, LayoutContext& ctx);
-    static OffsetInfo centreChords(const Segment* segment, ChordPosInfo& posInfo, staff_idx_t staffIdx, const Fraction& tick,
-                                   LayoutContext& ctx);
-    static void calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick, OffsetInfo& offsetInfo,
-                                      ChordPosInfo& posInfo, LayoutContext& ctx);
-    static void applyChordOffsets(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack, track_idx_t partEndTrack,
-                                  OffsetInfo& offsetInfo, const ChordPosInfo& posInfo, LayoutContext& ctx);
+    static ChordPosInfo calculateChordPosInfo(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack,
+                                              track_idx_t partEndTrack, LayoutContext& ctx);
+    static void calculateMaxNoteWidths(ChordPosInfo& posInfo, const Fraction& tick, const Staff* staff,
+                                       LayoutContext& ctx);
+    static OffsetInfo centreChords(const Segment* segment, ChordPosInfo& posInfo, staff_idx_t staffIdx,
+                                   const Fraction& tick, LayoutContext& ctx);
+    static void calculateChordOffsets(Segment* segment, staff_idx_t staffIdx, const Fraction& tick,
+                                      OffsetInfo& offsetInfo, ChordPosInfo& posInfo, LayoutContext& ctx);
+    static void applyChordOffsets(Segment* segment, staff_idx_t staffIdx, track_idx_t partStartTrack,
+                                  track_idx_t partEndTrack, OffsetInfo& offsetInfo, const ChordPosInfo& posInfo,
+                                  LayoutContext& ctx);
 };
 }
 

@@ -161,35 +161,48 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::KEYSIG:            return new KeySig(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIMESIG:           return new TimeSig(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BAR_LINE:          return new BarLine(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parent->isSystem() ? toSystem(
+                                                                      parent) : dummy->system());
     case ElementType::ARPEGGIO:          return new Arpeggio(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::CHORD_BRACKET:     return new ChordBracket(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::BREATH:            return new Breath(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
-    case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(
+                                                                     parent) : dummy->chord());
     case ElementType::TAPPING:           return new Tapping(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
-    case ElementType::ORNAMENT:          return new Ornament(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::ORNAMENT:          return new Ornament(parent->isChordRest() ? toChordRest(
+                                                                 parent) : dummy->chord());
     case ElementType::FERMATA:           return new Fermata(parent);
     case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
     case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::EXPRESSION:        return new Expression(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::EXPRESSION:        return new Expression(parent->isSegment() ? toSegment(
+                                                                   parent) : dummy->segment());
     case ElementType::TEXT:              return new Text(parent);
-    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(
+                                                                      parent) : dummy->measure());
+    case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(
+                                                                    parent) : dummy->measure());
+    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(
+                                                                       parent) : dummy->system());
     case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::PLAY_COUNT_TEXT:   return new PlayCountText(parent->isSegment() ? toSegment(
+                                                                      parent) : dummy->segment());
+    case ElementType::PLAYTECH_ANNOTATION: return new PlayTechAnnotation(parent->isSegment() ? toSegment(
+                                                                             parent) : dummy->segment());
     case ElementType::CAPO:              return new Capo(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(
+                                                                   parent) : dummy->segment());
+    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(
+                                                                      parent) : dummy->segment());
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
     case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
-    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(
+                                                                        parent) : dummy->measure());
     case ElementType::STAFF_VISIBILITY_INDICATOR: return new StaffVisibilityIndicator(parent->isSystem()
-                                                                                      ? toSystem(parent) : dummy->system());
+                                                                                      ? toSystem(
+                                                                                          parent) : dummy->system());
     case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::NOTEDOT: {
         if (parent->isNote()) {
@@ -200,12 +213,15 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
             return new NoteDot(dummy->note());
         }
     }
-    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(
+                                                                             parent) : dummy->chord());
     case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parent->isChord() ? toChord(parent) : dummy->chord());
-    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(
+                                                                    parent) : dummy->measure());
     case ElementType::MARKER:            return new Marker(parent);
     case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
-    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parent->isSegment() ? toSegment(
+                                                                      parent) : dummy->segment());
     case ElementType::ACTION_ICON:       return new ActionIcon(parent);
     case ElementType::NOTE:              return new Note(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SYMBOL:            return new Symbol(parent);
@@ -218,14 +234,17 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STAFF_STATE:       return new StaffState(parent);
     case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(
+                                                                    parent) : dummy->segment());
+    case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(
+                                                                         parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::GUITAR_BEND:       return new GuitarBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::LYRICSLINE:        return new LyricsLine(parent);
-    case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(
+                                                                    parent) : dummy->segment());
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
     case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
@@ -237,14 +256,18 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TBOX:              return new TBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::FBOX:              return new FBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::MEASURE:           return new Measure(parent->isSystem() ? toSystem(parent) : dummy->system());
-    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(
+                                                                            parent) : dummy->chord());
     case ElementType::IMAGE:             return new Image(parent);
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
     case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
-    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(
+                                                                    parent) : dummy->segment());
+    case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(
+                                                                        parent) : dummy->segment());
+    case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(
+                                                                       parent) : dummy->segment());
     case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::PARTIAL_TIE:       return new PartialTie(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
@@ -552,7 +575,8 @@ COPY_ITEM_IMPL(StemSlash)
 
 CREATE_ITEM_IMPL(System, Page, isAccessibleEnabled)
 
-SystemText* Factory::createSystemText(Segment * parent, TextStyleType textStyleType, ElementType type, bool isAccessibleEnabled)
+SystemText* Factory::createSystemText(Segment * parent, TextStyleType textStyleType, ElementType type,
+                                      bool isAccessibleEnabled)
 {
     SystemText* systemText = new SystemText(parent, textStyleType, type);
     systemText->setAccessibleEnabled(isAccessibleEnabled);
@@ -722,7 +746,8 @@ CREATE_ITEM_IMPL(FSymbol, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(PlayCountText, Segment, isAccessibleEnabled)
 
-PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingTechniqueType techniqueType, TextStyleType styleType,
+PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingTechniqueType techniqueType,
+                                                      TextStyleType styleType,
                                                       bool isAccessibleEnabled)
 {
     PlayTechAnnotation* annotation = new PlayTechAnnotation(parent, techniqueType, styleType);
@@ -738,7 +763,8 @@ CREATE_ITEM_IMPL(TimeTickAnchor, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(StaffVisibilityIndicator, System, isAccessibleEnabled)
 
-SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock,
+                                                        bool isAccessibleEnabled)
 {
     SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
     sli->setAccessibleEnabled(isAccessibleEnabled);

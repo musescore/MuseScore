@@ -52,7 +52,8 @@ bool ImplodeExplode::explode(Score* score)
     if (!endSegment) {
         endMeasure = score->lastMeasure();
     } else if (endSegment->tick() == endSegment->measure()->tick()) {
-        endMeasure = endSegment->measure()->prevMeasure() ? endSegment->measure()->prevMeasure() : score->firstMeasure();
+        endMeasure
+            = endSegment->measure()->prevMeasure() ? endSegment->measure()->prevMeasure() : score->firstMeasure();
     } else {
         endMeasure = endSegment->measure();
     }
@@ -124,7 +125,8 @@ bool ImplodeExplode::explode(Score* score)
             // keep note "i" from top, which is backwards from nnotes - 1
             // reuse notes if there are more instruments than notes
             size_t stavesPerNote = std::max((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
-            size_t keepIndex = static_cast<size_t>(std::max(static_cast<int>(nnotes) - 1 - static_cast<int>(i / stavesPerNote), 0));
+            size_t keepIndex
+                = static_cast<size_t>(std::max(static_cast<int>(nnotes) - 1 - static_cast<int>(i / stavesPerNote), 0));
             Note* keepNote = c->notes()[keepIndex];
             for (Note* n : notes) {
                 if (n != keepNote) {

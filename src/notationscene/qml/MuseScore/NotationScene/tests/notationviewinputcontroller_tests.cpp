@@ -870,7 +870,8 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     INotationInteraction::HitElementContext selectMeasureContext = hitMeasureContext(score, 0 /*first measure*/);
 
     //! [GIVEN] User pressed the right button on the selected measure, same context
-    INotationInteraction::HitElementContext contextMenuOnMeasureContext = hitMeasureContext(score, 1 /*second measure*/);
+    INotationInteraction::HitElementContext contextMenuOnMeasureContext
+        = hitMeasureContext(score, 1 /*second measure*/);
 
     EXPECT_CALL(*m_interaction, hitElement(_, _))
     .WillOnce(Return(selectMeasureContext.element))

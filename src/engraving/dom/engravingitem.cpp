@@ -578,7 +578,8 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
         }
     }
 
-    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show() && !cutawayMeasureNo(originalStaffIdx)) {
+    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show()
+        && !cutawayMeasureNo(originalStaffIdx)) {
         return originalStaffIdx;
     }
 
@@ -1067,7 +1068,8 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset, Fraction* 
 //   readMimeData
 //---------------------------------------------------------
 
-EngravingItem* EngravingItem::readMimeData(Score* score, const muse::ByteArray& data, PointF* dragOffset, Fraction* duration)
+EngravingItem* EngravingItem::readMimeData(Score* score, const muse::ByteArray& data, PointF* dragOffset,
+                                           Fraction* duration)
 {
     XmlReader e(data);
 
@@ -1124,7 +1126,8 @@ void EngravingItem::remove(EngravingItem* e)
         break;
     }
     default:
-        ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
+        ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()),
+                                                                        String::fromAscii(typeName())));
     }
 }
 
@@ -1298,7 +1301,8 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
             return explicitParent()->setProperty(propertyId, v);
         }
 
-        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.value<String>();
+        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) <<
+            "), data: " << v.value<String>();
         return false;
     }
     triggerLayout();
@@ -1405,7 +1409,8 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
         newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
     } else {
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
+        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT
+            || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
             if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {
@@ -2287,7 +2292,8 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
     }
     double yp;
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
-        Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
+        Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(
+            explicitParent());
         System* system = meas->system();
         const staff_idx_t stIdx = effectiveStaffIdx();
         if (stIdx == muse::nidx) {
@@ -2873,14 +2879,16 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::GUITAR_BEND_SEGMENT: {
             //! NOTE Temporary fix
             //! We can remove it the moment we figure out the layout order of the elements
-            TLayout::fillGuitarBendSegmentShape(toGuitarBendSegment(m_item),
+            TLayout::fillGuitarBendSegmentShape(toGuitarBendSegment(
+                                                    m_item),
                                                 static_cast<GuitarBendSegment::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
         case ElementType::HAIRPIN_SEGMENT: {
             //! To be removed when we're confident enough...
             IF_ASSERT_FAILED(m_shape.has_value()) {
-                const_cast<LayoutData*>(this)->setShape(TLayout::recalculateTextLineBaseSegmentShape(toHairpinSegment(m_item)));
+                const_cast<LayoutData*>(this)->setShape(TLayout::recalculateTextLineBaseSegmentShape(toHairpinSegment(
+                                                                                                         m_item)));
             }
             return m_shape.value(LD_ACCESS::CHECK);
         } break;

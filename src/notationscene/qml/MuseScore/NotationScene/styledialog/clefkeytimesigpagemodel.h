@@ -74,16 +74,25 @@ class ClefKeyTimeSigPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(mu::notation::StyleItem * useParensRepeatCourtesies READ useParensRepeatCourtesies CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * showCourtesiesOtherJumps READ showCourtesiesOtherJumps CONSTANT)
     Q_PROPERTY(mu::notation::StyleItem * useParensOtherJumpCourtesies READ useParensOtherJumpCourtesies CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * showCourtesiesAfterCancellingRepeats READ showCourtesiesAfterCancellingRepeats CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * useParensRepeatCourtesiesAfterCancelling READ useParensRepeatCourtesiesAfterCancelling CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * showCourtesiesAfterCancellingOtherJumps READ showCourtesiesAfterCancellingOtherJumps CONSTANT)
     Q_PROPERTY(
-        mu::notation::StyleItem * useParensOtherJumpCourtesiesAfterCancelling READ useParensOtherJumpCourtesiesAfterCancelling CONSTANT)
+        mu::notation::StyleItem
+        * showCourtesiesAfterCancellingRepeats READ showCourtesiesAfterCancellingRepeats CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * useParensRepeatCourtesiesAfterCancelling READ useParensRepeatCourtesiesAfterCancelling CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * showCourtesiesAfterCancellingOtherJumps READ showCourtesiesAfterCancellingOtherJumps CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * useParensOtherJumpCourtesiesAfterCancelling READ useParensOtherJumpCourtesiesAfterCancelling CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * smallParens READ smallParens CONSTANT)
 
     Q_PROPERTY(mu::notation::StyleItem * keySigNaturals READ keySigNaturals CONSTANT)
-    Q_PROPERTY(mu::notation::StyleItem * keySigShowNaturalsChangingSharpsFlats READ keySigShowNaturalsChangingSharpsFlats CONSTANT)
+    Q_PROPERTY(
+        mu::notation::StyleItem
+        * keySigShowNaturalsChangingSharpsFlats READ keySigShowNaturalsChangingSharpsFlats CONSTANT)
 
     QML_ELEMENT
 

@@ -542,7 +542,8 @@ void EditStaff::initStaff()
     } else if (element->isMeasure()) {
         tick = mu::engraving::toMeasure(element)->tick();
     } else if (element->isInstrumentName()) {
-        const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(element)->explicitParent());
+        const mu::engraving::System* system = mu::engraving::toSystem(mu::engraving::toInstrumentName(
+                                                                          element)->explicitParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
         staff = element->staff();
 
@@ -705,7 +706,8 @@ void EditStaff::applyPartProperties()
     } else if (m_instrument != prevInstrument) {
         bool groupNameChanged = name.useCustomGroupName() != prevInstrument.instrumentLabel().useCustomGroupName()
                                 || name.customNameLongGroup() != prevInstrument.instrumentLabel().customNameLongGroup()
-                                || name.customNameShortGroup() != prevInstrument.instrumentLabel().customNameShortGroup();
+                                || name.customNameShortGroup()
+                                != prevInstrument.instrumentLabel().customNameShortGroup();
         if (groupNameChanged) {
             notationParts()->setInstrumentGroupNameOptions(otherInstrumentsInSameGroup(),
                                                            name.useCustomGroupName(), name.customNameLongGroup(),

@@ -796,7 +796,9 @@ bool MeiExporter::writeInstrDef(pugi::xml_node node, const Part* part)
 bool MeiExporter::writeEnding(const Measure* measure)
 {
     std::vector<const Volta*> voltas = this->findVoltasInMeasure(measure);
-    auto voltaIter = std::find_if(voltas.begin(), voltas.end(), [measure](const Volta* volta) { return volta->startMeasure() == measure; });
+    auto voltaIter = std::find_if(voltas.begin(), voltas.end(), [measure](const Volta* volta) {
+        return volta->startMeasure() == measure;
+    });
 
     if (voltaIter != voltas.end()) {
         libmei::Ending meiEnding = Convert::endingToMEI(*voltaIter);
@@ -1085,7 +1087,8 @@ bool MeiExporter::writeArtic(const ChordLine* chordline)
  * Closing beam and tuplet only change the bool parameters and actually closing the elements is happening in MeiExporter::writeBeamAndTupletEnd
  */
 
-bool MeiExporter::writeBeamAndTuplet(const ChordRest* chordRest, bool& closingBeam, bool& closingTuplet, bool& closingBeamInTuplet)
+bool MeiExporter::writeBeamAndTuplet(const ChordRest* chordRest, bool& closingBeam, bool& closingTuplet,
+                                     bool& closingBeamInTuplet)
 {
     IF_ASSERT_FAILED(chordRest) {
         return false;
@@ -2170,7 +2173,8 @@ bool MeiExporter::writeTempo(const TempoText* tempoText, const std::string& star
     pugi::xml_node tempoNode = m_currentNode.append_child();
     libmei::Tempo meiTempo = Convert::tempoToMEI(tempoText, meiLines);
     if (tempoText->tick() == tempoText->measure()->tick()) {
-        double tstamp = Convert::tstampFromFraction(tempoText->tick() - tempoText->measure()->tick(), tempoText->measure()->timesig());
+        double tstamp = Convert::tstampFromFraction(tempoText->tick() - tempoText->measure()->tick(),
+                                                    tempoText->measure()->timesig());
         meiTempo.SetTstamp(tstamp);
     } else {
         meiTempo.SetStartid(startid);
@@ -2272,7 +2276,8 @@ bool MeiExporter::writeBeamTypeAtt(const ChordRest* chordRest, libmei::AttTyped&
  * Write the cross-staff attribute (@staff) for a ChordRest (i.e., chord, note, rest or space).
  */
 
-bool MeiExporter::writeStaffIdentAtt(const ChordRest* chordRest, const Staff* staff, libmei::AttStaffIdent& staffIdentAtt)
+bool MeiExporter::writeStaffIdentAtt(const ChordRest* chordRest, const Staff* staff,
+                                     libmei::AttStaffIdent& staffIdentAtt)
 {
     if (chordRest->staffMove() != 0) {
         staff_idx_t staffN = staff->idx() + chordRest->staffMove() + 1;
@@ -2360,7 +2365,9 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
-        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isPedal() || spanner->isSlur() || spanner->isTrill())) {
+        if (spanner
+            && (spanner->isHairpin() || spanner->isOttava() || spanner->isPedal() || spanner->isSlur()
+                || spanner->isTrill())) {
             if (spanner->startCR() == chordRest) {
                 m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
@@ -2779,10 +2786,12 @@ std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType)
         // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
         // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
         id = String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
-                                                                                                           elementType)).arg(++(
-                                                                                                                                 m_layerCounterFor
-                                                                                                                                 .at(
-                                                                                                                                     elementType)));
+                                                                                                           elementType))
+             .arg(++(
+                      m_layerCounterFor
+                      .
+                      at(
+                          elementType)));
     }
     return id.toStdString();
 }

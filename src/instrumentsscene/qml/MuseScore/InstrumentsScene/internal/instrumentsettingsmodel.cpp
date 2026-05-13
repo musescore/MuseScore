@@ -143,7 +143,8 @@ void InstrumentSettingsModel::setHideWhenEmpty(int value)
         return;
     }
 
-    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Change instrument settings"));
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction",
+                                                                            "Change instrument settings"));
 
     Part* mutablePart = const_cast<Part*>(part);
     mutablePart->undoChangeProperty(Pid::HIDE_WHEN_EMPTY, PropertyValue(static_cast<AutoOnOff>(value)));
@@ -165,7 +166,8 @@ void InstrumentSettingsModel::setHideStavesWhenIndividuallyEmpty(bool value)
         return;
     }
 
-    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Change instrument settings"));
+    currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction",
+                                                                            "Change instrument settings"));
 
     Part* mutablePart = const_cast<Part*>(part);
     mutablePart->undoChangeProperty(Pid::HIDE_STAVES_WHEN_INDIVIDUALLY_EMPTY, PropertyValue(value));

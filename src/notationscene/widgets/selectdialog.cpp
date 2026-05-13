@@ -270,7 +270,8 @@ void SelectDialog::apply() const
     } else if (doSubtract()) {
         std::vector<EngravingItem*> selectionElements = interaction->selection()->elements();
         for (EngravingItem* element: elements) {
-            selectionElements.erase(std::remove(selectionElements.begin(), selectionElements.end(), element), selectionElements.end());
+            selectionElements.erase(std::remove(selectionElements.begin(),
+                                                selectionElements.end(), element), selectionElements.end());
         }
 
         interaction->clearSelection();

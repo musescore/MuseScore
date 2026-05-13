@@ -155,7 +155,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
 
     Staff* stf = cr->staff();
-    if (!isGrace && !cr->tuplet() && (tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest)) {
+    if (!isGrace && !cr->tuplet()
+        && (tick + cr->actualTicksAt(tick) > measureEnd || partialCopy || convertMeasureRest)) {
         if (cr->isChord()) {
             // split Chord
             Chord* c = toChord(cr);
@@ -171,7 +172,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len = mlen > rest ? rest : mlen;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, false, (tick - measure->tick()) * timeStretch,
-                                                                   sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                                   sigmap()->timesig(
+                                                                       tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                     return;
@@ -219,7 +221,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len  = rest > mlen ? mlen : rest;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, true, (tick - measure->tick()) * timeStretch,
-                                                                   sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                                   sigmap()->timesig(
+                                                                       tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                     return;
@@ -402,7 +405,8 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
     }
 
     segment = target->score()->setNoteRest(segment, target->track(),
-                                           with->noteVal(), duration, stemDirection, false, {}, false, &target->score()->inputState());
+                                           with->noteVal(), duration, stemDirection, false, {}, false,
+                                           &target->score()->inputState());
     return toChord(segment->nextChordRest(target->track()))->upNote();
 }
 
@@ -412,7 +416,8 @@ static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fra
         return prepareTarget(toNote(target)->chord(), with, duration);
     }
     if (target->isChordRest()
-        && (toChordRest(target)->ticks() != duration || toChordRest(target)->durationType().type() == DurationType::V_MEASURE)) {
+        && (toChordRest(target)->ticks() != duration
+            || toChordRest(target)->durationType().type() == DurationType::V_MEASURE)) {
         return prepareTarget(toChordRest(target), with, duration);
     }
     return target;

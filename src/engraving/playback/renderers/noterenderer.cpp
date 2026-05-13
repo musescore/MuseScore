@@ -40,7 +40,8 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-bool NoteRenderer::shouldRender(const Note* note, const RenderingContext& ctx, const muse::mpe::ArticulationMap& articulations)
+bool NoteRenderer::shouldRender(const Note* note, const RenderingContext& ctx,
+                                const muse::mpe::ArticulationMap& articulations)
 {
     if (!note->play()) {
         return false;
@@ -174,8 +175,9 @@ void NoteRenderer::renderPartialTie(const Note* outgoingNote, NominalNoteCtx& ou
     }
 
     const int incomingNotePositionTickOffset = incomingNoteInfo.repeat->utick - incomingNoteInfo.repeat->tick;
-    RenderingContext incomingChordCtx = buildRenderingCtx(incomingNoteInfo.note->chord(), incomingNotePositionTickOffset,
-                                                          outgoingChordCtx.profile, outgoingChordCtx.playbackCtx);
+    RenderingContext incomingChordCtx = buildRenderingCtx(
+        incomingNoteInfo.note->chord(), incomingNotePositionTickOffset,
+        outgoingChordCtx.profile, outgoingChordCtx.playbackCtx);
 
     ChordArticulationsParser::buildChordArticulationMap(incomingNoteInfo.note->chord(), incomingChordCtx,
                                                         incomingChordCtx.commonArticulations);
@@ -232,7 +234,8 @@ void NoteRenderer::renderNormalTie(const Note* firstNote, NominalNoteCtx& firstN
         const NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
         if (shouldRender(currNote, currChordCtx, currNoteCtx.articulations)) {
             if (currNoteCtx.articulations.contains(ArticulationType::DiscreteGlissando)) {
-                firstNoteCtx.duration += GlissandosRenderer::discreteGlissandoStepDuration(currNote, currNoteCtx.duration);
+                firstNoteCtx.duration += GlissandosRenderer::discreteGlissandoStepDuration(currNote,
+                                                                                           currNoteCtx.duration);
             }
 
             break;
@@ -289,8 +292,9 @@ void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp,
 
         const duration_percentage_t occupiedFrom = mpe::occupiedPercentage(articulation.meta.timestamp,
                                                                            noteTimestampTo);
-        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(articulation.meta.timestamp + articulation.meta.overallDuration,
-                                                                         noteTimestampTo);
+        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(
+            articulation.meta.timestamp + articulation.meta.overallDuration,
+            noteTimestampTo);
 
         articulations.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
     }
@@ -311,8 +315,10 @@ void NoteRenderer::applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx)
     //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
     const Swing::ChordDurationAdjustment swingDurationAdjustment = Swing::applySwing(chord, swing);
     const duration_t additionalDuration = noteCtx.duration - noteCtx.chordCtx.nominalDuration;
-    noteCtx.timestamp = noteCtx.timestamp + noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
-    noteCtx.duration = noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
+    noteCtx.timestamp = noteCtx.timestamp + noteCtx.chordCtx.nominalDuration
+                        * swingDurationAdjustment.remainingDurationMultiplier;
+    noteCtx.duration = noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.durationMultiplier
+                       + additionalDuration;
 }
 
 NominalNoteCtx NoteRenderer::buildNominalNoteCtx(const Note* note, const RenderingContext& ctx)

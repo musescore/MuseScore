@@ -33,6 +33,7 @@ class RestSettingsProxyModel : public AbstractInspectorProxyModel
     QML_UNCREATABLE("Not creatable from QML")
 
 public:
-    explicit RestSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit RestSettingsProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                    IElementRepositoryService* repository);
 };
 }

@@ -266,7 +266,8 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                         ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
                                                              PropertyValue::fromValue(lastMeasureEndBarline->barLineType()),
                                                              PropertyFlags::NOSTYLE));
-                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                        ctx.mutDom().undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated,
+                                                             PropertyFlags::NOSTYLE));
                     }
                 }
             }
@@ -494,7 +495,8 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                 } else {
                     if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
                         bool addKey = underlyingKeySig->isChange();
-                        ctx.mutDom().undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
+                        ctx.mutDom().undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(),
+                                                           mmrKeySig->showCourtesy(),
                                                            addKey));
                     }
                 }
@@ -685,7 +687,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     // Break for spanners/textLines starting or ending mid-way inside the *previous* measure
     Measure* prevMeas = m->prevMeasure();
     if (prevMeas) {
-        auto prevMeasSpanners = ctx.dom().spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
+        auto prevMeasSpanners = ctx.dom().spannerMap().findOverlapping(prevMeas->tick().ticks(),
+                                                                       prevMeas->endTick().ticks());
         for (auto i : prevMeasSpanners) {
             Spanner* s = i.value;
             if (!s->visible()) {
@@ -795,7 +798,8 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
-                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated()) {
+                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED
+                        && !bl->generated()) {
                         return true;
                     } else {
                         break;
@@ -879,7 +883,8 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutC
             ++n;
             len += measureToBeChecked->ticks();
             lastMeasure = measureToBeChecked;
-            MeasureBase* nextMeasureBase = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
+            MeasureBase* nextMeasureBase
+                = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
             if (!(nextMeasureBase && nextMeasureBase->isMeasure())) {
                 break;
             }
@@ -963,7 +968,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         return;
     }
 
-    if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
+    if (ctx.conf().isLinearMode()
+        && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
         return;
     }
 
@@ -1287,7 +1293,8 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
             double staffMag = ctx.dom().staff(staffIdx)->staffMag(m->tick());
             double partialWidth = clefSeg
-                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.conf().styleAbsolute(Sid::clefLeftMargin)
+                                  ? m->width() - clefSeg->x() + clefSeg->minLeft() + ctx.conf().styleAbsolute(
+                Sid::clefLeftMargin)
                                   * staffMag
                                   : 0.0;
             layoutPartialWidth(ms->lines(), ctx, m->width(), partialWidth / (m->spatium() * staffMag), true);
@@ -1316,14 +1323,17 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 
         Segment* endBarSeg = m->last(SegmentType::BarLineType);
         PlayCountText* playCount
-            = endBarSeg ? toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track, track)) : nullptr;
+            = endBarSeg ? toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track,
+                                                                    track)) : nullptr;
         if (!playCount) {
             continue;
         }
 
         String text;
         const int repeatCount = m->repeatCount();
-        String defaultText = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+        String defaultText = TConv::translatedUserName(ctx.conf().styleV(
+                                                           Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).
+                             arg(
             repeatCount);
 
         switch (playCount->playCountTextSetting()) {
@@ -1349,7 +1359,8 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
-    MeasureNumberPlacement placementMode = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
+    MeasureNumberPlacement placementMode
+        = ctx.conf().styleV(Sid::measureNumberPlacementMode).value<MeasureNumberPlacement>();
 
     String stringNum = String::number(m->measureNumber() + 1);
 
@@ -1420,8 +1431,10 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
     }
 }
 
-MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Measure* measure, const Segment* firstCrSeg,
-                                                                       const staff_idx_t staffIdx, const bool needsHeaderException,
+MeasureLayout::MeasureStartEndPos MeasureLayout::getMeasureStartEndPos(const Measure* measure,
+                                                                       const Segment* firstCrSeg,
+                                                                       const staff_idx_t staffIdx,
+                                                                       const bool needsHeaderException,
                                                                        const bool modernMMRest,
                                                                        const LayoutContext& ctx)
 {
@@ -1503,7 +1516,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 //    x1 - left measure position of free space
                 //    x2 - right measure position of free space
 
-                const MeasureStartEndPos measureStartEnd = getMeasureStartEndPos(m, &s, staffIdx, e->isMMRest(), modernMMRest, ctx);
+                const MeasureStartEndPos measureStartEnd = getMeasureStartEndPos(m, &s, staffIdx,
+                                                                                 e->isMMRest(), modernMMRest, ctx);
 
                 const double x1 = measureStartEnd.x1;
                 const double x2 = measureStartEnd.x2;
@@ -1521,7 +1535,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                     // two- or four-measure repeat, center on following barline
                     double measureWidth = x2 - s.x() + .5 * (m->styleP(Sid::barWidth));
                     e->mutldata()->setPosX(measureWidth - .5 * e->width());
-                    if (toMeasureRepeat(e)->numMeasures() == 4 && ctx.conf().styleB(Sid::fourMeasureRepeatShowExtenders)) {
+                    if (toMeasureRepeat(e)->numMeasures() == 4
+                        && ctx.conf().styleB(Sid::fourMeasureRepeatShowExtenders)) {
                         TLayout::layoutMeasureRepeatExtender(toMeasureRepeat(e), toMeasureRepeat(e)->mutldata(), ctx);
                     }
                 } else {
@@ -1706,17 +1721,21 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         const bool isRepeatSigBarline = ctx.conf().styleB(Sid::barlineBeforeSigChange) && nextMeasRepeat;
 
         const int keySigBarlineMode = ctx.conf().styleI(Sid::keySigCourtesyBarlineMode);
-        const bool beforeKSCourtesy = keySigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY) && m->hasCourtesyKeySig();
+        const bool beforeKSCourtesy = keySigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)
+                                      && m->hasCourtesyKeySig();
         const bool alwaysDoubleKS = keySigBarlineMode == int(CourtesyBarlineMode::ALWAYS_DOUBLE) && hasKeySig;
-        const bool beforeRepeatKS = isRepeatSigBarline && hasKeySig && ctx.conf().styleB(Sid::doubleBarlineBeforeKeySig);
+        const bool beforeRepeatKS = isRepeatSigBarline && hasKeySig
+                                    && ctx.conf().styleB(Sid::doubleBarlineBeforeKeySig);
         if (beforeKSCourtesy || alwaysDoubleKS || beforeRepeatKS) {
             blType = BarLineType::DOUBLE;
         }
 
         const int timeSigBarlineMode = ctx.conf().styleI(Sid::timeSigCourtesyBarlineMode);
-        const bool beforeTSCourtesy = timeSigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY) && hasCourtesyTimeSig;
+        const bool beforeTSCourtesy = timeSigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)
+                                      && hasCourtesyTimeSig;
         const bool alwaysDoubleTS = timeSigBarlineMode == int(CourtesyBarlineMode::ALWAYS_DOUBLE) && hasTimeSig;
-        const bool beforeRepeatTS = isRepeatSigBarline && hasTimeSig && ctx.conf().styleB(Sid::doubleBarlineBeforeTimeSig);
+        const bool beforeRepeatTS = isRepeatSigBarline && hasTimeSig && ctx.conf().styleB(
+            Sid::doubleBarlineBeforeTimeSig);
 
         if (beforeTSCourtesy || alwaysDoubleTS || beforeRepeatTS) {
             blType = BarLineType::DOUBLE;
@@ -1829,7 +1848,8 @@ void MeasureLayout::setClefSegVisibility(Measure* m, bool isLastMeasureInSystem,
     } else if (!visibleClef && clefFound) {  // all (courtesy) clefs in the clef segment are not visible
         clefSeg->setVisible(false);
     } else { // should never happen
-        LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
+        LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(),
+             clefSeg->tick().denominator());
         clefSeg->setVisible(false);
         return;
     }
@@ -1857,7 +1877,8 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
     const Segment* tsSegAtCourtesyTick = m->findSegmentR(SegmentType::TimeSig, courtesySigRTick);
     tsSegAtCourtesyTick = !tsSegAtCourtesyTick && checkPrevMeasure ? prevMeasure->findSegmentR(SegmentType::TimeSig,
                                                                                                courtesySigTick
-                                                                                               - prevMeasure->tick()) : tsSegAtCourtesyTick;
+                                                                                               - prevMeasure->tick())
+                          : tsSegAtCourtesyTick;
     const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyTimeSig();
 
     Segment* courtesySigSeg = m->findSegmentR(courtesySegType, courtesySigRTick);
@@ -1873,13 +1894,16 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
         // Show continuation courtesy if there's a repeat courtesy before it
         // Show trailer courtesy only when there's a time sig element in the next bar
         const bool sigsDifferent = actualTimeSig->sig() != curTimeSig->sig();
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->element(
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment
+                                   && prevCourtesySegment->element(
             track) : isTrailer ? actualTimeSig->tick() == m->endTick() : sigsDifferent;
         // If there is a real key sig at this tick (in this bar or the previous), don't create a courtesy
-        const bool hasSigAtTick = tsSegAtCourtesyTick && tsSegAtCourtesyTick->enabled() && tsSegAtCourtesyTick->element(track);
+        const bool hasSigAtTick = tsSegAtCourtesyTick && tsSegAtCourtesyTick->enabled() && tsSegAtCourtesyTick->element(
+            track);
         // Only show courtesy if its real signature has courtesies enabled
         const bool actualShowCourtesy = actualTimeSig && actualTimeSig->showCourtesySig();
-        const bool show = actualShowCourtesy && needsCourtesy && !hasSigAtTick && ctx.conf().styleB(Sid::genCourtesyTimesig);
+        const bool show = actualShowCourtesy && needsCourtesy && !hasSigAtTick && ctx.conf().styleB(
+            Sid::genCourtesyTimesig);
 
         if (!courtesySigSeg) {
             if (!show) {
@@ -1931,7 +1955,8 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
         TLayout::layoutTimeSig(courtesyTimeSig, courtesyTimeSig->mutldata(), ctx);
     }
 
-    if (courtesySigSeg && ((!isContinuationCourtesy && !m->hasCourtesyTimeSig()) || !ctx.conf().styleB(Sid::genCourtesyTimesig))) {
+    if (courtesySigSeg
+        && ((!isContinuationCourtesy && !m->hasCourtesyTimeSig()) || !ctx.conf().styleB(Sid::genCourtesyTimesig))) {
         // Whole segment shouldn't be shown, remove any existing courtesy signatures
         if (!isContinuationCourtesy) {
             m->setHasCourtesyTimeSig(false);
@@ -1975,7 +2000,8 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     const Segment* ksSegAtCourtesyTick = m->findSegmentR(SegmentType::KeySig, courtesySigRTick);
     ksSegAtCourtesyTick = !ksSegAtCourtesyTick && checkPrevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySig,
                                                                                                courtesySigTick
-                                                                                               - prevMeasure->tick()) : ksSegAtCourtesyTick;
+                                                                                               - prevMeasure->tick())
+                          : ksSegAtCourtesyTick;
 
     const bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyKeySig();
 
@@ -1986,7 +2012,8 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         const Fraction refSigElementTick = staff->currentKeyTick(refSigTick);
         const Measure* refMeasure = ctx.dom().tick2measureMM(refSigElementTick);
         const Segment* actualKeySigSeg
-            = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig, refSigElementTick - refMeasure->tick()) : nullptr;
+            = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig,
+                                                    refSigElementTick - refMeasure->tick()) : nullptr;
         const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(track) : nullptr;
         const KeySig* actualKeySig = el ? toKeySig(el) : nullptr;
 
@@ -1994,16 +2021,20 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         // Get info from correct tick for repeats
         // For trailers and pre-repeat courtesies, signatures should be different
         const bool sigsDifferent = staff->key(m->endTick() - Fraction::eps()) != refKey.key();
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->element(
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment
+                                   && prevCourtesySegment->element(
             track) : sigsDifferent;
         // Only show key sig changes on pitched staves
         const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasureMM() == m
-                                              || (m->nextMeasureMM() && staff->isPitchedStaff(m->nextMeasureMM()->tick()));
+                                              || (m->nextMeasureMM() && staff->isPitchedStaff(
+                                                      m->nextMeasureMM()->tick()));
         // If there is a real key sig at this tick (in this bar or the previous), don't create a courtesy
-        const bool hasSigAtTick = ksSegAtCourtesyTick && ksSegAtCourtesyTick->enabled() && ksSegAtCourtesyTick->element(track);
+        const bool hasSigAtTick = ksSegAtCourtesyTick && ksSegAtCourtesyTick->enabled() && ksSegAtCourtesyTick->element(
+            track);
         // Only show courtesy if its real signature has courtesies enabled
         const bool actualShowCourtesy = actualKeySig ? actualKeySig->showCourtesy() : true;
-        const bool show = actualShowCourtesy && staffIsPitchedAtNextMeas && needsCourtesy && !hasSigAtTick && ctx.conf().styleB(
+        const bool show = actualShowCourtesy && staffIsPitchedAtNextMeas && needsCourtesy && !hasSigAtTick
+                          && ctx.conf().styleB(
             Sid::genCourtesyKeysig);
 
         if (!courtesySigSeg) {
@@ -2051,7 +2082,8 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         TLayout::layoutKeySig(courtesyKeySig, courtesyKeySig->mutldata(), ctx.conf());
     }
 
-    if (courtesySigSeg && ((!isContinuationCourtesy && !m->hasCourtesyKeySig()) || !ctx.conf().styleB(Sid::genCourtesyKeysig))) {
+    if (courtesySigSeg
+        && ((!isContinuationCourtesy && !m->hasCourtesyKeySig()) || !ctx.conf().styleB(Sid::genCourtesyKeysig))) {
         // Whole segment shouldn't be shown, remove any existing courtesy signatures
         if (!isContinuationCourtesy) {
             m->setHasCourtesyKeySig(false);
@@ -2085,10 +2117,12 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
 
     const Segment* prevCourtesySegment
         = prevMeasure ? prevMeasure->findSegmentR(SegmentType::ClefRepeatAnnounce, prevMeasure->ticks()) : nullptr;
-    const Segment* clefSegAtCourtesyTick = m->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, courtesyClefRTick);
+    const Segment* clefSegAtCourtesyTick = m->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
+                                                           courtesyClefRTick);
     clefSegAtCourtesyTick
         = !clefSegAtCourtesyTick
-          && prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySig, courtesyClefTick - prevMeasure->tick()) : clefSegAtCourtesyTick;
+          && prevMeasure ? prevMeasure->findSegmentR(SegmentType::KeySig,
+                                                     courtesyClefTick - prevMeasure->tick()) : clefSegAtCourtesyTick;
 
     bool shouldShowContCourtesy = prevMeasure && prevMeasure->hasCourtesyClef();
 
@@ -2104,7 +2138,8 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
             // Check previous measure
             Measure* refPrevMeasure = refMeasure->prevMeasureMM();
             actualClefSeg
-                = refPrevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, refClefElementTick - refPrevMeasure->tick());
+                = refPrevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
+                                               refClefElementTick - refPrevMeasure->tick());
         }
         const EngravingItem* el = actualClefSeg ? actualClefSeg->element(track) : nullptr;
         const Clef* actualClef = el ? toClef(el) : nullptr;
@@ -2112,13 +2147,16 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         const ClefType refClef = staff->clef(refClefTick);
         // For trailers and pre-repeat courtesies, clefs should be different
         const bool clefsDifferent = staff->clef(m->endTick() - Fraction::eps()) != refClef;
-        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->element(
+        const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment
+                                   && prevCourtesySegment->element(
             track) : clefsDifferent;
         // If there is a real clef at this tick (in this bar or the previous), don't create a courtesy
-        const bool hasClefAtTick = clefSegAtCourtesyTick && clefSegAtCourtesyTick->enabled() && clefSegAtCourtesyTick->element(track);
+        const bool hasClefAtTick = clefSegAtCourtesyTick && clefSegAtCourtesyTick->enabled()
+                                   && clefSegAtCourtesyTick->element(track);
         // Only show courtesy if its real clef has courtesies enabled
         const bool actualShowCourtesy = actualClef && actualClef->showCourtesy();
-        const bool show = actualShowCourtesy && needsCourtesy && !hasClefAtTick && ctx.conf().styleB(Sid::genCourtesyClef);
+        const bool show = actualShowCourtesy && needsCourtesy && !hasClefAtTick && ctx.conf().styleB(
+            Sid::genCourtesyClef);
 
         if (!courtesyClefSeg) {
             if (!show) {
@@ -2165,7 +2203,8 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
         TLayout::layoutClef(courtesyClef, courtesyClef->mutldata(), ctx.conf());
     }
 
-    if (courtesyClefSeg && (!ctx.conf().styleB(Sid::genCourtesyClef) || (!isContinuationCourtesy && !m->hasCourtesyClef()))) {
+    if (courtesyClefSeg
+        && (!ctx.conf().styleB(Sid::genCourtesyClef) || (!isContinuationCourtesy && !m->hasCourtesyClef()))) {
         // Whole segment shouldn't be shown, remove any existing courtesy signatures
         if (!isContinuationCourtesy) {
             m->setHasCourtesyClef(false);
@@ -2207,9 +2246,12 @@ static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom, L
 
 void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continuation, LayoutContext& ctx)
 {
-    const SegmentType tsSegType = continuation ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
-    const SegmentType ksSegType = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
-    const SegmentType clefSegType = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
+    const SegmentType tsSegType
+        = continuation ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
+    const SegmentType ksSegType
+        = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
+    const SegmentType clefSegType
+        = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
 
     const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
@@ -2254,15 +2296,18 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
         EngravingItem* rightItem = rightSeg ? rightSeg->element(track) : nullptr;
         Parenthesis* leftParen = nullptr;
         if (leftItem) {
-            leftItem->setParenthesesMode(leftItem->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
+            leftItem->setParenthesesMode(
+                leftItem->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
             leftParen = leftItem->leftParen();
         }
         Parenthesis* rightParen = nullptr;
         if (rightItem) {
-            rightItem->setParenthesesMode(rightItem->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
+            rightItem->setParenthesesMode(
+                rightItem->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
             rightParen = rightItem->rightParen();
         }
-        bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(SegmentType::TimeSigType)
+        bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(
+            SegmentType::TimeSigType)
                                      && ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
                                      != TimeSigPlacement::NORMAL;
         if ((ctx.conf().styleB(Sid::smallParens) || needsBigTimeSigAdjust) && leftParen && rightParen) {
@@ -2294,12 +2339,14 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             if (leftParen) {
                 leftParen->mutldata()->startY.set_value(-spatium);
                 leftParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * leftParen->mag());
-                leftParen->mutldata()->midPointThickness.set_value(leftParen->ldata()->height / 60 * leftParen->ldata()->mag());  // 0.1sp for a height of 6sp
+                leftParen->mutldata()->midPointThickness.set_value(
+                    leftParen->ldata()->height / 60 * leftParen->ldata()->mag());                                                 // 0.1sp for a height of 6sp
             }
             if (rightParen) {
                 rightParen->mutldata()->startY.set_value(-spatium);
                 rightParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * rightParen->mag());
-                rightParen->mutldata()->midPointThickness.set_value(rightParen->ldata()->height / 60 * rightParen->ldata()->mag());  // 0.1sp for a height of 6sp
+                rightParen->mutldata()->midPointThickness.set_value(
+                    rightParen->ldata()->height / 60 * rightParen->ldata()->mag());                                                  // 0.1sp for a height of 6sp
             }
         }
 
@@ -2374,9 +2421,12 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
 void MeasureLayout::removeRepeatCourtesyParenthesesMeasure(Measure* m, const bool continuation, LayoutContext& ctx)
 {
-    const SegmentType tsSegType = continuation ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
-    const SegmentType ksSegType = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
-    const SegmentType clefSegType = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
+    const SegmentType tsSegType
+        = continuation ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
+    const SegmentType ksSegType
+        = continuation ? SegmentType::KeySigStartRepeatAnnounce : SegmentType::KeySigRepeatAnnounce;
+    const SegmentType clefSegType
+        = continuation ? SegmentType::ClefStartRepeatAnnounce : SegmentType::ClefRepeatAnnounce;
 
     const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
@@ -2515,7 +2565,8 @@ void MeasureLayout::removeRepeatCourtesies(Measure* m)
         if (seg->isChordRestType()) {
             break;
         }
-        if (!seg->isType(SegmentType::ClefRepeatAnnounce | SegmentType::TimeSigRepeatAnnounce | SegmentType::KeySigRepeatAnnounce)) {
+        if (!seg->isType(SegmentType::ClefRepeatAnnounce | SegmentType::TimeSigRepeatAnnounce
+                         | SegmentType::KeySigRepeatAnnounce)) {
             continue;
         }
         seg->mutldata()->reset();
@@ -2562,7 +2613,8 @@ Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff*
     Segment* cSegment = m->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
     const StaffType* staffType = staff->staffType(m->tick());
 
-    const bool hideClef = staffType->isTabStaff() ? ctx.conf().styleB(Sid::hideTabClefAfterFirst) : !ctx.conf().styleB(Sid::genClef);
+    const bool hideClef = staffType->isTabStaff() ? ctx.conf().styleB(Sid::hideTabClefAfterFirst) : !ctx.conf().styleB(
+        Sid::genClef);
 
     // find the clef type at the previous tick
     ClefTypeList cl = staff->clefType(m->tick() - Fraction::eps());
@@ -2727,7 +2779,8 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 const System* sys = searchMeasure->system();
                 if (isFirstClef && searchMeasure->tick() >= clefTick) {
                     // Need to check previous measure for clef change if one not found in this measure
-                    Segment* clefSeg = searchMeasure->findFirstR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 1));
+                    Segment* clefSeg
+                        = searchMeasure->findFirstR(SegmentType::Clef | SegmentType::HeaderClef, Fraction(0, 1));
                     Measure* prevMeas = searchMeasure->prevMeasure();
                     if (prevMeas && !clefSeg) {
                         clefSeg = prevMeas->findSegment(SegmentType::Clef, m->tick());
@@ -3000,7 +3053,8 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             }
             ElementType t = e->type();
             staff_idx_t staffIdx = e->staffIdx();
-            if (t == ElementType::MEASURE_REPEAT || (t == ElementType::REST && (m->isMMRest() || toRest(e)->isFullMeasureRest()))) {
+            if (t == ElementType::MEASURE_REPEAT
+                || (t == ElementType::REST && (m->isMMRest() || toRest(e)->isFullMeasureRest()))) {
                 //
                 // element has to be centered in free space
                 //    x1 - left measure position of free space
@@ -3114,7 +3168,8 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
 ///   to the left or right of the measure
 //---------------------------------------------------------
 
-void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignRight)
+void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial,
+                                       bool alignRight)
 {
     StaffLines::LayoutData* ldata = lines->mutldata();
     const Staff* s = lines->staff();

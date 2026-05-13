@@ -283,7 +283,8 @@ static bool isSinglePartGroup(const LayoutBuildContext& ctx, const LayoutGroupSp
 //   calcGroupBarlineOverride
 //---------------------------------------------------------
 
-static mnx::StaffGroupBarlineOverride calcGroupBarlineOverride(const LayoutBuildContext& ctx, const LayoutGroupSpan& span)
+static mnx::StaffGroupBarlineOverride calcGroupBarlineOverride(const LayoutBuildContext& ctx,
+                                                               const LayoutGroupSpan& span)
 {
     if (span.end <= span.start || span.end >= ctx.staffCount) {
         return mnx::StaffGroupBarlineOverride::None;

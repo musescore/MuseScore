@@ -41,7 +41,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
+void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ctx, const Fraction& stick,
+                                                 const Fraction& etick)
 {
     ctx.mutState().setEndTick(etick);
 
@@ -107,7 +108,8 @@ void ScoreVerticalViewLayout::layoutVerticalView(Score* score, LayoutContext& ct
                 ctx.mutState().setMeasureNumber(0);
             } else {
                 ctx.mutState().setMeasureNumber(ctx.state().nextMeasure()->prevMeasure()->measureNumber()                      // will be adjusted later with respect
-                                                + (ctx.state().nextMeasure()->prevMeasure()->excludeFromNumbering() ? 0 : 1)); // to the user-defined offset.
+                                                + (ctx.state().nextMeasure()->prevMeasure()->excludeFromNumbering() ? 0
+                                                   : 1));                                                                      // to the user-defined offset.
             }
             ctx.mutState().setTick(ctx.state().nextMeasure()->tick());
         }
@@ -196,5 +198,6 @@ void ScoreVerticalViewLayout::doLayout(LayoutContext& ctx)
             p->invalidateBspTree();
         }
     }
-    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList().begin(), ctx.state().systemList().end());
+    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList().begin(),
+                                  ctx.state().systemList().end());
 }

@@ -36,7 +36,8 @@ void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
     dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::toggleSpecialCharactersDialog);
-    dispatcher()->reg(this, "time-signature-properties", this, &PaletteActionsController::openTimeSignaturePropertiesDialog);
+    dispatcher()->reg(this, "time-signature-properties", this,
+                      &PaletteActionsController::openTimeSignaturePropertiesDialog);
     dispatcher()->reg(this, "customize-kit", this, &PaletteActionsController::openCustomizeKitDialog);
 
     interactive()->currentUri().ch.onReceive(this, [this](const Uri& uri) {

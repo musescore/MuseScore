@@ -68,7 +68,11 @@ public:
 
     bool hasActivePads() const { return m_drumset; }
 
-    int numColumns() const { return m_drumset ? static_cast<int>(m_drumset->percussionPanelColumns()) : DEFAULT_NUM_COLUMNS; }
+    int numColumns() const
+    {
+        return m_drumset ? static_cast<int>(m_drumset->percussionPanelColumns()) : DEFAULT_NUM_COLUMNS;
+    }
+
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const engraving::Drumset* drumset);
@@ -84,7 +88,10 @@ public:
     void focusLastActivePad();
 
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
-    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> padActionRequested() const { return m_padActionRequestChannel; }
+    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> padActionRequested() const
+    {
+        return m_padActionRequestChannel;
+    }
 
 signals:
     void numPadsChanged();

@@ -133,7 +133,8 @@ public:
 
 private:
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
-    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
+    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection,
+                PartialSpannerDirection::NONE)
 
     PartialSpannerDirection calcIncomingDirection(bool incoming);
     PartialSpannerDirection calcOutgoingDirection(bool outgoing);

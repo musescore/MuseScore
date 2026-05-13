@@ -64,7 +64,8 @@ inline muse::mpe::duration_t durationFromStartAndTicks(const Score* score, const
 }
 
 inline muse::mpe::TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
-                                                                                     const int startTick, const int durationTicks,
+                                                                                     const int startTick,
+                                                                                     const int durationTicks,
                                                                                      const int tickPositionOffset)
 {
     int startTickWithOffset = startTick + tickPositionOffset;

@@ -640,7 +640,8 @@ void OveToMScore::convertTrackHeader(ovebase::Track* track, Part* part)
     }
 
     // DrumSet
-    if (track->getStartClef() == ovebase::ClefType::Percussion1 || track->getStartClef() == ovebase::ClefType::Percussion2) {
+    if (track->getStartClef() == ovebase::ClefType::Percussion1
+        || track->getStartClef() == ovebase::ClefType::Percussion2) {
         // use overture drumset
         Drumset* drumset = new Drumset();
         for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
@@ -1696,9 +1697,11 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 cr->add(note);
 
                 // cr->setVisible(oveNote->getShow());
-                ((mu::engraving::Chord*)cr)->setNoStem(int(container->getNoteType()) <= int(ovebase::NoteType::Note_Whole));
+                ((mu::engraving::Chord*)cr)->setNoStem(int(container->getNoteType())
+                                                       <= int(ovebase::NoteType::Note_Whole));
                 if (!setDirection) {
-                    ((mu::engraving::Chord*)cr)->setStemDirection(container->getStemUp() ? DirectionV::UP : DirectionV::DOWN);
+                    ((mu::engraving::Chord*)cr)->setStemDirection(
+                        container->getStemUp() ? DirectionV::UP : DirectionV::DOWN);
                 }
 
                 // cross staff
@@ -2156,7 +2159,8 @@ ovebase::MusicData* OveToMScore::getMusicDataByUnit(int part, int staff, int mea
 }
 */
 
-ovebase::MusicData* OveToMScore::getCrossMeasureElementByPos(int part, int staff, const ovebase::MeasurePos& pos, int voice,
+ovebase::MusicData* OveToMScore::getCrossMeasureElementByPos(int part, int staff, const ovebase::MeasurePos& pos,
+                                                             int voice,
                                                              ovebase::MusicDataType type)
 {
     ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, pos.getMeasure());

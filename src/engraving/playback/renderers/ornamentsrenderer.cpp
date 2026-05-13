@@ -67,7 +67,8 @@ struct DisclosurePattern {
     DisclosurePattern buildActualPattern(const Note* note, const IntervalsInfo& intervalsInfo, const double bps) const;
 
 private:
-    void updatePitchOffsets(const Note* note, const IntervalsInfo& intervalsInfo, std::vector<mpe::pitch_level_t>& pitchOffsets);
+    void updatePitchOffsets(const Note* note, const IntervalsInfo& intervalsInfo,
+                            std::vector<mpe::pitch_level_t>& pitchOffsets);
 };
 
 static IntervalsInfo makeIntervalsInfo(const OrnamentInterval& below, const OrnamentInterval& above)
@@ -340,7 +341,8 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     }
 }
 
-void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const ArticulationType ornamentType, RenderingContext& ctx)
+void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const ArticulationType ornamentType,
+                                               RenderingContext& ctx)
 {
     const Note* lastTiedNote = note->lastTiedNote(false);
     if (!lastTiedNote || lastTiedNote == note) {
@@ -348,7 +350,8 @@ void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const Articulat
     }
 
     ctx.nominalPositionEndTick = lastTiedNote->chord()->endTick().ticks();
-    ctx.nominalDuration = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick + ctx.positionTickOffset) - ctx.nominalTimestamp;
+    ctx.nominalDuration
+        = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick + ctx.positionTickOffset) - ctx.nominalTimestamp;
     ctx.nominalDurationTicks = ctx.nominalPositionEndTick - ctx.nominalPositionStartTick;
 
     mpe::ArticulationMeta& meta = ctx.commonArticulations.at(ornamentType).meta;
@@ -408,7 +411,8 @@ int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, co
 
 void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                                      const int availableDurationTicks, const int overallDurationTicks,
-                                     const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result)
+                                     const std::vector<mpe::pitch_level_t>& pitchOffsets,
+                                     mpe::PlaybackEventList& result)
 {
     float availableDurationRatio = availableDurationTicks / static_cast<float>(overallDurationTicks);
 
@@ -449,7 +453,8 @@ float DisclosurePattern::subNoteDurationTicks(const double bps) const
     return boundaries.lowTempoDurationTicks;
 }
 
-DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const IntervalsInfo& intervalsInfo, const double bps) const
+DisclosurePattern DisclosurePattern::buildActualPattern(const Note* note, const IntervalsInfo& intervalsInfo,
+                                                        const double bps) const
 {
     DisclosurePattern result = *this;
 

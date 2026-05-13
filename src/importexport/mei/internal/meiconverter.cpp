@@ -454,16 +454,19 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
     case (engraving::SymId::articAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_acc });
         break;
     case (engraving::SymId::articAccentStaccatoAbove):
-    case (engraving::SymId::articAccentStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_acc });
+    case (engraving::SymId::articAccentStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc,
+                                                                           libmei::ARTICULATION_acc });
         break;
     case (engraving::SymId::articMarcatoAbove):
     case (engraving::SymId::articMarcatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_marc });
         break;
     case (engraving::SymId::articMarcatoStaccatoAbove):
-    case (engraving::SymId::articMarcatoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_marc });
+    case (engraving::SymId::articMarcatoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc,
+                                                                            libmei::ARTICULATION_marc });
         break;
     case (engraving::SymId::articMarcatoTenutoAbove):
-    case (engraving::SymId::articMarcatoTenutoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten, libmei::ARTICULATION_marc });
+    case (engraving::SymId::articMarcatoTenutoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten,
+                                                                          libmei::ARTICULATION_marc });
         break;
     case (engraving::SymId::articSoftAccentAbove):
     case (engraving::SymId::articSoftAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_acc_soft });
@@ -484,10 +487,12 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
     case (engraving::SymId::articTenutoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten });
         break;
     case (engraving::SymId::articTenutoAccentAbove):
-    case (engraving::SymId::articTenutoAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten, libmei::ARTICULATION_acc });
+    case (engraving::SymId::articTenutoAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten,
+                                                                         libmei::ARTICULATION_acc });
         break;
     case (engraving::SymId::articTenutoStaccatoAbove):
-    case (engraving::SymId::articTenutoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_ten });
+    case (engraving::SymId::articTenutoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc,
+                                                                           libmei::ARTICULATION_ten });
         break;
     case (engraving::SymId::pluckedSnapPizzicatoAbove):
     case (engraving::SymId::pluckedSnapPizzicatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_snap });
@@ -1130,7 +1135,8 @@ libmei::curvature_CURVEDIR Convert::curvedirToMEI(engraving::DirectionV curvedir
     }
 }
 
-void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning)
+void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir,
+                         bool& warning)
 {
     IF_ASSERT_FAILED(textBase) {
         return;
@@ -1155,7 +1161,8 @@ void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLin
     textBase->setXmlText(meiLines.join(u"\n"));
 }
 
-void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning)
+void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir,
+                         bool& warning)
 {
     IF_ASSERT_FAILED(textLineBase) {
         return;
@@ -1165,8 +1172,9 @@ void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList
 
     // @place
     if (meiDir.HasPlace()) {
-        textLineBase->setPlacement(meiDir.GetPlace()
-                                   == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        textLineBase->setPlacement(
+            meiDir.GetPlace()
+            == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         textLineBase->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
@@ -1272,7 +1280,8 @@ libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, Strin
     return meiDir;
 }
 
-void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning)
+void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLines, const libmei::Dynam& meiDynam,
+                           bool& warning)
 {
     // The letters in the MEI to be mapped to SMuFL symbols in the xmlText
     static const std::map<Char, engraving::SymId> DYN_MAP = {
@@ -1321,7 +1330,9 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
             // If the word is only dynamic letters, convert them to SMuFL symbols one by one
             if (word.toStdString().find_first_not_of("fpmrszn") == std::string::npos) {
                 for (size_t i = 0; i < word.size(); i++) {
-                    line += u"<sym>" + String::fromAscii(engraving::SymNames::nameForSymId(DYN_MAP.at(word.at(i))).ascii()) + u"</sym>";
+                    line += u"<sym>" + String::fromAscii(engraving::SymNames::nameForSymId(DYN_MAP.at(word.at(
+                                                                                                          i))).ascii())
+                            + u"</sym>";
                 }
             }
             // Otherwise keep it as is
@@ -1468,7 +1479,8 @@ libmei::Ending Convert::endingToMEI(const engraving::Volta* volta)
     return meiEnding;
 }
 
-void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning)
+void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF,
+                       bool& warning)
 {
     warning = false;
 
@@ -1490,7 +1502,8 @@ libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, Str
     return meiF;
 }
 
-void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning)
+void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb,
+                        bool& warning)
 {
     warning = false;
 
@@ -1611,7 +1624,8 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     return meiFermata;
 }
 
-void Convert::fingFromMEI(engraving::Fingering* fing, const StringList& meiLines, const libmei::Fing& meiFing, bool& warning)
+void Convert::fingFromMEI(engraving::Fingering* fing, const StringList& meiLines, const libmei::Fing& meiFing,
+                          bool& warning)
 {
     IF_ASSERT_FAILED(fing) {
         return;
@@ -1624,7 +1638,8 @@ void Convert::fingFromMEI(engraving::Fingering* fing, const StringList& meiLines
 
     // @place
     if (meiFing.HasPlace()) {
-        fing->setPlacement(meiFing.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        fing->setPlacement(
+            meiFing.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         fing->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
@@ -1697,7 +1712,8 @@ libmei::Gliss Convert::glissToMEI(const engraving::Glissando* gliss)
     return meiGliss;
 }
 
-std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach, const libmei::data_GRACE meiGrace,
+std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
+                                                              const libmei::data_GRACE meiGrace,
                                                               bool& warning)
 {
     warning = false;
@@ -1713,7 +1729,8 @@ std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::grac
     return { isAfter, noteType };
 }
 
-std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> Convert::gracegrpToMEI(bool isAfter, engraving::NoteType noteType)
+std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> Convert::gracegrpToMEI(bool isAfter,
+                                                                                 engraving::NoteType noteType)
 {
     libmei::graceGrpLog_ATTACH meiAttach = (isAfter) ? libmei::graceGrpLog_ATTACH_pre : libmei::graceGrpLog_ATTACH_NONE;
     libmei::data_GRACE meiGrace = libmei::GRACE_acc;
@@ -1797,7 +1814,8 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
     return meiHairpin;
 }
 
-void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning)
+void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm,
+                          bool& warning)
 {
     IF_ASSERT_FAILED(harmony) {
         return;
@@ -1818,7 +1836,8 @@ void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLine
 
     // @place
     if (meiHarm.HasPlace()) {
-        harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harmony->setPlacement(
+            meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
@@ -1861,7 +1880,8 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     return meiHarm;
 }
 
-void Convert::harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal, bool& warning)
+void Convert::harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal,
+                               bool& warning)
 {
     IF_ASSERT_FAILED(harpPedalDiagram) {
         return;
@@ -1888,8 +1908,9 @@ void Convert::harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, co
 
     // @place
     if (meiHarpPedal.HasPlace()) {
-        harpPedalDiagram->setPlacement(meiHarpPedal.GetPlace()
-                                       == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harpPedalDiagram->setPlacement(
+            meiHarpPedal.GetPlace()
+            == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
         harpPedalDiagram->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
@@ -2235,7 +2256,8 @@ Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure
         warning = (warning || barlineWarning);
         // the measure will be flagged as repeatEnd and the BarLineType will not have to be set
         measureSt.repeatEnd
-            = (std::set<engraving::BarLineType> { engraving::BarLineType::END_REPEAT, engraving::BarLineType::END_START_REPEAT }).count(
+            = (std::set<engraving::BarLineType> { engraving::BarLineType::END_REPEAT,
+                                                  engraving::BarLineType::END_START_REPEAT }).count(
                   measureSt.endBarLineType) > 0;
     }
 
@@ -2251,7 +2273,8 @@ Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure
     return measureSt;
 }
 
-libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastExcludedFromNumbering)
+libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& measureN,
+                                      bool& isLastExcludedFromNumbering)
 {
     libmei::Measure meiMeasure;
 
@@ -2283,7 +2306,8 @@ libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& me
     return meiMeasure;
 }
 
-std::pair<engraving::Fraction, engraving::TimeSigType> Convert::meterFromMEI(const libmei::ScoreDef& meiScoreDef, bool& warning)
+std::pair<engraving::Fraction, engraving::TimeSigType> Convert::meterFromMEI(const libmei::ScoreDef& meiScoreDef,
+                                                                             bool& warning)
 {
     libmei::StaffDef meiStaffDef;
     meiStaffDef.SetMeterSym(meiScoreDef.GetMeterSym());
@@ -2292,14 +2316,16 @@ std::pair<engraving::Fraction, engraving::TimeSigType> Convert::meterFromMEI(con
     return meterFromMEI(meiStaffDef, warning);
 }
 
-std::pair<engraving::Fraction, engraving::TimeSigType> Convert::meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning)
+std::pair<engraving::Fraction, engraving::TimeSigType> Convert::meterFromMEI(const libmei::StaffDef& meiStaffDef,
+                                                                             bool& warning)
 {
     warning = false;
     engraving::Fraction fraction;
     engraving::TimeSigType tsType = engraving::TimeSigType::NORMAL;
     if (meiStaffDef.HasMeterCount() && meiStaffDef.HasMeterUnit()) {
         auto [counts, sign] = meiStaffDef.GetMeterCount();
-        int numerator = !counts.empty() ? counts.front() : (meiStaffDef.GetMeterSym() == libmei::METERSIGN_common) ? 4 : 2;
+        int numerator
+            = !counts.empty() ? counts.front() : (meiStaffDef.GetMeterSym() == libmei::METERSIGN_common) ? 4 : 2;
         fraction.set(numerator, meiStaffDef.GetMeterUnit());
     }
     if (meiStaffDef.HasMeterSym()) {
@@ -2332,7 +2358,8 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
     return meiStaffDef;
 }
 
-Convert::OrnamStruct Convert::mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning)
+Convert::OrnamStruct Convert::mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent,
+                                             bool& warning)
 {
     // @glyph.name
     bool smufl = (meiMordent.HasGlyphAuth() && (meiMordent.GetGlyphAuth() == SMUFL_AUTH));
@@ -2565,12 +2592,14 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     return meiOctave;
 }
 
-Convert::OrnamStruct Convert::ornamFromMEI(engraving::Ornament* ornament, const libmei::Element& meiElement, bool& warning)
+Convert::OrnamStruct Convert::ornamFromMEI(engraving::Ornament* ornament, const libmei::Element& meiElement,
+                                           bool& warning)
 {
     OrnamStruct ornamSt;
 
     const libmei::AttOrnamentAccid* ornamAccidAtt = dynamic_cast<const libmei::AttOrnamentAccid*>(&meiElement);
-    const libmei::AttPlacementRelStaff* placementRelStaffAtt = dynamic_cast<const libmei::AttPlacementRelStaff*>(&meiElement);
+    const libmei::AttPlacementRelStaff* placementRelStaffAtt
+        = dynamic_cast<const libmei::AttPlacementRelStaff*>(&meiElement);
     const libmei::AttTyped* typedAtt = dynamic_cast<const libmei::AttTyped*>(&meiElement);
 
     IF_ASSERT_FAILED(ornamAccidAtt && placementRelStaffAtt && typedAtt) {
@@ -2783,7 +2812,8 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
         bool accidWarning = false;
         libmei::data_ACCIDENTAL_GESTURAL meiAccidGes
-            = (meiAccid.HasAccidGes()) ? meiAccid.GetAccidGes() : libmei::Att::AccidentalWrittenToGestural(meiAccid.GetAccid());
+            = (meiAccid.HasAccidGes()) ? meiAccid.GetAccidGes() : libmei::Att::AccidentalWrittenToGestural(
+                  meiAccid.GetAccid());
         alter = Convert::accidGesFromMEI(meiAccidGes, accidWarning);
         warning = (warning || accidWarning);
     }
@@ -2817,7 +2847,8 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     return pitchSt;
 }
 
-std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
+std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note* note,
+                                                           const engraving::Accidental* accid,
                                                            const engraving::Interval& interval)
 {
     libmei::Note meiNote;
@@ -3324,7 +3355,8 @@ libmei::staffGroupingSym_SYMBOL Convert::symbolToMEI(const engraving::BracketTyp
     }
 }
 
-void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning)
+void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& meiLines, const libmei::Tempo& meiTempo,
+                           bool& warning)
 {
     IF_ASSERT_FAILED(tempoText) {
         return;

@@ -428,7 +428,8 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
             if (resultFormat.fontFamily() == "ScoreText") {
                 resultFormat.setFontFamily(fragment.format.fontFamily());
             }
-            if (fragment.format.fontFamily() != "ScoreText" && resultFormat.fontFamily() != fragment.format.fontFamily()) {
+            if (fragment.format.fontFamily() != "ScoreText"
+                && resultFormat.fontFamily() != fragment.format.fontFamily()) {
                 resultFormat.setFontFamily(TextBase::UNDEFINED_FONT_FAMILY);
             }
 
@@ -704,7 +705,8 @@ String TextCursor::selectedText(bool withFormat) const
     size_t c1 = selectColumn();
     size_t c2 = column();
     TextBase::sort(r1, c1, r2, c2);
-    return extractText(static_cast<int>(r1), static_cast<int>(c1), static_cast<int>(r2), static_cast<int>(c2), withFormat);
+    return extractText(static_cast<int>(r1), static_cast<int>(c1), static_cast<int>(r2), static_cast<int>(c2),
+                       withFormat);
 }
 
 //---------------------------------------------------------
@@ -882,7 +884,8 @@ Font TextFragment::font(const TextBase* t) const
     Font::Type fontType = Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->hasSymbolScale()) {
-            std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
+            std::string fontName
+                = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
 
@@ -893,7 +896,8 @@ Font TextFragment::font(const TextBase* t) const
             }
 
             if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                std::string fontName2
+                    = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                 family = String::fromStdString(fontName2);
             }
 
@@ -1503,7 +1507,8 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+    static std::shared_ptr<IEngravingFontsProvider> provider
+        = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
 
     SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
@@ -1525,7 +1530,8 @@ String TextBlock::text(int col1, int len, bool withFormat) const
             continue;
         }
         if (withFormat) {
-            s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family, f.format.style(), f.format.valign());
+            s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family,
+                                           f.format.style(), f.format.valign());
         }
 
         for (size_t i = 0; i < f.text.size(); ++i) {
@@ -1755,7 +1761,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
 
                         //char32_t code = score()->scoreFont()->symCode(id);
                         char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->
+                                        fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -1846,7 +1853,9 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
 //---------------------------------------------------------
 void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 {
-    if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
+    if (prepareFormat(token,
+                      *cursor.format())
+        && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
     }
 }
@@ -2249,7 +2258,8 @@ bool TextBase::mousePress(EditData& ed)
 {
     bool shift = ed.modifiers & ShiftModifier;
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
+    if (!ted->cursor()->set(ed.startMove,
+                            shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
 
@@ -2520,7 +2530,8 @@ bool TextBase::validateText(String& s)
                 d.append(u"&amp;");
             }
         } else if (c == u'<') {
-            const char16_t* ok[] { u"b>", u"/b>", u"i>", u"/i>", u"u>", u"/u", u"s>", u"/s>", u"font ", u"/font>", u"sym>", u"/sym>",
+            const char16_t* ok[] { u"b>", u"/b>", u"i>", u"/i>", u"u>", u"/u", u"s>", u"/s>", u"font ", u"/font>",
+                                   u"sym>", u"/sym>",
                                    u"sub>", u"/sub>", u"sup>", u"/sup>" };
             String t = s.mid(i + 1);
             bool found = false;
@@ -2852,7 +2863,8 @@ PointF TextBase::defaultPos() const
 //---------------------------------------------------------
 //   getHtmlStartTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------
-String TextBase::getHtmlStartTag(double newSize, double& curSize, const String& newFamily, String& curFamily, FontStyle style,
+String TextBase::getHtmlStartTag(double newSize, double& curSize, const String& newFamily, String& curFamily,
+                                 FontStyle style,
                                  VerticalAlignment vAlign)
 {
     String s;
@@ -2934,7 +2946,8 @@ void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const
     using namespace muse::accessibility;
     if (accessible()) {
         auto range = IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextInsert, muse::Val::fromQVariant(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextInsert,
+                                                       muse::Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);
@@ -2949,7 +2962,8 @@ void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const 
     using namespace muse::accessibility;
     if (accessible()) {
         auto range = IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextRemove, muse::Val::fromQVariant(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextRemove,
+                                                       muse::Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);

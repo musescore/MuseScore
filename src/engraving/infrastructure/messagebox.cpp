@@ -25,7 +25,8 @@
 
 using namespace mu::engraving;
 
-MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text, const std::set<Button>& buttons)
+MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text,
+                                       const std::set<Button>& buttons)
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
 

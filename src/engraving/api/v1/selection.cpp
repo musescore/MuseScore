@@ -129,8 +129,10 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    mu::engraving::Segment* segStart = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(startTick));
-    mu::engraving::Segment* segEnd = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(endTick));
+    mu::engraving::Segment* segStart
+        = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(startTick));
+    mu::engraving::Segment* segEnd = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(
+                                                                                  endTick));
 
     if (!segStart || (segEnd && !((*segEnd) > (*segStart)))) {
         return false;

@@ -38,7 +38,8 @@
 #include "uicomponents/qml/Muse/UiComponents/quickpaintedview.h"
 
 namespace mu::inspector {
-class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable, public muse::Contextable
+class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public muse::async::Asyncable,
+    public muse::Contextable
 {
     Q_OBJECT
     QML_ELEMENT;

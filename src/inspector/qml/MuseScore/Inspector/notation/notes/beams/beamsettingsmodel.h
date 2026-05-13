@@ -40,11 +40,13 @@ class BeamSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
     Q_PROPERTY(
         mu::inspector::BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
-    Q_PROPERTY(bool isFeatheringHeightChangingAllowed READ isFeatheringHeightChangingAllowed NOTIFY featheringModeChanged)
+    Q_PROPERTY(
+        bool isFeatheringHeightChangingAllowed READ isFeatheringHeightChangingAllowed NOTIFY featheringModeChanged)
 
     Q_PROPERTY(mu::inspector::PropertyItem * beamHeightLeft READ beamHeightLeft CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * beamHeightRight READ beamHeightRight CONSTANT)
-    Q_PROPERTY(bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
+    Q_PROPERTY(
+        bool isBeamHeightLocked READ isBeamHeightLocked WRITE setIsBeamHeightLocked NOTIFY isBeamHeightLockedChanged)
 
     Q_PROPERTY(mu::inspector::PropertyItem * isBeamHidden READ isBeamHidden CONSTANT)
 
@@ -58,7 +60,8 @@ class BeamSettingsModel : public AbstractInspectorModel
         bool isCrossStaffMoveAvailable READ isCrossStaffMoveAvailable WRITE setIsCrossStaffMoveAvailable NOTIFY isCrossStaffMoveAvailableChanged)
 
 public:
-    explicit BeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit BeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository);
 
     PropertyItem* forceHorizontal();
 

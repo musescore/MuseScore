@@ -251,7 +251,8 @@ ElementMap ScoreElementScanner::scanElements(Score* score)
             const float beatA = (A.beat < 0.f) ? std::numeric_limits<float>::max() : A.beat;
             const float beatB = (B.beat < 0.f) ? std::numeric_limits<float>::max() : B.beat;
 
-            return std::tie(A.staffIdx, A.measureIdx, beatA, A.voiceIdx) < std::tie(B.staffIdx, B.measureIdx, beatB, B.voiceIdx);
+            return std::tie(A.staffIdx, A.measureIdx, beatA,
+                            A.voiceIdx) < std::tie(B.staffIdx, B.measureIdx, beatB, B.voiceIdx);
         });
     }
 

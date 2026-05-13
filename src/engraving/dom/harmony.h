@@ -97,8 +97,15 @@ struct ChordSymbolParen : HarmonyRenderItem {
 
     double height() const override { return parenItem->height(); }
 
-    double leftPadding() const override { return parenItem->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING; }
-    double rightPadding() const override { return parenItem->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING; }
+    double leftPadding() const override
+    {
+        return parenItem->direction() == DirectionH::LEFT ? OUTER_PADDING : INNER_PADDING;
+    }
+
+    double rightPadding() const override
+    {
+        return parenItem->direction() == DirectionH::LEFT ? INNER_PADDING : OUTER_PADDING;
+    }
 
     HarmonyRenderItemType type() const override { return HarmonyRenderItemType::PAREN; }
 
@@ -316,7 +323,8 @@ public:
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.
-        ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
+        ld_field<std::vector<LineF> > polychordDividerLines
+            = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
         ld_field<double> polychordDividerOffset = { "[Harmony] polychordDividerOffset", 0.0 };
         ld_field<double> baseline = { "[Harmony] baseline", 0.0 };
         ld_field<std::vector<muse::draw::Font> > fontList = "[Harmony] fontList";          // temp values used in render()

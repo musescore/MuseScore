@@ -605,7 +605,8 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             tuplet = tuplet->tuplet();
             if (oldTuplet->elements().empty()) {
                 // this should not happen and is a sign of input file corruption
-                LOGD("Measure:read: empty tuplet in measure index=%d, input file corrupted?", ctx.currentMeasureIndex());
+                LOGD("Measure:read: empty tuplet in measure index=%d, input file corrupted?",
+                     ctx.currentMeasureIndex());
                 if (tuplet) {
                     tuplet->remove(oldTuplet);
                 }

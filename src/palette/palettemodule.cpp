@@ -72,7 +72,8 @@ void PaletteModule::resolveImports()
         ir->registerWidgetUri<TimeEditorDialog>(Uri("musescore://notation/timesignatures"));
 
         ir->registerQmlUri(Uri("musescore://palette/properties"), "MuseScore.Palette", "PalettePropertiesDialog");
-        ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette", "PaletteCellPropertiesDialog");
+        ir->registerQmlUri(Uri("musescore://palette/cellproperties"), "MuseScore.Palette",
+                           "PaletteCellPropertiesDialog");
     }
 
     auto accr = globalIoc()->resolve<muse::accessibility::IQAccessibleInterfaceRegister>(mname);

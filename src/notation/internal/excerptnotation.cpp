@@ -27,7 +27,8 @@
 
 using namespace mu::notation;
 
-ExcerptNotation::ExcerptNotation(MasterNotation* master, engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx)
+ExcerptNotation::ExcerptNotation(MasterNotation* master, engraving::Excerpt* excerpt,
+                                 const muse::modularity::ContextPtr& iocCtx)
     : Notation(master, iocCtx), m_excerpt(excerpt)
 {
 }

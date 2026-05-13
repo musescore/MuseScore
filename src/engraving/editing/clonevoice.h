@@ -31,7 +31,7 @@ class Segment;
 class CloneVoice
 {
 public:
-    static void cloneVoice(Segment* sourceSeg, const Fraction& lTick, Segment* destSeg, track_idx_t strack, track_idx_t dtrack,
-                           bool deleteSource, bool link);
+    static void cloneVoice(Segment* sourceSeg, const Fraction& lTick, Segment* destSeg, track_idx_t strack,
+                           track_idx_t dtrack, bool deleteSource, bool link);
 };
 }

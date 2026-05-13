@@ -281,8 +281,9 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
         return enabled;
     };
 
-    muse::uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
-                                                            isResetEnabled());
+    muse::uicomponents::MenuItem* resetItem
+        = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
+                        isResetEnabled());
 
     muse::ui::UiAction resetAction = resetItem->action();
     resetAction.iconCode = muse::ui::IconCode::Code::UNDO;
@@ -293,7 +294,9 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
     bool isMultiSelectionEnabled = !m_availablePresetsModel.isEmpty();
 
     muse::uicomponents::MenuItem* multiSelectionItem
-        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"), isMultiSelectionEnabled);
+        = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback",
+                                                                    "Allow multiple selection"),
+                        isMultiSelectionEnabled);
 
     muse::ui::UiAction multiSelectionAction = multiSelectionItem->action();
     multiSelectionAction.checkable = muse::ui::Checkable::Yes;
@@ -306,7 +309,8 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
     items << multiSelectionItem;
 
     muse::uicomponents::MenuItem* applyToAllStavesItem = buildMenuItem(APPLY_TO_ALL_STAVES_MENU_ID,
-                                                                       TranslatableString("playback", "Apply selection to all staves"));
+                                                                       TranslatableString("playback",
+                                                                                          "Apply selection to all staves"));
 
     muse::ui::UiAction applyToAllStavesAction = applyToAllStavesItem->action();
     applyToAllStavesAction.checkable = muse::ui::Checkable::Yes;
@@ -353,7 +357,8 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
             loadAvailablePlayingTechniques();
         }
     } else if (menuId == MULTI_SELECTION_MENU_ID) {
-        playbackConfiguration()->setSoundPresetsMultiSelectionEnabled(!playbackConfiguration()->soundPresetsMultiSelectionEnabled());
+        playbackConfiguration()->setSoundPresetsMultiSelectionEnabled(
+            !playbackConfiguration()->soundPresetsMultiSelectionEnabled());
         emit contextMenuModelChanged();
     } else if (menuId == APPLY_TO_ALL_STAVES_MENU_ID) {
         beginCommand(TranslatableString("undoableAction", "Toggle ‘Apply sound flag to all staves’"));

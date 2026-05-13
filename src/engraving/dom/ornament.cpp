@@ -242,7 +242,8 @@ bool Ornament::hasFullIntervalChoice() const
 bool Ornament::showCueNote()
 {
     if (m_showCueNote == AutoOnOff::AUTO) {
-        return (hasFullIntervalChoice() && style().styleB(Sid::trillAlwaysShowCueNote)) || _intervalAbove.step != IntervalStep::SECOND;
+        return (hasFullIntervalChoice() && style().styleB(Sid::trillAlwaysShowCueNote))
+               || _intervalAbove.step != IntervalStep::SECOND;
     }
 
     return m_showCueNote == AutoOnOff::ON;
@@ -293,7 +294,8 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
             note->setAccidentalType(Accidental::value2subtype(tpc2alter(note->tpc())));
         }
 
-        bool autoMode = (above && _intervalAbove.type == IntervalType::AUTO) || (!above && _intervalBelow.type == IntervalType::AUTO);
+        bool autoMode = (above && _intervalAbove.type == IntervalType::AUTO)
+                        || (!above && _intervalBelow.type == IntervalType::AUTO);
         if (autoMode) {
             // NOTE: In AUTO mode, the ornament note should match not only any alteration from the
             // key signature, but also any alteration present in the measure before this point.

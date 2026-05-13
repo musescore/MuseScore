@@ -691,7 +691,8 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     pen.setColor(color);
     painter->setPen(pen);
 
-    QRectF frameRectWithoutBorders = frameRect - QMargins(GRID_LINE_WIDTH, GRID_LINE_WIDTH, GRID_LINE_WIDTH, GRID_LINE_WIDTH);
+    QRectF frameRectWithoutBorders = frameRect - QMargins(GRID_LINE_WIDTH, GRID_LINE_WIDTH, GRID_LINE_WIDTH,
+                                                          GRID_LINE_WIDTH);
 
     // draw line between points
     for (const CurvePoint& v : m_points) {
@@ -889,9 +890,11 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
             bool moveToTop = currentPoint.pitch < toPoint.pitch;
             if (pointIndex - 1 >= 0) {
                 const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
-                bool isLeftValid = moveToTop ? leftPoint.pitch > currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
+                bool isLeftValid = moveToTop ? leftPoint.pitch > currentPoint.pitch : leftPoint.pitch
+                                   <= currentPoint.pitch;
                 if (isLeftValid) {
-                    canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
+                    canMove = leftPoint.generated
+                              || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
                 }
             }
 
@@ -901,9 +904,11 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
 
             if (pointIndex + 1 < m_points.size()) {
                 const CurvePoint& rightPoint = m_points.at(pointIndex + 1);
-                bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
+                bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch
+                                    <= currentPoint.pitch;
                 if (isRightValid) {
-                    canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
+                    canMove = rightPoint.generated
+                              || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
                 }
             }
         }

@@ -31,7 +31,8 @@ class NotesInChordSelectionFilterModel : public AbstractSelectionFilterModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool includeSingleNotes READ includeSingleNotes WRITE setIncludeSingleNotes NOTIFY includeSingleNotesChanged)
+    Q_PROPERTY(
+        bool includeSingleNotes READ includeSingleNotes WRITE setIncludeSingleNotes NOTIFY includeSingleNotesChanged)
 
     QML_ELEMENT
 
@@ -58,7 +59,10 @@ private:
     bool isAllowed(const SelectionFilterTypesVariant& variant) const override;
 
     SelectionFilterTypesVariant getAllMask() const override { return engraving::NotesInChordSelectionFilterTypes::ALL; }
-    SelectionFilterTypesVariant getNoneMask() const override { return engraving::NotesInChordSelectionFilterTypes::NONE; }
+    SelectionFilterTypesVariant getNoneMask() const override
+    {
+        return engraving::NotesInChordSelectionFilterTypes::NONE;
+    }
 
     bool includeSingleNotes() const;
     void setIncludeSingleNotes(bool include);

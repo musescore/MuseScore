@@ -40,7 +40,8 @@ void GuitarDiveLayout::updateDiveSequences(const std::vector<GuitarBend*>& bends
 {
     std::vector<GuitarBend*> dives;
     for (GuitarBend* bend : bends) {
-        if ((bend->bendType() == GuitarBendType::DIVE || bend->bendType() == GuitarBendType::PRE_DIVE) && bend->staffType()->isTabStaff()) {
+        if ((bend->bendType() == GuitarBendType::DIVE || bend->bendType() == GuitarBendType::PRE_DIVE)
+            && bend->staffType()->isTabStaff()) {
             dives.push_back(bend);
         }
     }
@@ -91,7 +92,8 @@ void GuitarDiveLayout::updateDiveSequences(const std::vector<GuitarBend*>& bends
             prevDive = prevDive->findPrecedingBend();
         }
 
-        bool layoutAboveStaff = tabPos == DirectionV::UP || (tabPos == DirectionV::AUTO && ctx.conf().styleB(Sid::guitarDivesAboveStaff));
+        bool layoutAboveStaff = tabPos == DirectionV::UP
+                                || (tabPos == DirectionV::AUTO && ctx.conf().styleB(Sid::guitarDivesAboveStaff));
 
         for (GuitarBend* d : diveSequence) {
             d->mutldata()->setDiveLevels(diveLevels);
@@ -178,7 +180,8 @@ void GuitarDiveLayout::layoutDiveTabStaff(GuitarBendSegment* item, LayoutContext
             bendTextPos += PointF(-0.5 * bendText->width(), -bendText->height() - verticalTextPad);
         } else {
             bendTextPos += PointF(-0.5 * bendText->width(),
-                                  item->pos().y() + item->pos2().y() > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
+                                  item->pos().y() + item->pos2().y()
+                                  > 0 ? verticalTextPad : -bendText->height() - verticalTextPad);
         }
         bendText->setPos(bendTextPos);
     } else {
@@ -237,7 +240,8 @@ PointF GuitarDiveLayout::computeStartPosOnStaff(GuitarBendSegment* item, LayoutC
     if (item->isSingleBeginType()) {
         startPos = startNote->systemPos();
         double horizontalIndent = 0.25 * item->spatium();
-        startPos += PointF(startNoteBbox.right() + horizontalIndent, -0.5 * startNoteBbox.height() + 0.5 * item->lineWidth());
+        startPos += PointF(startNoteBbox.right() + horizontalIndent,
+                           -0.5 * startNoteBbox.height() + 0.5 * item->lineWidth());
     } else {
         startPos.setX(item->system()->firstNoteRestSegmentX(true));
         startPos.setY(bend->frontSegment()->ldata()->pos().y() + bend->frontSegment()->ipos2().y());
@@ -323,7 +327,8 @@ PointF GuitarDiveLayout::computeStartPosAboveStaff(GuitarBendSegment* item, Layo
     PointF startPos;
 
     if (item->isSingleBeginType()) {
-        Note* note = bend->bendType() == GuitarBendType::PRE_BEND && !ctx.conf().styleB(Sid::alignPreBendAndPreDiveToGraceNote)
+        Note* note = bend->bendType() == GuitarBendType::PRE_BEND && !ctx.conf().styleB(
+            Sid::alignPreBendAndPreDiveToGraceNote)
                      ? bend->endNote() : bend->startNote();
         RectF noteBbox = getNoteAndParenthesesShape(note);
         startPos.setX(note->systemPos().x() + 0.5 * noteBbox.width());
@@ -399,7 +404,8 @@ LineSegment* GuitarDiveLayout::findPrevHoldOrBendSegment(GuitarBendSegment* item
     }
 
     GuitarBendHold* hold = prevBend->holdLine();
-    if (hold && !hold->segmentsEmpty() && prevBend->endNote() != bend->startNote() && hold->backSegment()->system() == item->system()) {
+    if (hold && !hold->segmentsEmpty() && prevBend->endNote() != bend->startNote()
+        && hold->backSegment()->system() == item->system()) {
         return hold->backSegment();
     }
 
@@ -478,9 +484,12 @@ void GuitarDiveLayout::layoutScoop(GuitarBendSegment* item)
     Shape chordShape = startNote->chord()->shape();
     chordShape.removeTypes({ ElementType::GUITAR_BEND, ElementType::GUITAR_BEND_SEGMENT, ElementType::BEAM });
 
-    double xMove = -HorizontalSpacing::minHorizontalDistance(Shape(bbox.translated(0.0, startNote->y())), chordShape, spatium) - leftPad;
+    double xMove = -HorizontalSpacing::minHorizontalDistance(Shape(bbox.translated(0.0,
+                                                                                   startNote->y())), chordShape,
+                                                             spatium) - leftPad;
 
-    startNote->chord()->segment()->staffShape(startNote->staffIdx()).add(bbox.translated(xMove, yMove + startNote->y()));
+    startNote->chord()->segment()->staffShape(startNote->staffIdx()).add(bbox.translated(xMove,
+                                                                                         yMove + startNote->y()));
 
     item->setPos(pos + PointF(xMove, yMove));
     item->setPos2(PointF());

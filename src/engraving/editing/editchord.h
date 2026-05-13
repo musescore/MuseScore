@@ -35,19 +35,24 @@ enum class SymId;
 class EditChord
 {
 public:
-    static void addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
-    static void removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void addChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true,
+                                    bool generated = false);
+    static void removeChordParentheses(Chord* chord, std::vector<Note*> notes, bool addToLinked = true,
+                                       bool generated = false);
     static void toggleArticulation(Score* score, SymId attr);
     static bool toggleArticulation(Score* score, EngravingItem* el, Articulation* a);
 
 private:
 
-    static void undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
-    static void undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthesis* leftParen, bool removeFromLinked = true);
-    static void undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
-                                          bool removeFromLinked = true);
+    static void undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true,
+                                          bool generated = false);
+    static void undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthesis* leftParen,
+                                              bool removeFromLinked = true);
+    static void undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen,
+                                          Parenthesis* rightParen, bool removeFromLinked = true);
 
-    static void doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen);
+    static void doAddNoteParentheses(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen,
+                                     Parenthesis* rightParen);
     static void doRemoveSingleNoteParenthesis(Chord* chord, Note* note, Parenthesis* leftParen);
     static void doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen);
 };

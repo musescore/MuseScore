@@ -202,8 +202,9 @@ private:
     };
 
     ChordParams collectChordParams(const Chord* chord, int tickOffset) const;
-    void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
-                                       int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
+    void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier,
+                                       Staff* st, int tickOffset, PitchWheelRenderer& pitchWheelRenderer,
+                                       MidiInstrumentEffect effect);
     void fillArticulationsInfo();
 
     Score* score = nullptr;

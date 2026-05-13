@@ -41,7 +41,8 @@ public:
     MscSaver(const muse::modularity::ContextPtr& iocCtx)
         : muse::Contextable(iocCtx) {}
 
-    bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail, const write::WriteContext* ctx = nullptr);
+    bool writeMscz(MasterScore* score, MscWriter& mscWriter, bool createThumbnail,
+                   const write::WriteContext* ctx = nullptr);
 
     bool exportPart(Score* partScore, MscWriter& mscWriter);
 };

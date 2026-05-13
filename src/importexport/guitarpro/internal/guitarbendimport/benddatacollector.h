@@ -60,6 +60,7 @@ private:
     void fillBendDataContext(BendDataContext& bendDataCtx);
 
     // if first chord in chunk has more segments than tied notes, move segments forward to other notes
-    void moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& dataChunk, ImportedBendInfo& dataForFirstNote, size_t noteIdx);
+    void moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& dataChunk, ImportedBendInfo& dataForFirstNote,
+                                 size_t noteIdx);
 };
 } // mu::iex::guitarpro

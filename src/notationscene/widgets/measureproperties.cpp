@@ -178,7 +178,8 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(muse::qtrc("notation/measureproperties", "Properties for measure %1").arg(m_measure->measureNumber() + 1));
+    setWindowTitle(muse::qtrc("notation/measureproperties",
+                              "Properties for measure %1").arg(m_measure->measureNumber() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
@@ -210,8 +211,9 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
 
     auto itemAccessibleText = [](const QTableWidgetItem* item){
         return item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-               + (item->checkState() == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked",
-                                                                                                             "checkstate"));
+               + (item->checkState()
+                  == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked",
+                                                                                          "checkstate"));
     };
 
     for (size_t staffIdx = 0; staffIdx < rows; ++staffIdx) {

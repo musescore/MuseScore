@@ -38,8 +38,10 @@ class DrawDataGenerator
     muse::GlobalInject<engraving::rendering::IScoreRenderer> scoreRenderer;
 
 public:
-    muse::Ret processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir, const GenOpt& opt = GenOpt());
-    muse::Ret processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile, const GenOpt& opt = GenOpt());
+    muse::Ret processDir(const muse::io::path_t& scoreDir, const muse::io::path_t& outDir,
+                         const GenOpt& opt = GenOpt());
+    muse::Ret processFile(const muse::io::path_t& scoreFile, const muse::io::path_t& outFile,
+                          const GenOpt& opt = GenOpt());
 
     muse::draw::DrawDataPtr genDrawData(const muse::io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
     muse::draw::Pixmap genImage(const muse::io::path_t& scorePath) const;

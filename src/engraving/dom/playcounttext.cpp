@@ -79,7 +79,8 @@ bool PlayCountText::setProperty(Pid id, const PropertyValue& v)
         m_playCountTextSetting = v.value<AutoCustomHide>();
         if (playCountTextSetting() == AutoCustomHide::CUSTOM && playCountCustomText().isEmpty()) {
             int repeatCount = m ? m->repeatCount() : 2;
-            String text = TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            String text = TConv::translatedUserName(style().styleV(
+                                                        Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
                 repeatCount);
             undoChangeProperty(Pid::PLAY_COUNT_TEXT, text);
         }
@@ -103,7 +104,8 @@ PropertyValue PlayCountText::propertyDefault(Pid propertyId) const
         return AutoCustomHide::AUTO;
     case Pid::PLAY_COUNT_TEXT: {
         int repeatCount = m ? m->repeatCount() : 2;
-        return TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(repeatCount);
+        return TConv::translatedUserName(style().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+            repeatCount);
     }
     default:
         return TextBase::propertyDefault(propertyId);

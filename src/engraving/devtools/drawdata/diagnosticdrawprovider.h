@@ -30,9 +30,10 @@ class DiagnosticDrawProvider : public IDiagnosticDrawProvider
 public:
     muse::Ret generateDrawData(const muse::io::path_t& dirOrFile, const muse::io::path_t& outDirOrFile,
                                const GenOpt& opt = GenOpt()) override;
-    muse::Ret compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test, const muse::io::path_t& outDiff,
-                              const ComOpt& opt = ComOpt()) override;
+    muse::Ret compareDrawData(const muse::io::path_t& ref, const muse::io::path_t& test,
+                              const muse::io::path_t& outDiff, const ComOpt& opt = ComOpt()) override;
     muse::Ret drawDataToPng(const muse::io::path_t& dataFile, const muse::io::path_t& outFile) override;
-    muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile, const muse::io::path_t& outFile) override;
+    muse::Ret drawDiffToPng(const muse::io::path_t& diffFile, const muse::io::path_t& refFile,
+                            const muse::io::path_t& outFile) override;
 };
 }

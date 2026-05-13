@@ -75,12 +75,15 @@ private:
                                     const LyricsVersesMap& lyricsVersesBelow, LayoutContext& ctx);
 
     static void checkCollisionsWithStaffElements(System* system, staff_idx_t staffIdx,  LayoutContext& ctx,
-                                                 const LyricsVersesMap& lyricsVersesAbove, const LyricsVersesMap& lyricsVersesBelow);
-    static SkylineLine createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses, System* system);
-    static void moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses);
+                                                 const LyricsVersesMap& lyricsVersesAbove,
+                                                 const LyricsVersesMap& lyricsVersesBelow);
+    static SkylineLine createSkylineForVerse(int verse, bool north, const LyricsVersesMap& lyricsVerses,
+                                             System* system);
+    static void moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff,
+                                          const LyricsVersesMap& lyricsVerses);
 
-    static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
-                             const LyricsVersesMap& lyricsVersesBelow);
+    static void addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx,
+                             const LyricsVersesMap& lyricsVersesAbove, const LyricsVersesMap& lyricsVersesBelow);
 
     static double lyricsLineStartX(const LyricsLineSegment* item);
     static double lyricsLineEndX(const LyricsLineSegment* item, const Lyrics* endLyrics = nullptr);

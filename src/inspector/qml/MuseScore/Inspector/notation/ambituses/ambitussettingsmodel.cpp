@@ -47,13 +47,16 @@ void AmbitusSettingsModel::createProperties()
     m_topOctave = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS3);
     m_bottomOctave = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS4);
 
-    m_topPitch = buildPropertyItem(mu::engraving::Pid::PITCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_topPitch
+        = buildPropertyItem(mu::engraving::Pid::PITCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_bottomPitch = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS2, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_bottomPitch
+        = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS2,
+                            [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();

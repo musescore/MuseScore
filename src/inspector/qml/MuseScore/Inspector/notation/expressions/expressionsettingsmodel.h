@@ -35,7 +35,8 @@ class ExpressionSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(mu::inspector::PropertyItem * snapExpression READ snapExpression CONSTANT)
 
 public:
-    explicit ExpressionSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit ExpressionSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

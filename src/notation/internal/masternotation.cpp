@@ -221,7 +221,8 @@ static void createMeasures(MasterScore* masterScore, const ScoreCreateOptions& s
         keys->clear();
     }
 
-    const int totalMeasures = scoreOptions.withPickupMeasure ? scoreOptions.totalMeasures + 1 : scoreOptions.totalMeasures;
+    const int totalMeasures = scoreOptions.withPickupMeasure ? scoreOptions.totalMeasures
+                              + 1 : scoreOptions.totalMeasures;
     for (int i = 0; i < totalMeasures; ++i) {
         MeasureBase* measureBase = masterScore->insertMeasure();
         Measure* measure = measureBase && measureBase->isMeasure() ? toMeasure(measureBase) : nullptr;
@@ -279,7 +280,8 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
     return make_ret(Err::NoError);
 }
 
-void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate)
+void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions,
+                                  bool createdFromTemplate)
 {
     TRACEFUNC;
 
@@ -306,7 +308,8 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
         // for templates using built-in base page style, set score page style to default (may be user-defined)
         for (auto st : pageStyles()) {
-            if (st != Sid::pageTwosided && RealIsEqual(score->style().styleD(st), DefaultStyle::baseStyle().styleD(st))) {
+            if (st != Sid::pageTwosided
+                && RealIsEqual(score->style().styleD(st), DefaultStyle::baseStyle().styleD(st))) {
                 score->style().set(st, DefaultStyle::defaultStyle().value(st));
             }
         }
@@ -564,7 +567,8 @@ void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
         partIdList.push_back(part->id());
     }
 
-    std::sort(excerpts.begin(), excerpts.end(), [&partIdList](const IExcerptNotationPtr& f, const IExcerptNotationPtr& s) {
+    std::sort(excerpts.begin(),
+              excerpts.end(), [&partIdList](const IExcerptNotationPtr& f, const IExcerptNotationPtr& s) {
         //! NOTE: excertps created by users are always at the end of the list in alphabetical order
         if (f->isCustom() && !s->isCustom()) {
             return false;
@@ -683,10 +687,12 @@ void MasterNotation::updatePotentialExcerpts() const
         partsWithoutExcerpt.push_back(part);
     }
 
-    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore());
+    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt,
+                                                                                                    masterScore());
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
-        auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
+        auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt,
+                                                                 iocContext());
         potentialExcerpts.push_back(excerptNotation);
     }
 
@@ -714,7 +720,8 @@ void MasterNotation::onPartsChanged()
 IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
     auto excerptNotation
-        = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), new mu::engraving::Excerpt(masterScore()), iocContext());
+        = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), new mu::engraving::Excerpt(
+                                                masterScore()), iocContext());
     excerptNotation->setName(name);
 
     return excerptNotation;

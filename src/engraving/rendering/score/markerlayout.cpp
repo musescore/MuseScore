@@ -71,7 +71,8 @@ void MarkerLayout::doLayoutMarker(Marker* item, TextBase::LayoutData* ldata, Lay
         xAdj = measure ? measure->width() : 0.0;
     }
 
-    bool startRepeat = rightMarker ? measure->nextMeasure() && measure->nextMeasure()->repeatStart() : measure->repeatStart();
+    bool startRepeat = rightMarker ? measure->nextMeasure()
+                       && measure->nextMeasure()->repeatStart() : measure->repeatStart();
     bool endRepeat = rightMarker ? measure->repeatEnd() : measure->prevMeasure() && measure->prevMeasure()->repeatEnd();
 
     bool avoidBarline = item->staffIdx() != 0 && hPos != AlignH::HCENTER;
@@ -162,7 +163,8 @@ double MarkerLayout::computeCustomTextOffset(const Marker* item, TextBase::Layou
     for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& fragment : block.fragments()) {
             if (fragment.text == referenceFragment.text) {
-                return ldata->pos().x() + fragment.pos.x() - referenceMarker.ldata()->pos().x() - referenceFragment.pos.x();
+                return ldata->pos().x() + fragment.pos.x() - referenceMarker.ldata()->pos().x()
+                       - referenceFragment.pos.x();
             }
         }
     }

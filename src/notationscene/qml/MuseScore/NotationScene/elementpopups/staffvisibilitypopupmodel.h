@@ -51,7 +51,9 @@ class StaffVisibilityPopupModel : public AbstractElementPopupModel, public QQmlP
     Q_INTERFACES(QQmlParserStatus);
     QML_ELEMENT;
 
-    Q_PROPERTY(mu::notation::EmptyStavesVisibilityModel * emptyStavesVisibilityModel READ emptyStavesVisibilityModel CONSTANT)
+    Q_PROPERTY(
+        mu::notation::EmptyStavesVisibilityModel
+        * emptyStavesVisibilityModel READ emptyStavesVisibilityModel CONSTANT)
     Q_PROPERTY(int systemIndex READ systemIndex NOTIFY systemIndexChanged)
 
 public:

@@ -139,7 +139,8 @@ void GlissandoSettingsModel::resetProperties()
 
 void GlissandoSettingsModel::onUpdateGlissPropertiesAvailability()
 {
-    bool isStraightLine = m_lineType->value().value<mu::engraving::GlissandoType>() == mu::engraving::GlissandoType::STRAIGHT;
+    bool isStraightLine = m_lineType->value().value<mu::engraving::GlissandoType>()
+                          == mu::engraving::GlissandoType::STRAIGHT;
     m_lineStyle->setIsEnabled(isStraightLine);
     m_thickness->setIsEnabled(isStraightLine);
 

@@ -34,7 +34,8 @@ using namespace mu::engraving;
 using IconCode = muse::ui::IconCode::Code;
 
 TextLineSettingsModel::TextLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
-                                             IElementRepositoryService* repository, mu::engraving::ElementType elementType)
+                                             IElementRepositoryService* repository,
+                                             mu::engraving::ElementType elementType)
     : InspectorModelWithVoiceAndPositionOptions(parent, iocCtx, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
@@ -76,7 +77,8 @@ void TextLineSettingsModel::createProperties()
     m_endFilledArrowHeight = buildPropertyItem(Pid::END_FILLED_ARROW_HEIGHT);
     m_endFilledArrowWidth = buildPropertyItem(Pid::END_FILLED_ARROW_WIDTH);
 
-    m_gapBetweenTextAndLine = buildPropertyItem(Pid::GAP_BETWEEN_TEXT_AND_LINE, applyPropertyValueAndUpdateAvailability);
+    m_gapBetweenTextAndLine
+        = buildPropertyItem(Pid::GAP_BETWEEN_TEXT_AND_LINE, applyPropertyValueAndUpdateAvailability);
 
     m_thickness = buildPropertyItem(Pid::LINE_WIDTH);
     m_dashLineLength = buildPropertyItem(Pid::DASH_LINE_LEN);
@@ -364,7 +366,8 @@ void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     auto hasHook = [](const PropertyItem* item) {
         HookType type = static_cast<HookType>(item->value().toInt());
-        return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED && type != HookType::ROSETTE;
+        return type != HookType::NONE && type != HookType::ARROW && type != HookType::ARROW_FILLED
+               && type != HookType::ROSETTE;
     };
     auto hasLineArrow = [](const PropertyItem* item) {
         HookType type = static_cast<HookType>(item->value().toInt());
@@ -428,24 +431,32 @@ void TextLineSettingsModel::updateStartAndEndHookTypes()
 {
     static const QList<HookTypeInfo> startHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°",
+                                                                                       "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°",
+                                                                                              "hook type") },
         { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK,
           muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
-        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_LEFT, muse::qtrc("inspector", "Line arrow", "hook type") },
-        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_LEFT,
+          muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_LEFT, muse::qtrc("inspector", "Filled arrow",
+                                                                                         "hook type") }
     };
 
     setPossibleStartHookTypes(startHookTypes);
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal", "hook type") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°", "hook type") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°", "hook type") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°",
+                                                                                     "hook type") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°",
+                                                                                            "hook type") },
         { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK,
           muse::qtrc("inspector", "Hooked 90° T-style", "hook type") },
-        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_RIGHT, muse::qtrc("inspector", "Line arrow", "hook type") },
-        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_RIGHT, muse::qtrc("inspector", "Filled arrow", "hook type") }
+        { mu::engraving::HookType::ARROW, IconCode::LINE_ARROW_RIGHT,
+          muse::qtrc("inspector", "Line arrow", "hook type") },
+        { mu::engraving::HookType::ARROW_FILLED, IconCode::FILLED_ARROW_RIGHT, muse::qtrc("inspector", "Filled arrow",
+                                                                                          "hook type") }
     };
 
     setPossibleEndHookTypes(endHookTypes);

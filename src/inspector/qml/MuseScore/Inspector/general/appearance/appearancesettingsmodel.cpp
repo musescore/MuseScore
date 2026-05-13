@@ -201,7 +201,9 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int minZ = (*std::min_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
+    int minZ
+        = (*std::min_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(),
+                             elementLessThan))->z();
     int i;
     for (i = 0; i < static_cast<int>(elements.size()); i++) {
         if (elements[i]->z() == minZ) {
@@ -211,7 +213,8 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
 
     EngravingItem* elementBehind = elements[i - 1 >= 0 ? i - 1 : 0];
     int elementBehindZ = elementBehind->z();
-    int newZ = elementBehindZ <= -INT_MAX + REARRANGE_ORDER_STEP ? elementBehindZ : elementBehindZ - REARRANGE_ORDER_STEP; // avoid underflow
+    int newZ = elementBehindZ
+               <= -INT_MAX + REARRANGE_ORDER_STEP ? elementBehindZ : elementBehindZ - REARRANGE_ORDER_STEP;                // avoid underflow
     m_arrangeOrder->setValue(newZ);
 }
 
@@ -220,7 +223,9 @@ void AppearanceSettingsModel::pushForwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int maxZ = (*std::max_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
+    int maxZ
+        = (*std::max_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(),
+                             elementLessThan))->z();
     int elementsCount = static_cast<int>(elements.size());
     int i;
     for (i = elementsCount - 1; i > 0; i--) {
@@ -231,7 +236,8 @@ void AppearanceSettingsModel::pushForwardsInOrder()
 
     EngravingItem* elementInFront = elements[i + 1 < elementsCount ? i + 1 : elementsCount - 1];
     int elementInFrontZ = elementInFront->z();
-    int newZ = elementInFrontZ >= INT_MAX - REARRANGE_ORDER_STEP ? elementInFrontZ : elementInFrontZ + REARRANGE_ORDER_STEP; // avoid overflow
+    int newZ = elementInFrontZ
+               >= INT_MAX - REARRANGE_ORDER_STEP ? elementInFrontZ : elementInFrontZ + REARRANGE_ORDER_STEP;                 // avoid overflow
     m_arrangeOrder->setValue(newZ);
 }
 

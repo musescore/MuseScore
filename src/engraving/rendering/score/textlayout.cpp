@@ -181,7 +181,8 @@ void TextLayout::computeTextHighResShape(const TextBase* item, TextBase::LayoutD
     ldata->highResShape = shape;
 }
 
-void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth, TextBase::LayoutData* ldata)
+void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double maxBlockWidth,
+                                      TextBase::LayoutData* ldata)
 {
     double leftMargin = 0.0;
     double layoutWidth = 0;

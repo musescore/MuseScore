@@ -35,7 +35,8 @@ using namespace mu::engraving;
 static const String GUITARPRO_DIR(u"guitarbendimporter_data/");
 
 namespace mu::iex::guitarpro {
-extern Err importGTP(MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool experimental = false);
+extern Err importGTP(MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx,
+                     bool experimental = false);
 class GuitarBendImporter_Tests : public ::testing::Test, public muse::Contextable
 {
 public:
@@ -60,7 +61,8 @@ void GuitarBendImporter_Tests::gpReadTest(const String& fileName, const String& 
 
     MasterScore* score = ScoreRW::readScore(gpFileName, false, importFunc);
     EXPECT_TRUE(score);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"guitarbend-" + fileName + u"-" + extension + u".mscx", refFileName));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"guitarbend-" + fileName + u"-" + extension + u".mscx",
+                                            refFileName));
 
     delete score;
 }

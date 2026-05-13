@@ -59,9 +59,11 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public QQmlParserStatus,
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY isRemovingAvailableChanged)
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
-    Q_PROPERTY(bool isAddingSystemMarkingsAvailable READ isAddingSystemMarkingsAvailable NOTIFY isAddingSystemMarkingsAvailableChanged)
+    Q_PROPERTY(
+        bool isAddingSystemMarkingsAvailable READ isAddingSystemMarkingsAvailable NOTIFY isAddingSystemMarkingsAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
-    Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
+    Q_PROPERTY(
+        QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
     Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
     Q_PROPERTY(bool isStaveSharingEnabled READ isStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
 
@@ -115,8 +117,8 @@ public:
     Q_INVOKABLE void startActiveDrag();
     Q_INVOKABLE void endActiveDrag();
 
-    Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
-                              int destinationChild) override;
+    Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+                              const QModelIndex& destinationParent, int destinationChild) override;
 
     Q_INVOKABLE QItemSelectionModel* selectionModel() const;
 

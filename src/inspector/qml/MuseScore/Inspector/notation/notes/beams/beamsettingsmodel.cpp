@@ -27,7 +27,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-BeamSettingsModel::BeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+BeamSettingsModel::BeamSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_BEAM);
@@ -43,7 +44,9 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, const muse::modularity::Co
         }
     });
 
-    connect(m_beamModesModel->mode(), &PropertyItem::propertyModified, this, &AbstractInspectorModel::requestReloadPropertyItems);
+    connect(
+        m_beamModesModel->mode(), &PropertyItem::propertyModified, this,
+        &AbstractInspectorModel::requestReloadPropertyItems);
 
     createProperties();
 }
@@ -53,15 +56,20 @@ void BeamSettingsModel::createProperties()
     m_featheringHeightLeft = buildPropertyItem(mu::engraving::Pid::GROW_LEFT);
     m_featheringHeightRight = buildPropertyItem(mu::engraving::Pid::GROW_RIGHT);
 
-    m_isBeamHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isBeamHidden) {
-        onPropertyValueChanged(pid, !isBeamHidden.toBool());
+    m_isBeamHidden
+        = buildPropertyItem(mu::engraving::Pid::VISIBLE,
+                            [this](const mu::engraving::Pid pid, const QVariant& isBeamHidden) {
+        onPropertyValueChanged(pid,
+                               !isBeamHidden.toBool());
     });
 
-    m_beamHeightLeft = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
+    m_beamHeightLeft
+        = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setBeamHeightLeft(newValue.toDouble());
     });
 
-    m_beamHeightRight = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
+    m_beamHeightRight
+        = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setBeamHeightRight(newValue.toDouble());
     });
 

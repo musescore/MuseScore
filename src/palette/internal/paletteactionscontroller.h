@@ -32,7 +32,8 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::palette {
-class PaletteActionsController : public muse::actions::Actionable, public muse::async::Asyncable, public muse::Contextable
+class PaletteActionsController : public muse::actions::Actionable, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };

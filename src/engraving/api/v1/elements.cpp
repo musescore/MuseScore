@@ -470,7 +470,8 @@ void MeasureBase::remove(apiv1::EngravingItem* wrapped)
     if (!s) {
         LOGW("PluginAPI::MeasureBase::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
     } else if (s->explicitParent() != measureBase()) {
-        LOGW("PluginAPI::MeasureBase::remove: The element is not a child of this measure base. Use removeElement() instead.");
+        LOGW(
+            "PluginAPI::MeasureBase::remove: The element is not a child of this measure base. Use removeElement() instead.");
     } else {
         measureBase()->score()->deleteItem(s);     // Create undo op and remove the element.
     }
@@ -508,7 +509,8 @@ void System::setIsLocked(bool locked)
     if (currentLock && !locked) {
         EditSystemLocks::undoRemoveSystemLock(system()->score(), currentLock);
     } else if (!currentLock && locked) {
-        EditSystemLocks::undoAddSystemLock(system()->score(), new mu::engraving::SystemLock(system()->first(), system()->last()));
+        EditSystemLocks::undoAddSystemLock(system()->score(),
+                                           new mu::engraving::SystemLock(system()->first(), system()->last()));
     }
 }
 
@@ -701,7 +703,8 @@ void FretDiagram::setDot(int string, int fret, bool add, int dotType)
 void FretDiagram::setMarker(int string, int marker)
 {
     if (string < 0 || string >= fretDiagram()->strings()) {
-        LOGW("PluginAPI::FretDiagram::setMarker: string %d is out of range (0..%d)", string, fretDiagram()->strings() - 1);
+        LOGW("PluginAPI::FretDiagram::setMarker: string %d is out of range (0..%d)", string,
+             fretDiagram()->strings() - 1);
         return;
     }
     if (marker < int(mu::engraving::FretMarkerType::NONE)
@@ -721,7 +724,8 @@ void FretDiagram::setMarker(int string, int marker)
 void FretDiagram::setBarre(int string, int fret, bool add)
 {
     if (string < 0 || string >= fretDiagram()->strings()) {
-        LOGW("PluginAPI::FretDiagram::setBarre: string %d is out of range (0..%d)", string, fretDiagram()->strings() - 1);
+        LOGW("PluginAPI::FretDiagram::setBarre: string %d is out of range (0..%d)", string,
+             fretDiagram()->strings() - 1);
         return;
     }
     if (fret <= 0) {

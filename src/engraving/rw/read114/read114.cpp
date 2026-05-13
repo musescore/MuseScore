@@ -455,11 +455,15 @@ static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
                     { u"flat", AccidentalType::FLAT }, { u"natural", AccidentalType::NATURAL },
                     { u"double sharp", AccidentalType::SHARP2 }, { u"double flat", AccidentalType::FLAT2 },
                     { u"flat-slash", AccidentalType::FLAT_SLASH }, { u"flat-slash2", AccidentalType::FLAT_SLASH2 },
-                    { u"mirrored-flat2", AccidentalType::MIRRORED_FLAT2 }, { u"mirrored-flat", AccidentalType::MIRRORED_FLAT },
+                    { u"mirrored-flat2", AccidentalType::MIRRORED_FLAT2 },
+                    { u"mirrored-flat", AccidentalType::MIRRORED_FLAT },
                     { u"sharp-slash", AccidentalType::SHARP_SLASH }, { u"sharp-slash2", AccidentalType::SHARP_SLASH2 },
-                    { u"sharp-slash3", AccidentalType::SHARP_SLASH3 }, { u"sharp-slash4", AccidentalType::SHARP_SLASH4 },
-                    { u"sharp arrow up", AccidentalType::SHARP_ARROW_UP }, { u"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
-                    { u"flat arrow up", AccidentalType::FLAT_ARROW_UP }, { u"flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
+                    { u"sharp-slash3", AccidentalType::SHARP_SLASH3 },
+                    { u"sharp-slash4", AccidentalType::SHARP_SLASH4 },
+                    { u"sharp arrow up", AccidentalType::SHARP_ARROW_UP },
+                    { u"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
+                    { u"flat arrow up", AccidentalType::FLAT_ARROW_UP },
+                    { u"flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
                     { u"natural arrow up", AccidentalType::NATURAL_ARROW_UP },
                     { u"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
                     { u"sori", AccidentalType::SORI }, { u"koron", AccidentalType::KORON }
@@ -2157,9 +2161,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 continue;
             }
             // int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
-            Fraction possibleDuration = tuplet2->ticks() * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
+            Fraction possibleDuration = tuplet2->ticks()
+                                        * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
 
-            if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration)
+            if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick)
+                && (tuplet2->tick() < tupletTick + tupletDuration)
                 && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {
                 bool found = false;
                 for (DurationElement* de : tElements) {
@@ -2712,7 +2718,8 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
             style->set(Sid::concertPitch, bool(e.readInt()));
         } else if (tag == "ChordList") {
             readChordListHook.read(e);
-        } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth") {   // obsolete
+        } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers"
+                   || tag == "FixMeasureWidth") {                                                                               // obsolete
             e.skipCurrentElement();
         } else if (tag == "systemDistance") {  // obsolete
             style->set(Sid::minSystemDistance, e.readDouble());
