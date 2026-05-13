@@ -87,12 +87,14 @@ Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
         queryBuffer->setData(configuration()->getMuseSamplerVersionQuery().toUtf8());
         auto receivedData = std::make_shared<QBuffer>();
 
-        m_networkManager = networkManagerCreator()->makeNetworkManager();
+        if (!m_networkManager) {
+            m_networkManager = networkManagerCreator()->makeNetworkManager();
+        }
+
         RetVal<Progress> progress = m_networkManager->post(configuration()->checkForMuseSamplerUpdateUrl(),
                                                            queryBuffer, receivedData,
                                                            configuration()->headers());
         if (!progress.ret) {
-            m_networkManager = nullptr;
             return resolve(RetVal<bool>::make_ret(progress.ret));
         }
 
@@ -108,7 +110,6 @@ Promise<RetVal<bool> > MuseSamplerCheckUpdateService::checkForUpdate()
             }
 
             (void)resolve(result);
-            m_networkManager = nullptr;
         });
 
         return Promise<RetVal<bool> >::dummy_result();
