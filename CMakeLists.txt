@@ -41,6 +41,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake
     ${MUSE_FRAMEWORK_SRC_PATH}/cmake
+    ${MUSE_FRAMEWORK_PATH}/buildscripts/cmake
     ${CMAKE_MODULE_PATH}
     )
 
@@ -224,6 +225,8 @@ include(SetupQt6)
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
 endif(MUE_DOWNLOAD_SOUNDFONT)
+
+set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
 
 include(SetupDependencies)
 
