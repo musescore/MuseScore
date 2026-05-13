@@ -36,7 +36,8 @@ namespace mu::iex::guitarpro {
 static void fillChordDurationsFromBendDiagram(BendDataContextSplitChord& bendDataCtx, Fraction totalDuration,
                                               const ImportedBendInfo& importedInfo);
 
-static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord);
+static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo,
+                                int noteIndexInChord);
 
 void BendDataCollectorSplitChord::storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues)
 {
@@ -55,7 +56,8 @@ BendDataContextSplitChord BendDataCollectorSplitChord::collectBendDataContext()
     return bendDataCtx;
 }
 
-static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo, int noteIndexInChord)
+static void fillBendDataForNote(BendDataContextSplitChord& bendDataCtx, const ImportedBendInfo& importedInfo,
+                                int noteIndexInChord)
 {
     if (importedInfo.segments.empty()) {
         return;

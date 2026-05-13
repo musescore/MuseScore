@@ -78,7 +78,8 @@ double SystemHeaderLayout::layoutBrackets(System* system, LayoutContext& ctx)
     return totalBracketWidth;
 }
 
-Bracket* SystemHeaderLayout::createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
+Bracket* SystemHeaderLayout::createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column,
+                                           staff_idx_t staffIdx,
                                            std::vector<Bracket*>& bl, Measure* measure)
 {
     if (!measure) {
@@ -557,7 +558,8 @@ void SystemHeaderLayout::computeInstrumentNamesWidth(System* system, LayoutConte
         if (staffNameAlign == AlignH::LEFT || staffNameAlign == AlignH::JUSTIFY) {
             return ldata->firstColumnWidth() + nameWidthIncludingGroupBrackets(outerName, system) + ldata->instrumentNameOffset();
         } else if (staffNameAlign == AlignH::HCENTER) {
-            double sumWidth = innerName->width() + nameWidthIncludingGroupBrackets(outerName, system) + ldata->instrumentNameOffset();
+            double sumWidth = innerName->width()
+                              + nameWidthIncludingGroupBrackets(outerName, system) + ldata->instrumentNameOffset();
             double move = 0.5 * (ldata->firstColumnWidth() - innerName->width());
             return sumWidth + move;
         } else {
@@ -606,7 +608,8 @@ void SystemHeaderLayout::setInstrumentNamesVerticalPos(System* system, LayoutCon
         if (InstrumentName* individualName = s->individualStaffName) {
             const RectF& staffBBox = s->bbox();
             const RectF& nameBBox = individualName->ldata()->bbox();
-            individualName->mutldata()->setPosY(0.5 * (staffBBox.top() + staffBBox.bottom() - nameBBox.bottom() - nameBBox.top()));
+            individualName->mutldata()->setPosY(0.5
+                                                * (staffBBox.top() + staffBBox.bottom() - nameBBox.bottom() - nameBBox.top()));
             partsWithIndividualStaffNames.insert(ctx.dom().staff(staffIdx)->part());
         }
     }
@@ -836,7 +839,8 @@ void SystemHeaderLayout::setInstrumentNamesHorizontalPos(System* system)
         }
 
         if (align == InstrumentNamesAlign::CENTER_RIGHT) {
-            name->mutldata()->setPosX(0.5 * ldata->secondColumnWidth() - 0.5 * (bbox.right() + bbox.left()) + 0.5 * groupBracketsWidth);
+            name->mutldata()->setPosX(
+                0.5 * ldata->secondColumnWidth() - 0.5 * (bbox.right() + bbox.left()) + 0.5 * groupBracketsWidth);
             return;
         }
 
@@ -1000,7 +1004,8 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
     String number = instr->number() > 0 && showNumber ? String::number(instr->number()) : String();
 
     bool showTranspo = longNames ? label.showTranspositionLong() : label.showTranspositionShort();
-    showTranspo &= style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
+    showTranspo
+        &= style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
     String transposition = showTranspo ? instr->transposition() : String();
 
     if (transposition.empty()) {
@@ -1047,7 +1052,8 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
     String instrName = longNames ? instr->longName() : instr->shortName();
 
     bool showTranspo = longNames ? label.showTranspositionLong() : label.showTranspositionShort();
-    showTranspo &= style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
+    showTranspo
+        &= style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
 
     String transposition = showTranspo ? instr->transposition() : String();
 
@@ -1109,12 +1115,14 @@ bool SystemHeaderLayout::showNames(LayoutContext& ctx)
     }
 
     if (ctx.state().firstSystem()
-        && ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE) {
+        && ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
+        == InstrumentLabelVisibility::HIDE) {
         return false;
     }
 
     if (!ctx.state().firstSystem()
-        && ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE) {
+        && ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
+        == InstrumentLabelVisibility::HIDE) {
         return false;
     }
 

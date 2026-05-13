@@ -25,7 +25,8 @@
 
 using namespace mu::inspector;
 
-HookSettingsModel::HookSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+HookSettingsModel::HookSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_HOOK);
@@ -55,7 +56,8 @@ void HookSettingsModel::resetProperties()
     m_offset->resetToDefault();
 }
 
-void HookSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet&)
+void HookSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                                          const mu::engraving::StyleIdSet&)
 {
     if (muse::contains(changedPropertyIdSet, mu::engraving::Pid::DURATION)
         || muse::contains(changedPropertyIdSet, mu::engraving::Pid::DURATION_TYPE_WITH_DOTS)

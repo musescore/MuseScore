@@ -107,7 +107,8 @@ bool InspectorListModel::alwaysUpdateModelList(const QList<engraving::EngravingI
     return false;
 }
 
-void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList, SelectionState selectionState)
+void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
+                                        SelectionState selectionState)
 {
     TRACEFUNC;
 
@@ -264,7 +265,8 @@ void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySe
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
-    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection,
+    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet,
+                                                                                                    isRangeSelection,
                                                                                                     selectedElementList);
 
     for (AbstractInspectorModel* model : m_modelList) {

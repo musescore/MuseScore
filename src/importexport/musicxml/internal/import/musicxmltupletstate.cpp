@@ -38,7 +38,8 @@ using namespace mu::iex::musicxml;
  and fraction * fullDuration equals duration.
  */
 
-void MusicXmlTupletState::determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration)
+void MusicXmlTupletState::determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction,
+                                                                 Fraction& fullDuration)
 {
     fraction = duration;
     fullDuration = Fraction(1, 1);

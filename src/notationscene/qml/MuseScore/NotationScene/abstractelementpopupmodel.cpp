@@ -77,7 +77,8 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
         mu::engraving::ElementType::FIGURED_BASS,
         mu::engraving::ElementType::TEMPO_TEXT,
         mu::engraving::ElementType::PLAY_COUNT_TEXT } },
-    { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
+    { PopupModelType::TYPE_PARTIAL_TIE,
+      { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -214,7 +215,8 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
     updateNotation();
 }
 
-void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, mu::engraving::PropertyFlags flags)
+void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const PropertyValue& value,
+                                                   mu::engraving::PropertyFlags flags)
 {
     IF_ASSERT_FAILED(m_item) {
         return;

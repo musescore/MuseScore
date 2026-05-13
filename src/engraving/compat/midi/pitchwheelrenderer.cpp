@@ -150,7 +150,8 @@ int32_t PitchWheelRenderer::calculatePitchBend(const std::vector<PitchWheelFunct
 // result           |--------------|
 // 3           |--------|            handleEndTick();
 // result      |-------------------|
-void PitchWheelRenderer::generateRanges(const std::vector<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges)
+void PitchWheelRenderer::generateRanges(const std::vector<PitchWheelFunction>& functions, std::map<int, int,
+                                                                                                   std::greater<> >& ranges)
 {
     // !NOTE ranges map is reversed. Use reverse iterators
     auto handleEndTick = [&](const PitchWheelFunction& func) {

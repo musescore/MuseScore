@@ -171,7 +171,8 @@ bool Read400::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
                 ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
-            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString());
+            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(
+                                                                             Sid::musicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -532,7 +533,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 if (doScale) {
                                     Fraction ticksScaled = t->durationType().ticks() * scale;
                                     if (!TDuration(ticksScaled).isValid()) {
-                                        LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                        LOGD("Can't paste: invalid duration %d/%d",
+                                             ticksScaled.numerator(), ticksScaled.denominator());
                                         return false;
                                     }
                                     t->setDurationType(ticksScaled);
@@ -966,7 +968,8 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         } else {
                             score->undoAddElement(el);
                         }
-                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking" || tag == "HarpPedalDiagram") {
+                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking"
+                               || tag == "HarpPedalDiagram") {
                         EngravingItem* el = Factory::createItemByName(tag, score->dummy());
                         TRead::readItem(el, e, ctx);
                         el->setTrack(destTrack);

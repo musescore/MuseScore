@@ -70,9 +70,11 @@ PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, QObject* pa
     id = makeId();
 }
 
-PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, ElementPtr e, const QString& _name, qreal _mag, const QPointF& _offset,
+PaletteCell::PaletteCell(const muse::modularity::ContextPtr& iocCtx, ElementPtr e, const QString& _name, qreal _mag,
+                         const QPointF& _offset,
                          const QString& _tag, QObject* parent)
-    : QObject(parent), muse::Contextable(iocCtx), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()), tag(_tag)
+    : QObject(parent), muse::Contextable(iocCtx), element(e), name(_name), mag(_mag), xoffset(_offset.x()), yoffset(_offset.y()),
+    tag(_tag)
 {
     id = makeId();
     drawStaff = needsStaff(element);
@@ -347,7 +349,8 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data, const mu
         }
     }
 
-    const String name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();
+    const String name
+        = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyPlainText() : element->translatedTypeUserName();
 
     return std::make_shared<PaletteCell>(iocCtx, element, name);
 }

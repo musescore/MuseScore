@@ -191,10 +191,11 @@ private:
     void barlineMeta(engraving::Segment* seg, int* stagger, int pos);
     void jumpMarkerMeta(engraving::Segment* seg, int* stagger, int pos);
 
-    bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType, engraving::EngravingItem* element,
-                      engraving::Segment* seg, engraving::Measure* measure, QString tooltip = "");
-    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, Measure* m, bool full_measure, engraving::EngravingItem* e,
-                     QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
+    bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType,
+                      engraving::EngravingItem* element, engraving::Segment* seg, engraving::Measure* measure,
+                      QString tooltip = "");
+    void setMetaData(QGraphicsItem* gi, int staff, engraving::ElementType et, Measure* m, bool full_measure,
+                     engraving::EngravingItem* e, QGraphicsItem* pairItem = nullptr, engraving::Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);
 
     int _globalMeasureNumber { 0 };

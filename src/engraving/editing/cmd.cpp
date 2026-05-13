@@ -822,7 +822,8 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         Tie* tieFor = on->tieFor();
         if (tieFor) {
-            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(this->dummy());
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(
+                this->dummy());
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
@@ -1091,7 +1092,8 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, Fraction sd, DirectionV stemDirection,
-                            bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
+                            bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic,
+                            InputState* externalInputState)
 {
     assert(segment->segmentType() == SegmentType::ChordRest);
     InputState& is = externalInputState ? (*externalInputState) : m_is;
@@ -2804,7 +2806,8 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                 }
             }
 
-            TDuration newDuration { stepDotted ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration.shift(nSteps) };
+            TDuration newDuration { stepDotted ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration.shift(
+                                        nSteps) };
             if (!newDuration.isValid()) {
                 continue;
             }
@@ -2840,7 +2843,8 @@ void Score::cmdExtendToNextNote()
 
     for (ChordRest* cr : getSelectedChordRests()) {
         ChordRest* ncr = nextChordRest(cr);
-        if (cr->isRest() || cr->isGrace() || cr->endTick() == this->endTick() || (ncr && ncr->isChord() && cr->endTick() == ncr->tick())) {
+        if (cr->isRest() || cr->isGrace() || cr->endTick() == this->endTick()
+            || (ncr && ncr->isChord() && cr->endTick() == ncr->tick())) {
             continue;
         }
         std::vector<Note*> chordNotes = toChord(cr)->notes();
@@ -2862,7 +2866,8 @@ void Score::cmdExtendToNextNote()
             }
             if (!ncr || cr->endTick() != ncr->tick()  // if voices>0 have empty measures till end OR have empty measures between cr and ncr
                 || cr->tuplet() != ncr->tuplet() || !allNotesSelected) {
-                std::vector<Note*> notesToExtend = !allNotesSelected ? (allNotesSelected = true, selectedChordNotes) : toChord(cr)->notes();
+                std::vector<Note*> notesToExtend
+                    = !allNotesSelected ? (allNotesSelected = true, selectedChordNotes) : toChord(cr)->notes();
                 m_is.setTrack(cr->track());
                 m_is.setSegment(cr->segment());
                 m_is.moveToNextInputPos();
@@ -3404,7 +3409,8 @@ void Score::cmdSlashFill()
                     // no chordrest or ordinary rest == OK to use voice
                     // if there are nothing but rests for duration of measure / selection
                     bool ok = true;
-                    for (Segment* ns = s->next(SegmentType::ChordRest); ns && ns != endSegment; ns = ns->next(SegmentType::ChordRest)) {
+                    for (Segment* ns = s->next(SegmentType::ChordRest); ns && ns != endSegment;
+                         ns = ns->next(SegmentType::ChordRest)) {
                         ChordRest* ncr = toChordRest(ns->element(track + voice));
                         if (ncr && ncr->isChord()) {
                             ok = false;
@@ -3701,7 +3707,8 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             continue;
         }
         const RealizedHarmony& r = h->getRealizedHarmony();
-        Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
+        Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(
+            h->explicitParent()->explicitParent());
         Fraction tick = seg->tick();
         Fraction duration = r.getActualDuration(tick.ticks(), durationType) * h->staff()->timeStretch(tick);
         bool concertPitch = style().styleB(Sid::concertPitch);
@@ -3810,7 +3817,8 @@ void Score::cmdPitchUp()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::UP);
     } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0,
+                                                                  -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), DirectionV::UP);
     } else {
@@ -3828,7 +3836,8 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), DirectionV::DOWN);
     } else if (el && (el->isArticulationFamily() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep * el->spatium())),
+        el->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(el->offset() + PointF(0.0,
+                                                                                           MScore::nudgeStep * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), DirectionV::DOWN);
@@ -3861,7 +3870,8 @@ void Score::cmdPitchDownOctave()
 {
     EngravingItem* el = selection().element();
     if (el && (el->isArticulationFamily() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0,
+                                                                  MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         EditNote::upDown(score(), false, UpDownMode::OCTAVE);
     }

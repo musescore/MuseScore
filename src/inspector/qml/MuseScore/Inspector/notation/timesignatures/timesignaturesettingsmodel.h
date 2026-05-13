@@ -38,7 +38,8 @@ class TimeSignatureSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isGenerated READ isGenerated CONSTANT)
 
 public:
-    explicit TimeSignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit TimeSignatureSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                        IElementRepositoryService* repository);
 
     Q_INVOKABLE void showTimeSignatureProperties();
 

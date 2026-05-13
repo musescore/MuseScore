@@ -79,7 +79,8 @@ static const ElementStyle voltaStyle {
 //---------------------------------------------------------
 
 VoltaSegment::VoltaSegment(Volta* sp, System* parent)
-    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent,
+                          ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     m_text->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
     m_endText->setTextStyleType(propertyDefault(Pid::TEXT_STYLE).value<TextStyleType>());
@@ -342,8 +343,10 @@ PointF Volta::linePos(Grip grip, System** system) const
 {
     bool start = grip == Grip::START;
 
-    Segment* segment = score()->tick2leftSegment(start ? tick() : tick2(), true,
-                                                 SegmentType::ChordRest | SegmentType::StartRepeatBarLine | SegmentType::EndBarLine);
+    Segment* segment = score()->tick2leftSegment(
+        start ? tick() : tick2(), true,
+        SegmentType::ChordRest | SegmentType::StartRepeatBarLine
+        | SegmentType::EndBarLine);
     if (!segment) {
         return PointF();
     }

@@ -447,7 +447,8 @@ void Box::manageExclusionFromParts(bool exclude)
         const std::list<EngravingObject*> links = linkList();
         for (EngravingObject* linkedObject : links) {
             // Only remove title frame from score
-            if (linkedObject->score() == score() || (!this->score()->isMaster() && titleFrame && !linkedObject->score()->isMaster())) {
+            if (linkedObject->score() == score()
+                || (!this->score()->isMaster() && titleFrame && !linkedObject->score()->isMaster())) {
                 continue;
             }
             EngravingItem* linkedItem = toEngravingItem(linkedObject);

@@ -475,7 +475,8 @@ QList<NotationRegionsBeingProcessedModel::RegionInfo> NotationRegionsBeingProces
     return regions;
 }
 
-std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Part* part, const std::vector<TickRange>& ranges) const
+std::vector<QRectF> NotationRegionsBeingProcessedModel::calculateRects(const Part* part,
+                                                                       const std::vector<TickRange>& ranges) const
 {
     std::vector<QRectF> result;
 

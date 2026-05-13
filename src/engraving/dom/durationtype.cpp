@@ -729,7 +729,8 @@ bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat,
 //   forceRhythmicSplitCompound
 //---------------------------------------------------------
 
-bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int dUnitsCrossed, BeatType strongestBeatCrossed)
+bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int dUnitsCrossed,
+                                BeatType strongestBeatCrossed)
 {
     switch (strongestBeatCrossed) {
     case BeatType::COMPOUND_STRESSED:

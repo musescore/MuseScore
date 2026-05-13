@@ -35,7 +35,9 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, const muse
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(type);
-    setTitle(type == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector", "Articulation") : muse::qtrc("inspector", "Tapping"));
+    setTitle(type
+             == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector", "Articulation") : muse::qtrc("inspector",
+                                                                                                             "Tapping"));
     setIcon(muse::ui::IconCode::Code::ARTICULATION);
     createProperties();
 }

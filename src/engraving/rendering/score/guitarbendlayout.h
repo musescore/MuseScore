@@ -52,9 +52,10 @@ private:
 
     // TAB layout
     static void layoutBendTabStaff(GuitarBendSegment* item, LayoutContext&);
-    static PointF computeStartPos(GuitarBendSegment* item, Note* startNote, double distAboveTab, double verticalPad, double arrowHeight);
-    static PointF computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad, double arrowHeight,
-                                double arrowWidth, const PointF& startPos, const PointF& prevEndPoint);
+    static PointF computeStartPos(GuitarBendSegment* item, Note* startNote, double distAboveTab, double verticalPad,
+                                  double arrowHeight);
+    static PointF computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad,
+                                double arrowHeight, double arrowWidth, const PointF& startPos, const PointF& prevEndPoint);
     static void checkConflictWithOtherBends(GuitarBendSegment* item);
     static bool startOnEndNote(GuitarBend* bend);
 };

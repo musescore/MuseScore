@@ -314,7 +314,8 @@ void InstrumentListModel::sortInstruments(Instruments& instruments) const
 {
     TRACEFUNC;
 
-    std::sort(instruments.begin(), instruments.end(), [this](const CombinedInstrument& instrument1, const CombinedInstrument& instrument2) {
+    std::sort(instruments.begin(), instruments.end(),
+              [this](const CombinedInstrument& instrument1, const CombinedInstrument& instrument2) {
         QString instrumentName1 = instrument1.name.toLower();
         QString instrumentName2 = instrument2.name.toLower();
         QString searchText = m_searchText.toLower();

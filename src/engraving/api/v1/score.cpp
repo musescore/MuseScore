@@ -368,7 +368,8 @@ Staff* Score::appendLinkedStaff(Staff* sourceStaff, Part* destinationPart)
         return nullptr;
     }
 
-    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(), destinationPart->part());
+    mu::engraving::Staff* staff = mu::engraving::EditPart::appendLinkedStaff(score(), sourceStaff->staff(),
+                                                                             destinationPart->part());
     return staff ? wrap<Staff>(staff, Ownership::SCORE) : nullptr;
 }
 

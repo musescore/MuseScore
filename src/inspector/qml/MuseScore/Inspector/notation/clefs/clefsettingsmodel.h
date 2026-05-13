@@ -38,7 +38,8 @@ class ClefSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isCourtesyClefAvailable READ isCourtesyClefAvailable NOTIFY isCourtesyClefAvailableChanged)
 
 public:
-    explicit ClefSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit ClefSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                               IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

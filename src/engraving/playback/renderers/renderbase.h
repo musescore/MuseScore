@@ -39,7 +39,8 @@ public:
         return supportedTypes.find(type) != supportedTypes.cend();
     }
 
-    static void render(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+    static void render(const EngravingItem* item, const muse::mpe::ArticulationType preferredType,
+                       const RenderingContext& context,
                        muse::mpe::PlaybackEventList& result)
     {
         IF_ASSERT_FAILED(item) {

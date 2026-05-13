@@ -29,4 +29,7 @@ TupletCenteringSelectorModel::TupletCenteringSelectorModel(QObject* parent)
 {
 }
 
-StyleItem* TupletCenteringSelectorModel::tupletNumberRythmicCenter() const { return styleItem(StyleId::tupletNumberRythmicCenter); }
+StyleItem* TupletCenteringSelectorModel::tupletNumberRythmicCenter() const
+{
+    return styleItem(StyleId::tupletNumberRythmicCenter);
+}

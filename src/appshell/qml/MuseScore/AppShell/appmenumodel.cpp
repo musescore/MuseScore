@@ -316,7 +316,8 @@ MenuItem* AppMenuModel::makeViewMenu()
     };
 
 #ifdef MUSE_MODULE_WORKSPACE
-    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"),
+                          m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
 
     viewItems << makeSeparator()
@@ -409,7 +410,8 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeSeparator(),
         makeMenuItem("pitch-spell-sharps"),
         makeMenuItem("pitch-spell-flats"),
-        makeMenu(TranslatableString("appshell/menu/tools", "Enharmonic spelling"), enharmonicSpellingItems, "menu-enharmonic-spelling"),
+        makeMenu(TranslatableString("appshell/menu/tools",
+                                    "Enharmonic spelling"), enharmonicSpellingItems, "menu-enharmonic-spelling"),
         makeSeparator(),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
@@ -563,7 +565,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         };
 
         items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics",
+                                       "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Testflow"), testflowItems, "menu-testflow");

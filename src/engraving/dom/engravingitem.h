@@ -429,7 +429,10 @@ public:
 
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
-    bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }
+    bool addToSkyline() const
+    {
+        return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw();
+    }
 
     bool excludeVerticalAlign() const { return m_excludeVerticalAlign; }
     void setExcludeVerticalAlign(bool v) { m_excludeVerticalAlign = v; }
@@ -488,7 +491,11 @@ public:
 
     virtual void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
     ParenthesesMode parenthesesMode() const;
-    inline Parenthesis* paren(const DirectionH& dir) const { return dir == DirectionH::LEFT ? m_leftParenthesis : m_rightParenthesis; }
+    inline Parenthesis* paren(const DirectionH& dir) const
+    {
+        return dir == DirectionH::LEFT ? m_leftParenthesis : m_rightParenthesis;
+    }
+
     Parenthesis* leftParen() const { return m_leftParenthesis; }
     Parenthesis* rightParen() const { return m_rightParenthesis; }
     void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
@@ -543,7 +550,11 @@ public:
         void setPos(double x, double y) { doSetPos(x, y); }
         void setPosX(double x) { doSetPos(x, pos(LD_ACCESS::MAYBE_NOTINITED).y()); }
         void setPosY(double y) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x(), y); }
-        void move(const PointF& p) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x() + p.x(), pos(LD_ACCESS::MAYBE_NOTINITED).y() + p.y()); }
+        void move(const PointF& p)
+        {
+            doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x() + p.x(), pos(LD_ACCESS::MAYBE_NOTINITED).y() + p.y());
+        }
+
         void moveX(double x) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x() + x, pos(LD_ACCESS::MAYBE_NOTINITED).y()); }
         void moveY(double y) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x(), pos(LD_ACCESS::MAYBE_NOTINITED).y() + y); }
 
@@ -720,8 +731,8 @@ protected:
 
     track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
 
-    static bool elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack, const VoiceAssignment voiceAssignment,
-                                      const Part* part);
+    static bool elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack,
+                                      const VoiceAssignment voiceAssignment, const Part* part);
 
 private:
 

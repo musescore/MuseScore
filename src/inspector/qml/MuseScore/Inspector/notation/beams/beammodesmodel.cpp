@@ -32,7 +32,8 @@ BeamModesModel::BeamModesModel(QObject* parent, const muse::modularity::ContextP
 void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(mu::engraving::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
+    m_isFeatheringAvailable
+        = buildPropertyItem(mu::engraving::Pid::DURATION_TYPE_WITH_DOTS, [](const mu::engraving::Pid, const QVariant&) {
     });                                                                                                                                         //@note readonly property, there is no need to modify it
 }
 

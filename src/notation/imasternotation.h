@@ -42,7 +42,8 @@ public:
     virtual project::INotationProject* project() const = 0;
 
     virtual muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) = 0;
-    virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) = 0;
+    virtual void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options,
+                              bool createdFromTemplate = false) = 0;
     virtual engraving::MasterScore* masterScore() const = 0;
     virtual void setMasterScore(engraving::MasterScore* masterScore, bool disablePlayback = false) = 0;
 

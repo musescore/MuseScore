@@ -114,8 +114,8 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     void processPendingNotes(QList<MidiChord>& midiChords, int voice, const ReducedFraction& startChordTickFrac,
                              const ReducedFraction& nextChordTick);
     void processMeta(int tick, const MidiEvent& mm);
-    void fillGapWithRests(engraving::Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength,
-                          engraving::track_idx_t track);
+    void fillGapWithRests(engraving::Score* score, int voice, const ReducedFraction& startChordTickFrac,
+                          const ReducedFraction& restLength, engraving::track_idx_t track);
     QList<std::pair<ReducedFraction, engraving::TDuration> >
     toDurationList(const engraving::Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
                    Meter::DurationType durationType);

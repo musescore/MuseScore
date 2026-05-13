@@ -110,11 +110,13 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
     score->insertMeasure(m);
     score->endCmd();
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_clef-ref.mscx"));
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
@@ -126,7 +128,8 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     score->undoRedo(true, 0);
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef_undo.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_clef.mscx"));
     delete score;
 }
 
@@ -143,7 +146,8 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     score->endCmd();
 
     EXPECT_TRUE(score->checkKeys());
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_key-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key.mscx",
+                                            MEASURE_DATA_DIR + u"measure-insert_bf_key-ref.mscx"));
 
     score->undoRedo(true, 0);
 
@@ -629,7 +633,8 @@ TEST_F(Engraving_MeasureTests, MMRestContinuationCourtesies) {
     auto checkSegmentsAndItems = [](Measure* m, bool continuationRepeat) {
         Fraction tick = continuationRepeat ? Fraction(0, 0) : m->ticks();
 
-        SegmentType timeSegType = continuationRepeat ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
+        SegmentType timeSegType
+            = continuationRepeat ? SegmentType::TimeSigStartRepeatAnnounce : SegmentType::TimeSigRepeatAnnounce;
         Segment* tsSeg = m->findSegmentR(timeSegType, tick);
         EXPECT_TRUE(tsSeg);
         EngravingItem* tsItem = tsSeg->element(0);

@@ -64,7 +64,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item)
 
     staff_idx_t staff = item->staffIdx();
     Measure* startOneBefore = startMeasure->prevMeasure();
-    for (MeasureBase* mb = startOneBefore ? startOneBefore : startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
+    for (MeasureBase* mb = startOneBefore ? startOneBefore : startMeasure; mb && mb->tick() <= endMeasure->tick();
+         mb = mb->next()) {
         if (!mb->isMeasure()) {
             continue;
         }
@@ -73,7 +74,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item)
 
     Fraction startTickExtendedRegion = startMeasure->tick();
     Fraction endTickExtendedRegion = endMeasure->endTick();
-    voice_idx_t voiceIdx =  item->hasVoiceAssignmentProperties() && item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>()
+    voice_idx_t voiceIdx =  item->hasVoiceAssignmentProperties()
+                           && item->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>()
                            != VoiceAssignment::CURRENT_VOICE_ONLY ? VOICES : item->voice();
 
     score->setShowAnchors(ShowAnchors(voiceIdx, staff, startTickMainRegion, endTickMainRegion, startTickExtendedRegion,
@@ -82,7 +84,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item)
     item->triggerLayout();
 }
 
-void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx, const std::set<Fraction>& additionalAnchorRelTicks)
+void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx,
+                                        const std::set<Fraction>& additionalAnchorRelTicks)
 {
     Fraction startTick = Fraction(0, 1);
     Fraction endTick = measure->ticks();
@@ -372,11 +375,13 @@ Segment* MoveElementAnchors::getNewSegment(EngravingItem* element, Segment* curS
 
 Segment* MoveElementAnchors::findNewAnchorableSegment(const Segment* curSeg, bool forward)
 {
-    Segment* newSeg = forward ? curSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : curSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    Segment* newSeg = forward ? curSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : curSeg->prev1(
+        Segment::CHORD_REST_OR_TIME_TICK_TYPE);
 
     // Continue until we get to a different tick than where we are
     while (newSeg && newSeg->tick() == curSeg->tick()) {
-        newSeg = forward ? newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        newSeg = forward ? newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE) : newSeg->prev1(
+            Segment::CHORD_REST_OR_TIME_TICK_TYPE);
     }
     if (!newSeg) {
         return nullptr;
@@ -479,7 +484,8 @@ void MoveElementAnchors::doMoveSegment(FiguredBass* element, Segment* newSeg, Fr
     // Shorten previous if needed
     if (newSeg->tick() < oldSeg->tick()) {
         FiguredBass* prevFB = nullptr;
-        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
+        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+             seg && seg->measure()->isAfterOrEqual(newSeg->measure());
              seg = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
             prevFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
             if (prevFB) {
@@ -546,7 +552,8 @@ void MoveElementAnchors::moveSnappedItems(EngravingItem* element, Segment* newSe
     }
 }
 
-void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg, Segment* oldSeg)
+void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg,
+                                                   Segment* oldSeg)
 {
     PointF offsetShift = newSeg->pagePos() - oldSeg->pagePos();
     element->setOffset(curOffset - offsetShift);

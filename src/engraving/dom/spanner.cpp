@@ -1078,7 +1078,8 @@ Segment* Spanner::startSegment() const
     if (!startSeg && startTick < score()->endTick()) {
         Measure* measure = mmRest ? score()->tick2measureMM(startTick) : score()->tick2measure(startTick);
         if (measure) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, startTick - measure->tick(), track2staff(trackIdx));
+            TimeTickAnchor* anchor
+                = EditTimeTickAnchors::createTimeTickAnchor(measure, startTick - measure->tick(), track2staff(trackIdx));
             IF_ASSERT_FAILED(anchor) {
                 return nullptr;
             }
@@ -1116,7 +1117,8 @@ Segment* Spanner::endSegment() const
     if (!endSeg && !endTick.isZero()) {
         Measure* measure = mmRest ? score()->tick2measureMM(endTick) : score()->tick2measure(endTick);
         if (measure) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(trackIdx));
+            TimeTickAnchor* anchor
+                = EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(trackIdx));
             EditTimeTickAnchors::updateLayout(measure);
             return anchor->segment();
         }
@@ -1137,7 +1139,8 @@ bool Spanner::elementAppliesToTrack(const track_idx_t refTrack) const
 
     const VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
 
-    return EngravingItem::elementAppliesToTrack(track(), refTrack, voiceAssignment, part()) || EngravingItem::elementAppliesToTrack(
+    return EngravingItem::elementAppliesToTrack(track(), refTrack, voiceAssignment,
+                                                part()) || EngravingItem::elementAppliesToTrack(
         track2(), refTrack, voiceAssignment, part());
 }
 

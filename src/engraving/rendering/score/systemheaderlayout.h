@@ -54,12 +54,12 @@ private:
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                   std::vector<Bracket*>& bl, Measure* measure);
     static void computeGroupBracketsWidths(System* system, LayoutContext& ctx);
-    static void computeStackedBracketsWidth(Bracket* first, const std::vector<Bracket*>& allGroupBracketsOrderedByColumn, double& width,
-                                            std::vector<Bracket*>& stack);
+    static void computeStackedBracketsWidth(Bracket* first, const std::vector<Bracket*>& allGroupBracketsOrderedByColumn,
+                                            double& width, std::vector<Bracket*>& stack);
 
     static void updateGroupNames(System* system, LayoutContext& ctx, const Fraction& tick);
-    static InstrumentName* updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name, InstrumentNameType type,
-                                      InstrumentNameRole role);
+    static InstrumentName* updateName(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const String& name,
+                                      InstrumentNameType type, InstrumentNameRole role);
     static String formattedInstrumentName(System* system, Part* part, const Fraction& tick);
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);

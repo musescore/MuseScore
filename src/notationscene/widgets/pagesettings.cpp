@@ -99,7 +99,8 @@ void PageSettings::componentComplete()
 
 void PageSettings::showEvent(QShowEvent* event)
 {
-    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit page settings"));
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction",
+                                                                                             "Edit page settings"));
     updateValues();
 
     WidgetStateStore::restoreGeometry(this);

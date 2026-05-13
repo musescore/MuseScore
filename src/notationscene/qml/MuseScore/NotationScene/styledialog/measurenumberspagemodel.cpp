@@ -81,9 +81,16 @@ StyleItem* MeasureNumbersPageModel::measureNumberPosBelow() const
     return styleItem(ts->offsetSids.below);
 }
 
-StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
+StyleItem* MeasureNumbersPageModel::measureNumberAlignToBarline() const
+{
+    return styleItem(StyleId::measureNumberAlignToBarline);
+}
 
-StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const { return styleItem(StyleId::mmRestShowMeasureNumberRange); }
+StyleItem* MeasureNumbersPageModel::mmRestShowMeasureNumberRange() const
+{
+    return styleItem(StyleId::mmRestShowMeasureNumberRange);
+}
+
 StyleItem* MeasureNumbersPageModel::mmRestRangeBracketType() const { return styleItem(StyleId::mmRestRangeBracketType); }
 
 StyleItem* MeasureNumbersPageModel::mmRestRangePosAbove() const { return styleItem(StyleId::mmRestRangePosAbove); }

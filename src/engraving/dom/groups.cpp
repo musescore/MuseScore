@@ -59,7 +59,8 @@ static std::vector<NoteGroup> noteGroups {
     },
     { Fraction(4, 2),
       Groups({ { 4, 0x200 }, { 8, 0x110 }, { 12, 0x200 }, { 16, 0x111 }, { 20, 0x200 }, { 24, 0x110 }, { 28, 0x200 },
-                 { 32, 0x111 }, { 36, 0x200 }, { 40, 0x110 }, { 44, 0x200 }, { 48, 0x111 }, { 52, 0x200 }, { 56, 0x110 }, { 60, 0x200 } })
+                 { 32, 0x111 }, { 36, 0x200 }, { 40, 0x110 }, { 44, 0x200 }, { 48, 0x111 }, { 52, 0x200 }, { 56, 0x110 }, { 60,
+                                                                                                                            0x200 } })
     },
     { Fraction(2, 4),
       Groups({ { 4, 0x200 }, { 8, 0x111 }, { 12, 0x200 } })
@@ -91,7 +92,8 @@ static std::vector<NoteGroup> noteGroups {
       Groups({ { 4, 0x200 }, { 8, 0x200 }, { 12, 0x111 }, { 16, 0x200 }, { 20, 0x111 }, { 24, 0x200 } })
     },
     { Fraction(9, 8),
-      Groups({ { 4, 0x200 }, { 8, 0x200 }, { 12, 0x111 }, { 16, 0x200 }, { 20, 0x200 }, { 24, 0x111 }, { 28, 0x200 }, { 32, 0x200 } })
+      Groups({ { 4, 0x200 }, { 8, 0x200 }, { 12, 0x111 }, { 16, 0x200 }, { 20, 0x200 }, { 24, 0x111 }, { 28, 0x200 }, { 32,
+                                                                                                                        0x200 } })
     },
     { Fraction(12, 8),
       Groups({ { 4, 0x200 }, { 8, 0x200 }, { 12, 0x111 }, { 16, 0x200 }, { 20, 0x200 }, { 24, 0x111 }, { 28, 0x200 },
@@ -239,7 +241,8 @@ BeamMode Groups::actualBeamMode(const ChordRest* cr, const ChordRest* prev,
                 // get minimum duration for this & previous beat
                 auto it_current = beatSubdivision->find(beat);
                 auto it_prev = beatSubdivision->find(beat - 1);
-                TDuration current_min = (it_current != beatSubdivision->end()) ? it_current->second : TDuration(DurationType::V_INVALID);
+                TDuration current_min = (it_current != beatSubdivision->end()) ? it_current->second : TDuration(
+                    DurationType::V_INVALID);
                 TDuration prev_min = (it_prev != beatSubdivision->end()) ? it_prev->second : TDuration(DurationType::V_INVALID);
                 TDuration minDuration = std::min(current_min, prev_min);
                 // re-calculate beam as if this were the duration of current chordrest

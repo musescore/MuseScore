@@ -1599,7 +1599,8 @@ bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure)
     const Score* score = endRepeatMeasure->score();
 
     for (const Measure* measure : measures) {
-        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
+        const SpannerMap::IntervalList& spanners = score->spannerMap().findOverlapping(measure->tick().ticks(),
+                                                                                       measure->endTick().ticks());
 
         for (auto& spanner : spanners) {
             if (spanner.value->isPartialLyricsLine() && spanner.start == measure->tick().ticks()) {
@@ -1765,7 +1766,8 @@ PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics)
             continue;
         }
         PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse()
+            || partialLine->placement() != lyrics->placement()) {
             continue;
         }
         return partialLine;

@@ -289,8 +289,9 @@ void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp,
 
         const duration_percentage_t occupiedFrom = mpe::occupiedPercentage(articulation.meta.timestamp,
                                                                            noteTimestampTo);
-        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(articulation.meta.timestamp + articulation.meta.overallDuration,
-                                                                         noteTimestampTo);
+        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(
+            articulation.meta.timestamp + articulation.meta.overallDuration,
+            noteTimestampTo);
 
         articulations.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
     }
@@ -311,7 +312,8 @@ void NoteRenderer::applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx)
     //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
     const Swing::ChordDurationAdjustment swingDurationAdjustment = Swing::applySwing(chord, swing);
     const duration_t additionalDuration = noteCtx.duration - noteCtx.chordCtx.nominalDuration;
-    noteCtx.timestamp = noteCtx.timestamp + noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
+    noteCtx.timestamp = noteCtx.timestamp + noteCtx.chordCtx.nominalDuration
+                        * swingDurationAdjustment.remainingDurationMultiplier;
     noteCtx.duration = noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
 }
 

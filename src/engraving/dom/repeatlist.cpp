@@ -550,7 +550,8 @@ void RepeatList::collectRepeatListElements()
                         // assume the previous volta was supposed to end before us (open volta case) -> insert the end
                         // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point
                         //          Consider splitting the volta or ignoring this repeat all together
-                        sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, m->prevMeasure()));
+                        sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta,
+                                                                          m->prevMeasure()));
                         volta = nullptr;
                     }
                     //else { // Volta and Start Repeat coincide on the same measure, see test::repeat56.mscx }
@@ -1072,7 +1073,8 @@ void RepeatList::unwind()
                     forceFinalRepeat = false;
 
                     if (continueAt.first != m_rlElements.cend()) {
-                        performJump(continueAt.first, continueAt.second, true, &playbackCount, &activeVolta, &startRepeatReference);
+                        performJump(continueAt.first, continueAt.second, true, &playbackCount, &activeVolta,
+                                    &startRepeatReference);
                         sectionIt = continueAt.first;
                         repeatListElementIt = continueAt.second;
                         if (startRepeatReference->measure != (*(continueAt.second))->measure) {

@@ -143,7 +143,8 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
 
     case StaffGroup::STANDARD: {
         AccidentalVal acci
-            = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, staffIdx, line, error) : Accidental::subtype2value(at));
+            = (at
+               == AccidentalType::NONE ? s->measure()->findAccidental(s, staffIdx, line, error) : Accidental::subtype2value(at));
         if (error) {
             return nval;
         }
@@ -233,7 +234,8 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         std::tie(note, lastTiedNote) = repitchReplaceNote(chord, nval);  // the add (not replace) case was handled above
     } else if (!is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         Segment* seg = setNoteRest(
-            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
+            is.segment(), track, nval, duration, stemDirection, /* forceAccidental */ false,
+            is.articulationIds(), /* rhythmic */ false,
             externalInputState);
         if (seg) {
             note = toChord(seg->element(track))->upNote();
@@ -552,7 +554,8 @@ Ret Score::putNote(const Position& p, bool replace)
 void Score::handleOverlappingChordRest(InputState& inputState)
 {
     MasterScore* ms = masterScore();
-    ChordRest* prevCr = inputState.segment()->nextChordRest(inputState.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+    ChordRest* prevCr
+        = inputState.segment()->nextChordRest(inputState.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
     if (prevCr && prevCr->endTick() > inputState.tick()) {
         const Fraction overlapDuration = prevCr->endTick() - inputState.tick();
         const Fraction desiredDuration = prevCr->ticks() - overlapDuration;
@@ -594,7 +597,9 @@ Ret Score::repitchNote(const Position& p, bool replace)
         nval.pitch = m_is.drumNote();
     } else {
         AccidentalVal acci
-            = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
+            = (at
+               == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(
+                   at));
         if (error) {
             return make_ret(Ret::Code::UnknownError);
         }
@@ -840,7 +845,9 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
             // the whole measure with rests.
             measureIsFull = measureRest->rtick().isZero();
             const Fraction fillLen = measureIsFull ? targetMeasureLen : measureRest->ticks();
-            ms->setRest(measureRest->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
+            ms->setRest(
+                measureRest->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr,
+                /* useFullMeasureRest */ false);
         }
 
         // II. Make chord or rest in other track longer if it crosses the insert area
@@ -850,7 +857,9 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
                 if (cr->isRest()) {
                     const Fraction fillLen = cr->ticks() + fraction;
                     ms->undoRemoveElement(cr);
-                    ms->setRest(cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
+                    ms->setRest(
+                        cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr,
+                        /* useFullMeasureRest */ false);
                 } else if (cr->isChord()) {
                     Chord* chord = toChord(cr);
                     std::vector<TDuration> durations = toDurationList(chord->ticks() + fraction, /* useDots */ true);

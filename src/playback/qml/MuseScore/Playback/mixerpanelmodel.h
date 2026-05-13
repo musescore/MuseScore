@@ -39,13 +39,15 @@
 #include "mixerchannelitem.h"
 
 namespace mu::playback {
-class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
+class MixerPanelModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable,
+    public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(
-        muse::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+        muse::ui::NavigationSection
+        * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
@@ -98,8 +100,8 @@ private:
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
     int indexOf(const muse::audio::TrackId trackId) const;
 
-    MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
-                                                 bool isPrimary = true);
+    MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId,
+                                                 const engraving::InstrumentTrackId& instrumentTrackId, bool isPrimary = true);
     MixerChannelItem* buildAuxChannelItem(muse::audio::aux_channel_idx_t index, const muse::audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 

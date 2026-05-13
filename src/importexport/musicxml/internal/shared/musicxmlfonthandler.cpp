@@ -238,8 +238,11 @@ String MScoreTextToMusicXml::updateFormat()
     }
     String res;
     res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), u"font-weight=\"bold\"", u"font-weight=\"normal\"");
-    res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), u"font-style=\"italic\"", u"font-style=\"normal\"");
-    res += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), u"underline=\"1\"", u"underline=\"0\"");
+    res += attribute(newFormat.italic() != oldFormat.italic(),
+                     newFormat.italic(), u"font-style=\"italic\"", u"font-style=\"normal\"");
+    res
+        += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), u"underline=\"1\"",
+                     u"underline=\"0\"");
     res += attribute(newFormat.strike() != oldFormat.strike(), newFormat.strike(), u"line-through=\"1\"", u"line-though=\"0\"");
     res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true,
                      String(u"font-family=\"%1\"").arg(newFormat.fontFamily()), u"");

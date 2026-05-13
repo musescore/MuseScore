@@ -76,7 +76,8 @@ void initGuitarProDrumset()
 
         gpDrumset->drum(50) = DrumInstrument(TConv::userName(DrumNum(50)), NoteHeadGroup::HEAD_NORMAL, 1, DirectionV::UP);
         gpDrumset->drum(51) = DrumInstrument(TConv::userName(DrumNum(51)), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::UP);
-        gpDrumset->drum(52) = DrumInstrument(TConv::userName(DrumNum(52)), NoteHeadGroup::HEAD_HEAVY_CROSS_HAT, -3, DirectionV::UP);
+        gpDrumset->drum(52)
+            = DrumInstrument(TConv::userName(DrumNum(52)), NoteHeadGroup::HEAD_HEAVY_CROSS_HAT, -3, DirectionV::UP);
         gpDrumset->drum(53) = DrumInstrument(TConv::userName(DrumNum(53)), NoteHeadGroup::HEAD_DIAMOND, 0, DirectionV::UP);
         gpDrumset->drum(54) = DrumInstrument(TConv::userName(DrumNum(54)), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
         gpDrumset->drum(55) = DrumInstrument(TConv::userName(DrumNum(55)), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
@@ -142,27 +143,36 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::HAND_CLAP:
         if (!gpHandClapSet) {
             gpHandClapSet = new Drumset;
-            gpHandClapSet->drum(39) = DrumInstrument(TConv::userName(DrumNum(39)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpHandClapSet->drum(39)
+                = DrumInstrument(TConv::userName(DrumNum(39)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::TAMBOURINE:
         if (!gpTambourineSet) {
             gpTambourineSet = new Drumset;
-            gpTambourineSet->drum(54) = DrumInstrument(TConv::userName(DrumNum(54)), NoteHeadGroup::HEAD_TRIANGLE_UP, 0, DirectionV::DOWN);
+            gpTambourineSet->drum(54) = DrumInstrument(TConv::userName(DrumNum(
+                                                                           54)), NoteHeadGroup::HEAD_TRIANGLE_UP, 0,
+                                                       DirectionV::DOWN);
         }
         break;
     case DrumSetType::COWBELL:
         if (!gpCowbellSet) {
             gpCowbellSet = new Drumset;
-            gpCowbellSet->drum(56) = DrumInstrument(TConv::userName(DrumNum(56)), NoteHeadGroup::HEAD_TRIANGLE_UP, 2, DirectionV::DOWN);
-            gpCowbellSet->drum(99) = DrumInstrument(TConv::userName(DrumNum(99)), NoteHeadGroup::HEAD_TRIANGLE_UP, 4, DirectionV::UP);
-            gpCowbellSet->drum(102) = DrumInstrument(TConv::userName(DrumNum(102)), NoteHeadGroup::HEAD_TRIANGLE_UP, 0, DirectionV::DOWN);
+            gpCowbellSet->drum(56) = DrumInstrument(TConv::userName(DrumNum(
+                                                                        56)), NoteHeadGroup::HEAD_TRIANGLE_UP, 2,
+                                                    DirectionV::DOWN);
+            gpCowbellSet->drum(99) = DrumInstrument(TConv::userName(DrumNum(
+                                                                        99)), NoteHeadGroup::HEAD_TRIANGLE_UP, 4, DirectionV::UP);
+            gpCowbellSet->drum(102) = DrumInstrument(TConv::userName(DrumNum(
+                                                                         102)), NoteHeadGroup::HEAD_TRIANGLE_UP, 0,
+                                                     DirectionV::DOWN);
         }
         break;
     case DrumSetType::VIBRASLAP:
         if (!gpVibraslapSet) {
             gpVibraslapSet = new Drumset;
-            gpVibraslapSet->drum(58) = DrumInstrument(TConv::userName(DrumNum(58)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpVibraslapSet->drum(58) = DrumInstrument(TConv::userName(DrumNum(
+                                                                          58)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::BONGOS:
@@ -183,7 +193,8 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::TIMBALE:
         if (!gpTimbalesSet) {
             gpTimbalesSet = new Drumset;
-            gpTimbalesSet->drum(65) = DrumInstrument(TConv::userName(DrumNum(65)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpTimbalesSet->drum(65)
+                = DrumInstrument(TConv::userName(DrumNum(65)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
             gpTimbalesSet->drum(66) = DrumInstrument(TConv::userName(DrumNum(66)), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
         }
         break;
@@ -196,13 +207,15 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::MARACAS:
         if (!gpMaracasSet) {
             gpMaracasSet = new Drumset;
-            gpMaracasSet->drum(70) = DrumInstrument(TConv::userName(DrumNum(70)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpMaracasSet->drum(70)
+                = DrumInstrument(TConv::userName(DrumNum(70)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::WHISTLE:
         if (!gpWhistleSet) {
             gpWhistleSet = new Drumset;
-            gpWhistleSet->drum(71) = DrumInstrument(TConv::userName(DrumNum(71)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpWhistleSet->drum(71)
+                = DrumInstrument(TConv::userName(DrumNum(71)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
             gpWhistleSet->drum(72) = DrumInstrument(TConv::userName(DrumNum(72)), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
         }
         break;
@@ -222,8 +235,10 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::WOODBLOCK:
         if (!gpWoodblockSet) {
             gpWoodblockSet = new Drumset;
-            gpWoodblockSet->drum(76) = DrumInstrument(TConv::userName(DrumNum(76)), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
-            gpWoodblockSet->drum(77) = DrumInstrument(TConv::userName(DrumNum(77)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpWoodblockSet->drum(76)
+                = DrumInstrument(TConv::userName(DrumNum(76)), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
+            gpWoodblockSet->drum(77) = DrumInstrument(TConv::userName(DrumNum(
+                                                                          77)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::CUICA:
@@ -236,8 +251,10 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::TRIANGLE:
         if (!gpTriangleSet) {
             gpTriangleSet = new Drumset;
-            gpTriangleSet->drum(80) = DrumInstrument(TConv::userName(DrumNum(80)), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::DOWN);
-            gpTriangleSet->drum(81) = DrumInstrument(TConv::userName(DrumNum(81)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpTriangleSet->drum(80)
+                = DrumInstrument(TConv::userName(DrumNum(80)), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::DOWN);
+            gpTriangleSet->drum(81)
+                = DrumInstrument(TConv::userName(DrumNum(81)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::SHAKER:
@@ -249,19 +266,22 @@ void initGuitarProPercussionSet(const GpDrumSet& ds)
     case DrumSetType::JINGLE_BELL:
         if (!gpJingleBellSet) {
             gpJingleBellSet = new Drumset;
-            gpJingleBellSet->drum(83) = DrumInstrument(TConv::userName(DrumNum(83)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpJingleBellSet->drum(83) = DrumInstrument(TConv::userName(DrumNum(
+                                                                           83)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::BELL_TREE:
         if (!gpBellTreeSet) {
             gpBellTreeSet = new Drumset;
-            gpBellTreeSet->drum(84) = DrumInstrument(TConv::userName(DrumNum(84)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpBellTreeSet->drum(84)
+                = DrumInstrument(TConv::userName(DrumNum(84)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::CASTANETS:
         if (!gpCastanetsSet) {
             gpCastanetsSet = new Drumset;
-            gpCastanetsSet->drum(85) = DrumInstrument(TConv::userName(DrumNum(85)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpCastanetsSet->drum(85) = DrumInstrument(TConv::userName(DrumNum(
+                                                                          85)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
         }
         break;
     case DrumSetType::SURDO:

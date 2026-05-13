@@ -145,7 +145,10 @@ StyleItem* mu::notation::ChordSymbolsPageModel::useSmuflSymbols() const { return
 StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const { return styleItem(StyleId::verticallyAlignChordSymbols); }
 StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordSymPosition); }
 StyleItem* ChordSymbolsPageModel::chordAlignmentToFretboard() const { return styleItem(StyleId::chordAlignmentToFretboard); }
-StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const { return styleItem(StyleId::chordAlignmentExcludeModifiers); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const
+{
+    return styleItem(StyleId::chordAlignmentExcludeModifiers);
+}
 
 StyleItem* ChordSymbolsPageModel::chordSymbolSpelling() const { return styleItem(StyleId::chordSymbolSpelling); }
 QVariantList ChordSymbolsPageModel::possibleChordSymbolSpellings() const

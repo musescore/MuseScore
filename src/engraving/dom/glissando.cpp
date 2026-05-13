@@ -220,7 +220,8 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
         // Regular diatonic mode
         int lineStart = noteStart->line();
         // scale obeying accidentals
-        for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
+        for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd);
+             line -= direction) {
             int halfSteps = chromaticPitchSteps(noteStart, noteEnd, lineStart - line);
             pitch = pitchStart + halfSteps;
             if ((direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd)) {
@@ -397,7 +398,8 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
     {
         // Make sure harp glisses can only be diatonic and chromatic
         GlissandoStyle glissStyle = v.value<GlissandoStyle>();
-        if (isHarpGliss().value_or(false) && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
+        if (isHarpGliss().value_or(false)
+            && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
             glissStyle = GlissandoStyle::DIATONIC;
         }
         setGlissandoStyle(glissStyle);

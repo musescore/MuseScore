@@ -276,7 +276,8 @@ double StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
         delta -= st->lineDistance().val() * 0.5;
     }
     double y
-        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val()
+           + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
           + delta;
     return y;
 }
@@ -449,7 +450,8 @@ int StemLayout::calcMinStemLength(Chord* item, const LayoutContext& ctx)
         if (item->hook()) {
             bool straightFlags = style.styleB(Sid::useStraightNoteFlags);
             double smuflAnchor = item->hook()->smuflAnchor().y() * (ldata->up ? 1 : -1);
-            int hookOffset = floor((item->hook()->height() / item->intrinsicMag() + smuflAnchor) / spatium * 4) - (straightFlags ? 0 : 2);
+            int hookOffset = floor((item->hook()->height() / item->intrinsicMag() + smuflAnchor) / spatium * 4)
+                             - (straightFlags ? 0 : 2);
             // some fonts have hooks that extend very far down (making the height of the hook very large)
             // so we constrain to a reasonable maximum for hook length
             hookOffset = std::min(hookOffset, 11);

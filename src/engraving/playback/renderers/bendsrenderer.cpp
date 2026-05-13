@@ -221,7 +221,8 @@ void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, 
     }
 }
 
-void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                                     mpe::PlaybackEventList& result)
 {
     NominalNoteCtx slightNoteCtx(note, ctx);
     slightNoteCtx.duration = 0; // aux notes have no duration
@@ -240,7 +241,8 @@ void BendsRenderer::renderSlightBend(const Note* note, const GuitarBend* bend, c
     result.emplace_back(buildNoteEvent(slightNoteCtx));
 }
 
-void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                              mpe::PlaybackEventList& result)
 {
     NominalNoteCtx dipNoteCtx(note, ctx);
     dipNoteCtx.duration = 0; // aux notes have no duration
@@ -265,7 +267,8 @@ void BendsRenderer::renderDip(const Note* note, const GuitarBend* bend, const Re
     }
 }
 
-void BendsRenderer::renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::renderScoop(const Note* note, const GuitarBend* bend, const RenderingContext& ctx,
+                                mpe::PlaybackEventList& result)
 {
     NominalNoteCtx scoopNoteCtx(note, ctx);
     scoopNoteCtx.duration = 0; // aux notes have no duration

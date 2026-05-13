@@ -109,10 +109,10 @@ private:
                        ContentContext context);
     void appendGrace(mnx::ContentArray content, ExportContext& ctx, engraving::GraceNotesGroup& graceNotes);
     void createBeam(ExportContext& ctx, engraving::ChordRest* chordRest);
-    size_t appendTuplet(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
-                        engraving::ChordRest* chordRest, const engraving::Tuplet* tuplet);
-    size_t appendTremolo(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests, size_t idx,
-                         engraving::ChordRest* chordRest);
+    size_t appendTuplet(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
+                        size_t idx, engraving::ChordRest* chordRest, const engraving::Tuplet* tuplet);
+    size_t appendTremolo(mnx::ContentArray content, ExportContext& ctx, const std::vector<engraving::ChordRest*>& chordRests,
+                         size_t idx, engraving::ChordRest* chordRest);
     bool appendEvent(mnx::ContentArray content, ExportContext& ctx, engraving::ChordRest* chordRest);
     bool createRest(mnx::sequence::Event& mnxEvent, engraving::ChordRest* chordRest);
     bool createNotes(mnx::sequence::Event& mnxEvent, engraving::ChordRest* chordRest);

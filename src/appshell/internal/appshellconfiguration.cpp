@@ -277,7 +277,8 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges,
+                                                    bool notifyOtherInstances) const
 {
     settings()->reset(keepDefaultSettings, notifyAboutChanges, notifyOtherInstances);
 }

@@ -59,8 +59,8 @@ public:
     virtual void setPartSharpFlat(const muse::ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
-    virtual void setInstrumentGroupNameOptions(const std::vector<InstrumentKey>& instruments, bool useCustom, const QString& longName,
-                                               const QString& shortName) = 0;
+    virtual void setInstrumentGroupNameOptions(const std::vector<InstrumentKey>& instruments, bool useCustom,
+                                               const QString& longName, const QString& shortName) = 0;
     virtual void setInstrumentNumber(const InstrumentKey& instrumentKey, int v) = 0;
     virtual void setStaffType(const muse::ID& staffId, StaffTypeId type) = 0;
     virtual void setStaffConfig(const muse::ID& staffId, const StaffConfig& config, Fraction tick = Fraction(0, 1)) = 0;
@@ -74,7 +74,8 @@ public:
         After
     };
 
-    virtual void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
+    virtual void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId,
+                           InsertMode mode = InsertMode::Before) = 0;
     virtual void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId,
                             InsertMode mode = InsertMode::Before) = 0;
 

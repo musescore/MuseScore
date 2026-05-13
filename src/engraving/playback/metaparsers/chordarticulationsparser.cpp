@@ -48,7 +48,8 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-void ChordArticulationsParser::buildChordArticulationMap(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ChordArticulationsParser::buildChordArticulationMap(const Chord* chord, const RenderingContext& ctx,
+                                                         mpe::ArticulationMap& result)
 {
     if (!chord || !ctx.isValid()) {
         LOGE() << "Unable to render playback events of invalid chord";
@@ -64,8 +65,9 @@ void ChordArticulationsParser::buildChordArticulationMap(const Chord* chord, con
 
         duration_percentage_t occupiedFrom = occupiedPercentage(ctx.nominalTimestamp - pair.second.meta.timestamp,
                                                                 pair.second.meta.overallDuration);
-        duration_percentage_t occupiedTo = occupiedPercentage(ctx.nominalTimestamp + ctx.nominalDuration - pair.second.meta.timestamp,
-                                                              pair.second.meta.overallDuration);
+        duration_percentage_t occupiedTo = occupiedPercentage(
+            ctx.nominalTimestamp + ctx.nominalDuration - pair.second.meta.timestamp,
+            pair.second.meta.overallDuration);
 
         result.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
     }
@@ -134,7 +136,8 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
     }
 }
 
-void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, const RenderingContext& ctx,
+                                                        mpe::ArticulationMap& result)
 {
     for (const Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);

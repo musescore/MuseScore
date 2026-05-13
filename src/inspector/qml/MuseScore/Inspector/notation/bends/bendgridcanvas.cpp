@@ -891,7 +891,8 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
                 const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
                 bool isLeftValid = moveToTop ? leftPoint.pitch > currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
                 if (isLeftValid) {
-                    canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
+                    canMove = leftPoint.generated
+                              || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
                 }
             }
 
@@ -903,7 +904,8 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
                 const CurvePoint& rightPoint = m_points.at(pointIndex + 1);
                 bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
                 if (isRightValid) {
-                    canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
+                    canMove = rightPoint.generated
+                              || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
                 }
             }
         }

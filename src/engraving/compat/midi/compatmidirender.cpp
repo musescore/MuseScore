@@ -42,7 +42,8 @@ namespace mu::engraving {
 static int slideTicks(const Chord* chord);
 static int graceBendTicks(const Chord* chord);
 
-void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats)
+void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx,
+                                   bool expandRepeats)
 {
     score->masterScore()->setExpandRepeats(expandRepeats);
     CompatMidiRendererInternal internal{ score };
@@ -189,7 +190,8 @@ void CompatMidiRender::createPlayEvents(const Score* score, const CompatMidiRend
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendererInternal::Context& context, Chord* chord, Chord* prevChord,
+std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendererInternal::Context& context, Chord* chord,
+                                                         Chord* prevChord,
                                                          int gateTime, int ontime, int trailtime)
 {
     const std::vector<mu::engraving::Note*>& notes = chord->notes();
@@ -232,7 +234,8 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendere
             tremolo = true;
         }
 
-        CompatMidiRender::renderChordArticulation(context, chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
+        CompatMidiRender::renderChordArticulation(context, chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH,
+                                                  tremolo);
     }
 
     // Check each note and apply gateTime
@@ -287,7 +290,8 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
         l = 2 * l / 3;
     }
     int start, end, step;
-    bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
+    bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN
+              && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
     if (up) {
         start = 0;
         end   = notes;
@@ -316,7 +320,8 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
 //   renderTremolo
 //---------------------------------------------------------
 
-void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime, double tremoloPartOfChord /* = 1.0 */)
+void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime,
+                                     double tremoloPartOfChord /* = 1.0 */)
 {
     if (muse::RealIsNull(tremoloPartOfChord)) {
         return;
@@ -526,7 +531,8 @@ void CompatMidiRender::updateGateTime(const Instrument* instrument, int& gateTim
 // to effect the on/off time of the main note
 //---------------------------------------------------------
 
-void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Fraction& tick, Chord* chord, int& ontime, int& trailtime)
+void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Fraction& tick, Chord* chord, int& ontime,
+                                                  int& trailtime)
 {
     std::vector<Chord*> gnb = chord->graceNotesBefore(true);
     std::vector<Chord*> gna = chord->graceNotesAfter(true);
@@ -653,7 +659,8 @@ void CompatMidiRender::renderGlissando(NoteEventList* events, Note* notestart, d
     std::vector<int> body;
     for (Spanner* s : notestart->spannerFor()) {
         if (s->isGlissando() && s->playSpanner() && Glissando::pitchSteps(s, body)) {
-            CompatMidiRender::renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true, empty, 16, 0,
+            CompatMidiRender::renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true,
+                                                     empty, 16, 0,
                                                      graceOnBeatProportion, tremoloBefore);
         }
     }

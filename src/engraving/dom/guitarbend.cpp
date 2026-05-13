@@ -747,8 +747,9 @@ void GuitarBend::updateHoldLine()
     Note* endOfHold = nullptr;
 
     bool isDipWithVibrato = bendType() == GuitarBendType::DIP && dipVibratoType() != VibratoType::NONE;
-    bool canHaveHoldLine = isDipWithVibrato || (staffType()->isTabStaff() && !isFullRelease() && bendType() != GuitarBendType::SCOOP
-                                                && bendType() != GuitarBendType::DIP);
+    bool canHaveHoldLine = isDipWithVibrato
+                           || (staffType()->isTabStaff() && !isFullRelease() && bendType() != GuitarBendType::SCOOP
+                               && bendType() != GuitarBendType::DIP);
     if (isDive()) {
         canHaveHoldLine &= startNote() && startNote() == startNote()->chord()->upNote();
     }
@@ -1152,7 +1153,8 @@ Note* GuitarBendHold::endNote() const
 
 double GuitarBendHold::lineWidth() const
 {
-    return style().styleAbsolute(parent() && toGuitarBend(parent())->isDive() ? Sid::guitarDiveLineWidthTab : Sid::guitarBendLineWidthTab);
+    return style().styleAbsolute(parent() && toGuitarBend(
+                                     parent())->isDive() ? Sid::guitarDiveLineWidthTab : Sid::guitarBendLineWidthTab);
 }
 
 /****************************************

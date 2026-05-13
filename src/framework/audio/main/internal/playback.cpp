@@ -584,7 +584,9 @@ async::Promise<bool> Playback::saveSoundTrack(const SoundTrackFormat& format, io
     ONLY_AUDIO_MAIN_THREAD;
     return async::make_promise<bool>([this, format, &dstDevice](auto resolve, auto reject) {
         ONLY_AUDIO_MAIN_THREAD;
-        Msg msg = rpc::make_request(ctxId(), MsgCode::SaveSoundTrack, RpcPacker::pack(format, reinterpret_cast<uintptr_t>(&dstDevice)));
+        Msg msg
+            = rpc::make_request(ctxId(), MsgCode::SaveSoundTrack, RpcPacker::pack(format,
+                                                                                  reinterpret_cast<uintptr_t>(&dstDevice)));
         channel()->send(msg, [resolve, reject](const Msg& res) {
             ONLY_AUDIO_MAIN_THREAD;
             Ret ret;

@@ -206,7 +206,8 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
                 currentChord = secondTremoloChord;
             }
 
-            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
+            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks,
+                                 ctx.nominalPositionStartTick + i * stepDurationTicks,
                                  ctx, tremoloTimeCache, result);
         }
 

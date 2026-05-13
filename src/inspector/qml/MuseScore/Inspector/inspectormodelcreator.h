@@ -29,6 +29,7 @@ class InspectorModelCreator
 {
 public:
     static AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent,
-                                                     const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+                                                     const muse::modularity::ContextPtr& iocCtx,
+                                                     IElementRepositoryService* repository);
 };
 }

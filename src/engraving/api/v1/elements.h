@@ -1747,7 +1747,11 @@ public:
     QQmlListProperty<Chord> graceNotesBefore() { return wrapContainerProperty<Chord>(this, chord()->graceNotesBefore()); }
     QQmlListProperty<Chord> graceNotesAfter() { return wrapContainerProperty<Chord>(this, chord()->graceNotesAfter()); }
     QQmlListProperty<Note> notes() { return wrapContainerProperty<Note>(this, chord()->notes()); }
-    QQmlListProperty<EngravingItem> articulations() { return wrapContainerProperty<EngravingItem>(this, chord()->articulations()); }
+    QQmlListProperty<EngravingItem> articulations()
+    {
+        return wrapContainerProperty<EngravingItem>(this, chord()->articulations());
+    }
+
     EngravingItem* stem() { return wrap(chord()->stem()); }
     EngravingItem* stemSlash() { return wrap(chord()->stemSlash()); }
     EngravingItem* hook() { return wrap(chord()->hook()); }

@@ -79,7 +79,9 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "zoom-whole-page", this, &NotationViewInputController::zoomToWholePage);
         dispatcher()->reg(this, "zoom-two-pages", this, &NotationViewInputController::zoomToTwoPages);
         dispatcher()->reg(this, "zoom100", [this]() { setZoom(100, findZoomFocusPoint()); });
-        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0), findZoomFocusPoint()); });
+        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) {
+            setZoom(args.arg<int>(0), findZoomFocusPoint());
+        });
 
         dispatcher()->reg(this, "view-mode-page", [this]() {
             setViewMode(ViewMode::PAGE);
@@ -545,7 +547,8 @@ void NotationViewInputController::movePage(int direction)
         m_view->moveCanvasVertical(offset);
     } else {
         qreal offset
-            = std::min((page->width() + notationScreenPadding) * direction, m_view->toLogical(QPoint()).x() + notationScreenPadding);
+            = std::min((page->width() + notationScreenPadding) * direction, m_view->toLogical(
+                           QPoint()).x() + notationScreenPadding);
         m_view->moveCanvasHorizontal(offset);
     }
 }
@@ -837,7 +840,8 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
 
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
-            const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
+            const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos,
+                                                                                                      hitWidth());
             if (overlappingHitElements.size() > 1) {
                 cycleOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
                 return;
@@ -1377,7 +1381,8 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
             break;
         }
         const std::vector<Note*>& notes = chord->notes();
-        if (selectType.value() == SelectType::ADD && std::all_of(notes.begin(), notes.end(), [](Note* n){ return n->selected(); })) {
+        if (selectType.value() == SelectType::ADD
+            && std::all_of(notes.begin(), notes.end(), [](Note* n){ return n->selected(); })) {
             for (Note* n : notes) {
                 n->score()->deselect(n);
             }
@@ -1432,7 +1437,8 @@ void NotationViewInputController::hoverLeaveEvent(QHoverEvent*)
 
 bool NotationViewInputController::isAnchorEditingEvent(QKeyEvent* event) const
 {
-    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) && event->modifiers() & Qt::ShiftModifier;
+    bool anchorEditingKeyCombo = (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
+                                 && event->modifiers() & Qt::ShiftModifier;
     EngravingItem* selectedItem = viewInteraction()->selection()->element();
     return selectedItem && selectedItem->allowTimeAnchor() && anchorEditingKeyCombo;
 }

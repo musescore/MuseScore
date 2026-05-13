@@ -882,7 +882,8 @@ Font TextFragment::font(const TextBase* t) const
     Font::Type fontType = Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->hasSymbolScale()) {
-            std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
+            std::string fontName
+                = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
 
@@ -893,7 +894,8 @@ Font TextFragment::font(const TextBase* t) const
             }
 
             if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                std::string fontName2
+                    = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                 family = String::fromStdString(fontName2);
             }
 
@@ -1503,7 +1505,8 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>(
+        "engraving");
 
     SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
@@ -1525,7 +1528,8 @@ String TextBlock::text(int col1, int len, bool withFormat) const
             continue;
         }
         if (withFormat) {
-            s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family, f.format.style(), f.format.valign());
+            s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family,
+                                           f.format.style(), f.format.valign());
         }
 
         for (size_t i = 0; i < f.text.size(); ++i) {
@@ -1755,7 +1759,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
 
                         //char32_t code = score()->scoreFont()->symCode(id);
                         char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->
+                                        symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format
@@ -1846,7 +1851,8 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
 //---------------------------------------------------------
 void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 {
-    if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
+    if (prepareFormat(token,
+                      *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
         setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
     }
 }
@@ -2520,7 +2526,8 @@ bool TextBase::validateText(String& s)
                 d.append(u"&amp;");
             }
         } else if (c == u'<') {
-            const char16_t* ok[] { u"b>", u"/b>", u"i>", u"/i>", u"u>", u"/u", u"s>", u"/s>", u"font ", u"/font>", u"sym>", u"/sym>",
+            const char16_t* ok[] { u"b>", u"/b>", u"i>", u"/i>", u"u>", u"/u", u"s>", u"/s>", u"font ", u"/font>", u"sym>",
+                                   u"/sym>",
                                    u"sub>", u"/sub>", u"sup>", u"/sup>" };
             String t = s.mid(i + 1);
             bool found = false;

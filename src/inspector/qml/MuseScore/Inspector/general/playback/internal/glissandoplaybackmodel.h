@@ -36,7 +36,8 @@ class GlissandoPlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(bool isHarpGliss READ isHarpGliss NOTIFY isHarpGlissChanged)
 
 public:
-    explicit GlissandoPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit GlissandoPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                    IElementRepositoryService* repository);
 
     PropertyItem* styleType() const;
     bool isHarpGliss() const;

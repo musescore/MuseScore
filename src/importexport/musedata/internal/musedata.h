@@ -61,8 +61,10 @@ class MuseData
     void readBackup(QStringView s);
     engraving::Measure* createMeasure();
     int countStaves(const QStringList& sl);
-    void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice, mu::engraving::EngravingItem* startChord);
-    void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice, engraving::EngravingItem* endChord);
+    void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice,
+                  mu::engraving::EngravingItem* startChord);
+    void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice,
+                   engraving::EngravingItem* endChord);
     QString diacritical(QStringView);
 
 public:

@@ -92,7 +92,8 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("extension", "Use extension to process a conversion job", "uri"));
 
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
-    m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
+    m_parser.addOption(QCommandLineOption({ "R", "revert-settings" },
+                                          "Revert to factory settings, but keep default preferences"));
     m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
     m_parser.addOption(QCommandLineOption({ "P", "export-score-parts" }, "Use with '-o <file>.pdf', export score and parts"));
     m_parser.addOption(QCommandLineOption({ "f", "force" },
@@ -100,9 +101,11 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption("score-media",
                                           "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
-    m_parser.addOption(QCommandLineOption("highlight-config", "Set highlight to svg, generated from a given score", "highlight-config"));
+    m_parser.addOption(QCommandLineOption("highlight-config", "Set highlight to svg, generated from a given score",
+                                          "highlight-config"));
     m_parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
-    m_parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
+    m_parser.addOption(QCommandLineOption("score-parts",
+                                          "Generate parts data for the given score and save them to separate mscz files"));
     m_parser.addOption(QCommandLineOption("score-parts-pdf",
                                           "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
     m_parser.addOption(QCommandLineOption("score-transpose",
@@ -162,7 +165,8 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("gp-experimental", "experimental features for guitar pro import"));
 
     //! NOTE Currently only implemented `full` mode
-    m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
+    m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration",
+                                          "mode"));
 
     // Diagnostic
     m_parser.addOption(QCommandLineOption("diagnostic-output", "Diagnostic output", "output"));
@@ -180,12 +184,14 @@ void CommandLineParser::init()
 
     // Audio plugins
     m_parser.addOption(QCommandLineOption("register-audio-plugin",
-                                          "Check an audio plugin for compatibility with the application and register it", "path"));
+                                          "Check an audio plugin for compatibility with the application and register it",
+                                          "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
 
     // Internal
     m_parser.addOption(internalCommandLineOption("score-display-name-override",
-                                                 "Display name to be shown in splash screen for the score that is being opened", "name"));
+                                                 "Display name to be shown in splash screen for the score that is being opened",
+                                                 "name"));
 }
 
 void CommandLineParser::parse(int argc, char** argv)

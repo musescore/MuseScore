@@ -32,7 +32,8 @@ protected:
     void breakLyricsOnBeatsIfNeed();
     bool isLyricsOnBeats() const;
 
-    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(muse::XmlDomNode* trackNode, muse::XmlDomNode* versionNode) = 0;
+    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(muse::XmlDomNode* trackNode,
+                                                                    muse::XmlDomNode* versionNode) = 0;
 
     std::unique_ptr<GPMasterTracks> createGPMasterTrack(muse::XmlDomNode* metadata);
     std::unique_ptr<GPMasterBar> createGPMasterBar(muse::XmlDomNode* masterBarNode);

@@ -247,7 +247,8 @@ void EditStyle::classBegin()
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setModal(true);
 
-    buttonApplyToAllParts = buttonBox->addButton(muse::qtrc("notation/editstyle", "Apply to all parts"), QDialogButtonBox::ApplyRole);
+    buttonApplyToAllParts = buttonBox->addButton(muse::qtrc("notation/editstyle",
+                                                            "Apply to all parts"), QDialogButtonBox::ApplyRole);
     WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
 
     // ====================================================
@@ -511,7 +512,8 @@ void EditStyle::classBegin()
         { StyleId::groupBracketTextAlign,   false, groupBracketTextAlign,   0 },
         { StyleId::groupBracketHangTextIntoMargin, false, groupBracketHangIntoMargin, 0 },
         { StyleId::groupBracketDistanceToNames, false, groupBracketDistanceToNames, groupBracketDistanceToNamesReset },
-        { StyleId::groupBracketDistanceToGroupBracket, false, groupBracketDistanceToBrackets, groupBracketDistanceToBracketsReset },
+        { StyleId::groupBracketDistanceToGroupBracket, false, groupBracketDistanceToBrackets,
+          groupBracketDistanceToBracketsReset },
         { StyleId::groupBracketTextOrientation, false, groupBracketOrientation },
 
         { StyleId::dividerLeft,             false, dividerLeft,             0 },
@@ -783,7 +785,8 @@ void EditStyle::classBegin()
     tupletBracketType->clear();
     tupletBracketType->addItem(muse::qtrc("notation/editstyle", "Automatic"), int(TupletBracketType::AUTO_BRACKET));
     tupletBracketType->addItem(muse::qtrc("notation/editstyle", "Bracket"), int(TupletBracketType::SHOW_BRACKET));
-    tupletBracketType->addItem(muse::qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
+    tupletBracketType->addItem(muse::qtrc("notation/editstyle", "None", "no tuplet bracket type"),
+                               int(TupletBracketType::SHOW_NO_BRACKET));
 
     lyricsDashStartSystemPlacement->clear();
     lyricsDashStartSystemPlacement->addItem(muse::qtrc("notation/editstyle", "Standard"), int(LyricsDashSystemStart::STANDARD));
@@ -956,7 +959,8 @@ void EditStyle::classBegin()
         chordSymbolsPage,
         QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml")));
     chordSymbolsPageWidget.widget->setMinimumSize(224, 400);
-    connect(chordSymbolsPageWidget.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    connect(chordSymbolsPageWidget.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this,
+            SLOT(goToTextStylePage(QString)));
     chordSymbolsPage->layout()->addWidget(chordSymbolsPageWidget.widget);
 
     // ====================================================
@@ -998,7 +1002,8 @@ void EditStyle::classBegin()
         PageRepeats,
         QUrl(QString::fromUtf8("qrc:/qt/qml/MuseScore/NotationScene/styledialog/RepeatPage.qml")));
     repeatPlayCountSection.widget->setMinimumSize(224, 500);
-    connect(repeatPlayCountSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    connect(repeatPlayCountSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this,
+            SLOT(goToTextStylePage(QString)));
     PageRepeats->layout()->addWidget(repeatPlayCountSection.widget);
 
     // ====================================================
@@ -1478,7 +1483,8 @@ void EditStyle::setHeaderFooterMacroInfoText()
           % "</i></td></tr><tr><td>$$</td><td width=\"12\"/><td><i>"_L1
           % muse::qtrc("notation/editstyle", "The $ sign itself")
           % "</i></td></tr></table><p>"_L1
-          % muse::qtrc("notation/editstyle", "<b>Metadata tags and current values</b> (configured in <b>File > Project properties…</b>)")
+          % muse::qtrc("notation/editstyle",
+                       "<b>Metadata tags and current values</b> (configured in <b>File > Project properties…</b>)")
           % "<br>"_L1
           % muse::qtrc("notation/editstyle",
                        "Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.")
@@ -2090,8 +2096,10 @@ void EditStyle::setValues()
     mmRestRefDuration->setEnabled(styleValue(StyleId::mmRestConstantWidth).toBool());
 
     lyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount).toBool());
-    resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount) != defaultStyleValue(StyleId::lyricsLimitDashCount)
-                                        || styleValue(StyleId::lyricsMaxDashCount) != defaultStyleValue(StyleId::lyricsMaxDashCount));
+    resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount)
+                                        != defaultStyleValue(StyleId::lyricsLimitDashCount)
+                                        || styleValue(StyleId::lyricsMaxDashCount)
+                                        != defaultStyleValue(StyleId::lyricsMaxDashCount));
     lyricsDashMaxDistance->setEnabled(!styleValue(StyleId::lyricsLimitDashCount).toBool()
                                       || styleValue(StyleId::lyricsMaxDashCount).toInt() > 1);
     resetLyricsDashMaxDistance->setEnabled(lyricsDashMaxDistance->isEnabled() && styleValue(StyleId::lyricsDashMaxDistance)
@@ -2380,8 +2388,10 @@ void EditStyle::valueChanged(int i)
 
     if (idx == StyleId::lyricsLimitDashCount || idx == StyleId::lyricsMaxDashCount) {
         lyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount).toBool());
-        resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount) != defaultStyleValue(StyleId::lyricsLimitDashCount)
-                                            || styleValue(StyleId::lyricsMaxDashCount) != defaultStyleValue(StyleId::lyricsMaxDashCount));
+        resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount)
+                                            != defaultStyleValue(StyleId::lyricsLimitDashCount)
+                                            || styleValue(StyleId::lyricsMaxDashCount)
+                                            != defaultStyleValue(StyleId::lyricsMaxDashCount));
         lyricsDashMaxDistance->setEnabled(!styleValue(StyleId::lyricsLimitDashCount).toBool()
                                           || styleValue(StyleId::lyricsMaxDashCount).toInt() > 1);
         resetLyricsDashMaxDistance->setEnabled(lyricsDashMaxDistance->isEnabled() && styleValue(StyleId::lyricsDashMaxDistance)
@@ -2605,8 +2615,10 @@ void EditStyle::endEditUserStyleName()
         return;
     }
     StyleId sid[]
-        = { StyleId::user1Name, StyleId::user2Name, StyleId::user3Name, StyleId::user4Name, StyleId::user5Name, StyleId::user6Name,
-            StyleId::user7Name, StyleId::user8Name, StyleId::user9Name, StyleId::user10Name, StyleId::user11Name, StyleId::user12Name };
+        = { StyleId::user1Name, StyleId::user2Name, StyleId::user3Name, StyleId::user4Name, StyleId::user5Name,
+            StyleId::user6Name,
+            StyleId::user7Name, StyleId::user8Name, StyleId::user9Name, StyleId::user10Name, StyleId::user11Name,
+            StyleId::user12Name };
     QString name = styleName->text();
     setStyleValue(sid[idx], name);
     if (name == "") {

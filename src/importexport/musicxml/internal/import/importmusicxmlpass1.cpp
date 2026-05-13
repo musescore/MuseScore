@@ -859,7 +859,8 @@ static TextStyleType creditWordTypeToTid(const String& type)
 //   creditWordTypeGuess
 //---------------------------------------------------------
 
-static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words,
+                                         const int pageWidth)
 {
     const double pw1 = pageWidth / 3;
     const double pw2 = pageWidth * 2 / 3;
@@ -952,7 +953,8 @@ bool isLikelySubtitleText(const String& text, const bool caseInsensitive = true)
 bool isLikelyCreditText(const String& text, const bool caseInsensitive = true)
 {
     std::regex::flag_type caseOption = caseInsensitive ? std::regex::icase : std::regex::ECMAScript;
-    return text.trimmed().contains(std::wregex(L"^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)", caseOption))
+    return text.trimmed().contains(std::wregex(L"^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)",
+                                               caseOption))
            || text.trimmed().contains(std::wregex(L"^(Traditional|Trad\\.)", caseOption));
 }
 
@@ -1527,7 +1529,8 @@ void MusicXmlParserPass1::identification()
                 } else if (m_e.name() == "software") {
                     String exporterString = m_e.readText().toLower();
                     setExporterSoftware(exporterString);
-                } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
+                } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam"
+                           && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();
                 } else {

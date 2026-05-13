@@ -106,7 +106,8 @@ private:
     QString sourceTypeToString(const muse::audio::AudioSourceType& type) const;
 
     QJsonObject buildAuxObject(muse::audio::aux_channel_idx_t index, const AudioOutputParams& params) const;
-    QJsonObject buildTrackObject(notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr, const engraving::InstrumentTrackId& id) const;
+    QJsonObject buildTrackObject(notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr,
+                                 const engraving::InstrumentTrackId& id) const;
 
     AudioOutputParams m_masterOutputParams;
 

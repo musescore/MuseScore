@@ -45,7 +45,8 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
     Q_PROPERTY(QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged)
 
     Q_PROPERTY(QVariantList numbersOfStrings READ numbersOfStrings NOTIFY numbersOfStringsChanged)
-    Q_PROPERTY(int currentNumberOfStrings READ currentNumberOfStrings WRITE setCurrentNumberOfStrings NOTIFY currentNumberOfStringsChanged)
+    Q_PROPERTY(
+        int currentNumberOfStrings READ currentNumberOfStrings WRITE setCurrentNumberOfStrings NOTIFY currentNumberOfStringsChanged)
 
     Q_PROPERTY(QList<StringTuningsItem*> strings READ strings NOTIFY stringsChanged)
 

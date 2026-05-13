@@ -67,7 +67,8 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
     events[channel].erase(it);
 }
 
-static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
+static void checkPitchBend(EventsHolder& events, int tick, int pitchValue,
+                           MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
                            int channel = DEFAULT_CHANNEL)
 {
     auto it = events[channel].find(tick);
@@ -95,7 +96,8 @@ static void checkPitchBendInterval(EventsHolder& events, int startTick, int endT
     }
 }
 
-static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
+static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false,
+                                     bool instrumentsHaveEffects = false)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_BEND_TESTS_DIR + fileName);
     EXPECT_TRUE(score);

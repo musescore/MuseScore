@@ -263,7 +263,8 @@ static void doCloneVoice(Score* destScore, track_idx_t srcTrack, track_idx_t dst
     }
 
     // Find and add corresponding slurs and hairpins
-    static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF, ElementType::HAIRPIN };
+    static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF,
+                                                          ElementType::HAIRPIN };
     auto spanners = sourceScore->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
     for (auto i = spanners.begin(); i < spanners.end(); i++) {
         Spanner* sp      = i->value;

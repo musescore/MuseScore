@@ -279,7 +279,8 @@ Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const Score
     return make_ret(Err::NoError);
 }
 
-void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate)
+void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions,
+                                  bool createdFromTemplate)
 {
     TRACEFUNC;
 
@@ -683,7 +684,8 @@ void MasterNotation::updatePotentialExcerpts() const
         partsWithoutExcerpt.push_back(part);
     }
 
-    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore());
+    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt,
+                                                                                                    masterScore());
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
         auto excerptNotation = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), excerpt, iocContext());
@@ -714,7 +716,8 @@ void MasterNotation::onPartsChanged()
 IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
     auto excerptNotation
-        = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), new mu::engraving::Excerpt(masterScore()), iocContext());
+        = std::make_shared<ExcerptNotation>(const_cast<MasterNotation*>(this), new mu::engraving::Excerpt(
+                                                masterScore()), iocContext());
     excerptNotation->setName(name);
 
     return excerptNotation;

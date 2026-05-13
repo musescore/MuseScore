@@ -308,7 +308,8 @@ public:
     DECLARE_API_ENUM(IntervalType, intervalTypeEnum, mu::engraving::apiv1::enums::IntervalType)
     /// Contains mu::engraving::InstrumentLabelVisibility enumeration values
     /// \since MuseScore 4.6
-    DECLARE_API_ENUM(InstrumentLabelVisibility, instrumentLabelVisibilityEnum, mu::engraving::apiv1::enums::InstrumentLabelVisibility)
+    DECLARE_API_ENUM(InstrumentLabelVisibility, instrumentLabelVisibilityEnum,
+                     mu::engraving::apiv1::enums::InstrumentLabelVisibility)
     /// Contains mu::engraving::OrnamentShowAccidental enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(OrnamentShowAccidental, ornamentShowAccidentalEnum, mu::engraving::apiv1::enums::OrnamentShowAccidental)

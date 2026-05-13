@@ -233,7 +233,8 @@ std::vector<QString> EditStaffType::textStyleNames() const
 {
     std::vector<QString> names;
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(
+            tid);
         names.push_back(styleName.qTranslated());
     }
     return names;
@@ -242,7 +243,8 @@ std::vector<QString> EditStaffType::textStyleNames() const
 TextStyleType EditStaffType::getTextStyle(const QString& styleName) const
 {
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString textStyleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString textStyleName
+            = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
 
         if (textStyleName.qTranslated() == styleName) {
             return tid;

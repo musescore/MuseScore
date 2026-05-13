@@ -157,7 +157,8 @@ dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackId
     return it->second.level;
 }
 
-std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const Score* score, const int nominalPositionTick) const
+std::pair<mpe::timestamp_t, PlayingTechniqueType> PlaybackContext::playingTechnique(const Score* score,
+                                                                                    const int nominalPositionTick) const
 {
     auto it = findLessOrEqual(m_playTechniquesMap, nominalPositionTick);
     if (it == m_playTechniquesMap.cend()) {

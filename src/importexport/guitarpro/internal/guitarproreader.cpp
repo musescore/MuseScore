@@ -28,8 +28,8 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {
-extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx,
-                                    bool experimental = false);
+extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io,
+                                    const muse::modularity::ContextPtr& iocCtx, bool experimental = false);
 
 muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options&)
 {

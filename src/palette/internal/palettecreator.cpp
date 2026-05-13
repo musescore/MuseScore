@@ -1558,7 +1558,8 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     static const std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
         { QT_TRANSLATE_NOOP("palette", "legato"),    PlayingTechniqueType::Legato },
         { QT_TRANSLATE_NOOP("palette", "pizz."),     PlayingTechniqueType::Pizzicato },
-        { QT_TRANSLATE_NOOP("palette", "arco"),      PlayingTechniqueType::Natural, false, muse::TranslatableString("palette", "Arco") },
+        { QT_TRANSLATE_NOOP("palette", "arco"),      PlayingTechniqueType::Natural, false, muse::TranslatableString("palette",
+                                                                                                                    "Arco") },
         { QT_TRANSLATE_NOOP("palette", "tremolo"),   PlayingTechniqueType::Tremolo, true },
         //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
         { QT_TRANSLATE_NOOP("palette", "mute"),      PlayingTechniqueType::Mute },

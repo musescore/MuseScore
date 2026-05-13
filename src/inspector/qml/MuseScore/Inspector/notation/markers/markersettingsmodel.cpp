@@ -26,7 +26,8 @@
 
 using namespace mu::inspector;
 
-MarkerSettingsModel::MarkerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+MarkerSettingsModel::MarkerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                         IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_MARKER);

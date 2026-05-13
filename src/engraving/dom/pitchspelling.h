@@ -80,9 +80,10 @@ extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
 extern int computeWindow(const std::vector<Note*>& notes, int start, int end);
 extern int tpc(int idx, int pitch, int opt);
-extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false, bool full = false);
-extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental = false,
-                     bool full = false);
+extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false,
+                       bool full = false);
+extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc,
+                     bool explicitAccidental = false, bool full = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, AccidentalVal& acc);
 extern String tpcUserName(int tpc, int pitch, bool explicitAccidental = false, bool full = false);
 extern int step2tpc(const String& stepName, AccidentalVal alter);

@@ -212,7 +212,8 @@ protected:
 
     virtual void initZoomAndPosition();
 
-    virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
+    virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix,
+                                 bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();

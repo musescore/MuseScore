@@ -103,7 +103,8 @@ TEST_F(Engraving_SelectionRangeTests, selRangeAndSpanners)
         }
 
         // Setup: Find start/end notes to make our range selection...
-        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             mu::engraving::EngravingItem* element = segment->element(0);
             if (!element || !element->isChord()) {
                 continue;
@@ -271,7 +272,8 @@ TEST_F(Engraving_SelectionRangeTests, deleteSkipAnnotations)
     Measure* m1 = score->firstMeasure();
     EXPECT_TRUE(m1);
 
-    ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes((int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
+    ElementsSelectionFilterTypes annotationFilterType = ElementsSelectionFilterTypes(
+        (int)ElementsSelectionFilterTypes::CHORD_SYMBOL);
     score->selectionFilter().setFiltered(annotationFilterType, false);
 
     score->startCmd(TranslatableString::untranslatable("Selection range delete tests"));
@@ -300,7 +302,8 @@ TEST_F(Engraving_SelectionRangeTests, deletePartialNestedTuplets)
 
         score->deselectAll();
 
-        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             mu::engraving::EngravingItem* element = segment->element(0);
             if (!element || !element->isChord()) {
                 continue;

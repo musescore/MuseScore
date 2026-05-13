@@ -262,8 +262,8 @@ public:
     Fraction snap(const Fraction& tick, const PointF p) const;
     Fraction snapNote(const Fraction& tick, const PointF p, int staff) const;
 
-    Segment* searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack, const Segment* preferredSegment = nullptr,
-                           double spacingFactor = 0.5) const;
+    Segment* searchSegment(double x, SegmentType st, track_idx_t strack, track_idx_t etrack,
+                           const Segment* preferredSegment = nullptr, double spacingFactor = 0.5) const;
 
     void insertStaff(Staff*, staff_idx_t staff);
     void insertMStaff(MStaff* staff, staff_idx_t idx);

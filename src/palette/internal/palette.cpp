@@ -138,7 +138,8 @@ PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, Action
     return insertElement(idx, icon, name, mag);
 }
 
-PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset,
+                                      const QString& tag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content

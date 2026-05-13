@@ -216,7 +216,8 @@ TEST_F(Engraving_SelectionFilterTests, filterOrnament)
  *          repeated every five measures (until measure 25), and the result is compared with the given reference. The "action" method can take
  *          an auxiliary Measure - for copy/pastes this is used as the paste destination...
  */
-void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Score*, MeasureBase* auxMeasure), const String& reference)
+void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Score*,
+                                                                            MeasureBase* auxMeasure), const String& reference)
 {
     //! [GIVEN] A score with a mixture of chords, single notes, and tuplets...
     MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords.mscx"));
@@ -325,7 +326,8 @@ TEST_F(Engraving_SelectionFilterTests, notesInChordsDeleteRange)
         score->endCmd();
     };
 
-    testNotesInChordsAction(deleteAction, SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_deleterange-ref.mscx"));
+    testNotesInChordsAction(deleteAction,
+                            SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_deleterange-ref.mscx"));
 }
 
 /**
@@ -346,7 +348,8 @@ TEST_F(Engraving_SelectionFilterTests, notesInChordsCopyPaste)
         score->endCmd();
     };
 
-    testNotesInChordsAction(copyPasteAction, SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_copypaste-ref.mscx"));
+    testNotesInChordsAction(copyPasteAction, SELECTIONFILTER_DATA_DIR + String(
+                                u"selectionfilter_notesinchords_copypaste-ref.mscx"));
 }
 
 /**

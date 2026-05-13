@@ -415,7 +415,8 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
                 if (underlyingSeg) {
                     underlyingSeg->undoChangeProperty(Pid::END_OF_MEASURE_CHANGE, false);
                     if (nextMeasure->isMMRest() && nextMeasure->mmRestFirst()) {
-                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(), Fraction(0, 1)));
+                        nextMeasure->score()->undo(new ChangeSegmentParent(underlyingSeg, nextMeasure->mmRestFirst(),
+                                                                           Fraction(0, 1)));
                     } else {
                         ctx.mutDom().doUndoRemoveElement(underlyingSeg);
                     }

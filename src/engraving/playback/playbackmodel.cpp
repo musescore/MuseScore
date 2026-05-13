@@ -274,7 +274,8 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const St
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
+void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration,
+                                          bool flushSound)
 {
     if (items.empty()) {
         return;
@@ -575,7 +576,8 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
     }
 }
 
-void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
+void PlaybackModel::processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat,
+                                         const Measure* currentMeasure,
                                          const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges)
 {
     if (!measureRepeat || !currentMeasure) {
@@ -855,7 +857,8 @@ void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t track
     }
 }
 
-void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
+void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom,
+                                       const track_idx_t trackTo,
                                        ChangedTrackIdSet* trackChanges)
 {
     TRACEFUNC;

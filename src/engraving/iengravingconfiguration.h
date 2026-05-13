@@ -65,7 +65,8 @@ public:
     virtual Color fontPrimaryColor() const = 0;
     virtual Color voiceColor(voice_idx_t voiceIdx) const = 0;
 
-    virtual Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
+    virtual Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true,
+                                 bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, Color color) = 0;
     virtual muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const = 0;
 

@@ -70,7 +70,8 @@ struct CurvePoint
     bool generated = false;
 
     CurvePoint() = default;
-    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false, const QString& name = QString(),
+    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false,
+               const QString& name = QString(),
                bool limitMoveVerticallyByNearestPoints = true)
         : time(time), pitch(pitch), moveDirection(moveDirection),
         limitMoveVerticallyByNearestPoints(limitMoveVerticallyByNearestPoints), endDashed(endDashed), name(name) {}

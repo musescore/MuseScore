@@ -1121,7 +1121,8 @@ bool ScoreRange::insertBarLine(Measure* m, const BarLinesBackup& barLine) const
                 m->score()->addElement(nbl);
             } else {
                 // We change BarLineType if necessary to keep END_START repeats if in the middle of a meassure
-                if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT) && middle) {
+                if ((nbl->barLineType() == BarLineType::END_REPEAT) && (bl->barLineType() == BarLineType::START_REPEAT)
+                    && middle) {
                     blt = BarLineType::END_START_REPEAT;
                 }
             }
@@ -1412,7 +1413,8 @@ bool ScoreRange::endOfMeasureElement(EngravingItem* e) const
     bool result = false;
 
     if (e->isMarker()
-        && ((muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
+        && ((muse::contains(Marker::RIGHT_MARKERS,
+                            toMarker(e)->markerType()) || toMarker(e)->markerType() == MarkerType::FINE))) {
         result = true;
     } else if (e->isJump()) {
         result = true;

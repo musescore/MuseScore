@@ -90,7 +90,9 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore.Project", "ProjectPropertiesDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore.Project", "UploadProgressDialog");
         ir->registerQmlUri(Uri("musescore://project/upload/success"), "MuseScore.Project", "ProjectUploadedDialog");
-        ir->registerQmlUri(Uri("musescore://project/audiogenerationsettings"), "MuseScore.Project", "AudioGenerationSettingsDialog");
+        ir->registerQmlUri(Uri(
+                               "musescore://project/audiogenerationsettings"), "MuseScore.Project",
+                           "AudioGenerationSettingsDialog");
     }
 
     auto er = globalIoc()->resolve<muse::extensions::IExtensionsExecPointsRegister>(mname);

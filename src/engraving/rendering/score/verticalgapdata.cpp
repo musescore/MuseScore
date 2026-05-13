@@ -32,7 +32,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer, double y)
+VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer,
+                                 double y)
     : style(style), system(sys), sysStaff(sst), staff(st), m_fixedHeight(first)
 {
     if (m_fixedHeight) {

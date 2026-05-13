@@ -456,7 +456,8 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
             instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;
-                int fretCorrection = (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
+                int fretCorrection
+                    = (capo.active && muse::contains(capo.ignoredStrings, (string_idx_t)*string)) ? capo.fretPosition : 0;
                 *fret = pitch - strg.pitch + fretCorrection;
                 return true;
             }

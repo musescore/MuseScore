@@ -361,7 +361,8 @@ XmlDomNode GuitarPro6::getNode(const String& id, XmlDomNode currentDomNode)
         }
         currentDomNode = currentDomNode.nextSibling();
     }
-    LOGD() << "WARNING: A null node was returned when search for the identifier" << id << ". Your Guitar Pro file may be corrupted.";
+    LOGD() << "WARNING: A null node was returned when search for the identifier" << id <<
+        ". Your Guitar Pro file may be corrupted.";
     return currentDomNode;
 }
 
@@ -450,7 +451,8 @@ void GuitarPro6::readGPX(ByteArray* buffer)
                 int blockCount        = 0;
                 ByteArray* fileBytes = new ByteArray();
                 while ((block = (readInteger(buffer, (indexOfBlock + (4 * (blockCount++)))))) != 0) {
-                    fileBytes->push_back(getBytes(buffer, (offset = (block * static_cast<int>(sectorSize))), static_cast<int>(sectorSize)));
+                    fileBytes->push_back(getBytes(buffer, (offset = (block * static_cast<int>(sectorSize))),
+                                                  static_cast<int>(sectorSize)));
                 }
                 // get file information and read the file
                 size_t fileSize = readInteger(buffer, indexFileSize);

@@ -245,7 +245,8 @@ bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord,
     return isFiltered(type);
 }
 
-bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart, const Fraction& selectionRangeEnd,
+bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart,
+                                      const Fraction& selectionRangeEnd,
                                       bool selectionContainsMultiNoteChords) const
 {
     // Tuplets are selectable if all of their contained elements are selectable...

@@ -57,7 +57,8 @@ protected:
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
-        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
+        m_dummyPatternSegment.expressionPattern
+            = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
@@ -508,7 +509,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score = ScoreRW::readScore(
-        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_inverted_turn_slash_variation/single_note_inverted_turn_slash_variation.mscx");
+        PLAYBACK_EVENTS_RENDERING_DIR
+        + "single_note_inverted_turn_slash_variation/single_note_inverted_turn_slash_variation.mscx");
 
     Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
@@ -796,7 +798,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
     Score* score
-        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR
+                             + "two_notes_continuous_glissando/two_notes_continuous_glissando.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->repeatList().size(), 2);
@@ -1129,7 +1132,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
             // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * glissandoNoteDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp,
+                      expectedTimestamp + static_cast<int>(i * glissandoNoteDuration));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -1172,7 +1176,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
             // [THEN] We expect that each sub-note has an expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * glissandoNoteDuration);
+            EXPECT_EQ(
+                noteEvent.arrangementCtx().nominalTimestamp,
+                expectedTimestamp + static_cast<duration_t>(i) * glissandoNoteDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -1890,7 +1896,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
 {
     // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
-    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_with_tied_notes/chord_arpeggio_with_tied_notes.mscx");
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_with_tied_notes/chord_arpeggio_with_tied_notes.mscx");
 
     Measure* firstMeasure = score->firstMeasure();
     ASSERT_TRUE(firstMeasure);
@@ -2608,7 +2615,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
 {
     // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
     Score* score
-        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo_tied_notes/single_chord_tremolo_tied_notes.mscx");
+        = ScoreRW::readScore(
+              PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo_tied_notes/single_chord_tremolo_tied_notes.mscx");
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
@@ -2620,7 +2628,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
     PlaybackEventsMap result;
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             const mu::engraving::EngravingItem* element = segment->element(0);
             if (element && element->isChord()) {
                 m_renderer.render(toChord(element), 0, m_defaultProfile, ctx, result);
@@ -2654,11 +2663,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
             ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo32nd));
 
             // [THEN] Each note event has the correct articulation time and duration
-            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo32nd);
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(
+                ArticulationType::Tremolo32nd);
             EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
 
-            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp
+                                                + noteEvent.arrangementCtx().actualDuration;
 
             // [THEN] Each note has the correct occupiedFrom/To
             if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
@@ -2770,11 +2781,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, PartiallyTiedTremolo)
             ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo16th));
 
             // [THEN] Each note event has the correct articulation time and duration
-            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo16th);
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(
+                ArticulationType::Tremolo16th);
             EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
 
-            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp
+                                                + noteEvent.arrangementCtx().actualDuration;
 
             // [THEN] Each note has the correct occupiedFrom/To
             if (noteEvent.arrangementCtx().nominalTimestamp == expectedTremoloTimestamp) {
@@ -3207,7 +3220,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
     PlaybackEventsMap result;
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             const mu::engraving::EngravingItem* element = segment->element(0);
             if (element && element->isChord()) {
                 m_renderer.render(toChord(element), 0, m_defaultProfile, ctx, result);
@@ -3248,11 +3262,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
                 EXPECT_EQ(pair.second.size(), expectedSubNotes);
 
                 // [THEN] Each note event has the correct articulation time and duration
-                const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Trill);
+                const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(
+                    ArticulationType::Trill);
                 EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
                 EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
-                const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+                const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp
+                                                    + noteEvent.arrangementCtx().actualDuration;
 
                 // [THEN] Each note has the correct occupiedFrom/To
                 if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
@@ -3364,7 +3380,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
             EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
             EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
 
-            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+            const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp
+                                                + noteEvent.arrangementCtx().actualDuration;
 
             // [THEN] Each note has the correct occupiedFrom/To
             if (noteEvent.arrangementCtx().nominalTimestamp == expectedTrillTimestamp) {
@@ -3567,7 +3584,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, HandbellsLetVibrate)
     PlaybackEventsMap result;
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             const mu::engraving::EngravingItem* element = segment->element(0);
             if (element && element->isChord()) {
                 m_renderer.render(toChord(element), 0, m_defaultProfile, ctx, result);

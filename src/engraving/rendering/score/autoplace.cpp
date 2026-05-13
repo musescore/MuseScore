@@ -285,7 +285,8 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
     }
     //OffsetChange saveChangedValue = _offsetChanged;
 
-    bool staffRelative = item->staff() && item->explicitParent() && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
+    bool staffRelative = item->staff() && item->explicitParent()
+                         && !(item->explicitParent()->isNote() || item->explicitParent()->isRest());
     if (staffRelative && item->propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
         // check if flipped
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
@@ -377,7 +378,8 @@ bool Autoplace::rebaseMinDistance(const EngravingItem* item, EngravingItem::Layo
     return rc;
 }
 
-void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute, const PointF& diff)
+void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute,
+                                 const PointF& diff)
 {
     if (v) {
         ldata->autoplace.offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
@@ -453,5 +455,6 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return true;
     }
 
-    return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
+    return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline
+           || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;
 }

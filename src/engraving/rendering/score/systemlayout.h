@@ -67,7 +67,8 @@ public:
     static System* collectSystem(LayoutContext& ctx);
     static void layoutSystemElements(System* system, LayoutContext& ctx);
 
-    static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
+    static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false,
+                             bool firstSystemIndent = false);
 
     static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
     static bool canChangeSysStaffVisibility(const System* system, const staff_idx_t staffIdx);
@@ -181,12 +182,14 @@ private:
 
     static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
-    static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx);
+    static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2,
+                                                 LayoutContext& ctx);
 
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
     static bool mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system);
     static bool whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment* wbar, const System* system);
-    static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
+    static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape,
+                                                const SkylineLine& skylineLine);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 

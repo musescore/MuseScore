@@ -68,12 +68,14 @@ private:
     static void layoutModifierParentheses(const Harmony* item, const LayoutContext& ctx);
 
     static void render(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
-    static void doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, int rootTpc, int bassTpc,
-                                      const LayoutContext& ctx);
-    static void renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
+    static void doRenderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, int rootTpc,
+                                      int bassTpc, const LayoutContext& ctx);
+    static void renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
+                                    const LayoutContext& ctx);
     static void renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata);
     static void render(Harmony* item, Harmony::LayoutData* ldata, const String& str, HarmonyRenderCtx& harmonyCtx);
-    static void render(Harmony* item, Harmony::LayoutData* ldata, SymId sym, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
+    static void render(Harmony* item, Harmony::LayoutData* ldata, SymId sym, HarmonyRenderCtx& harmonyCtx,
+                       const LayoutContext& ctx);
     static void render(Harmony* item, Harmony::LayoutData* ldata, const std::vector<RenderActionPtr>& renderList,
                        HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx, int tpc,
                        NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
@@ -81,14 +83,15 @@ private:
 
     static void renderAction(Harmony* item, Harmony::LayoutData* ldata, const RenderActionPtr& a, HarmonyRenderCtx& harmonyCtx,
                              const LayoutContext& ctx);
-    static void renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a, HarmonyRenderCtx& harmonyCtx,
-                                const LayoutContext& ctx);
+    static void renderActionSet(Harmony* item, Harmony::LayoutData* ldata, const RenderActionSetPtr& a,
+                                HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
     static void renderActionMove(Harmony* item, const RenderActionMovePtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionMoveXHeight(Harmony* item, const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionPush(HarmonyRenderCtx& harmonyCtx);
     static void renderActionPop(const RenderActionPopPtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionNote(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx);
-    static void renderActionAcc(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
+    static void renderActionAcc(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
+                                const LayoutContext& ctx);
     static void renderActionAlign(HarmonyRenderCtx& harmonyCtx);
     static void renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& harmonyCtx);
     static void renderActionParen(Harmony* item, const RenderActionParenPtr& a, HarmonyRenderCtx& harmonyCtx);

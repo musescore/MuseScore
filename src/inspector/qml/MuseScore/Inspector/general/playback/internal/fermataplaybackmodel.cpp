@@ -39,7 +39,8 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, const muse::modulari
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_timeStretch
+        = buildPropertyItem(mu::engraving::Pid::TIME_STRETCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 }

@@ -36,7 +36,8 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
 
-void NoteArticulationsParser::buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+void NoteArticulationsParser::buildNoteArticulationMap(const Note* note, const RenderingContext& ctx,
+                                                       mpe::ArticulationMap& result)
 {
     if (!note || !ctx.isValid()) {
         LOGE() << "Unable to render playback events of invalid note";
@@ -131,10 +132,12 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
     }
 }
 
-void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result, bool sustainAllowed)
+void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx, mpe::ArticulationMap& result,
+                                                    bool sustainAllowed)
 {
     const int chordPosTickWithOffset = ctx.nominalPositionStartTick + ctx.positionTickOffset;
-    const std::pair<timestamp_t, PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(ctx.score, chordPosTickWithOffset);
+    const std::pair<timestamp_t,
+                    PlayingTechniqueType> tech = ctx.playbackCtx->playingTechnique(ctx.score, chordPosTickWithOffset);
     if (tech.second == PlayingTechniqueType::HandbellsLV && !sustainAllowed) {
         return;
     }
@@ -153,7 +156,8 @@ void NoteArticulationsParser::parsePlayingTechnique(const RenderingContext& ctx,
     duration_t duration = ctx.nominalDuration;
 
     if (tech.second == PlayingTechniqueType::HandbellsLV) {
-        const timestamp_t dampTime = ctx.playbackCtx->findPlayingTechniqueTimestamp(ctx.score, PlayingTechniqueType::HandbellsDamp,
+        const timestamp_t dampTime = ctx.playbackCtx->findPlayingTechniqueTimestamp(ctx.score,
+                                                                                    PlayingTechniqueType::HandbellsDamp,
                                                                                     chordPosTickWithOffset);
         timestamp = tech.first;
         duration = dampTime > 0 ? dampTime - timestamp : mpe::INFINITE_DURATION;

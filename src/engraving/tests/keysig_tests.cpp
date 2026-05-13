@@ -132,9 +132,11 @@ TEST_F(Engraving_KeySigTests, concertPitch)
     EXPECT_TRUE(score);
 
     score->cmdConcertPitchChanged(true);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + u"concert-pitch-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-01-test.mscx",
+                                            KEYSIG_DATA_DIR + u"concert-pitch-01-ref.mscx"));
     score->cmdConcertPitchChanged(false);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + u"concert-pitch-02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"concert-pitch-02-test.mscx",
+                                            KEYSIG_DATA_DIR + u"concert-pitch-02-ref.mscx"));
 
     delete score;
 }
@@ -146,10 +148,12 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
-    Transpose::transpositionChanged(score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
+    Transpose::transpositionChanged(score1, part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1),
+                                    Fraction(16, 4));
     score1->update();
     score1->doLayout();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, u"preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, u"preferSharpFlat-1-test.mscx",
+                                            KEYSIG_DATA_DIR + u"preferSharpFlat-1-ref.mscx"));
     delete score1;
 
     MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + u"preferSharpFlat-2.mscx");
@@ -159,7 +163,8 @@ TEST_F(Engraving_KeySigTests, preferSharpFlat)
     // transpose augmented unison up
     Transpose::transpose(score2, TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
     score2->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, u"preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + u"preferSharpFlat-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, u"preferSharpFlat-2-test.mscx",
+                                            KEYSIG_DATA_DIR + u"preferSharpFlat-2-ref.mscx"));
     delete score2;
 }
 

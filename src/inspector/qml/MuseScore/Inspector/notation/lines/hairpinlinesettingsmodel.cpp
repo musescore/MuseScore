@@ -91,7 +91,8 @@ void HairpinLineSettingsModel::resetProperties()
 
 void HairpinLineSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [this](const mu::engraving::EngravingItem* element) -> bool {
+    m_elementList
+        = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [this](const mu::engraving::EngravingItem* element) -> bool {
         const mu::engraving::Hairpin* hairpin = mu::engraving::toHairpin(
             element);
 

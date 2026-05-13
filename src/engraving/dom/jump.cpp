@@ -67,7 +67,8 @@ const std::vector<JumpTypeTableItem> jumpTypeTable {
 //---------------------------------------------------------
 
 Jump::Jump(Measure* parent)
-    : TextBase(ElementType::JUMP, parent, TextStyleType::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::JUMP, parent, TextStyleType::REPEAT_RIGHT,
+               ElementFlag::MOVABLE | ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&jumpStyle);
     m_playRepeats = false;

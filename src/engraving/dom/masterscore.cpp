@@ -95,7 +95,8 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     metaTags().insert({ u"creationDate", muse::Date::currentDate().toString(muse::DateFormat::ISODate) });
 }
 
-MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle& s, std::weak_ptr<engraving::EngravingProject> project)
+MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle& s,
+                         std::weak_ptr<engraving::EngravingProject> project)
     : MasterScore{iocCtx, project}
 {
     setStyle(s);
@@ -357,7 +358,8 @@ void MasterScore::setLayout(const Fraction& t, staff_idx_t staff, const Engravin
     }
 }
 
-void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
+void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2,
+                            const EngravingItem* e)
 {
     if (tick1 >= Fraction(0, 1)) {
         m_cmdState.setTick(tick1);

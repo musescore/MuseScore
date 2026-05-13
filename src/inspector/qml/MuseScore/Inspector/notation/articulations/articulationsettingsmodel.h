@@ -36,7 +36,8 @@ class ArticulationSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(bool isPlacementAvailable READ isPlacementAvailable NOTIFY isPlacementAvailableChanged FINAL)
 
 public:
-    explicit ArticulationSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+    explicit ArticulationSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository,
                                        InspectorModelType type = InspectorModelType::TYPE_ARTICULATION);
 
     PropertyItem* placement() const;

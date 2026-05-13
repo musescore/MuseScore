@@ -37,7 +37,8 @@ muse::async::Promise<PartInstrumentListScoreOrder> SelectInstrumentsScenario::se
     return selectInstruments(params);
 }
 
-muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
+muse::async::Promise<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey)
+const
 {
     ValMap params {
         { "canSelectMultipleInstruments", Val(false) },

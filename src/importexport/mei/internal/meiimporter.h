@@ -187,8 +187,8 @@ private:
     int getVoiceIndex(int staffIdx, int layerN);
     void addLog(const std::string& msg, pugi::xml_node node);
     bool isNode(pugi::xml_node node, const muse::String& name);
-    engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track, const libmei::Element& meiElement,
-                                       engraving::Fraction& ticks, bool isRest);
+    engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track,
+                                       const libmei::Element& meiElement, engraving::Fraction& ticks, bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);

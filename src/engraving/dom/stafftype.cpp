@@ -84,7 +84,8 @@ StaffType::StaffType()
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
-                     bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines, bool invisible,
+                     bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines,
+                     bool invisible,
                      const Color& color)
     : m_group(sg), m_xmlName(xml), m_staffTypeName(name),
     m_invisible(invisible),

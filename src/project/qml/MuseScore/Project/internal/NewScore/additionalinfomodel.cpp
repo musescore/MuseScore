@@ -47,7 +47,8 @@ static const QString MAX_KEY("max");
 
 using MusicalSymbolCode = MusicalSymbolCodes::Code;
 
-AdditionalInfoModel::KeySignature::KeySignature(const QString& titleMajor, const QString& titleMinor, IconCode::Code icon, Key key)
+AdditionalInfoModel::KeySignature::KeySignature(const QString& titleMajor, const QString& titleMinor, IconCode::Code icon,
+                                                Key key)
     : titleMajor(titleMajor), titleMinor(titleMinor), icon(icon), key(key)
 {
 }

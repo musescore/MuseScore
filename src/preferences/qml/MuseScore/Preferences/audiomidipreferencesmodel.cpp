@@ -272,7 +272,8 @@ void AudioMidiPreferencesModel::setAutoProcessOnlineSoundsInBackground(bool valu
     audioConfiguration()->setAutoProcessOnlineSoundsInBackground(value);
 
     if (!value) {
-        if (playbackConfiguration()->onlineSoundsShowProgressBarMode() == playback::OnlineSoundsShowProgressBarMode::DuringPlayback) {
+        if (playbackConfiguration()->onlineSoundsShowProgressBarMode()
+            == playback::OnlineSoundsShowProgressBarMode::DuringPlayback) {
             playbackConfiguration()->setOnlineSoundsShowProgressBarMode(playback::OnlineSoundsShowProgressBarMode::Always);
         }
     }

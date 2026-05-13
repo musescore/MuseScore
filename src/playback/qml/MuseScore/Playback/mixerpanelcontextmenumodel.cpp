@@ -135,12 +135,14 @@ void MixerPanelContextMenuModel::load()
         emit auxSendsSectionVisibleChanged();
     });
 
-    configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t auxChannelIndex, bool newVisibilityValue) {
+    configuration()->isAuxChannelVisibleChanged().onReceive(this,
+                                                            [this](aux_channel_idx_t auxChannelIndex, bool newVisibilityValue) {
         setViewMenuItemChecked(auxChannelVisibleMenuItemId(auxChannelIndex), newVisibilityValue);
     });
 
     configuration()->isMixerSectionVisibleChanged().onReceive(this, [this](MixerSectionType sectionType, bool newVisibilityValue) {
-        setViewMenuItemChecked(QString::number(static_cast<int>(sectionType)), newVisibilityValue);
+        setViewMenuItemChecked(QString::number(
+                                   static_cast<int>(sectionType)), newVisibilityValue);
 
         emitMixerSectionVisibilityChanged(sectionType);
     });

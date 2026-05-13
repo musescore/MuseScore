@@ -315,7 +315,8 @@ void GuitarBendLayout::avoidBadStaffLineIntersection(GuitarBendSegment* item, Po
     }
 }
 
-void GuitarBendLayout::adjustX(GuitarBendSegment* item, PointF& startPos, PointF& endPos, const Note* startNote, const Note* endNote)
+void GuitarBendLayout::adjustX(GuitarBendSegment* item, PointF& startPos, PointF& endPos, const Note* startNote,
+                               const Note* endNote)
 {
     GuitarBend* bend = item->guitarBend();
     GuitarBend::LayoutData* layoutData = bend->mutldata();
@@ -470,7 +471,8 @@ void GuitarBendLayout::layoutBendTabStaff(GuitarBendSegment* item, LayoutContext
     double spatium = bend->spatium();
     const MStyle& style = item->style();
     const double verticalPad = 0.25 * spatium;
-    const double distAboveTab = style.styleD(Sid::guitarBendHeightAboveTABStaff) * spatium * item->staff()->lineDistance(item->tick());
+    const double distAboveTab = style.styleD(Sid::guitarBendHeightAboveTABStaff) * spatium * item->staff()->lineDistance(
+        item->tick());
     const double arrowWidth = style.styleAbsolute(Sid::guitarBendArrowWidth);
     const double arrowHeight = style.styleAbsolute(Sid::guitarBendArrowHeight);
     const double lineWidth = item->lineWidth();
@@ -631,7 +633,8 @@ PointF GuitarBendLayout::computeStartPos(GuitarBendSegment* item, Note* startNot
     return startPos;
 }
 
-PointF GuitarBendLayout::computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad, double arrowHeight,
+PointF GuitarBendLayout::computeEndPos(GuitarBendSegment* item, Note* endNote, double distAboveTab, double verticalPad,
+                                       double arrowHeight,
                                        double arrowWidth, const PointF& startPos, const PointF& prevEndPoint)
 {
     GuitarBend* bend = item->guitarBend();
@@ -723,7 +726,8 @@ void GuitarBendLayout::layoutHoldLine(GuitarBendHoldSegment* item)
     item->setEndBendSeg(endBendSegment);
 
     if (item->isSingleBeginType()) {
-        startPos = startBendSegment->pos() + (startBend->isDive() ? startBendSegment->pos2() : startBendSegment->ldata()->arrow().front());
+        startPos = startBendSegment->pos()
+                   + (startBend->isDive() ? startBendSegment->pos2() : startBendSegment->ldata()->arrow().front());
         if (!startBend->isDive()) {
             double gap = item->dashLength() * lineWidth;
             startPos += PointF(gap, (startBend->isReleaseBend() ? -0.5 : +0.5) * lineWidth);

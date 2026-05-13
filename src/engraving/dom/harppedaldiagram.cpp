@@ -307,7 +307,8 @@ PropertyValue HarpPedalDiagram::propertyDefault(Pid id) const
 
 String HarpPedalDiagram::accessibleInfo() const
 {
-    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
+    String rez
+        = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
     String s;
 
     for (size_t idx = 0; idx < m_pedalState.size(); idx++) {
@@ -336,7 +337,8 @@ String HarpPedalDiagram::accessibleInfo() const
 
 String HarpPedalDiagram::screenReaderInfo() const
 {
-    String rez = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
+    String rez
+        = score() ? score()->getTextStyleUserName(textStyleType()).translated() : TConv::translatedUserName(textStyleType());
     String s;
 
     for (size_t idx = 0; idx < m_pedalState.size(); idx++) {

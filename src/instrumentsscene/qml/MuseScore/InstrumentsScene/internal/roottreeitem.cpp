@@ -87,7 +87,8 @@ void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
 
     if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
         auto systemObjectsLayerItem = dynamic_cast<SystemObjectsLayerTreeItem*>(childAtId(params.objectIdListToMove.front(),
-                                                                                          LayoutPanelItemType::SYSTEM_OBJECTS_LAYER));
+                                                                                          LayoutPanelItemType::
+                                                                                          SYSTEM_OBJECTS_LAYER));
 
         const Staff* dstStaff = notation()->parts()->staff(params.destinationObjectId);
 

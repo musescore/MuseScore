@@ -301,7 +301,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 }
 
-void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
+void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType,
+                         int frag)
 {
     TRACEFUNC;
 
@@ -850,7 +851,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     const bool up = beam->up();
     const BeamMode restBeamMode = rest->beamMode();
     const bool firstRest = beam->elements().front() == rest
-                           && (restBeamMode == BeamMode::BEGIN || restBeamMode == BeamMode::BEGIN16 || restBeamMode == BeamMode::BEGIN32
+                           && (restBeamMode == BeamMode::BEGIN || restBeamMode == BeamMode::BEGIN16
+                               || restBeamMode == BeamMode::BEGIN32
                                || restBeamMode == BeamMode::MID);
 
     double restToBeamPadding;
@@ -1288,7 +1290,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                 double grow = item->growLeft();
                 if (!muse::RealIsEqual(item->growLeft(), item->growRight())) {
                     double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
-                    double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+                    double proportionAlongX = (anchorX - item->startAnchor().x())
+                                              / (item->endAnchor().x() - item->startAnchor().x());
                     grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
                 }
 
@@ -1300,7 +1303,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                                                                                          /*frenchStyleBeams*/ false,
                                                                                          level, beamsAbove, beamsBelow);
                     chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2 + _up * grow
-                                                                * (bboxStemLengthAdjustmentSteps - visualStemLengthAdjustmentSteps)
+                                                                * (bboxStemLengthAdjustmentSteps
+                                                                   - visualStemLengthAdjustmentSteps)
                                                                 * item->beamDist();
                 }
                 BeamTremoloLayout::extendStem(item->ldata(), chord, visualStemLengthAdjustment);

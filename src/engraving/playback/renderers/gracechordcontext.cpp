@@ -106,7 +106,8 @@ GraceChordCtx GraceChordCtx::buildCtx(const Chord* chord, const mpe::Articulatio
     const duration_t availableGraceNotesDuration = graceNotesMaxAvailableDuration(type, ctx, graceChords.size());
     const duration_t accumulatedGraceNotesDuration = graceNotesTotalDuration(graceChords, ctx.beatsPerSecond);
     const duration_t actualGraceNotesDuration = std::min(availableGraceNotesDuration, accumulatedGraceNotesDuration);
-    const timestamp_t principalChordTimestamp = principalNotesStartTimestamp(type, actualGraceNotesDuration, ctx.nominalTimestamp);
+    const timestamp_t principalChordTimestamp
+        = principalNotesStartTimestamp(type, actualGraceNotesDuration, ctx.nominalTimestamp);
     const duration_t principalChordDuration = ctx.nominalDuration - actualGraceNotesDuration;
 
     GraceChordCtx result { buildGraceRenderingCtx(ctx, principalChordTimestamp, principalChordDuration), {} };

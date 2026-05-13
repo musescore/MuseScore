@@ -91,7 +91,8 @@ private:
     bool isMuseSamplerModuleAdded() const;
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
-    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
+    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode,
+                                               muse::uicomponents::MenuItemRole role);
 
     muse::uicomponents::MenuItem* makeFileMenu();
     muse::uicomponents::MenuItemList makeSaveOtherSubItems();

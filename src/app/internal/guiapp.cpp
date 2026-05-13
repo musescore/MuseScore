@@ -105,7 +105,8 @@ void MuseScoreGuiApp::doStartupScenario(const muse::modularity::ContextPtr& ctxI
     auto startupScenario = muse::modularity::ioc(ctxId)->resolve<IStartupScenario>("app");
 
     //! NOTE Apply startup options
-    const std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(contextData(ctxId).options);
+    const std::shared_ptr<MuseScoreCmdOptions> options
+        = std::dynamic_pointer_cast<MuseScoreCmdOptions>(contextData(ctxId).options);
     IF_ASSERT_FAILED(options) {
         return;
     }

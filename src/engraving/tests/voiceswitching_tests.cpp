@@ -57,7 +57,8 @@ TEST_F(Engraving_VoiceSwitchingTests, voiceSwitching)
         ChordRest* destinationCR = nullptr;
 
         // Setup: Find the startCR (HEAD_PLUS) and destinationCR (HEAD_CROSS) for each measure...
-        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment;
+             segment = segment->next(SegmentType::ChordRest)) {
             for (track_idx_t track = 0; track < 2; ++track) { // Search both voices...
                 mu::engraving::EngravingItem* element = segment->element(track);
                 if (!element || !element->isChord()) {

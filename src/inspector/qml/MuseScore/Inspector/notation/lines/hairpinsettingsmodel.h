@@ -38,7 +38,8 @@ class HairpinSettingsModel : public HairpinLineSettingsModel
     Q_PROPERTY(mu::inspector::PropertyItem * continuousHeight READ continuousHeight CONSTANT)
 
 public:
-    explicit HairpinSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit HairpinSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                  IElementRepositoryService* repository);
 
     PropertyItem* isNienteCircleVisible() const;
 

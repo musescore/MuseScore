@@ -122,7 +122,8 @@ TEST_F(Engraving_ClefCourtesyTests, clef_courtesy01)
 
     clefCourt = toClef(seg->element(0));
     EXPECT_TRUE(clefCourt) << "No courtesy clef element in measure 3.";
-    EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(), 0.) << "Courtesy clef in measure 3 is not hidden when showCourtesy is false.";
+    EXPECT_DOUBLE_EQ(clefCourt->ldata()->bbox().width(),
+                     0.) << "Courtesy clef in measure 3 is not hidden when showCourtesy is false.";
 
     EXPECT_EQ(clef->clefType(), ClefType::G8_VA) << "Clef type in measure 4 is wrong";
     dropClef(clef, ClefType::G15_MA);

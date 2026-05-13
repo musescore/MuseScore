@@ -127,7 +127,8 @@ public:
 
     void setLayoutAll(staff_idx_t staff = muse::nidx, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2,
+                   const EngravingItem* e = nullptr);
 
     CmdState& cmdState() override { return m_cmdState; }
     const CmdState& cmdState() const override { return m_cmdState; }
@@ -180,7 +181,8 @@ public:
 
     MasterScore* unrollRepeats();
 
-    MeasureBase* insertMeasure(MeasureBase* beforeMeasure = nullptr, const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertMeasure(MeasureBase* beforeMeasure = nullptr,
+                               const InsertMeasureOptions& options = InsertMeasureOptions());
 
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
@@ -207,7 +209,8 @@ private:
     friend class read114::Read114;
     friend class read400::Read400;
 
-    MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
+    MasterScore(const muse::modularity::ContextPtr& iocCtx,
+                std::weak_ptr<EngravingProject> project = std::weak_ptr<EngravingProject>());
     MasterScore(const muse::modularity::ContextPtr& iocCtx, const MStyle&,
                 std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
 

@@ -133,7 +133,8 @@ bool MeiImporter::read(const muse::io::path_t& path)
 
     pugi::xml_attribute meiVersion = root.attribute("meiversion");
     if (!meiVersion || String(meiVersion.value()) != String(MEI_BASIC_VERSION)) {
-        Convert::logs.push_back(String("The MEI file does not seem to be a MEI Basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
+        Convert::logs.push_back(String("The MEI file does not seem to be a MEI Basic version '%1' file").arg(String(
+                                                                                                                 MEI_BASIC_VERSION)));
     }
 
     bool success = true;
@@ -239,7 +240,8 @@ int MeiImporter::getVoiceIndex(int staffIdx, int layerN)
  * When reading tuplet, increase the ticks value to the corrected ratio, and not at all when reading grace notes.
  */
 
-ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int track, const libmei::Element& meiElement, Fraction& ticks,
+ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int track, const libmei::Element& meiElement,
+                                     Fraction& ticks,
                                      bool isRest)
 {
     IF_ASSERT_FAILED(measure) {
@@ -652,7 +654,8 @@ ControlElementPosition MeiImporter::findStart(const libmei::Element& meiElement,
         Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
         const int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
             staffIdentAtt->GetStaff().at(0)) : 0;
-        const int layer = (layerIdentAtt && layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
+        const int layer
+            = (layerIdentAtt && layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
 
         pos.measure = measure;
         pos.tick = measure->tick() + tstampFraction;
@@ -679,7 +682,8 @@ ControlElementPosition MeiImporter::findEnd(pugi::xml_node controlNode, Spanner*
         std::string endId = this->xmlIdFrom(startEndIdAtt.GetEndid());
         // The @endid corresponding ChordRest should have been added to the m_endIdChordRests previously
         if (!m_endIdChordRests.count(endId) || !m_endIdChordRests.at(endId)) {
-            Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
+            Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.
+                                                                                                               GetEndid())));
             return pos;
         }
         pos.chordRest = m_endIdChordRests.at(endId);
@@ -749,7 +753,8 @@ Note* MeiImporter::findStartNote(const libmei::Element& meiElement)
     std::string startId = this->xmlIdFrom(startIdAtt->GetStartid());
     // The startid corresponding Note should have been added to the m_startIdNotes previously
     if (!m_startIdNotes.count(startId) || !m_startIdNotes.at(startId)) {
-        Convert::logs.push_back(String("Could not find note for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
+        Convert::logs.push_back(String("Could not find note for @startid '%1'").arg(String::fromStdString(
+                                                                                        startIdAtt->GetStartid())));
         return nullptr;
     }
     return m_startIdNotes.at(startId);
@@ -1258,7 +1263,8 @@ bool MeiImporter::readStaffDefs(pugi::xml_node parentNode)
         // try to import MEI from other applications
         pugi::xml_node meterSigNode = staffDefXpathNode.node().select_node(".//meterSig").node();
         if (meterSigNode) {
-            meiStaffDef.SetMeterCount(meiStaffDef.AttMeterSigDefaultLog::StrToMetercountPair(meterSigNode.attribute("count").value()));
+            meiStaffDef.SetMeterCount(meiStaffDef.AttMeterSigDefaultLog::StrToMetercountPair(meterSigNode.attribute(
+                                                                                                 "count").value()));
             meiStaffDef.SetMeterUnit(meterSigNode.attribute("unit").as_int());
             meiStaffDef.SetMeterSym(meiStaffDef.AttMeterSigDefaultLog::StrToMetersign(meterSigNode.attribute("sym").value()));
         }
@@ -1628,7 +1634,8 @@ bool MeiImporter::readLayers(pugi::xml_node parentNode, Measure* measure, int st
     for (pugi::xpath_node xpathNode : layers) {
         // We cannot have more than 4 voices in MuseScore
         if (i >= VOICES) {
-            Convert::logs.push_back(String("More than %1 layers in a staff in not supported. Their content will not be imported.").arg(
+            Convert::logs.push_back(String(
+                                        "More than %1 layers in a staff in not supported. Their content will not be imported.").arg(
                                         VOICES));
             break;
         }
@@ -1758,7 +1765,8 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Note* note)
     ChordLine* chordLine = nullptr;
 
     if (meiArtic.HasArtic()
-        && (meiArtic.GetArtic().at(0) >= libmei::ARTICULATION_doit && meiArtic.GetArtic().at(0) < libmei::ARTICULATION_longfall)) {
+        && (meiArtic.GetArtic().at(0) >= libmei::ARTICULATION_doit
+            && meiArtic.GetArtic().at(0) < libmei::ARTICULATION_longfall)) {
         chordLine = Factory::createChordLine(chord);
     }
 
@@ -2340,7 +2348,8 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
 
     lyrics->setXmlText(syllable);
     lyrics->setVerse(no);
-    lyrics->initTextStyleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
+    lyrics->initTextStyleType(
+        lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
     lyrics->setTrack(chord->track());
     chord->add(lyrics);
 
@@ -2664,7 +2673,8 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
             fermata = Factory::createFermata(segment);
             this->readXmlId(fermata, meiFermata.m_xmlId);
             const int staffIdx
-                = (meiFermata.HasStaff() && meiFermata.GetStaff().size() > 0) ? this->getStaffIndex(meiFermata.GetStaff().at(0)) : 0;
+                = (meiFermata.HasStaff()
+                   && meiFermata.GetStaff().size() > 0) ? this->getStaffIndex(meiFermata.GetStaff().at(0)) : 0;
             fermata->setTrack(staffIdx * VOICES);
             segment->add(fermata);
         }

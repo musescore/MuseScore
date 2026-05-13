@@ -84,8 +84,9 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
-    PreferencePageItem* makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE,
-                                 const QString& path = "", const QList<PreferencePageItem*>& children = {}) const;
+    PreferencePageItem* makeItem(const QString& id, const QString& title,
+                                 muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE, const QString& path = "",
+                                 const QList<PreferencePageItem*>& children = {}) const;
 
     PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;
 

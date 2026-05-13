@@ -103,7 +103,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::POSITION)) {
-            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables) && !(item->separator() && item->separator()->isEndMelisma())) {
+            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables)
+                && !(item->separator() && item->separator()->isEndMelisma())) {
                 item->setPosition(AlignH::HCENTER);
             } else {
                 item->setPosition(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>().horizontal);
@@ -662,7 +663,8 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const Lyr
         const LyricsVerse& lyricsVerse = lyricsVerses.at(verse);
         for (Lyrics* lyrics : lyricsVerse.lyrics()) {
             if (lyrics->addToSkyline()) {
-                Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX, lyrics->yRelativeToStaff()));
+                Shape lyricsShape = lyrics->highResShape().translated(PointF(lyrics->pageX() - systemX,
+                                                                             lyrics->yRelativeToStaff()));
                 lyricsSkyline.add(lyricsShape);
             }
         }
@@ -676,7 +678,8 @@ SkylineLine LyricsLayout::createSkylineForVerse(int verse, bool north, const Lyr
     return lyricsSkyline;
 }
 
-void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff, const LyricsVersesMap& lyricsVerses)
+void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool above, double diff,
+                                             const LyricsVersesMap& lyricsVerses)
 {
     auto moveVerse = [&](int verse) {
         if (lyricsVerses.count(verse) > 0) {
@@ -701,7 +704,8 @@ void LyricsLayout::moveThisVerseAndOuterOnes(int verse, int lastVerse, bool abov
     }
 }
 
-void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx, const LyricsVersesMap& lyricsVersesAbove,
+void LyricsLayout::addToSkyline(System* system, staff_idx_t staffIdx, LayoutContext& ctx,
+                                const LyricsVersesMap& lyricsVersesAbove,
                                 const LyricsVersesMap& lyricsVersesBelow)
 {
     double systemX = system->pageX();
@@ -751,7 +755,8 @@ double LyricsLayout::lyricsLineStartX(const LyricsLineSegment* item)
     const MStyle& style = item->style();
     const bool melisma = lyricsLine->isEndMelisma();
 
-    const LyricsDashSystemStart lyricsDashSystemStart = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
+    const LyricsDashSystemStart lyricsDashSystemStart
+        = style.styleV(Sid::lyricsDashPosAtStartOfSystem).value<LyricsDashSystemStart>();
     const bool leading = melisma || (lyricsDashSystemStart != LyricsDashSystemStart::UNDER_FIRST_NOTE);
 
     // Full melisma or dashes at beginning of system

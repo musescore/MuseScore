@@ -108,7 +108,8 @@ void AccidentalsLayout::layoutAccidentals(const std::vector<Chord*>& chords, Lay
 }
 
 void AccidentalsLayout::collectAccidentals(const std::vector<Chord*> chords, std::vector<Accidental*>& allAccidentals,
-                                           std::vector<Accidental*>& redundantAccidentals, std::vector<Accidental*>& invisibleAccidentals)
+                                           std::vector<Accidental*>& redundantAccidentals,
+                                           std::vector<Accidental*>& invisibleAccidentals)
 {
     for (const Chord* chord : chords) {
         for (const Note* note : chord->notes()) {
@@ -384,7 +385,8 @@ AccidentalGroups AccidentalsLayout::splitAccordingToAccidDisplacement(std::vecto
     return subGroups;
 }
 
-AccidentalGroups AccidentalsLayout::groupAccidentalsByXPos(std::vector<Accidental*>& accidentals, const AccidentalsLayoutContext& ctx)
+AccidentalGroups AccidentalsLayout::groupAccidentalsByXPos(std::vector<Accidental*>& accidentals,
+                                                           const AccidentalsLayoutContext& ctx)
 {
     std::map<double, std::vector<Accidental*> > groupsOfEqualX;
 
@@ -683,7 +685,8 @@ void AccidentalsLayout::findAndInsertSecond(Accidental* acc, std::vector<Acciden
 }
 
 bool AccidentalsLayout::findAndInsertOctave(Accidental* acc, std::vector<Accidental*>& accidentalsPlaced,
-                                            AccidentalsVectorView& accidentalsToPlace, AccidentalsLayoutContext& ctx, bool acceptAbove,
+                                            AccidentalsVectorView& accidentalsToPlace, AccidentalsLayoutContext& ctx,
+                                            bool acceptAbove,
                                             bool acceptBelow)
 {
     bool foundOctave = false;
@@ -742,7 +745,8 @@ void AccidentalsLayout::applyOrderingOffsets(std::vector<Accidental*>& accidenta
     });
 }
 
-double AccidentalsLayout::minAccidentalToChordDistance(Accidental* acc, const Shape& accShape, const AccidentalsLayoutContext& ctx)
+double AccidentalsLayout::minAccidentalToChordDistance(Accidental* acc, const Shape& accShape,
+                                                       const AccidentalsLayoutContext& ctx)
 {
     double dist = -DBL_MAX;
     for (const ShapeElement& accidentalElement : accShape.elements()) {
@@ -840,7 +844,8 @@ double AccidentalsLayout::minAccidentalToAccidentalGroupDistance(Accidental* acc
             // If the tolerance for detecting intersections is the same as the padding,
             // we may randomly detect wrong intersections just because of rounding errors
             double horPaddingWithTolerance = 0.999 * horPadding;
-            if (accShape.intersects(groupElement.adjusted(-horPaddingWithTolerance, -vertPadding, horPaddingWithTolerance, vertPadding))) {
+            if (accShape.intersects(groupElement.adjusted(-horPaddingWithTolerance, -vertPadding, horPaddingWithTolerance,
+                                                          vertPadding))) {
                 collisionFound = true;
             } else {
                 continue;
@@ -1042,7 +1047,8 @@ void AccidentalsLayout::collectVerticalSets(
             int column2 = acc2->ldata()->column;
             int verticalSub2 = acc2->ldata()->verticalSubgroup;
             double x2 = xPosRelativeToSegment(acc2);
-            bool alignAccidentals = column1 == column2 && verticalSub1 == verticalSub2 && abs(x1 - x2) < ctx.xVerticalAlignmentThreshold();
+            bool alignAccidentals = column1 == column2 && verticalSub1 == verticalSub2
+                                    && abs(x1 - x2) < ctx.xVerticalAlignmentThreshold();
             if (alignAccidentals) {
                 std::vector<Accidental*>& verticalSet = verticalSets[acc1];
                 if (verticalSet.empty()) {

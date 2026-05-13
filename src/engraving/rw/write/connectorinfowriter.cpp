@@ -100,7 +100,8 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* sp, int track, Fraction frac,
+SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* sp, int track,
+                             Fraction frac,
                              bool start)
     : ConnectorInfoWriter(xml, ctx, current, sp, track, frac)
 {

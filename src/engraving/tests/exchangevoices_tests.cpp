@@ -59,7 +59,8 @@ TEST_F(Engraving_ExchangevoicesTests, slurs)
     score->endCmd();
 
     // compare
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-slurs-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-slurs.mscx",
+                                            EXCHVOICES_DATA_DIR + u"exchangevoices-slurs-ref.mscx"));
 }
 
 TEST_F(Engraving_ExchangevoicesTests, glissandi)
@@ -79,7 +80,8 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
     score->endCmd();
 
     // compare
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"exchangevoices-gliss.mscx",
+                                            EXCHVOICES_DATA_DIR + u"exchangevoices-gliss-ref.mscx"));
 }
 
 TEST_F(Engraving_ExchangevoicesTests, rangeSelection)

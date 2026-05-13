@@ -508,7 +508,8 @@ void NotationBraille::setKeys(const QString& sequence)
             }
 
             if (prevChord) {
-                Note* rootNote = (currentIntervalDirection() == IntervalDirection::Up) ? prevChord->downNote() : prevChord->upNote();
+                Note* rootNote
+                    = (currentIntervalDirection() == IntervalDirection::Up) ? prevChord->downNote() : prevChord->upNote();
                 String pitchName;
                 String accidental; // needed for tpc2name
                 tpc2name(rootNote->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, pitchName, accidental);

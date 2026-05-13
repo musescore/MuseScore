@@ -90,7 +90,8 @@ public:
 
 private:
     PitchMap getIntervals(int rootTpc, bool literal = true) const;
-    PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, size_t max = 128, bool enforceMaxAsGoal = false) const;
+    PitchMap normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, size_t max = 128,
+                              bool enforceMaxAsGoal = false) const;
     void cascadeDirty(bool dirty);
 
     Harmony* m_harmony = nullptr;

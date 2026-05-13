@@ -42,7 +42,8 @@ public:
 
 private:
 
-    static void undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true, bool generated = false);
+    static void undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes, bool addToLinked = true,
+                                          bool generated = false);
     static void undoRemoveParenthesesFromNote(Chord* chord, Note* note, Parenthesis* leftParen, bool removeFromLinked = true);
     static void undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes, Parenthesis* leftParen, Parenthesis* rightParen,
                                           bool removeFromLinked = true);

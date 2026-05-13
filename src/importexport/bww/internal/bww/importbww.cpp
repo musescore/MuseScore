@@ -136,8 +136,8 @@ public:
     void beginMeasure(const Bww::MeasureBeginFlags mbf);
     void endMeasure(const Bww::MeasureEndFlags mef);
     void header(const QString title, const QString type, const QString composer, const QString footer, const unsigned int temp);
-    void note(const QString pitch, const QVector<Bww::BeamType> beamList, const QString type, const int dots, bool tieStart = false,
-              bool tieStop = false, StartStop triplet = StartStop::ST_NONE, bool grace = false);
+    void note(const QString pitch, const QVector<Bww::BeamType> beamList, const QString type, const int dots,
+              bool tieStart = false, bool tieStop = false, StartStop triplet = StartStop::ST_NONE, bool grace = false);
     void setScore(mu::engraving::Score* s) { score = s; }
     void tsig(const int beats, const int beat);
     void trailer();

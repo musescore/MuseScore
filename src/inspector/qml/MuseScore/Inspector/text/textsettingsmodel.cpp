@@ -37,7 +37,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-TextSettingsModel::TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+TextSettingsModel::TextSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setSectionType(InspectorSectionType::SECTION_TEXT);
@@ -61,14 +62,16 @@ void TextSettingsModel::createProperties()
     m_fontSize = buildPropertyItem(Pid::FONT_SIZE);
     m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
-    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_horizontalAlignment
+        = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
         emit requestReloadPropertyItems();
     });
 
-    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_verticalAlignment
+        = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
     }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
         updateStyleValue(sid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
@@ -88,7 +91,8 @@ void TextSettingsModel::createProperties()
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        onPropertyValueChanged(pid,
+                               newValue);
 
         updateFramePropertiesAvailability();
     });
@@ -100,7 +104,8 @@ void TextSettingsModel::createProperties()
     m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
 
     m_textType = buildPropertyItem(mu::engraving::Pid::TEXT_STYLE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        onPropertyValueChanged(pid,
+                               newValue);
         emit requestReloadPropertyItems();
     });
     m_textPlacement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);

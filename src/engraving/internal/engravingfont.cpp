@@ -668,7 +668,8 @@ void EngravingFont::loadStylisticAlternates(const JsonObject& glyphsWithAlternat
     bool ok;
     for (const GlyphWithAlternates& glyph : GLYPHS_WITH_ALTERNATES) {
         if (glyphsWithAlternatesObject.contains(glyph.key)) {
-            const JsonArray alternatesArray = glyphsWithAlternatesObject.value(glyph.key).toObject().value("alternates").toArray();
+            const JsonArray alternatesArray
+                = glyphsWithAlternatesObject.value(glyph.key).toObject().value("alternates").toArray();
 
             JsonValue val;
             for (size_t i = 0; i < alternatesArray.size(); ++i) {
@@ -1145,7 +1146,8 @@ void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, con
     }
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos, const double angle) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos,
+                         const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {

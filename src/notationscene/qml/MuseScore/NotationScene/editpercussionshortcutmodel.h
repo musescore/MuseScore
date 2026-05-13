@@ -46,7 +46,8 @@ class EditPercussionShortcutModel : public QObject, public muse::Contextable
 public:
     explicit EditPercussionShortcutModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(const QVariant& originDrum, const QVariantList& drumsWithShortcut, const QVariantList& applicationShortcuts);
+    Q_INVOKABLE void load(const QVariant& originDrum, const QVariantList& drumsWithShortcut,
+                          const QVariantList& applicationShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key);
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool trySave();

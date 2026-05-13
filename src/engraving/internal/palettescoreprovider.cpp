@@ -62,7 +62,8 @@ void PaletteScoreProvider::init()
     IEngravingFontPtr scoreFont = engravingfonts()->fontByName("Leland");
     m_paletteScore->setEngravingFont(scoreFont);
     m_paletteScore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack,
-                                                      m_paletteScore->style().spatium()) / m_paletteScore->style().defaultSpatium());
+                                                      m_paletteScore->style().spatium())
+                                     / m_paletteScore->style().defaultSpatium());
 }
 
 void PaletteScoreProvider::deinit()

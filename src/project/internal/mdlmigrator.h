@@ -48,8 +48,8 @@ public:
 
 private:
     bool loadDrumset(mu::engraving::Drumset* drumset, muse::io::path_t path);
-    void remapPitches(mu::engraving::track_idx_t startTrack, mu::engraving::track_idx_t endTrack, mu::engraving::Fraction startTick,
-                      mu::engraving::Fraction endTick, const RepitchFunc& repitch);
+    void remapPitches(mu::engraving::track_idx_t startTrack, mu::engraving::track_idx_t endTrack,
+                      mu::engraving::Fraction startTick, mu::engraving::Fraction endTick, const RepitchFunc& repitch);
     bool needToRemap(const mu::engraving::Instrument& instr, RepitchFunc& repitch, muse::io::path_t& drumsetPath);
 
     // Repitch functions

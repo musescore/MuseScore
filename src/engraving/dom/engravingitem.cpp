@@ -578,7 +578,8 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
         }
     }
 
-    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show() && !cutawayMeasureNo(originalStaffIdx)) {
+    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show()
+        && !cutawayMeasureNo(originalStaffIdx)) {
         return originalStaffIdx;
     }
 
@@ -1124,7 +1125,8 @@ void EngravingItem::remove(EngravingItem* e)
         break;
     }
     default:
-        ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()), String::fromAscii(typeName())));
+        ASSERT_X(String(u"EngravingItem: cannot remove %1 from %2").arg(String::fromAscii(e->typeName()),
+                                                                        String::fromAscii(typeName())));
     }
 }
 
@@ -1298,7 +1300,8 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
             return explicitParent()->setProperty(propertyId, v);
         }
 
-        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.value<String>();
+        LOG_PROP() << typeName() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " <<
+            v.value<String>();
         return false;
     }
     triggerLayout();
@@ -1405,7 +1408,8 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
         newPlacement = isOnLastStaffOfInstrument ? PlacementV::ABOVE : PlacementV::BELOW;
     } else {
         VoiceAssignment voiceAssignment = getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
-        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
+        if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT
+            || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
             if (style().styleB(Sid::dynamicsHairpinsAboveForVocalStaves) && part()->instrument()->isVocalInstrument()) {
                 newPlacement = PlacementV::ABOVE;
             } else {

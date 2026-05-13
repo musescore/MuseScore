@@ -452,7 +452,8 @@ PartialSpannerDirection Slur::calcIncomingDirection(bool incoming)
         dir = _partialSpannerDirection
               == PartialSpannerDirection::OUTGOING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::INCOMING;
     } else {
-        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
     }
     return dir;
 }
@@ -468,19 +469,22 @@ PartialSpannerDirection Slur::calcOutgoingDirection(bool outgoing)
         dir = _partialSpannerDirection
               == PartialSpannerDirection::INCOMING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::OUTGOING;
     } else {
-        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
     }
     return dir;
 }
 
 bool Slur::isIncoming() const
 {
-    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::INCOMING;
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH
+           || _partialSpannerDirection == PartialSpannerDirection::INCOMING;
 }
 
 bool Slur::isOutgoing() const
 {
-    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH
+           || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
 }
 
 void Slur::undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr)
@@ -541,7 +545,8 @@ bool Slur::isCrossStaff()
 
 bool Slur::hasCrossBeams()
 {
-    return (startCR() && startCR()->beam() && startCR()->beam()->cross()) || (endCR() && endCR()->beam() && endCR()->beam()->cross());
+    return (startCR() && startCR()->beam() && startCR()->beam()->cross())
+           || (endCR() && endCR()->beam() && endCR()->beam()->cross());
 }
 
 PropertyValue Slur::getProperty(Pid propertyId) const

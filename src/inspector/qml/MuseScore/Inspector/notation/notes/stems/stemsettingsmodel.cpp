@@ -29,7 +29,8 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-StemSettingsModel::StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+StemSettingsModel::StemSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                     IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
     setModelType(InspectorModelType::TYPE_STEM);

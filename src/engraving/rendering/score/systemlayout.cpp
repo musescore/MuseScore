@@ -171,7 +171,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
                 MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
             } else {
-                bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
+                bool createHeader = ctx.state().prevMeasure()->isHBox()
+                                    && toHBox(ctx.state().prevMeasure())->createSystemHeader();
                 if (createHeader) {
                     MeasureLayout::addSystemHeader(m, false, ctx);
                 } else if (m->header()) {
@@ -233,7 +234,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             oldSystem->clear();
         }
 
-        if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure() && ctx.state().prevMeasure()->system() == system) {
+        if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()
+            && ctx.state().prevMeasure()->system() == system) {
             Measure* m = toMeasure(ctx.mutState().prevMeasure());
 
             MeasureLayout::createEndBarLines(m, false, ctx);
@@ -449,7 +451,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
 
-    if (ctx.state().rangeDone() && oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
+    if (ctx.state().rangeDone() && oldSystem && !oldSystem->measures().empty()
+        && oldSystem->measures().front()->tick() >= system->endTick()
         && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have unfinished layouts of certain elements in the next system
         // - ties & bends (in LayoutChords::updateLineAttachPoints())
@@ -547,7 +550,8 @@ enum class StaffHideMode {
     ALWAYS_SHOW
 };
 
-static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx, const bool globalHideIfEmpty,
+static StaffHideMode computeHideMode(const System* system, const Staff* staff, const staff_idx_t staffIdx,
+                                     const bool globalHideIfEmpty,
                                      bool& hasSystemSpecificOverrides)
 {
     if (Part* part = staff->part(); part && part->isSharedPart() && staff != part->staves().front()) {
@@ -765,7 +769,8 @@ bool SystemLayout::canChangeSysStaffVisibility(const System* system, const staff
         const Fraction etick = system->last()->endTick();
         const auto& spanners = system->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
 
-        return !computeShowSysStaff(system, staff, staffIdx, system->first()->tick(), spanners, StaffHideMode::HIDE_WHEN_STAFF_EMPTY);
+        return !computeShowSysStaff(system, staff, staffIdx,
+                                    system->first()->tick(), spanners, StaffHideMode::HIDE_WHEN_STAFF_EMPTY);
     }
 
     // SysStaff is hidden; check if can show
@@ -1111,7 +1116,8 @@ void SystemLayout::layoutFretDiagrams(const ElementsToLayout& elements, System* 
             if (Harmony* harmony = fretDiag->harmony()) {
                 SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
                 Segment* s = fretDiag->segment();
-                Shape harmShape = harmony->ldata()->shape().translated(harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
+                Shape harmShape = harmony->ldata()->shape().translated(
+                    harmony->pos() + fretDiag->pos() + s->pos() + s->measure()->pos());
                 skl.add(harmShape);
             }
         }
@@ -1297,7 +1303,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (MMRestRange* mmrr : elementsToLayout.mmrRanges) {
         Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
-        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
+        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(
+                                                           mmrr->measure()->pos() + mmrr->pos()), mmrr);
     }
 
     processLines(system, ctx, elementsToLayout.ottavas);
@@ -1447,7 +1454,8 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                                         elements.guitarBends.push_back(toGuitarBend(sp));
                                     }
                                 }
-                                if (GuitarBend* bendFor = note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
+                                if (GuitarBend* bendFor
+                                        =note->bendFor(); bendFor && bendFor->bendType() == GuitarBendType::SLIGHT_BEND) {
                                     elements.guitarBends.push_back(bendFor);
                                 }
                             }
@@ -2303,7 +2311,8 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     SystemHeaderLayout::setInstrumentNamesVerticalPos(system, ctx);
 }
 
-double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx)
+double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2,
+                                                    LayoutContext& ctx)
 {
     double minSpace = -DBL_MAX;
     track_idx_t startTrack = staffIdx1 * VOICES;
@@ -2462,7 +2471,8 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     }
 
     double minVerticalDistance = conf.styleAbsolute(Sid::minVerticalDistance);
-    double dist = conf.isVerticalSpreadEnabled() ? conf.styleAbsolute(Sid::minSystemSpread) : conf.styleAbsolute(Sid::minSystemDistance);
+    double dist = conf.isVerticalSpreadEnabled() ? conf.styleAbsolute(Sid::minSystemSpread) : conf.styleAbsolute(
+        Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 
@@ -2540,7 +2550,8 @@ void SystemLayout::updateSkylineForElement(EngravingItem* element, const System*
     SkylineLine& skylineLine = isAbove ? skyline.north() : skyline.south();
     for (ShapeElement& shapeEl : skylineLine.elements()) {
         const EngravingItem* itemInSkyline = shapeEl.item();
-        if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
+        if (itemInSkyline && itemInSkyline->isText() && itemInSkyline->explicitParent()
+            && itemInSkyline->parent()->isSLineSegment()) {
             itemInSkyline = itemInSkyline->parentItem();
         }
         if (itemInSkyline == element) {
@@ -2557,7 +2568,8 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
         if (spannerSeg->isHairpinSegment() && elementShouldBeCenteredBetweenStaves(spannerSeg, system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
-        } else if (spannerSeg->isWhammyBarSegment() && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system)) {
+        } else if (spannerSeg->isWhammyBarSegment()
+                   && whammyBarShouldBeCenteredBetweenStaves(toWhammyBarSegment(spannerSeg), system)) {
             centerElementBetweenStaves(spannerSeg, system);
             centeredItems.push_back(spannerSeg);
         }
@@ -2620,8 +2632,10 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                         break;
                     }
                 }
-                double yTop = system->staff(thisStaffIdx)->y() + system->score()->staff(thisStaffIdx)->staffHeight(segment.tick());
-                double yBottom = system->staff(nextStaffIdx)->y() + system->score()->staff(nextStaffIdx)->staffHeight(segment.tick());
+                double yTop = system->staff(thisStaffIdx)->y()
+                              + system->score()->staff(thisStaffIdx)->staffHeight(segment.tick());
+                double yBottom = system->staff(nextStaffIdx)->y() + system->score()->staff(nextStaffIdx)->staffHeight(
+                    segment.tick());
                 double newYPos = 0.5 * (yBottom - yTop);
                 timeSig->mutldata()->setPosY(newYPos);
             }
@@ -2708,7 +2722,8 @@ bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment
     return wbar->placeBelow() && nextIsLinkedTab && nextSysStaff && nextSysStaff->show();
 }
 
-bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
+bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape,
+                                                   const SkylineLine& skylineLine)
 {
     double elemShapeLeft = -elementShape.left();
     double elemShapeRight = elementShape.right();
@@ -2783,10 +2798,12 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     nextSkyline.translateY(yStaffDiff);
 
     double elementMinDist = element->absoluteFromSpatium(element->minDistance());
-    double availSpaceAbove = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
-                             - elementMinDist;
-    double availSpaceBelow = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
-                             - elementMinDist;
+    double availSpaceAbove
+        = (isAbove ? nextSkyline.verticalClaranceBelow(elementShape) : thisSkyline.verticalClaranceBelow(elementShape))
+          - elementMinDist;
+    double availSpaceBelow
+        = (isAbove ? thisSkyline.verticalClearanceAbove(elementShape) : nextSkyline.verticalClearanceAbove(elementShape))
+          - elementMinDist;
 
     double yMove = 0.5 * (availSpaceBelow - availSpaceAbove);
 

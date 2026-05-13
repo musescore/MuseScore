@@ -60,8 +60,9 @@ inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu:
     }
 
     const engraving::MStyle& style = staves.front()->style();
-    bool collectMeasureNumbers = style.styleV(engraving::Sid::measureNumberPlacementMode).value<engraving::MeasureNumberPlacement>()
-                                 == engraving::MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES;
+    bool collectMeasureNumbers
+        = style.styleV(engraving::Sid::measureNumberPlacementMode).value<engraving::MeasureNumberPlacement>()
+          == engraving::MeasureNumberPlacement::ON_SYSTEM_OBJECT_STAVES;
     if (collectMeasureNumbers) {
         for (mu::engraving::Staff* staff : staves) {
             SystemObjectGroups& systemObjectGroups = result[staff];

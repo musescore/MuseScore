@@ -154,7 +154,10 @@ void NotationActionController::init()
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
     for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
-        registerAction(it.key(), [=]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
+        registerAction(it.key(), [=]() {
+            navigateToTextElementByFraction(
+                it.value());
+        }, &Controller::textNavigationByFractionAvailable);
     }
 
     registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay,
@@ -206,8 +209,10 @@ void NotationActionController::init()
 
     registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false, &Controller::isNotEditingOrHasPopup);
     registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false, &Controller::isNotEditingOrHasPopup);
-    registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
-    registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
+    registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true,
+                   &Controller::measureNavigationAvailable);
+    registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true,
+                   &Controller::measureNavigationAvailable);
     registerAction("pitch-up", &Controller::move, MoveDirection::Up, false, &Controller::isNotEditingOrHasPopup);
     registerAction("pitch-down", &Controller::move, MoveDirection::Down, false, &Controller::isNotEditingOrHasPopup);
     registerAction("pitch-up-octave", &Controller::move, MoveDirection::Up, true, &Controller::isNotEditingOrHasPopup);
@@ -336,7 +341,8 @@ void NotationActionController::init()
     registerAction("add-8va", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VA);
     registerAction("add-8vb", &Interaction::addOttavaToSelection, OttavaType::OTTAVA_8VB);
     registerAction("add-dynamic", &Interaction::toggleDynamicPopup, &Controller::noteOrRestSelected);
-    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN, &Controller::noteOrRestSelected);
+    registerAction("add-hairpin", &Interaction::addHairpinsToSelection, HairpinType::CRESC_HAIRPIN,
+                   &Controller::noteOrRestSelected);
     registerAction("add-hairpin-reverse", &Interaction::addHairpinsToSelection, HairpinType::DIM_HAIRPIN,
                    &Controller::noteOrRestSelected);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
@@ -492,9 +498,11 @@ void NotationActionController::init()
     registerAction("nat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::NATURAL, PlayMode::PlayNote);
     registerAction("flat-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT, PlayMode::PlayNote);
     registerAction("flat2-post", &Interaction::changeAccidental, mu::engraving::AccidentalType::FLAT2, PlayMode::PlayNote);
-    registerAction("pitch-up-diatonic-alterations", &Interaction::transposeDiatonicAlterations, mu::engraving::TransposeDirection::UP,
+    registerAction("pitch-up-diatonic-alterations", &Interaction::transposeDiatonicAlterations,
+                   mu::engraving::TransposeDirection::UP,
                    PlayMode::PlayNote);
-    registerAction("pitch-down-diatonic-alterations", &Interaction::transposeDiatonicAlterations, mu::engraving::TransposeDirection::DOWN,
+    registerAction("pitch-down-diatonic-alterations", &Interaction::transposeDiatonicAlterations,
+                   mu::engraving::TransposeDirection::DOWN,
                    PlayMode::PlayNote);
     registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
                    TranslatableString("undoableAction", "Enter full-measure rest"));
@@ -2487,7 +2495,8 @@ void NotationActionController::registerMoveSelectionAction(const ActionCode& cod
     dispatcher()->reg(this, code, moveSelectionFunc);
 }
 
-void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type, MoveDirection direction)
+void NotationActionController::registerAddToSelectionAction(const ActionCode& code, MoveSelectionType type,
+                                                            MoveDirection direction)
 {
     registerAction(code, &Interaction::addToSelection, direction, type, PlayMode::NoPlay, &Controller::isNotNoteInputMode);
     m_isAllowedDuringPlayback.insert(code);
@@ -2527,7 +2536,8 @@ void NotationActionController::registerAction(const ActionCode& code,
 }
 
 void NotationActionController::registerAction(const muse::actions::ActionCode& code,
-                                              void (NotationActionController::* handler)(), Ret (INotationInteraction::*enabler)() const)
+                                              void (NotationActionController::* handler)(),
+                                              Ret (INotationInteraction::*enabler)() const)
 {
     auto _enabler = [this, enabler]() {
         INotationPtr notation = currentNotation();
@@ -2559,7 +2569,8 @@ void NotationActionController::registerAction(const muse::actions::ActionCode& c
 }
 
 void NotationActionController::registerAction(const ActionCode& code,
-                                              void (INotationInteraction::* handler)(), bool (NotationActionController::* enabler)() const)
+                                              void (INotationInteraction::* handler)(),
+                                              bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, handler, PlayMode::NoPlay, enabler);
 }
@@ -2593,7 +2604,8 @@ void NotationActionController::registerAction(const ActionCode& code,
 
 template<typename P1, typename P2, typename Q1, typename Q2>
 void NotationActionController::registerAction(const ActionCode& code, void (INotationInteraction::* handler)(P1, P2),
-                                              Q1 param1, Q2 param2, PlayMode playMode, bool (NotationActionController::* enabler)() const)
+                                              Q1 param1, Q2 param2, PlayMode playMode,
+                                              bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, param1, param2, playMode]()
     {

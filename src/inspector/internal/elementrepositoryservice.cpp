@@ -72,7 +72,8 @@ void ElementRepositoryService::updateElementList(const QList<EngravingItem*>& ne
     m_elementsUpdated.send(m_rawElementList);
 }
 
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(const mu::engraving::ElementType elementType) const
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByType(const mu::engraving::ElementType elementType)
+const
 {
     switch (elementType) {
     case mu::engraving::ElementType::CHORD: return findChords();
@@ -144,7 +145,8 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::takeAllElements()
     return m_exposedElementList;
 }
 
-QList<mu::engraving::EngravingItem*> ElementRepositoryService::exposeRawElements(const QList<mu::engraving::EngravingItem*>& rawElementList)
+QList<mu::engraving::EngravingItem*> ElementRepositoryService::exposeRawElements(
+    const QList<mu::engraving::EngravingItem*>& rawElementList)
 const
 {
     QList<mu::engraving::EngravingItem*> resultList;

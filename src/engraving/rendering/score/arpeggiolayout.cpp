@@ -150,7 +150,8 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
         // We already calculated the gap between chords it does span in ChordLayout::layoutPitched
         bool aboveStart
             = std::make_pair(chord->vStaffIdx(), chord->downLine()) < std::make_pair(item->vStaffIdx(), item->chord()->upLine());
-        bool belowEnd = std::make_pair(chord->vStaffIdx(), chord->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
+        bool belowEnd = std::make_pair(chord->vStaffIdx(), chord->upLine()) > std::make_pair(
+            endChord->vStaffIdx(), endChord->downLine());
 
         if ((chord->spanArpeggio() == item && !(aboveStart || belowEnd)) || chord->vStaffIdx() < item->vStaffIdx()
             || chord->vStaffIdx() > endChord->vStaffIdx()) {
@@ -170,7 +171,8 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
         } else if (staffIdx == endChord->vStaffIdx() && item->crossStaff()) {
             // Arpeggio doesn't start on this staff so move to last note and extend upwards
             curArpShape.translate(PointF(0.0, endChord->downNote()->pagePos().y() - item->pagePos().y()));
-            curArpShape.addBBox(RectF(curArpShape.bbox().topLeft().x(), curArpShape.bbox().topLeft().y() - ARBITRARY_ARPEGGIO_LENGTH,
+            curArpShape.addBBox(RectF(curArpShape.bbox().topLeft().x(),
+                                      curArpShape.bbox().topLeft().y() - ARBITRARY_ARPEGGIO_LENGTH,
                                       curArpShape.bbox().width(), ARBITRARY_ARPEGGIO_LENGTH));
         }
 
@@ -184,7 +186,8 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
             }
             if (shapeElement.item()->isAccidental()) {
                 // Pad accidentals with Sid::arpeggioAccidentalDistance either side
-                shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioAccidentalDistance, shapeElement.topLeft().y()));
+                shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioAccidentalDistance,
+                                               shapeElement.topLeft().y()));
                 shapeElement.setWidth(shapeElement.width() + 2 * arpeggioAccidentalDistance);
             } else if (shapeElement.item()->isLedgerLine()) {
                 shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioLedgerDistance, shapeElement.topLeft().y()));

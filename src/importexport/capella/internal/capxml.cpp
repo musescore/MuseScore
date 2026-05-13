@@ -177,7 +177,8 @@ void BasicDurationalObj::readCapx(XmlReader& e, unsigned int& fullm)
         }
     }
     CAPELLA_TRACE("DurationObj ndots %d nodur %d postgr %d bsm %d inv %d notbl %d t %d hsh %d den %d trp %d ispro %d fullm %d",
-                  nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator, tripartite,
+                  nDots, noDuration, postGrace, bSmall, invisible, notBlack, int(t), horizontalShift, tupletDenominator,
+                  tripartite,
                   isProlonging, fullm
                   );
 }

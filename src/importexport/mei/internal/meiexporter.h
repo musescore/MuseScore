@@ -94,7 +94,8 @@ private:
     bool writeScoreDefChange();
     bool writeStaffGrpStart(const engraving::Staff* staff, std::vector<int>& ends, const engraving::Part* part);
     bool writeStaffGrpEnd(const engraving::Staff* staff, std::vector<int>& ends);
-    bool writeStaffDef(const engraving::Staff* staff, const engraving::Measure* measure, const engraving::Part* part, bool isPart);
+    bool writeStaffDef(const engraving::Staff* staff, const engraving::Measure* measure, const engraving::Part* part,
+                       bool isPart);
     bool writeLabel(pugi::xml_node node, const engraving::Part* part);
     bool writeInstrDef(pugi::xml_node node, const engraving::Part* part);
     bool writeEnding(const engraving::Measure* measure);
@@ -109,7 +110,8 @@ private:
     bool writeArtics(const engraving::Chord* chord);
     bool writeArtic(const engraving::Articulation* articulation);
     bool writeArtic(const engraving::ChordLine* chordline);
-    bool writeBeamAndTuplet(const engraving::ChordRest* chordRest, bool& closingBeam, bool& closingTuplet, bool& closingBeamInTuplet);
+    bool writeBeamAndTuplet(const engraving::ChordRest* chordRest, bool& closingBeam, bool& closingTuplet,
+                            bool& closingBeamInTuplet);
     bool writeBeamAndTupletEnd(bool closingBeam, bool closingTuplet, bool closingBeamInTuplet);
     bool writeBeam(const engraving::Beam* beam, const engraving::ChordRest* chordRest, bool& closing);
     bool writeBTrem(const engraving::TremoloSingleChord* tremolo);
@@ -157,7 +159,8 @@ private:
      * Methods for writing specific MEI attribute classes within elements
      */
     bool writeBeamTypeAtt(const engraving::ChordRest* chordRest, libmei::AttTyped& typeAtt);
-    bool writeStaffIdentAtt(const engraving::ChordRest* chordRest, const engraving::Staff* staff, libmei::AttStaffIdent& staffIdentAtt);
+    bool writeStaffIdentAtt(const engraving::ChordRest* chordRest, const engraving::Staff* staff,
+                            libmei::AttStaffIdent& staffIdentAtt);
     bool writeStemAtt(const engraving::Chord* chord, libmei::AttStems& stemsAtt);
 
     /**
@@ -227,7 +230,8 @@ private:
     /** A map of chord that are a plist of the arpeggio */
     std::map<const engraving::Chord*, const engraving::Arpeggio*> m_arpegPlistMap;
     /** A map of elements (e.g., Fermata) to which a tstamp will need to be added  */
-    std::vector<std::pair<const engraving::EngravingItem*, std::pair<libmei::xsdPositiveInteger_List, double> > > m_tstampControlEventMap;
+    std::vector<std::pair<const engraving::EngravingItem*,
+                          std::pair<libmei::xsdPositiveInteger_List, double> > > m_tstampControlEventMap;
     /** A map of items with the corresponding node (to which the endid from m_endingControlEventMap or plist from m_plistMap will be added) */
     std::map<const engraving::EngravingItem*, pugi::xml_node> m_openControlEventMap;
 

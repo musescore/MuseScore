@@ -45,7 +45,8 @@ public:
     project::INotationProject* project() const override;
 
     muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
-    void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
+    void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options,
+                      bool createdFromTemplate = false) override;
     engraving::MasterScore* masterScore() const override;
     void setMasterScore(engraving::MasterScore* masterScore, bool disablePlayback = false) override;
 

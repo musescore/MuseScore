@@ -95,7 +95,8 @@ muse::async::Channel<muse::audio::aux_channel_idx_t, std::string> PlaybackContro
     return {};
 }
 
-muse::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+muse::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(
+    const engraving::InstrumentTrackId&) const
 {
     return muse::async::Promise<muse::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
         return reject(int(muse::Ret::Code::UnknownError), "stub");

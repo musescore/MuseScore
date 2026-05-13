@@ -43,8 +43,8 @@ class ConnectorInfoWriter : public ConnectorInfo
     OBJECT_ALLOCATOR(engraving, ConnectorInfoWriter)
 
 public:
-    ConnectorInfoWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const EngravingItem* connector, int track = -1,
-                        Fraction = { -1, 1 });
+    ConnectorInfoWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const EngravingItem* connector,
+                        int track = -1, Fraction = { -1, 1 });
     virtual ~ConnectorInfoWriter() = default;
 
     void write();
@@ -70,8 +70,8 @@ class SpannerWriter : public ConnectorInfoWriter
 protected:
     const char* tagName() const override { return "Spanner"; }
 public:
-    SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* spanner, int track, Fraction frac,
-                  bool start);
+    SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingItem* current, const Spanner* spanner, int track,
+                  Fraction frac, bool start);
 
     static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
 };

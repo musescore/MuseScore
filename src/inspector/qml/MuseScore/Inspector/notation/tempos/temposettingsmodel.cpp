@@ -27,7 +27,8 @@
 
 using namespace mu::inspector;
 
-TempoSettingsModel::TempoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository,
+TempoSettingsModel::TempoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository,
                                        InspectorModelType modelType)
     : AbstractInspectorModel(parent, iocCtx, repository)
 {
@@ -60,7 +61,8 @@ void TempoSettingsModel::createProperties()
 {
     m_isFollowText
         = buildPropertyItem(mu::engraving::Pid::TEMPO_FOLLOW_TEXT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        onPropertyValueChanged(pid,
+                               newValue);
 
         emit requestReloadPropertyItems();
     });

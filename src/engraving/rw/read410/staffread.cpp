@@ -54,7 +54,8 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 //
                 Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
                 Fraction timeSigForThisMeasure = ctx.timeSigForNextMeasure();
-                Fraction f(timeSigForThisMeasure != Fraction(0, 1) ? ctx.timeSigForNextMeasure() : m ? m->timesig() : Fraction(4, 4));
+                Fraction f(timeSigForThisMeasure
+                           != Fraction(0, 1) ? ctx.timeSigForNextMeasure() : m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
 

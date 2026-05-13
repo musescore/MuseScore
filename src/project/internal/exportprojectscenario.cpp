@@ -48,7 +48,8 @@ std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes
 }
 
 RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                              INotationWriter::UnitType unitType, muse::io::path_t defaultPath) const
+                                                              INotationWriter::UnitType unitType,
+                                                              muse::io::path_t defaultPath) const
 {
     INotationProjectPtr project = context()->currentProject();
 
@@ -85,7 +86,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     }
 
     if (defaultPath == "") {
-        defaultPath = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
+        defaultPath
+            = configuration()->defaultSavingFilePath(project, filenameAddition, exportType.suffixes.front().toStdString());
     }
 
     RetVal<muse::io::path_t> exportPath;
@@ -119,7 +121,8 @@ bool ExportProjectScenario::exportScores(notation::INotationPtrList notations, c
     ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
 
     for (const INotationPtr& notation : notations) {
-        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+        auto it = std::find_if(potentialExcerpts.cbegin(),
+                               potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
             return excerpt->notation() == notation;
         });
 
@@ -266,7 +269,9 @@ bool ExportProjectScenario::guessIsCreatingOnlyOneFile(const notation::INotation
             // Check if it is not a potential (not-yet-initialized) excerpt
             ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
 
-            auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
+            auto it
+                = std::find_if(potentialExcerpts.cbegin(),
+                               potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
                     return excerpt->notation() == notation;
                 });
 
@@ -457,7 +462,8 @@ Ret ExportProjectScenario::doExportLoop(const muse::io::path_t& scorePath, std::
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
-    std::string title = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
+    std::string title
+        = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
 
     interactive()->showProgress(title, m_exportProgress);
 }

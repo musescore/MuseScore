@@ -584,7 +584,8 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
         // draw the ledger line for high A
         if (line == -2) {
             noteData.ledgerLine = LineF(x - headw * 1.5 - ldata->stemLineW * .5, y2, x + headw * .5 - ldata->stemLineW * .5, y2);
-            ldata->addBbox(RectF(x - headw * 1.5 - ldata->stemLineW * .5, y2 - ldata->stemLineW * 2, headw * 2, ldata->stemLineW));
+            ldata->addBbox(RectF(x - headw * 1.5 - ldata->stemLineW * .5, y2 - ldata->stemLineW * 2, headw * 2,
+                                 ldata->stemLineW));
         }
 
         // move x to next note x position
@@ -804,7 +805,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
 
-        ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
+        ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth)
+                              + ctx.style().styleAbsolute(Sid::bracketDistance);
     }
     break;
     case BracketType::GROUP:
@@ -1811,7 +1813,8 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
         if (item->largeParentheses()) {
             ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
                                  numRect.height() + denRect.height()));
-            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),
+                                 spatium / 2,
                                  numRect.height() + denRect.height()));
         }
     }
@@ -2117,7 +2120,8 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 // Assumes that l1p2 == l2p1 is the intersection between the lines.
 // If checkAngle is false, assumes that the lines are perpendicular,
 // and some calculations are saved.
-static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth, bool checkAngle)
+static inline void extendLines(const PointF& l1p1, PointF& l1p2, PointF& l2p1, const PointF& l2p2, double lineWidth,
+                               bool checkAngle)
 {
     PointF l1UnitVector = (l1p2 - l1p1).normalized();
     PointF l2UnitVector = (l2p1 - l2p2).normalized();
@@ -2375,7 +2379,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
 
         const bool beginArrow = isSingleOrBegin
                                 && (tl->beginHookType() == HookType::ARROW_FILLED || tl->beginHookType() == HookType::ARROW);
-        const bool endArrow = isSingleOrEnd && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
+        const bool endArrow = isSingleOrEnd
+                              && (tl->endHookType() == HookType::ARROW_FILLED || tl->endHookType() == HookType::ARROW);
 
         if (beginArrow) {
             const bool filled = tl->beginHookType() == HookType::ARROW_FILLED;

@@ -1024,7 +1024,8 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
-            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble() / mu::engraving::Constants::DIVISION);
+            beat->setArpeggioStretch(propertyNode.firstChild().toElement().text().toDouble()
+                                     / mu::engraving::Constants::DIVISION);
         } else if (propertyId == 1124204546) {
             int beamData = propertyNode.firstChild().toElement().text().toInt();
 
@@ -1406,7 +1407,8 @@ std::vector<GPMasterBar::Direction> GP67DomBuilder::readRepeatsJumps(XmlDomNode*
 
     while (!innerNode.isNull()) {
         GPMasterBar::Direction repeatJump;
-        repeatJump.type = (innerNode.nodeName() == "Jump" ? GPMasterBar::Direction::Type::Jump : GPMasterBar::Direction::Type::Repeat);
+        repeatJump.type
+            = (innerNode.nodeName() == "Jump" ? GPMasterBar::Direction::Type::Jump : GPMasterBar::Direction::Type::Repeat);
         repeatJump.name = innerNode.toElement().text();
 
         // GP encodes "To Coda" instructions as Jumps, but MuseScore uses Markers for that

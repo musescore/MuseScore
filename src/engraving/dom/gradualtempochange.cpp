@@ -327,7 +327,8 @@ PointF GradualTempoChange::linePos(Grip grip, System** system) const
     PointF rehearsalMarkPos = segment->pos() + segment->measure()->pos();
     rehearsalMarkBbox.translate(rehearsalMarkPos);
 
-    Text* text = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->endText();
+    Text* text
+        = start ? toGradualTempoChangeSegment(frontSegment())->text() : toGradualTempoChangeSegment(backSegment())->endText();
 
     const double sp = spatium();
 

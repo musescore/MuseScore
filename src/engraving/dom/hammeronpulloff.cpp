@@ -136,7 +136,8 @@ void HammerOnPullOffSegment::updateHopoText()
         curHopoText->setTrack(track());
         curHopoText->setIsValid(curRegion.isValid);
         curHopoText->setIsHammerOn(curRegion.isHammerOn);
-        curHopoText->setXmlText(style().styleB(Sid::hopoUpperCase) ? (curRegion.isHammerOn ? "H" : "P") : (curRegion.isHammerOn ? "h" : "p"));
+        curHopoText->setXmlText(style().styleB(Sid::hopoUpperCase) ? (curRegion.isHammerOn ? "H" : "P") : (curRegion.isHammerOn
+                                                                                                           ? "h" : "p"));
         curHopoText->setStartChord(curRegion.startChord);
         curHopoText->setEndChord(curRegion.endChord);
     }
@@ -151,11 +152,13 @@ void HammerOnPullOffSegment::updateHopoText()
     }
 }
 
-std::vector<HammerOnPullOffSegment::HopoTextRegion> HammerOnPullOffSegment::computeHopoTextRegions(Chord* startChord, Chord* endChord)
+std::vector<HammerOnPullOffSegment::HopoTextRegion> HammerOnPullOffSegment::computeHopoTextRegions(Chord* startChord,
+                                                                                                   Chord* endChord)
 {
     std::vector<HopoTextRegion> result;
     bool isTabStaff = staffType()->isTabStaff();
-    if ((isTabStaff && !style().styleB(Sid::hopoShowOnTabStaves)) || (!isTabStaff && !style().styleB(Sid::hopoShowOnStandardStaves))) {
+    if ((isTabStaff && !style().styleB(Sid::hopoShowOnTabStaves))
+        || (!isTabStaff && !style().styleB(Sid::hopoShowOnStandardStaves))) {
         return result;
     }
 
@@ -197,7 +200,8 @@ std::vector<HammerOnPullOffSegment::HopoTextRegion> HammerOnPullOffSegment::comp
     return result;
 }
 
-void HammerOnPullOffSegment::resolveStartEndNotes(Note** startNote, Note** endNote, Chord* startChord, Chord* endChord, bool isTabStaff)
+void HammerOnPullOffSegment::resolveStartEndNotes(Note** startNote, Note** endNote, Chord* startChord, Chord* endChord,
+                                                  bool isTabStaff)
 {
     // In future we need the ability to draw slurs between individual notes. For now, slurs are
     // attached to chords so we just try to guess which notes to consider for this HOPO

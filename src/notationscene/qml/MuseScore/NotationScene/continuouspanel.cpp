@@ -236,7 +236,8 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx, co
     ensureCacheSize(staffCount);
 
     if (!m_cachedMeasureNumberText) {
-        m_cachedMeasureNumberText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT, ACCESSIBILITY_DISABLED);
+        m_cachedMeasureNumberText = engraving::Factory::createText(seg, mu::engraving::TextStyleType::DEFAULT,
+                                                                   ACCESSIBILITY_DISABLED);
         m_cachedMeasureNumberText->setFlag(engraving::ElementFlag::MOVABLE, false);
         m_cachedMeasureNumberText->setFamily(u"FreeSans");
         m_cachedMeasureNumberText->setSizeIsSpatiumDependent(true);

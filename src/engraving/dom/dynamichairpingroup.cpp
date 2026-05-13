@@ -73,7 +73,8 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
     return nullptr;
 }
 
-std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d,
+                                                                      std::function<bool(const EngravingItem*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;
@@ -148,7 +149,8 @@ void HairpinWithDynamicsDragGroup::endDrag(EditData& ed)
     }
 }
 
-std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
+std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d,
+                                                                      std::function<bool(const EngravingItem*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;
@@ -209,7 +211,8 @@ void DynamicNearHairpinsDragGroup::endDrag(EditData& ed)
 // DynamicExpressionDragGroup
 //-------------------------------------------------------
 
-std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
+std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Dynamic* d,
+                                                                    std::function<bool(const EngravingItem*)> isDragged)
 {
     Expression* snappedExpression = d->snappedExpression();
     if (snappedExpression && !isDragged(snappedExpression)) {
@@ -218,7 +221,8 @@ std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Dynamic* d, 
     return nullptr;
 }
 
-std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged)
+std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Expression* e,
+                                                                    std::function<bool(const EngravingItem*)> isDragged)
 {
     Dynamic* snappedDynamic = e->snappedDynamic();
     if (snappedDynamic && !isDragged(snappedDynamic)) {

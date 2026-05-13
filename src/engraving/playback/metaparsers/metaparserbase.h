@@ -48,7 +48,8 @@ protected:
     static void appendArticulationData(muse::mpe::ArticulationMeta&& meta, muse::mpe::ArticulationMap& result)
     {
         result.emplace(meta.type,
-                       muse::mpe::ArticulationAppliedData(std::forward<muse::mpe::ArticulationMeta>(meta), 0, muse::mpe::HUNDRED_PERCENT));
+                       muse::mpe::ArticulationAppliedData(std::forward<muse::mpe::ArticulationMeta>(meta), 0,
+                                                          muse::mpe::HUNDRED_PERCENT));
     }
 };
 }

@@ -135,7 +135,8 @@ muse::io::path_t ProjectConfigurationStub::cloudProjectSavingPath(int) const
     return muse::io::path_t();
 }
 
-muse::io::path_t ProjectConfigurationStub::defaultSavingFilePath(INotationProjectPtr, const std::string&, const std::string&) const
+muse::io::path_t ProjectConfigurationStub::defaultSavingFilePath(INotationProjectPtr, const std::string&,
+                                                                 const std::string&) const
 {
     return muse::io::path_t();
 }

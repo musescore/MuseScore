@@ -57,7 +57,8 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable, pu
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
-    Q_PROPERTY(bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
+    Q_PROPERTY(
+        bool isSystemObjectBelowBottomStaff READ isSystemObjectBelowBottomStaff NOTIFY isSystemObjectBelowBottomStaffChanged)
     Q_PROPERTY(mu::inspector::CommonTypes::MeasurementUnits measurementUnits READ measurementUnits NOTIFY measurementUnitsChanged)
 
     QML_ELEMENT;
@@ -227,8 +228,9 @@ protected:
                                                                 const
                                                                 QVariant& newValue)> onStyleChangedCallBack = nullptr,
                                     std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack = nullptr);
-    PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
-                                                                                                  const QVariant& newValue)>
+    PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid,
+                                                std::function<void(const mu::engraving::Pid propertyId,
+                                                                   const QVariant& newValue)>
                                                 onPropertyChangedCallBack = nullptr,
                                                 std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack = nullptr);
 
@@ -266,7 +268,8 @@ protected:
 
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
-    void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid, const QVariant& newValue);
+    void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
+                          const QVariant& newValue);
     void onPropertyValueReset(const mu::engraving::Pid pid);
     void resetPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid);
     void updateProperties();
@@ -277,12 +280,10 @@ private:
     static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
 
     void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
-                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr,
-                          std::function<void(const mu::engraving::Sid styleId,
-                                             const
-                                             QVariant
-                                             & newValue)> onStyleChangedCallBack = nullptr,
-                          std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack = nullptr);
+                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr, std::function<void(const mu::engraving::Sid styleId,
+                                                                                                                                                            const
+                                                                                                                                                            QVariant
+                                                                                                                                                            & newValue)> onStyleChangedCallBack = nullptr, std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack = nullptr);
 
     mu::engraving::Sid styleIdByPropertyId(const mu::engraving::Pid pid) const;
 

@@ -153,7 +153,8 @@ bool Read460::readScoreTag(Score* score, XmlReader& e, ReadContext& ctx)
             // Since version 400, the Style is usually stored in a separate file,
             // but we also support reading it from the mscx file.
             compat::ReadStyleHook::readStyleTag(score, e);
-            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString());
+            score->m_engravingFont = score->engravingFonts()->fontByName(score->style().styleSt(
+                                                                             Sid::musicalSymbolFont).toStdString());
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -444,7 +445,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     ctx.setLocation(loc);
                     if (loc.isTimeTick()) {
                         Measure* measure = score->tick2measure(ctx.tick());
-                        EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(), track2staff(ctx.track()));
+                        EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(),
+                                                                  track2staff(ctx.track()));
                     }
                 } else if (tag == "Tuplet") {
                     Tuplet* oldTuplet = tuplet;
@@ -548,7 +550,8 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 if (doScale) {
                                     Fraction ticksScaled = tremolo->durationType().ticks() * scale;
                                     if (!TDuration(ticksScaled).isValid()) {
-                                        LOGD("Can't paste: invalid duration %d/%d", ticksScaled.numerator(), ticksScaled.denominator());
+                                        LOGD("Can't paste: invalid duration %d/%d",
+                                             ticksScaled.numerator(), ticksScaled.denominator());
                                         return false;
                                     }
                                     tremolo->setDurationType(ticksScaled);

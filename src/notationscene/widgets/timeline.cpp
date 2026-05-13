@@ -632,7 +632,8 @@ void TRowLabels::mouseOver(QPointF scenePt)
             } else {
                 if (std::get<0>(_oldItemInfo)) {
                     std::pair<QGraphicsItem*, int> p = std::make_pair(std::get<0>(_oldItemInfo), std::get<2>(_oldItemInfo));
-                    std::vector<std::pair<QGraphicsItem*, int> >::iterator it = std::find(_metaLabels.begin(), _metaLabels.end(), p);
+                    std::vector<std::pair<QGraphicsItem*, int> >::iterator it = std::find(_metaLabels.begin(),
+                                                                                          _metaLabels.end(), p);
                     if (it != _metaLabels.end()) {
                         _metaLabels.erase(it);
                     }
@@ -1037,7 +1038,8 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
                 }
             }
 
-            graphicsRectItem->setToolTip(initialLetter + u" "_s + QString::number(currMeasure->measureNumber() + 1) + u", "_s + partName);
+            graphicsRectItem->setToolTip(initialLetter + u" "_s + QString::number(
+                                             currMeasure->measureNumber() + 1) + u", "_s + partName);
             graphicsRectItem->setPen(QPen(activeTheme().backgroundColor));
             graphicsRectItem->setBrush(QBrush(colorBox(graphicsRectItem)));
             graphicsRectItem->setZValue(-3);
@@ -1052,7 +1054,8 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
     QGraphicsLineItem* graphicsLineItemSeparator = new QGraphicsLineItem(0,
                                                                          _gridHeight * numMetas + verticalScrollBar()->value() + 1,
                                                                          getWidth() - 1,
-                                                                         _gridHeight * numMetas + verticalScrollBar()->value() + 1);
+                                                                         _gridHeight * numMetas + verticalScrollBar()->value()
+                                                                         + 1);
     graphicsLineItemSeparator->setData(keyItemType, QVariant::fromValue(ItemType::TYPE_META));
     graphicsLineItemSeparator->setPen(QPen(activeTheme().gridColor1, 4));
     graphicsLineItemSeparator->setZValue(-2);
@@ -1509,7 +1512,8 @@ void Timeline::measureMeta(Segment*, int*, int pos)
 
     // Adjust number
     Measure* currMeasure;
-    for (currMeasure = score()->firstMeasure(); currMeasureNumber != 0; currMeasureNumber--, currMeasure = currMeasure->nextMeasure()) {
+    for (currMeasure = score()->firstMeasure(); currMeasureNumber != 0;
+         currMeasureNumber--, currMeasure = currMeasure->nextMeasure()) {
     }
 
     // Add measure number
@@ -1572,7 +1576,8 @@ unsigned Timeline::getMetaRow(QString targetText)
 //   Timeline::addMetaValue
 //---------------------------------------------------------
 
-bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, EngravingItem* element, Segment* seg,
+bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, EngravingItem* element,
+                            Segment* seg,
                             Measure* measure, QString tooltip)
 {
     TRACEFUNC;
@@ -2912,7 +2917,8 @@ void Timeline::mouseOver(QPointF pos)
             static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>())->setZValue(std::get<1>(_oldHoverInfo));
             QGraphicsRectItem* graphicsRectItem1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(_oldHoverInfo));
             QGraphicsRectItem* graphicsRectItem2
-                = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>()));
+                = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(
+                                                                                         5).value<void*>()));
             if (graphicsRectItem1) {
                 graphicsRectItem1->setBrush(QBrush(std::get<2>(_oldHoverInfo)));
             }
@@ -2931,7 +2937,8 @@ void Timeline::mouseOver(QPointF pos)
             static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>())->setZValue(std::get<1>(_oldHoverInfo));
             QGraphicsRectItem* graphicsRectItem1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(_oldHoverInfo));
             QGraphicsRectItem* graphicsRectItem2
-                = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>()));
+                = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(
+                                                                                         5).value<void*>()));
             if (graphicsRectItem1) {
                 graphicsRectItem1->setBrush(QBrush(std::get<2>(_oldHoverInfo)));
             }
@@ -2953,7 +2960,8 @@ void Timeline::mouseOver(QPointF pos)
         static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>())->setZValue(std::get<1>(_oldHoverInfo));
         QGraphicsRectItem* graphicsRectItem1 = qgraphicsitem_cast<QGraphicsRectItem*>(std::get<0>(_oldHoverInfo));
         QGraphicsRectItem* graphicsRectItem2
-            = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(5).value<void*>()));
+            = qgraphicsitem_cast<QGraphicsRectItem*>(static_cast<QGraphicsItem*>(std::get<0>(_oldHoverInfo)->data(
+                                                                                     5).value<void*>()));
         if (graphicsRectItem1) {
             graphicsRectItem1->setBrush(QBrush(std::get<2>(_oldHoverInfo)));
         }

@@ -42,7 +42,8 @@ QByteArray toMimeData(T* t)
 }
 
 template<class T>
-std::shared_ptr<T> fromMimeData(const QByteArray& data, const muse::AsciiStringView& tagName, const muse::modularity::ContextPtr& iocCtx)
+std::shared_ptr<T> fromMimeData(const QByteArray& data, const muse::AsciiStringView& tagName,
+                                const muse::modularity::ContextPtr& iocCtx)
 {
     engraving::XmlReader e(data);
     while (e.readNextStartElement()) {

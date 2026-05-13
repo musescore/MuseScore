@@ -726,7 +726,8 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                     }
                     fs->remove(savePathCopy);
                     QFile::setPermissions(targetMainFilePathCopy.toQString(),
-                                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+                                          QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup
+                                          | QFile::ReadOther);
                     LOGD() << "Autosave: background write complete: " << targetContainerPathCopy;
                 });
                 return make_ret(Ret::Code::Ok);
@@ -751,7 +752,8 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     // Step 4: replace to saved file
     {
         if (ioMode == MscIoMode::Dir) {
-            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" }, io::ScanMode::FilesAndFoldersInCurrentDir);
+            RetVal<io::paths_t> filesToBeMoved = fileSystem()->scanFiles(savePath, { "*" },
+                                                                         io::ScanMode::FilesAndFoldersInCurrentDir);
             if (!filesToBeMoved.ret) {
                 return filesToBeMoved.ret;
             }
@@ -1233,7 +1235,8 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
     MasterScore* score = m_masterNotation->masterScore();
 
     if (undoable) {
-        m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction", "Edit project properties"));
+        m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction",
+                                                                                     "Edit project properties"));
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->notation()->undoStack()->commitChanges();
         m_masterNotation->notation()->notationChanged().send(muse::RectF());

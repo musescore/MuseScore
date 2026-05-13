@@ -39,7 +39,8 @@ class InspectorModelWithVoiceAndPositionOptions : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * voiceAssignment READ voiceAssignment CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * voice READ voice CONSTANT)
     Q_PROPERTY(mu::inspector::PropertyItem * centerBetweenStaves READ centerBetweenStaves CONSTANT)
-    Q_PROPERTY(bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
+    Q_PROPERTY(
+        bool isMultiStaffInstrument READ isMultiStaffInstrument WRITE setIsMultiStaffInstrument NOTIFY isMultiStaffInstrumentChanged)
     Q_PROPERTY(
         bool isStaveCenteringAvailable READ isStaveCenteringAvailable WRITE setIsStaveCenteringAvailable NOTIFY isStaveCenteringAvailableChanged)
 

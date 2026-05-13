@@ -41,7 +41,8 @@ static const Settings::Key PLAY_NOTES_ON_MIDI_INPUT(moduleName, "score/note/play
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
-static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundPresetsMultiSelectionEnabled");
+static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName,
+                                                             "application/playback/soundPresetsMultiSelectionEnabled");
 
 static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
 static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
@@ -153,7 +154,8 @@ void PlaybackConfiguration::init()
         m_shouldShowOnlineSoundsProcessingErrorChanged.notify();
     });
 
-    settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
+    settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE,
+                                Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
     settings()->valueChanged(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).onReceive(nullptr, [this](const Val&) {
         m_onlineSoundsShowProgressBarModeChanged.notify();
     });

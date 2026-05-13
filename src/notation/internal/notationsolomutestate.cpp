@@ -123,7 +123,8 @@ void NotationSoloMuteState::removeTrackSoloMuteState(const engraving::Instrument
     }
 }
 
-muse::async::Channel<InstrumentTrackId, INotationSoloMuteState::SoloMuteState> NotationSoloMuteState::trackSoloMuteStateChanged() const
+muse::async::Channel<InstrumentTrackId,
+                     INotationSoloMuteState::SoloMuteState> NotationSoloMuteState::trackSoloMuteStateChanged() const
 {
     return m_trackSoloMuteStateChanged;
 }

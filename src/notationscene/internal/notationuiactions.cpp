@@ -2774,7 +2774,8 @@ const UiActionList NotationUiActions::s_engravingDebuggingActions = {
              )
 };
 
-NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> controller, const muse::modularity::ContextPtr& iocCtx)
+NotationUiActions::NotationUiActions(std::shared_ptr<NotationActionController> controller,
+                                     const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), m_controller(controller)
 {
 }

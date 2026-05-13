@@ -257,7 +257,8 @@ ChangeStaff::ChangeStaff(Staff* _staff)
     reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 }
 
-ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType, Spatium _userDist, bool _cutaway, bool _hideSystemBarLine,
+ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType, Spatium _userDist, bool _cutaway,
+                         bool _hideSystemBarLine,
                          AutoOnOff _mergeMatchingRests, bool _reflectTranspositionInLinkedTab)
 {
     staff       = _staff;

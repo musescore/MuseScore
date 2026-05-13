@@ -280,7 +280,8 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
 
     if (!el || (!el->isChordRest() && !el->isNote())) {
         // if no note/rest is selected, start with voice 0
-        engraving::track_idx_t track = is.track() == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
+        engraving::track_idx_t track = is.track()
+                                       == muse::nidx ? 0 : (is.track() / mu::engraving::VOICES) * mu::engraving::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -815,7 +816,8 @@ muse::RectF NotationNoteInput::cursorRect() const
     if (prevSeg && prevSeg->measure() == segment->measure()) {
         const RectF prevSegContentRect = ::segmentContentRect(prevSeg, track);
         if (prevSegContentRect.width() > 0) {
-            const double centerBetweenPrevSegRightAndCurrSegLeft = (prevSeg->pagePos().x() + prevSegContentRect.right() + x) * 0.5;
+            const double centerBetweenPrevSegRightAndCurrSegLeft = (prevSeg->pagePos().x() + prevSegContentRect.right() + x)
+                                                                   * 0.5;
             sideMargin = std::min(sideMargin, x - centerBetweenPrevSegRightAndCurrSegLeft);
         }
     }

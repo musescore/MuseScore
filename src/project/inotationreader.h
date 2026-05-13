@@ -45,7 +45,8 @@ public:
 
     virtual ~INotationReader() = default;
 
-    virtual muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) = 0;
+    virtual muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                           const Options& options = Options()) = 0;
 };
 
 using INotationReaderPtr = std::shared_ptr<INotationReader>;

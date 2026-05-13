@@ -38,7 +38,8 @@ public:
 
     virtual bool needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
                                        engraving::SelState selectionState) const = 0;
-    virtual void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList, engraving::SelState selectionState) = 0;
+    virtual void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
+                                   engraving::SelState selectionState) = 0;
 
     virtual QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType) const = 0;
     virtual QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType,

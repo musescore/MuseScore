@@ -33,7 +33,7 @@ class MeasureWrite
 {
 public:
 
-    static void writeMeasure(const Measure* measure, XmlWriter& xml, WriteContext& ctx, staff_idx_t staff, bool writeSystemElements,
-                             bool forceTimeSig);
+    static void writeMeasure(const Measure* measure, XmlWriter& xml, WriteContext& ctx, staff_idx_t staff,
+                             bool writeSystemElements, bool forceTimeSig);
 };
 }

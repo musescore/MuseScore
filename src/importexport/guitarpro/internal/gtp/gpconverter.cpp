@@ -1154,7 +1154,8 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
             k |= (uint64_t)tuning[i] << 8 * i;
         }
         bool useFlats
-            = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperties.useFlats;
+            = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(),
+                                         k) != flatPresets.end() : staffProperties.useFlats;
         auto fretCount = staffProperties.fretCount;
 
         if (tuning.empty()) {
@@ -2095,14 +2096,17 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     } else {
         if (stringDatas.empty()) {
             pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
-                                                                       nullptr) + note->part()->instrument()->transpose().chromatic;
+                                                                       nullptr)
+                    + note->part()->instrument()->transpose().chromatic;
         } else {
             if (const auto sd = stringDatas.find(note->part()->id().toUint64()); sd != stringDatas.end()) {
                 pitch = sd->second.getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
                                             nullptr) + note->part()->instrument()->transpose().chromatic;
             } else {
-                pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
-                                                                           nullptr) + note->part()->instrument()->transpose().chromatic;
+                pitch = note->part()->instrument()->stringData()->getPitch(musescoreString,
+                                                                           midiPitch.fret + note->part()->capoFret(),
+                                                                           nullptr)
+                        + note->part()->instrument()->transpose().chromatic;
             }
         }
     }
@@ -2339,31 +2343,36 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* /*note*/)
 
 void GPConverter::addLetRing(const GPBeat* gpbeat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::LET_RING, ContiniousElementsBuilder::ImportType::LET_RING,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::LET_RING,
+                                                        ContiniousElementsBuilder::ImportType::LET_RING,
                                                         gpbeat->letRing());
 }
 
 void GPConverter::addPalmMute(const GPBeat* gpbeat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PALM_MUTE, ContiniousElementsBuilder::ImportType::PALM_MUTE,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PALM_MUTE,
+                                                        ContiniousElementsBuilder::ImportType::PALM_MUTE,
                                                         gpbeat->palmMute());
 }
 
 void GPConverter::addDive(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR, ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::WHAMMY_BAR,
+                                                        ContiniousElementsBuilder::ImportType::WHAMMY_BAR,
                                                         beat->dive());
 }
 
 void GPConverter::addPickScrape(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PICK_SCRAPE, ContiniousElementsBuilder::ImportType::PICK_SCRAPE,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PICK_SCRAPE,
+                                                        ContiniousElementsBuilder::ImportType::PICK_SCRAPE,
                                                         beat->pickScrape());
 }
 
 void GPConverter::addRasgueado(const GPBeat* beat, ChordRest* cr)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::RASGUEADO, ContiniousElementsBuilder::ImportType::RASGUEADO,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::RASGUEADO,
+                                                        ContiniousElementsBuilder::ImportType::RASGUEADO,
                                                         beat->rasgueado() != GPBeat::Rasgueado::None);
 }
 
@@ -2376,14 +2385,18 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
 
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
                                                         ContiniousElementsBuilder::ImportType::HARMONIC_PINCH,
-                                                        gpbeat->harmonicMarkPinch(), ContiniousElementsBuilder::HarmonicMarkSubType::PINCH);
+                                                        gpbeat->harmonicMarkPinch(),
+                                                        ContiniousElementsBuilder::HarmonicMarkSubType::PINCH);
 
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK, ContiniousElementsBuilder::ImportType::HARMONIC_TAP,
-                                                        gpbeat->harmonicMarkTap(), ContiniousElementsBuilder::HarmonicMarkSubType::TAP);
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
+                                                        ContiniousElementsBuilder::ImportType::HARMONIC_TAP,
+                                                        gpbeat->harmonicMarkTap(),
+                                                        ContiniousElementsBuilder::HarmonicMarkSubType::TAP);
 
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
                                                         ContiniousElementsBuilder::ImportType::HARMONIC_SEMI,
-                                                        gpbeat->harmonicMarkSemi(), ContiniousElementsBuilder::HarmonicMarkSubType::SEMI);
+                                                        gpbeat->harmonicMarkSemi(),
+                                                        ContiniousElementsBuilder::HarmonicMarkSubType::SEMI);
 
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
                                                         ContiniousElementsBuilder::ImportType::HARMONIC_FEEDBACK,
@@ -2458,7 +2471,8 @@ void GPConverter::addTapping(const GPBeat* beat, ChordRest* cr)
     Chord* chord = toChord(cr);
     Tapping* tapping = Factory::createTapping(chord);
     tapping->setTrack(chord->track());
-    tapping->setHand(beat->tappingHand() == GPBeat::TappingHand::Left ? engraving::TappingHand::LEFT : engraving::TappingHand::RIGHT);
+    tapping->setHand(
+        beat->tappingHand() == GPBeat::TappingHand::Left ? engraving::TappingHand::LEFT : engraving::TappingHand::RIGHT);
     chord->add(tapping);
 }
 

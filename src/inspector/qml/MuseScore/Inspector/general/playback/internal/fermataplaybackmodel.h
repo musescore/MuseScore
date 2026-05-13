@@ -35,7 +35,8 @@ class FermataPlaybackModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * timeStretch READ timeStretch CONSTANT)
 
 public:
-    explicit FermataPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit FermataPlaybackModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                  IElementRepositoryService* repository);
 
 public:
     PropertyItem* timeStretch() const;

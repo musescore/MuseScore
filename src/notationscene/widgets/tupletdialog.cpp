@@ -60,7 +60,8 @@ void TupletDialog::componentComplete()
 
 void TupletDialog::defaultToStyleSettings()
 {
-    mu::engraving::TupletNumberType nt = mu::engraving::TupletNumberType(style()->styleValue(mu::engraving::Sid::tupletNumberType).toInt());
+    mu::engraving::TupletNumberType nt = mu::engraving::TupletNumberType(style()->styleValue(
+                                                                             mu::engraving::Sid::tupletNumberType).toInt());
     number->setChecked(nt == mu::engraving::TupletNumberType::SHOW_NUMBER);
     relation->setChecked(nt == mu::engraving::TupletNumberType::SHOW_RELATION);
     noNumber->setChecked(nt == mu::engraving::TupletNumberType::NO_TEXT);

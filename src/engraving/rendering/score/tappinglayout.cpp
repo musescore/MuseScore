@@ -62,7 +62,8 @@ void TappingLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, Lay
     }
 }
 
-void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff, LayoutContext& ctx)
+void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ldata, const MStyle& style, bool tabStaff,
+                                          LayoutContext& ctx)
 {
     updateHalfSlurs(item, style, tabStaff, ctx);
 

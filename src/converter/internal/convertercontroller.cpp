@@ -276,7 +276,8 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
     return ret;
 }
 
-Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const muse::io::path_t& out)
+Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
+                                           const muse::io::path_t& out)
 {
     std::string suffix = io::suffix(out);
 
@@ -595,7 +596,8 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
     return make_ret(Ret::Code::Ok);
 }
 
-muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const ConvertRegionJson& regionJson, const path_t& out) const
+muse::Ret ConverterController::saveRegion(INotationProjectPtr project, const ConvertRegionJson& regionJson,
+                                          const path_t& out) const
 {
     RetVal<ConvertRegion> region = ConverterUtils::parseRegion(regionJson);
     if (!region.ret) {
@@ -680,14 +682,16 @@ Ret ConverterController::exportScoreParts(const muse::io::path_t& in, const muse
     return BackendApi::exportScoreParts(in, out, openParams);
 }
 
-Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out, const OpenParams& openParams)
+Ret ConverterController::exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
+                                              const OpenParams& openParams)
 {
     TRACEFUNC;
 
     return BackendApi::exportScorePartsPdfs(in, out, openParams);
 }
 
-Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+Ret ConverterController::exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out,
+                                              const std::string& optionsJson,
                                               const OpenParams& openParams)
 {
     TRACEFUNC;

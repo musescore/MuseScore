@@ -224,7 +224,8 @@ void AbstractInspectorModel::updatemeasurementUnits()
     MeasurementUnits result = MeasurementUnits::UNITS_UNKNOWN;
 
     for (EngravingItem* item : m_elementList) {
-        MeasurementUnits itemUnits = item->offsetIsSpatiumDependent() ? MeasurementUnits::UNITS_SPATIUM : MeasurementUnits::UNITS_MM;
+        MeasurementUnits itemUnits
+            = item->offsetIsSpatiumDependent() ? MeasurementUnits::UNITS_SPATIUM : MeasurementUnits::UNITS_MM;
         if (result != MeasurementUnits::UNITS_UNKNOWN && itemUnits != result) {
             result = MeasurementUnits::UNITS_UNKNOWN;
             break;
@@ -278,7 +279,8 @@ ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
 
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
-    if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
+    if (elementKey.type == mu::engraving::ElementType::HAIRPIN
+        || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
         return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.subtype),
                                                  InspectorModelType::TYPE_UNDEFINED);
     }
@@ -388,7 +390,8 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         }
 
         // Don't show the "Text" inspector panel for "pure" dynamics (i.e. without custom text)
-        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList)) || barlineWithPlayText(selectedElementList)) {
+        if ((TEXT_ELEMENT_TYPES.contains(key.type) && !isPureDynamics(selectedElementList))
+            || barlineWithPlayText(selectedElementList)) {
             types << InspectorSectionType::SECTION_TEXT;
         }
 
@@ -766,7 +769,8 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
+                                              ConvertPropertyValueFunc convertElementPropertyValueFunc)
 {
     loadPropertyItem(propertyItem, m_elementList, convertElementPropertyValueFunc);
 }

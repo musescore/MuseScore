@@ -192,7 +192,8 @@ public:
     static void colorlineFromMEI(engraving::SLine* line, const libmei::Element& meiElement);
     static void colorlineToMEI(const engraving::SLine* line, libmei::Element& meiElement);
 
-    static void dirFromMEI(engraving::TextBase* textBase, const muse::StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
+    static void dirFromMEI(engraving::TextBase* textBase, const muse::StringList& meiLines, const libmei::Dir& meiDir,
+                           bool& warning);
     static void dirFromMEI(engraving::TextLineBase* textLineBase, const muse::StringList& meiLines, const libmei::Dir& meiDir,
                            bool& warning);
     static libmei::Dir dirToMEI(const engraving::TextBase* textBase, muse::StringList& meiLines);
@@ -207,7 +208,8 @@ public:
     static engraving::TremoloType unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning);
     static libmei::data_DURATION unitdurToMEI(const engraving::TremoloTwoChord* tremolo);
 
-    static void dynamFromMEI(engraving::Dynamic* dynamic, const muse::StringList& meiLines, const libmei::Dynam& meiDynam, bool& warning);
+    static void dynamFromMEI(engraving::Dynamic* dynamic, const muse::StringList& meiLines, const libmei::Dynam& meiDynam,
+                             bool& warning);
     static libmei::Dynam dynamToMEI(const engraving::Dynamic* dynamic, muse::StringList& meiLines);
 
     static void endingFromMEI(engraving::Volta* volta, const libmei::Ending& meiEnding, bool& warning);
@@ -217,13 +219,15 @@ public:
                          bool& warning);
     static libmei::F fToMEI(const engraving::FiguredBassItem* figuredBassItem, muse::StringList& meiLines);
 
-    static void fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning);
+    static void fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb,
+                          bool& warning);
     static std::pair<libmei::Harm, libmei::Fb> fbToMEI(const engraving::FiguredBass* figuredBass);
 
     static void fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning);
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 
-    static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
+    static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing,
+                            bool& warning);
     static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
 
     static void glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning);
@@ -236,10 +240,12 @@ public:
     static void hairpinFromMEI(engraving::Hairpin* haipin, const libmei::Hairpin& meiHairpin, bool& warning);
     static libmei::Hairpin hairpinToMEI(const engraving::Hairpin* hairpin);
 
-    static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
+    static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm,
+                            bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
 
-    static void harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal, bool& warning);
+    static void harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal,
+                                 bool& warning);
     static libmei::HarpPedal harpPedalToMEI(const engraving::HarpPedalDiagram* harpPedalDiagram);
 
     static engraving::PedalPosition harpPedalPositionFromMEI(const libmei::data_HARPPEDALPOSITION& pedalPosition);
@@ -265,8 +271,10 @@ public:
     static MeasureStruct measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
     static libmei::Measure measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastExcludedFromNumbering);
 
-    static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::ScoreDef& meiScoreDef, bool& warning);
-    static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
+    static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::ScoreDef& meiScoreDef,
+                                                                               bool& warning);
+    static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef,
+                                                                               bool& warning);
     static libmei::StaffDef meterToMEI(const engraving::Fraction& fraction, engraving::TimeSigType tsType);
 
     static OrnamStruct mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning);
@@ -285,8 +293,8 @@ public:
     static void pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning);
     static libmei::Pedal pedalToMEI(const engraving::Pedal* pedal);
 
-    static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
-                                    bool& warning);
+    static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid,
+                                    const engraving::Interval& interval, bool& warning);
     static std::pair<libmei::Note, libmei::Accid> pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
                                                              const engraving::Interval& interval);
 
@@ -322,7 +330,8 @@ public:
     static engraving::BracketType symbolFromMEI(const libmei::staffGroupingSym_SYMBOL meiGrpSym);
     static libmei::staffGroupingSym_SYMBOL symbolToMEI(const engraving::BracketType bracket);
 
-    static void tempoFromMEI(engraving::TempoText* tempo, const muse::StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning);
+    static void tempoFromMEI(engraving::TempoText* tempo, const muse::StringList& meiLines, const libmei::Tempo& meiTempo,
+                             bool& warning);
     static libmei::Tempo tempoToMEI(const engraving::TempoText* tempoText, muse::StringList& meiLines);
 
     static engraving::TextStyleType textFromMEI(const libmei::Rend& meiRend, bool& warning);
@@ -404,7 +413,11 @@ public:
 
     static UIDRegister* instance();
 
-    void reg(const engraving::EngravingItem* item, const std::string& meiUID) { m_uids[reinterpret_cast<uintptr_t>(item)] = meiUID; }
+    void reg(const engraving::EngravingItem* item, const std::string& meiUID)
+    {
+        m_uids[reinterpret_cast<uintptr_t>(item)] = meiUID;
+    }
+
     bool hasUid(const engraving::EngravingItem* item) const { return m_uids.count(reinterpret_cast<uintptr_t>(item)) > 0; }
     std::string uid(const engraving::EngravingItem* item) const { return m_uids.at(reinterpret_cast<uintptr_t>(item)); }
     void clear() { m_uids.clear(); }

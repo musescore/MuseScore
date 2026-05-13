@@ -31,7 +31,8 @@
 
 using namespace mu::inspector;
 
-PlaybackProxyModel::PlaybackProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository)
+PlaybackProxyModel::PlaybackProxyModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                       IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent, iocCtx, repository)
 {
     QList<AbstractInspectorModel*> models {

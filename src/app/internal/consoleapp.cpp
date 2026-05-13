@@ -148,7 +148,8 @@ void MuseScoreConsoleApp::applyCommandLineOptions(const std::shared_ptr<muse::Cm
 
 void MuseScoreConsoleApp::doStartupScenario(const muse::modularity::ContextPtr& ctxId)
 {
-    const std::shared_ptr<MuseScoreCmdOptions> options = std::dynamic_pointer_cast<MuseScoreCmdOptions>(contextData(ctxId).options);
+    const std::shared_ptr<MuseScoreCmdOptions> options
+        = std::dynamic_pointer_cast<MuseScoreCmdOptions>(contextData(ctxId).options);
     IF_ASSERT_FAILED(options) {
         return;
     }
@@ -215,7 +216,8 @@ int MuseScoreConsoleApp::processConverter(const MuseScoreCmdOptions::ConverterTa
         ret = converter()->batchConvert(task.inputFile, openParams, soundProfile, extensionUri);
         break;
     case ConvertType::File: {
-        std::string transposeOptionsJson = task.params[MuseScoreCmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        std::string transposeOptionsJson
+            = task.params[MuseScoreCmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
         std::optional<ConvertTarget> target = parseTarget(task.params);
         io::path_t tracksDiffPath = task.params[MuseScoreCmdOptions::ParamKey::TracksDiffPath].toString();
         ret = converter()->fileConvert(task.inputFile, task.outputFile, openParams, soundProfile, tracksDiffPath,

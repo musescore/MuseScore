@@ -458,7 +458,8 @@ static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
                     { u"mirrored-flat2", AccidentalType::MIRRORED_FLAT2 }, { u"mirrored-flat", AccidentalType::MIRRORED_FLAT },
                     { u"sharp-slash", AccidentalType::SHARP_SLASH }, { u"sharp-slash2", AccidentalType::SHARP_SLASH2 },
                     { u"sharp-slash3", AccidentalType::SHARP_SLASH3 }, { u"sharp-slash4", AccidentalType::SHARP_SLASH4 },
-                    { u"sharp arrow up", AccidentalType::SHARP_ARROW_UP }, { u"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
+                    { u"sharp arrow up", AccidentalType::SHARP_ARROW_UP },
+                    { u"sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
                     { u"flat arrow up", AccidentalType::FLAT_ARROW_UP }, { u"flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
                     { u"natural arrow up", AccidentalType::NATURAL_ARROW_UP },
                     { u"natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
@@ -2157,7 +2158,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 continue;
             }
             // int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
-            Fraction possibleDuration = tuplet2->ticks() * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
+            Fraction possibleDuration = tuplet2->ticks()
+                                        * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
 
             if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration)
                 && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {

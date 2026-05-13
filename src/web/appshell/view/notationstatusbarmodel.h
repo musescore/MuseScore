@@ -56,7 +56,8 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     Q_PROPERTY(bool zoomEnabled READ zoomEnabled NOTIFY zoomEnabledChanged)
     Q_PROPERTY(QVariantList availableViewModeList READ availableViewModeList_property NOTIFY availableViewModeListChanged)
     Q_PROPERTY(QVariantList availableZoomList READ availableZoomList_property NOTIFY availableZoomListChanged)
-    Q_PROPERTY(int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
+    Q_PROPERTY(
+        int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
 
     muse::GlobalInject<muse::workspace::IWorkspaceConfiguration> workspaceConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;

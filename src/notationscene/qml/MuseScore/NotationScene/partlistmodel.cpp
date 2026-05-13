@@ -126,7 +126,9 @@ void PartListModel::createNewPart()
 {
     TRACEFUNC;
 
-    QString name = mu::engraving::formatUniqueExcerptName(muse::mtrc("notation", "Part"), collectExcerptLowerNames(m_excerpts)).toQString();
+    QString name
+        = mu::engraving::formatUniqueExcerptName(muse::mtrc("notation", "Part"),
+                                                 collectExcerptLowerNames(m_excerpts)).toQString();
     IExcerptNotationPtr newExcerpt = masterNotation()->createEmptyExcerpt(name);
 
     int index = m_excerpts.size();

@@ -518,7 +518,8 @@ void SingleDraw::draw(const Note* item, Painter* painter, const PaintOptions& op
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
         if (item->tieBackNonPartial() && !tab->showBackTied()) {
-            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
+            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system()
+                && item->el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
@@ -682,10 +683,12 @@ static void drawTips(const BarLine* item, Painter* painter, bool reversed, doubl
     const BarLine::LayoutData* ldata = item->ldata();
     if (reversed) {
         if (item->isTop()) {
-            item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), ldata->y1));
+            item->drawSymbol(SymId::reversedBracketTop, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketTop), ldata->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), ldata->y2));
+            item->drawSymbol(SymId::reversedBracketBottom, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketBottom), ldata->y2));
         }
     } else {
         if (item->isTop()) {
@@ -1069,7 +1072,8 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter, const PaintOption
     }
 
     if (!item->isWavy()) {
-        painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+        painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(),
+                            PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(ldata->path);
     } else {

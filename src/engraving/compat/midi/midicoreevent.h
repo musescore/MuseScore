@@ -200,7 +200,12 @@ public:
     void setValue(int v) { _b = static_cast<uint8_t>(v); }
 
     void setData(int a, int b) { _a = static_cast<uint8_t>(a); _b = static_cast<uint8_t>(b); }
-    void setData(int t, int a, int b) { _type = static_cast<uint8_t>(t); _a = static_cast<uint8_t>(a); _b = static_cast<uint8_t>(b); }
+    void setData(int t, int a, int b)
+    {
+        _type = static_cast<uint8_t>(t);
+        _a = static_cast<uint8_t>(a);
+        _b = static_cast<uint8_t>(b);
+    }
 
     bool isChannelEvent() const
     {

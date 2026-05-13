@@ -33,7 +33,8 @@ class NoteLineSettingsModel : public TextLineSettingsModel
     QML_UNCREATABLE("Not creatable from QML")
 
 public:
-    explicit NoteLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit NoteLineSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                   IElementRepositoryService* repository);
 
 private:
     void createProperties() override;

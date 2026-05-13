@@ -48,7 +48,8 @@ static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/my
 static const Settings::Key SHOULD_ASK_SAVE_LOCATION_TYPE(module_name, "project/shouldAskSaveLocationType");
 static const Settings::Key LAST_USED_SAVE_LOCATION_TYPE(module_name, "project/lastUsedSaveLocationType");
 static const Settings::Key SHOULD_WARN_BEFORE_PUBLISH(module_name, "project/shouldWarnBeforePublish");
-static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name, "project/shouldWarnBeforeSavingPubliclyToCloud");
+static const Settings::Key SHOULD_WARN_BEFORE_SAVING_PUBLICLY_TO_CLOUD(module_name,
+                                                                       "project/shouldWarnBeforeSavingPubliclyToCloud");
 static const Settings::Key HOME_SCORES_PAGE_VIEW_TYPE(module_name, "project/homeScoresPageViewType");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
@@ -57,7 +58,8 @@ static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveI
 static const Settings::Key ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH(module_name, "project/alsoShareAudioCom");
 static const Settings::Key SHOW_ALSO_SHARE_AUDIO_COM_DIALOG(module_name, "project/showAlsoShareAudioComDialog");
 static const Settings::Key HAS_ASKED_ALSO_SHARE_AUDIO_COM(module_name, "project/hasAskedAlsoShareAudioCom");
-static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
+static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name,
+                                                                         "project/shouldDestinationFolderBeOpenedOnExport");
 static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/openDetailedProjectUploadedDialog");
 static const Settings::Key HAS_ASKED_AUDIO_GENERATION_SETTINGS(module_name, "project/hasAskedAudioGenerationSettings");
 static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");

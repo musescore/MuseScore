@@ -36,8 +36,8 @@ public:
 
 private:
     static void renderChord(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
-    static void renderChordWithGraceChords(const Chord* chord, const muse::mpe::ArticulationType type, const RenderingContext& ctx,
-                                           muse::mpe::PlaybackEventList& result);
+    static void renderChordWithGraceChords(const Chord* chord, const muse::mpe::ArticulationType type,
+                                           const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
     static bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 };
 }

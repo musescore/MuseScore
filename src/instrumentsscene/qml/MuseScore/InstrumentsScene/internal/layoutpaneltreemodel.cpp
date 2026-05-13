@@ -532,7 +532,8 @@ void LayoutPanelTreeModel::moveSelectedRowsUp()
 
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
+             sourceRowFirst.row() - 1);
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsDown()
@@ -553,7 +554,8 @@ void LayoutPanelTreeModel::moveSelectedRowsDown()
     const QModelIndex& sourceRowFirst = selectedIndexList.first();
     const QModelIndex& sourceRowLast = selectedIndexList.last();
 
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
+    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(),
+             sourceRowLast.row() + 1);
 }
 
 void LayoutPanelTreeModel::removeSelectedRows()
@@ -575,7 +577,8 @@ void LayoutPanelTreeModel::removeSelectedRows()
     removeRows(firstIndex.row(), selectedIndexList.size(), firstIndex.parent());
 }
 
-bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
+bool LayoutPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+                                    const QModelIndex& destinationParent,
                                     int destinationChild)
 {
     setLoadingBlocked(true);

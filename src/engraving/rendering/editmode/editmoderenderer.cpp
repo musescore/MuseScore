@@ -35,7 +35,8 @@ using namespace mu::engraving::rendering::editmode;
 using namespace mu::engraving;
 using namespace muse::draw;
 
-void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+void EditModeRenderer::drawItem(const EngravingItem* item, muse::draw::Painter* painter, const EditData& ed,
+                                double currentViewScaling,
                                 const PaintOptions& opt)
 {
     switch (item->type()) {
@@ -153,7 +154,8 @@ void EditModeRenderer::drawEngravingItem(const EngravingItem* item, muse::draw::
     }
 }
 
-void EditModeRenderer::drawBarline(const BarLine* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+void EditModeRenderer::drawBarline(const BarLine* item, muse::draw::Painter* painter, const EditData& ed,
+                                   double currentViewScaling,
                                    const PaintOptions& opt)
 {
     drawEngravingItem(item, painter, ed, currentViewScaling, opt);
@@ -172,7 +174,8 @@ void EditModeRenderer::drawBarline(const BarLine* item, muse::draw::Painter* pai
     painter->translate(-pos);
 }
 
-void EditModeRenderer::drawDynamic(const Dynamic* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+void EditModeRenderer::drawDynamic(const Dynamic* item, muse::draw::Painter* painter, const EditData& ed,
+                                   double currentViewScaling,
                                    const PaintOptions& opt)
 {
     if (item->cursor() && item->cursor()->editing()) {
@@ -211,7 +214,8 @@ static void drawTextBaseSelection(const TextBase* item, muse::draw::Painter* pai
     painter->restore();
 }
 
-void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed, double currentViewScaling,
+void EditModeRenderer::drawTextBase(const TextBase* item, muse::draw::Painter* painter, const EditData& ed,
+                                    double currentViewScaling,
                                     const PaintOptions& opt)
 {
     PointF pos(item->canvasPos());

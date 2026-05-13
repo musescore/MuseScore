@@ -140,7 +140,8 @@ ReducedFraction findSumLengthOfRests(
         const auto& chordOnTime = (chord.second->first < startBarTick)
                                   ? startBarTick
                                   : Quantize::findQuantizedTupletChordOnTime(*chord.second, tupletInfo.len,
-                                                                             tupletLimits(tupletInfo.tupletNumber).ratio, startBarTick);
+                                                                             tupletLimits(
+                                                                                 tupletInfo.tupletNumber).ratio, startBarTick);
         if (beg < chordOnTime) {
             sumLen += (chordOnTime - beg);
         }

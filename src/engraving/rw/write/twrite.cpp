@@ -1178,7 +1178,8 @@ void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, co
     w.write();
 }
 
-void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track, Fraction tick)
+void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track,
+                             Fraction tick)
 {
     Fraction frac = fraction(ctx.clipboardmode(), current, tick);
     if (frac == s->score()->endTick()) {

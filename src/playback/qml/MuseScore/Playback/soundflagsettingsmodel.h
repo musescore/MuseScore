@@ -47,8 +47,10 @@ class SoundFlagSettingsModel : public mu::notation::AbstractElementPopupModel
     Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
     Q_PROPERTY(QStringList selectedPresetCodes READ selectedPresetCodes NOTIFY selectedPresetCodesChanged FINAL)
 
-    Q_PROPERTY(QVariantList availablePlayingTechniques READ availablePlayingTechniques NOTIFY availablePlayingTechniquesChanged FINAL)
-    Q_PROPERTY(QString selectedPlayingTechniqueCode READ selectedPlayingTechniqueCode NOTIFY selectedPlayingTechniqueCodeChanged FINAL)
+    Q_PROPERTY(
+        QVariantList availablePlayingTechniques READ availablePlayingTechniques NOTIFY availablePlayingTechniquesChanged FINAL)
+    Q_PROPERTY(
+        QString selectedPlayingTechniqueCode READ selectedPlayingTechniqueCode NOTIFY selectedPlayingTechniqueCodeChanged FINAL)
 
     Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
 
@@ -108,7 +110,8 @@ private:
     void setAvailableSoundPresets(const muse::audio::SoundPresetList& presets);
     void loadAvailablePlayingTechniques();
 
-    muse::uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const muse::TranslatableString& title, bool enabled = true);
+    muse::uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const muse::TranslatableString& title,
+                                                bool enabled = true);
 
     QString defaultPresetCode() const;
     QString defaultPlayingTechniqueCode() const;

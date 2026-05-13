@@ -48,7 +48,8 @@ public:
     static void upDown(Score* score, bool up, UpDownMode mode);
 private:
     static void changeAccidental2(Note* n, int pitch, int tpc);
-    static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2);
+    static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1,
+                                int& newTpc2);
 };
 
 class ChangeVelocity : public UndoCommand

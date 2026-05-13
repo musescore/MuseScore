@@ -67,8 +67,8 @@ public:
         doWriteItem(static_cast<const EngravingItem*>(item), xml);
     }
 
-    virtual void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool,
-                               bool, Fraction& curTick) = 0;
+    virtual void writeSegments(XmlWriter& xml, SelectionFilter* filter, track_idx_t st, track_idx_t et, Segment* sseg,
+                               Segment* eseg, bool, bool, Fraction& curTick) = 0;
 
 private:
     virtual void doWriteItem(const EngravingItem* item, XmlWriter& xml) = 0;

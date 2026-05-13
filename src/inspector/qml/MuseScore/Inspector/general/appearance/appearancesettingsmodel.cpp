@@ -201,7 +201,8 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int minZ = (*std::min_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
+    int minZ
+        = (*std::min_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
     int i;
     for (i = 0; i < static_cast<int>(elements.size()); i++) {
         if (elements[i]->z() == minZ) {
@@ -220,7 +221,8 @@ void AppearanceSettingsModel::pushForwardsInOrder()
     std::vector<EngravingItem*> elements = allOverlappingElements();
     std::sort(elements.begin(), elements.end(), elementLessThan);
 
-    int maxZ = (*std::max_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
+    int maxZ
+        = (*std::max_element(m_elementsForArrangeProperty.begin(), m_elementsForArrangeProperty.end(), elementLessThan))->z();
     int elementsCount = static_cast<int>(elements.size());
     int i;
     for (i = elementsCount - 1; i > 0; i--) {

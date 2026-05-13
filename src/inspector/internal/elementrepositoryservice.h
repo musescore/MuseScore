@@ -32,11 +32,13 @@ public:
 
     bool needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
                                engraving::SelState selectionState) const override;
-    void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList, engraving::SelState selectionState) override;
+    void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
+                           engraving::SelState selectionState) override;
 
     QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType) const override;
     QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType,
-                                                            std::function<bool(const mu::engraving::EngravingItem*)> filterFunc) const
+                                                            std::function<bool(const mu::engraving::EngravingItem*)> filterFunc)
+    const
     override;
     QList<mu::engraving::EngravingItem*> takeAllElements() const override;
 

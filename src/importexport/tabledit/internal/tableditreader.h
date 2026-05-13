@@ -32,6 +32,7 @@ class TablEditReader : public project::INotationReader
     muse::GlobalInject<muse::io::IFileSystem> fileSystem;
 public:
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
-    mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
+    mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path,
+                              const Options& options = Options());
 };
 }

@@ -188,7 +188,8 @@ MenuItem* AppMenuModel::makeViewMenu()
     };
 
 #ifdef MUSE_MODULE_WORKSPACE
-    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"), m_workspacesMenuModel->items(), "menu-workspaces"),
+    viewItems << makeMenu(TranslatableString("appshell/menu/view", "W&orkspaces"),
+                          m_workspacesMenuModel->items(), "menu-workspaces"),
 #endif
 
     viewItems << makeSeparator()

@@ -35,7 +35,8 @@ class IGetScore;
 class NotationParts : public INotationParts, public muse::async::Asyncable
 {
 public:
-    NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack, INotationStylePtr style);
+    NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack,
+                  INotationStylePtr style);
 
     muse::async::NotifyList<const Part*> partList() const override;
     muse::async::NotifyList<const Staff*> staffList(const muse::ID& partId) const override;
@@ -69,8 +70,10 @@ public:
     void removeParts(const muse::IDList& partsIds) override;
     void removeStaves(const muse::IDList& stavesIds) override;
 
-    void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
-    void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
+    void moveParts(const muse::IDList& sourcePartsIds, const muse::ID& destinationPartId,
+                   InsertMode mode = InsertMode::Before) override;
+    void moveStaves(const muse::IDList& sourceStavesIds, const muse::ID& destinationStaffId,
+                    InsertMode mode = InsertMode::Before) override;
 
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
     bool appendStaffLinkedToMaster(Staff* staff, Staff* masterSourceStaff, const muse::ID& destinationPartId) override;

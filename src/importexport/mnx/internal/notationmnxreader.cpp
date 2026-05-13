@@ -59,7 +59,8 @@ Ret NotationMnxReader::importJson(MasterScore* score, ByteArray&& jsonData, cons
             if (!exactSchemaValidation && mnx::validation::hasValidDocumentRoot(doc)) {
                 LOGW() << path << " has a valid document root; importing with exact schema validation disabled.";
             } else {
-                return make_ret(Ret::Code::NotSupported, TranslatableString("importexport/mnx", "File is not a valid MNX document.").str);
+                return make_ret(Ret::Code::NotSupported,
+                                TranslatableString("importexport/mnx", "File is not a valid MNX document.").str);
             }
         }
         LOGI() << "MNX import started: schema version=" << doc.mnx().version() << " path=" << path;

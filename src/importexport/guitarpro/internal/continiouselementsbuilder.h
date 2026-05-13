@@ -96,8 +96,8 @@ public:
      * @param elemExists indicates if element exists in imported file on current beat
      * @param subType is used when elements of same MU type with different subtypes can overlap each other (ex, vibrato)
      */
-    void buildContiniousElement(mu::engraving::ChordRest* cr, mu::engraving::ElementType muType, ImportType importType, bool elemExists,
-                                sub_type_t subType = 0);
+    void buildContiniousElement(mu::engraving::ChordRest* cr, mu::engraving::ElementType muType, ImportType importType,
+                                bool elemExists, sub_type_t subType = 0);
     void notifyUncompletedMeasure();
     void addElementsToScore();
 
@@ -127,7 +127,8 @@ private:
 
     std::unordered_map<mu::engraving::ElementType,
                        std::unordered_map<track_idx_t, std::unordered_map<sub_type_t, ImportType> > > m_lastImportTypes;
-    std::unordered_map<track_idx_t, std::unordered_map<ImportType, std::set<mu::engraving::Spanner*> > > m_spannersWithoutEndElement;
+    std::unordered_map<track_idx_t,
+                       std::unordered_map<ImportType, std::set<mu::engraving::Spanner*> > > m_spannersWithoutEndElement;
     std::unordered_map<track_idx_t, std::unordered_map<ImportType, ContiniousElement> > m_elementsToAddToScore;
     std::vector<mu::engraving::Spanner*> m_orderedAddedElements;
 

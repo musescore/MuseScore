@@ -1031,7 +1031,8 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
         endEditElement();
     }
 
-    if (elements.size() == 1 && type == SelectType::ADD && QGuiApplication::keyboardModifiers() == Qt::KeyboardModifier::ControlModifier) {
+    if (elements.size() == 1 && type == SelectType::ADD
+        && QGuiApplication::keyboardModifiers() == Qt::KeyboardModifier::ControlModifier) {
         if (score()->selection().isRange()) {
             score()->selection().setState(mu::engraving::SelState::LIST);
             score()->setUpdateAll();
@@ -1067,7 +1068,8 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
     score()->select(elements, type, staffIndex);
 }
 
-void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
+void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType,
+                                                              mu::engraving::Segment* segment)
 {
     TRACEFUNC;
 
@@ -1565,7 +1567,8 @@ bool NotationInteraction::startDropRange(const QByteArray& data)
         if (reader.name() == "StaffList") {
             rdd.sourceTick = Fraction::fromString(reader.attribute("tick"));
             rdd.tickLength = Fraction::fromString(reader.attribute("len"));
-            rdd.timeStretch = reader.hasAttribute("timeStretch") ? Fraction::fromString(reader.attribute("timeStretch")) : Fraction(1, 1);
+            rdd.timeStretch
+                = reader.hasAttribute("timeStretch") ? Fraction::fromString(reader.attribute("timeStretch")) : Fraction(1, 1);
             rdd.sourceStaffIdx = static_cast<staff_idx_t>(reader.intAttribute("staff", -1));
             rdd.numStaves = reader.intAttribute("staves", 0);
             break;
@@ -1845,7 +1848,8 @@ static bool dropRangePosition(Score* score, const PointF& pos,
         static constexpr bool useTimeAnchors = true;
 
         // Depends on time tick anchors that we just created
-        if (!dragPositionToSegment(pos, targetStartMeasure, *targetStartStaffIdx, targetStartSegment, spacingFactor, useTimeAnchors)) {
+        if (!dragPositionToSegment(pos, targetStartMeasure, *targetStartStaffIdx, targetStartSegment, spacingFactor,
+                                   useTimeAnchors)) {
             return false;
         }
 
@@ -2393,9 +2397,12 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
     };
 
-    const bool elementIsStandardBend = element->isActionIcon() && (toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND
-                                                                   || toActionIcon(element)->actionType() == ActionIconType::DIVE);
-    const bool elementIsNoteLine = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::NOTE_ANCHORED_LINE;
+    const bool elementIsStandardBend = element->isActionIcon()
+                                       && (toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND
+                                           || toActionIcon(element)->actionType()
+                                           == ActionIconType::DIVE);
+    const bool elementIsNoteLine = element->isActionIcon()
+                                   && toActionIcon(element)->actionType() == ActionIconType::NOTE_ANCHORED_LINE;
     const bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend || elementIsNoteLine)
                                   && sel.isList() && sel.elements().size() == 2
                                   && sel.elements()[0]->isNote() && sel.elements()[1]->isNote()
@@ -2977,7 +2984,8 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
         bool firstCrTrill = firstItem && firstItem->isChord() && toChord(firstItem)->isTrillCueNote();
         bool secondCrTrill = secondItem && secondItem->isChord() && toChord(secondItem)->isTrillCueNote();
 
-        if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest()) && !(firstCrTrill || secondCrTrill)) {
+        if (firstItem && secondItem && (firstItem->isChordRest() || secondItem->isChordRest())
+            && !(firstCrTrill || secondCrTrill)) {
             doAddSlur(firstItem, secondItem, slurTemplate);
         }
     }
@@ -3966,7 +3974,8 @@ void NotationInteraction::selectEmptyTrailingMeasure()
             ftm = ftm->coveringMMRestOrThis();
         }
         EngravingItem* el
-            = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(mu::engraving::trackZeroVoice(cr->track()), false);
+            = !cr ? ftm->first()->nextChordRest(0, false) : ftm->first()->nextChordRest(mu::engraving::trackZeroVoice(
+                                                                                            cr->track()), false);
         score()->inputState().moveInputPos(el);
         select({ el }, SelectType::SINGLE);
         resetHitElementContext();
@@ -4135,7 +4144,8 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
     }
 
     const bool isLeftDirection = MoveDirection::Left == d;
-    const bool isHorizontalLayout = score()->isLayoutMode(LayoutMode::LINE) || score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED);
+    const bool isHorizontalLayout = score()->isLayoutMode(LayoutMode::LINE)
+                                    || score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED);
 
     // VBoxes are not included in horizontal layouts - skip over them (and their contents) when moving selections...
     const auto nextNonVBox = [this, isLeftDirection](EngravingItem* currElem) -> EngravingItem* {
@@ -4290,16 +4300,20 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
         }
     } break;
     case MoveDirection::Left:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(step,
+                                                                                 0.0), mu::engraving::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Right:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(step, 0.0), mu::engraving::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(step,
+                                                                                 0.0), mu::engraving::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Up:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() - PointF(0.0,
+                                                                                 step), mu::engraving::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Down:
-        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(0.0, step), mu::engraving::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(mu::engraving::Pid::OFFSET, el->offset() + PointF(0.0,
+                                                                                 step), mu::engraving::PropertyFlags::UNSTYLED);
         break;
     }
 
@@ -5004,7 +5018,8 @@ void NotationInteraction::editElement(QKeyEvent* event)
         if (isBracket && bracketIndex != muse::nidx && systemIndex != muse::nidx) {
             // Try to restore selected bracket
             System* system = systemIndex < score()->systems().size() ? score()->systems().at(systemIndex) : nullptr;
-            EngravingItem* bracket = system && bracketIndex < system->brackets().size() ? system->brackets().at(bracketIndex) : nullptr;
+            EngravingItem* bracket = system
+                                     && bracketIndex < system->brackets().size() ? system->brackets().at(bracketIndex) : nullptr;
             if (bracket) {
                 m_editData.element = bracket;
                 select({ bracket }, SelectType::SINGLE);
@@ -5054,7 +5069,8 @@ muse::async::Notification NotationInteraction::isEditingElementChanged() const
 void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
 {
     EngravingItem* selectedElement = m_selection->element();
-    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
+    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress
+        && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
         updateDragAnchorLines();
     } else {
@@ -5323,7 +5339,8 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_editData.element->editCopy(m_editData);
-        mu::engraving::TextEditData* ted = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
+        mu::engraving::TextEditData* ted
+            = static_cast<mu::engraving::TextEditData*>(m_editData.getData(m_editData.element).get());
         if (!ted->selectedText.isEmpty()) {
             QMimeData* mimeData = new QMimeData();
             mimeData->setData(TextEditData::mimeRichTextFormat, ted->selectedText.toQString().toUtf8());
@@ -6127,8 +6144,10 @@ bool NotationInteraction::transpose(const TransposeOptions& options)
 {
     startEdit(TranslatableString("undoableAction", "Transposition"));
 
-    bool ok = Transpose::transpose(score(), options.mode, options.direction, options.key, options.interval,
-                                   options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
+    bool ok = Transpose::transpose(
+        score(), options.mode, options.direction, options.key, options.interval,
+        options.needTransposeKeys, options.needTransposeChordNames,
+        options.needTransposeDoubleSharpsFlats);
 
     apply();
 
@@ -6438,7 +6457,8 @@ void NotationInteraction::addStretch(qreal value)
 Measure* NotationInteraction::selectedMeasure() const
 {
     INotationInteraction::HitElementContext context = hitElementContext();
-    mu::engraving::Measure* measure = context.element && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
+    mu::engraving::Measure* measure = context.element
+                                      && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
 
     if (!measure) {
         INotationSelectionPtr selection = this->selection();
@@ -7293,7 +7313,8 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 
     Fraction f = measure->ticks();
     int ticksPerBeat   = f.ticks()
-                         / ((f.numerator() > 3 && (f.numerator() % 3) == 0 && f.denominator() > 4) ? f.numerator() / 3 : f.numerator());
+                         / ((f.numerator() > 3 && (f.numerator() % 3) == 0
+                             && f.denominator() > 4) ? f.numerator() / 3 : f.numerator());
     Fraction tickInBar = tick - measure->tick();
     Fraction newTick   = measure->tick()
                          + Fraction::fromTicks((
@@ -7491,7 +7512,8 @@ void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
 
     bool bNew = false;
     // add a (new) FB element, using chord duration as default duration
-    mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0, 1), &bNew);
+    mu::engraving::FiguredBass* fbNew
+        = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0, 1), &bNew);
     if (bNew) {
         startEdit(TranslatableString("undoableAction", "Navigate to next figured bass"));
         score()->undoAddElement(fbNew);
@@ -7537,7 +7559,9 @@ void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direc
 
     bool bNew = false;
     // add a (new) FB element, using chord duration as default duration
-    mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, fb->track(), Fraction(0, 1), &bNew);
+    mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, fb->track(), Fraction(0,
+                                                                                                                            1),
+                                                                                            &bNew);
     if (bNew) {
         startEdit(TranslatableString("undoableAction", "Navigate to next figured bass"));
         score()->undoAddElement(fbNew);

@@ -245,7 +245,8 @@ void ChangeDrumset::flip(EditData*)
     drumset = d;
 
     if (part->staves().size() > 0) {
-        part->score()->setLayout(Fraction(0, 1), part->score()->endTick(), part->staves().front()->idx(), part->staves().back()->idx());
+        part->score()->setLayout(Fraction(0, 1), part->score()->endTick(), part->staves().front()->idx(),
+                                 part->staves().back()->idx());
     }
 }
 
@@ -447,7 +448,8 @@ void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fractio
     score->undo(new ChangeInstrumentShort(tick, part, abbreviature));
 }
 
-void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom,
+                                             const String& longName,
                                              const String& shortName)
 {
     if (!score || !part) {

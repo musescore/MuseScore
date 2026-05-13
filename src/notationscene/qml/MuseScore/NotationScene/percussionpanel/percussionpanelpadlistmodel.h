@@ -84,7 +84,10 @@ public:
     void focusLastActivePad();
 
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
-    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> padActionRequested() const { return m_padActionRequestChannel; }
+    muse::async::Channel<PercussionPanelPadModel::PadAction, int /*pitch*/> padActionRequested() const
+    {
+        return m_padActionRequestChannel;
+    }
 
 signals:
     void numPadsChanged();

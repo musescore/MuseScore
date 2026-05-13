@@ -335,7 +335,8 @@ void ContiniousElementsBuilder::addElementsToScore()
 }
 
 /// indicating the type of behaviour for continious element
-ContiniousElementsBuilder::ContiniousElementState ContiniousElementsBuilder::calculateState(bool isRest, bool elemExists, bool splitByRests,
+ContiniousElementsBuilder::ContiniousElementState ContiniousElementsBuilder::calculateState(bool isRest, bool elemExists,
+                                                                                            bool splitByRests,
                                                                                             bool importTypeChanged) const
 {
     ContiniousElementState state = ContiniousElementState::UNDEFINED;

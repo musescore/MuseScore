@@ -869,7 +869,9 @@ void Score::spell()
                 if (e && e->isChord()) {
                     Chord* c = toChord(e);
                     std::copy_if(c->notes().begin(), c->notes().end(),
-                                 std::back_inserter(notes), [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                                 std::back_inserter(notes), [this](EngravingItem* ce) {
+                        return selection().isNone() || ce->selected();
+                    });
                     for (Chord* g : c->graceNotes()) {
                         std::copy_if(g->notes().begin(), g->notes().end(),
                                      std::back_inserter(notes),
@@ -1060,7 +1062,8 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
 ///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, double spacingFactor, double preferredSpacingFactor) const
+Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, double spacingFactor,
+                              double preferredSpacingFactor) const
 {
     std::vector<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
     Measure* lastMeasure = nullptr;
@@ -2752,7 +2755,8 @@ KeyList Score::keyList() const
     }
     Key normalizedC = Key::C;
     bool needNormalize = firstStaff && !masterScore()->style().styleB(Sid::concertPitch)
-                         && (firstStaff->part()->instrument()->transpose().chromatic || firstStaff->part()->instruments().size() > 1);
+                         && (firstStaff->part()->instrument()->transpose().chromatic
+                             || firstStaff->part()->instruments().size() > 1);
     // normalize the keyevents to concert pitch if necessary
     KeyList nkl;
     for (auto key : tmpKeymap) {
@@ -2818,7 +2822,8 @@ void Score::sortSystemObjects(std::vector<staff_idx_t>& dst)
 
                 Measure* m = toMeasure(mb);
                 for (EngravingItem* e : m->el()) {
-                    if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(m_systemObjectStaves[i]->idx())) {
+                    if ((e->isJump() || e->isMarker()) && e->isLinked()
+                        && e->track() == staff2track(m_systemObjectStaves[i]->idx())) {
                         if (moveTo[i] == muse::nidx) {
                             // delete this clone
                             m->remove(e);
@@ -4033,7 +4038,8 @@ void Score::remapBracketsAndBarlines()
             // in which case masterStaff below will become null.
             size_t endSpannedMasterStaffIdx = std::min(masterStaffIdx + bracket->bracketSpan(), master->nstaves());
 
-            for (staff_idx_t spannedMasterStIdx = masterStaffIdx; spannedMasterStIdx < endSpannedMasterStaffIdx; ++spannedMasterStIdx) {
+            for (staff_idx_t spannedMasterStIdx = masterStaffIdx; spannedMasterStIdx < endSpannedMasterStaffIdx;
+                 ++spannedMasterStIdx) {
                 masterStaff = master->staff(spannedMasterStIdx);
                 IF_ASSERT_FAILED(masterStaff) {
                     continue;
@@ -4602,7 +4608,8 @@ ChordRest* Score::findChordRestEndingBeforeTickInStaff(const Fraction& tick, sta
 //   findChordRestEndingBeforeTickInStaffAndVoice
 //    find last chord/rest on staff and voice that ends before tick
 //-----------------------------------------------------------------
-ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx, voice_idx_t voice) const
+ChordRest* Score::findChordRestEndingBeforeTickInStaffAndVoice(const Fraction& tick, staff_idx_t staffIdx,
+                                                               voice_idx_t voice) const
 {
     return findChordRestEndingBeforeTickInStaffAndVoice(tick, staffIdx, true, voice);
 }
@@ -4796,10 +4803,13 @@ EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool dir) const
             auto currentSegment = el->isChordRest() ? toChordRest(el)->segment() : nullptr;
             if ((destination = getNextPrevSectionBreak(currentMeasureBase, false))) {
                 if (currentSegment) {
-                    if ((el = getScoreElementOfMeasureBase((score()->first() == destination) ? destination : destination->next()))) {
+                    if ((el
+                             = getScoreElementOfMeasureBase((score()->first()
+                                                             == destination) ? destination : destination->next()))) {
                         if (el->isChordRest() && (toChordRest(el)->segment() == currentSegment)) {
                             if ((destination = getNextPrevSectionBreak(destination, false))) {
-                                el = !(destination->sectionBreak()) ? destination : getScoreElementOfMeasureBase(destination->next());
+                                el = !(destination->sectionBreak()) ? destination : getScoreElementOfMeasureBase(
+                                    destination->next());
                             }
                         }
                     }
@@ -5551,7 +5561,8 @@ void Score::changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignmen
     }
 }
 
-std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, StaffAccepted staffAccepted) const
+std::set<staff_idx_t> Score::staffIdxSetFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
+                                                  StaffAccepted staffAccepted) const
 {
     std::set<staff_idx_t> result;
 
@@ -6265,8 +6276,13 @@ muse::async::Channel<ScoreChanges> Score::changesChannel() const { return m_mast
 void Score::setUpdateAll() { m_masterScore->setUpdateAll(); }
 
 void Score::setLayoutAll(staff_idx_t staff, const EngravingItem* e) { m_masterScore->setLayoutAll(staff, e); }
-void Score::setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e) { m_masterScore->setLayout(tick, staff, e); }
-void Score::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e)
+void Score::setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e)
+{
+    m_masterScore->setLayout(tick, staff, e);
+}
+
+void Score::setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2,
+                      const EngravingItem* e)
 {
     m_masterScore->setLayout(tick1, tick2, staff1, staff2, e);
 }

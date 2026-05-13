@@ -380,7 +380,8 @@ void VelocityMap::addMissingDynamicsAfterHairpins()
     auto nextDynamicVal = [](int previousDynamicValue, ChangeDirection hairpinDirection) {
         int newVal
             = (hairpinDirection
-               == ChangeDirection::INCREASING ? previousDynamicValue + VelocityMap::STEP : previousDynamicValue - VelocityMap::STEP);
+               == ChangeDirection::INCREASING ? previousDynamicValue + VelocityMap::STEP : previousDynamicValue
+               - VelocityMap::STEP);
         return std::clamp(newVal, VelocityMap::MIN_VALUE, VelocityMap::MAX_VALUE);
     };
 

@@ -68,7 +68,8 @@ static const std::string DEV_INFO_NAME = "devinfo";
 
 static constexpr bool ADD_SEPARATOR = true;
 
-Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& highlightConfigPath,
+Ret BackendApi::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
+                                 const muse::io::path_t& highlightConfigPath,
                                  const OpenParams& openParams)
 {
     TRACEFUNC
@@ -324,7 +325,8 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::path_t& highlightConfigPath, BackendJsonWriter& jsonWriter,
+Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::path_t& highlightConfigPath,
+                                BackendJsonWriter& jsonWriter,
                                 bool addSeparator)
 {
     TRACEFUNC
@@ -367,7 +369,8 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const muse::io::pat
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const std::string& elementsPositionsTagName,
+Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName,
+                                             const std::string& elementsPositionsTagName,
                                              const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
@@ -759,7 +762,8 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
         LOGW() << "Error write mscz file";
     }
 
-    QByteArray ba = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
+    QByteArray ba
+        = QByteArray::fromRawData(reinterpret_cast<const char*>(scoreData.constData()), static_cast<int>(scoreData.size()));
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);

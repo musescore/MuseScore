@@ -38,7 +38,8 @@ static void updateNoteLines(Segment* segment, track_idx_t track)
         return;
     }
     for (Segment* s = segment->next1(); s; s = s->next1()) {
-        if ((s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef)) && s->element(track) && !s->element(track)->generated()) {
+        if ((s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef)) && s->element(track)
+            && !s->element(track)->generated()) {
             break;
         }
         if (!s->isChordRestType()) {

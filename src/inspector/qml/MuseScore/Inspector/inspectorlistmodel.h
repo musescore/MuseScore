@@ -37,7 +37,8 @@
 
 namespace mu::inspector {
 class IElementRepositoryService;
-class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable, public muse::Contextable
+class InspectorListModel : public QAbstractListModel, public QQmlParserStatus, public muse::async::Asyncable,
+    public muse::Contextable
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -68,7 +69,8 @@ private:
     void listenSelectionChanged();
     void listenScoreChanges();
 
-    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet& changedStyleIdSet);
+    void onScoreChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                        const mu::engraving::StyleIdSet& changedStyleIdSet);
 
     void updateElementList();
 

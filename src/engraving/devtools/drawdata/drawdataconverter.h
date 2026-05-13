@@ -39,7 +39,8 @@ public:
     muse::Ret saveAsPng(const muse::draw::DrawDataPtr& data, const muse::io::path_t& path);
 
     muse::draw::Pixmap drawDataToPixmap(const muse::draw::DrawDataPtr& data);
-    void drawOnPixmap(muse::draw::Pixmap& px, const muse::draw::DrawDataPtr& data, const muse::draw::Color& overlay = muse::draw::Color());
+    void drawOnPixmap(muse::draw::Pixmap& px, const muse::draw::DrawDataPtr& data,
+                      const muse::draw::Color& overlay = muse::draw::Color());
 };
 }
 

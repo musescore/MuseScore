@@ -62,8 +62,10 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Sco
     //! NOTE To draw on the screen, no need to adjust the viewport,
     //! to draw on others (pdf, png, printer), we need to set the viewport
     if (opt.isSetViewport) {
-        painter->setViewport(RectF(0.0, 0.0, std::lrint(pageSize.width() * DEVICE_DPI), std::lrint(pageSize.height() * DEVICE_DPI)));
-        painter->setWindow(RectF(0.0, 0.0, std::lrint(pageSize.width() * engraving::DPI), std::lrint(pageSize.height() * engraving::DPI)));
+        painter->setViewport(RectF(0.0, 0.0, std::lrint(pageSize.width() * DEVICE_DPI), std::lrint(
+                                       pageSize.height() * DEVICE_DPI)));
+        painter->setWindow(RectF(0.0, 0.0, std::lrint(pageSize.width() * engraving::DPI),
+                                 std::lrint(pageSize.height() * engraving::DPI)));
     }
 
     // Setup score draw system

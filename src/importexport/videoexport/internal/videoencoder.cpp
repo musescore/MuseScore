@@ -78,7 +78,8 @@ VideoEncoder::~VideoEncoder()
     delete m_ffmpeg;
 }
 
-bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps)
+bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop,
+                        unsigned fps)
 {
     m_ffmpeg->ptsCounter = 0;
 
@@ -236,7 +237,8 @@ bool VideoEncoder::open(const muse::io::path_t& fileName, unsigned width, unsign
     avpicture_fill((AVPicture*)m_ffmpeg->ppicture, m_ffmpeg->picture_buf, m_ffmpeg->codecCtx->pix_fmt, m_ffmpeg->codecCtx->width,
                    m_ffmpeg->codecCtx->height);
 #else
-    av_image_fill_arrays(m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize, m_ffmpeg->picture_buf, m_ffmpeg->codecCtx->pix_fmt,
+    av_image_fill_arrays(m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize, m_ffmpeg->picture_buf,
+                         m_ffmpeg->codecCtx->pix_fmt,
                          m_ffmpeg->codecCtx->width, m_ffmpeg->codecCtx->height, 1);
 #endif
 
@@ -429,8 +431,10 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
         return false;
     }
 
-    m_ffmpeg->img_convert_ctx = sws_getCachedContext(m_ffmpeg->img_convert_ctx, m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_BGRA,
-                                                     m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
+    m_ffmpeg->img_convert_ctx = sws_getCachedContext(m_ffmpeg->img_convert_ctx, m_ffmpeg->width, m_ffmpeg->height,
+                                                     AV_PIX_FMT_BGRA,
+                                                     m_ffmpeg->width, m_ffmpeg->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL,
+                                                     NULL, NULL);
 
     if (!m_ffmpeg->img_convert_ctx) {
         LOGE() << "failed initialize the conversion context";
@@ -447,7 +451,8 @@ bool VideoEncoder::convertImage_sws(const QImage& img)
     srcstride[1] = 0;
     srcstride[2 ]= 0;
 
-    sws_scale(m_ffmpeg->img_convert_ctx, srcplanes, srcstride, 0, m_ffmpeg->height, m_ffmpeg->ppicture->data, m_ffmpeg->ppicture->linesize);
+    sws_scale(m_ffmpeg->img_convert_ctx, srcplanes, srcstride, 0, m_ffmpeg->height, m_ffmpeg->ppicture->data,
+              m_ffmpeg->ppicture->linesize);
 
     return true;
 }

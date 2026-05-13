@@ -35,4 +35,7 @@ RepeatBarlinesSectionModel::RepeatBarlinesSectionModel(QObject* parent)
 
 StyleItem* RepeatBarlinesSectionModel::barlineBeforeSigChange() const { return styleItem(StyleId::barlineBeforeSigChange); }
 StyleItem* RepeatBarlinesSectionModel::doubleBarlineBeforeKeySig() const { return styleItem(StyleId::doubleBarlineBeforeKeySig); }
-StyleItem* RepeatBarlinesSectionModel::doubleBarlineBeforeTimeSig() const { return styleItem(StyleId::doubleBarlineBeforeTimeSig); }
+StyleItem* RepeatBarlinesSectionModel::doubleBarlineBeforeTimeSig() const
+{
+    return styleItem(StyleId::doubleBarlineBeforeTimeSig);
+}

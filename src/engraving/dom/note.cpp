@@ -2100,7 +2100,8 @@ void Note::updateAccidental(AccidentalState* as)
         if (m_accidental) {
             bool correct = muse::RealIsEqual(Accidental::subtype2centOffset(m_accidental->accidentalType()), m_centOffset);
             if (!correct) {
-                m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE, static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
+                m_accidental->undoChangeProperty(Pid::ACCIDENTAL_TYPE,
+                                                 static_cast<int>(Accidental::centOffset2Subtype(m_centOffset)));
             }
         } else {
             AccidentalType accType = Accidental::value2MicrotonalSubtype(tpc2alter(tpc()), quarterToneOffset());
@@ -3091,7 +3092,8 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setDeadNote(v.toBool());
         if (!staff()->isDrumStaff(tick())) {
             NoteHeadGroup head
-                = (m_deadNote && m_headGroup != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
+                = (m_deadNote
+                   && m_headGroup != NoteHeadGroup::HEAD_CROSS) ? NoteHeadGroup::HEAD_CROSS : NoteHeadGroup::HEAD_NORMAL;
             setHeadGroup(head);
         }
         break;

@@ -382,7 +382,8 @@ class PowerTab
     void              addToScore(ptSection& sec);
 
     mu::engraving::Measure* createMeasure(ptBar* bar, const mu::engraving::Fraction& tick);
-    void              fillMeasure(tBeatList& elist, mu::engraving::Measure* measure, int staff, std::vector<mu::engraving::Note*>&);
+    void              fillMeasure(tBeatList& elist, mu::engraving::Measure* measure, int staff,
+                                  std::vector<mu::engraving::Note*>&);
 
     int staves{ 0 };
 

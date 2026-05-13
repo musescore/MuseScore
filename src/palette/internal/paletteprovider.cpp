@@ -336,7 +336,8 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
     return false;
 }
 
-async::Promise<UserPaletteController::RemoveAction> UserPaletteController::showHideOrDeleteDialog(const std::string& question) const
+async::Promise<UserPaletteController::RemoveAction> UserPaletteController::showHideOrDeleteDialog(const std::string& question)
+const
 {
     int hideButton = int(IInteractive::Button::CustomButton) + 1;
     int deleteButton = hideButton + 1;
@@ -377,8 +378,10 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
     if (isCell) {
         if (visible) {
             std::string question = customCount == 1
-                                   ? muse::trc("palette", "Do you want to hide this custom palette cell or permanently delete it?")
-                                   : muse::trc("palette", "Do you want to hide these custom palette cells or permanently delete them?");
+                                   ? muse::trc("palette",
+                                               "Do you want to hide this custom palette cell or permanently delete it?")
+                                   : muse::trc("palette",
+                                               "Do you want to hide these custom palette cells or permanently delete them?");
 
             showHideOrDeleteDialog(question)
             .onResolve(this, [=](RemoveAction action) {
@@ -404,7 +407,8 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
         if (visible) {
             std::string question = customCount == 1
                                    ? muse::trc("palette", "Do you want to hide this custom palette or permanently delete it?")
-                                   : muse::trc("palette", "Do you want to hide these custom palettes or permanently delete them?");
+                                   : muse::trc("palette",
+                                               "Do you want to hide these custom palettes or permanently delete them?");
 
             showHideOrDeleteDialog(question)
             .onResolve(this, [=](RemoveAction action) { remove(removeIndices, action); });
@@ -710,7 +714,8 @@ FilterPaletteTreeModel* PaletteProvider::customElementsPaletteModel()
 AbstractPaletteController* PaletteProvider::customElementsPaletteController()
 {
     if (!m_customElementsPaletteController) {
-        m_customElementsPaletteController = new UserPaletteController(customElementsPaletteModel(), m_userPaletteModel, iocContext(), this);
+        m_customElementsPaletteController = new UserPaletteController(customElementsPaletteModel(), m_userPaletteModel,
+                                                                      iocContext(), this);
         m_customElementsPaletteController->setCustom(true);
     }
 
@@ -818,7 +823,8 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
         QMimeData* data = m_masterPaletteModel->mimeData({ QModelIndex(index) });
         QModelIndex dropIndex = m_userPaletteModel->index(0, 0);
 
-        const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, dropIndex.row(), dropIndex.column(), QModelIndex());
+        const bool success = m_userPaletteModel->dropMimeData(data, Qt::CopyAction, dropIndex.row(),
+                                                              dropIndex.column(), QModelIndex());
         if (success) {
             m_userPaletteModel->setData(dropIndex, true, PaletteTreeModel::VisibleRole);
         }

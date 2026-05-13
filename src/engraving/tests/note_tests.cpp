@@ -364,7 +364,8 @@ TEST_F(Engraving_NoteTests, graceAfterSlashSave)
 
     EXPECT_TRUE(gc->showStemSlash());
 
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"graceAfterSlashSave-test.mscx", NOTE_DATA_DIR + u"graceAfterSlashSave-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"graceAfterSlashSave-test.mscx",
+                                            NOTE_DATA_DIR + u"graceAfterSlashSave-ref.mscx"));
 }
 
 //---------------------------------------------------------

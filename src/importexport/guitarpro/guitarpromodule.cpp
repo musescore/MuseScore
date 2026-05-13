@@ -49,6 +49,7 @@ void GuitarProModule::resolveImports()
 {
     auto readers = globalIoc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>(muse::modularity::globalCtx()));
+        readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" },
+                     std::make_shared<GuitarProReader>(muse::modularity::globalCtx()));
     }
 }

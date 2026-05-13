@@ -989,7 +989,8 @@ void Braille::instruments(QIODevice& device)
     //Print staff number to instrument mapping.
     QTextStream out(&device);
     for (size_t i = 0; i < m_score->staves().size(); ++i) {
-        out << TextToUEBBraille().braille(QString("%1 %2").arg(i + 1).arg(m_score->staves()[i]->part()->instrumentName())) << Qt::endl;
+        out << TextToUEBBraille().braille(QString("%1 %2").arg(i + 1).arg(m_score->staves()[i]->part()->instrumentName())) <<
+            Qt::endl;
     }
     out << Qt::endl;
     out.flush();
@@ -2226,14 +2227,16 @@ QString Braille::brailleKeySig(KeySig* keySig)
         case Key::E_B: brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(
                                                    AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
             break;
-        case Key::B_B: brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
+        case Key::B_B: brailleKeySig
+                = QString(brailleAccidentalType(AccidentalType::FLAT) + brailleAccidentalType(AccidentalType::FLAT));
             break;
         case Key::F:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::FLAT));
             break;
         case Key::C:   return QString();
         case Key::G:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP));
             break;
-        case Key::D:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));
+        case Key::D:   brailleKeySig
+                = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));
             break;
         case Key::A:   brailleKeySig = QString(brailleAccidentalType(AccidentalType::SHARP) + brailleAccidentalType(
                                                    AccidentalType::SHARP) + brailleAccidentalType(AccidentalType::SHARP));

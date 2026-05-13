@@ -58,7 +58,8 @@ protected:
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
-        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
+        m_dummyPatternSegment.expressionPattern
+            = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
@@ -247,7 +248,8 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
 TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
 {
     // [GIVEN] Score containing some repeated measures, some tempo changes and a tied note
-    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_tempo_changes_and_tie/repeat_tempo_changes_and_tie.mscx");
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_tempo_changes_and_tie/repeat_tempo_changes_and_tie.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -555,12 +557,15 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     // Gradually grow to forte after that
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 4312);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24), 4375);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), piano + (forte - piano) * 3 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(
+                  4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), piano + (forte - piano) * 3 / 24);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 4687);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 8 / 24), piano + (forte - piano) * 8 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(
+                  4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 8 / 24), piano + (forte - piano) * 8 / 24);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24), 5187);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24), 5562);
-    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), piano + (forte - piano) * 22 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(
+                  4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), piano + (forte - piano) * 22 / 24);
     EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 5687);
 
     // Reach forte
@@ -966,7 +971,8 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
  */
 TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
 {
-    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "tempo_changes_during_notes/tempo_changes_during_notes.mscx");
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "tempo_changes_during_notes/tempo_changes_during_notes.mscx");
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -997,7 +1003,8 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
         2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
 
         // Tied note of two measures long, with ritenuto over it
-        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(75)
+        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(
+            75)
         + quarterAtTempo(70) + quarterAtTempo(65),
 
         // Tied note of two measures long, with tempo changes in the middle of it, with eighth notes tremolo
@@ -1038,7 +1045,8 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes)
 
         // Same as beginning, but now with pedal
         2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
-        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(75)
+        quarterAtTempo(100) + quarterAtTempo(95) + quarterAtTempo(90) + quarterAtTempo(85) + quarterAtTempo(80) + quarterAtTempo(
+            75)
         + quarterAtTempo(70) + quarterAtTempo(65),
     };
 
@@ -1365,7 +1373,8 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
 
     // [GIVEN] Expected setup data for each instrument
     std::unordered_map<String, mpe::PlaybackSetupData> expectedSetupData = {
-        { u"sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, supportsSND } },
+        { u"sopranissimo-saxophone",
+          { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, supportsSND } },
         { u"marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
                                                                                   SoundSubCategory::Snare,
                                                                                   SoundSubCategory::Tenor } } },

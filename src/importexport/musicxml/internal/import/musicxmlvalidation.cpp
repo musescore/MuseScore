@@ -65,7 +65,8 @@ public:
         : QAbstractMessageHandler(0) {}
     QString getErrors() const { return m_errors; }
 protected:
-    virtual void handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation);
+    virtual void handleMessage(QtMsgType type, const QString& description, const QUrl& identifier,
+                               const QSourceLocation& sourceLocation);
 private:
     QString m_errors;
 };

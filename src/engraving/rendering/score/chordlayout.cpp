@@ -205,8 +205,10 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
         // If a note is covered in the voice span but located outside the visual span of the arpeggio calculate accidental offset later
         bool aboveStart
-            = std::make_pair(item->vStaffIdx(), item->downLine()) < std::make_pair(spanArp->vStaffIdx(), spanArp->chord()->upLine());
-        bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
+            = std::make_pair(item->vStaffIdx(), item->downLine()) < std::make_pair(spanArp->vStaffIdx(),
+                                                                                   spanArp->chord()->upLine());
+        bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(
+            endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
             ElementType elType = spanArp->type();
@@ -712,7 +714,8 @@ void ChordLayout::layoutLvArticulation(Chord* item, LayoutContext& ctx)
     for (Articulation* a : item->articulations()) {
         if (a->isLaissezVib()) {
             // Must set direction before laying out
-            if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
+            if (item->measure()->hasVoices(a->staffIdx(), item->tick(),
+                                           item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
                 a->setUp(item->up());         // if there are voices place articulation at stem
             } else if (a->anchor() == ArticulationAnchor::AUTO) {
                 a->setUp(!item->up());         // place articulation at note head
@@ -791,7 +794,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
     const double minDist = ctx.conf().styleAbsolute(Sid::articulationMinDistance) * mag;
-    const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
+    const ArticulationStemSideAlign articulationHAlign
+        = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
     const double stemSideDistance = ctx.conf().styleAbsolute(Sid::propertyDistanceStem) * mag;
     const double headSideDistance = ctx.conf().styleAbsolute(Sid::propertyDistanceHead) * mag;
@@ -829,7 +833,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
     Articulation* prevVisibleArticulation = nullptr;
     for (Articulation* a : item->articulations()) {
-        if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
+        if (item->measure()->hasVoices(a->staffIdx(), item->tick(),
+                                       item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
             a->setUp(item->up());         // if there are voices place articulation at stem
         } else if (a->anchor() == ArticulationAnchor::AUTO) {
             if (a->isOrnament()) {
@@ -1016,7 +1021,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide)
 {
-    ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
+    ArticulationStemSideAlign articulationHAlign
+        = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     for (Chord* gc : item->graceNotes()) {
         layoutArticulations2(gc, ctx);
     }
@@ -1644,7 +1650,8 @@ int ChordLayout::computeAutoStemDirection(const std::vector<int>& noteDistances)
 //   layoutSegmentElements
 //---------------------------------------------------------
 
-static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, track_idx_t endTrack, staff_idx_t staffIdx, LayoutContext& ctx)
+static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, track_idx_t endTrack, staff_idx_t staffIdx,
+                                  LayoutContext& ctx)
 {
     for (track_idx_t track = startTrack; track < endTrack; ++track) {
         if (EngravingItem* e = segment->element(track)) {
@@ -2250,7 +2257,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         skipAccidentals(segment, startTrack, endTrack);
     }
 
-    const bool isSimpleTab = !staff->staffType() || (!staff->staffType()->stemThrough() && !staff->staffType()->isCommonTabStaff());
+    const bool isSimpleTab = !staff->staffType()
+                             || (!staff->staffType()->stemThrough() && !staff->staffType()->isCommonTabStaff());
     if (staff && staff->isTabStaff(tick) && isSimpleTab) {
         // Positions of notes should be reset in case we are changing from common or full tab with offsets to simple which should have none
         for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
@@ -2892,7 +2900,8 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
                 int newOffset = 0;
                 bool adjustDown = (c->voice() & 1) && !c->up();
                 if (!anchoredDots.empty() && anchoredDots.back() == note->line()) {
-                    if (anchoredDots.size() >= 2 && anchoredDots[anchoredDots.size() - 2] == note->line() + (adjustDown ? 2 : -2)) {
+                    if (anchoredDots.size() >= 2
+                        && anchoredDots[anchoredDots.size() - 2] == note->line() + (adjustDown ? 2 : -2)) {
                         newOffset = adjustDown ? -2 : 2;
                     } else {
                         newOffset = adjustDown ? 2 : -2;
@@ -2970,7 +2979,8 @@ void ChordLayout::appendGraceNotes(Chord* chord)
     if (!gna.empty()) {
         Segment* followingSeg = measure->tick2segment(chord->endTick(), SegmentType::All);
         while (followingSeg
-               && (!followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx + 1) - 1) || followingSeg->isTimeTickType())) {
+               && (!followingSeg->hasElements(staff2track(staffIdx),
+                                              staff2track(staffIdx + 1) - 1) || followingSeg->isTimeTickType())) {
             // If there is nothing on this staff, go to next segment
             followingSeg = followingSeg->next();
         }
@@ -3109,7 +3119,8 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
         if (f->addToSkyline()) {
             Note* n = f->note();
             RectF r
-                = f->ldata()->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
+                = f->ldata()->bbox().translated(
+                      f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
             system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r, f);
         }
         shapesToRecreate.insert(f->staffIdx());
@@ -3173,7 +3184,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
     const ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
     const bool tieBackParen = isTabStaff && !item->fixed() && item->tieBack()
-                              && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
+                              && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend())
+                              && !item->shouldHideFret();
     bool useParens =  (tieBackParen || item->ghost()) && !item->hideGeneratedParens();
 
     if (item->harmonic() && item->displayFret() != Note::DisplayFretOption::NaturalHarmonic) {

@@ -74,7 +74,8 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
     score->undo(new InsertText(dynamic->cursor(), String(u"poco ")), &ed);
     score->endCmd();
     dynamic->endEdit(ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextBefore.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextBefore-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextBefore.mscx",
+                                            TEXTBASE_DATA_DIR + u"dynamicAddTextBefore-ref.mscx"));
 }
 
 TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
@@ -89,7 +90,8 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     dynamic->edit(ed);
     score->endCmd();
     dynamic->endEdit(ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx",
+                                            TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
 }
 
 TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
@@ -103,7 +105,8 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
     score->undo(new InsertText(dynamic->cursor(), String(u"moderately ")), &ed);
     score->endCmd();
     dynamic->endEdit(ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextNoItalic.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextNoItalic-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextNoItalic.mscx",
+                                            TEXTBASE_DATA_DIR + u"dynamicAddTextNoItalic-ref.mscx"));
 }
 
 StaffText* Engraving_TextBaseTests::addStaffText(MasterScore* score)

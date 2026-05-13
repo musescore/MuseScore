@@ -413,7 +413,8 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
     EventsHolder events = render.renderPitchWheel();
 
     std::multimap<int, int> pitches;
-    std::multimap<int, int> expectedValues = { { 0, 8202 }, { 20, 8212 }, { 40, 8222 }, { 50, 8212 }, { 60, 8202 }, { 70, 8192 } };
+    std::multimap<int,
+                  int> expectedValues = { { 0, 8202 }, { 20, 8212 }, { 40, 8222 }, { 50, 8212 }, { 60, 8202 }, { 70, 8192 } };
     for (const auto& ev : events[DEFAULT_CHANNEL]) {
         auto it = expectedValues.find(ev.first);
         EXPECT_TRUE(it != expectedValues.end());

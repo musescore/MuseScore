@@ -147,13 +147,15 @@ static void createSplitDurationBendsForChord(const BendDataContextSplitChord& be
     const BendChordData& bendChordData = currentTrackData.at(chordTicks);
     const Measure* startMeasure = score->tick2measure(bendChordData.startTick);
     IF_ASSERT_FAILED(startMeasure) {
-        LOGE() << "bend import error : no valid measure for track " << chord->track() << ", tick " << bendChordData.startTick.ticks();
+        LOGE() << "bend import error : no valid measure for track " << chord->track() << ", tick " <<
+            bendChordData.startTick.ticks();
         return;
     }
 
     Chord* startChord = startMeasure->findChord(bendChordData.startTick, chord->track());
     IF_ASSERT_FAILED(startChord) {
-        LOGE() << "bend import error : no valid chord for track " << chord->track() << ", tick " << bendChordData.startTick.ticks();
+        LOGE() << "bend import error : no valid chord for track " << chord->track() << ", tick " <<
+            bendChordData.startTick.ticks();
         return;
     }
 
@@ -233,7 +235,8 @@ static void removeReduntantChords(const BendDataContextSplitChord& bendDataCtx, 
         for (const Fraction& tick : trackInfo) {
             const Measure* currentMeasure = score->tick2measure(tick);
             IF_ASSERT_FAILED(currentMeasure) {
-                LOGE() << "bend import error : couldn't remove invalid chord, no valid measure for track " << track << ", tick " <<
+                LOGE() << "bend import error : couldn't remove invalid chord, no valid measure for track " << track <<
+                    ", tick " <<
                     tick.ticks();
                 continue;
             }
@@ -242,7 +245,8 @@ static void removeReduntantChords(const BendDataContextSplitChord& bendDataCtx, 
             Chord* currentChord = currentMeasure->findChord(tick, track);
 
             IF_ASSERT_FAILED(curSegment && currentChord) {
-                LOGE() << "bend import error : couldn't remove invalid chord, segment or chord was null for track " << track << ", tick " <<
+                LOGE() << "bend import error : couldn't remove invalid chord, segment or chord was null for track " << track <<
+                    ", tick " <<
                     tick.ticks();
                 continue;
             }

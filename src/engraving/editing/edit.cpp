@@ -263,7 +263,8 @@ MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, track_idx_t track, 
     return mr;
 }
 
-Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType)
+Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType,
+                         TupletBracketType bracketType)
 {
     if (destinationChordRest->durationType() < TDuration(DurationType::V_512TH)
         && destinationChordRest->durationType() != TDuration(DurationType::V_MEASURE)) {
@@ -469,7 +470,8 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //    "l" is in local (stretched) time
 //---------------------------------------------------------
 
-Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
+Rest* Score::setRest(const Fraction& _tick, track_idx_t track, const Fraction& _l, bool useDots, Tuplet* tuplet,
+                     bool useFullMeasureRest)
 {
     std::vector<Rest*> rests = setRests(_tick, track, _l, useDots, tuplet, useFullMeasureRest);
     return rests.empty() ? nullptr : rests.front();
@@ -629,7 +631,8 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
     return note;
 }
 
-Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental, const std::set<SymId>& articulationIds)
+Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
+                                const std::set<SymId>& articulationIds)
 {
     IF_ASSERT_FAILED(!chord->notes().empty()) {
         return nullptr;
@@ -714,7 +717,8 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
             }
         } else if (secondChordRest->isChord()) {
             bool firstChordRestIsTiedToSecond = firstChordRest->isChord() && toChord(firstChordRest)->allNotesTiedToNext()
-                                                && toChord(firstChordRest)->upNote()->tieFor()->endNote()->parent() == secondChordRest;
+                                                && toChord(firstChordRest)->upNote()->tieFor()->endNote()->parent()
+                                                == secondChordRest;
 
             // Follow chain of tied notes and slur until the last
             if (firstChordRestIsTiedToSecond || !firstChordRest->isGrace()) {
@@ -918,7 +922,8 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         break;
     }
     case TextStyleType::LYRICS_ODD: {
-        if (!destinationElement || (!destinationElement->isNote() && !destinationElement->isLyrics() && !destinationElement->isRest())) {
+        if (!destinationElement
+            || (!destinationElement->isNote() && !destinationElement->isLyrics() && !destinationElement->isRest())) {
             break;
         }
         ChordRest* chordRest = nullptr;
@@ -1894,7 +1899,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         measure = segment->measure();
                         std::vector<TDuration> dl;
                         dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(
-                                                        tick.ticks()).nominal(), measure, 1, staff(track2staff(track))->timeStretch(tick));
+                                                        tick.ticks()).nominal(), measure, 1, staff(track2staff(
+                                                                                                       track))->timeStretch(tick));
                         size_t n = dl.size();
                         for (size_t i = 0; i < n; ++i) {
                             const TDuration& d = dl[i];
@@ -3790,7 +3796,8 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
 ///   given selection filter.
 //---------------------------------------------------------
 
-void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter)
+void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2,
+                                       const SelectionFilter& filter)
 {
     if (!s1) {
         return;
@@ -3818,7 +3825,8 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
     }
 }
 
-void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
+void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg,
+                               const Fraction& endTick,
                                Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords)
 {
     while (startSeg && !(startSeg->isChordRestType() && startSeg->cr(track))) {
@@ -3900,7 +3908,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
                 const Fraction recursionEnd = std::min(nextTuplet->endTick(), endTick);
-                deleteRangeAtTrack(crsToSelect, track, cr1->segment(), recursionEnd, nextTuplet, filter, selectionContainsMultiNoteChords);
+                deleteRangeAtTrack(crsToSelect, track,
+                                   cr1->segment(), recursionEnd, nextTuplet, filter, selectionContainsMultiNoteChords);
                 foundDeselected(nextTuplet);
             }
 
@@ -4003,7 +4012,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 ///   deletion operation.
 //---------------------------------------------------------
 
-std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter,
+std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2,
+                                           const SelectionFilter& filter,
                                            bool selectionContainsMultiNoteChords)
 {
     std::vector<ChordRest*> crsForSelection;
@@ -4029,7 +4039,8 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         if (!filter.canSelectVoice(track)) {
             continue;
         }
-        deleteRangeAtTrack(crsForSelection, track, s1, endTick, /*currentTuplet*/ nullptr, filter, selectionContainsMultiNoteChords);
+        deleteRangeAtTrack(crsForSelection, track, s1, endTick, /*currentTuplet*/ nullptr, filter,
+                           selectionContainsMultiNoteChords);
     }
 
     return crsForSelection;
@@ -4748,7 +4759,8 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
 MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
 {
-    const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
+    const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX
+                         || type == ElementType::VBOX;
 
     if (!isFrame) {
         return nullptr;
@@ -5313,7 +5325,8 @@ void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staf
         EngravingItem* item = toEngravingItem(obj);
         Score* linkedScore = item->score();
         Staff* linkedOrigin = item->staff();
-        Staff* linkedDest = linkedScore != this && destStaff != element->staff() ? destStaff->findLinkedInScore(linkedScore) : linkedOrigin; // don't allow staff-change of linked elements within the same score
+        Staff* linkedDest = linkedScore != this
+                            && destStaff != element->staff() ? destStaff->findLinkedInScore(linkedScore) : linkedOrigin;                     // don't allow staff-change of linked elements within the same score
         if (!linkedDest && element->systemFlag()) {
             linkedDest = linkedScore->staff(0);
         }
@@ -5572,7 +5585,8 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         }
                     } else {
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType),
+                                                        PropertyFlags::NOSTYLE));
                         // set generated flag before and after so it sticks on type change and also works on undo/redo
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                         if (lbl != sbl && !generated && !lbl->links()) {
@@ -5595,7 +5609,8 @@ void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                 for (EngravingItem* e : segment1->elist()) {
                     if (e) {
                         lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType),
+                                                        PropertyFlags::NOSTYLE));
                         // set generated flag before and after so it sticks on type change and also works on undo/redo
                         lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                     }

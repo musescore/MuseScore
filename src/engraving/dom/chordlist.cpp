@@ -1571,7 +1571,8 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc, size_t modifierIdx,
+double ChordList::position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc,
+                           size_t modifierIdx,
                            size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
@@ -1688,7 +1689,8 @@ const std::vector<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl
 
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, stackModifier, superScriptModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifier, superScriptModifier, ctc, finalModIdx - modIdx,
+                                               modListSize) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1979,7 +1981,8 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag, bool stackModifiers,
+void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag,
+                                    bool stackModifiers,
                                     bool excludeModsHAlign, String symbolFont, const ChordStylePreset& preset)
 {
     m_stackModifiers = stackModifiers;

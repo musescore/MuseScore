@@ -38,7 +38,8 @@ public:
     bool supportsUnitType(UnitType unitType) const override;
 
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
-    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device,
+                        const Options& options = Options()) override;
 
 private:
     engraving::MscIoMode m_mode;

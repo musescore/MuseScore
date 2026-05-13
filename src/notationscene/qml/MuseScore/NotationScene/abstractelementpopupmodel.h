@@ -33,7 +33,8 @@
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public muse::Contextable, public muse::async::Asyncable, public muse::actions::Actionable
+class AbstractElementPopupModel : public QObject, public muse::Contextable, public muse::async::Asyncable,
+    public muse::actions::Actionable
 {
     Q_OBJECT
     QML_ELEMENT;

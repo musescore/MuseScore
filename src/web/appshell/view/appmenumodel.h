@@ -65,7 +65,8 @@ private:
     void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
-    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, muse::uicomponents::MenuItemRole role);
+    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode,
+                                               muse::uicomponents::MenuItemRole role);
 
     muse::uicomponents::MenuItem* makeFileMenu();
     muse::uicomponents::MenuItem* makeEditMenu();

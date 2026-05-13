@@ -184,7 +184,8 @@ public:
     Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent,
                               bool internal) const override;
 
-    bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) override;
+    bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent,
+              int destinationChild) override;
     bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
     bool insertNewItem(const QModelIndex& parent, int row, const QString& name) override;
     void remove(const QModelIndex& index) override;
@@ -210,10 +211,13 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
     Q_OBJECT
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
-    Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
+    Q_PROPERTY(mu::palette::AbstractPaletteController
+               * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
     Q_PROPERTY(mu::palette::FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
-    Q_PROPERTY(mu::palette::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
+    Q_PROPERTY(
+        mu::palette::AbstractPaletteController
+        * customElementsPaletteController READ customElementsPaletteController CONSTANT)
 
     Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)

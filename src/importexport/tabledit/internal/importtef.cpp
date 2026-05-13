@@ -253,7 +253,8 @@ static String fingeringTextRH(int rightFinger)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch, muse::draw::Color color,
+static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch,
+                           muse::draw::Color color,
                            std::vector<mu::engraving::Note*>& tiedNotes)
 {
     LOGN("pitch %d", pitch);
@@ -306,7 +307,8 @@ static void addGraceNotesToChord(mu::engraving::Chord* chord, int pitch, int fre
     chord->add(cr);
 }
 
-static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color, bool visible = true)
+static void addRest(Segment* segment, track_idx_t track, TDuration tDuration, Fraction length, muse::draw::Color color,
+                    bool visible = true)
 {
     mu::engraving::Rest* rest = Factory::createRest(segment);
     if (rest) {
@@ -444,7 +446,8 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
                                 int gracePitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->graceFret;
-                                addGraceNotesToChord(chord, gracePitch, note->graceFret, note->string - stringOffset - 1, toColor(voice));
+                                addGraceNotesToChord(chord, gracePitch, note->graceFret, note->string - stringOffset - 1,
+                                                     toColor(voice));
                             }
                         }
                         tupletHandler.addCr(measure, chord);

@@ -54,7 +54,8 @@ class StaffTypeSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * staffShortName READ staffShortName CONSTANT)
 
 public:
-    explicit StaffTypeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit StaffTypeSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                    IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

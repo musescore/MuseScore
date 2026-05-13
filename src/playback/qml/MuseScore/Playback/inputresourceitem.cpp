@@ -247,7 +247,8 @@ QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& reso
 
                     for (const auto& [instId, instName] : instruments) {
                         bool isCurrentInstrument = m_currentInputParams.resourceMeta.id == instId;
-                        QString itemId = makeMenuResourceItemId(AudioResourceType::MuseSamplerSoundPack, QString::fromStdString(instId));
+                        QString itemId
+                            = makeMenuResourceItemId(AudioResourceType::MuseSamplerSoundPack, QString::fromStdString(instId));
 
                         subItemsByCategory << buildMenuItem(itemId, instName.toQString(), isCurrentInstrument);
                         isCurrentCategory = isCurrentCategory || isCurrentInstrument;
@@ -385,7 +386,8 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
         if (soundFont == MS_BASIC_SOUNDFONT_NAME) {
             soundFontItems << buildMsBasicMenuItem(resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
         } else {
-            soundFontItems << buildSoundFontMenuItem(soundFont, resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
+            soundFontItems <<
+                buildSoundFontMenuItem(soundFont, resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
         }
     }
 
@@ -487,7 +489,8 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
     // Prepend the "Choose automatically" item
     categoryItems.prepend(buildSeparator());
-    categoryItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type, QString::fromStdString(chooseAutomaticMeta.id)),
+    categoryItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type,
+                                                               QString::fromStdString(chooseAutomaticMeta.id)),
                                         muse::qtrc("playback", "Choose automatically"),
                                         isCurrentSoundFont && !currentPreset.has_value(),
                                         /*subItems*/ QVariantList(),
@@ -537,7 +540,8 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const muse::String& soundF
                 presetName = muse::qtrc("playback", "Preset %1").arg(presetPair.first);
             }
 
-            QString itemId = makeMenuResourceItemId(AudioResourceType::FluidSoundfont, QString::fromStdString(presetPair.second.id));
+            QString itemId = makeMenuResourceItemId(AudioResourceType::FluidSoundfont, QString::fromStdString(
+                                                        presetPair.second.id));
             presetItems << buildMenuItem(itemId,
                                          presetName,
                                          isCurrentPreset);
@@ -552,7 +556,8 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const muse::String& soundF
 
     // Prepend the "Choose automatically" item
     bankItems.prepend(buildSeparator());
-    bankItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type, QString::fromStdString(chooseAutomaticMeta.id)),
+    bankItems.prepend(buildMenuItem(makeMenuResourceItemId(chooseAutomaticMeta.type,
+                                                           QString::fromStdString(chooseAutomaticMeta.id)),
                                     muse::qtrc("playback", "Choose automatically"),
                                     isCurrentSoundFont && !currentPreset.has_value(),
                                     /*subItems*/ QVariantList(),

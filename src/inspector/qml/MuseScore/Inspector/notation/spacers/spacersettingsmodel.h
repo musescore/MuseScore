@@ -35,7 +35,8 @@ class SpacerSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(mu::inspector::PropertyItem * spacerHeight READ spacerHeight CONSTANT)
 
 public:
-    explicit SpacerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+    explicit SpacerSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx,
+                                 IElementRepositoryService* repository);
 
     void createProperties() override;
     void requestElements() override;

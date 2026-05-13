@@ -128,7 +128,8 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
         Instrument* instrument = part ? part->instrument() : nullptr;
         const bool isVocalInstrument = instrument && instrument->isVocalInstrument();
         const bool directionIsDefault = item->getProperty(Pid::DIRECTION) == item->propertyDefault(Pid::DIRECTION);
-        const PlacementV defaultPlacement = masterScore->style().styleV(item->getPropertyStyle(Pid::PLACEMENT)).value<PlacementV>();
+        const PlacementV defaultPlacement
+            = masterScore->style().styleV(item->getPropertyStyle(Pid::PLACEMENT)).value<PlacementV>();
         const bool defaultIsBelow = defaultPlacement == PlacementV::BELOW;
 
         if (isVocalInstrument && directionIsDefault && defaultIsBelow) {

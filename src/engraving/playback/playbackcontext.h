@@ -46,8 +46,10 @@ class PlaybackContext
 public:
     muse::mpe::dynamic_level_t appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const;
 
-    std::pair<muse::mpe::timestamp_t, PlayingTechniqueType> playingTechnique(const Score* score, const int nominalPositionTick) const;
-    muse::mpe::timestamp_t findPlayingTechniqueTimestamp(const Score* score, PlayingTechniqueType type, const int startFromTick) const;
+    std::pair<muse::mpe::timestamp_t, PlayingTechniqueType> playingTechnique(const Score* score,
+                                                                             const int nominalPositionTick) const;
+    muse::mpe::timestamp_t findPlayingTechniqueTimestamp(const Score* score, PlayingTechniqueType type,
+                                                         const int startFromTick) const;
 
     std::map<muse::mpe::timestamp_t, muse::mpe::SoundPresetChangeEventList> soundPresets(const Score* score) const;
     muse::mpe::SoundPresetChangeEventList soundPresets(const track_idx_t trackIdx, const int nominalPositionTick) const;

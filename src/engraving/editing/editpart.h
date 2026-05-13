@@ -252,7 +252,8 @@ enum class StaffTypes : signed char;
 class EditPart
 {
 public:
-    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument, const StaffType* newStaffType = nullptr);
+    static void replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
+                                      const StaffType* newStaffType = nullptr);
 
     static bool replaceInstrumentAtTick(Score* score, Part* part, const Fraction& tick, const Instrument& newInstrument);
 
@@ -261,8 +262,8 @@ public:
     static void setPartSharpFlat(Score* score, Part* part, PreferSharpFlat sharpFlat);
     static void setInstrumentName(Score* score, Part* part, const Fraction& tick, const String& name);
     static void setInstrumentAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
-    static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
-                                              const String& shortName);
+    static void setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom,
+                                              const String& longName, const String& shortName);
     static void setInstrumentCustomGroupAbbreviature(Score* score, Part* part, const Fraction& tick, const String& abbreviature);
     static void setStaffType(Score* score, Staff* staff, StaffTypes typeId);
 

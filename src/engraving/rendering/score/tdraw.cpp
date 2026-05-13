@@ -691,7 +691,8 @@ static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Paint
             item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), data->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2));
+            item->drawSymbol(SymId::reversedBracketBottom, painter,
+                             PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2));
         }
     } else {
         if (item->isTop()) {
@@ -1188,7 +1189,8 @@ void TDraw::draw(const ChordLine* item, Painter* painter, const PaintOptions& op
         return;
     }
 
-    painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+    painter->setPen(Pen(item->curColor(opt), item->style().styleAbsolute(Sid::chordlineThickness) * item->mag(),
+                        PenStyle::SolidLine));
     painter->setBrush(BrushStyle::NoBrush);
     if (!item->isWavy()) {
         painter->drawPath(ldata->path);
@@ -1208,7 +1210,8 @@ void TDraw::draw(const Clef* item, Painter* painter, const PaintOptions& opt)
         return;
     }
 
-    if (ldata->symId == SymId::noSym || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
+    if (ldata->symId == SymId::noSym
+        || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
         return;
     }
 
@@ -2907,7 +2910,8 @@ void TDraw::draw(const StringTunings* item, Painter* painter, const PaintOptions
         PainterPath path;
         path.moveTo(x, y);
         path.arcTo(x, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 180.0, 90.0);
-        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 270, 90);
+        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 270,
+                   90);
         path.lineTo(x + width, y);
         path.moveTo(x + width / 2, y + topPartHeight);
         path.lineTo(x + width / 2, y + height);

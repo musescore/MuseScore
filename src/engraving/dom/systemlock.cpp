@@ -143,7 +143,9 @@ void SystemLocks::dump()
 #endif
 
 SystemLockIndicator::SystemLockIndicator(System* parent, const SystemLock* lock)
-    : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
+    : IndicatorIcon(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock)
+{
+}
 
 void SystemLockIndicator::setSelected(bool v)
 {

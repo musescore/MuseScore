@@ -298,7 +298,8 @@ int GuitarPro::readInt()
 
 void GuitarPro::addPalmMute(ChordRest* cr, bool hasPalmMute)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PALM_MUTE, ContiniousElementsBuilder::ImportType::PALM_MUTE,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::PALM_MUTE,
+                                                        ContiniousElementsBuilder::ImportType::PALM_MUTE,
                                                         hasPalmMute);
 }
 
@@ -308,7 +309,8 @@ void GuitarPro::addPalmMute(ChordRest* cr, bool hasPalmMute)
 
 void GuitarPro::addLetRing(ChordRest* cr, bool hasLetRing)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::LET_RING, ContiniousElementsBuilder::ImportType::LET_RING,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::LET_RING,
+                                                        ContiniousElementsBuilder::ImportType::LET_RING,
                                                         hasLetRing);
 }
 
@@ -318,7 +320,8 @@ void GuitarPro::addLetRing(ChordRest* cr, bool hasLetRing)
 
 void GuitarPro::addTrill(ChordRest* cr, bool hasTrill)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::TRILL, ContiniousElementsBuilder::ImportType::TRILL, hasTrill);
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::TRILL, ContiniousElementsBuilder::ImportType::TRILL,
+                                                        hasTrill);
 }
 
 //---------------------------------------------------------
@@ -328,7 +331,8 @@ void GuitarPro::addTrill(ChordRest* cr, bool hasTrill)
 void GuitarPro::addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff)
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HAMMER_ON_PULL_OFF,
-                                                        ContiniousElementsBuilder::ImportType::HAMMER_ON_PULL_OFF, hasHammerOnPullOff);
+                                                        ContiniousElementsBuilder::ImportType::HAMMER_ON_PULL_OFF,
+                                                        hasHammerOnPullOff);
 }
 
 //---------------------------------------------------------
@@ -337,7 +341,8 @@ void GuitarPro::addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff)
 
 void GuitarPro::addRasgueado(ChordRest* cr, bool hasRasgueado)
 {
-    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::RASGUEADO, ContiniousElementsBuilder::ImportType::RASGUEADO,
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::RASGUEADO,
+                                                        ContiniousElementsBuilder::ImportType::RASGUEADO,
                                                         hasRasgueado);
 }
 
@@ -348,7 +353,8 @@ void GuitarPro::addRasgueado(ChordRest* cr, bool hasRasgueado)
 void GuitarPro::addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand)
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::VIBRATO,
-                                                        ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_SLIGHT, hasVibratoLeftHand,
+                                                        ContiniousElementsBuilder::ImportType::VIBRATO_LEFT_HAND_SLIGHT,
+                                                        hasVibratoLeftHand,
                                                         ContiniousElementsBuilder::VibratoSubType::LEFT_HAND_SLIGHT);
 }
 
@@ -360,7 +366,8 @@ void GuitarPro::addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar)
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::VIBRATO,
                                                         ContiniousElementsBuilder::ImportType::VIBRATO_W_TREM_BAR_SLIGHT,
-                                                        hasVibratoWTremBar, ContiniousElementsBuilder::VibratoSubType::W_TREM_BAR_SLIGHT);
+                                                        hasVibratoWTremBar,
+                                                        ContiniousElementsBuilder::VibratoSubType::W_TREM_BAR_SLIGHT);
 }
 
 //---------------------------------------------------------
@@ -372,7 +379,8 @@ void GuitarPro::addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
                                                         ContiniousElementsBuilder::ImportType::HARMONIC_ARTIFICIAL,
-                                                        hasHarmonicArtificial, ContiniousElementsBuilder::HarmonicMarkSubType::ARTIFICIAL);
+                                                        hasHarmonicArtificial,
+                                                        ContiniousElementsBuilder::HarmonicMarkSubType::ARTIFICIAL);
 
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HARMONIC_MARK,
                                                         ContiniousElementsBuilder::ImportType::HARMONIC_PINCH,
@@ -1176,7 +1184,8 @@ bool GuitarPro1::read(IODevice* io)
 
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
-                    if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                    if ((tuplet == 0)
+                        || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
@@ -1679,7 +1688,8 @@ bool GuitarPro2::read(IODevice* io)
 
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
-                    if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                    if ((tuplet == 0)
+                        || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
@@ -1862,7 +1872,8 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
                 gc->setDurationType(d);
                 gc->setTicks(d.fraction());
                 gc->setNoteType(NoteType::ACCIACCATURA);
-                gc->mutldata()->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
+                gc->mutldata()->setMag(note->chord()->staff()->staffMag(Fraction(0,
+                                                                                 1)) * score->style().styleD(Sid::graceNoteMag));
                 note->chord()->add(gc);         // sets parent + track
                 addDynamic(gn, dynamic);
             }
@@ -2456,7 +2467,8 @@ bool GuitarPro3::read(IODevice* io)
 
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
-                    if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                    if ((tuplet == 0)
+                        || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = Factory::createTuplet(measure);
                         tuplet->setTick(fraction);
                         tuplet->setTrack(cr->track());
@@ -2936,7 +2948,8 @@ Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity
             break;
         }
         const GpBar& bar = gp->bars[idx];
-        if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT && bar.barLine != BarLineType::START_REPEAT
+        if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT
+            && bar.barLine != BarLineType::START_REPEAT
             && bar.barLine != BarLineType::END_START_REPEAT) {
             m1->setEndBarLineType(bar.barLine, 0);
         }

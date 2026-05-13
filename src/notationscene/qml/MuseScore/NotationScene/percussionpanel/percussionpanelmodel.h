@@ -61,7 +61,8 @@ class PercussionPanelModel : public QObject, public muse::Contextable, public mu
 
     Q_PROPERTY(QString soundTitle READ soundTitle NOTIFY soundTitleChanged)
 
-    Q_PROPERTY(mu::notation::PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
+    Q_PROPERTY(
+        mu::notation::PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
     Q_PROPERTY(int notationPreviewNumStaffLines READ notationPreviewNumStaffLines NOTIFY notationPreviewNumStaffLinesChanged)
     Q_PROPERTY(QColor notationPreviewBackgroundColor READ notationPreviewBackgroundColor CONSTANT)

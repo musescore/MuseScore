@@ -32,7 +32,8 @@
 #include "global/async/promise.h"
 
 namespace mu::instrumentsscene {
-class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable, public muse::Contextable
+class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable,
+    public muse::Contextable
 {
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::GlobalInject<notation::IInstrumentsRepository> instrumentsRepository;

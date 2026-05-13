@@ -478,9 +478,9 @@ public:
     bool excludeModsHAlign() const { return m_excludeModsHAlign; }
     double stackedModifierMag() const { return m_stackedmmag; }
     const ChordStylePreset& chordPreset() const { return m_chordPreset; }
-    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
-                             bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"",
-                             const ChordStylePreset& preset = ChordStylePreset::STANDARD);
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0,
+                             double stackedmmag = 0.0, bool stackModifiers = false, bool excludeModsHAlign = false,
+                             String symbolFont = u"", const ChordStylePreset& preset = ChordStylePreset::STANDARD);
     double position(const StringList& names, bool stackModifiers, bool superScript, ChordTokenClass ctc, size_t modifierIdx,
                     size_t nmodifiers) const;
 

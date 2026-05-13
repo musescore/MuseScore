@@ -406,7 +406,8 @@ static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note
         if (endNote->chord()->isGraceAfter()) {
             if (currentNotes.empty()) {
                 IF_ASSERT_FAILED(note->chord() == endNote->chord()->explicitParent()) {
-                    LOGE() << "error in filling bends midi data for note on track " << note->track() << ", tick " << note->tick().ticks();
+                    LOGE() << "error in filling bends midi data for note on track " << note->track() << ", tick " <<
+                        note->tick().ticks();
                     return {};
                 }
                 bendStartNote = note;
@@ -473,7 +474,8 @@ static void collectGuitarBend(const Note* note,
             bool graceBeforeBend = false;
             if (note->chord()->isGraceBefore() && bendFor) {
                 if (endNote->noteType() == NoteType::NORMAL) {
-                    duration = (previousChordTicks == -1) ? GRACE_BEND_DURATION : std::min(previousChordTicks / 2, GRACE_BEND_DURATION);
+                    duration = (previousChordTicks == -1) ? GRACE_BEND_DURATION : std::min(previousChordTicks / 2,
+                                                                                           GRACE_BEND_DURATION);
                     graceBeforeBend = true;
                 }
             } else if (muse::contains(graceNoteBendDurations, note)) {
@@ -484,7 +486,8 @@ static void collectGuitarBend(const Note* note,
             double initialPitchBendValue = quarterOffsetFromStartNote / 2.0;
 
             if (bendPlaybackInfo.startTick > curPitchBendSegmentStart && initialPitchBendValue != 0) {
-                addConstPitchWheel(curPitchBendSegmentStart, bendPlaybackInfo.startTick, initialPitchBendValue, pitchWheelRenderer, channel,
+                addConstPitchWheel(curPitchBendSegmentStart, bendPlaybackInfo.startTick, initialPitchBendValue,
+                                   pitchWheelRenderer, channel,
                                    note->staffIdx(), effect);
             }
 
@@ -535,7 +538,8 @@ static void collectGuitarBend(const Note* note,
                 } else {
                     Note* lastTied = note->lastTiedNote(false);
                     IF_ASSERT_FAILED(lastTied) {
-                        LOGE() << "couldn't find tied note for note on track " << note->track() << ", tick " << note->tick().ticks() <<
+                        LOGE() << "couldn't find tied note for note on track " << note->track() << ", tick " <<
+                            note->tick().ticks() <<
                             ", guitar bend midi may be incorrect";
                         constPitchWheelduration = note->chord()->actualTicks().ticks();
                     } else {
@@ -546,7 +550,8 @@ static void collectGuitarBend(const Note* note,
                     }
                 }
 
-                addConstPitchWheel(noteTick, noteTick + constPitchWheelduration, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer,
+                addConstPitchWheel(noteTick, noteTick + constPitchWheelduration, quarterOffsetFromStartNote / 2.0,
+                                   pitchWheelRenderer,
                                    channel,
                                    note->staffIdx(), effect);
             }
@@ -563,7 +568,8 @@ static void collectGuitarBend(const Note* note,
 
     // adding pitch wheel to last note of bend/tie chain, if it's end of bend
     if (!note->isGrace() && note->bendBack()) {
-        int constPitchWheelduration = (quarterOffsetFromStartNote == 0) ? g_wheelSpec.mStep : note->chord()->actualTicks().ticks();
+        int constPitchWheelduration
+            = (quarterOffsetFromStartNote == 0) ? g_wheelSpec.mStep : note->chord()->actualTicks().ticks();
         addConstPitchWheel(note->tick().ticks(),
                            note->tick().ticks() + constPitchWheelduration, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
                            note->staffIdx(), effect);
@@ -810,7 +816,8 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
 
             const auto& eventsList = tiedBack->playEvents();
             IF_ASSERT_FAILED(!eventsList.empty()) {
-                LOGE() << "play events are empty for note on track " << tiedBack->track() << ", tick " << tiedBack->tick().ticks();
+                LOGE() << "play events are empty for note on track " << tiedBack->track() << ", tick " <<
+                    tiedBack->tick().ticks();
                 break;
             }
 
@@ -854,7 +861,8 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         // Get the velocity used for this note from the staff
         // This allows correct playback of tremolos even without SND enabled.
         Fraction nonUnwoundTick = Fraction::fromTicks(on - noteParams.tickOffset);
-        int velo = context.velocitiesByTrack.at(note->track()).val(nonUnwoundTick) * noteParams.velocityMultiplier * e.velocityMultiplier();
+        int velo = context.velocitiesByTrack.at(note->track()).val(nonUnwoundTick) * noteParams.velocityMultiplier
+                   * e.velocityMultiplier();
         if (e.play()) {
             PlayNoteParams playParams;
             MidiInstrumentEffect eventEffect = noteEffect;
@@ -1047,10 +1055,12 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     }
 }
 
-void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier,
+void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events,
+                                                               double veloMultiplier,
                                                                Staff* st,
                                                                int tickOffset,
-                                                               PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
+                                                               PitchWheelRenderer& pitchWheelRenderer,
+                                                               MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -1174,8 +1184,10 @@ CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChord
 //   doCollectMeasureEvents
 //---------------------------------------------------------
 
-void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                                        PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
+void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff,
+                                                        int tickOffset,
+                                                        PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*,
+                                                                                                           VOICES>& prevChords)
 {
     staff_idx_t firstStaffIdx = staff->idx();
     for (Staff* st : staff->masterScore()->staves()) {
@@ -1238,7 +1250,8 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
                 effect = MidiInstrumentEffect::HAMMER_PULL;
             }
 
-            collectGraceBeforeChordEvents(chord, prevChords[voice], events, veloMultiplier, st1, tickOffset, pitchWheelRenderer, effect);
+            collectGraceBeforeChordEvents(chord, prevChords[voice], events, veloMultiplier, st1, tickOffset, pitchWheelRenderer,
+                                          effect);
 
             Instrument* instr = st1->part()->instrument(tick);
             for (const Note* note : chord->notes()) {
@@ -1286,7 +1299,8 @@ CompatMidiRendererInternal::CompatMidiRendererInternal(Score* s)
 //---------------------------------------------------------
 
 void CompatMidiRendererInternal::collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                                      PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
+                                                      PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*,
+                                                                                                         VOICES>& prevChords)
 {
     doCollectMeasureEvents(events, m, staff, tickOffset, pitchWheelRenderer, prevChords);
 
@@ -1584,7 +1598,8 @@ void CompatMidiRendererInternal::fillArticulationsInfo()
     for (const Part* part : score->parts()) {
         for (const auto& [tick, instr] : part->instruments()) {
             String instrId = instr->id();
-            for (auto it = Context::s_builtInArticulationsValues.cbegin(); it != Context::s_builtInArticulationsValues.cend(); it++) {
+            for (auto it = Context::s_builtInArticulationsValues.cbegin(); it != Context::s_builtInArticulationsValues.cend();
+                 it++) {
                 const String& articulationName = it->first;
                 const std::vector<MidiArticulation>& instrArticulations = instr->articulation();
                 bool instrHasArticulation
@@ -1687,7 +1702,8 @@ uint32_t CompatMidiRendererInternal::ChannelLookup::getChannel(uint32_t instrume
     return maxChannel++;
 }
 
-bool CompatMidiRendererInternal::ChannelLookup::LookupData::operator<(const CompatMidiRendererInternal::ChannelLookup::LookupData& other)
+bool CompatMidiRendererInternal::ChannelLookup::LookupData::operator<(
+    const CompatMidiRendererInternal::ChannelLookup::LookupData& other)
 const
 {
     if (harmony && !other.harmony) {

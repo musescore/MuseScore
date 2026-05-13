@@ -57,7 +57,8 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * 0.5;
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
+        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height())
+            * item->chord1()->intrinsicMag();
     }
 
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
@@ -96,7 +97,8 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         }
 
         y = anchor1->y();
-        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height()) * item->chord()->intrinsicMag();
+        h = (ctx.conf().styleAbsolute(Sid::tremoloNoteSidePadding) + item->ldata()->bbox().height())
+            * item->chord()->intrinsicMag();
     }
 
     layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
@@ -106,7 +108,8 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h,
+                                         double spatium)
 {
     const StaffType* staffType = item->staffType();
 
@@ -207,7 +210,8 @@ void TremoloLayout::calcIsUp(TremoloTwoChord* item)
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h,
+                                          double spatium)
 {
     UNUSED(x);
     UNUSED(y);
@@ -297,7 +301,8 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
 //    Returns a modified pair of stem lengths of two chords
 //---------------------------------------------------------
 
-std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2)
+std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1,
+                                                                           double stemLen2)
 {
     const double spatium = tremolo->spatium();
     Chord* c1 = tremolo->chord1();
@@ -307,7 +312,8 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     const double sgn1 = c1->up() ? -1.0 : 1.0;
     const double sgn2 = c2->up() ? -1.0 : 1.0;
     const double stemTipDistance = (s1 && s2) ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
-                                   : (StemLayout::stemPos(c2).y() + (sgn2 * stemLen2)) - (StemLayout::stemPos(c1).y() + (sgn1 * stemLen1));
+                                   : (StemLayout::stemPos(c2).y() + (sgn2 * stemLen2))
+                                   - (StemLayout::stemPos(c1).y() + (sgn1 * stemLen1));
 
     // same staff & same direction: extend one of the stems
     if (c1->staffMove() == c2->staffMove() && c1->up() == c2->up()) {

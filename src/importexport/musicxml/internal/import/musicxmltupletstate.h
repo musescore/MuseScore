@@ -45,7 +45,8 @@ class MusicXmlTupletState
 public:
     MusicXmlTupletFlags determineTupletAction(const engraving::Fraction noteDuration, const engraving::Fraction timeMod,
                                               const MusicXmlStartStop tupletStartStop, const engraving::TDuration normalType,
-                                              engraving::Fraction& missingPreviousDuration, engraving::Fraction& missingCurrentDuration);
+                                              engraving::Fraction& missingPreviousDuration,
+                                              engraving::Fraction& missingCurrentDuration);
     static void determineTupletFractionAndFullDuration(const engraving::Fraction duration, engraving::Fraction& fraction,
                                                        engraving::Fraction& fullDuration);
     static engraving::Fraction missingTupletDuration(const engraving::Fraction duration);

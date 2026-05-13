@@ -171,7 +171,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len = mlen > rest ? rest : mlen;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, false, (tick - measure->tick()) * timeStretch,
-                                                                   sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                                   sigmap()->timesig(
+                                                                       tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                     return;
@@ -219,7 +220,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
                 Fraction mlen = (measure->endTick() - tick) * timeStretch;
                 Fraction len  = rest > mlen ? mlen : rest;
                 std::vector<TDuration> dl = toRhythmicDurationList(len, true, (tick - measure->tick()) * timeStretch,
-                                                                   sigmap()->timesig(tick).nominal(), measure, MAX_DOTS, timeStretch);
+                                                                   sigmap()->timesig(
+                                                                       tick).nominal(), measure, MAX_DOTS, timeStretch);
                 if (dl.empty()) {
                     LOGD("Could not make durations for: %d/%d", len.numerator(), len.denominator());
                     return;
@@ -402,7 +404,8 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
     }
 
     segment = target->score()->setNoteRest(segment, target->track(),
-                                           with->noteVal(), duration, stemDirection, false, {}, false, &target->score()->inputState());
+                                           with->noteVal(), duration, stemDirection, false, {}, false,
+                                           &target->score()->inputState());
     return toChord(segment->nextChordRest(target->track()))->upNote();
 }
 

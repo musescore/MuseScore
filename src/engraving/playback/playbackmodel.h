@@ -142,8 +142,9 @@ private:
 
     void sendEvents(const InstrumentTrackId& trackId);
 
-    void removeEventsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo, const muse::mpe::timestamp_t timestampFrom = -1,
-                               const muse::mpe::timestamp_t timestampTo = -1, ChangedTrackIdSet* trackChanges = nullptr);
+    void removeEventsFromRange(const track_idx_t trackFrom, const track_idx_t trackTo,
+                               const muse::mpe::timestamp_t timestampFrom = -1, const muse::mpe::timestamp_t timestampTo = -1,
+                               ChangedTrackIdSet* trackChanges = nullptr);
     void removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom = -1,
                            const muse::mpe::timestamp_t timestampTo = -1, ChangedTrackIdSet* trackChanges = nullptr);
 

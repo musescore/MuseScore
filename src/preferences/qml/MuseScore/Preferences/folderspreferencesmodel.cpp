@@ -101,7 +101,8 @@ void FoldersPreferencesModel::load()
             notationConfiguration()->userInstrumentsFolder().toQString()
         },
         {
-            FolderType::Templates, muse::qtrc("preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, muse::qtrc("preferences", "Templates"),
+            projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {

@@ -106,7 +106,8 @@ void MidiInputOutputController::checkConnection(const muse::midi::MidiDeviceID& 
         return false;
     };
 
-    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId && containsDevice(availableDevices, preferredDeviceId)) {
+    if (!preferredDeviceId.empty() && preferredDeviceId != currentDeviceId
+        && containsDevice(availableDevices, preferredDeviceId)) {
         Ret ret = connectCallback(preferredDeviceId);
         if (!ret) {
             LOGW() << "failed connect to device, deviceID: " << preferredDeviceId << ", err: " << ret.text();
