@@ -205,7 +205,6 @@ RetVal<Progress> NetworkManager::execRequest(RequestType requestType, const QUrl
         }
 
         RequestData& data = it->second;
-        data.reply->disconnect();
         data.progress.canceled().disconnect(this);
 
         if (std::holds_alternative<QIODevicePtr>(data.outgoingData)) {
@@ -215,6 +214,8 @@ RetVal<Progress> NetworkManager::execRequest(RequestType requestType, const QUrl
         closeDevice(data.incomingData);
 
         const Ret ret = retFromReply(data.reply);
+        data.reply->deleteLater();
+
         Progress progress = data.progress;
         m_requestDataMap.erase(it);
         progress.finish(ret);
