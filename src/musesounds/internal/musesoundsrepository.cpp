@@ -108,7 +108,7 @@ void MuseSoundsRepository::init()
 
     progress.val.finished().onReceive(this, [this, receivedData](const muse::ProgressResult& res) {
         if (!res.ret) {
-            LOGE() << res.ret.toString();
+            LOGE() << "Unable to download MuseSounds list: " << res.ret.toString();
             return;
         }
 
