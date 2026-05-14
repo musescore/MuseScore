@@ -1365,7 +1365,7 @@ static bool allStaffGroupsIdentical(Part const* const p)
 
 static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const size_t span)
 {
-    for (const BracketItem* bracket : staff->score()->brackets(staff)) {
+    for (const BracketItem* bracket : staff->score()->brackets(staff->idx())) {
         if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span) {
             return true;
         }
@@ -1461,10 +1461,10 @@ void MusicXmlParserPass1::scorePartwise()
         // TODO: use group-symbol default-x to determine horizontal order of brackets
         Staff* staff = il.at(pg->start)->staff(0);
         if (pg->type != BracketType::NO_BRACKET && !isRedundantBracket(staff, pg->type, stavesSpan)) {
-            m_score->setBracketType(staff, pg->column, pg->type);
-            m_score->setBracketSpan(staff, pg->column, stavesSpan);
-            if ((m_score->brackets(staff).size() > pg->column) && pg->color.isValid()) {
-                BracketItem* bracketItem = m_score->brackets(staff).at(pg->column);
+            m_score->setBracketType(staff->idx(), pg->column, pg->type);
+            m_score->setBracketSpan(staff->idx(), pg->column, stavesSpan);
+            if ((m_score->brackets(staff->idx()).size() > pg->column) && pg->color.isValid()) {
+                BracketItem* bracketItem = m_score->brackets(staff->idx()).at(pg->column);
                 bracketItem->setColor(pg->color);
             }
             // add part to set (skip implicit bracket later)
@@ -1484,9 +1484,9 @@ void MusicXmlParserPass1::scorePartwise()
     for (const Part* p : il) {
         if (p->nstaves() > 1 && !muse::contains(partSet, p)) {
             Staff* staff = p->staff(0);
-            const size_t column = m_score->bracketLevels(staff) + 1;
-            m_score->setBracketType(staff, column, BracketType::BRACE);
-            m_score->setBracketSpan(staff, column, p->nstaves());
+            const size_t column = m_score->bracketLevels(staff->idx()) + 1;
+            m_score->setBracketType(staff->idx(), column, BracketType::BRACE);
+            m_score->setBracketSpan(staff->idx(), column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
                 for (Staff* spannedStaff : p->staves()) {

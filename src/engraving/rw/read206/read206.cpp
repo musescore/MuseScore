@@ -838,11 +838,11 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "bracket") {
             int col = e.intAttribute("col", -1);
             if (col == -1) {
-                col = static_cast<int>(ctx.score()->brackets(staff).size());
+                col = static_cast<int>(ctx.score()->brackets(staff->idx()).size());
             }
-            ctx.score()->setBracketType(staff, col, BracketType(e.intAttribute("type", -1)));
-            ctx.score()->setBracketSpan(staff, col, e.intAttribute("span", 0));
-            ctx.score()->setBracketVisible(staff, col, static_cast<bool>(e.intAttribute("visible", 1)));
+            ctx.score()->setBracketType(staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            ctx.score()->setBracketSpan(staff->idx(), col, e.intAttribute("span", 0));
+            ctx.score()->setBracketVisible(staff->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
             e.readNext();
         } else if (tag == "barLineSpan") {
             staff->setBarLineFrom(e.intAttribute("from", 0));

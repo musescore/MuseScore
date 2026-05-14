@@ -142,7 +142,7 @@ int BracketSettingsModel::maxBracketColumnPosition() const
     // Count the number of brackets that overlap with the selected one
     for (const Staff* staff : score->staves()) {
         int otherBracketStartIndex = static_cast<int>(staff->idx());
-        for (const BracketItem* otherBracketItem : score->brackets(staff)) {
+        for (const BracketItem* otherBracketItem : score->brackets(staff->idx())) {
             int otherBracketEndIndex = otherBracketStartIndex + static_cast<int>(otherBracketItem->bracketSpan()) - 1;
             if (otherBracketStartIndex <= bracketEndIndex
                 && otherBracketEndIndex >= bracketStartIndex) {

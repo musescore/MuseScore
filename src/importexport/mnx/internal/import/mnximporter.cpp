@@ -461,7 +461,7 @@ void MnxImporter::importBrackets()
         const int groupSpan = static_cast<int>(span.endIndex - span.startIndex + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(span.depth));
-        m_score->addBracket(m_score->staff(staffIdx), bi);
+        m_score->addBracket(staffIdx, bi);
         if (groupSpan <= 1 || span.kind != mnx::util::LayoutSpan::Kind::Group) {
             continue;
         }

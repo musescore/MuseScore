@@ -2409,9 +2409,9 @@ static void readStaff(Staff* staff, XmlReader& e, ReadContext& ctx)
         } else if (tag == "keylist") {
             read400::TRead::read(staff->keyList(), e, ctx);
         } else if (tag == "bracket") {
-            size_t col = ctx.score()->brackets(staff).size();
-            ctx.score()->setBracketType(staff, col, BracketType(e.intAttribute("type", -1)));
-            ctx.score()->setBracketSpan(staff, col, e.intAttribute("span", 0));
+            size_t col = ctx.score()->brackets(staff->idx()).size();
+            ctx.score()->setBracketType(staff->idx(), col, BracketType(e.intAttribute("type", -1)));
+            ctx.score()->setBracketSpan(staff->idx(), col, e.intAttribute("span", 0));
             e.readNext();
         } else if (tag == "barLineSpan") {
             const int barLineSpan = e.readInt();

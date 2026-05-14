@@ -1092,7 +1092,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     if (tR->staffCount() > 1) {
-        _score->addBracket(part->staff(0), mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
+        _score->addBracket(part->staff(0)->idx(), mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
         part->staff(0)->setBarLineSpan(true);
     }
 

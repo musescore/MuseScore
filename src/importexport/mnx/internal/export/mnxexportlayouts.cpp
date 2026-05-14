@@ -99,7 +99,7 @@ static std::vector<LayoutGroupSpan> buildGroupSpans(const std::vector<Staff*>& s
         if (!staff) {
             continue;
         }
-        for (const BracketItem* bracket : staff->score()->brackets(staff)) {
+        for (const BracketItem* bracket : staff->score()->brackets(staffIdx)) {
             if (!bracket) {
                 continue;
             }

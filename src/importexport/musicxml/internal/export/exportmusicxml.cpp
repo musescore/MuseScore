@@ -7809,8 +7809,8 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 continue;
             }
             const staff_idx_t staffIdx = st->idx();
-            for (size_t j = 0; j < score->bracketLevels(st) + 1; j++) {
-                if (score->bracketType(st, j) == BracketType::NO_BRACKET) {
+            for (size_t j = 0; j < score->bracketLevels(staffIdx) + 1; j++) {
+                if (score->bracketType(staffIdx, j) == BracketType::NO_BRACKET) {
                     continue;
                 }
                 bracketFound = true;
@@ -7821,7 +7821,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 }
                 // OK, found bracket in first staff of part
                 // filter out implicit brackets
-                if (score->bracketSpan(st, j) == part->nstaves() && score->bracketType(st, j) == BracketType::BRACE) {
+                if (score->bracketSpan(staffIdx, j) == part->nstaves() && score->bracketType(staffIdx, j) == BracketType::BRACE) {
                     continue;
                 }
                 // filter out brackets starting in the last part
@@ -7830,9 +7830,9 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                     // add others
                     int number = findPartGroupNumber(partGroupEnd);
                     if (number < MAX_PART_GROUPS) {
-                        const BracketItem* bi = score->brackets(st).at(j);
+                        const BracketItem* bi = score->brackets(staffIdx).at(j);
                         partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
-                        partGroupEnd[number] = static_cast<int>(staffCount + score->bracketSpan(st, j));
+                        partGroupEnd[number] = static_cast<int>(staffCount + score->bracketSpan(staffIdx, j));
                     }
                 }
             }

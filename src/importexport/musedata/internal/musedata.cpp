@@ -720,8 +720,8 @@ bool MuseData::read(const QString& name)
                 score->appendStaff(staff);
 
                 if ((staves == 2) && (i == 0)) {
-                    score->setBracketType(staff, 0, BracketType::BRACE);
-                    score->setBracketSpan(staff, 0, 2);
+                    score->setBracketType(staff->idx(), 0, BracketType::BRACE);
+                    score->setBracketSpan(staff->idx(), 0, 2);
                 }
             }
             score->appendPart(mpart);

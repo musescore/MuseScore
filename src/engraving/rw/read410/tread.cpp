@@ -3945,11 +3945,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx, StaffHideMo
     } else if (tag == "bracket") {
         int col = e.intAttribute("col", -1);
         if (col == -1) {
-            col = static_cast<int>(ctx.score()->brackets(s).size());
+            col = static_cast<int>(ctx.score()->brackets(s->idx()).size());
         }
-        ctx.score()->setBracketType(s, col, BracketType(e.intAttribute("type", -1)));
-        ctx.score()->setBracketSpan(s, col, e.intAttribute("span", 0));
-        ctx.score()->setBracketVisible(s, col, static_cast<bool>(e.intAttribute("visible", 1)));
+        ctx.score()->setBracketType(s->idx(), col, BracketType(e.intAttribute("type", -1)));
+        ctx.score()->setBracketSpan(s->idx(), col, e.intAttribute("span", 0));
+        ctx.score()->setBracketVisible(s->idx(), col, static_cast<bool>(e.intAttribute("visible", 1)));
         e.readNext();
     } else if (tag == "barLineSpan") {
         const int barLineSpan = e.readInt();

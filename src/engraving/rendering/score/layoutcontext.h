@@ -184,7 +184,7 @@ public:
 
     const PaddingTable& paddingTable() const;
 
-    const std::vector<BracketItem*>& brackets(const Staff* staff) const;
+    const std::vector<BracketItem*>& brackets(staff_idx_t staffIdx) const;
 
     // Mutable access
     std::vector<Page*>& pages();

@@ -941,11 +941,12 @@ PalettePtr PaletteCreator::newBracketsPalette()
 
     static Part* bracketItemOwnerPart = new Part(paletteScore());
     static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
-    paletteScore()->setBracketType(bracketItemOwner, types.size() - 1, BracketType::NORMAL);
+    paletteScore()->appendStaff(bracketItemOwner);
+    paletteScore()->setBracketType(bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(paletteScore()->dummy());
-        auto bi1 = paletteScore()->brackets(bracketItemOwner)[i];
+        auto bi1 = paletteScore()->brackets(bracketItemOwner->idx())[i];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);

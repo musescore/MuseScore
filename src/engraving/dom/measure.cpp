@@ -1553,7 +1553,7 @@ EngravingItem* Measure::drop(Transaction& tx, EditData& data)
         staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
         for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
-            for (const BracketItem* bi : score()->brackets(score()->staff(idx))) {
+            for (const BracketItem* bi : score()->brackets(idx)) {
                 if (bi->intersects(firstStaff, lastStaff)) {
                     level = std::max(level, bi->column() + 1);
                 }
