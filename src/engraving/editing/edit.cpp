@@ -4903,7 +4903,7 @@ void Score::undoAddBracket(Staff* staff, size_t level, BracketType type, size_t 
     // Make sure this brackets won't overlap with others sharing same column.
     // If overlaps are found, move the other brackets outwards (i.e. increase column).
     for (staff_idx_t staffIdx = startStaffIdx; staffIdx < startStaffIdx + span && staffIdx < totStaves; ++staffIdx) {
-        const std::vector<BracketItem*>& scoreBrackets = brackets(this->staff(staffIdx));
+        const std::vector<BracketItem*>& scoreBrackets = brackets(staffIdx);
 
         bool collision = false;
         for (BracketItem* b : scoreBrackets) {

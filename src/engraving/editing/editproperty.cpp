@@ -65,7 +65,7 @@ void ChangeBracketProperty::flip()
         return;
     }
 
-    element = staff->score()->brackets(staff)[level];
+    element = staff->score()->brackets(staff->idx())[level];
     ChangeProperty::flip();
     level = toBracketItem(element)->column();
 }

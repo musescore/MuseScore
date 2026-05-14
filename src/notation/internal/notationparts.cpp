@@ -1148,9 +1148,9 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ, co
         if (!staffType) {
             staffType = mu::engraving::StaffType::preset(StaffTypeId::STANDARD);
         }
-        initStaff(staff, templ, staffType, staffIndex);
 
         insertStaff(staff, staffIndex);
+        staff->init(&templ, staffType, staffIndex);
     }
 
     if (!part->nstaves()) {
@@ -1167,28 +1167,6 @@ void NotationParts::insertStaff(Staff* staff, staff_idx_t destinationStaffIndex,
     TRACEFUNC;
 
     score()->undoInsertStaff(staff, destinationStaffIndex, createRest);
-}
-
-void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex)
-{
-    TRACEFUNC;
-
-    const mu::engraving::StaffType* staffTypePreset = staffType ? staffType : templ.staffTypePreset;
-    if (!staffTypePreset) {
-        staffTypePreset = mu::engraving::StaffType::getDefaultPreset(templ.staffGroup);
-    }
-
-    mu::engraving::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
-    if (cleffIndex >= MAX_STAVES) {
-        stt->setSmall(false);
-    } else {
-        stt->setSmall(templ.smallStaff[cleffIndex]);
-        stt->setLines(templ.staffLines[cleffIndex]);
-        score()->setBracketType(staff, 0, templ.bracket[cleffIndex]);
-        score()->setBracketSpan(staff, 0, templ.bracketSpan[cleffIndex]);
-        staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
-    }
-    staff->setDefaultClefType(templ.clefType(cleffIndex));
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& newParts)

@@ -1132,24 +1132,28 @@ void Staff::removeStaffType(const Fraction& tick)
 //   init
 //---------------------------------------------------------
 
-void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
+void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, staff_idx_t templateStaffIdx)
 {
+    // Initialises a staff from an InstrumentTemplate and StaffType. The staff MUST be added to the score already.
+    assert(idx() != muse::nidx);
     // set staff-type-independent parameters
     const StaffType* pst = staffType ? staffType : t->staffTypePreset;
     if (!pst) {
         pst = StaffType::getDefaultPreset(t->staffGroup);
     }
 
+    const staff_idx_t staffIdx = idx() != muse::nidx ? idx() : score()->nstaves();
+
     StaffType* stt = setStaffType(Fraction(0, 1), *pst);
-    if (cidx >= MAX_STAVES) {
+    if (templateStaffIdx >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
-        stt->setSmall(t->smallStaff[cidx]);
-        score()->setBracketType(this, 0, t->bracket[cidx]);
-        score()->setBracketSpan(this, 0, t->bracketSpan[cidx]);
-        setBarLineSpan(t->barlineSpan[cidx]);
+        stt->setSmall(t->smallStaff[templateStaffIdx]);
+        score()->setBracketType(staffIdx, 0, t->bracket[templateStaffIdx]);
+        score()->setBracketSpan(staffIdx, 0, t->bracketSpan[templateStaffIdx]);
+        setBarLineSpan(t->barlineSpan[templateStaffIdx]);
     }
-    setDefaultClefType(t->clefType(cidx));
+    setDefaultClefType(t->clefType(templateStaffIdx));
 }
 
 //---------------------------------------------------------

@@ -299,7 +299,7 @@ size_t System::getBracketsColumnsCount() const
 {
     size_t columns = 0;
     for (const Staff* staff : score()->staves()) {
-        for (auto bi : score()->brackets(staff)) {
+        for (auto bi : score()->brackets(staff->idx())) {
             columns = std::max(columns, bi->column() + 1);
         }
     }

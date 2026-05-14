@@ -47,7 +47,7 @@ double SystemHeaderLayout::layoutBrackets(System* system, LayoutContext& ctx)
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         for (size_t i = 0; i < columns; ++i) {
-            for (BracketItem* bi : ctx.dom().brackets(ctx.dom().staff(staffIdx))) {
+            for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
@@ -178,7 +178,7 @@ void SystemHeaderLayout::addBrackets(System* system, Measure* measure, LayoutCon
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         for (size_t i = 0; i < columns; ++i) {
-            for (BracketItem* bi : ctx.dom().brackets(ctx.dom().staff(staffIdx))) {
+            for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
@@ -208,7 +208,7 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
 
     size_t columns = 0;
     for (const Staff* staff : ctx.dom().staves()) {
-        for (const BracketItem* bi : ctx.dom().brackets(staff)) {
+        for (const BracketItem* bi : ctx.dom().brackets(staff->idx())) {
             columns = std::max(columns, bi->column() + 1);
         }
     }
@@ -216,7 +216,7 @@ double SystemHeaderLayout::totalBracketOffset(LayoutContext& ctx)
     size_t nstaves = ctx.dom().nstaves();
     std::vector < double > bracketWidth(nstaves, 0.0);
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        for (BracketItem* bi : ctx.dom().brackets(ctx.dom().staff(staffIdx))) {
+        for (BracketItem* bi : ctx.dom().brackets(staffIdx)) {
             if (bi->bracketType() == BracketType::NO_BRACKET || !bi->visible() || bi->bracketType() == BracketType::GROUP) {
                 continue;
             }

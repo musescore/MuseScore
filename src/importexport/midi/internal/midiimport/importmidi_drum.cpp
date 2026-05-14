@@ -189,8 +189,8 @@ void setBracket(engraving::Staff*& staff, int& counter)
 {
     if (staff && counter > 1) {
         engraving::Score* score = staff->score();
-        score->setBracketType(staff, 0, engraving::BracketType::NORMAL);
-        score->setBracketSpan(staff, 0, counter);
+        score->setBracketType(staff->idx(), 0, engraving::BracketType::NORMAL);
+        score->setBracketSpan(staff->idx(), 0, counter);
     }
     if (counter) {
         counter = 0;

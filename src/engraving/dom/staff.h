@@ -63,7 +63,7 @@ class Staff final : public EngravingItem
 public:
     Staff* clone() const override;
 
-    void init(const InstrumentTemplate*, const StaffType* staffType, int);
+    void init(const InstrumentTemplate*, const StaffType* staffType, staff_idx_t templateStaffIdx);
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
 

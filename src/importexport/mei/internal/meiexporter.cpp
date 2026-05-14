@@ -618,15 +618,15 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
     }
     const staff_idx_t staffIdx = staff->idx();
 
-    for (size_t j = 0; j < m_score->bracketLevels(staff) + 1; j++) {
-        BracketType bracketType = m_score->bracketType(staff, j);
+    for (size_t j = 0; j < m_score->bracketLevels(staffIdx) + 1; j++) {
+        BracketType bracketType = m_score->bracketType(staffIdx, j);
         if (bracketType == BracketType::NO_BRACKET) {
             continue;
         }
 
         libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(bracketType, staff->barLineSpan());
         // mark at which staff we will need to close the staffGrp
-        int end = static_cast<int>(staffIdx + m_score->bracketSpan(staff, j)) - 1;
+        int end = static_cast<int>(staffIdx + m_score->bracketSpan(staffIdx, j)) - 1;
         // Something is wrong, maybe a staff was delete in the MuseScore file?
         if (end >= static_cast<int>(ends.size())) {
             continue;
@@ -636,7 +636,7 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
         m_currentNode = m_currentNode.append_child();
         meiStaffGrp.Write(m_currentNode);
         // If we have a part and reached the latest level, write the label and labelAbbr
-        if (staffGrpPart && j == m_score->bracketLevels(staff)) {
+        if (staffGrpPart && j == m_score->bracketLevels(staffIdx)) {
             this->writeLabel(m_currentNode, staffGrpPart);
             this->writeInstrDef(m_currentNode, staffGrpPart);
         }
