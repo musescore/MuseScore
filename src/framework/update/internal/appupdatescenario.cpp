@@ -60,7 +60,7 @@ void AppUpdateScenario::checkForUpdate(bool manual)
                 showReleaseInfo(res.val);
             }
         } else if (!noUpdate) {
-            LOGE() << res.ret.toString();
+            LOGE() << "Unable to check for app update: " << res.ret.toString();
         }
 
         m_checkInProgress = false;
