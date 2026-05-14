@@ -439,6 +439,48 @@ TEST_F(Engraving_TabTransposeTests, chordNotesOnDifferentStringsWithNegativeFret
     delete score;
 }
 
+// Lowest string: transpose by -8 must keep the note on that string (fret -1), not
+// move it to a thinner string because convertPitch found an in-range alternative.
+TEST_F(Engraving_TabTransposeTests, lowestStringStaysOnTransposePastOpenString)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "fret_low_string_transpose.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -8);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 1u);
+    const TabNote* n5 = findNoteByString(notes, 5);
+    ASSERT_NE(n5, nullptr) << "note must remain on the lowest string";
+    EXPECT_EQ(n5->fret, -1);
+    EXPECT_EQ(n5->pitch, 39);
+
+    delete score;
+}
+
+// Same-string transpose can yield a deep negative fret on an inner string while the
+// lowest string plays the same pitch with a shallower negative fret; prefer bass.
+TEST_F(Engraving_TabTransposeTests, preferBassWhenShallowerNegativeOnLowestString)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "prefer_bass_inner_negative.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -12);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 1u);
+    const TabNote* n5 = findNoteByString(notes, 5);
+    ASSERT_NE(n5, nullptr) << "expected note to move to lowest string";
+    EXPECT_EQ(n5->fret, -1);
+    EXPECT_EQ(n5->pitch, 39);
+
+    delete score;
+}
+
 // neg_fret_chord: path-independent assignment for -7 vs direct -8 (same strings, frets differ by one semitone step).
 TEST_F(Engraving_TabTransposeTests, negFretChordAssignmentIsPathIndependent)
 {
