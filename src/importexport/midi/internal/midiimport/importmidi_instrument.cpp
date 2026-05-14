@@ -657,12 +657,12 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
         } else {
             if (!instr) {
                 staff->setBarLineSpan(true);
-                score->setBracketType(staff, 0, BracketType::BRACE);
+                score->setBracketType(staff->idx(), 0, BracketType::BRACE);
             } else {
                 staff->setBarLineSpan(instr->barlineSpan[0]);
-                score->setBracketType(staff, 0, instr->bracket[0]);
+                score->setBracketType(staff->idx(), 0, instr->bracket[0]);
             }
-            score->setBracketSpan(staff, 0, 2);
+            score->setBracketSpan(staff->idx(), 0, 2);
         }
 
         if (instr) {

@@ -32,14 +32,14 @@ using namespace mu::engraving;
 
 void AddBracket::redo(EditData*)
 {
-    staff->score()->setBracketType(staff, level, bracketType);
-    staff->score()->setBracketSpan(staff, level, span);
+    staff->score()->setBracketType(staff->idx(), level, bracketType);
+    staff->score()->setBracketSpan(staff->idx(), level, span);
     staff->triggerLayout();
 }
 
 void AddBracket::undo(EditData*)
 {
-    staff->score()->setBracketType(staff, level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
@@ -49,13 +49,13 @@ void AddBracket::undo(EditData*)
 
 void RemoveBracket::redo(EditData*)
 {
-    staff->score()->setBracketType(staff, level, BracketType::NO_BRACKET);
+    staff->score()->setBracketType(staff->idx(), level, BracketType::NO_BRACKET);
     staff->triggerLayout();
 }
 
 void RemoveBracket::undo(EditData*)
 {
-    staff->score()->setBracketType(staff, level, bracketType);
-    staff->score()->setBracketSpan(staff, level, span);
+    staff->score()->setBracketType(staff->idx(), level, bracketType);
+    staff->score()->setBracketSpan(staff->idx(), level, span);
     staff->triggerLayout();
 }

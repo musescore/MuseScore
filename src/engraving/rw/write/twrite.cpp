@@ -2925,7 +2925,7 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("isStaffVisible", item->visible());
     }
 
-    for (const BracketItem* i : item->score()->brackets(item)) {
+    for (const BracketItem* i : item->score()->brackets(item->idx())) {
         write(i, xml);
     }
 

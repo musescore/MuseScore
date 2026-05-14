@@ -44,6 +44,16 @@ EngravingItem* BracketItem::clone() const
     return new BracketItem(*this);
 }
 
+Staff* BracketItem::startStaff() const
+{
+    return score() ? score()->staff(m_startStaffIdx) : nullptr;
+}
+
+void BracketItem::setStartStaff(Staff* staff)
+{
+    setStartStaffIdx(staff ? staff->idx() : muse::nidx);
+}
+
 PropertyValue BracketItem::getProperty(Pid id) const
 {
     switch (id) {
@@ -70,10 +80,10 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        score()->setBracketType(startStaff(), column(), BracketType(v.toInt())); // change bracket type global
+        score()->setBracketType(startStaffIdx(), column(), BracketType(v.toInt())); // change bracket type global
         break;
     case Pid::BRACKET_COLUMN:
-        score()->changeBracketColumn(startStaff(), column(), static_cast<size_t>(v.toInt()));
+        score()->changeBracketColumn(startStaffIdx(), column(), static_cast<size_t>(v.toInt()));
         break;
     case Pid::BRACKET_SPAN:
         m_bracketSpan = static_cast<size_t>(v.toInt());
@@ -121,14 +131,14 @@ PropertyValue BracketItem::propertyDefault(Pid id) const
 
 bool BracketItem::intersects(const BracketItem* other) const
 {
-    staff_idx_t firstOfOther = other->startStaff()->idx();
+    staff_idx_t firstOfOther = other->startStaffIdx();
     staff_idx_t lastOfOther = firstOfOther + other->bracketSpan() - 1;
     return intersects(firstOfOther, lastOfOther);
 }
 
 bool BracketItem::intersects(staff_idx_t first, staff_idx_t last) const
 {
-    staff_idx_t firstOfThis = m_startStaff->idx();
+    staff_idx_t firstOfThis = m_startStaffIdx;
     staff_idx_t lastOfThis = firstOfThis + bracketSpan() - 1;
     return firstOfThis <= last && lastOfThis >= first;
 }
