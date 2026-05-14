@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTRWREGISTER_H
-#define MU_PROJECT_PROJECTRWREGISTER_H
 
-#include <map>
+#include "aacwriter.h"
 
-#include "../iprojectrwregister.h"
+#include "log.h"
 
-namespace mu::project {
-class ProjectRWRegister : public IProjectRWRegister
+using namespace muse;
+using namespace muse::audio;
+using namespace mu::iex::audioexport;
+
+Ret AacWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
-public:
+    const SoundTrackFormat format {
+        SoundTrackType::AAC,
+        {
+            static_cast<sample_rate_t>(configuration()->exportSampleRate()),
+            configuration()->exportBufferSize(),
+            2 /* audioChannelsNumber */
+        },
+        AudioSampleFormat::Undefined,
+        configuration()->exportMp3Bitrate()
+    };
 
-    void regWriter(const std::vector<std::string>& suffixes, IProjectWriterPtr writer) override;
-    IProjectWriterPtr writer(const std::string& suffix) const override;
-
-private:
-    std::map<std::string, IProjectWriterPtr> m_writers;
-};
+    return doWriteAndWait(notation, destinationDevice, format, options);
 }
-
-#endif // MU_PROJECT_PROJECTRWREGISTER_H

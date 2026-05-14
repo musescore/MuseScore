@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited and others
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,23 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "projectrwregister.h"
+import QtQuick
 
-using namespace mu::project;
+import Muse.UiComponents
+import MuseScore.Project
 
-void ProjectRWRegister::regWriter(const std::vector<std::string>& suffixes, IProjectWriterPtr writer)
-{
-    for (const std::string& suffix : suffixes) {
-        m_writers.insert({ suffix, writer });
-    }
-}
+ExportSettingsPage {
+    id: root
 
-IProjectWriterPtr ProjectRWRegister::writer(const std::string& suffix) const
-{
-    auto it = m_writers.find(suffix);
-    if (it != m_writers.end()) {
-        return it->second;
+    AudioSettings {
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationOrderStart: root.navigationOrder
     }
 
-    return nullptr;
+    StyledTextLabel {
+        width: parent.width
+        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
+    }
 }

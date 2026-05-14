@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,32 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_VIDEOENCODER_H
-#define MU_IMPORTEXPORT_VIDEOENCODER_H
 
-#include <QImage>
+#pragma once
 
-#include "io/path.h"
+#include "abstractaudiowriter.h"
 
-namespace mu::iex::videoexport {
-struct FFmpeg;
-class VideoEncoder
+namespace mu::iex::audioexport {
+class AacWriter : public AbstractAudioWriter
 {
 public:
-    VideoEncoder();
-    ~VideoEncoder();
+    AacWriter(const muse::modularity::ContextPtr& iocCtx)
+        : AbstractAudioWriter(iocCtx) {}
 
-    bool open(const muse::io::path_t& fileName, unsigned width, unsigned height, unsigned bitrate, unsigned gop, unsigned fps);
-    void close();
-
-    bool encodeImage(const QImage& img);
-
-private:
-
-    bool convertImage_sws(const QImage& img);
-
-    FFmpeg* m_ffmpeg = nullptr;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
-
-#endif // MU_IMPORTEXPORT_VIDEOENCODER_H

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,38 +21,23 @@
  */
 import QtQuick
 
-import Muse.Ui
 import Muse.UiComponents
-import MuseScore.Preferences
+import MuseScore.Project
 
-import "internal"
-
-PreferencesPage {
+ExportSettingsPage {
     id: root
 
-    UpdatePreferencesModel {
-        id: updateModel
+    AudioSettings {
+        model: root.model
+        navigationPanel: root.navigationPanel
+        navigationOrderStart: root.navigationOrder
+        showBitRateControl: true
     }
 
-    Component.onCompleted: {
-        updateModel.load()
-    }
-
-    Column {
+    StyledTextLabel {
         width: parent.width
-        spacing: root.sectionsSpacing
-
-        AutomaticUpdateSection {
-            isAppUpdatable: updateModel.isAppUpdatable()
-            needCheckForNewAppVersion: updateModel.needCheckForNewAppVersion
-            museScorePrivacyPolicyUrl: updateModel.museScorePrivacyPolicyUrl()
-
-            navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 1
-
-            onNeedCheckForNewAppVersionChangeRequested: function(check) {
-                updateModel.needCheckForNewAppVersion = check
-            }
-        }
+        text: qsTrc("project/export", "Each selected part will be exported as a separate audio file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
     }
 }

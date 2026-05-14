@@ -91,13 +91,13 @@ muse::Progress* AbstractAudioWriter::progress()
 
 Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                                         io::IODevice& dstDevice,
-                                        const SoundTrackFormat& format)
+                                        const SoundTrackFormat& format,
+                                        const Options& options)
 {
     //! NOTE Temporary fix for the context injection
     m_iocContext = notation->iocContext();
 
-    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
-    muse::ContextInject<playback::IPlaybackController> playbackController  = { m_iocContext };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };
 
     //! NOTE Waiting for the audio system to start if it is not already running
     while (!startAudioController()->isAudioStarted()) {
@@ -111,15 +111,25 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
 
-    doWrite(dstDevice, format);
+    SoundTrackFormat actualFormat = format;
 
-    while (!m_isCompleted) {
-        application()->processEvents();
-        QThread::yieldCurrentThread();
+    double leadingSilenceSec = muse::value(options, OptionKey::LEADING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.leadingSilenceDuration = std::isfinite(leadingSilenceSec)
+                                          ? static_cast<msecs_t>(leadingSilenceSec) : msecs_t(0);
+
+    double trailingSilenceSec = muse::value(options, OptionKey::TRAILING_SILENCE_SEC, Val(0.0)).toDouble();
+    actualFormat.trailingSilenceDuration = std::isfinite(trailingSilenceSec)
+                                           ? static_cast<msecs_t>(trailingSilenceSec) : msecs_t(0);
+
+    doWrite(dstDevice, actualFormat);
+
+    const bool waitForCompletion = muse::value(options, OptionKey::WAIT_FOR_COMPLETION, Val(true)).toBool();
+    if (waitForCompletion) {
+        while (!m_isCompleted) {
+            application()->processEvents();
+            QThread::yieldCurrentThread();
+        }
     }
-
-    playbackController()->setIsExportingAudio(false);
-    playbackController()->setNotation(globalContext()->currentNotation());
 
     return m_writeRet;
 }
@@ -129,6 +139,15 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     muse::ContextInject<muse::audio::IPlayback> playbackInj = { m_iocContext };
 
     const std::string processingOnlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
+
+    muse::ContextInject<context::IGlobalContext> globalContext = { m_iocContext };
+    m_notationForRestore = globalContext()->currentNotation();
+
+    auto restorePlaybackState = [this]() {
+        muse::ContextInject<playback::IPlaybackController> playbackController = { m_iocContext };
+        playbackController()->setIsExportingAudio(false);
+        playbackController()->setNotation(m_notationForRestore);
+    };
 
     auto sendProgress = [this, processingOnlineSoundsMsg](int64_t current, int64_t total, SaveSoundTrackStage stage) {
         switch (stage) {
@@ -152,14 +171,19 @@ void AbstractAudioWriter::doWrite(io::IODevice& dstDevice, const SoundTrackForma
     });
 
     playback->saveSoundTrack(std::move(format), dstDevice)
-    .onResolve(this, [this, playback](const bool /*result*/) {
+    .onResolve(this, [this, playback, restorePlaybackState](const bool /*result*/) {
         LOGI() << "Successfully saved sound track";
+
+        restorePlaybackState();
+
         m_writeRet = muse::make_ok();
         m_isCompleted = true;
         m_progress.finish(muse::make_ok());
         playback->saveSoundTrackProgressChanged().disconnect(this);
     })
-    .onReject(this, [this, playback](int errorCode, const std::string& msg) {
+    .onReject(this, [this, playback, restorePlaybackState](int errorCode, const std::string& msg) {
+        restorePlaybackState();
+
         m_writeRet = Ret(errorCode, msg);
         m_isCompleted = true;
         m_progress.finish(make_ret(errorCode, msg));
