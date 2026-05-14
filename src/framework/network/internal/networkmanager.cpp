@@ -143,11 +143,7 @@ RetVal<Progress> NetworkManager::execRequest(RequestType requestType, const QUrl
         return RetVal<Progress>::make_ret((int)Err::NetworkError);
     }
 
-    size_t requestId = 0;
-    if (!m_requestDataMap.empty()) {
-        requestId = m_requestDataMap.rbegin()->first + 1;
-    }
-
+    const size_t requestId = m_lastRequestId++;
     RequestData& requestData = m_requestDataMap[requestId];
     requestData.incomingData = incomingData;
     requestData.outgoingData = outgoingData;

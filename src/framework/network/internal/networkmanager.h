@@ -81,5 +81,6 @@ private:
 
     QNetworkAccessManager* m_manager = nullptr;
     std::map<size_t /*requestId*/, RequestData> m_requestDataMap;
+    size_t m_lastRequestId = 0;
 };
 }
