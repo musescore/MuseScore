@@ -72,7 +72,7 @@ void NotationViewInputController::init()
 {
     m_possibleZoomPercentages = configuration()->possibleZoomPercentageList();
 
-    if (dispatcher() && !m_readonly) {
+    if (dispatcher()) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
@@ -81,45 +81,47 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "zoom100", [this]() { setZoom(100, findZoomFocusPoint()); });
         dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0), findZoomFocusPoint()); });
 
-        dispatcher()->reg(this, "view-mode-page", [this]() {
-            setViewMode(ViewMode::PAGE);
-        });
+        if (!m_readonly) {
+            dispatcher()->reg(this, "view-mode-page", [this]() {
+                setViewMode(ViewMode::PAGE);
+            });
 
-        if (globalConfiguration()->devModeEnabled()) {
-            dispatcher()->reg(this, "view-mode-float", [this]() {
-                setViewMode(ViewMode::FLOAT);
+            if (globalConfiguration()->devModeEnabled()) {
+                dispatcher()->reg(this, "view-mode-float", [this]() {
+                    setViewMode(ViewMode::FLOAT);
+                });
+            }
+
+            dispatcher()->reg(this, "view-mode-continuous", [this]() {
+                setViewMode(ViewMode::LINE);
+            });
+
+            dispatcher()->reg(this, "view-mode-single", [this]() {
+                setViewMode(ViewMode::SYSTEM);
+            });
+
+            dispatcher()->reg(this, "scr-next", this, &NotationViewInputController::nextScreen);
+            dispatcher()->reg(this, "scr-prev", this, &NotationViewInputController::previousScreen);
+            dispatcher()->reg(this, "page-next", this, &NotationViewInputController::nextPage);
+            dispatcher()->reg(this, "page-prev", this, &NotationViewInputController::previousPage);
+            dispatcher()->reg(this, "page-top", this, &NotationViewInputController::startOfScore);
+            dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
+
+            dispatcher()->reg(this, "notation-context-menu", [this]() {
+                m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
+            });
+
+            dispatcher()->reg(this, "notation-popup-menu", [this](const ActionData& args) {
+                if (EngravingItem* el = args.arg<EngravingItem*>()) {
+                    togglePopupForItemIfSupports(el);
+                }
+            });
+
+            onNotationChanged();
+            globalContext()->currentNotationChanged().onNotify(this, [this]() {
+                onNotationChanged();
             });
         }
-
-        dispatcher()->reg(this, "view-mode-continuous", [this]() {
-            setViewMode(ViewMode::LINE);
-        });
-
-        dispatcher()->reg(this, "view-mode-single", [this]() {
-            setViewMode(ViewMode::SYSTEM);
-        });
-
-        dispatcher()->reg(this, "scr-next", this, &NotationViewInputController::nextScreen);
-        dispatcher()->reg(this, "scr-prev", this, &NotationViewInputController::previousScreen);
-        dispatcher()->reg(this, "page-next", this, &NotationViewInputController::nextPage);
-        dispatcher()->reg(this, "page-prev", this, &NotationViewInputController::previousPage);
-        dispatcher()->reg(this, "page-top", this, &NotationViewInputController::startOfScore);
-        dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
-
-        dispatcher()->reg(this, "notation-context-menu", [this]() {
-            m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
-        });
-
-        dispatcher()->reg(this, "notation-popup-menu", [this](const ActionData& args) {
-            if (EngravingItem* el = args.arg<EngravingItem*>()) {
-                togglePopupForItemIfSupports(el);
-            }
-        });
-
-        onNotationChanged();
-        globalContext()->currentNotationChanged().onNotify(this, [this]() {
-            onNotationChanged();
-        });
     }
 }
 
@@ -1111,7 +1113,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
     const bool isNoteEnterMode = m_view->isNoteEnterMode();
     const bool isMiddleButton  = (event->buttons() & Qt::MiddleButton);
-    const bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
+    const bool isDragObjectsAllowed = !(readonly() || isNoteEnterMode || playbackController()->isPlaying() || isMiddleButton);
     if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = hitElementContext().element;
 
