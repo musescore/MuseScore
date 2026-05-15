@@ -708,8 +708,8 @@ void Harmony::startEdit(EditData& ed)
         rightParen()->mutldata()->reset();
     }
 
-    // layout as text, without position reset
-    renderer()->layoutText1(this, true);
+    // layout as harmony, without position reset
+    renderer()->layoutText1(this);
     triggerLayout();
 
     TextBase::startEdit(ed);
@@ -749,8 +749,8 @@ bool Harmony::edit(EditData& ed)
 
     bool rv = TextBase::edit(ed);
 
-    // layout as text, without position reset
-    renderer()->layoutText1(this, true);
+    // layout as harmony, without position reset
+    renderer()->layoutText1(this);
     triggerLayout();
 
     // check spelling
