@@ -272,7 +272,7 @@ private:
     void onPlayingChanged();
     void updatePlaybackCursorInterpolated();
     void movePlaybackCursor(muse::midi::tick_t tick);
-    bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
+    bool shouldAdjustCanvasVerticallyDuringPlayback(const muse::RectF& cursorRect);
 
     void onPlaybackCursorRectChanged();
 
@@ -317,6 +317,16 @@ private:
 
     muse::RectF m_shadowNoteRect;
     muse::RectF m_previewMeasureRect;
+
+    struct PageCache {
+        const Page* page = nullptr;
+        std::optional<bool> adjustVerticallyDuringPlayback;
+
+        void clear()
+        {
+            *this = PageCache();
+        }
+    } mutable m_pageCache;
 
     QQuickItem* m_playbackCursorItem = nullptr;
 
