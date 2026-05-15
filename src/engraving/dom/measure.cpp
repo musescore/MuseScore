@@ -1378,7 +1378,7 @@ bool Measure::acceptDrop(EditData& data) const
     MuseScoreView* viewer = data.view();
     const EngravingItem* e = data.dropElement;
 
-    if (data.track == muse::nidx) {
+    if (data.track == muse::nidx || !system()) {
         return false;
     }
 
