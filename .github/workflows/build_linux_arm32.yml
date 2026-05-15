@@ -41,7 +41,7 @@ on:
 
 jobs:
   linux_arm32:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-24.04-arm
     steps:
     - name: Clone repository
       uses: actions/checkout@v6

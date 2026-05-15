@@ -92,7 +92,7 @@ jobs:
         include:
           - platform: linux_x64
             arch: x86_64
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
             qt-host: linux
             qt-arch: linux_gcc_64
             dump-symbols-arch: x86-64
