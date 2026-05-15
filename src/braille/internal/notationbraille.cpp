@@ -72,6 +72,7 @@ void NotationBraille::init()
     brailleConfiguration()->intervalDirectionChanged().onNotify(this, [this]() {
         BrailleIntervalDirection direction = brailleConfiguration()->intervalDirection();
         setIntervalDirection(direction);
+        doBraille(true);
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -156,7 +157,7 @@ void NotationBraille::doBraille(bool force)
 
             if (!m) {
                 brailleEngravingItemList()->clear();
-                Braille lb(score());
+                Braille lb(score(), brailleConfiguration()->intervalDirection());
                 bool res = lb.convertItem(e, brailleEngravingItemList());
                 if (!res) {
                     QString txt = e->accessibleInfo();
@@ -170,7 +171,7 @@ void NotationBraille::doBraille(bool force)
             } else {
                 if (m != current_measure || force) {
                     brailleEngravingItemList()->clear();
-                    Braille lb(score());
+                    Braille lb(score(), brailleConfiguration()->intervalDirection());
                     lb.convertMeasure(m, brailleEngravingItemList());
                     setBrailleInfo(brailleEngravingItemList()->brailleStr());
                     current_measure = m;
