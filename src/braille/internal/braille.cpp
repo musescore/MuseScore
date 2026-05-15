@@ -1785,7 +1785,7 @@ QString Braille::brailleChord(Chord* chord)
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
     // All intervals are relative to the original (highest or lowest) note.
     std::vector<Note*> notes;
-    if (ascendingChords(m_context.currentClefType[chord->staffIdx()])) {
+    if (ascendingChords(m_score->staff(chord->staffIdx())->clef(Fraction(0, 1)))) {
         for (auto it = chord->notes().begin(); it != chord->notes().end(); ++it) {
             notes.push_back(*it);
         }
