@@ -1465,8 +1465,8 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
     if (!creditType.empty()) {
         xml.tag("credit-type", creditType);
     }
-    String attr = String(u" default-x=\"%1\"").arg(x);
-    attr += String(u" default-y=\"%1\"").arg(y);
+    String attr = String(u" default-x=\"%1\"").arg(String::number(x, 2));
+    attr += String(u" default-y=\"%1\"").arg(String::number(y, 2));
     attr += u" justify=\"" + just + u"\"";
     attr += u" valign=\"" + val + u"\"";
     MScoreTextToMusicXml mttm(u"credit-words", attr, defFmt, mtf);
