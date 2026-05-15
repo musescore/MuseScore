@@ -337,12 +337,6 @@ if (OS_IS_WIN)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
     endif()
 
-    # Install ssl
-    install(FILES
-            ${DEPENDENCIES_LIB_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_LIB_DIR}/libssl-1_1-x64.dll
-            DESTINATION bin)
-
     if (WIN_PORTABLE)
         # deploy the files and directory structure needed for the PortableApps.com format
         install(DIRECTORY ${PROJECT_SOURCE_DIR}/buildscripts/packaging/Windows/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)

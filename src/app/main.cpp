@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QStyleHints>
 #include <QQuickWindow>
+#include <QSslSocket>
 
 #include "appfactory.h"
 #include "internal/commandlineparser.h"
@@ -158,6 +159,27 @@ int main(int argc, char** argv)
     QCoreApplication* qapp = new QApplication(argc, argv);
     CmdOptions opt;
     opt.runMode = IApplication::RunMode::GuiApp;
+#endif
+
+    QString activeSslBackend = QSslSocket::activeBackend();
+    LOGI() << QString("SSL Info: supported: %1, build: %2, runtime: %3, active backend: %4, available backends: %5")
+        .arg(QSslSocket::supportsSsl())
+        .arg(QSslSocket::sslLibraryBuildVersionString())
+        .arg(QSslSocket::sslLibraryVersionString())
+        .arg(activeSslBackend)
+        .arg(QSslSocket::availableBackends().join(", "));
+
+#ifdef Q_OS_WIN
+    // NOTE: Force schannel backend. Qt prefers OpenSSL when qopensslbackend.dll
+    //       is present, which can crash on ABI mismatch with bundled OpenSSL.
+    //       see https://github.com/musescore/MuseScore/issues/33401
+    QString schannel("schannel");
+    if (activeSslBackend != schannel) {
+        LOGI() << "Changing SSL backend to " << schannel;
+        if (!QSslSocket::setActiveBackend(schannel)) {
+            LOGE() << "Unable to change SSL backend to " << schannel;
+        }
+    }
 #endif
 
     AppFactory f;
