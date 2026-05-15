@@ -28,7 +28,7 @@ sudo apt install lldb
 
 Edit `$HOME/.bashrc`, specify the current Qt, for example
 ```
-export QT_DIR=$HOME/Qt/6.10.1/gcc_64
+export QT_DIR=$HOME/Qt/6.11.0/gcc_64
 
 export PATH=$HOME/Qt/Tools/CMake/bin:$PATH
 export PATH=$HOME/Qt/Tools/Ninja:$PATH
@@ -59,4 +59,3 @@ Don't use the `flatpak` version because it has limited permissions; for example,
 * There will be a choice of cmake preset, select `Qt Clang Debug`.
 * There will be buttons on the bottom panel: Build, Debug, Run
 * Enjoy!
-
