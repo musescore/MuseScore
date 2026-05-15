@@ -81,6 +81,7 @@ void AbstractAudioWriter::abort()
 {
     muse::ContextInject<muse::audio::IPlayback> playback = { m_iocContext };
     playback()->abortSavingAllSoundTracks();
+    m_writeRet = make_ret(Ret::Code::Cancel);
     m_isCompleted = true;
 }
 
