@@ -874,7 +874,24 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 
 EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
+    if (e->isLyrics()) {
+        // The next element after Lyrics is the LyricsLine (if it exists)...
+        if (LyricsLine* line = toLyrics(e)->separator()) {
+            return line;
+        }
+    }
+    if (e->isLyricsLine()) {
+        LyricsLine* lyricsLine = toLyricsLine(e);
+        Lyrics* lyrics = lyricsLine->lyrics();
+        IF_ASSERT_FAILED(lyrics) {
+            return nullptr;
+        }
+        // We were on a LyricsLine - now we'll try to move to the next Lyrics...
+        e = lyrics;
+    }
+
     if (!isChord() || !e->isArticulationFamily()) {
+        // Move to the next Lyrics...
         auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
         if (i == m_lyrics.end() || i == m_lyrics.end() - 1) {
             return nullptr;
@@ -882,6 +899,7 @@ EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
         return *(i + 1);
     }
 
+    // Cycle through articulations...
     Chord* c = toChord(this);
     auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
     if (i == c->articulations().end()) {
@@ -905,25 +923,37 @@ EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 {
     const std::vector<Articulation*> artics = isChord() ? toChord(this)->articulations() : std::vector<Articulation*>();
 
-    auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
-    if (i != m_lyrics.end()) {
-        if (i != m_lyrics.begin()) {
-            return *(i - 1);
-        }
-        if (!artics.empty()) {
-            return artics.back();
-        }
-        return nullptr;
+    if (e->isLyricsLine()) {
+        // The previous element to a LyricsLine is the associated Lyrics...
+        return toLyricsLine(e)->lyrics();
     }
 
-    if (artics.empty()) {
+    auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
+    if (i == m_lyrics.end()) {
+        // Cycle through articulations...
+        if (artics.empty()) {
+            return nullptr;
+        }
+        auto j = std::find(artics.begin(), artics.end(), e);
+        if (j == artics.end() || j == artics.begin()) {
+            return nullptr;
+        }
+        return *(j - 1);
+    }
+    if (i == m_lyrics.begin()) {
+        return !artics.empty() ? artics.back() : nullptr;
+    }
+
+    // Move to the previous Lyrics...
+    Lyrics* lyrics = *(i - 1);
+    IF_ASSERT_FAILED(lyrics) {
         return nullptr;
     }
-    auto j = std::find(artics.begin(), artics.end(), e);
-    if (j == artics.end() || j == artics.begin()) {
-        return nullptr;
+    if (lyrics->separator()) {
+        // Move to the LyricsLine of the previous Lyrics (if it exists)...
+        return lyrics->separator();
     }
-    return *(j - 1);
+    return lyrics;
 }
 
 //---------------------------------------------------------
@@ -940,7 +970,8 @@ EngravingItem* ChordRest::nextElement()
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::TAPPING:
-    case ElementType::LYRICS: {
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE: {
         EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
             return next;
@@ -976,7 +1007,8 @@ EngravingItem* ChordRest::prevElement()
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::TAPPING:
-    case ElementType::LYRICS: {
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE: {
         EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {
             return prev;
@@ -1014,11 +1046,17 @@ EngravingItem* ChordRest::prevElement()
 
 EngravingItem* ChordRest::lastElementBeforeSegment()
 {
-    if (!m_lyrics.empty()) {
-        return m_lyrics.back();
+    if (m_lyrics.empty()) {
+        return nullptr;
     }
-
-    return nullptr;
+    Lyrics* lyrics = m_lyrics.back();
+    IF_ASSERT_FAILED(lyrics) {
+        return nullptr;
+    }
+    if (LyricsLine* lyricsLine = lyrics->separator()) {
+        return lyricsLine;
+    }
+    return lyrics;
 }
 
 //---------------------------------------------------------
