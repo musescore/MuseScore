@@ -284,6 +284,12 @@ void VideoWriter::abort()
     if (m_audioWriter) {
         m_audioWriter->abort();
     }
+
+    // Wait abort completion
+    while (!m_isCompleted || !m_audioCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
 }
 
 std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, Config& config)
