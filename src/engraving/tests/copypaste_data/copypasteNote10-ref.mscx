@@ -25,7 +25,7 @@
       <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <repeatPlayCountShow>0</repeatPlayCountShow>
       <spatium>1.76389</spatium>
-    </Style>
+      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
@@ -46,8 +46,8 @@
         <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
-        </StaffType>
-      </Staff>
+          </StaffType>
+        </Staff>
       <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
@@ -58,24 +58,24 @@
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
-        </Articulation>
+          </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
           <gateTime>85</gateTime>
-        </Articulation>
+          </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
-        </Articulation>
+          </Articulation>
         <Articulation name="sforzato">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
-        </Articulation>
+          </Articulation>
         <Channel>
           <program value="52"/>
-        </Channel>
-      </Instrument>
-    </Part>
+          </Channel>
+        </Instrument>
+      </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
@@ -85,13 +85,13 @@
           <eid>F_F</eid>
           <style>title</style>
           <text>Test</text>
-        </Text>
+          </Text>
         <Text>
           <eid>G_G</eid>
           <style>subtitle</style>
           <text>Copy-Paste</text>
-        </Text>
-      </VBox>
+          </Text>
+        </VBox>
       <Measure>
         <eid>H_H</eid>
         <voice>
@@ -100,12 +100,12 @@
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
             <eid>I_I</eid>
-          </Clef>
+            </Clef>
           <TimeSig>
             <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
-          </TimeSig>
+            </TimeSig>
           <Chord>
             <eid>K_K</eid>
             <durationType>quarter</durationType>
@@ -115,18 +115,18 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               <small>1</small>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Rest>
             <eid>M_M</eid>
             <durationType>quarter</durationType>
-          </Rest>
+            </Rest>
           <Rest>
             <eid>N_N</eid>
             <durationType>half</durationType>
-          </Rest>
-        </voice>
-      </Measure>
+            </Rest>
+          </voice>
+        </Measure>
       <Measure>
         <eid>O_O</eid>
         <voice>
@@ -139,8 +139,8 @@
               <pitch>67</pitch>
               <tpc>15</tpc>
               <small>1</small>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>R_R</eid>
             <durationType>quarter</durationType>
@@ -148,8 +148,8 @@
               <eid>S_S</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>T_T</eid>
             <durationType>quarter</durationType>
@@ -157,34 +157,34 @@
               <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
                 <eid>W_W</eid>
-              </Slur>
+                </Slur>
               <next>
                 <location>
                   <measures>1</measures>
                   <fractions>-3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
+                  </location>
+                </next>
+              </Spanner>
             <Note>
               <eid>X_X</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <BarLine>
             <span>1</span>
             <eid>Y_Y</eid>
-          </BarLine>
-        </voice>
-      </Measure>
+            </BarLine>
+          </voice>
+        </Measure>
       <Measure>
         <eid>Z_Z</eid>
         <voice>
@@ -196,15 +196,15 @@
                 <location>
                   <measures>-1</measures>
                   <fractions>3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
+                  </location>
+                </prev>
+              </Spanner>
             <Note>
               <eid>b_b</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>c_c</eid>
             <durationType>quarter</durationType>
@@ -212,8 +212,8 @@
               <eid>d_d</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>e_e</eid>
             <durationType>quarter</durationType>
@@ -221,8 +221,8 @@
               <eid>f_f</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <Chord>
             <eid>g_g</eid>
             <durationType>quarter</durationType>
@@ -230,14 +230,14 @@
               <eid>h_h</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
-            </Note>
-          </Chord>
+              </Note>
+            </Chord>
           <BarLine>
             <span>1</span>
             <eid>i_i</eid>
-          </BarLine>
-        </voice>
-      </Measure>
+            </BarLine>
+          </voice>
+        </Measure>
       <Measure>
         <eid>j_j</eid>
         <voice>
@@ -245,32 +245,26 @@
             <eid>k_k</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-          </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <eid>l_l</eid>
-          </BarLine>
-        </voice>
-      </Measure>
+            </Rest>
+          </voice>
+        </Measure>
       <Measure>
         <multiMeasureRest>1</multiMeasureRest>
-        <eid>m_m</eid>
+        <eid>l_l</eid>
         <voice>
           <Rest>
-            <eid>n_n</eid>
+            <eid>m_m</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-          </Rest>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
-            <eid>o_o</eid>
-            <linkedTo>l_l</linkedTo>
-          </BarLine>
-        </voice>
-      </Measure>
-    </Staff>
-  </Score>
-</museScore>
+            <eid>n_n</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
