@@ -23,6 +23,7 @@
 
 #include <QIODevice>
 
+#include "../brailletypes.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
@@ -161,7 +162,7 @@ struct BrailleContext {
 class Braille
 {
 public:
-    Braille(Score* s);
+    Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection);
     bool write(QIODevice& device);
     bool convertMeasure(Measure* m, BrailleEngravingItemList* beis);
     bool convertItem(EngravingItem* el, BrailleEngravingItemList* beis);
@@ -171,6 +172,7 @@ private:
 
     Score* m_score = nullptr;
     BrailleContext m_context;
+    mu::braille::BrailleIntervalDirection m_intervalDirection = mu::braille::BrailleIntervalDirection::Auto;
 
     void resetOctave(size_t stave);
     void resetOctaves();

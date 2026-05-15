@@ -790,9 +790,10 @@ QString TextToUEBBraille::braille(const QString& text)
     return rez.readAll();
 }
 
-Braille::Braille(Score* s)
+Braille::Braille(Score* s, mu::braille::BrailleIntervalDirection intervalDirection)
 {
     m_score = s;
+    m_intervalDirection = intervalDirection;
     for (size_t i = 0; i < m_score->staves().size(); ++i) {
         m_context.previousNote.push_back(nullptr);
         m_context.currentClefType.push_back(ClefType::INVALID);
@@ -1166,6 +1167,15 @@ bool Braille::hasTies(ChordRest* chordRest)
 
 bool Braille::ascendingChords(ClefType clefType)
 {
+    switch (m_intervalDirection) {
+    case mu::braille::BrailleIntervalDirection::Up:
+        return true;
+    case mu::braille::BrailleIntervalDirection::Down:
+        return false;
+    case mu::braille::BrailleIntervalDirection::Auto:
+        break;
+    }
+
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
     // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
     // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
