@@ -868,29 +868,27 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 
 EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
-    if (isChord() && e->isArticulationFamily()) {
-        Chord* c = toChord(this);
-        auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
-        if (i != c->articulations().end()) {
-            if (i != c->articulations().end() - 1) {
-                return *(i + 1);
-            } else {
-                if (!m_lyrics.empty()) {
-                    return m_lyrics[0];
-                } else {
-                    return nullptr;
-                }
-            }
-        }
-    } else {
+    if (!isChord() || !e->isArticulationFamily()) {
         auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
-        if (i != m_lyrics.end()) {
-            if (i != m_lyrics.end() - 1) {
-                return *(i + 1);
-            }
+        if (i == m_lyrics.end() || i == m_lyrics.end() - 1) {
+            return nullptr;
         }
+        return *(i + 1);
     }
-    return 0;
+
+    Chord* c = toChord(this);
+    auto i = std::find(c->articulations().begin(), c->articulations().end(), e);
+    if (i == c->articulations().end()) {
+        return nullptr;
+    }
+    if (i != c->articulations().end() - 1) {
+        return *(i + 1);
+    }
+    if (!m_lyrics.empty()) {
+        return m_lyrics[0];
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -899,27 +897,27 @@ EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 
 EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 {
+    const std::vector<Articulation*> artics = isChord() ? toChord(this)->articulations() : std::vector<Articulation*>();
+
     auto i = std::find(m_lyrics.begin(), m_lyrics.end(), e);
     if (i != m_lyrics.end()) {
         if (i != m_lyrics.begin()) {
             return *(i - 1);
-        } else {
-            if (isChord() && !toChord(this)->articulations().empty()) {
-                return toChord(this)->articulations().back();
-            } else {
-                return nullptr;
-            }
         }
-    } else if (isChord() && e->isArticulationFamily()) {
-        Chord* c = toChord(this);
-        auto j = std::find(c->articulations().begin(), c->articulations().end(), e);
-        if (j != c->articulations().end()) {
-            if (j != c->articulations().begin()) {
-                return *(j - 1);
-            }
+        if (!artics.empty()) {
+            return artics.back();
         }
+        return nullptr;
     }
-    return 0;
+
+    if (artics.empty()) {
+        return nullptr;
+    }
+    auto j = std::find(artics.begin(), artics.end(), e);
+    if (j == artics.end() || j == artics.begin()) {
+        return nullptr;
+    }
+    return *(j - 1);
 }
 
 //---------------------------------------------------------
