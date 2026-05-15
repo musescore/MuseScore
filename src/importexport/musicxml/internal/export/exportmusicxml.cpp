@@ -264,6 +264,7 @@ class GlissandoHandler
 {
 public:
     GlissandoHandler();
+    void reset();
     void doGlissandoStart(Glissando* gliss, Notations& notations, XmlWriter& xml);
     void doGlissandoStop(Glissando* gliss, Notations& notations, XmlWriter& xml);
 
@@ -1006,6 +1007,11 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
 //---------------------------------------------------------
 
 GlissandoHandler::GlissandoHandler()
+{
+    reset();
+}
+
+void GlissandoHandler::reset()
 {
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
         m_glissNote[i] = 0;
@@ -8643,6 +8649,7 @@ void ExportMusicXml::writeParts()
 
     for (size_t partIndex = 0; partIndex < parts.size(); ++partIndex) {
         const Part* part = parts.at(partIndex);
+        m_gh.reset(); // reset glissando handler state for each part
         m_tick = { 0, 1 };
         m_xml.startElementRaw(String(u"part id=\"P%1\"").arg(partIndex + 1));
 
