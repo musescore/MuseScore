@@ -2455,6 +2455,8 @@ void Score::removeStaff(Staff* staff)
     }
 
     muse::remove(m_staves, staff);
+
+    muse::DeleteAll(m_brackets[idx]);
     m_brackets.erase(m_brackets.begin() + idx);
     for (staff_idx_t i = idx; i < static_cast<staff_idx_t>(m_brackets.size()); ++i) {
         for (BracketItem* bi : m_brackets[i]) {
@@ -3582,7 +3584,7 @@ void Score::remapBracketsAndBarlines()
     Score* master = masterScore();
     for (staff_idx_t masterStaffIdx = 0; masterStaffIdx < master->nstaves(); ++masterStaffIdx) {
         Staff* masterStaff = master->staff(masterStaffIdx);
-        std::vector<BracketItem*>& staffBrackets = brackets(masterStaffIdx);
+        std::vector<BracketItem*>& staffBrackets = master->brackets(masterStaffIdx);
 
         for (size_t bracketIdx = 0; bracketIdx < staffBrackets.size(); ++bracketIdx) {
             BracketItem* bracket = staffBrackets.at(bracketIdx);
@@ -5438,9 +5440,9 @@ void Score::fillBrackets(staff_idx_t staffIdx, size_t idx)
 
 void Score::cleanBrackets(staff_idx_t staffIdx)
 {
-    const std::vector<BracketItem*> staffBrackets = brackets(staffIdx);
+    std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
     while (!staffBrackets.empty() && (staffBrackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = muse::takeLast(brackets(staffIdx));
+        BracketItem* bi = muse::takeLast(staffBrackets);
         delete bi;
     }
 }
@@ -5535,6 +5537,7 @@ void Score::addBracket(staff_idx_t staffIdx, BracketItem* b)
     std::vector<BracketItem*>& staffBrackets = brackets(staffIdx);
     b->setStartStaffIdx(staffIdx);
     if (!staffBrackets.empty() && staffBrackets[0]->bracketType() == BracketType::NO_BRACKET) {
+        delete staffBrackets[0];
         staffBrackets[0] = b;
     } else {
         //
