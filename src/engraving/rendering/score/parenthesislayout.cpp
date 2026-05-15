@@ -552,7 +552,9 @@ Shape ParenthesisLayout::getParentShape(const EngravingItem* parent)
         return !s.item() || s.item()->isParenthesis()
                || (s.item()->isLaissezVibSegment() && isChord)
                || (s.item()->isHook() && isChord)
-               || (s.item()->isStem() && isChord);
+               || (s.item()->isStem() && isChord)
+               || (s.item()->isArpeggio() && isChord)
+               || (s.item()->isChordBracket() && isChord);
     });
 
     return parentShape;
