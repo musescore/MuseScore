@@ -250,6 +250,18 @@ if $BUILD_PIPEWIRE ; then
 fi
 
 ##########################################################################
+# Old ssl for crashpad
+##########################################################################
+if [[ "$PACKARCH" == "x86_64" ]]; then
+  origin_dir=$(pwd)
+  mkdir -p $BUILD_TOOLS/ssl1
+  cd $BUILD_TOOLS/ssl1
+  wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+  sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+  cd $origin_dir
+fi
+
+##########################################################################
 # POST INSTALL
 ##########################################################################
 
