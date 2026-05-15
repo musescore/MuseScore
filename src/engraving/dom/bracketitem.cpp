@@ -34,8 +34,8 @@ BracketItem::BracketItem(EngravingItem* parent)
 {
 }
 
-BracketItem::BracketItem(EngravingItem* parent, BracketType a, int b)
-    : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(a), m_bracketSpan(b)
+BracketItem::BracketItem(EngravingItem* parent, BracketType bracketType, size_t span)
+    : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(bracketType), m_bracketSpan(span)
 {
 }
 

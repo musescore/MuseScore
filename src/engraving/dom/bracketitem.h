@@ -73,7 +73,7 @@ private:
     friend class Factory;
 
     BracketItem(EngravingItem* parent);
-    BracketItem(EngravingItem* parent, BracketType a, int b);
+    BracketItem(EngravingItem* parent, BracketType bracketType, size_t span);
 
     BracketType m_bracketType = BracketType::NO_BRACKET;
     size_t m_column = 0;
