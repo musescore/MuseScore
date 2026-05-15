@@ -4,11 +4,13 @@
 MF_ORIGIN_URL=https://github.com/musescore/muse_framework.git
 MF_FORK_URL=""
 TASK=""
+BRANCH=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -f|--fork) MF_FORK_URL="$2"; shift ;;
         -t|--task) TASK="$2"; shift ;;
+        -b|--branch) BRANCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -21,7 +23,6 @@ if [ -z "$TASK" ]; then echo "error: not set TASK"; exit 1; fi
 
 echo "MF_FORK_URL: $MF_FORK_URL"
 echo "TASK: $TASK"
-
 
 function use_fork() {
     git submodule set-url muse $MF_FORK_URL
@@ -43,9 +44,38 @@ function use_origin() {
     cd ..
 }
 
+function make_branch() {
+    name=$1
+
+    # switch to origin
+    use_origin
+
+    # update
+    git checkout main 
+    git fetch upstream
+    git rebase upstream/main
+    git submodule update --init --remote ./muse
+
+    # switch to fork
+    use_fork
+
+    # create branch
+    git checkout -b $name
+    cd muse
+    git checkout -b $name
+    git status 
+
+    cd ..
+    git status
+}
+
 case "$TASK" in
     "use-fork")
         use_fork
+        ;;
+    "make-branch")
+        if [ -z "$BRANCH" ]; then echo "error: not set BRANCH"; exit 1; fi
+        make_branch $BRANCH
         ;;
     "use-origin")
         use_origin
@@ -56,3 +86,4 @@ case "$TASK" in
         ;;    
     *) echo "Unknown task: $TASK"; exit 1 ;;
 esac
+
