@@ -126,7 +126,7 @@ TEST_F(Converter_ScoreElementsTests, ScanElements)
             const ElementInfo::Note& expectedNote = expectedInfo.notes.at(j);
 
             EXPECT_EQ(actualNote.name, expectedNote.name);
-            EXPECT_EQ(actualInfo.data, expectedInfo.data);
+            EXPECT_EQ(actualNote.data, expectedNote.data);
         }
     }
 
