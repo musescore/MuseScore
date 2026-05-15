@@ -939,9 +939,14 @@ PalettePtr PaletteCreator::newBracketsPalette()
         { BracketType::GROUP,  QT_TRANSLATE_NOOP("palette", "Group bracket") }
     } };
 
-    static Part* bracketItemOwnerPart = new Part(paletteScore());
-    static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
-    paletteScore()->appendStaff(bracketItemOwner);
+    static Part* bracketItemOwnerPart = nullptr;
+    static Staff* bracketItemOwner = nullptr;
+    if (!bracketItemOwner) {
+        bracketItemOwnerPart = new Part(paletteScore());
+        bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
+        paletteScore()->appendStaff(bracketItemOwner);
+    }
+
     paletteScore()->setBracketType(bracketItemOwner->idx(), types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
