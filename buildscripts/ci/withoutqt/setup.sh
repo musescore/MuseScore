@@ -42,8 +42,6 @@ echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 # GET DEPENDENCIES
 ##########################################################################
 
-sudo apt update
-
 apt_packages=(
   # Alphabetical order please!
   curl
