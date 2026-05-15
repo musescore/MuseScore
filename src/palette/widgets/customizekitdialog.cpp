@@ -159,6 +159,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     drumNote->setGridSize(70, 80);
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
+    drumNote->setIgnoreInputEvents(true);
 
     QTreeWidgetItem* itemToSelect = loadPitchesList();
 
