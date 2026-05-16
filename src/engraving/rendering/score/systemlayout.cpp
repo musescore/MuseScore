@@ -135,7 +135,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     SystemHeaderLayout::setInstrumentNames(system, ctx, longNames, lcmTick);
 
     double curSysWidth = 0.0;
-    double layoutSystemMinWidth = 0.0;
+    double leadingHBoxesWidth = 0.0;
     double targetSystemWidth = ctx.conf().styleD(Sid::pagePrintableWidth) * DPI;
     system->setWidth(targetSystemWidth);
 
@@ -167,7 +167,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
 
             if (m->isFirstInSystem()) {
-                layoutSystemMinWidth = curSysWidth;
+                leadingHBoxesWidth = curSysWidth;
                 SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
                 MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
             } else {
@@ -400,7 +400,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     // Relayout system to account for newly hidden/unhidden staves
-    SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -2081,7 +2081,8 @@ void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
     layoutTiesAndBends(elements, ctx);
 }
 
-void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, const bool isFirstSystem, bool firstSystemIndent)
+void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth, const bool isFirstSystem,
+                                bool firstSystemIndent)
 {
     if (system->staves().empty()) {                 // ignore vbox
         return;
@@ -2128,11 +2129,11 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
             double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
-            s->setbbox(system->leftMargin() + xo1, -h, 0.0, 2 * h);
+            s->setbbox(system->leftMargin() + leadingHBoxesWidth, -h, 0.0, 2 * h);
         } else {
             double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * system->spatium();
-            s->setbbox(system->leftMargin() + xo1, 0.0, 0.0, h);
+            s->setbbox(system->leftMargin() + leadingHBoxesWidth, 0.0, 0.0, h);
         }
     }
 
@@ -2140,7 +2141,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
     //  layout brackets
     //---------------------------------------------------
 
-    SystemHeaderLayout::setBracketsXPosition(system, xo1 + system->leftMargin());
+    SystemHeaderLayout::setBracketsXPosition(system, system->leftMargin() + leadingHBoxesWidth);
 
     SystemHeaderLayout::setInstrumentNamesHorizontalPos(system);
     SystemHeaderLayout::setGroupBracketsHorizontalPos(system);
