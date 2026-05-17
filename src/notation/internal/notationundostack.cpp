@@ -153,13 +153,13 @@ bool NotationUndoStack::isStackClean() const
     return undoStack()->isClean();
 }
 
-void NotationUndoStack::mergeCommands(size_t startIdx)
+void NotationUndoStack::mergeTransactions(size_t startIdx)
 {
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
 
-    undoStack()->mergeCommands(startIdx);
+    undoStack()->mergeTransactions(startIdx);
 }
 
 void NotationUndoStack::lock()

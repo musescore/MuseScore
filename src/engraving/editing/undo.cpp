@@ -125,131 +125,14 @@ void updateStaffTextCache(const StaffTextBase* text, Score* score)
     }
 }
 
-//---------------------------------------------------------
-//   UndoCommand
-//---------------------------------------------------------
-
-UndoCommand::~UndoCommand()
-{
-    for (auto c : m_childCommands) {
-        delete c;
-    }
-}
-
-//---------------------------------------------------------
-//   UndoCommand::cleanup
-//---------------------------------------------------------
-
-void UndoCommand::cleanup(bool undo)
-{
-    for (auto c : m_childCommands) {
-        c->cleanup(undo);
-    }
-}
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
 void UndoCommand::undo(EditData* ed)
 {
-    for (auto it = m_childCommands.rbegin(); it != m_childCommands.rend(); ++it) {
-        LOG_UNDO() << "<" << (*it)->name() << ">";
-        (*it)->undo(ed);
-    }
     flip(ed);
 }
-
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
 
 void UndoCommand::redo(EditData* ed)
 {
-    for (UndoCommand* c : m_childCommands) {
-        LOG_UNDO() << "<" << c->name() << ">";
-        c->redo(ed);
-    }
     flip(ed);
-}
-
-//---------------------------------------------------------
-//   appendChildren
-///   Append children of \p other into this UndoCommand.
-///   Ownership over child commands of \p other is
-///   transferred to this UndoCommand.
-//---------------------------------------------------------
-
-void UndoCommand::appendChildren(UndoCommand& other)
-{
-    m_childCommands.insert(m_childCommands.end(), other.m_childCommands.cbegin(), other.m_childCommands.cend());
-    other.m_childCommands.clear();
-}
-
-//---------------------------------------------------------
-//   hasFilteredChildren
-//---------------------------------------------------------
-
-bool UndoCommand::hasFilteredChildren(UndoCommand::Filter f, const EngravingItem* target) const
-{
-    for (UndoCommand* cmd : m_childCommands) {
-        if (cmd->isFiltered(f, target)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
-//   hasUnfilteredChildren
-//---------------------------------------------------------
-
-bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& filters, const EngravingItem* target) const
-{
-    for (UndoCommand* cmd : m_childCommands) {
-        bool filtered = false;
-        for (UndoCommand::Filter f : filters) {
-            if (cmd->isFiltered(f, target)) {
-                filtered = true;
-                break;
-            }
-        }
-        if (!filtered) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//---------------------------------------------------------
-//   filterChildren
-//---------------------------------------------------------
-
-void UndoCommand::filterChildren(UndoCommand::Filter f, EngravingItem* target)
-{
-    std::vector<UndoCommand*> acceptedList;
-    for (UndoCommand* cmd : m_childCommands) {
-        if (cmd->isFiltered(f, target)) {
-            delete cmd;
-        } else {
-            acceptedList.push_back(cmd);
-        }
-    }
-    m_childCommands = std::move(acceptedList);
-}
-
-//---------------------------------------------------------
-//   unwind
-//---------------------------------------------------------
-
-void UndoCommand::unwind()
-{
-    while (!m_childCommands.empty()) {
-        UndoCommand* c = muse::takeLast(m_childCommands);
-        LOG_UNDO() << "unwind: " << c->name();
-        c->undo(nullptr);
-        delete c;
-    }
 }
 
 //---------------------------------------------------------
@@ -258,24 +141,20 @@ void UndoCommand::unwind()
 
 UndoStack::UndoStack()
 {
-    m_activeCommand = nullptr;
+    m_activeTransaction = nullptr;
     m_currentIndex = 0;
     m_cleanState = 0;
-    m_stateList.push_back(m_cleanState);
+    m_states.push_back(m_cleanState);
     m_nextState = 1;
 }
-
-//---------------------------------------------------------
-//   UndoStack
-//---------------------------------------------------------
 
 UndoStack::~UndoStack()
 {
     size_t idx = 0;
-    for (auto c : m_macroList) {
+    for (auto c : m_transactions) {
         c->cleanup(idx++ < m_currentIndex);
     }
-    muse::DeleteAll(m_macroList);
+    muse::DeleteAll(m_transactions);
 }
 
 bool UndoStack::isLocked() const
@@ -288,33 +167,26 @@ void UndoStack::setLocked(bool locked)
     m_isLocked = locked;
 }
 
-//---------------------------------------------------------
-//   beginMacro
-//---------------------------------------------------------
-
-void UndoStack::beginMacro(Score* score, const TranslatableString& actionName)
+void UndoStack::beginTransaction(Score* score, const TranslatableString& actionName)
 {
     if (m_isLocked) {
         return;
     }
 
-    if (m_activeCommand) {
-        LOGW("already active");
+    IF_ASSERT_FAILED(!m_activeTransaction) {
+        LOGE() << "Transaction already in progress";
         return;
     }
-    m_activeCommand = new UndoMacro(score, actionName);
-}
 
-//---------------------------------------------------------
-//   push
-//---------------------------------------------------------
+    m_activeTransaction = new UndoableTransaction(score, actionName);
+}
 
 void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
 {
-    if (!m_activeCommand) {
-        // this can happen for layout() outside of a command (load)
+    if (!m_activeTransaction) {
+        // this can happen for layout() outside of a transaction (load)
         if (!ScoreLoad::loading()) {
-            LOG_UNDO() << "no active command, UndoStack";
+            LOG_UNDO() << "no active transaction, UndoStack";
         }
 
         cmd->redo(ed);
@@ -329,104 +201,85 @@ void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
         LOG_UNDO() << cmd->name();
     }
 #endif
-    m_activeCommand->appendChild(cmd);
+    m_activeTransaction->appendCommand(cmd);
     cmd->redo(ed);
 }
 
-//---------------------------------------------------------
-//   push1
-//---------------------------------------------------------
-
 void UndoStack::pushWithoutPerforming(UndoCommand* cmd)
 {
-    if (!m_activeCommand) {
+    if (!m_activeTransaction) {
         if (!ScoreLoad::loading()) {
-            LOGW("no active command, UndoStack %p", this);
+            LOGW("no active transaction, UndoStack %p", this);
         }
         return;
     }
-    m_activeCommand->appendChild(cmd);
+    m_activeTransaction->appendCommand(cmd);
 }
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
 
 void UndoStack::remove(size_t idx)
 {
     assert(idx <= m_currentIndex);
     assert(m_currentIndex != muse::nidx);
     // remove redo stack
-    while (m_macroList.size() > m_currentIndex) {
-        UndoCommand* cmd = muse::takeLast(m_macroList);
-        m_stateList.pop_back();
-        cmd->cleanup(false);      // delete elements for which UndoCommand() holds ownership
-        delete cmd;
+    while (m_transactions.size() > m_currentIndex) {
+        UndoableTransaction* transaction = muse::takeLast(m_transactions);
+        m_states.pop_back();
+        transaction->cleanup(false); // delete elements for which UndoCommand() holds ownership
+        delete transaction;
 //            --curIdx;
     }
-    while (m_macroList.size() > idx) {
-        UndoCommand* cmd = muse::takeLast(m_macroList);
-        m_stateList.pop_back();
-        cmd->cleanup(true);
-        delete cmd;
+    while (m_transactions.size() > idx) {
+        UndoableTransaction* transaction = muse::takeLast(m_transactions);
+        m_states.pop_back();
+        transaction->cleanup(true);
+        delete transaction;
     }
     m_currentIndex = idx;
 }
 
-//---------------------------------------------------------
-//   mergeCommands
-//---------------------------------------------------------
-
-void UndoStack::mergeCommands(size_t startIdx)
+void UndoStack::mergeTransactions(size_t startIdx)
 {
     assert(startIdx <= m_currentIndex);
 
-    if (startIdx >= m_macroList.size()) {
+    if (startIdx >= m_transactions.size()) {
         return;
     }
 
-    UndoMacro* startMacro = m_macroList[startIdx];
+    UndoableTransaction* startTransaction = m_transactions[startIdx];
 
     for (size_t idx = startIdx + 1; idx < m_currentIndex; ++idx) {
-        startMacro->append(std::move(*m_macroList[idx]));
+        startTransaction->append(std::move(*m_transactions[idx]));
     }
     remove(startIdx + 1);   // TODO: remove from startIdx to curIdx only
 }
 
-//---------------------------------------------------------
-//   endMacro
-//---------------------------------------------------------
-
-void UndoStack::endMacro(bool rollback)
+void UndoStack::endTransaction(bool rollback)
 {
     if (m_isLocked) {
         return;
     }
 
-    if (m_activeCommand == nullptr) {
-        LOGW("not active");
+    IF_ASSERT_FAILED(m_activeTransaction) {
+        LOGE() << "No transaction in progress";
         return;
     }
+
     if (rollback) {
-        delete m_activeCommand;
+        delete m_activeTransaction;
     } else {
         // remove redo stack
-        while (m_macroList.size() > m_currentIndex) {
-            UndoCommand* cmd = muse::takeLast(m_macroList);
-            m_stateList.pop_back();
-            cmd->cleanup(false);        // delete elements for which UndoCommand() holds ownership
-            delete cmd;
+        while (m_transactions.size() > m_currentIndex) {
+            UndoableTransaction* transaction = muse::takeLast(m_transactions);
+            m_states.pop_back();
+            transaction->cleanup(false); // delete elements for which UndoCommand() holds ownership
+            delete transaction;
         }
-        m_macroList.push_back(m_activeCommand);
-        m_stateList.push_back(m_nextState++);
+        m_transactions.push_back(m_activeTransaction);
+        m_states.push_back(m_nextState++);
         ++m_currentIndex;
     }
-    m_activeCommand = nullptr;
+    m_activeTransaction = nullptr;
 }
-
-//---------------------------------------------------------
-//   reopen
-//---------------------------------------------------------
 
 void UndoStack::reopen()
 {
@@ -434,20 +287,16 @@ void UndoStack::reopen()
         return;
     }
 
-    LOG_UNDO() << "curIdx: " << m_currentIndex << ", size: " << m_macroList.size();
-    assert(m_activeCommand == nullptr);
+    LOG_UNDO() << "curIdx: " << m_currentIndex << ", size: " << m_transactions.size();
+    assert(m_activeTransaction == nullptr);
     assert(m_currentIndex > 0);
     --m_currentIndex;
-    m_activeCommand = muse::takeAt(m_macroList, m_currentIndex);
-    m_stateList.erase(m_stateList.begin() + m_currentIndex);
-    for (auto i : m_activeCommand->commands()) {
+    m_activeTransaction = muse::takeAt(m_transactions, m_currentIndex);
+    m_states.erase(m_states.begin() + m_currentIndex);
+    for (auto i : m_activeTransaction->commands()) {
         LOG_UNDO() << "   " << i->name();
     }
 }
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
 
 void UndoStack::undo(EditData* ed)
 {
@@ -462,28 +311,101 @@ void UndoStack::undo(EditData* ed)
     }
     if (m_currentIndex) {
         --m_currentIndex;
-        assert(m_currentIndex < m_macroList.size());
-        m_macroList[m_currentIndex]->undo(ed);
+        assert(m_currentIndex < m_transactions.size());
+        m_transactions[m_currentIndex]->undo(ed);
     }
 }
-
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
 
 void UndoStack::redo(EditData* ed)
 {
     LOG_UNDO() << "called";
     if (canRedo()) {
-        m_macroList[m_currentIndex++]->redo(ed);
+        m_transactions[m_currentIndex++]->redo(ed);
     }
 }
 
 //---------------------------------------------------------
-//   UndoMacro
+//   UndoableTransaction
 //---------------------------------------------------------
 
-bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
+UndoableTransaction::UndoableTransaction(Score* s, const TranslatableString& actionName)
+    : m_undoInputState(s->inputState()), m_actionName(actionName), m_score(s)
+{
+    fillSelectionInfo(m_undoSelectionInfo, s->selection());
+}
+
+UndoableTransaction::~UndoableTransaction()
+{
+    for (UndoCommand* command : m_commands) {
+        delete command;
+    }
+}
+
+void UndoableTransaction::cleanup(bool undo)
+{
+    for (UndoCommand* command : m_commands) {
+        command->cleanup(undo);
+    }
+}
+
+void UndoableTransaction::unwind()
+{
+    while (!m_commands.empty()) {
+        UndoCommand* command = muse::takeLast(m_commands);
+        LOG_UNDO() << "unwind: " << command->name();
+        command->undo(nullptr);
+        delete command;
+    }
+}
+
+void UndoableTransaction::appendCommands(UndoableTransaction& other)
+{
+    m_commands.insert(m_commands.end(), other.m_commands.cbegin(), other.m_commands.cend());
+    other.m_commands.clear();
+}
+
+bool UndoableTransaction::hasCommandsMatchingFilter(UndoCommand::Filter f, const EngravingItem* target) const
+{
+    for (UndoCommand* command : m_commands) {
+        if (command->matchesFilter(f, target)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UndoableTransaction::hasCommandsNotMatchingFilters(const std::vector<UndoCommand::Filter>& filters,
+                                                        const EngravingItem* target) const
+{
+    for (UndoCommand* command : m_commands) {
+        bool filtered = false;
+        for (UndoCommand::Filter f : filters) {
+            if (command->matchesFilter(f, target)) {
+                filtered = true;
+                break;
+            }
+        }
+        if (!filtered) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void UndoableTransaction::removeCommandsMatchingFilter(UndoCommand::Filter f, EngravingItem* target)
+{
+    std::vector<UndoCommand*> acceptedList;
+    for (UndoCommand* command : m_commands) {
+        if (command->matchesFilter(f, target)) {
+            delete command;
+        } else {
+            acceptedList.push_back(command);
+        }
+    }
+    m_commands = std::move(acceptedList);
+}
+
+bool UndoableTransaction::canRecordSelectedElement(const EngravingItem* e)
 {
     if (e->generated()) {
         return false;
@@ -494,7 +416,7 @@ bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
            || e->isFretDiagram() || e->isSoundFlag();
 }
 
-void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
+void UndoableTransaction::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
 {
     info.staffStart = info.staffEnd = muse::nidx;
     info.elements.clear();
@@ -517,7 +439,7 @@ void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
     }
 }
 
-void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
+void UndoableTransaction::applySelectionInfo(const SelectionInfo& info, Selection& sel)
 {
     if (!info.elements.empty()) {
         for (EngravingItem* e : info.elements) {
@@ -528,20 +450,16 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
     }
 }
 
-UndoMacro::UndoMacro(Score* s, const TranslatableString& actionName)
-    : m_undoInputState(s->inputState()), m_actionName(actionName), m_score(s)
-{
-    fillSelectionInfo(m_undoSelectionInfo, s->selection());
-}
-
-void UndoMacro::undo(EditData* ed)
+void UndoableTransaction::undo(EditData* ed)
 {
     m_redoInputState = m_score->inputState();
     fillSelectionInfo(m_redoSelectionInfo, m_score->selection());
     m_score->deselectAll();
 
-    // Undo for child commands.
-    UndoCommand::undo(ed);
+    for (auto it = m_commands.rbegin(); it != m_commands.rend(); ++it) {
+        LOG_UNDO() << "<" << (*it)->name() << ">";
+        (*it)->undo(ed);
+    }
 
     m_score->setInputState(m_undoInputState);
     if (m_undoSelectionInfo.isValid()) {
@@ -550,14 +468,16 @@ void UndoMacro::undo(EditData* ed)
     }
 }
 
-void UndoMacro::redo(EditData* ed)
+void UndoableTransaction::redo(EditData* ed)
 {
     m_undoInputState = m_score->inputState();
     fillSelectionInfo(m_undoSelectionInfo, m_score->selection());
     m_score->deselectAll();
 
-    // Redo for child commands.
-    UndoCommand::redo(ed);
+    for (UndoCommand* command : m_commands) {
+        LOG_UNDO() << "<" << command->name() << ">";
+        command->redo(ed);
+    }
 
     m_score->setInputState(m_redoInputState);
     if (m_redoSelectionInfo.isValid()) {
@@ -566,31 +486,26 @@ void UndoMacro::redo(EditData* ed)
     }
 }
 
-bool UndoMacro::empty() const
+void UndoableTransaction::append(UndoableTransaction&& other)
 {
-    return childCount() == 0;
-}
-
-void UndoMacro::append(UndoMacro&& other)
-{
-    appendChildren(other);
+    appendCommands(other);
     if (m_score == other.m_score) {
         m_redoInputState = std::move(other.m_redoInputState);
         m_redoSelectionInfo = std::move(other.m_redoSelectionInfo);
     }
 }
 
-const InputState& UndoMacro::undoInputState() const
+const InputState& UndoableTransaction::undoInputState() const
 {
     return m_undoInputState;
 }
 
-const InputState& UndoMacro::redoInputState() const
+const InputState& UndoableTransaction::redoInputState() const
 {
     return m_redoInputState;
 }
 
-void UndoMacro::excludeElementFromSelectionInfo(EngravingItem* element)
+void UndoableTransaction::excludeElementFromSelectionInfo(EngravingItem* element)
 {
     if (m_undoSelectionInfo.isValid()) {
         muse::remove(m_undoSelectionInfo.elements, element);
@@ -601,17 +516,17 @@ void UndoMacro::excludeElementFromSelectionInfo(EngravingItem* element)
     }
 }
 
-const UndoMacro::SelectionInfo& UndoMacro::undoSelectionInfo() const
+const UndoableTransaction::SelectionInfo& UndoableTransaction::undoSelectionInfo() const
 {
     return m_undoSelectionInfo;
 }
 
-const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
+const UndoableTransaction::SelectionInfo& UndoableTransaction::redoSelectionInfo() const
 {
     return m_redoSelectionInfo;
 }
 
-UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
+UndoableTransaction::ChangesInfo UndoableTransaction::changesInfo(bool undo) const
 {
     ChangesInfo result;
 
@@ -654,7 +569,7 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
     return result;
 }
 
-const TranslatableString& UndoMacro::actionName() const
+const TranslatableString& UndoableTransaction::actionName() const
 {
     return m_actionName;
 }

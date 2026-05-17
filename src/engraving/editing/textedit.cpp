@@ -23,6 +23,7 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
+#include "undo.h"
 
 #include "iengravingfont.h"
 #include "types/symnames.h"
@@ -111,7 +112,7 @@ void TextBase::startEdit(EditData& ed)
     ted->e = this;
     ted->cursor()->startEdit();
 
-    assert(!score()->undoStack()->hasActiveCommand()); // make sure we are not in a Cmd
+    assert(!score()->undoStack()->hasActiveTransaction());
 
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->currentIndex();
@@ -161,8 +162,8 @@ void TextBase::endEdit(EditData& ed)
     //! undo (the "add element" command will have been popped from the stack before the calling of this method)...
     const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
     if (textWasEdited) {
-        undo->mergeCommands(ted->startUndoIdx);
-        undo->last()->filterChildren(Filter::TextEdit, this);
+        undo->mergeTransactions(ted->startUndoIdx);
+        undo->last()->removeCommandsMatchingFilter(Filter::TextEdit, this);
     } else {
         // No text changes in "undo" part of undo stack,
         // hence nothing to merge and filter.
@@ -176,11 +177,11 @@ void TextBase::endEdit(EditData& ed)
 
     const bool newlyAdded = ted->oldXmlText.isEmpty();
     if (newlyAdded) {
-        UndoCommand* ucmd = textWasEdited ? undo->prev() : undo->last();
-        if (ucmd && ucmd->hasFilteredChildren(Filter::AddElement, this)) {
+        const UndoableTransaction* transaction = textWasEdited ? undo->prev() : undo->last();
+        if (transaction && transaction->hasCommandsMatchingFilter(Filter::AddElement, this)) {
             // We have just added this element to a score.
             // Combine undo records of text creation with text editing.
-            undo->mergeCommands(ted->startUndoIdx - 1);
+            undo->mergeTransactions(ted->startUndoIdx - 1);
         }
     }
 

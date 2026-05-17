@@ -83,10 +83,6 @@ AddElement::AddElement(EngravingItem* e)
     element = e;
 }
 
-//---------------------------------------------------------
-//   AddElement::cleanup
-//---------------------------------------------------------
-
 void AddElement::cleanup(bool undo)
 {
     if (!undo) {
@@ -94,10 +90,6 @@ void AddElement::cleanup(bool undo)
         element = nullptr;
     }
 }
-
-//---------------------------------------------------------
-//   endUndoRedo
-//---------------------------------------------------------
 
 void AddElement::endUndoRedo(bool isUndo) const
 {
@@ -116,10 +108,6 @@ void AddElement::endUndoRedo(bool isUndo) const
     }
 }
 
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
 void AddElement::undo(EditData*)
 {
     Score* score = element->score();
@@ -134,10 +122,6 @@ void AddElement::undo(EditData*)
 
     endUndoRedo(true);
 }
-
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
 
 void AddElement::redo(EditData*)
 {
@@ -154,10 +138,6 @@ void AddElement::redo(EditData*)
     endUndoRedo(false);
 }
 
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
-
 const char* AddElement::name() const
 {
     static char buffer[64];
@@ -172,11 +152,7 @@ const char* AddElement::name() const
     return buffer;
 }
 
-//---------------------------------------------------------
-//   AddElement::isFiltered
-//---------------------------------------------------------
-
-bool AddElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool AddElement::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
 {
     using Filter = UndoCommand::Filter;
     switch (f) {
@@ -266,10 +242,6 @@ RemoveElement::RemoveElement(EngravingItem* e)
     }
 }
 
-//---------------------------------------------------------
-//   RemoveElement::cleanup
-//---------------------------------------------------------
-
 void RemoveElement::cleanup(bool undo)
 {
     if (undo) {
@@ -277,10 +249,6 @@ void RemoveElement::cleanup(bool undo)
         element = nullptr;
     }
 }
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
 
 void RemoveElement::undo(EditData*)
 {
@@ -307,10 +275,6 @@ void RemoveElement::undo(EditData*)
     }
 }
 
-//---------------------------------------------------------
-//   redo
-//---------------------------------------------------------
-
 void RemoveElement::redo(EditData*)
 {
     Score* score = element->score();
@@ -336,10 +300,6 @@ void RemoveElement::redo(EditData*)
     }
 }
 
-//---------------------------------------------------------
-//   name
-//---------------------------------------------------------
-
 const char* RemoveElement::name() const
 {
     static char buffer[64];
@@ -354,11 +314,7 @@ const char* RemoveElement::name() const
     return buffer;
 }
 
-//---------------------------------------------------------
-//   RemoveElement::isFiltered
-//---------------------------------------------------------
-
-bool RemoveElement::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool RemoveElement::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
 {
     using Filter = UndoCommand::Filter;
     switch (f) {
@@ -516,11 +472,7 @@ Link::Link(EngravingObject* e1, EngravingObject* e2)
     e = e1;
 }
 
-//---------------------------------------------------------
-//   Link::isFiltered
-//---------------------------------------------------------
-
-bool Link::isFiltered(UndoCommand::Filter f, const EngravingItem* target) const
+bool Link::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
 {
     using Filter = UndoCommand::Filter;
     if (f == Filter::Link) {

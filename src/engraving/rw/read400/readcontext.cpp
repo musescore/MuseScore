@@ -133,7 +133,7 @@ void ReadContext::addSpanner(Spanner* s)
 
 bool ReadContext::undoStackActive() const
 {
-    return m_score->undoStack()->hasActiveCommand();
+    return m_score->undoStack()->hasActiveTransaction();
 }
 
 bool ReadContext::isSameScore(const EngravingObject* obj) const

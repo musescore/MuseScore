@@ -1550,7 +1550,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 for (size_t i = 0; i < nstaves(); ++i) {
                     if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                         if (!mScore->rewriteMeasures(mf, ns, i)) {
-                            undoStack()->activeCommand()->unwind();
+                            undoStack()->activeTransaction()->unwind();
                             return;
                         }
                     }
@@ -1566,7 +1566,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
             auto staffIdxRangeOnMaster = getStaffIdxRange(mScore);
             if (staffIdxRangeOnMaster.second != staffIdxRangeOnMaster.first
                 && !mScore->rewriteMeasures(mf, ns, local ? staffIdxRangeOnMaster.first : muse::nidx)) {
-                undoStack()->activeCommand()->unwind();
+                undoStack()->activeTransaction()->unwind();
                 return;
             }
         }
@@ -1661,7 +1661,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
 
     if (!rScore->rewriteMeasures(rm, ns, muse::nidx)) {
-        undoStack()->activeCommand()->unwind();
+        undoStack()->activeTransaction()->unwind();
     } else {
         m = tick2measure(tick);           // old m may have been replaced
         // hack: fix measure rest durations for staves with local time signatures
@@ -7554,7 +7554,7 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo)
                 // These changes should be merged with the change in repeat structure which caused the ties to become invalid
                 // currentIndex returns the next empty index for an undo command
                 const size_t penultimateCmdIdx = undoStack()->currentIndex() - 2;
-                undoStack()->mergeCommands(penultimateCmdIdx);
+                undoStack()->mergeTransactions(penultimateCmdIdx);
             }
         } else {
             removeElement(tie);
@@ -7631,7 +7631,7 @@ void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
         // These changes should be merged with the change in repeat structure which caused the ties to become invalid
         // currentIdx returns the next empty index for an undo command
         const size_t penultimateCmdIdx = undoStack()->currentIndex() - 2;
-        undoStack()->mergeCommands(penultimateCmdIdx);
+        undoStack()->mergeTransactions(penultimateCmdIdx);
     }
 }
 
@@ -7699,7 +7699,7 @@ void Score::undoRemoveStaleTieJumpPoints(bool undo)
             undoRemoveElement(incomingPT);
             endCmd();
             if (undoIdx != undoStack()->currentIndex() && undoStack()->currentIndex() >= 2) {
-                undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+                undoStack()->mergeTransactions(undoStack()->currentIndex() - 2);
             }
         } else {
             removeElement(incomingPT);

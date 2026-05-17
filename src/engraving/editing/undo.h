@@ -166,6 +166,17 @@ enum class CommandType : signed char {
 class UndoCommand
 {
 public:
+    virtual ~UndoCommand() = default;
+
+    virtual void undo(EditData*);
+    virtual void redo(EditData*);
+
+    virtual void cleanup(bool /*undo*/) {}
+
+    virtual std::vector<EngravingObject*> objectItems() const { return {}; }
+    virtual const char* name() const { return "UndoCommand"; }
+    virtual CommandType type() const { return CommandType::Unknown; }
+
     enum class Filter : unsigned char {
         TextEdit,
         AddElement,
@@ -176,40 +187,37 @@ public:
         ChangePropertyLinked,
     };
 
-    virtual ~UndoCommand();
-    virtual void undo(EditData*);
-    virtual void redo(EditData*);
-    void appendChild(UndoCommand* cmd) { m_childCommands.push_back(cmd); }
-    size_t childCount() const { return m_childCommands.size(); }
-    void unwind();
-    const std::vector<UndoCommand*>& commands() const { return m_childCommands; }
-    virtual std::vector<EngravingObject*> objectItems() const { return {}; }
-    virtual void cleanup(bool undo);
-    virtual const char* name() const { return "UndoCommand"; }
-    virtual CommandType type() const { return CommandType::Unknown; }
-
-    virtual bool isFiltered(Filter, const EngravingItem* /* target */) const { return false; }
-    bool hasFilteredChildren(Filter, const EngravingItem* target) const;
-    bool hasUnfilteredChildren(const std::vector<Filter>& filters, const EngravingItem* target) const;
-    void filterChildren(UndoCommand::Filter f, EngravingItem* target);
+    virtual bool matchesFilter(Filter, const EngravingItem* /* target */) const { return false; }
 
 protected:
     virtual void flip(EditData*) {}
-    void appendChildren(UndoCommand& other);
-
-private:
-    std::vector<UndoCommand*> m_childCommands;
 };
 
-//---------------------------------------------------------
-//   UndoMacro
-//    A root element for undo macro which is stored
-//    directly in UndoStack
-//---------------------------------------------------------
-
-class UndoMacro : public UndoCommand
+class UndoableTransaction
 {
 public:
+    UndoableTransaction(Score* s, const muse::TranslatableString& actionName);
+    ~UndoableTransaction();
+
+    void undo(EditData*);
+    void redo(EditData*);
+
+    void appendCommand(UndoCommand* cmd) { m_commands.push_back(cmd); }
+    void append(UndoableTransaction&& other);
+
+    void unwind();
+    void cleanup(bool undo);
+
+    const std::vector<UndoCommand*>& commands() const { return m_commands; }
+    bool empty() const { return m_commands.empty(); }
+
+    bool hasCommandsMatchingFilter(UndoCommand::Filter, const EngravingItem* target) const;
+    bool hasCommandsNotMatchingFilters(const std::vector<UndoCommand::Filter>& filters, const EngravingItem* target) const;
+    void removeCommandsMatchingFilter(UndoCommand::Filter f, EngravingItem* target);
+
+    const InputState& undoInputState() const;
+    const InputState& redoInputState() const;
+
     struct SelectionInfo {
         std::vector<EngravingItem*> elements;
         Fraction tickStart;
@@ -220,19 +228,11 @@ public:
         bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };
 
-    UndoMacro(Score* s, const TranslatableString& actionName);
-    void undo(EditData*) override;
-    void redo(EditData*) override;
-    bool empty() const;
-    void append(UndoMacro&& other);
-
-    const InputState& undoInputState() const;
-    const InputState& redoInputState() const;
-
     const SelectionInfo& undoSelectionInfo() const;
     const SelectionInfo& redoSelectionInfo() const;
 
     void excludeElementFromSelectionInfo(EngravingItem* element);
+    static bool canRecordSelectedElement(const EngravingItem* e);
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;
@@ -243,18 +243,18 @@ public:
     };
 
     ChangesInfo changesInfo(bool undo = false) const;
-    const TranslatableString& actionName() const;
-
-    static bool canRecordSelectedElement(const EngravingItem* e);
-
-    UNDO_NAME("UndoMacro")
+    const muse::TranslatableString& actionName() const;
 
 private:
+    void appendCommands(UndoableTransaction& other);
+
+    std::vector<UndoCommand*> m_commands;
+
     InputState m_undoInputState;
     InputState m_redoInputState;
     SelectionInfo m_undoSelectionInfo;
     SelectionInfo m_redoSelectionInfo;
-    TranslatableString m_actionName;
+    muse::TranslatableString m_actionName;
 
     Score* m_score = nullptr;
 
@@ -271,48 +271,48 @@ public:
     bool isLocked() const;
     void setLocked(bool locked);
 
-    bool hasActiveCommand() const { return m_activeCommand != nullptr; }
+    bool hasActiveTransaction() const { return m_activeTransaction != nullptr; }
 
-    void beginMacro(Score*, const TranslatableString& actionName);
-    void endMacro(bool rollback);
+    void beginTransaction(Score*, const muse::TranslatableString& actionName);
+    void endTransaction(bool rollback);
 
     void pushAndPerform(UndoCommand*, EditData*);
     void pushWithoutPerforming(UndoCommand*);
 
     bool canUndo() const { return m_currentIndex > 0; }
-    bool canRedo() const { return m_currentIndex < m_macroList.size(); }
-    bool isClean() const { return m_cleanState == m_stateList[m_currentIndex]; }
+    bool canRedo() const { return m_currentIndex < m_transactions.size(); }
+    bool isClean() const { return m_cleanState == m_states[m_currentIndex]; }
 
-    size_t size() const { return m_macroList.size(); }
+    size_t size() const { return m_transactions.size(); }
     size_t currentIndex() const { return m_currentIndex; }
 
-    UndoMacro* activeCommand() const { return m_activeCommand; }
+    UndoableTransaction* activeTransaction() const { return m_activeTransaction; }
 
-    UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
-    UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
-    UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
+    UndoableTransaction* last() const { return m_currentIndex > 0 ? m_transactions[m_currentIndex - 1] : nullptr; }
+    UndoableTransaction* prev() const { return m_currentIndex > 1 ? m_transactions[m_currentIndex - 2] : nullptr; }
+    UndoableTransaction* next() const { return canRedo() ? m_transactions[m_currentIndex] : nullptr; }
 
-    /// Returns the command that led to the state with the given `idx`.
+    /// Returns the transaction that led to the state with the given `idx`.
     /// For further discussion of the indices involved in UndoStack, see:
     /// https://github.com/musescore/MuseScore/pull/25389#discussion_r1825782176
-    UndoMacro* lastAtIndex(size_t idx) const
+    UndoableTransaction* lastAtIndex(size_t idx) const
     {
-        return idx > 0 && idx - 1 < m_macroList.size() ? m_macroList[idx - 1] : nullptr;
+        return idx > 0 && idx - 1 < m_transactions.size() ? m_transactions[idx - 1] : nullptr;
     }
 
     void undo(EditData*);
     void redo(EditData*);
     void reopen();
 
-    void mergeCommands(size_t startIdx);
+    void mergeTransactions(size_t startIdx);
     void cleanRedoStack() { remove(m_currentIndex); }
 
 private:
     void remove(size_t idx);
 
-    UndoMacro* m_activeCommand = nullptr;
-    std::vector<UndoMacro*> m_macroList;
-    std::vector<int> m_stateList;
+    UndoableTransaction* m_activeTransaction = nullptr;
+    std::vector<UndoableTransaction*> m_transactions;
+    std::vector<int> m_states;
     int m_nextState = 0;
     int m_cleanState = 0;
     size_t m_currentIndex = 0;

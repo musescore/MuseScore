@@ -77,7 +77,7 @@ public:
     TextEditUndoCommand(const TextCursor& tc)
         : m_cursor(tc) {}
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
+    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override
     {
         return f == UndoCommand::Filter::TextEdit && m_cursor.text() == target;
     }

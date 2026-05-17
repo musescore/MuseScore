@@ -42,7 +42,7 @@ public:
     void cleanup(bool) override;
     const char* name() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -62,7 +62,7 @@ public:
     void cleanup(bool) override;
     const char* name() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
@@ -166,6 +166,6 @@ public:
     UNDO_TYPE(CommandType::Link)
     UNDO_NAME("Link")
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
 };
 }

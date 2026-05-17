@@ -364,7 +364,7 @@ void EditStaff::apply()
     size_t index = m_staff->score()->undoStack()->currentIndex();
     applyStaffProperties();
     applyPartProperties();
-    m_staff->score()->undoStack()->mergeCommands(index);
+    m_staff->score()->undoStack()->mergeTransactions(index);
 }
 
 void EditStaff::minPitchAClicked()

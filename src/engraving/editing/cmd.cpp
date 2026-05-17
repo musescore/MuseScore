@@ -101,28 +101,28 @@ using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack, bool undo = false)
+static UndoableTransaction::ChangesInfo changesInfo(const UndoStack* stack, bool undo = false)
 {
     IF_ASSERT_FAILED(stack) {
-        static UndoMacro::ChangesInfo empty;
+        static UndoableTransaction::ChangesInfo empty;
         return empty;
     }
 
-    const UndoMacro* actualMacro = stack->activeCommand();
+    const UndoableTransaction* transaction = stack->activeTransaction();
 
-    if (!actualMacro) {
-        actualMacro = stack->last();
+    if (!transaction) {
+        transaction = stack->last();
     }
 
-    if (!actualMacro) {
-        static UndoMacro::ChangesInfo empty;
+    if (!transaction) {
+        static UndoableTransaction::ChangesInfo empty;
         return empty;
     }
 
-    return actualMacro->changesInfo(undo);
+    return transaction->changesInfo(undo);
 }
 
-static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoMacro::ChangesInfo& changes)
+static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
@@ -351,7 +351,7 @@ void Score::startCmd(const TranslatableString& actionName)
         LOGD("===startCmd()");
     }
 
-    if (undoStack()->hasActiveCommand()) {
+    if (undoStack()->hasActiveTransaction()) {
         LOGD("Score::startCmd(): cmd already active");
         return;
     }
@@ -360,9 +360,8 @@ void Score::startCmd(const TranslatableString& actionName)
 
     cmdState().reset();
 
-    // Start collecting low-level undo operations for a
-    // user-visible undo action.
-    undoStack()->beginMacro(this, actionName);
+    // Start collecting low-level undoable operations for a user-visible undoable transaction.
+    undoStack()->beginTransaction(this, actionName);
 }
 
 //---------------------------------------------------------
@@ -378,7 +377,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    UndoMacro::ChangesInfo changes;
+    UndoableTransaction::ChangesInfo changes;
 
     cmdState().reset();
     if (undo) {
@@ -409,7 +408,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
         return;
     }
 
-    if (!undoStack()->hasActiveCommand()) {
+    if (!undoStack()->hasActiveTransaction()) {
         LOGW() << "no command active";
         update();
         return;
@@ -420,7 +419,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     }
 
     if (rollback) {
-        undoStack()->activeCommand()->unwind();
+        undoStack()->activeTransaction()->unwind();
     }
 
     update(false, layoutAllParts);
@@ -430,10 +429,10 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
         changes = buildScoreChanges(cmdState(), changesInfo(undoStack()));
     }
 
-    LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
+    LOGD() << "Undo stack current transaction commands count: " << undoStack()->activeTransaction()->commands().size();
 
-    const bool isCurrentCommandEmpty = undoStack()->activeCommand()->empty(); // nothing to undo?
-    undoStack()->endMacro(isCurrentCommandEmpty);
+    const bool isCurrentTransactionEmpty = undoStack()->activeTransaction()->empty(); // nothing to undo?
+    undoStack()->endTransaction(isCurrentTransactionEmpty);
 
     if (dirty()) {
         masterScore()->setPlaylistDirty(); // TODO: flag individual operations
@@ -441,7 +440,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     cmdState().reset();
 
-    if (!isCurrentCommandEmpty && !rollback) {
+    if (!isCurrentTransactionEmpty && !rollback) {
         changesChannel().send(changes);
     }
 }

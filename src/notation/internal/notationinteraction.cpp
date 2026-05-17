@@ -1388,7 +1388,7 @@ void NotationInteraction::endDrag()
 
     if (m_editData.isHairpinDragCreatedFromDynamic) {
         // Merge the two actions of hairpin creation + hairpin drag
-        m_undoStack->mergeCommands(m_undoStack->currentStateIndex() - 2);
+        m_undoStack->mergeTransactions(m_undoStack->currentStateIndex() - 2);
     }
 
     notifyAboutDragChanged();

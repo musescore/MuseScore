@@ -51,7 +51,7 @@ public:
 
     std::vector<EngravingObject*> objectItems() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
+    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override
     {
         return f == UndoCommand::Filter::ChangePropertyLinked && muse::contains(target->linkList(), element);
     }
