@@ -159,18 +159,9 @@ option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in d
 
 # === System libraries ===
 # Important for the maintainers of Linux distributions
-option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
-option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
-option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
-option(MUE_COMPILE_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
-option(MUE_COMPILE_USE_SYSTEM_PUGIXML "Try use system pugixml" OFF)
-option(MUE_COMPILE_USE_SYSTEM_LAME "Try use system lame" OFF)
-option(MUE_COMPILE_USE_SYSTEM_UTF8CPP "Try use system utf8cpp" OFF)
+option(MSS_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
 
 # === Debug ===
-option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
@@ -218,8 +209,8 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
 
     # These are included in the precompiled dependencies, so let's use them from there
-    set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
-    set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
+    set(MUSE_USE_SYSTEM_FLAC ON)
+    set(MUSE_USE_SYSTEM_OPUS ON)
 endif()
 
 include(SetupQt6)

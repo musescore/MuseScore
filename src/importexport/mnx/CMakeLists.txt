@@ -9,7 +9,7 @@ muse_create_module(iex_mnx)
 include(FetchContent)
 
 set(mnxdom_BUILD_TESTING OFF CACHE BOOL "Do not build tests for mnx")
-if(MUE_COMPILE_USE_SYSTEM_MNXDOM)
+if(MSS_USE_SYSTEM_MNXDOM)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(mnxdom REQUIRED IMPORTED_TARGET mnxdom)
     set(MNXDOM_LIB PkgConfig::mnxdom)
