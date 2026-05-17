@@ -21772,7 +21772,7 @@ Fret %1 on strings %2</translation>
 <context>
     <name>iex_audio</name>
     <message>
-        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="131"/>
+        <location filename="../../src/importexport/audioexport/internal/abstractaudiowriter.cpp" line="142"/>
         <source>Processing online sounds…</source>
         <translation type="unfinished">Processing online sounds…</translation>
     </message>
@@ -25856,13 +25856,13 @@ pickup measure</translation>
         <translation type="unfinished">An update for MuseSounds is available</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="136"/>
+        <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="138"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/devtools/musesoundsdevtoolsmodel.cpp" line="355"/>
         <source>Take me to MuseHub</source>
         <translation type="unfinished">Take me to MuseHub</translation>
     </message>
     <message>
-        <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="142"/>
+        <location filename="../../src/musesounds/internal/musesoundscheckupdatescenario.cpp" line="144"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/devtools/musesoundsdevtoolsmodel.cpp" line="356"/>
         <source>No thanks</source>
         <translation type="unfinished">No thanks</translation>
@@ -29809,13 +29809,13 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="493"/>
-        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1114"/>
+        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1123"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="494"/>
-        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1115"/>
+        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1124"/>
         <source>Properties…</source>
         <translation type="unfinished">Properties…</translation>
     </message>
@@ -30873,40 +30873,40 @@ failed.</translation>
         <translation type="unfinished">Collapse all palettes</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="605"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="656"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="607"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="658"/>
         <source>MuseScore drumset file</source>
         <translation type="unfinished">MuseScore drumset file</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="607"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="609"/>
         <source>Load drumset</source>
         <translation type="unfinished">Load drumset</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="624"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="626"/>
         <source>Drumset file too old</source>
         <translation type="unfinished">Drumset file too old</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="625"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="627"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
         <translation type="unfinished">MuseScore Studio may not be able to load this drumset file.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="658"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="660"/>
         <source>Save drumset</source>
         <translation type="unfinished">Save drumset</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="673"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="679"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="675"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="681"/>
         <source>Writing file failed: %1</source>
         <translation type="unfinished">Writing file failed: %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="674"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="680"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="676"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="682"/>
         <source>Write drumset</source>
         <translation type="unfinished">Write drumset</translation>
     </message>
@@ -30917,17 +30917,17 @@ failed.</translation>
         <translation type="unfinished">Symbols</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/noteGroups.cpp" line="85"/>
+        <location filename="../../src/palette/widgets/noteGroups.cpp" line="90"/>
         <source>Beam selector</source>
         <translation type="unfinished">Beam selector</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1132"/>
+        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1141"/>
         <source>Delete palette cell</source>
         <translation type="unfinished">Delete palette cell</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1133"/>
+        <location filename="../../src/palette/widgets/palettewidget.cpp" line="1142"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
         <translation type="unfinished">Are you sure you want to delete palette cell “%1”?</translation>
     </message>
@@ -33020,9 +33020,35 @@ failed.</translation>
         <translation type="unfinished">Folders</translation>
     </message>
     <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="30"/>
+        <source>Video converter</source>
+        <translation type="unfinished">Video converter</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="43"/>
+        <source>FFmpeg library version:</source>
+        <translation type="unfinished">FFmpeg library version:</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="45"/>
+        <source>FFmpeg library not found</source>
+        <translation type="unfinished">FFmpeg library not found</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="60"/>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FoldersSection.qml" line="63"/>
         <source>Choose %1 folder</source>
         <translation type="unfinished">Choose %1 folder</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="63"/>
+        <source>Locate existing installation</source>
+        <translation type="unfinished">Locate existing installation</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/FFmpegSection.qml" line="81"/>
+        <source>Download FFmpeg</source>
+        <translation type="unfinished">Download FFmpeg</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="30"/>
@@ -33519,7 +33545,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/appearancepreferencesmodel.cpp" line="173"/>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="245"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="249"/>
         <source>All</source>
         <translation type="unfinished">All</translation>
     </message>
@@ -33582,37 +33608,37 @@ failed.</translation>
         <translation type="unfinished">VST3</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="74"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="78"/>
         <source>Your version of %1 is up to date.</source>
         <translation type="unfinished">Your version of %1 is up to date.</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="107"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="111"/>
         <source>System default</source>
         <translation type="unfinished">System default</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="188"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="192"/>
         <source>Start empty</source>
         <translation type="unfinished">Start empty</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="192"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="196"/>
         <source>Continue last session</source>
         <translation type="unfinished">Continue last session</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="196"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="200"/>
         <source>Start with new score</source>
         <translation type="unfinished">Start with new score</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="200"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="204"/>
         <source>Start with score</source>
         <translation type="unfinished">Start with score</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="244"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/generalpreferencesmodel.cpp" line="248"/>
         <source>MuseScore file</source>
         <translation type="unfinished">MuseScore file</translation>
     </message>
@@ -33703,23 +33729,23 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="183"/>
+        <source>Video</source>
+        <translation type="unfinished">Video</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="186"/>
         <source>Percussion</source>
         <translation type="unfinished">Percussion</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="186"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="189"/>
         <source>Import</source>
         <translation type="unfinished">Import</translation>
     </message>
     <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="189"/>
+        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="192"/>
         <source>Shortcuts</source>
         <translation type="unfinished">Shortcuts</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="192"/>
-        <source>Update</source>
-        <translation type="unfinished">Update</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/preferencesmodel.cpp" line="198"/>
@@ -34472,52 +34498,56 @@ failed.</translation>
         <translation type="unfinished">Export settings</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="149"/>
+        <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="151"/>
         <source>Export…</source>
         <translation type="unfinished">Export…</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="38"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="47"/>
         <source>Sample rate:</source>
         <translation type="unfinished">Sample rate:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="58"/>
         <source>%1 Hz</source>
         <translation type="unfinished">%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="63"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="72"/>
         <source>Bit rate:</source>
         <translation type="unfinished">Bit rate:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="74"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="83"/>
         <source>%1 kBit/s</source>
         <translation type="unfinished">%1 kBit/s</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="88"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettings.qml" line="97"/>
         <source>Sample format:</source>
         <translation type="unfinished">Sample format:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AacSettingsPage.qml" line="39"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/FlacSettingsPage.qml" line="38"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml" line="39"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/OggSettingsPage.qml" line="39"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/WavSettingsPage.qml" line="38"/>
         <source>Each selected part will be exported as a separate audio file.</source>
         <translation type="unfinished">Each selected part will be exported as a separate audio file.</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="55"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="59"/>
         <source>Format:</source>
         <translation type="unfinished">Format:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="102"/>
         <source>File type:</source>
         <translation type="unfinished">File type:</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="191"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="197"/>
         <source>Open destination folder on export</source>
         <translation type="unfinished">Open destination folder on export</translation>
     </message>
@@ -34649,12 +34679,12 @@ failed.</translation>
         <translation type="unfinished">An error occurred while writing the file %1. Do you want to retry?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="460"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="470"/>
         <source>Exporting audio…</source>
         <translation type="unfinished">Exporting audio…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="460"/>
+        <location filename="../../src/project/internal/exportprojectscenario.cpp" line="470"/>
         <source>Exporting…</source>
         <translation type="unfinished">Exporting…</translation>
     </message>
@@ -34748,95 +34778,111 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="94"/>
+        <source>AAC audio</source>
+        <translation type="unfinished">AAC audio</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <source>AAC audio files</source>
+        <translation type="unfinished">AAC audio files</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="99"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="100"/>
+        <source>MP4 video</source>
+        <translation type="unfinished">MP4 video</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="104"/>
         <source>MIDI file</source>
         <translation type="unfinished">MIDI file</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="95"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="105"/>
         <source>MIDI files</source>
         <translation type="unfinished">MIDI files</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="98"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="108"/>
         <source>MusicXML</source>
         <translation type="unfinished">MusicXML</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="103"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="113"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://handbook.musescore.org/file-management/file-export#braille</extracomment>
         <translation type="unfinished">Braille (basic bar-over-bar)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="104"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
         <source>Braille files</source>
         <translation type="unfinished">Braille files</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="106"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="116"/>
         <source>MEI</source>
         <translation type="unfinished">MEI</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="107"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="117"/>
         <source>MEI files</source>
         <translation type="unfinished">MEI files</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="110"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="120"/>
         <source>MNX (experimental)</source>
         <translation type="unfinished">MNX (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="111"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="121"/>
         <source>MNX files (experimental)</source>
         <translation type="unfinished">MNX files (experimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="114"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="124"/>
         <source>LRC file</source>
         <translation type="unfinished">LRC file</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="115"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="125"/>
         <source>LRC files</source>
         <translation type="unfinished">LRC files</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="330"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="359"/>
         <source>Each page to a separate file</source>
         <translation type="unfinished">Each page to a separate file</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="331"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="360"/>
         <source>Each part to a separate file</source>
         <translation type="unfinished">Each part to a separate file</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="332"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="361"/>
         <source>All parts combined in one file</source>
         <translation type="unfinished">All parts combined in one file</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="727"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="812"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished">All layout</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="729"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="814"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished">System and page breaks</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="731"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="816"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished">Manually added system and page breaks only</translation>
     </message>
     <message>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="733"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/exportdialogmodel.cpp" line="818"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
         <translation type="unfinished">No system or page breaks</translation>
@@ -34883,6 +34929,36 @@ failed.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MnxSettingsPage.qml" line="118"/>
         <source>Export rest positions</source>
         <translation type="unfinished">Export rest positions</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="51"/>
+        <source>To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</source>
+        <translation type="unfinished">To export to this file format, an FFmpeg installation is required. You can also configure this in Preferences &gt; Video.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="59"/>
+        <source>Download FFmpeg</source>
+        <translation type="unfinished">Download FFmpeg</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="77"/>
+        <source>Choose FFmpeg library folder</source>
+        <translation type="unfinished">Choose FFmpeg library folder</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="80"/>
+        <source>Locate existing installation</source>
+        <translation type="unfinished">Locate existing installation</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="116"/>
+        <source>Video resolution:</source>
+        <translation type="unfinished">Video resolution:</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Export/Mp4SettingsPage.qml" line="140"/>
+        <source>Each selected part will be exported as a separate video file.</source>
+        <translation type="unfinished">Each selected part will be exported as a separate video file.</translation>
     </message>
 </context>
 <context>
@@ -35698,8 +35774,8 @@ failed.</translation>
         <translation type="unfinished">Define percussion keyboard shortcut</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="510"/>
-        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="706"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="512"/>
+        <location filename="../../src/palette/widgets/customizekitdialog.cpp" line="708"/>
         <source>None</source>
         <translation type="unfinished">None</translation>
     </message>
@@ -36925,7 +37001,7 @@ failed.</translation>
         <translation type="unfinished">Edit staff text properties</translation>
     </message>
     <message>
-        <location filename="../../src/palette/widgets/timesignaturepropertiesdialog.cpp" line="220"/>
+        <location filename="../../src/palette/widgets/timesignaturepropertiesdialog.cpp" line="222"/>
         <source>Edit time signature properties</source>
         <translation type="unfinished">Edit time signature properties</translation>
     </message>
