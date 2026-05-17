@@ -78,6 +78,7 @@ FlatButton {
         }
 
         if (root.showRemoveFromRecentFiles) {
+            result.push({}) // separator
             result.push({ id: "remove-from-recent-files", title: qsTrc("project", "Remove from recent files list") })
         }
 
