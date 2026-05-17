@@ -28,6 +28,7 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "../editing/editpart.h"
 
 #include "containers.h"

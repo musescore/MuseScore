@@ -116,10 +116,6 @@ void AddElement::undo(EditData*)
         score->removeElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    }
-
     endUndoRedo(true);
 }
 
@@ -129,10 +125,6 @@ void AddElement::redo(EditData*)
 
     if (!element->isTuplet()) {
         score->addElement(element);
-    }
-
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
     }
 
     endUndoRedo(false);
@@ -258,9 +250,7 @@ void RemoveElement::undo(EditData*)
         score->addElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    } else if (element->isChordRest()) {
+    if (element->isChordRest()) {
         if (element->isChord()) {
             Chord* chord = toChord(element);
             for (Note* note : chord->notes()) {
@@ -283,9 +273,7 @@ void RemoveElement::redo(EditData*)
         score->removeElement(element);
     }
 
-    if (element->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(element), score);
-    } else if (element->isChordRest()) {
+    if (element->isChordRest()) {
         undoRemoveTuplet(toChordRest(element));
         if (element->isChord()) {
             Chord* chord = toChord(element);
@@ -393,10 +381,6 @@ void ChangeElement::flip(EditData*)
         if (ns->system()) {
             ns->system()->add(ns);
         }
-    }
-
-    if (newElement->isStaffTextBase()) {
-        updateStaffTextCache(toStaffTextBase(newElement), score);
     }
 
     std::swap(oldElement, newElement);

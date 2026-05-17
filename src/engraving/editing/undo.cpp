@@ -43,12 +43,11 @@
 #include "../dom/fret.h"
 #include "../dom/harmony.h"
 #include "../dom/note.h"
-#include "../dom/stafftextbase.h"
 
 #include "log.h"
-#define LOG_UNDO() if (0) LOGD()
 
-using namespace mu;
+#define LOG_UNDO() if constexpr (false) LOGD()
+
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -112,17 +111,6 @@ std::vector<EngravingObject*> compoundObjects(EngravingObject* object)
     objects.push_back(object);
 
     return objects;
-}
-
-void updateStaffTextCache(const StaffTextBase* text, Score* score)
-{
-    TRACEFUNC;
-
-    if (text->isCapo()) {
-        score->updateCapo();
-    } else if (text->swing()) {
-        score->updateSwing();
-    }
 }
 
 void UndoCommand::undo(EditData* ed)

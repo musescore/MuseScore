@@ -73,7 +73,6 @@
 #include "../../dom/marker.h"
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumber.h"
-#include "../../dom/measurenumberbase.h"
 #include "../../dom/measurerepeat.h"
 #include "../../dom/mmrest.h"
 #include "../../dom/mmrestrange.h"
@@ -90,6 +89,7 @@
 
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
+#include "../../dom/stafftype.h"
 #include "../../dom/stafftypechange.h"
 #include "../../dom/stem.h"
 #include "../../dom/stemslash.h"

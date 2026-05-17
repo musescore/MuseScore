@@ -21,7 +21,6 @@
  */
 #include "lyricslayout.h"
 
-#include "dom/masterscore.h"
 #include "dom/repeatlist.h"
 #include "style/styledef.h"
 
@@ -30,12 +29,12 @@
 #include "dom/measure.h"
 #include "dom/score.h"
 #include "dom/segment.h"
+#include "dom/staff.h"
 #include "dom/stafftype.h"
 #include "dom/system.h"
 
 #include "tlayout.h"
 #include "textlayout.h"
-#include "autoplace.h"
 
 using namespace mu;
 using namespace mu::engraving;

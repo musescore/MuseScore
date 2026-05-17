@@ -20,11 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STAFFTEXTBASE_H
-#define MU_ENGRAVING_STAFFTEXTBASE_H
+#pragma once
 
 #include "textbase.h"
-#include "staff.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -75,8 +73,10 @@ public:
 
     bool positionRelativeToNoteheadRest() const override { return true; }
 
-private:
+    void added() override;
+    void removed() override;
 
+private:
     String m_channelNames[4];
     std::vector<ChannelActions> m_channelActions;
     SwingParameters m_swingParameters;
@@ -85,5 +85,4 @@ private:
     bool m_swing = false;
     int m_capo = 0;
 };
-} // namespace mu::engraving
-#endif
+}

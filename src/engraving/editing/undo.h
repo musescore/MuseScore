@@ -320,7 +320,4 @@ private:
 };
 
 std::vector<EngravingObject*> compoundObjects(EngravingObject* object);
-
-class StaffTextBase;
-void updateStaffTextCache(const StaffTextBase* text, Score* score);
 }
