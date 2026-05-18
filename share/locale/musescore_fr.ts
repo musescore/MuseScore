@@ -6584,7 +6584,7 @@ suivies de tirets</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="488"/>
         <source>Respell pitches with &amp;sharps</source>
-        <translation>Échanger les notes enharmoniques avec des dièse&amp;s</translation>
+        <translation>Échanger les notes enharmoniques avec des d&amp;ièses</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="489"/>
@@ -7605,7 +7605,7 @@ suivies de tirets</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1398"/>
         <source>L&amp;yrics</source>
-        <translation>&amp;Paroles</translation>
+        <translation>Paro&amp;les</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1399"/>
@@ -9573,7 +9573,7 @@ suivies de tirets</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="208"/>
         <source>Clear online sounds cache for this score</source>
-        <translation>Vider le cache des sons en ligne pour cette partition</translation>
+        <translation>Effacer le cache des sons en ligne pour cette partition</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/playbacktoolbarmodel.cpp" line="117"/>
@@ -10288,13 +10288,13 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="570"/>
         <source>&amp;Audio</source>
-        <translation>&amp;Audio</translation>
+        <translation>Audi&amp;o</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="574"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Diagnostics</source>
-        <translation>&amp;Diagnostics</translation>
+        <translation>Dia&amp;gnostics</translation>
     </message>
 </context>
 <context>

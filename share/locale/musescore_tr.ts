@@ -910,7 +910,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="890"/>
         <source>Note symbols</source>
-        <translation>Nota sembolleri</translation>
+        <translation>Nota simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstafftype.ui" line="897"/>
@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="232"/>
         <source>Chord symbols</source>
-        <translation>Akor sembolleri</translation>
+        <translation>Akor simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="237"/>
@@ -1286,7 +1286,7 @@
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="304"/>
         <source>Musical symbols font:</source>
-        <translation>Müzikal sembollerin yazı tipi:</translation>
+        <translation>Müzikal simgelerin yazı tipi:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="364"/>
@@ -2350,7 +2350,7 @@ space unit</extracomment>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4177"/>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4401"/>
         <source>Symbol size:</source>
-        <translation>Sembol boyutu:</translation>
+        <translation>Simge boyutu:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4187"/>
@@ -2368,22 +2368,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4259"/>
         <source>Center on the leftmost system barline</source>
-        <translation>En soldaki satır ölçü çizgisine ortala</translation>
+        <translation>En soldaki satırın ölçü çizgisine ortala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4266"/>
         <source>Align to the left page margin</source>
-        <translation>Sol sayfa kenar boşluğuna hizala</translation>
+        <translation>Satırın sol kenar boşluğuna hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4479"/>
         <source>Center on the rightmost system barline</source>
-        <translation>En sağdaki satır ölçü çizgisine ortala</translation>
+        <translation>En sağdaki satırın ölçü çizgisine ortala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4486"/>
         <source>Align to the right page margin</source>
-        <translation>Sağ sayfa kenar boşluğuna hizala</translation>
+        <translation>Satırın sağ kenar boşluğuna hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="4574"/>
@@ -2733,7 +2733,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5783"/>
         <source>Spacing of symbols:</source>
-        <translation>Sembollerin aralığı:</translation>
+        <translation>Simge aralığı:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="5806"/>
@@ -3876,27 +3876,27 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12673"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation>&apos;Düzensiz gurup sayıları için müzikal sembol yazı tipini kullanın&apos; değerini sıfırla</translation>
+        <translation>&apos;Düzensiz gurup sayıları için müzikal simge yazı tipini kullanın&apos; değerini sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12844"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation>Düzensiz gurup sayıları için müzikal sembol yazı tipini kullanın</translation>
+        <translation>Düzensiz gurup sayıları için müzikal simge yazı tipini kullanın</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12573"/>
         <source>Musical symbols</source>
-        <translation>Müzikal semboller</translation>
+        <translation>Müzikal simgeler</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12582"/>
         <source>Symbol font scale:</source>
-        <translation>Sembol yazı tipi ölçeği:</translation>
+        <translation>Simge yazı tipi ölçeği:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12611"/>
         <source>Reset &apos;Symbol font scale&apos; value</source>
-        <translation>&apos;Sembol yazı tipi ölçeği&apos; değerini sıfırla</translation>
+        <translation>&apos;Simge yazı tipi ölçeği&apos; değerini sıfırla</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="12621"/>
@@ -4499,17 +4499,17 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.ui" line="14"/>
         <source>Realize chord symbols</source>
-        <translation>Akor sembollerini notalara dönüştürün</translation>
+        <translation>Akor simgelerini notalara dönüştürün</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.ui" line="17"/>
         <source>Convert chord symbols into notes</source>
-        <translation>Akor sembollerini notalara dönüştürün</translation>
+        <translation>Akor simgelerini notalara dönüştürün</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.ui" line="41"/>
         <source>Chord symbols to be realized:</source>
-        <translation>Uygulanacak akor sembolleri:</translation>
+        <translation>Uygulanacak akor simgeleri:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/realizeharmonydialog.ui" line="95"/>
@@ -4751,7 +4751,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/palette/widgets/symboldialog.ui" line="14"/>
         <source>Symbols</source>
-        <translation>Semboller</translation>
+        <translation>Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/symboldialog.ui" line="25"/>
@@ -5206,7 +5206,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="513"/>
         <source>Transpose chord symbols and fretboard diagrams</source>
-        <translation>Akor sembollerini ve klavye diyagramlarını aktar</translation>
+        <translation>Akor simgelerini ve klavye şemalarını aktar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/transposedialog.ui" line="523"/>
@@ -5353,7 +5353,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/widgets/voicing_select.ui" line="122"/>
         <source>Until next chord symbol</source>
-        <translation>Sonraki akor sembolüne kadar</translation>
+        <translation>Sonraki akor simgesine kadar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/voicing_select.ui" line="127"/>
@@ -5822,12 +5822,12 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="90"/>
         <source>Show engraving &amp;style options list</source>
-        <translation>Gravür ve stil seçenekleri listesini göster</translation>
+        <translation>Gravür ve biçim seçenekleri listesini göster</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="91"/>
         <source>Show engraving style options list</source>
-        <translation>Gravür stil seçenekleri listesini göster</translation>
+        <translation>Gravür biçimi seçenekler listesini göster</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="96"/>
@@ -6484,7 +6484,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="421"/>
         <source>Save style</source>
-        <translation>Stili Kaydet</translation>
+        <translation>Biçimi kaydet</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="426"/>
@@ -6529,12 +6529,12 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="451"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>Akor sembollerini notalara dönüştürü&amp;n</translation>
+        <translation>Akor simgelerini notalara dönüştürü&amp;n</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="452"/>
         <source>Realize chord symbols</source>
-        <translation>Akor sembollerini notalara dönüştürün</translation>
+        <translation>Akor gimgelerini notalara dönüştürün</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="457"/>
@@ -7576,12 +7576,12 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1380"/>
         <source>C&amp;hord symbol</source>
-        <translation>A&amp;kor sembolü</translation>
+        <translation>A&amp;kor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1381"/>
         <source>Add text: chord symbol</source>
-        <translation>Metin ekle: akor sembolü</translation>
+        <translation>Metin ekle: akor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1386"/>
@@ -8060,67 +8060,67 @@ asla sola hizalama</translation>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1722"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1723"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Gelişmiş imleç: sonraki vuruş (akor sembolleri)</translation>
+        <translation>Gelişmiş imleç: sonraki vuruş (akor simgeleri)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1728"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1729"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
-        <translation>Gelişmiş imleç: önceki vuruş (akor sembolleri)</translation>
+        <translation>Gelişmiş imleç: önceki vuruş (akor simgeleri)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1734"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1735"/>
         <source>Advance cursor: longa (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: longa (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: longa (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1740"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1741"/>
         <source>Advance cursor: breve (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: breve (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: breve (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1746"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1747"/>
         <source>Advance cursor: whole note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: birlik nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: birlik nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1752"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1753"/>
         <source>Advance cursor: half note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: ikilik nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: ikilik nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1758"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1759"/>
         <source>Advance cursor: quarter note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: dörtlük nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: dörtlük nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1764"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1765"/>
         <source>Advance cursor: eighth note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: sekizlik nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: sekizlik nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1770"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1771"/>
         <source>Advance cursor: 16th note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: 16&apos;lık nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: 16&apos;lık nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1776"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1777"/>
         <source>Advance cursor: 32nd note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: 32&apos;lik nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: 32&apos;lik nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1782"/>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1783"/>
         <source>Advance cursor: 64th note (chord symbols/figured bass)</source>
-        <translation>Gelişmiş imleç: 64&apos;lük nota (akor sembolleri/sürekli bas)</translation>
+        <translation>Gelişmiş imleç: 64&apos;lük nota (akor simgeleri/sürekli bas)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1788"/>
@@ -8890,7 +8890,7 @@ asla sola hizalama</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2358"/>
         <source>Toggle duration dot: double</source>
-        <translation>Uzatma noktasını aç/kapat: çift</translation>
+        <translation>Uzatma noktasını aç/kapat: ikili</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="2364"/>
@@ -9526,7 +9526,7 @@ asla sola hizalama</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="148"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="149"/>
         <source>Play chord symbols</source>
-        <translation>Akor sembollerini çal</translation>
+        <translation>Akor simgelerini çal</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="156"/>
@@ -10032,7 +10032,7 @@ Bu eylem geri alınamaz.</translation>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="119"/>
         <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
-        <translation>Programla ilgili &lt;a href=&quot;%1&quot;&gt;yardım alın&lt;/a&gt; veya gelişimine  &lt;a href=&quot;%2&quot;&gt;katkıda bulunun&lt;/a&gt;.</translation>
+        <translation>Uygulamayla ilgili &lt;a href=&quot;%1&quot;&gt;yardım alın&lt;/a&gt; veya gelişimine  &lt;a href=&quot;%2&quot;&gt;katkıda bulunun&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/AboutDialog.qml" line="132"/>
@@ -10135,12 +10135,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="118"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation>Tercihler&apos;de daha fazla yüksek kontrast ayarı mevcuttur.</translation>
+        <translation>Tercihler&apos;de daha fazla yüksek karşıtlık ayarı mevcuttur.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/ThemesPage.qml" line="124"/>
         <source>Enable high contrast</source>
-        <translation>Yüksek kontrastı etkinleştir</translation>
+        <translation>Yüksek karşıtlığı etkinleştir</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
@@ -10894,13 +10894,13 @@ Perde %1 teller %2</translation>
         <location filename="../../src/engraving/dom/fret.cpp" line="1210"/>
         <location filename="../../src/engraving/dom/fret.cpp" line="1311"/>
         <source>with chord symbol %1</source>
-        <translation>%1 ile akor sembolü</translation>
+        <translation>%1 ile akor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1212"/>
         <location filename="../../src/engraving/dom/fret.cpp" line="1312"/>
         <source>without chord symbol</source>
-        <translation>akor sembolü olmadan</translation>
+        <translation>akor simgesi olmadan</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="1225"/>
@@ -11848,12 +11848,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
         <source>symbol(s)</source>
-        <translation><numerusform>semboller</numerusform><numerusform>sembol</numerusform></translation>
+        <translation><numerusform>simgeler</numerusform><numerusform>simge</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
         <source>Symbol(s)</source>
-        <translation><numerusform>Semboller</numerusform><numerusform>Sembol</numerusform></translation>
+        <translation><numerusform>Simgeler</numerusform><numerusform>Simge</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -12169,12 +12169,12 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="374"/>
         <source>chord symbol(s)</source>
-        <translation><numerusform>akor sembolü</numerusform><numerusform>akor sembolü</numerusform></translation>
+        <translation><numerusform>akor simgeleri</numerusform><numerusform>akor simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="375"/>
         <source>Chord symbol(s)</source>
-        <translation><numerusform>Akor sembolü</numerusform><numerusform>Akor sembolü</numerusform></translation>
+        <translation><numerusform>Akor simgeleri</numerusform><numerusform>Akor simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="377"/>
@@ -12529,22 +12529,22 @@ Perde %1 teller %2</translation>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="482"/>
         <source>tab duration symbol(s)</source>
-        <translation><numerusform>tab süresi sembolü</numerusform><numerusform>tab süresi sembolü</numerusform></translation>
+        <translation><numerusform>tab süresi simgeleri</numerusform><numerusform>tab süresi simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="483"/>
         <source>Tab duration symbol(s)</source>
-        <translation><numerusform>Tab süresi sembolü</numerusform><numerusform>Tab süresi sembolü</numerusform></translation>
+        <translation><numerusform>Tab süresi simgeleri</numerusform><numerusform>Tab süresi simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="485"/>
         <source>font symbol(s)</source>
-        <translation><numerusform>yazı tipi sembolü</numerusform><numerusform>yazı tipi sembolü</numerusform></translation>
+        <translation><numerusform>yazı tipi simgeleri</numerusform><numerusform>yazı tipi simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="486"/>
         <source>Font symbol(s)</source>
-        <translation><numerusform>Yazı tipi sembolü</numerusform><numerusform>Yazı tipi sembolü</numerusform></translation>
+        <translation><numerusform>Yazı tipi simgeleri</numerusform><numerusform>Yazı tipi simgesi</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
@@ -13198,12 +13198,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1734"/>
         <source>Chord symbol</source>
-        <translation>Akor sembolü</translation>
+        <translation>Akor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1735"/>
         <source>Chord symbol (alternate)</source>
-        <translation>Akor sembolü (alternatif)</translation>
+        <translation>Akor simgesi (başka)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1736"/>
@@ -13752,7 +13752,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3105"/>
         <source>To coda (symbol)</source>
-        <translation>Coda&apos;ya (sembol)</translation>
+        <translation>Coda&apos;ya (simge)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3106"/>
@@ -16561,7 +16561,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="149"/>
         <source>chord symbols per row</source>
-        <translation>satır başına akor sembollü</translation>
+        <translation>satır başına akor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="150"/>
@@ -16802,12 +16802,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="212"/>
         <source>music symbol size</source>
-        <translation>müzik sembolü boyutu</translation>
+        <translation>müzik simgesi boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="213"/>
         <source>marker center on symbol</source>
-        <translation>işaretleyici sembolün ortasında</translation>
+        <translation>işaretleyici simgenin ortasında</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="214"/>
@@ -17120,27 +17120,27 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="286"/>
         <source>chord symbol interpretation</source>
-        <translation>Akor Sembolünü Çözümle</translation>
+        <translation>akor simgesini çözümle</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="287"/>
         <source>chord symbol voicing</source>
-        <translation>Akor Sembolünü Seslendir</translation>
+        <translation>akor simgesini seslendir</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="288"/>
         <source>chord symbol duration</source>
-        <translation>akor sembolü süresi</translation>
+        <translation>akor simgesi süresi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="289"/>
         <source>chord symbol bass scale</source>
-        <translation>Akor Sembolü Bas Gamı</translation>
+        <translation>akor simgesi bas gamı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="290"/>
         <source>chord symbol do not stack modifiers</source>
-        <translation>Akor Sembolü Değiştiricilerini Üst Üste Yığma</translation>
+        <translation>akor simgesi değiştiricilerini üst üste yığma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="292"/>
@@ -17190,7 +17190,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="303"/>
         <source>symbol</source>
-        <translation>sembol</translation>
+        <translation>simge</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="304"/>
@@ -17355,7 +17355,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="342"/>
         <source>musical symbols scale</source>
-        <translation>Müzik Sembolleri Ölçeği</translation>
+        <translation>müzik simgelerin ölçeği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="343"/>
@@ -17435,37 +17435,37 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="359"/>
         <source>begin font style</source>
-        <translation>Başlangıç Yazı Tipi Stili</translation>
+        <translation>başlangıç yazı tipi biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="360"/>
         <source>begin text musical symbols scale</source>
-        <translation>Başlangıç Metin Müzik sembolleri ölçeği</translation>
+        <translation>başlangıç metin müzik simgeleri ölçeği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="361"/>
         <source>continue text musical symbols scale</source>
-        <translation>Devam Metin Müzik sembolleri ölçeği</translation>
+        <translation>devam metin müzik simgeleri ölçeği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="362"/>
         <source>end text musical symbols scale</source>
-        <translation>Son Metin Müzik sembolleri ölçeği</translation>
+        <translation>son metin müzik simgesi ölçeği</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="363"/>
         <source>begin text music symbols size</source>
-        <translation>Başlangıç metni müzik sembolleri boyutu</translation>
+        <translation>başlangıç metni müzik simgesi boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="364"/>
         <source>continue text music symbols size</source>
-        <translation>Devam metni müzik sembolleri boyutu</translation>
+        <translation>devam metni müzik simgesi boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="365"/>
         <source>end text music symbols size</source>
-        <translation>Son metni müzik sembolleri boyutu</translation>
+        <translation>son metni müzik simgesi boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="366"/>
@@ -17510,7 +17510,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="375"/>
         <source>continue font style</source>
-        <translation>Devam Yazı Tipi Stili</translation>
+        <translation>devam yazı tipi biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="376"/>
@@ -17580,7 +17580,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="390"/>
         <source>end font style</source>
-        <translation>Bitiş Yazı tipi Stili</translation>
+        <translation>bitiş yazı tipi biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="391"/>
@@ -17745,7 +17745,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="433"/>
         <source>tremolo style</source>
-        <translation>Tremolo Stili</translation>
+        <translation>tremolo biçimi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="434"/>
@@ -17970,12 +17970,12 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="495"/>
         <source>symbols size</source>
-        <translation>sembol boyutu</translation>
+        <translation>simge boyutu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="496"/>
         <source>symbol angle</source>
-        <translation>sembol açısı</translation>
+        <translation>simge açısı</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="498"/>
@@ -18115,7 +18115,7 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3177"/>
         <source>No symbol</source>
-        <translation>Sembol yok</translation>
+        <translation>Simge yok</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3187"/>
@@ -22876,7 +22876,7 @@ metnini göster</translation>
         <source>Show
 chord symbols</source>
         <translation>Akor 
-sembollerini göster</translation>
+simgelerini göster</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="861"/>
@@ -23949,7 +23949,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="93"/>
         <source>Until the next chord symbol</source>
-        <translation>Sonraki akor sembolüne kadar</translation>
+        <translation>Sonraki akor simgesine kadar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="94"/>
@@ -24123,7 +24123,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml" line="114"/>
         <source>Add chord symbols to your score and they’ll automatically appear in the legend.</source>
-        <translation>Partisyonunuza akor sembolleri ekleyin, bunlar otomatik olarak listeleme bölümünde görünecektir.</translation>
+        <translation>Partisyonunuza akor simgeleri ekleyin, bunlar otomatik olarak listeleme bölümünde görünecektir.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml" line="53"/>
@@ -24655,7 +24655,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="63"/>
         <source>Align symbol with barline</source>
-        <translation>Sembolü ölçü çizgisiyle hizala</translation>
+        <translation>Simgeyi ölçü çizgisiyle hizala</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
@@ -25460,7 +25460,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="57"/>
         <source>Symbol size</source>
-        <translation>Sembol boyutu</translation>
+        <translation>Simge boyutu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/text/TextSettings.qml" line="120"/>
@@ -25675,7 +25675,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/chordsymbols/chordsymbolsettingsmodel.cpp" line="33"/>
         <source>Chord symbol</source>
-        <translation>Akor sembolü</translation>
+        <translation>Akor simgesi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/clefs/clefsettingsmodel.cpp" line="35"/>
@@ -25850,7 +25850,7 @@ pickup measure</source>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/textlinesettingsmodel.cpp" line="447"/>
         <source>Line arrow</source>
         <comment>hook type</comment>
-        <translation>Ok çizgisi</translation>
+        <translation>Çizgi ok</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="86"/>
@@ -26123,7 +26123,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/symbols/symbolsettingsmodel.cpp" line="34"/>
         <source>Symbol</source>
-        <translation>Sembol</translation>
+        <translation>Simge</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/tempos/temposettingsmodel.cpp" line="46"/>
@@ -26940,12 +26940,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="119"/>
         <source>Notation/tab in open position</source>
-        <translation>Açık pozisyonda nota/tab</translation>
+        <translation>Nota/tab açık pozisyondadır</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="120"/>
         <source>Notation shows sounding pitches</source>
-        <translation>Nota ses perdelerini gösterir.</translation>
+        <translation>Nota duyulan perdeleri gösterir</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/elementpopups/CapoPopup.qml" line="121"/>
@@ -27418,7 +27418,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="168"/>
         <source>Edit chord symbol text style</source>
-        <translation>Akor sembolü metni biçimini düzenle</translation>
+        <translation>Akor simgesi metni biçimini düzenle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="280"/>
@@ -27476,7 +27476,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="756"/>
         <source>Min. space between chord symbols:</source>
-        <translation>Akor sembolleri arasındaki en az boşluk:</translation>
+        <translation>Akor simgeleri arasındaki en az boşluk:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="795"/>
@@ -27976,12 +27976,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="89"/>
         <source>No note or rest or chord symbol selected</source>
-        <translation>Nota, sus veya akor sembolü seçilmedi</translation>
+        <translation>Nota, sus veya akor simgesi seçilmedi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
         <source>Please select a note or rest or chord symbol and retry</source>
-        <translation>Lütfen bir nota, sus veya akor sembolü seçin ve yeniden deneyin</translation>
+        <translation>Lütfen bir nota, sus veya akor simgesi seçin ve yeniden deneyin</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="93"/>
@@ -28472,7 +28472,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="217"/>
         <source>Add c&amp;hord symbol</source>
-        <translation>A&amp;kor sembolü ekle</translation>
+        <translation>A&amp;kor simgesi ekle</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/notationcontextmenumodel.cpp" line="233"/>
@@ -28665,7 +28665,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="61"/>
         <source>Chord symbols</source>
-        <translation>Akor sembolleri</translation>
+        <translation>Akor simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/selectionfilter/elementsselectionfiltermodel.cpp" line="63"/>
@@ -28780,7 +28780,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="121"/>
         <source>MuseScore chord symbol style files</source>
-        <translation>MuseScore akor sembolü biçim dosyaları</translation>
+        <translation>MuseScore akor simgesi biçim dosyaları</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/colorlabel.cpp" line="68"/>
@@ -29296,7 +29296,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="604"/>
         <source>Use SMuFL symbols</source>
-        <translation>SMuFL sembollerini kullan</translation>
+        <translation>SMuFL simgelerini kullan</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="614"/>
@@ -29306,7 +29306,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="625"/>
         <source>Vertically align chord symbols and fretboard diagrams on the same system</source>
-        <translation>Aynı satırdaki akor sembolleri ve akor şemalarını dikey olarak hizala</translation>
+        <translation>Aynı satırdaki akor simgeleri ve akor şemalarını dikey olarak hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/ChordSymbolsPage.qml" line="667"/>
@@ -29413,7 +29413,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="230"/>
         <source>Until next chord symbol</source>
-        <translation>Sonraki akor sembolüne kadar</translation>
+        <translation>Sonraki akor simgesine kadar</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="233"/>
@@ -29428,17 +29428,17 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="253"/>
         <source>Don’t show chord symbols transposed by capo</source>
-        <translation>Kapodaki aktarılmış akor sembollerini gösterme</translation>
+        <translation>Kapodaki aktarılmış akor simgelelerini gösterme</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="256"/>
         <source>Show chord symbols &amp; transposed symbols</source>
-        <translation>Akor ve aktarma sembollerini göster</translation>
+        <translation>Akor ve aktarma simgelerini göster</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/chordsymbolspagemodel.cpp" line="259"/>
         <source>Show transposed symbols only</source>
-        <translation>Sadece aktarılmış sembolü göster</translation>
+        <translation>Sadece aktarılmış simgeyi göster</translation>
     </message>
 </context>
 <context>
@@ -29451,7 +29451,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="61"/>
         <source>Show ‘H’ and ‘P’ symbols on</source>
-        <translation>&apos;H&apos; ve &apos;P&apos; sembollerini göster</translation>
+        <translation>&apos;H&apos; ve &apos;P&apos; simgelerini göster</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="67"/>
@@ -29493,7 +29493,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="137"/>
         <source>Align ‘H’, ‘P’ and ‘T’ symbols in the same slur on</source>
-        <translation>‘H’, ‘P’ ve ‘T’ sembollerini aynı bağ üzerinde hizala</translation>
+        <translation>‘H’, ‘P’ ve ‘T’ simgelerini aynı bağ üzerinde hizala</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="157"/>
@@ -29532,7 +29532,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="323"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="358"/>
         <source>Symbol</source>
-        <translation>Sembol</translation>
+        <translation>Simge</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="231"/>
@@ -29558,12 +29558,12 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="405"/>
         <source>Symbol (standard staff)</source>
-        <translation>Sembol (normal dizek)</translation>
+        <translation>Simge (normal dizek)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/HammerOnPullOffTappingPage.qml" line="433"/>
         <source>Symbol (tablature staff)</source>
-        <translation>Sembol (tablatür dizek)</translation>
+        <translation>Simge (tablatür dizek)</translation>
     </message>
 </context>
 <context>
@@ -29614,7 +29614,7 @@ Ayrıca, Mastering MuseScore, en iyi müziğinizi yaratmanıza yardımcı olacak
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/LaissezVibrSection.qml" line="71"/>
         <source>Use SMuFL symbols</source>
-        <translation>SMuFL sembollerini kullan</translation>
+        <translation>SMuFL simgelerini kullan</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="39"/>
@@ -31757,7 +31757,7 @@ başarısız: %2</translation>
         <location filename="../../src/palette/widgets/masterpalette.cpp" line="135"/>
         <location filename="../../src/palette/widgets/masterpalette.cpp" line="171"/>
         <source>Symbols</source>
-        <translation>Semboller</translation>
+        <translation>Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/noteGroups.cpp" line="85"/>
@@ -31777,17 +31777,17 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="437"/>
         <source>Common symbols</source>
-        <translation>Yaygın semboller</translation>
+        <translation>Yaygın simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="456"/>
         <source>Musical symbols</source>
-        <translation>Müzikal semboller</translation>
+        <translation>Müzikal simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="479"/>
         <source>Unicode symbols</source>
-        <translation>Unicode semboller</translation>
+        <translation>Unicode simgeler</translation>
     </message>
 </context>
 <context>
@@ -32061,7 +32061,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="155"/>
         <source>Khmer Symbols</source>
-        <translation>Khmer Sembolü</translation>
+        <translation>Khmer Simgesi</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="156"/>
@@ -32161,7 +32161,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="175"/>
         <source>Currency Symbols</source>
-        <translation>Currency Sembolü</translation>
+        <translation>Currency Simgesi</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="176"/>
@@ -32171,7 +32171,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="177"/>
         <source>Letterlike Symbols</source>
-        <translation>Harf Benzeri Semboller</translation>
+        <translation>Harf-benzeri Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="178"/>
@@ -32226,7 +32226,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="188"/>
         <source>Miscellaneous Symbols</source>
-        <translation>Miscellaneous Symbols</translation>
+        <translation>Çeşitli Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="189"/>
@@ -32236,12 +32236,12 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="190"/>
         <source>Miscellaneous Mathematical Symbols-A</source>
-        <translation>Miscellaneous Mathematical Symbols-A</translation>
+        <translation>Çeşitli Matematik Simgeleri-A</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="191"/>
         <source>Supplemental Arrows-A</source>
-        <translation>Supplemental Arrows-A</translation>
+        <translation>Ek Oklar-A</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="192"/>
@@ -32251,12 +32251,12 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="193"/>
         <source>Supplemental Arrows-B</source>
-        <translation>Supplemental Arrows-B</translation>
+        <translation>Ek Oklar-B</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="194"/>
         <source>Miscellaneous Mathematical Symbols-B</source>
-        <translation>Miscellaneous Mathematical Symbols-B</translation>
+        <translation>Çeşitli Matematik Sembolleri-B</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="195"/>
@@ -32266,7 +32266,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="196"/>
         <source>Miscellaneous Symbols and Arrows</source>
-        <translation>Miscellaneous Symbols and Arrows</translation>
+        <translation>Çeşitli Simgeler ve Oklar</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="197"/>
@@ -32326,7 +32326,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="208"/>
         <source>CJK Symbols and Punctuation</source>
-        <translation>CJK Symbols and Punctuation</translation>
+        <translation>CJK Simgeleri ve Noktalamalar</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="209"/>
@@ -32386,7 +32386,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="220"/>
         <source>Yijing Hexagram Symbols</source>
-        <translation>Yijing Hexagram Symbols</translation>
+        <translation>Yijing Hexagram Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="221"/>
@@ -32631,7 +32631,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="269"/>
         <source>Ancient Symbols</source>
-        <translation>Antik Semboller</translation>
+        <translation>Antik Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="270"/>
@@ -32816,7 +32816,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="306"/>
         <source>Rumi Numeral Symbols</source>
-        <translation>Rumi Numeral Symbols</translation>
+        <translation>Rumi Numarası Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="307"/>
@@ -33066,7 +33066,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="356"/>
         <source>Ideographic Symbols and Punctuation</source>
-        <translation>Ideographic Symbols and Punctuation</translation>
+        <translation>Sembolik Simgeler ve Noktalamalar</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="357"/>
@@ -33116,12 +33116,12 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="366"/>
         <source>Byzantine Musical Symbols</source>
-        <translation>Byzantine Musical Symbols</translation>
+        <translation>Byzantine Müzikal Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="367"/>
         <source>Musical Symbols</source>
-        <translation>Müzikal Semboller</translation>
+        <translation>Müzikal Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="368"/>
@@ -33131,7 +33131,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="369"/>
         <source>Tai Xuan Jing Symbols</source>
-        <translation>Tai Xuan Jing Symbols</translation>
+        <translation>Tai Xuan Jing Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="370"/>
@@ -33141,7 +33141,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="371"/>
         <source>Mathematical Alphanumeric Symbols</source>
-        <translation>Matematiksel Alfanümerik Semboller</translation>
+        <translation>Matematiksel Alfanümerik Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="372"/>
@@ -33186,7 +33186,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="380"/>
         <source>Arabic Mathematical Alphabetic Symbols</source>
-        <translation>Arapça Matematik Alfabetik Semboller</translation>
+        <translation>Arapça Matematik Alfabetik Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="381"/>
@@ -33216,7 +33216,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="386"/>
         <source>Miscellaneous Symbols and Pictographs</source>
-        <translation>Çeşitli Semboller ve Piktograflar</translation>
+        <translation>Çeşitli Simgeler ve Resim-yazılar</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="387"/>
@@ -33231,12 +33231,12 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="389"/>
         <source>Transport and Map Symbols</source>
-        <translation>Ulaşım ve Harita Sembolleri</translation>
+        <translation>Ulaşım ve Harita Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="390"/>
         <source>Alchemical Symbols</source>
-        <translation>Simya Sembolleri</translation>
+        <translation>Simya Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="391"/>
@@ -33246,27 +33246,27 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="392"/>
         <source>Supplemental Arrows-C</source>
-        <translation>Supplemental Arrows-C</translation>
+        <translation>Ek Oklar-C</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="393"/>
         <source>Supplemental Symbols and Pictographs</source>
-        <translation>Supplemental Symbols and Pictographs</translation>
+        <translation>Ek Simgeleri ve Resim-yazıları</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="394"/>
         <source>Chess Symbols</source>
-        <translation>Satranç Sembolleri</translation>
+        <translation>Satranç Simgeleri</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="395"/>
         <source>Symbols and Pictographs Extended-A</source>
-        <translation>Symbols and Pictographs Extended-A</translation>
+        <translation>Simgeler and Reim-yazıları Genişletilmiş-A</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>Symbols for Legacy Computing</source>
-        <translation>Symbols for Legacy Computing</translation>
+        <translation>Eski Bilgisayar Sistemleri için Simgeler</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="397"/>
@@ -33906,7 +33906,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ImportStyleSection.qml" line="80"/>
         <source>Use style file</source>
-        <translation>Stil dosyası kullan</translation>
+        <translation>Biçim dosyası kullan</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
@@ -34028,7 +34028,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/FretboardDiagramsSection.qml" line="41"/>
         <source>Never autofill fretboard diagrams when changing chord symbols</source>
-        <translation>Akor sembollerini değiştirirken akor şemasını asla otomatik olarak doldurmayın</translation>
+        <translation>Akor simgelerini değiştirirken akor şemasını asla otomatik olarak doldurmayın</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/MidiInputSection.qml" line="33"/>
@@ -34139,7 +34139,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="113"/>
         <source>Play chord symbols and Nashville numbers</source>
-        <translation>Akor sembolleri ve Nashville sayılarını çal</translation>
+        <translation>Akor simgeleri ve Nashville sayılarını çal</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NotePreviewSection.qml" line="130"/>
@@ -34249,7 +34249,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ProgramStartSection.qml" line="31"/>
         <source>Program start</source>
-        <translation>Program başlangıcı</translation>
+        <translation>Uygulama başlangıcı</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ProgramStartSection.qml" line="88"/>
@@ -34314,7 +34314,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="30"/>
         <source>High-contrast theme</source>
-        <translation>Yüksek kontrastlı temalar</translation>
+        <translation>Yüksek karşıtlı temalar</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="30"/>
@@ -34329,7 +34329,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/ThemesSection.qml" line="91"/>
         <source>Enable high-contrast</source>
-        <translation>Yüksek kontrastı etkinleştir</translation>
+        <translation>Yüksek karşıtlığı etkinleştir</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/UiColorsSection.qml" line="32"/>
@@ -34463,7 +34463,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="117"/>
         <source>Musical symbol fonts</source>
-        <translation>Müzikal sembol yazı tipi</translation>
+        <translation>Müzikal simge yazı tipi</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="123"/>
@@ -37622,7 +37622,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3393"/>
         <source>Add chord symbol to fretboard diagram</source>
-        <translation>Akor şemasına akor sembolü ekle</translation>
+        <translation>Akor şemasına akor simgesi ekle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3961"/>
@@ -37944,7 +37944,7 @@ başarısız: %2</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6372"/>
         <source>Realize chord symbols</source>
-        <translation>Akor sembollerini notalara dönüştürün</translation>
+        <translation>Akor simgelerini notalara dönüştürün</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="6383"/>
@@ -38061,12 +38061,12 @@ başarısız: %2</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7179"/>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7269"/>
         <source>Navigate to next chord symbol</source>
-        <translation>Sonraki akor sembolüne  git</translation>
+        <translation>Sonraki akor simgesine git</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7312"/>
         <source>Navigate to chord symbol</source>
-        <translation>Akor sembolüne git</translation>
+        <translation>Akor simgesine git</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7369"/>
