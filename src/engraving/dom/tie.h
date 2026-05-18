@@ -143,6 +143,8 @@ public:
 protected:
     Tie(const ElementType& type, EngravingItem* parent = nullptr);
 
+    bool isInSpannerMap() const override { return false; }
+
     bool m_isInside = false;
     TiePlacement m_tiePlacement = TiePlacement::AUTO;
 
