@@ -1014,10 +1014,12 @@ std::vector<String> StaffType::tabFontNames(bool bDuration)
 {
     std::vector<String> names;
     if (bDuration) {
+        names.reserve(m_durationFonts.size());
         for (const TablatureDurationFont& f : m_durationFonts) {
             names.push_back(f.displayName);
         }
     } else {
+        names.reserve(m_fretFonts.size());
         for (const TablatureFretFont& f : m_fretFonts) {
             names.push_back(f.displayName);
         }
