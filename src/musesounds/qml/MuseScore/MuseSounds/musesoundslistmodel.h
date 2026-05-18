@@ -59,12 +59,12 @@ signals:
 
 private:
     enum Roles {
-        rCatalogueTitle = Qt::UserRole + 1,
-        rCatalogueSoundLibraries
+        rCatalogTitle = Qt::UserRole + 1,
+        rCatalogSoundLibraries
     };
 
-    void setSoundsCatalogs(const SoundCatalogueInfoList& soundsCatalogs);
+    void setSoundsCatalogs(const SoundCatalogInfoList& soundsCatalogs);
 
-    SoundCatalogueInfoList m_soundsCatalogs;
+    SoundCatalogInfoList m_soundsCatalogs;
 };
 }

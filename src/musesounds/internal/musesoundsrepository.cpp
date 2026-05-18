@@ -112,7 +112,7 @@ void MuseSoundsRepository::init()
             return;
         }
 
-        RetVal<SoundCatalogueInfoList> result;
+        RetVal<SoundCatalogInfoList> result;
 
         std::string err;
         JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData->data()), &err);
@@ -128,19 +128,19 @@ void MuseSoundsRepository::init()
     });
 }
 
-const SoundCatalogueInfoList& MuseSoundsRepository::soundsCatalogueList() const
+const SoundCatalogInfoList& MuseSoundsRepository::soundsCatalogs() const
 {
     return m_soundsCatalogs;
 }
 
-async::Notification MuseSoundsRepository::soundsCatalogueListChanged() const
+async::Notification MuseSoundsRepository::soundsCatalogsChanged() const
 {
     return m_soundsCatalogsChanged;
 }
 
-SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
+SoundCatalogInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
 {
-    SoundCatalogueInfoList result;
+    SoundCatalogInfoList result;
 
     JsonObject obj = soundsDoc.rootObject();
     JsonObject data = !obj.empty() ? obj.value("data").toObject() : JsonObject();
@@ -150,15 +150,15 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
     std::string museSoundsAppName = platformMuseSoundsAppName();
 
     for (size_t catalogIdx = 0; catalogIdx < catalogs.size(); ++catalogIdx) {
-        JsonObject catalogueObj = catalogs.at(catalogIdx).toObject();
-        if (catalogueObj.empty()) {
+        JsonObject catalogObj = catalogs.at(catalogIdx).toObject();
+        if (catalogObj.empty()) {
             continue;
         }
 
-        SoundCatalogueInfo catalogue;
-        catalogue.title = catalogueObj.value("title").toString();
+        SoundCatalogInfo catalog;
+        catalog.title = catalogObj.value("title").toString();
 
-        JsonArray soundsItems = catalogueObj.value("productCards").toArray();
+        JsonArray soundsItems = catalogObj.value("productCards").toArray();
         if (soundsItems.empty()) {
             continue;
         }
@@ -187,14 +187,14 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             soundLibrary.code = productObj.value("code").toString();
             soundLibrary.uri = configuration()->soundPageUri(soundLibrary.code);
 
-            catalogue.soundLibraries.emplace_back(soundLibrary);
+            catalog.soundLibraries.emplace_back(soundLibrary);
         }
 
-        if (catalogue.soundLibraries.empty()) {
+        if (catalog.soundLibraries.empty()) {
             continue;
         }
 
-        result.emplace_back(catalogue);
+        result.emplace_back(catalog);
     }
 
     return result;
