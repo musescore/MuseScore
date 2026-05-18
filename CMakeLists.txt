@@ -18,16 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (APPLE)
-    cmake_minimum_required(VERSION 3.26...3.31) # Min. required for Swift-C++ interop
-else()
-    cmake_minimum_required(VERSION 3.22...3.31) # Min. required by Qt 6.10
-endif()
+
+cmake_minimum_required(VERSION 3.28...3.31) 
 
 project(MuseScore LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

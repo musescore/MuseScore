@@ -42,8 +42,4 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-<<<<<<< HEAD
 bash $MF_DIR/buildscripts/ci/linux/setup.sh --arch $PACKARCH --compiler $COMPILER $BUILD_PIPEWIRE
-=======
-bash $MF_DIR/buildscripts/ci/linux/setup.sh --arch $PACKARCH --compiler $COMPILER --build-pipewire $BUILD_PIPEWIRE
->>>>>>> 6c1e04a887 (updated CI linux setup)
