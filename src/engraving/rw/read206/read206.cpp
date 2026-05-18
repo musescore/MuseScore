@@ -2145,6 +2145,7 @@ static bool readTextLineProperties(XmlReader& e, ReadContext& ctx, TextLineBase*
     } else if (!read400::TRead::readProperties(tl, e, ctx)) {
         return false;
     }
+
     return true;
 }
 
@@ -2175,6 +2176,7 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
         LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
         volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
+    CompatUtils::resetHookHeightSign(volta);
     adjustPlacement(volta);
 }
 
@@ -2220,6 +2222,7 @@ static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
         pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
 
+    CompatUtils::resetHookHeightSign(pedal);
     adjustPlacement(pedal);
 }
 
@@ -2254,6 +2257,7 @@ static void readOttava(XmlReader& e, ReadContext& ctx, Ottava* ottava)
         }
     }
     ottava->styleChanged();
+    CompatUtils::resetHookHeightSign(ottava);
     adjustPlacement(ottava);
 }
 
@@ -2296,6 +2300,7 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
         h->setContinueText(u"");
         h->setEndText(u"");
     }
+    CompatUtils::resetHookHeightSign(h);
     adjustPlacement(h);
 }
 
@@ -2331,6 +2336,7 @@ void Read206::readTextLine206(XmlReader& e, ReadContext& ctx, TextLineBase* tlb)
             e.unknown();
         }
     }
+    CompatUtils::resetHookHeightSign(tlb);
     adjustPlacement(tlb);
 }
 

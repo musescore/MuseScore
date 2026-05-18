@@ -1175,6 +1175,7 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
     }
     volta->setOffset(PointF());          // ignore offsets
     volta->setAutoplace(true);
+    CompatUtils::resetHookHeightSign(volta);
 }
 
 //---------------------------------------------------------
@@ -1217,6 +1218,8 @@ static void readOttava114(XmlReader& e, ReadContext& ctx, Ottava* ottava)
             e.unknown();
         }
     }
+
+    CompatUtils::resetHookHeightSign(ottava);
 }
 
 //---------------------------------------------------------
@@ -1296,6 +1299,8 @@ static void readTextLine114(XmlReader& e, ReadContext& ctx, TextLine* textLine)
             e.unknown();
         }
     }
+
+    CompatUtils::resetHookHeightSign(textLine);
 }
 
 //---------------------------------------------------------
@@ -1389,6 +1394,8 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
     } else if (pedal->endText() == pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
         pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
+
+    CompatUtils::resetHookHeightSign(pedal);
 }
 
 //---------------------------------------------------------

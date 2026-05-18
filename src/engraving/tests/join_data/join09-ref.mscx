@@ -128,6 +128,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>K_K</eid>
               </HairPin>
             <next>
@@ -199,6 +201,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>U_U</eid>
               </HairPin>
             <next>
@@ -211,6 +215,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>V_V</eid>
               </HairPin>
             <next>
@@ -358,6 +364,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <beginHookHeight>-1.9</beginHookHeight>
+              <endHookHeight>-1.9</endHookHeight>
               <eid>n_n</eid>
               </HairPin>
             <next>
