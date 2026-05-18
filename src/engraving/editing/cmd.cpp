@@ -3383,7 +3383,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
             }
         }
         if (m_is.noteEntryMode()) {
-            ChordRest* cr = crs.size() == 1 ? crs.front() : nullptr;
+            const ChordRest* cr = crs.size() == 1 ? crs.front() : nullptr;
             IF_ASSERT_FAILED(cr) {
                 // (At time of writing) it shouldn't be possible to have more than
                 // one CR selected during note entry...
