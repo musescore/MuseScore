@@ -50,8 +50,8 @@ public:
 private:
     SoundCatalogueInfoList parseSounds(const muse::JsonDocument& soundsDoc) const;
 
-    SoundCatalogueInfoList m_soundsСatalogs;
-    muse::async::Notification m_soundsСatalogsChanged;
+    SoundCatalogueInfoList m_soundsCatalogs;
+    muse::async::Notification m_soundsCatalogsChanged;
     muse::network::INetworkManagerPtr m_networkManager;
 };
 }

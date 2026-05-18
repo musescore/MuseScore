@@ -123,19 +123,19 @@ void MuseSoundsRepository::init()
             result.val = parseSounds(soundsInfoDoc);
         }
 
-        m_soundsСatalogs = result.val;
-        m_soundsСatalogsChanged.notify();
+        m_soundsCatalogs = result.val;
+        m_soundsCatalogsChanged.notify();
     });
 }
 
 const SoundCatalogueInfoList& MuseSoundsRepository::soundsCatalogueList() const
 {
-    return m_soundsСatalogs;
+    return m_soundsCatalogs;
 }
 
 async::Notification MuseSoundsRepository::soundsCatalogueListChanged() const
 {
-    return m_soundsСatalogsChanged;
+    return m_soundsCatalogsChanged;
 }
 
 SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
