@@ -70,6 +70,7 @@ public:
 
 protected:
     Sid defaultPosSid() const override;
+    bool managedByScore() const override { return false; }
 
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;

@@ -647,7 +647,7 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
         setTick(v.value<Fraction>());
-        if (score() && score()->spannerMap().removeSpanner(this)) {
+        if (score() && managedByScore() && score()->spannerMap().removeSpanner(this)) {
             score()->addSpanner(this, /*computeStartEnd =*/ false);
         }
         break;
@@ -1366,7 +1366,7 @@ void Spanner::setTick(const Fraction& v)
 
     Score* score = this->score();
 
-    if (score) {
+    if (score && managedByScore()) {
         score->spannerMap().setDirty();
     }
 }
@@ -1398,7 +1398,7 @@ void Spanner::setTicks(const Fraction& f)
 
     Score* score = this->score();
 
-    if (score) {
+    if (score && managedByScore()) {
         score->spannerMap().setDirty();
     }
 }

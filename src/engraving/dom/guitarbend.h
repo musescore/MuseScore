@@ -157,6 +157,9 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(GuitarBend)
 
+protected:
+    bool managedByScore() const override { return false; }
+
 private:
     GuitarBendType m_bendType = GuitarBendType::BEND;
     GuitarBendHold* m_holdLine = nullptr;
@@ -263,6 +266,9 @@ public:
     GuitarBend* guitarBend() const { return toGuitarBend(explicitParent()); }
 
     double lineWidth() const;
+
+protected:
+    bool managedByScore() const override { return false; }
 };
 
 class GuitarBendHoldSegment final : public LineSegment
