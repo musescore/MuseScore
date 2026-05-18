@@ -21,18 +21,25 @@
 
 trap 'echo Generate PNGs failed; exit 1' ERR
 
-sudo apt-get install libegl1 libfuse2 -y
+sudo apt update
+sudo apt install libegl1 imagemagick -y
 export QT_QPA_PLATFORM=offscreen
 export MU_QT_QPA_PLATFORM=offscreen
 
-REF_BIN=./musescore_reference/MuseScore-Studio-vtest.AppImage
-chmod +x $REF_BIN
+cd ./musescore_reference
+chmod +x ./MuseScore-Studio-vtest.AppImage
+./MuseScore-Studio-vtest.AppImage --appimage-extract
+cd ..
+REF_BIN=./musescore_reference/squashfs-root/AppRun
 
 echo reference version:
 $REF_BIN --long-version
 
-CUR_BIN=./musescore_current/MuseScore-Studio-vtest.AppImage
-chmod +x $CUR_BIN
+cd ./musescore_current
+chmod +x ./MuseScore-Studio-vtest.AppImage
+./MuseScore-Studio-vtest.AppImage --appimage-extract
+cd ..
+CUR_BIN=./musescore_current/squashfs-root/AppRun
 
 echo current version:
 $CUR_BIN --long-version
