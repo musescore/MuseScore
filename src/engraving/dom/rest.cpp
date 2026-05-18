@@ -216,7 +216,7 @@ EngravingItem* Rest::drop(EditData& data)
         if (!d.isZero()) {
             Segment* seg = score()->setNoteRest(segment(), track(), nval, d, dir);
             if (seg) {
-                ChordRest* cr = toChordRest(seg->element(track()));
+                const ChordRest* cr = toChordRest(seg->element(track()));
                 if (cr) {
                     score()->nextInputPos(cr, false);
                 }
