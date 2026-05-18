@@ -99,7 +99,7 @@ struct HarmonyMapKey
 static std::map<HarmonyMapKey /*key*/, std::vector<DiagramInfo> > s_harmonyToDiagramMap;
 static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
-static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
+static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH(":/data/harmony_to_diagram.xml");
 
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
