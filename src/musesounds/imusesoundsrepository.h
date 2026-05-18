@@ -34,7 +34,7 @@ class IMuseSoundsRepository : MODULE_GLOBAL_INTERFACE
 public:
     virtual ~IMuseSoundsRepository() = default;
 
-    virtual const SoundCatalogueInfoList& soundsCatalogueList() const = 0;
-    virtual muse::async::Notification soundsCatalogueListChanged() const = 0;
+    virtual const SoundCatalogInfoList& soundsCatalogs() const = 0;
+    virtual muse::async::Notification soundsCatalogsChanged() const = 0;
 };
 }

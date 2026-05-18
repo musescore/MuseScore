@@ -34,10 +34,10 @@ struct SoundLibraryInfo {
 };
 using SoundLibraryInfoList = std::vector<SoundLibraryInfo>;
 
-struct SoundCatalogueInfo {
+struct SoundCatalogInfo {
     muse::String title;
 
     SoundLibraryInfoList soundLibraries;
 };
-using SoundCatalogueInfoList = std::vector<SoundCatalogueInfo>;
+using SoundCatalogInfoList = std::vector<SoundCatalogInfo>;
 }

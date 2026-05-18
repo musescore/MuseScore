@@ -129,17 +129,17 @@ FocusScope {
             Repeater {
                 model: museSoundsModel
 
-                delegate: SoundCatalogueListView {
-                    required property string catalogueTitle
-                    required property var catalogueSoundsLibraries
+                delegate: SoundCatalogListView {
+                    required property string catalogTitle
+                    required property var catalogSoundsLibraries
                     required property int index
 
                     width: parent.width
 
-                    title: catalogueTitle
+                    title: catalogTitle
                     visible: count > 0
 
-                    model: catalogueSoundsLibraries
+                    model: catalogSoundsLibraries
 
                     flickableItem: column
 

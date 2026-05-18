@@ -44,14 +44,14 @@ public:
 
     void init();
 
-    const SoundCatalogueInfoList& soundsCatalogueList() const override;
-    muse::async::Notification soundsCatalogueListChanged() const override;
+    const SoundCatalogInfoList& soundsCatalogs() const override;
+    muse::async::Notification soundsCatalogsChanged() const override;
 
 private:
-    SoundCatalogueInfoList parseSounds(const muse::JsonDocument& soundsDoc) const;
+    SoundCatalogInfoList parseSounds(const muse::JsonDocument& soundsDoc) const;
 
-    SoundCatalogueInfoList m_soundsСatalogs;
-    muse::async::Notification m_soundsСatalogsChanged;
+    SoundCatalogInfoList m_soundsCatalogs;
+    muse::async::Notification m_soundsCatalogsChanged;
     muse::network::INetworkManagerPtr m_networkManager;
 };
 }
