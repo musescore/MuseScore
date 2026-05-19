@@ -115,7 +115,7 @@ PropertiesPanelSection {
             columns: 2
             columnSpacing: 4
 
-            PopupViewButton {
+            PropertiesPanelPopupButton {
                 id: playbackButton
 
                 popupAvailableWidth: parent ? parent.width : 0
@@ -141,7 +141,7 @@ PropertiesPanelSection {
                 }
             }
 
-            PopupViewButton {
+            PropertiesPanelPopupButton {
                 id: appearanceButton
 
                 popupAvailableWidth: parent ? parent.width : 0

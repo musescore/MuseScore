@@ -213,12 +213,13 @@ Item {
         Component {
             id: tempoButtonComponent
 
-            FlatButton {
+            PopupButton {
+                id: playbackSpeedButton
+
                 implicitWidth: tempoLoader.tempoViewWidth
                 implicitHeight: root.height
 
-                accentButton: playbackSpeedPopup.isOpened
-                transparent: !accentButton
+                transparent: !root.isPopupOpened
 
                 toolTipTitle: qsTrc("playback", "Speed")
 
@@ -236,14 +237,10 @@ Item {
                     tempoValueFont: timeField.font
                 }
 
-                onClicked: {
-                    playbackSpeedPopup.toggleOpened()
-                }
+                property PlaybackToolBarModel playbackModel: root.playbackModel
 
-                PlaybackSpeedPopup {
-                    id: playbackSpeedPopup
-
-                    playbackModel: root.playbackModel
+                popupComponent: PlaybackSpeedPopup {
+                    playbackModel: playbackSpeedButton.playbackModel
                 }
             }
         }
