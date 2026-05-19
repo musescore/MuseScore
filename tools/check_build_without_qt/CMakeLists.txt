@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.16)
 
 project(engraving_app LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../..)
 set(MUSE_FRAMEWORK_PATH ${MU_ROOT}/muse)
@@ -18,6 +19,18 @@ set(CMAKE_MODULE_PATH
     ${MUSE_FRAMEWORK_SRC_PATH}/cmake
     ${CMAKE_MODULE_PATH}
 )
+
+###########################################
+# Check compiler version
+###########################################    
+message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
+
+set(CLANG_MIN_VERSION 20)
+set(GCC_MIN_VERSION 14)
+set(MSVC_MIN_VERSION 19)
+
+include(GetCompilerInfo)
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)

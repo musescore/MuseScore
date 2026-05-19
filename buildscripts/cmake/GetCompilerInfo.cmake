@@ -55,6 +55,23 @@ else()
     message(FATAL_ERROR "Unsupported compiller: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+# Check compiler version
+if (CC_IS_CLANG)
+    set(_min_cxx_version ${CLANG_MIN_VERSION})
+elseif (CC_IS_GCC)
+    set(_min_cxx_version ${GCC_MIN_VERSION})
+elseif (CC_IS_MSVC)
+    set(_min_cxx_version ${MSVC_MIN_VERSION})
+endif()
+
+if (DEFINED _min_cxx_version AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${_min_cxx_version})
+    message(FATAL_ERROR
+        "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION} is too old; "
+        "requires ${_min_cxx_version} or newer.")
+
+    unset(_min_cxx_version)
+endif()
+
 # Define MINGW for VS, as it appears not to be defined
 if (MSVC)
    set (MINGW false)

@@ -36,10 +36,10 @@
 #include "log.h"
 
 // C++20 check
-#include <concepts>
-#include <type_traits>
-consteval int square(int n) { return n * n; }
-static_assert(square(5) == 25);
+// #include <concepts>
+// #include <type_traits>
+// consteval int square(int n) { return n * n; }
+// static_assert(square(5) == 25);
 // ========================
 
 #ifndef MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
