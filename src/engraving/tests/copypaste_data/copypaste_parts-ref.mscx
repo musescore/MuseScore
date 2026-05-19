@@ -592,42 +592,38 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            <eid>SB_SB</eid>
-            </Fermata>
           <Chord>
-            <eid>TB_TB</eid>
+            <eid>SB_SB</eid>
             <durationType>32nd</durationType>
             <grace32/>
             <Note>
-              <eid>UB_UB</eid>
+              <eid>TB_TB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>VB_VB</eid>
+            <eid>UB_UB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>WB_WB</eid>
+              <eid>VB_VB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <TremoloSingleChord>
               <subtype>r16</subtype>
-              <eid>XB_XB</eid>
+              <eid>WB_WB</eid>
               </TremoloSingleChord>
             </Chord>
           </voice>
         </Measure>
       <Measure>
-        <eid>YB_YB</eid>
+        <eid>XB_XB</eid>
         <voice>
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
-            <eid>ZB_ZB</eid>
+            <eid>YB_YB</eid>
             </Dynamic>
           <Spanner type="Pedal">
             <prev>
@@ -648,7 +644,7 @@
               <subtype>0</subtype>
               <beginHookHeight>-1.9</beginHookHeight>
               <endHookHeight>-1.9</endHookHeight>
-              <eid>aB_aB</eid>
+              <eid>ZB_ZB</eid>
               </HairPin>
             <next>
               <location>
@@ -657,44 +653,44 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>bB_bB</eid>
+            <eid>aB_aB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>cB_cB</eid>
+              <eid>bB_bB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
-              <eid>dB_dB</eid>
+              <eid>cB_cB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>eB_eB</eid>
+                <eid>dB_dB</eid>
                 </Accidental>
               <pitch>78</pitch>
               <tpc>20</tpc>
               </Note>
             <Arpeggio>
               <subtype>0</subtype>
-              <eid>fB_fB</eid>
+              <eid>eB_eB</eid>
               </Arpeggio>
             </Chord>
           <Breath>
             <symbol>caesuraCurved</symbol>
             <pause>2</pause>
-            <eid>gB_gB</eid>
+            <eid>fB_fB</eid>
             </Breath>
           <Chord>
-            <eid>hB_hB</eid>
+            <eid>gB_gB</eid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articMarcatoAbove</subtype>
-              <eid>iB_iB</eid>
+              <eid>hB_hB</eid>
               </Articulation>
             <Note>
-              <eid>jB_jB</eid>
+              <eid>iB_iB</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>kB_kB</eid>
+                  <eid>jB_jB</eid>
                   </Tie>
                 <next>
                   <location>
@@ -707,10 +703,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>lB_lB</eid>
+            <eid>kB_kB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>mB_mB</eid>
+              <eid>lB_lB</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -725,7 +721,7 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
-            <eid>nB_nB</eid>
+            <eid>mB_mB</eid>
             </Clef>
           <Spanner type="HairPin">
             <prev>
@@ -737,18 +733,18 @@
           <Spanner type="Trill">
             <Trill>
               <subtype>trill</subtype>
-              <eid>oB_oB</eid>
+              <eid>nB_nB</eid>
               <lineWidth>0.1488</lineWidth>
               <Ornament>
                 <Chord>
-                  <eid>pB_pB</eid>
+                  <eid>oB_oB</eid>
                   <small>1</small>
                   <Note>
-                    <eid>qB_qB</eid>
+                    <eid>pB_pB</eid>
                     <parentheses>both</parentheses>
                     <Accidental>
                       <subtype>accidentalSharp</subtype>
-                      <eid>rB_rB</eid>
+                      <eid>qB_qB</eid>
                       </Accidental>
                     <pitch>75</pitch>
                     <tpc>23</tpc>
@@ -762,7 +758,7 @@
                   </Chord>
                 <intervalAbove>third,major</intervalAbove>
                 <subtype>ornamentTrill</subtype>
-                <eid>sB_sB</eid>
+                <eid>rB_rB</eid>
                 </Ornament>
               </Trill>
             <next>
@@ -773,10 +769,10 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>tB_tB</eid>
+            <eid>sB_sB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>uB_uB</eid>
+              <eid>tB_tB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -784,7 +780,7 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>vB_vB</eid>
+        <eid>uB_uB</eid>
         <voice>
           <Spanner type="Trill">
             <prev>
@@ -795,32 +791,32 @@
               </prev>
             </Spanner>
           <Chord>
-            <eid>wB_wB</eid>
+            <eid>vB_vB</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>xB_xB</eid>
+              <eid>wB_wB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
-              <eid>yB_yB</eid>
+              <eid>xB_xB</eid>
               <l1>22</l1>
               <l2>22</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
-            <eid>zB_zB</eid>
+            <eid>yB_yB</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
-              <eid>0B_0B</eid>
+              <eid>zB_zB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <eid>1B_1B</eid>
+                  <eid>0B_0B</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -832,10 +828,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>2B_2B</eid>
+            <eid>1B_1B</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>3B_3B</eid>
+              <eid>2B_2B</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <Spanner type="Glissando">
@@ -850,17 +846,17 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
-            <eid>4B_4B</eid>
+            <eid>3B_3B</eid>
             </Clef>
           <Rest>
-            <eid>5B_5B</eid>
+            <eid>4B_4B</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       </Staff>
     <Score>
-      <eid>6B_6B</eid>
+      <eid>5B_5B</eid>
       <name>Flute</name>
       <Division>480</Division>
       <Style>
@@ -872,9 +868,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute</metaTag>
       <Part id="1">
-        <eid>7B_7B</eid>
+        <eid>6B_6B</eid>
         <Staff>
-          <eid>8B_8B</eid>
+          <eid>7B_7B</eid>
           <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>stdNormal</name>
@@ -899,24 +895,24 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <eid>9B_9B</eid>
+          <eid>8B_8B</eid>
           <linkedTo>E_E</linkedTo>
           <Text>
-            <eid>+B_+B</eid>
+            <eid>9B_9B</eid>
             <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>
         <Measure>
-          <eid>/B_/B</eid>
+          <eid>+B_+B</eid>
           <voice>
             <KeySig>
-              <eid>AC_AC</eid>
+              <eid>/B_/B</eid>
               <linkedTo>G_G</linkedTo>
               <concertKey>0</concertKey>
               </KeySig>
             <TimeSig>
-              <eid>BC_BC</eid>
+              <eid>AC_AC</eid>
               <linkedTo>H_H</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
@@ -924,14 +920,14 @@
             <Tempo>
               <tempo>1.333333</tempo>
               <followText>1</followText>
-              <eid>CC_CC</eid>
+              <eid>BC_BC</eid>
               <linkedTo>I_I</linkedTo>
               <text><sym>metNoteQuarterUp</sym><font face="Edwin"/> = 80</text>
               </Tempo>
             <Spanner type="Pedal">
               <Pedal>
                 <endHookType>1</endHookType>
-                <eid>DC_DC</eid>
+                <eid>CC_CC</eid>
                 <linkedTo>J_J</linkedTo>
                 </Pedal>
               <next>
@@ -943,7 +939,7 @@
             <Spanner type="Ottava">
               <Ottava>
                 <subtype>8va</subtype>
-                <eid>EC_EC</eid>
+                <eid>DC_DC</eid>
                 <linkedTo>K_K</linkedTo>
                 </Ottava>
               <next>
@@ -953,33 +949,33 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>FC_FC</eid>
+              <eid>EC_EC</eid>
               <linkedTo>L_L</linkedTo>
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>articAccentAbove</subtype>
-                <eid>GC_GC</eid>
+                <eid>FC_FC</eid>
                 <linkedTo>M_M</linkedTo>
                 </Articulation>
               <Note>
-                <eid>HC_HC</eid>
+                <eid>GC_GC</eid>
                 <linkedTo>N_N</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 <ChordLine>
                   <subtype>1</subtype>
-                  <eid>IC_IC</eid>
+                  <eid>HC_HC</eid>
                   <linkedTo>O_O</linkedTo>
                   </ChordLine>
                 </Note>
               </Chord>
             <Chord>
-              <eid>JC_JC</eid>
+              <eid>IC_IC</eid>
               <linkedTo>P_P</linkedTo>
               <durationType>quarter</durationType>
               <Spanner type="Slur">
                 <Slur>
-                  <eid>KC_KC</eid>
+                  <eid>JC_JC</eid>
                   <linkedTo>Q_Q</linkedTo>
                   </Slur>
                 <next>
@@ -990,22 +986,22 @@
                 </Spanner>
               <Articulation>
                 <subtype>articStaccatoAbove</subtype>
-                <eid>LC_LC</eid>
+                <eid>KC_KC</eid>
                 <linkedTo>R_R</linkedTo>
                 </Articulation>
               <Note>
-                <eid>MC_MC</eid>
+                <eid>LC_LC</eid>
                 <linkedTo>S_S</linkedTo>
                 <Accidental>
                   <subtype>accidentalSharp</subtype>
-                  <eid>NC_NC</eid>
+                  <eid>MC_MC</eid>
                   </Accidental>
                 <pitch>73</pitch>
                 <tpc>21</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>OC_OC</eid>
+              <eid>NC_NC</eid>
               <linkedTo>U_U</linkedTo>
               <durationType>quarter</durationType>
               <Spanner type="Slur">
@@ -1017,11 +1013,11 @@
                 </Spanner>
               <Articulation>
                 <subtype>articTenutoAbove</subtype>
-                <eid>PC_PC</eid>
+                <eid>OC_OC</eid>
                 <linkedTo>V_V</linkedTo>
                 </Articulation>
               <Note>
-                <eid>QC_QC</eid>
+                <eid>PC_PC</eid>
                 <linkedTo>W_W</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
@@ -1029,54 +1025,54 @@
               </Chord>
             <Fermata>
               <subtype>fermataAbove</subtype>
-              <eid>RC_RC</eid>
+              <eid>QC_QC</eid>
               <linkedTo>X_X</linkedTo>
               </Fermata>
             <Chord>
-              <eid>SC_SC</eid>
+              <eid>RC_RC</eid>
               <linkedTo>Y_Y</linkedTo>
               <durationType>32nd</durationType>
               <grace32/>
               <Note>
-                <eid>TC_TC</eid>
+                <eid>SC_SC</eid>
                 <linkedTo>Z_Z</linkedTo>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>UC_UC</eid>
+              <eid>TC_TC</eid>
               <linkedTo>a_a</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>VC_VC</eid>
+                <eid>UC_UC</eid>
                 <linkedTo>b_b</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <TremoloSingleChord>
                 <subtype>r16</subtype>
-                <eid>WC_WC</eid>
+                <eid>VC_VC</eid>
                 <linkedTo>c_c</linkedTo>
                 </TremoloSingleChord>
               </Chord>
             <BarLine>
               <subtype>double</subtype>
-              <eid>XC_XC</eid>
+              <eid>WC_WC</eid>
               <linkedTo>d_d</linkedTo>
               </BarLine>
             </voice>
           </Measure>
         <Measure>
-          <eid>YC_YC</eid>
+          <eid>XC_XC</eid>
           <voice>
             <KeySig>
-              <eid>ZC_ZC</eid>
+              <eid>YC_YC</eid>
               <linkedTo>f_f</linkedTo>
               <concertKey>4</concertKey>
               </KeySig>
             <TimeSig>
-              <eid>aC_aC</eid>
+              <eid>ZC_ZC</eid>
               <linkedTo>g_g</linkedTo>
               <sigN>3</sigN>
               <sigD>4</sigD>
@@ -1084,7 +1080,7 @@
             <Dynamic>
               <subtype>p</subtype>
               <velocity>49</velocity>
-              <eid>bC_bC</eid>
+              <eid>aC_aC</eid>
               <linkedTo>h_h</linkedTo>
               </Dynamic>
             <Spanner type="Pedal">
@@ -1105,7 +1101,7 @@
               <Volta>
                 <endHookType>1</endHookType>
                 <beginText>1.</beginText>
-                <eid>cC_cC</eid>
+                <eid>bC_bC</eid>
                 <linkedTo>i_i</linkedTo>
                 <endings>1</endings>
                 </Volta>
@@ -1120,7 +1116,7 @@
                 <subtype>0</subtype>
                 <beginHookHeight>-1.9</beginHookHeight>
                 <endHookHeight>-1.9</endHookHeight>
-                <eid>dC_dC</eid>
+                <eid>cC_cC</eid>
                 <linkedTo>j_j</linkedTo>
                 </HairPin>
               <next>
@@ -1130,48 +1126,48 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>eC_eC</eid>
+              <eid>dC_dC</eid>
               <linkedTo>k_k</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>fC_fC</eid>
+                <eid>eC_eC</eid>
                 <linkedTo>l_l</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <Note>
-                <eid>gC_gC</eid>
+                <eid>fC_fC</eid>
                 <linkedTo>m_m</linkedTo>
                 <pitch>78</pitch>
                 <tpc>20</tpc>
                 </Note>
               <Arpeggio>
                 <subtype>0</subtype>
-                <eid>hC_hC</eid>
+                <eid>gC_gC</eid>
                 <linkedTo>n_n</linkedTo>
                 </Arpeggio>
               </Chord>
             <Breath>
               <symbol>caesuraCurved</symbol>
               <pause>2</pause>
-              <eid>iC_iC</eid>
+              <eid>hC_hC</eid>
               <linkedTo>o_o</linkedTo>
               </Breath>
             <Chord>
-              <eid>jC_jC</eid>
+              <eid>iC_iC</eid>
               <linkedTo>p_p</linkedTo>
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>articMarcatoAbove</subtype>
-                <eid>kC_kC</eid>
+                <eid>jC_jC</eid>
                 <linkedTo>q_q</linkedTo>
                 </Articulation>
               <Note>
-                <eid>lC_lC</eid>
+                <eid>kC_kC</eid>
                 <linkedTo>r_r</linkedTo>
                 <Spanner type="Tie">
                   <Tie>
-                    <eid>mC_mC</eid>
+                    <eid>lC_lC</eid>
                     <linkedTo>s_s</linkedTo>
                     </Tie>
                   <next>
@@ -1185,11 +1181,11 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>nC_nC</eid>
+              <eid>mC_mC</eid>
               <linkedTo>t_t</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>oC_oC</eid>
+                <eid>nC_nC</eid>
                 <linkedTo>u_u</linkedTo>
                 <Spanner type="Tie">
                   <prev>
@@ -1205,21 +1201,21 @@
             <Clef>
               <concertClefType>F</concertClefType>
               <transposingClefType>F</transposingClefType>
-              <eid>pC_pC</eid>
+              <eid>oC_oC</eid>
               <linkedTo>v_v</linkedTo>
               </Clef>
             </voice>
           </Measure>
         <Measure>
-          <eid>qC_qC</eid>
+          <eid>pC_pC</eid>
           <voice>
             <KeySig>
-              <eid>rC_rC</eid>
+              <eid>qC_qC</eid>
               <linkedTo>x_x</linkedTo>
               <concertKey>0</concertKey>
               </KeySig>
             <TimeSig>
-              <eid>sC_sC</eid>
+              <eid>rC_rC</eid>
               <linkedTo>y_y</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
@@ -1241,19 +1237,19 @@
             <Spanner type="Trill">
               <Trill>
                 <subtype>trill</subtype>
-                <eid>tC_tC</eid>
+                <eid>sC_sC</eid>
                 <linkedTo>z_z</linkedTo>
                 <lineWidth>0.1488</lineWidth>
                 <Ornament>
                   <Chord>
-                    <eid>uC_uC</eid>
+                    <eid>tC_tC</eid>
                     <small>1</small>
                     <Note>
-                      <eid>vC_vC</eid>
+                      <eid>uC_uC</eid>
                       <parentheses>both</parentheses>
                       <Accidental>
                         <subtype>accidentalSharp</subtype>
-                        <eid>wC_wC</eid>
+                        <eid>vC_vC</eid>
                         </Accidental>
                       <pitch>75</pitch>
                       <tpc>23</tpc>
@@ -1267,7 +1263,7 @@
                     </Chord>
                   <intervalAbove>third,major</intervalAbove>
                   <subtype>ornamentTrill</subtype>
-                  <eid>xC_xC</eid>
+                  <eid>wC_wC</eid>
                   <linkedTo>3_3</linkedTo>
                   </Ornament>
                 </Trill>
@@ -1278,11 +1274,11 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>yC_yC</eid>
+              <eid>xC_xC</eid>
               <linkedTo>4_4</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>zC_zC</eid>
+                <eid>yC_yC</eid>
                 <linkedTo>5_5</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
@@ -1296,37 +1292,37 @@
                 </prev>
               </Spanner>
             <Chord>
-              <eid>0C_0C</eid>
+              <eid>zC_zC</eid>
               <linkedTo>6_6</linkedTo>
               <durationType>half</durationType>
               <duration>1/4</duration>
               <Note>
-                <eid>1C_1C</eid>
+                <eid>0C_0C</eid>
                 <linkedTo>7_7</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <TremoloTwoChord>
                 <subtype>c32</subtype>
-                <eid>2C_2C</eid>
+                <eid>1C_1C</eid>
                 <linkedTo>8_8</linkedTo>
                 <l1>22</l1>
                 <l2>22</l2>
                 </TremoloTwoChord>
               </Chord>
             <Chord>
-              <eid>3C_3C</eid>
+              <eid>2C_2C</eid>
               <linkedTo>9_9</linkedTo>
               <durationType>half</durationType>
               <duration>1/4</duration>
               <Note>
-                <eid>4C_4C</eid>
+                <eid>3C_3C</eid>
                 <linkedTo>+_+</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <eid>5C_5C</eid>
+                    <eid>4C_4C</eid>
                     <linkedTo>/_/</linkedTo>
                     <diagonal>1</diagonal>
                     </Glissando>
@@ -1339,11 +1335,11 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>6C_6C</eid>
+              <eid>5C_5C</eid>
               <linkedTo>AB_AB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>7C_7C</eid>
+                <eid>6C_6C</eid>
                 <linkedTo>BB_BB</linkedTo>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
@@ -1359,18 +1355,18 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
-              <eid>8C_8C</eid>
+              <eid>7C_7C</eid>
               <linkedTo>CB_CB</linkedTo>
               </Clef>
             </voice>
           </Measure>
         <Measure>
-          <eid>9C_9C</eid>
+          <eid>8C_8C</eid>
           <voice>
             <Spanner type="Pedal">
               <Pedal>
                 <endHookType>1</endHookType>
-                <eid>+C_+C</eid>
+                <eid>9C_9C</eid>
                 <linkedTo>EB_EB</linkedTo>
                 </Pedal>
               <next>
@@ -1382,7 +1378,7 @@
             <Spanner type="Ottava">
               <Ottava>
                 <subtype>8va</subtype>
-                <eid>/C_/C</eid>
+                <eid>+C_+C</eid>
                 <linkedTo>FB_FB</linkedTo>
                 </Ottava>
               <next>
@@ -1392,33 +1388,33 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>AD_AD</eid>
+              <eid>/C_/C</eid>
               <linkedTo>GB_GB</linkedTo>
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>articAccentAbove</subtype>
-                <eid>BD_BD</eid>
+                <eid>AD_AD</eid>
                 <linkedTo>HB_HB</linkedTo>
                 </Articulation>
               <Note>
-                <eid>CD_CD</eid>
+                <eid>BD_BD</eid>
                 <linkedTo>IB_IB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 <ChordLine>
                   <subtype>1</subtype>
-                  <eid>DD_DD</eid>
+                  <eid>CD_CD</eid>
                   <linkedTo>JB_JB</linkedTo>
                   </ChordLine>
                 </Note>
               </Chord>
             <Chord>
-              <eid>ED_ED</eid>
+              <eid>DD_DD</eid>
               <linkedTo>KB_KB</linkedTo>
               <durationType>quarter</durationType>
               <Spanner type="Slur">
                 <Slur>
-                  <eid>FD_FD</eid>
+                  <eid>ED_ED</eid>
                   <linkedTo>LB_LB</linkedTo>
                   </Slur>
                 <next>
@@ -1429,22 +1425,22 @@
                 </Spanner>
               <Articulation>
                 <subtype>articStaccatoAbove</subtype>
-                <eid>GD_GD</eid>
+                <eid>FD_FD</eid>
                 <linkedTo>MB_MB</linkedTo>
                 </Articulation>
               <Note>
-                <eid>HD_HD</eid>
+                <eid>GD_GD</eid>
                 <linkedTo>NB_NB</linkedTo>
                 <Accidental>
                   <subtype>accidentalSharp</subtype>
-                  <eid>ID_ID</eid>
+                  <eid>HD_HD</eid>
                   </Accidental>
                 <pitch>73</pitch>
                 <tpc>21</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>JD_JD</eid>
+              <eid>ID_ID</eid>
               <linkedTo>PB_PB</linkedTo>
               <durationType>quarter</durationType>
               <Spanner type="Slur">
@@ -1456,59 +1452,54 @@
                 </Spanner>
               <Articulation>
                 <subtype>articTenutoAbove</subtype>
-                <eid>KD_KD</eid>
+                <eid>JD_JD</eid>
                 <linkedTo>QB_QB</linkedTo>
                 </Articulation>
               <Note>
-                <eid>LD_LD</eid>
+                <eid>KD_KD</eid>
                 <linkedTo>RB_RB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               </Chord>
-            <Fermata>
-              <subtype>fermataAbove</subtype>
-              <eid>MD_MD</eid>
-              <linkedTo>SB_SB</linkedTo>
-              </Fermata>
             <Chord>
-              <eid>ND_ND</eid>
-              <linkedTo>TB_TB</linkedTo>
+              <eid>LD_LD</eid>
+              <linkedTo>SB_SB</linkedTo>
               <durationType>32nd</durationType>
               <grace32/>
               <Note>
-                <eid>OD_OD</eid>
-                <linkedTo>UB_UB</linkedTo>
+                <eid>MD_MD</eid>
+                <linkedTo>TB_TB</linkedTo>
                 <pitch>59</pitch>
                 <tpc>19</tpc>
                 </Note>
               </Chord>
             <Chord>
-              <eid>PD_PD</eid>
-              <linkedTo>VB_VB</linkedTo>
+              <eid>ND_ND</eid>
+              <linkedTo>UB_UB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>QD_QD</eid>
-                <linkedTo>WB_WB</linkedTo>
+                <eid>OD_OD</eid>
+                <linkedTo>VB_VB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <TremoloSingleChord>
                 <subtype>r16</subtype>
-                <eid>RD_RD</eid>
-                <linkedTo>XB_XB</linkedTo>
+                <eid>PD_PD</eid>
+                <linkedTo>WB_WB</linkedTo>
                 </TremoloSingleChord>
               </Chord>
             </voice>
           </Measure>
         <Measure>
-          <eid>SD_SD</eid>
+          <eid>QD_QD</eid>
           <voice>
             <Dynamic>
               <subtype>p</subtype>
               <velocity>49</velocity>
-              <eid>TD_TD</eid>
-              <linkedTo>ZB_ZB</linkedTo>
+              <eid>RD_RD</eid>
+              <linkedTo>YB_YB</linkedTo>
               </Dynamic>
             <Spanner type="Pedal">
               <prev>
@@ -1529,8 +1520,8 @@
                 <subtype>0</subtype>
                 <beginHookHeight>-1.9</beginHookHeight>
                 <endHookHeight>-1.9</endHookHeight>
-                <eid>UD_UD</eid>
-                <linkedTo>aB_aB</linkedTo>
+                <eid>SD_SD</eid>
+                <linkedTo>ZB_ZB</linkedTo>
                 </HairPin>
               <next>
                 <location>
@@ -1539,49 +1530,49 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>VD_VD</eid>
-              <linkedTo>bB_bB</linkedTo>
+              <eid>TD_TD</eid>
+              <linkedTo>aB_aB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>WD_WD</eid>
-                <linkedTo>cB_cB</linkedTo>
+                <eid>UD_UD</eid>
+                <linkedTo>bB_bB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <Note>
-                <eid>XD_XD</eid>
-                <linkedTo>dB_dB</linkedTo>
+                <eid>VD_VD</eid>
+                <linkedTo>cB_cB</linkedTo>
                 <pitch>78</pitch>
                 <tpc>20</tpc>
                 </Note>
               <Arpeggio>
                 <subtype>0</subtype>
-                <eid>YD_YD</eid>
-                <linkedTo>fB_fB</linkedTo>
+                <eid>WD_WD</eid>
+                <linkedTo>eB_eB</linkedTo>
                 </Arpeggio>
               </Chord>
             <Breath>
               <symbol>caesuraCurved</symbol>
               <pause>2</pause>
-              <eid>ZD_ZD</eid>
-              <linkedTo>gB_gB</linkedTo>
+              <eid>XD_XD</eid>
+              <linkedTo>fB_fB</linkedTo>
               </Breath>
             <Chord>
-              <eid>aD_aD</eid>
-              <linkedTo>hB_hB</linkedTo>
+              <eid>YD_YD</eid>
+              <linkedTo>gB_gB</linkedTo>
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>articMarcatoAbove</subtype>
-                <eid>bD_bD</eid>
-                <linkedTo>iB_iB</linkedTo>
+                <eid>ZD_ZD</eid>
+                <linkedTo>hB_hB</linkedTo>
                 </Articulation>
               <Note>
-                <eid>cD_cD</eid>
-                <linkedTo>jB_jB</linkedTo>
+                <eid>aD_aD</eid>
+                <linkedTo>iB_iB</linkedTo>
                 <Spanner type="Tie">
                   <Tie>
-                    <eid>dD_dD</eid>
-                    <linkedTo>kB_kB</linkedTo>
+                    <eid>bD_bD</eid>
+                    <linkedTo>jB_jB</linkedTo>
                     </Tie>
                   <next>
                     <location>
@@ -1594,12 +1585,12 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>eD_eD</eid>
-              <linkedTo>lB_lB</linkedTo>
+              <eid>cD_cD</eid>
+              <linkedTo>kB_kB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>fD_fD</eid>
-                <linkedTo>mB_mB</linkedTo>
+                <eid>dD_dD</eid>
+                <linkedTo>lB_lB</linkedTo>
                 <Spanner type="Tie">
                   <prev>
                     <location>
@@ -1614,8 +1605,8 @@
             <Clef>
               <concertClefType>F</concertClefType>
               <transposingClefType>F</transposingClefType>
-              <eid>gD_gD</eid>
-              <linkedTo>nB_nB</linkedTo>
+              <eid>eD_eD</eid>
+              <linkedTo>mB_mB</linkedTo>
               </Clef>
             <Spanner type="HairPin">
               <prev>
@@ -1627,19 +1618,19 @@
             <Spanner type="Trill">
               <Trill>
                 <subtype>trill</subtype>
-                <eid>hD_hD</eid>
-                <linkedTo>oB_oB</linkedTo>
+                <eid>fD_fD</eid>
+                <linkedTo>nB_nB</linkedTo>
                 <lineWidth>0.1488</lineWidth>
                 <Ornament>
                   <Chord>
-                    <eid>iD_iD</eid>
+                    <eid>gD_gD</eid>
                     <small>1</small>
                     <Note>
-                      <eid>jD_jD</eid>
+                      <eid>hD_hD</eid>
                       <parentheses>both</parentheses>
                       <Accidental>
                         <subtype>accidentalSharp</subtype>
-                        <eid>kD_kD</eid>
+                        <eid>iD_iD</eid>
                         </Accidental>
                       <pitch>75</pitch>
                       <tpc>23</tpc>
@@ -1653,8 +1644,8 @@
                     </Chord>
                   <intervalAbove>third,major</intervalAbove>
                   <subtype>ornamentTrill</subtype>
-                  <eid>lD_lD</eid>
-                  <linkedTo>sB_sB</linkedTo>
+                  <eid>jD_jD</eid>
+                  <linkedTo>rB_rB</linkedTo>
                   </Ornament>
                 </Trill>
               <next>
@@ -1665,12 +1656,12 @@
                 </next>
               </Spanner>
             <Chord>
-              <eid>mD_mD</eid>
-              <linkedTo>tB_tB</linkedTo>
+              <eid>kD_kD</eid>
+              <linkedTo>sB_sB</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>nD_nD</eid>
-                <linkedTo>uB_uB</linkedTo>
+                <eid>lD_lD</eid>
+                <linkedTo>tB_tB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
@@ -1678,7 +1669,7 @@
             </voice>
           </Measure>
         <Measure>
-          <eid>oD_oD</eid>
+          <eid>mD_mD</eid>
           <voice>
             <Spanner type="Trill">
               <prev>
@@ -1689,38 +1680,38 @@
                 </prev>
               </Spanner>
             <Chord>
-              <eid>pD_pD</eid>
-              <linkedTo>wB_wB</linkedTo>
+              <eid>nD_nD</eid>
+              <linkedTo>vB_vB</linkedTo>
               <durationType>half</durationType>
               <duration>1/4</duration>
               <Note>
-                <eid>qD_qD</eid>
-                <linkedTo>xB_xB</linkedTo>
+                <eid>oD_oD</eid>
+                <linkedTo>wB_wB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
               <TremoloTwoChord>
                 <subtype>c32</subtype>
-                <eid>rD_rD</eid>
-                <linkedTo>yB_yB</linkedTo>
+                <eid>pD_pD</eid>
+                <linkedTo>xB_xB</linkedTo>
                 <l1>0</l1>
                 <l2>0</l2>
                 </TremoloTwoChord>
               </Chord>
             <Chord>
-              <eid>sD_sD</eid>
-              <linkedTo>zB_zB</linkedTo>
+              <eid>qD_qD</eid>
+              <linkedTo>yB_yB</linkedTo>
               <durationType>half</durationType>
               <duration>1/4</duration>
               <Note>
-                <eid>tD_tD</eid>
-                <linkedTo>0B_0B</linkedTo>
+                <eid>rD_rD</eid>
+                <linkedTo>zB_zB</linkedTo>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <eid>uD_uD</eid>
-                    <linkedTo>1B_1B</linkedTo>
+                    <eid>sD_sD</eid>
+                    <linkedTo>0B_0B</linkedTo>
                     <diagonal>1</diagonal>
                     </Glissando>
                   <next>
@@ -1732,12 +1723,12 @@
                 </Note>
               </Chord>
             <Chord>
-              <eid>vD_vD</eid>
-              <linkedTo>2B_2B</linkedTo>
+              <eid>tD_tD</eid>
+              <linkedTo>1B_1B</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <eid>wD_wD</eid>
-                <linkedTo>3B_3B</linkedTo>
+                <eid>uD_uD</eid>
+                <linkedTo>2B_2B</linkedTo>
                 <pitch>65</pitch>
                 <tpc>13</tpc>
                 <Spanner type="Glissando">
@@ -1752,12 +1743,12 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
-              <eid>xD_xD</eid>
-              <linkedTo>4B_4B</linkedTo>
+              <eid>vD_vD</eid>
+              <linkedTo>3B_3B</linkedTo>
               </Clef>
             <Rest>
-              <eid>yD_yD</eid>
-              <linkedTo>5B_5B</linkedTo>
+              <eid>wD_wD</eid>
+              <linkedTo>4B_4B</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
             </voice>
