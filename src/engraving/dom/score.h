@@ -620,6 +620,7 @@ public:
 
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
+    std::vector<Part*> visibleParts() const;
     std::vector<SharedPart*> sharedParts() const;
     bool hasSharedParts() const;
 

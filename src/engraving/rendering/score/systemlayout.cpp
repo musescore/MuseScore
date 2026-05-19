@@ -109,8 +109,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     bool firstSysLongName = ctx.conf().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                             == InstrumentLabelVisibility::LONG;
-    bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
-                           == InstrumentLabelVisibility::LONG;
     if (measure) {
         ctx.mutState().setFirstSystem(measure->sectionBreak() && !ctx.conf().isFloatMode());
         if (const LayoutBreak* layoutBreak = measure->sectionBreakElement()) {
@@ -130,10 +128,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
-
-    Fraction lcmTick = ctx.state().curMeasure()->tick();
-    bool longNames = ctx.mutState().firstSystem() ? ctx.mutState().startWithLongNames() : subsSysLongName;
-    SystemHeaderLayout::setInstrumentNames(system, ctx, longNames, lcmTick);
 
     double curSysWidth = 0.0;
     double leadingHBoxesWidth = 0.0;
@@ -2108,6 +2102,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadi
     SystemHeaderLayout::layoutBrackets(system, ctx);
     double maxBracketsWidth = SystemHeaderLayout::totalBracketOffset(ctx);
 
+    SystemHeaderLayout::setInstrumentNames(system, ctx);
     SystemHeaderLayout::computeInstrumentNamesWidth(system, ctx);
     double maxNamesWidth = system->ldata()->totalNamesWidth();
     double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;

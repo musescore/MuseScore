@@ -5773,6 +5773,20 @@ size_t Score::visiblePartCount() const
     return count;
 }
 
+std::vector<Part*> Score::visibleParts() const
+{
+    std::vector<Part*> result;
+    result.reserve(m_parts.size());
+
+    for (Part* p : m_parts) {
+        if (p->show()) {
+            result.push_back(p);
+        }
+    }
+
+    return result;
+}
+
 std::vector<SharedPart*> Score::sharedParts() const
 {
     std::vector<SharedPart*> sharedParts;

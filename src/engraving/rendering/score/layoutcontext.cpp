@@ -160,6 +160,14 @@ size_t DomAccessor::visiblePartCount() const
     return score()->visiblePartCount();
 }
 
+std::vector<Part*> DomAccessor::visibleParts() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return {};
+    }
+    return score()->visibleParts();
+}
+
 size_t DomAccessor::npages() const
 {
     IF_ASSERT_FAILED(score()) {

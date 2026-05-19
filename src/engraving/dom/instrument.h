@@ -281,7 +281,7 @@ public:
 
     bool isDifferentInstrument(const Instrument& i) const;
 
-    String id() const { return m_id; }
+    const String& id() const { return m_id; }
     const String& soundId() const { return m_soundId; }
     void setSoundId(const String& id) { m_soundId = id; }
     String family() const;

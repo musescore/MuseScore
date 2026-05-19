@@ -50,6 +50,8 @@ void SharedPart::addOriginPart(Part* p)
     }
 
     p->setSharedPart(this);
+
+    computeIsSameInstruments();
 }
 
 void SharedPart::removeOriginPart(Part* p)
@@ -57,6 +59,8 @@ void SharedPart::removeOriginPart(Part* p)
     DO_ASSERT(muse::remove(m_originParts, p));
 
     p->setSharedPart(nullptr);
+
+    computeIsSameInstruments();
 }
 
 const SharedTrackMap& SharedPart::trackMapAtTick(const Fraction& tick) const
@@ -100,6 +104,36 @@ void mu::engraving::SharedPart::removeMapsBetweenTicks(const Fraction& startTick
         }
         iter = m_trackMapsByTick.erase(iter);
     }
+}
+
+bool SharedPart::hasTracksMappedToStaff(staff_idx_t absStaffIdx, const Fraction& tick) const
+{
+    const SharedTrackMap& trackMap = trackMapAtTick(tick);
+    for (const auto& pair : trackMap) {
+        if (track2staff(pair.second) == absStaffIdx) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void SharedPart::computeIsSameInstruments()
+{
+    IF_ASSERT_FAILED(m_originParts.size() > 0) {
+        m_isSameInstruments = false;
+        return;
+    }
+
+    const Instrument* instr = m_originParts.front()->instrument();
+    for (Part* p : m_originParts) {
+        if (p->instrument()->id() != instr->id()) {
+            m_isSameInstruments = false;
+            return;
+        }
+    }
+
+    m_isSameInstruments = true;
 }
 
 mu::engraving::String mu::engraving::SharedPart::partName() const

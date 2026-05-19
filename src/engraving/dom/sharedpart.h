@@ -51,8 +51,14 @@ public:
     const SharedTrackMap& trackMapAtTick(const Fraction& tick) const;
     void setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick);
     void removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick);
+    bool hasTracksMappedToStaff(staff_idx_t absStaffIdx, const Fraction& tick) const;
+
+    bool isSameInstruments() const { return m_isSameInstruments; }
 
 private:
+    void computeIsSameInstruments();
+    bool m_isSameInstruments = true;
+
     bool m_enabled = true;
     std::vector<Part*> m_originParts;
     std::map<Fraction, SharedTrackMap> m_trackMapsByTick { { Fraction(0, 1), SharedTrackMap() } };
