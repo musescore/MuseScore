@@ -102,6 +102,8 @@ void EditStaveSharing::toggleStaveSharing(Transaction& tx, Score* score, bool on
         cmdCreateSharedStaves(tx, score);
     }
 
+    score->setBracketsAndBarlines();
+
     score->update();
 }
 
