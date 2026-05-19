@@ -4,7 +4,7 @@ trap 'code=$?; echo "error: make_appimage.sh: command \`$BASH_COMMAND\` exited w
 
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
-PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
+PACKARCH="$3" # architecture (x86_64, aarch64)
 
 if [ "$4" == "--build-pipewire" ]; then
   BUILD_PIPEWIRE=true
@@ -16,8 +16,6 @@ if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
 if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
 if [ -z "$PACKARCH" ]; then 
   PACKARCH="x86_64"
-elif [ "$PACKARCH" == "armv7l" ]; then
-  PACKARCH="armhf"
 fi
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -30,11 +28,6 @@ mkdir -p $BUILD_TOOLS
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
 ##########################################################################
 
-if [ "$PACKARCH" == "armhf" ]; then
-  # In a Docker container, AppImages cannot run normally because of problems with FUSE.
-  export APPIMAGE_EXTRACT_AND_RUN=1
-fi
-
 function download_github_release()
 {
   local -r repo_slug="$1" release_tag="$2" file="$3"
@@ -45,8 +38,6 @@ function download_github_release()
   fi
 
   echo "try download: ${url}"
-  
-  # use curl instead of wget which fails on armhf
   curl "${url}" -O -L
   chmod +x "${file}"
   echo "downloaded: ${file}"
