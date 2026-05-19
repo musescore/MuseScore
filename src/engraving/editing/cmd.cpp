@@ -1310,7 +1310,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
 //    return size of actual gap in local time
 //---------------------------------------------------------
 
-Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord)
+Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd, Tuplet* tuplet, bool keepChord, bool deleteAnnotations)
 {
     assert(_sd.numerator());
 
@@ -1467,7 +1467,8 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // Delete annotations that require an anchor to the previous segment
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
-        if (s1 && s2 && (*s2) > (*s1)) {
+        const bool segsValid = s1 && s2 && (*s2) > (*s1);
+        if (segsValid && deleteAnnotations) {
             for (Segment* s = s1; s && s != s2; s = s->next1()) {
                 const auto annotations = s->annotations(); // make a copy since we alter the list
                 for (EngravingItem* annotation : annotations) {
@@ -1485,7 +1486,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     return accumulated;
 }
 
-bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick)
+bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fraction& tick, bool deleteAnnotations)
 {
     ChordRest* cr = 0;
     cr = toChordRest(seg->element(track));
@@ -1499,7 +1500,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
                 }
                 // this happens only for voices other than voice 1
                 expandVoice(seg, track);
-                return makeGapVoice(seg, track, len, tick);
+                return makeGapVoice(seg, track, len, tick, deleteAnnotations);
             }
             if (seg1->element(track)) {
                 break;
@@ -1562,7 +1563,7 @@ bool Score::makeGapVoice(Segment* seg, track_idx_t track, Fraction len, const Fr
             LOGD("cannot make gap");
             return false;
         }
-        Fraction l = makeGap(cr->segment(), cr->track(), len, 0);
+        Fraction l = makeGap(cr->segment(), cr->track(), len, nullptr, /*keepChord*/ false, deleteAnnotations);
         if (l.isZero()) {
             LOGD("returns zero gap");
             return false;

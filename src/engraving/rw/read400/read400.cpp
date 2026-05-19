@@ -336,7 +336,7 @@ bool Read400::preparePasteDurationElement(Score* score, const Fraction& tick, co
     }
 
     // First make a gap for as long as we need...
-    IF_ASSERT_FAILED(score->makeGapVoice(pasteDestinationSeg, track, ticks, tick)) {
+    IF_ASSERT_FAILED(score->makeGapVoice(pasteDestinationSeg, track, ticks, tick, /*deleteAnnotations*/ false)) {
         return false;
     }
 
