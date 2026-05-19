@@ -24,6 +24,7 @@
 #include <array>
 #include <vector>
 
+#include "../dom/mscore.h"
 #include "global/types/string.h"
 
 #include "../types/propertyvalue.h"
@@ -2269,5 +2270,14 @@ public:
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;
+
+    static double DEFAULT_SMUFL_POINT_SIZE()
+    {
+        const double DEFAULT_SPATIUM = styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
+        const double DEFAULT_SPATIUM_IN_POINT_UNITS = DEFAULT_SPATIUM / mu::engraving::DPI * mu::engraving::PPI;
+        const double DEFAULT_SMUFL_POINT_SIZE = 4 * DEFAULT_SPATIUM_IN_POINT_UNITS; // By Smufl spec the spatium is 1/4 of the em
+
+        return DEFAULT_SMUFL_POINT_SIZE;
+    }
 };
 }
