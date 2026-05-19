@@ -519,6 +519,8 @@ public:
 
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
+    Measure* undoGetMeasure(const Fraction& tick);
+
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
     GuitarBend* addGuitarBend(GuitarBendType type, Note* note, Note* endNote = nullptr);
@@ -809,7 +811,6 @@ public:
     bool getPosition(Position* pos, const PointF&, voice_idx_t voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
-    Measure* getCreateMeasure(const Fraction& tick);
 
     void adjustBracketsDel(size_t sidx, size_t eidx);
     void adjustBracketsIns(size_t sidx, size_t eidx);
