@@ -81,6 +81,7 @@
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
+#include "stavesharinglayout.h"
 #include "systemheaderlayout.h"
 
 #include "defer.h"
@@ -151,9 +152,16 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
                                    ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
 
+    if (systemLock) {
+        StaveSharingLayout::updateStaveSharingForFullSystem(systemLock->startMB(), systemLock->endMB(), ctx);
+    }
+
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
+        if (!systemLock) {
+            StaveSharingLayout::updateStaveSharingForLastAddedMeasure(system, ctx);
+        }
         MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
 
         if (ctx.state().curMeasure()->isMeasure()) {
@@ -201,7 +209,6 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         } else {
             // vbox:
             MeasureLayout::getNextMeasure(ctx);
-            MeasureLayout::layoutMeasure(ctx.mutState().curMeasure(), ctx);
             SystemLayout::layout2(system, ctx);         // compute staff distances
             return system;
         }

@@ -24,7 +24,8 @@
 #include "part.h"
 
 namespace mu::engraving {
-using SharedTracksMap = std::map<track_idx_t, track_idx_t>;
+// Map from origin track to shared track
+using SharedTrackMap = std::map<track_idx_t, track_idx_t>;
 
 class SharedPart final : public Part
 {
@@ -36,7 +37,7 @@ public:
 
     void addOriginPart(Part* p);
     void removeOriginPart(Part* p);
-    const std::vector<Part*> originParts() const { return m_originParts; }
+    const std::vector<Part*>& originParts() const { return m_originParts; }
 
     String partName() const override;
 
@@ -47,9 +48,13 @@ public:
     bool enabled() const;
     bool show() const override;
 
+    const SharedTrackMap& trackMapAtTick(const Fraction& tick) const;
+    void setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick);
+    void removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick);
+
 private:
     bool m_enabled = true;
     std::vector<Part*> m_originParts;
-    std::map<Fraction, SharedTracksMap> m_trackMaps;
+    std::map<Fraction, SharedTrackMap> m_trackMapsByTick { { Fraction(0, 1), SharedTrackMap() } };
 };
 }

@@ -252,7 +252,11 @@ void Part::removeStaff(Staff* staff)
 
 bool Part::show() const
 {
-    bool sharedPartEnabled = m_sharedPart && m_sharedPart->enabled();
+    if (score()->configuration()->debuggingOptions().showOriginAndCombinedStaves) {
+        return m_show;
+    }
+
+    bool sharedPartEnabled = sharedPart() && sharedPart()->enabled();
     return m_show && !sharedPartEnabled;
 }
 

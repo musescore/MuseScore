@@ -302,6 +302,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lastSystemFillLimit,                        PropertyValue(0.3)),
 
     styleDef(enableStaveSharing,                         false),
+    styleDef(allowVoiceCrossing,                         false),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),
     styleDef(hairpinPosAbove,                            PointF(0.0, -1.75)),

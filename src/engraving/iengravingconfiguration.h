@@ -105,6 +105,7 @@ public:
         bool markEmptyStaffVisibilityOverrides = false;
         bool markCorruptedMeasures = true;
         bool showGapRests = false;
+        bool showOriginAndCombinedStaves = false;
 
         bool anyEnabled() const
         {
@@ -119,6 +120,7 @@ public:
                    || markEmptyStaffVisibilityOverrides
                    || markCorruptedMeasures
                    || showGapRests
+                   || showOriginAndCombinedStaves
             ;
         }
     };
