@@ -134,7 +134,7 @@ int BracketSettingsModel::maxBracketColumnPosition() const
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
     const Score* score = bracketItem->score();
-    int bracketStartIndex = static_cast<int>(bracketItem->startStaff()->idx());
+    int bracketStartIndex = static_cast<int>(bracketItem->startStaffIdx());
     int bracketEndIndex = bracketStartIndex + static_cast<int>(bracketItem->bracketSpan()) - 1;
 
     int count = 0;
@@ -162,7 +162,7 @@ int BracketSettingsModel::maxBracketSpanStaves() const
     }
 
     const BracketItem* bracketItem = toBracketItem(m_elementList.front());
-    return static_cast<int>(bracketItem->score()->nstaves()) - static_cast<int>(bracketItem->startStaff()->idx());
+    return static_cast<int>(bracketItem->score()->nstaves()) - static_cast<int>(bracketItem->startStaffIdx());
 }
 
 bool BracketSettingsModel::isGroupBracket() const

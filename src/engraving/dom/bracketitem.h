@@ -53,7 +53,6 @@ public:
     staff_idx_t startStaffIdx() const { return m_startStaffIdx; }
     void setStartStaffIdx(staff_idx_t staffIdx) { m_startStaffIdx = staffIdx; }
     Staff* startStaff() const;
-    void setStartStaff(Staff* staff);
     size_t column() const { return m_column; }
     void setColumn(size_t v) { m_column = v; }
 

@@ -49,11 +49,6 @@ Staff* BracketItem::startStaff() const
     return score() ? score()->staff(m_startStaffIdx) : nullptr;
 }
 
-void BracketItem::setStartStaff(Staff* staff)
-{
-    setStartStaffIdx(staff ? staff->idx() : muse::nidx);
-}
-
 PropertyValue BracketItem::getProperty(Pid id) const
 {
     switch (id) {
