@@ -58,7 +58,7 @@ static bool saveBraille(MasterScore* score, const String& saveName)
         return false;
     }
 
-    bool res = Braille(score, mu::braille::BrailleIntervalDirection::Auto).write(file);
+    bool res = Braille(score, mu::braille::BrailleIntervalDirection::Auto, mu::braille::BrailleVoiceOrder::Auto).write(file);
     file.close();
     return res;
 }

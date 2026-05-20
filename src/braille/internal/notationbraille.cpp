@@ -75,6 +75,13 @@ void NotationBraille::init()
         doBraille(true);
     });
 
+    setVoiceOrder(brailleConfiguration()->voiceOrder());
+    brailleConfiguration()->voiceOrderChanged().onNotify(this, [this]() {
+        BrailleVoiceOrder order = brailleConfiguration()->voiceOrder();
+        setVoiceOrder(order);
+        doBraille(true);
+    });
+
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         if (notation()) {
             notation()->interaction()->selectionChanged().onNotify(this, [this]() {
@@ -157,7 +164,7 @@ void NotationBraille::doBraille(bool force)
 
             if (!m) {
                 brailleEngravingItemList()->clear();
-                Braille lb(score(), brailleConfiguration()->intervalDirection());
+                Braille lb(score(), brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder());
                 bool res = lb.convertItem(e, brailleEngravingItemList());
                 if (!res) {
                     QString txt = e->accessibleInfo();
@@ -171,7 +178,7 @@ void NotationBraille::doBraille(bool force)
             } else {
                 if (m != current_measure || force) {
                     brailleEngravingItemList()->clear();
-                    Braille lb(score(), brailleConfiguration()->intervalDirection());
+                    Braille lb(score(), brailleConfiguration()->intervalDirection(), brailleConfiguration()->voiceOrder());
                     lb.convertMeasure(m, brailleEngravingItemList());
                     setBrailleInfo(brailleEngravingItemList()->brailleStr());
                     current_measure = m;
@@ -230,6 +237,11 @@ ValCh<BrailleIntervalDirection> NotationBraille::intervalDirection() const
     return m_intervalDirection;
 }
 
+ValCh<BrailleVoiceOrder> NotationBraille::voiceOrder() const
+{
+    return m_voiceOrder;
+}
+
 ValCh<int> NotationBraille::mode() const
 {
     return m_mode;
@@ -254,6 +266,14 @@ void NotationBraille::setIntervalDirection(const BrailleIntervalDirection direct
         return;
     }
     m_intervalDirection.set(direction);
+}
+
+void NotationBraille::setVoiceOrder(const BrailleVoiceOrder order)
+{
+    if (order == m_voiceOrder.val) {
+        return;
+    }
+    m_voiceOrder.set(order);
 }
 
 BrailleEngravingItemList* NotationBraille::brailleEngravingItemList()
