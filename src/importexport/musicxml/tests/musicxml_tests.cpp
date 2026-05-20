@@ -1252,6 +1252,9 @@ TEST_F(MusicXml_Tests, tempo3) {
 TEST_F(MusicXml_Tests, tempo4) {
     musicXmlIoTestRef("testTempo4");
 }
+TEST_F(MusicXml_Tests, metronome) {
+    musicXmlIoTest("testMetronome");
+}
 TEST_F(MusicXml_Tests, tempo5) {
     musicXmlIoTest("testTempo5");
 }
