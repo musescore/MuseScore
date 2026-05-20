@@ -445,7 +445,7 @@ void TDraw::draw(const ActionIcon* item, Painter* painter, const PaintOptions&)
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->ldata();
     painter->setFont(item->iconFont());
-    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
+    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, muse::draw::TextDontClip, Char(item->icon()));
 }
 
 void TDraw::draw(const Ambitus* item, Painter* painter, const PaintOptions& opt)
@@ -979,7 +979,8 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
             const char* l = item->label[idx];
             painter->setFont(f);
             painter->drawText(RectF(x2, y2, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
 
             y = y2;
@@ -1012,7 +1013,8 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
             double ty = y2;       // - _spatium;
             painter->setFont(f);
             painter->drawText(RectF(x2, ty, .0, .0),
-                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom,
+                              muse::draw::TextDontClip,
                               String::fromAscii(l));
         } else {
             // down
@@ -1297,7 +1299,10 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
     Pen pen(item->figuredBass()->curColor(opt), FiguredBass::FB_CONTLINE_THICKNESS.toAbsolute(_spatium), PenStyle::SolidLine,
             PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(),
+                      muse::draw::AlignLeft | muse::draw::AlignTop,
+                      muse::draw::TextDontClip,
+                      ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1342,6 +1347,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter, const PaintOptio
         int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
         painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()),
                           muse::draw::AlignLeft | muse::draw::AlignTop,
+                          muse::draw::TextDontClip,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
@@ -1502,10 +1508,13 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
                 painter->drawText(RectF(-ldata->fretNumPadding, .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignVCenter | muse::draw::AlignRight,
+                                  muse::draw::TextDontClip,
+                                  text);
             } else {
                 painter->drawText(RectF(x2 + ldata->fretNumPadding, .0, .0, ldata->fretDist),
-                                  muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  muse::draw::AlignVCenter | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
                                   text);
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1514,10 +1523,14 @@ void TDraw::draw(const FretDiagram* item, Painter* painter, const PaintOptions& 
             painter->rotate(90);
             if (item->numPos() == 0) {
                 painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
-                                  muse::draw::AlignLeft | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
+                                  text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0),
-                                  muse::draw::AlignBottom | muse::draw::AlignLeft | muse::draw::TextDontClip, text);
+                                  muse::draw::AlignBottom | muse::draw::AlignLeft,
+                                  muse::draw::TextDontClip,
+                                  text);
             }
             painter->restore();
         }
@@ -2995,7 +3008,7 @@ void TDraw::draw(const SoundFlag* item, Painter* painter, const PaintOptions& op
 
     painter->setFont(item->iconFont());
     painter->setPen(!item->selected() ? item->curColor(true, opt) : Color::WHITE);
-    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
+    painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, muse::draw::TextDontClip, Char(item->iconCode()));
 }
 
 void TDraw::draw(const TabDurationSymbol* item, Painter* painter, const PaintOptions& opt)
