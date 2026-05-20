@@ -100,7 +100,7 @@
           <Spanner type="Pedal">
             <Pedal>
               <continueText>&lt;font size=&quot;11&quot;/&gt;</continueText>
-              <endHookHeight>-1.5</endHookHeight>
+              <endHookHeight>1.5</endHookHeight>
               <eid>I_I</eid>
               </Pedal>
             <next>
