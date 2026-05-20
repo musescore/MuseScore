@@ -1,0 +1,93 @@
+﻿/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <qqmlintegration.h>
+
+#include "propertiespanelabstractmodel.h"
+#include "playback/playbackproxymodel.h"
+#include "appearance/appearancesettingsmodel.h"
+
+namespace mu::propertiespanel {
+class GeneralSettingsModel : public PropertiesPanelAbstractModel
+{
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
+
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * isVisible READ isVisible CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * isAutoPlaceAllowed READ isAutoPlaceAllowed CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * isPlayable READ isPlayable CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * isSmall READ isSmall CONSTANT)
+
+    Q_PROPERTY(mu::propertiespanel::PlaybackProxyModel * playbackProxyModel READ playbackProxyModel CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::AppearanceSettingsModel * appearanceSettingsModel READ appearanceSettingsModel CONSTANT)
+    Q_PROPERTY(bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
+
+public:
+    explicit GeneralSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+
+    PropertyItem* isVisible() const;
+    PropertyItem* isAutoPlaceAllowed() const;
+    PropertyItem* isPlayable() const;
+    PropertyItem* isSmall() const;
+
+    PlaybackProxyModel* playbackProxyModel() const;
+    AppearanceSettingsModel* appearanceSettingsModel() const;
+
+    bool areGeneralPropertiesAvailable();
+
+    void onCurrentNotationChanged() override;
+
+signals:
+    void areGeneralPropertiesAvailableChanged(bool available);
+
+private:
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+    void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
+                           const mu::engraving::StyleIdSet& changedStyleIdSet) override;
+    void onVisibleChanged(bool visible);
+
+    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
+
+    void updateAreGeneralPropertiesAvailable();
+
+    PropertyItem* m_isVisible = nullptr;
+    PropertyItem* m_isAutoPlaceAllowed = nullptr;
+    PropertyItem* m_isPlayable = nullptr;
+    PropertyItem* m_isSmall = nullptr;
+
+    PlaybackProxyModel* m_playbackProxyModel = nullptr;
+    AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
+
+    QList<engraving::EngravingItem*> m_elementsForIsSmallProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsVisibleProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsAutoPlaceProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsPlayableProperty;
+
+    bool m_areGeneralPropertiesAvailable = true;
+};
+}

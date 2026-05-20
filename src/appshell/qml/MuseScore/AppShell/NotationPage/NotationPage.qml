@@ -32,7 +32,7 @@ import MuseScore.AppShell
 
 import MuseScore.NotationScene
 import MuseScore.Palette
-import MuseScore.Inspector
+import MuseScore.PropertiesPanel
 import MuseScore.InstrumentsScene
 import MuseScore.Playback
 
@@ -310,12 +310,12 @@ DockPage {
         },
 
         DockPanel {
-            id: inspectorPanel
+            id: propertiesPanel
 
-            objectName: root.pageModel.inspectorPanelName()
+            objectName: root.pageModel.propertiesPanelName()
             title: qsTrc("appshell", "Properties")
 
-            navigationSection: root.navigationPanelSec(inspectorPanel.location)
+            navigationSection: root.navigationPanelSec(propertiesPanel.location)
 
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
@@ -328,9 +328,9 @@ DockPage {
 
             dropDestinations: root.verticalPanelDropDestinations
 
-            InspectorForm {
-                navigationSection: inspectorPanel.navigationSection
-                navigationOrderStart: inspectorPanel.contentNavigationPanelOrderStart
+            PropertiesPanel {
+                navigationSection: propertiesPanel.navigationSection
+                navigationOrderStart: propertiesPanel.contentNavigationPanelOrderStart
                 notationView: root.notationView
             }
         },

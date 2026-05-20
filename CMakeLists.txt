@@ -114,8 +114,8 @@ option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 
-option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ${MUE_BUILD_INSPECTOR_MODULE})
+option(MUE_BUILD_PROPERTIESPANEL_MODULE "Build propertiespanel module" ON)
+option(MUE_BUILD_PROPERTIESPANEL_QML "Build propertiespanel QML" ${MUE_BUILD_PROPERTIESPANEL_MODULE})
 
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
 option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})

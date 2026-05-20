@@ -226,7 +226,7 @@
 #include "importexport/lyricsexport/lyricsexportmodule.h"
 #endif
 
-#include "inspector/inspectormodule.h"
+#include "propertiespanel/propertiespanelmodule.h"
 
 #ifdef MUE_BUILD_INSTRUMENTSSCENE_MODULE
 #include "instrumentsscene/instrumentsscenemodule.h"
@@ -411,7 +411,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
     app->addModule(new mu::iex::lrcexport::LyricsExportModule());
 #endif
 
-    app->addModule(new mu::inspector::InspectorModule());
+    app->addModule(new mu::propertiespanel::PropertiesPanelModule());
     app->addModule(new mu::instrumentsscene::InstrumentsSceneModule());
     app->addModule(new muse::extensions::ExtensionsModule());
     app->addModule(new muse::languages::LanguagesModule());

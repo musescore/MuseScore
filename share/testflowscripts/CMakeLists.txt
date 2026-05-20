@@ -26,7 +26,7 @@ install(FILES
       TC3_UsingNoteInputToolbar.js
       TC4_UsingPalettes.js
       TC5_UsingInstruments.js
-      TC6_UsingInspector_Note.js
+      TC6_UsingPropertiesPanel_Note.js
       TC7_UsingExport.js
       TC8_EngravingText.js
       "TC9_BigScore(perfomance).js"
@@ -41,7 +41,7 @@ install(FILES
       steps/Palette.js
       steps/Score.js
       steps/Instruments.js
-      steps/Inspector.js
+      steps/PropertiesPanel.js
       steps/Navigation.js
       steps/Home.js
       DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/testflowscripts/steps

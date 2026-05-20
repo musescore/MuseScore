@@ -123,9 +123,9 @@ QString NotationPageModel::layoutPanelName() const
     return LAYOUT_PANEL_NAME;
 }
 
-QString NotationPageModel::inspectorPanelName() const
+QString NotationPageModel::propertiesPanelName() const
 {
-    return INSPECTOR_PANEL_NAME;
+    return PROPERTIES_PANEL_NAME;
 }
 
 QString NotationPageModel::selectionFiltersPanelName() const

@@ -324,7 +324,7 @@ void EditChord::doRemoveAllNoteParentheses(Chord* chord, Parenthesis* leftParen)
         const NoteParenthesisInfo* noteParenInfo = chord->findNoteParenthesisInfo(leftParen);
 
         chord->removeNoteParenthesisInfo(noteParenInfo);
-        //! HACK: don't delete as it may still be used in Inspector - see Score::doUndoRemoveElement
+        //! HACK: don't delete as it may still be used in PropertiesPanel - see Score::doUndoRemoveElement
         // delete noteParenInfo
 
         chord->triggerLayout();
