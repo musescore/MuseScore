@@ -30,7 +30,7 @@ using DockName = QString;
 
 // Panels:
 static const DockName PALETTES_PANEL_NAME("palettesPanel");
-static const DockName LAYOUT_PANEL_NAME("instrumentsPanel"); // old name for backwards compatibility
+static const DockName LAYOUT_PANEL_NAME("layoutPanel");
 static const DockName PROPERTIES_PANEL_NAME("propertiesPanel");
 static const DockName SELECTION_FILTERS_PANEL_NAME("selectionFiltersPanel");
 static const DockName UNDO_HISTORY_PANEL_NAME("undoHistoryPanel");
