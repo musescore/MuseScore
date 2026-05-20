@@ -194,8 +194,6 @@ else()
     include(SetupConfigure)
 endif()
 
-set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
-
 ###########################################
 # Setup compiler and build environment
 ###########################################

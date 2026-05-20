@@ -180,7 +180,6 @@ public:
     virtual void undo(EditData*);
     virtual void redo(EditData*);
     void appendChild(UndoCommand* cmd) { m_childCommands.push_back(cmd); }
-    UndoCommand* removeChild() { return muse::takeLast(m_childCommands); }
     size_t childCount() const { return m_childCommands.size(); }
     void unwind();
     const std::vector<UndoCommand*>& commands() const { return m_childCommands; }
@@ -279,7 +278,6 @@ public:
 
     void pushAndPerform(UndoCommand*, EditData*);
     void pushWithoutPerforming(UndoCommand*);
-    void pop();
 
     bool canUndo() const { return m_currentIndex > 0; }
     bool canRedo() const { return m_currentIndex < m_macroList.size(); }

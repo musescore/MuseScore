@@ -22,9 +22,7 @@
 #include "musicxmlconfiguration.h"
 
 #include "log.h"
-#include "thirdparty/kors_logger/src/log_base.h"
 
-using namespace mu;
 using namespace muse;
 using namespace mu::iex::musicxml;
 

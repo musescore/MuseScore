@@ -31,7 +31,7 @@ target_sources(iex_capella PRIVATE
     internal/capxml.cpp
 )
 
-add_subdirectory(${THIRDPARTY_DIR}/rtf2html rtf2html)
+add_subdirectory(thirdparty/rtf2html)
 
 target_link_libraries(iex_capella PRIVATE
     rtf2html

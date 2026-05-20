@@ -340,19 +340,18 @@ public:
         d_ptr = new SvgPaintEnginePrivate;
     }
 
-    bool begin(QPaintDevice* device);
-    bool end();
+    bool begin(QPaintDevice* device) override;
+    bool end() override;
 
-    void updateState(const QPaintEngineState& state);
+    void updateState(const QPaintEngineState& state) override;
     void popGroup();
 
-    void drawPath(const QPainterPath& path);
-    void drawPixmap(const QRectF& r, const QPixmap& pm, const QRectF& sr);
-    void drawPolygon(const QPoint* points, int pointCount, PolygonDrawMode mode) { QPaintEngine::drawPolygon(points, pointCount, mode); }
-    void drawPolygon(const QPointF* points, int pointCount, PolygonDrawMode mode);
-    void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr, Qt::ImageConversionFlags flags = Qt::AutoColor);
+    void drawPath(const QPainterPath& path) override;
+    void drawPixmap(const QRectF& r, const QPixmap& pm, const QRectF& sr) override;
+    void drawPolygon(const QPointF* points, int pointCount, PolygonDrawMode mode) override;
+    void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr, Qt::ImageConversionFlags flags = Qt::AutoColor) override;
 
-    QPaintEngine::Type type() const { return QPaintEngine::SVG; }
+    QPaintEngine::Type type() const override { return QPaintEngine::SVG; }
 
     QSize size() const { return d_func()->size; }
     void setSize(const QSize& size)

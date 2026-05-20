@@ -38,10 +38,7 @@ include(GetPlatformInfo)
 include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/src
-    ${MU_ROOT}/thirdparty/dtl
 )
-
-set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
 set(MUSE_QT_SUPPORT OFF)
 include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)

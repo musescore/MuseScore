@@ -974,7 +974,7 @@ void CompatUtils::setPositionStylesFromAlign(MStyle* style, std::vector<Sid> ign
         if (muse::contains(ignoreSids, st.sid)) {
             continue;
         }
-        Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.sid);
+        Sid positionSid = CompatUtils::positionStyleFromAlign(st.sid);
         if (positionSid == Sid::NOSTYLE) {
             continue;
         }
@@ -1015,7 +1015,7 @@ void CompatUtils::resetHookHeightSign(TextLineBase* tl)
     }
 }
 
-void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
+void CompatUtils::setMusicSymbolSize470(MStyle& style)
 {
     // Music symbols have their own point size in 4.7
     // Initialize this to the text type's default font size
@@ -1051,7 +1051,7 @@ void mu::engraving::compat::CompatUtils::setMusicSymbolSize470(MStyle& style)
     }
 }
 
-void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item)
+void CompatUtils::doMigrateNoteParens(EngravingItem* item)
 {
     if (!item->isNote()) {
         return;
@@ -1076,7 +1076,7 @@ void mu::engraving::compat::CompatUtils::doMigrateNoteParens(EngravingItem* item
 
 static constexpr double PRE_470_DPI = 360;
 
-Spatium mu::engraving::compat::CompatUtils::convertPre470FrameRadius(double frameRadius)
+Spatium CompatUtils::convertPre470FrameRadius(double frameRadius)
 {
     // The frame radius used to be expressed in raster units and divided by 2 at drawing. Since 4.7 it is expressed in spatium.
     return Spatium(frameRadius * (DPI / PRE_470_DPI) / DefaultStyle::baseStyle().value(Sid::spatium).toDouble()) / 2;
@@ -1118,6 +1118,6 @@ void CompatUtils::migrateOffsetPre302(EngravingItem* item, int mscVersion)
     }
 
     PropertyValue offset = item->getProperty(Pid::OFFSET);
-    compat::CompatUtils::migrateOffset500(item, offset);
+    CompatUtils::migrateOffset500(item, offset);
     item->setProperty(Pid::OFFSET, offset);
 }

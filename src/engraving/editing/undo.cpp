@@ -394,22 +394,6 @@ void UndoStack::mergeCommands(size_t startIdx)
 }
 
 //---------------------------------------------------------
-//   pop
-//---------------------------------------------------------
-
-void UndoStack::pop()
-{
-    if (!m_activeCommand) {
-        if (!ScoreLoad::loading()) {
-            LOGW("no active command");
-        }
-        return;
-    }
-    UndoCommand* cmd = m_activeCommand->removeChild();
-    cmd->undo(nullptr);
-}
-
-//---------------------------------------------------------
 //   endMacro
 //---------------------------------------------------------
 
