@@ -440,7 +440,7 @@ struct Event {
 
         switch (messageType()) {
         case MessageType::ChannelVoice10: return m_data[0] & 0x7F;
-        case MessageType::ChannelVoice20: return scaleDown(m_data[1] >> 16, 16, 7);
+        case MessageType::ChannelVoice20: return static_cast<uint8_t>(scaleDown(m_data[1] >> 16, 16, 7));
         default: assert(false);
         }
         return 0;
@@ -471,7 +471,7 @@ struct Event {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
 
         switch (messageType()) {
-        case MessageType::ChannelVoice10: return scaleUp(m_data[0] & 0x7F, 7, 16);
+        case MessageType::ChannelVoice10: return static_cast<uint16_t>(scaleUp(m_data[0] & 0x7F, 7, 16));
         case MessageType::ChannelVoice20: return static_cast<uint16_t>(m_data[1] >> 16);
         default: assert(false);
         }
@@ -592,9 +592,11 @@ struct Event {
     {
         uint32_t val = data();
         if (messageType() == MessageType::ChannelVoice20) {
-            return scaleDown(val, 32, 7);
+            val = scaleDown(val, 32, 7);
+        } else if (messageType() == MessageType::ChannelVoice10 && opcode() == Opcode::PitchBend) {
+            val = scaleDown(val, 14, 7);
         }
-        return val;
+        return val & 0x7F;
     }
 
     uint32_t data14() const
@@ -836,7 +838,7 @@ struct Event {
             //D2.3
             case Opcode::AssignableController:
             case Opcode::RegisteredController: {
-                std::vector<std::pair<uint8_t, uint8_t> > controlChanges = {
+                std::vector<std::pair<uint8_t, uint32_t> > controlChanges = {
                     { (opcode() == Opcode::RegisteredController ? 101 : 99), bank() },
                     { (opcode() == Opcode::RegisteredController ? 100 : 98), index() },
                     { 6,  data() >> 25 }, // first 7 bits
