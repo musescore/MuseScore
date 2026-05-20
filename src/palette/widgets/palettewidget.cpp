@@ -1042,7 +1042,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             Font font(painter.font());
             font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY));
             painter.setFont(font);
-            painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
+            painter.drawText(rShift, AlignLeft | AlignTop, {}, tag);
         }
 
         muse::draw::Pen pen(linesColor);
