@@ -280,36 +280,40 @@ bool StaveSharingLayout::canGoToSameVoice(track_idx_t prevTrack, track_idx_t nex
             return false;
         }
 
-        if (cr1->isChord()) {
-            Chord* c1 = toChord(cr1);
-            Chord* c2 = toChord(cr2);
-            for (Note* n1 : c1->notes()) {
-                for (Note* n2 : c2->notes()) {
-                    if (n2->pitch() > n1->pitch()) {
+        if (!cr1->isChord()) {
+            continue;
+        }
+
+        Chord* c1 = toChord(cr1);
+        Chord* c2 = toChord(cr2);
+        for (Note* n1 : c1->notes()) {
+            for (Note* n2 : c2->notes()) {
+                if (n2->pitch() > n1->pitch()) {
+                    return false;
+                }
+
+                if (!n2->isExactUnison(n1)) {
+                    if (n2->pitch() == n1->pitch() || muse::contains(localUnisonNotes, n1)) {
                         return false;
                     }
-                    if (n2->pitch() == n1->pitch() && !n2->isExactUnison(n1)) {
-                        return false;
+
+                    continue;
+                }
+
+                for (track_idx_t track : curTrackGroup) {
+                    if (track == prevTrack) {
+                        continue;
                     }
-                    if (localUnisonNotes.count(n1) && !n2->isExactUnison(n1)) {
-                        return false;
-                    }
-                    if (n2->isExactUnison(n1)) {
-                        for (track_idx_t track : curTrackGroup) {
-                            if (track == prevTrack) {
-                                continue;
-                            }
-                            if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
-                                for (Note* n : toChord(cr)->notes()) {
-                                    if (!n2->isExactUnison(n)) {
-                                        return false;
-                                    }
-                                }
+                    if (ChordRest* cr = toChordRest(segment->element(track)); cr && cr->isChord()) {
+                        for (Note* n : toChord(cr)->notes()) {
+                            if (!n2->isExactUnison(n)) {
+                                return false;
                             }
                         }
-                        potentialUnisonNotes.push_back(n2);
                     }
                 }
+
+                potentialUnisonNotes.push_back(n2);
             }
         }
     }
