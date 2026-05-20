@@ -4852,6 +4852,8 @@ static bool findMetronome(const std::list<TextFragment>& list,
         if (pos3 == 0) {
             metroRight = sAfterEq.mid(0, len3);
             metroLen = len1 + lenEq + len3;
+        } else {
+            return false;
         }
     }
 
