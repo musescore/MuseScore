@@ -835,8 +835,11 @@ TEST_F(MusicXml_Tests, inferredRights) {
     musicXmlImportTestRef("testInferredRights");
 }
 TEST_F(MusicXml_Tests, inferredTechnique) {
+#if defined(__GNUC__) && __GNUC__ == 14
     GTEST_SKIP() << "Failed with gcc14";
+#else
     musicXmlImportTestRef("testInferredTechnique");
+#endif
 }
 TEST_F(MusicXml_Tests, inferredTempoText) {
     musicXmlImportTestRef("testInferredTempoText");
