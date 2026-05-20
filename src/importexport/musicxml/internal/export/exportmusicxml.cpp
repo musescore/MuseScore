@@ -4817,86 +4817,66 @@ static bool findMetronome(const std::list<TextFragment>& list,
     hasParen = false;
     metroLeft.clear();
     metroRight.clear();
-    int metroPos = -1;     // metronome start position
-    int metroLen = 0;      // metronome length
-
-    size_t indEq  = words.indexOf(u'=');
-    if (indEq == 0 || indEq == muse::nidx) {
-        return false;
-    }
 
     int len1 = 0;
     TDuration dur;
+    int pos1 = TempoText::findTempoDuration(words, len1, dur);
+    if (pos1 == -1) {
+        return false;
+    }
 
-    // find first note, limiting search to the part left of the first '=',
-    // to prevent matching the second note in a "note1 = note2" metronome
-    int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
+    int metroPos = pos1;
+    int metroLen = len1;
+    metroLeft = words.mid(pos1, len1);
+
     static const std::wregex equationRegEx(L"\\s*=\\s*");
     std::wsmatch equationMatch;
-    size_t pos2 = indexOf(words, equationRegEx, pos1 + len1, &equationMatch);
-    if (pos1 != -1 && int(pos2) == pos1 + len1) {
-        int len2 = equationMatch.length();
-        if (words.size() > pos2 + len2) {
-            String s1 = words.mid(0, pos1);           // string to the left of metronome
-            String s2 = words.mid(pos1, len1);        // first note
-            String s3 = words.mid(pos2, len2);        // equals sign
-            String s4 = words.mid(pos2 + len2);       // string to the right of equals sign
+    size_t posEq = indexOf(words, equationRegEx, pos1 + len1, &equationMatch);
 
-            // now determine what is to the right of the equals sign
-            // must have either a (dotted) note or a number at start of s4
-            int len3 = 0;
-            // One or more digits, optionally followed by a single dot or comma and one or more digits
+    if (posEq != muse::nidx && int(posEq) == pos1 + len1) {
+        int lenEq = equationMatch.length();
+        String sAfterEq = words.mid(posEq + lenEq);
+        int len3 = 0;
+        TDuration dur3;
+        int pos3 = TempoText::findTempoDuration(sAfterEq, len3, dur3);
+        if (pos3 == -1) {
+            // did not find note, try to find a number
             static const std::wregex numberRegEx(L"\\d+([,\\.]{1}\\d+)?");
-            int pos3 = TempoText::findTempoDuration(s4, len3, dur);
-            if (pos3 == -1) {
-                // did not find note, try to find a number
-                std::wsmatch numberMatch;
-                pos3 = static_cast<int>(indexOf(s4, numberRegEx, 0, &numberMatch));
-                if (pos3 == 0) {
-                    len3 = numberMatch.length();
-                }
+            std::wsmatch numberMatch;
+            pos3 = static_cast<int>(indexOf(sAfterEq, numberRegEx, 0, &numberMatch));
+            if (pos3 != 0) {
+                pos3 = -1;
+            } else {
+                len3 = numberMatch.length();
             }
-            if (pos3 == -1) {
-                // neither found
-                return false;
-            }
-
-            String s5 = s4.mid(0, len3);       // number or second note
-            String s6 = s4.mid(len3);          // string to the right of metronome
-
-            // determine if metronome has parentheses
-            // left part of string must end with parenthesis plus optional spaces
-            // right part of string must have parenthesis (but not in first pos)
-            size_t lparen = s1.indexOf(u'(');
-            size_t rparen = s6.indexOf(u')');
-            hasParen = (lparen == s1.size() - 1 && rparen == 0);
-
-            metroLeft = s2;
-            metroRight = s5;
-
-            metroPos = pos1;                     // metronome position
-            metroLen = len1 + len2 + len3;       // metronome length
-            if (hasParen) {
-                metroPos -= 1;                   // move left one position
-                metroLen += 2;                   // add length of '(' and ')'
-            }
-
-            // calculate starting position corrected for surrogate pairs
-            // (which were ignored by toPlainTextPlusSymbols())
-            int corrPos = metroPos;
-            for (int i = 0; i < metroPos; ++i) {
-                if (words.at(i).isHighSurrogate()) {
-                    --corrPos;
-                }
-            }
-            metroPos = corrPos;
-
-            std::list<TextFragment> mid;       // not used
-            MScoreTextToMusicXml::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
-            return true;
+        }
+        if (pos3 == 0) {
+            metroRight = sAfterEq.mid(0, len3);
+            metroLen = len1 + lenEq + len3;
         }
     }
-    return false;
+
+    if (metroPos > 0 && words.at(metroPos - 1) == '(') {
+        if (words.size() > size_t(metroPos + metroLen) && words.at(metroPos + metroLen) == ')') {
+            hasParen = true;
+            metroPos -= 1;
+            metroLen += 2;
+        }
+    }
+
+    // calculate starting position corrected for surrogate pairs
+    // (which were ignored by toPlainTextPlusSymbols())
+    int corrPos = metroPos;
+    for (int i = 0; i < metroPos; ++i) {
+        if (words.at(i).isHighSurrogate()) {
+            --corrPos;
+        }
+    }
+    metroPos = corrPos;
+
+    std::list<TextFragment> mid;       // not used
+    MScoreTextToMusicXml::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
+    return true;
 }
 
 //---------------------------------------------------------
@@ -4952,10 +4932,12 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         TempoText::findTempoDuration(metroLeft, len1, dur);
         beatUnit(xml, dur);
 
-        if (TempoText::findTempoDuration(metroRight, len1, dur) != -1) {
-            beatUnit(xml, dur);
-        } else {
-            xml.tag("per-minute", metroRight);
+        if (!metroRight.empty()) {
+            if (TempoText::findTempoDuration(metroRight, len1, dur) != -1) {
+                beatUnit(xml, dur);
+            } else {
+                xml.tag("per-minute", metroRight);
+            }
         }
 
         xml.endElement();
