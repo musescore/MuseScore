@@ -45,8 +45,8 @@ void PartTreeItem::init(const notation::Part* masterPart)
 
     const Part* part = notation()->parts()->part(masterPart->id());
     m_partExists = part != nullptr;
-    bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+    const bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
+    const bool enabled = !m_partExists || part->isSharedPart() || !(part->sharedPart() && part->sharedPart()->enabled());
 
     if (!m_partExists) {
         part = masterPart;
@@ -84,9 +84,7 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 
     m_ignoreVisibilityChange = true;
     setIsVisible(m_partExists && m_part->getProperty(Pid::VISIBLE).toBool());
-    if (!m_part->isSharedPart()) {
-        setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
-    }
+    setIsEnabled(!m_partExists || m_part->isSharedPart() || !(m_part->sharedPart() && m_part->sharedPart()->enabled()));
     m_ignoreVisibilityChange = false;
 }
 
