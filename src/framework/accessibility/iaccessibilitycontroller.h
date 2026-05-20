@@ -35,6 +35,7 @@ public:
 
     virtual void reg(IAccessible* item) = 0;
     virtual void unreg(IAccessible* item) = 0;
+    virtual bool isReg(IAccessible* item) const = 0;
 
     virtual void announce(const QString& announcement) = 0;
     virtual QString announcement() const = 0;
