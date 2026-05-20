@@ -19,12 +19,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-cmake_minimum_required(VERSION 3.28...3.31) 
+cmake_minimum_required(VERSION 3.28) 
 
 project(MuseScore LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -48,9 +49,9 @@ set(CMAKE_MODULE_PATH
 message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
 
-set(CLANG_MIN_VERSION 16)
-set(GCC_MIN_VERSION 10)
-set(MSVC_MIN_VERSION 19.10)
+set(CLANG_MIN_VERSION 20)
+set(GCC_MIN_VERSION 14)
+set(MSVC_MIN_VERSION 19.40)
 
 include(GetCompilerInfo)
 
