@@ -80,12 +80,14 @@ signals:
     void orientationChanged();
 
 private:
+    void onLoadNotation(INotationPtr notation) override;
+
     void initOrientation();
     void initVisible();
 
     ViewMode notationViewMode() const;
 
-    void rescale();
+    void rescaleIfVisible();
 
     void paint(QPainter* painter) override;
     void onViewSizeChanged() override;
