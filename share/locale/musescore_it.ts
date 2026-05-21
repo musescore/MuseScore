@@ -34168,7 +34168,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect</source>
-        <translation type="unfinished"/>
+        <translation>Quando inserite dinamiche e forcelle dovrebbero influire:</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -34442,7 +34442,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="99"/>
         <source>Instruments and score orders</source>
-        <translation type="unfinished"/>
+        <translation>Ordine di strumenti e partiture</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/folderspreferencesmodel.cpp" line="104"/>
