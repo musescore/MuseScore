@@ -124,7 +124,6 @@ Rectangle {
                 instrumentsModel.currentGroupIndex = newIndex
 
                 if (instrumentsView.searching) {
-                    instrumentsModel.saveCurrentGroup()
                     instrumentsView.clearSearch()
                 }
 

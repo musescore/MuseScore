@@ -69,7 +69,6 @@ public:
 
     Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId);
 
-    Q_INVOKABLE void saveCurrentGroup();
     Q_INVOKABLE void setSearchText(const QString& text);
 
     Q_INVOKABLE void selectInstrument(int instrumentIndex);
@@ -144,6 +143,5 @@ private:
     notation::InstrumentGroupList m_groups;
 
     bool m_instrumentsLoadingAllowed = false;
-    bool m_saveCurrentGroup = false;
 };
 }
