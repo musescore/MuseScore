@@ -16,6 +16,7 @@ set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
 set(CMAKE_MODULE_PATH
     ${MU_ROOT}/buildscripts
     ${MU_ROOT}/buildscripts/cmake
+    ${MUSE_FRAMEWORK_PATH}/buildscripts/cmake
     ${MUSE_FRAMEWORK_SRC_PATH}/cmake
     ${CMAKE_MODULE_PATH}
 )
@@ -26,12 +27,7 @@ set(CMAKE_MODULE_PATH
 message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
 
-set(CLANG_MIN_VERSION 20)
-set(GCC_MIN_VERSION 14)
-set(MSVC_MIN_VERSION 19)
-
 include(GetCompilerInfo)
-
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
