@@ -953,7 +953,6 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
     painter->setBrush(Brush(item->curColor(opt)));
 
     Font f = item->font(spatium);
-    painter->setFont(f);
 
     double x  = data->noteWidth + spatium * .2;
     double y  = -spatium * .8;
@@ -978,6 +977,7 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
 
             int idx = (pitch + 12) / 25;
             const char* l = item->label[idx];
+            painter->setFont(f);
             painter->drawText(RectF(x2, y2, .0, .0),
                               muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
                               String::fromAscii(l));
@@ -1010,6 +1010,7 @@ void TDraw::draw(const Bend* item, Painter* painter, const PaintOptions& opt)
             int idx = (item->points()[pt + 1].pitch + 12) / 25;
             const char* l = item->label[idx];
             double ty = y2;       // - _spatium;
+            painter->setFont(f);
             painter->drawText(RectF(x2, ty, .0, .0),
                               muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
                               String::fromAscii(l));

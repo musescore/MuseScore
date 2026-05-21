@@ -210,7 +210,9 @@ void AppearanceSettingsModel::pushBackwardsInOrder()
     }
 
     EngravingItem* elementBehind = elements[i - 1 >= 0 ? i - 1 : 0];
-    m_arrangeOrder->setValue(elementBehind->z() - REARRANGE_ORDER_STEP);
+    int elementBehindZ = elementBehind->z();
+    int newZ = elementBehindZ <= -INT_MAX + REARRANGE_ORDER_STEP ? elementBehindZ : elementBehindZ - REARRANGE_ORDER_STEP; // avoid underflow
+    m_arrangeOrder->setValue(newZ);
 }
 
 void AppearanceSettingsModel::pushForwardsInOrder()
@@ -228,30 +230,58 @@ void AppearanceSettingsModel::pushForwardsInOrder()
     }
 
     EngravingItem* elementInFront = elements[i + 1 < elementsCount ? i + 1 : elementsCount - 1];
-    m_arrangeOrder->setValue(elementInFront->z() + REARRANGE_ORDER_STEP);
+    int elementInFrontZ = elementInFront->z();
+    int newZ = elementInFrontZ >= INT_MAX - REARRANGE_ORDER_STEP ? elementInFrontZ : elementInFrontZ + REARRANGE_ORDER_STEP; // avoid overflow
+    m_arrangeOrder->setValue(newZ);
 }
 
 void AppearanceSettingsModel::pushToBackInOrder()
 {
     std::vector<EngravingItem*> elements = allElementsInPage();
-    EngravingItem* minElement = *std::min_element(elements.begin(), elements.end(), elementLessThan);
+    EngravingItem* minElement = *std::min_element(
+        elements.begin(), elements.end(), [](const EngravingItem* const e1, const EngravingItem* const e2) {
+        // Certain elements (TimeTickAnchor) have their Z set to -INT_MAX to ensure they're always at the back.
+        // With this check, we make sure that those elements are not taken into account when looking for the
+        // min Z, in order to avoid all elements to be pushed back to -INT_MAX:
+        if (e1->z() == -INT_MAX) {
+            return false;
+        } else if (e2->z() == -INT_MAX) {
+            return true;
+        }
+        return elementLessThan(e1, e2);
+    });
 
     if (m_elementsForArrangeProperty.contains(minElement)) {
         m_arrangeOrder->setValue(minElement->z());
     } else {
-        m_arrangeOrder->setValue(minElement->z() - REARRANGE_ORDER_STEP);
+        int minElementZ = minElement->z();
+        int newZ = minElementZ <= -INT_MAX + REARRANGE_ORDER_STEP ? minElementZ : minElementZ - REARRANGE_ORDER_STEP; // avoid underflow
+        m_arrangeOrder->setValue(newZ);
     }
 }
 
 void AppearanceSettingsModel::pushToFrontInOrder()
 {
     std::vector<EngravingItem*> elements = allElementsInPage();
-    EngravingItem* maxElement = *std::max_element(elements.begin(), elements.end(), elementLessThan);
+    EngravingItem* maxElement = *std::max_element(
+        elements.begin(), elements.end(), [](const EngravingItem* const e1, const EngravingItem* const e2) {
+        // Certain elements (SoundFlag) have their Z set to INT_MAX to ensure they're always at the front.
+        // With this check, we make sure that those elements are not taken into account when looking for the
+        // max Z, in order to avoid all elements to be pushed forward to INT_MAX:
+        if (e2->z() == INT_MAX) {
+            return false;
+        } else if (e1->z() == INT_MAX) {
+            return true;
+        }
+        return elementLessThan(e1, e2);
+    });
 
     if (m_elementsForArrangeProperty.contains(maxElement)) {
         m_arrangeOrder->setValue(maxElement->z());
     } else {
-        m_arrangeOrder->setValue(maxElement->z() + REARRANGE_ORDER_STEP);
+        int maxElementZ = maxElement->z();
+        int newZ = maxElementZ >= INT_MAX - REARRANGE_ORDER_STEP ? maxElementZ : maxElementZ + REARRANGE_ORDER_STEP; // avoid overflow
+        m_arrangeOrder->setValue(newZ);
     }
 }
 

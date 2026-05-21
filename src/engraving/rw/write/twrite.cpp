@@ -3426,6 +3426,8 @@ static void writeTimeSig(Score* score, const Fraction& tick, XmlWriter& xml, Wri
     TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(tsf);
     TWrite::write(ts, xml, ctx);
+    ts->masterScore()->eidRegister()->removeItem(ts);
+    delete ts;
 }
 
 //---------------------------------------------------------
@@ -3607,6 +3609,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     KeySig* ks = Factory::createKeySig(score->dummy()->segment());
                     ks->setKey(ck, tk);
                     TWrite::write(ks, xml, ctx);
+                    ks->masterScore()->eidRegister()->removeItem(ks);
                     delete ks;
                     keySigWritten = true;
                 }

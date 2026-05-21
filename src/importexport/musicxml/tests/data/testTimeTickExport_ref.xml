@@ -123,7 +123,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="resume" line="yes" sign="yes"/>
+          <pedal type="start" line="yes" sign="yes"/>
           </direction-type>
         <offset sound="yes">-3</offset>
         <staff>2</staff>

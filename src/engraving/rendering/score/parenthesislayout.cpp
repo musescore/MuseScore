@@ -314,8 +314,8 @@ void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::Layou
 
     PointF startPoint = PointF();
     double midThickness = 2 * midPointThickness;
-    int nbShapes = round(5.0 * heightInSpatium);
-    nbShapes = std::clamp(nbShapes, 20, 50);
+    int nbShapes = round(2.0 * heightInSpatium);
+    nbShapes = std::clamp(nbShapes, 3, 10);
     PointF bezier1mid = bezier1for - PointF(midPointThickness * direction, 0.0);
     PointF bezier2mid = bezier2for - PointF(midPointThickness * direction, 0.0);
     const CubicBezier b(startPoint, bezier1mid, bezier2mid, endNormalised);
