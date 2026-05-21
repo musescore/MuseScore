@@ -28,3 +28,8 @@ chat:
 issue_enrichment:
   auto_enrich:
     enabled: false  
+
+knowledge_base:
+  linked_repositories:
+    - repository: "musescore/muse_framework.git"
+      instructions: "Contains muse_framework(muse) submodule"
