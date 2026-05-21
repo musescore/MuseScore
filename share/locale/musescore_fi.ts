@@ -1655,7 +1655,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="587"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Näyttää nuottiarvot yli tahtirajojen (KOKEILULLINEN, vain vanhalle musiikille!)</translation>
+        <translation>Näyttää nuottiarvot tahtirajojen yli (KOKEILULLINEN, vain vanhalle musiikille!)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="594"/>
@@ -37485,13 +37485,13 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentsettingsmodel.cpp" line="129"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentsettingsmodel.cpp" line="151"/>
         <source>Change instrument settings</source>
-        <translation>Muuta soittimen asetuksia</translation>
+        <translation>Vaihda soittimen asetuksia</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="240"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="275"/>
         <source>Change staff settings</source>
-        <translation>Muuta viivaston asetuksia</translation>
+        <translation>Vaihda viivaston asetuksia</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayersettingsmodel.cpp" line="99"/>
