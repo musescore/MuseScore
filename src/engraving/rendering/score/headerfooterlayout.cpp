@@ -267,13 +267,13 @@ TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const 
                     }
                     [[fallthrough]];
                 case 'N': // on page 1 only if there are multiple pages
-                    if ((page->score()->npages() + page->score()->pageNumberOffset()) <= 1) {
+                    if ((static_cast<int>(page->score()->npages()) + page->score()->pageNumberOffset()) <= 1) {
                         break;
                     }
                     [[fallthrough]];
                 case 'P': // on all pages
                 {
-                    size_t no = page->pageNumber() + 1 + page->score()->pageNumberOffset();
+                    const int no = static_cast<int>(page->pageNumber()) + 1 + page->score()->pageNumberOffset();
                     if (no > 0) {
                         const String pageNumberString = String::number(no);
                         const CharFormat pageNumberFormat = formatForMacro(ctx, String('$' + nc));
@@ -283,7 +283,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const 
                 break;
                 case 'n':
                 {
-                    size_t no = page->score()->npages() + page->score()->pageNumberOffset();
+                    const int no = static_cast<int>(page->score()->npages()) + page->score()->pageNumberOffset();
                     const String numberOfPagesString = String::number(no);
                     const CharFormat pageNumberFormat = formatForMacro(ctx, String('$' + nc));
                     appendFormattedString(newFragments, numberOfPagesString, defaultFormat, pageNumberFormat);
