@@ -3998,12 +3998,14 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         static const std::regex nameparts("^note([A-Z][a-z]*)(Sharp|Flat)?");
         AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
         StringList matches = String::fromAscii(noteheadName.ascii()).search(nameparts, { 1, 2 }, SplitBehavior::SkipEmptyParts);
-        xml.startElement("notehead-text");
-        xml.tag("display-text", matches.at(0));
-        if (matches.size() > 1) {
-            xml.tag("accidental-text", matches.at(1).toLower());
+        if (!matches.empty()) {
+            xml.startElement("notehead-text");
+            xml.tag("display-text", matches.at(0));
+            if (matches.size() > 1) {
+                xml.tag("accidental-text", matches.at(1).toLower());
+            }
+            xml.endElement();
         }
-        xml.endElement();
     }
 }
 
