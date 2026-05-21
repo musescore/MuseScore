@@ -1563,28 +1563,37 @@ void Score::removeElement(EngravingItem* element)
         ) {
         MeasureBase* mb = toMeasureBase(element);
         measures()->remove(mb);
-        System* system = mb->system();
 
+        System* system = mb->system();
         if (!system) {
-            // vertical boxes are not shown in continuous view so no system
 #ifndef NDEBUG
-            bool noSystemMode = lineMode() && element->isVBoxBase();
-#endif
+            // vertical boxes are not shown in continuous view so no system
+            const bool noSystemMode = lineMode() && element->isVBoxBase();
             assert(noSystemMode || !isOpen());
+#endif
             return;
         }
 
-        Page* page = system->page();
-        if (element->isBox() && system->measures().size() == 1) {
-            auto i = std::find(page->systems().begin(), page->systems().end(), system);
-            page->systems().erase(i);
-            mb->resetExplicitParent();
-            if (page->systems().empty()) {
+        system->removeMeasure(mb);
+
+        // See also InsertRemoveMeasures::removeMeasures()
+        if (element->isBox() && system->measures().empty()) {
+            Page* page = system->page();
+            if (page) {
+                muse::remove(page->systems(), system);
+            }
+
+            muse::remove(m_systems, system);
+            deleteLater(system);
+
+            if (page && page->systems().empty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
                 PointF pos = page->pos();
                 auto ii = std::find(pages().begin(), pages().end(), page);
                 pages().erase(ii);
+                deleteLater(page);
+
                 while (ii != pages().end()) {
                     page = *ii;
                     page->setPageNumber(page->pageNumber() - 1);
@@ -1595,7 +1604,6 @@ void Score::removeElement(EngravingItem* element)
                 }
             }
         }
-//            setLayout(mb->tick());
         return;
     }
 
