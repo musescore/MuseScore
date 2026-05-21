@@ -46,7 +46,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     const Part* part = notation()->parts()->part(masterPart->id());
     m_partExists = part != nullptr;
     bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = !(part->sharedPart() && part->sharedPart()->enabled());
+    bool enabled = m_partExists && !(part->sharedPart() && part->sharedPart()->enabled());
 
     if (!m_partExists) {
         part = masterPart;
