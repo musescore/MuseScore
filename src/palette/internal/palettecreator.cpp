@@ -1221,6 +1221,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     pedal = makeElement<Pedal>(paletteScore());
     pedal->setLineVisible(false);
+    pedal->setEndHookType(HookType::ROSETTE);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
@@ -1873,6 +1874,7 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 
     auto pedal = makeElement<Pedal>(paletteScore());
     pedal->setLineVisible(false);
+    pedal->setEndHookType(HookType::ROSETTE);
     pedal->setBeginText(pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>());
     pedal->setContinueText(pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>());
     pedal->setEndText(pedal->propertyDefault(Pid::END_TEXT).value<String>());
