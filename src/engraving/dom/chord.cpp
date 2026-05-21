@@ -1401,7 +1401,7 @@ void Chord::removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren)
 //---------------------------------------------------------
 //   isChordPlayable
 //   @note Now every related to chord element has it's own "PLAY" property,
-//         However, there is no way to control these properties outside the scope of the chord since the new inspector.
+//         However, there is no way to control these properties outside the scope of the chord since the new Properties panel.
 //         So we'll use a chord as a proxy entity for "PLAY" property handling
 //---------------------------------------------------------
 

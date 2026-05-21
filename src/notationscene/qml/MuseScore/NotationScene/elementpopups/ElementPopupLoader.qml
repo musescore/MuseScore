@@ -24,7 +24,7 @@ import QtQuick
 import Muse.Ui
 import Muse.UiComponents
 
-import MuseScore.Inspector
+import MuseScore.PropertiesPanel
 import MuseScore.NotationScene
 import MuseScore.Playback
 

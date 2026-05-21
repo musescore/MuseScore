@@ -1713,7 +1713,7 @@ void Score::doUndoRemoveElement(EngravingItem* element)
 {
     if (element->generated()) {
         removeElement(element);
-        //! HACK: don't delete as it may still be used in Inspector
+        //! HACK: don't delete as it may still be used in PropertiesPanel
         // element->deleteLater();
     } else {
         undo(new RemoveElement(element));

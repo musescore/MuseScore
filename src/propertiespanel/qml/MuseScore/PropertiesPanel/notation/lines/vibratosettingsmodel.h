@@ -1,0 +1,54 @@
+﻿/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-Studio-CLA-applies
+ *
+ * MuseScore Studio
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore Limited and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#pragma once
+
+#include <qqmlintegration.h>
+
+#include "propertiespanelabstractmodel.h"
+
+namespace mu::propertiespanel {
+class VibratoSettingsModel : public PropertiesPanelAbstractModel
+{
+    Q_OBJECT
+    QML_ELEMENT;
+    QML_UNCREATABLE("Not creatable from QML")
+
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * placement READ placement CONSTANT)
+
+public:
+    explicit VibratoSettingsModel(QObject* parent, const muse::modularity::ContextPtr& iocCtx, IElementRepositoryService* repository);
+
+    PropertyItem* lineType() const;
+    PropertyItem* placement() const;
+
+    Q_INVOKABLE QVariantList possibleLineTypes() const;
+
+private:
+    void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* m_lineType = nullptr;
+    PropertyItem* m_placement = nullptr;
+};
+}

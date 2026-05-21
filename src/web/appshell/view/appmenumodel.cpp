@@ -175,7 +175,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-palettes"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),
-        makeMenuItem("inspector"),
+        makeMenuItem("toggle-properties-panel"),
         makeMenuItem("toggle-selection-filter"),
         historyItem,
         makeMenuItem("toggle-navigator"),

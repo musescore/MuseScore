@@ -70,7 +70,7 @@ public:
 
     Q_INVOKABLE QString palettesPanelName() const;
     Q_INVOKABLE QString layoutPanelName() const;
-    Q_INVOKABLE QString inspectorPanelName() const;
+    Q_INVOKABLE QString propertiesPanelName() const;
     Q_INVOKABLE QString selectionFiltersPanelName() const;
     Q_INVOKABLE QString undoHistoryPanelName() const;
 

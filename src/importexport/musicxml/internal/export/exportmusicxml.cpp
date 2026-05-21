@@ -542,8 +542,8 @@ String ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool
             //       seg, p.x(), p.y(), seg->offset().x(), seg->offset().y(), seg->spatium());
         } else {
             const LineSegment* seg = span->backSegment();
-            const PointF userOff = seg->offset();       // This is the offset accessible from the inspector
-            const PointF userOff2 = seg->userOff2();       // Offset of the actual dragged anchor, which doesn't affect the inspector offset
+            const PointF userOff = seg->offset();       // This is the offset accessible from the Properties panel
+            const PointF userOff2 = seg->userOff2();       // Offset of the actual dragged anchor, which doesn't affect the Properties panel offset
             //auto pos = seg->pos();
             //auto pos2 = seg->pos2();
 
