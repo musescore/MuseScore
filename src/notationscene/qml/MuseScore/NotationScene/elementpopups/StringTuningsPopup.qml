@@ -175,7 +175,7 @@ AbstractElementPopup {
                     navigation.panel: stringsNavPanel
                     navigation.row: index
                     navigation.column: 1
-                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.currentValue)
+                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.spelledNote)
 
                     RowLayout {
                         anchors.fill: parent
@@ -218,6 +218,7 @@ AbstractElementPopup {
 
                             property int currentValue: delegateItem.modelData["value"]
                             property string currentText: delegateItem.modelData["valueStr"]
+                            property string spelledNote: delegateItem.modelData["valueStr"]
                             property bool suppressNextTextCommit: false
 
                             Layout.leftMargin: 6
@@ -271,12 +272,12 @@ AbstractElementPopup {
                                 canDecrease: valueControl.currentValue > 0
 
                                 onIncreaseButtonClicked: {
-                                    valueControl.suppressNextTextCommit = true
+                                    valueControl.suppressNextTextCommit = valueInput.activeFocus
                                     stringTuningsModel.setStringPitchValue(delegateItem.index, valueControl.currentValue + 1, false)
                                 }
 
                                 onDecreaseButtonClicked: {
-                                    valueControl.suppressNextTextCommit = true
+                                    valueControl.suppressNextTextCommit = valueInput.activeFocus
                                     stringTuningsModel.setStringPitchValue(delegateItem.index, valueControl.currentValue - 1, true)
                                 }
                             }

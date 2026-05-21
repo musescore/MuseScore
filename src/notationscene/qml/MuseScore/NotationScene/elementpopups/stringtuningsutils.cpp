@@ -23,6 +23,7 @@
 #include "stringtuningsutils.h"
 
 #include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/dom/utils.h"
 
 using namespace mu;
@@ -65,26 +66,7 @@ String normalizeLocalizedNoteInput(String value, mu::engraving::NoteSpellingType
 
 QString mu::notation::stringTuningPitchToString(int pitch, bool useFlats, engraving::NoteSpellingType spelling)
 {
-    using namespace mu::engraving;
-
-    if (!pitchIsValid(pitch)) {
-        return QString();
-    }
-
-    const int tpc = pitch2tpc(pitch, Key::C, useFlats ? Prefer::FLATS : Prefer::SHARPS);
-
-    String step;
-    String accidental;
-    tpc2name(tpc, spelling, NoteCaseType::CAPITAL, step, accidental);
-
-    if (spelling == NoteSpellingType::GERMAN && tpc == TPC_B_B) {
-        accidental.clear();
-    }
-
-    String name = convertPitchStringFlatsAndSharpsToUnicode(step + accidental);
-    const int octave = (pitch / PITCH_DELTA_OCTAVE) - 1;
-
-    return (name + String::number(octave)).toQString();
+    return engraving::stringTuningPitchName(pitch, useFlats, spelling, true).toQString();
 }
 
 int mu::notation::stringTuningInputToPitch(const String& input, engraving::NoteSpellingType spelling, bool* useFlat)

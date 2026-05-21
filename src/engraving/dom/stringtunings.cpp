@@ -37,13 +37,13 @@
 using namespace mu;
 using namespace mu::engraving;
 
-static String tuningPitchName(const instrString& stringInfo, NoteSpellingType spelling, bool withOctave)
+String mu::engraving::stringTuningPitchName(int pitch, bool useFlat, NoteSpellingType spelling, bool withOctave)
 {
-    if (!pitchIsValid(stringInfo.pitch)) {
+    if (!pitchIsValid(pitch)) {
         return String();
     }
 
-    const int tpc = pitch2tpc(stringInfo.pitch, Key::C, stringInfo.useFlat ? Prefer::FLATS : Prefer::SHARPS);
+    const int tpc = pitch2tpc(pitch, Key::C, useFlat ? Prefer::FLATS : Prefer::SHARPS);
 
     String step;
     String accidental;
@@ -56,7 +56,7 @@ static String tuningPitchName(const instrString& stringInfo, NoteSpellingType sp
     String result = convertPitchStringFlatsAndSharpsToUnicode(step + accidental);
 
     if (withOctave) {
-        const int octave = (stringInfo.pitch / PITCH_DELTA_OCTAVE) - 1;
+        const int octave = (pitch / PITCH_DELTA_OCTAVE) - 1;
         result += String::number(octave);
     }
 
@@ -200,7 +200,7 @@ String StringTunings::accessibleInfo() const
         string_idx_t index = numOfStrings - i - 1;
         if (muse::contains(m_visibleStrings, index)) {
             const instrString& stringInfo = stringList[index];
-            String pitchStr = tuningPitchName(stringInfo, spelling, true);
+            String pitchStr = stringTuningPitchName(stringInfo.pitch, stringInfo.useFlat, spelling, true);
             if (pitchStr.empty()) {
                 LOGE() << "Invalid get pitch name for " << stringInfo.pitch;
                 continue;
@@ -309,7 +309,7 @@ String StringTunings::generateText() const
         string_idx_t index = numOfStrings - i - 1;
         if (muse::contains(m_visibleStrings, index)) {
             const instrString& stringInfo = stringList[index];
-            String pitchStr = tuningPitchName(stringInfo, spelling, false);
+            String pitchStr = stringTuningPitchName(stringInfo.pitch, stringInfo.useFlat, spelling, false);
             if (pitchStr.empty()) {
                 LOGE() << "Invalid get pitch name for " << stringInfo.pitch;
                 continue;
