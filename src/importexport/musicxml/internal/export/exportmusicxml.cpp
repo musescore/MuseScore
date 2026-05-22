@@ -5050,7 +5050,7 @@ void ExportMusicXml::playText(PlayTechAnnotation const* const annot, staff_idx_t
 {
     const int offset = calculateTimeDeltaInDivisions(annot->tick(), tick(), m_div);
 
-    if (annot->plainText() == "") {
+    if (annot->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5099,7 +5099,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
            muPrintable(text->plainText()));
     */
 
-    if (text->plainText() == u"") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5226,7 +5226,7 @@ void ExportMusicXml::systemText(StaffTextBase const* const text, staff_idx_t sta
 {
     const int offset = calculateTimeDeltaInDivisions(text->tick(), tick(), m_div);
 
-    if (text->plainText() == "") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5262,7 +5262,7 @@ String ExportMusicXml::positioningAttributesForTboxText(const PointF position, f
 
 void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, const PointF relativePosition)
 {
-    if (text->plainText() == "") {
+    if (text->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -5291,7 +5291,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff)
 {
-    if (rmk->plainText() == "") {
+    if (rmk->plainText().empty()) {
         // sometimes empty Texts are present, exporting would result
         // in invalid MusicXML (as an empty direction-type would be created)
         return;
@@ -6283,7 +6283,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     case MarkerType::CODA:
     case MarkerType::CODETTA:
         type = u"coda";
-        if (m->label() == "") {
+        if (m->label().empty()) {
             sound = u"coda=\"1\"";
         } else {
             sound = u"coda=\"" + m->label() + u"\"";
@@ -6294,7 +6294,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         [[fallthrough]];
     case MarkerType::SEGNO:
         type = u"segno";
-        if (m->label() == "") {
+        if (m->label().empty()) {
             sound = u"segno=\"1\"";
         } else {
             sound = u"segno=\"" + m->label() + u"\"";
@@ -6308,7 +6308,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     case MarkerType::TOCODASYM:
     case MarkerType::DA_CODA:
     case MarkerType::DA_DBLCODA: {
-        if (m->xmlText() == "") {
+        if (m->xmlText().empty()) {
             words = u"To Coda";
         } else {
             words = m->xmlText();
