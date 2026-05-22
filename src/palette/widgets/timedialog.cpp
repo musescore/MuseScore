@@ -44,6 +44,11 @@ TimeEditor::TimeEditor(QWidget* parent)
     : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
     setupUi(this);
+}
+
+void TimeEditor::classBegin()
+{
+    groups->classBegin();
 
     QLayout* l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);
@@ -290,6 +295,8 @@ TimeEditorDialog::TimeEditorDialog(QWidget* parent)
 void TimeEditorDialog::classBegin()
 {
     m_timeEditor = new TimeEditor(this);
+    m_timeEditor->classBegin();
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSizeConstraint(QLayout::SetFixedSize);

@@ -50,6 +50,8 @@ class TimeEditor : public QWidget, Ui::TimeDialogBase, public muse::Contextable
 public:
     TimeEditor(QWidget* parent = 0);
 
+    void classBegin();
+
     bool dirty() const;
     bool showTimePalette() const;
     void save();
