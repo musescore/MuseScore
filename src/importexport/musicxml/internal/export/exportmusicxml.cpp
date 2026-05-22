@@ -5174,6 +5174,12 @@ static void getImageInfo(const ImageStoreItem* isi, String& source, String& type
                 if (suffix.isEmpty()) {
                     source += u".bmp";
                 }
+            } else if ((ba.at(0) == 0x49 && ba.at(1) == 0x49 && ba.at(2) == 0x2A && ba.at(3) == 0x00)
+                       || (ba.at(0) == 0x4D && ba.at(1) == 0x4D && ba.at(2) == 0x00 && ba.at(3) == 0x2A)) {
+                type = u"image/tiff";
+                if (suffix.isEmpty()) {
+                    source += u".tif";
+                }
             } else if (ba.at(0) == 0x3C && (ba.at(1) == 0x3F || ba.at(1) == 0x73)) {
                 type = u"image/svg+xml";
                 if (suffix.isEmpty()) {
