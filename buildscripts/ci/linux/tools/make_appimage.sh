@@ -113,9 +113,9 @@ linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 # The system must be used
-if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
-  rm -f ${appdir}/lib/libglib-2.0.so.0 
-fi
+for lib in libglib-2.0.so.0 libgio-2.0.so.0 libgmodule-2.0.so.0 libgobject-2.0.so.0; do
+  rm -f "${appdir}/lib/${lib}"
+done
 
 unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
