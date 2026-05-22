@@ -86,7 +86,7 @@ void createTupletNotes(
         tuplet->setBaseLen(baseLen);
 
         tuplet->setTrack(track);
-//            tuplet->setTick(tupletData.onTime.ticks());
+        tuplet->setTick(tupletData.onTime.fraction());
         tuplet->setVoice(tupletData.voice);
         tuplet->setParent(measure);
 
