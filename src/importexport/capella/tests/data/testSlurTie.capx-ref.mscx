@@ -53,17 +53,21 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
-          <TimeSig>
+          <KeySig>
             <eid>H_H</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>I_I</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
-                <eid>J_J</eid>
+                <eid>K_K</eid>
                 </Slur>
               <next>
                 <location>
@@ -72,19 +76,19 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>K_K</eid>
+              <eid>L_L</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>L_L</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>N_N</eid>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -97,10 +101,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -113,7 +117,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -123,7 +127,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
