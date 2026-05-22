@@ -1,5 +1,5 @@
 //=============================================================================
-//  MuseScore
+//  MuseScore Studio
 //  Music Composition & Notation
 //
 //  Note Names Plugin

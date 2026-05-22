@@ -23,9 +23,9 @@ MuseScore Studio is an open source and free music notation software. For support
 
 ## More info
 
-- [MuseScore Homepage](https://musescore.org)
-- [MuseScore Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
-- [How to compile MuseScore?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
+- [MuseScore Studio Homepage](https://musescore.org)
+- [MuseScore Studio Git workflow instructions](https://musescore.org/en/developers-handbook/git-workflow)
+- [How to compile MuseScore Studio?](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment)
 
 ## License
 
@@ -81,7 +81,7 @@ used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
 
-See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
+See the [Unit tests section](https://github.com/musescore/MuseScore/wiki/Unit-tests) of the [MuseScore Studio Wiki](https://github.com/musescore/MuseScore/wiki) for instructions on how to run the test suite.
 
 ### Code Formatting
 

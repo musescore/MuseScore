@@ -29,7 +29,7 @@ set(EXECUTABLE_NAME mscore)
 ###########################################
 include(GetPlatformInfo)
 if (OS_IS_WIN)
-    set(EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
+    set(EXECUTABLE_NAME ${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR})
 
     include(GetCompilerInfo)
 
@@ -64,11 +64,11 @@ elseif(OS_IS_LIN)
 elseif(OS_IS_MAC)
 
     set(MACOSX_BUNDLE_GUI_IDENTIFIER ${MUSE_APP_GUI_IDENTIFIER})
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_TITLE})
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_NAME_HUMAN_READABLE})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_BUILD_NUMBER})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited. Published under the GNU General Public License version 3.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited and others. Published under the GNU General Public License version 3.")
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
     if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
