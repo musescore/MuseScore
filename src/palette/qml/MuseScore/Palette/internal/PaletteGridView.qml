@@ -620,8 +620,12 @@ StyledGridView {
 
                 DelegateModel.inItems = !internalDrag;
             }
-            // TODO: causes crash inside Qt code. Investigate why.
-            // onDraggedChanged: DelegateModel.inItems = !internalDrag;
+
+            onDraggedChanged: {
+                Qt.callLater(function() {
+                    DelegateModel.inItems = !internalDrag
+                })
+            }
 
             property var dropData: null
 
@@ -630,17 +634,12 @@ StyledGridView {
 
                 paletteView.state = "drag";
                 DelegateModel.inPersistedItems = true;
-
-                // TODO: this replaces the commented `onDraggedChanged` handler
-                DelegateModel.inItems = !internalDrag;
             }
 
             Drag.onDragFinished: {
                 paletteView.state = "default";
                 paletteDrag = false;
                 internalDrag = false;
-                // TODO: this replaces the commented `onDraggedChanged` handler
-                DelegateModel.inItems = !internalDrag;
                 DelegateModel.inPersistedItems = false;
 
                 if (dropData) {
