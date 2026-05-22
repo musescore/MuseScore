@@ -695,6 +695,10 @@ bool ProjectActionsController::closeOpenedProject(bool goToHome)
         return false;
     }
 
+    if (m_isProjectSaving || m_isProjectUploading) {
+        return false;
+    }
+
     m_isProjectClosing = true;
     DEFER {
         m_isProjectClosing = false;
