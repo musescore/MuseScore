@@ -363,6 +363,7 @@ public:
     void tempoSound(TempoText const* const text);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
     Score* score() const { return m_score; }
+    void setMxl(bool v) { m_isMxl = v; }
     double getTenthsFromInches(double) const;
     double getTenthsFromDots(double) const;
     Fraction tick() const { return m_tick; }
@@ -440,6 +441,7 @@ private:
     TrillHash m_trillStop;
     MusicXmlInstrumentMap m_instrMap;
     PlayingTechniqueType m_currPlayTechnique;
+    bool m_isMxl = false;
 };
 
 //---------------------------------------------------------
@@ -5187,24 +5189,30 @@ void ExportMusicXml::image(const Image* const img, staff_idx_t staff)
     String type;
     getImageInfo(isi, source, type);
 
-    String imgTag = u"image source=\"" + XmlWriter::xmlString(source) + u"\"";
-    imgTag += u" type=\"" + XmlWriter::xmlString(type) + u"\"";
+    if (m_isMxl) {
+        String imgTag = u"image source=\"" + XmlWriter::xmlString(source) + u"\"";
+        imgTag += u" type=\"" + XmlWriter::xmlString(type) + u"\"";
 
-    double width = img->imageWidth();
-    double height = img->imageHeight();
-    if (!img->sizeIsSpatium()) {
-        double sp = img->spatium();
-        if (sp > 0.0) {
-            width /= sp;
-            height /= sp;
+        double width = img->imageWidth();
+        double height = img->imageHeight();
+        if (!img->sizeIsSpatium()) {
+            double sp = img->spatium();
+            if (sp > 0.0) {
+                width /= sp;
+                height /= sp;
+            }
         }
+
+        imgTag += u" height=\"" + String::number(height * 10.0, 2) + u"\"";
+        imgTag += u" width=\"" + String::number(width * 10.0, 2) + u"\"";
+        imgTag += positioningAttributes(img);
+
+        m_xml.tagRaw(imgTag);
+    } else {
+        String otherTag = u"other-direction";
+        otherTag += positioningAttributes(img);
+        m_xml.tagRaw(otherTag, XmlWriter::xmlString(source));
     }
-
-    imgTag += u" height=\"" + String::number(height * 10.0, 2) + u"\"";
-    imgTag += u" width=\"" + String::number(width * 10.0, 2) + u"\"";
-    imgTag += positioningAttributes(img);
-
-    m_xml.tagRaw(imgTag);
     m_xml.endElement(); // direction-type
 
     directionETag(m_xml, staff);
@@ -8939,6 +8947,7 @@ static void writeMxlArchive(Score* score, muse::ZipWriter& zip, const String& fi
     muse::io::Buffer dbuf;
     dbuf.open(muse::io::IODevice::ReadWrite);
     ExportMusicXml em(score);
+    em.setMxl(true);
     em.write(&dbuf);
     dbuf.seek(0);
     zip.addFile(filename.toStdString(), dbuf.data());
