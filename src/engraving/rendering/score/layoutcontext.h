@@ -245,6 +245,8 @@ public:
 
     bool rangeDone() const { return m_rangeDone; }
 
+    bool mustRecomputeHeadersFooters() const { return m_mustRecomputeHeadersFooters; }
+
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
 
     // Mutable
@@ -282,6 +284,8 @@ public:
 
     void setRangeDone(bool val) { m_rangeDone = val; }
 
+    void setMustRecomputeHeadersFooters(bool val) { m_mustRecomputeHeadersFooters = val; }
+
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
 
 private:
@@ -312,6 +316,8 @@ private:
     std::set<Spanner*> m_processedSpanners;
 
     bool m_rangeDone = false;
+
+    bool m_mustRecomputeHeadersFooters = false; // we may need to re-compute headers/footers after laying out all pages if they contained a page count
 
     // cache
     double m_totalBracketsWidth = -1.0;
