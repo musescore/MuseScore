@@ -17,7 +17,12 @@ if(NOT DEFINED CMAKE_SCRIPT_MODE_FILE)
     )
 endif()
 
-cmake_minimum_required(VERSION 3.22) # should match version in CMakeLists.txt
+# should match version requirement in CMakeLists.txt
+if (APPLE)
+    cmake_minimum_required(VERSION 3.31)
+else()
+    cmake_minimum_required(VERSION 3.28)
+endif()
 
 # CMake arguments up to '-P' (ignore these)
 set(i "1")

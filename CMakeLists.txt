@@ -18,8 +18,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-cmake_minimum_required(VERSION 3.28) 
+if (APPLE)
+    # Required to prevent issues with incremental builds of MuseScoreQuickLookPreviewExtension
+    # (https://github.com/musescore/MuseScore/pull/33554)
+    cmake_minimum_required(VERSION 3.31)
+else()
+    # Required to use C++20 modules in the future.
+    cmake_minimum_required(VERSION 3.28)
+endif()
 
 project(MuseScoreStudio LANGUAGES C CXX)
 
