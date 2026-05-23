@@ -173,6 +173,9 @@
 #ifdef MUE_BUILD_IMPEXP_BB_MODULE
 #include "importexport/bb/bbmodule.h"
 #endif
+#ifdef MUE_BUILD_IMPEXP_ENCORE_MODULE
+#include "importexport/encore/enc-module.h"
+#endif
 #ifdef MUE_BUILD_IMPEXP_BWW_MODULE
 #include "importexport/bww/bwwmodule.h"
 #endif
@@ -383,6 +386,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
 #ifdef MUE_BUILD_IMPEXP_BB_MODULE
     app->addModule(new mu::iex::bb::BBModule());
 #endif
+#ifdef MUE_BUILD_IMPEXP_ENCORE_MODULE
+    app->addModule(new mu::iex::enc::EncoreModule());
+#endif
 #ifdef MUE_BUILD_IMPEXP_BWW_MODULE
     app->addModule(new mu::iex::bww::BwwModule());
 #endif
@@ -504,6 +510,9 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
 
 #ifdef MUE_BUILD_IMPEXP_BB_MODULE
     app->addModule(new mu::iex::bb::BBModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_ENCORE_MODULE
+    app->addModule(new mu::iex::enc::EncoreModule());
 #endif
 #ifdef MUE_BUILD_IMPEXP_BWW_MODULE
     app->addModule(new mu::iex::bww::BwwModule());
