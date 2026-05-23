@@ -33,7 +33,6 @@
 #include "async/async.h"
 #include "audio/common/soundfonttypes.h"
 
-#include "defer.h"
 #include "translation.h"
 #include "log.h"
 
@@ -226,11 +225,9 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
     }
 
     m_quiting = true;
-    DEFER {
-        m_quiting = false;
-    };
 
     if (!projectFilesController()->closeOpenedProject(false)) {
+        m_quiting = false;
         return false;
     }
 
@@ -246,6 +243,8 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         multiwindowsProvider()->notifyAboutWindowWasQuited();
     }
 
+    //! NOTE the following destroys the IoC context and `this` with it,
+    //! so don't access `this` after this point!
     if (isAllInstances) {
         multiwindowsProvider()->quitForAll();
     } else {
