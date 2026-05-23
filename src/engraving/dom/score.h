@@ -490,7 +490,6 @@ public:
     void undoRemoveHopoText(HammerOnPullOffText* hopoText);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
     void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
-    void spellNotelist(std::vector<Note*>& notes);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
     void undoRemovePart(Part* part, size_t partIdx = muse::nidx);
     void undoInsertPart(Part* part, size_t targetPartIndex);
@@ -711,10 +710,6 @@ public:
 
     bool isOpen() const;
     void setIsOpen(bool open);
-
-    void spell();
-    void spellWithSharpsOrFlats(Prefer prefer);
-    void changeEnharmonicSpelling(bool both);
 
     Fraction nextSeg(const Fraction& tick, int track);
 

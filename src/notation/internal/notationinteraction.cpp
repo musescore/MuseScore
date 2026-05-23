@@ -90,6 +90,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editchord.h"
+#include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -6613,30 +6614,38 @@ void NotationInteraction::replaceSelectedNotesWithSlashes()
 
 void NotationInteraction::changeEnharmonicSpelling(bool both)
 {
-    startEdit(TranslatableString("undoableAction", "Change enharmonic spelling"));
-    score()->changeEnharmonicSpelling(both);
-    apply();
+    transaction(TranslatableString("undoableAction", "Change enharmonic spelling"), [&](auto&) {
+        EditEnharmonicSpelling::changeEnharmonicSpelling(score(), both);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::spellPitches()
 {
-    startEdit(TranslatableString("undoableAction", "Optimize enharmonic spelling"));
-    score()->spell();
-    apply();
+    transaction(TranslatableString("undoableAction", "Optimize enharmonic spelling"), [&](auto&) {
+        EditEnharmonicSpelling::spell(score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::spellPitchesWithSharps()
 {
-    startEdit(TranslatableString("undoableAction", "Respell pitches with sharps"));
-    score()->spellWithSharpsOrFlats(Prefer::SHARPS);
-    apply();
+    transaction(TranslatableString("undoableAction", "Respell pitches with sharps"), [&](auto&) {
+        EditEnharmonicSpelling::spellWithSharpsOrFlats(score(), Prefer::SHARPS);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::spellPitchesWithFlats()
 {
-    startEdit(TranslatableString("undoableAction", "Respell pitches with flats"));
-    score()->spellWithSharpsOrFlats(Prefer::FLATS);
-    apply();
+    transaction(TranslatableString("undoableAction", "Respell pitches with flats"), [&](auto&) {
+        EditEnharmonicSpelling::spellWithSharpsOrFlats(score(), Prefer::FLATS);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::regroupNotesAndRests()

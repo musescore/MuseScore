@@ -22,8 +22,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include "types/string.h"
 #include "../types/types.h"
 
@@ -78,8 +76,6 @@ enum class NoteCaseType : signed char {
 
 extern int pitch2tpc(int pitch, Key, Prefer prefer);
 
-extern int computeWindow(const std::vector<Note*>& notes, int start, int end);
-extern int tpc(int idx, int pitch, int opt);
 extern String tpc2name(int tpc, NoteSpellingType spelling, NoteCaseType noteCase, bool explicitAccidental = false, bool full = false);
 extern void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, String& s, String& acc, bool explicitAccidental = false,
                      bool full = false);
@@ -106,7 +102,6 @@ extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
 extern int clampEnharmonic(int tpc, bool useDoubleSharpsFlats = true);
 extern int clampPitch(int pitch, bool octaved = false);
 extern Key clampKey(Key key, PreferSharpFlat prefer = PreferSharpFlat::NONE);
-extern int bestEnharmonicFit(const std::vector<int> tpcs, Key key);
 extern int key2Tpc(Key key);
 extern Key tpc2Key(int tpc);
 

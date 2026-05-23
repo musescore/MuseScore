@@ -116,16 +116,18 @@ target_sources(engraving PRIVATE
     editing/editchord.h
     editing/editclef.cpp
     editing/editclef.h
-    editing/editharppedaldiagram.cpp
-    editing/editharppedaldiagram.h
-    editing/editinstrumentchange.cpp
-    editing/editinstrumentchange.h
     editing/editdata.cpp
     editing/editdata.h
+    editing/editenharmonicspelling.cpp
+    editing/editenharmonicspelling.h
     editing/editexcerpt.cpp
     editing/editexcerpt.h
     editing/editfretboarddiagram.cpp
     editing/editfretboarddiagram.h
+    editing/editharppedaldiagram.cpp
+    editing/editharppedaldiagram.h
+    editing/editinstrumentchange.cpp
+    editing/editinstrumentchange.h
     editing/editkeysig.cpp
     editing/editkeysig.h
     editing/editmeasures.cpp
@@ -154,13 +156,13 @@ target_sources(engraving PRIVATE
     editing/edittie.h
     editing/edittremolo.cpp
     editing/edittremolo.h
+    editing/elementeditdata.h
     editing/exchangevoices.cpp
     editing/exchangevoices.h
     editing/implodeexplode.cpp
     editing/implodeexplode.h
     editing/inserttime.cpp
     editing/inserttime.h
-    editing/elementeditdata.h
     editing/mscoreview.cpp
     editing/mscoreview.h
     editing/splitjoinmeasure.cpp
