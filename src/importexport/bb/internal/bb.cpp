@@ -47,6 +47,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/transpose.h"
 #include "engraving/engravingerrors.h"
 
@@ -476,7 +477,7 @@ Err importBB(MasterScore* score, const QString& name)
         }
     }
 
-    score->spell();
+    EditEnharmonicSpelling::spell(score);
 
     //---------------------------------------------------
     //    create title

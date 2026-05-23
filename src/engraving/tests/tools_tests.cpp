@@ -24,6 +24,7 @@
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
+#include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
@@ -206,7 +207,7 @@ void Engraving_ToolsTests::changeEnharmonic(bool both)
     score->cmdSelectAll();
     for (int i = 1; i < 6; ++i) {
         score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-        score->changeEnharmonicSpelling(both);
+        EditEnharmonicSpelling::changeEnharmonicSpelling(score, both);
         score->endCmd();
         String prefix = u"change-enharmonic-" + mode + u"-0" + (u'0' + i);
         EXPECT_TRUE(ScoreComp::saveCompareScore(score, prefix + u"-test.mscx", TOOLS_DATA_DIR + prefix + u"-ref.mscx"));
