@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/tremolotwochord.h"
 
 namespace mu::engraving {
-class MoveTremolo : public UndoCommand
+class MoveTremolo : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, MoveTremolo)
 

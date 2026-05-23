@@ -94,7 +94,7 @@ void ChangeStyle::flip(EditData*)
 void ChangeStyle::undo(EditData* ed)
 {
     overlap = false;
-    UndoCommand::undo(ed);
+    UndoableCommand::undo(ed);
 }
 
 //---------------------------------------------------------

@@ -23,7 +23,8 @@
 
 #include "notation/inotation.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undoablecommand.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "log.h"
 
@@ -79,7 +80,7 @@ void EngravingUndoStackModel::load(const UndoableTransaction* transaction, Item*
 {
     TRACEFUNC;
 
-    for (const UndoCommand* childCommand : transaction->commands()) {
+    for (const UndoableCommand* childCommand : transaction->commands()) {
         createItem(parent, childCommand);
     }
 }
@@ -220,15 +221,15 @@ EngravingUndoStackModel::Item* EngravingUndoStackModel::createItem(
 }
 
 EngravingUndoStackModel::Item* EngravingUndoStackModel::createItem(
-    Item* parent, const UndoCommand* undoCommand, bool isCurrent)
+    Item* parent, const UndoableCommand* command, bool isCurrent)
 {
     Item* item = new Item(parent);
     m_allItems.insert(item->key(), item);
 
-    if (undoCommand) {
+    if (command) {
         QVariantMap data;
-        data["text"] = QString(undoCommand->name());
-        data["color"] = colorForPointer(undoCommand);
+        data["text"] = QString(command->name());
+        data["color"] = colorForPointer(command);
         data["isCurrent"] = isCurrent;
 
         item->setData(data);

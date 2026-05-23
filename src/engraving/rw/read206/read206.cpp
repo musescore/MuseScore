@@ -101,7 +101,6 @@
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
 #include "editing/transpose.h"
 
 #include "../compat/readchordlisthook.h"

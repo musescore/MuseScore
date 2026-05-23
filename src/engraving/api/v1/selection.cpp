@@ -22,7 +22,7 @@
 
 #include "selection.h"
 
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 // api
 #include "score.h"

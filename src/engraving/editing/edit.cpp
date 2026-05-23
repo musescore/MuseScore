@@ -119,6 +119,7 @@
 #include "inserttime.h"
 #include "mscoreview.h"
 #include "splitjoinmeasure.h"
+#include "transaction/undostack.h"
 #include "transpose.h"
 
 #include "log.h"

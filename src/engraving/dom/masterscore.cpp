@@ -25,6 +25,7 @@
 
 #include "compat/writescorehook.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
 #include "rw/rwregister.h"

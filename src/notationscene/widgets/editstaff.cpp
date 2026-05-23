@@ -43,7 +43,7 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 
 #include "log.h"
 

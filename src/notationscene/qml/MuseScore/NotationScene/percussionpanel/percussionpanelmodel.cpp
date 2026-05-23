@@ -33,7 +33,6 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/utils.h"
-#include "engraving/editing/undo.h"
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");

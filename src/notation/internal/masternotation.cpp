@@ -21,7 +21,6 @@
  */
 #include "masternotation.h"
 
-#include <cmath>
 #include <QFileInfo>
 
 #include "log.h"
@@ -39,10 +38,8 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/keysig.h"
-#include "engraving/dom/rest.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/editing/undo.h"
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"

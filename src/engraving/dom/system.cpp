@@ -29,12 +29,10 @@
 
 #include "style/style.h"
 
-#include "actionicon.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
 #include "bracketItem.h"
-#include "chord.h"
 #include "chordrest.h"
 #include "factory.h"
 #include "measure.h"
@@ -43,15 +41,12 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
-#include "sig.h"
 #include "spacer.h"
 #include "spanner.h"
 #include "staff.h"
 #include "staffvisibilityindicator.h"
 #include "system.h"
 #include "systemdivider.h"
-
-#include "tremolotwochord.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"

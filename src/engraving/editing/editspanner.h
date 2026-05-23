@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/spanner.h"
 
 namespace mu::engraving {
-class ChangeSpannerElements : public UndoCommand
+class ChangeSpannerElements : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSpannerElements)
 
@@ -46,7 +46,7 @@ public:
     UNDO_CHANGED_OBJECTS({ spanner })
 };
 
-class ChangeStartEndSpanner : public UndoCommand
+class ChangeStartEndSpanner : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeStartEndSpanner)
 

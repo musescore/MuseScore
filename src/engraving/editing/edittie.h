@@ -22,22 +22,26 @@
 
 #pragma once
 
-#include "undo.h"
+#include "global/allocator.h"
+#include "global/types/string.h"
+
+#include "transaction/undoablecommand.h"
 
 namespace mu::engraving {
 class TieJumpPointList;
-class ChangeTieJumpPointActive : public UndoCommand
+
+class ChangeTieJumpPointActive : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeTieJumpPointActive)
 
     TieJumpPointList* m_jumpPointList = nullptr;
-    String m_id;
+    muse::String m_id;
     bool m_active = false;
 
     void flip(EditData*) override;
 
 public:
-    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, String& id, bool active)
+    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, muse::String id, bool active)
         : m_jumpPointList(jumpPointList), m_id(id), m_active(active) {}
 
     UNDO_TYPE(CommandType::ChangeTieEndPointActive)

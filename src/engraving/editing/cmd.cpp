@@ -91,12 +91,12 @@
 #include "editspanner.h"
 #include "editstaff.h"
 #include "editsystemlocks.h"
-#include "transpose.h"
 #include "mscoreview.h"
+#include "transaction/undostack.h"
+#include "transpose.h"
 
 #include "log.h"
 
-using namespace mu;
 using namespace muse::io;
 using namespace mu::engraving;
 

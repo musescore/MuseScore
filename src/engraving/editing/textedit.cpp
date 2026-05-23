@@ -23,7 +23,7 @@
 #include "textedit.h"
 
 #include "mscoreview.h"
-#include "undo.h"
+#include "transaction/undostack.h"
 
 #include "iengravingfont.h"
 #include "types/symnames.h"
@@ -156,14 +156,12 @@ void TextBase::endEdit(EditData& ed)
     // replace all undo/redo records collected during text editing with
     // one property change
 
-    using Filter = UndoCommand::Filter;
-
     //! NOTE: Current index can be less than the start index if the text element is newly added and immediately removed through
     //! undo (the "add element" command will have been popped from the stack before the calling of this method)...
     const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
     if (textWasEdited) {
         undo->mergeTransactions(ted->startUndoIdx);
-        undo->last()->removeCommandsMatchingFilter(Filter::TextEdit, this);
+        undo->last()->removeCommandsMatchingFilter(UndoableCommandFilter::TextEdit, this);
     } else {
         // No text changes in "undo" part of undo stack,
         // hence nothing to merge and filter.
@@ -178,7 +176,7 @@ void TextBase::endEdit(EditData& ed)
     const bool newlyAdded = ted->oldXmlText.isEmpty();
     if (newlyAdded) {
         const UndoableTransaction* transaction = textWasEdited ? undo->prev() : undo->last();
-        if (transaction && transaction->hasCommandsMatchingFilter(Filter::AddElement, this)) {
+        if (transaction && transaction->hasCommandsMatchingFilter(UndoableCommandFilter::AddElement, this)) {
             // We have just added this element to a score.
             // Combine undo records of text creation with text editing.
             undo->mergeTransactions(ted->startUndoIdx - 1);
@@ -1090,7 +1088,7 @@ void ChangeTextProperties::restoreSelection()
 }
 
 ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
-    : TextEditUndoCommand(*tc)
+    : TextEditUndoableCommand(*tc)
 {
     m_propertyId = propId;
     m_propertyVal = propVal;

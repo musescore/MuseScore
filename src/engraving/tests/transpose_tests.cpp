@@ -23,7 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/dom/masterscore.h"
-#include "engraving/editing/undo.h"
+#include "engraving/editing/transaction/undostack.h"
 #include "engraving/editing/transpose.h"
 
 #include "utils/scorerw.h"

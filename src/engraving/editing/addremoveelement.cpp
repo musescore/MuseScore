@@ -144,13 +144,12 @@ const char* AddElement::name() const
     return buffer;
 }
 
-bool AddElement::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
+bool AddElement::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
     switch (f) {
-    case Filter::AddElement:
+    case UndoableCommandFilter::AddElement:
         return target == element;
-    case Filter::AddElementLinked:
+    case UndoableCommandFilter::AddElementLinked:
         return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
@@ -302,13 +301,12 @@ const char* RemoveElement::name() const
     return buffer;
 }
 
-bool RemoveElement::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
+bool RemoveElement::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
     switch (f) {
-    case Filter::RemoveElement:
+    case UndoableCommandFilter::RemoveElement:
         return target == element;
-    case Filter::RemoveElementLinked:
+    case UndoableCommandFilter::RemoveElementLinked:
         return muse::contains(target->linkList(), static_cast<EngravingObject*>(element));
     default:
         break;
@@ -456,10 +454,9 @@ Link::Link(EngravingObject* e1, EngravingObject* e2)
     e = e1;
 }
 
-bool Link::matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const
+bool Link::matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    using Filter = UndoCommand::Filter;
-    if (f == Filter::Link) {
+    if (f == UndoableCommandFilter::Link) {
         return e == target || le->contains(const_cast<EngravingItem*>(target));
     }
     return false;

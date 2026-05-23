@@ -22,11 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
+
 #include "../dom/segment.h"
 
 namespace mu::engraving {
-class AddElement : public UndoCommand
+class AddElement : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddElement)
 
@@ -42,14 +43,14 @@ public:
     void cleanup(bool) override;
     const char* name() const override;
 
-    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::AddElement)
 };
 
-class RemoveElement : public UndoCommand
+class RemoveElement : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveElement)
 
@@ -62,14 +63,14 @@ public:
     void cleanup(bool) override;
     const char* name() const override;
 
-    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override;
 
     std::vector<EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::RemoveElement)
 };
 
-class ChangeElement : public UndoCommand
+class ChangeElement : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeElement)
 
@@ -86,7 +87,7 @@ public:
     UNDO_CHANGED_OBJECTS({ oldElement, newElement })
 };
 
-class ChangeParent : public UndoCommand
+class ChangeParent : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeParent)
 
@@ -105,7 +106,7 @@ public:
     UNDO_CHANGED_OBJECTS({ element })
 };
 
-class ChangeSegmentParent : public UndoCommand
+class ChangeSegmentParent : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeSegmentParent)
 
@@ -124,7 +125,7 @@ public:
     UNDO_CHANGED_OBJECTS({ segment })
 };
 
-class LinkUnlink : public UndoCommand
+class LinkUnlink : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, LinkUnlink)
 
@@ -166,6 +167,6 @@ public:
     UNDO_TYPE(CommandType::Link)
     UNDO_NAME("Link")
 
-    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override;
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override;
 };
 }

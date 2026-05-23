@@ -23,13 +23,12 @@
 #include "playcounttext.h"
 
 #include "../editing/textedit.h"
-#include "../editing/undo.h"
+#include "../editing/transaction/undostack.h"
 #include "../types/typesconv.h"
 
 #include "barline.h"
 #include "score.h"
 
-using namespace mu;
 using namespace mu::engraving;
 
 static ElementStyle playCountStyle {

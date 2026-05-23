@@ -24,7 +24,6 @@
 
 #include "../editing/elementeditdata.h"
 #include "../editing/mscoreview.h"
-#include "../editing/undo.h"
 #include "../types/typesconv.h"
 
 #include "accidental.h"

@@ -38,8 +38,9 @@
 #include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/stringdata.h"
-#include "dom/tapping.h"
 #include "dom/utils.h"
+
+#include "editing/transaction/undostack.h"
 
 using namespace mu::engraving;
 
@@ -47,7 +48,7 @@ using namespace mu::engraving;
 //   ChangePitch
 //---------------------------------------------------------
 
-class ChangePitch : public UndoCommand
+class ChangePitch : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePitch)
 
@@ -97,7 +98,7 @@ public:
 //    fret and string numbers for (potentially) all the notes of all the chords of a segment.
 //---------------------------------------------------------
 
-class ChangeFretting : public UndoCommand
+class ChangeFretting : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeFretting)
 

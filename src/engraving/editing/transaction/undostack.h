@@ -27,171 +27,18 @@
 #include "global/containers.h"
 #include "global/types/translatablestring.h"
 
-#include "editdata.h"
-#include "../dom/input.h"
+#include "../../dom/input.h"
 
 namespace mu::engraving {
 class EngravingObject;
 class Score;
 class Segment;
 
-enum class CommandType : signed char {
-    Unknown = -1,
+class EditData;
 
-    // Parts
-    InsertPart,
-    RemovePart,
-    AddPartToExcerpt,
-    SetSoloist,
-    ChangePart,
-    ConnectSharedPart,
-    DisconnectSharedPart,
-
-    // Staves
-    InsertStaff,
-    RemoveStaff,
-    AddSystemObjectStaff,
-    RemoveSystemObjectStaff,
-    SortStaves,
-    ChangeStaff,
-    ChangeStaffType,
-
-    // MStaves
-    InsertMStaff,
-    RemoveMStaff,
-    InsertStaves,
-    RemoveStaves,
-    ChangeMStaffProperties,
-    ChangeMStaffHideIfEmpty,
-
-    // Instruments
-    ChangeInstrumentShort,
-    ChangeInstrumentLong,
-    ChangeInstrumentGroupOptions,
-    ChangeInstrumentNumber,
-    ChangeInstrument,
-    ChangeDrumset,
-
-    // Measures
-    RemoveMeasures,
-    InsertMeasures,
-    ChangeMeasureLen,
-    ChangeMMRest,
-    ChangeMeasureRepeatCount,
-
-    // Elements
-    AddElement,
-    RemoveElement,
-    Unlink,
-    Link,
-    ChangeElement,
-    ChangeParent,
-
-    // Notes
-    ChangePitch,
-    ChangeFretting,
-    ChangeVelocity,
-
-    // ChordRest
-    ChangeChordStaffMove,
-    SwapCR,
-    AddNoteParenthesesInfo,
-    RemoveNoteParenthesesInfo,
-    RemoveSingleNoteParentheses,
-
-    // Brackets
-    RemoveBracket,
-    AddBracket,
-
-    // Fret
-    FretDataChange,
-    FretDot,
-    FretMarker,
-    FretBarre,
-    FretClear,
-    AddFretDiagramToFretBox,
-    RemoveFretDiagramFromFretBox,
-
-    // Harmony
-    TransposeHarmony,
-
-    // KeySig
-    ChangeKeySig,
-
-    // Clef
-    ChangeClefType,
-
-    // Tremolo
-    MoveTremolo,
-
-    // Spanners
-    ChangeSpannerElements,
-    InsertTimeUnmanagedSpanner,
-    ChangeStartEndSpanner,
-
-    // Ties
-    ChangeTieEndPointActive,
-
-    // Style
-    ChangeStyle,
-    ChangeStyleValues,
-
-    // Property
-    ChangeProperty,
-
-    // Voices
-    ExchangeVoice,
-
-    // Excerpts
-    AddExcerpt,
-    RemoveExcerpt,
-    SwapExcerpt,
-    ChangeExcerptTitle,
-
-    // Meta info
-    ChangeMetaInfo,
-
-    // Text
-    TextEdit,
-
-    // Other
-    InsertTime,
-    ChangeScoreOrder,
-};
-
-#define UNDO_TYPE(t) CommandType type() const override { return t; }
-#define UNDO_NAME(a) const char* name() const override { return a; }
-#define UNDO_CHANGED_OBJECTS(...) std::vector<EngravingObject*> objectItems() const override { return __VA_ARGS__; }
-
-class UndoCommand
-{
-public:
-    virtual ~UndoCommand() = default;
-
-    virtual void undo(EditData*);
-    virtual void redo(EditData*);
-
-    virtual void cleanup(bool /*undo*/) {}
-
-    virtual std::vector<EngravingObject*> objectItems() const { return {}; }
-    virtual const char* name() const { return "UndoCommand"; }
-    virtual CommandType type() const { return CommandType::Unknown; }
-
-    enum class Filter : unsigned char {
-        TextEdit,
-        AddElement,
-        AddElementLinked,
-        Link,
-        RemoveElement,
-        RemoveElementLinked,
-        ChangePropertyLinked,
-    };
-
-    virtual bool matchesFilter(Filter, const EngravingItem* /* target */) const { return false; }
-
-protected:
-    virtual void flip(EditData*) {}
-};
+class UndoableCommand;
+enum class UndoableCommandFilter : unsigned char;
+enum class CommandType : signed char;
 
 class UndoableTransaction
 {
@@ -202,18 +49,18 @@ public:
     void undo(EditData*);
     void redo(EditData*);
 
-    void appendCommand(UndoCommand* cmd) { m_commands.push_back(cmd); }
+    void appendCommand(UndoableCommand* cmd) { m_commands.push_back(cmd); }
     void append(UndoableTransaction&& other);
 
     void unwind();
     void cleanup(bool undo);
 
-    const std::vector<UndoCommand*>& commands() const { return m_commands; }
+    const std::vector<UndoableCommand*>& commands() const { return m_commands; }
     bool empty() const { return m_commands.empty(); }
 
-    bool hasCommandsMatchingFilter(UndoCommand::Filter, const EngravingItem* target) const;
-    bool hasCommandsNotMatchingFilters(const std::vector<UndoCommand::Filter>& filters, const EngravingItem* target) const;
-    void removeCommandsMatchingFilter(UndoCommand::Filter f, EngravingItem* target);
+    bool hasCommandsMatchingFilter(UndoableCommandFilter, const EngravingItem* target) const;
+    bool hasCommandsNotMatchingFilters(const std::vector<UndoableCommandFilter>& filters, const EngravingItem* target) const;
+    void removeCommandsMatchingFilter(UndoableCommandFilter f, EngravingItem* target);
 
     const InputState& undoInputState() const;
     const InputState& redoInputState() const;
@@ -248,7 +95,7 @@ public:
 private:
     void appendCommands(UndoableTransaction& other);
 
-    std::vector<UndoCommand*> m_commands;
+    std::vector<UndoableCommand*> m_commands;
 
     InputState m_undoInputState;
     InputState m_redoInputState;
@@ -276,8 +123,8 @@ public:
     void beginTransaction(Score*, const muse::TranslatableString& actionName);
     void endTransaction(bool rollback);
 
-    void pushAndPerform(UndoCommand*, EditData*);
-    void pushWithoutPerforming(UndoCommand*);
+    void pushAndPerform(UndoableCommand*, EditData*);
+    void pushWithoutPerforming(UndoableCommand*);
 
     bool canUndo() const { return m_currentIndex > 0; }
     bool canRedo() const { return m_currentIndex < m_transactions.size(); }
@@ -318,6 +165,4 @@ private:
     size_t m_currentIndex = 0;
     bool m_isLocked = false;
 };
-
-std::vector<EngravingObject*> compoundObjects(EngravingObject* object);
 }

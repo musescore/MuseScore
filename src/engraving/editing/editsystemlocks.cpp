@@ -22,7 +22,7 @@
 
 #include "editsystemlocks.h"
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measurebase.h"
 #include "../dom/score.h"
@@ -35,7 +35,7 @@ using namespace mu::engraving;
 //   AddSystemLock
 //---------------------------------------------------------
 
-class AddSystemLock : public UndoCommand
+class AddSystemLock : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, AddSystemLock)
 
@@ -76,7 +76,7 @@ public:
 //   RemoveSystemLock
 //---------------------------------------------------------
 
-class RemoveSystemLock : public UndoCommand
+class RemoveSystemLock : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
 

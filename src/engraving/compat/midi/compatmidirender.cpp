@@ -35,7 +35,6 @@
 #include "dom/trill.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
-#include "editing/undo.h"
 #include "types/constants.h"
 
 namespace mu::engraving {

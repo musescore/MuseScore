@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/score.h"
 
 namespace mu::engraving {
-class ChangeMetaTags : public UndoCommand
+class ChangeMetaTags : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMetaTags)
 
@@ -45,7 +45,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeMetaText : public UndoCommand
+class ChangeMetaText : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMetaText)
 
@@ -64,7 +64,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangeScoreOrder : public UndoCommand
+class ChangeScoreOrder : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeScoreOrder)
 
@@ -81,7 +81,7 @@ public:
     UNDO_CHANGED_OBJECTS({ score })
 };
 
-class ChangePageNumberOffset : public UndoCommand
+class ChangePageNumberOffset : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangePageNumberOffset)
 

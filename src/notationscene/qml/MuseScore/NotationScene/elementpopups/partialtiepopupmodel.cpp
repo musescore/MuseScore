@@ -24,7 +24,6 @@
 
 #include "engraving/dom/partialtie.h"
 #include "engraving/dom/tie.h"
-#include "engraving/editing/undo.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;

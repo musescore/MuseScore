@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/staff.h"
 
 namespace mu::engraving {
-class ChangeProperty : public UndoCommand
+class ChangeProperty : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeProperty)
 protected:
@@ -51,9 +51,9 @@ public:
 
     std::vector<EngravingObject*> objectItems() const override;
 
-    bool matchesFilter(UndoCommand::Filter f, const EngravingItem* target) const override
+    bool matchesFilter(UndoableCommandFilter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::ChangePropertyLinked && muse::contains(target->linkList(), element);
+        return f == UndoableCommandFilter::ChangePropertyLinked && muse::contains(target->linkList(), element);
     }
 };
 

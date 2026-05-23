@@ -148,7 +148,7 @@ class Text;
 class TimeSig;
 class TimeSigMap;
 class Tuplet;
-class UndoCommand;
+class UndoableCommand;
 class UndoStack;
 
 class ShadowNote;
@@ -503,7 +503,7 @@ public:
                              PropertyFlags propFlags = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
-    void undo(UndoCommand*, EditData* = nullptr) const;
+    void undo(UndoableCommand*, EditData* = nullptr) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false, bool moveStaffTypeChanges = true);
     void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
     void undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span);

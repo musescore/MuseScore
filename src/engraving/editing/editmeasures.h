@@ -21,12 +21,12 @@
  */
 #pragma once
 
-#include "undo.h"
+#include "transaction/undoablecommand.h"
 
 #include "../dom/measure.h"
 
 namespace mu::engraving {
-class InsertRemoveMeasures : public UndoCommand
+class InsertRemoveMeasures : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertRemoveMeasures)
 
@@ -75,7 +75,7 @@ public:
     UNDO_NAME("InsertMeasures")
 };
 
-class ChangeMeasureLen : public UndoCommand
+class ChangeMeasureLen : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureLen)
 
@@ -92,7 +92,7 @@ public:
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
-class ChangeMMRest : public UndoCommand
+class ChangeMMRest : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMMRest)
 
@@ -110,7 +110,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m, mmrest })
 };
 
-class ChangeMeasureRepeatCount : public UndoCommand
+class ChangeMeasureRepeatCount : public UndoableCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeMeasureRepeatCount)
 

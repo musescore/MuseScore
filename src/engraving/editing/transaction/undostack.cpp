@@ -32,17 +32,14 @@
  between startUndo() and endUndo().
 */
 
-#include "undo.h"
+#include "undostack.h"
 
 #include "containers.h"
 
-#include "editproperty.h"
-#include "editstyle.h"
-#include "textedit.h"
-
-#include "../dom/fret.h"
-#include "../dom/harmony.h"
-#include "../dom/note.h"
+#include "editing/editproperty.h"
+#include "editing/editstyle.h"
+#include "editing/textedit.h"
+#include "editing/transaction/undoablecommand.h"
 
 #include "log.h"
 
@@ -84,44 +81,6 @@ static const std::unordered_map<CommandType, CommandType> COMMAND_TYPE_INVERSION
     { CommandType::ConnectSharedPart, CommandType::DisconnectSharedPart },
     { CommandType::DisconnectSharedPart, CommandType::ConnectSharedPart },
 };
-
-std::vector<EngravingObject*> compoundObjects(EngravingObject* object)
-{
-    std::vector<EngravingObject*> objects;
-
-    if (object->isChord()) {
-        const Chord* chord = toChord(object);
-        for (const Note* note : chord->notes()) {
-            for (Note* compoundNote : note->compoundNotes()) {
-                objects.push_back(compoundNote);
-            }
-        }
-    } else if (object->isNote()) {
-        const Note* note = toNote(object);
-        for (Note* compoundNote : note->compoundNotes()) {
-            objects.push_back(compoundNote);
-        }
-    } else if (object->isFretDiagram()) {
-        const FretDiagram* fret = toFretDiagram(object);
-        if (fret->harmony()) {
-            objects.push_back(fret->harmony());
-        }
-    }
-
-    objects.push_back(object);
-
-    return objects;
-}
-
-void UndoCommand::undo(EditData* ed)
-{
-    flip(ed);
-}
-
-void UndoCommand::redo(EditData* ed)
-{
-    flip(ed);
-}
 
 //---------------------------------------------------------
 //   UndoStack
@@ -169,7 +128,7 @@ void UndoStack::beginTransaction(Score* score, const TranslatableString& actionN
     m_activeTransaction = new UndoableTransaction(score, actionName);
 }
 
-void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
+void UndoStack::pushAndPerform(UndoableCommand* cmd, EditData* ed)
 {
     if (!m_activeTransaction) {
         // this can happen for layout() outside of a transaction (load)
@@ -182,7 +141,7 @@ void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
         return;
     }
 #ifndef QT_NO_DEBUG
-    if (!strcmp(cmd->name(), "ChangeProperty")) {
+    if (cmd->type() == CommandType::ChangeProperty) {
         ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
         LOG_UNDO() << cmd->name() << " id: " << int(cp->getId()) << ", property: " << propertyName(cp->getId());
     } else {
@@ -193,7 +152,7 @@ void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
     cmd->redo(ed);
 }
 
-void UndoStack::pushWithoutPerforming(UndoCommand* cmd)
+void UndoStack::pushWithoutPerforming(UndoableCommand* cmd)
 {
     if (!m_activeTransaction) {
         if (!ScoreLoad::loading()) {
@@ -212,7 +171,7 @@ void UndoStack::remove(size_t idx)
     while (m_transactions.size() > m_currentIndex) {
         UndoableTransaction* transaction = muse::takeLast(m_transactions);
         m_states.pop_back();
-        transaction->cleanup(false); // delete elements for which UndoCommand() holds ownership
+        transaction->cleanup(false); // delete elements for which UndoableCommand() holds ownership
         delete transaction;
 //            --curIdx;
     }
@@ -259,7 +218,7 @@ void UndoStack::endTransaction(bool rollback)
         while (m_transactions.size() > m_currentIndex) {
             UndoableTransaction* transaction = muse::takeLast(m_transactions);
             m_states.pop_back();
-            transaction->cleanup(false); // delete elements for which UndoCommand() holds ownership
+            transaction->cleanup(false); // delete elements for which UndoableCommand() holds ownership
             delete transaction;
         }
         m_transactions.push_back(m_activeTransaction);
@@ -324,14 +283,14 @@ UndoableTransaction::UndoableTransaction(Score* s, const TranslatableString& act
 
 UndoableTransaction::~UndoableTransaction()
 {
-    for (UndoCommand* command : m_commands) {
+    for (UndoableCommand* command : m_commands) {
         delete command;
     }
 }
 
 void UndoableTransaction::cleanup(bool undo)
 {
-    for (UndoCommand* command : m_commands) {
+    for (UndoableCommand* command : m_commands) {
         command->cleanup(undo);
     }
 }
@@ -339,7 +298,7 @@ void UndoableTransaction::cleanup(bool undo)
 void UndoableTransaction::unwind()
 {
     while (!m_commands.empty()) {
-        UndoCommand* command = muse::takeLast(m_commands);
+        UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
         command->undo(nullptr);
         delete command;
@@ -352,9 +311,9 @@ void UndoableTransaction::appendCommands(UndoableTransaction& other)
     other.m_commands.clear();
 }
 
-bool UndoableTransaction::hasCommandsMatchingFilter(UndoCommand::Filter f, const EngravingItem* target) const
+bool UndoableTransaction::hasCommandsMatchingFilter(UndoableCommandFilter f, const EngravingItem* target) const
 {
-    for (UndoCommand* command : m_commands) {
+    for (UndoableCommand* command : m_commands) {
         if (command->matchesFilter(f, target)) {
             return true;
         }
@@ -362,12 +321,12 @@ bool UndoableTransaction::hasCommandsMatchingFilter(UndoCommand::Filter f, const
     return false;
 }
 
-bool UndoableTransaction::hasCommandsNotMatchingFilters(const std::vector<UndoCommand::Filter>& filters,
+bool UndoableTransaction::hasCommandsNotMatchingFilters(const std::vector<UndoableCommandFilter>& filters,
                                                         const EngravingItem* target) const
 {
-    for (UndoCommand* command : m_commands) {
+    for (UndoableCommand* command : m_commands) {
         bool filtered = false;
-        for (UndoCommand::Filter f : filters) {
+        for (UndoableCommandFilter f : filters) {
             if (command->matchesFilter(f, target)) {
                 filtered = true;
                 break;
@@ -380,10 +339,10 @@ bool UndoableTransaction::hasCommandsNotMatchingFilters(const std::vector<UndoCo
     return false;
 }
 
-void UndoableTransaction::removeCommandsMatchingFilter(UndoCommand::Filter f, EngravingItem* target)
+void UndoableTransaction::removeCommandsMatchingFilter(UndoableCommandFilter f, EngravingItem* target)
 {
-    std::vector<UndoCommand*> acceptedList;
-    for (UndoCommand* command : m_commands) {
+    std::vector<UndoableCommand*> acceptedList;
+    for (UndoableCommand* command : m_commands) {
         if (command->matchesFilter(f, target)) {
             delete command;
         } else {
@@ -462,7 +421,7 @@ void UndoableTransaction::redo(EditData* ed)
     fillSelectionInfo(m_undoSelectionInfo, m_score->selection());
     m_score->deselectAll();
 
-    for (UndoCommand* command : m_commands) {
+    for (UndoableCommand* command : m_commands) {
         LOG_UNDO() << "<" << command->name() << ">";
         command->redo(ed);
     }
@@ -518,7 +477,7 @@ UndoableTransaction::ChangesInfo UndoableTransaction::changesInfo(bool undo) con
 {
     ChangesInfo result;
 
-    for (const UndoCommand* command : commands()) {
+    for (const UndoableCommand* command : commands()) {
         CommandType type = command->type();
 
         if (type == CommandType::ChangeProperty) {
@@ -534,7 +493,7 @@ UndoableTransaction::ChangesInfo UndoableTransaction::changesInfo(bool undo) con
             const StyleIdSet styleIds = changeStyle->changedIds();
             result.changedStyleIdSet.insert(styleIds.cbegin(), styleIds.cend());
         } else if (type == CommandType::TextEdit) {
-            result.isTextEditing |= static_cast<const TextEditUndoCommand*>(command)->cursor().editing();
+            result.isTextEditing |= static_cast<const TextEditUndoableCommand*>(command)->cursor().editing();
         }
 
         if (undo) {

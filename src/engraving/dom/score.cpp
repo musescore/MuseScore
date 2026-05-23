@@ -37,6 +37,7 @@
 #include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
+#include "editing/transaction/undostack.h"
 #include "editing/transpose.h"
 
 #include "style/style.h"
@@ -4340,7 +4341,7 @@ void Score::cmdSelectSection()
 //   undo
 //---------------------------------------------------------
 
-void Score::undo(UndoCommand* cmd, EditData* ed) const
+void Score::undo(UndoableCommand* cmd, EditData* ed) const
 {
     undoStack()->pushAndPerform(cmd, ed);
 }
