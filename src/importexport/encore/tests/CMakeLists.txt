@@ -18,23 +18,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-muse_create_module(iex_encore)
+set(MODULE_TEST iex_encore_tests)
 
-target_sources(iex_encore PRIVATE
-    enc-module.cpp
-    enc-module.h
-    ienc-importconfiguration.h
-    internal/enc-importconfiguration.h
-    internal/enc-importconfiguration.cpp
-    internal/notationencreader.cpp
-    internal/notationencreader.h
-    internal/importer/import.cpp
-    internal/importer/import.h
-    internal/importer/import-options.h
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/tst_smoke.cpp
 )
 
-target_link_libraries(iex_encore PRIVATE engraving)
+set(MODULE_TEST_LINK
+    engraving
+    iex_encore
+)
 
-if (MUE_BUILD_IMPORTEXPORT_TESTS)
-    add_subdirectory(tests)
-endif()
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(SetupGTest)
