@@ -569,9 +569,15 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
     if (startLevel == endLevel && strongestLevelCrossed == startLevel - 1) {
         needToSplit = false;
     }
-    // nor for the next simplest case of level 2 syncopation (allow sixteenth-note, eighth, eighth... to cross unstressed beats)
-    if (startLevel == endLevel && strongestLevelCrossed == startLevel - 2) {
-        // but disallow sixteenth-note, quarter, quarter...
+    // nor for the next simplest case of level 2 syncopation: a note starting and ending at the same
+    // subbeat level crossing a beat 2 levels stronger (e.g. 32nd position crossing an 8th beat).
+    // The note must be at least as long as one unit of the crossed beat level to form a valid syncopation
+    // (e.g. an 8th note or longer at a 32nd-note position crossing an 8th beat is OK; a shorter note is not).
+    // A note that is too short to form a valid syncopation must be split (e.g. an 8th note at a 16th-note
+    // position crossing a quarter-note beat must be split into two 16th notes).
+    if (startLevel == endLevel && strongestLevelCrossed == startLevel - 2
+        && l.ticks() >= nominal.subbeatTicks(strongestLevelCrossed)) {
+        // but disallow a note that is not centered between adjacent subbets of the crossed beat level
         int ticksToNext = nominal.ticksToNextSubbeat(rtickStart.ticks(), startLevel - 1);
         int ticksPastPrev = nominal.ticksPastSubbeat(rtickStart.ticks(), startLevel - 1);
         needToSplit = ticksToNext != ticksPastPrev;

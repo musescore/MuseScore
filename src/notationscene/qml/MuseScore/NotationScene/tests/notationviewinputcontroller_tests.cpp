@@ -887,11 +887,6 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_interaction, setHitElementContext(contextMenuOnMeasureContext))
     .WillOnce(Return());
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
-#endif
-    ;
-
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
     .WillRepeatedly(Return(false));
