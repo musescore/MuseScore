@@ -208,21 +208,21 @@ jobs:
     - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
-    # - name: Generate and upload dump symbols
-    #   if: env.DO_UPLOAD_SYMBOLS == 'true'
-    #   run: |
-    #     APP_BIN=$(pwd)/applebuild/mscore.app/Contents/MacOS/mscore
-    #     GENERATE_ARCHS=("x86_64 arm64")
-    #     BUILD_DIR=$(pwd)/applebuild
-    #     cmake -DAPP_BIN=${APP_BIN} \
-    #           -DGENERATE_ARCHS="${GENERATE_ARCHS}" \
-    #           -DBUILD_DIR=${BUILD_DIR} \
-    #           -DSENTRY_URL=https://sentry.musescore.com \
-    #           -DSENTRY_ORG=sentry \
-    #           -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
-    #           -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-    #           -DSTAGE=${BUILD_MODE} \
-    #           -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
+    - name: Generate and upload dump symbols
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        APP_BIN=$(pwd)/applebuild/mscore.app/Contents/MacOS/mscore
+        GENERATE_ARCHS=("x86_64 arm64")
+        BUILD_DIR=$(pwd)/applebuild
+        cmake -DAPP_BIN=${APP_BIN} \
+              -DGENERATE_ARCHS="${GENERATE_ARCHS}" \
+              -DBUILD_DIR=${BUILD_DIR} \
+              -DSENTRY_URL=https://sentry.musescore.com \
+              -DSENTRY_ORG=sentry \
+              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
+              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+              -DSTAGE=${BUILD_MODE} \
+              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
