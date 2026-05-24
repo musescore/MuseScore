@@ -26,9 +26,13 @@ target_sources(iex_encore PRIVATE
     ienc-importconfiguration.h
     internal/enc-importconfiguration.h
     internal/enc-importconfiguration.cpp
+    internal/parser/ticks.cpp
+    internal/parser/ticks.h
     internal/notationencreader.cpp
     internal/notationencreader.h
     internal/importer/import.cpp
+    internal/importer/durations.h
+    internal/importer/durations.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )
