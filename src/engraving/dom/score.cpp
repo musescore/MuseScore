@@ -1560,7 +1560,7 @@ void Score::removeElement(EngravingItem* element)
             }
 
             muse::remove(m_systems, system);
-            deleteLater(system);
+            system->deleteLater();
 
             if (page && page->systems().empty()) {
                 // Remove this page, since it is now empty.
@@ -1568,7 +1568,7 @@ void Score::removeElement(EngravingItem* element)
                 PointF pos = page->pos();
                 auto ii = std::find(pages().begin(), pages().end(), page);
                 pages().erase(ii);
-                deleteLater(page);
+                page->deleteLater();
 
                 while (ii != pages().end()) {
                     page = *ii;

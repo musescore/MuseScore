@@ -336,6 +336,38 @@ void CmdState::setUpdateMode(UpdateMode m)
 }
 
 //---------------------------------------------------------
+//   deleteLater
+//---------------------------------------------------------
+
+void CmdState::deleteLater(EngravingObject* e)
+{
+    m_postponedDeletions.push_back(e);
+}
+
+std::vector<EngravingObject*> CmdState::takePostponedDeletions()
+{
+    std::vector<EngravingObject*> result;
+    result.swap(m_postponedDeletions);
+    return result;
+}
+
+static void deletePostponed(CmdState& cmdState)
+{
+    for (EngravingObject* e : cmdState.takePostponedDeletions()) {
+        if (e->isSystem()) {
+            System* s = toSystem(e);
+            std::list<SpannerSegment*> spanners = s->spannerSegments();
+            for (SpannerSegment* ss : spanners) {
+                if (ss->system() == s) {
+                    ss->setSystem(0);
+                }
+            }
+        }
+        delete e;
+    }
+}
+
+//---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
 ///   and starting a user-visible undo.
@@ -476,7 +508,7 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
     {
         MasterScore* ms = masterScore();
         CmdState& cs = ms->cmdState();
-        ms->deletePostponed();
+        deletePostponed(cs);
 
         if (cs.layoutRange()) {
             for (Score* s : ms->scoreList()) {
@@ -529,27 +561,6 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
 void Score::lockUpdates(bool locked)
 {
     m_updatesLocked = locked;
-}
-
-//---------------------------------------------------------
-//   deletePostponed
-//---------------------------------------------------------
-
-void Score::deletePostponed()
-{
-    for (EngravingObject* e : m_updateState.deleteList) {
-        if (e->isSystem()) {
-            System* s = toSystem(e);
-            std::list<SpannerSegment*> spanners = s->spannerSegments();
-            for (SpannerSegment* ss : spanners) {
-                if (ss->system() == s) {
-                    ss->setSystem(0);
-                }
-            }
-        }
-    }
-    muse::DeleteAll(m_updateState.deleteList);
-    m_updateState.deleteList.clear();
 }
 
 //---------------------------------------------------------

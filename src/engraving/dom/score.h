@@ -612,8 +612,6 @@ public:
     bool selectionEmpty() const { return m_selection.staffStart() == m_selection.staffEnd(); }
     bool selectionChanged() const { return m_updateState.selectionChanged; }
     void setSelectionChanged(bool val) { m_updateState.selectionChanged = val; }
-    void deleteLater(EngravingObject* e) { m_updateState.deleteList.push_back(e); }
-    void deletePostponed();
 
     void changeSelectedElementsVoice(voice_idx_t);
     void changeSelectedElementsVoiceAssignment(VoiceAssignment);
