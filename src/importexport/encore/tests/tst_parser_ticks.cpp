@@ -26,6 +26,7 @@
 #include <gtest/gtest.h>
 
 #include "../internal/parser/ticks.h"
+#include "../internal/parser/readers.h"
 #include "../internal/importer/durations.h"
 
 #include <vector>
@@ -217,4 +218,14 @@ TEST(Tst_EncoreRhythm, dottedAdvance)
     // Quarter base.
     EXPECT_EQ(dottedAdvance(DurationType::V_QUARTER, 0), Fraction(1, 4));
     EXPECT_EQ(dottedAdvance(DurationType::V_QUARTER, 1), Fraction(3, 8));
+}
+
+TEST(Tst_EncoreParserBounds, clampMeasureEnd_clamps_oversized_varsize)
+{
+    // Normal case: end = measStart + varsize + elemBlockOffset.
+    EXPECT_EQ(clampMeasureEnd(100, 50, 0x36, 10000), 100 + 50 + 0x36);
+    // An oversized (attacker-controlled) varsize must clamp to the device size, never past EOF.
+    EXPECT_EQ(clampMeasureEnd(100, 0xFFFFFFFFu, 0x36, 1000), 1000);
+    // A varsize that fits stays unclamped even for a large device.
+    EXPECT_EQ(clampMeasureEnd(0, 200, 0x36, 100000), 200 + 0x36);
 }
