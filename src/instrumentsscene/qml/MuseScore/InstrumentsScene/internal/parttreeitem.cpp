@@ -29,6 +29,15 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 
+static bool isPartItemEnabled(const Part* part, bool partExists)
+{
+    if (!partExists) {
+        return true;
+    }
+
+    return part->isSharedPart() || !(part->sharedPart() && part->sharedPart()->enabled());
+}
+
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent, LayoutPanelItemType::ItemType type)
     : AbstractLayoutPanelTreeItem(type, masterNotation, notation, parent), Contextable(iocCtxForQmlObject(this))
 {
@@ -46,7 +55,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     const Part* part = notation()->parts()->part(masterPart->id());
     m_partExists = part != nullptr;
     bool visible = m_partExists && part->getProperty(Pid::VISIBLE).toBool();
-    bool enabled = m_partExists && !(part->sharedPart() && part->sharedPart()->enabled());
+    bool enabled = isPartItemEnabled(part, m_partExists);
 
     if (!m_partExists) {
         part = masterPart;
@@ -84,9 +93,7 @@ void PartTreeItem::onScoreChanged(const mu::engraving::ScoreChanges&)
 
     m_ignoreVisibilityChange = true;
     setIsVisible(m_partExists && m_part->getProperty(Pid::VISIBLE).toBool());
-    if (!m_part->isSharedPart()) {
-        setIsEnabled(!(m_part->sharedPart() && m_part->sharedPart()->enabled()));
-    }
+    setIsEnabled(isPartItemEnabled(m_part, m_partExists));
     m_ignoreVisibilityChange = false;
 }
 
