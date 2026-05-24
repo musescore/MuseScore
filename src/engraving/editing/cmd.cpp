@@ -92,6 +92,7 @@
 #include "editstaff.h"
 #include "editsystemlocks.h"
 #include "mscoreview.h"
+#include "transaction/transaction.h"
 #include "transaction/undostack.h"
 #include "transpose.h"
 
@@ -101,36 +102,6 @@ using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes)
-{
-    int startTick = cmdState.startTick().ticks();
-    int endTick = cmdState.endTick().ticks();
-
-    for (const auto& pair : changes.changedObjects) {
-        if (!pair.first->isEngravingItem()) {
-            continue;
-        }
-
-        int tick = toEngravingItem(pair.first)->tick().ticks();
-
-        if (startTick > tick) {
-            startTick = tick;
-        }
-
-        if (endTick < tick) {
-            endTick = tick;
-        }
-    }
-
-    return { startTick, endTick,
-             cmdState.startStaff(), cmdState.endStaff(),
-             changes.isTextEditing,
-             std::move(changes.changedObjects),
-             std::move(changes.changedObjectTypes),
-             std::move(changes.changedPropertyIdSet),
-             std::move(changes.changedStyleIdSet) };
-}
-
 //---------------------------------------------------------
 //    For use with Score::scanElements.
 //    Reset positions and autoplacement for the given
@@ -354,26 +325,7 @@ static void deletePostponed(CmdState& cmdState)
 
 void Score::startCmd(const TranslatableString& actionName)
 {
-    masterScore()->startCmd(actionName);
-}
-
-void MasterScore::startCmd(const TranslatableString& actionName)
-{
-    if (undoStack()->isLocked()) {
-        return;
-    }
-
-    if (undoStack()->hasActiveTransaction()) {
-        LOGD() << "cmd already active";
-        return;
-    }
-
-    MScore::setError(MsError::MS_NO_ERROR);
-
-    cmdState().reset();
-
-    // Start collecting low-level undoable operations for a user-visible undoable transaction.
-    undoStack()->beginTransaction(this, actionName);
+    masterScore()->transactionManager()->beginTransaction(actionName);
 }
 
 //---------------------------------------------------------
@@ -382,53 +334,7 @@ void MasterScore::startCmd(const TranslatableString& actionName)
 
 void Score::undoRedo(bool undo, EditData* ed)
 {
-    masterScore()->undoRedo(undo, ed);
-}
-
-void MasterScore::undoRedo(bool undo, EditData* ed)
-{
-    if (readOnly()) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(!undoStack()->hasActiveTransaction()) {
-        LOGW() << "cannot undo/redo while transaction is active";
-        return;
-    }
-
-    if (undo) {
-        IF_ASSERT_FAILED(undoStack()->canUndo()) {
-            LOGW() << "cannot undo";
-            return;
-        }
-    } else {
-        IF_ASSERT_FAILED(undoStack()->canRedo()) {
-            LOGW() << "cannot redo";
-            return;
-        }
-    }
-
-    cmdState().reset();
-
-    //! NOTE: the order of operations is very important here
-    //! 1. for the undo operation, the list of changed elements is available before undo()
-    //! 2. for the redo operation, the list of changed elements will be available after redo()
-    UndoableTransaction::ChangesInfo changes;
-
-    if (undo) {
-        changes = undoStack()->last()->changesInfo(true);
-        undoStack()->undo(ed);
-    } else {
-        undoStack()->redo(ed);
-        changes = undoStack()->last()->changesInfo(false);
-    }
-
-    update(false);
-    invalidateRepeatList();    // TODO: flag individual operations
-    updateSelection();
-
-    ScoreChanges result = buildScoreChanges(cmdState(), changes);
-    changesChannel().send(result);
+    masterScore()->transactionManager()->undoRedo(undo, ed);
 }
 
 //---------------------------------------------------------
@@ -439,50 +345,7 @@ void MasterScore::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback, bool layoutAllParts)
 {
-    masterScore()->endCmd(rollback, layoutAllParts);
-}
-
-void MasterScore::endCmd(bool rollback, bool layoutAllParts)
-{
-    if (undoStack()->isLocked()) {
-        return;
-    }
-
-    if (!undoStack()->hasActiveTransaction()) {
-        LOGW() << "no command active";
-        update();
-        return;
-    }
-
-    if (readOnly() || (MScore::_error != MsError::MS_NO_ERROR && !MScore::_errorIsWarning)) {
-        rollback = true;
-    }
-
-    if (rollback) {
-        undoStack()->activeTransaction()->unwind();
-    }
-
-    update(false, layoutAllParts);
-
-    ScoreChanges changes;
-    if (!rollback) {
-        changes = buildScoreChanges(cmdState(), undoStack()->activeTransaction()->changesInfo());
-    }
-
-    LOGD() << "Undo stack current transaction commands count: " << undoStack()->activeTransaction()->commands().size();
-
-    const bool isCurrentTransactionEmpty = undoStack()->activeTransaction()->empty(); // nothing to undo?
-    undoStack()->endTransaction(isCurrentTransactionEmpty);
-
-    if (dirty()) {
-        invalidateRepeatList(); // TODO: flag individual operations
-    }
-
-    cmdState().reset();
-
-    if (!isCurrentTransactionEmpty && !rollback) {
-        changesChannel().send(changes);
-    }
+    masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts);
 }
 
 #ifndef NDEBUG

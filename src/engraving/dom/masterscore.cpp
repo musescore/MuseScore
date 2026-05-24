@@ -25,6 +25,7 @@
 
 #include "compat/writescorehook.h"
 #include "editing/editmeasures.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
 #include "rw/mscloader.h"
 #include "rw/xmlreader.h"
@@ -66,6 +67,7 @@ MasterScore::MasterScore(const muse::modularity::ContextPtr& iocCtx, std::weak_p
     : Score(iocCtx)
 {
     m_project = project;
+    m_transactionManager = std::make_unique<TransactionManager>(this);
     m_undoStack   = new UndoStack();
     m_tempomap    = new TempoMap;
     m_sigmap      = new TimeSigMap();

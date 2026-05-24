@@ -28,6 +28,7 @@
 namespace mu::engraving {
 class Score;
 class MasterScore;
+class TransactionManager;
 class UndoStack;
 class EditData;
 }
@@ -75,6 +76,7 @@ private:
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;
+    mu::engraving::TransactionManager* transactionManager() const;
     mu::engraving::UndoStack* undoStack() const;
 
     IGetScore* m_getScore = nullptr;
