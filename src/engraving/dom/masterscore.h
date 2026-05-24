@@ -138,6 +138,13 @@ public:
     bool excerptsChanged() const { return m_cmdState.excerptsChanged; }
     bool instrumentsChanged() const { return m_cmdState.instrumentsChanged; }
 
+    void startCmd(const TranslatableString& actionName);
+    void endCmd(bool rollback = false, bool layoutAllParts = false);
+    void undoRedo(bool undo, EditData* ed);
+
+    void update() { update(true); }
+    void lockUpdates(bool locked);
+
     void setTempomap(TempoMap* tm);
 
     int midiPortCount() const { return m_midiPortCount; }
@@ -193,6 +200,7 @@ public:
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 
 private:
+    void update(bool resetCmdState, bool layoutAllParts = false);
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -230,6 +238,7 @@ private:
     bool m_readOnly = false;
 
     CmdState m_cmdState;       // modified during cmd processing
+    bool m_updatesLocked = false;
 
     std::array<Fraction, 2> m_loopBoundaries; ///< 0 - LoopIn, 1 - LoopOut
 

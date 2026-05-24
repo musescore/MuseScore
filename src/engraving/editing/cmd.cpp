@@ -375,16 +375,17 @@ static void deletePostponed(CmdState& cmdState)
 
 void Score::startCmd(const TranslatableString& actionName)
 {
+    masterScore()->startCmd(actionName);
+}
+
+void MasterScore::startCmd(const TranslatableString& actionName)
+{
     if (undoStack()->isLocked()) {
         return;
     }
 
-    if (MScore::debugMode) {
-        LOGD("===startCmd()");
-    }
-
     if (undoStack()->hasActiveTransaction()) {
-        LOGD("Score::startCmd(): cmd already active");
+        LOGD() << "cmd already active";
         return;
     }
 
@@ -401,6 +402,11 @@ void Score::startCmd(const TranslatableString& actionName)
 //---------------------------------------------------------
 
 void Score::undoRedo(bool undo, EditData* ed)
+{
+    masterScore()->undoRedo(undo, ed);
+}
+
+void MasterScore::undoRedo(bool undo, EditData* ed)
 {
     if (readOnly()) {
         return;
@@ -421,7 +427,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     }
 
     update(false);
-    masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
+    setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
 
     ScoreChanges result = buildScoreChanges(cmdState(), changes);
@@ -435,6 +441,11 @@ void Score::undoRedo(bool undo, EditData* ed)
 //---------------------------------------------------------
 
 void Score::endCmd(bool rollback, bool layoutAllParts)
+{
+    masterScore()->endCmd(rollback, layoutAllParts);
+}
+
+void MasterScore::endCmd(bool rollback, bool layoutAllParts)
 {
     if (undoStack()->isLocked()) {
         return;
@@ -467,7 +478,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     undoStack()->endTransaction(isCurrentTransactionEmpty);
 
     if (dirty()) {
-        masterScore()->setPlaylistDirty(); // TODO: flag individual operations
+        setPlaylistDirty(); // TODO: flag individual operations
     }
 
     cmdState().reset();
@@ -496,7 +507,12 @@ void CmdState::dump()
 //    layout & update
 //---------------------------------------------------------
 
-void Score::update(bool resetCmdState, bool layoutAllParts)
+void Score::update()
+{
+    masterScore()->update();
+}
+
+void MasterScore::update(bool resetCmdState, bool layoutAllParts)
 {
     if (m_updatesLocked) {
         return;
@@ -504,53 +520,55 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
 
     TRACEFUNC;
 
+    deletePostponed(m_cmdState);
+
     bool updateAll = false;
-    {
-        MasterScore* ms = masterScore();
-        CmdState& cs = ms->cmdState();
-        deletePostponed(cs);
-
-        if (cs.layoutRange()) {
-            for (Score* s : ms->scoreList()) {
-                if (s != this && !s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
-                    continue;
-                }
-                s->doLayoutRange(cs.startTick(), cs.endTick());
-            }
-            updateAll = true;
-        }
-    }
-
-    if (m_needSetUpTempoMap) {
-        setUpTempoMap();
-        m_needSetUpTempoMap = false;
-    }
-
-    MasterScore* ms = masterScore();
-    CmdState& cs = ms->cmdState();
-    if (updateAll || cs.updateAll()) {
+    if (m_cmdState.layoutRange()) {
         for (Score* s : scoreList()) {
-            for (MuseScoreView* v : s->m_viewer) {
+            if (s != this && !s->isOpen() && scoreList().size() > 1 && !layoutAllParts) {
+                continue;
+            }
+            s->doLayoutRange(m_cmdState.startTick(), m_cmdState.endTick());
+        }
+        updateAll = true;
+    }
+
+    if (needSetUpTempoMap()) {
+        setUpTempoMap();
+    }
+
+    if (updateAll || m_cmdState.updateAll()) {
+        for (Score* s : scoreList()) {
+            for (MuseScoreView* v : s->getViewer()) {
                 v->updateAll();
             }
         }
-    } else if (cs.updateRange()) {
-        // updateRange updates only current score
-        double d = style().spatium() * .5;
-        m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-        for (MuseScoreView* v : m_viewer) {
-            v->dataChanged(m_updateState.refresh);
+    } else if (m_cmdState.updateRange()) {
+        // Any score that accumulated a refresh rect via addRefresh() calls dataChanged() on its viewers.
+        for (Score* s : scoreList()) {
+            if (s->refreshRect().isNull()) {
+                continue;
+            }
+            const std::list<MuseScoreView*>& viewers = s->getViewer();
+            if (!viewers.empty()) {
+                double d = s->style().spatium() * .5;
+                RectF rect = s->refreshRect().adjusted(-d, -d, 2 * d, 2 * d);
+                for (MuseScoreView* v : viewers) {
+                    v->dataChanged(rect);
+                }
+            }
+            s->clearRefreshRect();
         }
-        m_updateState.refresh = RectF();
-    }
-    if (playlistDirty()) {
-        masterScore()->setPlaylistClean();
-    }
-    if (resetCmdState) {
-        cs.reset();
     }
 
-    for (Score* score : ms->scoreList()) {
+    if (playlistDirty()) {
+        setPlaylistClean();
+    }
+    if (resetCmdState) {
+        m_cmdState.reset();
+    }
+
+    for (Score* score : scoreList()) {
         Selection& sel = score->selection();
         if (sel.isRange() && !sel.isLocked()) {
             sel.updateSelectedElements();
@@ -558,7 +576,7 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
     }
 }
 
-void Score::lockUpdates(bool locked)
+void MasterScore::lockUpdates(bool locked)
 {
     m_updatesLocked = locked;
 }

@@ -584,8 +584,7 @@ public:
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
-    void update() { update(true); }
-    void lockUpdates(bool locked);
+    void update();
     void undoRedo(bool undo, EditData*);
 
     virtual muse::async::Channel<ScoreChanges> changesChannel() const;
@@ -601,7 +600,6 @@ public:
     virtual const CmdState& cmdState() const;
     virtual void addLayoutFlags(LayoutFlags);
     virtual void setInstrumentsChanged(bool);
-    void addRefresh(const RectF&);
 
     void cmdToggleAutoplace(bool all);
 
@@ -612,6 +610,9 @@ public:
     bool selectionEmpty() const { return m_selection.staffStart() == m_selection.staffEnd(); }
     bool selectionChanged() const { return m_updateState.selectionChanged; }
     void setSelectionChanged(bool val) { m_updateState.selectionChanged = val; }
+    const RectF& refreshRect() const { return m_updateState.refresh; }
+    void addRefresh(const RectF&);
+    void clearRefreshRect() { m_updateState.refresh = RectF(); }
 
     void changeSelectedElementsVoice(voice_idx_t);
     void changeSelectedElementsVoiceAssignment(VoiceAssignment);
@@ -686,6 +687,7 @@ public:
 
     void setUpTempoMapLater();
     void setUpTempoMap();
+    bool needSetUpTempoMap() const { return m_needSetUpTempoMap; }
 
     EngravingItem* nextElement();
     EngravingItem* prevElement();
@@ -1133,8 +1135,6 @@ private:
     void deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
                             Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
 
-    void update(bool resetCmdState, bool layoutAllParts = false);
-
     muse::ID newStaffId() const;
     muse::ID newPartId() const;
 
@@ -1226,8 +1226,6 @@ private:
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;
-
-    bool m_updatesLocked = false;
 };
 
 static inline Score* toScore(EngravingObject* e)
