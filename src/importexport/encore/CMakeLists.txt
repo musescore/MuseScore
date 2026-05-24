@@ -26,6 +26,7 @@ target_sources(iex_encore PRIVATE
     ienc-importconfiguration.h
     internal/enc-importconfiguration.h
     internal/enc-importconfiguration.cpp
+    internal/parser/elem.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h
     internal/notationencreader.cpp
