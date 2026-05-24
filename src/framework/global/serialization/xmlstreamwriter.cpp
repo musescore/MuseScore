@@ -23,7 +23,11 @@
 
 #include <vector>
 
-#include <global/thirdparty/utfcpp/utf8.h>
+#ifdef SYSTEM_UTFCPP
+#include <utf8cpp/utf8.h>
+#else
+#include "global/thirdparty/utfcpp/utf8.h"
+#endif
 
 #include "global/containers.h"
 #include "textstream.h"
