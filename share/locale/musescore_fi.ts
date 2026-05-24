@@ -1655,7 +1655,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="587"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Näyttää nuottiarvot yli tahtirajojen (KOKEILULLINEN, vain vanhalle musiikille!)</translation>
+        <translation>Näyttää nuottiarvot tahtirajojen yli (KOKEILULLINEN, vain vanhalle musiikille!)</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="594"/>
@@ -7375,22 +7375,22 @@ jos niiden perässä on viivoja</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1255"/>
         <source>Ottava 8va &amp;alta</source>
-        <translation>Oktaavi ylempää (8va alta)</translation>
+        <translation>Oktaavi 8va &amp;ylempää</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1256"/>
         <source>Add ottava 8va alta</source>
-        <translation>Lisää oktaavi ylempää (8va alta)</translation>
+        <translation>Lisää oktaavi 8va ylempää</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1261"/>
         <source>Ottava 8va &amp;bassa</source>
-        <translation>Oktaavi alempaa (8va bassa)</translation>
+        <translation>Oktaavi 8va &amp;alempaa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1262"/>
         <source>Add ottava 8va bassa</source>
-        <translation>Lisää oktaavi alempaa (8va bassa)</translation>
+        <translation>Lisää oktaavi 8va alempaa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="1267"/>
@@ -9395,7 +9395,7 @@ jos niiden perässä on viivoja</translation>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="66"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="67"/>
         <source>Apply current palette element</source>
-        <translation>Sovella nykyistä palettielementtiä</translation>
+        <translation>Käytä nykyistä palettielementtiä</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="72"/>
@@ -14934,7 +14934,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1312"/>
         <source>Tenor clef 8va bassa</source>
-        <translation>Tenoriavain oktaavia alempaa</translation>
+        <translation>Tenoriavain 8va alempaa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1313"/>
@@ -20284,7 +20284,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3251"/>
         <source>Thumb damp</source>
-        <translation>Peuvalovaimennus</translation>
+        <translation>Peukalovaimennus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="3252"/>
@@ -25649,7 +25649,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="58"/>
         <source>Bend/dive</source>
-        <translation>Venytys/lasku</translation>
+        <translation>Taivutus/lasku</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/bends/bendsettingsmodel.cpp" line="283"/>
@@ -25784,32 +25784,32 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="56"/>
         <source>8va alta</source>
-        <translation>8va (okt. ylempää)</translation>
+        <translation>8va ylempää</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="57"/>
         <source>8va bassa</source>
-        <translation>8va (okt. alempaa)</translation>
+        <translation>8va lempaa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="58"/>
         <source>15ma alta</source>
-        <translation>15ma (2 okt. ylempää)</translation>
+        <translation>15ma ylempää</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="59"/>
         <source>15ma bassa</source>
-        <translation>15ma (2 okt. alempaa)</translation>
+        <translation>15ma alempaa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="60"/>
         <source>22ma alta</source>
-        <translation>22ma (3 okt. ylempää)</translation>
+        <translation>22ma ylempää</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="61"/>
         <source>22ma bassa</source>
-        <translation>22ma (3 okt. alempaa)</translation>
+        <translation>22ma alempaa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/qml/MuseScore/Inspector/notation/lines/ottavasettingsmodel.cpp" line="82"/>
@@ -29154,7 +29154,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="131"/>
         <source>Label for full bends:</source>
-        <translation>Kokosävelvenytysten merkintä:</translation>
+        <translation>Kokonaisen taivutuksen merkintä:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="163"/>
@@ -29189,7 +29189,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="289"/>
         <source>Grace note bends/dives on tablature</source>
-        <translation>Korunuottien venytykset/syöksyt tabulatuurissa</translation>
+        <translation>Korunuottien taivutukset/syöksyt tabulatuurissa</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="296"/>
@@ -29199,7 +29199,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="307"/>
         <source>Align pre-bends and pre-dives</source>
-        <translation>Tasaa ennakkovenytykset ja ennakkosyöksyt</translation>
+        <translation>Tasaa ennakkotaivutukset ja ennakkosyöksyt</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/BendsPage.qml" line="314"/>
@@ -30267,7 +30267,7 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="152"/>
         <source>Use legacy percussion panel</source>
-        <translation>Käytä vanhaa lyömäsoitinpaneelia</translation>
+        <translation>Käytä perinteistä lyömäsoitinpaneelia</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/percussionpanelmodel.cpp" line="191"/>
@@ -30277,12 +30277,12 @@ Lisäksi Mastering MuseScore sisältää tukevan muusikkoyhteisön, jossa on kes
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/percussionpanelmodel.cpp" line="207"/>
         <source>Pad names</source>
-        <translation>Padin tyyli</translation>
+        <translation>Padin nimet</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/percussionpanelmodel.cpp" line="210"/>
         <source>Notation preview</source>
-        <translation>Nuotinnuksen esittely</translation>
+        <translation>Nuotinnuksen esikatselu</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/percussionpanel/percussionpanelmodel.cpp" line="215"/>
@@ -33267,7 +33267,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>Symbols for Legacy Computing</source>
-        <translation>Legacy Computingin symbolit</translation>
+        <translation>Symbolit perinteisille tietokonejärjestelmille</translation>
     </message>
     <message>
         <location filename="../../src/palette/widgets/specialcharactersdialog.cpp" line="397"/>
@@ -34395,7 +34395,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PercussionPreferencesPage.qml" line="144"/>
         <source>Legacy panel</source>
-        <translation>Vanha paneeli</translation>
+        <translation>Perinteinen paneeli</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/PreferencesDialog.qml" line="34"/>
@@ -35845,7 +35845,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
-        <translation>Valitse graafiset parannukset, joita haluat soveltaa partituuriisi</translation>
+        <translation>Valitse graafiset parannukset, joita haluat käyttää partituurissa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
@@ -37485,13 +37485,13 @@ Haluatko korvata sen?</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentsettingsmodel.cpp" line="129"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/instrumentsettingsmodel.cpp" line="151"/>
         <source>Change instrument settings</source>
-        <translation>Muuta soittimen asetuksia</translation>
+        <translation>Vaihda soittimen asetuksia</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="240"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/staffsettingsmodel.cpp" line="275"/>
         <source>Change staff settings</source>
-        <translation>Muuta viivaston asetuksia</translation>
+        <translation>Vaihda viivaston asetuksia</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/systemobjectslayersettingsmodel.cpp" line="99"/>
@@ -38551,7 +38551,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/workspacelistmodel.cpp" line="228"/>
         <source>Resetting workspaces</source>
-        <translation>Työtilojen resetointi</translation>
+        <translation>Työtilojen palauttaminen</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/qml/Muse/Workspace/workspacelistmodel.cpp" line="229"/>
