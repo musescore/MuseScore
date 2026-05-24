@@ -302,7 +302,6 @@ void ChangeStaff::flip(EditData*)
 
     staff->triggerLayout();
     staff->masterScore()->rebuildMidiMapping();
-    staff->score()->setPlaylistDirty();
 }
 
 //---------------------------------------------------------

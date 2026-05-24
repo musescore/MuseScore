@@ -697,7 +697,6 @@ void ChangeVelocity::flip(EditData*)
 
 void ChangeNoteEventList::flip(EditData*)
 {
-    note->score()->setPlaylistDirty();
     // Get copy of current list.
     NoteEventList nel = note->playEvents();
     // Replace current copy with new list.
@@ -718,7 +717,6 @@ void ChangeNoteEventList::flip(EditData*)
 
 void ChangeNoteEvent::flip(EditData*)
 {
-    note->score()->setPlaylistDirty();
     NoteEvent e = *oldEvent;
     *oldEvent   = newEvent;
     newEvent    = e;
@@ -736,7 +734,6 @@ void ChangeNoteEvent::flip(EditData*)
 
 void ChangeChordPlayEventType::flip(EditData*)
 {
-    chord->score()->setPlaylistDirty();
     // Flips data between NoteEventList's.
     size_t n = chord->notes().size();
     for (size_t i = 0; i < n; ++i) {

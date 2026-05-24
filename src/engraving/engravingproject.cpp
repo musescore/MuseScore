@@ -123,7 +123,7 @@ Ret EngravingProject::setupMasterScore(bool forceMode)
     m_masterScore->rebuildMidiMapping();
 
     for (Score* s : m_masterScore->scoreList()) {
-        s->setPlaylistDirty();
+        s->invalidateRepeatList();
         s->setLayoutAll();
         s->createPaddingTable();
     }

@@ -826,22 +826,9 @@ bool Score::dirty() const
     return !undoStack()->isClean();
 }
 
-//---------------------------------------------------------
-//   playlistDirty
-//---------------------------------------------------------
-
-bool Score::playlistDirty() const
+void Score::invalidateRepeatList()
 {
-    return masterScore()->playlistDirty();
-}
-
-//---------------------------------------------------------
-//   setPlaylistDirty
-//---------------------------------------------------------
-
-void Score::setPlaylistDirty()
-{
-    masterScore()->setPlaylistDirty();
+    masterScore()->invalidateRepeatList();
 }
 
 bool Score::isOpen() const
@@ -1435,13 +1422,8 @@ void Score::addElement(EngravingItem* element)
             }
         }
         o->staff()->updateOttava();
-        setPlaylistDirty();
     }
     break;
-
-    case ElementType::DYNAMIC:
-        setPlaylistDirty();
-        break;
 
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
@@ -1453,7 +1435,6 @@ void Score::addElement(EngravingItem* element)
 
     case ElementType::CHORD:
     {
-        setPlaylistDirty();
         // May need to reconnect slur when inserting new chord
         SpannerMap& smap = spannerMap();
         Fraction tick = element->tick();
@@ -1653,13 +1634,8 @@ void Score::removeElement(EngravingItem* element)
         o->triggerLayout();
         removeSpanner(o);
         o->staff()->updateOttava();
-        setPlaylistDirty();
     }
     break;
-
-    case ElementType::DYNAMIC:
-        setPlaylistDirty();
-        break;
 
     case ElementType::CHORD:
     case ElementType::REST:
@@ -4205,7 +4181,6 @@ void Score::setTempo(Segment* segment, BeatsPerSecond tempo)
 void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 {
     tempomap()->setTempo(tick.ticks(), roundTempo(tempo));
-    setPlaylistDirty();
 }
 
 //---------------------------------------------------------
@@ -4215,7 +4190,6 @@ void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 void Score::removeTempo(const Fraction& tick)
 {
     tempomap()->delTempo(tick.ticks());
-    setPlaylistDirty();
 }
 
 //---------------------------------------------------------
@@ -4256,7 +4230,6 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
 void Score::setPause(const Fraction& tick, double seconds)
 {
     tempomap()->setPause(tick.ticks(), seconds);
-    setPlaylistDirty();
 }
 
 //---------------------------------------------------------

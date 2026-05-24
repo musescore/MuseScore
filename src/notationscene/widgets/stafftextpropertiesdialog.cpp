@@ -152,7 +152,6 @@ void StaffTextPropertiesDialog::saveValues()
     score->undoChangeElement(m_originStaffText, nt);
     score->masterScore()->updateChannel();
     score->updateSwing();
-    score->setPlaylistDirty();
     stack->commitChanges();
 }
 

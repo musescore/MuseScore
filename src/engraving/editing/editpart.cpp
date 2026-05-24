@@ -142,7 +142,6 @@ void ChangePart::flip(EditData*)
     Score* score = part->score();
     score->masterScore()->rebuildMidiMapping();
     score->setInstrumentsChanged(true);
-    score->setPlaylistDirty();
 
     // check if notes need to be updated
     // true if changing into or away from TAB or from one TAB type to another

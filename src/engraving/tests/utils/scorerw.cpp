@@ -92,7 +92,7 @@ MasterScore* ScoreRW::readScore(const String& name, bool isAbsolutePath, ImportF
     // up-to-date from that point. But we weren't finished reading the score, so the score will still
     // change. We need to tell the repeat list about that, so that it will be updated next time
     // someone uses it.
-    score->setPlaylistDirty();
+    score->invalidateRepeatList();
 
     return score;
 }

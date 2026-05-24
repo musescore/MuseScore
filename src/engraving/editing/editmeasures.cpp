@@ -85,7 +85,7 @@ void InsertRemoveMeasures::insertMeasures()
     Segment* fs = nullptr;
     Segment* ls = nullptr;
     if (fm->isMeasure()) {
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
         fs = toMeasure(fm)->first();
         ls = toMeasure(lm)->last();
         for (Segment* s = fs; s && s != ls; s = s->next1()) {
@@ -294,7 +294,7 @@ void InsertRemoveMeasures::removeMeasures()
 
     if (fm->isMeasure()) {
         score->setUpTempoMap();
-        score->setPlaylistDirty();
+        score->invalidateRepeatList();
 
         // check if there is a clef at the end of last measure
         // remove clef from staff cleflist

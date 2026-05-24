@@ -424,7 +424,7 @@ void MasterScore::undoRedo(bool undo, EditData* ed)
     }
 
     update(false);
-    setPlaylistDirty();    // TODO: flag all individual operations
+    invalidateRepeatList();    // TODO: flag individual operations
     updateSelection();
 
     ScoreChanges result = buildScoreChanges(cmdState(), changes);
@@ -475,7 +475,7 @@ void MasterScore::endCmd(bool rollback, bool layoutAllParts)
     undoStack()->endTransaction(isCurrentTransactionEmpty);
 
     if (dirty()) {
-        setPlaylistDirty(); // TODO: flag individual operations
+        invalidateRepeatList(); // TODO: flag individual operations
     }
 
     cmdState().reset();
@@ -558,9 +558,6 @@ void MasterScore::update(bool resetCmdState, bool layoutAllParts)
         }
     }
 
-    if (playlistDirty()) {
-        setPlaylistClean();
-    }
     if (resetCmdState) {
         m_cmdState.reset();
     }

@@ -705,8 +705,6 @@ public:
     void setSavedCapture(bool v) { m_savedCapture = v; }
     bool printing() const { return m_printing; }
     void setPrinting(bool val) { m_printing = val; }
-    virtual bool playlistDirty() const;
-    virtual void setPlaylistDirty();
     bool hasCorruptedMeasures() const { return m_corrupted; }
     void setHasCorruptedMeasures(bool val) { m_corrupted = val; }
 
@@ -821,9 +819,11 @@ public:
     /// To be used together with setExpandRepeats.
     /// For bigger operations, where suboperations might also use it,
     /// where those need to have the same value for expandRepeats.
-    virtual const RepeatList& repeatList() const;
+    const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
-    virtual const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
+
+    void invalidateRepeatList();
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;

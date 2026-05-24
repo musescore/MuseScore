@@ -818,7 +818,6 @@ void Segment::add(EngravingItem* el)
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }
-            score()->setPlaylistDirty();
         }
     // fall through
 
@@ -886,7 +885,6 @@ void Segment::remove(EngravingItem* el)
                 score()->undo(new ChangeStartEndSpanner(s, start, end));
             }
         }
-        score()->setPlaylistDirty();
     }
     break;
 
