@@ -165,6 +165,7 @@ option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
 option(MUE_COMPILE_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
 option(MUE_COMPILE_USE_SYSTEM_PUGIXML "Try use system pugixml" OFF)
+option(MUE_COMPILE_USE_SYSTEM_LAME "Try use system lame" OFF)
 option(MUE_COMPILE_USE_SYSTEM_UTF8CPP "Try use system utf8cpp" OFF)
 
 # === Debug ===
