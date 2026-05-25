@@ -175,11 +175,14 @@ void TremoloLayout::calcIsUp(TremoloTwoChord* item)
         && item->chord2()->stemDirection() == DirectionV::AUTO
         && item->chord1()->staffMove() == item->chord2()->staffMove()
         && !hasVoices) {
+        std::vector<int> chord1Distances = item->chord1()->noteDistances();
+        std::vector<int> chord2Distances = item->chord2()->noteDistances();
         std::vector<int> noteDistances;
-        for (int distance : item->chord1()->noteDistances()) {
+        noteDistances.reserve(chord1Distances.size() + chord2Distances.size());
+        for (int distance : chord1Distances) {
             noteDistances.push_back(distance);
         }
-        for (int distance : item->chord2()->noteDistances()) {
+        for (int distance : chord2Distances) {
             noteDistances.push_back(distance);
         }
         std::sort(noteDistances.begin(), noteDistances.end());

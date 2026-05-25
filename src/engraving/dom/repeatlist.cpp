@@ -196,6 +196,7 @@ void RepeatList::update(bool expand, bool updateTies)
     }
 
     std::vector<RepeatSegment> oldSegments;
+    oldSegments.reserve(size());
     for (RepeatSegment* rs : *this) {
         oldSegments.push_back(*rs);
     }

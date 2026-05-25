@@ -4411,6 +4411,7 @@ std::vector<Spanner*> Score::spannerList() const
 {
     std::vector<Spanner*> result;
     const std::multimap<int, Spanner*>& spannerMap = m_spanner.map();
+    result.reserve(spannerMap.size());
     for (auto it = spannerMap.begin(); it != spannerMap.end(); ++it) {
         result.push_back(it->second);
     }

@@ -653,6 +653,7 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
 String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style)
 {
     std::vector<int> tpcs;
+    tpcs.reserve(notes.size());
     NoteSpellingType harmonySpelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     NoteCaseType harmonyCase = NoteCaseType::AUTO;
     size_t idx = 0;

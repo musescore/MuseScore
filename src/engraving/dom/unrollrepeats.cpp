@@ -137,6 +137,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     // remove excerpts for now (they are re-created after unrolling master score)
     std::vector<Excerpt*> excerpts;
+    excerpts.reserve(score->excerpts().size());
     for (Excerpt* e : score->excerpts()) {
         excerpts.push_back(new Excerpt(*e, false));
         score->masterScore()->deleteExcerpt(e);

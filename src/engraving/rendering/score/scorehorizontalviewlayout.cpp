@@ -272,6 +272,7 @@ void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
 void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
 {
     std::vector<int> visibleParts;
+    visibleParts.reserve(ctx.dom().parts().size());
     for (size_t partIdx = 0; partIdx < ctx.dom().parts().size(); partIdx++) {
         if (ctx.dom().parts().at(partIdx)->show()) {
             visibleParts.push_back(static_cast<int>(partIdx));

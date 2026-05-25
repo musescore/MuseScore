@@ -31,6 +31,7 @@ BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags 
 BeamBase::BeamBase(const BeamBase& b)
     : EngravingItem(b)
 {
+    m_beamSegments.reserve(b.m_beamSegments.size());
     for (const BeamSegment* bs : b.m_beamSegments) {
         m_beamSegments.push_back(new BeamSegment(*bs));
     }

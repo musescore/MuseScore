@@ -833,6 +833,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             }
         }
     }
+    m_tracks.reserve(sl.size() * VOICES);
     for (track_idx_t staffIdx : sl) {
         track_idx_t sTrack = staffIdx * VOICES;
         track_idx_t eTrack = sTrack + VOICES;

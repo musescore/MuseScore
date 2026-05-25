@@ -49,7 +49,9 @@ StringData::StringData(int numFrets, int numStrings, int strings[], bool useFlat
     instrString strg = { 0, false, 0 };
     m_frets = numFrets;
 
-    for (int i = 0; i < numStrings; i++) {
+    const int safeNumStrings = std::max(0, numStrings);
+    m_stringTable.reserve(static_cast<size_t>(safeNumStrings));
+    for (int i = 0; i < safeNumStrings; i++) {
         strg.pitch = strings[i];
         strg.useFlat = useFlats;
         m_stringTable.push_back(strg);
@@ -62,6 +64,7 @@ StringData::StringData(int numFrets, std::vector<instrString>& strings)
     m_frets = numFrets;
 
     m_stringTable.clear();
+    m_stringTable.reserve(strings.size());
     for (const instrString& i : strings) {
         m_stringTable.push_back(i);
     }

@@ -225,6 +225,7 @@ void EditChord::undoAddParenthesesToNotes(Chord* chord, std::vector<Note*> notes
         linkedParenRight->setTrack(linkedChord->track());
 
         std::vector<Note*> linkedNotes;
+        linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
             linkedNotes.push_back(linkedNote);
@@ -286,6 +287,7 @@ void EditChord::undoClearParenthesisGroup(Chord* chord, std::vector<Note*> notes
         }
 
         std::vector<Note*> linkedNotes;
+        linkedNotes.reserve(notes.size());
         for (Note* note : notes) {
             Note* linkedNote = toNote(note->findLinkedInStaff(linkedStaff));
             linkedNotes.push_back(linkedNote);

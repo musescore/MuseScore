@@ -244,9 +244,13 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
     const double columnGap = item->columnGap().val() * spatium;
 
     //! The height of each row is determined by the height of the tallest cell in that row
+    const size_t numRows = chordsPerRow > 0 ? (totalDiagrams + chordsPerRow - 1) / chordsPerRow : 0;
     std::vector<double> rowHeights;
+    rowHeights.reserve(numRows);
     std::vector<double> harmonyHeights;
+    harmonyHeights.reserve(numRows);
     std::vector<double> harmonyBaselines;
+    harmonyBaselines.reserve(numRows);
     for (size_t i = 0; i < totalDiagrams; i += chordsPerRow) {
         size_t itemsInRow = std::min(chordsPerRow, totalDiagrams - i);
         double maxRowHeight = 0.0;

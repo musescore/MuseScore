@@ -2274,6 +2274,7 @@ void Measure::createVoice(int track)
 void Measure::sortStaves(std::vector<staff_idx_t>& dst)
 {
     std::vector<MStaff*> ms;
+    ms.reserve(dst.size());
     for (staff_idx_t idx : dst) {
         ms.push_back(m_mstaves[idx]);
     }
