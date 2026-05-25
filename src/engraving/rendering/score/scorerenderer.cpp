@@ -49,6 +49,11 @@ void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction
     ScoreLayout::layoutRange(score, st, et);
 }
 
+void ScoreRenderer::layoutHeadersFooters(Score* score) const
+{
+    ScoreLayout::layoutHeadersFooters(score);
+}
+
 SizeF ScoreRenderer::pageSizeInch(const Score* score) const
 {
     return Paint::pageSizeInch(score);
