@@ -297,9 +297,10 @@ void TimeEditorDialog::classBegin()
     m_timeEditor = new TimeEditor(this);
     m_timeEditor->classBegin();
 
+    this->resize(m_timeEditor->size());
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->addWidget(m_timeEditor);
 }
 
