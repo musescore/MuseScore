@@ -29,7 +29,7 @@
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
 #include "engraving/editing/splitjoinmeasure.h"
-#include "engraving/editing/transaction/undostack.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -582,17 +582,16 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
     EXPECT_TRUE(score);
 
     TestUtils::createParts(score, 2);
-    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Engraving measure tests"), [&](Transaction& tx) {
+        Measure* m = score->firstMeasure()->nextMeasure();
+        EXPECT_TRUE(m);
+        ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
+        EXPECT_TRUE(cr);
 
-    Measure* m = score->firstMeasure()->nextMeasure();
-    EXPECT_TRUE(m);
-    ChordRest* cr = m->first(SegmentType::ChordRest)->next()->nextChordRest(0);
-    EXPECT_TRUE(cr);
+        SplitJoinMeasure::splitMeasure(tx, score->masterScore(), cr->tick());
 
-    SplitJoinMeasure::splitMeasure(score->masterScore(), cr->tick());
-
-    score->setLayoutAll();
-    score->endCmd();
+        score->setLayoutAll();
+    });
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measureSplit.mscx", MEASURE_DATA_DIR + u"measureSplit-ref.mscx"));
 }

@@ -47,6 +47,8 @@ public:
 
     void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
 
+    void transaction(const muse::TranslatableString& actionName, std::function<void(mu::engraving::Transaction&)> func) override;
+
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
     void commitChanges() override;

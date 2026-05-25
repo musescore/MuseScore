@@ -348,6 +348,28 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     masterScore()->transactionManager()->endTransaction(rollback, layoutAllParts);
 }
 
+//---------------------------------------------------------
+//   undo
+//    Deprecated: use Transaction::push instead.
+//---------------------------------------------------------
+
+void Score::undo(UndoableCommand* cmd, EditData* ed) const
+{
+    Transaction* tx = masterScore()->transactionManager()->currentTransaction();
+    if (!tx) {
+        // this can happen for layout() outside of a transaction (load)
+        if (!ScoreLoad::loading()) {
+            LOGW() << "called outside of transaction";
+        }
+
+        cmd->redo(ed);
+        delete cmd;
+        return;
+    }
+
+    tx->push(cmd, ed);
+}
+
 #ifndef NDEBUG
 //---------------------------------------------------------
 //   CmdState::dump
@@ -1849,6 +1871,8 @@ void Score::cmdResetToDefaultLayout()
 {
     TRACEFUNC;
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     StyleIdSet dontResetTheseStyles {
         Sid::lyricsPlacement,
         Sid::repeatBarTips,
@@ -1977,7 +2001,7 @@ void Score::cmdResetToDefaultLayout()
     cmdResetMeasuresLayout();
     scanElements(resetPositionAndTextProperties);
     cmdResetAllStyles(dontResetTheseStyles);
-    EditSystemLocks::undoRemoveAllLocks(this);
+    EditSystemLocks::undoRemoveAllLocks(tx, this);
 }
 
 //---------------------------------------------------------
@@ -3891,13 +3915,14 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
     }
 
     // toggle the breaks
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
     for (MeasureBase* mb: mbl) {
         bool val = false;
         switch (type) {
         case LayoutBreakType::LINE:
             val = !mb->lineBreak();
             if (val) {
-                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove page break if appropriate
@@ -3908,7 +3933,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::PAGE:
             val = !mb->pageBreak();
             if (val) {
-                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove line break if appropriate
@@ -3919,7 +3944,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::SECTION:
             val = !mb->sectionBreak();
             if (val) {
-                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(this, type, mb);
+                EditSystemLocks::removeSystemLocksOnAddLayoutBreak(tx, this, type, mb);
             }
             mb->undoSetBreak(val, type);
             break;

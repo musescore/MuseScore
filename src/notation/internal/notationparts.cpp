@@ -21,6 +21,7 @@
  */
 #include "notationparts.h"
 
+#include "engraving/editing/transaction/transaction.h"
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
@@ -246,7 +247,8 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     mu::engraving::EditPart::setPartVisible(score(), part, visible);
 
     if (visible) {
-        EditSystemLocks::removeSystemLocksContainingMMRests(score());
+        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
     apply();
@@ -570,7 +572,8 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     doSetStaffConfig(staff, config);
 
     if (visible) {
-        EditSystemLocks::removeSystemLocksContainingMMRests(score());
+        engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
     }
 
     apply();
@@ -730,7 +733,8 @@ void NotationParts::insertPart(Part* part, size_t index)
 
     startEdit(TranslatableString("undoableAction", "Add instrument"));
 
-    EditSystemLocks::removeSystemLocksContainingMMRests(score());
+    engraving::Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditSystemLocks::removeSystemLocksContainingMMRests(tx, score());
 
     doInsertPart(part, index);
 

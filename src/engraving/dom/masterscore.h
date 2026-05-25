@@ -100,7 +100,7 @@ public:
     bool readOnly() const override { return m_readOnly; }
     void setReadOnly(bool ro) { m_readOnly = ro; }
     TransactionManager* transactionManager() const { return m_transactionManager.get(); }
-    UndoStack* undoStack() const override { return m_undoStack; }
+    UndoStack* undoStack() const { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
     muse::async::Channel<ScoreChanges> changesChannel() const override { return m_changesChannel; }

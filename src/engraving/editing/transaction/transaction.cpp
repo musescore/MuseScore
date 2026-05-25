@@ -24,6 +24,7 @@
 
 #include "../../dom/masterscore.h"
 
+#include "undoablecommand.h"
 #include "undostack.h"
 
 #include "log.h"
@@ -60,6 +61,51 @@ static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTr
              std::move(changes.changedStyleIdSet) };
 }
 
+//---------------------------------------------------------
+// Transaction
+//---------------------------------------------------------
+
+Transaction::Transaction(UndoableTransaction* undoableTransaction)
+    : m_undoableTransaction(undoableTransaction)
+{
+}
+
+Transaction& Transaction::dummy()
+{
+    static Transaction dummyTransaction(nullptr);
+    dummyTransaction.m_isDummy = true;
+    return dummyTransaction;
+}
+
+void Transaction::push(UndoableCommand* cmd, EditData* editData)
+{
+    if (m_isDummy) {
+        cmd->redo(editData);
+        delete cmd;
+        return;
+    }
+
+    // NOTE: append the command _before_ performing it. Some commands' redo()
+    // may themselves push further commands; those must end up _after_ this
+    // command in the transaction, so that undo reverses them first.
+    m_undoableTransaction->appendCommand(cmd);
+    cmd->redo(editData);
+}
+
+void Transaction::pushWithoutPerforming(UndoableCommand* cmd)
+{
+    if (m_isDummy) {
+        delete cmd;
+        return;
+    }
+
+    m_undoableTransaction->appendCommand(cmd);
+}
+
+//---------------------------------------------------------
+// TransactionManager
+//---------------------------------------------------------
+
 TransactionManager::TransactionManager(MasterScore* masterScore)
     : m_masterScore(masterScore)
 {
@@ -70,7 +116,19 @@ UndoStack* TransactionManager::undoStack() const
     return m_masterScore->undoStack();
 }
 
-void TransactionManager::beginTransaction(const muse::TranslatableString& actionName)
+void TransactionManager::transaction(const muse::TranslatableString& description, std::function<void(Transaction&)> func)
+{
+    IF_ASSERT_FAILED(!m_currentTransaction) {
+        LOGW() << "transaction already active";
+        func(*m_currentTransaction);
+        return;
+    }
+    beginTransaction(description);
+    func(*m_currentTransaction);
+    endTransaction();
+}
+
+void TransactionManager::beginTransaction(const muse::TranslatableString& description)
 {
     UndoStack* stack = undoStack();
 
@@ -86,7 +144,8 @@ void TransactionManager::beginTransaction(const muse::TranslatableString& action
     MScore::setError(MsError::MS_NO_ERROR);
 
     m_masterScore->cmdState().reset();
-    stack->beginTransaction(m_masterScore, actionName);
+    stack->beginTransaction(m_masterScore, description);
+    m_currentTransaction = std::unique_ptr<Transaction>(new Transaction(stack->activeTransaction()));
 }
 
 void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
@@ -124,6 +183,7 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
 
     const bool isCurrentTransactionEmpty = stack->activeTransaction()->empty(); // nothing to undo?
     stack->endTransaction(isCurrentTransactionEmpty);
+    m_currentTransaction.reset();
 
     if (m_masterScore->dirty()) {
         m_masterScore->invalidateRepeatList(); // TODO: flag individual operations
@@ -133,6 +193,20 @@ void TransactionManager::endTransaction(bool rollback, bool layoutAllParts)
 
     if (!isCurrentTransactionEmpty && !rollback) {
         m_masterScore->changesChannel().send(changes);
+    }
+}
+
+Transaction* TransactionManager::currentTransaction() const
+{
+    return m_currentTransaction.get();
+}
+
+Transaction& TransactionManager::currentOrDummyTransaction()
+{
+    if (m_currentTransaction) {
+        return *m_currentTransaction;
+    } else {
+        return Transaction::dummy();
     }
 }
 

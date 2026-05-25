@@ -27,6 +27,7 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editexcerpt.h"
 #include "../editing/transpose.h"
+#include "../editing/transaction/transaction.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -350,6 +351,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 {
     MasterScore* masterScore = excerpt->masterScore();
     Score* score = excerpt->excerptScore();
+    Transaction& tx = masterScore->transactionManager()->currentOrDummyTransaction();
 
     std::vector<Part*>& parts = excerpt->parts();
     std::vector<staff_idx_t> srcStaves;
@@ -441,7 +443,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            Transpose::transposeKeys(score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
+            Transpose::transposeKeys(tx, score, staffIdx, staffIdx + 1, Fraction(0, 1), endTick, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
@@ -467,7 +469,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        Transpose::undoTransposeHarmony(score, hh, interval);
+                        Transpose::undoTransposeHarmony(tx, hh, interval);
                     }
                 }
             }
@@ -1420,6 +1422,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     Score* oscore = srcStaff->score();
     Score* score  = dstStaff->score();
 
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     Excerpt* oex = oscore->excerpt();
     Excerpt* ex  = score->excerpt();
     TracksMap otracks, tracks;
@@ -1694,7 +1698,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             interval.flip();
         }
 
-        Transpose::transposeKeys(score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+        Transpose::transposeKeys(tx, score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 
     collectTieEndPoints(tieMap);

@@ -123,9 +123,6 @@ public:
     void beginTransaction(Score*, const muse::TranslatableString& actionName);
     void endTransaction(bool rollback);
 
-    void pushAndPerform(UndoableCommand*, EditData*);
-    void pushWithoutPerforming(UndoableCommand*);
-
     bool canUndo() const { return m_currentIndex > 0; }
     bool canRedo() const { return m_currentIndex < m_transactions.size(); }
     bool isClean() const { return m_cleanState == m_states[m_currentIndex]; }

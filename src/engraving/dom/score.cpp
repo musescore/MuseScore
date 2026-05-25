@@ -37,6 +37,7 @@
 #include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
+#include "editing/transaction/transaction.h"
 #include "editing/transaction/undostack.h"
 #include "editing/transpose.h"
 
@@ -2034,6 +2035,8 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 
 bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick)
 {
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     Fraction tickOfAppend = last()->endTick();
     TieMap tieMap;
 
@@ -2146,7 +2149,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     // check if section starts with a pick-up measure to be merged with end of previous section
     Measure* cm = firstAppendedMeasure, * pm = cm->prevMeasure();
     if (pm->timesig() == cm->timesig() && pm->ticks() + cm->ticks() == cm->timesig()) {
-        SplitJoinMeasure::joinMeasures(m_masterScore, pm->tick(), cm->tick());
+        SplitJoinMeasure::joinMeasures(tx, m_masterScore, pm->tick(), cm->tick());
     }
 
     // clone the spanners (only in the range currently copied)
@@ -2886,6 +2889,8 @@ void Score::cmdConcertPitchChanged(bool flag)
         return;
     }
 
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
     for (Staff* staff : m_staves) {
@@ -2905,7 +2910,7 @@ void Score::cmdConcertPitchChanged(bool flag)
         track_idx_t startTrack = staffIdx * VOICES;
         track_idx_t endTrack   = startTrack + VOICES;
 
-        Transpose::transposeKeys(this, staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
+        Transpose::transposeKeys(tx, this, staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), !flag);
 
         for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
             interval = staff->transpose(segment->tick());
@@ -2922,7 +2927,7 @@ void Score::cmdConcertPitchChanged(bool flag)
                     // just ones resulting from mmrests
                     Harmony* he = toHarmony(se);              // toHarmony() does not work as e is an ScoreElement
                     if (he->staff() == h->staff()) {
-                        Transpose::undoTransposeHarmony(this, he, interval);
+                        Transpose::undoTransposeHarmony(tx, he, interval);
                     }
                 }
                 //realized harmony should be invalid after a transpose command
@@ -4308,15 +4313,6 @@ void Score::cmdSelectSection()
     m_selection.setRange(toMeasure(sm)->first(), toMeasure(em)->last(), 0, nstaves());
     setUpdateAll();
     update();
-}
-
-//---------------------------------------------------------
-//   undo
-//---------------------------------------------------------
-
-void Score::undo(UndoableCommand* cmd, EditData* ed) const
-{
-    undoStack()->pushAndPerform(cmd, ed);
 }
 
 //---------------------------------------------------------
@@ -6221,6 +6217,7 @@ void Score::addSystemDivider(size_t systemIdx, SystemDivider* divider)
 
 IAutomation* Score::automation() const { return m_masterScore->automation(); }
 
+TransactionManager* Score::transactionManager() const { return m_masterScore->transactionManager(); }
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }
 const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(); }
 const RepeatList& Score::repeatList(bool expandRepeats, bool updateTies)  const

@@ -40,7 +40,7 @@
 #include "dom/stringdata.h"
 #include "dom/utils.h"
 
-#include "editing/transaction/undostack.h"
+#include "editing/transaction/transaction.h"
 
 using namespace mu::engraving;
 
@@ -657,9 +657,11 @@ void EditNote::upDown(Score* score, bool up, UpDownMode mode)
 
 void EditNote::undoChangePitch(Score* score, Note* note, int pitch, int tpc1, int tpc2)
 {
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     for (EngravingObject* e : note->linkList()) {
         Note* n = toNote(e);
-        score->undoStack()->pushAndPerform(new ChangePitch(n, pitch, tpc1, tpc2), 0);
+        tx.push(new ChangePitch(n, pitch, tpc1, tpc2), 0);
     }
 }
 
@@ -669,9 +671,11 @@ void EditNote::undoChangePitch(Score* score, Note* note, int pitch, int tpc1, in
 
 void EditNote::undoChangeFretting(Score* score, Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
 {
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     for (EngravingObject* e : note->linkList()) {
         Note* n = toNote(e);
-        score->undo(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
+        tx.push(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2), 0);
     }
 }
 

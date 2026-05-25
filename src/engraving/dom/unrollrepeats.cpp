@@ -26,6 +26,7 @@
 
 #include "style/style.h"
 #include "../editing/editexcerpt.h"
+#include "../editing/transaction/transaction.h"
 
 #include "barline.h"
 #include "engravingitem.h"
@@ -39,8 +40,6 @@
 #include "segment.h"
 
 #include "log.h"
-
-using namespace mu;
 
 namespace mu::engraving {
 static void removeRepeatMarkings(Score* score)
@@ -98,20 +97,19 @@ static void createExcerpts(MasterScore* cs, const std::vector<Excerpt*>& excerpt
         Score* nscore = e->masterScore()->createScore();
         e->setExcerptScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
-        cs->startCmd(TranslatableString("undoableAction", "Create parts"));
-        cs->undo(new AddExcerpt(e));
-        Excerpt::createExcerpt(e);
+        cs->transactionManager()->transaction(TranslatableString("undoableAction", "Create parts"), [&](auto& tx) {
+            tx.push(new AddExcerpt(e));
+            Excerpt::createExcerpt(e);
 
-        // borrowed from excerptsdialog.cpp
-        // a new excerpt is created in AddExcerpt, make sure the parts are filed
-        for (Excerpt* ee : e->masterScore()->excerpts()) {
-            if (ee->excerptScore() == nscore && ee != e) {
-                ee->parts().clear();
-                ee->parts().insert(ee->parts().end(), e->parts().begin(), e->parts().end());
+            // borrowed from excerptsdialog.cpp
+            // a new excerpt is created in AddExcerpt, make sure the parts are filed
+            for (Excerpt* ee : e->masterScore()->excerpts()) {
+                if (ee->excerptScore() == nscore && ee != e) {
+                    ee->parts().clear();
+                    ee->parts().insert(ee->parts().end(), e->parts().begin(), e->parts().end());
+                }
             }
-        }
-
-        cs->endCmd();
+        });
     }
 }
 
