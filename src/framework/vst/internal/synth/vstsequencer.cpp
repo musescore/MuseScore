@@ -201,7 +201,21 @@ void VstSequencer::addParamChange(EventSequenceMap& destination, const mpe::time
         return;
     }
 
-    destination[timestamp].emplace_back(ParamChangeEvent { controlIt->second, value });
+    const PluginParamId paramId = controlIt->second;
+    EventSequence& events = destination[timestamp];
+
+    for (const EventType& e : events) {
+        if (!std::holds_alternative<ParamChangeEvent>(e)) {
+            continue;
+        }
+
+        const ParamChangeEvent& pce = std::get<ParamChangeEvent>(e);
+        if (pce.paramId == paramId && RealIsEqual(pce.value, value)) {
+            return;
+        }
+    }
+
+    events.emplace_back(ParamChangeEvent { paramId, value });
 }
 
 void VstSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
