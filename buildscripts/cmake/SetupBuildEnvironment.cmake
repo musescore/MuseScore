@@ -78,6 +78,7 @@ if(CC_IS_MSVC)
     add_compile_definitions(_UNICODE UNICODE)
     add_compile_definitions(_USE_MATH_DEFINES)
     add_compile_definitions(NOMINMAX)
+    add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
     
     add_link_options("/NODEFAULTLIB:LIBCMT")
 endif()
