@@ -74,8 +74,6 @@ private:
     IAudioDriverPtr createDriver(const std::string& name) const;
     void setNewDriver(IAudioDriverPtr newDriver);
 
-    IAudioDriver::Spec defaultSpec() const;
-
     void checkOutputDevice();
     void updateOutputSpec();
 
