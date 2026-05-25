@@ -226,15 +226,6 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
     } while (state.curSystem() && !(state.rangeDone() && lmb == state.pageOldMeasure()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
-
-    /* If the headers/footers involve page count, we need to re-calculate them. This needs to
-     * be done after laying out all pages, so that the total number of pages will be known: */
-    if (state.mustRecomputeHeadersFooters()) {
-        for (const auto& page : ctx.mutDom().pages()) {
-            HeaderFooterLayout::layoutHeaderFooter(ctx, page);
-        }
-        state.setMustRecomputeHeadersFooters(false);
-    }
 }
 
 void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
@@ -262,4 +253,13 @@ void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
     }
 
     score->systems().insert(score->systems().end(), state.systemList().begin(), state.systemList().end());
+
+    /* If the headers/footers involve page count, we need to re-calculate them. This needs to
+     * be done after laying out all pages, so that the total number of pages will be known: */
+    if (state.mustRecomputeHeadersFooters()) {
+        for (const auto& page : ctx.mutDom().pages()) {
+            HeaderFooterLayout::layoutHeaderFooter(ctx, page);
+        }
+        state.setMustRecomputeHeadersFooters(false);
+    }
 }
