@@ -887,8 +887,8 @@ void FinaleParser::importStaffItems()
             const auto musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, musxStaffId);
             for (const auto& musxStyleChange : musxStyleChanges) {
                 styleChanges.emplace(musxStyleChange->startMeas);
-                if (std::optional<std::pair<MeasCmper, Edu> > nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
-                    auto [nextMeas, nextEdu] = nextLoc.value();
+                if (const auto nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
+                    MeasCmper nextMeas = nextLoc->measureId;
                     if (nextMeas == musxStyleChange->startMeas && nextMeas < MeasCmper(musxMeasures.size())) {
                         styleChanges.emplace(nextMeas + 1);
                     } else {
