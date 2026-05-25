@@ -34,6 +34,7 @@ public:
 
     // Main interface
     void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
+    void layoutHeadersFooters(Score* score) const override;
 
     SizeF pageSizeInch(const Score* score) const override;
     SizeF pageSizeInch(const Score* score, const ScorePaintOptions& opt) const override;

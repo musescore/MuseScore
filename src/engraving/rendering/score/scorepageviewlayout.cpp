@@ -257,9 +257,26 @@ void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
     /* If the headers/footers involve page count, we need to re-calculate them. This needs to
      * be done after laying out all pages, so that the total number of pages will be known: */
     if (state.mustRecomputeHeadersFooters()) {
-        for (const auto& page : ctx.mutDom().pages()) {
-            HeaderFooterLayout::layoutHeaderFooter(ctx, page);
-        }
+        doLayoutHeadersFooters(ctx);
         state.setMustRecomputeHeadersFooters(false);
+    }
+}
+
+void ScorePageViewLayout::layoutHeadersFooters(LayoutContext& ctx)
+{
+    TRACEFUNC;
+
+    LAYOUT_CALL_CLEAR();
+    LAYOUT_CALL();
+
+    doLayoutHeadersFooters(ctx);
+
+    LAYOUT_CALL_PRINT();
+}
+
+void ScorePageViewLayout::doLayoutHeadersFooters(LayoutContext& ctx)
+{
+    for (const auto& page : ctx.dom().pages()) {
+        HeaderFooterLayout::layoutHeaderFooter(ctx, page);
     }
 }

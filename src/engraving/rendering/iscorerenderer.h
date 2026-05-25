@@ -105,6 +105,7 @@ public:
     // Main interface
 
     virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
+    virtual void layoutHeadersFooters(Score* score) const = 0;
 
     struct ScorePaintOptions : public PaintOptions
     {

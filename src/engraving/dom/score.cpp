@@ -5979,6 +5979,11 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 }
 
+void Score::doLayoutHeadersFooters()
+{
+    renderer()->layoutHeadersFooters(this);
+}
+
 void Score::createPaddingTable()
 {
     m_paddingTable.createTable(style());
