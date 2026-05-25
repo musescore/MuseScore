@@ -217,7 +217,10 @@ void AudioDriverController::changeCurrentAudioApi(const std::string& name)
 
     if (m_audioDriver && !m_audioDriver->defaultDevice().empty()) {
         spec.deviceId = DEFAULT_DEVICE_ID;
-        m_audioDriver->open(spec, nullptr);
+        bool ok = m_audioDriver->open(spec, nullptr);
+        if (!ok) {
+            LOGE() << "Failed to open audio driver: " << name;
+        }
     } else {
         LOGW() << "No devices for " << name;
     }
@@ -254,17 +257,20 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
     driver->init();
     setNewDriver(driver);
 
+    LOGI() << "Trying to open audio driver: " << m_audioDriver->name() << ", device: " << spec.deviceId;
     bool ok = m_audioDriver->open(spec, activeSpec);
     if (!ok) {
         // reset to default device
         IAudioDriver::Spec defaultDeviceSpec = spec;
         defaultDeviceSpec.deviceId = m_audioDriver->defaultDevice();
+        LOGW() << "Failed to open device: " << spec.deviceId << ", falling back to default: " << defaultDeviceSpec.deviceId;
         ok = m_audioDriver->open(defaultDeviceSpec, activeSpec);
     }
 
     if (!ok) {
         const std::string defaultAudioApi = configuration()->defaultAudioApi();
         if (defaultAudioApi != currentAudioApi) {
+            LOGW() << "Failed to open driver: " << m_audioDriver->name() << ", falling back to default: " << defaultAudioApi;
             IAudioDriverPtr defaultDriver = createDriver(defaultAudioApi);
             defaultDriver->init();
             setNewDriver(defaultDriver);
@@ -280,9 +286,12 @@ bool AudioDriverController::open(const IAudioDriver::Spec& spec, IAudioDriver::S
         }
     }
 
-    LOGI() << "Used audio driver: " << m_audioDriver->name()
-           << ", opened: " << (ok ? "success" : "failed")
-           << ", device: " << m_audioDriver->activeSpec().deviceId;
+    if (ok) {
+        LOGI() << "Opened audio driver: " << m_audioDriver->name()
+               << ", device: " << m_audioDriver->activeSpec().deviceId;
+    } else {
+        LOGE() << "Failed to open any audio driver, last tried: " << m_audioDriver->name();
+    }
 
     return ok;
 }
@@ -348,8 +357,11 @@ bool AudioDriverController::selectOutputDevice(const AudioDeviceID& deviceId)
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
     if (!ok) {
-        LOGE() << "failed select device, return to old: " << oldSpec.deviceId;
-        m_audioDriver->open(oldSpec, nullptr);
+        LOGE() << "Failed to select device: " << deviceId << ", returning to: " << oldSpec.deviceId;
+        bool restored = m_audioDriver->open(oldSpec, nullptr);
+        if (!restored) {
+            LOGE() << "Failed to restore previous device: " << oldSpec.deviceId;
+        }
     }
     return ok;
 }
@@ -366,12 +378,17 @@ void AudioDriverController::checkOutputDevice()
     }
 
     IAudioDriver::Spec spec = m_audioDriver->activeSpec();
+    LOGI() << "Checking output device: " << spec.deviceId;
     m_audioDriver->close();
     bool ok = m_audioDriver->open(spec, nullptr);
     if (!ok) {
         // reset to default device
+        LOGW() << "Failed to reopen device: " << spec.deviceId << ", falling back to default";
         spec.deviceId = DEFAULT_DEVICE_ID;
-        m_audioDriver->open(spec, nullptr);
+        ok = m_audioDriver->open(spec, nullptr);
+        if (!ok) {
+            LOGE() << "Failed to reopen default device";
+        }
     }
 }
 
@@ -413,6 +430,8 @@ void AudioDriverController::changeBufferSize(samples_t samples)
         updateOutputSpec();
         configuration()->setDriverBufferSize(samples);
         m_outputDeviceBufferSizeChanged.notify();
+    } else {
+        LOGE() << "Failed to change buffer size to: " << samples;
     }
 }
 
@@ -449,6 +468,8 @@ void AudioDriverController::changeSampleRate(sample_rate_t sampleRate)
         updateOutputSpec();
         configuration()->setSampleRate(sampleRate);
         m_outputDeviceSampleRateChanged.notify();
+    } else {
+        LOGE() << "Failed to change sample rate to: " << sampleRate;
     }
 }
 
