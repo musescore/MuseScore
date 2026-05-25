@@ -6889,7 +6889,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="707"/>
         <source>Insert measures after selection</source>
-        <translation>Inserisci battute dopo la selezione</translation>
+        <translation>Aggiungi battute dopo la selezione</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="713"/>
@@ -6899,7 +6899,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="719"/>
         <source>Insert one measure at end of score</source>
-        <translation>Inserisci una battuta a fine partitura</translation>
+        <translation>Aggiungi una battuta a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="700"/>
@@ -6909,7 +6909,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="706"/>
         <source>Insert &amp;after selection…</source>
-        <translation>Inserisci &amp;dopo la selezione...</translation>
+        <translation>Aggiungi &amp;dopo la selezione...</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="712"/>
@@ -6919,17 +6919,17 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="718"/>
         <source>Insert &amp;one measure at end of score</source>
-        <translation>Inserisci &amp;una battuta a fine partitura</translation>
+        <translation>Aggiungi &amp;una battuta a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="724"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>Inserisci a &amp;fine partitura...</translation>
+        <translation>Aggiungi a &amp;fine partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="725"/>
         <source>Insert measures at end of score</source>
-        <translation>Inserisci battute a fine partitura</translation>
+        <translation>Aggiungi battute a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="730"/>
@@ -6979,7 +6979,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="759"/>
         <source>Insert horizontal frame at end of score</source>
-        <translation>Inserisci una cornice orizzontale a fine partitura</translation>
+        <translation>Aggiungi una cornice orizzontale a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="765"/>
@@ -6989,7 +6989,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="766"/>
         <source>Insert vertical frame at end of score</source>
-        <translation>Inserisci una cornice verticale a fine partitura</translation>
+        <translation>Aggiungi una cornice verticale a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="772"/>
@@ -6999,7 +6999,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="773"/>
         <source>Insert text frame at end of score</source>
-        <translation>Inserisci una cornice di testo a fine partitura</translation>
+        <translation>Aggiungi una cornice di testo a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="779"/>
@@ -7009,7 +7009,7 @@ seguite da trattini</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="780"/>
         <source>Insert fretboard diagram legend at end of score</source>
-        <translation>Inserisci legenda diagrammi chitarra a fine partitura</translation>
+        <translation>Aggiungi legenda diagrammi chitarra a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="786"/>
@@ -27849,7 +27849,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="698"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="367"/>
         <source>Insert &amp;after selection…</source>
-        <translation>Inserisci &amp;dopo la selezione...</translation>
+        <translation>Aggiungi &amp;dopo la selezione...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="697"/>
@@ -27865,7 +27865,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="695"/>
         <source>Insert &amp;one measure at end of score</source>
-        <translation>Inserisci &amp;una battuta a fine partitura</translation>
+        <translation>Aggiungi &amp;una battuta a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="700"/>
@@ -27877,13 +27877,13 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="701"/>
         <location filename="../../src/web/appshell/view/appmenumodel.cpp" line="371"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>Inserisci a &amp;fine partitura...</translation>
+        <translation>Aggiungi a &amp;fine partitura...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="715"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="675"/>
         <source>Insert at end of score</source>
-        <translation>Inserisci a fine partitura</translation>
+        <translation>Aggiungi a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/notationstatusbarmodel.cpp" line="168"/>
