@@ -1832,16 +1832,11 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
         uniqueMeasures = toMeasureRepeat(dropElement)->numMeasures() == 1;
         break;
 
-    // Add these elements only once per staff in range selections, else once per staff per measure:
-    case ElementType::SPACER:
-    case ElementType::STAFFTYPE_CHANGE:
-        uniqueStaves = true;
-        uniqueMeasures = !sel.isRange();
-        break;
-
     // Add these elements once per measure in list selections, else once total:
     case ElementType::MARKER:
     case ElementType::JUMP:
+    case ElementType::SPACER:  //! HACK - these should be applied "per staff" in range selections (see issue #33486)
+    case ElementType::STAFFTYPE_CHANGE:  //! HACK - these should be applied "per staff" in range selections (see issue #33486)
     case ElementType::VBOX:
     case ElementType::HBOX:
     case ElementType::TBOX:
@@ -1862,10 +1857,7 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
     case ElementType::ACTION_ICON: {
         const ActionIconType actionType = toActionIcon(dropElement)->actionType();
         switch (actionType) {
-        case ActionIconType::STAFF_TYPE_CHANGE:
-            uniqueStaves = true;
-            uniqueMeasures = !sel.isRange();
-            break;
+        case ActionIconType::STAFF_TYPE_CHANGE: //! HACK - these should be applied "per staff" in range selections (see issue #33486)
         case ActionIconType::VFRAME:
         case ActionIconType::HFRAME:
         case ActionIconType::TFRAME:
