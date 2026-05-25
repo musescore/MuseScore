@@ -24,7 +24,11 @@
 
 #include <cmath>
 
-#include "lame.h"
+#ifdef SYSTEM_LAME
+#  include <lame/lame.h>
+#else
+#  include "lame.h"
+#endif
 
 #include "log.h"
 

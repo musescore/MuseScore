@@ -32,7 +32,11 @@
 #include <sstream>
 #include <utility>
 
+#ifdef SYSTEM_UTFCPP
+#include <utf8cpp/utf8.h>
+#else
 #include "global/thirdparty/utfcpp/utf8.h"
+#endif
 
 #include "bytearray.h"
 
