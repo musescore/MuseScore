@@ -558,8 +558,17 @@ bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutCont
     if (prevMeasure) {
         for (Segment* s = prevMeasure->first(); s; s = s->next()) {
             // Break for breath segments in previous measure
-            if (s->isBreathType()) {
-                return true;
+            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+                if (!ctx.dom().staff(staffIdx)->show()) {
+                    continue;
+                }
+                EngravingItem* e = s->element(staffIdx * VOICES);
+                if (!e || e->generated()) {
+                    continue;
+                }
+                if (s->isBreathType()) {
+                    return true;
+                }
             }
 
             for (EngravingItem* e : s->annotations()) {

@@ -6917,10 +6917,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         } else if (element->isBreath()) {
             Breath* breath   = toBreath(element);
             Fraction tick    = breath->segment()->tick();
-            Measure* m       = score->tick2measureMM(tick);
+            Measure* m       = score->tick2measure(tick);
             // breath appears before barline
             if (m->tick() == tick) {
-                m = m->prevMeasureMM();
+                m = m->prevMeasure();
             }
             Segment* seg     = m->undoGetSegment(SegmentType::Breath, tick);
             Breath* nbreath  = toBreath(ne);
