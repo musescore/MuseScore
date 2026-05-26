@@ -245,6 +245,10 @@ ByteArray MscReader::readAudioSettingsJsonFile(const muse::io::path_t& pathPrefi
 
 ByteArray MscReader::readVideoSettingsJsonFile() const
 {
+    if (!fileExists(u"videosettings.json")) {
+        return ByteArray();
+    }
+
     return fileData(u"videosettings.json");
 }
 

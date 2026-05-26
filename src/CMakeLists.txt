@@ -18,7 +18,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+if (MUE_BUILD_PLAYBACK_MODULE)
+    find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+endif()
 
 # Modules must be listed in dependency order
 if (MUE_BUILD_BRAILLE_MODULE)

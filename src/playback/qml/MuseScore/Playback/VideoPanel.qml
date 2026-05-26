@@ -275,7 +275,7 @@ Item {
                     navigation.order: root.contentNavigationPanelOrderStart + 7
 
                     onTextEditingFinished: function(newTextValue) {
-                        var parsedValue = parseInt(newTextValue)
+                        var parsedValue = parseInt(newTextValue, 10)
                         if (!isNaN(parsedValue)) {
                             videoModel.offsetMs = parsedValue
                         }

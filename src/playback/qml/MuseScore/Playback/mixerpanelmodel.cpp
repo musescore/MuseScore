@@ -51,7 +51,8 @@ static volume_db_t videoVolumeToDb(float volume)
 
 static float videoVolumeFromDb(volume_db_t volume)
 {
-    return std::clamp(muse::db_to_linear(volume).raw(), 0.f, 1.f);
+    float linear = std::clamp(muse::db_to_linear(volume).raw(), 0.f, 1.f);
+    return linear <= 0.001f ? 0.f : linear;
 }
 
 MixerPanelModel::MixerPanelModel(QObject* parent)

@@ -24,6 +24,8 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonParseError>
+#include <QJsonValue>
 
 #include "types/bytearray.h"
 
@@ -65,8 +67,22 @@ muse::Ret ProjectVideoSettings::read(const engraving::MscReader& reader)
         return make_ret(Ret::Code::Ok);
     }
 
-    QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
-    m_attachment = attachmentFromJson(rootObj.value("attachment").toObject());
+    QJsonParseError parseError;
+    const QJsonDocument document = QJsonDocument::fromJson(json.toQByteArrayNoCopy(), &parseError);
+    if (parseError.error != QJsonParseError::NoError || !document.isObject()) {
+        makeDefault();
+        return make_ret(Ret::Code::Ok);
+    }
+
+    QJsonObject rootObj = document.object();
+    const int version = rootObj.value("version").toInt(0);
+    const QJsonValue attachmentValue = rootObj.value("attachment");
+    if (version != VIDEO_SETTINGS_VERSION || !attachmentValue.isObject()) {
+        makeDefault();
+        return make_ret(Ret::Code::Ok);
+    }
+
+    m_attachment = attachmentFromJson(attachmentValue.toObject());
 
     return make_ret(Ret::Code::Ok);
 }

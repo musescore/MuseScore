@@ -32,6 +32,32 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::project;
 
+static VideoAttachmentSettings readAttachmentFromJson(const QString& json)
+{
+    QTemporaryDir dir;
+    EXPECT_TRUE(dir.isValid());
+
+    MscWriter::Params writerParams;
+    writerParams.filePath = dir.path();
+    writerParams.mode = MscIoMode::Dir;
+
+    MscWriter writer(writerParams);
+    EXPECT_TRUE(writer.open());
+    writer.writeVideoSettingsJsonFile(ByteArray::fromQByteArray(json.toUtf8()));
+    writer.close();
+
+    MscReader::Params readerParams;
+    readerParams.filePath = dir.path();
+    readerParams.mode = MscIoMode::Dir;
+
+    MscReader reader(readerParams);
+    EXPECT_TRUE(reader.open());
+
+    ProjectVideoSettings settings;
+    EXPECT_TRUE(settings.read(reader));
+    return settings.attachment();
+}
+
 TEST(ProjectVideoSettingsTests, MissingSettingsReadAsDefault)
 {
     QTemporaryDir dir;
@@ -48,6 +74,27 @@ TEST(ProjectVideoSettingsTests, MissingSettingsReadAsDefault)
     EXPECT_TRUE(settings.read(reader));
 
     EXPECT_FALSE(settings.attachment().isValid());
+}
+
+TEST(ProjectVideoSettingsTests, InvalidSettingsReadAsDefault)
+{
+    VideoAttachmentSettings attachment = readAttachmentFromJson("{");
+
+    EXPECT_FALSE(attachment.isValid());
+}
+
+TEST(ProjectVideoSettingsTests, UnknownVersionReadsAsDefault)
+{
+    VideoAttachmentSettings attachment = readAttachmentFromJson(R"({"version":999,"attachment":{"path":"media/reference-picture.mp4"}})");
+
+    EXPECT_FALSE(attachment.isValid());
+}
+
+TEST(ProjectVideoSettingsTests, MissingAttachmentReadsAsDefault)
+{
+    VideoAttachmentSettings attachment = readAttachmentFromJson(R"({"version":1})");
+
+    EXPECT_FALSE(attachment.isValid());
 }
 
 TEST(ProjectVideoSettingsTests, WriteAndReadAttachment)
