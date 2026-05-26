@@ -57,7 +57,7 @@ message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 include(CheckCompilerVersion)
 check_compile_version("Clang" 20 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
-check_compile_version("AppleClang" 21 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
+check_compile_version("AppleClang" 16 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
 check_compile_version("GCC" 14 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
 check_compile_version("MSVC" 19.40 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
 
