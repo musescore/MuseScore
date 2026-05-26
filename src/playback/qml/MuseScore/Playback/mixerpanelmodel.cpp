@@ -658,7 +658,13 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     });
 
     connect(item, &MixerChannelItem::controlParamsChanged, this, [this](const AudioOutputParams& params) {
-        playback()->setMasterControlParams(params.control());
+        AudioOutputParams playbackParams = params;
+        IProjectVideoSettingsPtr videoSettingsPtr = videoSettings();
+        if (videoSettingsPtr && videoSettingsPtr->attachment().isValid() && videoSettingsPtr->attachment().solo) {
+            playbackParams.muted = true;
+        }
+
+        playback()->setMasterControlParams(playbackParams.control());
     });
 
     connect(item, &MixerChannelItem::fxChainParamsChanged, this, [this](const AudioOutputParams& params) {
