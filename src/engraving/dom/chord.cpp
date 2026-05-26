@@ -1064,8 +1064,8 @@ bool Chord::shouldHaveStem() const
            && durationType().hasStem()
            && !(durationType().type() == DurationType::V_HALF && staffType && staffType->isTabStaff()
                 && staffType->minimStyle() == TablatureMinimStyle::NONE)
-           && !(measure() && measure()->stemless(staffIdx()))
-           && !(staffType && staffType->isTabStaff() && staffType->stemless());
+           && !(measure() && measure()->stemless(staffIdx(), tick()))
+           && !(staffType && staffType->stemless());
 }
 
 bool Chord::shouldHaveHook() const

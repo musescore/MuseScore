@@ -514,12 +514,12 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
 
 //---------------------------------------------------------
 //   tick2pos
-///    return x position for tick relative to System
+///    return x position for absolute tick, relative to Measure origin
 //---------------------------------------------------------
 
 double Measure::tick2pos(Fraction tck) const
 {
-    tck -= ticks();
+    tck -= tick();   // convert absolute tick to relative (offset from measure start)
     if (isMMRest()) {
         Segment* s = first(SegmentType::ChordRest);
         double x1   = s->x();
@@ -536,7 +536,7 @@ double Measure::tick2pos(Fraction tck) const
         x2    = s->x();
         tick2 = s->rtick();
         if (tck == tick2) {
-            return x2 + pos().x();
+            return x2;
         }
         if (tck <= tick2) {
             break;
@@ -551,7 +551,7 @@ double Measure::tick2pos(Fraction tck) const
     double dx = x2 - x1;
     Fraction dt   = tick2 - tick1;
     x1      += dt.isZero() ? 0.0 : (dx * (tck.ticks() - tick1.ticks()) / dt.ticks());
-    return x1 + pos().x();
+    return x1;
 }
 
 //---------------------------------------------------------
@@ -906,26 +906,27 @@ void Measure::add(EngravingItem* e)
     case ElementType::STAFFTYPE_CHANGE:
     {
         StaffTypeChange* staffTypeChange = toStaffTypeChange(e);
+        const Fraction staffTypeTick = staffTypeChange->tick();
         const StaffType* templateStaffType = staffTypeChange->staffType();
 
         Staff* staff = staffTypeChange->staff();
 
-        // This will need to point to the stafftype element within the stafftypelist for the staff
+        // This will need to point to the stafftype element within the stafftype list for the staff
         StaffType* newStaffType = nullptr;
 
         if (templateStaffType) {
             // executed on read, undo/redo, clone
             // setStaffType adds a copy to stafftypelist and returns a pointer to that element within stafftypelist
-            newStaffType = staff->setStaffType(tick(), *templateStaffType);
+            newStaffType = staff->setStaffType(staffTypeTick, *templateStaffType);
         } else {
             // executed on add from palette
             // staffType returns a pointer to the current stafftype element in the list
             // setStaffType will make a copy and return a pointer to that element within list
-            templateStaffType = staff->staffType(tick());
-            newStaffType = staff->setStaffType(tick(), *templateStaffType);
+            templateStaffType = staff->staffType(staffTypeTick);
+            newStaffType = staff->setStaffType(staffTypeTick, *templateStaffType);
         }
 
-        staff->staffTypeListChanged(tick());
+        staff->staffTypeListChanged(staffTypeTick);
         staffTypeChange->setStaffType(newStaffType, false);
 
         MeasureBase::add(e);
@@ -1028,11 +1029,12 @@ void Measure::remove(EngravingItem* e)
         StaffTypeChange* stc = toStaffTypeChange(e);
         Staff* staff = stc->staff();
         if (staff) {
+            const Fraction staffTypeTick = stc->tick();
             // st currently points to an list element that is about to be removed
             // make a copy now to use on undo/redo
             StaffType* st = new StaffType(*stc->staffType());
-            if (!tick().isZero()) {
-                staff->removeStaffType(tick());
+            if (!staffTypeTick.isZero()) {
+                staff->removeStaffType(staffTypeTick);
             }
             stc->setStaffType(st, true);
         }
@@ -1106,6 +1108,11 @@ void Measure::moveTicks(const Fraction& diff)
                     }
                 }
             }
+        }
+    }
+    for (EngravingItem* element : m_el) {
+        if (element && element->isStaffTypeChange()) {
+            toStaffTypeChange(element)->moveTicks(diff);
         }
     }
     tuplets.clear();
@@ -1440,6 +1447,12 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
         // Always drop to single staff
+        if (e->isStaffTypeChange()) {
+            const Fraction tick = StaffTypeChange::insertionTick(this, data.pos);
+            if (!canAddStaffTypeChange(staffIdx, tick)) {
+                return false;
+            }
+        }
         if (viewer) {
             viewer->setDropRectangle(staffRect);
         }
@@ -1472,7 +1485,7 @@ bool Measure::acceptDrop(EditData& data) const
             return true;
         }
         case ActionIconType::STAFF_TYPE_CHANGE:
-            if (!canAddStaffTypeChange(staffIdx)) {
+            if (!canAddStaffTypeChange(staffIdx, StaffTypeChange::insertionTick(this, data.pos))) {
                 return false;
             }
             if (viewer) {
@@ -1798,12 +1811,14 @@ EngravingItem* Measure::drop(EditData& data)
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         case ActionIconType::STAFF_TYPE_CHANGE: {
-            if (!canAddStaffTypeChange(staffIdx)) {
+            const Fraction tick = StaffTypeChange::insertionTick(this, data.pos);
+            if (!canAddStaffTypeChange(staffIdx, tick)) {
                 return nullptr;
             }
             EngravingItem* stc = Factory::createStaffTypeChange(this);
             stc->setParent(this);
             stc->setTrack(trackZeroVoice(data.track));
+            toStaffTypeChange(stc)->setTickFromDropPosition(this, data.pos);
             score()->undoAddElement(stc);
             break;
         }
@@ -1817,8 +1832,15 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::STAFFTYPE_CHANGE:
     {
+        const Fraction tick = StaffTypeChange::insertionTick(this, data.pos);
+        if (!canAddStaffTypeChange(staffIdx, tick)) {
+            delete e;
+            return nullptr;
+        }
+
         e->setParent(this);
         e->setTrack(trackZeroVoice(data.track));
+        toStaffTypeChange(e)->setTickFromDropPosition(this, data.pos);
         score()->undoAddElement(e);
     }
     break;
@@ -2045,12 +2067,17 @@ bool Measure::visible(staff_idx_t staffIdx) const
 
 bool Measure::stemless(staff_idx_t staffIdx) const
 {
+    return stemless(staffIdx, tick());
+}
+
+bool Measure::stemless(staff_idx_t staffIdx, const Fraction& atTick) const
+{
     const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
         return false;
     }
 
-    return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
+    return staff->stemless(atTick) || m_mstaves[staffIdx]->stemless() || staff->staffType(atTick)->stemless();
 }
 
 //---------------------------------------------------------
@@ -3657,10 +3684,19 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
     return !alreadyHasStringTunings;
 }
 
-bool Measure::canAddStaffTypeChange(staff_idx_t staffIdx) const
+bool Measure::canAddStaffTypeChange(staff_idx_t staffIdx, const Fraction& tick) const
 {
     if (isMMRest()) {
         return false;
+    }
+
+    return staffTypeChangeAt(staffIdx, tick) == nullptr;
+}
+
+const StaffTypeChange* Measure::staffTypeChangeAt(staff_idx_t staffIdx, const Fraction& tick) const
+{
+    if (el().empty()) {
+        return nullptr;
     }
 
     for (const EngravingObject* child : el()) {
@@ -3669,13 +3705,131 @@ bool Measure::canAddStaffTypeChange(staff_idx_t staffIdx) const
         }
 
         const StaffTypeChange* stc = toStaffTypeChange(child);
-        if (stc->staffIdx() == staffIdx) {
-            // Staff already has a StaffTypeChange at this measure...
-            return false;
+        if (stc->staffIdx() == staffIdx && stc->tick() == tick) {
+            return stc;
         }
     }
 
+    return nullptr;
+}
+
+std::vector<Fraction> Measure::midMeasureStaffTypeChangeTicks(staff_idx_t staffIdx) const
+{
+    if (el().empty()) {
+        return {};
+    }
+
+    const Fraction measureStart = tick();
+    const Fraction measureEnd = endTick();
+
+    std::vector<Fraction> ticks;
+    ticks.reserve(el().size());
+    for (const EngravingObject* child : el()) {
+        if (!child || !child->isStaffTypeChange()) {
+            continue;
+        }
+
+        const StaffTypeChange* stc = toStaffTypeChange(child);
+        if (stc->staffIdx() != staffIdx) {
+            continue;
+        }
+
+        const Fraction stcTick = stc->tick();
+        if (stcTick <= measureStart || stcTick >= measureEnd) {
+            continue;
+        }
+
+        ticks.push_back(stcTick);
+    }
+
+    if (ticks.size() > 1) {
+        std::sort(ticks.begin(), ticks.end());
+        ticks.erase(std::unique(ticks.begin(), ticks.end()), ticks.end());
+    }
+    return ticks;
+}
+
+const StaffTypeChange* Measure::firstMidMeasureStaffTypeChange(staff_idx_t staffIdx) const
+{
+    if (el().empty()) {
+        return nullptr;
+    }
+
+    const Fraction measureStart = tick();
+    const Fraction measureEnd = endTick();
+
+    const StaffTypeChange* firstStc = nullptr;
+    Fraction firstTick = Fraction(0, 1);
+
+    for (const EngravingObject* child : el()) {
+        if (!child || !child->isStaffTypeChange()) {
+            continue;
+        }
+
+        const StaffTypeChange* stc = toStaffTypeChange(child);
+        if (stc->staffIdx() != staffIdx) {
+            continue;
+        }
+
+        const Fraction stcTick = stc->tick();
+        if (stcTick <= measureStart || stcTick >= measureEnd) {
+            continue;
+        }
+
+        if (!firstStc || stcTick < firstTick) {
+            firstTick = stcTick;
+            firstStc = stc;
+        }
+    }
+
+    return firstStc;
+}
+
+bool Measure::isStaffTypeTransitionMeasure(staff_idx_t staffIdx, Fraction* transitionTick) const
+{
+    const StaffTypeChange* stc = firstMidMeasureStaffTypeChange(staffIdx);
+    if (!stc) {
+        return false;
+    }
+
+    if (transitionTick) {
+        *transitionTick = stc->tick();
+    }
     return true;
+}
+
+bool Measure::isPostStaffTypeTransitionTick(staff_idx_t staffIdx, const Fraction& itemTick) const
+{
+    if (itemTick <= tick()) {
+        return false;
+    }
+
+    Fraction transitionTick;
+    if (!isStaffTypeTransitionMeasure(staffIdx, &transitionTick)) {
+        return false;
+    }
+
+    return itemTick >= transitionTick;
+}
+
+double Measure::computeStaffTypeTransitionOffset(staff_idx_t staffIdx, const Fraction& itemTick, double spatium) const
+{
+    if (!isPostStaffTypeTransitionTick(staffIdx, itemTick)) {
+        return 0.0;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return 0.0;
+    }
+
+    const StaffType* activeType = staff->staffType(itemTick);
+    const StaffType* measureStartType = staff->staffType(tick());
+    if (!activeType || !measureStartType) {
+        return 0.0;
+    }
+
+    return (activeType->yoffset().val() - measureStartType->yoffset().val()) * spatium;
 }
 
 Fraction Measure::maxTicks() const

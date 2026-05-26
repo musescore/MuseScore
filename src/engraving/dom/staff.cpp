@@ -1290,9 +1290,16 @@ const StaffType* Staff::staffTypeForElement(const EngravingItem* e) const
         // if one staff type spans for the entire staff, optimize by omitting a call to `tick()`
         return &m_staffTypeList.staffType({ 0, 1 });
     }
-    // Handle items at the last tick of measures as StaffTypeList::staffType rounds up
+
+    Fraction tick = e->tick();
+
+    // Handle items at the last tick of a measure as StaffTypeList::staffType rounds up
+    // to a change that may belong to the next measure.
     const Measure* measure = e->findMeasure();
-    const Fraction tick = measure ? measure->tick() : e->tick();
+    if (measure && tick == measure->endTick()) {
+        tick -= Fraction::eps();
+    }
+
     return &m_staffTypeList.staffType(tick);
 }
 
