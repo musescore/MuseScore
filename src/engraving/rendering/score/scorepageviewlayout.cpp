@@ -32,6 +32,7 @@
 #include "passresetlayoutdata.h"
 #include "passlayoutindependentitems.h"
 
+#include "headerfooterlayout.h"
 #include "measurelayout.h"
 #include "systemlayout.h"
 #include "pagelayout.h"
@@ -252,4 +253,13 @@ void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
     }
 
     score->systems().insert(score->systems().end(), state.systemList().begin(), state.systemList().end());
+
+    /* If the headers/footers involve page count, we need to re-calculate them. This needs to
+     * be done after laying out all pages, so that the total number of pages will be known: */
+    if (state.mustRecomputeHeadersFooters()) {
+        for (const auto& page : ctx.mutDom().pages()) {
+            HeaderFooterLayout::layoutHeaderFooter(ctx, page);
+        }
+        state.setMustRecomputeHeadersFooters(false);
+    }
 }
