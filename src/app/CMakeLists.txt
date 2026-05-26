@@ -120,6 +120,7 @@ endmacro()
 # This function also adds qml parts to the link
 add_to_link_if_exists(muse::accessibility)
 add_to_link_if_exists(muse::actions)
+add_to_link_if_exists(muse::rcommand)
 add_to_link_if_exists(muse::audio)
 add_to_link_if_exists(muse::audioplugins)
 add_to_link_if_exists(muse::testflow)
