@@ -5004,8 +5004,11 @@ void Score::cmdTimeDelete()
     EngravingItem* e = selection().element();
 
     if (e && e->isBarLine() && toBarLine(e)->segment()->isEndBarLineType()) {
-        Measure* m = toBarLine(e)->segment()->measure();
-        SplitJoinMeasure::joinMeasures(m_masterScore, m->tick(), m->nextMeasure()->tick());
+        const Measure* m = toBarLine(e)->segment()->measure();
+        const Measure* next = m->nextMeasure();
+        if (next) {
+            SplitJoinMeasure::joinMeasures(m_masterScore, m->tick(), next->tick());
+        }
         return;
     }
 
