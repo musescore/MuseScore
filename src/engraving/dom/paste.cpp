@@ -283,18 +283,24 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 
 bool Score::cmdRepeatListSelection()
 {
+    TRACEFUNC;
+
     InputState& is = inputState();
 
     std::vector<Note*> notes = m_selection.noteList();
-    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) { return a->track() < b->track(); });
+    std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) {
+        return std::make_tuple(a->track(), a->tick(), a->pitch())
+               < std::make_tuple(b->track(), b->tick(), b->pitch());
+    });
 
     std::vector<EngravingItem*> toSelect;
     std::unordered_set<const Chord*> foundChords;
 
     // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
     // new notes have been created we can call cmdAddParentheses on each group...
+    // Use a vector of pairs to preserve insertion order
     using NoteList = std::list<Note*>;
-    std::unordered_map</*leftParen*/ const Parenthesis*, NoteList> parenMap;
+    std::vector<std::pair<const Parenthesis*, NoteList> > parenEntries;
 
     for (Note* n : notes) {
         if (n->isGrace() || n->incomingPartialTie() || n->outgoingPartialTie()) {
@@ -352,18 +358,20 @@ bool Score::cmdRepeatListSelection()
             tie = tiedNote->tieBack();
         }
 
-        auto search = parenMap.find(leftParen);
-        if (search != parenMap.end()) {
-            NoteList& nl = search->second;
-            nl.insert(nl.end(), notesForParen.begin(), notesForParen.end());
+        auto search = std::find_if(parenEntries.begin(), parenEntries.end(),
+                                   [leftParen](const std::pair<const Parenthesis*, NoteList>& p) {
+            return p.first == leftParen;
+        });
+        if (search != parenEntries.end()) {
+            search->second.insert(search->second.end(), notesForParen.begin(), notesForParen.end());
             continue;
         }
 
-        parenMap.emplace(leftParen, notesForParen);
+        parenEntries.emplace_back(leftParen, std::move(notesForParen));
     }
 
-    for (auto& pair : parenMap) {
-        cmdAddParenthesesToNotes(pair.second);
+    for (auto& [paren, noteList] : parenEntries) {
+        cmdAddParenthesesToNotes(noteList);
     }
 
     select(toSelect, SelectType::ADD);
