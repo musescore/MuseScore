@@ -1590,8 +1590,8 @@ double ChordList::position(const StringList& names, bool stackModifiers, bool su
             const double base = stackHeight / 2;                            // Baseline of bottom modifier in the stack
             yAdj += base - modifierIdx * modifierHeight * (1 + LINE_SPACING);
         }
-        Char c = name.isEmpty() ? name.at(0) : u'0';
-        if (c.isDigit() || c.isPunct()) {
+
+        if (!name.isEmpty()) {
             yAdj += m_madjust;
         }
         return yAdj;
