@@ -91,15 +91,6 @@ double EngravingFont::textEnclosureThickness()
     return m_textEnclosureThickness;
 }
 
-double DEFAULT_SMUFL_POINT_SIZE()
-{
-    const double DEFAULT_SPATIUM = StyleDef::styleValues[static_cast<size_t>(Sid::spatium)].defaultValue.toDouble();
-    const double DEFAULT_SPATIUM_IN_POINT_UNITS = DEFAULT_SPATIUM / mu::engraving::DPI * mu::engraving::PPI;
-    const double DEFAULT_SMUFL_POINT_SIZE = 4 * DEFAULT_SPATIUM_IN_POINT_UNITS; // By Smufl spec the spatium is 1/4 of the em
-
-    return DEFAULT_SMUFL_POINT_SIZE;
-}
-
 // =============================================
 // Load
 // =============================================
@@ -121,7 +112,7 @@ void EngravingFont::ensureLoad()
     m_font.setNoFontMerging(true);
     m_font.setHinting(Font::Hinting::PreferVerticalHinting);
 
-    m_font.setPointSizeF(DEFAULT_SMUFL_POINT_SIZE());
+    m_font.setPointSizeF(StyleDef::DEFAULT_SMUFL_POINT_SIZE());
 
     for (size_t id = 0; id < m_symbols.size(); ++id) {
         Smufl::Code code = Smufl::code(static_cast<SymId>(id));
@@ -1120,7 +1111,7 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     }
 
     painter->save();
-    m_font.setPointSizeF(DEFAULT_SMUFL_POINT_SIZE());
+    m_font.setPointSizeF(StyleDef::DEFAULT_SMUFL_POINT_SIZE());
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
     if (angle != 0) {
