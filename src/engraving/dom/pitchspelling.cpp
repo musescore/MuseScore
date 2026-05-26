@@ -1139,10 +1139,10 @@ int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& no
 
 int clampEnharmonic(int tpc, bool useDoubleSharpsFlats)
 {
-    while (tpc > (useDoubleSharpsFlats ? Tpc::TPC_MAX : Tpc::TPC_F_SS)) {
+    while (tpc > (useDoubleSharpsFlats ? Tpc::TPC_MAX : Tpc::TPC_B_S)) {
         tpc -= TPC_DELTA_ENHARMONIC;
     }
-    while (tpc < (useDoubleSharpsFlats ? Tpc::TPC_MIN : Tpc::TPC_B_BB)) {
+    while (tpc < (useDoubleSharpsFlats ? Tpc::TPC_MIN : Tpc::TPC_F_B)) {
         tpc += TPC_DELTA_ENHARMONIC;
     }
     return tpc;
