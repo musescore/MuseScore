@@ -2906,7 +2906,6 @@ static std::map<Chord*, std::set<Note*, NoteComparator> > getNotesByChord(std::l
     if (notes.empty()) {
         return notesByChord;
     }
-    std::set<Note*> additionalNotes;
     for (Note* noteToAdd : notes) {
         Chord* chord = noteToAdd->chord();
         auto notesByChordIt = notesByChord.find(chord);
