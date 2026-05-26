@@ -626,7 +626,21 @@ void QWidgetAdapter::move(int x, int y)
 
 void QWidgetAdapter::setSize(QSize size)
 {
-    QQuickItem::setSize(QSizeF(size));
+    QSize newSize = size;
+#ifdef Q_OS_MACOS
+    FloatingWindow *floatingWindow = this->floatingWindow();
+    if (floatingWindow) {
+        newSize = size.expandedTo(minimumSize());
+
+        QWindow* window = floatingWindow->windowHandle();
+        if (window && window->size() != newSize) {
+            QRect windowGeo = window->geometry();
+            windowGeo.setSize(newSize);
+            window->setGeometry(windowGeo);
+        }
+    }
+#endif
+    QQuickItem::setSize(QSizeF(newSize));
 }
 
 void QWidgetAdapter::setParent(QQuickItem *p)
