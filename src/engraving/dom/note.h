@@ -220,6 +220,8 @@ public:
     int tpc() const;
     int tpc1() const { return m_tpc[0]; }                  // non transposed tpc
     int tpc2() const { return m_tpc[1]; }                  // transposed tpc
+    //! Draw color from @c Sid::noteColor0…11 / @c defaultNoteColor, or explicit @c m_color override.
+    Color color() const override;
     String tpcUserName(bool explicitAccidental = false, bool full = false) const;
 
     void setTpc(int v);
