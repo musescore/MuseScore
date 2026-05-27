@@ -566,7 +566,7 @@ bool VideoWriter::generateScoreFrames(muse::media::IVideoEncoderPtr encoder, INo
 
     auto pageByTick = [](const PageList& pages, tick_t tick) -> const Page* {
         for (const Page* p : pages) {
-            if (tick <= static_cast<tick_t>(p->endTick().ticks())) {
+            if (tick < static_cast<tick_t>(p->endTick().ticks())) {
                 return p;
             }
         }
