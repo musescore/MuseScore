@@ -237,12 +237,23 @@ void FluidSequencer::addControlChangeEvent(EventSequenceMap& destination, const 
 void FluidSequencer::addControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
                                       const int midiControlIdx, const channel_t channelIdx, const uint32_t value)
 {
+    EventSequence& events = destination[timestamp];
+    for (const EventType& e : events) {
+        const midi::Event& midiEvent = std::get<midi::Event>(e);
+        if (midiEvent.opcode() == Event::Opcode::ControlChange
+            && midiEvent.channel() == channelIdx
+            && midiEvent.index() == static_cast<uint8_t>(midiControlIdx)
+            && midiEvent.data() == value) {
+            return;
+        }
+    }
+
     midi::Event cc(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     cc.setIndex(midiControlIdx);
     cc.setChannel(channelIdx);
     cc.setData(value);
 
-    destination[timestamp].emplace_back(std::move(cc));
+    events.emplace_back(cc);
 }
 
 void FluidSequencer::addPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
