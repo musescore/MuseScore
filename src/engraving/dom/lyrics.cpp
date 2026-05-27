@@ -467,9 +467,6 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::VISIBLE:
         setVisible(v.toBool());
-        if (separator()) {
-            separator()->setVisible(v.toBool());
-        }
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -569,6 +566,8 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
         }
         TextBase::undoChangeProperty(id, v, ps);
         return;
+    } else if (id == Pid::VISIBLE && separator()) {
+        separator()->undoChangeProperty(Pid::VISIBLE, v.toBool(), ps);
     }
 
     TextBase::undoChangeProperty(id, v, ps);
