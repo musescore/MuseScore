@@ -5001,36 +5001,42 @@ PlayingTechniqueType MusicXmlParserDirection::getPlayingTechnique() const
         return PlayingTechniqueType::Undefined;
     }
 
-    const String plainWords = MScoreTextToMusicXml::toPlainText(m_wordsText.simplified());
-    static const std::unordered_map<muse::String, PlayingTechniqueType> textToPlayTechniqueType {
-        { u"natural", PlayingTechniqueType::Natural },
-        { u"normal", PlayingTechniqueType::Natural },
-        { u"ord", PlayingTechniqueType::Natural },
-        { u"arco", PlayingTechniqueType::Natural },
-        { u"pizz", PlayingTechniqueType::Pizzicato },
-        { u"open", PlayingTechniqueType::Open },
-        { u"senza sord", PlayingTechniqueType::Open },
-        { u"unmuted", PlayingTechniqueType::Open },
+    String plainWords = MScoreTextToMusicXml::toPlainText(m_wordsText.simplified()).toLower();
+    plainWords.remove(std::wregex(L"[\\.,;:]+")); // remove punctuation
+
+    // Ordered longest-first so specific phrases match before their substrings
+    // (e.g. "without mute" before "mute", "con sord" before "ord")
+    static const std::vector<std::pair<muse::String, PlayingTechniqueType> > textToPlayTechniqueType {
+        { u"palm mute", PlayingTechniqueType::Undefined },
+        { u"palmmute",  PlayingTechniqueType::Undefined },
         { u"without mute", PlayingTechniqueType::Open },
-        { u"no mute", PlayingTechniqueType::Open },
-        { u"mute", PlayingTechniqueType::Mute },
-        { u"con sord", PlayingTechniqueType::Mute },
-        { u"sord", PlayingTechniqueType::Mute },
-        { u"trem", PlayingTechniqueType::Tremolo },
-        { u"detache", PlayingTechniqueType::Detache },
-        { u"martele", PlayingTechniqueType::Martele },
-        { u"legno", PlayingTechniqueType::ColLegno },
+        { u"distortion", PlayingTechniqueType::Distortion },
+        { u"senza sord", PlayingTechniqueType::Open },
+        { u"harmonics", PlayingTechniqueType::Harmonics },
+        { u"overdrive", PlayingTechniqueType::Overdrive },
         { u"sul pont", PlayingTechniqueType::SulPonticello },
         { u"sul tast", PlayingTechniqueType::SulTasto },
+        { u"con sord", PlayingTechniqueType::Mute },
+        { u"detache", PlayingTechniqueType::Detache },
+        { u"martele", PlayingTechniqueType::Martele },
+        { u"natural", PlayingTechniqueType::Natural },
+        { u"no mute", PlayingTechniqueType::Open },
+        { u"unmuted", PlayingTechniqueType::Open },
         { u"vibrato", PlayingTechniqueType::Vibrato },
         { u"legato", PlayingTechniqueType::Legato },
-        { u"distortion", PlayingTechniqueType::Distortion },
-        { u"overdrive", PlayingTechniqueType::Overdrive },
-        { u"harmonics", PlayingTechniqueType::Harmonics },
+        { u"normal", PlayingTechniqueType::Natural },
+        { u"legno", PlayingTechniqueType::ColLegno },
+        { u"open", PlayingTechniqueType::Open },
+        { u"arco", PlayingTechniqueType::Natural },
         { u"jazz", PlayingTechniqueType::JazzTone },
+        { u"mute", PlayingTechniqueType::Mute },
+        { u"pizz", PlayingTechniqueType::Pizzicato },
+        { u"sord", PlayingTechniqueType::Mute },
+        { u"trem", PlayingTechniqueType::Tremolo },
+        { u"ord", PlayingTechniqueType::Natural },
     };
 
-    for (auto& technique : textToPlayTechniqueType) {
+    for (const auto& technique : textToPlayTechniqueType) {
         if (plainWords.contains(technique.first)) {
             return technique.second;
         }

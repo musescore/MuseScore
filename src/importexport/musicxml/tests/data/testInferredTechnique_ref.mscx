@@ -321,7 +321,7 @@
         <eid>t_t</eid>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
+            <playTechType>open</playTechType>
             <eid>u_u</eid>
             <text>senza sord</text>
             </PlayTechAnnotation>
