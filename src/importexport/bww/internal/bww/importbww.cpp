@@ -503,7 +503,7 @@ void MsScWriter::doTriplet(mu::engraving::Chord* cr, StartStop triplet)
         tuplet = new mu::engraving::Tuplet(currentMeasure);
         tuplet->setTrack(0);
         tuplet->setRatio(mu::engraving::Fraction(3, 2));
-//            tuplet->setTick(tick);
+        tuplet->setTick(tick);
         currentMeasure->add(tuplet);
     } else if (triplet == StartStop::ST_STOP) {
         if (tuplet) {
