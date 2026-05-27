@@ -560,7 +560,8 @@ Note* MnxImporter::createNote(const mnx::sequence::Note& mnxNote, Chord* chord, 
 //   Create a MuseScore tuplet from an MNX tuplet container.
 //---------------------------------------------------------
 
-Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measure* measure, track_idx_t curTrackIdx)
+Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measure* measure, track_idx_t curTrackIdx,
+                                  const mnx::FractionValue& startTick)
 {
     TDuration baseLen = toMuseScoreDuration(mnxTuplet.outer().duration());
     mnx::FractionValue ratioDivisor = mnxTuplet.outer() / mnxTuplet.inner().duration();
@@ -574,6 +575,7 @@ Tuplet* MnxImporter::createTuplet(const mnx::sequence::Tuplet& mnxTuplet, Measur
     Tuplet* t = Factory::createTuplet(measure);
     t->setTrack(curTrackIdx);
     t->setParent(measure);
+    t->setTick(measure->tick() + toMuseScoreFraction(startTick));
     t->setRatio(tupletRatio);
     t->setBaseLen(baseLen);
     Fraction f = baseLen.fraction() * tupletRatio.denominator();
@@ -818,7 +820,7 @@ bool MnxImporter::importNonGraceEvents(const mnx::Sequence& sequence, Measure* m
                 activeTuplets.push(nullptr);
                 return mnx::util::SequenceWalkControl::SkipChildren;
             }
-            if (Tuplet* t = createTuplet(mnxTuplet, measure, curTrackIdx)) {
+            if (Tuplet* t = createTuplet(mnxTuplet, measure, curTrackIdx, ctx.elapsedTime)) {
                 if (!activeTuplets.empty()) {
                     DO_ASSERT(activeTuplets.top());
                     if (activeTuplets.top()) {
