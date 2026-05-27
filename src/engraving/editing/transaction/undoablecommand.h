@@ -25,7 +25,6 @@
 #include <vector>
 
 namespace mu::engraving {
-class EditData;
 class EngravingItem;
 class EngravingObject;
 
@@ -172,8 +171,8 @@ class UndoableCommand
 public:
     virtual ~UndoableCommand() = default;
 
-    virtual void undo(EditData*);
-    virtual void redo(EditData*);
+    virtual void undo();
+    virtual void redo();
 
     virtual void cleanup(bool /*wasDone*/) {}
 
@@ -184,7 +183,7 @@ public:
     virtual bool matchesFilter(UndoableCommandFilter, const EngravingItem* /* target */) const { return false; }
 
 protected:
-    virtual void flip(EditData*) {}
+    virtual void flip() {}
 };
 
 std::vector<EngravingObject*> compoundObjects(EngravingObject* object);

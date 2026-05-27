@@ -353,7 +353,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 //    Deprecated: use Transaction::push instead.
 //---------------------------------------------------------
 
-void Score::undo(UndoableCommand* cmd, EditData* ed) const
+void Score::undo(UndoableCommand* cmd) const
 {
     Transaction* tx = masterScore()->transactionManager()->currentTransaction();
     if (!tx) {
@@ -362,12 +362,12 @@ void Score::undo(UndoableCommand* cmd, EditData* ed) const
             LOGW() << "called outside of transaction";
         }
 
-        cmd->redo(ed);
+        cmd->redo();
         delete cmd;
         return;
     }
 
-    tx->push(cmd, ed);
+    tx->push(cmd);
 }
 
 #ifndef NDEBUG

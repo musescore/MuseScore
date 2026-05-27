@@ -46,8 +46,8 @@ public:
     UndoableTransaction(Score* s, const muse::TranslatableString& actionName);
     ~UndoableTransaction();
 
-    void undo(EditData*);
-    void redo(EditData*);
+    void undo();
+    void redo();
 
     void appendCommand(UndoableCommand* cmd) { m_commands.push_back(cmd); }
     void append(UndoableTransaction&& other);
@@ -145,7 +145,7 @@ public:
     }
 
     void undo(EditData*);
-    void redo(EditData*);
+    void redo();
     void reopen();
 
     void mergeTransactions(size_t startIdx);

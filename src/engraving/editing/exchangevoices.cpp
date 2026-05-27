@@ -44,12 +44,12 @@ public:
     ExchangeVoicesInMeasure(Measure* measure, track_idx_t srcTrack, track_idx_t dstTrack, staff_idx_t staff)
         : m_measure(measure), m_srcTrack(srcTrack), m_dstTrack(dstTrack), m_staff(staff) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         doExchange(m_dstTrack, m_srcTrack);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         doExchange(m_srcTrack, m_dstTrack);
     }

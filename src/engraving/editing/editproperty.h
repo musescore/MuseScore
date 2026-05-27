@@ -36,7 +36,7 @@ protected:
     PropertyValue property;
     PropertyFlags flags;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeProperty(EngravingObject* e, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
@@ -64,7 +64,7 @@ class ChangeBracketProperty : public ChangeProperty
     Staff* staff = nullptr;
     size_t level = 0;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeBracketProperty(Staff* s, size_t l, Pid i, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
@@ -77,7 +77,7 @@ class ChangeTextLineProperty : public ChangeProperty
 {
     OBJECT_ALLOCATOR(engraving, ChangeTextLineProperty)
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeTextLineProperty(EngravingObject* e, PropertyValue v)

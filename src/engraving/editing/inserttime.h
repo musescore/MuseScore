@@ -35,8 +35,8 @@ class InsertTime : public UndoableCommand
     Fraction tick;
     Fraction len;
 
-    void redo(EditData*) override;
-    void undo(EditData*) override;
+    void redo() override;
+    void undo() override;
 
 public:
     InsertTime(Score* _score, const Fraction& _tick, const Fraction& _len)
@@ -55,7 +55,7 @@ class InsertTimeUnmanagedSpanner : public UndoableCommand
     Fraction tick;
     Fraction len;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     InsertTimeUnmanagedSpanner(Score* s, const Fraction& _tick, const Fraction& _len)

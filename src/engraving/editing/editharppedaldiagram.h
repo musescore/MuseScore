@@ -33,7 +33,7 @@ class ChangeHarpPedalState : public UndoableCommand
     HarpPedalDiagram* diagram;
     std::array<PedalPosition, HARP_STRING_NO> pedalState;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeHarpPedalState(HarpPedalDiagram* _diagram, std::array<PedalPosition, HARP_STRING_NO> _pedalState)
@@ -52,7 +52,7 @@ class ChangeSingleHarpPedal : public UndoableCommand
     HarpStringType type;
     PedalPosition pos;
 
-    void flip(EditData*) override;
+    void flip() override;
 
 public:
     ChangeSingleHarpPedal(HarpPedalDiagram* _diagram, HarpStringType _type, PedalPosition _pos)

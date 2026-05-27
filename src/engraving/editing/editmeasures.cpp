@@ -366,7 +366,7 @@ ChangeMeasureLen::ChangeMeasureLen(Measure* m, Fraction l)
     len         = l;
 }
 
-void ChangeMeasureLen::flip(EditData*)
+void ChangeMeasureLen::flip()
 {
     Fraction oLen = measure->ticks();
 
@@ -391,7 +391,7 @@ void ChangeMeasureLen::flip(EditData*)
 //   ChangeMMRest
 //---------------------------------------------------------
 
-void ChangeMMRest::flip(EditData*)
+void ChangeMMRest::flip()
 {
     Measure* mmr = m->mmRest();
     m->setMMRest(mmrest);
@@ -402,14 +402,14 @@ void ChangeMMRest::flip(EditData*)
 //   ChangeMeasureRepeatCount
 //---------------------------------------------------------
 
-void ChangeMeasureRepeatCount::flip(EditData*)
+void ChangeMeasureRepeatCount::flip()
 {
     int oldCount = m->measureRepeatCount(staffIdx);
     m->setMeasureRepeatCount(count, staffIdx);
     count = oldCount;
 }
 
-void ChangeMMRestNext::flip(EditData*)
+void ChangeMMRestNext::flip()
 {
     assert(m_mmrest->isMMRest());
     MeasureBase* oldNext = m_mmrest->next();
@@ -418,7 +418,7 @@ void ChangeMMRestNext::flip(EditData*)
     m_next = oldNext;
 }
 
-void ChangeMMRestPrev::flip(EditData*)
+void ChangeMMRestPrev::flip()
 {
     assert(m_mmrest->isMMRest());
     MeasureBase* oldPrev = m_mmrest->prev();

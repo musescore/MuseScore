@@ -330,7 +330,7 @@ public:
     String plainText() const;
     void resetFormatting();
 
-    void insertText(EditData&, const String&);
+    void insertText(const String&);
 
     double lineSpacing() const;
     double lineHeight() const;
@@ -360,19 +360,19 @@ public:
     virtual void endEdit(EditData&) override;
     virtual RectF drag(EditData&) override;
     virtual void endDrag(EditData&) override;
-    void movePosition(EditData&, TextCursor::MoveOperation);
+    void movePosition(TextCursor::MoveOperation);
 
     bool mousePress(EditData& ed);
     void dragTo(EditData& ed);
 
-    bool deleteSelectedText(EditData&);
+    bool deleteSelectedText();
 
-    void selectAll(TextCursor*);
-    void select(EditData&, SelectTextType);
+    void selectAll();
+    void select(SelectTextType);
     bool isPrimed() const { return m_primed; }
     void setPrimed(bool primed) { m_primed = primed; }
 
-    virtual void paste(EditData& ed, const String& txt);
+    virtual void paste(const String& txt);
 
     RectF pageRectangle() const;
 
@@ -399,7 +399,7 @@ public:
 
     static bool validateText(String& s);
     bool inHexState() const { return m_hexState >= 0; }
-    void endHexState(EditData&);
+    void endHexState();
 
     muse::draw::Font font() const;
     muse::draw::FontMetrics fontMetrics() const;
@@ -414,7 +414,6 @@ public:
     void styleChanged() override;
     void editInsertText(TextCursor*, const String&);
 
-    TextCursor* cursorFromEditData(const EditData&);
     TextCursor* cursor() const { return m_cursor; }
 
     void setTextInvalid() { m_textInvalid = true; }
@@ -531,7 +530,7 @@ protected:
 
     bool nudge(const EditData& ed);
 
-    void insertSym(EditData& ed, SymId id);
+    void insertSym(SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
 

@@ -36,8 +36,8 @@ class RemoveBracket : public UndoableCommand
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     RemoveBracket(Staff* s, size_t l, BracketType t, size_t sp)
@@ -57,8 +57,8 @@ class AddBracket : public UndoableCommand
     BracketType bracketType = BracketType::NORMAL;
     size_t span = 0;
 
-    void undo(EditData*) override;
-    void redo(EditData*) override;
+    void undo() override;
+    void redo() override;
 
 public:
     AddBracket(Staff* s, size_t l, BracketType t, size_t sp)

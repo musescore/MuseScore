@@ -91,7 +91,7 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
     using EngravingObject::undoChangeProperty;
-    void paste(EditData& ed, const String& txt) override;
+    void paste(const String& txt) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

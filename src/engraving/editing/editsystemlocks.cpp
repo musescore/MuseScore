@@ -45,13 +45,13 @@ public:
     AddSystemLock(const SystemLock* systemLock)
         : m_systemLock(systemLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->removeSystemLock(m_systemLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->addSystemLock(m_systemLock);
@@ -86,13 +86,13 @@ public:
     RemoveSystemLock(const SystemLock* systemLock)
         : m_systemLock(systemLock) {}
 
-    void undo(EditData*) override
+    void undo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->addSystemLock(m_systemLock);
     }
 
-    void redo(EditData*) override
+    void redo() override
     {
         Score* score = m_systemLock->startMB()->score();
         score->removeSystemLock(m_systemLock);

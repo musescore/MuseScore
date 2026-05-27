@@ -35,8 +35,8 @@ class ChangeStyle : public UndoableCommand
     MStyle style;
     bool overlap = false;
 
-    void flip(EditData*) override;
-    void undo(EditData*) override;
+    void flip() override;
+    void undo() override;
 
 public:
     ChangeStyle(Score*, const MStyle&, const bool overlapOnly = false);
@@ -63,7 +63,7 @@ public:
     UNDO_CHANGED_OBJECTS({ m_score })
 
 private:
-    void flip(EditData*) override;
+    void flip() override;
 
     Score* m_score = nullptr;
     std::unordered_map<Sid, PropertyValue> m_values;
