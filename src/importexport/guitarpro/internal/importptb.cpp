@@ -743,6 +743,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             tuple = Factory::createTuplet(measure);
             tuple->setParent(measure);
             tuple->setTrack(cr->track());
+            tuple->setTick(cr->tick());
             tuple->setBaseLen(l);
             tuple->setRatio(Fraction(3, 2));
             tuple->setTicks(l * tuple->ratio().denominator());

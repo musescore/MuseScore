@@ -77,6 +77,7 @@ void TupletHandler::addCr(Measure* measure, ChordRest* cr)
         LOGN("new tuplet %p cr ticks %d/%d", tuplet, cr->ticks().numerator(), cr->ticks().denominator());
         tuplet->setParent(measure);
         tuplet->setTrack(cr->track());
+        tuplet->setTick(cr->tick());
         tuplet->setRatio({ 3, 2 });
     }
     if (tuplet) {
