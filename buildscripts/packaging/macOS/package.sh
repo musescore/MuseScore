@@ -6,6 +6,9 @@ trap 'echo Package failed; exit 1' ERR
 APP_NAME="MuseScore Studio"
 VOL_NAME="MuseScore-Studio"
 DO_SIGN=false
+APPLE_TEAM_ID=""
+APPLE_USERNAME=""
+APPLE_PASSWORD=""
 
 function change_rpath() {
    for P in `otool -L $1 | awk '{print $1}'`
@@ -39,6 +42,9 @@ while [[ "$#" -gt 0 ]]; do
         --app-name) APP_NAME="$2"; shift ;;
         --vol-name) VOL_NAME="$2"; shift ;;
         --sign) DO_SIGN=true ;;
+        --team-id) APPLE_TEAM_ID="$2"; shift ;;
+        --user) APPLE_USERNAME="$2"; shift ;;
+        --password) APPLE_PASSWORD="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -123,6 +129,21 @@ if $DO_SIGN; then
 
     echo "spctl"
     spctl --assess --type execute -vvv "${APP_PATH}"
+
+    # Notarize and staple the .app before sealing the DMG
+    if [ -n "$APPLE_USERNAME" ] && [ -n "$APPLE_PASSWORD" ]; then
+        APP_ZIP="applebuild/app-notarization.zip"
+        rm -f "$APP_ZIP"
+        ditto -c -k --keepParent "${APP_PATH}" "$APP_ZIP"
+        xcrun notarytool submit "$APP_ZIP" \
+            --apple-id "$APPLE_USERNAME" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_PASSWORD" \
+            --wait
+        xcrun stapler staple "${APP_PATH}"
+        xcrun stapler validate "${APP_PATH}"
+        rm -f "$APP_ZIP"
+    fi
 else
     echo "Skipping code signing"
 fi
