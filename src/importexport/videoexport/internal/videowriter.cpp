@@ -339,9 +339,10 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
 
     if (score->staves().size() > 3) {
         //! NOTE: Calculate the dpi to display all page elements
-        muse::RectF ttbox = page->tbbox();
+        double originalPageHeight = page->height() - score->style().styleD(engraving::Sid::pageOddTopMargin)
+                                    - score->style().styleD(engraving::Sid::pageOddBottomMargin);
         double margin = 100.0;
-        double ttboxHeight = ttbox.height() + margin * 2;
+        double ttboxHeight = originalPageHeight + margin * 2;
         double scale = config.height / ttboxHeight;
         config.canvasDpi = scale * engraving::DPI;
     }
