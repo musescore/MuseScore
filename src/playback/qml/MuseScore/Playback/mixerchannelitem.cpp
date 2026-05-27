@@ -312,6 +312,15 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
 
     m_outParams.auxSends = auxSends;
 
+    for (size_t i = 0; i < auxSends.size(); ++i) {
+        const auto index = static_cast<aux_channel_idx_t>(i);
+        auto it = m_auxSendItems.find(index);
+        if (it != m_auxSendItems.end()) {
+            it.value()->setIsActive(auxSends[i].active);
+            it.value()->setAudioSignalPercentage(static_cast<int>(auxSends[i].signalAmount * 100.f));
+        }
+    }
+
     configuration()->isAuxSendVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
         if (visible) {
             IF_ASSERT_FAILED(index < m_outParams.auxSends.size()) {

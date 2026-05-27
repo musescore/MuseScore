@@ -820,6 +820,11 @@
     <seq>Ctrl+A</seq>
     </SC>
   <SC>
+    <key>reset-mixer</key>
+    <seq>Ctrl+Shift+R</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     <seq>Enter</seq>

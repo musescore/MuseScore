@@ -30,12 +30,25 @@ Item {
 
     property alias navigation: navPanel
 
+    signal resetMixerRequested()
+
     anchors.fill: parent
 
     NavigationPanel {
         id: navPanel
         name: "MixerPanelToolbarPanel"
         enabled: root.enabled && root.visible
+    }
+
+    ResetMixerButton {
+        id: resetMixerButton
+
+        anchors.fill: parent
+        navigationPanel: navPanel
+
+        onResetMixerRequested: {
+            root.resetMixerRequested()
+        }
     }
 
     // TODO: https://github.com/musescore/MuseScore/issues/16722

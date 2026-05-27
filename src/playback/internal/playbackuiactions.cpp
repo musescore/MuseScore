@@ -201,6 +201,14 @@ const UiActionList PlaybackUiActions::s_diagnosticActions = {
              )
 };
 
+const UiActionList PlaybackUiActions::s_mixerActions = {
+    UiAction("reset-mixer",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Reset mixer to default settings")
+             )
+};
+
 const UiActionList PlaybackUiActions::s_onlineSoundsActions = {
     UiAction(CLEAR_ONLINE_SOUNDS_CACHE_CODE,
              mu::context::UiCtxAny,
@@ -264,6 +272,7 @@ const UiActionList& PlaybackUiActions::actionsList() const
         alist.insert(alist.end(), s_settingsActions.cbegin(), s_settingsActions.cend());
         alist.insert(alist.end(), s_loopBoundaryActions.cbegin(), s_loopBoundaryActions.cend());
         alist.insert(alist.end(), s_diagnosticActions.cbegin(), s_diagnosticActions.cend());
+        alist.insert(alist.end(), s_mixerActions.cbegin(), s_mixerActions.cend());
         alist.insert(alist.end(), s_onlineSoundsActions.cbegin(), s_onlineSoundsActions.cend());
     }
     return alist;

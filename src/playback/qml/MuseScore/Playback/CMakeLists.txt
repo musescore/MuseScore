@@ -70,6 +70,7 @@ qt_add_qml_module(playback_qml
         internal/PlaybackSpeedPopup.qml
         internal/PlaybackSpeedSlider.qml
         internal/PlaybackToolBarActions.qml
+        internal/ResetMixerButton.qml
         internal/SoundFlag/MuseSoundsParams.qml
         internal/SoundFlag/ParamsGridView.qml
         internal/VolumePressureMeter.qml

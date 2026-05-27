@@ -42,6 +42,10 @@ ColumnLayout {
     property Component toolbarComponent: MixerPanelToolbar {
         navigation.section: root.navigationSection
         navigation.order: root.contentNavigationPanelOrderStart
+
+        onResetMixerRequested: {
+            root.resetMixer()
+        }
     }
 
     signal resizeRequested(var newWidth, var newHeight)
@@ -86,6 +90,25 @@ ColumnLayout {
             flickable.contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
         } else if (targetScrollPosition < flickable.contentX) {
             flickable.contentX = Math.max(targetScrollPosition - prv.channelItemWidth, 0)
+        }
+    }
+
+    function resetMixer() {
+        for (let i = 0; i < mixerPanelModel.count; i++) {
+            let item = mixerPanelModel.get(i)
+            if (!item || !item.channelItem) {
+                continue
+            }
+
+            item.channelItem.volumeLevel = 0
+            item.channelItem.balance = 0
+
+            let auxList = item.channelItem.auxSendItemList
+            for (let j = 0; j < auxList.length; j++) {
+                let aux = auxList[j]
+                aux.isActive = true
+                aux.audioSignalPercentage = 30
+            }
         }
     }
 

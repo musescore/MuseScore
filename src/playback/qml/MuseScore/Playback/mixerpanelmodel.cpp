@@ -66,6 +66,22 @@ void MixerPanelModel::init()
         removeItem(trackId);
     });
 
+    controller()->mixerResetRequested().onNotify(this, [this]() {
+        for (MixerChannelItem* item : m_mixerChannelList) {
+            const InstrumentTrackId& instrumentTrackId = item->instrumentTrackId();
+            if (!instrumentTrackId.isValid()) {
+                continue;
+            }
+            AudioOutputParams outParams = audioSettings()->trackOutputParams(instrumentTrackId);
+            loadOutputParams(item, std::move(outParams));
+        }
+
+        if (m_masterChannelItem) {
+            AudioOutputParams masterParams = audioSettings()->masterAudioOutputParams();
+            loadOutputParams(m_masterChannelItem, std::move(masterParams));
+        }
+    });
+
     reload();
 }
 

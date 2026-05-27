@@ -132,6 +132,8 @@ public:
     muse::async::Notification onlineSoundsChanged() const override;
     muse::Progress onlineSoundsProcessingProgress() const override;
 
+    muse::async::Notification mixerResetRequested() const override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -215,6 +217,8 @@ private:
     void updateSoloMuteStates();
     void updateAuxMuteStates();
 
+    void resetMixerToDefaults();
+
     using TrackAddFinished = std::function<void ()>;
 
     void addTrack(const engraving::InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished);
@@ -239,6 +243,7 @@ private:
     muse::async::Notification m_isPlayingChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
+    muse::async::Notification m_mixerResetRequested;
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> m_currentPlaybackPositionChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 

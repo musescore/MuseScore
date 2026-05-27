@@ -86,6 +86,8 @@ public:
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));
     MOCK_METHOD(void, setTempoMultiplier, (double), (override));
 
+    MOCK_METHOD(muse::async::Notification, mixerResetRequested, (), (const, override));
+
     MOCK_METHOD(muse::Progress, loadingProgress, (), (const, override));
 
     MOCK_METHOD(void, applyProfile, (const SoundProfileName&), (override));

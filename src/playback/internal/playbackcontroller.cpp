@@ -69,6 +69,7 @@ static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
 static const ActionCode TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE("toggle-hear-playback-when-editing");
+static const ActionCode RESET_MIXER_CODE("reset-mixer");
 
 static AudioOutputParams makeReverbOutputParams()
 {
@@ -127,6 +128,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
     dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
+    dispatcher()->reg(this, RESET_MIXER_CODE, this, &PlaybackController::resetMixerToDefaults);
 
     m_onlineSoundsController->regActions();
 
@@ -954,6 +956,84 @@ void PlaybackController::reloadPlaybackCache()
     if (nPlayback) {
         nPlayback->reload();
     }
+}
+
+void PlaybackController::resetMixerToDefaults()
+{
+    IF_ASSERT_FAILED(audioSettings() && notationPlayback()) {
+        return;
+    }
+
+    InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
+
+    for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        if (!muse::contains(m_instrumentTrackIdMap, instrumentTrackId)) {
+            continue;
+        }
+
+        AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
+        const bool wasMuted = outParams.muted;
+        const bool wasForceMute = outParams.forceMute;
+
+        outParams.volume = 0.f;
+        outParams.balance = 0.f;
+
+        const AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
+        const AudioSourceType sourceType = inParams.isValid() ? inParams.type() : AudioSourceType::Fluid;
+        const muse::String instrumentSoundId = inParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
+
+        const bool isMetronome = instrumentTrackId == notationPlayback()->metronomeTrackId();
+
+        if (isMetronome) {
+            outParams.muted = wasMuted;
+        } else {
+            const auto soloMuteState = trackSoloMuteState(instrumentTrackId);
+            outParams.solo = soloMuteState.solo;
+            outParams.muted = soloMuteState.mute;
+        }
+        outParams.forceMute = wasForceMute;
+
+        if (!isMetronome) {
+            if (outParams.auxSends.empty()) {
+                const auto& auxMap = m_auxTrackIdMap;
+                for (aux_channel_idx_t idx = 0; idx < static_cast<aux_channel_idx_t>(auxMap.size()); ++idx) {
+                    gain_t signalAmount = configuration()->defaultAuxSendValue(idx, sourceType, instrumentSoundId);
+                    outParams.auxSends.emplace_back(AuxSendParams { signalAmount, true });
+                }
+            } else {
+                for (aux_channel_idx_t idx = 0; idx < static_cast<aux_channel_idx_t>(outParams.auxSends.size()); ++idx) {
+                    gain_t signalAmount = configuration()->defaultAuxSendValue(idx, sourceType, instrumentSoundId);
+                    outParams.auxSends[idx] = AuxSendParams { signalAmount, true };
+                }
+            }
+        }
+
+        audioSettings()->setTrackOutputParams(instrumentTrackId, outParams);
+
+        audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
+        playback()->setControlParams(trackId, outParams.control());
+        playback()->setAuxSendsParams(trackId, outParams.auxSends);
+    }
+
+    AudioOutputParams masterParams = audioSettings()->masterAudioOutputParams();
+    const bool masterWasMuted = masterParams.muted;
+    const bool masterWasForceMute = masterParams.forceMute;
+
+    masterParams.volume = 0.f;
+    masterParams.balance = 0.f;
+
+    masterParams.muted = masterWasMuted;
+    masterParams.forceMute = masterWasForceMute;
+
+    audioSettings()->setMasterAudioOutputParams(masterParams);
+    playback()->setMasterControlParams(masterParams.control());
+
+    m_mixerResetRequested.notify();
+}
+
+muse::async::Notification PlaybackController::mixerResetRequested() const
+{
+    return m_mixerResetRequested;
 }
 
 void PlaybackController::openPlaybackSetupDialog()
