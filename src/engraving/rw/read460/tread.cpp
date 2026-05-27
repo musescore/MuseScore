@@ -781,7 +781,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             d->setPlayDynamic(e.readBool());
         } else if (ctx.mscVersion() < 470 && tag == "dynamicsSize") {
-            d->setSymbolScale(e.readDouble());
+            readProperty(d, e, ctx, Pid::MUSICAL_SYMBOLS_SCALE);
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (readProperty(d, tag, e, ctx, Pid::ANCHOR_TO_END_OF_PREVIOUS)) {
