@@ -74,7 +74,7 @@ newDetailsFile = False
 translationChanged = False
 
 # read languages.json and store language code and name
-langCode_file = open("share/locale/languages.json", "r+")
+langCode_file = open("muse/framework/languages/resources/languages.json", "r+")
 langCodeNameDict = json.load(langCode_file)  # language code --> props
 langCode_file.close()
 
