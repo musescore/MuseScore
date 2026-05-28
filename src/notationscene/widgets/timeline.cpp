@@ -704,8 +704,8 @@ QString TRowLabels::cursorIsOn()
 //   Timeline
 //---------------------------------------------------------
 
-Timeline::Timeline(QSplitter* splitter)
-    : QGraphicsView(splitter), muse::Contextable(muse::iocCtxForQWidget(this))
+Timeline::Timeline(QSplitter* splitter, const muse::modularity::ContextPtr& iocCtx)
+    : QGraphicsView(splitter), muse::Contextable(iocCtx)
 {
     TRACEFUNC;
 
@@ -2308,6 +2308,27 @@ void Timeline::mousePressEvent(QMouseEvent* event)
     } else {
         interaction()->clearSelection();
     }
+
+    this->seekSelection();
+}
+
+void Timeline::seekSelection()
+{
+    const INotationSelectionPtr selection = interaction()->selection();
+    const std::vector<EngravingItem*>& elements = selection->elements();
+    if (elements.empty()) {
+        return;
+    }
+
+    EngravingItem* elementToSeek = elements.front();
+    for (EngravingItem* element : elements) {
+        if (element->tick() > elementToSeek->tick()) {
+            continue;
+        }
+        elementToSeek = element;
+    }
+
+    playbackController()->seekElement(elementToSeek);
 }
 
 //---------------------------------------------------------

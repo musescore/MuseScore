@@ -35,7 +35,7 @@ namespace mu::notation {
 class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget
 {
 public:
-    TimelineAdapter()
+    TimelineAdapter(const muse::modularity::ContextPtr& iocCtx)
         : QSplitter(nullptr)
     {
         setFocusPolicy(Qt::NoFocus);
@@ -43,7 +43,7 @@ public:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setObjectName("TimelineAdapter");
 
-        m_msTimeline = new Timeline(this);
+        m_msTimeline = new Timeline(this, iocCtx);
     }
 
     void updateView()
@@ -141,7 +141,7 @@ void TimelineView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    auto timeline = std::make_shared<TimelineAdapter>();
+    auto timeline = std::make_shared<TimelineAdapter>(iocContext());
 
     auto updateView = [this, timeline]() {
         update();
