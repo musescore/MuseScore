@@ -4536,6 +4536,8 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     m_editData.hRaster = hRaster;
     m_editData.vRaster = vRaster;
 
+    m_editData.isEditMode = isEditingElement();
+
     //: Means: an editing operation triggered by a keystroke
     startEdit(TranslatableString("undoableAction", "Keystroke edit"));
 
