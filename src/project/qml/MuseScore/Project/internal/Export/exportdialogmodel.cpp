@@ -839,3 +839,17 @@ void ExportDialogModel::setSelectedSampleFormat(int format)
     audioExportConfiguration()->setExportSampleFormat(m_selectedExportType.suffixes[0], audioFormat);
     emit selectedSampleFormatChanged();
 }
+
+bool ExportDialogModel::applyWatermark() const
+{
+    return imageExportConfiguration()->exportApplyWatermark();
+}
+
+void ExportDialogModel::setApplyWatermark(bool apply)
+{
+    if (apply == imageExportConfiguration()->exportApplyWatermark()) {
+        return;
+    }
+    imageExportConfiguration()->setExportApplyWatermark(apply);
+    emit applyWatermarkChanged(apply);
+}

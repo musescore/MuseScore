@@ -97,6 +97,8 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
+    Q_PROPERTY(bool applyWatermark READ applyWatermark WRITE setApplyWatermark NOTIFY applyWatermarkChanged)
+
     QML_ELEMENT
 
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
@@ -212,6 +214,9 @@ public:
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
 
+    bool applyWatermark() const;
+    void setApplyWatermark(bool apply);
+
     Q_INVOKABLE void updateExportInfo();
 
 signals:
@@ -254,6 +259,8 @@ signals:
 
     void shouldDestinationFolderBeOpenedOnExportChanged(bool shouldDestinationFolderBeOpenedOnExport);
 
+    void applyWatermarkChanged(bool apply);
+
 private:
     void classBegin() override;
     void componentComplete() override {}
@@ -279,5 +286,6 @@ private:
     ExportType m_selectedExportType = ExportType();
     muse::io::path_t m_exportPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
+    bool m_applyWatermark = true;
 };
 }
