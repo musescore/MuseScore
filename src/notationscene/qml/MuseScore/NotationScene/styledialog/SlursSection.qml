@@ -136,7 +136,7 @@ StyledGroupBox {
 
             CheckBox {
                 id: maskSlursCheckbox
-                text: qsTrc("notation/editstyle/slursandties", "Mask slurs where they overlap other items")
+                text: qsTrc("notation/editstyle/slursandties", "Mask slurs over clefs, key and time signatures")
                 checked: root.pageModel.maskSlurs.value
                 width: parent.width
                 Layout.columnSpan: 2

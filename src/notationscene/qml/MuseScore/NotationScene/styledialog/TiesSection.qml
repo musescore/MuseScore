@@ -179,7 +179,7 @@ StyledGroupBox {
 
             CheckBox {
                 id: maskTiesCheckbox
-                text: qsTrc("notation/editstyle/slursandties", "Mask ties where they overlap other items")
+                text: qsTrc("notation/editstyle/slursandties", "Mask ties over clefs, key and time signatures")
                 checked: root.pageModel.maskTies.value
                 width: parent.width
                 Layout.columnSpan: 2
