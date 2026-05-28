@@ -322,21 +322,12 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                 break;
                 case 'm': {
                     IFileInfoProviderPtr fileInfo = page->score()->masterScore()->fileInfo();
-                    if (page->score()->dirty() || !fileInfo->saved()) {
-                        newFragments.back().text += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
-                    } else {
-                        newFragments.back().text += fileInfo->lastModified().time().toString(
-                            muse::DateFormat::ISODate);
-                    }
+                    newFragments.back().text += fileInfo->lastModified().time().toString(muse::DateFormat::ISODate);
                 }
                 break;
                 case 'M': {
                     IFileInfoProviderPtr fileInfo = page->score()->masterScore()->fileInfo();
-                    if (page->score()->dirty() || !fileInfo->saved()) {
-                        newFragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
-                    } else {
-                        newFragments.back().text += fileInfo->lastModified().date().toString(muse::DateFormat::ISODate);
-                    }
+                    newFragments.back().text += fileInfo->lastModified().date().toString(muse::DateFormat::ISODate);
                 }
                 break;
                 case 'C': // only on first page
