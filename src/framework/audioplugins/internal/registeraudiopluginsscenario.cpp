@@ -76,28 +76,33 @@ PluginScanResult RegisterAudioPluginsScenario::scanPlugins() const
     return result;
 }
 
-Ret RegisterAudioPluginsScenario::updatePluginsRegistry()
+void RegisterAudioPluginsScenario::updatePluginsRegistry()
 {
     TRACEFUNC;
 
-    PluginScanResult result = scanPlugins();
+    const PluginScanResult result = scanPlugins();
 
-    unregisterRemovedPlugins(result.missingPluginIds);
-    registerNewPlugins(result.newPluginPaths);
+    Ret ret = unregisterRemovedPlugins(result.missingPluginIds);
+    if (!ret) {
+        LOGE() << "Failed to unregister plugins: " << ret.toString();
+    }
 
-    return knownPluginsRegister()->load();
+    ret = registerNewPlugins(result.newPluginPaths);
+    if (!ret) {
+        LOGE() << "Failed to register plugins: " << ret.toString();
+    }
 }
 
-void RegisterAudioPluginsScenario::registerNewPlugins(const io::paths_t& pluginPaths)
+Ret RegisterAudioPluginsScenario::registerNewPlugins(const io::paths_t& pluginPaths)
 {
     TRACEFUNC;
 
     if (pluginPaths.empty()) {
-        return;
+        return make_ok();
     }
 
     processPluginsRegistration(pluginPaths);
-    knownPluginsRegister()->load();
+    return knownPluginsRegister()->load();
 }
 
 Ret RegisterAudioPluginsScenario::unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds)
@@ -108,12 +113,7 @@ Ret RegisterAudioPluginsScenario::unregisterRemovedPlugins(const audio::AudioRes
         return make_ok();
     }
 
-    Ret ret = knownPluginsRegister()->unregisterPlugins(pluginIds);
-    if (!ret) {
-        LOGE() << "Failed to unregister removed plugins: " << ret.toString();
-    }
-
-    return ret;
+    return knownPluginsRegister()->unregisterPlugins(pluginIds);
 }
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
@@ -123,8 +123,8 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
     m_aborted = false;
     m_progress.start();
 
-    std::string appPath = globalConfiguration()->appBinPath().toStdString();
-    int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
+    const std::string appPath = globalConfiguration()->appBinPath().toStdString();
+    const int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
 
     for (int64_t i = 0; i < pluginCount; ++i) {
         if (m_aborted) {
@@ -132,7 +132,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         }
 
         const io::path_t& pluginPath = pluginPaths[i];
-        std::string pluginPathStr = pluginPath.toStdString();
+        const std::string pluginPathStr = pluginPath.toStdString();
 
         m_progress.progress(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
