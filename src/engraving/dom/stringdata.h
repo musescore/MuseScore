@@ -91,7 +91,11 @@ private:
 
     int         fret(int pitch, int string, int pitchOffset) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
-    void        sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const;
+    void        sortChordNotesUseSameString(const Chord* chord) const;
+    bool        hasPendingPitchChange(const Chord* chord) const;
+    void        updateFretsOnSameStrings(const Chord* chord) const;
+    void        preferBassStringForNegativeFret(const Chord* chord) const;
+    void        reassignNegativeFretNotes(const Chord* chord) const;
     bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
                                                            int& nNewFret) const;
 
