@@ -32,4 +32,5 @@ class Score;
 namespace mu::iex::guitarpro::utils {
 int harmonicOvertone(mu::engraving::Note* note, float harmonicValue, int harmonicType);
 mu::engraving::Chord* getLocatedChord(mu::engraving::Score* score, mu::engraving::Fraction tickFr, mu::engraving::track_idx_t track);
+void createGhostNoteParenGroups(mu::engraving::Chord* ch);
 } // mu::iex::guitarpro
