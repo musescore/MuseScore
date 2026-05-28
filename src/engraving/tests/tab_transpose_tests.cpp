@@ -529,6 +529,34 @@ TEST_F(Engraving_TabTransposeTests, negFretChordAssignmentIsPathIndependent)
     }
 }
 
+// two_strings_different_frets: str2/fr5 + str3/fr7, transpose -6.
+// One note gets a negative fret (-1 on str2), the other stays positive (fr1 on str3).
+// The negative-fret note should move to str3/fr4 and displace the positive note to str4/fr6,
+// not leave the positive note on str3 and push the higher pitch to str4/fr9.
+TEST_F(Engraving_TabTransposeTests, negFretNoteDisplacesPositiveFretToOptimalString)
+{
+    setFrettingFlags(true, true);
+
+    MasterScore* score = ScoreRW::readScore(DATA_DIR + "two_strings_different_frets.mscx");
+    ASSERT_TRUE(score);
+
+    transposeScore(score, -6);
+
+    auto notes = collectTabNotes(score);
+    ASSERT_EQ(notes.size(), 2u);
+
+    const TabNote* n3 = findNoteByString(notes, 3);
+    const TabNote* n4 = findNoteByString(notes, 4);
+    ASSERT_NE(n3, nullptr) << "expected a note on string 3";
+    ASSERT_NE(n4, nullptr) << "expected a note on string 4";
+    EXPECT_EQ(n3->pitch, 54) << "pitch 54 should be on str3";
+    EXPECT_EQ(n3->fret, 4) << "pitch 54 should be on str3/fr4";
+    EXPECT_EQ(n4->pitch, 51) << "pitch 51 should be on str4";
+    EXPECT_EQ(n4->fret, 6) << "pitch 51 should be on str4/fr6";
+
+    delete score;
+}
+
 // high_frets: same-string +9; second fret can exceed maxFrets without changing strings.
 TEST_F(Engraving_TabTransposeTests, sameStringTransposeKeepsStringsWithFretAboveMax)
 {
