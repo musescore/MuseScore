@@ -22,7 +22,10 @@
 #include "utils.h"
 
 #include "realfn.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/parenthesis.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/measure.h"
 
@@ -81,5 +84,44 @@ Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t
     }
 
     return chord;
+}
+
+static void addParenthesesToNotes(Chord* ch, const std::vector<Note*>& notes)
+{
+    auto createParen = [ch](DirectionH dir) {
+        Parenthesis* p = Factory::createParenthesis(ch);
+        p->setParent(ch);
+        p->setTrack(ch->track());
+        p->setDirection(dir);
+        return p;
+    };
+
+    NoteParenthesisInfo* parenInfo = new NoteParenthesisInfo(createParen(DirectionH::LEFT), createParen(DirectionH::RIGHT), notes);
+    ch->addNoteParenthesisInfo(parenInfo);
+
+    for (Note* n : notes) {
+        n->setProperty(Pid::HAS_PARENTHESES, PropertyValue::fromValue(ParenthesesMode::BOTH));
+        n->setHideGeneratedParens(true);
+    }
+}
+
+void createGhostNoteParenGroups(Chord* ch)
+{
+    if (!ch->noteParentheses().empty()) {
+        return;
+    }
+
+    const std::vector<Note*>& notes = ch->notes();
+    const size_t count = notes.size();
+    std::vector<Note*> currentGroup;
+
+    for (size_t i = 0; i <= count; ++i) {
+        if (i < count && notes[i]->ghost()) {
+            currentGroup.push_back(notes[i]);
+        } else if (!currentGroup.empty()) {
+            addParenthesesToNotes(ch, currentGroup);
+            currentGroup.clear();
+        }
+    }
 }
 } // namespace mu::iex::guitarpro
