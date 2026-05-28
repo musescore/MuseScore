@@ -64,6 +64,10 @@ if(BUILD_MODE STREQUAL "RELEASE")
     set(MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE OFF)
 endif()
 
+if (MUSE_APP_UNSTABLE)
+    set(MUSE_APP_GUI_IDENTIFIER "${MUSE_APP_GUI_IDENTIFIER}Development")
+endif(MUSE_APP_UNSTABLE)
+
 ###########################################
 # Setup paths
 ###########################################
