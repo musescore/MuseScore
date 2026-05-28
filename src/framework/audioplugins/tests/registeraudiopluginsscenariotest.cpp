@@ -158,6 +158,11 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry)
     ON_CALL(*m_knownPlugins, pluginInfoList(_))
     .WillByDefault(Return(alreadyRegisteredPlugins));
 
+    for (const AudioPluginInfo& info : alreadyRegisteredPlugins) {
+        ON_CALL(*m_knownPlugins, exists(info.path))
+        .WillByDefault(Return(true));
+    }
+
     // [THEN] The progress bar is shown
     EXPECT_CALL(*m_interactive, showProgress(muse::trc("audio", "Scanning audio plugins"), _))
     .Times(1);
@@ -231,6 +236,11 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_NoNe
     ON_CALL(*m_knownPlugins, pluginInfoList(_))
     .WillByDefault(Return(alreadyRegisteredPlugins));
 
+    for (const path_t& pluginPath : foundPluginPaths) {
+        ON_CALL(*m_knownPlugins, exists(pluginPath))
+        .WillByDefault(Return(true));
+    }
+
     // [THEN] Don't register the plugins again
     EXPECT_CALL(*m_process, execute(_, _))
     .Times(0);
@@ -285,6 +295,11 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_Unre
         .WillByDefault(Return(foundPluginPaths));
     }
 
+    for (const path_t& path : foundPluginPaths) {
+        ON_CALL(*m_knownPlugins, exists(path))
+        .WillByDefault(Return(true));
+    }
+
     // [THEN] Unreg the uninstalled plugins
     AudioResourceIdList uninstalledPluginIdList {
         knownPlugins[0].meta.id, knownPlugins[1].meta.id
@@ -300,6 +315,105 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_Unre
     Ret ret = m_scenario->updatePluginsRegistry();
 
     // [THEN] Successfully unregistered
+    EXPECT_TRUE(ret);
+}
+
+//! A multi-component VST can expose several plugins (different IDs) from a single .vst3 path
+//! When that path is still present on disk, none of the components should be re-registered
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_SamePathDifferentIds_PluginPresent)
+{
+    path_t sharedPath = "/some/path/MultiPlugin.vst3";
+
+    // [GIVEN] Two already registered components that share the same path
+    AudioPluginInfoList knownPlugins;
+
+    AudioPluginInfo mono;
+    mono.path = sharedPath;
+    mono.meta.id = "MultiPlugin_Mono";
+    knownPlugins.push_back(mono);
+
+    AudioPluginInfo stereo;
+    stereo.path = sharedPath;
+    stereo.meta.id = "MultiPlugin_Stereo";
+    knownPlugins.push_back(stereo);
+
+    ON_CALL(*m_knownPlugins, pluginInfoList(_))
+    .WillByDefault(Return(knownPlugins));
+
+    // [GIVEN] Scanner still finds the shared path
+    for (const IAudioPluginsScannerPtr& scanner : m_scanners) {
+        AudioPluginsScannerMock* mock = dynamic_cast<AudioPluginsScannerMock*>(scanner.get());
+        ASSERT_TRUE(mock);
+
+        ON_CALL(*mock, scanPlugins())
+        .WillByDefault(Return(paths_t { sharedPath }));
+    }
+
+    ON_CALL(*m_knownPlugins, exists(sharedPath))
+    .WillByDefault(Return(true));
+
+    // [THEN] Neither component is re-registered or unregistered
+    EXPECT_CALL(*m_process, execute(_, _))
+    .Times(0);
+
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(_))
+    .Times(0);
+
+    EXPECT_CALL(*m_knownPlugins, load())
+    .WillOnce(Return(muse::make_ok()));
+
+    // [WHEN] Update registry
+    Ret ret = m_scenario->updatePluginsRegistry();
+
+    // [THEN] Successfully updated
+    EXPECT_TRUE(ret);
+}
+
+//! When a multi-component plugin is uninstalled, ALL of its component IDs must be unregistered
+TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, UpdatePluginsRegistry_SamePathDifferentIds_PluginMissing)
+{
+    path_t sharedPath = "/some/path/MultiPlugin.vst3";
+
+    // [GIVEN] Two already registered components that share the same path
+    AudioPluginInfoList knownPlugins;
+
+    AudioPluginInfo mono;
+    mono.path = sharedPath;
+    mono.meta.id = "MultiPlugin_Mono";
+    knownPlugins.push_back(mono);
+
+    AudioPluginInfo stereo;
+    stereo.path = sharedPath;
+    stereo.meta.id = "MultiPlugin_Stereo";
+    knownPlugins.push_back(stereo);
+
+    ON_CALL(*m_knownPlugins, pluginInfoList(_))
+    .WillByDefault(Return(knownPlugins));
+
+    // [GIVEN] Scanner finds nothing — the plugin has been uninstalled
+    for (const IAudioPluginsScannerPtr& scanner : m_scanners) {
+        AudioPluginsScannerMock* mock = dynamic_cast<AudioPluginsScannerMock*>(scanner.get());
+        ASSERT_TRUE(mock);
+
+        ON_CALL(*mock, scanPlugins())
+        .WillByDefault(Return(paths_t {}));
+    }
+
+    // [THEN] Both component IDs are unregistered
+    AudioResourceIdList expectedIds { mono.meta.id, stereo.meta.id };
+    EXPECT_CALL(*m_knownPlugins, unregisterPlugins(expectedIds))
+    .WillOnce(Return(make_ok()));
+
+    EXPECT_CALL(*m_process, execute(_, _))
+    .Times(0);
+
+    EXPECT_CALL(*m_knownPlugins, load())
+    .WillOnce(Return(muse::make_ok()));
+
+    // [WHEN] Update registry
+    Ret ret = m_scenario->updatePluginsRegistry();
+
+    // [THEN] Successfully updated
     EXPECT_TRUE(ret);
 }
 

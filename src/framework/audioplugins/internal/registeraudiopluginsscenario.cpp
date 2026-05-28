@@ -23,7 +23,7 @@
 #include "registeraudiopluginsscenario.h"
 
 #include <QCoreApplication>
-#include <map>
+#include <set>
 
 #include "global/translation.h"
 
@@ -55,24 +55,22 @@ PluginScanResult RegisterAudioPluginsScenario::scanPlugins() const
     TRACEFUNC;
 
     PluginScanResult result;
+    std::set<io::path_t> scannedPaths;
 
-    std::map<io::path_t, audio::AudioResourceId> registered;
-    for (const auto& info : knownPluginsRegister()->pluginInfoList()) {
-        registered[info.path] = info.meta.id;
-    }
-
-    for (const auto& scanner : scannerRegister()->scanners()) {
-        for (const auto& path : scanner->scanPlugins()) {
-            if (auto it = registered.find(path); it != registered.end()) {
-                registered.erase(it);
-            } else {
+    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
+        for (const io::path_t& path : scanner->scanPlugins()) {
+            if (!knownPluginsRegister()->exists(path)) {
                 result.newPluginPaths.push_back(path);
             }
+
+            scannedPaths.insert(path);
         }
     }
 
-    for (const auto& [path, id] : registered) {
-        result.missingPluginIds.push_back(id);
+    for (const AudioPluginInfo& info : knownPluginsRegister()->pluginInfoList()) {
+        if (!muse::contains(scannedPaths, info.path)) {
+            result.missingPluginIds.push_back(info.meta.id);
+        }
     }
 
     return result;
