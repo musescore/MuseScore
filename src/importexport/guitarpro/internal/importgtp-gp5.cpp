@@ -383,6 +383,11 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             }
             delnote.clear();
         }
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            chord->sortNotes();
+            mu::iex::guitarpro::utils::createGhostNoteParenGroups(chord);
+        }
         createSlur(hasSlur, staffIdx, cr);
         if (lyrics) {
             cr->add(lyrics);
