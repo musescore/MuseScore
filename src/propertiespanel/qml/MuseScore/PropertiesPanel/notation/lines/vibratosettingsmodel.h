@@ -46,7 +46,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_lineType = nullptr;
     PropertyItem* m_placement = nullptr;

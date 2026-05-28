@@ -143,14 +143,6 @@ void SlurAndTieSettingsModel::loadProperties()
     updateisLineStyleAvailable();
 }
 
-void SlurAndTieSettingsModel::resetProperties()
-{
-    m_lineStyle->resetToDefault();
-    m_direction->resetToDefault();
-    m_tiePlacement->resetToDefault();
-    m_minLength->resetToDefault();
-}
-
 void SlurAndTieSettingsModel::updateIsTiePlacementAvailable()
 {
     bool available = false;

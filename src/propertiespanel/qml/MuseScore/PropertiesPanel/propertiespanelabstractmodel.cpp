@@ -239,11 +239,6 @@ void PropertiesPanelAbstractModel::updatemeasurementUnits()
     }
 }
 
-void PropertiesPanelAbstractModel::requestResetToDefaults()
-{
-    resetProperties();
-}
-
 QString PropertiesPanelAbstractModel::title() const
 {
     return m_title;

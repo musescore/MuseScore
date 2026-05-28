@@ -49,6 +49,5 @@ private:
 
     void createProperties() override {}
     void loadProperties() override {}
-    void resetProperties() override {}
 };
 }

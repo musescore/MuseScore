@@ -54,12 +54,6 @@ void ChordBracketSettingsModel::loadProperties()
     updateIsBracket();
 }
 
-void ChordBracketSettingsModel::resetProperties()
-{
-    m_bracketRightSide->resetToDefault();
-    m_hookPos->resetToDefault();
-}
-
 void ChordBracketSettingsModel::updateIsBracket()
 {
     bool isBracket = true;

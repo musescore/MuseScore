@@ -102,14 +102,6 @@ void BendSettingsModel::loadProperties()
     loadBendCurve();
 }
 
-void BendSettingsModel::resetProperties()
-{
-    m_bendDirection->resetToDefault();
-    m_showHoldLine->resetToDefault();
-    m_diveTabPos->resetToDefault();
-    m_dipVibratoType->resetToDefault();
-}
-
 bool BendSettingsModel::areSettingsAvailable() const
 {
     return m_elementList.count() == 1; // Bend propertiespanel doesn't support multiple selection

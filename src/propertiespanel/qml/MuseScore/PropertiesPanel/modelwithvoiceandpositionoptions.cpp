@@ -56,14 +56,6 @@ void ModelWithVoiceAndPositionOptions::loadProperties()
     updateIsStaveCenteringAvailable();
 }
 
-void ModelWithVoiceAndPositionOptions::resetProperties()
-{
-    m_voiceBasedPosition->resetToDefault();
-    m_voiceAssignment->resetToDefault();
-    m_voice->setValue(0);
-    m_centerBetweenStaves->resetToDefault();
-}
-
 void ModelWithVoiceAndPositionOptions::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
     loadProperties();

@@ -77,10 +77,3 @@ void VoltaSettingsModel::loadProperties()
     loadPropertyItem(m_repeatCount);
     updateStartAndEndHookTypes();
 }
-
-void VoltaSettingsModel::resetProperties()
-{
-    TextLineSettingsModel::resetProperties();
-
-    m_repeatCount->resetToDefault();
-}

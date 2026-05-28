@@ -263,28 +263,6 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     updateRightPositionText();
 }
 
-void TextSettingsModel::resetProperties()
-{
-    m_fontFamily->resetToDefault();
-    m_fontStyle->resetToDefault();
-    m_fontSize->resetToDefault();
-    m_textLineSpacing->resetToDefault();
-    m_isSizeSpatiumDependent->resetToDefault();
-    m_symbolSize->resetToDefault();
-    m_symbolScale->resetToDefault();
-
-    m_frameType->resetToDefault();
-    m_frameBorderColor->resetToDefault();
-    m_frameFillColor->resetToDefault();
-    m_frameThickness->resetToDefault();
-    m_frameMargin->resetToDefault();
-    m_frameCornerRadius->resetToDefault();
-
-    m_textType->resetToDefault();
-    m_textPlacement->resetToDefault();
-    m_textScriptAlignment->resetToDefault();
-}
-
 void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds, const StyleIdSet& changedStyleIds)
 {
     loadProperties(changedProperyIds);

@@ -128,18 +128,6 @@ void FretDiagramSettingsModel::loadProperties()
     loadPropertyItem(m_verticalAlign);
 }
 
-void FretDiagramSettingsModel::resetProperties()
-{
-    m_scale->resetToDefault();
-    m_stringsCount->resetToDefault();
-    m_fretsCount->resetToDefault();
-    m_fretNumber->resetToDefault();
-    m_isNutVisible->resetToDefault();
-    m_placement->resetToDefault();
-    m_showFingerings->resetToDefault();
-    m_verticalAlign->resetToDefault();
-}
-
 PropertyItem* FretDiagramSettingsModel::scale() const
 {
     return m_scale;

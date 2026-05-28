@@ -70,14 +70,6 @@ void StemSettingsModel::loadProperties()
     emit useStraightNoteFlagsChanged();
 }
 
-void StemSettingsModel::resetProperties()
-{
-    m_thickness->resetToDefault();
-    m_length->resetToDefault();
-    m_stemDirection->resetToDefault();
-    m_offset->resetToDefault();
-}
-
 PropertyItem* StemSettingsModel::thickness() const
 {
     return m_thickness;

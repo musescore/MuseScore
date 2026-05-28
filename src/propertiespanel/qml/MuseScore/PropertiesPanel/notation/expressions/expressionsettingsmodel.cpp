@@ -54,13 +54,6 @@ void ExpressionSettingsModel::loadProperties()
     loadPropertyItem(m_snapExpression);
 }
 
-void ExpressionSettingsModel::resetProperties()
-{
-    ModelWithVoiceAndPositionOptions::resetProperties();
-
-    m_snapExpression->resetToDefault();
-}
-
 PropertyItem* ExpressionSettingsModel::snapExpression() const
 {
     return m_snapExpression;

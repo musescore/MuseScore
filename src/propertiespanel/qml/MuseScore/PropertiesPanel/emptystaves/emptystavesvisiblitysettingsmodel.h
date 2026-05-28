@@ -42,7 +42,6 @@ public:
 
     void createProperties() override {}
     void loadProperties() override;
-    void resetProperties() override {}
     void requestElements() override {}
 
     bool isEmpty() const override;

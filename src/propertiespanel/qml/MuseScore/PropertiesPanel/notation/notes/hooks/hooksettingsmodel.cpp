@@ -50,11 +50,6 @@ void HookSettingsModel::loadProperties()
     updatemeasurementUnits();
 }
 
-void HookSettingsModel::resetProperties()
-{
-    m_offset->resetToDefault();
-}
-
 void HookSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet&)
 {
     if (muse::contains(changedPropertyIdSet, mu::engraving::Pid::DURATION)

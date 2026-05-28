@@ -73,14 +73,6 @@ void TremoloBarSettingsModel::loadProperties()
     loadPropertyItem(m_scale, formatDoubleFunc);
 }
 
-void TremoloBarSettingsModel::resetProperties()
-{
-    m_type->resetToDefault();
-    m_curve->resetToDefault();
-    m_lineThickness->resetToDefault();
-    m_scale->resetToDefault();
-}
-
 PropertyItem* TremoloBarSettingsModel::type() const
 {
     return m_type;

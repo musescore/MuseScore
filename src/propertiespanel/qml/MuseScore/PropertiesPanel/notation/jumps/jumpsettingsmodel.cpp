@@ -55,14 +55,6 @@ void JumpSettingsModel::loadProperties()
     loadPropertyItem(m_hasToPlayRepeats);
 }
 
-void JumpSettingsModel::resetProperties()
-{
-    m_jumpTo->resetToDefault();
-    m_playUntil->resetToDefault();
-    m_continueAt->resetToDefault();
-    m_hasToPlayRepeats->resetToDefault();
-}
-
 PropertyItem* JumpSettingsModel::jumpTo() const
 {
     return m_jumpTo;

@@ -52,7 +52,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_verse = nullptr;

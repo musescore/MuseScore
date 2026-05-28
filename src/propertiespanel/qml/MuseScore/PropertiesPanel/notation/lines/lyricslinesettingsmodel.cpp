@@ -71,9 +71,3 @@ void LyricsLineSettingsModel::loadProperties()
     loadPropertyItem(m_thickness);
     loadPropertyItem(m_verse);
 }
-
-void LyricsLineSettingsModel::resetProperties()
-{
-    m_thickness->resetToDefault();
-    m_verse->resetToDefault();
-}

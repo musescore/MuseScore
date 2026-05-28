@@ -82,9 +82,3 @@ void VibratoSettingsModel::loadProperties()
     loadPropertyItem(m_lineType);
     loadPropertyItem(m_placement);
 }
-
-void VibratoSettingsModel::resetProperties()
-{
-    m_lineType->resetToDefault();
-    m_placement->resetToDefault();
-}

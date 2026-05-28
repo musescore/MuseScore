@@ -45,7 +45,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_snapBefore = nullptr;
     PropertyItem* m_snapAfter = nullptr;

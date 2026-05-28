@@ -125,18 +125,6 @@ void GlissandoSettingsModel::loadProperties()
     onUpdateGlissPropertiesAvailability();
 }
 
-void GlissandoSettingsModel::resetProperties()
-{
-    m_lineType->resetToDefault();
-    m_showText->resetToDefault();
-    m_text->resetToDefault();
-
-    m_thickness->resetToDefault();
-    m_lineStyle->resetToDefault();
-    m_dashLineLength->resetToDefault();
-    m_dashGapLength->resetToDefault();
-}
-
 void GlissandoSettingsModel::onUpdateGlissPropertiesAvailability()
 {
     bool isStraightLine = m_lineType->value().value<mu::engraving::GlissandoType>() == mu::engraving::GlissandoType::STRAIGHT;

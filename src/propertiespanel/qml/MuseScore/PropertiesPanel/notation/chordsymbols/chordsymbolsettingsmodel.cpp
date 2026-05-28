@@ -73,16 +73,6 @@ void ChordSymbolSettingsModel::loadProperties()
     loadPropertyItem(m_doNotStackModifiers);
 }
 
-void ChordSymbolSettingsModel::resetProperties()
-{
-    m_isLiteral->resetToDefault();
-    m_voicingType->resetToDefault();
-    m_durationType->resetToDefault();
-    m_verticalAlign->resetToDefault();
-    m_bassScale->resetToDefault();
-    m_doNotStackModifiers->resetToDefault();
-}
-
 PropertyItem* ChordSymbolSettingsModel::isLiteral() const
 {
     return m_isLiteral;

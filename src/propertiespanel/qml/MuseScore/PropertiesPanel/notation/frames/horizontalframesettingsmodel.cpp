@@ -64,15 +64,6 @@ void HorizontalFrameSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void HorizontalFrameSettingsModel::resetProperties()
-{
-    m_frameWidth->resetToDefault();
-    m_leftGap->resetToDefault();
-    m_rightGap->resetToDefault();
-    m_shouldDisplayKeysAndBrackets->resetToDefault();
-    m_isSizeSpatiumDependent->resetToDefault();
-}
-
 void HorizontalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

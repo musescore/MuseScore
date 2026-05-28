@@ -84,20 +84,6 @@ void AmbitusSettingsModel::loadProperties()
     loadPropertyItem(m_lineThickness, formatDoubleFunc);
 }
 
-void AmbitusSettingsModel::resetProperties()
-{
-    m_noteheadGroup->resetToDefault();
-    m_noteheadType->resetToDefault();
-
-    m_direction->resetToDefault();
-    m_lineThickness->resetToDefault();
-
-    m_topTpc->resetToDefault();
-    m_bottomTpc->resetToDefault();
-    m_topPitch->resetToDefault();
-    m_bottomPitch->resetToDefault();
-}
-
 void AmbitusSettingsModel::matchRangesToStaff()
 {
     m_topTpc->resetToDefault();

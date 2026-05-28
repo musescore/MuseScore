@@ -65,7 +65,6 @@ private:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
-    void resetProperties() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet&, const mu::engraving::StyleIdSet&) override;
     void onCurrentNotationChanged() override;
 

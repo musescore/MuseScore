@@ -136,20 +136,6 @@ void VerticalFrameSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void VerticalFrameSettingsModel::resetProperties()
-{
-    m_frameHeight->resetToDefault();
-    m_gapAbove->resetToDefault();
-    m_gapBelow->resetToDefault();
-    m_frameLeftMargin->resetToDefault();
-    m_frameRightMargin->resetToDefault();
-    m_frameTopMargin->resetToDefault();
-    m_frameBottomMargin->resetToDefault();
-    m_isSizeSpatiumDependent->resetToDefault();
-    m_paddingToNotationAbove->resetToDefault();
-    m_paddingToNotationBelow->resetToDefault();
-}
-
 void VerticalFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

@@ -46,7 +46,6 @@ public slots:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
-    void resetProperties() override;
 
 private:
     PropertyItem* m_mode = nullptr;

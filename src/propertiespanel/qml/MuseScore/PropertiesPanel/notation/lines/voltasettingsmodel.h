@@ -45,7 +45,6 @@ protected:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_repeatCount = nullptr;
 };

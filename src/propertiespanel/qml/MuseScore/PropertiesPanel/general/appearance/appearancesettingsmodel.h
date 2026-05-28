@@ -60,7 +60,6 @@ public:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* leadingSpace() const;
     PropertyItem* measureWidth() const;

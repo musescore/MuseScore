@@ -54,11 +54,6 @@ void GlissandoPlaybackModel::loadProperties()
     loadPropertyItem(m_styleType);
 }
 
-void GlissandoPlaybackModel::resetProperties()
-{
-    m_styleType->resetToDefault();
-}
-
 void GlissandoPlaybackModel::updateIsHarpGliss()
 {
     bool isHarpGliss = false;

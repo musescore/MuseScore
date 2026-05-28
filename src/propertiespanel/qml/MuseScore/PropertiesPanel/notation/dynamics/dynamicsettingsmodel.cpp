@@ -89,22 +89,6 @@ void DynamicsSettingsModel::loadProperties()
     updateFramePropertiesAvailability();
 }
 
-void DynamicsSettingsModel::resetProperties()
-{
-    ModelWithVoiceAndPositionOptions::resetProperties();
-
-    m_avoidBarLines->resetToDefault();
-    m_dynamicScale->resetToDefault();
-    m_centerOnNotehead->resetToDefault();
-
-    m_frameType->resetToDefault();
-    m_frameBorderColor->resetToDefault();
-    m_frameFillColor->resetToDefault();
-    m_frameThickness->resetToDefault();
-    m_frameMargin->resetToDefault();
-    m_frameCornerRadius->resetToDefault();
-}
-
 PropertyItem* DynamicsSettingsModel::avoidBarLines() const
 {
     return m_avoidBarLines;

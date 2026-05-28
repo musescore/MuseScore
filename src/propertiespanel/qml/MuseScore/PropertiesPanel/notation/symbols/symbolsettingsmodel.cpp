@@ -68,14 +68,6 @@ void SymbolSettingsModel::loadProperties()
     loadPropertyItem(m_symAngle);
 }
 
-void SymbolSettingsModel::resetProperties()
-{
-    m_sym->resetToDefault();
-    m_scoreFont->resetToDefault();
-    m_symbolSize->resetToDefault();
-    m_symAngle->resetToDefault();
-}
-
 PropertyItem* SymbolSettingsModel::sym() const
 {
     return m_sym;

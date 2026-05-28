@@ -81,14 +81,6 @@ void HairpinLineSettingsModel::loadProperties()
     loadPropertyItem(m_snapAfter);
 }
 
-void HairpinLineSettingsModel::resetProperties()
-{
-    TextLineSettingsModel::resetProperties();
-
-    m_snapBefore->resetToDefault();
-    m_snapAfter->resetToDefault();
-}
-
 void HairpinLineSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [this](const mu::engraving::EngravingItem* element) -> bool {

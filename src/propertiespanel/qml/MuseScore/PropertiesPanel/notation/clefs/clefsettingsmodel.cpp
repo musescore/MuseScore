@@ -56,12 +56,6 @@ void ClefSettingsModel::loadProperties()
     updatePropertiesAvailable();
 }
 
-void ClefSettingsModel::resetProperties()
-{
-    m_shouldShowCourtesy->resetToDefault();
-    m_clefToBarlinePosition->resetToDefault();
-}
-
 PropertyItem* ClefSettingsModel::shouldShowCourtesy() const
 {
     return m_shouldShowCourtesy;

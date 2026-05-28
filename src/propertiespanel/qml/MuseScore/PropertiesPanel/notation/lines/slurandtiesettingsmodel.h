@@ -74,7 +74,6 @@ signals:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     void updateIsTiePlacementAvailable();
     void updateIsMinLengthAvailable();

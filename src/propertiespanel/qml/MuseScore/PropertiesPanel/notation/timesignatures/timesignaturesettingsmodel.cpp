@@ -100,13 +100,6 @@ void TimeSignatureSettingsModel::loadProperties()
     m_verticalScale->setIsEnabled(!m_isGenerated);
 }
 
-void TimeSignatureSettingsModel::resetProperties()
-{
-    m_horizontalScale->resetToDefault();
-    m_verticalScale->resetToDefault();
-    m_shouldShowCourtesy->resetToDefault();
-}
-
 void TimeSignatureSettingsModel::showTimeSignatureProperties()
 {
     dispatcher()->dispatch("time-signature-properties");

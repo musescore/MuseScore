@@ -48,7 +48,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
     void requestElements() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
