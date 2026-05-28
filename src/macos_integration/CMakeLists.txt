@@ -89,7 +89,7 @@ set_target_properties(MuseScoreQuickLookPreviewExtension PROPERTIES
     MACOSX_BUNDLE_BUNDLE_NAME "MuseScoreQuickLookPreviewExtension"
     MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_BUILD_NUMBER}"
     MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited and others. Published under the GNU General Public License version 3."
-    MACOSX_BUNDLE_GUI_IDENTIFIER "org.musescore.MuseScore.QuickLookPreviewExtension"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "${MUSE_APP_GUI_IDENTIFIER}.QuickLookPreviewExtension"
     MACOSX_BUNDLE_LONG_VERSION_STRING "${MUSE_APP_VERSION}"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${MUSE_APP_VERSION}"
     OSX_ARCHITECTURES ""
