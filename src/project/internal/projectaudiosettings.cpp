@@ -229,6 +229,49 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
     }
 }
 
+bool ProjectAudioSettings::duplicateTrackParams(const InstrumentTrackId& srcTrackId,
+                                                const InstrumentTrackId& dstTrackId)
+{
+    const bool inputParamsCopied = copyInputParamsBetweenTracks(srcTrackId, dstTrackId);
+    const bool outputParamsCopied = copyOutputParamsBetweenTracks(srcTrackId, dstTrackId);
+
+    const bool somethingWasCopied = inputParamsCopied || outputParamsCopied;
+    if (somethingWasCopied) {
+        m_settingsChanged.notify();
+    }
+
+    return somethingWasCopied;
+}
+
+bool ProjectAudioSettings::copyInputParamsBetweenTracks(const InstrumentTrackId& srcTrackId,
+                                                        const InstrumentTrackId& dstTrackId)
+{
+    auto srcEntry = m_trackInputParamsMap.find(srcTrackId);
+    if (srcEntry == m_trackInputParamsMap.end()) {
+        return false;
+    }
+
+    AudioInputParams sourceParamsCopy = srcEntry->second;
+    m_trackInputParamsMap[dstTrackId] = sourceParamsCopy;
+    m_trackInputParamsChanged.send(dstTrackId);
+
+    return true;
+}
+
+bool ProjectAudioSettings::copyOutputParamsBetweenTracks(const InstrumentTrackId& srcTrackId,
+                                                         const InstrumentTrackId& dstTrackId)
+{
+    auto srcEntry = m_trackOutputParamsMap.find(srcTrackId);
+    if (srcEntry == m_trackOutputParamsMap.end()) {
+        return false;
+    }
+
+    AudioOutputParams sourceParamsCopy = srcEntry->second;
+    m_trackOutputParamsMap[dstTrackId] = sourceParamsCopy;
+
+    return true;
+}
+
 const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
 {
     return m_activeSoundProfileName;
