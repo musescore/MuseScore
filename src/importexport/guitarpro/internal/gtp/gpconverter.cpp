@@ -657,6 +657,7 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = toChord(cr);
         ch->sortNotes();
+        mu::iex::guitarpro::utils::createGhostNoteParenGroups(ch);
     }
 }
 
