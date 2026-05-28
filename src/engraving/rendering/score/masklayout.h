@@ -49,6 +49,8 @@ private:
     static void computeSlurTieMasks(SlurTieSegment* slurTieSegment);
 
     static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding);
+    static Shape createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape,
+                                         const double horizontalCollisionPadding, const double verticalCollisionPadding);
 
     static void cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength);
 

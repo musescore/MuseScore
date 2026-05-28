@@ -392,17 +392,20 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
 
     Shape mask;
     const double spatium = slurTieSegment->spatium();
-    const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::minNoteDistance)].defaultValue.toDouble();
-    const double collisionPadding = maskPadding;
+    const double maskPadding = spatium * StyleDef::styleValues[size_t(Sid::keysigLeftMargin)].defaultValue.toDouble() / 2;
+    const double horizontalCollisionPadding = maskPadding;
+    const double verticalCollisionPadding = spatium * 0.1;
 
     for (const EngravingItem* item : itemsToMaskOver) {
         PointF itemPos = item->pagePos();
         Shape itemShape = item->shape().translated(itemPos);
-        if (!slurTieShape.bbox().intersects(itemShape.bbox().padded(collisionPadding))) {
+
+        if (!slurTieShape.bbox().intersects(itemShape.bbox().adjusted(-horizontalCollisionPadding, -verticalCollisionPadding,
+                                                                      horizontalCollisionPadding, verticalCollisionPadding))) {
             continue;
         }
 
-        Shape filteredItemShape = createFilteredItemShape(itemShape, slurTieShape, collisionPadding);
+        Shape filteredItemShape = createFilteredItemShape(itemShape, slurTieShape, horizontalCollisionPadding, verticalCollisionPadding);
         if (filteredItemShape.empty()) {
             continue;
         }
@@ -430,10 +433,18 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
 
 Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape, const double collisionPadding)
 {
+    return MaskLayout::createFilteredItemShape(overlyingItemShape, maskedItemShape, collisionPadding, collisionPadding);
+}
+
+Shape MaskLayout::createFilteredItemShape(const Shape& overlyingItemShape, const Shape& maskedItemShape,
+                                          const double horizontalCollisionPadding, const double verticalCollisionPadding)
+{
     Shape filteredItemShape;
     filteredItemShape.elements().reserve(overlyingItemShape.elements().size());
     for (const ShapeElement& el : overlyingItemShape.elements()) {
-        if (maskedItemShape.intersects(el.padded(collisionPadding))) {
+        Shape padded = el.adjusted(-horizontalCollisionPadding, -verticalCollisionPadding,
+                                   horizontalCollisionPadding, verticalCollisionPadding);
+        if (maskedItemShape.intersects(padded)) {
             filteredItemShape.add(el);
         }
     }

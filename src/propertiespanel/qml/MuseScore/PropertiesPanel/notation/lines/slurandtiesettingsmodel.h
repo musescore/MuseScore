@@ -36,7 +36,7 @@ class SlurAndTieSettingsModel : public PropertiesPanelAbstractModel
     Q_PROPERTY(mu::propertiespanel::PropertyItem * direction READ direction CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * tiePlacement READ tiePlacement CONSTANT)
     Q_PROPERTY(mu::propertiespanel::PropertyItem * minLength READ minLength CONSTANT)
-    Q_PROPERTY(mu::propertiespanel::PropertyItem * maskOverTimeAndKeySigs READ maskOverTimeAndKeySigs CONSTANT)
+    Q_PROPERTY(mu::propertiespanel::PropertyItem * maskSlurTie READ maskSlurTie CONSTANT)
     Q_PROPERTY(bool isTiePlacementAvailable READ isTiePlacementAvailable NOTIFY isTiePlacementAvailableChanged)
     Q_PROPERTY(bool isMinLengthAvailable READ isMinLengthAvailable NOTIFY isMinLengthAvailableChanged)
     Q_PROPERTY(bool isLineStyleAvailable READ isLineStyleAvailable NOTIFY isLineStyleAvailableChanged)
