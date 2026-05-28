@@ -37,6 +37,7 @@ EID EIDRegister::newEIDForItem(const EngravingObject* item)
 
 void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 {
+    std::lock_guard lock(m_mutex);
     IF_ASSERT_FAILED(eid.isValid() && item) {
         return;
     }
@@ -58,6 +59,7 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 
 void EIDRegister::removeItem(const EngravingObject* item)
 {
+    std::lock_guard lock(m_mutex);
     // NOTE: needed only when elements are removed during read (e.g. broken spanners)
 
     auto itemIter = m_itemToEid.find(const_cast<EngravingObject*>(item));
@@ -80,6 +82,7 @@ void EIDRegister::removeItem(const EngravingObject* item)
 
 EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
+    std::shared_lock lock(m_mutex);
     auto iter = m_eidToItem.find(eid);
     IF_ASSERT_FAILED(iter != m_eidToItem.end()) {
         return nullptr;
@@ -89,6 +92,7 @@ EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 
 EID EIDRegister::EIDFromItem(const EngravingObject* item) const
 {
+    std::shared_lock lock(m_mutex);
     auto iter = m_itemToEid.find(const_cast<EngravingObject*>(item));
     return iter == m_itemToEid.end() ? EID::invalid() : iter->second;
 }
