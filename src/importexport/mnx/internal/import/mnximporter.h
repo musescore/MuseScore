@@ -103,8 +103,8 @@ private:
     engraving::ChordRest* importEvent(const mnx::sequence::Event& event, engraving::track_idx_t, engraving::Measure* measure,
                                       const mnx::FractionValue& startTick, const std::stack<engraving::Tuplet*>& activeTuplets,
                                       engraving::TremoloTwoChord* activeTremolo);
-    engraving::Tuplet* createTuplet(const mnx::sequence::Tuplet& mnxTuplet, engraving::Measure* measure,
-                                    engraving::track_idx_t curTrackIdx);
+    engraving::Tuplet* createTuplet(const mnx::sequence::Tuplet& mnxTuplet, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
+                                    const mnx::FractionValue& startTick);
     void createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremolo, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
                        const mnx::FractionValue& startTick, const mnx::FractionValue& endTick);
     void processSequencePass2(const mnx::Sequence& sequence, engraving::Measure* measure);
