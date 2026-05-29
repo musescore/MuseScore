@@ -135,12 +135,7 @@ void StartupScenario::registerAudioPlugins()
     //! which leads to automatic exit from the application.
     //! (Thanks to the splashscreen, but this is not an obvious detail)
     qApp->setQuitLockEnabled(false);
-
-    Ret ret = registerAudioPluginsScenario()->updatePluginsRegistry();
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
-
+    registerAudioPluginsScenario()->updatePluginsRegistry();
     qApp->setQuitLockEnabled(true);
 }
 
