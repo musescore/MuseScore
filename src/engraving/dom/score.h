@@ -827,7 +827,7 @@ public:
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
 
-    void nextInputPos(ChordRest* cr, bool);
+    void nextInputPos(const ChordRest* cr, bool);
     void cmdMirrorNoteHead();
 
     virtual size_t npages() const { return m_pages.size(); }

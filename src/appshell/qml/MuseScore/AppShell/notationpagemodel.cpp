@@ -62,6 +62,7 @@ void NotationPageModel::init()
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+        scheduleUpdatePercussionPanelVisibility();
     });
 
     extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
