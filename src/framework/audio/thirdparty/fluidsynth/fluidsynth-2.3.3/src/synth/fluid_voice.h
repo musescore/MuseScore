@@ -116,7 +116,7 @@ struct _fluid_voice_t
 };
 
 
-fluid_voice_t *new_fluid_voice(fluid_rvoice_eventhandler_t *handler, fluid_real_t output_rate);
+fluid_voice_t *new_fluid_voice(fluid_rvoice_eventhandler_t *handler, fluid_real_t output_rate, int use_iir_lowpass_filter);
 void delete_fluid_voice(fluid_voice_t *voice);
 
 void fluid_voice_start(fluid_voice_t *voice);
@@ -193,6 +193,7 @@ fluid_voice_unlock_rvoice(fluid_voice_t *voice)
 
 fluid_real_t fluid_voice_gen_value(const fluid_voice_t *voice, int num);
 void fluid_voice_set_custom_filter(fluid_voice_t *voice, enum fluid_iir_filter_type type, enum fluid_iir_filter_flags flags);
+void fluid_voice_set_iir_lowpass_filter_active(fluid_voice_t *voice, int active);
 
 
 #endif /* _FLUID_VOICE_H */

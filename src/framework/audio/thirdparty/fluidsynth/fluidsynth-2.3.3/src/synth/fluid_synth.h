@@ -164,6 +164,7 @@ struct _fluid_synth_t
     fluid_ladspa_fx_t *ladspa_fx;      /**< Effects unit for LADSPA support */
     enum fluid_iir_filter_type custom_filter_type; /**< filter type of the user-defined filter currently used for all voices */
     enum fluid_iir_filter_flags custom_filter_flags; /**< filter type of the user-defined filter currently used for all voices */
+    int use_iir_lowpass_filter; /**< whether to apply IIR lowpass filter on voices (1=enabled, 0=disabled) */
 };
 
 /**

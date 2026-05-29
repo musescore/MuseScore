@@ -177,7 +177,7 @@ static void fluid_voice_swap_rvoice(fluid_voice_t *voice)
     voice->overflow_sample = voice->sample;
 }
 
-static void fluid_voice_initialize_rvoice(fluid_voice_t *voice, fluid_real_t output_rate)
+static void fluid_voice_initialize_rvoice(fluid_voice_t *voice, fluid_real_t output_rate, int use_iir_lowpass_filter)
 {
     fluid_rvoice_param_t param[MAX_EVENT_PARAMS];
 
@@ -197,7 +197,7 @@ static void fluid_voice_initialize_rvoice(fluid_voice_t *voice, fluid_real_t out
     fluid_voice_update_modenv(voice, FALSE, FLUID_VOICE_ENVFINISHED,
                               0xffffffff, 0.0f, 0.0f, -1.0f, 1.0f);
 
-    param[0].i = FLUID_IIR_LOWPASS;
+    param[0].i = use_iir_lowpass_filter ? FLUID_IIR_LOWPASS : FLUID_IIR_DISABLED;
     param[1].i = 0;
     fluid_iir_filter_init(&voice->rvoice->resonant_filter, param);
 
@@ -212,7 +212,7 @@ static void fluid_voice_initialize_rvoice(fluid_voice_t *voice, fluid_real_t out
  * new_fluid_voice
  */
 fluid_voice_t *
-new_fluid_voice(fluid_rvoice_eventhandler_t *handler, fluid_real_t output_rate)
+new_fluid_voice(fluid_rvoice_eventhandler_t *handler, fluid_real_t output_rate, int use_iir_lowpass_filter)
 {
     fluid_voice_t *voice;
     voice = FLUID_NEW(fluid_voice_t);
@@ -247,9 +247,9 @@ new_fluid_voice(fluid_rvoice_eventhandler_t *handler, fluid_real_t output_rate)
     voice->output_rate = output_rate;
 
     /* Initialize both the rvoice and overflow_rvoice */
-    fluid_voice_initialize_rvoice(voice, output_rate);
+    fluid_voice_initialize_rvoice(voice, output_rate, use_iir_lowpass_filter);
     fluid_voice_swap_rvoice(voice);
-    fluid_voice_initialize_rvoice(voice, output_rate);
+    fluid_voice_initialize_rvoice(voice, output_rate, use_iir_lowpass_filter);
 
     return voice;
 }
@@ -2048,5 +2048,12 @@ fluid_voice_get_overflow_prio(fluid_voice_t *voice,
 void fluid_voice_set_custom_filter(fluid_voice_t *voice, enum fluid_iir_filter_type type, enum fluid_iir_filter_flags flags)
 {
     UPDATE_RVOICE_GENERIC_I2(fluid_iir_filter_init, &voice->rvoice->resonant_custom_filter, type, flags);
+}
+
+void fluid_voice_set_iir_lowpass_filter_active(fluid_voice_t *voice, int active)
+{
+    enum fluid_iir_filter_type type = active ? FLUID_IIR_LOWPASS : FLUID_IIR_DISABLED;
+    UPDATE_RVOICE_GENERIC_I2(fluid_iir_filter_init, &voice->rvoice->resonant_filter, type, 0);
+    UPDATE_RVOICE_GENERIC_I2(fluid_iir_filter_init, &voice->overflow_rvoice->resonant_filter, type, 0);
 }
 
