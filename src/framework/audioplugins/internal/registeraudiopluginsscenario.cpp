@@ -23,7 +23,7 @@
 #include "registeraudiopluginsscenario.h"
 
 #include <QCoreApplication>
-#include <map>
+#include <set>
 
 #include "global/translation.h"
 
@@ -55,51 +55,54 @@ PluginScanResult RegisterAudioPluginsScenario::scanPlugins() const
     TRACEFUNC;
 
     PluginScanResult result;
+    std::set<io::path_t> scannedPaths;
 
-    std::map<io::path_t, audio::AudioResourceId> registered;
-    for (const auto& info : knownPluginsRegister()->pluginInfoList()) {
-        registered[info.path] = info.meta.id;
-    }
-
-    for (const auto& scanner : scannerRegister()->scanners()) {
-        for (const auto& path : scanner->scanPlugins()) {
-            if (auto it = registered.find(path); it != registered.end()) {
-                registered.erase(it);
-            } else {
+    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
+        for (const io::path_t& path : scanner->scanPlugins()) {
+            if (!knownPluginsRegister()->exists(path)) {
                 result.newPluginPaths.push_back(path);
             }
+
+            scannedPaths.insert(path);
         }
     }
 
-    for (const auto& [path, id] : registered) {
-        result.missingPluginIds.push_back(id);
+    for (const AudioPluginInfo& info : knownPluginsRegister()->pluginInfoList()) {
+        if (!muse::contains(scannedPaths, info.path)) {
+            result.missingPluginIds.push_back(info.meta.id);
+        }
     }
 
     return result;
 }
 
-Ret RegisterAudioPluginsScenario::updatePluginsRegistry()
+void RegisterAudioPluginsScenario::updatePluginsRegistry()
 {
     TRACEFUNC;
 
-    PluginScanResult result = scanPlugins();
+    const PluginScanResult result = scanPlugins();
 
-    unregisterRemovedPlugins(result.missingPluginIds);
-    registerNewPlugins(result.newPluginPaths);
+    Ret ret = unregisterRemovedPlugins(result.missingPluginIds);
+    if (!ret) {
+        LOGE() << "Failed to unregister plugins: " << ret.toString();
+    }
 
-    return knownPluginsRegister()->load();
+    ret = registerNewPlugins(result.newPluginPaths);
+    if (!ret) {
+        LOGE() << "Failed to register plugins: " << ret.toString();
+    }
 }
 
-void RegisterAudioPluginsScenario::registerNewPlugins(const io::paths_t& pluginPaths)
+Ret RegisterAudioPluginsScenario::registerNewPlugins(const io::paths_t& pluginPaths)
 {
     TRACEFUNC;
 
     if (pluginPaths.empty()) {
-        return;
+        return make_ok();
     }
 
     processPluginsRegistration(pluginPaths);
-    knownPluginsRegister()->load();
+    return knownPluginsRegister()->load();
 }
 
 Ret RegisterAudioPluginsScenario::unregisterRemovedPlugins(const audio::AudioResourceIdList& pluginIds)
@@ -110,12 +113,7 @@ Ret RegisterAudioPluginsScenario::unregisterRemovedPlugins(const audio::AudioRes
         return make_ok();
     }
 
-    Ret ret = knownPluginsRegister()->unregisterPlugins(pluginIds);
-    if (!ret) {
-        LOGE() << "Failed to unregister removed plugins: " << ret.toString();
-    }
-
-    return ret;
+    return knownPluginsRegister()->unregisterPlugins(pluginIds);
 }
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
@@ -125,8 +123,8 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
     m_aborted = false;
     m_progress.start();
 
-    std::string appPath = globalConfiguration()->appBinPath().toStdString();
-    int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
+    const std::string appPath = globalConfiguration()->appBinPath().toStdString();
+    const int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
 
     for (int64_t i = 0; i < pluginCount; ++i) {
         if (m_aborted) {
@@ -134,12 +132,11 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         }
 
         const io::path_t& pluginPath = pluginPaths[i];
-        std::string pluginPathStr = pluginPath.toStdString();
+        const std::string pluginPathStr = pluginPath.toStdString();
 
         m_progress.progress(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
-        LOGD() << "--register-audio-plugin " << pluginPathStr;
         int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });
         if (code != 0) {
             code = process()->execute(appPath, { "--register-failed-audio-plugin", pluginPathStr, "--", std::to_string(code) });

@@ -553,8 +553,10 @@ int ConsoleApp::processAudioPluginRegistration(const CmdOptions::AudioPluginRegi
     Ret ret = make_ret(Ret::Code::Ok);
 
     if (task.failedPlugin) {
+        LOGI() << "Register incompatible plugin: " << task.pluginPath << ", err code: " << task.failCode;
         ret = registerAudioPluginsScenario()->registerFailedPlugin(task.pluginPath, task.failCode);
     } else {
+        LOGI() << "Register plugin: " << task.pluginPath;
         ret = registerAudioPluginsScenario()->registerPlugin(task.pluginPath);
     }
 

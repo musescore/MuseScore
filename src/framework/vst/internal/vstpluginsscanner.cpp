@@ -34,15 +34,14 @@ using namespace muse::vst;
  * @see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
  **/
 namespace muse::vst {
-static io::paths_t pluginPathsFromDefaultLocation()
+static std::set<io::path_t> pluginPathsFromDefaultLocation()
 {
-    io::paths_t result;
+    std::set<io::path_t> result;
 
     try {
         PluginModule::PathList paths = PluginModule::getModulePaths();
-
         for (const std::string& path : paths) {
-            result.push_back(path);
+            result.insert(path);
         }
     } catch (...) {
         LOGE() << "Unable to get module paths";
@@ -56,16 +55,16 @@ io::paths_t VstPluginsScanner::scanPlugins() const
 {
     TRACEFUNC;
 
-    io::paths_t result = pluginPathsFromDefaultLocation();
-    io::paths_t plugins = pluginPathsFromCustomLocations(configuration()->userVstDirectories());
-    result.insert(result.end(), std::make_move_iterator(plugins.begin()), std::make_move_iterator(plugins.end()));
+    std::set<io::path_t> unique = pluginPathsFromDefaultLocation();
+    std::set<io::path_t> custom = pluginPathsFromCustomLocations(configuration()->userVstDirectories());
+    unique.insert(custom.begin(), custom.end());
 
-    return result;
+    return { unique.begin(), unique.end() };
 }
 
-io::paths_t VstPluginsScanner::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
+std::set<io::path_t> VstPluginsScanner::pluginPathsFromCustomLocations(const io::paths_t& customPaths) const
 {
-    io::paths_t result;
+    std::set<io::path_t> result;
 
     for (const io::path_t& path : customPaths) {
         RetVal<io::paths_t> paths = fileSystem()->scanFiles(path, { VST3_PACKAGE_FILTER });
@@ -74,7 +73,7 @@ io::paths_t VstPluginsScanner::pluginPathsFromCustomLocations(const io::paths_t&
             continue;
         }
 
-        result.insert(result.end(), std::make_move_iterator(paths.val.begin()), std::make_move_iterator(paths.val.end()));
+        result.insert(paths.val.begin(), paths.val.end());
     }
 
     return result;
