@@ -21,6 +21,7 @@
  */
 #include "lyricslayout.h"
 
+#include "dom/factory.h"
 #include "dom/masterscore.h"
 #include "dom/repeatlist.h"
 #include "style/styledef.h"
@@ -481,7 +482,7 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
 
     if (isEndMelisma() || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
         if (!item->separator()) {
-            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
+            LyricsLine* separator = Factory::createLyricsLine(ctx.mutDom().dummyParent());
             separator->setTick(cr->tick());
             item->setSeparator(separator);
             ctx.mutDom().addUnmanagedSpanner(item->separator());
