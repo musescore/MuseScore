@@ -303,6 +303,12 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(enableStaveSharing,                         false),
     styleDef(allowVoiceCrossing,                         false),
+    styleDef(trailingDotOnMarginLabelsSingle,            false),
+    styleDef(trailingDotOnMarginLabelsMultiple,          false),
+    styleDef(trailingDotOnInStaffLabelsSingle,           true),
+    styleDef(trailingDotOnInStaffLabelsMultiple,         true),
+    styleDef(twoInstrLabelAlign,                         Orientation::HORIZONTAL),
+    styleDef(compressWithHyphenMoreThan,                 2),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),
     styleDef(hairpinPosAbove,                            PointF(0.0, -1.75)),

@@ -1327,7 +1327,7 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
 
 void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
 {
-    if (originItem->m_layoutData->m_sharedItem == sharedItem) {
+    if (originItem->ldata()->m_sharedItem == sharedItem) {
         return;
     }
 
@@ -1335,17 +1335,17 @@ void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* 
         return;
     }
 
-    IF_ASSERT_FAILED(sharedItem->m_layoutData->m_sharedItem == nullptr && originItem->m_layoutData->m_originItems.empty()) {
+    IF_ASSERT_FAILED(sharedItem->ldata()->m_sharedItem == nullptr && originItem->ldata()->m_originItems.empty()) {
         return;
     }
 
-    IF_ASSERT_FAILED(!(originItem->m_layoutData->m_sharedItem && originItem->m_layoutData->m_sharedItem != sharedItem)) {
-        disconnectSharedItem(originItem->m_layoutData->m_sharedItem, originItem);
+    if ((originItem->ldata()->m_sharedItem && originItem->ldata()->m_sharedItem != sharedItem)) {
+        disconnectSharedItem(originItem->ldata()->m_sharedItem, originItem);
     }
 
-    originItem->m_layoutData->m_sharedItem = sharedItem;
+    originItem->mutldata()->m_sharedItem = sharedItem;
 
-    std::vector<EngravingItem*>& curOriginItems = sharedItem->m_layoutData->m_originItems;
+    std::vector<EngravingItem*>& curOriginItems = sharedItem->mutldata()->m_originItems;
     auto it = std::lower_bound(curOriginItems.begin(), curOriginItems.end(), originItem, [](EngravingItem* item1, EngravingItem* item2) {
         return item1->track() < item2->track();
     });

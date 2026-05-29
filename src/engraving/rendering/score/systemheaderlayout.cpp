@@ -1123,6 +1123,10 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
                                                      const std::vector<Part*>& originParts)
 {
     Score* score = originParts.front()->score();
+    const MStyle& style = score->style();
+    bool trailingDotSingle = style.styleB(Sid::trailingDotOnMarginLabelsSingle);
+    bool trailingDotMultiple = style.styleB(Sid::trailingDotOnMarginLabelsMultiple);
+    int hyphenLimit = style.styleI(Sid::compressWithHyphenMoreThan);
 
     std::vector<Instrument*> instrumentsMappedToFirstVoice;
     std::vector<Instrument*> instrumentsMappedToSecondVoice;
@@ -1136,25 +1140,94 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         }
     }
 
-    String result;
-    for (Instrument* instr : instrumentsMappedToFirstVoice) {
-        if (!result.empty()) {
-            result += u".";
-        }
-        result += String::number(instr->instrumentLabel().number());
+    if (instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size() == 2) {
+        Orientation orientation = style.styleV(Sid::twoInstrLabelAlign).value<Orientation>();
+        return formatTwoInstrumentSharedStaffLabel(instrumentsMappedToFirstVoice, instrumentsMappedToSecondVoice, orientation,
+                                                   trailingDotSingle, trailingDotMultiple);
     }
+
+    String result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
     if (instrumentsMappedToSecondVoice.empty()) {
         return result;
     }
 
-    result += u"\n";
+    result += formatVoice(instrumentsMappedToSecondVoice, /*isFirstVoice*/ false, trailingDotSingle, trailingDotMultiple, hyphenLimit);
 
-    for (Instrument* instr : instrumentsMappedToSecondVoice) {
-        if (result.back() != '\n') {
+    return result;
+}
+
+String SystemHeaderLayout::formatTwoInstrumentSharedStaffLabel(const std::vector<Instrument*>& instrumentsMappedToFirstVoice,
+                                                               const std::vector<Instrument*>& instrumentsMappedToSecondVoice,
+                                                               Orientation orientation, bool trailingDotSingle, bool trailingDotMultiple)
+{
+    std::array<int, 2> instrNumberPair;
+    size_t curIdx = 0;
+    for (Instrument* i : instrumentsMappedToFirstVoice) {
+        instrNumberPair[curIdx] = i->instrumentLabel().number();
+        ++curIdx;
+    }
+    for (Instrument* i : instrumentsMappedToSecondVoice) {
+        instrNumberPair[curIdx] = i->instrumentLabel().number();
+        ++curIdx;
+    }
+
+    if (orientation == Orientation::VERTICAL) {
+        return String::number(instrNumberPair.front()) + (trailingDotSingle ? u"." : u"")
+               + u"\n"
+               + String::number(instrNumberPair.back()) + (trailingDotSingle ? u"." : u"");
+    }
+
+    return String::number(instrNumberPair.front()) + u"."
+           + String::number(instrNumberPair.back()) + (trailingDotMultiple ? u"." : u"");
+}
+
+String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
+                                       bool trailingDotMultiple, int hyphenLimit)
+{
+    String result;
+
+    if (!isFirstVoice) {
+        result += '\n';
+    }
+
+    size_t voiceCount = instruments.size();
+    bool putTrailingDot = (voiceCount <= 1 && trailingDotSingle) || (voiceCount > 1 && trailingDotMultiple);
+
+    for (size_t i = 0; i < instruments.size(); ++i) {
+        if (isFirstVoice && !result.empty()) {
+            result += u".";
+        } else if (!isFirstVoice && result.back() != '\n') {
             result += u".";
         }
-        result += String::number(instr->instrumentLabel().number());
+
+        Instrument* instr = instruments[i];
+        int startNumber = instr->number();
+        int curNumber = startNumber;
+        for (size_t j = i + 1; j < instruments.size(); ++j) {
+            Instrument* nextInstr = instruments[j];
+            int nextNumber = nextInstr->number();
+            if (nextNumber == curNumber + 1) {
+                curNumber = nextNumber;
+                if (nextNumber - startNumber >= hyphenLimit) {
+                    i = j;
+                } else {
+                    continue;
+                }
+            } else {
+                break;
+            }
+        }
+
+        if (curNumber - startNumber >= hyphenLimit) {
+            result += String::number(startNumber) + (putTrailingDot ? u"." : u"") + u"–" + String::number(curNumber);
+        } else {
+            result += String::number(startNumber);
+        }
+    }
+
+    if (!result.isEmpty() && putTrailingDot) {
+        result += u".";
     }
 
     return result;
@@ -1250,7 +1323,7 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
         size_t partNstaves = part->nstaves();
         size_t visibleStavesCount = part->visibleStavesCount();
 
-        if (part->isSharedPart()) {
+        if (part->isSharedPart() && part->show()) {
             setSharedPartNames(toSharedPart(part), staffIdx, system, ctx, longName, tick);
             staffIdx += partNstaves;
             continue;

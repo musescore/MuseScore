@@ -67,7 +67,14 @@ private:
                                       InstrumentNameRole role);
     static String formattedInstrumentName(System* system, Part* part, const Fraction& tick);
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
+
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
+    static String formatTwoInstrumentSharedStaffLabel(const std::vector<Instrument*>& instrumentsMappedToFirstVoice,
+                                                      const std::vector<Instrument*>& instrumentsMappedToSecondVoice,
+                                                      Orientation orientation, bool trailingDotSingle, bool trailingDotMultiple);
+    static String formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
+                              bool trailingDotMultiple, int hyphenLimit);
+
     static String& resolveTokens(String& str, const String& name, const String& transposition, const String& number);
     static bool showNames(LayoutContext& ctx);
     static double nameWidthIncludingGroupBrackets(InstrumentName* name, System* system);

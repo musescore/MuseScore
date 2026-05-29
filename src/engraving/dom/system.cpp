@@ -117,8 +117,8 @@ InstrumentName* SysStaff::name(InstrumentNameRole role) const
 void SysStaff::addInstrumentName(InstrumentName* n)
 {
     InstrumentNameRole role = n->instrumentNameRole();
-    if (muse::contains(m_instrumentNames, role)) {
-        delete m_instrumentNames[role];
+    if (InstrumentName* curName = name(role)) {
+        delete curName;
     }
 
     m_instrumentNames[role] = n;
@@ -126,8 +126,8 @@ void SysStaff::addInstrumentName(InstrumentName* n)
 
 void SysStaff::removeInstrumentName(InstrumentNameRole role)
 {
-    if (muse::contains(m_instrumentNames, role)) {
-        delete m_instrumentNames[role];
+    if (InstrumentName* n = name(role)) {
+        delete n;
     }
 
     m_instrumentNames[role] = nullptr;
@@ -567,11 +567,11 @@ void System::remove(EngravingItem* el)
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
     {
-        // TODO: I'm pretty sure that this gets leadked. Needs fixing.
+        // NOTE: el gets deleted here
         InstrumentName* n = toInstrumentName(el);
         SysStaff* sysStaff = m_staves[n->staffIdx()];
         sysStaff->removeInstrumentName(n->instrumentNameRole());
-        break;
+        return;
     }
     case ElementType::BEAM:
         score()->removeElement(el);

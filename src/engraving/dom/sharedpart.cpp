@@ -120,7 +120,7 @@ bool SharedPart::hasTracksMappedToStaff(staff_idx_t absStaffIdx, const Fraction&
 
 void SharedPart::computeIsSameInstruments()
 {
-    IF_ASSERT_FAILED(m_originParts.size() > 0) {
+    if (m_originParts.empty()) {
         m_isSameInstruments = false;
         return;
     }

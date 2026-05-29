@@ -352,6 +352,8 @@ void LayoutPanelTreeModel::onScoreChanged(const mu::engraving::ScoreChanges& cha
         return;
     }
 
+    updateIsStaveSharingEnabled();
+
     for (AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
         item->onScoreChanged(changes);
     }

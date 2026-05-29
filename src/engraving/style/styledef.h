@@ -307,6 +307,12 @@ enum class Sid : short {
 
     enableStaveSharing,
     allowVoiceCrossing,
+    trailingDotOnMarginLabelsSingle,
+    trailingDotOnMarginLabelsMultiple,
+    trailingDotOnInStaffLabelsSingle,
+    trailingDotOnInStaffLabelsMultiple,
+    twoInstrLabelAlign,
+    compressWithHyphenMoreThan,
 
     hairpinPlacement,
     hairpinPosAbove,
