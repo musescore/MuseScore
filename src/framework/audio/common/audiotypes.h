@@ -160,6 +160,7 @@ struct SoundTrackFormat {
 struct AudioEngineConfig {
     bool autoProcessOnlineSoundsInBackground = false;
     bool isLazyProcessingOfOnlineSoundsEnabled = false;
+    bool useSoundFontLowPassFilter = false;
 };
 
 using AudioSourceName = std::string;

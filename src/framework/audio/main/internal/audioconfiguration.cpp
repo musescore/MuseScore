@@ -46,6 +46,7 @@ static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
 
 static const Settings::Key ONLINE_SOUNDS_PROCESS_IN_BACKGROUND("audio", "io/onlineSounds/processInBackground");
+static const Settings::Key USE_SOUNDFONT_LOWPASS_FILTER("audio", "synthesizer/useSoundFontLowPassFilter");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -91,6 +92,11 @@ void AudioConfiguration::init()
     settings()->valueChanged(ONLINE_SOUNDS_PROCESS_IN_BACKGROUND).onReceive(nullptr, [this](const Val& val) {
         m_autoProcessOnlineSoundsInBackgroundChanged.send(val.toBool());
     });
+
+    settings()->setDefaultValue(USE_SOUNDFONT_LOWPASS_FILTER, Val(true));
+    settings()->valueChanged(USE_SOUNDFONT_LOWPASS_FILTER).onReceive(nullptr, [this](const Val& val) {
+        m_useSoundFontLowPassFilterChanged.send(val.toBool());
+    });
 }
 
 AudioEngineConfig AudioConfiguration::engineConfig() const
@@ -98,6 +104,7 @@ AudioEngineConfig AudioConfiguration::engineConfig() const
     AudioEngineConfig conf;
     conf.autoProcessOnlineSoundsInBackground = autoProcessOnlineSoundsInBackground();
     conf.isLazyProcessingOfOnlineSoundsEnabled = conf.autoProcessOnlineSoundsInBackground;
+    conf.useSoundFontLowPassFilter = useSoundFontLowPassFilter();
     return conf;
 }
 
@@ -224,6 +231,23 @@ void AudioConfiguration::setAutoProcessOnlineSoundsInBackground(bool value)
 async::Channel<bool> AudioConfiguration::autoProcessOnlineSoundsInBackgroundChanged() const
 {
     return m_autoProcessOnlineSoundsInBackgroundChanged;
+}
+
+bool AudioConfiguration::useSoundFontLowPassFilter() const
+{
+    return settings()->value(USE_SOUNDFONT_LOWPASS_FILTER).toBool();
+}
+
+void AudioConfiguration::setUseSoundFontLowPassFilter(bool value)
+{
+    settings()->setSharedValue(USE_SOUNDFONT_LOWPASS_FILTER, Val(value));
+
+    onEngineConfigChanged();
+}
+
+async::Channel<bool> AudioConfiguration::useSoundFontLowPassFilterChanged() const
+{
+    return m_useSoundFontLowPassFilterChanged;
 }
 
 bool AudioConfiguration::shouldMeasureInputLag() const

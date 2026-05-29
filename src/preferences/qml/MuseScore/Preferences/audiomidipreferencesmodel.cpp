@@ -139,6 +139,10 @@ void AudioMidiPreferencesModel::init()
     audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool) {
         emit autoProcessOnlineSoundsInBackgroundChanged();
     });
+
+    audioConfiguration()->useSoundFontLowPassFilterChanged().onReceive(this, [this](bool) {
+        emit useSoundFontLowPassFilterChanged();
+    });
 }
 
 QStringList AudioMidiPreferencesModel::audioApiList() const
@@ -290,4 +294,18 @@ void AudioMidiPreferencesModel::setOnlineSoundsShowProgressBarMode(int mode)
     }
 
     playbackConfiguration()->setOnlineSoundsShowProgressBarMode(static_cast<playback::OnlineSoundsShowProgressBarMode>(mode));
+}
+
+bool AudioMidiPreferencesModel::useSoundFontLowPassFilter() const
+{
+    return audioConfiguration()->useSoundFontLowPassFilter();
+}
+
+void AudioMidiPreferencesModel::setUseSoundFontLowPassFilter(bool value)
+{
+    if (value == useSoundFontLowPassFilter()) {
+        return;
+    }
+
+    audioConfiguration()->setUseSoundFontLowPassFilter(value);
 }
