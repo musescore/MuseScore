@@ -80,19 +80,19 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
             }
         }
 
-        if (maskSlurs || maskTies) {
-            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
-                if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
-                    continue;
-                }
-                spannerSeg->mutldata()->setMask(Shape());
-                AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
-                if (slurTieMaskOverride == AutoOnOff::ON
-                    || (slurTieMaskOverride == AutoOnOff::AUTO
-                        && ((maskSlurs && spannerSeg->isSlurSegment())
-                            || (maskTies && spannerSeg->isTieSegment())))) {
-                    computeSlurTieMasks(toSlurTieSegment(spannerSeg));
-                }
+        for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+            if (!spannerSeg->isSlurTieSegment() || !system->staff(spannerSeg->staffIdx())->show() || !spannerSeg->visible()) {
+                continue;
+            }
+
+            spannerSeg->mutldata()->setMask(Shape());
+
+            AutoOnOff slurTieMaskOverride = spannerSeg->getProperty(Pid::MASK_SLURTIE).value<AutoOnOff>();
+            if (slurTieMaskOverride == AutoOnOff::ON
+                || (slurTieMaskOverride == AutoOnOff::AUTO
+                    && ((maskSlurs && spannerSeg->isSlurSegment())
+                        || (maskTies && spannerSeg->isTieSegment())))) {
+                computeSlurTieMasks(toSlurTieSegment(spannerSeg));
             }
         }
     }
