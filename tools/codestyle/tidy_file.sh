@@ -15,11 +15,13 @@ trap 'echo >&2 "$0: Error $?, line ${LINENO}, args: $*"; exit ${FAIL_FAST}' ERR
 # the git index when multiple instances of this script are run in parallel.
 
 HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
+REPO_ROOT="${HERE}/../.."
+UNCRUSTIFY_CONFIG="${REPO_ROOT}/muse/tools/codestyle/uncrustify_muse.cfg" # lives in framework submodule
 
 function uncrustify_file()
 {
     local file="$1" lang="$2" status
-    uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l "${lang}" -f "${file}"
+    uncrustify -c "${UNCRUSTIFY_CONFIG}" --no-backup -l "${lang}" -f "${file}"
     status=$?
     rm -f "${file}.uncrustify" # remove possible temporary file
     return ${status}

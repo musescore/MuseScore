@@ -44,6 +44,7 @@ class MixerPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel,
     Q_PROPERTY(bool faderSectionVisible READ faderSectionVisible NOTIFY faderSectionVisibleChanged)
     Q_PROPERTY(bool muteAndSoloSectionVisible READ muteAndSoloSectionVisible NOTIFY muteAndSoloSectionVisibleChanged)
     Q_PROPERTY(bool titleSectionVisible READ titleSectionVisible NOTIFY titleSectionVisibleChanged)
+    Q_PROPERTY(bool unMuteAndUnSoloSectionVisible READ unMuteAndUnSoloSectionVisible NOTIFY unMuteAndUnSoloSectionVisibleChanged)
 
     QML_ELEMENT
 
@@ -62,6 +63,7 @@ public:
     bool faderSectionVisible() const;
     bool muteAndSoloSectionVisible() const;
     bool titleSectionVisible() const;
+    bool unMuteAndUnSoloSectionVisible() const;
 
     Q_INVOKABLE void load() override;
 
@@ -75,6 +77,7 @@ signals:
     void faderSectionVisibleChanged();
     void muteAndSoloSectionVisibleChanged();
     void titleSectionVisibleChanged();
+    void unMuteAndUnSoloSectionVisibleChanged();
 
 private:
     bool isSectionVisible(MixerSectionType sectionType) const;

@@ -305,21 +305,34 @@ ColumnLayout {
                 }
             }
 
-            MixerMuteAndSoloSection {
-                id: muteAndSoloSection
+            Item {
+                width: contentColumn.width
+                height: muteAndSoloSection.height
 
-                visible: contextMenuModel.muteAndSoloSectionVisible
-                headerVisible: contextMenuModel.labelsSectionVisible
-                headerWidth: prv.headerWidth
-                channelItemWidth: prv.channelItemWidth
+                MixerMuteAndSoloSection {
+                    id: muteAndSoloSection
 
-                model: mixerPanelModel
+                    visible: contextMenuModel.muteAndSoloSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    channelItemWidth: prv.channelItemWidth
 
-                navigationRowStart: 600
-                needReadChannelName: prv.isPanelActivated
+                    model: mixerPanelModel
+                    navigationRowStart: 600
+                    needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: function(index) {
-                    prv.setNavigateControlIndex(index)
+                    onNavigateControlIndexChanged: function(index) {
+                        prv.setNavigateControlIndex(index)
+                    }
+                }
+
+                MixerUnMuteAndUnSoloSection {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: contextMenuModel.unMuteAndUnSoloSectionVisible
+                    headerVisible: contextMenuModel.labelsSectionVisible
+                    headerWidth: prv.headerWidth
+                    model: mixerPanelModel
                 }
             }
 

@@ -263,6 +263,20 @@ void MixerPanelModel::clear()
 
 void MixerPanelModel::setupConnections()
 {
+    currentProject()->masterNotation()->notation()->soloMuteState()->trackSoloMuteStateChanged().onReceive(
+        this, [this](const InstrumentTrackId& instrumentTrackId,
+                     const notation::INotationSoloMuteState::SoloMuteState& newState) {
+        const IPlaybackController::InstrumentTrackIdMap& trackIdMap = controller()->instrumentTrackIdMap();
+        auto it = trackIdMap.find(instrumentTrackId);
+        if (it == trackIdMap.end()) {
+            return;
+        }
+
+        if (MixerChannelItem* item = findChannelItem(it->second)) {
+            item->loadSoloMuteState(newState);
+        }
+    });
+
     audioSettings()->auxSoloMuteStateChanged().onReceive(
         this, [this](const aux_channel_idx_t index,
                      notation::INotationSoloMuteState::SoloMuteState newSoloMuteState) {
