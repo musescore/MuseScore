@@ -327,7 +327,7 @@ public:
     virtual void setTrack(track_idx_t val);
 
     int z() const;
-    virtual void setZ(int val);
+    void setZ(int val);
 
     staff_idx_t staffIdx() const;
     void setStaffIdx(staff_idx_t val);
