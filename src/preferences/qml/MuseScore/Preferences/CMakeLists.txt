@@ -105,6 +105,7 @@ qt_add_qml_module(preferences_qml
         internal/MiscellaneousSection.qml
         internal/MixerSection.qml
         internal/MusicXmlSection.qml
+        internal/PlaybackQualitySection.qml
         internal/NoteInput/FretboardDiagramsSection.qml
         internal/NoteInput/MidiInputSection.qml
         internal/NoteInput/NoteColorsSection.qml

@@ -82,11 +82,24 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        PlaybackQualitySection {
+            useSoundFontLowPassFilter: audioMidiModel.useSoundFontLowPassFilter
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onUseSoundFontLowPassFilterChangeRequested: function(use) {
+                audioMidiModel.useSoundFontLowPassFilter = use
+            }
+        }
+
+        SeparatorLine {}
+
         MixerSection {
             muteHiddenInstruments: audioMidiModel.muteHiddenInstruments
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 3
+            navigation.order: root.navigationOrderStart + 4
 
             onMuteHiddenInstrumentsChangeRequested: function(mute) {
                 audioMidiModel.muteHiddenInstruments = mute
@@ -105,7 +118,7 @@ PreferencesPage {
             progressBarMode: audioMidiModel.onlineSoundsShowProgressBarMode
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 4
+            navigation.order: root.navigationOrderStart + 5
 
             onShowErrorDialogChangeRequested: function(value) {
                 audioMidiModel.shouldShowOnlineSoundsProcessingError = value
