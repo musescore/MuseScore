@@ -16,6 +16,7 @@
 
 #include "framework/actions/actionsmodule.h"
 #include "framework/rcommand/rcommandmodule.h"
+#include "framework/rcontrol/rcontrolmodule.h"
 
 #ifdef MUSE_MODULE_AUDIO
 #include "framework/audio/main/audiomodule.h"
@@ -313,6 +314,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const std::shared_ptr<
     app->addModule(new muse::accessibility::AccessibilityModule());
     app->addModule(new muse::actions::ActionsModule());
     app->addModule(new muse::rcommand::RCommandModule());
+    app->addModule(new muse::rcontrol::RControlModule());
     app->addModule(new muse::audio::AudioModule());
 #ifdef MUSE_MODULE_AUDIOPLUGINS
     app->addModule(new muse::audioplugins::AudioPluginsModule());
@@ -455,6 +457,7 @@ static void addConsoleModules(std::shared_ptr<MuseScoreConsoleApp> app)
     // framework
     app->addModule(new muse::actions::ActionsModule());
     app->addModule(new muse::rcommand::RCommandModule());
+    app->addModule(new muse::rcontrol::RControlModule());
     app->addModule(new muse::audio::AudioModule());
 #ifdef MUSE_MODULE_AUDIOPLUGINS
     app->addModule(new muse::audioplugins::AudioPluginsModule());
