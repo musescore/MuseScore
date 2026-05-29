@@ -52,11 +52,6 @@ void SpacerSettingsModel::loadProperties()
     loadPropertyItem(m_spacerHeight, formatDoubleFunc);
 }
 
-void SpacerSettingsModel::resetProperties()
-{
-    m_spacerHeight->resetToDefault();
-}
-
 void SpacerSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     if (muse::contains(changedPropertyIdSet, Pid::SPACE)) {

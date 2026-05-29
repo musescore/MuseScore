@@ -149,18 +149,6 @@ void OrnamentSettingsModel::loadProperties()
     updateIsIntervalBelowAvailable();
 }
 
-void OrnamentSettingsModel::resetProperties()
-{
-    m_placement->resetToDefault();
-    m_intervalAbove->resetToDefault();
-    m_intervalBelow->resetToDefault();
-    m_intervalStep->resetToDefault();
-    m_intervalType->resetToDefault();
-    m_showAccidental->resetToDefault();
-    m_showCueNote->resetToDefault();
-    m_startOnUpperNote->resetToDefault();
-}
-
 PropertyItem* OrnamentSettingsModel::placement() const
 {
     return m_placement;

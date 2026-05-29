@@ -55,12 +55,6 @@ void NotePlaybackModel::loadProperties()
     });
 }
 
-void NotePlaybackModel::resetProperties()
-{
-    m_tuning->resetToDefault();
-    m_velocity->resetToDefault();
-}
-
 PropertyItem* NotePlaybackModel::tuning() const
 {
     return m_tuning;

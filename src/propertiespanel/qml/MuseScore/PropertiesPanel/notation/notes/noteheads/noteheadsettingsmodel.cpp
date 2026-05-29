@@ -121,19 +121,6 @@ void NoteheadSettingsModel::loadProperties()
     updatemeasurementUnits();
 }
 
-void NoteheadSettingsModel::resetProperties()
-{
-    m_isHeadHidden->resetToDefault();
-    m_isHeadSmall->resetToDefault();
-    m_hasHeadParentheses->resetToDefault();
-    m_headDirection->resetToDefault();
-    m_headGroup->resetToDefault();
-    m_headType->resetToDefault();
-    m_headSystem->resetToDefault();
-    m_dotPosition->resetToDefault();
-    m_offset->resetToDefault();
-}
-
 void NoteheadSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet, const mu::engraving::StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

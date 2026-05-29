@@ -70,11 +70,6 @@ void ArticulationSettingsModel::loadProperties()
     updateIsPlacementAvailable();
 }
 
-void ArticulationSettingsModel::resetProperties()
-{
-    m_placement->resetToDefault();
-}
-
 void ArticulationSettingsModel::updateIsPlacementAvailable()
 {
     bool available = false;

@@ -135,42 +135,6 @@ void TextLineSettingsModel::loadProperties()
     updateStartAndEndHookTypes();
 }
 
-void TextLineSettingsModel::resetProperties()
-{
-    ModelWithVoiceAndPositionOptions::resetProperties();
-
-    QList<PropertyItem*> allProperties {
-        m_isLineVisible,
-        m_allowDiagonal,
-        m_lineStyle,
-        m_thickness,
-        m_dashLineLength,
-        m_dashGapLength,
-        m_startHookType,
-        m_endHookType,
-        m_startHookHeight,
-        m_endHookHeight,
-        m_startLineArrowHeight,
-        m_startLineArrowWidth,
-        m_endLineArrowHeight,
-        m_endLineArrowWidth,
-        m_gapBetweenTextAndLine,
-        m_placement,
-        m_beginningText,
-        m_beginningTextOffset,
-        m_continuousText,
-        m_continuousTextOffset,
-        m_endText,
-        m_endTextOffset
-    };
-
-    for (PropertyItem* property : allProperties) {
-        if (property) {
-            property->resetToDefault();
-        }
-    }
-}
-
 PropertyItem* TextLineSettingsModel::isLineVisible() const
 {
     return m_isLineVisible;

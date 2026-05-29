@@ -62,12 +62,6 @@ void MMRestSettingsModel::loadProperties()
     updateNumberOptionsEnabled();
 }
 
-void MMRestSettingsModel::resetProperties()
-{
-    m_isNumberVisible->resetToDefault();
-    m_numberPosition->resetToDefault();
-}
-
 PropertyItem* MMRestSettingsModel::isNumberVisible() const
 {
     return m_isNumberVisible;

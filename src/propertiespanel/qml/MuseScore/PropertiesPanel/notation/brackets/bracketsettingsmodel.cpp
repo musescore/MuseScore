@@ -79,14 +79,6 @@ void BracketSettingsModel::loadProperties()
     updateIsGroupBracket();
 }
 
-void BracketSettingsModel::resetProperties()
-{
-    m_bracketColumnPosition->resetToDefault();
-    m_bracketSpanStaves->resetToDefault();
-    m_longName->resetToDefault();
-    m_shortName->resetToDefault();
-}
-
 void BracketSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

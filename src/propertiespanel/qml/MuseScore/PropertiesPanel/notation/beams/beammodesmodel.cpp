@@ -72,11 +72,6 @@ void BeamModesModel::loadProperties()
     });
 }
 
-void BeamModesModel::resetProperties()
-{
-    m_mode->resetToDefault();
-}
-
 PropertyItem* BeamModesModel::mode() const
 {
     return m_mode;

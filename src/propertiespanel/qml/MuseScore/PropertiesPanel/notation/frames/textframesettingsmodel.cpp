@@ -71,19 +71,6 @@ void TextFrameSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void TextFrameSettingsModel::resetProperties()
-{
-    m_gapAbove->resetToDefault();
-    m_gapBelow->resetToDefault();
-    m_frameLeftMargin->resetToDefault();
-    m_frameRightMargin->resetToDefault();
-    m_frameTopMargin->resetToDefault();
-    m_frameBottomMargin->resetToDefault();
-    m_isSizeSpatiumDependent->resetToDefault();
-    m_paddingToNotationAbove->resetToDefault();
-    m_paddingToNotationBelow->resetToDefault();
-}
-
 void TextFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

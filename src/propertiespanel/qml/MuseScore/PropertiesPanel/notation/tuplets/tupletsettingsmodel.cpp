@@ -100,11 +100,3 @@ void TupletSettingsModel::loadProperties()
     loadPropertyItem(m_bracketType);
     loadPropertyItem(m_lineThickness, formatDoubleFunc);
 }
-
-void TupletSettingsModel::resetProperties()
-{
-    m_directionType->resetToDefault();
-    m_numberType->resetToDefault();
-    m_bracketType->resetToDefault();
-    m_lineThickness->resetToDefault();
-}

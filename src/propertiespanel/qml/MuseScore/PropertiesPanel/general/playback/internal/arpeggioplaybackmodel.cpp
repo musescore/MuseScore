@@ -52,11 +52,6 @@ void ArpeggioPlaybackModel::loadProperties()
     loadPropertyItem(m_stretch, formatDoubleFunc);
 }
 
-void ArpeggioPlaybackModel::resetProperties()
-{
-    m_stretch->resetToDefault();
-}
-
 PropertyItem* ArpeggioPlaybackModel::stretch() const
 {
     return m_stretch;

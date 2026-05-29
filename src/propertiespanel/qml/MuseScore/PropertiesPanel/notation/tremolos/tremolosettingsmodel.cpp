@@ -74,12 +74,6 @@ void TremoloSettingsModel::loadProperties()
     loadProperties(PropertyIdSet { Pid::TREMOLO_STYLE, Pid::STEM_DIRECTION });
 }
 
-void TremoloSettingsModel::resetProperties()
-{
-    m_style->resetToDefault();
-    m_direction->resetToDefault();
-}
-
 void TremoloSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

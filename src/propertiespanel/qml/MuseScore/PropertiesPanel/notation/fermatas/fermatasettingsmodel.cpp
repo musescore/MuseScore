@@ -50,11 +50,6 @@ void FermataSettingsModel::loadProperties()
     loadPropertyItem(m_placementType);
 }
 
-void FermataSettingsModel::resetProperties()
-{
-    m_placementType->resetToDefault();
-}
-
 PropertyItem* FermataSettingsModel::placementType() const
 {
     return m_placementType;

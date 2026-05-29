@@ -109,11 +109,3 @@ void OttavaSettingsModel::loadProperties()
     loadPropertyItem(m_showNumbersOnly);
     updateStartAndEndHookTypes();
 }
-
-void OttavaSettingsModel::resetProperties()
-{
-    TextLineSettingsModel::resetProperties();
-
-    m_ottavaType->resetToDefault();
-    m_showNumbersOnly->resetToDefault();
-}

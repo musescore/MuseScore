@@ -127,16 +127,6 @@ void AppearanceSettingsModel::loadProperties()
     updatemeasurementUnits();
 }
 
-void AppearanceSettingsModel::resetProperties()
-{
-    m_leadingSpace->resetToDefault();
-    m_minimumDistance->resetToDefault();
-    m_measureWidth->resetToDefault();
-    m_color->resetToDefault();
-    m_arrangeOrder->resetToDefault();
-    m_offset->resetToDefault();
-}
-
 void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

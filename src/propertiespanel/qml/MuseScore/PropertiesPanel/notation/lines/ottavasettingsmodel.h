@@ -49,7 +49,6 @@ protected:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_ottavaType = nullptr;
     PropertyItem* m_showNumbersOnly = nullptr;

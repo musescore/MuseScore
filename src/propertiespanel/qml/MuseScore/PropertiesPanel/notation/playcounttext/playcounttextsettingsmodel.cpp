@@ -57,12 +57,6 @@ void PlayCountTextSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void PlayCountTextSettingsModel::resetProperties()
-{
-    m_playCountText->resetToDefault();
-    m_playCountTextSetting->resetToDefault();
-}
-
 void PlayCountTextSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                                                    const mu::engraving::StyleIdSet&)
 {

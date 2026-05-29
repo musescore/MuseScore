@@ -51,7 +51,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_directionType = nullptr;
     PropertyItem* m_numberType = nullptr;

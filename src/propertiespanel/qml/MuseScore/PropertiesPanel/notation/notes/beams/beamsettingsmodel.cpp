@@ -157,23 +157,6 @@ void BeamSettingsModel::loadBeamHeightProperties()
     m_cachedBeamHeights.second = m_beamHeightRight->value().toDouble();
 }
 
-void BeamSettingsModel::resetProperties()
-{
-    m_featheringHeightLeft->resetToDefault();
-    m_featheringHeightRight->resetToDefault();
-    m_beamHeightLeft->resetToDefault();
-    m_beamHeightRight->resetToDefault();
-    m_forceHorizontal->resetToDefault();
-    m_customPositioned->resetToDefault();
-    m_stemDirection->resetToDefault();
-    m_crossStaffMove->resetToDefault();
-
-    m_cachedBeamHeights = PairF();
-
-    setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
-    setIsBeamHeightLocked(false);
-}
-
 PropertyItem* BeamSettingsModel::forceHorizontal()
 {
     return m_forceHorizontal;

@@ -53,7 +53,6 @@ signals:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* m_bracketRightSide = nullptr;
     PropertyItem* m_hookPos = nullptr;

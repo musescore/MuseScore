@@ -75,9 +75,3 @@ void GradualTempoChangePlaybackModel::loadProperties()
 
     loadPropertyItem(m_tempoEasingMethod);
 }
-
-void GradualTempoChangePlaybackModel::resetProperties()
-{
-    m_tempoChangeFactor->resetToDefault();
-    m_tempoEasingMethod->resetToDefault();
-}

@@ -57,7 +57,6 @@ public:
 
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
     void onNotationChanged(const PropertyIdSet&, const StyleIdSet&) override;
 
     PropertyItem* voiceBasedPosition() const;

@@ -65,7 +65,6 @@ private:
     void onFrameHeightReset(const mu::engraving::Pid pid);
     void requestElements() override;
     void loadProperties() override;
-    void resetProperties() override;
     void onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 

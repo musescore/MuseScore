@@ -56,11 +56,6 @@ void FermataPlaybackModel::loadProperties()
     });
 }
 
-void FermataPlaybackModel::resetProperties()
-{
-    m_timeStretch->resetToDefault();
-}
-
 PropertyItem* FermataPlaybackModel::timeStretch() const
 {
     return m_timeStretch;

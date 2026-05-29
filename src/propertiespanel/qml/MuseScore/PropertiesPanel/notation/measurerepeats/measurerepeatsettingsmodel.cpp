@@ -50,11 +50,6 @@ void MeasureRepeatSettingsModel::loadProperties()
     loadPropertyItem(m_numberPosition);
 }
 
-void MeasureRepeatSettingsModel::resetProperties()
-{
-    m_numberPosition->resetToDefault();
-}
-
 PropertyItem* MeasureRepeatSettingsModel::numberPosition() const
 {
     return m_numberPosition;

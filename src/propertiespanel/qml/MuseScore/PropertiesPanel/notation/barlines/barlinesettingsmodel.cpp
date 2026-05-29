@@ -86,18 +86,6 @@ void BarlineSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void BarlineSettingsModel::resetProperties()
-{
-    m_type->resetToDefault();
-    m_playCount->resetToDefault();
-    m_playCountText->resetToDefault();
-    m_playCountTextSetting->resetToDefault();
-    m_isSpanToNextStaff->resetToDefault();
-    m_spanFrom->resetToDefault();
-    m_spanTo->resetToDefault();
-    m_hasToShowTips->resetToDefault();
-}
-
 void BarlineSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet& changedPropertyIdSet,
                                              const mu::engraving::StyleIdSet&)
 {

@@ -74,12 +74,6 @@ void KeySignatureSettingsModel::loadProperties()
     m_mode->setIsEnabled(enableMode);
 }
 
-void KeySignatureSettingsModel::resetProperties()
-{
-    m_hasToShowCourtesy->resetToDefault();
-    m_mode->resetToDefault();
-}
-
 PropertyItem* KeySignatureSettingsModel::hasToShowCourtesy() const
 {
     return m_hasToShowCourtesy;

@@ -62,11 +62,6 @@ void FretFrameChordsSettingsModel::loadProperties()
     updateHasInvisibleChords();
 }
 
-void FretFrameChordsSettingsModel::resetProperties()
-{
-    m_listOrder->resetToDefault();
-}
-
 mu::engraving::FBox* FretFrameChordsSettingsModel::fretBox() const
 {
     if (m_elementList.isEmpty()) {

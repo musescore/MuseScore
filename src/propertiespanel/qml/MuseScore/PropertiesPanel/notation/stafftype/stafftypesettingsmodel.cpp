@@ -94,30 +94,6 @@ void StaffTypeSettingsModel::loadProperties()
     loadPropertyItem(m_staffShortName);
 }
 
-void StaffTypeSettingsModel::resetProperties()
-{
-    m_isSmall->resetToDefault();
-    m_verticalOffset->resetToDefault();
-    m_scale->resetToDefault();
-
-    m_lineCount->resetToDefault();
-    m_lineDistance->resetToDefault();
-    m_stepOffset->resetToDefault();
-    m_isInvisible->resetToDefault();
-    m_color->resetToDefault();
-
-    m_noteheadSchemeType->resetToDefault();
-    m_isStemless->resetToDefault();
-    m_shouldShowBarlines->resetToDefault();
-    m_shouldShowLedgerLines->resetToDefault();
-    m_shouldGenerateClefs->resetToDefault();
-    m_shouldGenerateTimeSignatures->resetToDefault();
-    m_shouldGenerateKeySignatures->resetToDefault();
-
-    m_staffLongName->resetToDefault();
-    m_staffShortName->resetToDefault();
-}
-
 PropertyItem* StaffTypeSettingsModel::isSmall() const
 {
     return m_isSmall;

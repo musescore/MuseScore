@@ -51,11 +51,6 @@ void BreathPlaybackModel::loadProperties()
     loadPropertyItem(m_pauseTime, formatDoubleFunc);
 }
 
-void BreathPlaybackModel::resetProperties()
-{
-    m_pauseTime->resetToDefault();
-}
-
 PropertyItem* BreathPlaybackModel::pauseTime() const
 {
     return m_pauseTime;

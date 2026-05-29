@@ -84,13 +84,6 @@ void PropertiesPanelAbstractProxyModel::requestElements()
     }
 }
 
-void PropertiesPanelAbstractProxyModel::requestResetToDefaults()
-{
-    for (PropertiesPanelAbstractModel* model : modelList()) {
-        model->requestResetToDefaults();
-    }
-}
-
 bool PropertiesPanelAbstractProxyModel::isEmpty() const
 {
     for (const PropertiesPanelAbstractModel* model : modelList()) {

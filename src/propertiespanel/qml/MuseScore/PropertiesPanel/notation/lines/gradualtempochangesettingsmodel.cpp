@@ -56,14 +56,6 @@ void GradualTempoChangeSettingsModel::loadProperties()
     loadPropertyItem(m_snapAfter);
 }
 
-void GradualTempoChangeSettingsModel::resetProperties()
-{
-    TextLineSettingsModel::resetProperties();
-
-    m_snapBefore->resetToDefault();
-    m_snapAfter->resetToDefault();
-}
-
 PropertyItem* GradualTempoChangeSettingsModel::snapBefore() const
 {
     return m_snapBefore;

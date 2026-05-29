@@ -93,16 +93,6 @@ void ImageSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void ImageSettingsModel::resetProperties()
-{
-    m_shouldScaleToFrameSize->resetToDefault();
-    m_height->resetToDefault();
-    m_width->resetToDefault();
-    m_isAspectRatioLocked->resetToDefault();
-    m_isSizeInSpatiums->resetToDefault();
-    m_isImageFramed->resetToDefault();
-}
-
 void ImageSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

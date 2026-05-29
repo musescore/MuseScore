@@ -51,12 +51,6 @@ void LyricsSettingsModel::loadProperties()
     loadPropertyItem(m_avoidBarlines);
 }
 
-void LyricsSettingsModel::resetProperties()
-{
-    m_verse->resetToDefault();
-    m_avoidBarlines->resetToDefault();
-}
-
 PropertyItem* LyricsSettingsModel::verse() const
 {
     return m_verse;

@@ -67,14 +67,6 @@ void ScoreDisplaySettingsModel::loadProperties()
     updateAll();
 }
 
-void ScoreDisplaySettingsModel::resetProperties()
-{
-    setShouldShowInvisible(false);
-    setShouldShowFormatting(false);
-    setShouldShowFrames(false);
-    setShouldShowPageMargins(false);
-}
-
 ScoreConfig ScoreDisplaySettingsModel::scoreConfig() const
 {
     if (!currentNotation()) {

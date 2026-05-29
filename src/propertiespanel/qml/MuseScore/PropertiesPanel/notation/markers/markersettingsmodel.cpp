@@ -56,14 +56,6 @@ void MarkerSettingsModel::loadProperties()
     loadPropertyItem(m_centerOnSymbol);
 }
 
-void MarkerSettingsModel::resetProperties()
-{
-    m_type->resetToDefault();
-    m_label->resetToDefault();
-    m_position->resetToDefault();
-    m_centerOnSymbol->resetToDefault();
-}
-
 PropertyItem* MarkerSettingsModel::type() const
 {
     return m_type;

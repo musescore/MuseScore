@@ -51,9 +51,4 @@ void RestSettingsModel::loadProperties()
 {
     loadPropertyItem(m_alignWithOtherRests);
 }
-
-void RestSettingsModel::resetProperties()
-{
-    m_alignWithOtherRests->resetToDefault();
-}
 } // namespace mu::propertiespanel

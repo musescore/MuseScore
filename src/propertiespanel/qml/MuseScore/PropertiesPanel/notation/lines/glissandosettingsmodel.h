@@ -60,7 +60,6 @@ public:
 private:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
     void onUpdateGlissPropertiesAvailability();
 
     PropertyItem* m_lineType = nullptr;

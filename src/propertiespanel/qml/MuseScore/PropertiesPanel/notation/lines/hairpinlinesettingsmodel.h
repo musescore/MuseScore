@@ -51,7 +51,6 @@ public:
 protected:
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
     void requestElements() override;
 
 private:

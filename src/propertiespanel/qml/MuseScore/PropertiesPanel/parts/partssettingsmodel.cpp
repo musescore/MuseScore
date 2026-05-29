@@ -89,13 +89,6 @@ void PartsSettingsModel::loadProperties()
     loadPropertyItem(m_excludeFromOtherParts, m_elementsForExcludeOption);
 }
 
-void PartsSettingsModel::resetProperties()
-{
-    m_positionLinkedToMaster->resetToDefault();
-    m_appearanceLinkedToMaster->resetToDefault();
-    m_textLinkedToMaster->resetToDefault();
-}
-
 void PartsSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
     loadProperties();

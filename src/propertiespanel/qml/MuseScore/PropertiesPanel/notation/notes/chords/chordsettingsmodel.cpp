@@ -61,13 +61,6 @@ void ChordSettingsModel::loadProperties()
     updateShowStemSlashEnabled();
 }
 
-void ChordSettingsModel::resetProperties()
-{
-    m_isStemless->resetToDefault();
-    m_showStemSlash->resetToDefault();
-    updateShowStemSlashEnabled();
-}
-
 PropertyItem* ChordSettingsModel::isStemless() const
 {
     return m_isStemless;

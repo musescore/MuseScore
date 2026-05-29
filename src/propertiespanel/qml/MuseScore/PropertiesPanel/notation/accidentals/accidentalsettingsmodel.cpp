@@ -63,12 +63,6 @@ void AccidentalSettingsModel::loadProperties()
     updateIsStackingOrderAvailableAndEnabled();
 }
 
-void AccidentalSettingsModel::resetProperties()
-{
-    m_bracketType->resetToDefault();
-    m_stackingOrderOffset->resetToDefault();
-}
-
 PropertyItem* AccidentalSettingsModel::bracketType() const
 {
     return m_bracketType;

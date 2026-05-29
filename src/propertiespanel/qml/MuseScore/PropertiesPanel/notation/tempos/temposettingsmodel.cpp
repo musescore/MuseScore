@@ -79,12 +79,6 @@ void TempoSettingsModel::loadProperties()
     loadPropertyItem(m_tempo, formatDoubleFunc);
 }
 
-void TempoSettingsModel::resetProperties()
-{
-    m_isFollowText->resetToDefault();
-    m_tempo->resetToDefault();
-}
-
 PropertyItem* TempoSettingsModel::isFollowText() const
 {
     return m_isFollowText;

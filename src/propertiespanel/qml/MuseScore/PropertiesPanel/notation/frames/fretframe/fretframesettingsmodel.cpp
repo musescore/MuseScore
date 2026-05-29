@@ -96,25 +96,6 @@ void FretFrameSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void FretFrameSettingsModel::resetProperties()
-{
-    m_textScale->resetToDefault();
-    m_diagramScale->resetToDefault();
-    m_columnGap->resetToDefault();
-    m_rowGap->resetToDefault();
-    m_chordsPerRow->resetToDefault();
-    m_horizontalAlignment->resetToDefault();
-    m_gapAbove->resetToDefault();
-    m_gapBelow->resetToDefault();
-    m_frameLeftMargin->resetToDefault();
-    m_frameRightMargin->resetToDefault();
-    m_frameTopMargin->resetToDefault();
-    m_frameBottomMargin->resetToDefault();
-    m_isSizeSpatiumDependent->resetToDefault();
-    m_paddingToNotationAbove->resetToDefault();
-    m_paddingToNotationBelow->resetToDefault();
-}
-
 void FretFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

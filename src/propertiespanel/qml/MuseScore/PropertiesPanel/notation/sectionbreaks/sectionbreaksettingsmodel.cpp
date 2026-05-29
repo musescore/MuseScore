@@ -59,15 +59,6 @@ void SectionBreakSettingsModel::loadProperties()
     loadPropertyItem(m_showCourtesySignatures);
 }
 
-void SectionBreakSettingsModel::resetProperties()
-{
-    m_shouldStartWithLongInstrNames->resetToDefault();
-    m_shouldResetBarNums->resetToDefault();
-    m_pauseDuration->resetToDefault();
-    m_firstSystemIndent->resetToDefault();
-    m_showCourtesySignatures->resetToDefault();
-}
-
 PropertyItem* SectionBreakSettingsModel::shouldStartWithLongInstrNames() const
 {
     return m_shouldStartWithLongInstrNames;

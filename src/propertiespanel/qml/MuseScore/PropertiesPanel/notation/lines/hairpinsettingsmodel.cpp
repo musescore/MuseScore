@@ -84,15 +84,6 @@ void HairpinSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void HairpinSettingsModel::resetProperties()
-{
-    HairpinLineSettingsModel::resetProperties();
-
-    m_isNienteCircleVisible->resetToDefault();
-    m_height->resetToDefault();
-    m_continuousHeight->resetToDefault();
-}
-
 void HairpinSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN, [](const mu::engraving::EngravingItem* element) -> bool {

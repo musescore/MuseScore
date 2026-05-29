@@ -67,7 +67,6 @@ signals:
 private:
     void createProperties() override { }
     void requestElements() override { }
-    void resetProperties() override { }
     void loadProperties() override {}
 
     void onCurrentNotationChanged() override;

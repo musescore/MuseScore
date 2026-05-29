@@ -165,8 +165,6 @@ public:
 
     void init();
 
-    Q_INVOKABLE virtual void requestResetToDefaults();
-
     QString title() const;
     int icon() const;
     PropertiesPanelSectionType sectionType() const;
@@ -181,7 +179,6 @@ public:
 
     virtual void createProperties() = 0;
     virtual void loadProperties() = 0;
-    virtual void resetProperties() = 0;
 
     virtual void requestElements();
 
@@ -208,7 +205,6 @@ public slots:
 signals:
     void titleChanged();
 
-    void modelReseted();
     void isEmptyChanged();
 
     void requestReloadPropertyItems();

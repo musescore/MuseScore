@@ -113,14 +113,6 @@ void GeneralSettingsModel::loadProperties()
     updateAreGeneralPropertiesAvailable();
 }
 
-void GeneralSettingsModel::resetProperties()
-{
-    m_isVisible->resetToDefault();
-    m_isAutoPlaceAllowed->resetToDefault();
-    m_isPlayable->resetToDefault();
-    m_isSmall->resetToDefault();
-}
-
 void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);

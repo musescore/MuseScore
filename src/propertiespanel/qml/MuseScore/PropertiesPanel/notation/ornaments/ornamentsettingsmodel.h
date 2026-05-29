@@ -56,7 +56,6 @@ public:
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
-    void resetProperties() override;
 
     PropertyItem* placement() const;
     PropertyItem* intervalAbove() const;
