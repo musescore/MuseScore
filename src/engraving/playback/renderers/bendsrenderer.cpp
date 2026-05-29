@@ -75,8 +75,13 @@ bool BendsRenderer::isMultibendPart(const Note* note)
     }
 
     const Note* currNote = note->firstTiedNote(IGNORE_UNPLAYABLE);
+    std::unordered_set<const Note*> visited;
 
     while (currNote && currNote->play()) {
+        if (!visited.insert(currNote).second) {
+            break;
+        }
+
         if (currNote->bendFor() || note->bendBack()) {
             return true;
         }
@@ -127,11 +132,16 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
 {
     const Note* currNote = startNote;
     const GuitarBend* currBend = nullptr;
+    std::unordered_set<const Note*> visited;
 
     mpe::PlaybackEventList bendEvents;
     BendTimeFactorMap bendTimeFactorMap;
 
     while (currNote) {
+        if (!visited.insert(currNote).second) {
+            break;
+        }
+
         RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
         if (!currNote->tieBack() || !currNote->tieBack()->playSpanner()) {
             renderNote(currNote, currNoteCtx, bendEvents);
