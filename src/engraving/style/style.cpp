@@ -648,6 +648,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook, in
     if (mscVersion < 500) {
         set(Sid::windsNameByGroup, false);
         set(Sid::vocalsNameByGroup, false);
+        set(Sid::maskSlurs, false);
+        set(Sid::maskTies, false);
     }
 
     if (mscVersion < 470) {
