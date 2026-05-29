@@ -139,6 +139,7 @@ static void fluid_synth_handle_important_channels(void *data, const char *name,
         const char *value);
 static void fluid_synth_handle_reverb_chorus_num(void *data, const char *name, double value);
 static void fluid_synth_handle_reverb_chorus_int(void *data, const char *name, int value);
+static void fluid_synth_handle_iir_lowpass_filter(void *data, const char *name, int value);
 
 
 static void fluid_synth_reset_basic_channel_LOCAL(fluid_synth_t *synth, int chan, int nbr_chan);
@@ -255,6 +256,8 @@ void fluid_synth_settings(fluid_settings_t *settings)
     fluid_settings_add_option(settings, "synth.midi-bank-select", "mma");
 
     fluid_settings_register_int(settings, "synth.dynamic-sample-loading", 0, 0, 1, FLUID_HINT_TOGGLED);
+
+    fluid_settings_register_int(settings, "synth.iir-lowpass-filter.active", 1, 0, 1, FLUID_HINT_TOGGLED);
 }
 
 /**
@@ -667,6 +670,7 @@ new_fluid_synth(fluid_settings_t *settings)
     fluid_settings_getint(settings, "synth.reverb.active", &synth->with_reverb);
     fluid_settings_getint(settings, "synth.chorus.active", &synth->with_chorus);
     fluid_settings_getint(settings, "synth.verbose", &synth->verbose);
+    fluid_settings_getint(settings, "synth.iir-lowpass-filter.active", &synth->use_iir_lowpass_filter);
 
     fluid_settings_getint(settings, "synth.polyphony", &synth->polyphony);
     fluid_settings_getnum(settings, "synth.sample-rate", &synth->sample_rate);
@@ -722,6 +726,8 @@ new_fluid_synth(fluid_settings_t *settings)
                                 fluid_synth_handle_reverb_chorus_int, synth);
     fluid_settings_callback_int(settings, "synth.chorus.nr",
                                 fluid_synth_handle_reverb_chorus_int, synth);
+    fluid_settings_callback_int(settings, "synth.iir-lowpass-filter.active",
+                                fluid_synth_handle_iir_lowpass_filter, synth);
     fluid_settings_callback_num(settings, "synth.chorus.level",
                                 fluid_synth_handle_reverb_chorus_num, synth);
     fluid_settings_callback_num(settings, "synth.chorus.depth",
@@ -928,7 +934,8 @@ new_fluid_synth(fluid_settings_t *settings)
     FLUID_MEMSET(synth->voice, 0, synth->nvoice * sizeof(*synth->voice));
     for(i = 0; i < synth->nvoice; i++)
     {
-        synth->voice[i] = new_fluid_voice(synth->eventhandler, synth->sample_rate);
+        synth->voice[i] = new_fluid_voice(synth->eventhandler, synth->sample_rate,
+                                           synth->use_iir_lowpass_filter);
 
         if(synth->voice[i] == NULL)
         {
@@ -1073,6 +1080,8 @@ delete_fluid_synth(fluid_synth_t *synth)
     fluid_settings_callback_num(synth->settings, "synth.chorus.depth",
                                 NULL, NULL);
     fluid_settings_callback_num(synth->settings, "synth.chorus.speed",
+                                NULL, NULL);
+    fluid_settings_callback_int(synth->settings, "synth.iir-lowpass-filter.active",
                                 NULL, NULL);
 
     /* turn off all voices, needed to unload SoundFont data */
@@ -3651,7 +3660,8 @@ fluid_synth_update_polyphony_LOCAL(fluid_synth_t *synth, int new_polyphony)
 
         for(i = synth->nvoice; i < new_polyphony; i++)
         {
-            synth->voice[i] = new_fluid_voice(synth->eventhandler, synth->sample_rate);
+            synth->voice[i] = new_fluid_voice(synth->eventhandler, synth->sample_rate,
+                                               synth->use_iir_lowpass_filter);
 
             if(synth->voice[i] == NULL)
             {
@@ -5019,6 +5029,27 @@ static void fluid_synth_handle_reverb_chorus_int(void *data, const char *name, i
     {
 		fluid_synth_chorus_set_param(synth, -1, FLUID_CHORUS_NR, (double)value);
     }
+}
+
+static void fluid_synth_handle_iir_lowpass_filter(void *data, const char *name, int value)
+{
+    int i;
+    fluid_synth_t *synth = (fluid_synth_t *)data;
+    fluid_return_if_fail(synth != NULL);
+
+    fluid_synth_api_enter(synth);
+
+    synth->use_iir_lowpass_filter = value;
+
+    for(i = 0; i < synth->nvoice; i++)
+    {
+        if(synth->voice[i])
+        {
+            fluid_voice_set_iir_lowpass_filter_active(synth->voice[i], value);
+        }
+    }
+
+    fluid_synth_api_exit(synth);
 }
 
 /*

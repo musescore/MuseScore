@@ -134,6 +134,20 @@ async::Channel<bool> AudioConfigurationStub::autoProcessOnlineSoundsInBackground
     return {};
 }
 
+bool AudioConfigurationStub::useSoundFontLowPassFilter() const
+{
+    return false;
+}
+
+void AudioConfigurationStub::setUseSoundFontLowPassFilter(bool)
+{
+}
+
+async::Channel<bool> AudioConfigurationStub::useSoundFontLowPassFilterChanged() const
+{
+    return {};
+}
+
 bool AudioConfigurationStub::shouldMeasureInputLag() const
 {
     return false;

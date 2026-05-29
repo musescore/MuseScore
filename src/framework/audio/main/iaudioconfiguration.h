@@ -70,6 +70,10 @@ public:
     virtual void setAutoProcessOnlineSoundsInBackground(bool value) = 0;
     virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
 
+    virtual bool useSoundFontLowPassFilter() const = 0;
+    virtual void setUseSoundFontLowPassFilter(bool value) = 0;
+    virtual async::Channel<bool> useSoundFontLowPassFilterChanged() const = 0;
+
     virtual bool shouldMeasureInputLag() const = 0;
 };
 }

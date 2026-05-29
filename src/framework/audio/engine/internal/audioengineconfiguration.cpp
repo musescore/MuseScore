@@ -54,6 +54,11 @@ void AudioEngineConfiguration::setConfig(const AudioEngineConfig& conf)
     }
 
     setIsLazyProcessingOfOnlineSoundsEnabled(conf.isLazyProcessingOfOnlineSoundsEnabled);
+
+    if (conf.useSoundFontLowPassFilter != m_conf.useSoundFontLowPassFilter) {
+        m_conf.useSoundFontLowPassFilter = conf.useSoundFontLowPassFilter;
+        m_useSoundFontLowPassFilterChanged.send(m_conf.useSoundFontLowPassFilter);
+    }
 }
 
 bool AudioEngineConfiguration::autoProcessOnlineSoundsInBackground() const
@@ -84,6 +89,16 @@ bool AudioEngineConfiguration::isLazyProcessingOfOnlineSoundsEnabled() const
 async::Channel<bool> AudioEngineConfiguration::isLazyProcessingOfOnlineSoundsEnabledChanged() const
 {
     return m_isLazyProcessingOfOnlineSoundsEnabledChanged;
+}
+
+bool AudioEngineConfiguration::useSoundFontLowPassFilter() const
+{
+    return m_conf.useSoundFontLowPassFilter;
+}
+
+async::Channel<bool> AudioEngineConfiguration::useSoundFontLowPassFilterChanged() const
+{
+    return m_useSoundFontLowPassFilterChanged;
 }
 
 AudioInputParams AudioEngineConfiguration::defaultAudioInputParams() const
