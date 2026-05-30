@@ -27,7 +27,13 @@ target_sources(iex_encore PRIVATE
     internal/enc-importconfiguration.h
     internal/enc-importconfiguration.cpp
     internal/parser/parsers-note.cpp
+    internal/parser/parsers-chord.cpp
+    internal/parser/parsers-ornament.cpp
+    internal/parser/parsers-lyric-tie.cpp
     internal/parser/parsers-measure.cpp
+    internal/parser/parsers-metadata.cpp
+    internal/parser/parsers-text.cpp
+    internal/parser/parsers-root.cpp
     internal/parser/parsers-encoding.h
     internal/parser/parsers-encoding.cpp
     internal/parser/readers.h
