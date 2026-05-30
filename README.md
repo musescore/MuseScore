@@ -43,8 +43,10 @@ See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStr
 
 If using git to download repo of entire code history, type:
 
-    git clone https://github.com/musescore/MuseScore.git
+    git clone  --recurse-submodules https://github.com/musescore/MuseScore.git
     cd MuseScore
+
+(The `--recurse-submodules` ensures that the [`muse_framework`](https://github.com/musescore/muse_framework) git submodule is checked out into the `muse/` subdirectory.)
 
 Otherwise, you can just download the latest source release tarball from the [Releases page](https://github.com/musescore/MuseScore/releases), and then from your download directory type:
 
