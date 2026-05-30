@@ -43,8 +43,27 @@ static std::unique_ptr<EncMeasureElem> createMeasureElement(
         return std::make_unique<EncNote>(tick, tp, vo);
     case EncElemType::REST:
         return std::make_unique<EncRest>(tick, tp, vo);
+    case EncElemType::CHORD:
+        return std::make_unique<EncChordSym>(tick, tp, vo);
+    case EncElemType::ORNAMENT:
+    {
+        auto orn = std::make_unique<EncOrnament>(tick, tp, vo);
+        orn->tindOffset = fmt.staffTextTindOffset();
+        orn->yoffOffset = fmt.staffTextYoffsetOffset();
+        return orn;
+    }
+    case EncElemType::LYRIC:
+    {
+        auto lyr = std::make_unique<EncLyric>(tick, tp, vo);
+        lyr->preKieSkip = fmt.lyricPreKieSkip();
+        lyr->textGapAfterKie = fmt.lyricTextGapAfterKie();
+        lyr->spacingFactor = static_cast<quint8>(fmt.elemSpacing(1));   // element slot = size * factor
+        return lyr;
+    }
     case EncElemType::KEYCHANGE:
         return std::make_unique<EncKeyChange>(tick, tp, vo);
+    case EncElemType::TIE:
+        return std::make_unique<EncTie>(tick, tp, vo);
     case EncElemType::UNKNOWN1:
         // Genuinely unknown element type; counted and reported once by logEncRootInfo.
         return std::make_unique<EncGenericElem>(tick, tp, vo);
