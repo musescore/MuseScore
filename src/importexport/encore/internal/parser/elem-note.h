@@ -48,7 +48,7 @@ struct EncMeasureElem {
     quint8 size  { 0 };
     quint8 staffIdx    { 0 };   // low 6 bits of raw staff byte: staff index in system
     quint8 staffWithin { 0 };   // high 2 bits (>> 6): staff index within instrument (0=first, 1=second, ...)
-    quint8 xoffset  { 0 };
+    qint16 xoffset  { 0 };   // column, signed: a wide measure runs past a byte
     qint16 realDuration { -1 };
 
     // Raw staff byte (staffWithin<<6)|staffIdx, identical to instrStaffIdx in the LINE block.
