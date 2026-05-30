@@ -26,10 +26,16 @@ target_sources(iex_encore PRIVATE
     ienc-importconfiguration.h
     internal/enc-importconfiguration.h
     internal/enc-importconfiguration.cpp
+    internal/parser/parsers-note.cpp
+    internal/parser/parsers-measure.cpp
     internal/parser/parsers-encoding.h
     internal/parser/parsers-encoding.cpp
     internal/parser/readers.h
     internal/parser/readers.cpp
+    internal/parser/readers-v0xc4-base.h
+    internal/parser/readers-v0xc4-base.cpp
+    internal/parser/readers-v0xc4.h
+    internal/parser/readers-v0xc4.cpp
     internal/parser/elem.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h

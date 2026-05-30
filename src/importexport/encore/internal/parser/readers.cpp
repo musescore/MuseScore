@@ -23,6 +23,7 @@
 // Shared block-skip/clamp helper implementations and the EncFormatReader factory (version to reader).
 
 #include "readers.h"
+#include "readers-v0xc4.h"
 
 #include <algorithm>
 #include <limits>
@@ -65,5 +66,22 @@ qint64 clampMeasureEnd(qint64 measStart, quint32 varsize, qint64 elemBlockOffset
 {
     const qint64 end = measStart + static_cast<qint64>(varsize) + elemBlockOffset;
     return std::min(end, deviceSize);
+}
+
+// Selects a format reader. SCO5 (macOS Encore 5) is matched by magic string because its chuMagio
+// is not 0xC4 even though it shares the v0xC4 format; otherwise chuMagio picks the reader.
+std::unique_ptr<EncFormatReader> EncFormatReader::create(quint8 chuMagio, const QString& magic)
+{
+    if (magic == "SCO5") {
+        return makeFormatReader_SCO5();
+    }
+    switch (chuMagio) {
+    case static_cast<quint8>(EncFormatVersion::V5_X):
+        return makeFormatReader_V0xC4();
+    default:
+        LOGW() << QString("Encore: unsupported format version 0x%1 - import may fail")
+            .arg(chuMagio, 2, 16, QChar('0'));
+        return makeFormatReader_V0xC4();
+    }
 }
 } // namespace mu::iex::enc
