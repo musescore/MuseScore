@@ -46,6 +46,25 @@ static int readMidiByteAt(QDataStream& ds, qint64 off)
     return (prg >= 1 && prg <= 128) ? static_cast<int>(prg) : 0;
 }
 
+// The MIDI channels sit immediately before the program byte, one per voice of the staff, eight of
+// them from format 3.05 on, and a staff normally carries the same channel on every voice. The first
+// one is the staff's channel, and it is read whether or not the program byte holds anything: a
+// percussion track often carries no program at all. Stored from zero, returned as the Staff Sheet
+// shows it. See ENCORE_FORMAT.md §5.1 Instrument block.
+static void readChannelBeforeMidi(QDataStream& ds, qint64 midiOff, EncInstrument& instr)
+{
+    static constexpr qint64 VOICES_PER_STAFF = 8;
+    const qint64 off = midiOff - VOICES_PER_STAFF;
+    if (off < 0 || !ds.device()->seek(off)) {
+        return;
+    }
+    quint8 ch = 0;
+    ds >> ch;
+    if (ch < 16) {
+        instr.midiChannel = static_cast<int>(ch) + 1;
+    }
+}
+
 // Read the 1-byte signed key-transpose value at absolute offset off. Returns true and sets
 // out (-33..24) when valid; returns false otherwise (including a seek failure). Key 0 is a
 // valid value, so a bool/out-param is used rather than a sentinel return.
@@ -298,6 +317,7 @@ static void readMidiProgramsNoTk(
             if (off >= effectiveFirstBlock || off >= static_cast<qint64>(ds.device()->size())) {
                 break;
             }
+            readChannelBeforeMidi(ds, off, instruments[n]);
             if (int prg = readMidiByteAt(ds, off)) {
                 instruments[n].midiProgram = prg;
             }
@@ -325,6 +345,7 @@ static void readMidiProgramsNoTk(
                 if (off >= effectiveFirstBlock || off >= static_cast<qint64>(ds.device()->size())) {
                     break;
                 }
+                readChannelBeforeMidi(ds, off, instruments[n]);
                 if (int prg = readMidiByteAt(ds, off)) {
                     instruments[n].midiProgram = prg;
                 }
@@ -344,6 +365,7 @@ static void readMidiProgramsNoTk(
                 if (off >= static_cast<qint64>(ds.device()->size())) {
                     break;
                 }
+                readChannelBeforeMidi(ds, off, instruments[n]);
                 if (int prg = readMidiByteAt(ds, off)) {
                     instruments[n].midiProgram = prg;
                 }
@@ -377,6 +399,7 @@ static void readMidiProgramsNoTk(
                 if (mOff >= static_cast<qint64>(ds.device()->size())) {
                     continue;
                 }
+                readChannelBeforeMidi(ds, mOff, instruments[n]);
                 if (int prm = readMidiByteAt(ds, mOff)) {
                     instruments[n].midiProgram = prm;
                 }
@@ -397,6 +420,7 @@ static void readMidiProgramsNoTk(
                 if (off >= static_cast<qint64>(ds.device()->size())) {
                     break;
                 }
+                readChannelBeforeMidi(ds, off, instruments[nextTarget]);
                 if (int prg = readMidiByteAt(ds, off)) {
                     instruments[nextTarget].midiProgram = prg;
                 }
@@ -440,6 +464,7 @@ static void readMidiProgramsLargeEntry(std::vector<EncInstrument>& instruments, 
         if (off >= static_cast<qint64>(ds.device()->size())) {
             break;
         }
+        readChannelBeforeMidi(ds, off, instruments[n]);
         if (int prg = readMidiByteAt(ds, off)) {
             instruments[n].midiProgram = prg;
         }
@@ -482,6 +507,7 @@ static void readMidiProgramsSmallTk(
         if (off >= static_cast<qint64>(ds.device()->size())) {
             continue;
         }
+        readChannelBeforeMidi(ds, off, instr);
         int prg = readMidiByteAt(ds, off);
         if (!prg && contentSizeMisdeclared) {
             // Entries short enough that the tables reach back into the content itself keep the
@@ -538,6 +564,7 @@ void readMidiPrograms(std::vector<EncInstrument>& instruments, QDataStream& ds, 
                 if (off >= static_cast<qint64>(ds.device()->size())) {
                     break;
                 }
+                readChannelBeforeMidi(ds, off, instruments[nextTarget]);
                 if (int prg = readMidiByteAt(ds, off)) {
                     instruments[nextTarget].midiProgram = prg;
                 }
@@ -566,6 +593,7 @@ void readMidiPrograms(std::vector<EncInstrument>& instruments, QDataStream& ds, 
         if (instruments[n].midiProgram != 0) {
             continue;
         }
+        readChannelBeforeMidi(ds, off, instruments[n]);
         if (int prg = readMidiByteAt(ds, off)) {
             instruments[n].midiProgram = prg;
         }
