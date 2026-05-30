@@ -48,6 +48,10 @@ struct EncInstrument {
     qint64 contentFilePos { -1 };   // byte offset of TK content start (after 8-byte header); -1 for compact
     int nstaves   { 0 };
     int midiProgram { 0 };   // 1-indexed GM program (0 = not configured)
+    // 1-indexed MIDI channel from Encore's Staff Sheet, 0 where the generation's instrument table
+    // has not been read for it. Channel 10 is the General MIDI percussion channel and Encore plays
+    // such a staff as percussion whatever its program says. See ENCORE_FORMAT.md §5.1.
+    int midiChannel { 0 };
     // Signed chromatic offset from Encore's Staff Sheet "Key" field.
     // 0=written, -12=octave lower, +12=octave higher.
     qint8 keyTransposeSemitones { 0 };
