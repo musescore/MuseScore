@@ -55,7 +55,6 @@ bool EncNote::read(QDataStream& ds)
     ds >> faceValue >> grace1 >> grace2;
     ds.skipRawData(2);
     ds >> xoffset;
-    ds.skipRawData(1);
     ds >> position >> tuplet >> dotControl >> semiTonePitch >> playbackDurTicks;
     ds.skipRawData(1);
     ds >> velocity >> options >> alterationGlyph;
@@ -84,7 +83,7 @@ bool EncRest::read(QDataStream& ds)
     ds >> faceValue;
     ds.skipRawData(4);
     ds >> xoffset;
-    ds.skipRawData(2);
+    ds.skipRawData(1);
     ds >> tuplet >> dotControl;
     if (static_cast<int>(size) > 15) {
         ds >> mrestCount;   // multi-measure rest count at element offset +15
