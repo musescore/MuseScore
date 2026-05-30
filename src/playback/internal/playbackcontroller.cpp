@@ -34,6 +34,7 @@
 #include "engraving/dom/factory.h"
 
 #include "audio/common/audioutils.h"
+#include "audio/common/soundfonttypes.h"
 #include "audio/devtools/inputlag.h"
 
 #include "containers.h"
@@ -82,6 +83,44 @@ static AudioOutputParams makeReverbOutputParams()
     result.fxChain.emplace(reverbParams.chainOrder, std::move(reverbParams));
 
     return result;
+}
+
+static AudioInputParams defaultBasicInputParams()
+{
+    static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
+    static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = {
+        DEFAULT_SOUND_FONT_NAME,
+        "Fluid",
+        {
+            { PLAYBACK_SETUP_DATA_ATTRIBUTE, muse::mpe::GENERIC_SETUP_DATA_STRING },
+            { synth::SOUNDFONT_NAME_ATTRIBUTE, muse::String::fromStdString(DEFAULT_SOUND_FONT_NAME) }
+        },
+        AudioResourceType::FluidSoundfont,
+        false /*hasNativeEditor*/
+    };
+
+    return { DEFAULT_AUDIO_RESOURCE_META, {} };
+}
+
+static bool needsProfileInputFallback(const AudioInputParams& params)
+{
+    if (!params.isValid()) {
+        return true;
+    }
+
+    if (params.resourceMeta.type == AudioResourceType::MuseSamplerSoundPack
+        && params.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE).isEmpty()) {
+        return true;
+    }
+
+    return false;
+}
+
+static bool shouldAvoidMuseSamplerInput(const AudioInputParams& params, const SoundProfileName& activeProfileName,
+                                        const SoundProfileName& museSoundsProfileName)
+{
+    return params.resourceMeta.type == AudioResourceType::MuseSamplerSoundPack
+           || activeProfileName == museSoundsProfileName;
 }
 
 static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutputParams& params, bool considerFx = true)
@@ -1128,14 +1167,22 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
     bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
 
-    if (!inParams.isValid()) {
-        if (isMetronome) {
+    const bool useBasicProfile = isMetronome
+                                 || shouldAvoidMuseSamplerInput(inParams, audioSettings()->activeSoundProfile(),
+                                                                configuration()->museSoundsProfileName());
+
+    if (needsProfileInputFallback(inParams) || useBasicProfile) {
+        if (useBasicProfile) {
             const SoundProfile& profile = profilesRepo()->profile(configuration()->basicSoundProfileName());
             inParams = { profile.findResource(playbackData.setupData), {} };
         } else {
             const SoundProfile& profile = profilesRepo()->profile(audioSettings()->activeSoundProfile());
             inParams = { profile.findResource(playbackData.setupData), {} };
         }
+    }
+
+    if (!inParams.isValid()) {
+        inParams = defaultBasicInputParams();
     }
 
     if (!isMetronome && originParams.auxSends.empty()) {
@@ -1698,6 +1745,63 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);
+}
+
+bool PlaybackController::hasAvailableMuseSoundsReassignments() const
+{
+    return museSoundsReassignmentCandidateCount() > 0;
+}
+
+void PlaybackController::reassignInstrumentsToAvailableMuseSounds()
+{
+    if (!hasAvailableMuseSoundsReassignments()) {
+        return;
+    }
+
+    applyProfile(configuration()->museSoundsProfileName());
+}
+
+size_t PlaybackController::museSoundsReassignmentCandidateCount() const
+{
+    INotationPlaybackPtr nPlayback = notationPlayback();
+    project::IProjectAudioSettingsPtr audioSettingsPtr = audioSettings();
+
+    if (!nPlayback || !audioSettingsPtr) {
+        return 0;
+    }
+
+    const SoundProfile& museSoundsProfile = profilesRepo()->profile(configuration()->museSoundsProfileName());
+    if (!museSoundsProfile.isValid()) {
+        return 0;
+    }
+
+    const InstrumentTrackId& metronomeTrackId = nPlayback->metronomeTrackId();
+    size_t result = 0;
+
+    for (const auto& pair : m_instrumentTrackIdMap) {
+        const InstrumentTrackId& instrumentTrackId = pair.first;
+        if (instrumentTrackId == metronomeTrackId) {
+            continue;
+        }
+
+        const mpe::PlaybackData& playbackData = nPlayback->trackPlaybackData(instrumentTrackId);
+        const AudioResourceMeta& museSoundsMatch = museSoundsProfile.findResource(playbackData.setupData);
+        if (!museSoundsMatch.isValid()) {
+            continue;
+        }
+
+        const AudioInputParams& currentParams = audioSettingsPtr->trackInputParams(instrumentTrackId);
+        if (currentParams.resourceMeta.type == AudioResourceType::MuseSamplerSoundPack
+            && currentParams.resourceMeta.id == museSoundsMatch.id) {
+            continue;
+        }
+
+        if (!currentParams.isValid() || currentParams.resourceMeta.type == AudioResourceType::FluidSoundfont) {
+            ++result;
+        }
+    }
+
+    return result;
 }
 
 void PlaybackController::setNotation(notation::INotationPtr notation)

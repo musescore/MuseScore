@@ -89,6 +89,8 @@ public:
     MOCK_METHOD(muse::Progress, loadingProgress, (), (const, override));
 
     MOCK_METHOD(void, applyProfile, (const SoundProfileName&), (override));
+    MOCK_METHOD(bool, hasAvailableMuseSoundsReassignments, (), (const, override));
+    MOCK_METHOD(void, reassignInstrumentsToAvailableMuseSounds, (), (override));
 
     MOCK_METHOD(void, setNotation, (notation::INotationPtr), (override));
     MOCK_METHOD(void, setIsExportingAudio, (bool), (override));

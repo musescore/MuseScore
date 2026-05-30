@@ -120,6 +120,8 @@ public:
     muse::Progress loadingProgress() const override;
 
     void applyProfile(const SoundProfileName& profileName) override;
+    bool hasAvailableMuseSoundsReassignments() const override;
+    void reassignInstrumentsToAvailableMuseSounds() override;
 
     void setNotation(notation::INotationPtr notation) override;
     void setMasterNotation(notation::IMasterNotationPtr masterNotation);
@@ -194,6 +196,7 @@ private:
     void reloadPlaybackCache();
 
     void openPlaybackSetupDialog();
+    size_t museSoundsReassignmentCandidateCount() const;
 
     void addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);

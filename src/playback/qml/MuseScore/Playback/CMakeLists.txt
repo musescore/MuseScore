@@ -36,6 +36,8 @@ qt_add_qml_module(playback_qml
         mixerpanelcontextmenumodel.h
         mixerpanelmodel.cpp
         mixerpanelmodel.h
+        musesoundsreassignmodel.cpp
+        musesoundsreassignmodel.h
         msbasicpresetscategories.h
         notationregionsbeingprocessedmodel.cpp
         notationregionsbeingprocessedmodel.h
@@ -75,6 +77,7 @@ qt_add_qml_module(playback_qml
         internal/VolumePressureMeter.qml
         internal/VolumeSlider.qml
         MixerPanel.qml
+        MuseSoundsReassignDialog.qml
         NotationRegionsBeingProcessedView.qml
         OnlineSoundsStatusView.qml
         PlaybackLoadingInfo.qml

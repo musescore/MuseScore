@@ -196,6 +196,15 @@ void PlaybackControllerStub::applyProfile(const SoundProfileName&)
 {
 }
 
+bool PlaybackControllerStub::hasAvailableMuseSoundsReassignments() const
+{
+    return false;
+}
+
+void PlaybackControllerStub::reassignInstrumentsToAvailableMuseSounds()
+{
+}
+
 void PlaybackControllerStub::setNotation(notation::INotationPtr)
 {
 }

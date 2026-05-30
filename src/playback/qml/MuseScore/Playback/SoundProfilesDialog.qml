@@ -224,10 +224,11 @@ StyledDialogView {
             }
         }
 
-        Row {
-            id: buttons
+        RowLayout {
+            id: footer
 
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignBottom
 
             spacing: 12
 
@@ -238,6 +239,29 @@ StyledDialogView {
                 order: 3
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
+            FlatButton {
+                height: 30
+                width: 430
+
+                enabled: profilesListModel.canReassignInstrumentsToMuseSounds()
+                text: qsTrc("playback", "Reassign instruments to available Muse Sounds matches")
+
+                navigation.panel: footer.navigationPanel
+                navigation.order: 1
+
+                onClicked: {
+                    profilesListModel.openMuseSoundsReassignDialog()
+                }
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
             FlatButton {
                 height: 30
                 width: 160
@@ -246,8 +270,8 @@ StyledDialogView {
                 visible: profilesListModel.currentlySelectedProfile != profilesListModel.activeProfile
                 text: qsTrc("playback", "Activate this profile")
 
-                navigation.panel: buttons.navigationPanel
-                navigation.order: 1
+                navigation.panel: footer.navigationPanel
+                navigation.order: 2
 
                 onClicked: {
                     profilesListModel.activeProfile = profilesListModel.currentlySelectedProfile
@@ -260,8 +284,8 @@ StyledDialogView {
 
                 text: qsTrc("global", "OK")
 
-                navigation.panel: buttons.navigationPanel
-                navigation.order: 2
+                navigation.panel: footer.navigationPanel
+                navigation.order: 3
 
                 onClicked: {
                     root.hide()

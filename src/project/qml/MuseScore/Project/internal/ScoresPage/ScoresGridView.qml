@@ -120,16 +120,7 @@ Item {
 
         flickableDirection: Flickable.VerticalFlick
 
-        ScrollBar.vertical: StyledScrollBar {
-            parent: root
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-
-            visible: view.contentHeight > view.height
-            z: 2
-        }
+        ScrollBar.vertical: null
 
         model: itemTypeFilterModel
 

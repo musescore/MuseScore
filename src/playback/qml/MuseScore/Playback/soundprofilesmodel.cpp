@@ -60,6 +60,29 @@ void SoundProfilesModel::init()
     endResetModel();
 }
 
+bool SoundProfilesModel::canReassignInstrumentsToMuseSounds() const
+{
+    return context()->currentProject() != nullptr
+           && controller()->hasAvailableMuseSoundsReassignments();
+}
+
+void SoundProfilesModel::reassignInstrumentsToMuseSounds()
+{
+    controller()->reassignInstrumentsToAvailableMuseSounds();
+
+    if (INotationProjectPtr project = context()->currentProject()) {
+        m_activeProfile = project->audioSettings()->activeSoundProfile().toQString();
+        m_currentlySelectedProfile = m_activeProfile;
+        emit activeProfileChanged();
+        emit currentlySelectedProfileChanged();
+    }
+}
+
+void SoundProfilesModel::openMuseSoundsReassignDialog()
+{
+    interactive()->open("musescore://playback/musesoundsreassigndialog");
+}
+
 int SoundProfilesModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return static_cast<int>(m_profiles.size());

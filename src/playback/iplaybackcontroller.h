@@ -113,6 +113,8 @@ public:
     virtual muse::Progress loadingProgress() const = 0;
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
+    virtual bool hasAvailableMuseSoundsReassignments() const = 0;
+    virtual void reassignInstrumentsToAvailableMuseSounds() = 0;
 
     virtual void setNotation(notation::INotationPtr notation) = 0;
     virtual void setIsExportingAudio(bool exporting) = 0;

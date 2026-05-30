@@ -57,6 +57,9 @@ public:
     explicit SoundProfilesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
+    Q_INVOKABLE bool canReassignInstrumentsToMuseSounds() const;
+    Q_INVOKABLE void reassignInstrumentsToMuseSounds();
+    Q_INVOKABLE void openMuseSoundsReassignDialog();
 
     int rowCount(const QModelIndex& parent) const override;
     QVariant data(const QModelIndex& index, int role) const override;
