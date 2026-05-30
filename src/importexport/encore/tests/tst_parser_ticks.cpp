@@ -26,6 +26,7 @@
 #include <gtest/gtest.h>
 
 #include "../internal/parser/ticks.h"
+#include "../internal/parser/elem.h"
 #include "../internal/parser/readers.h"
 #include "../internal/importer/durations.h"
 
@@ -228,4 +229,24 @@ TEST(Tst_EncoreParserBounds, clampMeasureEnd_clamps_oversized_varsize)
     EXPECT_EQ(clampMeasureEnd(100, 0xFFFFFFFFu, 0x36, 1000), 1000);
     // A varsize that fits stays unclamped even for a large device.
     EXPECT_EQ(clampMeasureEnd(0, 200, 0x36, 100000), 200 + 0x36);
+}
+
+TEST(Tst_EncoreParserDurations, computeElementDurations_gap_and_boundary)
+{
+    // Two notes 480 ticks apart in a 960-tick (4/4) measure: each spans the gap to the next event,
+    // and the last spans the gap to the measure end.
+    EncNote a(0, 9, 0);
+    EncNote b(480, 9, 0);
+    std::vector<EncMeasureElem*> elems { &a, &b };
+    computeElementDurations(elems, 960, /*hasGraceTimeBorrowing*/ false);
+    EXPECT_EQ(a.realDuration, 480);
+    EXPECT_EQ(b.realDuration, 480);
+
+    // A boundary tick (e.g. a mid-measure clef change) caps the preceding note's gap.
+    EncNote c(0, 9, 0);
+    EncNote d(480, 9, 0);
+    std::vector<EncMeasureElem*> elems2 { &c, &d };
+    computeElementDurations(elems2, 960, false, { 240 });
+    EXPECT_EQ(c.realDuration, 240);
+    EXPECT_EQ(d.realDuration, 480);
 }
