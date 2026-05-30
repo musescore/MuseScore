@@ -172,7 +172,7 @@
             <playCountCustomText></playCountCustomText>
             <eid>P_P</eid>
             <style>repeat_play_count</style>
-            <text>4x</text>
+            <text>4×</text>
             </PlayCountText>
           </voice>
         </Measure>

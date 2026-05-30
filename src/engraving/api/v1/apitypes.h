@@ -1723,6 +1723,8 @@ enum class RepeatPlayCountPreset {
     N_X          = int(mu::engraving::RepeatPlayCountPreset::N_X),
     PLAY_N_TIMES = int(mu::engraving::RepeatPlayCountPreset::PLAY_N_TIMES),
     N_REPEATS    = int(mu::engraving::RepeatPlayCountPreset::N_REPEATS),
+    EX_N          = int(mu::engraving::RepeatPlayCountPreset::EX_N),
+    N_EX          = int(mu::engraving::RepeatPlayCountPreset::N_EX),
 };
 Q_ENUM_NS(RepeatPlayCountPreset);
 

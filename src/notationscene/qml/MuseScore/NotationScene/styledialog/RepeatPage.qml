@@ -160,7 +160,7 @@ Rectangle {
                 }
 
                 CheckBox {
-                    text: qsTrc("notation/editstyle/repeatplaycount", "Show for single repeats (e.g. “x2”)")
+                    text: qsTrc("notation/editstyle/repeatplaycount", "Show for single repeats (e.g. “×2”)")
                     checked: repeatPlayCountTextModel.repeatPlayCountShowSingleRepeats.value === true
                     onClicked: repeatPlayCountTextModel.repeatPlayCountShowSingleRepeats.value = !repeatPlayCountTextModel.repeatPlayCountShowSingleRepeats.value
 

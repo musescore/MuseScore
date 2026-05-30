@@ -953,10 +953,12 @@ ParenthesesMode TConv::fromXml(const AsciiStringView& str, ParenthesesMode def)
 }
 
 static const std::vector<Item<RepeatPlayCountPreset> > REPEAT_COUNT_PRESET = {
-    { RepeatPlayCountPreset::X_N, "xn",                         muse::TranslatableString("engraving", "x%1") },
-    { RepeatPlayCountPreset::N_X, "nx",                         muse::TranslatableString("engraving", "%1x") },
+    { RepeatPlayCountPreset::X_N, "xn",                         muse::TranslatableString("engraving", "×%1") },
+    { RepeatPlayCountPreset::N_X, "nx",                         muse::TranslatableString("engraving", "%1×") },
     { RepeatPlayCountPreset::PLAY_N_TIMES, "playntimes",        muse::TranslatableString("engraving", "Play %1 times") },
     { RepeatPlayCountPreset::N_REPEATS, "nrepeats",             muse::TranslatableString("engraving", "%1 repeats") },
+    { RepeatPlayCountPreset::EX_N, "exn",                       muse::TranslatableString("engraving", "x%1") },
+    { RepeatPlayCountPreset::N_EX, "nex",                       muse::TranslatableString("engraving", "%1x") },
 };
 
 const muse::TranslatableString& TConv::userName(RepeatPlayCountPreset v)

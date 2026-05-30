@@ -116,7 +116,7 @@
             <playCountCustomText></playCountCustomText>
             <eid>M_M</eid>
             <style>repeat_play_count</style>
-            <text>3x</text>
+            <text>3×</text>
             </PlayCountText>
           </voice>
         </Measure>

@@ -42,10 +42,10 @@ QVariantList RepeatPlayCountTextModel::textPresetOptions() const
 {
     QVariantList options {
         QVariantMap{
-            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "x3") },
+            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "×3") },
             { "value", mu::engraving::RepeatPlayCountPreset::X_N } },
         QVariantMap{
-            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "3x") },
+            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "3×") },
             { "value", mu::engraving::RepeatPlayCountPreset::N_X } },
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/repeatplaycount", "Play 3 times") },
@@ -53,6 +53,12 @@ QVariantList RepeatPlayCountTextModel::textPresetOptions() const
         QVariantMap{
             { "text", muse::qtrc("notation/editstyle/repeatplaycount", "3 repeats") },
             { "value", mu::engraving::RepeatPlayCountPreset::N_REPEATS } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "x3") },
+            { "value", mu::engraving::RepeatPlayCountPreset::EX_N } },
+        QVariantMap{
+            { "text", muse::qtrc("notation/editstyle/repeatplaycount", "3x") },
+            { "value", mu::engraving::RepeatPlayCountPreset::N_EX } },
     };
 
     return options;

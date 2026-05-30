@@ -821,7 +821,9 @@ enum RepeatPlayCountPreset : unsigned char {
     X_N,
     N_X,
     PLAY_N_TIMES,
-    N_REPEATS
+    N_REPEATS,
+    EX_N,
+    N_EX
 };
 
 //-------------------------------------------------------------------
