@@ -43,11 +43,18 @@ target_sources(iex_encore PRIVATE
     internal/parser/readers-v0xc4.h
     internal/parser/readers-v0xc4.cpp
     internal/parser/elem.h
+    internal/importer/mappers-instruments.cpp
+    internal/importer/mappers.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h
     internal/notationencreader.cpp
     internal/notationencreader.h
     internal/importer/import.cpp
+    internal/importer/debug-dump.h
+    internal/importer/debug-dump.cpp
+    internal/importer/ctx.h
+    internal/importer/builders.h
+    internal/importer/builders-parts.cpp
     internal/importer/durations.h
     internal/importer/durations.cpp
     internal/importer/import.h

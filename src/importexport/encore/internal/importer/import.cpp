@@ -23,9 +23,13 @@
 // Top-level Encore (.enc) import: read the file, build the score, and run whole-score fix-up passes.
 // Binary format reverse-engineered by Leon Vinken (Enc2MusicXML, GPL v3+) building on enc2ly by Felipe Castro.
 
+#include "ctx.h"
+#include "builders.h"
+#include "debug-dump.h"
 
 #include "import.h"
 
+#include "../parser/elem.h"
 
 #include <algorithm>
 #include <cmath>
@@ -88,6 +92,20 @@
 using namespace mu::engraving;
 
 namespace mu::iex::enc {
+static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOptions& opts)
+{
+    ScoreLoad sl;   // import edits run outside any undo transaction; see mergeNonOverlappingVoices
+
+    BuildCtx ctx{ score, enc, opts };
+    buildParts(ctx);
+    // Assign MIDI ports/channels to every part. The file read path does this on load,
+    // but a direct import builds the score in memory without it, leaving each channel
+    // at -1; that makes Part::midiPort() index m_midiMapping[-1] and crash on a
+    // straight-to-MusicXML export.
+    score->rebuildMidiMapping();
+    score->setUpTempoMap();
+    score->doLayout();
+}
 
 muse::String encoreLoadErrorMessage(const QString& path)
 {
@@ -147,6 +165,26 @@ Err importEncore(MasterScore* score, const QString& path, const EncImportOptions
         }
     }
 
-    return Err::FileBadFormat;
+    QDataStream ds(&file);
+    ds.setByteOrder(QDataStream::LittleEndian);
+
+    EncRoot enc;
+    if (!enc.read(ds)) {
+        return Err::FileBadFormat;
+    }
+
+    if (enc.instruments.empty() || enc.measures.empty()) {
+        return Err::FileBadFormat;
+    }
+
+    logEncRootInfo(enc);
+    buildScore(score, enc, opts);
+
+    muse::Ret integrity = score->sanityCheck();
+    if (!integrity) {
+        LOGW() << "Encore import: score corruption detected:\n" << integrity.text();
+    }
+
+    return Err::NoError;
 }
 } // namespace mu::iex::enc
