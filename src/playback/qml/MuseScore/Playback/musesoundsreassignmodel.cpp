@@ -29,6 +29,9 @@ using namespace mu::engraving;
 using namespace muse;
 using namespace muse::audio;
 
+static const muse::String MUSICXML_SOUND_ATTRIBUTE(u"musicXmlSound");
+static const muse::String MUSE_UID_ATTRIBUTE(u"museUID");
+
 static QString cleanText(QString text)
 {
     text = text.toLower();
@@ -88,6 +91,13 @@ static QString resourceTitle(const AudioResourceMeta& resource)
     return parts.join(u" / ");
 }
 
+static bool isUsableMuseSamplerResource(const AudioResourceMeta& resource)
+{
+    return resource.type == AudioResourceType::MuseSamplerSoundPack
+           && resource.isValid()
+           && !resource.attributeVal(MUSE_UID_ATTRIBUTE).isEmpty();
+}
+
 MuseSoundsReassignModel::MuseSoundsReassignModel(QObject* parent)
     : QAbstractListModel(parent), muse::Contextable(muse::iocCtxForQmlObject(this))
 {
@@ -130,6 +140,10 @@ void MuseSoundsReassignModel::setSelectedCandidate(int row, int candidateIndex)
 void MuseSoundsReassignModel::apply()
 {
     for (const TrackChoice& choice : m_choices) {
+        if (choice.audioTrackId == INVALID_TRACK_ID) {
+            continue;
+        }
+
         if (choice.selectedCandidateIndex < 0 || choice.selectedCandidateIndex >= static_cast<int>(choice.candidates.size())) {
             continue;
         }
@@ -191,9 +205,7 @@ void MuseSoundsReassignModel::buildChoices(const AudioResourceMetaList& availabl
 {
     AudioResourceMetaList museResources;
     for (const AudioResourceMeta& resource : availableResources) {
-        if (resource.type == AudioResourceType::MuseSamplerSoundPack
-            && resource.isValid()
-            && !resource.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE).isEmpty()) {
+        if (isUsableMuseSamplerResource(resource)) {
             museResources.push_back(resource);
         }
     }
@@ -252,21 +264,31 @@ std::vector<MuseSoundsReassignModel::Candidate> MuseSoundsReassignModel::candida
     const QString& staffName, const mpe::PlaybackSetupData& setupData, const AudioResourceMetaList& museResources) const
 {
     QString setupText = setupData.toString().toQString();
-    QStringList queryTokens = tokensFrom(staffName + u" " + setupText);
+    QString musicXmlSound = setupData.musicXmlSoundId.has_value()
+                            ? QString::fromStdString(setupData.musicXmlSoundId.value())
+                            : QString();
+    QStringList queryTokens = tokensFrom(staffName + u" " + setupText + u" " + musicXmlSound);
 
     std::vector<Candidate> result;
 
     for (const AudioResourceMeta& resource : museResources) {
         QString title = resourceTitle(resource);
+        QString resourceSetupText = resource.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE).toQString();
+        QString resourceMusicXmlSound = resource.attributeVal(MUSICXML_SOUND_ATTRIBUTE).toQString();
         QString haystack = title + u" "
-                           + resource.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE).toQString() + u" "
+                           + resourceSetupText + u" "
+                           + resourceMusicXmlSound + u" "
                            + resource.attributeVal(u"museCategory").toQString();
 
         QString cleanHaystack = cleanText(haystack);
 
         int score = 0;
-        if (resource.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE).toQString() == setupText) {
+        if (!setupText.isEmpty() && resourceSetupText == setupText) {
             score += 100;
+        }
+
+        if (!musicXmlSound.isEmpty() && resourceMusicXmlSound == musicXmlSound) {
+            score += 90;
         }
 
         for (const QString& token : queryTokens) {

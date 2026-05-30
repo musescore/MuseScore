@@ -140,9 +140,10 @@ ColumnLayout {
 
         ScrollBar.horizontal: horizontalScrollBar
 
-        ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
+        ScrollBar.vertical: null
 
         property bool completed: false
+        property bool pendingPositionViewAtEnd: false
         property bool resourcePickingActive: soundSection.resourcePickingActive || fxSection.resourcePickingActive
 
         function positionViewAtEnd() {
@@ -150,15 +151,28 @@ ColumnLayout {
                 return
             }
 
-            if (flickable.contentY == flickable.contentHeight) {
+            let endY = Math.max(0, flickable.contentHeight - flickable.height)
+            if (Math.abs(flickable.contentY - endY) < 1) {
                 return
             }
 
-            flickable.contentY = flickable.contentHeight - flickable.height
+            flickable.contentY = endY
+        }
+
+        function schedulePositionViewAtEnd() {
+            if (!flickable.completed || flickable.pendingPositionViewAtEnd) {
+                return
+            }
+
+            flickable.pendingPositionViewAtEnd = true
+            Qt.callLater(function() {
+                flickable.pendingPositionViewAtEnd = false
+                flickable.positionViewAtEnd()
+            })
         }
 
         onContentHeightChanged: {
-            flickable.positionViewAtEnd()
+            flickable.schedulePositionViewAtEnd()
         }
 
         Component.onCompleted: {
@@ -360,6 +374,6 @@ ColumnLayout {
     }
 
     onHeightChanged: {
-        flickable.positionViewAtEnd()
+        flickable.schedulePositionViewAtEnd()
     }
 }
