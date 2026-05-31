@@ -50,6 +50,9 @@ struct EncMeasureElem {
     quint8 staffWithin { 0 };   // high 2 bits (>> 6): staff index within instrument (0=first, 1=second, ...)
     qint16 xoffset  { 0 };   // column, signed: a wide measure runs past a byte
     qint16 realDuration { -1 };
+    // Bytes to add to every body field from offset +8 onward, from EncFormatReader::elementBodyShift().
+    // -2 for files older than format 3.07, 0 otherwise. Set before read(); see parsers-measure.cpp.
+    qint8 bodyShift { 0 };
 
     // Raw staff byte (staffWithin<<6)|staffIdx, identical to instrStaffIdx in the LINE block.
     // Importers reverse-map it to a LINE slot (see buildLineSlotByRawByte).
@@ -63,6 +66,15 @@ struct EncMeasureElem {
     // Raw faceValue byte; 0 for elements without one.
     virtual quint8 faceValueByte() const { return 0; }
     virtual bool impliedTupletMember() const { return false; }
+
+    // Raw layout byte carrying the dot count in its low two bits; 0 for elements without one.
+    virtual quint8 dotControlByte() const { return 0; }
+    // The written duration, as a face value nibble; 0 for elements that carry none.
+    quint8 faceValue4() const { return faceValueByte() & 0x0F; }
+    // Dots the element is drawn with, which are part of its written value, not a decoration.
+    quint8 dotCount() const { return dotControlByte() & 0x03; }
+    // True when the element carries an explicit tuplet ratio, actual against normal.
+    bool inTuplet() const { return (tupletByte() >> 4) >= 2 && (tupletByte() & 0x0F) >= 1; }
 
     EncMeasureElem() = default;
     EncMeasureElem(quint16 t, quint8 tp, quint8 v)
@@ -103,19 +115,22 @@ struct EncNote : EncMeasureElem {
     // (rdur/faceValue mismatch gives the ratio). Explicit flag so incidental MIDI timing drift
     // in other formats is never misread as a tuplet.
     bool isImpliedTupletMember  { false };
-
+    // Note materialized from a tab-only staff's pitch-bearing REST element (rest byte layout, so
+    // faceValue is derived from realDuration later; see parsers-measure.cpp / EncRoot::read).
+    bool fromTabFingering       { false };
 
     using EncMeasureElem::EncMeasureElem;
 
     quint8 tupletByte() const override { return tuplet; }
     quint8 faceValueByte() const override { return faceValue; }
+    quint8 dotControlByte() const override { return dotControl; }
     bool impliedTupletMember() const override { return isImpliedTupletMember; }
     int actualNotes() const { return tuplet >> 4; }
     int normalNotes() const { return tuplet & 0x0F; }
 
     EncGraceType graceType() const;
-    // grace1 bit 0x20 = small note (a grace or a cue). grace2 bit 0x01 = muted (playback off), a
-    // per-note Encore flag independent of size; a cue is small and muted by default.
+    // grace1 bit 0x20 = small note (a grace or a cue). grace2 bit 0x01 = muted (playback off): the
+    // per-note Play switch, independent of size.
     bool isSmall() const { return grace1 & 0x20; }
     bool isMuted() const { return grace2 & 0x01; }
 
@@ -137,6 +152,7 @@ struct EncRest : EncMeasureElem {
 
     quint8 tupletByte() const override { return tuplet; }
     quint8 faceValueByte() const override { return faceValue; }
+    quint8 dotControlByte() const override { return dotControl; }
     bool impliedTupletMember() const override { return isImpliedTupletMember; }
     int actualNotes() const { return tuplet >> 4; }
     int normalNotes() const { return tuplet & 0x0F; }

@@ -298,6 +298,113 @@ bool EncMeasure::read(QDataStream& ds, const quint32 vs, const EncFormatReader& 
     return true;
 }
 
+// The length of a face value carrying n dots, or 0 when that length is not a whole number of ticks:
+// a triple-dotted sixteenth is 112.5, which no note position can hold.
+static int dottedTicks(int faceTicks, int dots)
+{
+    static const int kNum[] = { 1, 3, 7, 15 };
+    static const int kDen[] = { 1, 2, 4, 8 };
+    if (faceTicks <= 0 || dots < 0 || dots > 3 || (faceTicks * kNum[dots]) % kDen[dots] != 0) {
+        return 0;
+    }
+    return faceTicks * kNum[dots] / kDen[dots];
+}
+
+// What the element already writes: its sounding duration when that is a clean dotted multiple of the
+// face value, the face value otherwise.
+static int writtenTicks(const EncMeasureElem* e)
+{
+    const int faceTicks = faceValue2ticks(e->faceValue4());
+    for (int dots = 1; dots <= 3; ++dots) {
+        const int len = dottedTicks(faceTicks, dots);
+        if (len > 0 && e->realDuration == len) {
+            return len;
+        }
+    }
+    return faceTicks;
+}
+
+// The ticks the dots a note states would add, and 0 unless it states dots its duration does not show.
+static int statedExtra(const EncMeasureElem* e)
+{
+    const auto* en = dynamic_cast<const EncNote*>(e);
+    if (!en) {
+        return 0;
+    }
+    const int faceTicks = faceValue2ticks(e->faceValue4());
+    const int len = dottedTicks(faceTicks, en->dotControl & 0x03);
+    return (len > faceTicks && en->realDuration == faceTicks) ? len - faceTicks : 0;
+}
+
+// Puts back the dots a note states in its layout byte but its sounding duration does not show, and
+// moves everything past them so the stored ticks line up with the notation again. The dots have to
+// account for the group's shortfall exactly, not merely fit in it: room alone would let a spurious
+// bit dot a plain note, which the two tests named in ENCORE_IMPORTER.md 6.1 pin down.
+// See ENCORE_FORMAT.md 7.3 Dots for the two habits this tells apart.
+// Encore lets the LAST note of a bar be drawn longer than the space left and clips its playback to
+// what remains, so a bar with 120 ticks free can end in a dotted quarter. The face value survives
+// that on its own, being authoritative for the notation, but the dots do not: they are stated in the
+// layout byte and no duration in the bar shows them. Restore them and let the importer's overfull
+// strategy decide what the bar does about it, which is the question that option exists to answer.
+void EncMeasure::keepStatedFigureOfLastNote(std::vector<EncMeasureElem*>& elems)
+{
+    if (elems.empty()) {
+        return;
+    }
+    for (const EncMeasureElem* e : elems) {
+        // A tuplet rescales the group and the tuplet passes own that arithmetic.
+        if (e->inTuplet()) {
+            return;
+        }
+    }
+    auto* en = dynamic_cast<EncNote*>(elems.back());
+    if (!en) {
+        return;
+    }
+    const int stated = dottedTicks(faceValue2ticks(en->faceValue4()), en->dotControl & 0x03);
+    if (stated > en->realDuration) {
+        en->realDuration = static_cast<qint16>(stated);
+    }
+}
+
+void EncMeasure::restoreHintedDots(std::vector<EncMeasureElem*>& elems, int staffIdx, int voice)
+{
+    int writtenSum = 0;
+    int extraSum = 0;
+    std::vector<std::pair<qint16, int> > shifts;   // where a lengthened note ends, and by how much
+    for (const EncMeasureElem* e : elems) {
+        // A tuplet rescales everything the group writes and the tuplet passes own that arithmetic.
+        if (e->inTuplet()) {
+            return;
+        }
+        writtenSum += writtenTicks(e);
+        const int extra = statedExtra(e);
+        extraSum += extra;
+        if (extra > 0) {
+            shifts.push_back({ static_cast<qint16>(e->tick + faceValue2ticks(e->faceValue4())), extra });
+        }
+    }
+    if (extraSum == 0 || durTicks <= 0 || writtenSum + extraSum != static_cast<int>(durTicks)) {
+        return;
+    }
+    for (EncMeasureElem* e : elems) {
+        e->realDuration = static_cast<qint16>(e->realDuration + statedExtra(e));
+    }
+    for (auto& owned : elements) {
+        EncMeasureElem* e = owned.get();
+        if (e->staffIdx != staffIdx || e->voice != voice) {
+            continue;
+        }
+        int shift = 0;
+        for (const auto& [from, extra] : shifts) {
+            if (e->tick >= from) {   // measured against the stored tick, never a shifted one
+                shift += extra;
+            }
+        }
+        e->tick = static_cast<qint16>(e->tick + shift);
+    }
+}
+
 void EncMeasure::calculateRealDurations(bool hasGraceTimeBorrowing, const EncFormatReader& fmt)
 {
     // Collect per-staff boundary ticks from CLEF/KEYCHANGE elements (see computeElementDurations).
@@ -331,6 +438,8 @@ void EncMeasure::calculateRealDurations(bool hasGraceTimeBorrowing, const EncFor
             normalizeChordColumnTicks(elems);
         }
         computeElementDurations(elems, durTicks, hasGraceTimeBorrowing, boundaries);
+        restoreHintedDots(elems, key.first, key.second);
+        keepStatedFigureOfLastNote(elems);
         fmt.postProcessVoiceGroup(elems, durTicks);
     }
 
