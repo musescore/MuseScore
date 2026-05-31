@@ -45,6 +45,7 @@ target_sources(iex_encore PRIVATE
     internal/parser/elem.h
     internal/importer/mappers-clefs.cpp
     internal/importer/mappers-instruments.cpp
+    internal/importer/mappers-tempo.cpp
     internal/importer/mappers.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h
@@ -69,12 +70,18 @@ target_sources(iex_encore PRIVATE
     internal/importer/durations.cpp
     internal/importer/emitters-note.cpp
     internal/importer/emitters-rest.cpp
+    internal/importer/emitters-tempo.cpp
     internal/importer/emitters-fill.cpp
     internal/importer/emitters-overfill.cpp
     internal/importer/emitters.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )
+
+# While the module is partially populated, unity chunk boundaries shift and a source can lose
+# the neighbor includes it sees in the full module; one unity unit keeps CI-equivalent
+# semantics without those boundaries. Removed when every module source is in place.
+set_target_properties(iex_encore PROPERTIES UNITY_BUILD_BATCH_SIZE 0)
 
 target_link_libraries(iex_encore PRIVATE engraving)
 
