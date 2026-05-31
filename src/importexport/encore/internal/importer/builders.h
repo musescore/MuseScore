@@ -30,6 +30,9 @@
 
 namespace mu::iex::enc {
 void buildParts(BuildCtx& ctx);
+void buildMeasures(BuildCtx& ctx);
+void buildInitialSignatures(BuildCtx& ctx);
+void emitMeasures(BuildCtx& ctx);
 } // namespace mu::iex::enc
 
 #endif // MU_IMPORTEXPORT_ENC_IMPORT_BUILDERS_H
