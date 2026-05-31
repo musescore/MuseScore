@@ -1697,7 +1697,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="663"/>
         <source>On first system of sections:</source>
-        <translation>Ensimmäisessä viivastoryhmässä:</translation>
+        <translation>Osioiden ensimmäisessä viivastoryhmässä:</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/widgets/editstyle.ui" line="670"/>
