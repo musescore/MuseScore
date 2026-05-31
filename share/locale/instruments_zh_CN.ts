@@ -13,14 +13,14 @@
         <source>Winds</source>
         <comment>winds trackName</comment>
         <extracomment>trackName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>管乐组</translation>
+        <translation>木管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="212"/>
         <source>Winds</source>
         <comment>winds longName</comment>
         <extracomment>longName for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>管乐组</translation>
+        <translation>木管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="214"/>
@@ -10226,14 +10226,14 @@
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums trackName</comment>
         <extracomment>trackName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>领奏钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3446"/>
         <source>Lead Steel Pan</source>
         <comment>soprano-steel-drums longName</comment>
         <extracomment>longName for Lead Steel Pan; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>领奏钢鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3448"/>
@@ -10471,7 +10471,7 @@
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>源自加那利群岛的小型5弦吉他。类似具有高音C弦（回弦调律）和额外D弦的尤克里里。（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6287"/>
@@ -10492,7 +10492,7 @@
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</source>
         <comment>timple-canario-tablature description</comment>
         <extracomment>description for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>源自加那利群岛的小型5弦吉他。类似具有高音C弦（回弦调律）和额外D弦的尤克里里。（指法谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6296"/>
@@ -17079,7 +17079,7 @@
         <source>5-string electric bass guitar (staff notation).</source>
         <comment>5-string-electric-bass description</comment>
         <extracomment>description for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5弦低音电吉他（指法谱）。</translation>
+        <translation>5弦低音电吉他（五线谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5644"/>
@@ -18045,7 +18045,7 @@
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>非常大的山扬琴/阿巴拉契亚扬琴，比普通扬琴低一个八度。（谱表记谱）</translation>
+        <translation>非常大的山扬琴/阿巴拉契亚扬琴，比普通扬琴低一个八度。（五线谱）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5953"/>
@@ -20146,7 +20146,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="88"/>
         <source>Winds</source>
-        <translation>管乐器</translation>
+        <translation>木管组</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>

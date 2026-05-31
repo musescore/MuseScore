@@ -6997,7 +6997,7 @@ seguidas de guiones</translation>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="772"/>
         <source>&amp;Text frame</source>
-        <translation>Marco &amp;vertical</translation>
+        <translation>Marco de texto</translation>
     </message>
     <message>
         <location filename="../../src/notationscene/internal/notationuiactions.cpp" line="773"/>
@@ -27890,7 +27890,7 @@ Además, Mastering MuseScore cuenta con una comunidad de músicos que te apoyan,
         <location filename="../../src/appshell/qml/MuseScore/AppShell/appmenumodel.cpp" line="715"/>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/noteinputbarmodel.cpp" line="675"/>
         <source>Insert at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Insertar al final de la partitura</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MuseScore/AppShell/notationstatusbarmodel.cpp" line="168"/>
