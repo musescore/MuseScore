@@ -105,6 +105,10 @@ const mu::engraving::InstrumentTemplate* findTemplateByMidiFamily(int encMidiPro
 const mu::engraving::InstrumentTemplate* findInstrumentVariant(
     const mu::engraving::InstrumentTemplate* base, bool wantTab);
 
+// Return BPS if text is a standard Italian tempo term (Allegro, Andante, ...).
+// Return 0 for relative marks (a tempo, Tempo I). Return -1 if not a tempo mark.
+double encTextToTempoBps(const QString& text);
+
 } // namespace mu::iex::enc
 
 #endif // MU_IMPORTEXPORT_ENC_IMPORT_MAPPING_H

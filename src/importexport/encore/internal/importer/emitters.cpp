@@ -1033,6 +1033,8 @@ void emitMeasures(BuildCtx& ctx)
         ++measIdx;
     }
 
+    applyMeasureBpmMarks(ctx);
+
     // One-line summary of elements that could not be placed (they reference a staff/voice the
     // score does not have), instead of a debug line per dropped element.
     if (!ctx.scratch.droppedByMissingStaff.empty() || ctx.scratch.droppedByBadVoice > 0) {
