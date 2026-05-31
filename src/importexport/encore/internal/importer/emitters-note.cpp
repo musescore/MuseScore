@@ -593,7 +593,6 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
 
     const EncNote* en = static_cast<const EncNote*>(e);
 
-
     if (!isValidFaceValue(en->faceValue)) {
         return;
     }
@@ -643,7 +642,6 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
             return;
         }
     }
-
 
     const int concertPitch = en->semiTonePitch + ctx.staffPitchOffset[staffIdx];
     if (chord->findNote(concertPitch)) {

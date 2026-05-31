@@ -32,6 +32,7 @@
 #include <QString>
 
 #include "../parser/elem.h"
+#include "page-layout.h"
 
 #include "log.h"
 
@@ -83,7 +84,19 @@ void logEncRootInfo(const EncRoot& enc)
         LOGD() << "  Copyrt:   " << enc.titleBlock.copyright[0].toStdString();
     }
 
+    // Must match applyStaffScale's kScaleBySize in import.cpp: { 0.60, 0.75, 1.00, 1.30 }.
+    static const char* kSizeLabel[4] = { "60%", "75%", "100%", "130%" };
 
+    LOGD() << "---- Instruments ----";
+    for (size_t i = 0; i < enc.instruments.size(); ++i) {
+        const EncInstrument& ins = enc.instruments[i];
+        const int sz = staffDisplaySize(enc, static_cast<int>(i));
+        LOGD() << "  [" << i << "] \"" << ins.name.toStdString() << "\""
+               << "  midi=" << ins.midiProgram
+               << "  staves=" << ins.nstaves
+               << "  key=" << ins.keyTransposeSemitones
+               << "  size=" << sz << "(" << kSizeLabel[sz - 1] << ")";
+    }
 
     LOGD() << "---- Systems ----";
     {

@@ -25,6 +25,7 @@
 
 #include "ctx.h"
 #include "builders.h"
+#include "page-layout.h"
 #include "debug-dump.h"
 
 #include "import.h"
@@ -147,13 +148,28 @@ static void respellTransposingStaves(MasterScore* score)
     }
 }
 
+// Map Encore score-size (1 to 4) to MuseScore Staff Properties Scale (Pid::MAG): 1=60%, 2=75%,
+// 3=100%, 4=130%. Global spatium is not changed.
+static void applyStaffScale(MasterScore* score, const EncRoot& enc)
+{
+    static const double kScaleBySize[4] = { 0.60, 0.75, 1.00, 1.30 };
+    staff_idx_t msStaffIdx = 0;
+    for (size_t instrIdx = 0; instrIdx < enc.instruments.size(); ++instrIdx) {
+        const int sz = staffDisplaySize(enc, static_cast<int>(instrIdx));
+        const double scale = kScaleBySize[sz - 1];
+        const int ns = enc.instruments[instrIdx].nstaves > 0 ? enc.instruments[instrIdx].nstaves : 1;
+        for (int s = 0; s < ns && msStaffIdx < score->staves().size(); ++s, ++msStaffIdx) {
+            score->staves()[msStaffIdx]->setProperty(Pid::MAG, PropertyValue(scale));
+        }
+    }
+}
+
 static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOptions& opts)
 {
     ScoreLoad sl;   // import edits run outside any undo transaction; see mergeNonOverlappingVoices
 
     score->style().set(Sid::chordsXmlFile, true);
     score->chordList()->read(u"chords.xml");
-
 
     // Encore positions tuplet brackets/numbers flush against note heads and stems
     // with no extra vertical gap, and never pushes them outside the staff.
@@ -175,7 +191,9 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     buildInitialSignatures(ctx);
     emitMeasures(ctx);
 
-
+    if (ctx.opts.importStaffSize) {
+        applyStaffScale(score, enc);
+    }
 
     EditEnharmonicSpelling::spell(score);
     respellTransposingStaves(score);
@@ -186,8 +204,6 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->rebuildMidiMapping();
     score->setUpTempoMap();
     score->doLayout();
-
-
 
 }
 
