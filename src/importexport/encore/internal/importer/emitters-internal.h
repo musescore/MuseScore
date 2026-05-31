@@ -158,9 +158,14 @@ mu::engraving::Fraction collectVoice(mu::engraving::Measure* measure, mu::engrav
 // tuplet from its parent and delete it. A tuplet is atomic, never leave a partial one. (emitters-overfill.cpp)
 void dissolveTuplet(mu::engraving::Tuplet* t);
 
+// Apply per-measure BPM marks as TempoText elements. (emitters-tempo.cpp)
+void applyMeasureBpmMarks(BuildCtx& ctx);
+
 // Render tempo text (beatTicks in display ticks: 240=quarter, 360=dotted-quarter, ...). (emitters-tempo.cpp)
 mu::engraving::String tempoXmlText(int displayBpm, int beatTicks);
 
+// Decode the ORN tempo beat unit from the `noto` byte to display ticks, or 0 if unset. (emitters-tempo.cpp)
+int notoToBeatTicks(quint8 noto);
 } // namespace mu::iex::enc
 
 #endif // MU_IEX_ENCORE_NOTELOOP_INTERNAL_H
