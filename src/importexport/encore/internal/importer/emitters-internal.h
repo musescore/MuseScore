@@ -122,7 +122,6 @@ struct NoteElemCtx {
 void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 void handleRest(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 
-
 // Resolved MuseScore destination for an element: staff/voice and the derived track + lookup keys.
 struct RoutedTrack {
     int staffIdx { 0 };
@@ -158,7 +157,6 @@ mu::engraving::Fraction collectVoice(mu::engraving::Measure* measure, mu::engrav
 // Dissolve a tuplet whole: detach every member (revert to plain face value), remove the empty
 // tuplet from its parent and delete it. A tuplet is atomic, never leave a partial one. (emitters-overfill.cpp)
 void dissolveTuplet(mu::engraving::Tuplet* t);
-
 
 // Render tempo text (beatTicks in display ticks: 240=quarter, 360=dotted-quarter, ...). (emitters-tempo.cpp)
 mu::engraving::String tempoXmlText(int displayBpm, int beatTicks);
