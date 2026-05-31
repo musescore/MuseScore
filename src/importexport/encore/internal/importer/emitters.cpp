@@ -1020,9 +1020,6 @@ void emitMeasures(BuildCtx& ctx)
 
         resetPerMeasureState(ctx);
 
-
-
-
         MeasureElemRefVec sortedElems;
         prepareMeasureContext(ctx, mc, encMeas, sortedElems);
 
@@ -1034,7 +1031,6 @@ void emitMeasures(BuildCtx& ctx)
                                      measSkip, msIdxCounter, enc);
         ++measIdx;
     }
-
 
     // One-line summary of elements that could not be placed (they reference a staff/voice the
     // score does not have), instead of a debug line per dropped element.
