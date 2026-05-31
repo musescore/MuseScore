@@ -61,6 +61,10 @@ struct EncMeasure {
 
     bool read(QDataStream& ds, const quint32 vs, const struct EncFormatReader& fmt);
     void calculateRealDurations(bool hasGraceTimeBorrowing, const struct EncFormatReader& fmt);
+    // Give back the dots the note-on positions do not carry, for one (staff, voice) group.
+    void restoreHintedDots(std::vector<EncMeasureElem*>& elems, int staffIdx, int voice);
+    // Keep the figure Encore draws on a last note written longer than the space left.
+    void keepStatedFigureOfLastNote(std::vector<EncMeasureElem*>& elems);
     // Snap a note whose MIDI tick drifted back to the tick of its xoffset column.
     void reconcileStaleNoteTicksByColumn();
 };

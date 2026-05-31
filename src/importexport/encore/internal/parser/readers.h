@@ -141,6 +141,11 @@ struct EncFormatReader
                                    QDataStream& /*ds*/,
                                    qint64 /*lineContentStart*/) const {}
 
+    // Maps this generation's notehead vocabulary onto the one 6.4 lists. The high nibble of the
+    // face value names a notehead, and the generations do not name them alike, just as they do not
+    // name articulations alike (see 1.5). The base is the listed vocabulary itself.
+    virtual quint8 canonicalNoteHeadNibble(quint8 nibble) const { return nibble; }
+
     // True when a slur's stored xoffset2 lives in a stale coordinate origin and the endpoint
     // must be anchored explicitly (to the target measure / next note) instead of by coordinate
     // search. v0xC2 only. See ENCORE_FORMAT.md §6.8 Ornament.
