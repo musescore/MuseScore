@@ -43,10 +43,14 @@ target_sources(iex_encore PRIVATE
     internal/parser/readers-v0xc4.h
     internal/parser/readers-v0xc4.cpp
     internal/parser/elem.h
+    internal/importer/mappers-clefs.cpp
     internal/importer/mappers-instruments.cpp
     internal/importer/mappers.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h
+    internal/importer/emitters-tuplets.cpp
+    internal/importer/emitters-tuplets-groups.cpp
+    internal/importer/emitters-tuplets.h
     internal/notationencreader.cpp
     internal/notationencreader.h
     internal/importer/import.cpp
@@ -55,8 +59,17 @@ target_sources(iex_encore PRIVATE
     internal/importer/ctx.h
     internal/importer/builders.h
     internal/importer/builders-parts.cpp
+    internal/importer/builders-measures.cpp
+    internal/importer/emitters-internal.h
+    internal/importer/coords.h
+    internal/importer/coords.cpp
     internal/importer/durations.h
     internal/importer/durations.cpp
+    internal/importer/emitters-note.cpp
+    internal/importer/emitters-rest.cpp
+    internal/importer/emitters-fill.cpp
+    internal/importer/emitters-overfill.cpp
+    internal/importer/emitters.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )

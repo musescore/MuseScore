@@ -593,6 +593,63 @@ TEST_F(Tst_Instruments, no_tk_blocks_large_tk_layout_reads_all_instrument_names)
     delete score;
 }
 
+// A drumset staff (GM percussion range) must get a percussion clef, overriding the pitched clef stored in
+// the LINE block. See ENCORE_IMPORTER.md §Instruments in the GM Percussive range (MIDI programs 113 to 128).
+TEST_F(Tst_Instruments, gm_perc_range_drumset_staff_gets_perc_clef)
+{
+    MasterScore* score = readEncoreScore("instruments_gm_perc_range_taiko.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->staves().empty());
+
+    const Staff* st = score->staff(0);
+    ASSERT_NE(st, nullptr);
+
+    Measure* m0 = score->firstMeasure();
+    ASSERT_NE(m0, nullptr);
+    Segment* cs = m0->findSegment(SegmentType::HeaderClef, m0->tick());
+    ASSERT_NE(cs, nullptr) << "First measure must have a header clef segment";
+
+    bool foundPerc = false;
+    for (EngravingItem* el : cs->elist()) {
+        if (el && el->isClef()) {
+            const Clef* clef = toClef(el);
+            if (clef->clefType() == ClefType::PERC || clef->clefType() == ClefType::PERC2) {
+                foundPerc = true;
+            }
+        }
+    }
+    EXPECT_TRUE(foundPerc)
+        << "Drumset staff (GM prg=116) must use percussion clef, "
+        "not the LINE-block clef (C3L/C4L/F)";
+
+    delete score;
+}
+
+// Genuine simultaneous chord tones on a percussion staff must survive the short-rdur MIDI-artifact filter.
+// The first on-staff note and chord extensions bypass the filter so a close-tick chord is not thinned.
+TEST_F(Tst_Instruments, gm_perc_chord_notes_not_dropped_by_artifact_filter)
+{
+    MasterScore* score = readEncoreScore("instruments_gm_perc_chord_notes.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m0 = score->firstMeasure();
+    ASSERT_NE(m0, nullptr);
+
+    Segment* firstSeg = m0->first(SegmentType::ChordRest);
+    ASSERT_NE(firstSeg, nullptr);
+    EngravingItem* el = firstSeg->element(0);
+    ASSERT_NE(el, nullptr);
+    ASSERT_TRUE(el->isChord());
+
+    const Chord* chord = toChord(el);
+    EXPECT_EQ(static_cast<int>(chord->notes().size()), 2)
+        << "Both chord notes (pit=60 and pit=64) must survive the MIDI artifact "
+        "filter: note@0 is the first on-staff note (bypass: savedPrevMidiTick<0) "
+        "and note@5 is a chord extension (bypass: isChordExt=true)";
+
+    delete score;
+}
+
 // A MIDI program in the GM percussive range with a name matching no template must route to drumset,
 // not fall back to Grand Piano.
 TEST_F(Tst_Instruments, gm_perc_range_midi_program_routes_to_drumset)
@@ -607,6 +664,31 @@ TEST_F(Tst_Instruments, gm_perc_range_midi_program_routes_to_drumset)
         "to drumset even when the instrument name matches nothing";
     EXPECT_NE(inst->drumset(), nullptr)
         << "Drumset instrument must carry a drumset object";
+    delete score;
+}
+
+// encKey=0 ("sounds as written") must zero even an octave template transposition (e.g. acoustic-bass -12),
+// so notes display at Encore's written pitch. See ENCORE_IMPORTER.md §Per-instrument Key transposition.
+TEST_F(Tst_Instruments, key0_zeroes_octave_template_transposition)
+{
+    MasterScore* score = readEncoreScore("instruments_bass_enckey0_no_octave_transpos.enc");
+    ASSERT_NE(score, nullptr);
+    ASSERT_FALSE(score->parts().empty());
+    const Instrument* inst = score->parts().front()->instrument();
+    ASSERT_NE(inst, nullptr);
+    EXPECT_EQ(inst->transpose().chromatic, 0)
+        << "encKey=0 (sounds as written) must zero the template's octave transposition (-12) "
+        "so notes display at Encore's written pitch, not one octave higher";
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* seg = m->first(SegmentType::ChordRest);
+    ASSERT_NE(seg, nullptr);
+    EngravingItem* el = seg->element(0);
+    ASSERT_TRUE(el && el->isChord());
+    EXPECT_EQ(toChord(el)->notes().front()->pitch(), 45)
+        << "Concert pitch A2(45) must be stored unchanged; octave shift from template must not apply";
+
     delete score;
 }
 
@@ -636,6 +718,15 @@ TEST_F(Tst_Instruments, abbreviated_name_with_trailing_dot_matches_bandurria)
         << "Name 'Bandurr. I' must resolve to bandurria after punctuation stripping";
     delete score;
 }
+TEST_F(Tst_Instruments, orchestra_loads_with_all_parts)
+{
+    MasterScore* score = readEncoreScore("kordorkestro.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_GT(score->parts().size(), 1u) << "Orchestra should have multiple parts";
+    EXPECT_GT(score->nstaves(), 1u) << "Orchestra should have multiple staves";
+    EXPECT_GT(score->nmeasures(), 0);
+    delete score;
+}
 
 TEST_F(Tst_Instruments, orchestra_sanity_check)
 {
@@ -643,6 +734,63 @@ TEST_F(Tst_Instruments, orchestra_sanity_check)
     ASSERT_NE(score, nullptr);
     muse::Ret ret = score->sanityCheck();
     EXPECT_TRUE(ret) << "kordorkestro should pass sanityCheck: " << ret.text();
+    delete score;
+}
+
+// Positive octave Key: a clef is NOT decorated with an 8va (octave-up clefs are rare and Encore
+// shows such instruments with a plain clef). The octave becomes a playback transposition, so the
+// staff keeps its plain G clef and the notes stay at their written height.
+TEST_F(Tst_Instruments, v0c4_positive_octave_key_keeps_g_clef)
+{
+    MasterScore* score = readEncoreScore("structure_g_clef_8va_from_key.enc");
+    ASSERT_NE(score, nullptr);
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* seg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(seg, nullptr);
+    EngravingItem* el = seg->element(0);
+    ASSERT_TRUE(el && el->isClef());
+    EXPECT_EQ(toClef(el)->clefType(), ClefType::G)
+        << "G clef + Key=+12 must keep a plain G clef (no 8va)";
+    ASSERT_FALSE(score->parts().empty());
+    EXPECT_EQ(score->parts()[0]->instrument()->transpose().chromatic, 12)
+        << "positive octave is carried as a playback transposition (+12)";
+    delete score;
+}
+
+// Binary-driven clef rule: F clef + Key=-12 -> F8_VB. No template required.
+TEST_F(Tst_Instruments, v0c4_f_clef_8vb_from_key)
+{
+    MasterScore* score = readEncoreScore("structure_f_clef_8vb_from_key.enc");
+    ASSERT_NE(score, nullptr);
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* seg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(seg, nullptr);
+    EngravingItem* el = seg->element(0);
+    ASSERT_TRUE(el && el->isClef());
+    EXPECT_EQ(toClef(el)->clefType(), ClefType::F8_VB)
+        << "F clef + Key=-12 must yield F8_VB";
+    delete score;
+}
+
+// Positive octave Key with an F clef (the tuba "Bajo" case): keep a plain F clef and carry the
+// octave as a playback transposition, so the bass instrument reads as clave de fa, not F8va.
+TEST_F(Tst_Instruments, v0c4_positive_octave_key_keeps_f_clef)
+{
+    MasterScore* score = readEncoreScore("structure_f_clef_8va_from_key.enc");
+    ASSERT_NE(score, nullptr);
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* seg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(seg, nullptr);
+    EngravingItem* el = seg->element(0);
+    ASSERT_TRUE(el && el->isClef());
+    EXPECT_EQ(toClef(el)->clefType(), ClefType::F)
+        << "F clef + Key=+12 must keep a plain F clef (no 8va)";
+    ASSERT_FALSE(score->parts().empty());
+    EXPECT_EQ(score->parts()[0]->instrument()->transpose().chromatic, 12)
+        << "positive octave is carried as a playback transposition (+12)";
     delete score;
 }
 
@@ -693,6 +841,131 @@ TEST_F(Tst_Instruments, instrument_weak_substring_name_defers_to_midi)
     delete score;
 }
 
+// Binary-driven clef rule: G clef + Key=-7 (non-octave) -> plain G.
+TEST_F(Tst_Instruments, v0c4_non_octave_key_keeps_clef)
+{
+    MasterScore* score = readEncoreScore("structure_non_octave_key_keeps_clef.enc");
+    ASSERT_NE(score, nullptr);
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* seg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(seg, nullptr);
+    EngravingItem* el = seg->element(0);
+    ASSERT_TRUE(el && el->isClef());
+    EXPECT_EQ(toClef(el)->clefType(), ClefType::G)
+        << "G clef + Key=-7 (non-octave) must keep plain G";
+    delete score;
+}
+
+// Regression: laud has plain G clef in Encore but Key=-12. Binary-driven rule maps G+Key=-12 -> G8_VB.
+TEST_F(Tst_Instruments, v0c4_octave_bassa_clef_override)
+{
+    MasterScore* score = readEncoreScore("structure_octave_bassa_clef_override.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load structure_octave_bassa_clef_override.enc";
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    ASSERT_EQ(score->parts().size(), 1u);
+    const Instrument* inst = score->parts()[0]->instrument();
+    ASSERT_NE(inst, nullptr);
+    EXPECT_EQ(inst->id(), String(u"laud"));
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* clefSeg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(clefSeg, nullptr) << "header clef segment missing";
+    EngravingItem* clefEl = clefSeg->element(0);
+    ASSERT_NE(clefEl, nullptr);
+    ASSERT_TRUE(clefEl->isClef());
+    EXPECT_EQ(toClef(clefEl)->clefType(), ClefType::G8_VB)
+        << "laud staff must carry G8_VB (template clef), not the plain G stored by Encore";
+
+    Chord* firstChord = nullptr;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChord()) {
+            firstChord = toChord(el);
+            break;
+        }
+    }
+    ASSERT_NE(firstChord, nullptr);
+    ASSERT_EQ(firstChord->notes().size(), 1u);
+    EXPECT_EQ(firstChord->notes()[0]->pitch(), 76 - 12);
+    delete score;
+}
+
+// Regression: bass guitar F clef + Key=-12 must yield F8_VB (binary-driven rule).
+TEST_F(Tst_Instruments, v0c4_bass_guitar_transposing_clef)
+{
+    MasterScore* score = readEncoreScore("instruments_bass_guitar_transposing_clef.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load instruments_bass_guitar_transposing_clef.enc";
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    ASSERT_EQ(score->parts().size(), 1u);
+    const Instrument* inst = score->parts()[0]->instrument();
+    ASSERT_NE(inst, nullptr);
+    EXPECT_EQ(inst->transpose().chromatic, -12)
+        << "matched instrument template must be a bass-guitar variant (transposeChromatic = -12)";
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Segment* clefSeg = m->findSegment(SegmentType::HeaderClef, m->tick());
+    ASSERT_NE(clefSeg, nullptr);
+    EngravingItem* clefEl = clefSeg->element(0);
+    ASSERT_NE(clefEl, nullptr);
+    ASSERT_TRUE(clefEl->isClef());
+    EXPECT_EQ(toClef(clefEl)->clefType(), ClefType::F8_VB)
+        << "F clef + Key=-12 must yield F8_VB (binary-driven rule); "
+        "template transposing clef (plain F) is no longer preferred";
+
+    Chord* firstChord = nullptr;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChord()) {
+            firstChord = toChord(el);
+            break;
+        }
+    }
+    ASSERT_NE(firstChord, nullptr);
+    ASSERT_EQ(firstChord->notes().size(), 1u);
+    EXPECT_EQ(firstChord->notes()[0]->pitch(), 45 - 12)
+        << "Key = -12 applied: binary 45 -> m_pitch 33 (sounding A1)";
+    delete score;
+}
+
+// Regression: Key offset (signed int8 at PRG_BASE-23+n*PRG_STEP) must be applied per-staff.
+TEST_F(Tst_Instruments, v0c4_key_transposition_per_staff)
+{
+    MasterScore* score = readEncoreScore("structure_key_per_staff.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load structure_key_per_staff.enc";
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    auto firstChordTopPitch = [m](int staffIdx) -> int {
+        const track_idx_t base = staffIdx * VOICES;
+        for (Segment* s = m->first(SegmentType::ChordRest);
+             s; s = s->next(SegmentType::ChordRest)) {
+            for (int v = 0; v < static_cast<int>(VOICES); ++v) {
+                EngravingItem* el = s->element(base + v);
+                if (el && el->isChord()) {
+                    return toChord(el)->upNote()->pitch();
+                }
+            }
+        }
+        return -1;
+    };
+
+    EXPECT_EQ(firstChordTopPitch(0), 69)
+        << "staff 0 first chord top pitch (Key=0): expected 69";
+    EXPECT_EQ(firstChordTopPitch(1), 69 - 12)
+        << "staff 1 first chord top pitch (Key=-12): expected 57";
+    delete score;
+}
+
 // Oboe with keyTransposeSemitones=5: instrument transposition must be chromatic=5, diatonic=3.
 TEST_F(Tst_Instruments, key_transposition_non_octave_oboe)
 {
@@ -705,6 +978,43 @@ TEST_F(Tst_Instruments, key_transposition_non_octave_oboe)
     EXPECT_EQ(iv.diatonic, 3);
     muse::Ret ret = score->sanityCheck();
     EXPECT_TRUE(ret) << ret.text();
+    delete score;
+}
+
+// Must import cleanly: correct measure count, no DOM corruption.
+TEST_F(Tst_Instruments, percussion_drum_kit_no_crash)
+{
+    MasterScore* score = readEncoreScore("importer_perc_bateria.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_EQ(score->nmeasures(), 36);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+    delete score;
+}
+
+// Regression: compact-TK files (varsize=112) don't follow PRG_BASE+n*PRG_STEP for Key bytes.
+TEST_F(Tst_Instruments, v0c4_compact_tk_ignores_key_byte)
+{
+    MasterScore* score = readEncoreScore("instruments_compact_tk_ignores_key_byte.enc");
+    ASSERT_NE(score, nullptr) << "Failed to load instruments_compact_tk_ignores_key_byte.enc";
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << "Corrupted: " << ret.text();
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+    Chord* firstChord = nullptr;
+    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        EngravingItem* el = s->element(0);
+        if (el && el->isChord()) {
+            firstChord = toChord(el);
+            break;
+        }
+    }
+    ASSERT_NE(firstChord, nullptr);
+    ASSERT_EQ(firstChord->notes().size(), 1u);
+    EXPECT_EQ(firstChord->notes()[0]->pitch(), 76)
+        << "compact-TK file: garbage Key byte at formula offset must be "
+        "ignored; imported pitch stays at binary 76 (not 76+8=84)";
     delete score;
 }
 

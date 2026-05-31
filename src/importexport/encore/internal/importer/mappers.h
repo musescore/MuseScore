@@ -44,6 +44,30 @@ class InstrumentTemplate;
 }
 
 namespace mu::iex::enc {
+mu::engraving::ClefType encClef2MuseScore(EncClefType ct);
+
+// Encore time-signature glyph byte to MuseScore TimeSigType. Common time (0x43 'C' / 0x63 'c')
+// in 4/4 maps to FOUR_FOUR; everything else is NORMAL (numeric). Cut time (alla breve) uses a
+// glyph value that is not yet confirmed in the format, so it currently shows as numeric 2/2.
+mu::engraving::TimeSigType encTimeSigGlyph2Type(quint8 glyph, mu::engraving::Fraction ts);
+// Pick octave-decorated clef when Encore's plain G/F plus a NEGATIVE octave Key implies one
+// (e.g. keyOffset=-12 -> G8_VB/F8_VB; -24 -> G15_MB/F15_MB). Positive octave Keys keep the plain
+// clef (the octave is carried as a playback transposition; see builders-parts.cpp).
+mu::engraving::ClefType pickStaffClef(EncClefType encClef, int keyOffsetSemitones);
+
+// Return the octave-down variant of an already-resolved MuseScore clef for a NEGATIVE octave Key
+// (-12/-24). Returns the input clef for non-octave or positive offsets, or when the clef has no
+// octave variant.
+mu::engraving::ClefType applyOctaveToClef(mu::engraving::ClefType base, int keyOffsetSemitones);
+
+int encKeyToFifths(quint8 key);
+
+void addInitialKeySig(mu::engraving::MasterScore* score, int staffIdx, quint8 encKey);
+void addInitialTimeSig(mu::engraving::MasterScore* score, int nstaves, mu::engraving::Fraction ts,
+                       mu::engraving::TimeSigType tsType = mu::engraving::TimeSigType::NORMAL);
+void addInitialClef(mu::engraving::MasterScore* score, int staffIdx, EncClefType ct);
+void addInitialClef(mu::engraving::MasterScore* score, int staffIdx, mu::engraving::ClefType clef);
+
 QString normalizeEncoreInstrName(const QString& name);
 
 // Sentinel for findEncoreInstrumentTemplate: skip the transposition compatibility filter.
@@ -79,7 +103,6 @@ const mu::engraving::InstrumentTemplate* findTemplateByMidiFamily(int encMidiPro
 // musicXmlId, then by track name with any trailing "(...)" variant suffix removed.
 const mu::engraving::InstrumentTemplate* findInstrumentVariant(
     const mu::engraving::InstrumentTemplate* base, bool wantTab);
-
 } // namespace mu::iex::enc
 
 #endif // MU_IMPORTEXPORT_ENC_IMPORT_MAPPING_H
