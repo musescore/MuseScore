@@ -28,6 +28,7 @@
 #include "../internal/parser/ticks.h"
 #include "../internal/parser/elem.h"
 #include "../internal/parser/readers.h"
+#include "../internal/importer/coords.h"
 #include "../internal/importer/durations.h"
 
 #include <vector>
@@ -205,6 +206,27 @@ TEST(Tst_EncoreRhythm, dotCalculation_noFalsePositiveForFractionalDottedValues)
     EXPECT_EQ(calcDots(225, 4), 3);
     EXPECT_EQ(calcDotsSnap(225, 4), 3);
     EXPECT_EQ(calcDotsSnap(226, 4), 3);
+}
+
+// Encore ticks are on a fixed 960-per-whole grid, so ticks-per-whole must be 960 for every meter
+// including compound (the old beatTicks x timeSigDen form was wrong). No usable meter -> kEncWholeTicks.
+TEST(Tst_EncoreRhythm, wholeNoteTicks)
+{
+    auto wnt = [](int durTicks, int num, int den) {
+        EncMeasure m;
+        m.durTicks   = static_cast<quint16>(durTicks);
+        m.timeSigNum = static_cast<quint8>(num);
+        m.timeSigDen = static_cast<quint8>(den);
+        return encWholeNoteTicks(m);
+    };
+    EXPECT_EQ(wnt(960, 4, 4), 960);   // 4/4
+    EXPECT_EQ(wnt(480, 2, 4), 960);   // 2/4
+    EXPECT_EQ(wnt(720, 6, 8), 960);   // 6/8 compound: 720*8/6
+    EXPECT_EQ(wnt(840, 7, 8), 960);   // 7/8: 840*8/7
+    EXPECT_EQ(wnt(360, 3, 8), 960);   // 3/8: 360*8/3
+    // Missing time signature falls back to the constant.
+    EXPECT_EQ(wnt(0, 0, 0), kEncWholeTicks);
+    EXPECT_EQ(encWholeNoteTicks(EncMeasure {}), kEncWholeTicks);
 }
 
 TEST(Tst_EncoreRhythm, dottedAdvance)

@@ -30,6 +30,9 @@
 #include "import.h"
 
 #include "../parser/elem.h"
+#include "mappers.h"
+#include "../parser/ticks.h"
+#include "emitters-tuplets.h"
 
 #include <algorithm>
 #include <cmath>
@@ -92,12 +95,90 @@
 using namespace mu::engraving;
 
 namespace mu::iex::enc {
+// faceValue low nibble: 1=whole, 2=half ... 8=256th; 0 and 9..15 are invalid.
+// High nibble carries unrelated flags.
+bool isValidFaceValue(quint8 faceValue)
+{
+    const quint8 fv = faceValue & 0x0F;
+    return fv > 0 && fv <= 8;
+}
+
+void applyConcertPitch(Note* n, int semitone)
+{
+    // A transposed or garbage Encore semitone can land outside MIDI's [0,127]. Note::setPitch
+    // only asserts the range (no clamp), and downstream drumset lookups index a 128-entry table
+    // by pitch, so an out-of-range value is undefined behaviour. Clamp once, here, at the single
+    // choke point both the main and grace note paths go through.
+    n->setPitch(std::clamp(semitone, 0, 127));
+    n->setTpcFromPitch();
+}
+
+// score->spell() re-spells the whole score with a context heuristic that can spell transposed
+// pitches with double-flats instead of the plain note the key wants. Re-derive the TPC of notes on
+// transposing staves from pitch + concert key + transposition (pitch unchanged); leave others as is.
+// TODO: format-agnostic, reads no Encore data; candidate to promote to a shared importexport util.
+static void respellTransposingStaves(MasterScore* score)
+{
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            for (track_idx_t t = 0; t < score->ntracks(); ++t) {
+                EngravingItem* e = s->element(t);
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(e);
+                if (!chord->staff() || chord->staff()->transpose(chord->tick()).isZero()) {
+                    continue;   // non-transposing staff: keep spell()'s spelling
+                }
+                for (Chord* gc : chord->graceNotes()) {
+                    for (Note* n : gc->notes()) {
+                        n->setTpcFromPitch();
+                    }
+                }
+                for (Note* n : chord->notes()) {
+                    n->setTpcFromPitch();
+                }
+            }
+        }
+    }
+}
+
 static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOptions& opts)
 {
     ScoreLoad sl;   // import edits run outside any undo transaction; see mergeNonOverlappingVoices
 
+    score->style().set(Sid::chordsXmlFile, true);
+    score->chordList()->read(u"chords.xml");
+
+
+    // Encore positions tuplet brackets/numbers flush against note heads and stems
+    // with no extra vertical gap, and never pushes them outside the staff.
+    score->style().set(Sid::tupletOutOfStaff,      false);
+    score->style().set(Sid::tupletVHeadDistance,   0.0);
+    score->style().set(Sid::tupletVStemDistance,   0.0);
+
+    // Encore does not stretch systems and staves to fill the page: it lays them out at fixed
+    // distances from the top. Keep vertical justification enabled but allow it no extra room
+    // (max system/staff spread = 0), so the imported spacing matches Encore instead of being
+    // spread to fill the page.
+    score->style().set(Sid::enableVerticalSpread, true);
+    score->style().set(Sid::maxSystemSpread,      Spatium(0.0));
+    score->style().set(Sid::maxStaffSpread,       Spatium(0.0));
+
     BuildCtx ctx{ score, enc, opts };
     buildParts(ctx);
+    buildMeasures(ctx);
+    buildInitialSignatures(ctx);
+    emitMeasures(ctx);
+
+
+
+    EditEnharmonicSpelling::spell(score);
+    respellTransposingStaves(score);
     // Assign MIDI ports/channels to every part. The file read path does this on load,
     // but a direct import builds the score in memory without it, leaving each channel
     // at -1; that makes Part::midiPort() index m_midiMapping[-1] and crash on a
@@ -105,6 +186,9 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->rebuildMidiMapping();
     score->setUpTempoMap();
     score->doLayout();
+
+
+
 }
 
 muse::String encoreLoadErrorMessage(const QString& path)
