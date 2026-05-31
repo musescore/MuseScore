@@ -64,6 +64,11 @@ struct EncMeasureElem {
     virtual quint8 faceValueByte() const { return 0; }
     virtual bool impliedTupletMember() const { return false; }
 
+    // The written duration, as a face value nibble; 0 for elements that carry none.
+    quint8 faceValue4() const { return faceValueByte() & 0x0F; }
+    // True when the element carries an explicit tuplet ratio, actual against normal.
+    bool inTuplet() const { return (tupletByte() >> 4) >= 2 && (tupletByte() & 0x0F) >= 1; }
+
     EncMeasureElem() = default;
     EncMeasureElem(quint16 t, quint8 tp, quint8 v)
         : tick(t), type(tp), voice(v) {}
