@@ -196,7 +196,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     if (firstMeasure != lastMeasure) {
         for (Measure* m = firstMeasure->nextMeasure(); m; m = m->nextMeasure()) {
             ++numMeasuresInMMRest;
-            m->setMMRestCount(-1);
+            m->setMMRestCount(0);
             if (m->mmRest()) {
                 ctx.mutDom().undo(new ChangeMMRest(m, nullptr));
             }
@@ -806,7 +806,6 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(Measure* firstMeasure, LayoutC
                 removeMMRestElements(firstMeasure->mmRest(), ctx);
                 ctx.mutDom().undo(new ChangeMMRest(firstMeasure, nullptr));
             }
-            firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNumber(mn);
         }
     } else if (firstMeasure->mmRest()) {

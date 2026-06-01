@@ -1553,9 +1553,10 @@ void TLayout::layoutBreath(const Breath* item, Breath::LayoutData* ldata, const 
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
-        return;
-    }
+    // TODO review with all other instances of this
+    // if (ldata->isValid()) {
+    // return;
+    // }
 
     const double voiceOffset = item->placeBelow() ? item->staff()->staffHeight(item->tick()) : 0.0;
     if (item->isCaesura()) {

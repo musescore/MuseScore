@@ -3030,7 +3030,7 @@ Measure* Measure::coveringMMRestOrThis()
         return m_mmRest;
     }
 
-    if (m_mmRestCount != -1) {
+    if (isMMRest()) {
         return this;
     }
 
@@ -3043,7 +3043,7 @@ Measure* Measure::coveringMMRestOrThis()
         return m->m_mmRest;
     }
 
-    return 0;
+    return this;
 }
 
 const Measure* Measure::coveringMMRestOrThis() const

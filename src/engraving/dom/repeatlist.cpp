@@ -671,9 +671,6 @@ void RepeatList::collectRepeatListElements()
                 startFromRepeatMeasure
                     = new RepeatListElement(RepeatListElementType::REPEAT_START, nextMeas, toMeasure(nextMeas));
                 sectionRLElements.push_back(startFromRepeatMeasure);
-                // Loop will forward one measureBase, so return one now
-                // this logic aids in skipping multiple frames between sections
-                mb = nextMeas->prevMM();
             } else {
                 // no more measures -> done
                 break;
