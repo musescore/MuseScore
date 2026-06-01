@@ -30,6 +30,7 @@ class Part;
 class Score;
 class SharedPart;
 class StaffType;
+class Transaction;
 
 using StaveSharingGroup = std::vector<Part*>;
 using StaveSharingGroups = std::vector<StaveSharingGroup>;
@@ -37,19 +38,19 @@ using StaveSharingGroups = std::vector<StaveSharingGroup>;
 class EditStaveSharing
 {
 public:
-    static void toggleStaveSharing(Score* score, bool on);
-    static void handleRemovePart(Part* part);
+    static void toggleStaveSharing(Transaction& tx, Score* score, bool on);
+    static void handleRemovePart(Transaction& tx, Part* part);
 
 private:
-    static void cmdCreateSharedStaves(Score* score);
+    static void cmdCreateSharedStaves(Transaction& tx, Score* score);
     static void cmdRemoveSharedStaves(Score* score);
 
     static StaveSharingGroups computeGroups(Score* score);
-    static void createSharedParts(const StaveSharingGroups& groups, Score* score);
+    static void createSharedParts(Transaction& tx, const StaveSharingGroups& groups, Score* score);
     static SharedPart* createSharedPart(Score* score, size_t idx, const Instrument* instr);
     static void addStaffToSharedPart(SharedPart* sharedPart, const KeyList& keyList, const StaffType* staffType);
 
-    static void connectSharedPart(SharedPart* sharedPart, Part* originPart);
-    static void disconnectSharedPart(SharedPart* sharedPart, Part* originPart);
+    static void connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
+    static void disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart);
 };
 }

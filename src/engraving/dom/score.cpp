@@ -2351,7 +2351,8 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
-    EditStaveSharing::handleRemovePart(part);
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
+    EditStaveSharing::handleRemovePart(tx, part);
 
     staff_idx_t sidx = staffIdx(part);
     size_t n = part->nstaves();

@@ -896,11 +896,10 @@ void NotationParts::moveSystemObjectLayerAboveBottomStaff()
 
 void NotationParts::toggleStaveSharing(bool on)
 {
-    startEdit(TranslatableString("undoableAction", "Toggle stave sharing"));
-
-    EditStaveSharing::toggleStaveSharing(score(), on);
-
-    apply();
+    undoStack()->transaction(TranslatableString("undoableAction", "Toggle stave sharing"), [&](engraving::Transaction& tx) {
+        EditStaveSharing::toggleStaveSharing(tx, score(), on);
+    });
+    m_partsChanged.notify();
 }
 
 Notification NotationParts::sharedPartsChanged() const

@@ -29,6 +29,7 @@
 #include "dom/sharedpart.h"
 #include "dom/staff.h"
 
+#include "transaction/transaction.h"
 #include "transaction/undoablecommand.h"
 
 using namespace mu::engraving;
@@ -93,12 +94,12 @@ public:
 // EditStaveSharing
 //-------------------------------------------------------------------
 
-void EditStaveSharing::toggleStaveSharing(Score* score, bool on)
+void EditStaveSharing::toggleStaveSharing(Transaction& tx, Score* score, bool on)
 {
     score->undoChangeStyleVal(Sid::enableStaveSharing, on);
 
     if (on && score->sharedParts().empty()) {
-        cmdCreateSharedStaves(score);
+        cmdCreateSharedStaves(tx, score);
     }
 
     score->update();
@@ -115,11 +116,11 @@ void EditStaveSharing::cmdRemoveSharedStaves(Score* score)
     }
 }
 
-void EditStaveSharing::cmdCreateSharedStaves(Score* score)
+void EditStaveSharing::cmdCreateSharedStaves(Transaction& tx, Score* score)
 {
     StaveSharingGroups staveSharingGroups = computeGroups(score);
 
-    createSharedParts(staveSharingGroups, score);
+    createSharedParts(tx, staveSharingGroups, score);
 }
 
 StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
@@ -183,7 +184,7 @@ StaveSharingGroups EditStaveSharing::computeGroups(Score* score)
     return staveSharingGroups;
 }
 
-void EditStaveSharing::createSharedParts(const StaveSharingGroups& groups, Score* score)
+void EditStaveSharing::createSharedParts(Transaction& tx, const StaveSharingGroups& groups, Score* score)
 {
     for (const StaveSharingGroup& group : groups) {
         SharedPart* sharedPart = nullptr;
@@ -205,10 +206,10 @@ void EditStaveSharing::createSharedParts(const StaveSharingGroups& groups, Score
         for (Part* originPart : group) {
             SharedPart* existingSharedPart = originPart->sharedPart();
             if (existingSharedPart && existingSharedPart != sharedPart) {
-                disconnectSharedPart(existingSharedPart, originPart);
-                connectSharedPart(sharedPart, originPart);
+                disconnectSharedPart(tx, existingSharedPart, originPart);
+                connectSharedPart(tx, sharedPart, originPart);
             } else if (!existingSharedPart) {
-                connectSharedPart(sharedPart, originPart);
+                connectSharedPart(tx, sharedPart, originPart);
             }
         }
     }
@@ -249,26 +250,26 @@ void EditStaveSharing::addStaffToSharedPart(SharedPart* sharedPart, const KeyLis
     score->adjustKeySigs(absStaffIdx, absStaffIdx + 1, keyList);
 }
 
-void EditStaveSharing::connectSharedPart(SharedPart* sharedPart, Part* originPart)
+void EditStaveSharing::connectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart)
 {
     Score* score = originPart->score();
-    score->undo(new ConnectSharedPart(sharedPart, originPart));
+    tx.push(new ConnectSharedPart(sharedPart, originPart));
     addStaffToSharedPart(sharedPart, score->keyList(), originPart->staff(0)->staffType());
 }
 
-void EditStaveSharing::disconnectSharedPart(SharedPart* sharedPart, Part* originPart)
+void EditStaveSharing::disconnectSharedPart(Transaction& tx, SharedPart* sharedPart, Part* originPart)
 {
     Score* score = originPart->score();
-    score->undo(new DisconnectSharedPart(sharedPart, originPart));
+    tx.push(new DisconnectSharedPart(sharedPart, originPart));
     score->undoRemoveStaff(sharedPart->staves().back());
 }
 
-void EditStaveSharing::handleRemovePart(Part* part)
+void EditStaveSharing::handleRemovePart(Transaction& tx, Part* part)
 {
     Score* score = part->score();
 
     if (SharedPart* sharedPart = part->sharedPart()) {
-        disconnectSharedPart(sharedPart, part);
+        disconnectSharedPart(tx, sharedPart, part);
         if (sharedPart->originParts().empty()) {
             score->cmdRemovePart(sharedPart);
         }
@@ -276,7 +277,7 @@ void EditStaveSharing::handleRemovePart(Part* part)
         sharedPart = toSharedPart(part);
         std::vector<Part*> originParts = sharedPart->originParts();
         for (Part* originPart : originParts) {
-            score->undo(new DisconnectSharedPart(sharedPart, originPart));
+            tx.push(new DisconnectSharedPart(sharedPart, originPart));
         }
     }
 }
