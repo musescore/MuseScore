@@ -11,6 +11,8 @@
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -829,6 +831,8 @@
         <vocalsNameByGroup>0</vocalsNameByGroup>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+        <maskSlurs>0</maskSlurs>
+        <maskTies>0</maskTies>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1308,6 +1312,8 @@
         <vocalsNameByGroup>0</vocalsNameByGroup>
         <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
         <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+        <maskSlurs>0</maskSlurs>
+        <maskTies>0</maskTies>
         <spatium>1.75</spatium>
         </Style>
       <showInvisible>1</showInvisible>
