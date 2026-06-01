@@ -32,6 +32,7 @@
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
@@ -58,6 +59,7 @@ class NotationProject : public INotationProject, public muse::Contextable, publi
     muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<INotationWritersRegister> writers;
     muse::ContextInject<IProjectMigrator> migrator = { this };
+    muse::ContextInject<engraving::rendering::IScoreRenderer> renderer = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)

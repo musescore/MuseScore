@@ -522,7 +522,7 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
             }
 
             // Re-compute headers and footers on save, to force timestamps update (if any)
-            m_engravingProject->masterScore()->doLayoutHeadersFooters();
+            renderer()->layoutHeadersFooters(m_engravingProject->masterScore());
         }
     } break;
     case SaveMode::AutoSave: {

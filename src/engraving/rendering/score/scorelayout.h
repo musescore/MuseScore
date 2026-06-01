@@ -34,7 +34,6 @@ class ScoreLayout
 public:
 
     static void layoutRange(Score* score, const Fraction& st, const Fraction& et);
-    static void layoutHeadersFooters(Score* score);
 };
 }
 
