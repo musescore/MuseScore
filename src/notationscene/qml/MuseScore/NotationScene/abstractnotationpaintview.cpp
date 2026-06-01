@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QMimeData>
 
+#include "async/async.h"
+
 #include "actions/actiontypes.h"
 #include "engraving/dom/shadownote.h"
 #include "log.h"
@@ -354,7 +356,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         });
     }
 
-    forceFocusIn();
+    async::Async::call(this, [this](){
+        forceFocusIn();
+    });
+
     scheduleRedraw();
 
     emit horizontalScrollChanged();
