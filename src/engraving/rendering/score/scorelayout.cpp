@@ -97,28 +97,3 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
 
     //LOGDA() << DumpLayoutData::dump(score);
 }
-
-void ScoreLayout::layoutHeadersFooters(Score* score)
-{
-    TRACEFUNC;
-
-    CmdStateLocker cmdStateLocker(score);
-    LayoutContext ctx(score);
-
-    if (!ctx.conf().isMode(LayoutMode::PAGE) && !ctx.conf().isMode(LayoutMode::FLOAT)) {
-        return;
-    }
-
-    // Check empty score
-    if (!score->last()) {
-        LOGD() << "empty score";
-        muse::DeleteAll(score->systems());
-        score->systems().clear();
-        muse::DeleteAll(score->pages());
-        score->pages().clear();
-        PageLayout::getNextPage(ctx);
-        return;
-    }
-
-    ScorePageViewLayout::layoutHeadersFooters(ctx);
-}

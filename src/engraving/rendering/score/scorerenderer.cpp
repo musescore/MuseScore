@@ -33,6 +33,7 @@
 #include "chordlayout.h"
 #include "layoutcontext.h"
 #include "scorelayout.h"
+#include "scorepageviewlayout.h"
 #include "horizontalspacing.h"
 #include "slurtielayout.h"
 
@@ -51,7 +52,12 @@ void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction
 
 void ScoreRenderer::layoutHeadersFooters(Score* score) const
 {
-    ScoreLayout::layoutHeadersFooters(score);
+    LayoutContext ctx(score);
+    if (!ctx.conf().isMode(LayoutMode::PAGE) && !ctx.conf().isMode(LayoutMode::FLOAT)) {
+        return;
+    }
+
+    ScorePageViewLayout::layoutHeadersFooters(ctx);
 }
 
 SizeF ScoreRenderer::pageSizeInch(const Score* score) const

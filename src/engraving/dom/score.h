@@ -888,7 +888,6 @@ public:
 
     void doLayout();
     void doLayoutRange(const Fraction& st, const Fraction& et);
-    void doLayoutHeadersFooters();
 
     SynthesizerState& synthesizerState() { return m_synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
