@@ -511,27 +511,19 @@ void Transpose::transposeChord(Chord* c, const Fraction& tick)
 
 Interval Transpose::keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 {
-    static int stepTable[STEP_DELTA_OCTAVE] = {
-        // C  G  D  A  E  B F
-        0, 4, 1, 5, 2, 6, 3,
-    };
+    int diatonic = tpc2step(key2Tpc(nKey)) - tpc2step(key2Tpc(oKey));
+    int chromatic = ((int(nKey) - int(oKey)) + (diatonic * TPC_DELTA_ENHARMONIC)) / TPC_DELTA_SEMITONE;
 
-    int cofSteps = (nKey > oKey) ? int(nKey) - int(oKey) : int(nKey) - int(oKey) + PITCH_DELTA_OCTAVE; // circle of fifth steps
-    int diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
-    if (diatonic < 0) {
-        diatonic += STEP_DELTA_OCTAVE;
-    }
-    diatonic %= STEP_DELTA_OCTAVE;
-    int chromatic = (cofSteps * 7) % PITCH_DELTA_OCTAVE;
-
-    if ((dir == TransposeDirection::CLOSEST) && (chromatic > 6)) {
-        dir = TransposeDirection::DOWN;
+    if ((dir == TransposeDirection::CLOSEST && chromatic > 6)
+        || (dir == TransposeDirection::DOWN && chromatic > 0)) {
+        diatonic -= 7;
+        chromatic -= 12;
+    } else if ((dir == TransposeDirection::CLOSEST && chromatic < -6)
+               || (dir == TransposeDirection::UP && chromatic < 0)) {
+        diatonic += 7;
+        chromatic += 12;
     }
 
-    if (dir == TransposeDirection::DOWN) {
-        chromatic = chromatic == 0 ? 0 : chromatic - 12;
-        diatonic  = diatonic == 0 ? 0 : diatonic - 7;
-    }
     return Interval(diatonic, chromatic);
 }
 
