@@ -25,6 +25,8 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
+#include "rcommand/icommanddispatcher.h"
+#include "rcommand/commandable.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
@@ -46,13 +48,14 @@
 namespace mu::playback {
 class OnlineSoundsController;
 class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public muse::async::Asyncable,
-    public muse::Contextable
+    public muse::rcommand::Commandable, public muse::Contextable
 {
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::ContextInject<ISoundProfilesRepository> profilesRepo = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::ContextInject<muse::rcommand::ICommandDispatcher> commandsDispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<muse::tours::IToursService> tours = { this };

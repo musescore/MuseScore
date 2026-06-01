@@ -34,6 +34,8 @@ target_sources(playback PRIVATE
     internal/onlinesoundscontroller.h
     internal/playbackuiactions.cpp
     internal/playbackuiactions.h
+    internal/playbackcommands.cpp
+    internal/playbackcommands.h 
     internal/playbackconfiguration.cpp
     internal/playbackconfiguration.h
     internal/soundprofilesrepository.cpp
