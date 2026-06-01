@@ -105,8 +105,7 @@ private:
                            const GraceNeighborsMap& graceNeighbors);
     engraving::ChordRest* importEvent(const mnx::sequence::Event& event, engraving::track_idx_t, engraving::Measure* measure,
                                       const mnx::FractionValue& startTick, const mnx::FractionValue& actualDuration,
-                                      const std::stack<engraving::Tuplet*>& activeTuplets,
-                                      engraving::TremoloTwoChord* activeTremolo);
+                                      const std::stack<engraving::Tuplet*>& activeTuplets, engraving::TremoloTwoChord* activeTremolo);
     engraving::Tuplet* createTuplet(const mnx::sequence::Tuplet& mnxTuplet, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
                                     const mnx::FractionValue& startTick);
     void createTremolo(const mnx::sequence::MultiNoteTremolo& mnxTremolo, engraving::Measure* measure, engraving::track_idx_t curTrackIdx,
