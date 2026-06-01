@@ -207,6 +207,10 @@ public:
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
     virtual muse::async::Channel<int> notePlayDurationMillisecondsChanged() const = 0;
 
+    virtual int pedalReleaseGapMs() const = 0;
+    virtual void setPedalReleaseGapMs(int ms) = 0;
+    virtual muse::async::Channel<int> pedalReleaseGapMsChanged() const = 0;
+
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
 

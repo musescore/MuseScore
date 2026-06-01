@@ -638,6 +638,21 @@ muse::async::Channel<int> NotationConfigurationStub::notePlayDurationMillisecond
     return ch;
 }
 
+int NotationConfigurationStub::pedalReleaseGapMs() const
+{
+    return 0;
+}
+
+void NotationConfigurationStub::setPedalReleaseGapMs(int)
+{
+}
+
+muse::async::Channel<int> NotationConfigurationStub::pedalReleaseGapMsChanged() const
+{
+    static muse::async::Channel<int> ch;
+    return ch;
+}
+
 void NotationConfigurationStub::setTemplateModeEnabled(std::optional<bool>)
 {
 }

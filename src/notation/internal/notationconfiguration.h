@@ -209,6 +209,10 @@ public:
     void setNotePlayDurationMilliseconds(int durationMs) override;
     muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
 
+    int pedalReleaseGapMs() const override;
+    void setPedalReleaseGapMs(int ms) override;
+    muse::async::Channel<int> pedalReleaseGapMsChanged() const override;
+
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
 
@@ -261,6 +265,7 @@ private:
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
     muse::async::Channel<int> m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
     muse::async::Channel<int> m_notePlayDurationMillisecondsChanged;
+    muse::async::Channel<int> m_pedalReleaseGapMsChanged;
     muse::async::Channel<bool> m_useMidiVelocityAndDurationDuringNoteInputChanged;
     muse::async::Channel<std::string> m_styleFileImportPathChanged;
     muse::async::Notification m_isPlayRepeatsChanged;

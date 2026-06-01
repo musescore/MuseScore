@@ -58,6 +58,7 @@
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafftextbase.h"
+#include "dom/tempo.h"
 #include "dom/swing.h"
 #include "dom/tie.h"
 #include "dom/trill.h"
@@ -1468,6 +1469,8 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
     if (s->isPedal()) {
         PedalEvent lastEvent;
 
+        // TODO: pedalEventList is always empty here, so consecutive-pedal gap checks below never fire.
+        // The list should likely be accumulated across spanners.
         if (!pedalEventList.empty()) {
             lastEvent = pedalEventList.back();
         } else {
@@ -1476,14 +1479,20 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
 
         int st = s->tick().ticks();
 
+        int gapTicks = 1;
+        if (MScore::pedalReleaseGapMs > 0) {
+            double bps = score->tempomap()->multipliedTempo(st).val;
+            gapTicks = std::max(1, static_cast<int>((MScore::pedalReleaseGapMs* bps* Constants::DIVISION) / 1000.0));
+        }
+
         if (!lastEvent.on && lastEvent.tick >= (st + 2)) {
             pedalEventList.emplace(pedalEventList.cend() - 1,
-                                   st + (2 - MScore::pedalEventsMinTicks), false, staffIdx);
+                                   st + (2 - gapTicks), false, staffIdx);
         }
         int a = st + 2;
         pedalEventList.emplace_back(a, true, staffIdx);
 
-        int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
+        int t = std::max(a + 1, s->tick2().ticks() + (2 - gapTicks));
         if (!score->repeatList().empty()) {
             const RepeatSegment& lastRepeat = *score->repeatList().back();
             if (t > lastRepeat.utick + lastRepeat.len()) {
