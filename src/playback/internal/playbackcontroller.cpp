@@ -39,6 +39,7 @@
 #include "containers.h"
 #include "defer.h"
 #include "log.h"
+#include "types/ret.h"
 
 using namespace muse;
 using namespace muse::actions;
@@ -129,6 +130,21 @@ void PlaybackController::init()
     dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
     m_onlineSoundsController->regActions();
+
+    commandsDispatcher()->onRequest(this, rcommand::Command("playback/play"), [this](const rcommand::Request& request) {
+        togglePlay();
+        return rcommand::make_response(request, make_ok());
+    });
+
+    commandsDispatcher()->onRequest(this, rcommand::Command("playback/stop"), [this](const rcommand::Request& request) {
+        stop();
+        return rcommand::make_response(request, make_ok());
+    });
+
+    commandsDispatcher()->onRequest(this, rcommand::Command("playback/pause"), [this](const rcommand::Request& request) {
+        pause(/*select*/ false);
+        return rcommand::make_response(request, make_ok());
+    });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
