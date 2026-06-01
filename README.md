@@ -59,6 +59,9 @@ To compile MuseScore Studio for release, type:
 
     cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release
 
+On MacOS, append `-G Ninja` in order to use the `ninja` build tool (which you may need to install), since this
+is required to compile Swift components.
+
 If something goes wrong, append the word "clean" to the above command to delete the build subdirectory:
 
     cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release clean
