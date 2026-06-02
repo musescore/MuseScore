@@ -371,7 +371,7 @@ std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotation
     score->style().set(engraving::Sid::staffUpperBorder, engraving::Spatium(7));
 
     score->setLayoutAll();
-    score->update();
+    score->doLayout();
 
     return result;
 }
