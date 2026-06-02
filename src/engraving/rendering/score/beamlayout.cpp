@@ -338,9 +338,11 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
     item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), startCr, ChordBeamAnchorType::Start));
     item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), endCr, ChordBeamAnchorType::End));
 
+    double graceScale = 1.0;
     if (item->isGrace()) {
-        item->setBeamDist(item->beamDist() * ctx.conf().styleD(Sid::graceNoteMag));
-        item->setBeamWidth(item->beamWidth() * ctx.conf().styleD(Sid::graceNoteMag));
+        graceScale = ctx.conf().styleD(Sid::graceNoteMag);
+        item->setBeamDist(item->beamDist() * graceScale);
+        item->setBeamWidth(item->beamWidth() * graceScale);
     }
 
     int fragmentIndex = item->directionIdx();
@@ -373,8 +375,8 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
         item->setSlope(0.0);
-        item->setBeamWidth(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->mag());
-        item->setBeamDist(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag());
+        item->setBeamWidth(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->mag() * graceScale);
+        item->setBeamDist(ctx.conf().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->mag() * graceScale);
     } else if (!item->isBesideTabStaff()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notePositions());

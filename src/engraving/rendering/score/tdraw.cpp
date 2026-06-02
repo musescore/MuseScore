@@ -1254,6 +1254,10 @@ void TDraw::draw(const DurationLine* item, Painter* painter, const PaintOptions&
     TRACE_DRAW_ITEM;
 
     const DurationLine::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
     painter->setPen(Pen(item->curColor(opt), ldata->lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(LineF(0.0, 0.0, item->len(), 0.0));
 }
@@ -2478,7 +2482,12 @@ void TDraw::draw(const OctaveDot* item, Painter* painter, const PaintOptions& op
 {
     TRACE_DRAW_ITEM;
 
-    double rad = item->ldata()->radius;
+    const OctaveDot::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    double rad = ldata->radius;
     double x = item->len() * 0.5; // draw dot in the middle
 
     painter->setPen(Pen(item->curColor(opt)));
@@ -2738,7 +2747,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter, const PaintOptions&)
         double lineDistance = item->style().styleAbsolute(Sid::jianpuDiminutionBeamDistance) * item->magS();
         double lineThickness = item->style().styleAbsolute(Sid::jianpuDiminutionBeamThickness) * item->magS();
         double dotDistance = item->style().styleAbsolute(Sid::jianpuOctaveDotDistance) * item->magS();
-        double rad = item->style().styleAbsolute(Sid::jianpuOctaveDotDiameter) * item->magS();
+        double rad = item->style().styleAbsolute(Sid::jianpuOctaveDotRadius) * item->magS();
 
         if (item->lineIndex() >= 0) {
             jianpuY = bbox.height() + bbox.y();

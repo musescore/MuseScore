@@ -859,6 +859,9 @@ void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
     for (EngravingItem* e : m_el) {
         func(e);
     }
+    for (DurationLine* dl : m_durationLines) {
+        func(dl);
+    }
 }
 
 //---------------------------------------------------------
@@ -1336,7 +1339,9 @@ bool ChordRest::hasPrecedingJumpItem() const
 void ChordRest::resizeDurationLinesTo(size_t newSize)
 {
     while (m_durationLines.size() < newSize) {
-        m_durationLines.push_back(new DurationLine(score()->dummy()));
+        DurationLine* dl = new DurationLine(score()->dummy());
+        dl->setTrack(track());
+        m_durationLines.push_back(dl);
     }
 
     while (m_durationLines.size() > newSize) {

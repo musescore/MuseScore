@@ -2246,7 +2246,7 @@ enum class Sid : short {
     palmMuteEndFilledArrowWidth,
 
     jianpuNumberVerticalDistance,
-    jianpuOctaveDotDiameter,
+    jianpuOctaveDotRadius,
     jianpuOctaveDotDistance,
     jianpuDiminutionBeamThickness,
     jianpuDiminutionBeamDistance,

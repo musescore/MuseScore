@@ -2299,6 +2299,9 @@ void Note::setTrack(track_idx_t val)
     for (NoteDot* dot : m_dots) {
         dot->setTrack(val);
     }
+    for (OctaveDot* dot : m_octaveDots) {
+        dot->setTrack(val);
+    }
 }
 
 //---------------------------------------------------------
@@ -3276,6 +3279,9 @@ void Note::setScore(Score* s)
     for (NoteDot* dot : m_dots) {
         dot->setScore(s);
     }
+    for (OctaveDot* dot : m_octaveDots) {
+        dot->setScore(s);
+    }
     for (EngravingItem* el : m_el) {
         el->setScore(s);
     }
@@ -4144,7 +4150,9 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
 void Note::resizeOctaveDotsTo(size_t newSize)
 {
     while (m_octaveDots.size() < newSize) {
-        m_octaveDots.push_back(new OctaveDot(score()->dummy()));
+        OctaveDot* dot = new OctaveDot(score()->dummy());
+        dot->setTrack(track());
+        m_octaveDots.push_back(dot);
     }
     while (m_octaveDots.size() > newSize) {
         delete m_octaveDots.back();

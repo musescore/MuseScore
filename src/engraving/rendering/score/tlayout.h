@@ -140,6 +140,7 @@ class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
 
+class OctaveDot;
 class Ottava;
 class OttavaSegment;
 

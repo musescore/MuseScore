@@ -1704,6 +1704,8 @@ void ChordLayout::layoutDurationLines(Chord* item, LayoutContext& ctx)
     bool isJianpu = staff->isJianpuStaff(tick);
 
     if (!isJianpu) {
+        muse::DeleteAll(item->durationLines());
+        item->durationLines().clear();
         return;
     }
 
@@ -1751,6 +1753,9 @@ void ChordLayout::layoutOctaveDots(Chord* item, LayoutContext& ctx)
     bool staffVisible = !staff->isLinesInvisible(tick);
     bool isJianpu = staff->isJianpuStaff(tick);
     if (!isJianpu) {
+        for (Note* note : item->notes()) {
+            note->resizeOctaveDotsTo(0);
+        }
         return;
     }
 
@@ -2452,6 +2457,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         for (Chord* chord : posInfo.chords) {
             for (Chord* grace : chord->graceNotes()) {
                 AccidentalsLayout::layoutAccidentals({ grace }, ctx);
+                ChordLayout::layoutOctaveDots(grace, ctx);
             }
             ChordLayout::layoutDurationLines(chord, ctx);
             ChordLayout::layoutOctaveDots(chord, ctx);
