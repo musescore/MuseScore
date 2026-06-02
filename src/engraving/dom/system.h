@@ -220,6 +220,9 @@ public:
     void addLockIndicator(SystemLockIndicator* sli);
     void deleteLockIndicators();
 
+    void setPageLockIndicator(PageLockIndicator* pli);
+    void deletePageLockIndicator();
+
     struct LayoutData : public EngravingItem::LayoutData {
     public:
         bool useLongNames() const { return m_useLongNames; }
@@ -279,6 +282,7 @@ private:
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
     std::vector<SystemLockIndicator*> m_lockIndicators;
+    PageLockIndicator* m_pageLockIndicator = nullptr;
 
     StaffVisibilityIndicator* m_staffVisibilityIndicator = nullptr;
 

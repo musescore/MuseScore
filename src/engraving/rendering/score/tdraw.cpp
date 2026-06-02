@@ -317,7 +317,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter, const PaintOpt
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter, opt);
         break;
-
+    case ElementType::PAGE_LOCK_INDICATOR: draw(item_cast<const PageLockIndicator*>(item), painter, opt);
+        break;
     case ElementType::PARENTHESIS:          draw(item_cast<const Parenthesis*>(item), painter, opt);
         break;
     case ElementType::PARTIAL_TIE_SEGMENT:  draw(item_cast<const PartialTieSegment*>(item), painter, opt);
@@ -2434,6 +2435,35 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter, const PaintOptions
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter, opt);
+}
+
+void TDraw::draw(const PageLockIndicator* item, Painter* painter, const PaintOptions& opt)
+{
+    TRACE_DRAW_ITEM;
+
+    if (opt.isPrinting || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    painter->setPen(pen);
+    painter->setFont(item->font());
+    painter->drawSymbol(PointF(), item->iconCode());
+
+    if (item->selected()) {
+        Color lockedAreaColor = item->configuration()->selectionColor();
+        lockedAreaColor.setAlpha(38);
+        Brush brush(lockedAreaColor);
+        painter->setBrush(brush);
+        painter->setNoPen();
+        double radius = 0.5 * item->spatium();
+
+        PainterPath path;
+        path.setFillRule(PainterPath::FillRule::OddEvenFill);
+        path.addRoundedRect(item->ldata()->rangeRect, radius, radius);
+        path.addRect(item->ldata()->innerRangeRect);
+        painter->drawPath(path);
+    }
 }
 
 void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter, const PaintOptions& opt)

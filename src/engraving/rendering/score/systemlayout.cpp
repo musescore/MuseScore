@@ -45,6 +45,7 @@
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
+#include "dom/page.h"
 #include "dom/part.h"
 #include "dom/parenthesis.h"
 #include "dom/pedal.h"
@@ -516,6 +517,23 @@ void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx
     system->addLockIndicator(lockIndicator);
 
     TLayout::layoutIndicatorIcon(lockIndicator, lockIndicator->mutldata());
+}
+
+void SystemLayout::layoutPageLockIndicators(System* system)
+{
+    Page* page = system->page();
+    system->deletePageLockIndicator();
+
+    const RangeLock* lock = page->pageLock();
+    if (!lock || page->systems().back() != system) {
+        return;
+    }
+
+    PageLockIndicator* lockIndicator = new PageLockIndicator(system, lock);
+    lockIndicator->setParent(system);
+    system->setPageLockIndicator(lockIndicator);
+
+    TLayout::layoutPageLockIndicator(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------

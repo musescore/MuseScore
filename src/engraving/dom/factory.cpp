@@ -302,6 +302,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
     case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::PAGE_LOCK_INDICATOR:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
     case ElementType::HAMMER_ON_PULL_OFF_TEXT:
     case ElementType::TAPPING_HALF_SLUR:
@@ -476,6 +477,15 @@ CREATE_ITEM_IMPL(NoteLine, Note, isAccessibleEnabled)
 MAKE_ITEM_IMPL(NoteLine, Note);
 
 CREATE_ITEM_IMPL(Page, RootItem, isAccessibleEnabled)
+
+PageLockIndicator* Factory::createPageLockIndicator(System * parent, const RangeLock * lock, bool isAccessibleEnabled)
+{
+    PageLockIndicator* sli = new PageLockIndicator(parent, lock);
+    sli->setAccessibleEnabled(isAccessibleEnabled);
+    return sli;
+}
+
+COPY_ITEM_IMPL(PageLockIndicator)
 
 CREATE_ITEM_IMPL(PartialTie, Note, isAccessibleEnabled)
 COPY_ITEM_IMPL(PartialTie)

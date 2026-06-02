@@ -302,6 +302,7 @@ public:
     static void layoutOttava(Ottava* item, LayoutContext& ctx);
     static void layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx);
 
+    static void layoutPageLockIndicator(const PageLockIndicator* item, PageLockIndicator::LayoutData* ldata);
     static void layoutPalmMute(PalmMute* item, LayoutContext& ctx);
     static void layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx);
     static void layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);

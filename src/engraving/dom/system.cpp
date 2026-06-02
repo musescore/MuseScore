@@ -161,6 +161,9 @@ System::~System()
     if (m_staffVisibilityIndicator) {
         delete m_staffVisibilityIndicator;
     }
+    if (m_pageLockIndicator) {
+        delete m_pageLockIndicator;
+    }
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -331,6 +334,17 @@ void System::deleteLockIndicators()
 {
     muse::DeleteAll(m_lockIndicators);
     m_lockIndicators.clear();
+}
+
+void System::setPageLockIndicator(PageLockIndicator* pli)
+{
+    m_pageLockIndicator = pli;
+}
+
+void System::deletePageLockIndicator()
+{
+    delete m_pageLockIndicator;
+    m_pageLockIndicator = nullptr;
 }
 
 //---------------------------------------------------------
@@ -724,6 +738,10 @@ void System::scanElements(std::function<void(EngravingItem*)> func)
 
     if (m_staffVisibilityIndicator) {
         func(m_staffVisibilityIndicator);
+    }
+
+    if (m_pageLockIndicator) {
+        func(m_pageLockIndicator);
     }
 
     for (auto i : m_lockIndicators) {

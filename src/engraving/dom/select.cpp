@@ -404,7 +404,7 @@ MeasureBase* Selection::endMeasureBase() const
 std::vector<System*> Selection::selectedSystems() const
 {
     EngravingItem* el = element();
-    if (el && (el->isSystemLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
+    if (el && (el->isSystemLockIndicator() || el->isPageLockIndicator() /*TODO: || el->isStaffVisibilityIndicator*/)) {
         return { const_cast<System*>(toIndicatorIcon(el)->system()) };
     }
 
@@ -428,9 +428,9 @@ std::vector<System*> Selection::selectedSystems() const
 std::vector<Page*> mu::engraving::Selection::selectedPages() const
 {
     EngravingItem* el = element();
-    // if (el && (el->pageLockIndicator())) { TODO
-    //     return { const_cast<System*>(toIndicatorIcon(el)->system()) };
-    // }
+    if (el && (el->isPageLockIndicator())) {
+        return { const_cast<Page*>(toPageLockIndicator(el)->page()) };
+    }
 
     std::vector<System*> systems = selectedSystems();
     std::vector<Page*> pages;
