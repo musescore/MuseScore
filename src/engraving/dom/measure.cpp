@@ -1834,6 +1834,7 @@ EngravingItem* Measure::drop(EditData& data)
         newBox->setNext(m);
         newBox->setPrev(m->prev());
         score()->undo(new InsertMeasures(newBox, newBox));
+        newBox->manageExclusionFromParts(/*exclude =*/ false);
         return newBox;
     }
     break;
