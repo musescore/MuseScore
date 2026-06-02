@@ -344,12 +344,12 @@ void EditPageLocks::applyLockToSelection(Transaction& tx, Score* score)
         last = score->selection().endMeasureBase();
     } else {
         for (EngravingItem* el : score->selection().elements()) {
-            // if (el->isPageLockIndicator()) { TODO
-            //     const RangeLock* lock = toPageLockIndicator(el)->pageLock();
-            //     first = lock->startMB();
-            //     last = lock->endMB();
-            //     break;
-            // }
+            if (el->isPageLockIndicator()) {
+                const RangeLock* lock = toPageLockIndicator(el)->pageLock();
+                first = lock->startMB();
+                last = lock->endMB();
+                break;
+            }
             MeasureBase* mb = el->findMeasureBase();
             if (!mb) {
                 continue;

@@ -2801,6 +2801,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::KEYSIG:
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
+        case ElementType::PAGE_LOCK_INDICATOR:
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         case ElementType::PLAY_COUNT_TEXT:
         case ElementType::LYRICSLINE_SEGMENT:
@@ -3286,6 +3287,12 @@ void Score::deleteItem(EngravingItem* el)
     {
         const RangeLock* systemLock = toSystemLockIndicator(el)->systemLock();
         EditSystemLocks::undoRemoveSystemLock(tx, this, systemLock);
+    }
+    break;
+    case ElementType::PAGE_LOCK_INDICATOR:
+    {
+        const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
+        EditPageLocks::undoRemovePageLock(this, pageLock);
     }
     break;
 

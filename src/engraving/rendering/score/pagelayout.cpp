@@ -390,6 +390,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             MeasureLayout::layout2(m, ctx);
         }
         SystemLayout::layoutSystemLockIndicators(s, ctx);
+        SystemLayout::layoutPageLockIndicators(s);
 
         if (StaffVisibilityIndicator* visibilityIndicator = s->staffVisibilityIndicator()) {
             TLayout::layoutIndicatorIcon(visibilityIndicator, visibilityIndicator->mutldata());

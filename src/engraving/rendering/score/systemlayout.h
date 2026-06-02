@@ -85,6 +85,7 @@ public:
     static void removeElementFromSkyline(EngravingItem* element, const System* system);
 
     static void layoutSystemLockIndicators(System* system, LayoutContext& ctx);
+    static void layoutPageLockIndicators(System* system);
 
 private:
     struct MeasureState

@@ -148,6 +148,9 @@ public:
 
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
+    static PageLockIndicator* createPageLockIndicator(System* parent, const RangeLock* lock, bool isAccessibleEnabled = true);
+    static PageLockIndicator* copyPageLockIndicator(const PageLockIndicator& src);
+
     static Parenthesis* createParenthesis(EngravingItem* parent, bool isAccessibleEnabled = true);
     static Parenthesis* copyParenthesis(const Parenthesis& src);
 
