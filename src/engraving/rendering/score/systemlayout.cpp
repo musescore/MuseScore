@@ -294,6 +294,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 prevMeasureState.measureWidth = nmb->width();
                 for (Segment& seg : toMeasure(nmb)->segments()) {
                     prevMeasureState.elementPositions.emplace(&seg, seg.ldata()->pos());
+                    prevMeasureState.elementWidths.emplace(&seg, seg.width());
                     for (EngravingItem* item : seg.annotations()) {
                         if (item->isHarmony() || item->isFretDiagram()) {
                             prevMeasureState.elementPositions.emplace(item, item->ldata()->pos());
@@ -367,6 +368,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
                     SystemLayout::restoreOldSystemLayout(m->system(), ctx);
+
                     if (m == nm || !m->noBreak()) {
                         break;
                     }
