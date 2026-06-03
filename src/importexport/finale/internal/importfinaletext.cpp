@@ -689,6 +689,11 @@ void FinaleParser::importTextExpressions()
             /// @todo shape library
             /// @todo positioning
             if (!expressionAssignment->textExprId) {
+                if (const auto span = musx::util::calcNonArpeggioSpanForAssignment(expressionAssignment, arpeggioSpanOptions())) {
+                    if (createArpeggioFromSpan(*span, nullptr, !expressionAssignment->hidden)) {
+                        continue;
+                    }
+                }
                 const auto shapeExpr = m_doc->getOthers()->get<others::ShapeExpressionDef>(m_currentMusxPartId,
                                                                                            expressionAssignment->shapeExprId);
                 Image* img = getImageFromShape(shapeExpr->shapeDef);
