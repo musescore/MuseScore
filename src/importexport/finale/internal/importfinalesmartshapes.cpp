@@ -518,6 +518,11 @@ void FinaleParser::importSmartShapes()
             // Unassigned shape, no need to import
             continue;
         }
+        if (const auto span = musx::util::calcNonArpeggioSpanForSmartShape(smartShape, arpeggioSpanOptions())) {
+            if (createArpeggioFromSpan(*span, nullptr, !smartShape->hidden)) {
+                continue;
+            }
+        }
 
         bool endsOnBarline = false;
         bool startsOnBarline = false;
