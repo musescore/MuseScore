@@ -1736,6 +1736,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         const Fraction tickPrev = tick - Fraction::eps();
 
         if (item->staff()->isJianpuStaff(tick)) {
+            ldata->setShape(Shape());
             ldata->setBbox(RectF());
             ldata->symId = SymId::noSym;
             return; // Jianpu do not need to show clef
@@ -1764,6 +1765,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
 
         // if clef not to show or not compatible with staff group
         if (!show) {
+            ldata->setShape(Shape());
             ldata->setBbox(RectF());
             ldata->symId = SymId::noSym;
             LOGD("invisible clef at tick %d(%d) staff %zu",
@@ -4708,7 +4710,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         double lw = ctx.conf().styleAbsolute(Sid::ledgerLineWidth);
 
         // jianpu will show the 5-line staff with more extra length
-        if (isJianpu && lineIdx > 0) {
+        if (isJianpu) {
             x -= 2 * extraLen;
             w += 4 * extraLen;
         }

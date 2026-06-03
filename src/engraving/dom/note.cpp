@@ -4150,7 +4150,7 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
 void Note::resizeOctaveDotsTo(size_t newSize)
 {
     while (m_octaveDots.size() < newSize) {
-        OctaveDot* dot = new OctaveDot(score()->dummy());
+        OctaveDot* dot = new OctaveDot(this);
         dot->setTrack(track());
         m_octaveDots.push_back(dot);
     }
