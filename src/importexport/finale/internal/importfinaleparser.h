@@ -114,7 +114,7 @@ struct FrameSettings {
     engraving::FrameType frameType = engraving::FrameType::NO_FRAME;
     double frameWidth = 0.1;
     double paddingWidth = 0.2;
-    int frameRound = 0;
+    engraving::Spatium frameRound;
 
     void setFrameProperties(engraving::TextBase* text) const;
     double oneSidePaddingWidth() const;
