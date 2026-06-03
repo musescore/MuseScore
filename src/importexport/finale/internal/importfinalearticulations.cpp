@@ -24,8 +24,10 @@
 #include "internal/finaletypesconv.h"
 #include "internal/text/finaletextconv.h"
 
+#include <algorithm>
 #include <vector>
 #include <exception>
+#include <optional>
 
 #include "musx/musx.h"
 #include "smufl_mapping.h"
@@ -168,6 +170,156 @@ static const std::unordered_set<SymId> recognisedArticulations = {
     SymId::tremoloDivisiDots4,
     SymId::tremoloDivisiDots6,
 };
+
+static ArpeggioType arpeggioTypeFromSpan(const musx::util::ArpeggioSpanCandidate& span)
+{
+    switch (span.direction) {
+    case musx::util::ArpeggioDirection::Down:
+        return ArpeggioType::DOWN;
+    case musx::util::ArpeggioDirection::Up:
+        return ArpeggioType::UP;
+    case musx::util::ArpeggioDirection::Auto:
+        break;
+    }
+
+    switch (span.arrow) {
+    case musx::util::ArpeggioArrow::Down:
+        return ArpeggioType::DOWN;
+    case musx::util::ArpeggioArrow::Up:
+        return ArpeggioType::UP;
+    case musx::util::ArpeggioArrow::Auto:
+    case musx::util::ArpeggioArrow::None:
+        return ArpeggioType::NORMAL;
+    }
+
+    return ArpeggioType::NORMAL;
+}
+
+static std::optional<musx::util::ArpeggioSpanCandidate> singleGlyphArpeggioSpan(
+    const EntryInfoPtr& sourceEntry, const String& symName)
+{
+    std::optional<musx::util::ArpeggioSpanCandidate> result;
+    auto makeArpeggioCandidate = [&](musx::util::ArpeggioDirection direction, musx::util::ArpeggioArrow arrow) {
+        auto& candidate = result.emplace();
+        candidate.type = musx::util::ArpeggioSpanType::Normal;
+        candidate.sourceEntry = sourceEntry;
+        candidate.topEntry = sourceEntry;
+        candidate.bottomEntry = sourceEntry;
+        candidate.direction = direction;
+        candidate.arrow = arrow;
+    };
+
+    if (symName == String(u"arpeggiato")) {
+        makeArpeggioCandidate(musx::util::ArpeggioDirection::Auto, musx::util::ArpeggioArrow::None);
+    } else if (symName == String(u"arpeggiatoUp")) {
+        makeArpeggioCandidate(musx::util::ArpeggioDirection::Up, musx::util::ArpeggioArrow::Up);
+    } else if (symName == String(u"arpeggiatoDown")) {
+        makeArpeggioCandidate(musx::util::ArpeggioDirection::Down, musx::util::ArpeggioArrow::Down);
+    }
+
+    return result;
+}
+
+musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions(bool skipGraceEntries) const
+{
+    musx::util::ArpeggioSpanOptions options;
+    options.skipGraceEntries = skipGraceEntries;
+    options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
+                                                const musx::util::StaffOriginOffsetRequest& request) {
+        const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
+        const staff_idx_t targetStaffIdx = muse::value(m_inst2Staff, request.targetStaffId, muse::nidx);
+        const Fraction tick = muse::value(m_meas2Tick, request.measureId, Fraction(-1, 1));
+        Measure* measure = tick == Fraction(-1, 1) ? nullptr : m_score->tick2measure(tick);
+        const System* system = measure ? measure->system() : nullptr;
+        const auto musxSystem = document ? document->calcSystemFromMeasure(partId, request.measureId) : nullptr;
+
+        if (sourceStaffIdx == muse::nidx || targetStaffIdx == muse::nidx || !system || !musxSystem) {
+            return musx::util::StaffOriginOffsetResolverResult {
+                musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+            };
+        }
+        if (!system->staff(sourceStaffIdx)->show() || !system->staff(targetStaffIdx)->show()) {
+            return musx::util::StaffOriginOffsetResolverResult {
+                musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+            };
+        }
+
+        const double sourceY = system->staff(sourceStaffIdx)->y();
+        const double targetY = system->staff(targetStaffIdx)->y();
+        const double systemSpatium = musxSystem->calcEffectiveScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
+        IF_ASSERT_FAILED(systemSpatium > 0.0) {
+            return musx::util::StaffOriginOffsetResolverResult {
+                musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+            };
+        }
+        return musx::util::StaffOriginOffsetResolverResult {
+            musx::util::StaffOriginOffsetResolverDecision::Offset,
+            (targetY - sourceY) * EVPU_PER_SPACE / systemSpatium
+        };
+    };
+    return options;
+}
+
+bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
+                                          const MusxInstance<others::ArticulationDef>& articDef,
+                                          bool visible)
+{
+    ChordRest* topCR = chordRestFromEntryInfoPtr(span.topEntry);
+    ChordRest* bottomCR = chordRestFromEntryInfoPtr(span.bottomEntry);
+    if (!topCR || !bottomCR || !topCR->isChord() || !bottomCR->isChord()) {
+        return false;
+    }
+    if (topCR->part() != bottomCR->part()) {
+        return false;
+    }
+
+    Chord* arpChord = toChord(topCR);
+    if (span.type == musx::util::ArpeggioSpanType::Normal && arpChord->arpeggio()) {
+        return false;
+    }
+
+    track_idx_t topChordTrack = arpChord->track();
+    track_idx_t bottomChordTrack = std::min(bottomCR->track(), m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
+    Segment* segment = arpChord->segment();
+    if (!segment || bottomChordTrack < topChordTrack) {
+        return false;
+    }
+
+    Arpeggio* arpeggio = nullptr;
+    if (span.type == musx::util::ArpeggioSpanType::Bracket) {
+        arpeggio = Factory::createArpeggio(arpChord);
+        arpeggio->setArpeggioType(ArpeggioType::BRACKET);
+    } else {
+        arpeggio = Factory::createArpeggio(arpChord);
+        arpeggio->setArpeggioType(arpeggioTypeFromSpan(span));
+    }
+
+    arpeggio->setTrack(topChordTrack);
+    arpeggio->setVisible(visible);
+    arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
+    for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
+        if (segment->element(track) && segment->element(track)->isChord()) {
+            toChord(segment->element(track))->setSpanArpeggio(arpeggio);
+        }
+    }
+
+    if (span.type == musx::util::ArpeggioSpanType::Normal) {
+        arpeggio->setPlayArpeggio(articDef ? articDef->playArtic : true);
+        if (articDef) {
+            Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
+            double beatsPerSecondRatio = m_score->tempo(segment->tick()).val / 2.0; // ratio against 120 bpm
+            if (beatsPerSecondRatio > 0.0 && !arpChord->notes().empty()) {
+                double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
+                arpeggio->setStretch(timeIn120BPM * 8.0 / arpChord->notes().size());
+            }
+        }
+    } else {
+        arpeggio->setPlayArpeggio(false);
+    }
+
+    arpChord->add(arpeggio);
+    return true;
+}
 
 ReadableArticulation::ReadableArticulation(FinaleParser& ctx, const MusxInstance<others::ArticulationDef>& articDef)
 {
@@ -568,6 +720,15 @@ void FinaleParser::importArticulations()
                 return line;
             }();
 
+            if (cr->isChord() && (!musxArtic || musxArtic->unrecognised) && !articAssign->hide) {
+                EntryInfoPtr sourceEntry = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+                if (const auto span = musx::util::calcNonArpeggioSpanForAssignment(sourceEntry, articAssign, arpeggioSpanOptions())) {
+                    if (createArpeggioFromSpan(*span)) {
+                        continue;
+                    }
+                }
+            }
+
             // unknown value or shape
             if (!musxArtic || musxArtic->unrecognised) {
                 continue;
@@ -792,86 +953,24 @@ void FinaleParser::importArticulations()
             }
 
             // Arpeggios
-            // The Finale symbol is an optional character and not in SMuFL
-            if (!c->arpeggio() && musxArtic->symName == String(u"arpeggioVerticalSegment")) {
+            if (musxArtic->symName == String(u"arpeggioVerticalSegment") || musxArtic->symName == String(u"arpeggiato")
+                || musxArtic->symName == String(u"arpeggiatoUp") || musxArtic->symName == String(u"arpeggiatoDown")) {
                 if (c->isGrace() || articAssign->hide) {
                     continue;
                 }
-                Segment* s = c->segment();
+                if (c->arpeggio()) {
+                    continue;
+                }
                 EntryInfoPtr sourceEntry = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
-                musx::util::ArpeggioSpanOptions options;
-                options.skipGraceEntries = true;
-                options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
-                                                            const musx::util::StaffOriginOffsetRequest& request) {
-                    const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
-                    const staff_idx_t targetStaffIdx = muse::value(m_inst2Staff, request.targetStaffId, muse::nidx);
-                    const Fraction tick = muse::value(m_meas2Tick, request.measureId, Fraction(-1, 1));
-                    Measure* measure = tick == Fraction(-1, 1) ? nullptr : m_score->tick2measure(tick);
-                    const System* system = measure ? measure->system() : nullptr;
-                    const auto musxSystem = document ? document->calcSystemFromMeasure(partId, request.measureId) : nullptr;
-
-                    if (sourceStaffIdx == muse::nidx || targetStaffIdx == muse::nidx || !system || !musxSystem) {
-                        return musx::util::StaffOriginOffsetResolverResult {
-                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
-                        };
-                    }
-                    if (!system->staff(sourceStaffIdx)->show() || !system->staff(targetStaffIdx)->show()) {
-                        return musx::util::StaffOriginOffsetResolverResult {
-                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
-                        };
-                    }
-
-                    const double sourceY = system->staff(sourceStaffIdx)->y();
-                    const double targetY = system->staff(targetStaffIdx)->y();
-                    const double systemSpatium = musxSystem->calcEffectiveScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
-                    IF_ASSERT_FAILED(systemSpatium > 0.0) {
-                        return musx::util::StaffOriginOffsetResolverResult {
-                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
-                        };
-                    }
-                    return musx::util::StaffOriginOffsetResolverResult {
-                        musx::util::StaffOriginOffsetResolverDecision::Offset,
-                        (targetY - sourceY) * EVPU_PER_SPACE / systemSpatium
-                    };
-                };
-
-                const auto span = musx::util::calcArpeggioSpanForAssignment(sourceEntry, articAssign, options);
+                const auto options = arpeggioSpanOptions();
+                std::optional<musx::util::ArpeggioSpanCandidate> span;
+                span = musx::util::calcArpeggioSpanForAssignment(sourceEntry, articAssign, options);
                 if (!span) {
-                    continue;
+                    span = singleGlyphArpeggioSpan(sourceEntry, musxArtic->symName);
                 }
-
-                ChordRest* topCR = chordRestFromEntryInfoPtr(span->topEntry);
-                ChordRest* bottomCR = chordRestFromEntryInfoPtr(span->bottomEntry);
-                if (!topCR || !bottomCR || !topCR->isChord() || !bottomCR->isChord()) {
-                    continue;
+                if (span) {
+                    createArpeggioFromSpan(*span, articDef);
                 }
-                track_idx_t topChordTrack = topCR->track();
-                track_idx_t bottomChordTrack = std::min(bottomCR->track(), m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
-                Chord* arpChord = toChord(s->element(topChordTrack));
-                if (!arpChord || arpChord->arpeggio()) {
-                    continue;
-                }
-                Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
-                arpeggio->setTrack(topChordTrack);
-                arpeggio->setArpeggioType(ArpeggioType::NORMAL);
-                arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
-                for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
-                    if (s->element(track) && s->element(track)->isChord()) {
-                        toChord(s->element(track))->setSpanArpeggio(arpeggio);
-                    }
-                }
-                // Unused, probably don't map nicely
-                // arpeggio->setUserLen1(spToScoreDouble);
-                // arpeggio->setUserLen2(spToScoreDouble);
-                arpeggio->setPlayArpeggio(articDef->playArtic);
-                // Playback values in finale are EDUs by default, or in % by non-default (exact workings needs to be investigated)
-                // MuseScore is relative to BPM 120 (8 notes take the spread time beats).
-                Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
-                double beatsPerSecondRatio = m_score->tempo(s->tick()).val / 2.0; // We are this much faster/slower than 120 bpm
-                double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
-                arpeggio->setStretch(timeIn120BPM * 8.0 / c->notes().size());
-                arpeggio->setParent(arpChord);
-                arpChord->setArpeggio(arpeggio);
                 continue;
             }
 
