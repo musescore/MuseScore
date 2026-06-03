@@ -61,6 +61,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stem.h"
 #include "engraving/dom/stafftypechange.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/system.h"
