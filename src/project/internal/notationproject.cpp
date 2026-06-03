@@ -521,14 +521,15 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
             }
 
             // Re-compute headers and footers on save, to force timestamps update (if any)
-            const std::list<Score*>& scores = m_engravingProject->masterScore()->scoreList();
-            for (Score* s : scores) {
-                renderer()->layoutHeadersFooters(s);
-            }
-            for (const IExcerptNotationPtr& excerptNotation : m_masterNotation->excerpts()) {
-                if (excerptNotation->isInited() && excerptNotation->notation()->isOpen()) {
-                    excerptNotation->notation()->notationChanged().notify();
+            bool timestampsUpdated = false;
+            for (Score* s : m_engravingProject->masterScore()->scoreList()) {
+                if (renderer()->scoreHasTimestampHeadersFooters(s)) {
+                    renderer()->layoutHeadersFooters(s);
+                    timestampsUpdated = true;
                 }
+            }
+            if (timestampsUpdated) {
+                globalContext()->currentNotation()->notationChanged().notify();
             }
         }
     } break;

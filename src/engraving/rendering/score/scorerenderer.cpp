@@ -36,6 +36,7 @@
 #include "scorepageviewlayout.h"
 #include "horizontalspacing.h"
 #include "slurtielayout.h"
+#include "headerfooterlayout.h"
 
 #include "paint.h"
 
@@ -129,4 +130,12 @@ void ScoreRenderer::layoutStem(Chord* item)
 {
     LayoutContext ctx(item->score());
     ChordLayout::layoutStem(item, ctx);
+}
+
+bool ScoreRenderer::scoreHasTimestampHeadersFooters(const Score* score) const
+{
+    if (score->layoutMode() != LayoutMode::PAGE && score->layoutMode() != LayoutMode::FLOAT) {
+        return false;
+    }
+    return HeaderFooterLayout::scoreHasTimestampHeadersFooters(score);
 }
