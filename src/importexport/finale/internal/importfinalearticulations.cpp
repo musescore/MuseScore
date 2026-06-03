@@ -794,71 +794,63 @@ void FinaleParser::importArticulations()
             // Arpeggios
             // The Finale symbol is an optional character and not in SMuFL
             if (!c->arpeggio() && musxArtic->symName == String(u"arpeggioVerticalSegment")) {
-                if (c->isGrace()) {
+                if (c->isGrace() || articAssign->hide) {
                     continue;
                 }
                 Segment* s = c->segment();
-                track_idx_t topChordTrack = c->track();
-                track_idx_t bottomChordTrack = c->track();
-                if (const System* sys = c->measure()->system()) {
-                    int line = c->staffType()->isTabStaff() ? c->upNote()->string() * 2 : c->upNote()->line();
-                    // x in chord coords, y in system coords
-                    PointF baseStartPos(c->upNote()->ldata()->pos().x(),
-                                        sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
-                                        + (line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
-                    if (articDef->autoVert) {
-                        // determine up/down and add corresponding offset (flipped/main)
-                        // and also other factors (centering, stacking, etc.)
-                    } else {
-                        // observed: always use above pos
-                        baseStartPos += evpuToPointF(articDef->xOffsetMain, -articDef->yOffsetMain) * c->spatium();
+                EntryInfoPtr sourceEntry = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
+                musx::util::ArpeggioSpanOptions options;
+                options.skipGraceEntries = true;
+                options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
+                                                            const musx::util::StaffOriginOffsetRequest& request) {
+                    const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
+                    const staff_idx_t targetStaffIdx = muse::value(m_inst2Staff, request.targetStaffId, muse::nidx);
+                    const Fraction tick = muse::value(m_meas2Tick, request.measureId, Fraction(-1, 1));
+                    Measure* measure = tick == Fraction(-1, 1) ? nullptr : m_score->tick2measure(tick);
+                    const System* system = measure ? measure->system() : nullptr;
+                    const auto musxSystem = document ? document->calcSystemFromMeasure(partId, request.measureId) : nullptr;
+
+                    if (sourceStaffIdx == muse::nidx || targetStaffIdx == muse::nidx || !system || !musxSystem) {
+                        return musx::util::StaffOriginOffsetResolverResult {
+                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+                        };
                     }
-                    baseStartPos += evpuToPointF(articAssign->horzOffset, -articAssign->vertOffset) * c->spatium();
-
-                    muse::draw::FontMetrics fm = FontTracker(articDef->fontMain, c->spatium()).toFontMetrics();
-                    baseStartPos.ry() -= fm.boundingRect(musxArtic->articChar.value()).height();
-
-                    line = c->staffType()->isTabStaff() ? c->downNote()->string() * 2 : c->downNote()->line();
-                    PointF baseEndPos(c->downNote()->ldata()->pos().x(),
-                                      sys->staff(c->vStaffIdx())->y() + c->staffOffsetY()
-                                      + (++line * c->spatium() * c->staffType()->lineDistance().val() * 0.5));
-                    baseEndPos += evpuToPointF(articAssign->horzAdd, -articAssign->vertAdd) * c->spatium();
-                    /// @todo (How) is this point affected by baseStartPos
-
-                    double upDiff = DBL_MAX;
-                    double downDiff = DBL_MAX;
-                    for (track_idx_t track = 0; track < m_score->ntracks(); ++track) {
-                        if (!sys->staff(track2staff(track))->show()) {
-                            continue;
-                        }
-                        if (s->element(track) && s->element(track)->isChord()) {
-                            Chord* potentialMatch = toChord(s->element(track));
-                            double staffYpos = sys->staff(potentialMatch->vStaffIdx())->y() + potentialMatch->staffOffsetY();
-                            double lineDist = potentialMatch->spatium() * potentialMatch->staffType()->lineDistance().val() * 0.5;
-                            // Check for up match
-                            // Iterate through and find best top/bottom matches
-                            // Then add to top chord (not c) and set spanArpeggio (only for lower chord?) as appropriate
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->upNote()->string() * 2
-                                   : potentialMatch->upNote()->line();
-                            double upPos = staffYpos + line * lineDist;
-                            double diff = std::abs(upPos - baseStartPos.y());
-                            if (diff < upDiff) {
-                                upDiff = diff;
-                                topChordTrack = potentialMatch->track();
-                            }
-                            line = potentialMatch->staffType()->isTabStaff() ? potentialMatch->downNote()->string() * 2
-                                   : potentialMatch->downNote()->line();
-                            double downPos = staffYpos + line * lineDist;
-                            diff = std::abs(downPos - baseEndPos.y());
-                            if (diff < downDiff) {
-                                downDiff = diff;
-                                bottomChordTrack = potentialMatch->track();
-                            }
-                        }
+                    if (!system->staff(sourceStaffIdx)->show() || !system->staff(targetStaffIdx)->show()) {
+                        return musx::util::StaffOriginOffsetResolverResult {
+                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+                        };
                     }
-                    bottomChordTrack = std::min(bottomChordTrack, m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
+
+                    const double sourceY = system->staff(sourceStaffIdx)->y();
+                    const double targetY = system->staff(targetStaffIdx)->y();
+                    const double systemSpatium = musxSystem->calcEffectiveScaling().toDouble() * FINALE_DEFAULT_SPATIUM;
+                    IF_ASSERT_FAILED(systemSpatium > 0.0) {
+                        return musx::util::StaffOriginOffsetResolverResult {
+                            musx::util::StaffOriginOffsetResolverDecision::Unavailable, 0.0
+                        };
+                    }
+                    return musx::util::StaffOriginOffsetResolverResult {
+                        musx::util::StaffOriginOffsetResolverDecision::Offset,
+                        (targetY - sourceY) * EVPU_PER_SPACE / systemSpatium
+                    };
+                };
+
+                const auto span = musx::util::calcArpeggioSpanForAssignment(sourceEntry, articAssign, options);
+                if (!span) {
+                    continue;
                 }
+
+                ChordRest* topCR = chordRestFromEntryInfoPtr(span->topEntry);
+                ChordRest* bottomCR = chordRestFromEntryInfoPtr(span->bottomEntry);
+                if (!topCR || !bottomCR || !topCR->isChord() || !bottomCR->isChord()) {
+                    continue;
+                }
+                track_idx_t topChordTrack = topCR->track();
+                track_idx_t bottomChordTrack = std::min(bottomCR->track(), m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
                 Chord* arpChord = toChord(s->element(topChordTrack));
+                if (!arpChord || arpChord->arpeggio()) {
+                    continue;
+                }
                 Arpeggio* arpeggio = Factory::createArpeggio(arpChord);
                 arpeggio->setTrack(topChordTrack);
                 arpeggio->setArpeggioType(ArpeggioType::NORMAL);

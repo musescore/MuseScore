@@ -16,7 +16,7 @@ set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
     musx
     GIT_REPOSITORY https://github.com/rpatters1/musxdom.git
-    GIT_TAG        main
+    GIT_TAG        dev/arpeggio-refactor
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 

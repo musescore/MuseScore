@@ -93,8 +93,7 @@ FrameSettings::FrameSettings(const others::Enclosure* enclosure)
 
     frameWidth   = efixToSp(enclosure->lineWidth);
     paddingWidth = evpuToSp(enclosure->xMargin);
-    /// @todo better approximation. Finale's corner radius values do not convert.
-    frameRound   = enclosure->roundCorners ? 100 : 0;
+    frameRound   = Spatium(enclosure->roundCorners ? efixToSp(enclosure->cornerRadius) : 0.0);
 }
 
 FrameSettings::FrameSettings(const others::TextBlock* textBlock)
@@ -107,8 +106,7 @@ FrameSettings::FrameSettings(const others::TextBlock* textBlock)
         frameType = FrameType::SQUARE;
         frameWidth = efixToSp(textBlock->stdLineThickness);
         paddingWidth = efixToSp(textBlock->inset) + 0.5; // fudge factor to ameliorate vertical discrepancy with Finale
-        /// @todo better approximation. Finale's corner radius values do not convert.
-        frameRound = textBlock->roundCorners ? 100 : 0;
+        frameRound = Spatium(textBlock->roundCorners ? efixToSp(textBlock->cornerRadius) : 0.0);
     }
 }
 
@@ -118,7 +116,7 @@ void FrameSettings::setFrameProperties(TextBase* item) const
     if (item->frameType() != FrameType::NO_FRAME) {
         setAndStyleProperty(item, Pid::FRAME_WIDTH, spatiumFromSp(frameWidth, item)); // is this the correct scaling?
         setAndStyleProperty(item, Pid::FRAME_PADDING, spatiumFromSp(paddingWidth, item)); // is this the correct scaling?
-        if (frameRound > 0) {
+        if (frameRound.val() > 0) {
             setAndStyleProperty(item, Pid::FRAME_ROUND, frameRound);
         }
     }
