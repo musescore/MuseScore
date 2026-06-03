@@ -103,6 +103,7 @@ public:
     void setSelected(bool f) override;
     void setVisible(bool f) override;
     void setColor(const Color& col) override;
+    void setZ(int val) override;
 
     bool collectForDrawing() const override;
 
@@ -247,6 +248,7 @@ public:
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
     virtual void setColor(const Color& col) override;
+    virtual void setZ(int val) override;
     Spanner* nextSpanner(EngravingItem* e, staff_idx_t activeStaff);
     Spanner* prevSpanner(EngravingItem* e, staff_idx_t activeStaff);
     virtual EngravingItem* nextSegmentElement() override;
