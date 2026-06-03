@@ -39,6 +39,7 @@
 #include "iprojectmigrator.h"
 
 #include "global/iglobalconfiguration.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::engraving {
 class MscReader;
@@ -58,6 +59,7 @@ class NotationProject : public INotationProject, public muse::Contextable, publi
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<INotationWritersRegister> writers;
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IProjectMigrator> migrator = { this };
     muse::ContextInject<engraving::rendering::IScoreRenderer> renderer = { this };
 

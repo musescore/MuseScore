@@ -53,6 +53,8 @@ public:
     void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) override;
     void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF()) override;
 
+    bool scoreHasTimestampHeadersFooters(const Score* score) const override;
+
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;
