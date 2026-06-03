@@ -403,7 +403,7 @@ bool SpannerSegment::isUserModified() const
                         || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
                     || (!offset().isNull() || !userOff2().isNull());
 
-    return modified; // ? modified : EngravingItem::isUserModified();
+    return modified;
 }
 
 bool SpannerSegment::allowTimeAnchor() const
@@ -471,7 +471,7 @@ void Spanner::add(EngravingItem* e)
     ls->setSelected(selected());
     ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
-    ls->setZ(z());
+    ls->EngravingItem::setZ(z());
     m_segments.push_back(ls);
     e->added();
 }
