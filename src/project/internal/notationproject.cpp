@@ -33,6 +33,7 @@
 #include "global/io/devtools/allzerosbuffercorruptor.h"
 
 #include "engraving/compat/engravingcompat.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/editing/editscoreproperties.h"
@@ -522,7 +523,15 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
             }
 
             // Re-compute headers and footers on save, to force timestamps update (if any)
-            renderer()->layoutHeadersFooters(m_engravingProject->masterScore());
+            const std::list<Score*>& scores = m_engravingProject->masterScore()->scoreList();
+            for (Score* s : scores) {
+                renderer()->layoutHeadersFooters(s);
+            }
+            for (const IExcerptNotationPtr& excerptNotation : m_masterNotation->excerpts()) {
+                if (excerptNotation->isInited() && excerptNotation->notation()->isOpen()) {
+                    excerptNotation->notation()->notationChanged().notify();
+                }
+            }
         }
     } break;
     case SaveMode::AutoSave: {
