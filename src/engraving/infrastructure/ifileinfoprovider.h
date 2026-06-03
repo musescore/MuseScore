@@ -43,6 +43,7 @@ public:
 
     virtual muse::DateTime birthTime() const = 0;
     virtual muse::DateTime lastModified() const = 0;
+    virtual bool isNewlyCreated() const = 0;
 };
 
 using IFileInfoProviderPtr = std::shared_ptr<IFileInfoProvider>;

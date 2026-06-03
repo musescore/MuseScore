@@ -67,3 +67,8 @@ DateTime ProjectFileInfoProvider::lastModified() const
 {
     return filesystem()->lastModified(path());
 }
+
+bool ProjectFileInfoProvider::isNewlyCreated() const
+{
+    return m_project->isNewlyCreated();
+}
