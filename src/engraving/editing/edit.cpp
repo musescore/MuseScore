@@ -4749,9 +4749,27 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
 {
     const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
-
     if (!isFrame) {
         return nullptr;
+    }
+
+    return this->insertBox(toMeasureBase(Factory::createItem(type, dummy())), beforeMeasure, options);
+}
+
+MeasureBase* Score::insertBox(MeasureBase* box, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
+{
+    IF_ASSERT_FAILED(box) {
+        return nullptr;
+    }
+
+    ElementType type = box->type();
+    const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
+    if (!isFrame) {
+        return nullptr;
+    }
+
+    if (box->score() != this) {
+        box->setScore(this);
     }
 
     Fraction tick;
@@ -4777,27 +4795,26 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, dummy()));
-    newMeasureBase->setTick(tick);
-    newMeasureBase->setNext(beforeMeasure);
-    newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
-    newMeasureBase->setSizeIsSpatiumDependent(!isTitleFrame);
+    box->setTick(tick);
+    box->setNext(beforeMeasure);
+    box->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
+    box->setSizeIsSpatiumDependent(!isTitleFrame);
 
     if (type == ElementType::FBOX) {
-        toFBox(newMeasureBase)->init();
+        toFBox(box)->init();
     }
 
-    undo(new InsertMeasures(newMeasureBase, newMeasureBase));
+    undo(new InsertMeasures(box, box));
 
     if (options.needDeselectAll) {
         deselectAll();
     }
 
     if (options.cloneBoxToAllParts) {
-        newMeasureBase->manageExclusionFromParts(/*exclude =*/ false);
+        box->manageExclusionFromParts(/*exclude =*/ false);
     }
 
-    return newMeasureBase;
+    return box;
 }
 
 void Score::restoreInitialKeySigAndTimeSig()

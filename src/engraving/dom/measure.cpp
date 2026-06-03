@@ -1827,17 +1827,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::TBOX:
     case ElementType::FBOX:
     case ElementType::HBOX:
-    {
-        MeasureBase* newBox = toMeasureBase(e);
-        Measure* m = isMMRest() ? mmRestFirst() : this;
-        newBox->setTick(m->tick());
-        newBox->setNext(m);
-        newBox->setPrev(m->prev());
-        score()->undo(new InsertMeasures(newBox, newBox));
-        newBox->manageExclusionFromParts(/*exclude =*/ false);
-        return newBox;
-    }
-    break;
+        return score()->insertBox(toMeasureBase(e), this);
 
     default:
         LOGD("Measure: cannot drop %s here", e->typeName());
