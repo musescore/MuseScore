@@ -220,10 +220,10 @@ static std::optional<musx::util::ArpeggioSpanCandidate> singleGlyphArpeggioSpan(
     return result;
 }
 
-musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions(bool skipGraceEntries) const
+musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions() const
 {
     musx::util::ArpeggioSpanOptions options;
-    options.skipGraceEntries = skipGraceEntries;
+    options.skipGraceEntries = false;
     options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
                                                 const musx::util::StaffOriginOffsetRequest& request) {
         const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
@@ -272,6 +272,10 @@ bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidat
     if (topCR->part() != bottomCR->part()) {
         return false;
     }
+    const bool graceArpeggio = topCR->isGrace() || bottomCR->isGrace();
+    if (graceArpeggio && topCR != bottomCR) {
+        return false;
+    }
 
     Chord* arpChord = toChord(topCR);
     if (span.type == musx::util::ArpeggioSpanType::Normal && arpChord->arpeggio()) {
@@ -296,10 +300,16 @@ bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidat
 
     arpeggio->setTrack(topChordTrack);
     arpeggio->setVisible(visible);
-    arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
-    for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
-        if (segment->element(track) && segment->element(track)->isChord()) {
-            toChord(segment->element(track))->setSpanArpeggio(arpeggio);
+    if (graceArpeggio) {
+        arpeggio->setSpan(1);
+    } else {
+        arpeggio->setSpan(int(bottomChordTrack + 1 - topChordTrack));
+    }
+    if (!graceArpeggio) {
+        for (track_idx_t track = topChordTrack; track <= bottomChordTrack; ++track) {
+            if (segment->element(track) && segment->element(track)->isChord()) {
+                toChord(segment->element(track))->setSpanArpeggio(arpeggio);
+            }
         }
     }
 
@@ -955,7 +965,7 @@ void FinaleParser::importArticulations()
             // Arpeggios
             if (musxArtic->symName == String(u"arpeggioVerticalSegment") || musxArtic->symName == String(u"arpeggiato")
                 || musxArtic->symName == String(u"arpeggiatoUp") || musxArtic->symName == String(u"arpeggiatoDown")) {
-                if (c->isGrace() || articAssign->hide) {
+                if (articAssign->hide) { // plugins may use hidden arpeggios as placeholders for multistaff arpeggios, so ignore them
                     continue;
                 }
                 if (c->arpeggio()) {
