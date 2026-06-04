@@ -32,12 +32,14 @@
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
 
 #include "global/iglobalconfiguration.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::engraving {
 class MscReader;
@@ -55,9 +57,11 @@ class NotationProject : public INotationProject, public muse::Contextable, publi
     muse::GlobalInject<IProjectConfiguration> configuration;
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<INotationReadersRegister> readers = { this };
     muse::ContextInject<INotationWritersRegister> writers = { this };
     muse::ContextInject<IProjectMigrator> migrator = { this };
+    muse::ContextInject<engraving::rendering::IScoreRenderer> renderer = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)

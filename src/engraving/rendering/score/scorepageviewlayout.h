@@ -30,6 +30,7 @@ class ScorePageViewLayout
 public:
 
     static void layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick);
+    static void layoutHeadersFooters(LayoutContext& ctx);
 
 private:
 
@@ -37,6 +38,8 @@ private:
     static void prepareScore(Score* score, const LayoutContext& ctx);
 
     static void doLayout(LayoutContext& ctx);
+
+    static void doLayoutHeadersFooters(LayoutContext& ctx);
 
     static void layoutFinished(Score* score, LayoutContext& ctx);
 };
