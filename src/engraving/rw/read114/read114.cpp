@@ -3038,8 +3038,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
-    masterScore->connectTies();
-
     //
     // remove "middle beam" flags from first ChordRest in
     // measure
@@ -3131,6 +3129,18 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
         }
     }
 
+    masterScore->setUpTempoMap();
+    // While reading the score, some elements might use `score->repeatList()` (which is incorrect
+    // anyway, because the repeatList will be incomplete because the score is incomplete, but some
+    // elements still do it).
+    // `score->repeatList()` calls `_repeatList->update()`; the repeat list then thinks that it is
+    // up-to-date from that point. But we weren't finished reading the score, so the score will still
+    // change. We need to tell the repeat list about that, so that it will be updated next time
+    // someone uses it.
+    masterScore->invalidateRepeatList();
+    masterScore->connectTies();
+    masterScore->undoRemoveStaleTieJumpPoints(false);
+
     // create excerpts
     {
         std::vector<Excerpt*> readExcerpts;
@@ -3155,8 +3165,6 @@ muse::Ret Read114::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     if (masterScore->style().styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
-
-    masterScore->setUpTempoMap();
 
     for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);

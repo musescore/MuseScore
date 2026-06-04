@@ -220,7 +220,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRef(const char* file, bool exportLayo
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_ref.xml"));
@@ -245,7 +244,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRefBreaks(const char* file)
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
@@ -273,7 +271,6 @@ void MusicXml_Tests::musicXmlMscxExportTestRefInvisibleElements(const char* file
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
     ASSERT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));

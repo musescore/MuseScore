@@ -40,16 +40,6 @@ public:
     void brailleSaveTest(const char* file);
 };
 
-//---------------------------------------------------------
-//   fixupScore -- do required fixups after reading/importing score
-//---------------------------------------------------------
-
-static void fixupScore(MasterScore* score)
-{
-    score->connectTies();
-    score->masterScore()->rebuildMidiMapping();
-}
-
 static bool saveBraille(MasterScore* score, const String& saveName)
 {
     QFile file(saveName);
@@ -73,7 +63,6 @@ void Braille_Tests::brailleSaveTest(const char* file)
     String fileName = String::fromUtf8(file);
     MasterScore* score = ScoreRW::readScore(BRAILLE_DIR + fileName + u".mscx", false);
     EXPECT_TRUE(score);
-    fixupScore(score);
     score->doLayout();
     EXPECT_TRUE(saveCompareBrailleScore(score, fileName + ".brf", BRAILLE_DIR + fileName + "_ref.brf"));
     delete score;
