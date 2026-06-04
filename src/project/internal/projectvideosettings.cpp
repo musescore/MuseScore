@@ -37,6 +37,14 @@ using namespace muse;
 
 static constexpr int VIDEO_SETTINGS_VERSION = 1;
 
+static void normalizeHitPoints(VideoAttachmentSettings& attachment)
+{
+    std::stable_sort(attachment.hitPoints.begin(), attachment.hitPoints.end(), [](const VideoHitPointSettings& a,
+                                                                                 const VideoHitPointSettings& b) {
+        return a.timeMs < b.timeMs;
+    });
+}
+
 const VideoAttachmentSettings& ProjectVideoSettings::attachment() const
 {
     return m_attachment;
@@ -44,11 +52,14 @@ const VideoAttachmentSettings& ProjectVideoSettings::attachment() const
 
 void ProjectVideoSettings::setAttachment(const VideoAttachmentSettings& attachment)
 {
-    if (m_attachment == attachment) {
+    VideoAttachmentSettings normalized = attachment;
+    normalizeHitPoints(normalized);
+
+    if (m_attachment == normalized) {
         return;
     }
 
-    m_attachment = attachment;
+    m_attachment = normalized;
     m_settingsChanged.notify();
 }
 
@@ -152,9 +163,7 @@ VideoAttachmentSettings ProjectVideoSettings::attachmentFromJson(const QJsonObje
         }
     }
 
-    std::sort(result.hitPoints.begin(), result.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
-        return a.timeMs < b.timeMs;
-    });
+    normalizeHitPoints(result);
 
     return result;
 }

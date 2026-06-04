@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
 #include "engraving/types/constants.h"
@@ -102,7 +103,7 @@ QString VideoPanelModel::formatTimecode(int videoPositionMs) const
     videoPositionMs = std::max(0, videoPositionMs);
     const double framesPerSecond = std::clamp(frameRate(), 1.0, 240.0);
     const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(framesPerSecond)));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((videoPositionMs / 1000.0) * framesPerSecond + 0.5));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((videoPositionMs / 1000.0) * roundedFrameRate + 0.5));
 
     const qint64 frames = totalFrames % roundedFrameRate;
     const qint64 totalSeconds = totalFrames / roundedFrameRate;
@@ -347,7 +348,7 @@ QString VideoPanelModel::musicalPositionText(int videoPositionMs) const
         return QString();
     }
 
-    engraving::Score* score = project->masterNotation()->masterScore();
+    auto* score = project->masterNotation()->masterScore();
     const double scoreTimeSeconds = std::max(0.0, static_cast<double>(videoPositionMs - offsetMs()) / 1000.0);
     const int tick = std::max(0, score->utime2utick(scoreTimeSeconds));
     const engraving::Measure* measure = score->tick2measure(engraving::Fraction::fromTicks(tick));

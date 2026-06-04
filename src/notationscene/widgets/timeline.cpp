@@ -1490,12 +1490,12 @@ void Timeline::hitPointMeta(Segment* seg, int* stagger, int pos)
         return;
     }
 
-    project::IProjectVideoSettingsPtr settings = videoSettings();
+    mu::project::IProjectVideoSettingsPtr settings = videoSettings();
     if (!settings || !settings->attachment().isValid()) {
         return;
     }
 
-    const project::VideoAttachmentSettings& attachment = settings->attachment();
+    const mu::project::VideoAttachmentSettings& attachment = settings->attachment();
     if (attachment.hitPoints.empty()) {
         return;
     }
@@ -1503,8 +1503,13 @@ void Timeline::hitPointMeta(Segment* seg, int* stagger, int pos)
     const int row = getMetaRow(muse::qtrc("notation/timeline", "Hit points"));
     const int currentMeasureIndex = pos / _gridWidth;
 
-    for (const project::VideoHitPointSettings& hitPoint : attachment.hitPoints) {
-        const double scoreTimeSeconds = std::max(0.0, static_cast<double>(hitPoint.timeMs - attachment.offsetMs) / 1000.0);
+    for (const mu::project::VideoHitPointSettings& hitPoint : attachment.hitPoints) {
+        const int scoreRelativeMs = hitPoint.timeMs - attachment.offsetMs;
+        if (scoreRelativeMs < 0) {
+            continue;
+        }
+
+        const double scoreTimeSeconds = static_cast<double>(scoreRelativeMs) / 1000.0;
         const int tick = std::max(0, score()->utime2utick(scoreTimeSeconds));
         const Measure* measure = score()->tick2measure(Fraction::fromTicks(tick));
         if (!measure || measure->measureIndex() != currentMeasureIndex) {
@@ -1514,7 +1519,7 @@ void Timeline::hitPointMeta(Segment* seg, int* stagger, int pos)
         const int x = pos + (*stagger) * _spacing;
         const QString label = hitPoint.label.empty() ? muse::qtrc("notation/timeline", "Hit") : hitPoint.label.toQString();
         const QString tooltip = muse::qtrc("notation/timeline", "Video hit point at %1").arg(formatVideoTimecode(hitPoint.timeMs));
-        if (addMetaValue(x, pos, label, row, ElementType::INVALID, nullptr, seg, seg->measure(), tooltip)) {
+        if (addMetaValue(x, pos, label, row, ElementType::INVALID, nullptr, nullptr, seg->measure(), tooltip)) {
             (*stagger)++;
             _globalZValue++;
         }
@@ -1531,22 +1536,24 @@ void Timeline::timecodeMeta(Segment* seg, int* stagger, int pos)
         return;
     }
 
-    project::IProjectVideoSettingsPtr settings = videoSettings();
+    mu::project::IProjectVideoSettingsPtr settings = videoSettings();
     if (!settings || !settings->attachment().isValid()) {
         return;
     }
 
-    const project::VideoAttachmentSettings& attachment = settings->attachment();
-    if (attachment.timecodeDisplayMode == project::VideoTimecodeDisplayMode::Off) {
+    const mu::project::VideoAttachmentSettings& attachment = settings->attachment();
+    if (attachment.timecodeDisplayMode == mu::project::VideoTimecodeDisplayMode::Off) {
         return;
     }
 
-    const int videoPositionMs = std::max(0, static_cast<int>(std::lround(score()->utick2utime(seg->measure()->tick().ticks()) * 1000.0))
-                                        + attachment.offsetMs);
+    const int measureTick = seg->measure()->tick().ticks();
+    const double measureTimeSeconds = score()->utick2utime(measureTick);
+    const int measureTimeMs = static_cast<int>(std::lround(measureTimeSeconds * 1000.0));
+    const int videoPositionMs = std::max(0, measureTimeMs + attachment.offsetMs);
     const int row = getMetaRow(muse::qtrc("notation/timeline", "Timecode"));
     const int x = pos + (*stagger) * _spacing;
 
-    if (addMetaValue(x, pos, formatVideoTimecode(videoPositionMs), row, ElementType::INVALID, nullptr, seg, seg->measure())) {
+    if (addMetaValue(x, pos, formatVideoTimecode(videoPositionMs), row, ElementType::INVALID, nullptr, nullptr, seg->measure())) {
         (*stagger)++;
         _globalZValue++;
     }
@@ -3332,17 +3339,17 @@ Score* Timeline::score() const
     return m_notation ? m_notation->elements()->msScore() : nullptr;
 }
 
-project::IProjectVideoSettingsPtr Timeline::videoSettings() const
+mu::project::IProjectVideoSettingsPtr Timeline::videoSettings() const
 {
     return m_notation && m_notation->project() ? m_notation->project()->videoSettings() : nullptr;
 }
 
 QString Timeline::formatVideoTimecode(int videoPositionMs) const
 {
-    const project::IProjectVideoSettingsPtr settings = videoSettings();
+    const mu::project::IProjectVideoSettingsPtr settings = videoSettings();
     const double framesPerSecond = settings && settings->attachment().isValid() ? settings->attachment().frameRate : 24.0;
     const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(framesPerSecond, 1.0, 240.0))));
-    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * framesPerSecond + 0.5));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * roundedFrameRate + 0.5));
 
     const qint64 frames = totalFrames % roundedFrameRate;
     const qint64 totalSeconds = totalFrames / roundedFrameRate;
