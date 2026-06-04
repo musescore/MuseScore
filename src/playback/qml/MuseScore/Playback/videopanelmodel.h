@@ -65,6 +65,7 @@ public:
     Q_INVOKABLE void nudgeOffset(int deltaMs);
     Q_INVOKABLE void addHitPoint(int videoPositionMs);
     Q_INVOKABLE void removeHitPoint(int index);
+    Q_INVOKABLE void renameHitPoint(int index, const QString& label);
     Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
 
     bool hasVideo() const;

@@ -23,6 +23,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
 
@@ -38,7 +39,6 @@ Item {
 
     readonly property int contentMargin: 8
     readonly property bool compactMode: width < 620
-    readonly property int controlsHeight: controlsColumn.implicitHeight
 
     clip: true
 
@@ -112,8 +112,8 @@ Item {
             Layout.maximumWidth: 16777215
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredHeight: Math.max(140, root.height - root.controlsHeight - (root.contentMargin * 2) - 8)
-            Layout.minimumHeight: 72
+            Layout.preferredHeight: root.compactMode ? 180 : 260
+            Layout.minimumHeight: 96
 
             radius: 4
             color: "#111111"
@@ -335,70 +335,6 @@ Item {
                 }
             }
 
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 8
-
-                StyledTextLabel {
-                    text: qsTrc("playback", "Timecode")
-                }
-
-                FlatButton {
-                    text: qsTrc("playback", "Off")
-                    enabled: videoModel.hasVideo
-                    accentButton: videoModel.timecodeDisplayMode === 0
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 9
-
-                    onClicked: {
-                        videoModel.timecodeDisplayMode = 0
-                    }
-                }
-
-                FlatButton {
-                    text: qsTrc("playback", "Above")
-                    enabled: videoModel.hasVideo
-                    accentButton: videoModel.timecodeDisplayMode === 1
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 10
-
-                    onClicked: {
-                        videoModel.timecodeDisplayMode = 1
-                    }
-                }
-
-                FlatButton {
-                    text: qsTrc("playback", "Below")
-                    enabled: videoModel.hasVideo
-                    accentButton: videoModel.timecodeDisplayMode === 2
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 11
-
-                    onClicked: {
-                        videoModel.timecodeDisplayMode = 2
-                    }
-                }
-
-                StyledTextLabel {
-                    text: qsTrc("playback", "fps")
-                }
-
-                TextInputField {
-                    Layout.preferredWidth: 56
-                    currentText: videoModel.frameRate.toString()
-                    enabled: videoModel.hasVideo
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 12
-
-                    onTextEditingFinished: function(newTextValue) {
-                        var parsedValue = parseFloat(newTextValue)
-                        if (!isNaN(parsedValue)) {
-                            videoModel.frameRate = parsedValue
-                        }
-                    }
-                }
-            }
-
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 4
@@ -413,11 +349,30 @@ Item {
                         text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
                     }
 
+                    StyledTextLabel {
+                        text: qsTrc("playback", "fps")
+                    }
+
+                    TextInputField {
+                        Layout.preferredWidth: 56
+                        currentText: videoModel.frameRate.toString()
+                        enabled: videoModel.hasVideo
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 9
+
+                        onTextEditingFinished: function(newTextValue) {
+                            var parsedValue = parseFloat(newTextValue)
+                            if (!isNaN(parsedValue)) {
+                                videoModel.frameRate = parsedValue
+                            }
+                        }
+                    }
+
                     FlatButton {
                         text: qsTrc("playback", "Add hit point")
                         enabled: videoModel.hasVideo
                         navigation.panel: navigationPanel
-                        navigation.order: root.contentNavigationPanelOrderStart + 13
+                        navigation.order: root.contentNavigationPanelOrderStart + 10
 
                         onClicked: {
                             videoModel.addHitPoint(video.position)
@@ -425,38 +380,101 @@ Item {
                     }
                 }
 
-                Repeater {
-                    model: videoModel.hitPoints
+                StyledFlickable {
+                    id: hitPointsFlickable
 
-                    RowLayout {
-                        required property var modelData
-                        required property int index
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: Math.min(hitPointsColumn.implicitHeight, 132)
+                    Layout.maximumHeight: 132
+                    visible: videoModel.hitPoints.length > 0
 
-                        Layout.fillWidth: true
-                        spacing: 8
+                    contentHeight: hitPointsColumn.implicitHeight
+                    interactive: contentHeight > height
+                    clip: true
 
-                        StyledTextLabel {
-                            Layout.preferredWidth: 92
-                            text: parent.modelData.timecode
-                            maximumLineCount: 1
-                        }
+                    ScrollBar.vertical: StyledScrollBar {
+                        policy: hitPointsFlickable.contentHeight > hitPointsFlickable.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
+                        padding: 0
+                    }
 
-                        StyledTextLabel {
-                            Layout.fillWidth: true
-                            text: parent.modelData.label + "  " + parent.modelData.musicalPosition
-                            maximumLineCount: 1
-                        }
+                    ColumnLayout {
+                        id: hitPointsColumn
 
-                        FlatButton {
-                            Layout.preferredWidth: 32
-                            Layout.preferredHeight: 28
-                            icon: IconCode.DELETE_TANK
-                            buttonType: FlatButton.IconOnly
-                            navigation.panel: navigationPanel
-                            navigation.order: root.contentNavigationPanelOrderStart + 14 + parent.index
+                        width: hitPointsFlickable.width - (hitPointsFlickable.contentHeight > hitPointsFlickable.height ? 12 : 0)
+                        spacing: 4
 
-                            onClicked: {
-                                videoModel.removeHitPoint(parent.index)
+                        Repeater {
+                            model: videoModel.hitPoints
+
+                            RowLayout {
+                                id: hitPointDelegate
+
+                                required property var modelData
+                                required property int index
+
+                                property bool editingLabel: false
+
+                                width: hitPointsColumn.width
+                                spacing: 8
+
+                                StyledTextLabel {
+                                    Layout.preferredWidth: 92
+                                    text: hitPointDelegate.modelData.timecode
+                                    maximumLineCount: 1
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 28
+
+                                    StyledTextLabel {
+                                        anchors.fill: parent
+                                        verticalAlignment: Text.AlignVCenter
+                                        text: hitPointDelegate.modelData.label + "  " + hitPointDelegate.modelData.musicalPosition
+                                        maximumLineCount: 1
+                                        visible: !hitPointDelegate.editingLabel
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                hitPointDelegate.editingLabel = true
+                                                labelEditor.forceActiveFocus()
+                                            }
+                                        }
+                                    }
+
+                                    TextInputField {
+                                        id: labelEditor
+
+                                        anchors.fill: parent
+                                        currentText: hitPointDelegate.modelData.label
+                                        visible: hitPointDelegate.editingLabel
+                                        navigation.panel: navigationPanel
+                                        navigation.order: root.contentNavigationPanelOrderStart + 11 + hitPointDelegate.index
+
+                                        onTextEditingFinished: function(newTextValue) {
+                                            videoModel.renameHitPoint(hitPointDelegate.index, newTextValue)
+                                            hitPointDelegate.editingLabel = false
+                                        }
+
+                                        Keys.onEscapePressed: {
+                                            hitPointDelegate.editingLabel = false
+                                        }
+                                    }
+                                }
+
+                                FlatButton {
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 28
+                                    icon: IconCode.DELETE_TANK
+                                    buttonType: FlatButton.IconOnly
+                                    navigation.panel: navigationPanel
+                                    navigation.order: root.contentNavigationPanelOrderStart + 18 + hitPointDelegate.index
+
+                                    onClicked: {
+                                        videoModel.removeHitPoint(hitPointDelegate.index)
+                                    }
+                                }
                             }
                         }
                     }

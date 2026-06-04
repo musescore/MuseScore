@@ -32,6 +32,7 @@
 #include "dockwindow/idockwindowprovider.h"
 #include "extensions/iextensionsprovider.h"
 #include "context/iglobalcontext.h"
+#include "project/iprojectvideosettings.h"
 #include "notationscene/inotationsceneconfiguration.h"
 #include "braille/ibrailleconfiguration.h"
 #include "iappshellstate.h"
@@ -90,6 +91,7 @@ private:
     void onNotationChanged();
 
     void toggleDock(const QString& name);
+    void setVideoTimecodeDisplayMode(project::VideoTimecodeDisplayMode mode);
 
     void scheduleUpdatePercussionPanelVisibility();
     void doUpdatePercussionPanelVisibility();

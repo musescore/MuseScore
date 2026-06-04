@@ -98,6 +98,25 @@ void VideoPanelModel::removeHitPoint(int index)
     updateAttachment(updated);
 }
 
+void VideoPanelModel::renameHitPoint(int index, const QString& label)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+        return;
+    }
+
+    const QString trimmedLabel = label.trimmed();
+    const muse::String newLabel = trimmedLabel.isEmpty()
+                                  ? muse::String(u"Hit %1").arg(index + 1)
+                                  : muse::String::fromQString(trimmedLabel);
+    if (updated.hitPoints.at(index).label == newLabel) {
+        return;
+    }
+
+    updated.hitPoints[index].label = newLabel;
+    updateAttachment(updated);
+}
+
 QString VideoPanelModel::formatTimecode(int videoPositionMs) const
 {
     videoPositionMs = std::max(0, videoPositionMs);
