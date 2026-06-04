@@ -39,10 +39,11 @@ static constexpr int VIDEO_SETTINGS_VERSION = 1;
 
 static void normalizeHitPoints(VideoAttachmentSettings& attachment)
 {
-    std::stable_sort(attachment.hitPoints.begin(), attachment.hitPoints.end(), [](const VideoHitPointSettings& a,
-                                                                                 const VideoHitPointSettings& b) {
-        return a.timeMs < b.timeMs;
-    });
+    std::stable_sort(
+        attachment.hitPoints.begin(), attachment.hitPoints.end(),
+        [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
+            return a.timeMs < b.timeMs;
+        });
 }
 
 const VideoAttachmentSettings& ProjectVideoSettings::attachment() const
