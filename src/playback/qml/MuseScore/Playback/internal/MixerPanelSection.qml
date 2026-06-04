@@ -88,23 +88,7 @@ Loader {
             spacing: 1 // for separators (will be rendered in MixerPanel.qml)
 
             model: root.model
-            delegate: Item {
-                id: delegateRoot
-
-                required property var channelItem
-
-                width: root.channelItemWidth
-                height: contentLoader.item ? contentLoader.item.height : 1
-
-                Loader {
-                    id: contentLoader
-
-                    property var channelItem: delegateRoot.channelItem
-
-                    active: Boolean(channelItem)
-                    sourceComponent: root.delegateComponent
-                }
-            }
+            delegate: root.delegateComponent
         }
     }
 }
