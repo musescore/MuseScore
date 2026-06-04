@@ -39,6 +39,7 @@ Item {
 
     readonly property int contentMargin: 8
     readonly property bool compactMode: width < 620
+    readonly property color hitPointColor: "#3B94E5"
 
     clip: true
 
@@ -54,6 +55,12 @@ Item {
 
     function targetVideoPositionMs() {
         return Math.max(0, Math.min(video.duration, videoModel.scorePlaybackPositionMs + videoModel.offsetMs))
+    }
+
+    function clearAttachedVideo() {
+        video.stop()
+        video.source = ""
+        videoModel.clearVideo()
     }
 
     function syncVideoToScore(forceSeek) {
@@ -185,7 +192,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                height: 28
+                height: 36
                 visible: videoModel.hasVideo && video.duration > 0 && videoModel.hitPoints.length > 0
 
                 Rectangle {
@@ -193,22 +200,49 @@ Item {
                     color: "#99000000"
                 }
 
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 2
+                    color: "#66FFFFFF"
+                }
+
                 Repeater {
                     model: videoModel.hitPoints
 
-                    Rectangle {
+                    Item {
                         required property var modelData
 
                         x: Math.max(0, Math.min(parent.width - width, (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
-                        y: 3
-                        width: 2
-                        height: parent.height - 6
-                        color: "#" + ("000000" + modelData.color.toString(16)).slice(-6)
+                        width: Math.max(20, hitLabel.implicitWidth + 8)
+                        height: parent.height
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.bottom: hitLabel.top
+                            width: 2
+                            color: root.hitPointColor
+                        }
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: root.hitPointColor
+                            border.width: 1
+                            border.color: "white"
+                        }
 
                         StyledTextLabel {
-                            anchors.left: parent.right
-                            anchors.leftMargin: 3
-                            anchors.verticalCenter: parent.verticalCenter
+                            id: hitLabel
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 2
                             text: parent.modelData.label
                             maximumLineCount: 1
                             font.pixelSize: 10
@@ -249,25 +283,50 @@ Item {
                     }
                 }
 
-                StyledSlider {
+                Item {
                     Layout.fillWidth: true
-                    from: 0
-                    to: Math.max(video.duration, 1)
-                    stepSize: 100
-                    value: video.position
-                    enabled: videoModel.hasVideo && video.seekable
-                    navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 3
+                    Layout.preferredHeight: 30
 
-                    onMoved: {
-                        video.seek(value)
+                    StyledSlider {
+                        id: positionSlider
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        from: 0
+                        to: Math.max(video.duration, 1)
+                        stepSize: 100
+                        value: video.position
+                        enabled: videoModel.hasVideo && video.seekable
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 3
+
+                        onMoved: {
+                            video.seek(value)
+                        }
+                    }
+
+                    Repeater {
+                        model: videoModel.hitPoints
+
+                        Rectangle {
+                            required property var modelData
+
+                            x: Math.max(0, Math.min(parent.width - width, (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
+                            y: 2
+                            width: 3
+                            height: parent.height - 4
+                            radius: 1
+                            visible: videoModel.hasVideo && video.duration > 0
+                            color: root.hitPointColor
+                        }
                     }
                 }
 
                 StyledTextLabel {
-                    Layout.preferredWidth: root.compactMode ? 64 : 92
+                    Layout.preferredWidth: root.compactMode ? 86 : 116
                     horizontalAlignment: Text.AlignRight
-                    text: videoModel.hasVideo ? Math.floor(video.position / 1000) + " / " + Math.floor(video.duration / 1000) + " s" : ""
+                    text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
                 }
             }
 
@@ -346,7 +405,7 @@ Item {
 
                     StyledTextLabel {
                         Layout.fillWidth: true
-                        text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
+                        text: videoModel.hasVideo ? videoModel.hitPoints.length + " " + qsTrc("playback", "hit points") : ""
                     }
 
                     StyledTextLabel {
@@ -495,8 +554,7 @@ Item {
                     navigation.order: root.contentNavigationPanelOrderStart + 30
 
                     onClicked: {
-                        video.stop()
-                        videoModel.clearVideo()
+                        root.clearAttachedVideo()
                     }
                 }
             }
