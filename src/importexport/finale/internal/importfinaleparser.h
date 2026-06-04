@@ -426,7 +426,7 @@ private:
     engraving::Note* noteFromEntryInfoAndNumber(const musx::dom::EntryInfoPtr& entryInfoPtr, musx::dom::NoteNumber nn);
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
-    musx::util::ArpeggioSpanOptions arpeggioSpanOptions(bool skipGraceEntries = true) const;
+    musx::util::ArpeggioSpanOptions arpeggioSpanOptions() const;
     bool createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
                                 const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef = nullptr,
                                 bool visible = true);
