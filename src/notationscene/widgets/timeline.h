@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotation.h"
+#include "project/iprojectvideosettings.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
@@ -190,6 +191,8 @@ private:
     void keyMeta(engraving::Segment* seg, int* stagger, int pos);
     void barlineMeta(engraving::Segment* seg, int* stagger, int pos);
     void jumpMarkerMeta(engraving::Segment* seg, int* stagger, int pos);
+    void hitPointMeta(engraving::Segment* seg, int* stagger, int pos);
+    void timecodeMeta(engraving::Segment* seg, int* stagger, int pos);
 
     bool addMetaValue(int x, int pos, QString metaText, int row, engraving::ElementType elementType, engraving::EngravingItem* element,
                       engraving::Segment* seg, engraving::Measure* measure, QString tooltip = "");
@@ -227,6 +230,8 @@ private:
 
     INotationInteractionPtr interaction() const;
     engraving::Score* score() const;
+    project::IProjectVideoSettingsPtr videoSettings() const;
+    QString formatVideoTimecode(int videoPositionMs) const;
 
 private slots:
     void handleScroll(int value);

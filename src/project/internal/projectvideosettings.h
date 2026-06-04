@@ -46,6 +46,8 @@ public:
     void makeDefault();
 
 private:
+    VideoHitPointSettings hitPointFromJson(const QJsonObject& object) const;
+    QJsonObject hitPointToJson(const VideoHitPointSettings& hitPoint) const;
     VideoAttachmentSettings attachmentFromJson(const QJsonObject& object) const;
     QJsonObject attachmentToJson(const VideoAttachmentSettings& attachment) const;
 

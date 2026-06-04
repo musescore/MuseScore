@@ -29,6 +29,9 @@
 #include <QScrollBar>
 #include <QTextDocument>
 
+#include <algorithm>
+#include <cmath>
+
 #include "translation.h"
 
 #include "engraving/dom/barline.h"
@@ -48,6 +51,7 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/types/typesconv.h"
+#include "project/inotationproject.h"
 
 #include "log.h"
 
@@ -766,6 +770,8 @@ Timeline::Timeline(QSplitter* splitter, const muse::modularity::ContextPtr& iocC
 
     _metas.push_back({ muse::qtrc("notation/timeline", "Tempo"), &Timeline::tempoMeta, true });
     _metas.push_back({ muse::qtrc("notation/timeline", "Time signature"), &Timeline::timeMeta, true });
+    _metas.push_back({ muse::qtrc("notation/timeline", "Timecode"), &Timeline::timecodeMeta, true });
+    _metas.push_back({ muse::qtrc("notation/timeline", "Hit points"), &Timeline::hitPointMeta, true });
     _metas.push_back({ muse::qtrc("notation/timeline", "Rehearsal mark"), &Timeline::rehearsalMeta, true });
     _metas.push_back({ muse::qtrc("notation/timeline", "Key signature"), &Timeline::keyMeta, true });
     _metas.push_back({ muse::qtrc("notation/timeline", "Barlines"), &Timeline::barlineMeta, true });
@@ -1472,6 +1478,78 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
     }
     std::get<2>(_repeatInfo) = nullptr;
     std::get<3>(_repeatInfo) = nullptr;
+}
+
+//---------------------------------------------------------
+//   Timeline::hitPointMeta
+//---------------------------------------------------------
+
+void Timeline::hitPointMeta(Segment* seg, int* stagger, int pos)
+{
+    if (!seg || seg != seg->measure()->first()) {
+        return;
+    }
+
+    project::IProjectVideoSettingsPtr settings = videoSettings();
+    if (!settings || !settings->attachment().isValid()) {
+        return;
+    }
+
+    const project::VideoAttachmentSettings& attachment = settings->attachment();
+    if (attachment.hitPoints.empty()) {
+        return;
+    }
+
+    const int row = getMetaRow(muse::qtrc("notation/timeline", "Hit points"));
+    const int currentMeasureIndex = pos / _gridWidth;
+
+    for (const project::VideoHitPointSettings& hitPoint : attachment.hitPoints) {
+        const double scoreTimeSeconds = std::max(0.0, static_cast<double>(hitPoint.timeMs - attachment.offsetMs) / 1000.0);
+        const int tick = std::max(0, score()->utime2utick(scoreTimeSeconds));
+        const Measure* measure = score()->tick2measure(Fraction::fromTicks(tick));
+        if (!measure || measure->measureIndex() != currentMeasureIndex) {
+            continue;
+        }
+
+        const int x = pos + (*stagger) * _spacing;
+        const QString label = hitPoint.label.empty() ? muse::qtrc("notation/timeline", "Hit") : hitPoint.label.toQString();
+        const QString tooltip = muse::qtrc("notation/timeline", "Video hit point at %1").arg(formatVideoTimecode(hitPoint.timeMs));
+        if (addMetaValue(x, pos, label, row, ElementType::INVALID, nullptr, seg, seg->measure(), tooltip)) {
+            (*stagger)++;
+            _globalZValue++;
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   Timeline::timecodeMeta
+//---------------------------------------------------------
+
+void Timeline::timecodeMeta(Segment* seg, int* stagger, int pos)
+{
+    if (!seg || seg != seg->measure()->first()) {
+        return;
+    }
+
+    project::IProjectVideoSettingsPtr settings = videoSettings();
+    if (!settings || !settings->attachment().isValid()) {
+        return;
+    }
+
+    const project::VideoAttachmentSettings& attachment = settings->attachment();
+    if (attachment.timecodeDisplayMode == project::VideoTimecodeDisplayMode::Off) {
+        return;
+    }
+
+    const int videoPositionMs = std::max(0, static_cast<int>(std::lround(score()->utick2utime(seg->measure()->tick().ticks()) * 1000.0))
+                                        + attachment.offsetMs);
+    const int row = getMetaRow(muse::qtrc("notation/timeline", "Timecode"));
+    const int x = pos + (*stagger) * _spacing;
+
+    if (addMetaValue(x, pos, formatVideoTimecode(videoPositionMs), row, ElementType::INVALID, nullptr, seg, seg->measure())) {
+        (*stagger)++;
+        _globalZValue++;
+    }
 }
 
 //---------------------------------------------------------
@@ -2546,6 +2624,8 @@ void Timeline::changeEvent(QEvent* event)
         _metas.clear();
         _metas.push_back({ muse::qtrc("notation/timeline", "Tempo"), &Timeline::tempoMeta, true });
         _metas.push_back({ muse::qtrc("notation/timeline", "Time signature"), &Timeline::timeMeta, true });
+        _metas.push_back({ muse::qtrc("notation/timeline", "Timecode"), &Timeline::timecodeMeta, true });
+        _metas.push_back({ muse::qtrc("notation/timeline", "Hit points"), &Timeline::hitPointMeta, true });
         _metas.push_back({ muse::qtrc("notation/timeline", "Rehearsal mark"), &Timeline::rehearsalMeta, true });
         _metas.push_back({ muse::qtrc("notation/timeline", "Key signature"), &Timeline::keyMeta, true });
         _metas.push_back({ muse::qtrc("notation/timeline", "Barlines"), &Timeline::barlineMeta, true });
@@ -3250,6 +3330,31 @@ INotationInteractionPtr Timeline::interaction() const
 Score* Timeline::score() const
 {
     return m_notation ? m_notation->elements()->msScore() : nullptr;
+}
+
+project::IProjectVideoSettingsPtr Timeline::videoSettings() const
+{
+    return m_notation && m_notation->project() ? m_notation->project()->videoSettings() : nullptr;
+}
+
+QString Timeline::formatVideoTimecode(int videoPositionMs) const
+{
+    const project::IProjectVideoSettingsPtr settings = videoSettings();
+    const double framesPerSecond = settings && settings->attachment().isValid() ? settings->attachment().frameRate : 24.0;
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(std::clamp(framesPerSecond, 1.0, 240.0))));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((std::max(0, videoPositionMs) / 1000.0) * framesPerSecond + 0.5));
+
+    const qint64 frames = totalFrames % roundedFrameRate;
+    const qint64 totalSeconds = totalFrames / roundedFrameRate;
+    const qint64 seconds = totalSeconds % 60;
+    const qint64 minutes = (totalSeconds / 60) % 60;
+    const qint64 hours = totalSeconds / 3600;
+
+    return QString("%1:%2:%3:%4")
+           .arg(hours, 2, 10, QLatin1Char('0'))
+           .arg(minutes, 2, 10, QLatin1Char('0'))
+           .arg(seconds, 2, 10, QLatin1Char('0'))
+           .arg(frames, 2, 10, QLatin1Char('0'));
 }
 
 TRowLabels* Timeline::labelsColumn() const

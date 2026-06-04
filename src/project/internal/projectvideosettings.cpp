@@ -22,6 +22,9 @@
 
 #include "projectvideosettings.h"
 
+#include <algorithm>
+
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
@@ -108,6 +111,24 @@ void ProjectVideoSettings::makeDefault()
     m_attachment = VideoAttachmentSettings();
 }
 
+VideoHitPointSettings ProjectVideoSettings::hitPointFromJson(const QJsonObject& object) const
+{
+    VideoHitPointSettings result;
+    result.label = object.value("label").toString();
+    result.timeMs = std::max(0, object.value("timeMs").toInt());
+    result.color = object.value("color").toInt(0x3B94E5);
+    return result;
+}
+
+QJsonObject ProjectVideoSettings::hitPointToJson(const VideoHitPointSettings& hitPoint) const
+{
+    QJsonObject object;
+    object["label"] = hitPoint.label.toQString();
+    object["timeMs"] = hitPoint.timeMs;
+    object["color"] = hitPoint.color;
+    return object;
+}
+
 VideoAttachmentSettings ProjectVideoSettings::attachmentFromJson(const QJsonObject& object) const
 {
     VideoAttachmentSettings result;
@@ -117,6 +138,24 @@ VideoAttachmentSettings ProjectVideoSettings::attachmentFromJson(const QJsonObje
     result.balance = static_cast<float>(object.value("balance").toDouble(0.0));
     result.muted = object.value("muted").toBool(false);
     result.solo = object.value("solo").toBool(false);
+    result.frameRate = std::clamp(object.value("frameRate").toDouble(24.0), 1.0, 240.0);
+    result.timecodeDisplayMode = static_cast<VideoTimecodeDisplayMode>(
+        std::clamp(object.value("timecodeDisplayMode").toInt(static_cast<int>(VideoTimecodeDisplayMode::Off)),
+                   static_cast<int>(VideoTimecodeDisplayMode::Off),
+                   static_cast<int>(VideoTimecodeDisplayMode::BelowBars)));
+
+    const QJsonArray hitPoints = object.value("hitPoints").toArray();
+    result.hitPoints.reserve(static_cast<size_t>(hitPoints.size()));
+    for (const QJsonValue& hitPointValue : hitPoints) {
+        if (hitPointValue.isObject()) {
+            result.hitPoints.push_back(hitPointFromJson(hitPointValue.toObject()));
+        }
+    }
+
+    std::sort(result.hitPoints.begin(), result.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
+        return a.timeMs < b.timeMs;
+    });
+
     return result;
 }
 
@@ -129,5 +168,14 @@ QJsonObject ProjectVideoSettings::attachmentToJson(const VideoAttachmentSettings
     object["balance"] = attachment.balance;
     object["muted"] = attachment.muted;
     object["solo"] = attachment.solo;
+    object["frameRate"] = attachment.frameRate;
+    object["timecodeDisplayMode"] = static_cast<int>(attachment.timecodeDisplayMode);
+
+    QJsonArray hitPoints;
+    for (const VideoHitPointSettings& hitPoint : attachment.hitPoints) {
+        hitPoints.append(hitPointToJson(hitPoint));
+    }
+    object["hitPoints"] = hitPoints;
+
     return object;
 }

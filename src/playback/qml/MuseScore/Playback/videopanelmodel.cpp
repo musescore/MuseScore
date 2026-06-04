@@ -25,6 +25,10 @@
 #include <algorithm>
 #include <cmath>
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/types/constants.h"
+
 using namespace mu::playback;
 using namespace mu::project;
 
@@ -59,6 +63,58 @@ void VideoPanelModel::clearVideo()
 void VideoPanelModel::nudgeOffset(int deltaMs)
 {
     setOffsetMs(offsetMs() + deltaMs);
+}
+
+void VideoPanelModel::addHitPoint(int videoPositionMs)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid()) {
+        return;
+    }
+
+    videoPositionMs = std::max(0, videoPositionMs);
+
+    VideoHitPointSettings hitPoint;
+    hitPoint.timeMs = videoPositionMs;
+    hitPoint.label = muse::String(u"Hit %1").arg(static_cast<int>(updated.hitPoints.size()) + 1);
+    updated.hitPoints.push_back(hitPoint);
+
+    std::sort(updated.hitPoints.begin(), updated.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
+        return a.timeMs < b.timeMs;
+    });
+
+    updateAttachment(updated);
+}
+
+void VideoPanelModel::removeHitPoint(int index)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+        return;
+    }
+
+    updated.hitPoints.erase(updated.hitPoints.begin() + index);
+    updateAttachment(updated);
+}
+
+QString VideoPanelModel::formatTimecode(int videoPositionMs) const
+{
+    videoPositionMs = std::max(0, videoPositionMs);
+    const double framesPerSecond = std::clamp(frameRate(), 1.0, 240.0);
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(framesPerSecond)));
+    const qint64 totalFrames = static_cast<qint64>(std::floor((videoPositionMs / 1000.0) * framesPerSecond + 0.5));
+
+    const qint64 frames = totalFrames % roundedFrameRate;
+    const qint64 totalSeconds = totalFrames / roundedFrameRate;
+    const qint64 seconds = totalSeconds % 60;
+    const qint64 minutes = (totalSeconds / 60) % 60;
+    const qint64 hours = totalSeconds / 3600;
+
+    return QString("%1:%2:%3:%4")
+           .arg(hours, 2, 10, QLatin1Char('0'))
+           .arg(minutes, 2, 10, QLatin1Char('0'))
+           .arg(seconds, 2, 10, QLatin1Char('0'))
+           .arg(frames, 2, 10, QLatin1Char('0'));
 }
 
 bool VideoPanelModel::hasVideo() const
@@ -189,6 +245,58 @@ void VideoPanelModel::setSolo(bool solo)
     updateAttachment(updated);
 }
 
+double VideoPanelModel::frameRate() const
+{
+    return std::clamp(attachment().frameRate, 1.0, 240.0);
+}
+
+void VideoPanelModel::setFrameRate(double frameRate)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid()) {
+        return;
+    }
+
+    frameRate = std::clamp(frameRate, 1.0, 240.0);
+    if (std::abs(updated.frameRate - frameRate) < 0.001) {
+        return;
+    }
+
+    updated.frameRate = frameRate;
+    updateAttachment(updated);
+}
+
+int VideoPanelModel::timecodeDisplayMode() const
+{
+    return static_cast<int>(attachment().timecodeDisplayMode);
+}
+
+void VideoPanelModel::setTimecodeDisplayMode(int mode)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid()) {
+        return;
+    }
+
+    mode = std::clamp(mode, static_cast<int>(VideoTimecodeDisplayMode::Off), static_cast<int>(VideoTimecodeDisplayMode::BelowBars));
+    const VideoTimecodeDisplayMode displayMode = static_cast<VideoTimecodeDisplayMode>(mode);
+    if (updated.timecodeDisplayMode == displayMode) {
+        return;
+    }
+
+    updated.timecodeDisplayMode = displayMode;
+    updateAttachment(updated);
+}
+
+QVariantList VideoPanelModel::hitPoints() const
+{
+    QVariantList result;
+    for (const VideoHitPointSettings& hitPoint : attachment().hitPoints) {
+        result.push_back(hitPointToMap(hitPoint));
+    }
+    return result;
+}
+
 bool VideoPanelModel::scorePlaying() const
 {
     return playbackController()->isPlaying();
@@ -219,6 +327,37 @@ void VideoPanelModel::updateAttachment(const VideoAttachmentSettings& attachment
     }
 
     settings->setAttachment(attachment);
+}
+
+QVariantMap VideoPanelModel::hitPointToMap(const VideoHitPointSettings& hitPoint) const
+{
+    QVariantMap result;
+    result["label"] = hitPoint.label.toQString();
+    result["timeMs"] = hitPoint.timeMs;
+    result["timecode"] = formatTimecode(hitPoint.timeMs);
+    result["musicalPosition"] = musicalPositionText(hitPoint.timeMs);
+    result["color"] = hitPoint.color;
+    return result;
+}
+
+QString VideoPanelModel::musicalPositionText(int videoPositionMs) const
+{
+    INotationProjectPtr project = context()->currentProject();
+    if (!project || !project->masterNotation() || !project->masterNotation()->masterScore()) {
+        return QString();
+    }
+
+    engraving::Score* score = project->masterNotation()->masterScore();
+    const double scoreTimeSeconds = std::max(0.0, static_cast<double>(videoPositionMs - offsetMs()) / 1000.0);
+    const int tick = std::max(0, score->utime2utick(scoreTimeSeconds));
+    const engraving::Measure* measure = score->tick2measure(engraving::Fraction::fromTicks(tick));
+    if (!measure) {
+        return QString();
+    }
+
+    const int beatTicks = engraving::Constants::DIVISION;
+    const int beat = std::max(1, ((tick - measure->tick().ticks()) / beatTicks) + 1);
+    return QString("%1.%2").arg(measure->measureNumber() + 1).arg(beat);
 }
 
 void VideoPanelModel::listenCurrentProject()

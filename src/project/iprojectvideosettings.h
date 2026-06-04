@@ -23,11 +23,38 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "async/notification.h"
 #include "global/io/path.h"
+#include "global/types/string.h"
 
 namespace mu::project {
+enum class VideoTimecodeDisplayMode {
+    Off = 0,
+    AboveBars,
+    BelowBars
+};
+
+struct VideoHitPointSettings
+{
+    muse::String label;
+    int timeMs = 0;
+    int color = 0x3B94E5;
+
+    bool operator==(const VideoHitPointSettings& other) const
+    {
+        return label == other.label
+               && timeMs == other.timeMs
+               && color == other.color;
+    }
+
+    bool operator!=(const VideoHitPointSettings& other) const
+    {
+        return !(*this == other);
+    }
+};
+
 struct VideoAttachmentSettings
 {
     muse::io::path_t path;
@@ -36,6 +63,9 @@ struct VideoAttachmentSettings
     float balance = 0.f;
     bool muted = false;
     bool solo = false;
+    double frameRate = 24.0;
+    VideoTimecodeDisplayMode timecodeDisplayMode = VideoTimecodeDisplayMode::Off;
+    std::vector<VideoHitPointSettings> hitPoints;
 
     bool isValid() const
     {
@@ -49,7 +79,10 @@ struct VideoAttachmentSettings
                && volume == other.volume
                && balance == other.balance
                && muted == other.muted
-               && solo == other.solo;
+               && solo == other.solo
+               && frameRate == other.frameRate
+               && timecodeDisplayMode == other.timecodeDisplayMode
+               && hitPoints == other.hitPoints;
     }
 
     bool operator!=(const VideoAttachmentSettings& other) const

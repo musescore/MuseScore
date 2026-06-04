@@ -30,6 +30,7 @@
 #include <QTimer>
 
 #include "log.h"
+#include "project/inotationproject.h"
 
 namespace mu::notation {
 class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget
@@ -168,6 +169,12 @@ void TimelineView::componentComplete()
         notation->interaction()->selectionChanged().onNotify(this, [=] {
             updateView();
         }, Asyncable::Mode::SetReplace /* FIXME */);
+
+        if (notation->project() && notation->project()->videoSettings()) {
+            notation->project()->videoSettings()->settingsChanged().onNotify(this, [=] {
+                updateView();
+            }, Asyncable::Mode::SetReplace);
+        }
     };
 
     globalContext()->currentNotationChanged().onNotify(this, [initTimeline]() {

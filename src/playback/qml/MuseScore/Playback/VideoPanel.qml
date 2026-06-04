@@ -180,6 +180,43 @@ Item {
                     video.play()
                 }
             }
+
+            Item {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: 28
+                visible: videoModel.hasVideo && video.duration > 0 && videoModel.hitPoints.length > 0
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#99000000"
+                }
+
+                Repeater {
+                    model: videoModel.hitPoints
+
+                    Rectangle {
+                        required property var modelData
+
+                        x: Math.max(0, Math.min(parent.width - width, (modelData.timeMs / Math.max(video.duration, 1)) * parent.width - (width / 2)))
+                        y: 3
+                        width: 2
+                        height: parent.height - 6
+                        color: "#" + ("000000" + modelData.color.toString(16)).slice(-6)
+
+                        StyledTextLabel {
+                            anchors.left: parent.right
+                            anchors.leftMargin: 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: parent.modelData.label
+                            maximumLineCount: 1
+                            font.pixelSize: 10
+                            color: "white"
+                        }
+                    }
+                }
+            }
         }
 
         ColumnLayout {
@@ -300,6 +337,134 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
+                spacing: 8
+
+                StyledTextLabel {
+                    text: qsTrc("playback", "Timecode")
+                }
+
+                FlatButton {
+                    text: qsTrc("playback", "Off")
+                    enabled: videoModel.hasVideo
+                    accentButton: videoModel.timecodeDisplayMode === 0
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 9
+
+                    onClicked: {
+                        videoModel.timecodeDisplayMode = 0
+                    }
+                }
+
+                FlatButton {
+                    text: qsTrc("playback", "Above")
+                    enabled: videoModel.hasVideo
+                    accentButton: videoModel.timecodeDisplayMode === 1
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 10
+
+                    onClicked: {
+                        videoModel.timecodeDisplayMode = 1
+                    }
+                }
+
+                FlatButton {
+                    text: qsTrc("playback", "Below")
+                    enabled: videoModel.hasVideo
+                    accentButton: videoModel.timecodeDisplayMode === 2
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 11
+
+                    onClicked: {
+                        videoModel.timecodeDisplayMode = 2
+                    }
+                }
+
+                StyledTextLabel {
+                    text: qsTrc("playback", "fps")
+                }
+
+                TextInputField {
+                    Layout.preferredWidth: 56
+                    currentText: videoModel.frameRate.toString()
+                    enabled: videoModel.hasVideo
+                    navigation.panel: navigationPanel
+                    navigation.order: root.contentNavigationPanelOrderStart + 12
+
+                    onTextEditingFinished: function(newTextValue) {
+                        var parsedValue = parseFloat(newTextValue)
+                        if (!isNaN(parsedValue)) {
+                            videoModel.frameRate = parsedValue
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 4
+                visible: videoModel.hasVideo
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 8
+
+                    StyledTextLabel {
+                        Layout.fillWidth: true
+                        text: videoModel.hasVideo ? videoModel.formatTimecode(video.position) : ""
+                    }
+
+                    FlatButton {
+                        text: qsTrc("playback", "Add hit point")
+                        enabled: videoModel.hasVideo
+                        navigation.panel: navigationPanel
+                        navigation.order: root.contentNavigationPanelOrderStart + 13
+
+                        onClicked: {
+                            videoModel.addHitPoint(video.position)
+                        }
+                    }
+                }
+
+                Repeater {
+                    model: videoModel.hitPoints
+
+                    RowLayout {
+                        required property var modelData
+                        required property int index
+
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        StyledTextLabel {
+                            Layout.preferredWidth: 92
+                            text: parent.modelData.timecode
+                            maximumLineCount: 1
+                        }
+
+                        StyledTextLabel {
+                            Layout.fillWidth: true
+                            text: parent.modelData.label + "  " + parent.modelData.musicalPosition
+                            maximumLineCount: 1
+                        }
+
+                        FlatButton {
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 28
+                            icon: IconCode.DELETE_TANK
+                            buttonType: FlatButton.IconOnly
+                            navigation.panel: navigationPanel
+                            navigation.order: root.contentNavigationPanelOrderStart + 14 + parent.index
+
+                            onClicked: {
+                                videoModel.removeHitPoint(parent.index)
+                            }
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
 
                 Item {
                     Layout.fillWidth: true
@@ -309,7 +474,7 @@ Item {
                     text: qsTrc("playback", "Clear")
                     enabled: videoModel.hasVideo
                     navigation.panel: navigationPanel
-                    navigation.order: root.contentNavigationPanelOrderStart + 9
+                    navigation.order: root.contentNavigationPanelOrderStart + 30
 
                     onClicked: {
                         video.stop()

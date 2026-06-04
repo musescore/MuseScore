@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QUrl>
+#include <QVariantList>
 #include <qqmlintegration.h>
 
 #include "async/asyncable.h"
@@ -45,6 +46,9 @@ class VideoPanelModel : public QObject, public muse::Contextable, public muse::a
     Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY videoSettingsChanged)
+    Q_PROPERTY(double frameRate READ frameRate WRITE setFrameRate NOTIFY videoSettingsChanged)
+    Q_PROPERTY(int timecodeDisplayMode READ timecodeDisplayMode WRITE setTimecodeDisplayMode NOTIFY videoSettingsChanged)
+    Q_PROPERTY(QVariantList hitPoints READ hitPoints NOTIFY videoSettingsChanged)
     Q_PROPERTY(bool scorePlaying READ scorePlaying NOTIFY playbackSyncChanged)
     Q_PROPERTY(int scorePlaybackPositionMs READ scorePlaybackPositionMs NOTIFY playbackSyncChanged)
 
@@ -59,6 +63,9 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void clearVideo();
     Q_INVOKABLE void nudgeOffset(int deltaMs);
+    Q_INVOKABLE void addHitPoint(int videoPositionMs);
+    Q_INVOKABLE void removeHitPoint(int index);
+    Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
 
     bool hasVideo() const;
     QString videoPath() const;
@@ -80,6 +87,14 @@ public:
     bool solo() const;
     void setSolo(bool solo);
 
+    double frameRate() const;
+    void setFrameRate(double frameRate);
+
+    int timecodeDisplayMode() const;
+    void setTimecodeDisplayMode(int mode);
+
+    QVariantList hitPoints() const;
+
     bool scorePlaying() const;
     int scorePlaybackPositionMs() const;
 
@@ -91,6 +106,8 @@ private:
     project::IProjectVideoSettingsPtr videoSettings() const;
     project::VideoAttachmentSettings attachment() const;
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
+    QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
+    QString musicalPositionText(int videoPositionMs) const;
     void listenCurrentProject();
     void listenPlaybackController();
 

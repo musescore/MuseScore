@@ -117,6 +117,20 @@ TEST(ProjectVideoSettingsTests, WriteAndReadAttachment)
     attachment.balance = -0.25f;
     attachment.muted = true;
     attachment.solo = true;
+    attachment.frameRate = 29.97;
+    attachment.timecodeDisplayMode = VideoTimecodeDisplayMode::AboveBars;
+
+    VideoHitPointSettings firstHitPoint;
+    firstHitPoint.label = u"Door slam";
+    firstHitPoint.timeMs = 3200;
+    firstHitPoint.color = 0xD94A4A;
+    attachment.hitPoints.push_back(firstHitPoint);
+
+    VideoHitPointSettings secondHitPoint;
+    secondHitPoint.label = u"Cut";
+    secondHitPoint.timeMs = 9600;
+    secondHitPoint.color = 0x3B94E5;
+    attachment.hitPoints.push_back(secondHitPoint);
 
     source.setAttachment(attachment);
     EXPECT_TRUE(source.write(writer));
