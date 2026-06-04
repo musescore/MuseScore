@@ -65,3 +65,8 @@ DateTime LocalFileInfoProvider::lastModified() const
 {
     return fileSystem()->lastModified(m_path);
 }
+
+bool LocalFileInfoProvider::isNewlyCreated() const
+{
+    return true;
+}

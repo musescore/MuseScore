@@ -46,6 +46,7 @@ public:
 
     muse::DateTime birthTime() const override;
     muse::DateTime lastModified() const override;
+    bool isNewlyCreated() const override;
 
 private:
     NotationProject* m_project = nullptr;
