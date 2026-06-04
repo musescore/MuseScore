@@ -1731,11 +1731,13 @@ void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t sta
 std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts, MasterScore* score)
 {
     StringList allExcerptLowerNames;
+    allExcerptLowerNames.reserve(score->excerpts().size() + parts.size());
     for (const Excerpt* e : score->excerpts()) {
         allExcerptLowerNames.push_back(e->name().toLower());
     }
 
     std::vector<Excerpt*> result;
+    result.reserve(parts.size());
 
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(score);

@@ -34,7 +34,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void HeaderFooterLayout::layoutHeaderFooter(const LayoutContext& ctx, Page* page)
+void HeaderFooterLayout::layoutHeaderFooter(LayoutContext& ctx, Page* page)
 {
     const bool isPageMode = ctx.conf().isMode(LayoutMode::PAGE) || ctx.conf().isMode(LayoutMode::FLOAT);
     if (!isPageMode) {
@@ -66,7 +66,7 @@ void HeaderFooterLayout::layoutHeaderFooter(const LayoutContext& ctx, Page* page
     }
 }
 
-void HeaderFooterLayout::createUpdateHeaderText(const LayoutContext& ctx, Page* page, int area, const String& s)
+void HeaderFooterLayout::createUpdateHeaderText(LayoutContext& ctx, Page* page, int area, const String& s)
 {
     if (s.empty()) {
         removeHeaderText(page, area);
@@ -105,7 +105,7 @@ void HeaderFooterLayout::createUpdateHeaderText(const LayoutContext& ctx, Page* 
     }
 }
 
-void HeaderFooterLayout::createUpdateFooterText(const LayoutContext& ctx, Page* page, int area, const String& s)
+void HeaderFooterLayout::createUpdateFooterText(LayoutContext& ctx, Page* page, int area, const String& s)
 {
     if (s.empty()) {
         removeFooterText(page, area);
@@ -144,7 +144,7 @@ void HeaderFooterLayout::createUpdateFooterText(const LayoutContext& ctx, Page* 
     }
 }
 
-bool HeaderFooterLayout::updateHeaderFooterText(const LayoutContext& ctx, Page* page, Text* text, const String& s)
+bool HeaderFooterLayout::updateHeaderFooterText(LayoutContext& ctx, Page* page, Text* text, const String& s)
 {
     // Hack: we can't use toXmlEscaped on the entire string because this would erase any manual XML
     // formatting, but we do want to be able to use a plain '&' in favour of XML character entities ...
@@ -243,7 +243,7 @@ void HeaderFooterLayout::removeFooterText(Page* page, int area)
 //       workTitle
 //---------------------------------------------------------
 
-TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const Page* page, const TextBlock& tb)
+TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* page, const TextBlock& tb)
 {
     std::list<TextFragment> newFragments;
     for (const TextFragment& tf: tb.fragments()) {
@@ -267,13 +267,14 @@ TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const 
                     }
                     [[fallthrough]];
                 case 'N': // on page 1 only if there are multiple pages
-                    if ((page->score()->npages() + page->score()->pageNumberOffset()) <= 1) {
+                    if ((static_cast<int>(page->score()->npages()) + page->score()->pageNumberOffset()) <= 1) {
+                        ctx.mutState().setMustRecomputeHeadersFooters(true);
                         break;
                     }
                     [[fallthrough]];
                 case 'P': // on all pages
                 {
-                    size_t no = page->pageNumber() + 1 + page->score()->pageNumberOffset();
+                    const int no = static_cast<int>(page->pageNumber()) + 1 + page->score()->pageNumberOffset();
                     if (no > 0) {
                         const String pageNumberString = String::number(no);
                         const CharFormat pageNumberFormat = formatForMacro(ctx, String('$' + nc));
@@ -283,7 +284,8 @@ TextBlock HeaderFooterLayout::replaceTextMacros(const LayoutContext& ctx, const 
                 break;
                 case 'n':
                 {
-                    size_t no = page->score()->npages() + page->score()->pageNumberOffset();
+                    ctx.mutState().setMustRecomputeHeadersFooters(true);
+                    const int no = static_cast<int>(page->score()->npages()) + page->score()->pageNumberOffset();
                     const String numberOfPagesString = String::number(no);
                     const CharFormat pageNumberFormat = formatForMacro(ctx, String('$' + nc));
                     appendFormattedString(newFragments, numberOfPagesString, defaultFormat, pageNumberFormat);

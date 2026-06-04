@@ -1753,7 +1753,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     tuplet->setRatio(Fraction(container->getTuplet(), container->getSpace()));
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
-                    // tuplet->setTick(tick);
+                    tuplet->setTick(Fraction::fromTicks(tick));
                     tuplet->setParent(measure);
                     // measure->add(tuplet);
                 }

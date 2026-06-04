@@ -188,6 +188,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
             HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
+            playablePitches.reserve(playableTpcs.size());
             for (int t : playableTpcs) {
                 playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
             }

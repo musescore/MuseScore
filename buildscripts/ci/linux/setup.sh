@@ -19,241 +19,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
 
-df -h .
-
+HERE="$(dirname ${BASH_SOURCE[0]})"
+ROOT_DIR="$HERE/../../.."
+MF_DIR_NAME="muse"
+MF_DIR="$ROOT_DIR/$MF_DIR_NAME"
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
-PACKARCH="x86_64" # x86_64, armv7l, aarch64, wasm
+PACKARCH="x86_64" # x86_64, aarch64, wasm
 COMPILER="gcc" # gcc, clang
 EMSDK_VERSION="4.0.7" # for Qt 6.10
-BUILD_PIPEWIRE=false
+BUILD_PIPEWIRE=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --arch) PACKARCH="$2"; shift ;;
         --compiler) COMPILER="$2"; shift ;;
-        --build-pipewire) BUILD_PIPEWIRE=true ;;
+        --build-pipewire) BUILD_PIPEWIRE="--build-pipewire" ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-mkdir -p $BUILD_TOOLS
-
-# Let's remove the file with environment variables to recreate it
-rm -f $ENV_FILE
-
-echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
-
-if [[ "$PACKARCH" == "armv7l" ]]; then
-  SUDO=""
-  export DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
-else
-  SUDO="sudo"
-fi
-
-##########################################################################
-# GET DEPENDENCIES
-##########################################################################
-
-apt_packages_tools=(
-  # Alphabetical order please!
-  curl
-  desktop-file-utils # installs `desktop-file-validate` for appimagetool
-  lcov
-  libgpgme-dev # install for appimagetool
-  p7zip-full
-  unzip
-  wget
-  zsync # installs `zsyncmake` for appimagetool
-  )
-
-# Qt dependencies are already installed by the "Install Qt" step
-apt_packages_deps=(
-  libasound2-dev
-  libcups2-dev
-  libsndfile1-dev
-  libvulkan-dev
-)
-
-apt_packages_ffmpeg=(
-  ffmpeg
-  libavcodec-dev
-  libavformat-dev
-  libswscale-dev
-  )
-
-if $BUILD_PIPEWIRE ; then
-  apt_packages_deps+=(
-    libdbus-1-dev
-    libudev-dev
-    )
-fi
-
-$SUDO apt-get install -y --no-install-recommends \
-  "${apt_packages_tools[@]}" \
-  "${apt_packages_deps[@]}" \
-  "${apt_packages_ffmpeg[@]}"
-
-##########################################################################
-# GET TOOLS
-##########################################################################
-
-# COMPILER
-if [ "$COMPILER" == "gcc" ]; then
-
-  gcc_version="10"
-  $SUDO apt-get install -y --no-install-recommends "g++-${gcc_version}"
-  $SUDO update-alternatives \
-    --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
-    --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
-
-  echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
-  echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
-
-  gcc-${gcc_version} --version
-  g++-${gcc_version} --version
-
-elif [ "$COMPILER" == "clang" ]; then
-
-  $SUDO apt-get install clang
-  echo export CC="/usr/bin/clang" >> ${ENV_FILE}
-  echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
-
-  clang --version
-  clang++ --version
-
-else
-  echo "Unknown compiler: $COMPILER"
-fi
-
-# CMake
-if [[ "$PACKARCH" == "armv7l" ]]; then
-  $SUDO apt-get install -y --no-install-recommends cmake
-fi
-echo "cmake version"
-cmake --version
-
-# Ninja
-if [[ "$PACKARCH" == "armv7l" ]]; then
-  $SUDO apt-get install -y --no-install-recommends ninja-build
-fi
-echo "ninja version"
-ninja --version
-
-# Emscripten
-if [[ "$PACKARCH" == "wasm" ]]; then
-  git clone https://github.com/emscripten-core/emsdk.git $BUILD_TOOLS/emsdk
-  origin_dir=$(pwd)
-  cd $BUILD_TOOLS/emsdk
-  git pull
-  ./emsdk install $EMSDK_VERSION
-  ./emsdk activate $EMSDK_VERSION
-  echo "source $BUILD_TOOLS/emsdk/emsdk_env.sh" >> ${ENV_FILE}
-  cd $origin_dir
-fi
-
-# Python3-pip
-if [[ "$PACKARCH" == "armv7l" ]]; then
-  $SUDO apt-get install -y --no-install-recommends python3-pip
-fi
-
-##########################################################################
-# BUILD PIPWIRE
-##########################################################################
-
-if $BUILD_PIPEWIRE ; then
-  # MESON
-  # Get recent version of Meson (to build pipewire)
-  meson_version="1.1.1"
-  $SUDO python3 -m pip install meson==${meson_version}
-
-  pw_version="1.0.4"
-  pw_src_dir="$BUILD_TOOLS/pw-src-${pw_version}"
-  pw_dist_dir="$BUILD_TOOLS/pw-dist-${pw_version}"
-  pw_url="https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/${pw_version}/pipewire-${pw_version}.tar.gz"
-  if [[ ! -d "${pw_src_dir}" ]]; then
-    mkdir -p "${pw_src_dir}"
-    wget -q --show-progress -O pw.tar.gz "${pw_url}"
-    tar -xzf pw.tar.gz -C "${pw_src_dir}" --strip-components=1
-    rm pw.tar.gz
-    pushd "${pw_src_dir}"
-
-    meson setup builddir \
-      --buildtype=debug \
-      --prefix=${pw_dist_dir} \
-      --libdir=${pw_dist_dir}/lib \
-      -Dexamples=disabled \
-      -Dtests=disabled \
-      -Dgstreamer=disabled \
-      -Dgstreamer-device-provider=disabled \
-      -Dsystemd=disabled \
-      -Dselinux=disabled \
-      -Dpipewire-alsa=disabled \
-      -Dpipewire-jack=disabled \
-      -Dpipewire-v4l2=disabled \
-      -Djack-devel=false \
-      -Dalsa=disabled \
-      -Daudiomixer=disabled \
-      -Daudioconvert=enabled \
-      -Dbluez5=disabled \
-      -Dcontrol=disabled \
-      -Daudiotestsrc=disabled \
-      -Djack=disabled \
-      -Dsupport=enabled \
-      -Devl=disabled \
-      -Dv4l2=disabled \
-      -Dvideoconvert=disabled \
-      -Dvideotestsrc=disabled \
-      -Dpw-cat=disabled \
-      -Dudev=disabled \
-      -Dsdl2=disabled \
-      -Dsndfile=disabled \
-      -Dlibmysofa=disabled \
-      -Dlibpulse=disabled \
-      -Droc=disabled \
-      -Decho-cancel-webrtc=disabled \
-      -Dlibusb=disabled \
-      -Dsession-managers=[] \
-      -Draop=disabled \
-      -Dlv2=disabled \
-      -Dx11=disabled \
-      -Dlibcanberra=disabled \
-      -Dlegacy-rtkit=false \
-      -Davb=disabled \
-      -Dflatpak=disabled \
-      -Dreadline=disabled \
-      -Dgsettings=disabled \
-      -Dcompress-offload=disabled \
-      -Drlimits-install=false \
-      -Dopus=disabled \
-      -Dlibffado=disabled \
-
-    meson compile -C builddir
-    popd
-  fi
-  echo "Built pipewire in ${pw_src_dir}/builddir"
-  if [[ ! -d "${pw_dist_dir}" ]]; then
-    pushd ${pw_src_dir}
-    meson install -C builddir
-    popd
-  fi
-  echo "Installed pipewire to ${pw_dist_dir}"
-
-  echo export PW_DIST_DIR="${pw_dist_dir}" >> ${ENV_FILE}
-  echo export PKG_CONFIG_PATH="${pw_dist_dir}/lib/pkgconfig:\${PKG_CONFIG_PATH}" >> ${ENV_FILE}
-  echo export LIBRARY_PATH="${pw_dist_dir}/lib:\${LIBRARY_PATH}" >> ${ENV_FILE}
-  echo export LD_LIBRARY_PATH="${pw_dist_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-fi
-
-##########################################################################
-# POST INSTALL
-##########################################################################
-
-chmod +x "$ENV_FILE"
-
-df -h .
-echo "Setup script done"
+bash $MF_DIR/buildscripts/ci/linux/setup.sh --arch $PACKARCH --compiler $COMPILER $BUILD_PIPEWIRE

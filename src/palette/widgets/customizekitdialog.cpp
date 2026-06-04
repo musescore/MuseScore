@@ -153,6 +153,7 @@ CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     drumNote->setGridSize(70, 80);
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
+    drumNote->setIgnoreInputEvents(true);
 
     for (auto g : noteHeadNames) {
         noteHead->addItem(TConv::translatedUserName(g), int(g));

@@ -22,6 +22,7 @@
 
 #include "notationruler.h"
 
+#include "draw/types/drawtypes.h"
 #include "notation/notationtypes.h"
 #include "engraving/dom/sig.h"
 
@@ -169,7 +170,7 @@ void NotationRuler::paintLine(Painter* painter, LineType type, const PointF& poi
 
         painter->setPen(color);
         painter->setFont(font);
-        painter->drawText(rect, AlignHCenter | AlignBottom,
+        painter->drawText(rect, AlignHCenter | AlignBottom, TextDontClip,
                           Char(static_cast<char16_t>(muse::ui::IconCode::Code::DURATION_CURSOR)));
     } else {
         painter->fillRect(rect, color);

@@ -1527,6 +1527,11 @@ void Note::setVisible(bool v)
     }
 }
 
+bool Note::isExactUnison(Note* other)
+{
+    return other->pitch() == m_pitch && other->tpc() == tpc();
+}
+
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:
@@ -2008,7 +2013,7 @@ EngravingItem* Note::drop(EditData& data)
         NoteVal nval;
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
-        ChordRest* cr = nullptr;
+        const ChordRest* cr = nullptr;
         if (data.modifiers & ShiftModifier) {
             // add note to chord
             score()->addNote(ch, nval);

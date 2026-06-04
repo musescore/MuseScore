@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -96,22 +96,23 @@ void MuseSoundsRepository::init()
     device->setData(jsonData);
     auto receivedData = std::make_shared<QBuffer>();
 
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    if (!m_networkManager) {
+        m_networkManager = networkManagerCreator()->makeNetworkManager();
+    }
+
     RetVal<Progress> progress = m_networkManager->post(url, device, receivedData, headers);
     if (!progress.ret) {
         LOGE() << progress.ret.toString();
-        m_networkManager = nullptr;
         return;
     }
 
     progress.val.finished().onReceive(this, [this, receivedData](const muse::ProgressResult& res) {
         if (!res.ret) {
-            LOGE() << res.ret.toString();
-            m_networkManager = nullptr;
+            LOGE() << "Unable to download MuseSounds list: " << res.ret.toString();
             return;
         }
 
-        RetVal<SoundCatalogueInfoList> result;
+        RetVal<SoundCatalogInfoList> result;
 
         std::string err;
         JsonDocument soundsInfoDoc = JsonDocument::fromJson(ByteArray::fromQByteArray(receivedData->data()), &err);
@@ -122,25 +123,24 @@ void MuseSoundsRepository::init()
             result.val = parseSounds(soundsInfoDoc);
         }
 
-        m_soundsСatalogs = result.val;
-        m_soundsСatalogsChanged.notify();
-        m_networkManager = nullptr;
+        m_soundsCatalogs = result.val;
+        m_soundsCatalogsChanged.notify();
     });
 }
 
-const SoundCatalogueInfoList& MuseSoundsRepository::soundsCatalogueList() const
+const SoundCatalogInfoList& MuseSoundsRepository::soundsCatalogs() const
 {
-    return m_soundsСatalogs;
+    return m_soundsCatalogs;
 }
 
-async::Notification MuseSoundsRepository::soundsCatalogueListChanged() const
+async::Notification MuseSoundsRepository::soundsCatalogsChanged() const
 {
-    return m_soundsСatalogsChanged;
+    return m_soundsCatalogsChanged;
 }
 
-SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
+SoundCatalogInfoList MuseSoundsRepository::parseSounds(const JsonDocument& soundsDoc) const
 {
-    SoundCatalogueInfoList result;
+    SoundCatalogInfoList result;
 
     JsonObject obj = soundsDoc.rootObject();
     JsonObject data = !obj.empty() ? obj.value("data").toObject() : JsonObject();
@@ -150,15 +150,15 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
     std::string museSoundsAppName = platformMuseSoundsAppName();
 
     for (size_t catalogIdx = 0; catalogIdx < catalogs.size(); ++catalogIdx) {
-        JsonObject catalogueObj = catalogs.at(catalogIdx).toObject();
-        if (catalogueObj.empty()) {
+        JsonObject catalogObj = catalogs.at(catalogIdx).toObject();
+        if (catalogObj.empty()) {
             continue;
         }
 
-        SoundCatalogueInfo catalogue;
-        catalogue.title = catalogueObj.value("title").toString();
+        SoundCatalogInfo catalog;
+        catalog.title = catalogObj.value("title").toString();
 
-        JsonArray soundsItems = catalogueObj.value("productCards").toArray();
+        JsonArray soundsItems = catalogObj.value("productCards").toArray();
         if (soundsItems.empty()) {
             continue;
         }
@@ -187,14 +187,14 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             soundLibrary.code = productObj.value("code").toString();
             soundLibrary.uri = configuration()->soundPageUri(soundLibrary.code);
 
-            catalogue.soundLibraries.emplace_back(soundLibrary);
+            catalog.soundLibraries.emplace_back(soundLibrary);
         }
 
-        if (catalogue.soundLibraries.empty()) {
+        if (catalog.soundLibraries.empty()) {
             continue;
         }
 
-        result.emplace_back(catalogue);
+        result.emplace_back(catalog);
     }
 
     return result;

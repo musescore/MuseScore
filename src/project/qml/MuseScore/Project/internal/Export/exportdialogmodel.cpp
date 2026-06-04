@@ -154,7 +154,7 @@ void ExportDialogModel::init()
         selectExportTypeById(info.id);
     }
 
-    m_exportPath = info.exportPath;
+    m_exportDirPath = info.exportDirPath;
     setUnitType(info.unitType);
 
     beginResetModel();
@@ -416,28 +416,15 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    INotationProjectPtr project = context()->currentProject();
-    muse::io::path_t filename = io::filename(project->path());
-    // TODO: only restore filename if exactly the same notations are selected and the same unit type.
-    // These settings may namely cause extra things to be added to the name, but these extra things
-    // are not applicable to other values of these settings.
-    //if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
-    //    filename = io::filename(m_exportPath);
-    //}
-    muse::io::path_t defaultPath;
-    if (m_exportPath != "" && filename != "") {
-        defaultPath = io::absoluteDirpath(m_exportPath)
-                      .appendingComponent(io::filename(filename, false))
-                      .appendingSuffix(m_selectedExportType.suffixes[0]);
-    }
+    std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
 
     RetVal<muse::io::path_t> exportPath
-        = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath);
+        = scenario->askExportPath(notations, m_selectedExportType, m_selectedUnitType, m_exportDirPath);
     if (!exportPath.ret) {
         return false;
     }
 
-    m_exportPath = exportPath.val;
+    m_exportDirPath = io::absoluteDirpath(exportPath.val);
 
     struct Params {
         INotationPtrList notations;
@@ -451,10 +438,8 @@ bool ExportDialogModel::exportScores()
     //! Therefore, we save everything we need in variables
     //! and pass them to the lambda.
     //! We can't access the dialog class member in the lambda body.
-    Params params{ notations, m_exportPath, m_selectedUnitType,
+    Params params{ notations, exportPath.val, m_selectedUnitType,
                    shouldDestinationFolderBeOpenedOnExport() };
-
-    std::shared_ptr<IExportProjectScenario> scenario = exportProjectScenario();
 
     //! NOTE We can't use Async here
     // because the async::processMessages is called deep within the functions,
@@ -891,7 +876,7 @@ void ExportDialogModel::updateExportInfo()
 {
     ExportInfo info;
     info.id = m_selectedExportType.id;
-    info.exportPath = m_exportPath;
+    info.exportDirPath = m_exportDirPath;
     info.unitType = m_selectedUnitType;
 
     for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {

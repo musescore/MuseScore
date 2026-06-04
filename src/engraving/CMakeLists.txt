@@ -352,7 +352,7 @@ endif()
 if (ENGRAVING_NO_INTERNAL)
     target_compile_definitions(engraving PUBLIC ENGRAVING_NO_INTERNAL ENGRAVING_NO_INTERACTIVE ENGRAVING_NO_API)
 else()
-    include(${CMAKE_CURRENT_LIST_DIR}/api/v1/api_v1.cmake)
+    include(api/v1/api_v1.cmake)
     target_sources(engraving PRIVATE
         internal/engravingconfiguration.cpp
         internal/engravingconfiguration.h
@@ -383,7 +383,7 @@ set_source_files_properties(
     dom/transpose.cpp
     editing/transpose.cpp
     style/style.cpp
-    #${CMAKE_CURRENT_LIST_DIR}/api/vi/style.cpp
+    #api/vi/style.cpp
 
     infrastructure/mscreader.cpp
     infrastructure/mscwriter.cpp
@@ -441,7 +441,7 @@ endif()
 
 target_include_directories(engraving PRIVATE
     infrastructure
-    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    thirdparty/dtl
 )
 
 target_link_libraries(engraving PRIVATE muse::draw)

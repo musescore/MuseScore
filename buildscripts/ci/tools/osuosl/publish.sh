@@ -116,18 +116,18 @@ fi
 # Delete old files
 if [ "$BUILD_MODE" == "nightly" ]; then
     echo "Delete old MuseScore-Studio-Nightly files"
-    num_days=40         # keep old nightlies for this long  
-    num_today=2         # today's build and latest symlink  
-    num_branches=2      # master and release branch  
-    num_variants=1  
-    if [ "$OS" == "windows" ]; then  
-        num_variants=2      # portable and normal  
-    elif [ "$OS" == "linux" ]; then  
-        num_variants=3      # x86_64, aarch64, armv7l  
-        ((num_today += 1))  # zsync file  
-    fi  
-    num_to_keep=$(((num_days + num_today) * num_branches * num_variants))  
-    start_line_num=$((num_to_keep + 1))  
+    num_days=40         # keep old nightlies for this long
+    num_today=2         # today's build and latest symlink
+    num_branches=2      # master and release branch
+    num_variants=1
+    if [ "$OS" == "windows" ]; then
+        num_variants=2      # portable and normal
+    elif [ "$OS" == "linux" ]; then
+        num_variants=2      # x86_64, aarch64
+        ((num_today += 1))  # zsync file
+    fi
+    num_to_keep=$(((num_days + num_today) * num_branches * num_variants))
+    start_line_num=$((num_to_keep + 1))
     ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH && ls -t MuseScore{-Studio-,}Nightly* | tail -n +${start_line_num} | xargs rm -f"
 fi
 

@@ -92,7 +92,7 @@ jobs:
         include:
           - platform: linux_x64
             arch: x86_64
-            runs-on: ubuntu-22.04
+            runs-on: ubuntu-24.04
             qt-host: linux
             qt-arch: linux_gcc_64
             dump-symbols-arch: x86-64
@@ -265,6 +265,7 @@ jobs:
                    -DSENTRY_ORG=sentry \
                    -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
                    -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+                   -DSTAGE=${BUILD_MODE} \
                    -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'

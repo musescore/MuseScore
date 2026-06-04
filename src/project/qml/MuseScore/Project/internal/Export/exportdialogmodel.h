@@ -306,7 +306,7 @@ private:
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
-    muse::io::path_t m_exportPath;
+    muse::io::path_t m_exportDirPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }

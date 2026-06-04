@@ -449,6 +449,8 @@ public:
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
+    bool isExactUnison(Note* other);
+
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
         ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update

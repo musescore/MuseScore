@@ -300,7 +300,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-palettes"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),
-        makeMenuItem("inspector"),
+        makeMenuItem("toggle-properties-panel"),
         makeMenuItem("toggle-selection-filter"),
         historyItem,
         makeMenuItem("toggle-navigator"),
@@ -538,6 +538,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("show-gap-rests"),
             makeMenuItem("show-line-attach-points"),
             makeMenuItem("mark-empty-staff-visibility-overrides"),
+            makeMenuItem("show-both-origin-and-combined"),
             makeMenuItem("mark-corrupted-measures"),
             makeMenuItem("check-for-score-corruptions")
         };

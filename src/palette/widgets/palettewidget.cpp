@@ -440,6 +440,16 @@ void PaletteWidget::setUseDoubleClickForApplyingElements(bool val)
     m_useDoubleClickForApplyingElements = val;
 }
 
+bool PaletteWidget::ignoreInputEvents() const
+{
+    return m_ignoreInputEvents;
+}
+
+void PaletteWidget::setIgnoreInputEvents(bool val)
+{
+    m_ignoreInputEvents = val;
+}
+
 void PaletteWidget::applyCurrentElementToScore()
 {
     applyElementAtIndex(m_currentIdx);
@@ -662,6 +672,10 @@ QSize PaletteWidget::sizeHint() const
 bool PaletteWidget::event(QEvent* ev)
 {
     if (!m_palette) {
+        return false;
+    }
+
+    if (m_ignoreInputEvents && ev->isInputEvent()) {
         return false;
     }
 
@@ -1028,7 +1042,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             Font font(painter.font());
             font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY));
             painter.setFont(font);
-            painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
+            painter.drawText(rShift, AlignLeft | AlignTop, {}, tag);
         }
 
         muse::draw::Pen pen(linesColor);

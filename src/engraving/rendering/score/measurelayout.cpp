@@ -949,10 +949,6 @@ void MeasureLayout::checkStaffMoveValidity(Measure* measure, const LayoutContext
 
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
-    IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
-        return;
-    }
-
     if (!currentMB || !currentMB->isMeasure()) {
         return;
     }

@@ -49,17 +49,60 @@ void SharedPart::addOriginPart(Part* p)
         m_originParts.push_back(p);
     }
 
-    p->m_sharedPart = this;
+    p->setSharedPart(this);
 }
 
 void SharedPart::removeOriginPart(Part* p)
 {
     DO_ASSERT(muse::remove(m_originParts, p));
 
-    p->m_sharedPart = nullptr;
+    p->setSharedPart(nullptr);
 }
 
-String SharedPart::partName() const
+const SharedTrackMap& SharedPart::trackMapAtTick(const Fraction& tick) const
+{
+    static constexpr Fraction TICK_ZERO = Fraction(0, 1);
+
+    IF_ASSERT_FAILED(m_trackMapsByTick.size() > 0) {
+        const_cast<SharedPart*>(this)->m_trackMapsByTick[TICK_ZERO] = SharedTrackMap();
+        return m_trackMapsByTick.at(TICK_ZERO);
+    }
+
+    DO_ASSERT(muse::contains(m_trackMapsByTick, TICK_ZERO));
+
+    IF_ASSERT_FAILED(tick.positive()) {
+        return m_trackMapsByTick.at(TICK_ZERO);
+    }
+
+    auto upperBound = m_trackMapsByTick.upper_bound(tick);
+    DO_ASSERT(upperBound != m_trackMapsByTick.begin());
+
+    --upperBound;
+
+    return upperBound->second;
+}
+
+void SharedPart::setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick)
+{
+    m_trackMapsByTick[tick] = map;
+}
+
+void mu::engraving::SharedPart::removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick)
+{
+    auto upperBound = m_trackMapsByTick.lower_bound(startTick);
+    if (upperBound == m_trackMapsByTick.end()) {
+        return;
+    }
+
+    for (auto iter = upperBound; iter != m_trackMapsByTick.end();) {
+        if (iter->first >= endTick) {
+            break;
+        }
+        iter = m_trackMapsByTick.erase(iter);
+    }
+}
+
+mu::engraving::String mu::engraving::SharedPart::partName() const
 {
     const Instrument* i = instrument();
     String fullName = i->longName();
@@ -73,7 +116,7 @@ String SharedPart::partName() const
     int firstNumber = 10000;
     int lastNumber = 0;
 
-    for (const Part* originPart : m_originParts) {
+    for (const Part* originPart : originParts()) {
         int number = originPart->instrument()->number();
         firstNumber = std::min(firstNumber, number);
         lastNumber = std::max(lastNumber, number);

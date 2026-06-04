@@ -39,6 +39,10 @@
 #include "importexport/midi/internal/midiimport/importmidi_quant.h"
 #include "importexport/midi/internal/midiimport/importmidi_tuplet.h"
 
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/tuplet.h"
+
 using namespace muse;
 using namespace mu;
 using namespace mu::iex::midi;
@@ -1446,4 +1450,44 @@ TEST_F(MidiImportTests, testGuiTracksModel) {
     const int channelCol = findColByHeader(model, "Channel");
     EXPECT_GE(channelCol, 0);
     EXPECT_EQ(model.flags(model.index(0, channelCol)), notEditableFlags);
+}
+
+TEST_F(MidiImportTests, tupletTickSetCorrectly)
+{
+    // Regression test: MIDI importer must call setTick() on Tuplet objects.
+    // Before the fix, Tuplet::m_tick was left at 0 (default), causing
+    // cmdDeleteTuplet to place the replacement rest at tick 0 instead of
+    // the actual tuplet position, silently corrupting the score.
+    // tuplet_tick_regression.mid: measure 1 has 4 quarter notes (tick 0-1920),
+    // measure 2 has triplet 8th notes starting at tick 1920.
+    const String fileName = midiFilePath("tuplet_tick_regression");
+    auto& opers = midiImportOperations;
+    opers.addNewMidiFile(fileName);
+    MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, fileName);
+    opers.data()->trackOpers.simplifyDurations.setDefaultValue(false, false);
+    opers.data()->trackOpers.showTempoText.setDefaultValue(false);
+
+    std::unique_ptr<engraving::MasterScore> score = importMidi(fileName);
+    ASSERT_TRUE(score);
+
+    engraving::Tuplet* firstTuplet = nullptr;
+    for (engraving::Segment* seg = score->firstSegment(engraving::SegmentType::ChordRest); seg;
+         seg = seg->next1(engraving::SegmentType::ChordRest)) {
+        engraving::EngravingItem* el = seg->element(0);
+        if (!el || !el->isChordRest()) {
+            continue;
+        }
+        engraving::Tuplet* t = engraving::toChordRest(el)->tuplet();
+        if (!t || t->elements().empty()) {
+            continue;
+        }
+        firstTuplet = t;
+        break;
+    }
+
+    ASSERT_TRUE(firstTuplet) << "No tuplet found in tuplet_tick_regression.mid";
+    EXPECT_NE(firstTuplet->tick(), engraving::Fraction(0, 1))
+        << "Tuplet tick must not be 0: tuplet is in measure 2, not measure 1";
+    EXPECT_EQ(firstTuplet->tick(), firstTuplet->elements().front()->tick())
+        << "Tuplet tick must match first element tick";
 }

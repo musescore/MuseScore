@@ -366,6 +366,7 @@ bool ScoreOrder::isScoreOrder(const std::vector<int>& indices) const
 bool ScoreOrder::isScoreOrder(const Score* score) const
 {
     std::vector<int> indices;
+    indices.reserve(score->parts().size());
     for (const Part* part : score->parts()) {
         indices.push_back(instrumentSortingIndex(part->instrument()->id(), part->soloist()));
     }

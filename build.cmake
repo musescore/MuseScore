@@ -17,7 +17,12 @@ if(NOT DEFINED CMAKE_SCRIPT_MODE_FILE)
     )
 endif()
 
-cmake_minimum_required(VERSION 3.22) # should match version in CMakeLists.txt
+# should match version requirement in CMakeLists.txt
+if (APPLE)
+    cmake_minimum_required(VERSION 3.31)
+else()
+    cmake_minimum_required(VERSION 3.28)
+endif()
 
 # CMake arguments up to '-P' (ignore these)
 set(i "1")
@@ -161,7 +166,7 @@ fn__set_default(INSTALL_PATH "install") # relative to BUILD_PATH
 
 # MSCORE_EXECUTABLE (path relative to INSTALL_PATH)
 if(WIN32)
-    fn__set_default(MSCORE_EXECUTABLE "bin/MuseScore5.exe")
+    fn__set_default(MSCORE_EXECUTABLE "bin/MuseScoreStudio5.exe")
 elseif(APPLE)
     fn__set_default(MSCORE_EXECUTABLE "mscore.app/Contents/MacOS/mscore")
 else()

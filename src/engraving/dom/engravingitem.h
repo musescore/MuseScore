@@ -648,6 +648,10 @@ public:
         EngravingItem* m_itemSnappedAfter = nullptr;
 
         StaffCenteringInfo m_staffCenteringInfo;
+
+        // STAVE SHARING
+        EngravingItem* m_sharedItem = nullptr;
+        std::vector<EngravingItem*> m_originItems;
     };
 
     const LayoutData* ldata() const;
@@ -671,6 +675,12 @@ public:
     PropertyPropagation propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const;
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
+
+    EngravingItem* sharedItem() const { return m_layoutData->m_sharedItem; }
+    const std::vector<EngravingItem*>& originItems() const { return m_layoutData->m_originItems; }
+    static void connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
+    static void disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem);
+    static void disconnectAllOriginItems(EngravingItem* sharedItem);
 
     virtual bool isBefore(const EngravingItem* item) const;
 

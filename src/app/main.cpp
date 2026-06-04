@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QStyleHints>
 #include <QQuickWindow>
+#include <QSslSocket>
 
 #include "appfactory.h"
 #include "internal/commandlineparser.h"
@@ -34,6 +35,13 @@
 #include "app_config.h"
 
 #include "log.h"
+
+// C++20 check
+// #include <concepts>
+// #include <type_traits>
+// consteval int square(int n) { return n * n; }
+// static_assert(square(5) == 25);
+// ========================
 
 #ifndef MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 static void crashCallback(int signum)
@@ -132,6 +140,15 @@ int main(int argc, char** argv)
     using namespace muse;
     using namespace mu::app;
 
+    auto fixSslBackend = []() {
+#ifdef Q_OS_WIN
+        // NOTE: Force schannel backend. Qt prefers OpenSSL when qopensslbackend.dll
+        //       is present, which can crash on ABI mismatch with bundled OpenSSL.
+        //       see https://github.com/musescore/MuseScore/issues/33401
+        QSslSocket::setActiveBackend("schannel");
+#endif
+    };
+
     // ====================================================
     // Parse command line options
     // ====================================================
@@ -149,11 +166,16 @@ int main(int argc, char** argv)
         qapp = new QApplication(argc, argv);
     }
 
+    fixSslBackend();
+
     commandLineParser.processBuiltinArgs(*qapp);
     std::shared_ptr<MuseScoreCmdOptions> opt = commandLineParser.options();
 
 #else
     QCoreApplication* qapp = new QApplication(argc, argv);
+
+    fixSslBackend();
+
     std::shared_ptr<MuseScoreCmdOptions> opt = std::make_shared<MuseScoreCmdOptions>();
     opt->runMode = IApplication::RunMode::GuiApp;
 #endif
@@ -178,6 +200,13 @@ int main(int argc, char** argv)
             app->setup();
             QMetaObject::invokeMethod(qapp, [&app]() {
                 app->setupNewContext();
+
+                LOGI() << QString("SSL Info: supported: %1, build: %2, runtime: %3, active backend: %4, available backends: %5")
+                    .arg(QSslSocket::supportsSsl())
+                    .arg(QSslSocket::sslLibraryBuildVersionString())
+                    .arg(QSslSocket::sslLibraryVersionString())
+                    .arg(QSslSocket::activeBackend())
+                    .arg(QSslSocket::availableBackends().join(", "));
             }, Qt::QueuedConnection);
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);

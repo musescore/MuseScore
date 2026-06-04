@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -135,6 +135,24 @@ ComboBox {
             onClicked: {
                 comboDropdown.activated(index)
                 comboDropdown.popup.close()
+            }
+        }
+
+        popup: Popup {
+            width: comboDropdown.width
+            height: Math.min(contentItem.implicitHeight, comboDropdown.Window.height)
+
+            padding: 0
+
+            background: Rectangle {
+                color: ui.theme.popupBackgroundColor
+            }
+
+            contentItem: StyledListView {
+                implicitHeight: contentHeight
+
+                model: comboDropdown.delegateModel
+                currentIndex: comboDropdown.highlightedIndex
             }
         }
 

@@ -2274,6 +2274,7 @@ void Measure::createVoice(int track)
 void Measure::sortStaves(std::vector<staff_idx_t>& dst)
 {
     std::vector<MStaff*> ms;
+    ms.reserve(dst.size());
     for (staff_idx_t idx : dst) {
         ms.push_back(m_mstaves[idx]);
     }
@@ -2908,12 +2909,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
+        score()->setPlaylistDirty();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);

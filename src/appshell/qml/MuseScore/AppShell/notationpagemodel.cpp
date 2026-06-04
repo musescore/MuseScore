@@ -57,11 +57,12 @@ void NotationPageModel::init()
 
     for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
         DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
-        dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
+        dispatcher()->reg(this, actionCode, [this, dockName]() { toggleDock(dockName); });
     }
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+        scheduleUpdatePercussionPanelVisibility();
     });
 
     extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
@@ -123,9 +124,9 @@ QString NotationPageModel::layoutPanelName() const
     return LAYOUT_PANEL_NAME;
 }
 
-QString NotationPageModel::inspectorPanelName() const
+QString NotationPageModel::propertiesPanelName() const
 {
-    return INSPECTOR_PANEL_NAME;
+    return PROPERTIES_PANEL_NAME;
 }
 
 QString NotationPageModel::selectionFiltersPanelName() const

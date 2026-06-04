@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2025 MuseScore Limited and others
@@ -176,6 +176,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.minHangingTieLength
             }
+
+            CheckBox {
+                id: maskTiesCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask ties over clefs, key and time signatures")
+                checked: root.pageModel.maskTies.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskTies.value = !maskTiesCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskTies
+            }
         }
 
         ColumnLayout {
@@ -190,8 +206,8 @@ StyledGroupBox {
             RadioButtonGroup {
                 height: 30
                 model: [
-                    { iconCode: IconCode.TIE_INSIDE, value: 1, title: qsTrc("inspector", "Inside") },
-                    { iconCode: IconCode.TIE_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") }
+                    { iconCode: IconCode.TIE_INSIDE, value: 1, title: qsTrc("propertiespanel", "Inside") },
+                    { iconCode: IconCode.TIE_OUTSIDE, value: 2, title: qsTrc("propertiespanel", "Outside") }
                 ]
 
                 delegate: FlatRadioButton {
@@ -222,8 +238,8 @@ StyledGroupBox {
             RadioButtonGroup {
                 height: 30
                 model: [
-                    { iconCode: IconCode.TIE_CHORD_INSIDE, value: 1, title: qsTrc("inspector", "Inside") },
-                    { iconCode: IconCode.TIE_CHORD_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") }
+                    { iconCode: IconCode.TIE_CHORD_INSIDE, value: 1, title: qsTrc("propertiespanel", "Inside") },
+                    { iconCode: IconCode.TIE_CHORD_OUTSIDE, value: 2, title: qsTrc("propertiespanel", "Outside") }
                 ]
 
                 delegate: FlatRadioButton {

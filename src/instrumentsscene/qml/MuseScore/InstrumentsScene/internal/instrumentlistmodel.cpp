@@ -235,18 +235,20 @@ void InstrumentListModel::loadGroups()
     m_groups = acceptedGroups;
     emit groupsChanged();
 
-    bool currentGroupInNewGenre = false;
-    for (const InstrumentGroup* group : m_groups) {
-        if (group->id == m_currentGroupId) {
-            currentGroupInNewGenre = true;
-            break;
+    if (m_currentGroupId != NONE_GROUP_ID) {
+        bool currentGroupInNewGenre = false;
+        for (const InstrumentGroup* group : m_groups) {
+            if (group->id == m_currentGroupId) {
+                currentGroupInNewGenre = true;
+                break;
+            }
         }
-    }
-    if (!currentGroupInNewGenre && !isSearching()) {
-        setCurrentGroupIndex(0);
-    }
+        if (!currentGroupInNewGenre && !isSearching()) {
+            setCurrentGroupIndex(0);
+        }
 
-    emit currentGroupIndexChanged();
+        emit currentGroupIndexChanged();
+    }
 }
 
 void InstrumentListModel::loadInstruments()
@@ -396,11 +398,6 @@ QStringList InstrumentListModel::selectedInstrumentIdList() const
     return QStringList(result.begin(), result.end());
 }
 
-void InstrumentListModel::saveCurrentGroup()
-{
-    m_saveCurrentGroup = true;
-}
-
 void InstrumentListModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
@@ -468,7 +465,7 @@ void InstrumentListModel::updateStateBySearch()
 
     //! The current group may not be present in the saved genre,
     //! so let's keep ALL_INSTRUMENTS_GENRE_ID as the current genre
-    if (m_saveCurrentGroup && !searching) {
+    if (!searching && m_currentGroupId != NONE_GROUP_ID && m_savedGroupId != m_currentGroupId) {
         m_savedGenreId.clear();
     }
 
@@ -486,15 +483,16 @@ void InstrumentListModel::updateStateBySearch()
         loadInstruments();
     }
 
-    if (searching && m_savedGroupId.isEmpty()) {
+    bool groupSaved = !m_savedGroupId.isEmpty();
+    if (searching && !groupSaved) {
         m_savedGroupId = m_currentGroupId;
         setCurrentGroup(NONE_GROUP_ID);
-    } else if (!searching) {
-        setCurrentGroup(m_savedGroupId);
-        m_savedGroupId = "";
+    } else if (!searching && groupSaved) {
+        if (m_currentGroupId == NONE_GROUP_ID) {
+            setCurrentGroup(m_savedGroupId);
+        }
+        m_savedGroupId.clear();
     }
-
-    m_saveCurrentGroup = false;
 }
 
 bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithCurrentGroup) const

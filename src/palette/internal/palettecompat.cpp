@@ -39,6 +39,7 @@
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/instrchange.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -199,6 +200,14 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
 
     if (item->isActionIcon() && muse::contains(BOXES_ACTION_TYPES, toActionIcon(item)->actionType())) {
         cell->mag = COMPAT_FRAME_MAG;
+    }
+
+    if (item->isInstrumentChange()) {
+        InstrumentChange* newInstrumentChange = Factory::createInstrumentChange(paletteScore->dummy()->segment());
+        newInstrumentChange->setXmlText(QT_TRANSLATE_NOOP("palette", "Change instr."));
+
+        cell->element.reset(newInstrumentChange);
+        return;
     }
 }
 

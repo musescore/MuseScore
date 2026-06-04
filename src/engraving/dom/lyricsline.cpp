@@ -292,6 +292,31 @@ Sid PartialLyricsLine::getPropertyStyle(Pid propertyId) const
     }
 }
 
+void PartialLyricsLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::VERSE && verse() != v.toInt()) {
+        ChordRest* endCR = endElement()
+                           && endElement()->isChordRest() ? toChordRest(endElement()) : nullptr;
+        Lyrics* endLyrics = nullptr;
+        if (endCR) {
+            for (Lyrics* lyr : endCR->lyrics()) {
+                if (lyr->verse() == verse()) {
+                    endLyrics = lyr;
+                    break;
+                }
+            }
+        }
+
+        LyricsLine::undoChangeProperty(id, v, ps);
+        if (endLyrics && endLyrics->verse() != v.toInt()) {
+            endLyrics->undoChangeProperty(id, v, ps);
+        }
+        return;
+    }
+
+    LyricsLine::undoChangeProperty(id, v, ps);
+}
+
 void PartialLyricsLine::doComputeEndElement()
 {
     LyricsLine::doComputeEndElement();

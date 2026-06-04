@@ -62,6 +62,8 @@ class AudioMidiPreferencesModel : public QObject, public muse::Contextable, publ
         bool autoProcessOnlineSoundsInBackground READ autoProcessOnlineSoundsInBackground WRITE setAutoProcessOnlineSoundsInBackground NOTIFY autoProcessOnlineSoundsInBackgroundChanged)
     Q_PROPERTY(
         int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
+    Q_PROPERTY(
+        bool useSoundFontLowPassFilter READ useSoundFontLowPassFilter WRITE setUseSoundFontLowPassFilter NOTIFY useSoundFontLowPassFilterChanged)
 
     muse::GlobalInject<muse::audio::IAudioConfiguration> audioConfiguration;
     muse::GlobalInject<muse::midi::IMidiConfiguration> midiConfiguration;
@@ -101,6 +103,7 @@ public:
     bool shouldShowOnlineSoundsProcessingError() const;
     bool autoProcessOnlineSoundsInBackground() const;
     int onlineSoundsShowProgressBarMode() const;
+    bool useSoundFontLowPassFilter() const;
 
 public slots:
     void setCurrentAudioDriverIndex(int index);
@@ -112,6 +115,7 @@ public slots:
     void setShouldShowOnlineSoundsProcessingError(bool value);
     void setAutoProcessOnlineSoundsInBackground(bool value);
     void setOnlineSoundsShowProgressBarMode(int mode);
+    void setUseSoundFontLowPassFilter(bool value);
 
 signals:
     void currentAudioDriverIndexChanged(int index);
@@ -128,6 +132,7 @@ signals:
     void shouldShowOnlineSoundsProcessingErrorChanged();
     void autoProcessOnlineSoundsInBackgroundChanged();
     void onlineSoundsShowProgressBarModeChanged();
+    void useSoundFontLowPassFilterChanged();
 
 private:
     muse::midi::MidiDeviceID midiInputDeviceId(int index) const;

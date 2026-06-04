@@ -35,10 +35,10 @@ add_subdirectory(engraving)
 
 add_subdirectory(importexport)
 
-if (MUE_BUILD_INSPECTOR_MODULE)
-    add_subdirectory(inspector)
+if (MUE_BUILD_PROPERTIESPANEL_MODULE)
+    add_subdirectory(propertiespanel)
 else()
-    add_subdirectory(stubs/inspector)
+    add_subdirectory(stubs/propertiespanel)
 endif()
 
 if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)

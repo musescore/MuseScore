@@ -29,7 +29,7 @@ set(EXECUTABLE_NAME mscore)
 ###########################################
 include(GetPlatformInfo)
 if (OS_IS_WIN)
-    set(EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
+    set(EXECUTABLE_NAME ${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR})
 
     include(GetCompilerInfo)
 
@@ -64,13 +64,13 @@ elseif(OS_IS_LIN)
 elseif(OS_IS_MAC)
 
     set(MACOSX_BUNDLE_GUI_IDENTIFIER ${MUSE_APP_GUI_IDENTIFIER})
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_TITLE})
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_NAME_HUMAN_READABLE})
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSE_APP_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_BUILD_NUMBER})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited. Published under the GNU General Public License version 3.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2026 MuseScore Limited and others. Published under the GNU General Public License version 3.")
 
-    set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${QT_INSTALL_LIBS};@loader_path/../Frameworks")
     if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
         list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
     endif()
@@ -170,7 +170,7 @@ add_to_link_if_exists(iex_musicxml)
 add_to_link_if_exists(iex_ove)
 add_to_link_if_exists(iex_tabledit)
 add_to_link_if_exists(iex_videoexport)
-add_to_link_if_exists(inspector)
+add_to_link_if_exists(propertiespanel)
 add_to_link_if_exists(instrumentsscene)
 add_to_link_if_exists(musesounds)
 add_to_link_if_exists(notation)
@@ -338,12 +338,6 @@ if (OS_IS_WIN)
     if (SNDFILE_DLL)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
     endif()
-
-    # Install ssl
-    install(FILES
-            ${DEPENDENCIES_LIB_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_LIB_DIR}/libssl-1_1-x64.dll
-            DESTINATION bin)
 
     if (WIN_PORTABLE)
         # deploy the files and directory structure needed for the PortableApps.com format

@@ -181,6 +181,8 @@ void EditStaveSharing::addStaffToSharedPart(SharedPart* sharedPart, const KeyLis
     staff->setScore(score);
 
     staff_idx_t relStaffIdx = sharedPart->nstaves();
+    staff->setDefaultClefType(sharedPart->instrument()->clefType(relStaffIdx));
+
     score->undoInsertStaff(staff, relStaffIdx);
 
     staff_idx_t absStaffIdx = track2staff(sharedPart->startTrack()) + relStaffIdx;

@@ -4325,7 +4325,7 @@
         <source>Consists of two soprano saxophones joined together, played either separately or simultaneously.</source>
         <comment>aulochrome description</comment>
         <extracomment>description for Aulochrome; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>두 대의 소프라노 색소폰을 하나로 합쳐, 따로 또는 동시에 연주하도록 만든 악기.</translation>
+        <translation>두 대의 소프라노 색소폰이 결합된 형태로, 각자 따로 연주하거나 동시에 연주할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1586"/>
@@ -5669,7 +5669,7 @@
         <source>Bass harmonica (non-specific model).</source>
         <comment>bass-harmonica description</comment>
         <extracomment>description for Bass Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>베이스 하모니카 (일반).</translation>
+        <translation>베이스 하모니카 (특정 모델 없음).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2018"/>
@@ -9477,14 +9477,14 @@
         <source>Orchestral tuba (where the exact type is not specified).</source>
         <comment>tuba description</comment>
         <extracomment>description for Tuba (unspecified); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>관현악단 튜바 (일반).</translation>
+        <translation>관현악단 튜바 (특정 종류 없음).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3205"/>
         <source>Tuba (unspecified)</source>
         <comment>tuba trackName</comment>
         <extracomment>trackName for Tuba (unspecified); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>튜바 (일반)</translation>
+        <translation>튜바 (미지정)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3207"/>
@@ -10933,7 +10933,7 @@
         <source>Tuned hand-held bells.</source>
         <comment>hand-bells description</comment>
         <extracomment>description for Handbells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>조율된 핸드벨.</translation>
+        <translation>음정이 조율된 핸드벨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3660"/>
@@ -11549,7 +11549,7 @@
         <source>Japanese hourglass-shaped drum. Smaller and lower-pitched than the o-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>ko-tsuzumi description</comment>
         <extracomment>description for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일본의 장구형 북(오츠즈미). 오쓰즈미보다 크기가 작고 음역대가 낮습니다. 한쪽 북면을 치는 동시에 다른 쪽 줄을 조이거나 풀어서 음높이를 조절합니다.</translation>
+        <translation>일본의 장구형 북(오츠즈미). 오쓰즈미보다 크기가 작고 음역대가 낮습니다. 한쪽 북면을 치는 동시에 다른 쪽 줄을 조이거나 풀어서 피치를 조절합니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3861"/>
@@ -11577,7 +11577,7 @@
         <source>Japanese hourglass-shaped drum. Larger and higher-pitched than the ko-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</source>
         <comment>o-tsuzumi description</comment>
         <extracomment>description for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일본의 장구형 북(오츠즈미). 코츠즈미보다 크고 음역대가 높습니다. 한쪽 면을 치면서 다른 쪽 면을 조이거나 풀어 음높이를 조절합니다.</translation>
+        <translation>일본의 장구형 북(오츠즈미). 코츠즈미보다 크고 음역대가 높습니다. 한쪽 면을 치면서 다른 쪽 면을 조이거나 풀어 피치를 조절합니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3870"/>
@@ -11969,7 +11969,7 @@
         <source>Brazilian friction drum played by rubbing a stick permanently fastened to the drum membrane on the inside. Applying pressure to the outside increases the pitch.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuíca; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>드럼 막 안쪽에 고정된 막대를 문질러 소리를 내는 브라질의 마찰 북(쿠이카). 바깥쪽에서 압력을 가하면 음높이가 높아집니다.</translation>
+        <translation>드럼 막 안쪽에 고정된 막대를 문질러 소리를 내는 브라질의 마찰 북(쿠이카). 바깥쪽에서 압력을 가하면 피치가 높아집니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3996"/>
@@ -12004,7 +12004,7 @@
         <source>Drum Kit (large)</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Drum Kit (large); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>드럼 키트(대형)</translation>
+        <translation>드럼 키트 (확장 구성)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4007"/>
@@ -12025,14 +12025,14 @@
         <source>Minimal drum kit, 4-piece.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4피스 구성의 미니멀 드럼 키트.</translation>
+        <translation>미니멀 드럼 키트 (4피스).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4014"/>
         <source>Drum Kit (minimal)</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for Drum Kit (minimal); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>드럼 키트(미니멀)</translation>
+        <translation>드럼 키트 (최소 구성)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4016"/>
@@ -12060,7 +12060,7 @@
         <source>Drum Kit (common)</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for Drum Kit (common); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>드럼 키트(일반)</translation>
+        <translation>드럼 키트 (일반 구성)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4025"/>
@@ -12529,7 +12529,7 @@
         <source>Inverted metal bowls nested on a vertical rod in order of pitch. The pitches are indefinite.</source>
         <comment>bell-tree description</comment>
         <extracomment>description for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>음높이 순서대로 수직 막대에 겹쳐 놓은 뒤집힌 금속 그릇 형태의 악기. 음높이는 부정형.</translation>
+        <translation>피치 순서대로 수직 막대에 겹쳐 놓은 뒤집힌 금속 그릇 형태의 악기. 피치는 부정형.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4176"/>
@@ -12697,7 +12697,7 @@
         <source>Large Chinese gong with falling pitch.</source>
         <comment>daluo description</comment>
         <extracomment>description for Daluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>음높이가 떨어지는 대형 중국 징(다뤄).</translation>
+        <translation>피치가 떨어지는 대형 중국 징(다뤄).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4230"/>
@@ -12725,7 +12725,7 @@
         <source>Small Chinese gong with rising pitch.</source>
         <comment>xiaoluo description</comment>
         <extracomment>description for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>음높이가 높아지는 소형 중국 징(샤오뤄).</translation>
+        <translation>피치가 높아지는 소형 중국 징(샤오뤄).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4239"/>
@@ -12949,7 +12949,7 @@
         <source>Finger cymbals of unspecified pitch.</source>
         <comment>finger-cymbals description</comment>
         <extracomment>description for Finger Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>음높이가 지정되지 않은 핑거 심벌즈.</translation>
+        <translation>피치가 지정되지 않은 핑거 심벌즈.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4311"/>
@@ -13033,7 +13033,7 @@
         <source>Chimes hung from a horizontal bar in order of pitch. The pitches are indefinite.</source>
         <comment>mark-tree description</comment>
         <extracomment>description for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>음높이 순서대로 가로 막대에 매달린 차임. 음높이는 부정형.</translation>
+        <translation>피치 순서대로 가로 막대에 매달린 차임. 피치는 부정형.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4338"/>
@@ -13957,7 +13957,7 @@
         <source>Two wooden boards joined by a hinge, played by being brought together rapidly. Also known as a slap stick.</source>
         <comment>whip description</comment>
         <extracomment>description for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>경첩으로 연결된 두 개의 나무판을 빠르게 부딪쳐 소리 내는 악기. 슬랩스틱으로도 알려져 있습니다.</translation>
+        <translation>경첩으로 연결된 두 개의 나무 판자로, 빠르게 서로 부딪쳐서 연주합니다. &apos;슬랩스틱&apos;으로도 잘 알려져 있습니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4635"/>
@@ -14013,21 +14013,21 @@
         <source>Bird call.</source>
         <comment>bird-call description</comment>
         <extracomment>description for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>새의 울음소리.</translation>
+        <translation>새소리.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4653"/>
         <source>Bird Call</source>
         <comment>bird-call trackName</comment>
         <extracomment>trackName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>새의 울음소리</translation>
+        <translation>새소리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4655"/>
         <source>Bird Call</source>
         <comment>bird-call longName</comment>
         <extracomment>longName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>새의 울음소리</translation>
+        <translation>새소리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4657"/>
@@ -14125,7 +14125,7 @@
         <source>Marching snare drum.</source>
         <comment>marching-snare description</comment>
         <extracomment>description for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>행진용 스네어 드럼.</translation>
+        <translation>마칭 스네어 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4692"/>
@@ -14153,7 +14153,7 @@
         <source>Marching tenor drums.</source>
         <comment>marching-tenor-drums description</comment>
         <extracomment>description for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>행진용 테너 드럼.</translation>
+        <translation>마칭 테너 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4701"/>
@@ -14181,7 +14181,7 @@
         <source>Marching show-style tenor drum.</source>
         <comment>marching-show-tenors description</comment>
         <extracomment>description for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>행진 공연용 테너 드럼.</translation>
+        <translation>마칭 쇼 스타일 테너 테너 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4710"/>
@@ -14195,7 +14195,7 @@
         <source>Show Tenors</source>
         <comment>marching-show-tenors longName</comment>
         <extracomment>longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Show Tenors</translation>
+        <translation>쇼 테너</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4714"/>
@@ -14209,7 +14209,7 @@
         <source>Marching bass drums.</source>
         <comment>marching-bass-drums description</comment>
         <extracomment>description for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>행진용 베이스 드럼.</translation>
+        <translation>마칭 베이스 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4719"/>
@@ -14237,7 +14237,7 @@
         <source>Marching cymbals.</source>
         <comment>marching-cymbals description</comment>
         <extracomment>description for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>행진용 심벌즈.</translation>
+        <translation>마칭 심벌즈.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4728"/>
@@ -14741,7 +14741,7 @@
         <source>Voice (unspecified type).</source>
         <comment>voice description</comment>
         <extracomment>description for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>보이스 (유형 미지정).</translation>
+        <translation>보이스 (미지정 유형).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4896"/>
@@ -18934,7 +18934,7 @@
         <source>The largest tamburica, used for playing bass lines.</source>
         <comment>berda description</comment>
         <extracomment>description for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>가장 큰 탬버리카로, 근음을 연주하는 데 사용된다.</translation>
+        <translation>가장 큰 탬버리카로, 기본음을 연주하는 데 사용된다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6237"/>
@@ -20096,7 +20096,7 @@
         <source>Swedish bowed instrument with keys to change the pitch of the strings.</source>
         <comment>nyckelharpa description</comment>
         <extracomment>description for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>현의 음높이를 조절하는 키(Key)가 달린 스웨덴의 찰현악기.</translation>
+        <translation>현의 피치를 조절하는 키(Key)가 달린 스웨덴의 찰현악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6613"/>
@@ -20772,7 +20772,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="205"/>
         <source>Woodwinds</source>
-        <translation>목관악기</translation>
+        <translation>우드윈드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1818"/>
@@ -20812,22 +20812,25 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4947"/>
         <source>Keyboards</source>
-        <translation>건반</translation>
+        <translation>키보드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5112"/>
         <source>Electronic</source>
-        <translation>전자</translation>
+        <translation>일렉트로닉</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5402"/>
         <source>Strings - Plucked</source>
-        <translation>발현악기</translation>
+        <translation>스트링 - 플럭트
+
+
+ </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6301"/>
         <source>Strings - Bowed</source>
-        <translation>찰현악기</translation>
+        <translation>스트링 - 보우드</translation>
     </message>
 </context>
 <context>
@@ -20835,12 +20838,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6626"/>
         <source>Orchestra</source>
-        <translation>관현악단</translation>
+        <translation>오케스트라</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6627"/>
         <source>Choir</source>
-        <translation>합창단</translation>
+        <translation>콰이어</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6628"/>

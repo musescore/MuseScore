@@ -109,6 +109,7 @@ void MasterPalette::componentComplete()
     m_timeItem = new QTreeWidgetItem();
     m_timeItem->setData(0, Qt::UserRole, stack->count());
     m_timeEditor = new TimeEditor(this);
+    m_timeEditor->classBegin();
     stack->addWidget(m_timeEditor);
     treeWidget->addTopLevelItem(m_timeItem);
 

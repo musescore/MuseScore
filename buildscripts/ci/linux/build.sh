@@ -69,7 +69,7 @@ cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
 # disable update module due to current broken functionality
-if [ "$PACKARCH" == "aarch64" ] || [ "$PACKARCH" == "armv7l" ]; then
+if [ "$PACKARCH" == "aarch64" ]; then
   MUSESCORE_BUILD_UPDATE_MODULE="OFF"
 fi
 

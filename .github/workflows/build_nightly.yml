@@ -3,7 +3,7 @@ run-name: "${{ format('Build: Nightly - {0}', github.ref_name) }}"
 
 on:
   schedule:
-    - cron: "0 3 * * *" # Every night at 03:00 for master branch
+    - cron: "0 3 * * *" # Every night at 03:00 for main branch
     - cron: "0 4 * * *" # Every night at 04:00 for current release branch
   workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
                   return;
                 }
               } else {
-                ref = 'master';
+                ref = 'main';
               }
             } else {
               ref = context.ref.replace(/^(refs\/heads\/)/, "");

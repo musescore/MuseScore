@@ -886,7 +886,7 @@ Font TextFragment::font(const TextBase* t) const
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
 
-            m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+            m = StyleDef::DEFAULT_SMUFL_POINT_SIZE();
             m *= t->getProperty(Pid::MUSICAL_SYMBOLS_SCALE).toDouble();
             if (t->sizeIsSpatiumDependent()) {
                 m *= t->spatiumScaling();
@@ -896,10 +896,6 @@ Font TextFragment::font(const TextBase* t) const
                 std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                 family = String::fromStdString(fontName2);
             }
-
-            // We use a default font size of 10pt for historical reasons,
-            // but SMuFL standard is 20pt so multiply x2 here.
-            m *= 2;
 
             m *= t->mag();
         } else if (t->hasSymbolSize()) {

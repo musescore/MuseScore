@@ -144,6 +144,8 @@ public:
     void setApplyingElementsDisabled(bool val);
     bool useDoubleClickForApplyingElements() const;
     void setUseDoubleClickForApplyingElements(bool val);
+    bool ignoreInputEvents() const;
+    void setIgnoreInputEvents(bool val);
 
     void applyCurrentElementToScore();
 
@@ -227,6 +229,7 @@ private:
     bool m_isReadOnly = false;
     bool m_isApplyingElementsDisabled = false;
     bool m_useDoubleClickForApplyingElements = false;
+    bool m_ignoreInputEvents = false;
     bool m_showContextMenu = true;
 
     int m_currentIdx = -1;

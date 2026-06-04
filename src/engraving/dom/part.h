@@ -201,6 +201,7 @@ public:
     const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
 
     SharedPart* sharedPart() const { return m_sharedPart; }
+    void setSharedPart(SharedPart* p) { m_sharedPart = p; }
 
 private:
     friend class read206::Read206;

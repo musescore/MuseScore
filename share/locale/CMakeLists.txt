@@ -31,7 +31,6 @@ if (MUE_RUN_LRELEASE)
 endif()
 
 install(FILES
-    ${CMAKE_CURRENT_LIST_DIR}/languages.json
     ${QM_FILES}
     DESTINATION ${MUSE_APP_INSTALL_RESOURCES_LOCATION}/locale
 )

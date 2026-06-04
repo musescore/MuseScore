@@ -8,6 +8,8 @@
       <vocalsNameByGroup>0</vocalsNameByGroup>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

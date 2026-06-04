@@ -19,15 +19,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 if (APPLE)
-    cmake_minimum_required(VERSION 3.26...3.31) # Min. required for Swift-C++ interop
+    # Required to prevent issues with incremental builds of MuseScoreQuickLookPreviewExtension
+    # (https://github.com/musescore/MuseScore/pull/33554)
+    cmake_minimum_required(VERSION 3.31)
 else()
-    cmake_minimum_required(VERSION 3.22...3.31) # Min. required by Qt 6.10
+    # Required to use C++20 modules in the future.
+    cmake_minimum_required(VERSION 3.28)
 endif()
 
-project(MuseScore LANGUAGES C CXX)
+project(MuseScoreStudio LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -44,6 +48,18 @@ set(CMAKE_MODULE_PATH
     ${MUSE_FRAMEWORK_PATH}/buildscripts/cmake
     ${CMAKE_MODULE_PATH}
     )
+
+###########################################
+# Check compiler version
+###########################################    
+message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
+
+include(CheckCompilerVersion)
+check_compile_version("Clang" 20 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
+check_compile_version("AppleClang" 21 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
+check_compile_version("GCC" 14 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
+check_compile_version("MSVC" 19.40 "https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment")
 
 ###########################################
 # Setup option and build settings
@@ -104,8 +120,8 @@ option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 
-option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ${MUE_BUILD_INSPECTOR_MODULE})
+option(MUE_BUILD_PROPERTIESPANEL_MODULE "Build propertiespanel module" ON)
+option(MUE_BUILD_PROPERTIESPANEL_QML "Build propertiespanel QML" ${MUE_BUILD_PROPERTIESPANEL_MODULE})
 
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
 option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})
@@ -159,18 +175,9 @@ option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in d
 
 # === System libraries ===
 # Important for the maintainers of Linux distributions
-option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
-option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
-option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
-option(MUE_COMPILE_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
-option(MUE_COMPILE_USE_SYSTEM_PUGIXML "Try use system pugixml" OFF)
-option(MUE_COMPILE_USE_SYSTEM_LAME "Try use system lame" OFF)
-option(MUE_COMPILE_USE_SYSTEM_UTF8CPP "Try use system utf8cpp" OFF)
+option(MSS_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
 
 # === Debug ===
-option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
@@ -194,8 +201,6 @@ else()
     include(SetupConfigure)
 endif()
 
-set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
-
 ###########################################
 # Setup compiler and build environment
 ###########################################
@@ -218,8 +223,8 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
 
     # These are included in the precompiled dependencies, so let's use them from there
-    set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
-    set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
+    set(MUSE_USE_SYSTEM_FLAC ON)
+    set(MUSE_USE_SYSTEM_OPUS ON)
 endif()
 
 include(SetupQt6)

@@ -1171,6 +1171,7 @@ bool FiguredBass::readConfigFile(const String& fileName)
 std::vector<String> FiguredBass::fontNames()
 {
     std::vector<String> names;
+    names.reserve(g_FBFonts.size());
     for (const FiguredBassFont& f : g_FBFonts) {
         names.push_back(f.displayName);
     }

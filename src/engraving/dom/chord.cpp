@@ -269,6 +269,7 @@ std::vector<int> Chord::noteDistances() const
     int staffMiddleLine = staffType->middleLine();
 
     std::vector<int> distances;
+    distances.reserve(m_notes.size());
     for (Note* note : m_notes) {
         int noteLine = isTabStaff ? note->string() : note->line();
         distances.push_back(noteLine - staffMiddleLine);
@@ -411,6 +412,7 @@ Chord::Chord(const Chord& c, bool link)
             }
 
             std::vector<Note*> newNotes;
+            newNotes.reserve(info->notes().size());
             for (Note* note : info->notes()) {
                 newNotes.push_back(findNote(note->pitch()));
             }
@@ -1401,7 +1403,7 @@ void Chord::removeNoteFromParenthesisInfo(Note* note, const Parenthesis* paren)
 //---------------------------------------------------------
 //   isChordPlayable
 //   @note Now every related to chord element has it's own "PLAY" property,
-//         However, there is no way to control these properties outside the scope of the chord since the new inspector.
+//         However, there is no way to control these properties outside the scope of the chord since the new Properties panel.
 //         So we'll use a chord as a proxy entity for "PLAY" property handling
 //---------------------------------------------------------
 
@@ -2715,6 +2717,7 @@ std::vector<NoteEventList> Chord::getNoteEventLists()
     if (notes().empty()) {
         return ell;
     }
+    ell.reserve(notes().size());
     for (size_t i = 0; i < notes().size(); ++i) {
         ell.push_back(NoteEventList(notes()[i]->playEvents()));
     }

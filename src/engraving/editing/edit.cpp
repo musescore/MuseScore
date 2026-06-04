@@ -4699,7 +4699,7 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
 //   nextInputPos
 //---------------------------------------------------------
 
-void Score::nextInputPos(ChordRest* cr, bool doSelect)
+void Score::nextInputPos(const ChordRest* cr, bool doSelect)
 {
     ChordRest* ncr = nextChordRest(cr);
     if ((!ncr) && (m_is.track() % VOICES)) {
@@ -5431,6 +5431,19 @@ void Score::undoUpdatePlayCountText(Measure* m)
         undoRemoveElement(topPlayCountText);
         return;
     }
+}
+
+Measure* Score::undoGetMeasure(const Fraction& tick)
+{
+    Measure* last = lastMeasure();
+    if (!last || last->endTick() <= tick) {
+        Fraction lastTick  = last ? last->endTick() : Fraction(0, 1);
+        while (tick >= lastTick) {
+            MeasureBase* m = score()->insertMeasure(ElementType::MEASURE);
+            lastTick += m->ticks();
+        }
+    }
+    return tick2measure(tick);
 }
 
 void Score::undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves, bool replace)

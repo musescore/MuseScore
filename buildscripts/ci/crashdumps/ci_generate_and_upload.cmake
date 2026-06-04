@@ -27,12 +27,14 @@ set(SENTRY_URL "" CACHE STRING "Sentry URL")
 set(SENTRY_AUTH_TOKEN "" CACHE STRING "Sentry Auth Token")
 set(SENTRY_ORG "" CACHE STRING "Sentry Organization")
 set(SENTRY_PROJECT "" CACHE STRING "Sentry Project")
+set(STAGE "" CACHE STRING "Build stage (e.g. stable, testing, nightly, devel)")
 
 set(CONFIG
     -DSENTRY_URL=${SENTRY_URL}
     -DSENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
     -DSENTRY_ORG=${SENTRY_ORG}
     -DSENTRY_PROJECT=${SENTRY_PROJECT}
+    -DSTAGE=${STAGE}
 )
 
 execute_process(

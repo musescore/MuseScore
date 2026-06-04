@@ -139,16 +139,17 @@ void TemplatesModel::setVisibleCategories(const QStringList& titles)
         return;
     }
 
-    QString currentCategory = titles.value(0);
-    if (m_saveCurrentCategory) {
-        m_saveCurrentCategory = false;
-        currentCategory = m_currentCategory;
-    }
-
     m_visibleCategoriesTitles = titles;
     emit categoriesChanged();
 
-    setCurrentCategory(currentCategory);
+    if (m_saveCurrentCategory) {
+        m_saveCurrentCategory = false;
+        // when the visibleCategoriesTitles are updated, the UI currentCategoryIndex needs to be updated,
+        // even if we want the currentCategory to remain the same. So we need to force an emit:
+        emit currentCategoryChanged();
+    } else {
+        setCurrentCategory(titles.value(0));
+    }
 }
 
 void TemplatesModel::setCurrentCategory(const QString& category)

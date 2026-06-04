@@ -27,19 +27,18 @@
 #include <QThread>
 
 #include "global/concurrency/concurrent.h"
-#include "io/buffer.h"
-#include "io/filestream.h"
+#include "global/io/filestream.h"
 
+#include "draw/fontmetrics.h"
+#include "draw/types/drawtypes.h"
+
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/repeatlist.h"
-#include "engraving/dom/masterscore.h"
 
-#include "notation/imasternotation.h"
 #include "notation/notationtypes.h"
 
 #include "notationscene/qml/MuseScore/NotationScene/playbackcursor.h"
-
-#include "draw/fontmetrics.h"
 
 #include "defer.h"
 #include "log.h"
@@ -54,7 +53,7 @@ static muse::String notationTitle(const INotationPtr notation)
 {
     muse::String title;
     mu::engraving::Score* score = notation->elements()->msScore();
-    mu::engraving::Score* masterScore = notation->masterNotation()->masterScore();
+    mu::engraving::MasterScore* masterScore = notation->masterNotation()->masterScore();
 
     if (const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::TITLE)) {
         title = text->plainText();
@@ -284,6 +283,12 @@ void VideoWriter::abort()
     if (m_audioWriter) {
         m_audioWriter->abort();
     }
+
+    // Wait abort completion
+    while (!m_isCompleted || !m_audioCompleted) {
+        application()->processEvents();
+        QThread::yieldCurrentThread();
+    }
 }
 
 std::optional<VideoWriter::ScoreRestoreData> VideoWriter::prepareScore(INotationPtr notation, Config& config)
@@ -485,8 +490,6 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
     double subtitleTop = titleRect.bottom() + subtitleOffset;
     muse::RectF subtitleRect(textLeft, subtitleTop, maxTextWidth, subtitleHeight);
 
-    const int textFlags = AlignCenter | TextWordWrap;
-
     for (int f = 0; f < leadingFrameCount; f++) {
         if (m_abort) {
             m_writeRet = make_ret(muse::Ret::Code::Cancel);
@@ -499,11 +502,11 @@ bool VideoWriter::generateLeadingFrames(muse::media::IVideoEncoderPtr encoder, I
         painter.fillRect(frameRect, Color::BLACK);
         painter.setPen(Color::WHITE);
         painter.setFont(titleFont);
-        painter.drawText(titleRect, textFlags, title);
+        painter.drawText(titleRect, AlignCenter, TextWordWrap, title);
 
         if (!subtitle.isEmpty()) {
             painter.setFont(subtitleFont);
-            painter.drawText(subtitleRect, textFlags, subtitle);
+            painter.drawText(subtitleRect, AlignCenter, TextWordWrap, subtitle);
         }
 
         encoder->encodeImage(frame);

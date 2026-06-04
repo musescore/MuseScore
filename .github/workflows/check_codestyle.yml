@@ -6,13 +6,18 @@ on:
 
 jobs:
   codestyle:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
     - name: Clone repository
       uses: actions/checkout@v6
       with:
         submodules: recursive
 
+    - name: Install CMake
+      run: |
+        sudo apt update
+        sudo apt install -y cmake
+        
     - name: Test MSS coding style
       run: |
         cmake -P ./muse/buildscripts/ci/checkcodestyle/checkcodestyle.cmake ./src/

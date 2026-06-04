@@ -961,9 +961,6 @@ void TWrite::write(const Breath* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 {
-    // HACK: foundNotes is a workaround introduced with the "notes in chords" selection filter. A substantial overhaul of our
-    // copy/paste logic would be required to make this fully compatible with de-selected chords - for now we'll simply replace
-    // these chords with a rest of the same duration...
     bool foundNotes = false;
     const size_t noteCount = item->notes().size();
     for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
@@ -973,13 +970,35 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
     if (!foundNotes) {
-        Rest* dummyRest = Factory::createRest(item->segment());
-        dummyRest->setDurationType(item->durationType());
-        dummyRest->setTuplet(item->tuplet());
-        dummyRest->setTicks(item->ticks());
-        dummyRest->setTrack(item->track());
-        write(dummyRest, xml, ctx);
-        dummyRest->deleteLater();
+        if (item->tuplet()) {
+            // HACK: See PR #30178 - deselected chords still not fully handled in tuplets...
+            Rest* dummyRest = Factory::createRest(item->segment());
+            dummyRest->setDurationType(item->durationType());
+            dummyRest->setTuplet(item->tuplet());
+            dummyRest->setTicks(item->ticks());
+            dummyRest->setTrack(item->track());
+            write(dummyRest, xml, ctx);
+            dummyRest->deleteLater();
+        } else {
+            // No writable notes found, write a Location instead (skip this chord)...
+
+            const Fraction tick = item->tick();
+            const track_idx_t track = item->track();
+
+            Location curr = Location::absolute();
+            curr.setFrac(ctx.curTick());
+            curr.setTrack(static_cast<int>(ctx.curTrack()));
+
+            Location dest = Location::absolute();
+            dest.setFrac(tick);
+            dest.setTrack(static_cast<int>(track));
+
+            dest.toRelative(curr);
+            TWrite::write(&dest, xml, ctx);
+
+            ctx.setCurTick(tick);
+            ctx.setCurTrack(track);
+        }
         return;
     }
 
@@ -1031,7 +1050,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hook() && item->hook()->isUserModified()) {
         write(item->hook(), xml, ctx);
     }
-    if (item->showStemSlash() && item->isUserModified()) {
+    if (item->showStemSlash() != item->propertyDefault(Pid::SHOW_STEM_SLASH).toBool()) {
         xml.tag("showStemSlash", item->showStemSlash());
     }
     if (item->stemSlash() && item->stemSlash()->isUserModified()) {
@@ -2816,6 +2835,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
     }
     writeProperty(item, xml, Pid::SLUR_DIRECTION);
     writeProperty(item, xml, Pid::SLUR_STYLE_TYPE);
+    writeProperty(item, xml, Pid::MASK_SLURTIE);
 }
 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)

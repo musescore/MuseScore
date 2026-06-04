@@ -264,6 +264,7 @@ class GlissandoHandler
 {
 public:
     GlissandoHandler();
+    void reset();
     void doGlissandoStart(Glissando* gliss, Notations& notations, XmlWriter& xml);
     void doGlissandoStop(Glissando* gliss, Notations& notations, XmlWriter& xml);
 
@@ -541,8 +542,8 @@ String ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool
             //       seg, p.x(), p.y(), seg->offset().x(), seg->offset().y(), seg->spatium());
         } else {
             const LineSegment* seg = span->backSegment();
-            const PointF userOff = seg->offset();       // This is the offset accessible from the inspector
-            const PointF userOff2 = seg->userOff2();       // Offset of the actual dragged anchor, which doesn't affect the inspector offset
+            const PointF userOff = seg->offset();       // This is the offset accessible from the Properties panel
+            const PointF userOff2 = seg->userOff2();       // Offset of the actual dragged anchor, which doesn't affect the Properties panel offset
             //auto pos = seg->pos();
             //auto pos2 = seg->pos2();
 
@@ -1007,6 +1008,11 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
 
 GlissandoHandler::GlissandoHandler()
 {
+    reset();
+}
+
+void GlissandoHandler::reset()
+{
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
         m_glissNote[i] = 0;
         m_slideNote[i] = 0;
@@ -1459,8 +1465,8 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
     if (!creditType.empty()) {
         xml.tag("credit-type", creditType);
     }
-    String attr = String(u" default-x=\"%1\"").arg(x);
-    attr += String(u" default-y=\"%1\"").arg(y);
+    String attr = String(u" default-x=\"%1\"").arg(String::number(x, 2));
+    attr += String(u" default-y=\"%1\"").arg(String::number(y, 2));
     attr += u" justify=\"" + just + u"\"";
     attr += u" valign=\"" + val + u"\"";
     MScoreTextToMusicXml mttm(u"credit-words", attr, defFmt, mtf);
@@ -2470,32 +2476,8 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
     } else {
         // traditional key signature
         m_xml.tag("fifths", static_cast<int>(ks->key()));
-        switch (ks->mode()) {
-        case KeyMode::NONE:       m_xml.tag("mode", "none");
-            break;
-        case KeyMode::MAJOR:      m_xml.tag("mode", "major");
-            break;
-        case KeyMode::MINOR:      m_xml.tag("mode", "minor");
-            break;
-        case KeyMode::DORIAN:     m_xml.tag("mode", "dorian");
-            break;
-        case KeyMode::PHRYGIAN:   m_xml.tag("mode", "phrygian");
-            break;
-        case KeyMode::LYDIAN:     m_xml.tag("mode", "lydian");
-            break;
-        case KeyMode::MIXOLYDIAN: m_xml.tag("mode", "mixolydian");
-            break;
-        case KeyMode::AEOLIAN:    m_xml.tag("mode", "aeolian");
-            break;
-        case KeyMode::IONIAN:     m_xml.tag("mode", "ionian");
-            break;
-        case KeyMode::LOCRIAN:    m_xml.tag("mode", "locrian");
-            break;
-        case KeyMode::UNKNOWN:              // fall thru
-        default:
-            if (ks->isCustom()) {
-                m_xml.tag("mode", "none");
-            }
+        if (ks->mode() != KeyMode::UNKNOWN) {
+            m_xml.tag("mode", String::fromAscii(TConv::toXml(ks->mode()).ascii()));
         }
     }
     m_xml.endElement();
@@ -3361,6 +3343,12 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             }
             if (!subtype.empty()) {
                 subtype += color2xml(cl);
+                if (cl->isStraight()) {
+                    subtype += u" line-shape=\"straight\"";
+                }
+                if (cl->isWavy()) {
+                    subtype += u" line-type=\"wavy\"";
+                }
                 notations.tag(xml, cl, "articulations");
                 xml.tagRaw(subtype);
             }
@@ -3987,12 +3975,14 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         static const std::regex nameparts("^note([A-Z][a-z]*)(Sharp|Flat)?");
         AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
         StringList matches = String::fromAscii(noteheadName.ascii()).search(nameparts, { 1, 2 }, SplitBehavior::SkipEmptyParts);
-        xml.startElement("notehead-text");
-        xml.tag("display-text", matches.at(0));
-        if (matches.size() > 1) {
-            xml.tag("accidental-text", matches.at(1).toLower());
+        if (!matches.empty()) {
+            xml.startElement("notehead-text");
+            xml.tag("display-text", matches.at(0));
+            if (matches.size() > 1) {
+                xml.tag("accidental-text", matches.at(1).toLower());
+            }
+            xml.endElement();
         }
-        xml.endElement();
     }
 }
 
@@ -5610,7 +5600,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = u"change";
             break;
         case HookType::NONE:
-            pedalType = pd->lineVisible() ? u"resume" : u"start";
+            pedalType = (pd->lineVisible() && pd->beginText().isEmpty()) ? u"resume" : u"start";
             break;
         default:
             pedalType = u"start";
@@ -5620,10 +5610,12 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = u"sostenuto";
         }
     } else {
-        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
+        switch (pd->endHookType()) {
+        case HookType::NONE:
+            pedalType = (pd->lineVisible() && pd->endText().isEmpty()) ? u"discontinue" : u"stop";
+            break;
+        default:
             pedalType = u"stop";
-        } else {
-            pedalType = u"discontinue";
         }
         // "change" type is handled only on the beginning of pedal lines
 
@@ -8635,6 +8627,7 @@ void ExportMusicXml::writeParts()
 
     for (size_t partIndex = 0; partIndex < parts.size(); ++partIndex) {
         const Part* part = parts.at(partIndex);
+        m_gh.reset(); // reset glissando handler state for each part
         m_tick = { 0, 1 };
         m_xml.startElementRaw(String(u"part id=\"P%1\"").arg(partIndex + 1));
 

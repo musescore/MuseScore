@@ -106,6 +106,7 @@ void ExampleView::setScore(Score* s)
     ScoreLoad sl;
     m_score->doLayout();
     resetMatrix();
+    updateGeometry(); // notify the widget's layout system that the sizeHint has changed
     update();
 }
 

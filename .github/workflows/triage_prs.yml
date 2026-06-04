@@ -22,7 +22,7 @@ jobs:
             echo "should_add=true" >> $GITHUB_OUTPUT
           fi
       - name: "Add community PR to triaging project"
-        if: steps.check_author.outputs.should_add == 'true'
+        if: steps.check_author.outputs.should_add == 'true' && github.repository == 'musescore/MuseScore'
         uses: actions/add-to-project@main
         with:
           project-url: https://github.com/orgs/musescore/projects/117

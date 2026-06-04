@@ -387,13 +387,13 @@
               </Note>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>2</NoteIdx>
+                <NoteIdx>0</NoteIdx>
+                <NoteIdx>1</NoteIdx>
                 </Notes>
               </NoteParenGroup>
             <NoteParenGroup>
               <Notes>
-                <NoteIdx>0</NoteIdx>
-                <NoteIdx>1</NoteIdx>
+                <NoteIdx>2</NoteIdx>
                 </Notes>
               </NoteParenGroup>
             </Chord>

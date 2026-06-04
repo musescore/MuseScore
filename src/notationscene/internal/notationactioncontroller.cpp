@@ -76,7 +76,8 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
     { "mark-empty-staff-visibility-overrides", &EngravingDebuggingOptions::markEmptyStaffVisibilityOverrides },
     { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures },
-    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests }
+    { "show-gap-rests", &EngravingDebuggingOptions::showGapRests },
+    { "show-both-origin-and-combined", &EngravingDebuggingOptions::showOriginAndCombinedStaves },
 };
 
 //! NOTE Just for more readable
@@ -154,7 +155,10 @@ void NotationActionController::init()
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
     for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
-        registerAction(it.key(), [=]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
+        registerAction(it.key(), [this, fraction = it.value()]() {
+            navigateToTextElementByFraction(
+                fraction);
+        }, &Controller::textNavigationByFractionAvailable);
     }
 
     registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay,

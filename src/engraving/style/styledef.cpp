@@ -302,6 +302,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lastSystemFillLimit,                        PropertyValue(0.3)),
 
     styleDef(enableStaveSharing,                         false),
+    styleDef(allowVoiceCrossing,                         false),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),
     styleDef(hairpinPosAbove,                            PointF(0.0, -1.75)),
@@ -597,6 +598,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(minWigglyGlissandoLength,                   2.0_sp),
     styleDef(slurMinDistance,                            0.5_sp),
     styleDef(tieMinDistance,                             0.5_sp),
+    styleDef(maskSlurs,                                  true),
+    styleDef(maskTies,                                   true),
     styleDef(laissezVibMinDistance,                      0.5_sp),
     styleDef(headerToLineStartDistance,                  1.0_sp),
     styleDef(lineEndToBarlineDistance,                   0.25_sp),
