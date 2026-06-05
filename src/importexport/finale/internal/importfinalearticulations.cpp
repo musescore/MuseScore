@@ -266,41 +266,35 @@ musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions() const
     return options;
 }
 
-bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
-                                          const MusxInstance<others::ArticulationDef>& articDef,
-                                          bool visible)
+bool FinaleParser::createArpeggioForChordRange(const musx::util::ArpeggioSpanCandidate& span,
+                                               const MusxInstance<others::ArticulationDef>& articDef,
+                                               bool visible, Chord* topChord, Chord* bottomChord)
 {
-    ChordRest* topCR = chordRestFromEntryInfoPtr(span.topEntry);
-    ChordRest* bottomCR = chordRestFromEntryInfoPtr(span.bottomEntry);
-    if (!topCR || !bottomCR || !topCR->isChord() || !bottomCR->isChord()) {
+    if (!topChord || !bottomChord || topChord->part() != bottomChord->part()) {
         return false;
     }
-    if (topCR->part() != bottomCR->part()) {
-        return false;
-    }
-    const bool graceArpeggio = topCR->isGrace() || bottomCR->isGrace();
-    if (graceArpeggio && topCR != bottomCR) {
+    const bool graceArpeggio = topChord->isGrace() || bottomChord->isGrace();
+    if (graceArpeggio && topChord != bottomChord) {
         return false;
     }
 
-    Chord* arpChord = toChord(topCR);
-    if (span.type == musx::util::ArpeggioSpanType::Normal && arpChord->arpeggio()) {
+    if (span.type == musx::util::ArpeggioSpanType::Normal && topChord->arpeggio()) {
         return false;
     }
 
-    track_idx_t topChordTrack = arpChord->track();
-    track_idx_t bottomChordTrack = std::min(bottomCR->track(), m_score->staff(track2staff(topChordTrack))->part()->endTrack() - 1);
-    Segment* segment = arpChord->segment();
-    if (!segment || bottomChordTrack < topChordTrack) {
+    track_idx_t topChordTrack = topChord->track();
+    track_idx_t bottomChordTrack = std::min(bottomChord->track(), topChord->part()->endTrack() - 1);
+    Segment* segment = topChord->segment();
+    if (!segment || bottomChord->segment() != segment || bottomChordTrack < topChordTrack) {
         return false;
     }
 
     Arpeggio* arpeggio = nullptr;
     if (span.type == musx::util::ArpeggioSpanType::Bracket) {
-        arpeggio = Factory::createArpeggio(arpChord);
+        arpeggio = Factory::createArpeggio(topChord);
         arpeggio->setArpeggioType(ArpeggioType::BRACKET);
     } else {
-        arpeggio = Factory::createArpeggio(arpChord);
+        arpeggio = Factory::createArpeggio(topChord);
         arpeggio->setArpeggioType(arpeggioTypeFromSpan(span));
     }
 
@@ -324,17 +318,77 @@ bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidat
         if (articDef) {
             Fraction totalArpDuration = eduToFraction(articDef->startTopNoteDelta - articDef->startBotNoteDelta);
             double beatsPerSecondRatio = m_score->tempo(segment->tick()).val / 2.0; // ratio against 120 bpm
-            if (beatsPerSecondRatio > 0.0 && !arpChord->notes().empty()) {
+            if (beatsPerSecondRatio > 0.0 && !topChord->notes().empty()) {
                 double timeIn120BPM = totalArpDuration.toDouble() / beatsPerSecondRatio;
-                arpeggio->setStretch(timeIn120BPM * 8.0 / arpChord->notes().size());
+                arpeggio->setStretch(timeIn120BPM * 8.0 / topChord->notes().size());
             }
         }
     } else {
         arpeggio->setPlayArpeggio(false);
     }
 
-    arpChord->add(arpeggio);
+    topChord->add(arpeggio);
     return true;
+}
+
+bool FinaleParser::createPartSplitArpeggios(const musx::util::ArpeggioSpanCandidate& span,
+                                            const MusxInstance<others::ArticulationDef>& articDef,
+                                            bool visible, Chord* topChord, Chord* bottomChord)
+{
+    if (!topChord || !bottomChord || topChord->segment() != bottomChord->segment() || bottomChord->track() < topChord->track()) {
+        return false;
+    }
+
+    Segment* segment = topChord->segment();
+    bool created = false;
+    for (Part* part : m_score->parts()) {
+        const track_idx_t partStartTrack = part->startTrack();
+        const track_idx_t partEndTrack = part->endTrack() - 1;
+        const track_idx_t rangeStartTrack = std::max(topChord->track(), partStartTrack);
+        const track_idx_t rangeEndTrack = std::min(bottomChord->track(), partEndTrack);
+        if (rangeEndTrack < rangeStartTrack) {
+            continue;
+        }
+
+        Chord* partTopChord = nullptr;
+        Chord* partBottomChord = nullptr;
+        for (track_idx_t track = rangeStartTrack; track <= rangeEndTrack; ++track) {
+            EngravingItem* item = segment->element(track);
+            if (!item || !item->isChord()) {
+                continue;
+            }
+            if (!partTopChord) {
+                partTopChord = toChord(item);
+            }
+            partBottomChord = toChord(item);
+        }
+        if (!partTopChord || !partBottomChord) {
+            continue;
+        }
+
+        created = createArpeggioForChordRange(span, articDef, visible, partTopChord, partBottomChord) || created;
+    }
+
+    return created;
+}
+
+bool FinaleParser::createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
+                                          const MusxInstance<others::ArticulationDef>& articDef,
+                                          bool visible)
+{
+    ChordRest* topCR = chordRestFromEntryInfoPtr(span.topEntry);
+    ChordRest* bottomCR = chordRestFromEntryInfoPtr(span.bottomEntry);
+    if (!topCR || !bottomCR || !topCR->isChord() || !bottomCR->isChord()) {
+        return false;
+    }
+
+    Chord* topChord = toChord(topCR);
+    Chord* bottomChord = toChord(bottomCR);
+    if (topCR->part() == bottomCR->part()) {
+        return createArpeggioForChordRange(span, articDef, visible, topChord, bottomChord);
+    }
+
+    return createPartSplitArpeggios(span, articDef, visible, topChord, bottomChord);
 }
 
 ReadableArticulation::ReadableArticulation(FinaleParser& ctx, const MusxInstance<others::ArticulationDef>& articDef)

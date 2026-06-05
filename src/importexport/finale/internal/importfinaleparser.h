@@ -427,6 +427,12 @@ private:
     engraving::Note* noteFromNoteInfoPtr(const musx::dom::NoteInfoPtr& noteInfoPtr);
     engraving::ChordRest* chordRestFromEntryInfoPtr(const musx::dom::EntryInfoPtr& entryInfoPtr);
     musx::util::ArpeggioSpanOptions arpeggioSpanOptions() const;
+    bool createArpeggioForChordRange(const musx::util::ArpeggioSpanCandidate& span,
+                                     const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
+                                     bool visible, engraving::Chord* topChord, engraving::Chord* bottomChord);
+    bool createPartSplitArpeggios(const musx::util::ArpeggioSpanCandidate& span,
+                                  const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef,
+                                  bool visible, engraving::Chord* topChord, engraving::Chord* bottomChord);
     bool createArpeggioFromSpan(const musx::util::ArpeggioSpanCandidate& span,
                                 const musx::dom::MusxInstance<musx::dom::others::ArticulationDef>& articDef = nullptr,
                                 bool visible = true);
