@@ -2402,8 +2402,10 @@ QString Braille::brailleMeasure(Measure* measure, int staffCount)
             resetOctave(staffCount);
 
             // Undo filling the missing beats with rests, so we don't have an altered score.
+/* see FIXME above
             m_score->undoRedo(true, nullptr);
             m_score->undoRedo(true, nullptr);
+*/
             m_score->deselectAll();
         }
     }
