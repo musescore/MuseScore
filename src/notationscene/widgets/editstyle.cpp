@@ -274,7 +274,8 @@ void EditStyle::classBegin()
     videoHitPointLineStyleLayout->setContentsMargins(0, 0, 0, 0);
     videoHitPointLineStyleLayout->setSpacing(4);
 
-    auto addVideoHitPointLineStyleButton = [this, videoHitPointLineStyleButtons, videoHitPointLineStyleLayout](const QString& text, LineType lineType) {
+    auto addVideoHitPointLineStyleButton
+        = [this, videoHitPointLineStyleButtons, videoHitPointLineStyleLayout](const QString& text, LineType lineType) {
         QToolButton* button = new QToolButton(videoHitPointLineStyleButtons);
         button->setCheckable(true);
         button->setText(text);

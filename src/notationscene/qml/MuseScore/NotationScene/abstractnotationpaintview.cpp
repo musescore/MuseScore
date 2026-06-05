@@ -591,8 +591,9 @@ void AbstractNotationPaintView::paintVideoHitPoints(QPainter* painter)
         const QString label = (hitPoint.label.empty() ? String(u"Hit") : hitPoint.label).toQString();
         const int labelWidth = std::max(qRound(18.0), labelMetrics.horizontalAdvance(label) + qRound(4.0));
         const int labelHeight = std::max(qRound(10.0), labelMetrics.height() + qRound(2.0));
-        const QRectF labelRect(x - (labelWidth / 2.0) + labelOffsetX, markerRect.top() - labelHeight - 2.0 + labelOffsetY,
-                                labelWidth, labelHeight);
+        const QRectF labelRect(x - (labelWidth / 2.0) + labelOffsetX,
+                               markerRect.top() - labelHeight - 2.0 + labelOffsetY,
+                               labelWidth, labelHeight);
 
         painter->setPen(markerPen);
         painter->drawLine(QPointF(x, markerRect.top()), QPointF(x, markerRect.bottom()));

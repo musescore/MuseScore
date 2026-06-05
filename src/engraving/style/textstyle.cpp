@@ -790,8 +790,6 @@ const TextStyle videoHitPointTextStyle {
         { TextStylePropertyType::FrameRound,           Sid::videoHitPointFrameRound,               Pid::FRAME_ROUND },
         { TextStylePropertyType::FrameBorderColor,     Sid::videoHitPointFrameFgColor,             Pid::FRAME_FG_COLOR },
         { TextStylePropertyType::FrameFillColor,       Sid::videoHitPointFrameBgColor,             Pid::FRAME_BG_COLOR },
-        { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,              Pid::MUSICAL_SYMBOLS_SCALE },
-        { TextStylePropertyType::MusicalSymbolsSize,   Sid::defaultMusicalSymbolSize,              Pid::MUSIC_SYMBOL_SIZE },
         { TextStylePropertyType::Position,             Sid::videoHitPointPosition,                 Pid::POSITION },
     } },
     { Sid::videoHitPointPosAbove, Sid::videoHitPointPosBelow }
@@ -1795,7 +1793,6 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::REPEAT_RIGHT,
     TextStyleType::REHEARSAL_MARK,
     TextStyleType::SYSTEM,
-    TextStyleType::VIDEO_HIT_POINT,
     TextStyleType::STAFF,
     TextStyleType::EXPRESSION,
     TextStyleType::DYNAMICS,
@@ -1830,6 +1827,9 @@ const std::vector<TextStyleType>& allTextStyles()
     if (_allTextStyles.empty()) {
         _allTextStyles.reserve(int(TextStyleType::TEXT_TYPES));
         for (int t = int(TextStyleType::DEFAULT) + 1; t < int(TextStyleType::TEXT_TYPES); ++t) {
+            if (TextStyleType(t) == TextStyleType::VIDEO_HIT_POINT) {
+                continue;
+            }
             _allTextStyles.push_back(TextStyleType(t));
         }
     }
@@ -1852,6 +1852,12 @@ const std::vector<TextStyleType>& editableTextStyles()
     if (_editableTextStyles.empty()) {
         _editableTextStyles = allTextStyles();
         muse::remove(_editableTextStyles, TextStyleType::DYNAMICS);
+        for (auto it = _editableTextStyles.begin(); it != _editableTextStyles.end(); ++it) {
+            if (*it == TextStyleType::SYSTEM) {
+                _editableTextStyles.insert(++it, TextStyleType::VIDEO_HIT_POINT);
+                break;
+            }
+        }
     }
     return _editableTextStyles;
 }

@@ -42,8 +42,8 @@ static void normalizeHitPoints(VideoAttachmentSettings& attachment)
     std::stable_sort(
         attachment.hitPoints.begin(), attachment.hitPoints.end(),
         [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
-            return a.timeMs < b.timeMs;
-        });
+        return a.timeMs < b.timeMs;
+    });
 }
 
 const VideoAttachmentSettings& ProjectVideoSettings::attachment() const
