@@ -2157,7 +2157,7 @@ void SlurTieLayout::forceHorizontal(Tie* tie, SlurTiePos& sPos)
 
     if (startNote && endNote
         && startNote->line() == endNote->line()
-        && startNote->chord()->vStaffIdx() == endNote->chord()->vStaffIdx()) {
+        && startNote->vStaffIdx() == endNote->vStaffIdx()) {
         double y1 = sPos.p1.y();
         double y2 = sPos.p2.y();
         double outerY = tie->up() ? std::min(y1, y2) : std::max(y1, y2);
