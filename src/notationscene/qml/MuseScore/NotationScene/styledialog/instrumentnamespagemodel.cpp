@@ -41,6 +41,11 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
     StyleId::instrumentNamesFormatShort,
     StyleId::instrumentNamesCustomFormatShort,
     StyleId::instrumentNamesAlignIncludeGroupBrackets,
+
+    StyleId::instrumentNumeralsTrailingDotSingle,
+    StyleId::instrumentNumeralsTrailingDotMultiple,
+    StyleId::twoInstrumentNumeralsAlign,
+    StyleId::instrumentNumeralsHyphenateMoreThan,
 })
 {
 }
@@ -113,4 +118,24 @@ StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatShort() const
 StyleItem* InstrumentNamesPageModel::instrumentNamesAlignIncludeGroupBrackets() const
 {
     return styleItem(StyleId::instrumentNamesAlignIncludeGroupBrackets);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsTrailingDotSingle() const
+{
+    return styleItem(StyleId::instrumentNumeralsTrailingDotSingle);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsTrailingDotMultiple() const
+{
+    return styleItem(StyleId::instrumentNumeralsTrailingDotMultiple);
+}
+
+StyleItem* InstrumentNamesPageModel::twoInstrumentNumeralsAlign() const
+{
+    return styleItem(StyleId::twoInstrumentNumeralsAlign);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNumeralsHyphenateMoreThan() const
+{
+    return styleItem(StyleId::instrumentNumeralsHyphenateMoreThan);
 }

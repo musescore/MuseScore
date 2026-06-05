@@ -1124,9 +1124,9 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
 {
     Score* score = originParts.front()->score();
     const MStyle& style = score->style();
-    bool trailingDotSingle = style.styleB(Sid::trailingDotOnMarginLabelsSingle);
-    bool trailingDotMultiple = style.styleB(Sid::trailingDotOnMarginLabelsMultiple);
-    int hyphenLimit = style.styleI(Sid::compressWithHyphenMoreThan);
+    bool trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+    bool trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
+    int hyphenLimit = style.styleI(Sid::instrumentNumeralsHyphenateMoreThan);
 
     std::vector<Instrument*> instrumentsMappedToFirstVoice;
     std::vector<Instrument*> instrumentsMappedToSecondVoice;
@@ -1141,7 +1141,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     }
 
     if (instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size() == 2) {
-        Orientation orientation = style.styleV(Sid::twoInstrLabelAlign).value<Orientation>();
+        Orientation orientation = style.styleV(Sid::twoInstrumentNumeralsAlign).value<Orientation>();
         return formatTwoInstrumentSharedStaffLabel(instrumentsMappedToFirstVoice, instrumentsMappedToSecondVoice, orientation,
                                                    trailingDotSingle, trailingDotMultiple);
     }

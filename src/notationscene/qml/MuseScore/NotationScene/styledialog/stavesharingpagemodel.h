@@ -35,12 +35,6 @@ class StaveSharingPageModel : public AbstractStyleDialogModel
         bool isStaveSharingEnabled READ isStaveSharingEnabled WRITE setIsStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
 
     Q_PROPERTY(StyleItem * allowVoiceCrossing READ allowVoiceCrossing CONSTANT)
-    Q_PROPERTY(StyleItem * trailingDotOnMarginLabelsSingle READ trailingDotOnMarginLabelsSingle CONSTANT)
-    Q_PROPERTY(StyleItem * trailingDotOnInStaffLabelsSingle READ trailingDotOnInStaffLabelsSingle CONSTANT)
-    Q_PROPERTY(StyleItem * trailingDotOnMarginLabelsMultiple READ trailingDotOnMarginLabelsMultiple CONSTANT)
-    Q_PROPERTY(StyleItem * trailingDotOnInStaffLabelsMultiple READ trailingDotOnInStaffLabelsMultiple CONSTANT)
-    Q_PROPERTY(StyleItem * twoInstrLabelAlign READ twoInstrLabelAlign CONSTANT)
-    Q_PROPERTY(StyleItem * compressWithHyphenMoreThan READ compressWithHyphenMoreThan CONSTANT)
 
 public:
     explicit StaveSharingPageModel(QObject* parent = nullptr);
@@ -53,11 +47,5 @@ signals:
 
 public:
     StyleItem* allowVoiceCrossing() const;
-    StyleItem* trailingDotOnMarginLabelsSingle() const;
-    StyleItem* trailingDotOnInStaffLabelsSingle() const;
-    StyleItem* trailingDotOnMarginLabelsMultiple() const;
-    StyleItem* trailingDotOnInStaffLabelsMultiple() const;
-    StyleItem* twoInstrLabelAlign() const;
-    StyleItem* compressWithHyphenMoreThan() const;
 };
 }

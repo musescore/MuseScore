@@ -70,6 +70,12 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(instrumentNamesAlignShort,                  InstrumentNamesAlign::RIGHT_RIGHT),
     styleDef(instrumentNamesStackVertically,             false),
     styleDef(instrumentNamesAlignIncludeGroupBrackets,   true),
+
+    styleDef(instrumentNumeralsTrailingDotSingle,            false),
+    styleDef(instrumentNumeralsTrailingDotMultiple,          false),
+    styleDef(twoInstrumentNumeralsAlign,                         Orientation::HORIZONTAL),
+    styleDef(instrumentNumeralsHyphenateMoreThan,                 2),
+
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),
     styleDef(stringsNameByGroup,                         false),
@@ -303,12 +309,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(enableStaveSharing,                         false),
     styleDef(allowVoiceCrossing,                         false),
-    styleDef(trailingDotOnMarginLabelsSingle,            false),
-    styleDef(trailingDotOnMarginLabelsMultiple,          false),
-    styleDef(trailingDotOnInStaffLabelsSingle,           true),
-    styleDef(trailingDotOnInStaffLabelsMultiple,         true),
-    styleDef(twoInstrLabelAlign,                         Orientation::HORIZONTAL),
-    styleDef(compressWithHyphenMoreThan,                 2),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),
     styleDef(hairpinPosAbove,                            PointF(0.0, -1.75)),

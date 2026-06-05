@@ -81,6 +81,12 @@ enum class Sid : short {
     instrumentNamesAlignShort,
     instrumentNamesStackVertically,
     instrumentNamesAlignIncludeGroupBrackets,
+
+    instrumentNumeralsTrailingDotSingle,
+    instrumentNumeralsTrailingDotMultiple,
+    twoInstrumentNumeralsAlign,
+    instrumentNumeralsHyphenateMoreThan,
+
     windsNameByGroup,
     vocalsNameByGroup,
     stringsNameByGroup,
@@ -307,12 +313,6 @@ enum class Sid : short {
 
     enableStaveSharing,
     allowVoiceCrossing,
-    trailingDotOnMarginLabelsSingle,
-    trailingDotOnMarginLabelsMultiple,
-    trailingDotOnInStaffLabelsSingle,
-    trailingDotOnInStaffLabelsMultiple,
-    twoInstrLabelAlign,
-    compressWithHyphenMoreThan,
 
     hairpinPlacement,
     hairpinPosAbove,

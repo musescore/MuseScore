@@ -180,6 +180,84 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
+            title: qsTrc("notation/editstyle/instrumentnames", "Numerals")
+
+            ColumnLayout {
+                spacing: 12
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Add trailing dot")
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On single instruments")
+                        styleItem: instrumentNamesModel.instrumentNumeralsTrailingDotSingle
+                    }
+
+                    StyleToggle {
+                        text: qsTrc("notation/editstyle/instrumentnames", "On combined multiple instruments")
+                        styleItem: instrumentNamesModel.instrumentNumeralsTrailingDotMultiple
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 8
+
+                    StyledTextLabel {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Align combined two-instrument numerals")
+                    }
+
+                    Repeater {
+                        model: [
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Vertically"), value: 0 },
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Horizontally"), value: 1 },
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Following voice assignment"), value: 2 },
+                        ]
+
+                        RoundedRadioButton {
+                            required property var modelData
+                            text: modelData.text
+                            checked: instrumentNamesModel.twoInstrumentNumeralsAlign.value === modelData.value
+                            onClicked: instrumentNamesModel.twoInstrumentNumeralsAlign.value = modelData.value
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: false
+                    spacing: 8
+
+                    StyledTextLabel {
+                        horizontalAlignment: Qt.AlignLeft
+                        text: qsTrc("notation/editstyle/instrumentnames", "Show numerals as interval when the number of consecutive combined instruments exceeds")
+                    }
+
+                    IncrementalPropertyControl {
+                        Layout.preferredWidth: 60
+                        width: 60
+                        decimals: 0
+                        step: 1
+                        minValue: 1
+                        maxValue: 100
+                        currentValue: instrumentNamesModel.instrumentNumeralsHyphenateMoreThan.value
+                        onValueEditingFinished: function(newValue) {
+                            instrumentNamesModel.instrumentNumeralsHyphenateMoreThan.value = newValue
+                        }
+                    }
+
+                    StyleResetButton {
+                        styleItem: instrumentNamesModel.instrumentNumeralsHyphenateMoreThan
+                    }
+                }
+            }
+        }
+
+        StyledGroupBox {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 500
             title: qsTrc("notation/editstyle/instrumentnames", "Group names")
 
             ColumnLayout {

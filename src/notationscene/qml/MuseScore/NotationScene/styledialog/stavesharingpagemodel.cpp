@@ -27,12 +27,6 @@ namespace mu::notation {
 StaveSharingPageModel::StaveSharingPageModel(QObject* parent)
     : AbstractStyleDialogModel(parent, { StyleId::enableStaveSharing,
                                          StyleId::allowVoiceCrossing,
-                                         StyleId::trailingDotOnMarginLabelsSingle,
-                                         StyleId::trailingDotOnInStaffLabelsSingle,
-                                         StyleId::trailingDotOnMarginLabelsMultiple,
-                                         StyleId::trailingDotOnInStaffLabelsMultiple,
-                                         StyleId::twoInstrLabelAlign,
-                                         StyleId::compressWithHyphenMoreThan,
                                })
 {
 }
@@ -55,35 +49,5 @@ void StaveSharingPageModel::setIsStaveSharingEnabled(bool v)
 StyleItem* StaveSharingPageModel::allowVoiceCrossing() const
 {
     return styleItem(StyleId::allowVoiceCrossing);
-}
-
-StyleItem* StaveSharingPageModel::trailingDotOnMarginLabelsSingle() const
-{
-    return styleItem(StyleId::trailingDotOnMarginLabelsSingle);
-}
-
-StyleItem* StaveSharingPageModel::trailingDotOnInStaffLabelsSingle() const
-{
-    return styleItem(StyleId::trailingDotOnInStaffLabelsSingle);
-}
-
-StyleItem* StaveSharingPageModel::trailingDotOnMarginLabelsMultiple() const
-{
-    return styleItem(StyleId::trailingDotOnMarginLabelsMultiple);
-}
-
-StyleItem* StaveSharingPageModel::trailingDotOnInStaffLabelsMultiple() const
-{
-    return styleItem(StyleId::trailingDotOnInStaffLabelsMultiple);
-}
-
-StyleItem* StaveSharingPageModel::twoInstrLabelAlign() const
-{
-    return styleItem(StyleId::twoInstrLabelAlign);
-}
-
-StyleItem* StaveSharingPageModel::compressWithHyphenMoreThan() const
-{
-    return styleItem(StyleId::compressWithHyphenMoreThan);
 }
 }
