@@ -84,7 +84,7 @@ i = 0
 while i < len(release_assets):
     asset = release_assets[i]
     name = asset.get("name")
-    if ".AppImage" in name and ("aarch64" in name or "armv7l" in name):
+    if ".AppImage" in name and "aarch64" in name:
         release_new_assets.append(asset)
         del release_assets[i]
     else:
