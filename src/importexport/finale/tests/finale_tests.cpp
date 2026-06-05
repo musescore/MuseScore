@@ -186,6 +186,7 @@ void Finale_Tests::enigmaXmlImportTestRef(const char* file)
     }
 
 MUSX_IMPORT_TEST(arpeggios)
+MUSX_IMPORT_TEST(arpeggios2)
 MUSX_IMPORT_TEST(articulations1)
 MUSX_IMPORT_TEST_DISABLED(beamOverBarlines)
 MUSX_IMPORT_TEST(beamOverMultBarsGraceNotes)
