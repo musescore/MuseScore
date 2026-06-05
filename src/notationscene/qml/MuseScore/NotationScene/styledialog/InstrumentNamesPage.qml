@@ -212,16 +212,16 @@ StyledFlickable {
 
                     Repeater {
                         model: [
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Vertically"), value: 0 },
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Horizontally"), value: 1 },
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Following voice assignment"), value: 2 },
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Horizontally"), value: 2 },
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Vertically"), value: 1 },
+                            { text: qsTrc("notation/editstyle/instrumentnames", "Following voice assignment"), value: 0 },
                         ]
 
                         RoundedRadioButton {
                             required property var modelData
                             text: modelData.text
-                            checked: instrumentNamesModel.twoInstrumentNumeralsAlign.value === modelData.value
-                            onClicked: instrumentNamesModel.twoInstrumentNumeralsAlign.value = modelData.value
+                            checked: instrumentNamesModel.twoInstrumentNumeralsAlignVertical.value === modelData.value
+                            onClicked: instrumentNamesModel.twoInstrumentNumeralsAlignVertical.value = modelData.value
                         }
                     }
                 }

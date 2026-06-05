@@ -44,7 +44,7 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
 
     StyleId::instrumentNumeralsTrailingDotSingle,
     StyleId::instrumentNumeralsTrailingDotMultiple,
-    StyleId::twoInstrumentNumeralsAlign,
+    StyleId::twoInstrumentNumeralsAlignVertical,
     StyleId::instrumentNumeralsHyphenateMoreThan,
 })
 {
@@ -130,9 +130,9 @@ StyleItem* InstrumentNamesPageModel::instrumentNumeralsTrailingDotMultiple() con
     return styleItem(StyleId::instrumentNumeralsTrailingDotMultiple);
 }
 
-StyleItem* InstrumentNamesPageModel::twoInstrumentNumeralsAlign() const
+StyleItem* InstrumentNamesPageModel::twoInstrumentNumeralsAlignVertical() const
 {
-    return styleItem(StyleId::twoInstrumentNumeralsAlign);
+    return styleItem(StyleId::twoInstrumentNumeralsAlignVertical);
 }
 
 StyleItem* InstrumentNamesPageModel::instrumentNumeralsHyphenateMoreThan() const

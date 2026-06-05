@@ -1141,9 +1141,9 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     }
 
     if (instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size() == 2) {
-        Orientation orientation = style.styleV(Sid::twoInstrumentNumeralsAlign).value<Orientation>();
-        return formatTwoInstrumentSharedStaffLabel(instrumentsMappedToFirstVoice, instrumentsMappedToSecondVoice, orientation,
-                                                   trailingDotSingle, trailingDotMultiple);
+        AutoOnOff vertical = style.styleV(Sid::twoInstrumentNumeralsAlignVertical).value<AutoOnOff>();
+        return formatTwoInstrumentSharedStaffLabel(instrumentsMappedToFirstVoice, instrumentsMappedToSecondVoice, vertical,
+                                                   trailingDotSingle, trailingDotMultiple, hyphenLimit);
     }
 
     String result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
@@ -1159,7 +1159,8 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
 
 String SystemHeaderLayout::formatTwoInstrumentSharedStaffLabel(const std::vector<Instrument*>& instrumentsMappedToFirstVoice,
                                                                const std::vector<Instrument*>& instrumentsMappedToSecondVoice,
-                                                               Orientation orientation, bool trailingDotSingle, bool trailingDotMultiple)
+                                                               AutoOnOff vertical, bool trailingDotSingle, bool trailingDotMultiple,
+                                                               int hyphenLimit)
 {
     std::array<int, 2> instrNumberPair;
     size_t curIdx = 0;
@@ -1172,14 +1173,61 @@ String SystemHeaderLayout::formatTwoInstrumentSharedStaffLabel(const std::vector
         ++curIdx;
     }
 
-    if (orientation == Orientation::VERTICAL) {
-        return String::number(instrNumberPair.front()) + (trailingDotSingle ? u"." : u"")
-               + u"\n"
-               + String::number(instrNumberPair.back()) + (trailingDotSingle ? u"." : u"");
+    Orientation orientation;
+    switch (vertical) {
+    case AutoOnOff::AUTO:
+        if (!instrumentsMappedToFirstVoice.empty() && !instrumentsMappedToSecondVoice.empty()) {
+            orientation = Orientation::VERTICAL;
+        } else {
+            orientation = Orientation::HORIZONTAL;
+        }
+        break;
+    case AutoOnOff::ON:
+        orientation = Orientation::VERTICAL;
+        break;
+    case AutoOnOff::OFF:
+        orientation = Orientation::HORIZONTAL;
+        break;
     }
 
-    return String::number(instrNumberPair.front()) + u"."
-           + String::number(instrNumberPair.back()) + (trailingDotMultiple ? u"." : u"");
+    String result;
+
+    if (orientation == Orientation::VERTICAL) {
+        result += String::number(instrNumberPair.front());
+
+        if (trailingDotSingle) {
+            result += '.';
+        }
+
+        result += '\n';
+        result += String::number(instrNumberPair.back());
+
+        if (trailingDotSingle) {
+            result += '.';
+        }
+
+        return result;
+    }
+
+    result += String::number(instrNumberPair.front());
+
+    if (trailingDotMultiple) {
+        result += '.';
+    }
+
+    if (hyphenLimit < 2) {
+        result += u'–';
+    } else if (result.back() != '.') {
+        result += '.';
+    }
+
+    result += String::number(instrNumberPair.back());
+
+    if (trailingDotMultiple) {
+        result += '.';
+    }
+
+    return result;
 }
 
 String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
@@ -1196,9 +1244,9 @@ String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instrumen
 
     for (size_t i = 0; i < instruments.size(); ++i) {
         if (isFirstVoice && !result.empty()) {
-            result += u".";
+            result += '.';
         } else if (!isFirstVoice && result.back() != '\n') {
-            result += u".";
+            result += '.';
         }
 
         Instrument* instr = instruments[i];
@@ -1220,7 +1268,13 @@ String SystemHeaderLayout::formatVoice(const std::vector<Instrument*>& instrumen
         }
 
         if (curNumber - startNumber >= hyphenLimit) {
-            result += String::number(startNumber) + (putTrailingDot ? u"." : u"") + u"–" + String::number(curNumber);
+            result += String::number(startNumber);
+
+            if (putTrailingDot) {
+                result += '.';
+            }
+
+            result += u'–' + String::number(curNumber);
         } else {
             result += String::number(startNumber);
         }

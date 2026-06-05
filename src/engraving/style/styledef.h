@@ -84,7 +84,7 @@ enum class Sid : short {
 
     instrumentNumeralsTrailingDotSingle,
     instrumentNumeralsTrailingDotMultiple,
-    twoInstrumentNumeralsAlign,
+    twoInstrumentNumeralsAlignVertical,
     instrumentNumeralsHyphenateMoreThan,
 
     windsNameByGroup,

@@ -73,8 +73,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(instrumentNumeralsTrailingDotSingle,            false),
     styleDef(instrumentNumeralsTrailingDotMultiple,          false),
-    styleDef(twoInstrumentNumeralsAlign,                         Orientation::HORIZONTAL),
-    styleDef(instrumentNumeralsHyphenateMoreThan,                 2),
+    styleDef(twoInstrumentNumeralsAlignVertical,             AutoOnOff::OFF),
+    styleDef(instrumentNumeralsHyphenateMoreThan,            2),
 
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),

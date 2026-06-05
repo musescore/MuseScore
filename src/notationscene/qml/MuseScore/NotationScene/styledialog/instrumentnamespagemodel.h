@@ -47,7 +47,7 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotSingle READ instrumentNumeralsTrailingDotSingle CONSTANT)
     Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotMultiple READ instrumentNumeralsTrailingDotMultiple CONSTANT)
-    Q_PROPERTY(StyleItem * twoInstrumentNumeralsAlign READ twoInstrumentNumeralsAlign CONSTANT)
+    Q_PROPERTY(StyleItem * twoInstrumentNumeralsAlignVertical READ twoInstrumentNumeralsAlignVertical CONSTANT)
     Q_PROPERTY(StyleItem * instrumentNumeralsHyphenateMoreThan READ instrumentNumeralsHyphenateMoreThan CONSTANT)
 
     QML_ELEMENT
@@ -73,7 +73,7 @@ public:
 
     StyleItem* instrumentNumeralsTrailingDotSingle() const;
     StyleItem* instrumentNumeralsTrailingDotMultiple() const;
-    StyleItem* twoInstrumentNumeralsAlign() const;
+    StyleItem* twoInstrumentNumeralsAlignVertical() const;
     StyleItem* instrumentNumeralsHyphenateMoreThan() const;
 };
 }
