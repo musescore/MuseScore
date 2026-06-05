@@ -196,8 +196,12 @@ static ArpeggioType arpeggioTypeFromSpan(const musx::util::ArpeggioSpanCandidate
 }
 
 static std::optional<musx::util::ArpeggioSpanCandidate> singleGlyphArpeggioSpan(
-    const EntryInfoPtr& sourceEntry, const String& symName)
+    const EntryInfoPtr& sourceEntry, const String& symName, const musx::util::ArpeggioSpanOptions& options)
 {
+    if (options.skipGraceEntries && sourceEntry->getEntry()->graceNote) {
+        return std::nullopt;
+    }
+
     std::optional<musx::util::ArpeggioSpanCandidate> result;
     auto makeArpeggioCandidate = [&](musx::util::ArpeggioDirection direction, musx::util::ArpeggioArrow arrow) {
         auto& candidate = result.emplace();
@@ -223,7 +227,9 @@ static std::optional<musx::util::ArpeggioSpanCandidate> singleGlyphArpeggioSpan(
 musx::util::ArpeggioSpanOptions FinaleParser::arpeggioSpanOptions() const
 {
     musx::util::ArpeggioSpanOptions options;
-    options.skipGraceEntries = false;
+    // MuseScore currently lays out grace-note arpeggios incorrectly after relayout
+    // actions such as Page View <-> Continuous View.
+    options.skipGraceEntries = true;
     options.staffOriginOffsetResolver = [this](const DocumentPtr& document, Cmper partId,
                                                 const musx::util::StaffOriginOffsetRequest& request) {
         const staff_idx_t sourceStaffIdx = muse::value(m_inst2Staff, request.sourceStaffId, muse::nidx);
@@ -974,9 +980,10 @@ void FinaleParser::importArticulations()
                 EntryInfoPtr sourceEntry = EntryInfoPtr::fromEntryNumber(m_doc, m_currentMusxPartId, entryNumber);
                 const auto options = arpeggioSpanOptions();
                 std::optional<musx::util::ArpeggioSpanCandidate> span;
+                // Grace-note arpeggios are currently skipped by arpeggioSpanOptions().
                 span = musx::util::calcArpeggioSpanForAssignment(sourceEntry, articAssign, options);
                 if (!span) {
-                    span = singleGlyphArpeggioSpan(sourceEntry, musxArtic->symName);
+                    span = singleGlyphArpeggioSpan(sourceEntry, musxArtic->symName, options);
                 }
                 if (span) {
                     createArpeggioFromSpan(*span, articDef);
