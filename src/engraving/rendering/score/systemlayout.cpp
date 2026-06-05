@@ -170,7 +170,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
             if (m->isFirstInSystem()) {
                 leadingHBoxesWidth = curSysWidth;
-                SystemLayout::layoutSystem(system, ctx, curSysWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+                SystemLayout::layoutSystem(system, ctx, curSysWidth);
                 MeasureLayout::addSystemHeader(m, ctx.state().firstSystem(), ctx);
             } else {
                 bool createHeader = ctx.state().prevMeasure()->isHBox() && toHBox(ctx.state().prevMeasure())->createSystemHeader();
@@ -403,7 +403,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     // Relayout system to account for newly hidden/unhidden staves
-    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
+    SystemLayout::layoutSystem(system, ctx, leadingHBoxesWidth);
 
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
@@ -2084,42 +2084,11 @@ void SystemLayout::restoreOldSystemLayout(System* system, LayoutContext& ctx)
     layoutTiesAndBends(elements, ctx);
 }
 
-void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth, const bool isFirstSystem,
-                                bool firstSystemIndent)
+void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double leadingHBoxesWidth)
 {
-    if (system->staves().empty()) {                 // ignore vbox
-        return;
-    }
-
-    SystemHeaderLayout::computeInstrumentNameOffset(system, ctx);
-    double instrumentNameOffset = system->ldata()->instrumentNameOffset();
+    SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
 
     size_t nstaves = system->staves().size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //---------------------------------------------------
-    SystemHeaderLayout::layoutBrackets(system, ctx);
-    double maxBracketsWidth = SystemHeaderLayout::totalBracketOffset(ctx);
-
-    SystemHeaderLayout::setInstrumentNames(system, ctx);
-    SystemHeaderLayout::computeInstrumentNamesWidth(system, ctx);
-    double maxNamesWidth = system->ldata()->totalNamesWidth();
-    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
-    if (isFirstSystem && firstSystemIndent) {
-        indent = std::max(indent, system->styleP(Sid::firstSystemIndentationValue) * system->mag() - maxBracketsWidth);
-        maxNamesWidth = indent - instrumentNameOffset;
-    }
-
-    if (muse::RealIsNull(indent)) {
-        if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
-            system->setLeftMargin(0.0);
-        } else {
-            system->setLeftMargin(maxBracketsWidth);
-        }
-    } else {
-        system->setLeftMargin(indent + maxBracketsWidth);
-    }
 
     for (size_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
         SysStaff* s = system->staves().at(staffIdx);

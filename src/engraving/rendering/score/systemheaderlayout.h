@@ -38,6 +38,8 @@ namespace mu::engraving::rendering::score {
 class SystemHeaderLayout
 {
 public:
+    static void updateSystemHeaderWidth(System* system, LayoutContext& ctx);
+
     static double layoutBrackets(System* system, LayoutContext& ctx);
     static void addBrackets(System* system, Measure* measure, LayoutContext& ctx);
     static double totalBracketOffset(LayoutContext& ctx);

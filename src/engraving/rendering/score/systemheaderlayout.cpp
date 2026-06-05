@@ -1344,12 +1344,12 @@ void SystemHeaderLayout::setInstrumentNames(System* system, LayoutContext& ctx)
         return;
     }
 
-    const MeasureBase* curMeasure = ctx.state().curMeasure();
-    if (!curMeasure || !curMeasure->system() || curMeasure != curMeasure->system()->firstMeasure()) {
+    const Measure* firstMeasure = system->firstMeasure();
+    if (!firstMeasure) {
         return;
     }
 
-    Fraction tick = ctx.state().curMeasure()->tick();
+    Fraction tick = firstMeasure->tick();
 
     bool subsSysLongName = ctx.conf().styleV(Sid::subsSystemInstNameVisibility).value<InstrumentLabelVisibility>()
                            == InstrumentLabelVisibility::LONG;
@@ -1558,4 +1558,39 @@ bool SystemHeaderLayout::useGroupNames(const String& instrumentGroup, LayoutCont
     }
 
     return style.styleB(Sid::othersNameByGroup);
+}
+
+void SystemHeaderLayout::updateSystemHeaderWidth(System* system, LayoutContext& ctx)
+{
+    if (system->staves().empty()) {                 // ignore vbox
+        return;
+    }
+
+    SystemHeaderLayout::computeInstrumentNameOffset(system, ctx);
+    double instrumentNameOffset = system->ldata()->instrumentNameOffset();
+
+    //---------------------------------------------------
+    //  find x position of staves
+    //---------------------------------------------------
+    SystemHeaderLayout::layoutBrackets(system, ctx);
+    double maxBracketsWidth = SystemHeaderLayout::totalBracketOffset(ctx);
+
+    SystemHeaderLayout::setInstrumentNames(system, ctx);
+    SystemHeaderLayout::computeInstrumentNamesWidth(system, ctx);
+    double maxNamesWidth = system->ldata()->totalNamesWidth();
+    double indent = maxNamesWidth > 0 ? maxNamesWidth + instrumentNameOffset : 0.0;
+    if (ctx.state().firstSystem() && ctx.state().firstSystemIndent()) {
+        indent = std::max(indent, system->styleP(Sid::firstSystemIndentationValue) * system->mag() - maxBracketsWidth);
+        maxNamesWidth = indent - instrumentNameOffset;
+    }
+
+    if (muse::RealIsNull(indent)) {
+        if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
+            system->setLeftMargin(0.0);
+        } else {
+            system->setLeftMargin(maxBracketsWidth);
+        }
+    } else {
+        system->setLeftMargin(indent + maxBracketsWidth);
+    }
 }
