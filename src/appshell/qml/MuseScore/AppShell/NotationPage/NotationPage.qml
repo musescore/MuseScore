@@ -91,6 +91,9 @@ DockPage {
     }
 
     readonly property int verticalPanelDefaultWidth: 300
+    
+    readonly property int verticalPanelMinWidth: 280
+    readonly property int verticalPanelMaxWidth: 800
 
     readonly property int horizontalPanelMinHeight: 100
     readonly property int horizontalPanelMaxHeight: 520
@@ -260,8 +263,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(palettesPanel.location)
 
             width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelMinWidth
+            maximumWidth: root.verticalPanelMaxWidth
 
             minimumHeight: root.panelMinDimension
             maximumHeight: root.panelMaxDimension
@@ -289,8 +292,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(layoutPanel.location)
 
             width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelMinWidth
+            maximumWidth: root.verticalPanelMaxWidth
 
             minimumHeight: root.panelMinDimension
             maximumHeight: root.panelMaxDimension
@@ -318,8 +321,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(propertiesPanel.location)
 
             width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelMinWidth
+            maximumWidth: root.verticalPanelMaxWidth
 
             minimumHeight: root.panelMinDimension
             maximumHeight: root.panelMaxDimension
@@ -344,8 +347,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 
             width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelMinWidth
+            maximumWidth: root.verticalPanelMaxWidth
 
             minimumHeight: root.panelMinDimension
             maximumHeight: root.panelMaxDimension
@@ -372,8 +375,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(undoHistoryPanel.location)
 
             width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelMinWidth
+            maximumWidth: root.verticalPanelMaxWidth
 
             minimumHeight: root.panelMinDimension
             maximumHeight: root.panelMaxDimension
