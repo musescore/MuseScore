@@ -1827,6 +1827,8 @@ const std::vector<TextStyleType>& allTextStyles()
     if (_allTextStyles.empty()) {
         _allTextStyles.reserve(int(TextStyleType::TEXT_TYPES));
         for (int t = int(TextStyleType::DEFAULT) + 1; t < int(TextStyleType::TEXT_TYPES); ++t) {
+            // Video hit point text is editor-only and rendered by the notation view;
+            // keep it out of broad score serialization/import defaults.
             if (TextStyleType(t) == TextStyleType::VIDEO_HIT_POINT) {
                 continue;
             }
@@ -1852,6 +1854,8 @@ const std::vector<TextStyleType>& editableTextStyles()
     if (_editableTextStyles.empty()) {
         _editableTextStyles = allTextStyles();
         muse::remove(_editableTextStyles, TextStyleType::DYNAMICS);
+        // Reinsert video hit point text for the Style dialog without making it a
+        // globally serialized text style.
         for (auto it = _editableTextStyles.begin(); it != _editableTextStyles.end(); ++it) {
             if (*it == TextStyleType::SYSTEM) {
                 _editableTextStyles.insert(++it, TextStyleType::VIDEO_HIT_POINT);
