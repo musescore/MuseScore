@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include <QStringList>
+
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/score.h"
@@ -117,6 +119,36 @@ void VideoPanelModel::renameHitPoint(int index, const QString& label)
     updateAttachment(updated);
 }
 
+void VideoPanelModel::setHitPointTimecode(int index, const QString& timecode)
+{
+    const int positionMs = parseTimecodeToMs(timecode);
+    if (positionMs < 0) {
+        return;
+    }
+
+    setHitPointTimeMs(index, positionMs);
+}
+
+void VideoPanelModel::setHitPointTimeMs(int index, int videoPositionMs)
+{
+    VideoAttachmentSettings updated = attachment();
+    if (!updated.isValid() || index < 0 || index >= static_cast<int>(updated.hitPoints.size())) {
+        return;
+    }
+
+    const int positionMs = std::max(0, videoPositionMs);
+    if (updated.hitPoints.at(index).timeMs == positionMs) {
+        return;
+    }
+
+    updated.hitPoints[index].timeMs = positionMs;
+    std::sort(updated.hitPoints.begin(), updated.hitPoints.end(), [](const VideoHitPointSettings& a, const VideoHitPointSettings& b) {
+        return a.timeMs < b.timeMs;
+    });
+
+    updateAttachment(updated);
+}
+
 QString VideoPanelModel::formatTimecode(int videoPositionMs) const
 {
     videoPositionMs = std::max(0, videoPositionMs);
@@ -135,6 +167,41 @@ QString VideoPanelModel::formatTimecode(int videoPositionMs) const
            .arg(minutes, 2, 10, QLatin1Char('0'))
            .arg(seconds, 2, 10, QLatin1Char('0'))
            .arg(frames, 2, 10, QLatin1Char('0'));
+}
+
+int VideoPanelModel::parseTimecodeToMs(const QString& timecode) const
+{
+    const QStringList parts = timecode.trimmed().split(QLatin1Char(':'));
+    if (parts.size() != 4) {
+        return -1;
+    }
+
+    bool ok = false;
+    const int hours = parts.at(0).toInt(&ok);
+    if (!ok || hours < 0) {
+        return -1;
+    }
+
+    const int minutes = parts.at(1).toInt(&ok);
+    if (!ok || minutes < 0 || minutes > 59) {
+        return -1;
+    }
+
+    const int seconds = parts.at(2).toInt(&ok);
+    if (!ok || seconds < 0 || seconds > 59) {
+        return -1;
+    }
+
+    const double framesPerSecond = std::clamp(frameRate(), 1.0, 240.0);
+    const int roundedFrameRate = std::max(1, static_cast<int>(std::lround(framesPerSecond)));
+    const int frames = parts.at(3).toInt(&ok);
+    if (!ok || frames < 0 || frames >= roundedFrameRate) {
+        return -1;
+    }
+
+    const qint64 totalSeconds = static_cast<qint64>(hours) * 3600 + minutes * 60 + seconds;
+    const qint64 totalFrames = totalSeconds * roundedFrameRate + frames;
+    return static_cast<int>(std::floor((static_cast<double>(totalFrames) * 1000.0 / roundedFrameRate) + 0.5));
 }
 
 bool VideoPanelModel::hasVideo() const

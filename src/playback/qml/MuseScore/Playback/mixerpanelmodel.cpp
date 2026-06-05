@@ -277,7 +277,9 @@ void MixerPanelModel::clear()
     TRACEFUNC;
 
     m_masterChannelItem = nullptr;
-    qDeleteAll(m_mixerChannelList);
+    for (MixerChannelItem* item : m_mixerChannelList) {
+        item->deleteLater();
+    }
     m_mixerChannelList.clear();
 }
 

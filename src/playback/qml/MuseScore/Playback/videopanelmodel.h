@@ -66,6 +66,8 @@ public:
     Q_INVOKABLE void addHitPoint(int videoPositionMs);
     Q_INVOKABLE void removeHitPoint(int index);
     Q_INVOKABLE void renameHitPoint(int index, const QString& label);
+    Q_INVOKABLE void setHitPointTimeMs(int index, int videoPositionMs);
+    Q_INVOKABLE void setHitPointTimecode(int index, const QString& timecode);
     Q_INVOKABLE QString formatTimecode(int videoPositionMs) const;
 
     bool hasVideo() const;
@@ -109,6 +111,7 @@ private:
     void updateAttachment(const project::VideoAttachmentSettings& attachment);
     QVariantMap hitPointToMap(const project::VideoHitPointSettings& hitPoint) const;
     QString musicalPositionText(int videoPositionMs) const;
+    int parseTimecodeToMs(const QString& timecode) const;
     void listenCurrentProject();
     void listenPlaybackController();
 

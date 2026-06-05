@@ -570,8 +570,8 @@ DockPage {
             objectName: root.pageModel.videoPanelName()
             title: qsTrc("appshell", "Video")
 
-            height: 150
-            minimumHeight: 96
+            height: 360
+            minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
 
             minimumWidth: root.panelMinDimension
@@ -589,6 +589,7 @@ DockPage {
             navigationSection: root.navigationPanelSec(videoPanel.location)
 
             VideoPanel {
+                anchors.fill: parent
                 navigationSection: videoPanel.navigationSection
                 contentNavigationPanelOrderStart: videoPanel.contentNavigationPanelOrderStart
             }
