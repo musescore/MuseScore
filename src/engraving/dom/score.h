@@ -37,7 +37,6 @@
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
-#include "global/iapplication.h"
 #include "../iengravingfontsprovider.h"
 #include "../ipalettescoreprovider.h"
 #include "../iengravingcontextconfiguration.h"
@@ -339,7 +338,6 @@ class Score : public EngravingObject, public muse::Contextable
     muse::GlobalInject<muse::draw::IImageProvider> imageProvider;
     muse::GlobalInject<IEngravingConfiguration> configuration;
     muse::GlobalInject<IEngravingFontsProvider> engravingFonts;
-    muse::GlobalInject<muse::IApplication> application;
     muse::ContextInject<IEngravingContextConfiguration> contextConfiguration = { this };
     muse::ContextInject<IEngravingElementsProvider> elementsProvider = { this };
     muse::ContextInject<IPaletteScoreProvider> paletteScoreProvider = { this };
@@ -900,7 +898,6 @@ public:
     int pageNumberOffset() const { return m_pageNumberOffset; }
     void setPageNumberOffset(int v) { m_pageNumberOffset = v; }
 
-    String appVersion() const { return application()->version().toString(); }
     String mscoreVersion() const { return m_mscoreVersion; }
     int mscoreRevision() const { return m_mscoreRevision; }
     void setMscoreVersion(const String& val) { m_mscoreVersion = val; }
