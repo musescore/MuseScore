@@ -171,6 +171,22 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     score->style().set(Sid::chordsXmlFile, true);
     score->chordList()->read(u"chords.xml");
 
+    // Enable multi-measure rests only when the file uses them (any REST with mrestCount > 1);
+    // otherwise show individual whole rests.
+    const bool hasMMRest = std::any_of(enc.measures.begin(), enc.measures.end(),
+                                       [](const EncMeasure& m) {
+        if (m.elements.empty()) {
+            return false;
+        }
+        for (const auto& ep : m.elements) {
+            if (static_cast<EncElemType>(ep->type) != EncElemType::REST) {
+                return false;
+            }
+        }
+        return static_cast<const EncRest*>(m.elements[0].get())->mrestCount > 1;
+    });
+    score->style().set(Sid::createMultiMeasureRests, hasMMRest);
+
     // Encore positions tuplet brackets/numbers flush against note heads and stems
     // with no extra vertical gap, and never pushes them outside the staff.
     score->style().set(Sid::tupletOutOfStaff,      false);
