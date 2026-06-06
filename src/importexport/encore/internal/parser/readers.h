@@ -71,15 +71,9 @@ struct EncFormatReader
     virtual quint32 elemBlockOffset() const = 0;
 
     // Apply format-specific fixups; return true to drop the element (duplicate suppression).
-    virtual bool postProcessElement(EncMeasureElem* elem,
-                                    QDataStream& ds,
-                                    qint64 rawElemStart) const
-    {
-        (void)elem;
-        (void)ds;
-        (void)rawElemStart;
-        return false;
-    }
+    // The base reads the tie flags every generation carries on the note itself; an override that
+    // adds format-specific work calls it first. See ENCORE_FORMAT.md §The note's own tie flags.
+    virtual bool postProcessElement(EncMeasureElem* elem, QDataStream& ds, qint64 rawElemStart) const;
 
     // True if the candidate REST is a duplicate and should be dropped.
     virtual bool deduplicateRest(std::vector<std::unique_ptr<EncMeasureElem> >& elements,

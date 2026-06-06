@@ -34,6 +34,17 @@
 #include "log.h"
 
 namespace mu::iex::enc {
+// The low nibble of grace1 records the ties the note takes part in: bit 0 outgoing, bit 1 incoming.
+// It reads the same way in every generation. Most of these repeat a TIE element at the same tick,
+// but a few percent are the only record of that tie. See ENCORE_FORMAT.md §The note's own tie flags.
+bool EncFormatReader::postProcessElement(EncMeasureElem* elem, QDataStream&, qint64) const
+{
+    if (EncNote* en = dynamic_cast<EncNote*>(elem)) {
+        en->isTieSender = (en->grace1 & 0x01);
+    }
+    return false;
+}
+
 bool skipBlock(QDataStream& ds, qint64 size)
 {
     QIODevice* dev = ds.device();
