@@ -32,6 +32,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_structure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_notes.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_tempo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_notes_tuplets.cpp
 )
 
 set(MODULE_TEST_LINK
