@@ -359,14 +359,15 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     break;
                 case 'r':
                     if (page->score()->dirty()) {
-                        static String revision; // FIXME
-                        newFragments.back().text += revision;
+                        newFragments.back().text += String(); // FIXME
                     } else {
                         int rev = page->score()->mscoreRevision();
-                        if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-                            newFragments.back().text += String::number(rev, 16);
-                        } else {
+                        if (rev > 0 && rev <= 5709) { // MuseScore 1.x and earlier used decimal numbers, referring to a commit on SourceForge.net, the largest being 5709
                             newFragments.back().text += String::number(rev, 10);
+                        } else if (rev > 0xffffff) { // MuseScore 2.0 and later use a >= 7-digit hex SHA, referring to a commit on GitHub.com
+                            newFragments.back().text += String::number(rev, 16);
+                        } else { // unknown, like in a self-built development version, or in a very old version of MuseScore before the revision number was tracked
+                            newFragments.back().text += String::number(rev, 10); // or "" or "Unknown"?
                         }
                     }
                     break;
