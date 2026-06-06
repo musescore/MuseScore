@@ -44,7 +44,8 @@ QString AboutModel::museScoreVersion() const
 
 QString AboutModel::museScoreRevision() const
 {
-    return QString::fromStdString(configuration()->museScoreRevision());
+    return QString("<a href=\"https://github.com/musescore/MuseScore/commit/%1\">%1</a>")
+           .arg(QString::fromStdString(configuration()->museScoreRevision()));
 }
 
 QVariantMap AboutModel::museScoreUrl() const
