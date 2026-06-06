@@ -31,6 +31,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_staff_size.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_structure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_notes.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_notes_mrest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_tempo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_notes_tuplets.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_notes_ties.cpp
