@@ -359,7 +359,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     break;
                 case 'r':
                     if (page->score()->dirty()) {
-                        newFragments.back().text += String(); // FIXME
+                        newFragments.back().text += page->score()->appRevision();
                     } else {
                         int rev = page->score()->mscoreRevision();
                         if (rev > 0 && rev <= 5709) { // MuseScore 1.x and earlier used decimal numbers, referring to a commit on SourceForge.net, the largest being 5709
