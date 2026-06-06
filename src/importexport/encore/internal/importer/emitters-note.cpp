@@ -106,6 +106,57 @@ static bool isCascadeFilteredTieReceiver(const EncNote* en,
     return false;
 }
 
+static void completePendingTie(BuildCtx& ctx,
+                               const NoteElemCtx& ec,
+                               const EncNote* en,
+                               Note* note)
+{
+    auto tieKey = std::make_tuple(ec.staffIdx, ec.voice, (int)en->semiTonePitch);
+    auto it = ctx.scratch.pendingTieNote.find(tieKey);
+    if (it != ctx.scratch.pendingTieNote.end()) {
+        Note* startNote = it->second;
+        // The format has no tie-end, so a tie-start is matched to a later note by (staff, voice,
+        // pitch); accept only when the receiver is the first chord after the start on that track
+        // (intervening chords void the tie, rests are skipped), else it jumps across measures to
+        // the next same-pitch note. See ENCORE_IMPORTER.md §TIE element handling.
+        bool consecutive = true;
+        Chord* startChord = startNote->chord();
+        if (startChord && startChord->segment() && note->chord()) {
+            consecutive = false;
+            const track_idx_t trk = startNote->track();
+            for (Segment* s = startChord->segment()->next1(SegmentType::ChordRest);
+                 s; s = s->next1(SegmentType::ChordRest)) {
+                EngravingItem* el = s->element(trk);
+                if (el && el->isChord()) {
+                    consecutive = (toChord(el) == note->chord());
+                    break;
+                }
+            }
+        }
+        if (consecutive) {
+            Tie* tie = Factory::createTie(startNote);
+            tie->setStartNote(startNote);
+            tie->setEndNote(note);
+            tie->setTrack(startNote->track());
+            startNote->add(tie);
+        }
+        ctx.scratch.pendingTieNote.erase(it);
+    }
+}
+
+static void registerTieStartIfApplicable(BuildCtx& ctx,
+                                         const NoteElemCtx& ec,
+                                         const MeasEmitCtx& mc,
+                                         const EncNote* en,
+                                         Note* note)
+{
+    bool hasTieStart = mc.isTieStartAt(ec.staffIdx, ec.voice, (int)ec.e->tick, (int)en->position)
+                       || en->isTieSender;
+    if (hasTieStart) {
+        ctx.scratch.pendingTieNote[{ ec.staffIdx, ec.voice, (int)en->semiTonePitch }] = note;
+    }
+}
+
 // Returns V_INVALID if rdur does not match the beat-relative pattern.
 static DurationType resolveBeatRelativeFaceValue(
     const EncNote* en,
@@ -663,5 +714,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     }
 
     configureNoteHeadForDrumset(note, en);
+    completePendingTie(ctx, ec, en, note);
+    registerTieStartIfApplicable(ctx, ec, mc, en, note);
 }
 } // namespace mu::iex::enc
