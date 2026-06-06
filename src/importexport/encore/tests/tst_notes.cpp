@@ -991,6 +991,50 @@ TEST_F(Tst_Notes, grandstaff_staffwithin_rest_on_second_staff)
     delete score;
 }
 
+// A TIE with staffWithin=1 must resolve on staff 2 (with its note), not leave a dangling tie on staff 1.
+TEST_F(Tst_Notes, grandstaff_staffwithin_tie_on_second_staff)
+{
+    // Single 4/4 measure: treble C5 half+half, bass E3 half tied to E3 half.
+    // Both bass notes use voice=2, staffWithin=1 (raw staff byte = 0x40).
+    // The TIE element also carries staffWithin=1; the tieStartSet routing must
+    // key the tie by the ROUTED (staffIdx=1, voice=0) rather than the raw values
+    // to correctly link the two E3 chords on staff 2.
+    MasterScore* score = readEncoreScore("notes_grandstaff_staffwithin_tie_on_second_staff.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck()) << "sanity check failed";
+    ASSERT_EQ(score->nstaves(), 2);
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    Note* tieStart = nullptr;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        for (int v = 0; v < static_cast<int>(VOICES); ++v) {
+            EngravingItem* e = seg->element(static_cast<track_idx_t>(1 * VOICES + v));
+            if (e && e->isChord()) {
+                for (Note* n : toChord(e)->notes()) {
+                    if (n->pitch() == 52 && !tieStart) {
+                        tieStart = n;
+                    }
+                }
+            }
+        }
+    }
+    ASSERT_NE(tieStart, nullptr) << "Bass E3 (pitch=52) must be on staff 2";
+    EXPECT_NE(tieStart->tieFor(), nullptr)
+        << "First E3 on staff 2 must carry tie-for (staffWithin tie routing broken)";
+
+    if (tieStart->tieFor()) {
+        Note* tieEnd = tieStart->tieFor()->endNote();
+        EXPECT_NE(tieEnd, nullptr) << "Tie must resolve to second E3 on staff 2";
+        if (tieEnd) {
+            EXPECT_EQ(tieEnd->pitch(), 52) << "Tie end note must also be E3 (pitch=52)";
+        }
+    }
+
+    delete score;
+}
+
 // All four Encore voices distribute correctly across the grand staff: voices 0-1 to the treble staff,
 // voices 2-3 to the bass staff.
 TEST_F(Tst_Notes, grandstaff_staffwithin_four_voices)

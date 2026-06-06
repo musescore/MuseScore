@@ -62,6 +62,8 @@ static void resizeMeasureAndShift(BuildCtx& ctx, Measure* measure, Fraction newL
     for (Measure* m = measure->nextMeasure(); m; m = m->nextMeasure()) {
         m->setTick(m->tick() + delta);
     }
+    // tick2measure answers from an index keyed by the old ticks until it is rebuilt.
+    ctx.score->measures()->updateTickIndex();
 
     auto shift = [&](Fraction& t) {
         const bool past = shrinking ? (t > boundary) : (t >= boundary);
