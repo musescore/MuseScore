@@ -352,7 +352,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                 break;
                 case 'v':
                     if (page->score()->dirty()) {
-                        newFragments.back().text += page->score()->appVersion();
+                        newFragments.back().text += application()->version().toString();
                     } else {
                         newFragments.back().text += page->score()->mscoreVersion();
                     }
