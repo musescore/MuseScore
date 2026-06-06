@@ -87,15 +87,13 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 void AboutModel::copyRevisionToClipboard() const
 {
     QApplication::clipboard()->setText(
-        QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: github-musescore-musescore-%6")
+        QString("OS: %1, Arch.: %2, MuseScore Studio version (%3-bit): %4-%5, revision: "
+                "[%6](https://github.com/musescore/MuseScore/commit/%6)")
         .arg(QSysInfo::prettyProductName()
              + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
-                ? " or later" : ""))
-        .arg(QSysInfo::currentCpuArchitecture())
+                ? " or later" : ""), QSysInfo::currentCpuArchitecture())
         .arg(QSysInfo::WordSize)
-        .arg(application()->version().toString())
-        .arg(application()->build())
-        .arg(application()->revision()));
+        .arg(application()->version().toString(), application()->build(), application()->revision()));
 }
 
 void AboutModel::toggleDevMode()
