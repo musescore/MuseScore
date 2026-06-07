@@ -1266,6 +1266,56 @@ TEST_F(Tst_Notes, scale_no_anchor_produces_no_circles)
     delete score;
 }
 
+// ===========================================================================
+// REGRESSION: Standalone string-number ORN (0xE6 = string 2) must NOT duplicate
+// the string number that the per-note hasScaleStringAnchors options-bit-0 path
+// already placed on the same note.
+// Fixture: n1 artUp=0x39 (string 1, sets anchor); ORN 0xE6 at tick=240 (string 2)
+// + n2 with options bit 0 and position=1. Without the dedup guard in the resolver,
+// n2 would get TWO "2" string numbers.
+// ===========================================================================
+TEST_F(Tst_Notes, string_num_orn_does_not_duplicate_anchor_path_number)
+{
+    MasterScore* score = readEncoreScore("notes_string_num_orn_no_dup.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck());
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    std::map<int, std::vector<int> > numsByBeat;  // beat_index → list of string numbers
+    int beat = 0;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        EngravingItem* el = seg->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        for (Note* n : toChord(el)->notes()) {
+            for (EngravingItem* sub : n->el()) {
+                if (sub && sub->isFingering()
+                    && toFingering(sub)->textStyleType() == TextStyleType::STRING_NUMBER) {
+                    bool ok;
+                    int v = toFingering(sub)->plainText().toInt(&ok);
+                    if (ok) {
+                        numsByBeat[beat].push_back(v);
+                    }
+                }
+            }
+        }
+        ++beat;
+    }
+    EXPECT_EQ(numsByBeat[0].size(), 1u) << "n1 must have exactly one string number (1)";
+    EXPECT_EQ(numsByBeat[1].size(), 1u) << "n2 must have exactly one string number (2), not two";
+    if (!numsByBeat[0].empty()) {
+        EXPECT_EQ(numsByBeat[0][0], 1);
+    }
+    if (!numsByBeat[1].empty()) {
+        EXPECT_EQ(numsByBeat[1][0], 2);
+    }
+
+    delete score;
+}
+
 // voice_overflow_notes_dropped_not_routed_to_voice2
 TEST_F(Tst_Notes, voice_overflow_notes_dropped_not_routed_to_voice2)
 {
