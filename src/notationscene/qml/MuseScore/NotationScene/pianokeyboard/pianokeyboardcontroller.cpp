@@ -39,32 +39,32 @@ PianoKeyboardController::PianoKeyboardController(const muse::modularity::Context
     });
 
     playbackController()->currentPlaybackPositionChanged().onReceive(this,
-        [this](const muse::audio::secs_t pos, const muse::midi::tick_t) {
-            auto notation = currentNotation();
-            if (!notation) {
-                return;
-            }
+                                                                     [this](const muse::audio::secs_t pos, const muse::midi::tick_t) {
+        auto notation = currentNotation();
+        if (!notation) {
+            return;
+        }
 
-            auto playback = notation->masterNotation()->playback();
-            if (!playback) {
-                return;
-            }
+        auto playback = notation->masterNotation()->playback();
+        if (!playback) {
+            return;
+        }
 
-            muse::mpe::timestamp_t micros = static_cast<muse::mpe::timestamp_t>(pos * 1'000'000.0);
-            auto activeNotes = playback->activeNotesAtTimestamp(micros);
+        muse::mpe::timestamp_t micros = static_cast<muse::mpe::timestamp_t>(pos * 1'000'000.0);
+        auto activeNotes = playback->activeNotesAtTimestamp(micros);
 
-            std::vector<piano_key_t> activeKeys;
-            std::map<piano_key_t, std::set<uint64_t> > activeInstruments;
-            activeKeys.reserve(activeNotes.size());
-            for (const auto& note : activeNotes) {
-                piano_key_t k = static_cast<piano_key_t>(note.pitch);
-                activeKeys.push_back(k);
-                activeInstruments[k].insert(note.trackId);
-            }
+        std::vector<piano_key_t> activeKeys;
+        std::map<piano_key_t, std::set<uint64_t> > activeInstruments;
+        activeKeys.reserve(activeNotes.size());
+        for (const auto& note : activeNotes) {
+            piano_key_t k = static_cast<piano_key_t>(note.pitch);
+            activeKeys.push_back(k);
+            activeInstruments[k].insert(note.trackId);
+        }
 
-            updatePlayingKeys(activeKeys);
-            setPlayingInstruments(activeInstruments);
-        });
+        updatePlayingKeys(activeKeys);
+        setPlayingInstruments(activeInstruments);
+    });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         if (playbackController()->isPlaying()) {

@@ -1155,9 +1155,8 @@ std::vector<PlaybackModel::ActiveNoteInfo> PlaybackModel::activeNotesAtTimestamp
                     if (s <= now && e > now) {
                         int midi
                             = static_cast<int>(std::round(
-                                n->pitchCtx().nominalPitchLevel
-                                / static_cast<double>(muse::mpe::PITCH_LEVEL_STEP)))
-                            + muse::mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
+                                                   n->pitchCtx().nominalPitchLevel / static_cast<double>(muse::mpe::PITCH_LEVEL_STEP)))
+                              + muse::mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
                         if (midi >= 0 && midi <= 127) {
                             active[midi] = tid.partId.toUint64();
                         }
