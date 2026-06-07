@@ -41,6 +41,8 @@ class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public mu
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)
+    Q_PROPERTY(bool showNoteLabels READ showNoteLabels WRITE setShowNoteLabels NOTIFY showNoteLabelsChanged)
+    Q_PROPERTY(bool splitHands READ splitHands WRITE setSplitHands NOTIFY splitHandsChanged)
 
     Q_PROPERTY(qreal scrollBarPosition READ scrollBarPosition WRITE setScrollBarPosition NOTIFY scrollBarChanged)
     Q_PROPERTY(qreal scrollBarSize READ scrollBarSize NOTIFY scrollBarChanged)
@@ -63,6 +65,11 @@ public:
     Q_INVOKABLE void scale(qreal factor, qreal x);
     void setScaling(qreal scaling, qreal x = 0.0);
 
+    bool showNoteLabels() const;
+    void setShowNoteLabels(bool show);
+    bool splitHands() const;
+    void setSplitHands(bool split);
+
     qreal scrollBarPosition() const;
     qreal scrollBarSize() const;
     void setScrollBarPosition(qreal position);
@@ -70,6 +77,8 @@ public:
 signals:
     void numberOfKeysChanged();
     void keyWidthScalingChanged();
+    void showNoteLabelsChanged();
+    void splitHandsChanged();
 
     void scrollBarChanged();
 
@@ -83,6 +92,7 @@ private:
 
     void paintWhiteKeys(QPainter* painter, const QRectF& viewport);
     void paintBlackKeys(QPainter* painter, const QRectF& viewport);
+    void paintNoteLabel(QPainter* painter, piano_key_t key, const QRectF& rect);
 
     void moveCanvas(qreal dx);
     void setScrollOffset(qreal offset);
@@ -119,6 +129,9 @@ private:
 
     static QColor instrumentColor(uint64_t trackId);
     QColor playingKeyColor(piano_key_t key) const;
+
+    bool m_showNoteLabels = false;
+    bool m_splitHands = false;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;

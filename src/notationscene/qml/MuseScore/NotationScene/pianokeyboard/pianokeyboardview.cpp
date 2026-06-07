@@ -31,6 +31,17 @@ using namespace mu::notation;
 
 static const QColor backgroundColor(36, 36, 39);
 
+static const std::vector<QString> NOTE_NAMES = {
+    QStringLiteral("C"), QStringLiteral("C#"), QStringLiteral("D"), QStringLiteral("D#"),
+    QStringLiteral("E"), QStringLiteral("F"), QStringLiteral("F#"), QStringLiteral("G"),
+    QStringLiteral("G#"), QStringLiteral("A"), QStringLiteral("A#"), QStringLiteral("B")
+};
+
+static const std::vector<QColor> HAND_PALETTE = {
+    QColor(66, 133, 244),   // right hand — blue
+    QColor(234, 67, 53),    // left hand  — red
+};
+
 static const std::vector<QColor> INSTRUMENT_PALETTE = {
     QColor(66, 133, 244),   // blue
     QColor(234, 67, 53),    // red
@@ -76,6 +87,13 @@ QColor PianoKeyboardView::instrumentColor(uint64_t trackId)
 
 QColor PianoKeyboardView::playingKeyColor(piano_key_t key) const
 {
+    if (m_splitHands) {
+        size_t handIdx = (key < 60) ? 1 : 0; // middle C = 60
+        if (handIdx < HAND_PALETTE.size()) {
+            return HAND_PALETTE[handIdx];
+        }
+    }
+
     const auto& instruments = m_controller->playingInstruments(key);
     if (instruments.empty()) {
         return QColor();
@@ -94,6 +112,46 @@ QColor PianoKeyboardView::playingKeyColor(piano_key_t key) const
         }
     }
     return mixedColor;
+}
+
+bool PianoKeyboardView::showNoteLabels() const { return m_showNoteLabels; }
+void PianoKeyboardView::setShowNoteLabels(bool show)
+{
+    if (m_showNoteLabels != show) {
+        m_showNoteLabels = show;
+        emit showNoteLabelsChanged();
+        update();
+    }
+}
+
+bool PianoKeyboardView::splitHands() const { return m_splitHands; }
+void PianoKeyboardView::setSplitHands(bool split)
+{
+    if (m_splitHands != split) {
+        m_splitHands = split;
+        emit splitHandsChanged();
+        update();
+    }
+}
+
+void PianoKeyboardView::paintNoteLabel(QPainter* painter, piano_key_t key, const QRectF& rect)
+{
+    if (!m_showNoteLabels) {
+        return;
+    }
+
+    QString name = NOTE_NAMES[key % 12];
+    int octave = (key / 12) - 1;
+    QString label = name + QString::number(octave);
+
+    painter->save();
+    QFont f = painter->font();
+    f.setPixelSize(std::max(8, static_cast<int>(10 * m_keyWidthScaling)));
+    f.setBold(true);
+    painter->setFont(f);
+    painter->setPen(Qt::white);
+    painter->drawText(rect, Qt::AlignCenter, label);
+    painter->restore();
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
@@ -304,6 +362,10 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
         }
 
         painter->fillPath(path, fillColor);
+
+        if (m_showNoteLabels) {
+            paintNoteLabel(painter, key, rect);
+        }
 
         if (key % 12 == 0) {
             // Draw octave label
