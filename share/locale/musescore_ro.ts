@@ -28060,7 +28060,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="129"/>
         <source>Please select all notes that are part of this tuplet and try again.</source>
-        <translation>Te rog selectează toate notele care fac parte din această diviziune excepțională și încearcă din nou.</translation>
+        <translation>Selectează toate notele care fac parte din această diviziune excepțională și încearcă din nou.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="132"/>
@@ -28080,7 +28080,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Please select all notes that are part of this tremolo and try again.</source>
-        <translation>Te rog selectează toate notele care fac parte din acest tremolo și încearcă din nou.</translation>
+        <translation>Selectează toate notele care fac parte din acest tremolo și încearcă din nou.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
@@ -34070,7 +34070,7 @@ a eșuat: %2</translation>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NoteColorsSection.qml" line="43"/>
         <source>Color notes outside of usable pitch range</source>
-        <translation>Colorează notele din afara întinderii</translation>
+        <translation>Colorează notele în afara întinderii</translation>
     </message>
     <message>
         <location filename="../../src/preferences/qml/MuseScore/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
