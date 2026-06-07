@@ -120,6 +120,9 @@ struct NoteElemCtx {
 };
 
 void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
+// Apply articulations, ornaments, tremolos, string numbers to a note/chord. (emitters-note-artic.cpp)
+void applyNoteArticulations(BuildCtx& ctx, mu::engraving::Note* note, mu::engraving::Chord* chord, const EncNote* en,
+                            mu::engraving::track_idx_t track, const MeasEmitCtx& mc);
 void handleRest(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 
 // Resolved MuseScore destination for an element: staff/voice and the derived track + lookup keys.
