@@ -94,7 +94,10 @@ void AboutModel::copyRevisionToClipboard() const
              + ((QSysInfo::productType() == "windows" && (QSysInfo::productVersion() == "10" || QSysInfo::productVersion() == "11"))
                 ? " or later" : ""), QSysInfo::currentCpuArchitecture())
         .arg(QSysInfo::WordSize)
-        .arg(application()->version().toString(), application()->build(), application()->revision()));
+        .arg(application()->version().toString(), application()->build())
+        +
+        QString(application()->revision().isEmpty() ? "" : ", revision: [%1](https://github.com/musescore/MuseScore/commit/%1)")
+        .arg(application()->revision()));
 }
 
 void AboutModel::toggleDevMode()
