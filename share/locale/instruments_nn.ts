@@ -14083,7 +14083,7 @@
         <source>Percussion</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4675"/>
@@ -14111,7 +14111,7 @@
         <source>Percussion</source>
         <comment>percussion longName</comment>
         <extracomment>longName for Mixed Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Perkusjon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4684"/>
@@ -14195,7 +14195,7 @@
         <source>Show Tenors</source>
         <comment>marching-show-tenors longName</comment>
         <extracomment>longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vis tenorar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4714"/>
