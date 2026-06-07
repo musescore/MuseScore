@@ -89,9 +89,17 @@ public:
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
 
+    struct ActiveNoteInfo {
+        int pitch = 0;
+        uint64_t trackId = 0;
+    };
+
     virtual void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) = 0;
     virtual void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
     virtual bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
+    virtual void collectPlaybackTracks(engraving::InstrumentTrackIdSet& trackIdSet) const = 0;
+
+    virtual std::vector<ActiveNoteInfo> activeNotesAtTimestamp(muse::mpe::timestamp_t timestamp) const = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;

@@ -91,6 +91,9 @@ public:
     void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) override;
     void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
     bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
+    void collectPlaybackTracks(engraving::InstrumentTrackIdSet& trackIdSet) const override;
+
+    std::vector<INotationPlayback::ActiveNoteInfo> activeNotesAtTimestamp(muse::mpe::timestamp_t timestamp) const override;
 
 private:
     engraving::Score* score() const;

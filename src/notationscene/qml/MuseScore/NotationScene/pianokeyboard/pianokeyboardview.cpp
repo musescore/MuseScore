@@ -31,6 +31,19 @@ using namespace mu::notation;
 
 static const QColor backgroundColor(36, 36, 39);
 
+static const std::vector<QColor> INSTRUMENT_PALETTE = {
+    QColor(66, 133, 244),   // blue
+    QColor(234, 67, 53),    // red
+    QColor(52, 168, 83),    // green
+    QColor(251, 188, 4),    // yellow
+    QColor(154, 71, 199),   // purple
+    QColor(0, 184, 212),    // cyan
+    QColor(255, 112, 67),   // orange
+    QColor(244, 67, 163),   // pink
+    QColor(96, 125, 139),   // blue-grey
+    QColor(158, 157, 36),   // lime
+};
+
 static constexpr bool isBlackKey(piano_key_t key)
 {
     constexpr bool isBlack[12] { false, true, false, true, false, false, true, false, true, false, true, false };
@@ -50,6 +63,37 @@ static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
     result.setGreen(opacity * foreground.green() + (1 - opacity) * background.green());
     result.setBlue(opacity * foreground.blue() + (1 - opacity) * background.blue());
     return result;
+}
+
+QColor PianoKeyboardView::instrumentColor(uint64_t trackId)
+{
+    if (trackId == 0) {
+        return QColor(); // invalid
+    }
+    size_t idx = static_cast<size_t>(trackId) % INSTRUMENT_PALETTE.size();
+    return INSTRUMENT_PALETTE[idx];
+}
+
+QColor PianoKeyboardView::playingKeyColor(piano_key_t key) const
+{
+    const auto& instruments = m_controller->playingInstruments(key);
+    if (instruments.empty()) {
+        return QColor();
+    }
+
+    QColor mixedColor;
+    for (uint64_t trackId : instruments) {
+        QColor c = instrumentColor(trackId);
+        if (!mixedColor.isValid()) {
+            mixedColor = c;
+        } else {
+            qreal alpha = 0.5;
+            mixedColor.setRedF(mixedColor.redF() * (1 - alpha) + c.redF() * alpha);
+            mixedColor.setGreenF(mixedColor.greenF() * (1 - alpha) + c.greenF() * alpha);
+            mixedColor.setBlueF(mixedColor.blueF() * (1 - alpha) + c.blueF() * alpha);
+        }
+    }
+    return mixedColor;
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
@@ -246,7 +290,18 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         painter->translate(rect.topLeft());
 
-        QColor fillColor = m_whiteKeyStateColors[m_controller->keyState(key)];
+        QColor fillColor;
+        KeyState ks = m_controller->keyState(key);
+        if (ks == KeyState::Played) {
+            QColor instColor = playingKeyColor(key);
+            if (instColor.isValid()) {
+                fillColor = mixedColors(Qt::white, instColor, 0.8);
+            } else {
+                fillColor = m_whiteKeyStateColors[ks];
+            }
+        } else {
+            fillColor = m_whiteKeyStateColors[ks];
+        }
 
         painter->fillPath(path, fillColor);
 
@@ -342,8 +397,21 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             bottomPieceGradient.setFinalStop(0.0, bottom);
         }
 
-        topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->keyState(key)]);
-        bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->keyState(key)]);
+        {
+            KeyState ks = m_controller->keyState(key);
+            QColor instColor;
+            if (ks == KeyState::Played) {
+                instColor = playingKeyColor(key);
+            }
+            if (instColor.isValid()) {
+                QColor blackBase(56, 56, 58);
+                topPieceGradient.setColorAt(1.0, mixedColors(blackBase, instColor, 1.0));
+                bottomPieceGradient.setColorAt(0.0, mixedColors(blackBase, instColor, 1.0));
+            } else {
+                topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[ks]);
+                bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[ks]);
+            }
+        }
 
         painter->translate(rect.topLeft());
         painter->fillRect(backgroundRect, backgroundColor);

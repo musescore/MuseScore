@@ -537,6 +537,22 @@ bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trac
     return false;
 }
 
+void NotationPlayback::collectPlaybackTracks(engraving::InstrumentTrackIdSet& trackIdSet) const
+{
+    trackIdSet = m_playbackModel.existingTrackIdSet();
+}
+
+std::vector<INotationPlayback::ActiveNoteInfo> NotationPlayback::activeNotesAtTimestamp(muse::mpe::timestamp_t timestamp) const
+{
+    std::vector<INotationPlayback::ActiveNoteInfo> result;
+    auto modelNotes = m_playbackModel.activeNotesAtTimestamp(timestamp);
+    result.reserve(modelNotes.size());
+    for (const auto& note : modelNotes) {
+        result.push_back({ note.pitch, note.trackId });
+    }
+    return result;
+}
+
 std::vector<StaffText*> NotationPlayback::collectStaffText(const InstrumentTrackIdSet& trackIdSet, bool withSoundFlags) const
 {
     TRACEFUNC;

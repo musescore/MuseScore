@@ -33,13 +33,57 @@ PianoKeyboardController::PianoKeyboardController(const muse::modularity::Context
     onNotationChanged();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
+        m_playingKeys.clear();
+        m_playingInstruments.clear();
         onNotationChanged();
+    });
+
+    playbackController()->currentPlaybackPositionChanged().onReceive(this,
+        [this](const muse::audio::secs_t pos, const muse::midi::tick_t) {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+
+            auto playback = notation->masterNotation()->playback();
+            if (!playback) {
+                return;
+            }
+
+            muse::mpe::timestamp_t micros = static_cast<muse::mpe::timestamp_t>(pos * 1'000'000.0);
+            auto activeNotes = playback->activeNotesAtTimestamp(micros);
+
+            std::vector<piano_key_t> activeKeys;
+            std::map<piano_key_t, std::set<uint64_t> > activeInstruments;
+            activeKeys.reserve(activeNotes.size());
+            for (const auto& note : activeNotes) {
+                piano_key_t k = static_cast<piano_key_t>(note.pitch);
+                activeKeys.push_back(k);
+                activeInstruments[k].insert(note.trackId);
+            }
+
+            updatePlayingKeys(activeKeys);
+            setPlayingInstruments(activeInstruments);
+        });
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        if (playbackController()->isPlaying()) {
+            m_keys.clear();
+            m_otherNotesInChord.clear();
+            m_keyStatesChanged.notify();
+        } else {
+            updatePlayingKeys({});
+        }
     });
 }
 
 KeyState PianoKeyboardController::keyState(piano_key_t key) const
 {
     if (m_pressedKey == key) {
+        return KeyState::Played;
+    }
+
+    if (m_playingKeys.find(key) != m_playingKeys.cend()) {
         return KeyState::Played;
     }
 
@@ -130,6 +174,7 @@ void PianoKeyboardController::onNotationChanged()
 
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
+            m_playingKeys.clear();
             updateNotesKeys(notes);
         }, Asyncable::Mode::SetReplace /* FIXME */);
     }
@@ -158,6 +203,33 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
             newOtherNotesInChord.insert(static_cast<piano_key_t>(useWrittenPitch ? otherNote->epitch() : otherNote->ppitch()));
         }
     }
+}
+
+void PianoKeyboardController::updatePlayingKeys(const std::vector<piano_key_t>& keys)
+{
+    std::unordered_set<piano_key_t> newPlayingKeys(keys.begin(), keys.end());
+    if (newPlayingKeys != m_playingKeys) {
+        m_playingKeys = newPlayingKeys;
+        m_keyStatesChanged.notify();
+    }
+}
+
+void PianoKeyboardController::setPlayingInstruments(const std::map<piano_key_t, std::set<uint64_t> >& instruments)
+{
+    if (m_playingInstruments != instruments) {
+        m_playingInstruments = instruments;
+        m_keyStatesChanged.notify();
+    }
+}
+
+const std::set<uint64_t>& PianoKeyboardController::playingInstruments(piano_key_t key) const
+{
+    static const std::set<uint64_t> empty;
+    auto it = m_playingInstruments.find(key);
+    if (it != m_playingInstruments.end()) {
+        return it->second;
+    }
+    return empty;
 }
 
 void PianoKeyboardController::sendNoteOn(piano_key_t key)

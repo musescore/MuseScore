@@ -30,6 +30,7 @@
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/measurerepeat.h"
+#include "dom/note.h"
 #include "dom/part.h"
 #include "dom/staff.h"
 #include "dom/repeatlist.h"
@@ -1126,6 +1127,52 @@ const RepeatList& PlaybackModel::repeatList() const
     m_score->masterScore()->setExpandRepeats(m_expandRepeats);
 
     return m_score->repeatList();
+}
+
+std::vector<PlaybackModel::ActiveNoteInfo> PlaybackModel::activeNotesAtTimestamp(muse::mpe::timestamp_t now) const
+{
+    if (m_playbackDataMap.empty()) {
+        return {};
+    }
+
+    std::map<int, uint64_t> active;
+    muse::mpe::timestamp_t scanFrom = (now > 5'000'000) ? now - 5'000'000 : 0;
+
+    for (const auto& [tid, pd] : m_playbackDataMap) {
+        if (tid == METRONOME_TRACK_ID) {
+            continue;
+        }
+
+        const auto& evMap = pd.originEvents;
+        auto upper = evMap.upper_bound(now);
+        auto lower = evMap.lower_bound(scanFrom);
+
+        for (auto it = lower; it != upper; ++it) {
+            for (const auto& ev : it->second) {
+                if (const auto* n = std::get_if<muse::mpe::NoteEvent>(&ev)) {
+                    auto s = n->arrangementCtx().nominalTimestamp;
+                    auto e = s + n->arrangementCtx().nominalDuration;
+                    if (s <= now && e > now) {
+                        int midi
+                            = static_cast<int>(std::round(
+                                n->pitchCtx().nominalPitchLevel
+                                / static_cast<double>(muse::mpe::PITCH_LEVEL_STEP)))
+                            + muse::mpe::ZERO_PITCH_LEVEL_MIDI_EQUIVALENT;
+                        if (midi >= 0 && midi <= 127) {
+                            active[midi] = tid.partId.toUint64();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    std::vector<ActiveNoteInfo> result;
+    result.reserve(active.size());
+    for (const auto& [pitch, trackId] : active) {
+        result.push_back({ pitch, trackId });
+    }
+    return result;
 }
 
 InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const

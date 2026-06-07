@@ -27,6 +27,8 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationplayback.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "pianokeyboardtypes.h"
 
@@ -35,6 +37,7 @@ class PianoKeyboardController : public muse::Contextable, public muse::async::As
 {
     muse::GlobalInject<INotationConfiguration> notationConfiguration;
     muse::ContextInject<context::IGlobalContext> context = { this };
+    muse::ContextInject<playback::IPlaybackController> playbackController = { this };
 
 public:
     PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx);
@@ -47,12 +50,15 @@ public:
     muse::async::Notification keyStatesChanged() const;
 
     bool isFromMidi() const;
+    const std::set<uint64_t>& playingInstruments(piano_key_t key) const;
 
 private:
     INotationPtr currentNotation() const;
 
     void onNotationChanged();
     void updateNotesKeys(const std::vector<const Note*>& receivedNotes);
+    void updatePlayingKeys(const std::vector<piano_key_t>& keys);
+    void setPlayingInstruments(const std::map<piano_key_t, std::set<uint64_t> >& instruments);
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
@@ -61,6 +67,8 @@ private:
     std::optional<piano_key_t> m_hoveredKey = std::nullopt;
     std::unordered_set<piano_key_t> m_keys;
     std::unordered_set<piano_key_t> m_otherNotesInChord;
+    std::unordered_set<piano_key_t> m_playingKeys;
+    std::map<piano_key_t, std::set<uint64_t> > m_playingInstruments;
 
     bool m_isFromMidi = false;
 

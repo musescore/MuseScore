@@ -117,6 +117,9 @@ private:
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
 
+    static QColor instrumentColor(uint64_t trackId);
+    QColor playingKeyColor(piano_key_t key) const;
+
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
     qreal m_spacing = 0.0;

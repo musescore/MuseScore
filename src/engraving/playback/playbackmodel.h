@@ -25,6 +25,9 @@
 #include <unordered_map>
 #include <map>
 #include <functional>
+#include <vector>
+#include <set>
+#include <algorithm>
 
 #include "async/asyncable.h"
 #include "async/channel.h"
@@ -92,6 +95,13 @@ public:
     InstrumentTrackIdSet existingTrackIdSet() const;
     muse::async::Channel<InstrumentTrackId> trackAdded() const;
     muse::async::Channel<InstrumentTrackId> trackRemoved() const;
+
+    struct ActiveNoteInfo {
+        int pitch = 0;
+        uint64_t trackId = 0;
+    };
+
+    std::vector<ActiveNoteInfo> activeNotesAtTimestamp(muse::mpe::timestamp_t timestamp) const;
 
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
