@@ -303,6 +303,12 @@ static void scanMeasureMetadata(const MeasureElemRefVec& sortedElems, MeasEmitCt
                 mc.maxVoice0Tick = std::max(mc.maxVoice0Tick, static_cast<int>(em->tick));
                 mc.stavesWithRealNote.insert(static_cast<int>(em->staffIdx));
             }
+            // Detect scale string number anchors (au in 0x39..0x40)
+            const EncNote* enPre = static_cast<const EncNote*>(em);
+            if (encArticByteToScaleStringNumber(enPre->articulationUp) > 0
+                || encArticByteToScaleStringNumber(enPre->articulationDown) > 0) {
+                mc.hasScaleStringAnchors = true;
+            }
         } else if (et2 == EncElemType::ORNAMENT) {
             const EncOrnament* eo2 = static_cast<const EncOrnament*>(em);
             const EncOrnamentType ot2 = eo2->ornType();
