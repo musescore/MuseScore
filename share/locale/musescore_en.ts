@@ -10960,37 +10960,37 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Annotations:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1612"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1630"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="155"/>
         <source>Start measure: %1</source>
         <translation type="unfinished">Start measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1615"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1633"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="157"/>
         <source>Start displayed measure: %1</source>
         <translation type="unfinished">Start displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1618"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1636"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="159"/>
         <source>Start beat: %1</source>
         <translation type="unfinished">Start beat: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1625"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1643"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="162"/>
         <source>End measure: %1</source>
         <translation type="unfinished">End measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1628"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1646"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="164"/>
         <source>End displayed measure: %1</source>
         <translation type="unfinished">End displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1631"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1649"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="166"/>
         <source>End beat: %1</source>
         <translation type="unfinished">End beat: %1</translation>
@@ -18687,121 +18687,126 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/property.cpp" line="489"/>
+        <source>mask slur/tie</source>
+        <translation type="unfinished">mask slur/tie</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/dom/property.cpp" line="490"/>
         <source>partial spanner direction</source>
         <translation type="unfinished">partial spanner direction</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="491"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="492"/>
         <source>position linked to main score</source>
         <translation type="unfinished">position linked to main score</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="492"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="493"/>
         <source>appearance linked to main score</source>
         <translation type="unfinished">appearance linked to main score</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="493"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="494"/>
         <source>text linked to main score</source>
         <translation type="unfinished">text linked to main score</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="494"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="495"/>
         <source>exclude from parts</source>
         <translation type="unfinished">exclude from parts</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="496"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="497"/>
         <source>strings count</source>
         <translation type="unfinished">strings count</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="497"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="498"/>
         <source>strings preset</source>
         <translation type="unfinished">strings preset</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="498"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="499"/>
         <source>visible strings</source>
         <translation type="unfinished">visible strings</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="500"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="501"/>
         <source>score font</source>
         <translation type="unfinished">score font</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="501"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="502"/>
         <source>symbols size</source>
         <translation type="unfinished">symbols size</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="502"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="503"/>
         <source>symbol angle</source>
         <translation type="unfinished">symbol angle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="503"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="504"/>
         <source>text angle</source>
         <translation type="unfinished">text angle</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="505"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="506"/>
         <source>apply to all staves</source>
         <translation type="unfinished">apply to all staves</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="506"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="507"/>
         <source>is courtesy</source>
         <translation type="unfinished">is courtesy</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="507"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="508"/>
         <source>exclude vertical align</source>
         <translation type="unfinished">exclude vertical align</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="509"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="510"/>
         <source>show measure numbers</source>
         <translation type="unfinished">show measure numbers</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="510"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="511"/>
         <source>play count text setting</source>
         <translation type="unfinished">play count text setting</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="511"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="512"/>
         <source>play count text</source>
         <translation type="unfinished">play count text</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="513"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="514"/>
         <source>align with other rests in the same voice</source>
         <translation type="unfinished">align with other rests in the same voice</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="515"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="516"/>
         <source>cutaway</source>
         <translation type="unfinished">cutaway</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="516"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="517"/>
         <source>hide system barline</source>
         <translation type="unfinished">hide system barline</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="517"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="518"/>
         <source>merge matching rests</source>
         <translation type="unfinished">merge matching rests</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="518"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="519"/>
         <source>reflect transposition</source>
         <translation type="unfinished">reflect transposition</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/property.cpp" line="520"/>
+        <location filename="../../src/engraving/dom/property.cpp" line="521"/>
         <source>shared part enabled</source>
         <translation type="unfinished">shared part enabled</translation>
     </message>
@@ -18822,27 +18827,27 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/slurstyletype</name>
     <message>
-        <location filename="../../src/engraving/dom/slurtie.cpp" line="437"/>
+        <location filename="../../src/engraving/dom/slurtie.cpp" line="466"/>
         <source>Solid</source>
         <translation type="unfinished">Solid</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/slurtie.cpp" line="439"/>
+        <location filename="../../src/engraving/dom/slurtie.cpp" line="468"/>
         <source>Dotted</source>
         <translation type="unfinished">Dotted</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/slurtie.cpp" line="441"/>
+        <location filename="../../src/engraving/dom/slurtie.cpp" line="470"/>
         <source>Dashed</source>
         <translation type="unfinished">Dashed</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/slurtie.cpp" line="443"/>
+        <location filename="../../src/engraving/dom/slurtie.cpp" line="472"/>
         <source>Wide dashed</source>
         <translation type="unfinished">Wide dashed</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/slurtie.cpp" line="445"/>
+        <location filename="../../src/engraving/dom/slurtie.cpp" line="474"/>
         <source>Undefined</source>
         <translation type="unfinished">Undefined</translation>
     </message>
@@ -21805,12 +21810,12 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Free time</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1051"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1052"/>
         <source>Music by %1</source>
         <translation type="unfinished">Music by %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1058"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1059"/>
         <location filename="../../src/importexport/guitarpro/internal/importgtp.cpp" line="2838"/>
         <source>Words by %1</source>
         <translation type="unfinished">Words by %1</translation>
@@ -22132,6 +22137,29 @@ pickup measure</translation>
         <location filename="../../src/importexport/mnx/internal/notationmnxreader.cpp" line="68"/>
         <source>File contains no measures.</source>
         <translation type="unfinished">File contains no measures.</translation>
+    </message>
+</context>
+<context>
+    <name>inspector</name>
+    <message>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="105"/>
+        <source>Mask over clefs, key and time signatures</source>
+        <translation type="unfinished">Mask over clefs, key and time signatures</translation>
+    </message>
+    <message>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="113"/>
+        <source>Auto</source>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="114"/>
+        <source>On</source>
+        <translation type="unfinished">On</translation>
+    </message>
+    <message>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="115"/>
+        <source>Off</source>
+        <translation type="unfinished">Off</translation>
     </message>
 </context>
 <context>
@@ -23185,32 +23213,32 @@ pickup measure</translation>
         <translation type="unfinished">Merge matching rests</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="186"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="202"/>
         <source>Placement on single notes:</source>
         <translation type="unfinished">Placement on single notes:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="218"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="234"/>
         <source>Placement on chords:</source>
         <translation type="unfinished">Placement on chords:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="250"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="266"/>
         <source>Placement of inner ties with respect to augmentation dots:</source>
         <translation type="unfinished">Placement of inner ties with respect to augmentation dots:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="258"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="274"/>
         <source>Auto</source>
         <translation type="unfinished">Auto</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="265"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="281"/>
         <source>Always before dots</source>
         <translation type="unfinished">Always before dots</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="272"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="288"/>
         <source>Always after dots</source>
         <translation type="unfinished">Always after dots</translation>
     </message>
@@ -25518,17 +25546,22 @@ pickup measure</translation>
         <translation type="unfinished">Autoplace min. distance:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="143"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="139"/>
+        <source>Mask slurs over clefs, key and time signatures</source>
+        <translation type="unfinished">Mask slurs over clefs, key and time signatures</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="159"/>
         <source>Partial slurs across repeats and breaks:</source>
         <translation type="unfinished">Partial slurs across repeats and breaks:</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="153"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="169"/>
         <source>Follow contour of notes</source>
         <translation type="unfinished">Follow contour of notes</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="154"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/SlursSection.qml" line="170"/>
         <source>Angle away from staff</source>
         <translation type="unfinished">Angle away from staff</translation>
     </message>
@@ -25546,6 +25579,11 @@ pickup measure</translation>
         <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="159"/>
         <source>Minimum hanging tie length:</source>
         <translation type="unfinished">Minimum hanging tie length:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="182"/>
+        <source>Mask ties over clefs, key and time signatures</source>
+        <translation type="unfinished">Mask ties over clefs, key and time signatures</translation>
     </message>
 </context>
 <context>
@@ -30584,7 +30622,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="71"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="88"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="89"/>
         <source>Untitled score</source>
         <translation type="unfinished">Untitled score</translation>
     </message>
@@ -32247,12 +32285,12 @@ failed.</translation>
         <translation type="unfinished">Publish</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="964"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="977"/>
         <source>File “%1” could not be opened for validation. %2</source>
         <translation type="unfinished">File “%1” could not be opened for validation. %2</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="975"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="988"/>
         <source>“%1” is corrupted or damaged.</source>
         <translation type="unfinished">“%1” is corrupted or damaged.</translation>
     </message>
@@ -32481,15 +32519,15 @@ failed.</translation>
 <context>
     <name>propertiespanel</name>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="193"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="225"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="209"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="241"/>
         <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="98"/>
         <source>Inside</source>
         <translation type="unfinished">Inside</translation>
     </message>
     <message>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="194"/>
-        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="226"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="210"/>
+        <location filename="../../src/notationscene/qml/MuseScore/NotationScene/styledialog/TiesSection.qml" line="242"/>
         <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="99"/>
         <source>Outside</source>
         <translation type="unfinished">Outside</translation>
@@ -34138,7 +34176,7 @@ failed.</translation>
         <translation type="unfinished">Tie placement</translation>
     </message>
     <message>
-        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="106"/>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/SlurAndTieSettings.qml" line="122"/>
         <source>Minimum length</source>
         <translation type="unfinished">Minimum length</translation>
     </message>
@@ -35418,25 +35456,25 @@ failed.</translation>
         <translation type="unfinished">Hammer-on/pull-off</translation>
     </message>
     <message>
-        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="115"/>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="120"/>
         <source>Normal</source>
         <comment>slur style</comment>
         <translation type="unfinished">Normal</translation>
     </message>
     <message>
-        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="116"/>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="121"/>
         <source>Wide dashed</source>
         <comment>slur style</comment>
         <translation type="unfinished">Wide dashed</translation>
     </message>
     <message>
-        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="117"/>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="122"/>
         <source>Dashed</source>
         <comment>slur style</comment>
         <translation type="unfinished">Dashed</translation>
     </message>
     <message>
-        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="118"/>
+        <location filename="../../src/propertiespanel/qml/MuseScore/PropertiesPanel/notation/lines/slurandtiesettingsmodel.cpp" line="123"/>
         <source>Dotted</source>
         <comment>slur style</comment>
         <translation type="unfinished">Dotted</translation>
@@ -37043,7 +37081,7 @@ failed.</translation>
         <translation type="unfinished">Toggle ‘Apply sound flag to all staves’</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/notationproject.cpp" line="1236"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="1249"/>
         <source>Edit project properties</source>
         <translation type="unfinished">Edit project properties</translation>
     </message>
