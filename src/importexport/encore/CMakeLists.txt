@@ -72,10 +72,14 @@ target_sources(iex_encore PRIVATE
     internal/importer/emitters-note.cpp
     internal/importer/emitters-note-artic.cpp
     internal/importer/emitters-rest.cpp
+    internal/importer/emitters-orn.cpp
     internal/importer/emitters-tempo.cpp
     internal/importer/emitters-fill.cpp
     internal/importer/emitters-overfill.cpp
     internal/importer/emitters.cpp
+    internal/importer/resolvers.h
+    internal/importer/resolvers.cpp
+    internal/importer/resolvers-ornaments.cpp
     internal/importer/import.h
     internal/importer/import-options.h
 )
