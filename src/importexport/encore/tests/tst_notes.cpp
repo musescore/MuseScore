@@ -1231,6 +1231,87 @@ TEST_F(Tst_Notes, transposing_melody_no_double_flat_after_spell)
 
     delete score;
 }
+// grandstaff_staffwithin_fermata
+TEST_F(Tst_Notes, grandstaff_staffwithin_fermata)
+{
+    MasterScore* score = readEncoreScore("notes_grandstaff_staffwithin_fermata.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck()) << "sanity check failed";
+    ASSERT_EQ(score->nstaves(), 2);
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    auto fermatasOnStaff = [&](int staffIdx) {
+        std::vector<SymId> symIds;
+        for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+            for (EngravingItem* e : seg->annotations()) {
+                if (e->isFermata() && e->staffIdx() == static_cast<staff_idx_t>(staffIdx)) {
+                    symIds.push_back(toFermata(e)->symId());
+                }
+            }
+        }
+        return symIds;
+    };
+
+    auto s1 = fermatasOnStaff(0);
+    auto s2 = fermatasOnStaff(1);
+
+    EXPECT_EQ(s1.size(), 1u) << "Treble staff must have 1 fermata (tipo 0xCC)";
+    EXPECT_EQ(s2.size(), 1u) << "Bass staff must have 1 fermata (tipo 0xCD, staffWithin=1)";
+
+    if (!s1.empty()) {
+        EXPECT_EQ(s1[0], SymId::fermataAbove)
+            << "Treble fermata must be above (tipo 0xCC)";
+    }
+    if (!s2.empty()) {
+        EXPECT_EQ(s2[0], SymId::fermataBelow)
+            << "Bass fermata must be below (tipo 0xCD); staffWithin routing broken for ORNs";
+    }
+
+    delete score;
+}// scale_string_numbers_from_anchor_bytes
+TEST_F(Tst_Notes, scale_string_numbers_from_anchor_bytes)
+{
+    // Fixture: M1 has 4 notes with au=0x39 on note 1 (explicit string 1) and au=0x00
+    // on notes 2-4. The anchor unlocks opt-based circles for the whole measure:
+    // all 4 notes show strings 1-4 via pos+1.
+    MasterScore* score = readEncoreScore("notes_scale_string_numbers_anchor.enc");
+    ASSERT_NE(score, nullptr);
+    EXPECT_TRUE(score->sanityCheck()) << "sanity check failed";
+
+    Measure* m = score->firstMeasure();
+    ASSERT_NE(m, nullptr);
+
+    std::vector<int> nums;
+    for (Segment* seg = m->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
+        EngravingItem* el = seg->element(0);
+        if (!el || !el->isChord()) {
+            continue;
+        }
+        for (Note* n : toChord(el)->notes()) {
+            for (EngravingItem* sub : n->el()) {
+                if (sub && sub->isFingering()) {
+                    Fingering* fg = toFingering(sub);
+                    if (fg->textStyleType() == TextStyleType::STRING_NUMBER) {
+                        bool ok;
+                        int v = fg->plainText().toInt(&ok);
+                        if (ok) {
+                            nums.push_back(v);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    EXPECT_EQ(nums.size(), 4u) << "Anchor byte 0x39 must enable circles on all 4 notes";
+    for (int i = 0; i < (int)nums.size(); ++i) {
+        EXPECT_EQ(nums[i], i + 1) << "Note " << i + 1 << " must show string " << i + 1;
+    }
+
+    delete score;
+}
 
 // scale_no_anchor_produces_no_circles
 TEST_F(Tst_Notes, scale_no_anchor_produces_no_circles)

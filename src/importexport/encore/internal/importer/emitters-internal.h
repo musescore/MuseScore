@@ -124,6 +124,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 void applyNoteArticulations(BuildCtx& ctx, mu::engraving::Note* note, mu::engraving::Chord* chord, const EncNote* en,
                             mu::engraving::track_idx_t track, const MeasEmitCtx& mc);
 void handleRest(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
+void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec);
 
 // Resolved MuseScore destination for an element: staff/voice and the derived track + lookup keys.
 struct RoutedTrack {
