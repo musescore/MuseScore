@@ -38,6 +38,7 @@
 #include "engraving/dom/tremolosinglechord.h"
 
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/edittie.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -313,7 +314,7 @@ TEST_F(Engraving_NoteTests, grace)
 
     // tie
     score->select(gn);
-    score->cmdAddTie();
+    EditTie::cmdAddTie(score);
 //      n = toNote(ScoreRW::writeReadElement(gn));
 //      QVERIFY(n->tieFor() != 0);
 //      delete n;

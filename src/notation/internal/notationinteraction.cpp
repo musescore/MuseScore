@@ -93,6 +93,7 @@
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/edittie.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/exchangevoices.h"
 #include "engraving/editing/implodeexplode.h"
@@ -5593,7 +5594,7 @@ void NotationInteraction::flipSelectionHorizontally()
 void NotationInteraction::addTieToSelection()
 {
     // Calls `startEdit` internally
-    Tie* newTie = score()->cmdToggleTie();
+    Tie* newTie = mu::engraving::EditTie::cmdToggleTie(score());
 
     notifyAboutNotationChanged();
 
@@ -5605,7 +5606,7 @@ void NotationInteraction::addTieToSelection()
 void NotationInteraction::addLaissezVibToSelection()
 {
     // Calls `startEdit` internally
-    score()->cmdToggleLaissezVib();
+    mu::engraving::EditTie::cmdToggleLaissezVib(score());
 
     notifyAboutNotationChanged();
 }
@@ -5613,7 +5614,7 @@ void NotationInteraction::addLaissezVibToSelection()
 void NotationInteraction::addTiedNoteToChord()
 {
     // Calls `startEdit` internally
-    score()->cmdAddTie(true);
+    mu::engraving::EditTie::cmdAddTie(score(), true);
 
     notifyAboutNotationChanged();
 }
