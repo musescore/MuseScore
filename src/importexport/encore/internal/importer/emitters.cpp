@@ -963,6 +963,8 @@ static void emitMeasureElement(BuildCtx& ctx, MeasEmitCtx& mc, const EncMeasureE
         break;
     case EncElemType::REST:      handleRest(ctx, mc, ec);
         break;
+    case EncElemType::ORNAMENT:  handleOrnament(ctx, mc, ec);
+        break;
     default: break;
     }
 }

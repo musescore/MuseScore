@@ -25,6 +25,7 @@
 
 #include "ctx.h"
 #include "builders.h"
+#include "resolvers.h"
 #include "page-layout.h"
 #include "debug-dump.h"
 
@@ -210,6 +211,8 @@ static void buildScore(MasterScore* score, const EncRoot& enc, const EncImportOp
     if (ctx.opts.importStaffSize) {
         applyStaffScale(score, enc);
     }
+
+    resolveAll(ctx);
 
     EditEnharmonicSpelling::spell(score);
     respellTransposingStaves(score);
