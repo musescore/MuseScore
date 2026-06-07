@@ -965,6 +965,10 @@ static void emitMeasureElement(BuildCtx& ctx, MeasEmitCtx& mc, const EncMeasureE
         break;
     case EncElemType::ORNAMENT:  handleOrnament(ctx, mc, ec);
         break;
+    case EncElemType::KEYCHANGE: handleKeyChange(ctx, mc, ec, e, pendingKeySigs);
+        break;
+    case EncElemType::CLEF:     handleClefChange(ctx, mc, ec, e);
+        break;
     default: break;
     }
 }
@@ -1028,6 +1032,8 @@ void emitMeasures(BuildCtx& ctx)
         mc.lineSlotByRawByte = &lineSlotByRawByte;
 
         resetPerMeasureState(ctx);
+
+        flushPendingKeySigs(score, measure, measTick, encMeas, pendingKeySigs);
 
         MeasureElemRefVec sortedElems;
         prepareMeasureContext(ctx, mc, encMeas, sortedElems);

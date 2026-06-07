@@ -366,6 +366,32 @@ TEST_F(Tst_Structure, page_margins_no_wini_uses_defaults)
 }
 
 // ===========================================================================
+// A KEYCHANGE to C major (tipo=0) must be emitted; the previous guard silently dropped it.
+TEST_F(Tst_Structure, keychange_to_c_major_emitted)
+{
+    MasterScore* score = readEncoreScore("structure_keychange_to_c.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int keySigCount = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+        for (Segment* s = m->first(SegmentType::KeySig); s; s = s->next(SegmentType::KeySig)) {
+            if (s->element(0)) {
+                ++keySigCount;
+            }
+        }
+    }
+    // Initial key sig (m0 G major) + tipo=0 modulation sig (m1); both must be present.
+    EXPECT_GE(keySigCount, 2);
+    delete score;
+}
+
+// ===========================================================================
 // v0xC2 stores the MIDI pitch in the tuplet field, not semiTonePitch; it must be swapped back on import.
 // See ENCORE_FORMAT.md §v0xC2 note (size 22 or 24).
 TEST_F(Tst_Structure, old_format_v0c2_correct_pitches)
@@ -594,6 +620,75 @@ TEST_F(Tst_Structure, fit_spatium_first_system_measure_count)
     EXPECT_GE(firstSystemMeasureCount, 3)
         << "first system must fit at least enc.lines[0].measureCount (3) measures";
 
+    delete score;
+}
+
+// A mid-measure CLEF anchors to the note that physically follows it in the stream, not to its own stored
+// tick, so it lands before the next note rather than mid-beat.
+TEST_F(Tst_Structure, mid_measure_clef_change_imported)
+{
+    MasterScore* score = readEncoreScore("structure_clef_change_mid_measure.enc");
+    ASSERT_NE(score, nullptr);
+
+    bool foundC4 = false;
+    bool foundEarly = false;
+    for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::Clef); s; s = s->next(SegmentType::Clef)) {
+            if (s->tick() <= m->tick()) {
+                continue;  // skip header clef at measure start
+            }
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isClef() || toClef(el)->clefType() != ClefType::C4) {
+                continue;
+            }
+            if (s->tick() == m->tick() + Fraction(1, 4)) {
+                foundC4 = true;
+            } else if (s->tick() == m->tick() + Fraction(3, 16)) {
+                foundEarly = true;
+            }
+        }
+    }
+    EXPECT_TRUE(foundC4)
+        << "mid-measure CLEF(C4L) must anchor to the following note at beat-2 offset (1/4)";
+    EXPECT_FALSE(foundEarly)
+        << "CLEF must not be placed at its own stored tick (3/16); it follows the next note";
+    delete score;
+}
+
+// A trailing CLEF (last element of a measure, no note after it) is cautionary: it takes effect on the next
+// measure's downbeat, not before the current measure's final note.
+TEST_F(Tst_Structure, trailing_clef_change_moves_to_next_measure)
+{
+    MasterScore* score = readEncoreScore("structure_clef_trailing_cautionary.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m1 = score->firstMeasure();
+    ASSERT_NE(m1, nullptr);
+    Measure* m2 = m1->nextMeasure();
+    ASSERT_NE(m2, nullptr);
+    const Fraction barline = m2->tick();   // = end of measure 1 = downbeat of measure 2
+
+    // A cautionary clef on the m1/m2 barline is serialized as a trailing Clef segment of m1,
+    // so check by absolute tick rather than by measure ownership.
+    bool clefAtBarline = false;
+    bool clefMidM1 = false;
+    for (Measure* m = m1; m; m = m->nextMeasure()) {
+        for (Segment* s = m->first(SegmentType::Clef); s; s = s->next(SegmentType::Clef)) {
+            EngravingItem* el = s->element(0);
+            if (!el || !el->isClef() || toClef(el)->clefType() != ClefType::F) {
+                continue;
+            }
+            if (s->tick() == barline) {
+                clefAtBarline = true;
+            } else if (s->tick() > m1->tick() && s->tick() < barline) {
+                clefMidM1 = true;
+            }
+        }
+    }
+    EXPECT_TRUE(clefAtBarline)
+        << "trailing CLEF must take effect on the downbeat of the next measure";
+    EXPECT_FALSE(clefMidM1)
+        << "trailing CLEF must not land inside measure 1";
     delete score;
 }
 
