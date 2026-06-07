@@ -30,6 +30,7 @@
 using namespace mu::notation;
 
 static const QColor backgroundColor(36, 36, 39);
+static const QColor blackKeyBaseColor(56, 56, 58);
 
 static const std::vector<QString> NOTE_NAMES = {
     QStringLiteral("C"), QStringLiteral("C#"), QStringLiteral("D"), QStringLiteral("D#"),
@@ -99,18 +100,24 @@ QColor PianoKeyboardView::playingKeyColor(piano_key_t key) const
         return QColor();
     }
 
-    QColor mixedColor;
+    qreal r = 0.0, g = 0.0, b = 0.0;
+    size_t count = 0;
     for (uint64_t trackId : instruments) {
         QColor c = instrumentColor(trackId);
-        if (!mixedColor.isValid()) {
-            mixedColor = c;
-        } else {
-            qreal alpha = 0.5;
-            mixedColor.setRedF(mixedColor.redF() * (1 - alpha) + c.redF() * alpha);
-            mixedColor.setGreenF(mixedColor.greenF() * (1 - alpha) + c.greenF() * alpha);
-            mixedColor.setBlueF(mixedColor.blueF() * (1 - alpha) + c.blueF() * alpha);
+        if (c.isValid()) {
+            r += c.redF();
+            g += c.greenF();
+            b += c.blueF();
+            ++count;
         }
     }
+    if (count == 0) {
+        return QColor();
+    }
+    QColor mixedColor;
+    mixedColor.setRedF(r / count);
+    mixedColor.setGreenF(g / count);
+    mixedColor.setBlueF(b / count);
     return mixedColor;
 }
 
@@ -288,11 +295,10 @@ void PianoKeyboardView::updateKeyStateColors()
     m_blackKeyTopPieceStateColors[KeyState::Selected] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.8);
     m_blackKeyTopPieceStateColors[KeyState::Played] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 1.0);
 
-    QColor blackKeyBottomPieceBaseColor(56, 56, 58);
-    m_blackKeyBottomPieceStateColors[KeyState::None] = blackKeyBottomPieceBaseColor;
-    m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.4);
-    m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.8);
-    m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
+    m_blackKeyBottomPieceStateColors[KeyState::None] = blackKeyBaseColor;
+    m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBaseColor, accentColor, 0.4);
+    m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBaseColor, accentColor, 0.8);
+    m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBaseColor, accentColor, 1.0);
 }
 
 void PianoKeyboardView::paint(QPainter* painter)
@@ -466,9 +472,8 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
                 instColor = playingKeyColor(key);
             }
             if (instColor.isValid()) {
-                QColor blackBase(56, 56, 58);
-                topPieceGradient.setColorAt(1.0, mixedColors(blackBase, instColor, 1.0));
-                bottomPieceGradient.setColorAt(0.0, mixedColors(blackBase, instColor, 1.0));
+                topPieceGradient.setColorAt(1.0, mixedColors(blackKeyBaseColor, instColor, 1.0));
+                bottomPieceGradient.setColorAt(0.0, mixedColors(blackKeyBaseColor, instColor, 1.0));
             } else {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[ks]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[ks]);
