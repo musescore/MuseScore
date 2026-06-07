@@ -2618,8 +2618,8 @@ const UiActionList NotationUiActions::s_actions = {
     UiAction(TOGGLE_AUTOMATION_CODE,
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Automation"),
-             TranslatableString("action", "Toggle automation"),
+             TranslatableString("action", "Automation view"),
+             TranslatableString("action", "Toggle automation view"),
              IconCode::Code::AUTOMATION,
              Checkable::Yes
              ),

@@ -21,29 +21,323 @@
  */
 
 #include "notationautomation.h"
+
+#include <algorithm>
+#include <iterator>
+#include <utility>
+#include <vector>
+
 #include "engraving/automation/iautomation.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/editing/undo.h"
 
 using namespace mu::notation;
 
-// TODO: This will do for now, but it needs to be smarter because there will be gaps between ChordRest/TimeTick segment types (e.g.
-// barlines). This method effectively needs to return the closest segment of the desired type (and probably whether canvasX is before
-// or after the segment). If the canvasX is before the closest segment, then we'll go on to use the start tick of the segment. If it's
-// after, we'll use the end tick of the segment....
-static const Segment* segmentForCanvasX(const System* system, double canvasX)
+static constexpr mu::engraving::AutomationType AUTOMATION_VIEW_TYPE = mu::engraving::AutomationType::Expression;
+static constexpr double AUTOMATION_VIEW_DEFAULT_VALUE = 0.5;
+
+static double automationValueToLineY(double value)
+{
+    return 1.0 - std::clamp(value, 0.0, 1.0);
+}
+
+static double lineYToAutomationValue(double y)
+{
+    return 1.0 - std::clamp(static_cast<double>(y), 0.0, 1.0);
+}
+
+static mu::engraving::AutomationCurveKey automationKey(const mu::engraving::Staff* staff)
+{
+    mu::engraving::AutomationCurveKey key;
+    key.type = AUTOMATION_VIEW_TYPE;
+    key.staffId = staff ? staff->id() : muse::ID();
+    return key;
+}
+
+static bool hasAutomationPointAtTick(const mu::engraving::IAutomation* automation,
+                                     const mu::engraving::AutomationCurveKey& key, int tick)
+{
+    IF_ASSERT_FAILED(automation) {
+        return false;
+    }
+
+    const mu::engraving::AutomationCurve& curve = automation->curve(key);
+    return curve.find(tick) != curve.cend();
+}
+
+static mu::engraving::AutomationPoint automationPoint(double value)
+{
+    mu::engraving::AutomationPoint point;
+    point.inValue = value;
+    point.outValue = value;
+    return point;
+}
+
+static bool automationPointsEqual(const mu::engraving::AutomationPoint& left,
+                                  const mu::engraving::AutomationPoint& right)
+{
+    return muse::RealIsEqual(left.inValue, right.inValue)
+           && muse::RealIsEqual(left.outValue, right.outValue)
+           && left.interpolation == right.interpolation
+           && left.itemId == right.itemId;
+}
+
+static bool automationCurvesEqual(const mu::engraving::AutomationCurve& left,
+                                  const mu::engraving::AutomationCurve& right)
+{
+    if (left.size() != right.size()) {
+        return false;
+    }
+
+    auto leftIt = left.cbegin();
+    auto rightIt = right.cbegin();
+    while (leftIt != left.cend()) {
+        if (leftIt->first != rightIt->first || !automationPointsEqual(leftIt->second, rightIt->second)) {
+            return false;
+        }
+
+        ++leftIt;
+        ++rightIt;
+    }
+
+    return true;
+}
+
+static void replaceAutomationCurve(mu::engraving::IAutomation* automation,
+                                   const mu::engraving::AutomationCurveKey& key,
+                                   const mu::engraving::AutomationCurve& curve)
+{
+    IF_ASSERT_FAILED(automation) {
+        return;
+    }
+
+    const mu::engraving::AutomationCurve currentCurve = automation->curve(key);
+    for (const auto& point : currentCurve) {
+        automation->removePoint(key, point.first);
+    }
+
+    for (const auto& [tick, point] : curve) {
+        automation->addPoint(key, tick, point);
+    }
+}
+
+class ChangeAutomationCurve : public mu::engraving::UndoCommand
+{
+public:
+    ChangeAutomationCurve(mu::engraving::Score* score, mu::engraving::AutomationCurveKey key,
+                          mu::engraving::AutomationCurve before, mu::engraving::AutomationCurve after)
+        : m_score(score), m_key(std::move(key)), m_before(std::move(before)), m_after(std::move(after))
+    {
+    }
+
+    const char* name() const override
+    {
+        return "ChangeAutomationCurve";
+    }
+
+protected:
+    void flip(mu::engraving::EditData*) override
+    {
+        IF_ASSERT_FAILED(m_score && m_score->automation()) {
+            return;
+        }
+
+        replaceAutomationCurve(m_score->automation(), m_key, m_atAfter ? m_before : m_after);
+        m_atAfter = !m_atAfter;
+    }
+
+private:
+    mu::engraving::Score* m_score = nullptr;
+    mu::engraving::AutomationCurveKey m_key;
+    mu::engraving::AutomationCurve m_before;
+    mu::engraving::AutomationCurve m_after;
+    bool m_atAfter = true;
+};
+
+static const Segment* firstAutomationSegmentForSystem(const System* system)
 {
     IF_ASSERT_FAILED(system) {
         return nullptr;
     }
+
     const mu::engraving::SegmentType type = Segment::CHORD_REST_OR_TIME_TICK_TYPE;
     const Segment* seg = system->firstMeasure() ? system->firstMeasure()->first(type) : nullptr;
-    while (seg && seg->system() == system) {
-        if (canvasX >= seg->canvasX() && canvasX <= seg->canvasX() + seg->width()) {
-            return seg;
-        }
+    while (seg && seg->system() != system) {
         seg = seg->next1(type);
     }
-    return nullptr;
+    return seg && seg->system() == system ? seg : nullptr;
+}
+
+struct TickCanvasPoint {
+    int tick = 0;
+    double canvasX = 0.0;
+};
+
+using TickCanvasMap = std::vector<TickCanvasPoint>;
+
+static void appendTickCanvasPoint(TickCanvasMap& points, int tick, double canvasX)
+{
+    if (!points.empty() && tick == points.back().tick) {
+        points.back().canvasX = canvasX;
+        return;
+    }
+
+    if (points.empty() || tick > points.back().tick) {
+        points.push_back({ tick, canvasX });
+    }
+}
+
+static TickCanvasMap tickCanvasMapForSystem(const System* system, double staffStartCanvasX, double staffEndCanvasX,
+                                            int startTick, int endTick)
+{
+    TickCanvasMap points;
+    points.reserve(16);
+    appendTickCanvasPoint(points, startTick, staffStartCanvasX);
+
+    const mu::engraving::SegmentType type = Segment::CHORD_REST_OR_TIME_TICK_TYPE;
+    const Segment* seg = firstAutomationSegmentForSystem(system);
+    while (seg && seg->system() == system) {
+        const double segStartCanvasX = seg->canvasX();
+        const double segEndCanvasX = segStartCanvasX + seg->width();
+        const int segStartTick = seg->tick().ticks();
+        const int segEndTick = segStartTick + seg->ticks().ticks();
+
+        appendTickCanvasPoint(points, segStartTick, segStartCanvasX);
+        appendTickCanvasPoint(points, segEndTick, segEndCanvasX);
+
+        seg = seg->next1(type);
+    }
+
+    appendTickCanvasPoint(points, endTick, staffEndCanvasX);
+    return points;
+}
+
+static int interpolatedTick(double x, double leftX, double rightX, int leftTick, int rightTick)
+{
+    if (rightTick <= leftTick || muse::RealIsEqual(leftX, rightX)) {
+        return leftTick;
+    }
+
+    const double ratio = std::clamp((x - leftX) / (rightX - leftX), 0.0, 1.0);
+    return leftTick + static_cast<int>(ratio * (rightTick - leftTick));
+}
+
+static double interpolatedCanvasX(int tick, int leftTick, int rightTick, double leftX, double rightX)
+{
+    if (rightTick <= leftTick || muse::RealIsEqual(leftX, rightX)) {
+        return leftX;
+    }
+
+    const double ratio = std::clamp(static_cast<double>(tick - leftTick) / static_cast<double>(rightTick - leftTick),
+                                    0.0, 1.0);
+    return leftX + (ratio * (rightX - leftX));
+}
+
+static int tickForCanvasX(const TickCanvasMap& tickCanvasMap, double canvasX, bool* ok)
+{
+    if (ok) {
+        *ok = false;
+    }
+
+    IF_ASSERT_FAILED(!tickCanvasMap.empty()) {
+        return 0;
+    }
+
+    auto right = std::lower_bound(tickCanvasMap.cbegin(), tickCanvasMap.cend(), canvasX,
+                                  [](const TickCanvasPoint& point, double x) {
+        return point.canvasX < x;
+    });
+
+    if (ok) {
+        *ok = true;
+    }
+
+    if (right == tickCanvasMap.cbegin()) {
+        return right->tick;
+    }
+
+    if (right == tickCanvasMap.cend()) {
+        return tickCanvasMap.back().tick;
+    }
+
+    if (muse::RealIsEqual(right->canvasX, canvasX)) {
+        return right->tick;
+    }
+
+    auto left = std::prev(right);
+    return interpolatedTick(canvasX, left->canvasX, right->canvasX, left->tick, right->tick);
+}
+
+static double canvasXForTick(const TickCanvasMap& tickCanvasMap, int tick)
+{
+    IF_ASSERT_FAILED(!tickCanvasMap.empty()) {
+        return 0.0;
+    }
+
+    auto right = std::lower_bound(tickCanvasMap.cbegin(), tickCanvasMap.cend(), tick,
+                                  [](const TickCanvasPoint& point, int value) {
+        return point.tick < value;
+    });
+
+    if (right == tickCanvasMap.cbegin()) {
+        return right->canvasX;
+    }
+
+    if (right == tickCanvasMap.cend()) {
+        return tickCanvasMap.back().canvasX;
+    }
+
+    if (right->tick == tick) {
+        return right->canvasX;
+    }
+
+    auto left = std::prev(right);
+    return interpolatedCanvasX(tick, left->tick, right->tick, left->canvasX, right->canvasX);
+}
+
+static bool hasAutomationViewCurve(const mu::engraving::Score* score)
+{
+    IF_ASSERT_FAILED(score && score->automation()) {
+        return false;
+    }
+
+    for (const mu::engraving::Staff* staff : score->staves()) {
+        if (!staff || !staff->isPrimaryStaff()) {
+            continue;
+        }
+
+        if (!score->automation()->curve(automationKey(staff)).empty()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+static void seedAutomationViewCurves(mu::engraving::Score* score)
+{
+    IF_ASSERT_FAILED(score && score->automation()) {
+        return;
+    }
+
+    const int startTick = 0;
+    const int endTick = score->lastMeasure() ? score->lastMeasure()->endTick().ticks() : startTick;
+
+    for (const mu::engraving::Staff* staff : score->staves()) {
+        if (!staff || !staff->isPrimaryStaff()) {
+            continue;
+        }
+
+        const mu::engraving::AutomationCurveKey expressionKey = automationKey(staff);
+        if (!score->automation()->curve(expressionKey).empty()) {
+            continue;
+        }
+
+        score->automation()->addPoint(expressionKey, startTick, automationPoint(AUTOMATION_VIEW_DEFAULT_VALUE));
+        if (endTick > startTick) {
+            score->automation()->addPoint(expressionKey, endTick, automationPoint(AUTOMATION_VIEW_DEFAULT_VALUE));
+        }
+    }
 }
 
 NotationAutomation::NotationAutomation(IGetScore* getScore,
@@ -64,8 +358,6 @@ void NotationAutomation::setAutomationModeEnabled(bool enabled)
     }
 
     if (enabled) {
-        // TODO: Optimization - we don't need to init all the lines every time. Only the bits that
-        // changed since the last time automation was enabled...
         initAutomationLinesData();
     }
 
@@ -90,15 +382,15 @@ void NotationAutomation::initAutomationLinesData()
         return;
     }
 
-    if (m_automationLinesData.isEmpty()) {
-        // TODO: Placeholder - init this elsewhere. Also note that automation data doesn't currently
-        // update through score interactions (such as deleting dynamics, etc)...
+    if (m_automationLinesData.isEmpty() && !hasAutomationViewCurve(masterScore)) {
         masterScore->initAutomation();
+        seedAutomationViewCurves(masterScore);
     }
 
     QVariantList automationLinesData;
-    for (const System* system : score()->systems()) {
-        const QVariantList linesData = linesDataForSystem(system);
+    const std::vector<System*>& systems = score()->systems();
+    for (size_t systemIdx = 0; systemIdx < systems.size(); ++systemIdx) {
+        const QVariantList linesData = linesDataForSystem(systems.at(systemIdx), systemIdx);
         if (!linesData.empty()) {
             automationLinesData << linesData;
         }
@@ -107,43 +399,16 @@ void NotationAutomation::initAutomationLinesData()
     m_automationLinesDataChanged.notify();
 }
 
-QVariantList NotationAutomation::linesDataForSystem(const System* system) const
+QVariantList NotationAutomation::linesDataForSystem(const System* system, size_t systemIdx) const
 {
     QVariantList lines;
 
-    const int systemStartTick = system->first()->tick().ticks();
-    const int systemEndTick = system->last()->endTick().ticks();
-
     staff_idx_t staffIdx = system->firstVisibleStaff();
     while (staffIdx != muse::nidx) {
-        const Staff* staff = score()->staff(staffIdx);
-        const SysStaff* sysStaff = system->staff(staffIdx);
-        IF_ASSERT_FAILED(staff && sysStaff) {
-            staffIdx = system->nextVisibleStaff(staffIdx);
-            continue;
+        const QVariantMap lineData = lineDataForSysStaff(staffIdx, systemIdx, system);
+        if (!lineData.isEmpty()) {
+            lines << lineData;
         }
-
-        if (!staff->isPrimaryStaff()) {
-            staffIdx = system->nextVisibleStaff(staffIdx);
-            continue;
-        }
-
-        const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-        const QVariantList staffLinesData = linesDataForSysStaff(staff, staffCanvasRect, systemStartTick, systemEndTick);
-        if (staffLinesData.isEmpty()) {
-            staffIdx = system->nextVisibleStaff(staffIdx);
-            continue;
-        }
-
-        QVariantMap lineData;
-        lineData["staffIdx"] = static_cast<int>(staffIdx);
-        lineData["x"] = staffCanvasRect.x();
-        lineData["y"] = staffCanvasRect.y();
-        lineData["width"] = staffCanvasRect.width();
-        lineData["height"] = staffCanvasRect.height();
-        lineData["points"] = staffLinesData;
-
-        lines << lineData;
 
         staffIdx = system->nextVisibleStaff(staffIdx);
     }
@@ -151,8 +416,48 @@ QVariantList NotationAutomation::linesDataForSystem(const System* system) const
     return lines;
 }
 
-QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect,
-                                                      int startTick, int endTick) const
+QVariantMap NotationAutomation::lineDataForSysStaff(staff_idx_t staffIdx, size_t systemIdx, const System* system) const
+{
+    IF_ASSERT_FAILED(system && system->first() && system->last()) {
+        return {};
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    const SysStaff* sysStaff = system->staff(staffIdx);
+    IF_ASSERT_FAILED(staff && sysStaff) {
+        return {};
+    }
+
+    if (!staff->isPrimaryStaff()) {
+        return {};
+    }
+
+    const int systemStartTick = system->first()->tick().ticks();
+    const int systemEndTick = system->last()->endTick().ticks();
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+    const QVariantList staffLinesData = pointsDataForSysStaff(staff, system, staffCanvasRect,
+                                                              systemStartTick, systemEndTick);
+    if (staffLinesData.isEmpty()) {
+        return {};
+    }
+
+    QVariantMap lineData;
+    lineData["staffIdx"] = static_cast<int>(staffIdx);
+    lineData["systemIdx"] = static_cast<qulonglong>(systemIdx);
+    lineData["x"] = staffCanvasRect.x();
+    lineData["y"] = staffCanvasRect.y();
+    lineData["width"] = staffCanvasRect.width();
+    lineData["height"] = staffCanvasRect.height();
+    lineData["startTick"] = systemStartTick;
+    lineData["endTick"] = systemEndTick;
+    lineData["points"] = staffLinesData;
+
+    return lineData;
+}
+
+QVariantList NotationAutomation::pointsDataForSysStaff(const Staff* staff, const System* system,
+                                                       const muse::RectF& sysStaffCanvasRect, int startTick,
+                                                       int endTick) const
 {
     QVariantList points;
     const auto addPoint = [&points](double x, double y, int tick, PointType pointType) {
@@ -168,37 +473,37 @@ QVariantList NotationAutomation::linesDataForSysStaff(const Staff* staff, const 
         return points;
     }
 
-    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
-    for (auto& point : automation()->curve(key)) {
+    const mu::engraving::AutomationCurveKey key = automationKey(staff);
+    const mu::engraving::AutomationCurve& curve = automation()->curve(key);
+    const TickCanvasMap tickCanvasMap = tickCanvasMapForSystem(system, sysStaffCanvasRect.x(),
+                                                               sysStaffCanvasRect.x() + sysStaffCanvasRect.width(),
+                                                               startTick, endTick);
+
+    const mu::engraving::AutomationPoint& startPoint = automation()->activePoint(key, startTick);
+    addPoint(0.0, automationValueToLineY(startPoint.outValue), startTick, PointType::BOTH);
+
+    for (const auto& point : curve) {
         const int tick = point.first;
-        if (tick < startTick || tick > endTick) {
+        if (tick <= startTick || tick >= endTick) {
             continue;
         }
 
-        const Fraction frac = Fraction::fromTicks(tick);
-        const Segment* seg = score()->tick2leftSegmentMM(frac);
-        IF_ASSERT_FAILED(seg) {
-            continue;
-        }
-
-        // The point's tick may not exactly match that of a segment. For this reason we can only calculate the x position
-        // of our points based on a "tickRatio". This ratio is based on the "tick difference" between the point tick and
-        // the segment's tick, and the duration of the segment (in ticks)...
-        const int tickDiff = tick - seg->tick().ticks();
-        const double tickRatio = static_cast<double>(tickDiff) / seg->ticks().ticks();
-        const double pointXInSeg = tickRatio * seg->width(); // The point's x relative to the segment
-
-        const double segXInStaff = seg->canvasX() - sysStaffCanvasRect.x(); // The segment's x relative to the staff
-        const double pointXInStaff = (segXInStaff + pointXInSeg) / sysStaffCanvasRect.width();
+        const double pointCanvasX = canvasXForTick(tickCanvasMap, tick);
+        const double pointXInStaff = (pointCanvasX - sysStaffCanvasRect.x()) / sysStaffCanvasRect.width();
 
         // Point in/out values are always between 0 and 1 - higher value == lower Y...
         const mu::engraving::AutomationPoint& autoPoint = point.second;
         if (muse::RealIsEqual(autoPoint.inValue, autoPoint.outValue)) {
-            addPoint(pointXInStaff, 1 - autoPoint.inValue, tick, PointType::BOTH);
+            addPoint(pointXInStaff, automationValueToLineY(autoPoint.inValue), tick, PointType::BOTH);
             continue;
         }
-        addPoint(pointXInStaff, 1 - autoPoint.inValue, tick, PointType::IN);
-        addPoint(pointXInStaff, 1 - autoPoint.outValue, tick, PointType::OUT);
+        addPoint(pointXInStaff, automationValueToLineY(autoPoint.inValue), tick, PointType::IN);
+        addPoint(pointXInStaff, automationValueToLineY(autoPoint.outValue), tick, PointType::OUT);
+    }
+
+    if (endTick > startTick) {
+        const mu::engraving::AutomationPoint& endPoint = automation()->activePoint(key, endTick);
+        addPoint(1.0, automationValueToLineY(endPoint.outValue), endTick, PointType::BOTH);
     }
 
     return points;
@@ -219,6 +524,120 @@ mu::engraving::IAutomation* NotationAutomation::automation() const
     return score() ? score()->automation() : nullptr;
 }
 
+void NotationAutomation::refreshAutomationView()
+{
+    m_automationLinesData.clear();
+    initAutomationLinesData();
+    m_notationChanged.send(muse::RectF());
+}
+
+bool NotationAutomation::refreshAutomationLinesForStaff(staff_idx_t staffIdx)
+{
+    const std::vector<System*>& systems = score()->systems();
+    bool refreshed = false;
+
+    for (qsizetype lineIdx = 0; lineIdx < m_automationLinesData.size(); ++lineIdx) {
+        const QVariantMap lineData = m_automationLinesData.at(lineIdx).toMap();
+        bool ok = false;
+        const staff_idx_t lineStaffIdx = static_cast<staff_idx_t>(lineData.value("staffIdx").toInt(&ok));
+        if (!ok || lineStaffIdx != staffIdx) {
+            continue;
+        }
+
+        const qulonglong systemIdxRaw = lineData.value("systemIdx").toULongLong(&ok);
+        if (!ok || systemIdxRaw >= systems.size()) {
+            return false;
+        }
+
+        const QVariantMap refreshedLineData = lineDataForSysStaff(staffIdx, static_cast<size_t>(systemIdxRaw),
+                                                                  systems.at(static_cast<size_t>(systemIdxRaw)));
+        if (refreshedLineData.isEmpty()) {
+            return false;
+        }
+
+        m_automationLinesData.replace(lineIdx, refreshedLineData);
+        refreshed = true;
+    }
+
+    if (!refreshed) {
+        return false;
+    }
+
+    m_automationLinesDataChanged.notify();
+    m_notationChanged.send(muse::RectF());
+    return true;
+}
+
+void NotationAutomation::notifyAutomationChanged(staff_idx_t staffIdx)
+{
+    mu::engraving::Score* s = score();
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+
+    if (!refreshAutomationLinesForStaff(staffIdx)) {
+        refreshAutomationView();
+    }
+
+    mu::engraving::ScoreChanges changes;
+    changes.tickFrom = 0;
+    changes.tickTo = s->lastMeasure() ? s->lastMeasure()->endTick().ticks() : 0;
+    changes.staffIdxFrom = staffIdx;
+    changes.staffIdxTo = staffIdx + 1;
+    s->changesChannel().send(changes);
+}
+
+int NotationAutomation::tickForLineX(const QVariantMap& lineData, staff_idx_t staffIdx, qreal x, bool* ok)
+{
+    if (ok) {
+        *ok = false;
+    }
+
+    bool dataOk = false;
+    const int startTick = lineData.value("startTick").toInt(&dataOk);
+    IF_ASSERT_FAILED(dataOk) {
+        return 0;
+    }
+
+    const int endTick = lineData.value("endTick").toInt(&dataOk);
+    IF_ASSERT_FAILED(dataOk) {
+        return 0;
+    }
+
+    const qulonglong systemIdxRaw = lineData.value("systemIdx").toULongLong(&dataOk);
+    IF_ASSERT_FAILED(dataOk) {
+        return 0;
+    }
+
+    const std::vector<System*>& systems = score()->systems();
+    IF_ASSERT_FAILED(systemIdxRaw < systems.size()) {
+        refreshAutomationView();
+        return 0;
+    }
+
+    const System* system = systems.at(static_cast<size_t>(systemIdxRaw));
+    const SysStaff* sysStaff = system ? system->staff(staffIdx) : nullptr;
+    IF_ASSERT_FAILED(sysStaff) {
+        refreshAutomationView();
+        return 0;
+    }
+
+    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
+    const double staffStartCanvasX = staffCanvasRect.x();
+    const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
+    const double pointCanvasX = staffStartCanvasX
+                                + std::clamp(static_cast<double>(x), 0.0, 1.0) * (staffEndCanvasX - staffStartCanvasX);
+    const TickCanvasMap tickCanvasMap = tickCanvasMapForSystem(system, staffStartCanvasX, staffEndCanvasX,
+                                                               startTick, endTick);
+
+    bool tickOk = false;
+    const int tick = tickForCanvasX(tickCanvasMap, pointCanvasX, &tickOk);
+    if (ok) {
+        *ok = tickOk;
+    }
+    return tick;
+}
+
 void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y)
 {
     IF_ASSERT_FAILED(automation() && lineIdx < m_automationLinesData.size()) {
@@ -230,7 +649,7 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
         return;
     }
 
-    bool ok;
+    bool ok = false;
     const staff_idx_t staffIdx = static_cast<staff_idx_t>(lineData.value("staffIdx").toInt(&ok));
     IF_ASSERT_FAILED(ok && staffIdx != muse::nidx) {
         return;
@@ -254,10 +673,35 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
     }
 
     const PointType pointType = static_cast<PointType>(pointTypeRaw);
-    const mu::engraving::AutomationCurveKey key { mu::engraving::AutomationType::Dynamics, staff->id(), std::nullopt };
+    const mu::engraving::AutomationCurveKey key = automationKey(staff);
+    const mu::engraving::AutomationCurve beforeChange = automation()->curve(key);
+    score()->startCmd(muse::TranslatableString("undoableAction", "Edit automation"));
 
-    // Point in/out values are always between 0 and 1 - higher value == lower Y...
-    const double newValue = 1.0 - y;
+    auto finishChange = [this, staffIdx, key, beforeChange]() {
+        const mu::engraving::AutomationCurve afterChange = automation()->curve(key);
+        if (!automationCurvesEqual(afterChange, beforeChange)) {
+            score()->undoStack()->pushWithoutPerforming(new ChangeAutomationCurve(score(), key, beforeChange,
+                                                                                  afterChange));
+        }
+
+        score()->endCmd();
+        notifyAutomationChanged(staffIdx);
+    };
+
+    const double newValue = lineYToAutomationValue(y);
+
+    bool tickOk = false;
+    const int newTick = tickForLineX(lineData, staffIdx, x, &tickOk);
+    if (!tickOk) {
+        score()->endCmd(true);
+        return;
+    }
+    const bool pointExistsAtOldTick = hasAutomationPointAtTick(automation(), key, oldTick);
+
+    if (!pointExistsAtOldTick) {
+        const mu::engraving::AutomationPoint& activePoint = automation()->activePoint(key, oldTick);
+        automation()->addPoint(key, oldTick, automationPoint(activePoint.outValue));
+    }
 
     if (pointType == PointType::IN || pointType == PointType::BOTH) {
         automation()->setPointInValue(key, oldTick, newValue);
@@ -266,34 +710,13 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
         automation()->setPointOutValue(key, oldTick, newValue);
     }
 
-    //! NOTE: newSeg will always be in the same system as oldSeg...
-    const Segment* oldSeg = score()->tick2leftSegmentMM(Fraction::fromTicks(oldTick));
-    const System* system = oldSeg ? oldSeg->system() : nullptr;
-    const SysStaff* sysStaff = system ? system->staff(staffIdx) : nullptr;
-    IF_ASSERT_FAILED(sysStaff) {
-        return;
-    }
-
-    const muse::RectF staffCanvasRect = sysStaff->bbox().translated(system->canvasPos());
-    const double staffStartCanvasX = staffCanvasRect.x();
-    const double staffEndCanvasX = staffStartCanvasX + staffCanvasRect.width();
-    const double pointCanvasX = staffStartCanvasX + x * (staffEndCanvasX - staffStartCanvasX);
-
-    // TODO: See segmentForCanvasX - it needs to be a bit smarter...
-    const Segment* newSeg = segmentForCanvasX(system, pointCanvasX);
-    IF_ASSERT_FAILED(newSeg) {
-        return;
-    }
-
-    const double segStartCanvasX = newSeg->canvasX();
-    const double setEndCanvasX = segStartCanvasX + newSeg->width();
-
-    const int segStartTick = newSeg->tick().ticks();
-    const int segEndTick = segStartTick + newSeg->ticks().ticks();
-
-    const double tickRatio = (pointCanvasX - segStartCanvasX) / (setEndCanvasX - segStartCanvasX);
-    const int newTick = segStartTick + static_cast<int>(tickRatio * (segEndTick - segStartTick));
     if (newTick == oldTick) {
+        finishChange();
+        return;
+    }
+
+    if (hasAutomationPointAtTick(automation(), key, newTick)) {
+        finishChange();
         return;
     }
 
@@ -303,11 +726,12 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
 
     if (pointType == PointType::BOTH) {
         automation()->movePoint(key, oldTick, newTick);
+        finishChange();
         return;
     }
 
     const mu::engraving::AutomationPoint& oldPoint = automation()->activePoint(key, oldTick);
-    const mu::engraving::AutomationPoint newPoint = { newValue, newValue };
+    const mu::engraving::AutomationPoint newPoint = automationPoint(newValue);
     if (pointType == PointType::IN) {
         automation()->setPointInValue(key, oldTick, oldPoint.outValue);
     }
@@ -315,4 +739,108 @@ void NotationAutomation::requestChangeAutomationPoint(qsizetype lineIdx, qsizety
         automation()->setPointOutValue(key, oldTick, oldPoint.inValue);
     }
     automation()->addPoint(key, newTick, newPoint);
+    finishChange();
+}
+
+void NotationAutomation::requestAddAutomationPoint(qsizetype lineIdx, qreal x, qreal y)
+{
+    IF_ASSERT_FAILED(automation() && lineIdx < m_automationLinesData.size()) {
+        return;
+    }
+
+    const QVariantMap lineData = m_automationLinesData.at(lineIdx).toMap();
+    IF_ASSERT_FAILED(!lineData.isEmpty()) {
+        return;
+    }
+
+    bool ok = false;
+    const staff_idx_t staffIdx = static_cast<staff_idx_t>(lineData.value("staffIdx").toInt(&ok));
+    IF_ASSERT_FAILED(ok && staffIdx != muse::nidx) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    bool tickOk = false;
+    const int tick = tickForLineX(lineData, staffIdx, x, &tickOk);
+    if (!tickOk) {
+        return;
+    }
+
+    const mu::engraving::AutomationCurveKey key = automationKey(staff);
+    const double newValue = lineYToAutomationValue(y);
+    const mu::engraving::AutomationCurve beforeChange = automation()->curve(key);
+    score()->startCmd(muse::TranslatableString("undoableAction", "Edit automation"));
+
+    if (!hasAutomationPointAtTick(automation(), key, tick)) {
+        automation()->addPoint(key, tick, automationPoint(newValue));
+    } else {
+        automation()->setPointInValue(key, tick, newValue);
+        automation()->setPointOutValue(key, tick, newValue);
+    }
+
+    const mu::engraving::AutomationCurve afterChange = automation()->curve(key);
+    if (!automationCurvesEqual(afterChange, beforeChange)) {
+        score()->undoStack()->pushWithoutPerforming(new ChangeAutomationCurve(score(), key, beforeChange,
+                                                                              afterChange));
+    }
+
+    score()->endCmd();
+    notifyAutomationChanged(staffIdx);
+}
+
+void NotationAutomation::requestRemoveAutomationPoint(qsizetype lineIdx, qsizetype pointIdx)
+{
+    IF_ASSERT_FAILED(automation() && lineIdx < m_automationLinesData.size()) {
+        return;
+    }
+
+    const QVariantMap lineData = m_automationLinesData.at(lineIdx).toMap();
+    IF_ASSERT_FAILED(!lineData.isEmpty()) {
+        return;
+    }
+
+    bool ok = false;
+    const staff_idx_t staffIdx = static_cast<staff_idx_t>(lineData.value("staffIdx").toInt(&ok));
+    IF_ASSERT_FAILED(ok && staffIdx != muse::nidx) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    const QVariantList pointsList = lineData.value("points").toList();
+    IF_ASSERT_FAILED(staff && !pointsList.isEmpty() && pointIdx < pointsList.size()) {
+        return;
+    }
+
+    const QVariantMap point = pointsList.at(pointIdx).toMap();
+    IF_ASSERT_FAILED(!point.isEmpty()) {
+        return;
+    }
+
+    const int tick = point.value("tick").toInt(&ok);
+    IF_ASSERT_FAILED(ok) {
+        return;
+    }
+
+    const mu::engraving::AutomationCurveKey key = automationKey(staff);
+    if (!hasAutomationPointAtTick(automation(), key, tick)) {
+        refreshAutomationView();
+        return;
+    }
+
+    const mu::engraving::AutomationCurve beforeChange = automation()->curve(key);
+    score()->startCmd(muse::TranslatableString("undoableAction", "Edit automation"));
+    automation()->removePoint(key, tick);
+
+    const mu::engraving::AutomationCurve afterChange = automation()->curve(key);
+    if (!automationCurvesEqual(afterChange, beforeChange)) {
+        score()->undoStack()->pushWithoutPerforming(new ChangeAutomationCurve(score(), key, beforeChange,
+                                                                              afterChange));
+    }
+
+    score()->endCmd();
+    notifyAutomationChanged(staffIdx);
 }

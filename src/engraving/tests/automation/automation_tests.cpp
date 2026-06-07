@@ -22,6 +22,8 @@
 
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "engraving/automation/internal/automationcontroller.h"
 #include "engraving/automation/iautomation.h"
 #include "engraving/dom/staff.h"
@@ -44,6 +46,12 @@ class Engraving_AutomationTests : public ::testing::Test
 {
 };
 
+static AutomationPoint makePoint(double inValue, double outValue,
+                                 InterpolationType interpolation = InterpolationType::Linear)
+{
+    return AutomationPoint { inValue, outValue, interpolation, std::nullopt };
+}
+
 static void checkCurvesMatch(const AutomationCurve& actualCurve, const AutomationCurve& expectedCurve)
 {
     EXPECT_EQ(actualCurve.size(), expectedCurve.size());
@@ -61,13 +69,13 @@ static void checkCurvesMatch(const AutomationCurve& actualCurve, const Automatio
 TEST_F(Engraving_AutomationTests, Init_Dynamics)
 {
     // [GIVEN] Score with dynamics
-    Score* score = ScoreRW::readScore(AUTOMATION_DATA_DIR + u"dynamics.mscx");
+    std::unique_ptr<Score> score(ScoreRW::readScore(AUTOMATION_DATA_DIR + u"dynamics.mscx"));
     ASSERT_TRUE(score);
     ASSERT_FALSE(score->staves().empty());
 
     // [WHEN] Calculate the dynamics curve
     AutomationController controller;
-    controller.init(score);
+    controller.init(score.get());
 
     // [THEN] Curve matches expectations
     AutomationCurveKey key;
@@ -78,20 +86,20 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
 
     // 1st measure
     AutomationCurve expectedCurve;
-    expectedCurve[480] = AutomationPoint { MID_VALUE, P_VALUE, InterpolationType::Linear }; // 2nd beat: p
-    expectedCurve[1440] = AutomationPoint { P_VALUE, MP_VALUE, InterpolationType::Linear }; // 4th beat: mp
+    expectedCurve[480] = makePoint(MID_VALUE, P_VALUE); // 2nd beat: p
+    expectedCurve[1440] = makePoint(P_VALUE, MP_VALUE); // 4th beat: mp
 
     // 2nd measure
-    expectedCurve[1920] = AutomationPoint { MP_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: sf
-    expectedCurve[2400] = AutomationPoint { F_VALUE, MP_VALUE, InterpolationType::Linear }; // 2nd beat: mp
-    expectedCurve[2880] = AutomationPoint { MP_VALUE, P_VALUE, InterpolationType::Exponential }; // 3rd beat: p (pf)
-    expectedCurve[3264] = AutomationPoint { P_VALUE, F_VALUE, InterpolationType::Linear }; // 4th beat: f (pf)
+    expectedCurve[1920] = makePoint(MP_VALUE, F_VALUE); // 1st beat: sf
+    expectedCurve[2400] = makePoint(F_VALUE, MP_VALUE); // 2nd beat: mp
+    expectedCurve[2880] = makePoint(MP_VALUE, P_VALUE, InterpolationType::Exponential); // 3rd beat: p (pf)
+    expectedCurve[3264] = makePoint(P_VALUE, F_VALUE); // 4th beat: f (pf)
 
     // 3rd measure
-    expectedCurve[4800] = AutomationPoint { F_VALUE, P_VALUE, InterpolationType::Linear }; // 3rd beat: p (hairpin starts)
+    expectedCurve[4800] = makePoint(F_VALUE, P_VALUE); // 3rd beat: p (hairpin starts)
 
     // 4th measure
-    expectedCurve[5760] = AutomationPoint { FF_VALUE, FF_VALUE, InterpolationType::Linear }; // 1st beat: ff (hairpin ends)
+    expectedCurve[5760] = makePoint(FF_VALUE, FF_VALUE); // 1st beat: ff (hairpin ends)
 
     checkCurvesMatch(actualCurve, expectedCurve);
 
@@ -101,9 +109,36 @@ TEST_F(Engraving_AutomationTests, Init_Dynamics)
 
     // 3rd measure
     expectedCurve.clear();
-    expectedCurve[3840] = AutomationPoint { MID_VALUE, F_VALUE, InterpolationType::Linear }; // 1st beat: f (applied only to 2nd voice)
+    expectedCurve[3840] = makePoint(MID_VALUE, F_VALUE); // 1st beat: f (applied only to 2nd voice)
 
     checkCurvesMatch(actualCurve, expectedCurve);
 
-    delete score;
+}
+
+TEST_F(Engraving_AutomationTests, ReadWrite_ExpressionStaffId)
+{
+    std::unique_ptr<Score> score(ScoreRW::readScore(AUTOMATION_DATA_DIR + u"dynamics.mscx"));
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->staves().empty());
+
+    AutomationController controller;
+    controller.init(score.get());
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Expression;
+    key.staffId = score->staff(0)->id();
+
+    AutomationPoint point;
+    point.inValue = 0.25;
+    point.outValue = 0.75;
+    point.interpolation = InterpolationType::Linear;
+    controller.automation()->addPoint(key, 480, point);
+
+    AutomationController roundTripController;
+    roundTripController.automation()->read(controller.automation()->toJson());
+
+    AutomationCurve expectedCurve;
+    expectedCurve[480] = point;
+    checkCurvesMatch(roundTripController.automation()->curve(key), expectedCurve);
+
 }

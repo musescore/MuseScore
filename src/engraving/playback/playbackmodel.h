@@ -122,6 +122,8 @@ private:
     void updateContext(const InstrumentTrackId& trackId);
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
+    void appendAutomationExpressionEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom,
+                                          const track_idx_t trackTo, ChangedTrackIdSet* trackChanges = nullptr);
 
     void reloadMetronomeEvents();
 

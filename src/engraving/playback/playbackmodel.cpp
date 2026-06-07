@@ -22,7 +22,11 @@
 
 #include "playbackmodel.h"
 
+#include <algorithm>
+#include <iterator>
 #include <limits>
+
+#include "engraving/automation/iautomation.h"
 
 #include "dom/fret.h"
 #include "dom/harmony.h"
@@ -37,6 +41,7 @@
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 #include "editing/undo.h"
+#include "types/constants.h"
 
 #include "defer.h"
 #include "log.h"
@@ -48,6 +53,7 @@ using namespace muse::async;
 
 static const String METRONOME_INSTRUMENT_ID(u"metronome");
 static const String CHORD_SYMBOLS_INSTRUMENT_ID(u"chord_symbols");
+static constexpr int AUTOMATION_EXPRESSION_STEP_TICKS = Constants::DIVISION / 4;
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 
@@ -60,6 +66,85 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
     }
 
     return nullptr;
+}
+
+static AutomationCurveKey expressionAutomationKey(const Staff* staff)
+{
+    AutomationCurveKey key;
+    key.type = AutomationType::Expression;
+    key.staffId = staff ? staff->id() : muse::ID();
+    return key;
+}
+
+static ControllerChangeEvent expressionControllerEvent(double value)
+{
+    ControllerChangeEvent event;
+    event.type = ControllerChangeEvent::Expression;
+    event.val = static_cast<float>(std::clamp(value, 0.0, 1.0));
+    return event;
+}
+
+static void appendExpressionEvent(PlaybackEventsMap& events, const Score* score, int utick, double value)
+{
+    events[timestampFromTicks(score, utick)].push_back(expressionControllerEvent(value));
+}
+
+static void appendExpressionCurve(PlaybackEventsMap& events, const Score* score, const AutomationCurve& curve,
+                                  int tickFrom, int tickTo)
+{
+    if (curve.empty()) {
+        return;
+    }
+
+    auto it = curve.lower_bound(tickFrom);
+    if (it != curve.cbegin()) {
+        --it;
+    }
+
+    for (; it != curve.cend(); ++it) {
+        const int tick = it->first;
+        const AutomationPoint& point = it->second;
+        if (tick > tickTo) {
+            break;
+        }
+
+        if (tick > tickFrom && tick <= tickTo) {
+            appendExpressionEvent(events, score, tick, point.outValue);
+        }
+
+        auto nextIt = std::next(it);
+        if (nextIt == curve.cend()) {
+            continue;
+        }
+
+        const int nextTick = nextIt->first;
+        if (nextTick < tickFrom) {
+            continue;
+        }
+
+        if (nextTick <= tick) {
+            continue;
+        }
+
+        const double startValue = point.outValue;
+        const double endValue = nextIt->second.inValue;
+        if (muse::RealIsEqual(startValue, endValue)) {
+            continue;
+        }
+
+        const int durationTicks = nextTick - tick;
+        const int steps = std::max(1, durationTicks / AUTOMATION_EXPRESSION_STEP_TICKS);
+        for (int step = 1; step < steps; ++step) {
+            const int stepTick = tick + (durationTicks * step / steps);
+            if (stepTick < tickFrom || stepTick > tickTo) {
+                continue;
+            }
+
+            const double ratio = static_cast<double>(step) / static_cast<double>(steps);
+            const double value = startValue + ((endValue - startValue) * ratio);
+            appendExpressionEvent(events, score, stepTick, value);
+        }
+    }
 }
 
 void PlaybackModel::load(Score* score)
@@ -666,6 +751,60 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 m_renderer.renderMetronome(m_score, measure, tickPositionOffset, metronomeProfile, metronomeEvents);
                 collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
             }
+        }
+    }
+
+    appendAutomationExpressionEvents(tickFrom, tickTo, trackFrom, trackTo, trackChanges);
+}
+
+void PlaybackModel::appendAutomationExpressionEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom,
+                                                     const track_idx_t trackTo, ChangedTrackIdSet* trackChanges)
+{
+    TRACEFUNC;
+
+    if (!m_score || !m_score->automation()) {
+        return;
+    }
+
+    for (const Part* part : m_score->parts()) {
+        if (!part || trackTo < part->startTrack() || trackFrom >= part->endTrack()) {
+            continue;
+        }
+
+        PlaybackEventsMap events;
+        for (const Staff* staff : part->staves()) {
+            if (!staff || !staff->isPrimaryStaff()) {
+                continue;
+            }
+
+            const AutomationCurveKey key = expressionAutomationKey(staff);
+            const AutomationCurve& curve = m_score->automation()->curve(key);
+            if (curve.empty()) {
+                continue;
+            }
+
+            const AutomationPoint& activePoint = m_score->automation()->activePoint(key, tickFrom);
+            appendExpressionEvent(events, m_score, tickFrom, activePoint.outValue);
+            appendExpressionCurve(events, m_score, curve, tickFrom, tickTo);
+        }
+
+        if (events.empty()) {
+            continue;
+        }
+
+        for (const InstrumentTrackId& trackId : part->instrumentTrackIdSet()) {
+            auto trackDataIt = m_playbackDataMap.find(trackId);
+            if (trackDataIt == m_playbackDataMap.end()) {
+                continue;
+            }
+
+            PlaybackEventsMap& originEvents = trackDataIt->second.originEvents;
+            for (const auto& [timestamp, eventList] : events) {
+                PlaybackEventList& destination = originEvents[timestamp];
+                destination.insert(destination.begin(), eventList.begin(), eventList.end());
+            }
+
+            collectChangesTracks(trackId, trackChanges);
         }
     }
 }

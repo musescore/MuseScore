@@ -337,6 +337,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     m_notation->viewModeChanged().onNotify(this, [this]() {
         ensureViewportInsideScrollableArea();
+
+        if (notationAutomation() && notationAutomation()->isAutomationModeEnabled()) {
+            notationAutomation()->refreshAutomationView();
+        }
     });
 
     // FIXME: only un-/re-subscribe when master notation changes
@@ -347,6 +351,12 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     notationAutomation()->automationLinesDataChanged().onNotify(this, [this]() {
         emit automationLinesDataChanged();
+    });
+
+    m_notation->undoStack()->undoRedoNotification().onNotify(this, [this]() {
+        if (notationAutomation() && notationAutomation()->isAutomationModeEnabled()) {
+            notationAutomation()->refreshAutomationView();
+        }
     });
 
     if (isMainView()) {
@@ -398,6 +408,7 @@ void AbstractNotationPaintView::onUnloadNotation(INotationPtr)
     m_notation->viewModeChanged().disconnect(this);
     notationAutomation()->automationModeEnabledChanged().disconnect(this);
     notationAutomation()->automationLinesDataChanged().disconnect(this);
+    m_notation->undoStack()->undoRedoNotification().disconnect(this);
 
     if (isMainView()) {
         disconnect(this, &QQuickPaintedItem::focusChanged, this, nullptr);
@@ -1706,4 +1717,20 @@ void AbstractNotationPaintView::requestChangeAutomationPoint(qsizetype lineIdx, 
         return;
     }
     notationAutomation()->requestChangeAutomationPoint(lineIdx, pointIdx, x, y);
+}
+
+void AbstractNotationPaintView::requestAddAutomationPoint(qsizetype lineIdx, qreal x, qreal y)
+{
+    IF_ASSERT_FAILED(notationAutomation()) {
+        return;
+    }
+    notationAutomation()->requestAddAutomationPoint(lineIdx, x, y);
+}
+
+void AbstractNotationPaintView::requestRemoveAutomationPoint(qsizetype lineIdx, qsizetype pointIdx)
+{
+    IF_ASSERT_FAILED(notationAutomation()) {
+        return;
+    }
+    notationAutomation()->requestRemoveAutomationPoint(lineIdx, pointIdx);
 }

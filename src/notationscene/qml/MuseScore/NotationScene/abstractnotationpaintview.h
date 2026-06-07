@@ -106,6 +106,8 @@ public:
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
 
     Q_INVOKABLE void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y);
+    Q_INVOKABLE void requestAddAutomationPoint(qsizetype lineIdx, qreal x, qreal y);
+    Q_INVOKABLE void requestRemoveAutomationPoint(qsizetype lineIdx, qsizetype pointIdx);
 
     qreal width() const override;
     qreal height() const override;

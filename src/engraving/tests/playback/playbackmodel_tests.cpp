@@ -29,9 +29,11 @@
 #include "mpe/tests/utils/articulationutils.h"
 #include "mpe/tests/mocks/articulationprofilesrepositorymock.h"
 
+#include "engraving/automation/iautomation.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/staff.h"
 
 #include "engraving/playback/playbackmodel.h"
 
@@ -1198,8 +1200,8 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
 TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 {
     // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
-    Score* score = ScoreRW::readScore(
-        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx");
+    std::unique_ptr<Score> score(ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx"));
 
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 1);
@@ -1228,7 +1230,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     // [GIVEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
-    model.load(score);
+    model.load(score.get());
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
@@ -1260,6 +1262,65 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [WHEN] User has clicked on the first note
     model.triggerEventsForItems({ firstNote }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
+}
+
+TEST_F(Engraving_PlaybackModelTests, Automation_Expression_Events)
+{
+    // [GIVEN] Simple piece of score (Violin, 4/4, 120 bpm, Treble Cleff)
+    std::unique_ptr<Score> score(ScoreRW::readScore(
+        PLAYBACK_MODEL_TEST_FILES_DIR + "note_entry_playback/note_entry_playback_note.mscx"));
+
+    ASSERT_TRUE(score);
+    ASSERT_FALSE(score->staves().empty());
+    ASSERT_EQ(score->parts().size(), 1);
+    ASSERT_TRUE(score->automation());
+
+    const Part* part = score->parts().front();
+    ASSERT_TRUE(part);
+
+    AutomationCurveKey key;
+    key.type = AutomationType::Expression;
+    key.staffId = score->staff(0)->id();
+
+    AutomationPoint startExpressionPoint;
+    startExpressionPoint.inValue = 0.25;
+    startExpressionPoint.outValue = 0.25;
+
+    AutomationPoint secondBeatExpressionPoint;
+    secondBeatExpressionPoint.inValue = 0.75;
+    secondBeatExpressionPoint.outValue = 0.75;
+
+    score->automation()->addPoint(key, 0, startExpressionPoint);
+    score->automation()->addPoint(key, 480, secondBeatExpressionPoint);
+
+    // [GIVEN] The articulation profiles repository will be returning required profiles
+    ON_CALL(*m_repositoryMock, defaultProfile(_)).WillByDefault(Return(m_defaultProfile));
+
+    // [WHEN] The playback model is loaded
+    PlaybackModel model(modularity::globalCtx());
+    model.profilesRepository.set(m_repositoryMock);
+    model.load(score.get());
+
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
+
+    // [THEN] Expression automation is emitted as controller-change playback events
+    ASSERT_TRUE(result.originEvents.contains(0));
+    const PlaybackEventList& startEvents = result.originEvents.at(0);
+    ASSERT_FALSE(startEvents.empty());
+    ASSERT_TRUE(std::holds_alternative<ControllerChangeEvent>(startEvents.front()));
+
+    const ControllerChangeEvent& startExpression = std::get<ControllerChangeEvent>(startEvents.front());
+    EXPECT_EQ(startExpression.type, ControllerChangeEvent::Expression);
+    EXPECT_NEAR(startExpression.val.raw(), 0.25f, 0.0001f);
+
+    ASSERT_TRUE(result.originEvents.contains(QUARTER_NOTE_DURATION));
+    const PlaybackEventList& beatTwoEvents = result.originEvents.at(QUARTER_NOTE_DURATION);
+    ASSERT_FALSE(beatTwoEvents.empty());
+    ASSERT_TRUE(std::holds_alternative<ControllerChangeEvent>(beatTwoEvents.front()));
+
+    const ControllerChangeEvent& beatTwoExpression = std::get<ControllerChangeEvent>(beatTwoEvents.front());
+    EXPECT_EQ(beatTwoExpression.type, ControllerChangeEvent::Expression);
+    EXPECT_NEAR(beatTwoExpression.val.raw(), 0.75f, 0.0001f);
 }
 
 /**

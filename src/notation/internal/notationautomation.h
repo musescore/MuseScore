@@ -46,9 +46,12 @@ public:
     muse::async::Notification automationModeEnabledChanged() const override;
 
     QVariant automationLinesData() const override;
-    muse::async::Notification automationLinesDataChanged() const override; // TODO: probably a channel specifying indices
+    muse::async::Notification automationLinesDataChanged() const override;
+    void refreshAutomationView() override;
 
     void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y) override;
+    void requestAddAutomationPoint(qsizetype lineIdx, qreal x, qreal y) override;
+    void requestRemoveAutomationPoint(qsizetype lineIdx, qsizetype pointIdx) override;
 
 private:
     enum class PointType : unsigned char {
@@ -60,8 +63,13 @@ private:
 
     void initAutomationLinesData();
 
-    QVariantList linesDataForSystem(const System* system) const;
-    QVariantList linesDataForSysStaff(const Staff* staff, const muse::RectF& sysStaffCanvasRect, int startTick, int endTick) const;
+    QVariantList linesDataForSystem(const System* system, size_t systemIdx) const;
+    QVariantMap lineDataForSysStaff(staff_idx_t staffIdx, size_t systemIdx, const System* system) const;
+    QVariantList pointsDataForSysStaff(const Staff* staff, const System* system, const muse::RectF& sysStaffCanvasRect,
+                                       int startTick, int endTick) const;
+    int tickForLineX(const QVariantMap& lineData, staff_idx_t staffIdx, qreal x, bool* ok);
+    bool refreshAutomationLinesForStaff(staff_idx_t staffIdx);
+    void notifyAutomationChanged(staff_idx_t staffIdx);
 
     mu::engraving::Score* score() const;
     mu::engraving::IAutomation* automation() const;

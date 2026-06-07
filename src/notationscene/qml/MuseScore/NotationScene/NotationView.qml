@@ -231,7 +231,15 @@ FocusScope {
                         onPointChangeRequested: function(lineIdx, pointIdx, x, y) {
                             notationView.requestChangeAutomationPoint(lineIdx, pointIdx, x, y)
                         }
-                     }
+
+                        onPointAddRequested: function(lineIdx, x, y) {
+                            notationView.requestAddAutomationPoint(lineIdx, x, y)
+                        }
+
+                        onPointRemoveRequested: function(lineIdx, pointIdx) {
+                            notationView.requestRemoveAutomationPoint(lineIdx, pointIdx)
+                        }
+                    }
 
                     NotationRegionsBeingProcessedView {
                         notationViewRect: Qt.rect(notationView.x, notationView.y, notationView.width, notationView.height)

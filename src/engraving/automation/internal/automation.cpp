@@ -30,6 +30,7 @@ using namespace mu::engraving;
 
 static const std::unordered_map<AutomationType, muse::String> AUTOMATION_TYPE_TO_STRING {
     { AutomationType::Dynamics, u"Dynamics" },
+    { AutomationType::Expression, u"Expression" },
 };
 
 static const std::unordered_map<AutomationPoint::InterpolationType, muse::String> INTERPOLATION_TYPE_TO_STRING {
@@ -211,7 +212,11 @@ void Automation::read(const muse::ByteArray& json)
         const muse::JsonObject curveObj = rootArray.at(i).toObject();
         AutomationCurveKey key;
         key.type = muse::key(AUTOMATION_TYPE_TO_STRING, curveObj.value("type").toString(), AutomationType::Unknown);
-        key.staffId = static_cast<uint64_t>(curveObj.value("staffId").toInt());
+
+        const muse::String staffId = curveObj.value("staffId").toString();
+        key.staffId = !staffId.empty()
+                      ? muse::ID(staffId.toStdString())
+                      : muse::ID(static_cast<uint64_t>(curveObj.value("staffId").toInt()));
 
         if (curveObj.contains("voiceId")) {
             key.voiceIdx = static_cast<size_t>(curveObj.value("voiceId").toInt());

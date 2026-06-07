@@ -44,6 +44,7 @@ struct AutomationPoint {
 enum class AutomationType : unsigned char {
     Unknown = 0,
     Dynamics,
+    Expression,
 };
 
 using AutomationCurve = std::map<int /*utick*/, AutomationPoint>;
