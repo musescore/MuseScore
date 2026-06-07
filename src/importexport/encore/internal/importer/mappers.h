@@ -109,6 +109,24 @@ const mu::engraving::InstrumentTemplate* findInstrumentVariant(
 // Return 0 for relative marks (a tempo, Tempo I). Return -1 if not a tempo mark.
 double encTextToTempoBps(const QString& text);
 
+// Map articulation byte to MuseScore SymIds. One byte can encode multiple glyphs
+// (e.g. 0x24=tenuto+staccato). Empty vector means no known articulation mapping.
+std::vector<mu::engraving::SymId> encArticulation2SymIds(quint8 articByte);
+
+// Map articulation byte to fingering number 1..5, or 0 if not a fingering.
+int encArticByteToFingerNumber(quint8 articByte);
+
+// True when the articulation byte is an open-string marker (importer emits Fingering "0").
+bool encArticByteIsOpenString(quint8 articByte);
+
+// String number (1..8) for the explicit string-number anchor bytes 0x39..0x40 (= byte - 0x38),
+// else 0. When a measure holds at least one, its notes with options bit 0 and no other artic byte
+// also show string numbers.
+int encArticByteToScaleStringNumber(quint8 articByte);
+
+// Returns the trill upper-neighbor interval for artic bytes 0x05/0x06/0x07 (flat/sharp/natural).
+// Returns {SECOND, AUTO} for bytes with no accidental modifier.
+mu::engraving::OrnamentInterval encArticByteToTrillInterval(quint8 articByte);
 } // namespace mu::iex::enc
 
 #endif // MU_IMPORTEXPORT_ENC_IMPORT_MAPPING_H

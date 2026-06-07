@@ -46,6 +46,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/mappers-clefs.cpp
     internal/importer/mappers-instruments.cpp
     internal/importer/mappers-tempo.cpp
+    internal/importer/mappers-articulations.cpp
     internal/importer/mappers.h
     internal/parser/ticks.cpp
     internal/parser/ticks.h
@@ -69,6 +70,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/durations.h
     internal/importer/durations.cpp
     internal/importer/emitters-note.cpp
+    internal/importer/emitters-note-artic.cpp
     internal/importer/emitters-rest.cpp
     internal/importer/emitters-tempo.cpp
     internal/importer/emitters-fill.cpp

@@ -715,6 +715,7 @@ void handleNote(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
 
     configureNoteHeadForDrumset(note, en);
     completePendingTie(ctx, ec, en, note);
+    applyNoteArticulations(ctx, note, chord, en, track, mc);
     registerTieStartIfApplicable(ctx, ec, mc, en, note);
 }
 } // namespace mu::iex::enc
