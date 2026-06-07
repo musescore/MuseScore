@@ -28,6 +28,8 @@
 #include "engraving/dom/note.h"
 #include "engraving/internal/qmimedataadapter.h"
 
+#include "engraving/editing/edittie.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 
@@ -93,7 +95,7 @@ protected:
         // Add tie to start note
         // Expect tie to be added successfully and all jump points to have an incoming tie
         m_masterScore->select(m_startNote);
-        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* t = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
 
         for (const Note* note : m_jumpPoints) {
@@ -256,7 +258,7 @@ protected:
 
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
 
         bool newTieFound = false;
         for (TieJumpPoint* jumpPoint : *jumpPointList) {
@@ -290,7 +292,7 @@ protected:
         // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->select(noteBeforeSegno);
-        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* tieBeforeSegno = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(tieBeforeSegno);
 
         Tie* startTie = addTie();
@@ -350,7 +352,7 @@ protected:
         // Expect tie to be added successfully and all jump points to have an incoming tie
         m_masterScore->select(m_startNote);
         m_masterScore->select(secondTieNote, SelectType::ADD);
-        Tie* t = m_masterScore->cmdToggleTie(); // calls startCmd/endCmd internally
+        Tie* t = EditTie::cmdToggleTie(m_masterScore); // calls startCmd/endCmd internally
         EXPECT_TRUE(t);
 
         for (const Note* note : m_jumpPoints) {
@@ -548,7 +550,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie at 4/4
     score->select(tieFromNote);
-    score->cmdToggleTie(); // calls startCmd/endCmd internally
+    EditTie::cmdToggleTie(score); // calls startCmd/endCmd internally
 
     // Clear the second measure
 
@@ -586,7 +588,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
 
     // Toggle tie again at 4/4
     score->select(tieFromNote);
-    score->cmdToggleTie(); // calls startCmd/endCmd internally
+    EditTie::cmdToggleTie(score); // calls startCmd/endCmd internally
 
     // Verify the tie is now full
     Tie* newTie = tieFromNote->tieFor();

@@ -33,6 +33,9 @@
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/tremolosinglechord.h"
+
+#include "engraving/editing/edittie.h"
+
 #include "utils/scorerw.h"
 
 using namespace mu::engraving;
@@ -71,7 +74,7 @@ TEST_F(Engraving_LVTests, LV_Double_Notehead_test)
 
     // Add a Laissez-Vibrer tie to the First Note
     score->select(c->upNote());
-    score->cmdToggleLaissezVib();
+    EditTie::cmdToggleLaissezVib(score);
 
     EXPECT_TRUE(c->upNote()->tieFor()->isLaissezVib());
     score->doLayout();

@@ -405,10 +405,6 @@ public:
     void cmdSetBeamMode(BeamMode);
     void cmdBeamSelectedRange();
     void cmdRemovePart(Part*);
-    void cmdAddTie(bool addToChord = false);
-    Tie* cmdToggleTie();
-    void cmdToggleLaissezVib();
-    static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
@@ -670,6 +666,8 @@ public:
     const SelectionFilter& selectionFilter() const { return m_selectionFilter; }
     SelectionFilter& selectionFilter() { return m_selectionFilter; }
     void setSelection(const Selection& s);
+
+    bool canReselectItem(const EngravingItem* item) const;
 
     Fraction pos();
     Measure* tick2measure(const Fraction& tick) const;
@@ -1105,8 +1103,6 @@ private:
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
     void selectRange(EngravingItem* e, staff_idx_t staffIdx);
-
-    bool canReselectItem(const EngravingItem* item) const;
 
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);

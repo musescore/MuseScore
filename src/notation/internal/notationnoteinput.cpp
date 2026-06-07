@@ -37,6 +37,7 @@
 #include "engraving/dom/utils.h"
 
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/edittie.h"
 
 #include "log.h"
 
@@ -893,7 +894,7 @@ void NotationNoteInput::addTie()
     TRACEFUNC;
 
     // Calls `startEdit` internally
-    score()->cmdAddTie();
+    mu::engraving::EditTie::cmdAddTie(score());
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();
@@ -904,7 +905,7 @@ void NotationNoteInput::addLaissezVib()
     TRACEFUNC;
 
     // Calls `startEdit` internally
-    score()->cmdToggleLaissezVib();
+    mu::engraving::EditTie::cmdToggleLaissezVib(score());
 
     notifyAboutStateChanged();
     m_interaction->checkAndShowError();
