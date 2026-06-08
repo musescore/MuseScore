@@ -62,6 +62,7 @@ public:
 
     page_idx_t pageNumber() const { return m_pageNumber; }
     void setPageNumber(page_idx_t n) { m_pageNumber = n; }
+    int getDisplayPageNumber() const;
     bool isOdd() const;
     double tm() const;              // margins in pixel
     double bm() const;
