@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,8 +31,6 @@ class NoteLineSegment final : public TextLineBaseSegment
     OBJECT_ALLOCATOR(engraving, NoteLineSegment)
     DECLARE_CLASSOF(ElementType::NOTELINE_SEGMENT)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     NoteLineSegment(Spanner* sp, System* parent);
 
@@ -47,8 +45,6 @@ class NoteLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, NoteLine)
     DECLARE_CLASSOF(ElementType::NOTELINE)
-
-    Sid getPropertyStyle(Pid) const override;
 
 public:
     NoteLine(EngravingItem* parent);
@@ -71,6 +67,10 @@ public:
     void reset() override;
 
     bool enforceMinLength() { return m_lineEndPlacement != NoteLineEndPlacement::LEFT_EDGE; }
+
+protected:
+    Sid defaultPosSid() const override;
+
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;
 };

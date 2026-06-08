@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_timesignaturepropertiesdialog.h"
 
 #include "modularity/ioc.h"
@@ -34,7 +36,7 @@ class TimeSig;
 }
 
 namespace mu::palette {
-class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties, public muse::Contextable
+class TimeSignaturePropertiesDialog : public muse::ui::WidgetDialog, public Ui::TimeSigProperties
 {
     Q_OBJECT
 
@@ -45,6 +47,8 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
     ~TimeSignaturePropertiesDialog() override;
+
+    void classBegin() override;
 
 private slots:
     void accept() override;

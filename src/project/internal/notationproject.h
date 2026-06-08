@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,12 +32,14 @@
 #include "inotationwritersregister.h"
 
 #include "engraving/engravingproject.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 #include "notation/inotationconfiguration.h"
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
 
 #include "global/iglobalconfiguration.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::engraving {
 class MscReader;
@@ -57,6 +59,8 @@ class NotationProject : public INotationProject, public muse::Contextable, publi
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
     muse::GlobalInject<INotationReadersRegister> readers;
     muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<engraving::rendering::IScoreRenderer> renderer;
+    muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IProjectMigrator> migrator = { this };
 
 public:
@@ -118,11 +122,11 @@ private:
     muse::Ret doImport(const muse::io::path_t& path, const OpenParams& params);
 
     muse::Ret saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup = true,
-                        bool createThumbnail = true, bool isAutosave = false);
+                        bool createThumbnail = true, bool isAutosave = false, const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret saveSelectionOnScore(const muse::io::path_t& path = muse::io::path_t());
     muse::Ret exportProject(const muse::io::path_t& path, const std::string& suffix);
     muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
-                     bool isAutosave = false);
+                     bool isAutosave = false, const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret makeBackup(muse::io::path_t filePath);
     muse::Ret writeProject(const muse::io::path_t& path, const engraving::write::WriteContext* ctx = nullptr);
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool createThumbnail = true,
@@ -149,6 +153,7 @@ private:
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;
+    bool m_needSave = false;
     bool m_needAutoSave = false;
     bool m_hasNonUndoStackChanges = false;
 };

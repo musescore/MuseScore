@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -361,7 +361,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         Part* p = new Part(score);
         p->setId(part->id());
         p->setInstrument(*part->instrument());
-        p->setPartName(part->partName());
         p->setPreferSharpFlat(part->preferSharpFlat());
 
         for (Staff* staff : part->staves()) {
@@ -774,12 +773,6 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
 
 static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t strack)
 {
-    // reset offset as most likely it will not fit
-    PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
-    if (f == PropertyFlags::UNSTYLED) {
-        ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
-        ne->resetProperty(Pid::OFFSET);
-    }
     ne->setTrack(strack == muse::nidx ? 0 : strack);
     ne->setScore(score);
 }
@@ -1738,11 +1731,13 @@ void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t sta
 std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts, MasterScore* score)
 {
     StringList allExcerptLowerNames;
+    allExcerptLowerNames.reserve(score->excerpts().size() + parts.size());
     for (const Excerpt* e : score->excerpts()) {
         allExcerptLowerNames.push_back(e->name().toLower());
     }
 
     std::vector<Excerpt*> result;
+    result.reserve(parts.size());
 
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(score);

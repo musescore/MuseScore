@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -1757,6 +1757,23 @@ bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* seco
     return segEndsWithBl && adjacentAndSecondShareSegment;
 }
 
+PartialLyricsLine* findPrevPartialLyricsLineDash(Lyrics* lyrics)
+{
+    Score* score = lyrics->score();
+    for (auto sp : score->spannerMap().findOverlapping(lyrics->tick().ticks(), lyrics->tick().ticks())) {
+        if (!sp.value->isPartialLyricsLine() || sp.value->track() != lyrics->track()) {
+            continue;
+        }
+        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
+        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
+            continue;
+        }
+        return partialLine;
+    }
+
+    return nullptr;
+}
+
 MeasureBeat findBeat(const Score* score, int tick)
 {
     MeasureBeat measureBeat;
@@ -1815,16 +1832,11 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
         uniqueMeasures = toMeasureRepeat(dropElement)->numMeasures() == 1;
         break;
 
-    // Add these elements only once per staff in range selections, else once per staff per measure:
-    case ElementType::SPACER:
-    case ElementType::STAFFTYPE_CHANGE:
-        uniqueStaves = true;
-        uniqueMeasures = !sel.isRange();
-        break;
-
     // Add these elements once per measure in list selections, else once total:
     case ElementType::MARKER:
     case ElementType::JUMP:
+    case ElementType::SPACER:  //! HACK - these should be applied "per staff" in range selections (see issue #33486)
+    case ElementType::STAFFTYPE_CHANGE:  //! HACK - these should be applied "per staff" in range selections (see issue #33486)
     case ElementType::VBOX:
     case ElementType::HBOX:
     case ElementType::TBOX:
@@ -1845,10 +1857,7 @@ std::vector<EngravingItem*> filterTargetElements(const Selection& sel, Engraving
     case ElementType::ACTION_ICON: {
         const ActionIconType actionType = toActionIcon(dropElement)->actionType();
         switch (actionType) {
-        case ActionIconType::STAFF_TYPE_CHANGE:
-            uniqueStaves = true;
-            uniqueMeasures = !sel.isRange();
-            break;
+        case ActionIconType::STAFF_TYPE_CHANGE: //! HACK - these should be applied "per staff" in range selections (see issue #33486)
         case ActionIconType::VFRAME:
         case ActionIconType::HFRAME:
         case ActionIconType::TFRAME:

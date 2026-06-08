@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -44,6 +44,8 @@ enum class CommandType : signed char {
     AddPartToExcerpt,
     SetSoloist,
     ChangePart,
+    ConnectSharedPart,
+    DisconnectSharedPart,
 
     // Staves
     InsertStaff,
@@ -65,6 +67,8 @@ enum class CommandType : signed char {
     // Instruments
     ChangeInstrumentShort,
     ChangeInstrumentLong,
+    ChangeInstrumentGroupOptions,
+    ChangeInstrumentNumber,
     ChangeInstrument,
     ChangeDrumset,
 
@@ -137,7 +141,6 @@ enum class CommandType : signed char {
 
     // Voices
     ExchangeVoice,
-    CloneVoice,
 
     // Excerpts
     AddExcerpt,
@@ -177,7 +180,6 @@ public:
     virtual void undo(EditData*);
     virtual void redo(EditData*);
     void appendChild(UndoCommand* cmd) { m_childCommands.push_back(cmd); }
-    UndoCommand* removeChild() { return muse::takeLast(m_childCommands); }
     size_t childCount() const { return m_childCommands.size(); }
     void unwind();
     const std::vector<UndoCommand*>& commands() const { return m_childCommands; }
@@ -276,7 +278,6 @@ public:
 
     void pushAndPerform(UndoCommand*, EditData*);
     void pushWithoutPerforming(UndoCommand*);
-    void pop();
 
     bool canUndo() const { return m_currentIndex > 0; }
     bool canRedo() const { return m_currentIndex < m_macroList.size(); }

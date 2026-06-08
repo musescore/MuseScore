@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,16 +26,20 @@
 #include <qqmlintegration.h>
 #include <QQmlParserStatus>
 
+#include "app_config.h"
+
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
 
 #include "interactive/iinteractive.h"
+#include "media/ivideoencoderresolver.h"
 #include "context/iglobalcontext.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/videoexport/ivideoexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 #include "importexport/lyricsexport/ilyricsexportconfiguration.h"
 #include "importexport/mnx/imnxconfiguration.h"
@@ -74,6 +78,8 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
         bool svgTransparentBackground READ svgTransparentBackground WRITE setSvgTransparentBackground NOTIFY svgTransparentBackgroundChanged)
     Q_PROPERTY(bool svgIllustratorCompat READ svgIllustratorCompat WRITE setSvgIllustratorCompat NOTIFY svgIllustratorCompatChanged FINAL)
 
+    Q_PROPERTY(QString videoResolution READ videoResolution WRITE setVideoResolution NOTIFY videoResolutionChanged)
+
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
     Q_PROPERTY(QVariantList availableSampleFormats READ availableSampleFormats NOTIFY availableSampleFormatsChanged)
@@ -98,6 +104,8 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
 
     Q_PROPERTY(bool applyWatermark READ applyWatermark WRITE setApplyWatermark NOTIFY applyWatermarkChanged)
+    Q_PROPERTY(bool isFFmpegAvailable READ isFFmpegAvailable NOTIFY isFFmpegAvailableChanged)
+    Q_PROPERTY(QString ffmpegDir READ ffmpegDir WRITE setFFmpegDir NOTIFY ffmpegDirChanged)
 
     QML_ELEMENT
 
@@ -108,8 +116,10 @@ class ExportDialogModel : public QAbstractListModel, public QQmlParserStatus, pu
     muse::GlobalInject<iex::lrcexport::ILyricsExportConfiguration> lrcConfiguration;
     muse::GlobalInject<iex::mnxio::IMnxConfiguration> mnxConfiguration;
     muse::GlobalInject<IProjectConfiguration> configuration;
+    muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::imagesexport::IImagesExportConfiguration> imageExportConfiguration;
     muse::GlobalInject<INotationWritersRegister> writers;
+    muse::GlobalInject<muse::media::IVideoEncoderResolver> videoEncoderResolver;
     muse::ContextInject<muse::IInteractive> interactive = { this };
     muse::ContextInject<context::IGlobalContext> context = { this };
     muse::ContextInject<IExportProjectScenario> exportProjectScenario = { this };
@@ -162,6 +172,10 @@ public:
 
     bool svgIllustratorCompat() const;
     void setSvgIllustratorCompat(bool compat);
+
+    Q_INVOKABLE QStringList availableVideoResolutions() const;
+    QString videoResolution() const;
+    void setVideoResolution(const QString& resolution);
 
     Q_INVOKABLE QList<int> availableSampleRates() const;
     int sampleRate() const;
@@ -217,6 +231,10 @@ public:
     bool applyWatermark() const;
     void setApplyWatermark(bool apply);
 
+    bool isFFmpegAvailable() const;
+    QString ffmpegDir() const;
+    void setFFmpegDir(const QString& dir);
+
     Q_INVOKABLE void updateExportInfo();
 
 signals:
@@ -235,6 +253,8 @@ signals:
 
     void svgTransparentBackgroundChanged(bool transparent);
     void svgIllustratorCompatChanged(bool compat);
+
+    void videoResolutionChanged(const QString& resolution);
 
     void availableSampleRatesChanged();
     void sampleRateChanged(int sampleRate);
@@ -261,6 +281,9 @@ signals:
 
     void applyWatermarkChanged(bool apply);
 
+    void isFFmpegAvailableChanged();
+    void ffmpegDirChanged();
+
 private:
     void classBegin() override;
     void componentComplete() override {}
@@ -279,12 +302,17 @@ private:
 
     void selectSavedNotations();
 
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
+    void disableVideoExportSettingMode();
+    void updateVideoExportSettingMode();
+#endif
+
     QList<notation::INotationPtr> m_notations {};
     QItemSelectionModel* m_selectionModel = nullptr;
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
-    muse::io::path_t m_exportPath;
+    muse::io::path_t m_exportDirPath;
     project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
     bool m_applyWatermark = true;
 };

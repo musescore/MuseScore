@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -743,6 +743,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             tuple = Factory::createTuplet(measure);
             tuple->setParent(measure);
             tuple->setTrack(cr->track());
+            tuple->setTick(cr->tick());
             tuple->setBaseLen(l);
             tuple->setRatio(Fraction(3, 2));
             tuple->setTicks(l * tuple->ratio().denominator());
@@ -790,7 +791,6 @@ void PowerTab::addToScore(ptSection& sec)
                 std::string n = "part " + std::to_string(i + 1);
                 staffName = muse::String::fromStdString(n);
             }
-            part->setPartName(staffName);
             part->setPlainLongName(staffName);
 
             std::vector<int> reverseStr;

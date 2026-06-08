@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -83,6 +83,7 @@ class Image;
 class Instrument;
 class InstrChannel;
 class InstrumentChange;
+class InstrumentLabel;
 
 class Jump;
 
@@ -129,7 +130,7 @@ class SLine;
 class Spanner;
 class Spacer;
 class Staff;
-class StaffName;
+class StaffLabel;
 class StaffState;
 class StaffText;
 class StaffTextBase;
@@ -260,6 +261,7 @@ public:
     static void write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Parenthesis* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Part* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const SharedPart* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PartialTie* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Pedal* item, XmlWriter& xml, WriteContext& ctx);
@@ -275,7 +277,6 @@ public:
     static void write(const Slur* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Spacer* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Staff* item, XmlWriter& xml, WriteContext& ctx);
-    static void write(const StaffName& item, XmlWriter& xml);
     static void write(const StaffState* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffText* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const StaffType* item, XmlWriter& xml, WriteContext& ctx);
@@ -320,6 +321,9 @@ public:
     static void writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
     static void writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const StaffLabel& item, XmlWriter& xml);
+    static void write(const InstrumentLabel& item, XmlWriter& xml);
+
 private:
 
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
@@ -333,6 +337,8 @@ private:
 
     static void writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
     static void writeChordRestBeam(const ChordRest* item, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeProperties(const Part* part, XmlWriter& xml, WriteContext& ctx);
 
     static void writeProperties(const Rest* item, XmlWriter& xml, WriteContext& ctx);
 
@@ -362,6 +368,10 @@ private:
 
     static void writeSystemLock(const SystemLock* systemLock, XmlWriter& xml);
 
-    static void lineBreakToTag(String& str);
+    static muse::String lineBreakToTag(const String& str);
+    static void writeProperties(const StaffLabel& item, XmlWriter& xml);
+    static void writeProperties(const InstrumentLabel& item, XmlWriter& xml);
+
+    static void write(const BracketItem* item, XmlWriter& xml);
 };
 }

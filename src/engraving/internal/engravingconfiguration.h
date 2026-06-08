@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
-#include "accessibility/iaccessibilityconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 
 #include "../iengravingconfiguration.h"
@@ -37,7 +36,6 @@ class EngravingConfiguration : public IEngravingConfiguration, public muse::asyn
 {
     muse::GlobalInject<muse::IGlobalConfiguration> globalConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
-    muse::GlobalInject<muse::accessibility::IAccessibilityConfiguration> accessibilityConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
 
 public:
@@ -73,8 +71,6 @@ public:
     Color fontPrimaryColor() const override;
     Color voiceColor(voice_idx_t voiceIdx) const override;
 
-    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
-
     Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
     void setSelectionColor(voice_idx_t voiceIndex, Color color) override;
     muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const override;
@@ -107,8 +103,6 @@ public:
     void setDebuggingOptions(const DebuggingOptions& options) override;
     muse::async::Notification debuggingOptionsChanged() const override;
 
-    bool isAccessibleEnabled() const override;
-
     bool doNotSaveEIDsForBackCompat() const override;
     void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
 
@@ -122,6 +116,7 @@ public:
     bool specificSlursLayoutWorkaround() const override;
     bool preferSameStringForTranspose() const override;
     void setPreferSameStringForTranspose(bool preferSameString) override;
+    bool keepDeadNotesUnchangedOnTranspose() const override;
 
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;

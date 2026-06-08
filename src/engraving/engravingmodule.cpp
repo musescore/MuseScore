@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,6 +31,7 @@
 
 #ifndef ENGRAVING_NO_INTERNAL
 #include "internal/engravingconfiguration.h"
+#include "internal/engravingcontextconfiguration.h"
 #include "internal/engravingfontsprovider.h"
 #include "internal/palettescoreprovider.h"
 #endif
@@ -281,6 +282,7 @@ void EngravingContext::registerExports()
     m_paletteScoreProvider = std::make_shared<PaletteScoreProvider>(iocContext());
     ioc()->registerExport<IPaletteScoreProvider>(mname, m_paletteScoreProvider);
     ioc()->registerExport<IEngravingElementsProvider>(mname, new EngravingElementsProvider());
+    ioc()->registerExport<IEngravingContextConfiguration>(mname, new EngravingContextConfiguration(iocContext()));
 #endif
 }
 

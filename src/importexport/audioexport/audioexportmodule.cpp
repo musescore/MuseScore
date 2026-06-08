@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,6 +28,7 @@
 #include "internal/wavewriter.h"
 #include "internal/oggwriter.h"
 #include "internal/flacwriter.h"
+#include "internal/aacwriter.h"
 
 #include "internal/audioexportconfiguration.h"
 
@@ -58,6 +59,7 @@ void AudioExportModule::resolveImports()
         writers->reg({ "mp3" }, std::make_shared<Mp3Writer>(globalCtx()));
         writers->reg({ "ogg" }, std::make_shared<OggWriter>(globalCtx()));
         writers->reg({ "flac" }, std::make_shared<FlacWriter>(globalCtx()));
+        writers->reg({ "aac" }, std::make_shared<AacWriter>(globalCtx()));
     }
 }
 

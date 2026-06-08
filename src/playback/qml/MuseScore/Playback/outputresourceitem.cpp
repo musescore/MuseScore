@@ -2,6 +2,8 @@
 
 #include <QList>
 
+#include "audio/common/audioutils.h"
+
 #include "log.h"
 #include "translation.h"
 #include "stringutils.h"
@@ -97,7 +99,7 @@ void OutputResourceItem::handleMenuItem(const QString& menuItemId)
     } else if (menuItemId == GET_MORE_EFFECTS) {
         const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
         const QString urlParams("plugins?utm_source=mss-mixer-fx&utm_medium=mh-fx&utm_campaign=mss-mixer-fx-mainpage");
-        interactive()->openUrl(url + urlParams);
+        platformInteractive()->openUrl(url + urlParams);
         return;
     }
 
@@ -181,7 +183,9 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
     requestToCloseNativeEditorView();
 
     audio::AudioFxParams newParams = m_currentFxParams;
+    newParams.categories = audio::audioFxCategoriesFromString(newMeta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
     newParams.resourceMeta = newMeta;
+    newParams.configuration.clear();
     newParams.active = newMeta.isValid();
 
     setParams(newParams);

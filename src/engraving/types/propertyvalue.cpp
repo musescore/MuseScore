@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -188,6 +188,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return static_cast<int>(value<MeasureNumberPlacement>());
     case P_TYPE::CAPO_TRANSPOSE_MODE:  return static_cast<int>(value<CapoParams::TransposeMode>());
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return static_cast<int>(value<InstrumentNamesAlign>());
+    case P_TYPE::INSTRUMENT_NAMES_FORMAT: return static_cast<int>(value<InstrumentNamesFormat>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -311,6 +312,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::MEASURE_NUMBER_PLACEMENT: return PropertyValue(MeasureNumberPlacement(v.toInt()));
     case P_TYPE::CAPO_TRANSPOSE_MODE: return PropertyValue(CapoParams::TransposeMode(v.toInt()));
     case P_TYPE::INSTRUMENT_NAMES_ALIGN: return PropertyValue(InstrumentNamesAlign(v.toInt()));
+    case P_TYPE::INSTRUMENT_NAMES_FORMAT: return PropertyValue(InstrumentNamesFormat(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

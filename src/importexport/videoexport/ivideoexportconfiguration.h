@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,6 +23,7 @@
 #define MU_IMPORTEXPORT_IVIDEOEXPORTCONFIGURATION_H
 
 #include <string>
+#include <vector>
 #include <optional>
 
 #include "modularity/imoduleinterface.h"
@@ -47,6 +48,7 @@ public:
 
     virtual std::string resolution() const = 0;
     virtual void setResolution(std::optional<std::string> resolution) = 0;
+    virtual const std::vector<std::string>& availableResolutions() const = 0;
 
     virtual int fps() const = 0;
     virtual void setFps(std::optional<int> fps) = 0;

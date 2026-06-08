@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -188,6 +188,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
             HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
+            playablePitches.reserve(playableTpcs.size());
             for (int t : playableTpcs) {
                 playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
             }

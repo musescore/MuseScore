@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,7 @@ import Muse.UiComponents
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0
 import MuseScore.InstrumentsScene 1.0
-import MuseScore.Inspector
+import MuseScore.PropertiesPanel
 
 Item {
 
@@ -85,7 +85,7 @@ Item {
 
             }
 
-            InspectorForm {
+            PropertiesPanel {
                 notationView: notationView.paintView
             }
         }

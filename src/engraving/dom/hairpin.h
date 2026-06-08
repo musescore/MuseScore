@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -70,13 +70,13 @@ public:
     bool hasVoiceAssignmentProperties() const override { return spanner()->hasVoiceAssignmentProperties(); }
 
     EngravingItem* findElementToSnapBefore(bool ignoreInvisible = true) const;
-    EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true) const;
+    EngravingItem* findElementToSnapAfter(bool ignoreInvisible = true, bool requirePlayable = false) const;
 
     void endDragGrip(EditData& ed) override;
 
 private:
     TextBase* findStartDynamicOrExpression(bool ignoreInvisible = true) const;
-    TextBase* findEndDynamicOrExpression(bool ignoreInvisible = true) const;
+    TextBase* findEndDynamicOrExpression(bool ignoreInvisible = true, bool requirePlayable = false) const;
 
     void startDragGrip(EditData&) override;
     void dragGrip(EditData&) override;
@@ -178,6 +178,9 @@ public:
 
     int subtype() const override { return int(m_hairpinType); }
     TranslatableString subtypeUserName() const override;
+
+protected:
+    Sid defaultPosSid() const override;
 
 private:
 

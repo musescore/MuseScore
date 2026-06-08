@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -1753,7 +1753,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     tuplet->setRatio(Fraction(container->getTuplet(), container->getSpace()));
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     tuplet->setBaseLen(duration);
-                    // tuplet->setTick(tick);
+                    tuplet->setTick(Fraction::fromTicks(tick));
                     tuplet->setParent(measure);
                     // measure->add(tuplet);
                 }

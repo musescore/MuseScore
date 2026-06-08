@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2024 MuseScore Limited
+# Copyright (C) 2024 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -19,29 +19,42 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 if (APPLE)
-    cmake_minimum_required(VERSION 3.26...3.31) # Min. required for Swift-C++ interop
+    # Required to prevent issues with incremental builds of MuseScoreQuickLookPreviewExtension
+    # (https://github.com/musescore/MuseScore/pull/33554)
+    cmake_minimum_required(VERSION 3.31)
 else()
-    cmake_minimum_required(VERSION 3.22...3.31) # Min. required by Qt 6.10
+    # Required to use C++20 modules in the future.
+    cmake_minimum_required(VERSION 3.28)
 endif()
 
-project(MuseScore LANGUAGES C CXX)
+project(MuseScoreStudio LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(MUSE_FRAMEWORK_PATH "${CMAKE_CURRENT_LIST_DIR}/muse" CACHE PATH "Path to muse framework")
+
+set(MUSE_FRAMEWORK_SRC_PATH ${MUSE_FRAMEWORK_PATH}/framework)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts
     ${CMAKE_CURRENT_LIST_DIR}/buildscripts/cmake
-    ${CMAKE_CURRENT_LIST_DIR}/src/framework/cmake
+    ${MUSE_FRAMEWORK_SRC_PATH}/cmake
+    ${MUSE_FRAMEWORK_PATH}/buildscripts/cmake
     ${CMAKE_MODULE_PATH}
     )
 
-set(MUSE_FRAMEWORK_PATH ${CMAKE_CURRENT_LIST_DIR})
-set(MUSE_FRAMEWORK_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/src/framework)
+###########################################
+# Check compiler version
+###########################################    
+message(STATUS "C:   ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "CXX: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")    
+
 
 ###########################################
 # Setup option and build settings
@@ -96,14 +109,14 @@ option(MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE "Build importexport audioexport modul
 option(MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE "Build importexport imagesexport module" ON)
 option(MUE_BUILD_IMPEXP_GUITARPRO_MODULE "Build importexport guitarpro module" ON)
 option(MUE_BUILD_IMPEXP_MEI_MODULE "Build importexport mei module" ON)
-option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" OFF)
+option(MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE "Build importexport videoexport module" ON)
 option(MUE_BUILD_IMPEXP_TABLEDIT_MODULE "Build importexport tabledit module" ON)
 option(MUE_BUILD_IMPEXP_LYRICS_MODULE "Build importexport lyrics module" ON)
 
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 
-option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(MUE_BUILD_INSPECTOR_QML "Build inspector QML" ${MUE_BUILD_INSPECTOR_MODULE})
+option(MUE_BUILD_PROPERTIESPANEL_MODULE "Build propertiespanel module" ON)
+option(MUE_BUILD_PROPERTIESPANEL_QML "Build propertiespanel QML" ${MUE_BUILD_PROPERTIESPANEL_MODULE})
 
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON) 
 option(MUE_BUILD_INSTRUMENTSSCENE_QML "Build instruments scene QML" ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})
@@ -144,6 +157,8 @@ option(MUE_RUN_WINDEPLOYQT "Run windeployqt" ON)
 
 # === Tests ===
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
+set(APP_WORKSPACE_CONFIG_FILE "${CMAKE_CURRENT_LIST_DIR}/src/app/configs/workspaces.cfg")
+set(APP_BUILTIN_WORKSPACES_DIR "${CMAKE_CURRENT_LIST_DIR}/share/workspaces")
 
 # === Compile ===
 set(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "" CACHE PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)")
@@ -155,18 +170,9 @@ option(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in d
 
 # === System libraries ===
 # Important for the maintainers of Linux distributions
-option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
-option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
-option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
-option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
-option(MUE_COMPILE_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
-option(MUE_COMPILE_USE_SYSTEM_PUGIXML "Try use system pugixml" OFF)
-option(MUE_COMPILE_USE_SYSTEM_LAME "Try use system lame" OFF)
-option(MUE_COMPILE_USE_SYSTEM_UTF8CPP "Try use system utf8cpp" OFF)
+option(MSS_USE_SYSTEM_MNXDOM "Try use system mnxdom" OFF)
 
 # === Debug ===
-option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
@@ -182,15 +188,13 @@ set(QT_ADD_WEBSOCKET OFF)
 set(QT_QPROCESS_SUPPORTED ON)
 set(QT_CONCURRENT_SUPPORTED ON)
 set(QT_NO_PRIVATE_MODULE_WARNING ON)
+set(MUSE_MODULE_MULTIWINDOWS_SINGLEPROC_MODE ON)
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
 else()
     include(SetupConfigure)
 endif()
-
-set(MUSE_FRAMEWORK_SRC_PATH ${PROJECT_SOURCE_DIR}/src/framework)
-set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
 ###########################################
 # Setup compiler and build environment
@@ -207,13 +211,15 @@ endif(MUSE_COMPILE_USE_COMPILER_CACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
+set(FETCHCONTENT_QUIET OFF)
+set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
 
 if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
 
     # These are included in the precompiled dependencies, so let's use them from there
-    set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
-    set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
+    set(MUSE_USE_SYSTEM_FLAC ON)
+    set(MUSE_USE_SYSTEM_OPUS ON)
 endif()
 
 include(SetupQt6)
@@ -221,6 +227,10 @@ include(SetupQt6)
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
 endif(MUE_DOWNLOAD_SOUNDFONT)
+
+set(FETCHCONTENT_BASE_DIR ${PROJECT_BINARY_DIR}/_deps)
+
+include(SetupDependencies)
 
 ###########################################
 # Add source tree
@@ -231,6 +241,7 @@ if (MUSE_ENABLE_UNIT_TESTS)
 endif()
 
 add_subdirectory(share)
+add_subdirectory(${MUSE_FRAMEWORK_SRC_PATH})
 add_subdirectory(src)
 
 

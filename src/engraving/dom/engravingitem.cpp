@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -192,14 +192,19 @@ EngravingItemList EngravingItem::childrenItems(bool all) const
     return list;
 }
 
+const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+{
+    return score()->configuration.get();
+}
+
 const muse::modularity::ContextPtr& EngravingItem::iocContext() const
 {
     return score()->iocContext();
 }
 
-const std::shared_ptr<IEngravingConfiguration>& EngravingItem::configuration() const
+const std::shared_ptr<IEngravingContextConfiguration>& EngravingItem::contextConfiguration() const
 {
-    return score()->configuration.get();
+    return score()->contextConfiguration.get();
 }
 
 const std::shared_ptr<rendering::IScoreRenderer>& EngravingItem::renderer() const
@@ -284,6 +289,29 @@ bool EngravingItem::isInteractionAvailable() const
 bool EngravingItem::offsetIsSpatiumDependent() const
 {
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
+}
+
+Sid EngravingItem::defaultPosSid() const
+{
+    return Sid::NOSTYLE;
+}
+
+PointF EngravingItem::defaultPos() const
+{
+    Sid styleId = defaultPosSid();
+
+    if (styleId == Sid::NOSTYLE) {
+        return PointF();
+    }
+
+    PointF offsetPos = style().value(styleId).value<PointF>();
+    if (offsetIsSpatiumDependent()) {
+        offsetPos *= spatium();
+    } else {
+        offsetPos *= DPMM;
+    }
+
+    return offsetPos;
 }
 
 PlacementV EngravingItem::placement() const
@@ -1297,6 +1325,54 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+void EngravingItem::connectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    if (originItem->m_layoutData->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->type() == originItem->type()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(sharedItem->m_layoutData->m_sharedItem == nullptr && originItem->m_layoutData->m_originItems.empty()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(!(originItem->m_layoutData->m_sharedItem && originItem->m_layoutData->m_sharedItem != sharedItem)) {
+        disconnectSharedItem(originItem->m_layoutData->m_sharedItem, originItem);
+    }
+
+    originItem->m_layoutData->m_sharedItem = sharedItem;
+
+    std::vector<EngravingItem*>& curOriginItems = sharedItem->m_layoutData->m_originItems;
+    auto it = std::lower_bound(curOriginItems.begin(), curOriginItems.end(), originItem, [](EngravingItem* item1, EngravingItem* item2) {
+        return item1->track() < item2->track();
+    });
+
+    curOriginItems.insert(it, originItem);
+}
+
+void EngravingItem::disconnectSharedItem(EngravingItem* sharedItem, EngravingItem* originItem)
+{
+    IF_ASSERT_FAILED(originItem->m_layoutData->m_sharedItem == sharedItem) {
+        return;
+    }
+
+    originItem->m_layoutData->m_sharedItem = nullptr;
+
+    DO_ASSERT(muse::remove(sharedItem->m_layoutData->m_originItems, originItem));
+}
+
+void EngravingItem::disconnectAllOriginItems(EngravingItem* sharedItem)
+{
+    for (EngravingItem* originItem : sharedItem->originItems()) {
+        originItem->m_layoutData->m_sharedItem = nullptr;
+    }
+
+    sharedItem->m_layoutData->m_originItems.clear();
+}
+
 bool EngravingItem::isBefore(const EngravingItem* item) const
 {
     if (!item) {
@@ -1365,8 +1441,6 @@ bool EngravingItem::elementAppliesToTrack(const track_idx_t refTrack) const
 void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirection)
 {
     PlacementV oldPlacement = placement();
-    bool offsetIsStyled = isStyled(Pid::OFFSET);
-
     PlacementV newPlacement = PlacementV::BELOW;
 
     DirectionV internalDirectionProperty = getProperty(Pid::DIRECTION).value<DirectionV>();
@@ -1419,9 +1493,6 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
 
     if (newPlacement != oldPlacement) {
         setPlacement(newPlacement);
-        if (offsetIsStyled) {
-            resetProperty(Pid::OFFSET);
-        }
     }
 }
 
@@ -1580,10 +1651,6 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        PropertyValue v = EngravingObject::propertyDefault(pid);
-        if (v.isValid()) {        // if it's a styled property
-            return v;
-        }
         return PropertyValue::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
@@ -2598,7 +2665,7 @@ void EngravingItem::setVisible(bool f)
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 void EngravingItem::initAccessibleIfNeed()
 {
-    if (!configuration()->isAccessibleEnabled()) {
+    if (!contextConfiguration() || !contextConfiguration()->isAccessibleEnabled()) {
         return;
     }
 

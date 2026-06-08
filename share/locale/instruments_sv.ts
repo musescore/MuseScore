@@ -4213,7 +4213,7 @@
         <source>Single-reed, conical bore instrument used in Hungarian and Romanian folk music.</source>
         <comment>tarogato description</comment>
         <extracomment>description for Tarogato; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Koniskt borrat instrument med enkelt rörblad. Används i Ungersk- och Rumänsk folkmusik.</translation>
+        <translation>Koniskt borrat instrument med enkelt rörblad. Används i ungersk och rumänsk folkmusik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1550"/>

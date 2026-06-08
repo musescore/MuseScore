@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -60,11 +60,21 @@ void InstrumentsActionsController::changeInstrument()
         return;
     }
 
-    const mu::engraving::EngravingItem* element = master->notation()->interaction()->selection()->element();
-    const mu::engraving::InstrumentChange* instrumentChange = element ? mu::engraving::toInstrumentChange(element) : nullptr;
-    if (!instrumentChange) {
+    INotationPtr notation = context()->currentNotation();
+    IF_ASSERT_FAILED(notation) {
         return;
     }
+
+    const mu::engraving::EngravingItem* element = notation->interaction()->hitElementContext().element;
+    if (!element) {
+        element = notation->interaction()->selection()->element();
+    }
+
+    if (!element || !element->isInstrumentChange()) {
+        return;
+    }
+
+    const mu::engraving::InstrumentChange* instrumentChange = mu::engraving::toInstrumentChange(element);
 
     InstrumentKey key;
     key.instrumentId = instrumentChange->instrument()->id();

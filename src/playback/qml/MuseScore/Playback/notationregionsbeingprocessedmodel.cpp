@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -270,9 +270,7 @@ void NotationRegionsBeingProcessedModel::startListeningToProgress(const TrackId 
         return;
     }
 
-    const TrackSequenceId sequenceId = playbackController()->currentTrackSequenceId();
-
-    playback()->inputProcessingProgress(sequenceId, trackId)
+    playback()->inputProcessingProgress(trackId)
     .onResolve(this, [this, instrumentTrackId](InputProcessingProgress inputProgress) {
         if (inputProgress.isStarted) {
             onProgressStarted(instrumentTrackId);

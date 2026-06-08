@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -2236,7 +2236,6 @@ void MusicXmlParserPass2::part()
     String partName = mxmlPart.getName();
     setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments, partName);
     partName = replacePartNameAccidentals(partName);
-    part->setPartName(partName);
     const bool inconsistentVisibility = mxmlPart.getPrintName() != mxmlPart.getPrintAbbr();
     if (!isLikelyIncorrectPartName(partName)) {
         part->setLongNameAll(partName);
@@ -2252,12 +2251,7 @@ void MusicXmlParserPass2::part()
     } else {
         part->setPlainShortNameAll(u"");
     }
-    // set the parts first instrument
-    // try to prevent an empty track name
-    if (part->partName() == "") {
-        String instrId = m_pass1.getInstrList(id).instrument(Fraction(0, 1));
-        part->setPartName(muse::value(instruments, instrId).name);
-    }
+
     if (m_pass1.nparts() == 1 && mxmlPart.getPrintName() && mxmlPart.getPrintAbbr()) {
         m_score->style().set(Sid::hideInstrumentNameIfOneInstrument, false);
     }
@@ -5131,7 +5125,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             } else if (lineEnd == "both") {
                 textLine->setBeginHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
-                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+                textLine->setBeginHookType(HookType::ARROW_FILLED);
             } else if (lineEnd == "none") {
                 textLine->setBeginHookType(HookType::NONE);
             }
@@ -5192,7 +5186,7 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
             } else if (lineEnd == "both") {
                 textLine->setEndHookType(HookType::HOOK_90T);
             } else if (lineEnd == "arrow") {
-                m_logger->logError(String(u"line-end \"arrow\" not supported"));
+                textLine->setEndHookType(HookType::ARROW_FILLED);
             } else if (lineEnd == "none") {
                 textLine->setEndHookType(HookType::NONE);
             }
@@ -6078,31 +6072,7 @@ void MusicXmlParserPass2::key(const String& partId, Measure* measure, const Frac
             key.setConcertKey(cKey);
             key.setKey(tKey);
         } else if (m_e.name() == "mode") {
-            String m = m_e.readText();
-            if (m == u"none") {
-                key.setCustom(true);
-                key.setMode(KeyMode::NONE);
-            } else if (m == u"major") {
-                key.setMode(KeyMode::MAJOR);
-            } else if (m == u"minor") {
-                key.setMode(KeyMode::MINOR);
-            } else if (m == u"dorian") {
-                key.setMode(KeyMode::DORIAN);
-            } else if (m == u"phrygian") {
-                key.setMode(KeyMode::PHRYGIAN);
-            } else if (m == u"lydian") {
-                key.setMode(KeyMode::LYDIAN);
-            } else if (m == u"mixolydian") {
-                key.setMode(KeyMode::MIXOLYDIAN);
-            } else if (m == u"aeolian") {
-                key.setMode(KeyMode::AEOLIAN);
-            } else if (m == u"ionian") {
-                key.setMode(KeyMode::IONIAN);
-            } else if (m == u"locrian") {
-                key.setMode(KeyMode::LOCRIAN);
-            } else {
-                m_logger->logError(String(u"Unsupported mode '%1'").arg(m), &m_e);
-            }
+            key.setMode(TConv::fromXml(m_e.readText().toAscii().constChar(), KeyMode::UNKNOWN));
         } else if (m_e.name() == "cancel") {
             skipLogCurrElem();        // TODO ??
         } else if (m_e.name() == "key-step") {
@@ -6615,22 +6585,8 @@ static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
  Set the notehead parameters.
  */
 
-static void setNoteHead(Note* note, const Color noteheadColor, const bool noteheadParentheses, const String& noteheadFilled)
+static void setNoteHead(Note* note, const String& noteheadFilled)
 {
-    Score* const score = note->score();
-
-    colorItem(note, noteheadColor);
-    if (noteheadParentheses) {
-        Symbol* s = new Symbol(note);
-        s->setSym(SymId::noteheadParenthesisLeft);
-        s->setParent(note);
-        score->addElement(s);
-        s = new Symbol(note);
-        s->setSym(SymId::noteheadParenthesisRight);
-        s->setParent(note);
-        score->addElement(s);
-    }
-
     if (noteheadFilled == u"no") {
         note->setHeadType(NoteHeadType::HEAD_HALF);
     } else if (noteheadFilled == u"yes") {
@@ -7260,7 +7216,11 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
             c->add(stem);
         }
-        setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+        setNoteHead(note, noteheadFilled);
+        if (noteheadParentheses) {
+            note->setParenthesesMode(ParenthesesMode::BOTH);
+        }
+        colorItem(note, noteheadColor);
         note->setVisible(hasHead && printObject);
         stem->setVisible(printObject);
 
@@ -9225,6 +9185,8 @@ static void addChordLine(const Notation& notation, Note* note,
                          MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
+    const String lineType = notation.attribute(u"line-type");
+    const String lineShape = notation.attribute(u"line-shape");
     if (!chordLineType.empty()) {
         if (note) {
             ChordLine* const chordline = Factory::createChordLine(note->chord());
@@ -9236,6 +9198,14 @@ static void addChordLine(const Notation& notation, Note* note,
                 chordline->setChordLineType(ChordLineType::PLOP);
             } else if (chordLineType == u"scoop") {
                 chordline->setChordLineType(ChordLineType::SCOOP);
+            }
+            if (lineShape == u"straight") {
+                chordline->setStraight(true);
+            }
+            if (lineType == u"wavy") {
+                chordline->setWavy(true);
+            } else if (!lineType.empty() && lineType != u"solid") {
+                logger->logError(String(u"unsupported line-type: %1").arg(lineType), xmlreader);
             }
             chordline->setVisible(notation.visible());
             colorItem(chordline, Color::fromString(notation.attribute(u"color")));

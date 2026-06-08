@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -1139,10 +1139,10 @@ int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& no
 
 int clampEnharmonic(int tpc, bool useDoubleSharpsFlats)
 {
-    while (tpc > (useDoubleSharpsFlats ? Tpc::TPC_MAX : Tpc::TPC_F_SS)) {
+    while (tpc > (useDoubleSharpsFlats ? Tpc::TPC_MAX : Tpc::TPC_B_S)) {
         tpc -= TPC_DELTA_ENHARMONIC;
     }
-    while (tpc < (useDoubleSharpsFlats ? Tpc::TPC_MIN : Tpc::TPC_B_BB)) {
+    while (tpc < (useDoubleSharpsFlats ? Tpc::TPC_MIN : Tpc::TPC_F_B)) {
         tpc += TPC_DELTA_ENHARMONIC;
     }
     return tpc;
@@ -1212,5 +1212,15 @@ int bestEnharmonicFit(const std::vector<int> tpcs, Key key)
     }
 
     return closestTpc;
+}
+
+int key2Tpc(Key key)
+{
+    return (int)key + KEY_TO_TPC_OFFSET;
+}
+
+Key tpc2Key(int tpc)
+{
+    return Key(tpc - KEY_TO_TPC_OFFSET);
 }
 }

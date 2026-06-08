@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "ui/view/widgetdialog.h"
+
 #include "ui_tupletdialog.h"
 
 #include "modularity/ioc.h"
@@ -28,7 +30,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::notation {
-class TupletDialog : public QDialog, Ui::TupletDialog, public muse::Contextable
+class TupletDialog : public muse::ui::WidgetDialog, private Ui::TupletDialog
 {
     Q_OBJECT
 
@@ -40,6 +42,8 @@ class TupletDialog : public QDialog, Ui::TupletDialog, public muse::Contextable
 
 public:
     TupletDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
     void defaultToStyleSettings();
 

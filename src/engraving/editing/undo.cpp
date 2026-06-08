@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -81,6 +81,9 @@ static const std::unordered_map<CommandType, CommandType> COMMAND_TYPE_INVERSION
 
     { CommandType::AddNoteParenthesesInfo, CommandType::RemoveNoteParenthesesInfo },
     { CommandType::RemoveNoteParenthesesInfo, CommandType::AddNoteParenthesesInfo },
+
+    { CommandType::ConnectSharedPart, CommandType::DisconnectSharedPart },
+    { CommandType::DisconnectSharedPart, CommandType::ConnectSharedPart },
 };
 
 std::vector<EngravingObject*> compoundObjects(EngravingObject* object)
@@ -388,22 +391,6 @@ void UndoStack::mergeCommands(size_t startIdx)
         startMacro->append(std::move(*m_macroList[idx]));
     }
     remove(startIdx + 1);   // TODO: remove from startIdx to curIdx only
-}
-
-//---------------------------------------------------------
-//   pop
-//---------------------------------------------------------
-
-void UndoStack::pop()
-{
-    if (!m_activeCommand) {
-        if (!ScoreLoad::loading()) {
-            LOGW("no active command");
-        }
-        return;
-    }
-    UndoCommand* cmd = m_activeCommand->removeChild();
-    cmd->undo(nullptr);
 }
 
 //---------------------------------------------------------

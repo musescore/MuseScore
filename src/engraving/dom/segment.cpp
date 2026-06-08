@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -689,10 +689,6 @@ void Segment::add(EngravingItem* el)
     assert(track < score()->ntracks());
     assert(el->score() == score());
     assert(score()->nstaves() * VOICES == m_elist.size());
-    // make sure offset is correct for staff
-    if (el->isStyled(Pid::OFFSET)) {
-        el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
 
     switch (el->type()) {
     case ElementType::MEASURE_REPEAT:
@@ -700,10 +696,9 @@ void Segment::add(EngravingItem* el)
         setEmpty(false);
         break;
 
+    //fallthrough
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
-        score()->rebuildFretBox();
-    //fallthrough
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
@@ -1422,7 +1417,7 @@ EngravingItem* Segment::findAnnotation(ElementType type, track_idx_t minTrack, t
 //---------------------------------------------------------
 //   findAnnotations
 ///  Returns the list of found annotations
-///  or nullptr if nothing was found.
+///  or an empty list if nothing was found.
 //---------------------------------------------------------
 
 std::vector<EngravingItem*> Segment::findAnnotations(ElementType type, track_idx_t minTrack, track_idx_t maxTrack) const

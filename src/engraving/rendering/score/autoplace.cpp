@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -201,10 +201,6 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
 void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingItem::LayoutData* ldata, double sp)
 {
-    if (item->isStyled(Pid::OFFSET)) {
-        const_cast<SpannerSegment*>(item)->setOffset(item->spanner()->propertyDefault(Pid::OFFSET).value<PointF>());
-    }
-
     if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
         return;
     }

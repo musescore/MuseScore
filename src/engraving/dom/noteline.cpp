@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -55,15 +55,13 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineEndFilledArrowWidth,        Pid::END_FILLED_ARROW_WIDTH },
     { Sid::noteLineBeginFilledArrowHeight,     Pid::BEGIN_FILLED_ARROW_HEIGHT },
     { Sid::noteLineBeginFilledArrowWidth,      Pid::BEGIN_FILLED_ARROW_WIDTH },
+    { Sid::noteLineMusicalSymbolSize,          Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::noteLineMusicalSymbolSize,          Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::noteLineMusicalSymbolSize,          Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
 };
-
-Sid NoteLineSegment::getPropertyStyle(Pid pid) const
-{
-    if (pid == Pid::OFFSET) {
-        return Sid::NOSTYLE;
-    }
-    return TextLineBaseSegment::getPropertyStyle(pid);
-}
 
 NoteLineSegment::NoteLineSegment(Spanner* sp, System* parent)
     : TextLineBaseSegment(ElementType::NOTELINE_SEGMENT, sp, parent, ElementFlag::MOVABLE)
@@ -79,17 +77,6 @@ EngravingObject* NoteLineSegment::propertyDelegate(Pid pid) const
     }
 
     return TextLineBaseSegment::propertyDelegate(pid);
-}
-
-Sid NoteLine::getPropertyStyle(Pid pid) const
-{
-    switch (pid) {
-    case Pid::OFFSET:
-        return Sid::NOSTYLE;
-    default:
-        break;
-    }
-    return TextLineBase::getPropertyStyle(pid);
 }
 
 NoteLine::NoteLine(EngravingItem* parent)
@@ -165,8 +152,6 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return true;
     case Pid::NOTELINE_PLACEMENT:
         return NoteLineEndPlacement::OFFSET_ENDS;
-    case Pid::OFFSET:
-        return PointF();
     case Pid::GAP_BETWEEN_TEXT_AND_LINE:
         return 0.5_sp;
     case Pid::SYSTEM_FLAG:
@@ -214,5 +199,10 @@ void NoteLine::reset()
 {
     undoResetProperty(Pid::NOTELINE_PLACEMENT);
     TextLineBase::reset();
+}
+
+Sid NoteLine::defaultPosSid() const
+{
+    return Sid::NOSTYLE;
 }
 } // namespace mu::engraving

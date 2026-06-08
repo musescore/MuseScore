@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "translation.h"
 #include "roottreeitem.h"
 #include "parttreeitem.h"
+#include "sharedparttreeitem.h"
 #include "stafftreeitem.h"
 #include "staffcontroltreeitem.h"
 #include "systemobjectslayertreeitem.h"
@@ -225,6 +226,10 @@ void LayoutPanelTreeModel::setupPartsConnections()
             load();
         }
     }, Mode::SetReplace);
+
+    m_notation->parts()->sharedPartsChanged().onNotify(this, [this]() {
+        updateIsStaveSharingEnabled();
+    }, Mode::SetReplace);
 }
 
 void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& partId)
@@ -410,7 +415,7 @@ void LayoutPanelTreeModel::load()
             }
         }
 
-        m_rootItem->appendChild(buildMasterPartItem(part));
+        m_rootItem->appendChild(part->isSharedPart() ? buildSharedPartItem(part) : buildMasterPartItem(part));
 
         if (showSystemObjectLayers) {
             for (Staff* staff : part->staves()) {
@@ -428,8 +433,16 @@ void LayoutPanelTreeModel::load()
 
     updateIsAddingSystemMarkingsAvailable();
 
+    updateIsStaveSharingEnabled();
+
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
+}
+
+void LayoutPanelTreeModel::toggleStaveSharing(bool on)
+{
+    m_notation->parts()->toggleStaveSharing(on);
+    updateIsStaveSharingEnabled();
 }
 
 void LayoutPanelTreeModel::sortParts(notation::PartList& parts, notation::PartList& referenceParts)
@@ -673,6 +686,24 @@ void LayoutPanelTreeModel::changeVisibility(const QModelIndex& index, bool visib
     setLoadingBlocked(false);
 }
 
+void LayoutPanelTreeModel::changeEnabledOfSelectedRows(bool enable)
+{
+    const QModelIndexList selectedIndices = m_selectionModel->selectedIndexes();
+    for (const QModelIndex& index : selectedIndices) {
+        changeEnabled(index, enable);
+    }
+}
+
+void LayoutPanelTreeModel::changeEnabled(const QModelIndex& index, bool enable)
+{
+    setLoadingBlocked(true);
+
+    AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
+    item->setIsEnabled(enable);
+
+    setLoadingBlocked(false);
+}
+
 QItemSelectionModel* LayoutPanelTreeModel::selectionModel() const
 {
     return m_selectionModel;
@@ -805,6 +836,11 @@ bool LayoutPanelTreeModel::isEmpty() const
 int LayoutPanelTreeModel::selectedItemsType() const
 {
     return static_cast<int>(m_selectedItemsType);
+}
+
+bool LayoutPanelTreeModel::isStaveSharingEnabled() const
+{
+    return m_isStaveSharingEnabled;
 }
 
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
@@ -1001,6 +1037,17 @@ void LayoutPanelTreeModel::updateIsAddingSystemMarkingsAvailable()
     }
 }
 
+void LayoutPanelTreeModel::updateIsStaveSharingEnabled()
+{
+    bool enabled = m_notation->style()->styleValue(StyleId::enableStaveSharing).toBool();
+    if (enabled == m_isStaveSharingEnabled) {
+        return;
+    }
+
+    m_isStaveSharingEnabled = enabled;
+    emit isStaveSharingEnabledChanged(enabled);
+}
+
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)
 {
     for (const QModelIndex& index : indexes) {
@@ -1037,6 +1084,14 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
         { IInteractive::Button::No, IInteractive::Button::Yes }
         )
            .standardButton() == IInteractive::Button::Yes;
+}
+
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSharedPartItem(const Part* part)
+{
+    auto sharedPartItem = new SharedPartTreeItem(m_masterNotation, m_notation, m_rootItem);
+    sharedPartItem->init(part);
+
+    return sharedPartItem;
 }
 
 AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Part* masterPart)
@@ -1114,7 +1169,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 
     for (AbstractLayoutPanelTreeItem* item : children) {
         if (item->type() != LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
-            if (item->type() == LayoutPanelItemType::PART) {
+            if (item->type() == LayoutPanelItemType::PART || item->type() == LayoutPanelItemType::SHARED_PART) {
                 partItems.push_back(static_cast<const PartTreeItem*>(item));
             }
             continue;
@@ -1183,7 +1238,7 @@ void LayoutPanelTreeModel::updateSystemObjectLayers()
 const PartTreeItem* LayoutPanelTreeModel::findPartItemByStaff(const Staff* staff) const
 {
     for (const AbstractLayoutPanelTreeItem* item : m_rootItem->childItems()) {
-        if (item->type() != LayoutPanelItemType::PART) {
+        if (item->type() != LayoutPanelItemType::PART && item->type() != LayoutPanelItemType::SHARED_PART) {
             continue;
         }
 

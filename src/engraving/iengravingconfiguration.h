@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -65,8 +65,6 @@ public:
     virtual Color fontPrimaryColor() const = 0;
     virtual Color voiceColor(voice_idx_t voiceIdx) const = 0;
 
-    virtual double guiScaling(const muse::modularity::ContextPtr& ctx) const = 0;
-
     virtual Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, Color color) = 0;
     virtual muse::async::Channel<voice_idx_t, Color> selectionColorChanged() const = 0;
@@ -107,6 +105,7 @@ public:
         bool markEmptyStaffVisibilityOverrides = false;
         bool markCorruptedMeasures = true;
         bool showGapRests = false;
+        bool showOriginAndCombinedStaves = false;
 
         bool anyEnabled() const
         {
@@ -121,6 +120,7 @@ public:
                    || markEmptyStaffVisibilityOverrides
                    || markCorruptedMeasures
                    || showGapRests
+                   || showOriginAndCombinedStaves
             ;
         }
     };
@@ -128,8 +128,6 @@ public:
     virtual const DebuggingOptions& debuggingOptions() const = 0;
     virtual void setDebuggingOptions(const DebuggingOptions& options) = 0;
     virtual muse::async::Notification debuggingOptionsChanged() const = 0;
-
-    virtual bool isAccessibleEnabled() const = 0;
 
     virtual bool doNotSaveEIDsForBackCompat() const = 0;
     virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
@@ -145,5 +143,6 @@ public:
     virtual bool specificSlursLayoutWorkaround() const = 0;
     virtual bool preferSameStringForTranspose() const = 0;
     virtual void setPreferSameStringForTranspose(bool preferSameString) = 0;
+    virtual bool keepDeadNotesUnchangedOnTranspose() const = 0;
 };
 }

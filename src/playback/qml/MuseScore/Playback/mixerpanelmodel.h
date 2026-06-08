@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -32,6 +32,7 @@
 #include "audio/main/iplayback.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackconfiguration.h"
+#include "project/iprojectaudiosettings.h"
 #include "ui/qml/Muse/Ui/navigationsection.h"
 
 #include "iplaybackcontroller.h"
@@ -85,8 +86,8 @@ private:
         ChannelItemRole = Qt::UserRole + 1
     };
 
-    void load();
-    void loadItems();
+    void reload();
+    void reloadItems();
     void onTrackAdded(const muse::audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);
     void removeItem(const muse::audio::TrackId trackId);
@@ -106,7 +107,7 @@ private:
 
     MixerChannelItem* findChannelItem(const muse::audio::TrackId& trackId) const;
 
-    void loadOutputParams(MixerChannelItem* item, muse::audio::AudioOutputParams&& params);
+    void loadOutputParams(MixerChannelItem* item, project::AudioOutputParams&& params);
     void updateOutputResourceItemCount();
 
     project::INotationProjectPtr currentProject() const;
@@ -116,7 +117,6 @@ private:
 
     QList<MixerChannelItem*> m_mixerChannelList;
     MixerChannelItem* m_masterChannelItem = nullptr;
-    muse::audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     muse::ui::NavigationSection* m_navigationSection = nullptr;
     int m_navigationOrderStart = 1;

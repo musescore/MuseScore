@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -24,6 +24,8 @@
 
 #include "types.h"
 
+#include "engraving/dom/guitarbend.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/tremolobar.h"
 
 namespace mu::engraving {
@@ -197,6 +199,12 @@ public:
     static AsciiStringView toXml(ChordLineType v);
     static ChordLineType fromXml(const AsciiStringView& tag, ChordLineType def);
 
+    static AsciiStringView toXml(GuitarBendType v);
+    static GuitarBendType fromXml(const AsciiStringView& tag, GuitarBendType def);
+
+    static AsciiStringView toXml(NoteCaseType v);
+    static NoteCaseType fromXml(const AsciiStringView& tag, NoteCaseType def);
+
     static const String& userName(DrumNum v);
 
     static const TranslatableString& userName(GlissandoType v);
@@ -297,5 +305,8 @@ public:
 
     static AsciiStringView toXml(InstrumentNamesAlign v);
     static InstrumentNamesAlign fromXml(const AsciiStringView& str, InstrumentNamesAlign def);
+
+    static AsciiStringView toXml(InstrumentNamesFormat v);
+    static InstrumentNamesFormat fromXml(const AsciiStringView& str, InstrumentNamesFormat def);
 };
 }

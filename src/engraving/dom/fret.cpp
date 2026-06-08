@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -99,7 +99,7 @@ struct HarmonyMapKey
 static std::map<HarmonyMapKey /*key*/, std::vector<DiagramInfo> > s_harmonyToDiagramMap;
 static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
-static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
+static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH(":/data/harmony_to_diagram.xml");
 
 static HarmonyMapKey createHarmonyMapKey(const String& harmony, const NoteSpellingType& spellingType, const ChordList* cl)
 {
@@ -1072,6 +1072,36 @@ void FretDiagram::scanElements(std::function<void(EngravingItem*)> func)
 //   getProperty
 //---------------------------------------------------------
 
+void FretDiagram::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::EXCLUDE_VERTICAL_ALIGN) {
+        EngravingItem::undoChangeProperty(id, v, ps);
+
+        bool val = v.toBool();
+        Harmony* h = harmony();
+        if (h && h->excludeVerticalAlign() != val) {
+            h->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+        }
+        Segment* parentSeg = segment();
+        if (!parentSeg) {
+            return;
+        }
+
+        for (EngravingItem* item : parentSeg->annotations()) {
+            if ((!item->isFretDiagram() && !item->isHarmony()) || item == this || track2staff(item->track()) != staffIdx()) {
+                continue;
+            }
+
+            if (item->excludeVerticalAlign() != val) {
+                item->undoChangeProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val, ps);
+            }
+        }
+        return;
+    }
+
+    EngravingItem::undoChangeProperty(id, v, ps);
+}
+
 PropertyValue FretDiagram::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
@@ -1128,26 +1158,7 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         setFingering(v.value<std::vector<int> >());
         break;
     case Pid::EXCLUDE_VERTICAL_ALIGN: {
-        bool val = v.toBool();
-        setExcludeVerticalAlign(val);
-        Harmony* h = harmony();
-        if (h && h->excludeVerticalAlign() != val) {
-            h->setExcludeVerticalAlign(val);
-        }
-        Segment* parentSeg = segment();
-        if (!parentSeg) {
-            break;
-        }
-
-        for (EngravingItem* item : parentSeg->annotations()) {
-            if (!item->isFretDiagram() || !item->isHarmony() || item == this || track2staff(item->track()) != staffIdx()) {
-                continue;
-            }
-
-            if (item->excludeVerticalAlign() != val) {
-                item->setProperty(Pid::EXCLUDE_VERTICAL_ALIGN, val);
-            }
-        }
+        setExcludeVerticalAlign(v.toBool());
         break;
     }
     default:
@@ -1179,15 +1190,6 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
         }
     }
     return EngravingItem::propertyDefault(pid);
-}
-
-void FretDiagram::setVisible(bool f)
-{
-    EngravingItem::setVisible(f);
-
-    if (m_harmony && m_harmony->isStyled(Pid::OFFSET)) {
-        m_harmony->resetProperty(Pid::OFFSET);
-    }
 }
 
 void FretDiagram::setTrack(track_idx_t val)

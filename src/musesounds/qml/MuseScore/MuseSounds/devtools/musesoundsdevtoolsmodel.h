@@ -31,6 +31,7 @@
 
 #include "modularity/ioc.h"
 #include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "imusesoundsconfiguration.h"
 
 namespace mu::musesounds {
@@ -51,6 +52,7 @@ class MuseSoundsDevToolsModel : public QObject, public muse::Contextable
         QString currentUpdateData READ currentUpdateData_property WRITE setCurrentUpdateData_property NOTIFY currentUpdateDataChanged FINAL)
 
     muse::GlobalInject<IMuseSoundsConfiguration> configuration;
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:

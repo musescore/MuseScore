@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -138,16 +138,6 @@ IFileInfoProviderPtr MasterScore::fileInfo() const
 void MasterScore::setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider)
 {
     m_fileInfoProvider = fileInfoProvider;
-}
-
-bool MasterScore::saved() const
-{
-    return m_saved;
-}
-
-void MasterScore::setSaved(bool v)
-{
-    m_saved = v;
 }
 
 String MasterScore::name() const
@@ -383,6 +373,14 @@ void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, staff_
 
         m_cmdState.setElement(e);
     }
+}
+
+void MasterScore::initAutomation()
+{
+    IF_ASSERT_FAILED(m_automationController) {
+        return;
+    }
+    m_automationController->init(this);
 }
 
 //---------------------------------------------------------

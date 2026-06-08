@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -253,7 +253,8 @@ static String fingeringTextRH(int rightFinger)
     }
 }
 
-static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int pitch, muse::draw::Color color)
+static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, int stringOffset, int pitch, muse::draw::Color color,
+                           std::vector<mu::engraving::Note*>& tiedNotes)
 {
     LOGN("pitch %d", pitch);
     mu::engraving::Note* note = Factory::createNote(chord);
@@ -262,10 +263,10 @@ static void addNoteToChord(mu::engraving::Chord* chord, const TefNote* tefNote, 
         note->setPitch(pitch);
         note->setTpcFromPitch(Prefer::NEAREST);
         note->setFret(tefNote->fret);
-        note->setString(tefNote->string - 1);
+        note->setString(tefNote->string - stringOffset - 1);
         note->setColor(color);
         if (tefNote->tie) {
-            connectTie(chord, note);
+            tiedNotes.push_back(note);
         }
         if (tefNote->fingeringLH) {
             Fingering* fi = Factory::createFingering(note, TextStyleType::LH_GUITAR_FINGERING);
@@ -356,6 +357,7 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
 
     for (size_t part = 0; part < tefInstruments.size(); ++part) {
         LOGN("part %zu", part);
+        std::vector<mu::engraving::Note*> tiedNotes;
         for (voice_idx_t voice = 0; voice < mu::engraving::VOICES; ++voice) {
             LOGN("- voice %zu", voice);
             auto& voiceContent { voiceAllocators.at(part).voiceContent(voice) };
@@ -438,17 +440,20 @@ void TablEdit::createContents(const MeasureHandler& measureHandler)
                             int pitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->fret;
                             LOGN("      -> string %d fret %d pitch %d", note->string, note->fret, pitch);
                             // note TableEdit's strings start at 1, MuseScore's at 0
-                            addNoteToChord(chord, note, pitch, toColor(voice));
+                            addNoteToChord(chord, note, stringOffset, pitch, toColor(voice), tiedNotes);
                             if (note->hasGrace) {
                                 // todo fix magical constant 96 and code duplication
-                                int gracePitch = 96 - instrument.tuning.at(/* todo */ note->string - stringOffset - 1) + note->graceFret;
-                                addGraceNotesToChord(chord, gracePitch, note->graceFret, /* todo */ note->string - 1, toColor(voice));
+                                int gracePitch = 96 - instrument.tuning.at(note->string - stringOffset - 1) + note->graceFret;
+                                addGraceNotesToChord(chord, gracePitch, note->graceFret, note->string - stringOffset - 1, toColor(voice));
                             }
                         }
                         tupletHandler.addCr(measure, chord);
                     }
                 }
             }
+        }
+        for (const auto note : tiedNotes) {
+            connectTie(note->chord(), note);
         }
     }
 }
@@ -580,7 +585,6 @@ void TablEdit::createParts()
         Part* part = new Part(score);
         score->appendPart(part);
         muse::String staffName { muse::String::fromStdString(instrument.name) };
-        part->setPartName(staffName);
         part->setPlainLongName(staffName);
 
         StringData stringData;

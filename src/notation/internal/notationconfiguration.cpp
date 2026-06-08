@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -659,16 +659,6 @@ Notification NotationConfiguration::defaultZoomChanged() const
     return m_defaultZoomChanged;
 }
 
-qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage, const muse::modularity::ContextPtr& ctx) const
-{
-    return zoomPercentage / 100.0 * notationScaling(ctx);
-}
-
-int NotationConfiguration::zoomPercentageFromScaling(qreal scaling, const muse::modularity::ContextPtr& ctx) const
-{
-    return std::round(scaling * 100.0 / notationScaling(ctx));
-}
-
 QList<int> NotationConfiguration::possibleZoomPercentageList() const
 {
     return {
@@ -922,16 +912,6 @@ bool NotationConfiguration::isCountInEnabled() const
 void NotationConfiguration::setIsCountInEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
-}
-
-double NotationConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
-{
-    return uiConfiguration() ? uiConfiguration()->guiScaling(ctx) : 1.0;
-}
-
-double NotationConfiguration::notationScaling(const muse::modularity::ContextPtr& ctx) const
-{
-    return uiConfiguration() ? uiConfiguration()->physicalDpi(ctx) / mu::engraving::DPI : 1.0;
 }
 
 ValCh<muse::Orientation> NotationConfiguration::canvasOrientation() const

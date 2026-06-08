@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2021 MuseScore Limited and others
@@ -29,12 +29,88 @@ InstrumentNamesPageModel::InstrumentNamesPageModel(QObject* parent)
     StyleId::instrumentNamesAlignLong,
     StyleId::instrumentNamesAlignShort,
     StyleId::instrumentNamesStackVertically,
+    StyleId::windsNameByGroup,
+    StyleId::vocalsNameByGroup,
+    StyleId::stringsNameByGroup,
+    StyleId::othersNameByGroup,
+
+    StyleId::instrumentNamesShowTranspositionLong,
+    StyleId::instrumentNamesShowTranspositionShort,
+    StyleId::instrumentNamesFormatLong,
+    StyleId::instrumentNamesCustomFormatLong,
+    StyleId::instrumentNamesFormatShort,
+    StyleId::instrumentNamesCustomFormatShort,
+    StyleId::instrumentNamesAlignIncludeGroupBrackets,
 })
 {
 }
 
-StyleItem* InstrumentNamesPageModel::instrumentNamesAlignLong() const { return styleItem(StyleId::instrumentNamesAlignLong); }
+StyleItem* InstrumentNamesPageModel::instrumentNamesAlignLong() const
+{
+    return styleItem(StyleId::instrumentNamesAlignLong);
+}
 
-StyleItem* InstrumentNamesPageModel::instrumentNamesAlignShort() const { return styleItem(StyleId::instrumentNamesAlignShort); }
+StyleItem* InstrumentNamesPageModel::instrumentNamesAlignShort() const
+{
+    return styleItem(StyleId::instrumentNamesAlignShort);
+}
 
-StyleItem* InstrumentNamesPageModel::instrumentNamesStackVertically() const { return styleItem(StyleId::instrumentNamesStackVertically); }
+StyleItem* InstrumentNamesPageModel::instrumentNamesStackVertically() const
+{
+    return styleItem(StyleId::instrumentNamesStackVertically);
+}
+
+StyleItem* InstrumentNamesPageModel::windsNameByGroup() const
+{
+    return styleItem(StyleId::windsNameByGroup);
+}
+
+StyleItem* InstrumentNamesPageModel::vocalsNameByGroup() const
+{
+    return styleItem(StyleId::vocalsNameByGroup);
+}
+
+StyleItem* InstrumentNamesPageModel::stringsNameByGroup() const
+{
+    return styleItem(StyleId::stringsNameByGroup);
+}
+
+StyleItem* InstrumentNamesPageModel::othersNameByGroup() const
+{
+    return styleItem(StyleId::othersNameByGroup);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesShowTranspositionLong() const
+{
+    return styleItem(StyleId::instrumentNamesShowTranspositionLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesShowTranspositionShort() const
+{
+    return styleItem(StyleId::instrumentNamesShowTranspositionShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesFormatLong() const
+{
+    return styleItem(StyleId::instrumentNamesFormatLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatLong() const
+{
+    return styleItem(StyleId::instrumentNamesCustomFormatLong);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesFormatShort() const
+{
+    return styleItem(StyleId::instrumentNamesFormatShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesCustomFormatShort() const
+{
+    return styleItem(StyleId::instrumentNamesCustomFormatShort);
+}
+
+StyleItem* InstrumentNamesPageModel::instrumentNamesAlignIncludeGroupBrackets() const
+{
+    return styleItem(StyleId::instrumentNamesAlignIncludeGroupBrackets);
+}

@@ -26,14 +26,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>right hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -42,13 +42,13 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>E_E</eid>
       <Staff>
-        <eid>D_D</eid>
+        <eid>F_F</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>left hand</trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -59,20 +59,29 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <eid>E_E</eid>
+        <eid>G_G</eid>
         </VBox>
       <Measure>
-        <eid>F_F</eid>
+        <eid>H_H</eid>
         <LayoutBreak>
-          <eid>G_G</eid>
+          <eid>I_I</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <KeySig>
+            <eid>J_J</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>K_K</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
-            <eid>H_H</eid>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>I_I</eid>
+              <eid>M_M</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -87,13 +96,22 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
-            <eid>J_J</eid>
+            <eid>N_N</eid>
             </Clef>
+          <KeySig>
+            <eid>O_O</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>P_P</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           <Chord>
-            <eid>K_K</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>R_R</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>

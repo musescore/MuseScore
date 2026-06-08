@@ -1,0 +1,58 @@
+name: 'Check: Submodules'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check_muse_framework:
+    runs-on: ubuntu-slim
+    env:
+      EXPECTED_URL: https://github.com/musescore/muse_framework.git
+      EXPECTED_BRANCH: main
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v6
+
+    - name: Verify muse_framework submodule URL
+      run: |
+        ACTUAL_URL=$(git config -f .gitmodules submodule.muse_framework.url)
+        echo "Expected: ${EXPECTED_URL}"
+        echo "Actual:   ${ACTUAL_URL}"
+        if [ "${ACTUAL_URL}" != "${EXPECTED_URL}" ]; then
+          echo "::error file=.gitmodules::muse_framework submodule URL must be ${EXPECTED_URL}, found ${ACTUAL_URL}. Did you accidentally leave it pointing at a fork?"
+          exit 1
+        fi
+
+    - name: Verify muse_framework commit is in upstream
+      run: |
+        SHA=$(git ls-tree HEAD muse | awk '{print $3}')
+        if [ -z "${SHA}" ]; then
+          echo "::error::Could not read muse_framework submodule SHA from index"
+          exit 1
+        fi
+        echo "Pinned commit: ${SHA}"
+        TMP=$(mktemp -d)
+        git clone --quiet --filter=tree:0 --no-checkout --single-branch --branch ${EXPECTED_BRANCH} "${EXPECTED_URL}" "${TMP}"
+        if ! git -C "${TMP}" merge-base --is-ancestor "${SHA}" origin/${EXPECTED_BRANCH}; then
+          echo "::error::muse_framework is pinned to ${SHA}, which is not on the ${EXPECTED_BRANCH} branch of ${EXPECTED_URL}"
+          exit 1
+        fi   
+
+    - name: Verify muse_framework commit on upstream HEAD
+      if: false
+      run: |
+        SHA=$(git ls-tree HEAD muse | awk '{print $3}')
+        if [ -z "${SHA}" ]; then
+          echo "::error::Could not read muse_framework submodule SHA from index"
+          exit 1
+        fi
+        echo "Pinned commit: ${SHA}"
+        TMP=$(mktemp -d)
+        git clone --quiet --filter=tree:0 --no-checkout --single-branch --branch "${EXPECTED_BRANCH}" "${EXPECTED_URL}" "${TMP}"
+        UPSTREAM_HEAD=$(git -C "${TMP}" rev-parse origin/${EXPECTED_BRANCH}^{commit})
+        echo "Upstream ${EXPECTED_BRANCH} HEAD: ${UPSTREAM_HEAD}"
+        if [ "${SHA}" != "${UPSTREAM_HEAD}" ]; then
+          echo "::error::muse_framework is pinned to ${SHA}, expected ${UPSTREAM_HEAD} (HEAD of ${EXPECTED_BRANCH} in ${EXPECTED_URL})%0Aplease ensure the submodule is up to date by running \`git submodule update --init --remote ./muse\`"
+          exit 1
+        fi

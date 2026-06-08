@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,6 +21,8 @@
  */
 #ifndef MU_PALETTE_CUSTOMIZEKITDIALOG_H
 #define MU_PALETTE_CUSTOMIZEKITDIALOG_H
+
+#include "ui/view/widgetdialog.h"
 
 #include "ui_customizekitdialog.h"
 
@@ -40,7 +42,7 @@ namespace mu::palette {
 //   CustomizeKitDialog
 //---------------------------------------------------------
 
-class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog, public muse::Contextable
+class CustomizeKitDialog : public muse::ui::WidgetDialog, private Ui::CustomizeKitDialog
 {
     Q_OBJECT
 
@@ -54,6 +56,8 @@ public:
     muse::ContextInject<engraving::IPaletteScoreProvider> paletteScoreProvider = { this };
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);
+
+    void componentComplete() override;
 
 private slots:
     void bboxClicked(QAbstractButton* button);

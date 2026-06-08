@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Puhallinosa nuotinnettu pianoviivastolle.</translation>
+        <translation>Puhallinsektio nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="210"/>
@@ -3905,7 +3905,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (an octave above the alto chalumeau).</source>
         <comment>sopranino-chalumeau description</comment>
         <extracomment>description for Sopranino Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä, sävelkorkeus F (oktaavi altto chalumeaun yläpuolella).</translation>
+        <translation>Nykyajan klarinetin edeltäjä, F-vireinen (oktaavi altto chalumeaun yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1452"/>
@@ -3933,7 +3933,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in C (an octave above the tenor chalumeau).</source>
         <comment>soprano-chalumeau description</comment>
         <extracomment>description for Soprano Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä sävelkorkeus C (oktaavi tenorin chalumeaun yläpuolella).</translation>
+        <translation>Nykyajan klarinetin edeltäjä, C-vireinen (oktaavi tenorin chalumeaun yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1461"/>
@@ -3961,7 +3961,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (a fourth above the tenor chalumeau).</source>
         <comment>alto-chalumeau description</comment>
         <extracomment>description for Alto Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä, sävelkorkeus F (kvartti tenori chalumeaun yläpuolella).</translation>
+        <translation>Nykyajan klarinetin edeltäjä, F-vireinen (kvartti tenori chalumeaun yläpuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1470"/>
@@ -3989,7 +3989,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in C.</source>
         <comment>chalumeau description</comment>
         <extracomment>description for Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä, sävelkorkeus C.</translation>
+        <translation>Nykyajan klarinetin edeltäjä, C-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1479"/>
@@ -4017,7 +4017,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in C (an octave below the soprano chalumeau).</source>
         <comment>tenor-chalumeau description</comment>
         <extracomment>description for Tenor Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä, sävelkorkeus C (oktaavi sopraano chalumeaun alapuolella).</translation>
+        <translation>Nykyajan klarinetin edeltäjä, C-vireinen (oktaavi sopraano chalumeaun alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1488"/>
@@ -4045,7 +4045,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (an fifth below the tenor chalumeau).</source>
         <comment>bass-chalumeau description</comment>
         <extracomment>description for Bass Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Nykyajan klarinetin edeltäjä, sävelkorkeudella F (kvintti tenori chalumeaun alapuolella).</translation>
+        <translation>Nykyajan klarinetin edeltäjä, F-vireinen (kvintti tenori chalumeaun alapuolella).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1497"/>
@@ -5165,7 +5165,7 @@
         <source>10-hole diatonic harmonica pitched in high G.</source>
         <comment>harmonica-d10high-g description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>10-reikäinen diatoninen huuliharppu, korkea G-viritys.</translation>
+        <translation>10-reikäinen diatoninen huuliharppu, korkea G-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1859"/>
@@ -5375,7 +5375,7 @@
         <source>10-hole diatonic harmonica pitched in low D.</source>
         <comment>harmonica-d10low-d description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>10-reikäinen diatoninen huuliharppu, matala D-viritys.</translation>
+        <translation>10-reikäinen diatoninen huuliharppu, matala D-vireinen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1925"/>
@@ -5865,7 +5865,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vaskiosa nuotinnettu pianoviivastolle.</translation>
+        <translation>Vaskisektio nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2084"/>
@@ -11801,7 +11801,7 @@
         <source>High-pitched, shallow body taiko drum.</source>
         <comment>shime-daiko description</comment>
         <extracomment>description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Korkeaääninen, matalarunkoinen taiko-rumpu.</translation>
+        <translation>Korkeavireinen, matalarunkoinen taiko-rumpu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3942"/>
@@ -12137,7 +12137,7 @@
         <source>Chinese high-pitched frame drum.</source>
         <comment>bangu description</comment>
         <extracomment>description for Bangu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kiinalainen korkeaääninen kehysrumpu.</translation>
+        <translation>Kiinalainen korkeavireinen kehysrumpu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4050"/>
@@ -12277,7 +12277,7 @@
         <source>Korean low-pitched double-headed barrel drum.</source>
         <comment>buk description</comment>
         <extracomment>description for Buk; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Korealainen matalaääninen kaksipäinen tynnyrirumpu.</translation>
+        <translation>Korealainen matalavireinen kaksipäinen tynnyrirumpu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4095"/>
@@ -19096,7 +19096,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Jousiosa, nuotinnettu pianoviivastolle.</translation>
+        <translation>Jousisektio, nuotinnettu pianoviivastolle.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6306"/>
@@ -19222,14 +19222,14 @@
         <source>Violin section.</source>
         <comment>violins description</comment>
         <extracomment>description for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viuluosa.</translation>
+        <translation>Viulusektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6345"/>
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viulut (osa)</translation>
+        <translation>Viulut (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6347"/>
@@ -19320,14 +19320,14 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alttoviuluosa.</translation>
+        <translation>Alttoviulusektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6375"/>
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alttoviulut (osa)</translation>
+        <translation>Alttoviulut (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6377"/>
@@ -19418,14 +19418,14 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sello-osa.</translation>
+        <translation>Sellosektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6405"/>
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sellot (osa)</translation>
+        <translation>Sellot (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6407"/>
@@ -19516,14 +19516,14 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasso (tuplabasso) osa.</translation>
+        <translation>Kontrabasso (tuplabasso) sektio.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6435"/>
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabassot (osa)</translation>
+        <translation>Kontrabassot (sektio)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6437"/>
@@ -20492,7 +20492,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Pitched Metal Percussion</source>
-        <translation>Viritetyt metalliset lyömäsoittimet</translation>
+        <translation>Vireiset metalliset lyömäsoittimet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="158"/>
@@ -20788,7 +20788,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3412"/>
         <source>Percussion - Pitched</source>
-        <translation>Lyömäsoittimet - viritetty</translation>
+        <translation>Lyömäsoittimet - vireiset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3829"/>
@@ -21014,7 +21014,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="53"/>
         <source>Jazz Lead Sheet</source>
-        <translation>Jazz Lead Sheet</translation>
+        <translation>Jazz-lead sheet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="54"/>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,8 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/system.h"
+
+#include "notation/inotationcontextconfiguration.h"
 
 #include "log.h"
 
@@ -96,11 +98,15 @@ void ExampleView::setScore(Score* s)
     m_score->addViewer(this);
     m_score->setLayoutMode(LayoutMode::LINE);
 
-    m_defaultScaling = 0.9 * notationConfiguration()->notationScaling(s->iocContext());
+    //! HACK
+    muse::ContextInject<INotationContextConfiguration> contextConfiguration = { s->iocContext() };
+
+    m_defaultScaling = 0.9 * contextConfiguration()->notationScaling();
 
     ScoreLoad sl;
     m_score->doLayout();
     resetMatrix();
+    updateGeometry(); // notify the widget's layout system that the sizeHint has changed
     update();
 }
 

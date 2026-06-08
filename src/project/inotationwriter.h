@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -50,7 +50,13 @@ public:
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
         BEATS_COLORS,
-        APPLY_WATERMARK
+        APPLY_WATERMARK,
+        WAIT_FOR_COMPLETION,
+
+        WITH_AUDIO,
+
+        LEADING_SILENCE_SEC,
+        TRAILING_SILENCE_SEC,
     };
 
     using Options = std::map<OptionKey, muse::Val>;

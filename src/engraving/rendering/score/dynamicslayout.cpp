@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -152,7 +152,7 @@ void DynamicsLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase:
 
 void DynamicsLayout::manageBarlineCollisions(const Dynamic* item, TextBase::LayoutData* ldata)
 {
-    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious() || !item->isStyled(Pid::OFFSET)) {
+    if (item->score()->nstaves() <= 1 || item->anchorToEndOfPrevious() || !item->offset().isNull()) {
         return;
     }
 

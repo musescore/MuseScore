@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -91,7 +91,13 @@ private:
 
     int         fret(int pitch, int string, int pitchOffset) const;
     void        sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int* count) const;
-    void        sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const;
+    void        sortChordNotesUseSameString(const Chord* chord) const;
+    bool        hasPendingPitchChange(const Chord* chord) const;
+    void        updateFretsOnSameStrings(const Chord* chord) const;
+    void        preferBassStringForNegativeFret(const Chord* chord) const;
+    void        reassignNegativeFretNotes(const Chord* chord) const;
+    bool        tryResolveStringConflictWithOutOfRangeFret(const Note* note, int numStrings, std::vector<int>& bUsed, int& nNewString,
+                                                           int& nNewFret) const;
 
     //      std::vector<int>  stringTable { 40, 45, 50, 55, 59, 64 };   // guitar is default
     //      int         _frets = 19;

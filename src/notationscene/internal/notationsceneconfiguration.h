@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2026 MuseScore Limited
+ * Copyright (C) 2026 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -45,10 +45,6 @@ public:
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
-    bool useNewPercussionPanel() const override;
-    void setUseNewPercussionPanel(bool use) override;
-    muse::async::Notification useNewPercussionPanelChanged() const override;
-
     bool percussionPanelUseNotationPreview() const override;
     void setPercussionPanelUseNotationPreview(bool use) override;
     muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
@@ -73,7 +69,6 @@ private:
     muse::async::Notification m_isSmoothPanningChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
-    muse::async::Notification m_useNewPercussionPanelChanged;
     muse::async::Notification m_percussionPanelUseNotationPreviewChanged;
     muse::async::Notification m_percussionPanelAutoShowModeChanged;
     muse::async::Notification m_autoClosePercussionPanelChanged;

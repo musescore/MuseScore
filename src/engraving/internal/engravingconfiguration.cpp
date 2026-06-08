@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -305,11 +305,6 @@ Color EngravingConfiguration::voiceColor(voice_idx_t voiceIdx) const
     return VOICE_COLORS[voiceIdx].color;
 }
 
-double EngravingConfiguration::guiScaling(const muse::modularity::ContextPtr& ctx) const
-{
-    return uiConfiguration() ? uiConfiguration()->guiScaling(ctx) : 1.0;
-}
-
 Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
 {
     Color color = itemIsUnlinkedFromScore ? unlinkedColor() : VOICE_COLORS[voice].color;
@@ -430,11 +425,6 @@ muse::async::Notification EngravingConfiguration::debuggingOptionsChanged() cons
     return m_debuggingOptions.notification;
 }
 
-bool EngravingConfiguration::isAccessibleEnabled() const
-{
-    return accessibilityConfiguration() ? accessibilityConfiguration()->enabled() : false;
-}
-
 bool EngravingConfiguration::doNotSaveEIDsForBackCompat() const
 {
     return settings()->value(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT).toBool();
@@ -487,4 +477,9 @@ bool EngravingConfiguration::preferSameStringForTranspose() const
 
 void EngravingConfiguration::setPreferSameStringForTranspose(bool /*preferSameString*/)
 {
+}
+
+bool EngravingConfiguration::keepDeadNotesUnchangedOnTranspose() const
+{
+    return false;
 }

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/parenthesis.h"
@@ -289,14 +290,51 @@ void EngravingCompat::migrateNoteParens(MasterScore* masterScore)
     }
 }
 
+static void doMigrateOffset500(EngravingItem* item)
+{
+    if (item->offset().isNull()
+        || (!item->isTextBase() && !item->isSpanner() && !item->isSpannerSegment()) || !item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    item->setOffset(CompatUtils::getAdjustedOffset(item, item->offset()));
+}
+
+void EngravingCompat::migrateOffset500(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->spannerList()) {
+            if (!sp->hasVoiceAssignmentProperties()) {
+                continue;
+            }
+            sp->setPlacementBasedOnVoiceAssignment(sp->style().styleV(Sid::dynamicsHairpinVoiceBasedPlacement).value<DirectionV>());
+            doMigrateOffset500(sp);
+            for (SpannerSegment* seg : sp->spannerSegments()) {
+                doMigrateOffset500(seg);
+            }
+        }
+
+        score->scanElements(doMigrateOffset500);
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     bool needRelayout = false;
 
     int mscVersion = score->mscVersion();
 
+    if (mscVersion < 470) {
+        needRelayout |= setLyricLineVisibility(score);
+    }
+
     if (mscVersion < 440) {
         needRelayout |= relayoutUserModifiedCrossStaffBeams(score);
+    }
+
+    if (mscVersion < 500) {
+        migrateOffset500(score);
+        needRelayout = true;
     }
 
     if (needRelayout) {
@@ -342,5 +380,27 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::setLyricLineVisibility(MasterScore* masterScore)
+{
+    bool needRelayout = false;
+    for (Score* score : masterScore->scoreList()) {
+        for (Spanner* sp : score->unmanagedSpanners()) {
+            if (!sp->isLyricsLine()) {
+                continue;
+            }
+
+            LyricsLine* ll = toLyricsLine(sp);
+            if (!ll->lyrics() || ll->visible() == ll->lyrics()->visible()) {
+                continue;
+            }
+
+            ll->setVisible(ll->lyrics()->visible());
+            needRelayout = true;
+        }
+    }
+
+    return needRelayout;
 }
 } // namespace mu::engraving::compat

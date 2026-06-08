@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -54,9 +54,9 @@ MuseSoundsListModel::MuseSoundsListModel(QObject* parent)
 
 void MuseSoundsListModel::load()
 {
-    setSoundsCatalogs(repository()->soundsCatalogueList());
-    repository()->soundsCatalogueListChanged().onNotify(this, [this](){
-        setSoundsCatalogs(repository()->soundsCatalogueList());
+    setSoundsCatalogs(repository()->soundsCatalogs());
+    repository()->soundsCatalogsChanged().onNotify(this, [this](){
+        setSoundsCatalogs(repository()->soundsCatalogs());
     });
 }
 
@@ -66,12 +66,12 @@ QVariant MuseSoundsListModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const SoundCatalogueInfo& soundCategoryInfo = m_soundsCatalogs.at(index.row());
+    const SoundCatalogInfo& soundCategoryInfo = m_soundsCatalogs.at(index.row());
 
     switch (role) {
-    case rCatalogueTitle:
+    case rCatalogTitle:
         return soundCategoryInfo.title.toQString();
-    case rCatalogueSoundLibraries:
+    case rCatalogSoundLibraries:
         return soundInfoListToVariantList(soundCategoryInfo.soundLibraries);
     }
 
@@ -86,8 +86,8 @@ int MuseSoundsListModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> MuseSoundsListModel::roleNames() const
 {
     return {
-        { rCatalogueTitle, "catalogueTitle" },
-        { rCatalogueSoundLibraries, "catalogueSoundsLibraries" }
+        { rCatalogTitle, "catalogTitle" },
+        { rCatalogSoundLibraries, "catalogSoundsLibraries" }
     };
 }
 
@@ -96,7 +96,7 @@ bool MuseSoundsListModel::isEmpty() const
     return m_soundsCatalogs.empty();
 }
 
-void MuseSoundsListModel::setSoundsCatalogs(const SoundCatalogueInfoList& soundsCatalogs)
+void MuseSoundsListModel::setSoundsCatalogs(const SoundCatalogInfoList& soundsCatalogs)
 {
     beginResetModel();
 

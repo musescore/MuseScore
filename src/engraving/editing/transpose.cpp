@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -511,33 +511,29 @@ void Transpose::transposeChord(Chord* c, const Fraction& tick)
 
 Interval Transpose::keydiff2Interval(Key oKey, Key nKey, TransposeDirection dir)
 {
-    static int stepTable[STEP_DELTA_OCTAVE] = {
-        // C  G  D  A  E  B F
-        0, 4, 1, 5, 2, 6, 3,
-    };
+    int diatonic = tpc2step(key2Tpc(nKey)) - tpc2step(key2Tpc(oKey));
+    int chromatic = ((int(nKey) - int(oKey)) + (diatonic * TPC_DELTA_ENHARMONIC)) / TPC_DELTA_SEMITONE;
 
-    int cofSteps = (nKey > oKey) ? int(nKey) - int(oKey) : int(nKey) - int(oKey) + PITCH_DELTA_OCTAVE; // circle of fifth steps
-    int diatonic = stepTable[(int(nKey) + 7) % 7] - stepTable[(int(oKey) + 7) % 7];
-    if (diatonic < 0) {
-        diatonic += STEP_DELTA_OCTAVE;
-    }
-    diatonic %= STEP_DELTA_OCTAVE;
-    int chromatic = (cofSteps * 7) % PITCH_DELTA_OCTAVE;
-
-    if ((dir == TransposeDirection::CLOSEST) && (chromatic > 6)) {
-        dir = TransposeDirection::DOWN;
+    if ((dir == TransposeDirection::CLOSEST && chromatic > 6)
+        || (dir == TransposeDirection::DOWN && chromatic > 0)) {
+        diatonic -= 7;
+        chromatic -= 12;
+    } else if ((dir == TransposeDirection::CLOSEST && chromatic < -6)
+               || (dir == TransposeDirection::UP && chromatic < 0)) {
+        diatonic += 7;
+        chromatic += 12;
     }
 
-    if (dir == TransposeDirection::DOWN) {
-        chromatic = chromatic == 0 ? 0 : chromatic - 12;
-        diatonic  = diatonic == 0 ? 0 : diatonic - 7;
-    }
     return Interval(diatonic, chromatic);
 }
 
 bool Transpose::transposeNote(Note* note, TransposeMode mode, int transposeInterval, bool trKeys, bool useDoubleSharpsFlats,
                               Interval interval)
 {
+    if (note->deadNote() && note->configuration()->keepDeadNotesUnchangedOnTranspose()) {
+        return true;
+    }
+
     if (mode == TransposeMode::DIATONICALLY) {
         return note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
     }
@@ -649,6 +645,7 @@ void Transpose::transposeFretDiagram(FretDiagram* diagram, Score* score, Interva
 String Transpose::findBestEnharmonicFit(const std::vector<String>& notes, Key key, const MStyle& style)
 {
     std::vector<int> tpcs;
+    tpcs.reserve(notes.size());
     NoteSpellingType harmonySpelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     NoteCaseType harmonyCase = NoteCaseType::AUTO;
     size_t idx = 0;
@@ -705,7 +702,8 @@ int Transpose::transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepA
 
 Key Transpose::transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
 {
-    Key newKey = Key(transposeTpc(int(key), interval, false));
+    int keyAsTpc = key2Tpc(key);
+    Key newKey = tpc2Key(transposeTpc(keyAsTpc, interval, false));
 
     // ignore prefer for octave transposing instruments
     if (interval.chromatic % PITCH_DELTA_OCTAVE == 0 && interval.diatonic % STEP_DELTA_OCTAVE == 0) {

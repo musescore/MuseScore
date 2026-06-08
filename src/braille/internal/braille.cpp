@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -1375,10 +1375,10 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
             m_score->select(measure, SelectType::RANGE, staffCount);
             m_score->update();
             m_score->startCmd();
-            m_score->cmdExchangeVoice(0, static_cast<int>(i));
+            ExchangeVoices::exchangeVoicesInSelection(m_score, 0, static_cast<int>(i));
             m_score->endCmd();
             m_score->startCmd();
-            m_score->cmdExchangeVoice(0, static_cast<int>(i));
+            ExchangeVoices::exchangeVoicesInSelection(m_score, 0, static_cast<int>(i));
             m_score->endCmd();
 */
             resetOctave(staffCount);
@@ -2374,10 +2374,10 @@ QString Braille::brailleMeasure(Measure* measure, int staffCount)
             m_score->select(measure, SelectType::RANGE, staffCount);
             m_score->update();
             m_score->startCmd();
-            m_score->cmdExchangeVoice(0, static_cast<int>(i));
+            ExchangeVoices::exchangeVoicesInSelection(m_score, 0, static_cast<int>(i));
             m_score->endCmd();
             m_score->startCmd();
-            m_score->cmdExchangeVoice(0, static_cast<int>(i));
+            ExchangeVoices::exchangeVoicesInSelection(m_score, 0, static_cast<int>(i));
             m_score->endCmd();
 */
 

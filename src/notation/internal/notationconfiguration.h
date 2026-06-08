@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -117,9 +117,6 @@ public:
     void setDefaultZoom(int zoomPercentage) override;
     muse::async::Notification defaultZoomChanged() const override;
 
-    qreal scalingFromZoomPercentage(int zoomPercentage, const muse::modularity::ContextPtr& ctx) const override;
-    int zoomPercentageFromScaling(qreal scaling, const muse::modularity::ContextPtr& ctx) const override;
-
     QList<int> possibleZoomPercentageList() const override;
 
     int mouseZoomPrecision() const override;
@@ -187,9 +184,6 @@ public:
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
-
-    double guiScaling(const muse::modularity::ContextPtr& ctx) const override;
-    double notationScaling(const muse::modularity::ContextPtr& ctx) const override;
 
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;

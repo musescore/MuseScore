@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -40,8 +40,8 @@ public:
 
     MOCK_METHOD((muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t>), currentPlaybackPositionChanged, (), (const, override));
 
-    MOCK_METHOD(muse::audio::TrackSequenceId, currentTrackSequenceId, (), (const, override));
-    MOCK_METHOD(muse::async::Notification, currentTrackSequenceIdChanged, (), (const, override));
+    MOCK_METHOD(bool, isPlaybackInited, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, playbackInitedChanged, (), (const, override));
 
     MOCK_METHOD(const InstrumentTrackIdMap&, instrumentTrackIdMap, (), (const, override));
 

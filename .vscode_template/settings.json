@@ -16,7 +16,7 @@
     "commands": [
       {
         "match": "\\.(cpp|c|h|hpp)$",
-        "cmd": "cmake -P ${workspaceFolder}/buildscripts/tools/codestyle/format_file.cmake '${file}'"
+        "cmd": "cmake -P ${workspaceFolder}/muse/tools/codestyle/format_file.cmake '${file}'"
       }
     ]
   }

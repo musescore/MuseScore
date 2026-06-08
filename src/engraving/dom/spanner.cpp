@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -138,6 +138,7 @@ EngravingObject* SpannerSegment::propertyDelegate(Pid pid) const
     switch (pid) {
     case Pid::PLAY:
     case Pid::COLOR:
+    case Pid::Z:
     case Pid::VISIBLE:
     case Pid::PLACEMENT:
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
@@ -205,6 +206,11 @@ PropertyValue SpannerSegment::propertyDefault(Pid pid) const
     default:
         return EngravingItem::propertyDefault(pid);
     }
+}
+
+PointF SpannerSegment::defaultPos() const
+{
+    return spanner() ? spanner()->defaultPos() : PointF();
 }
 
 //---------------------------------------------------------
@@ -285,13 +291,9 @@ void SpannerSegment::setSelected(bool f)
 void SpannerSegment::setVisible(bool f)
 {
     if (m_spanner) {
-        for (SpannerSegment* ss : m_spanner->spannerSegments()) {
-            ss->EngravingItem::setVisible(f);
-        }
         m_spanner->setVisible(f);
-    } else {
-        EngravingItem::setVisible(f);
     }
+    EngravingItem::setVisible(f);
 }
 
 //---------------------------------------------------------
@@ -301,13 +303,21 @@ void SpannerSegment::setVisible(bool f)
 void SpannerSegment::setColor(const Color& col)
 {
     if (m_spanner) {
-        for (SpannerSegment* ss : m_spanner->spannerSegments()) {
-            ss->m_color = col;
-        }
-        m_spanner->m_color = col;
-    } else {
-        m_color = col;
+        m_spanner->setColor(col);
     }
+    EngravingItem::setColor(col);
+}
+
+//---------------------------------------------------------
+//   setZ
+//---------------------------------------------------------
+
+void SpannerSegment::setZ(int val)
+{
+    if (m_spanner) {
+        m_spanner->setZ(val);
+    }
+    EngravingItem::setZ(val);
 }
 
 //---------------------------------------------------------
@@ -391,7 +401,7 @@ bool SpannerSegment::isUserModified() const
     bool modified = !autoplace() || !visible()
                     || (propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
                         || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
-                    || (!isStyled(Pid::OFFSET) && (!offset().isNull() || !userOff2().isNull()));
+                    || (!offset().isNull() || !userOff2().isNull());
 
     return modified;
 }
@@ -461,6 +471,7 @@ void Spanner::add(EngravingItem* e)
     ls->setSelected(selected());
     ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
+    ls->EngravingItem::setZ(z());
     m_segments.push_back(ls);
     e->added();
 }
@@ -1219,9 +1230,21 @@ void Spanner::setAutoplace(bool f)
 void Spanner::setColor(const Color& col)
 {
     for (SpannerSegment* ss : spannerSegments()) {
-        ss->setColor(col);
+        ss->EngravingItem::setColor(col);
     }
-    m_color = col;
+    EngravingItem::setColor(col);
+}
+
+//---------------------------------------------------------
+//   setZ
+//---------------------------------------------------------
+
+void Spanner::setZ(int val)
+{
+    for (SpannerSegment* ss : spannerSegments()) {
+        ss->EngravingItem::setZ(val);
+    }
+    EngravingItem::setZ(val);
 }
 
 //---------------------------------------------------------
@@ -1625,27 +1648,6 @@ String SpannerSegment::formatEndBarsAndBeats(const Segment* segment) const
 
     result += u"; " + muse::mtrc("engraving", "End beat: %1").arg(barbeat.beat);
     return result;
-}
-
-//---------------------------------------------------------
-//   undoChangeProperty
-//---------------------------------------------------------
-
-void Spanner::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
-{
-    if (id == Pid::PLACEMENT) {
-        EngravingObject::undoChangeProperty(id, v, ps);
-        // change offset of all segments if styled
-
-        for (SpannerSegment* s : m_segments) {
-            if (s->isStyled(Pid::OFFSET)) {
-                s->setOffset(s->propertyDefault(Pid::OFFSET).value<PointF>());
-                s->triggerLayout();
-            }
-        }
-        return;
-    }
-    EngravingItem::undoChangeProperty(id, v, ps);
 }
 
 bool SpannerSegment::collectForDrawing() const

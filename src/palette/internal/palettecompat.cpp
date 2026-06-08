@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -39,6 +39,7 @@
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/instrchange.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -157,7 +158,7 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
         return;
     }
 
-    if (item->isMarker()) {
+    if (item->isMarker() && paletteScore->mscVersion() < 470) {
         Marker* marker = toMarker(item);
 
         if (marker->markerType() == MarkerType::TOCODASYM) {
@@ -200,6 +201,14 @@ void PaletteCompat::migrateOldPaletteCellIfNeeded(PaletteCell* cell, Score* pale
     if (item->isActionIcon() && muse::contains(BOXES_ACTION_TYPES, toActionIcon(item)->actionType())) {
         cell->mag = COMPAT_FRAME_MAG;
     }
+
+    if (item->isInstrumentChange()) {
+        InstrumentChange* newInstrumentChange = Factory::createInstrumentChange(paletteScore->dummy()->segment());
+        newInstrumentChange->setXmlText(QT_TRANSLATE_NOOP("palette", "Change instr."));
+
+        cell->element.reset(newInstrumentChange);
+        return;
+    }
 }
 
 void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
@@ -226,6 +235,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
 
     if (palette.type() == Palette::Type::Layout) {
         addNewLayoutItems(palette);
+        return;
+    }
+
+    if (palette.type() == Palette::Type::Keyboard) {
+        addNewKeyboardItems(palette, paletteScore);
         return;
     }
 }
@@ -393,15 +407,8 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette, Score* paletteScore)
     }
 
     if (!containsChordBrackets) {
-        std::array<QString, 3> names = { QT_TRANSLATE_NOOP("palette", "Chord bracket"),
-                                         QT_TRANSLATE_NOOP("palette", "Chord bracket (play with left hand)"),
-                                         QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
-        for (int i = 0; i < 3; ++i) {
-            DirectionV hookPos = DirectionV(i);
-            auto c = Factory::makeChordBracket(paletteScore->dummy()->chord());
-            c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
-            linesPalette.insertElement(27 + i, c, names[i]);
-        }
+        int defaultPosition = std::min(27, linesPalette.cellsCount());
+        addChordBrackets(linesPalette, paletteScore, defaultPosition);
     }
 }
 
@@ -467,6 +474,37 @@ void PaletteCompat::addNewLayoutItems(Palette& layoutPalette)
     if (!containsFFrame) {
         int defaultPosition = std::min(10, layoutPalette.cellsCount());
         layoutPalette.insertActionIcon(defaultPosition, ActionIconType::FFRAME, "insert-fretframe", COMPAT_FRAME_MAG);
+    }
+}
+
+void PaletteCompat::addNewKeyboardItems(Palette& keyPalette, engraving::Score* paletteScore)
+{
+    bool containsChordBrackets = false;
+    for (const PaletteCellPtr& cell : keyPalette.cells()) {
+        if (cell->element && cell->element->isChordBracket()) {
+            containsChordBrackets = true;
+        }
+    }
+
+    if (!containsChordBrackets) {
+        addChordBrackets(keyPalette, paletteScore);
+    }
+}
+
+void PaletteCompat::addChordBrackets(Palette& palette, engraving::Score* paletteScore, size_t position)
+{
+    std::array<QString, 3> names = { QT_TRANSLATE_NOOP("palette", "Chord bracket"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with left hand)"),
+                                     QT_TRANSLATE_NOOP("palette", "Chord bracket (play with right hand)") };
+    for (int i = 0; i < 3; ++i) {
+        DirectionV hookPos = DirectionV(i);
+        auto c = Factory::makeChordBracket(paletteScore->dummy()->chord());
+        c->setProperty(Pid::BRACKET_HOOK_POS, hookPos);
+        if (position != muse::nidx) {
+            palette.insertElement(position + i, c, names[i]);
+        } else {
+            palette.appendElement(c, names[i]);
+        }
     }
 }
 

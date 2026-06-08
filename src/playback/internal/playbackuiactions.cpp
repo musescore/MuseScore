@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -50,12 +50,12 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Play from selection"),
              IconCode::Code::PLAY
              ),
-    UiAction("stop",
+    UiAction("pause",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Stop"),
-             TranslatableString("action", "Stop playback"),
-             IconCode::Code::STOP
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Pause"),
+             TranslatableString("action", "Pause playback"),
+             IconCode::Code::PAUSE
              ),
     UiAction("pause-and-select",
              mu::context::UiCtxProjectOpened,
@@ -63,6 +63,13 @@ const UiActionList PlaybackUiActions::s_mainActions = {
              TranslatableString("action", "Pause and select"),
              TranslatableString("action", "Pause and select playback position"),
              IconCode::Code::PAUSE
+             ),
+    UiAction("stop",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Stop"),
+             TranslatableString("action", "Stop playback"),
+             IconCode::Code::STOP
              ),
     UiAction("rewind",
              mu::context::UiCtxProjectOpened,
@@ -279,7 +286,12 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
     if (act.code == PLAY_FROM_SELECTION_CODE) {
         const INotationPtr currNotation = globalContext()->currentNotation();
         const INotationInteractionPtr interaction = currNotation ? currNotation->interaction() : nullptr;
-        return interaction && !interaction->selection()->isNone() && !interaction->isEditingElement();
+        const INotationSelectionPtr selection = interaction ? interaction->selection() : nullptr;
+        if (!selection) {
+            return false;
+        }
+        const bool selectionValid = !selection->isNone() || selection->lastElementHit();
+        return selectionValid && !interaction->isEditingElement();
     }
 
     return true;

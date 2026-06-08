@@ -7,6 +7,8 @@
       <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
+      <windsNameByGroup>0</windsNameByGroup>
+      <vocalsNameByGroup>0</vocalsNameByGroup>
       <maskBarlinesForText>0</maskBarlinesForText>
       <dividerLeftAlignToSystemBarline>0</dividerLeftAlignToSystemBarline>
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
@@ -37,16 +39,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">test_mmrest_text_links</metaTag>
     <Part id="1">
+      <eid>n_n</eid>
       <Staff>
         <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Piano</trackName>
       <Instrument id="piano">
-        <longName>Piano</longName>
-        <shortName>Pno.</shortName>
+        <InstrumentLabel>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          </InstrumentLabel>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
@@ -131,33 +135,33 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>n_n</eid>
+        <eid>o_o</eid>
         <LayoutBreak>
-          <eid>o_o</eid>
+          <eid>p_p</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <TimeSig>
-            <eid>p_p</eid>
+            <eid>q_q</eid>
             <linkedTo>G_G</linkedTo>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <linkedTo>H_H</linkedTo>
             <offset x="-12.5239" y="-3.69242"/>
             <text>test1</text>
             </StaffText>
           <Rest>
-            <eid>r_r</eid>
+            <eid>s_s</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -176,7 +180,7 @@
           <BarLine>
             <subtype>double</subtype>
             <eid>S_S</eid>
-            <linkedTo>s_s</linkedTo>
+            <linkedTo>t_t</linkedTo>
             </BarLine>
           </voice>
         </Measure>
@@ -197,27 +201,27 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>t_t</eid>
+        <eid>u_u</eid>
         <LayoutBreak>
-          <eid>u_u</eid>
+          <eid>v_v</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             <linkedTo>U_U</linkedTo>
             <offset x="28.5455" y="-4.14373"/>
             <text>test2</text>
             </StaffText>
           <Rest>
-            <eid>w_w</eid>
+            <eid>x_x</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <eid>x_x</eid>
+            <eid>y_y</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -236,7 +240,7 @@
           <BarLine>
             <subtype>double</subtype>
             <eid>e_e</eid>
-            <linkedTo>x_x</linkedTo>
+            <linkedTo>y_y</linkedTo>
             </BarLine>
           </voice>
         </Measure>
@@ -256,15 +260,15 @@
         </Measure>
       <Measure len="8/4">
         <multiMeasureRest>2</multiMeasureRest>
-        <eid>y_y</eid>
+        <eid>z_z</eid>
         <voice>
           <StaffText>
-            <eid>z_z</eid>
+            <eid>0_0</eid>
             <linkedTo>g_g</linkedTo>
             <text>test3</text>
             </StaffText>
           <Rest>
-            <eid>0_0</eid>
+            <eid>1_1</eid>
             <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>

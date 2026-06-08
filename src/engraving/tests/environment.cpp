@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -55,7 +55,6 @@ static muse::testing::SuiteEnvironment engraving_se(
     using ECMock = ::testing::NiceMock<mu::engraving::EngravingConfigurationMock>;
 
     std::shared_ptr<ECMock> configurator(new ECMock(), [](ECMock*) {}); // no delete
-    ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(::testing::Return(false));
     ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(muse::draw::Color::BLACK));
     ON_CALL(*configurator, debuggingOptions()).WillByDefault(::testing::ReturnRef(debugOpt));
     ON_CALL(*configurator, allowReadingImagesFromOutsideMscz()).WillByDefault(::testing::Return(true));

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MASTERSCORE_H
-#define MU_ENGRAVING_MASTERSCORE_H
+
+#pragma once
 
 #include <array>
 
@@ -170,6 +170,8 @@ public:
     void initExcerpt(Excerpt*);
     void initEmptyExcerpt(Excerpt*);
 
+    void initAutomation(); // TODO: Placeholder?
+
     void setPlaybackScore(Score*);
     Score* playbackScore() { return m_playbackScore; }
     const Score* playbackScore() const { return m_playbackScore; }
@@ -182,9 +184,6 @@ public:
 
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
-
-    bool saved() const;
-    void setSaved(bool v);
 
     String name() const override;
 
@@ -247,9 +246,5 @@ private:
     // FIXME: Move to EngravingProject
     // We can't yet, because m_project is not set on every MasterScore
     IFileInfoProviderPtr m_fileInfoProvider;
-
-    bool m_saved = false;
 };
 }
-
-#endif // MU_ENGRAVING_MASTERSCORE_H

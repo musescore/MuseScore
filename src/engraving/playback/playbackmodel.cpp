@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -699,6 +699,7 @@ void PlaybackModel::reloadMetronomeEvents()
 bool PlaybackModel::hasToReloadTracks(const ScoreChanges& changes) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES {
+        ElementType::PART,
         ElementType::PLAYTECH_ANNOTATION,
         ElementType::CAPO,
         ElementType::DYNAMIC,
@@ -869,8 +870,8 @@ void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, con
     }
 
     if (tickFrom == 0 && lastMeasure->endTick().ticks() == tickTo) {
-        removeEventsFromRange(trackFrom, trackTo);
-        removeTrackEvents(METRONOME_TRACK_ID);
+        removeEventsFromRange(trackFrom, trackTo, -1 /*timestampFrom*/, -1 /*timestampTo*/, trackChanges);
+        removeTrackEvents(METRONOME_TRACK_ID, -1 /*timestampFrom*/, -1 /*timestampTo*/, trackChanges);
         return;
     }
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -339,7 +339,7 @@ void Paint::paintWatermark(Painter* painter, const Score* score, const RectF& pa
             // Draw centered
             const double bigDim = std::max(pageRect.width(), pageRect.height()) * 2.0;
             const RectF textRect(-bigDim / 2.0, -bigDim / 2.0, bigDim, bigDim);
-            painter->drawText(textRect, muse::draw::AlignCenter, text);
+            painter->drawText(textRect, muse::draw::AlignCenter, muse::draw::TextFlags(), text);
         }
     }
     else if (watermarkTypeVal == 1) {

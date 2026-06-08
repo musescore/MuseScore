@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,6 +34,7 @@
 #include "containers.h"
 
 #include "editing/addremoveelement.h"
+#include "editing/editstavesharing.h"
 #include "editing/mscoreview.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transpose.h"
@@ -1345,31 +1346,6 @@ void Score::styleChanged()
 }
 
 //---------------------------------------------------------
-//   getCreateMeasure
-//    - return Measure for tick
-//    - create Factory::createMeasure(s) if there is no measure for
-//      this tick
-//---------------------------------------------------------
-
-Measure* Score::getCreateMeasure(const Fraction& tick)
-{
-    Measure* last = lastMeasure();
-    if (!last || last->endTick() <= tick) {
-        Fraction lastTick  = last ? last->endTick() : Fraction(0, 1);
-        while (tick >= lastTick) {
-            Measure* m = Factory::createMeasure(this->dummy()->system());
-            Fraction ts = sigmap()->timesig(lastTick).timesig();
-            m->setTick(lastTick);
-            m->setTimesig(ts);
-            m->setTicks(ts);
-            measures()->append(toMeasureBase(m));
-            lastTick += m->ticks();
-        }
-    }
-    return tick2measure(tick);
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 
@@ -1562,28 +1538,37 @@ void Score::removeElement(EngravingItem* element)
         ) {
         MeasureBase* mb = toMeasureBase(element);
         measures()->remove(mb);
-        System* system = mb->system();
 
+        System* system = mb->system();
         if (!system) {
-            // vertical boxes are not shown in continuous view so no system
 #ifndef NDEBUG
-            bool noSystemMode = lineMode() && element->isVBoxBase();
-#endif
+            // vertical boxes are not shown in continuous view so no system
+            const bool noSystemMode = lineMode() && element->isVBoxBase();
             assert(noSystemMode || !isOpen());
+#endif
             return;
         }
 
-        Page* page = system->page();
-        if (element->isBox() && system->measures().size() == 1) {
-            auto i = std::find(page->systems().begin(), page->systems().end(), system);
-            page->systems().erase(i);
-            mb->resetExplicitParent();
-            if (page->systems().empty()) {
+        system->removeMeasure(mb);
+
+        // See also InsertRemoveMeasures::removeMeasures()
+        if (element->isBox() && system->measures().empty()) {
+            Page* page = system->page();
+            if (page) {
+                muse::remove(page->systems(), system);
+            }
+
+            muse::remove(m_systems, system);
+            deleteLater(system);
+
+            if (page && page->systems().empty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
                 PointF pos = page->pos();
                 auto ii = std::find(pages().begin(), pages().end(), page);
                 pages().erase(ii);
+                deleteLater(page);
+
                 while (ii != pages().end()) {
                     page = *ii;
                     page->setPageNumber(page->pageNumber() - 1);
@@ -1594,7 +1579,6 @@ void Score::removeElement(EngravingItem* element)
                 }
             }
         }
-//            setLayout(mb->tick());
         return;
     }
 
@@ -1712,7 +1696,7 @@ void Score::doUndoRemoveElement(EngravingItem* element)
 {
     if (element->generated()) {
         removeElement(element);
-        //! HACK: don't delete as it may still be used in Inspector
+        //! HACK: don't delete as it may still be used in PropertiesPanel
         // element->deleteLater();
     } else {
         undo(new RemoveElement(element));
@@ -2387,6 +2371,8 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
+    EditStaveSharing::handleRemovePart(part);
+
     staff_idx_t sidx = staffIdx(part);
     size_t n = part->nstaves();
 
@@ -2395,6 +2381,10 @@ void Score::cmdRemovePart(Part* part)
     }
 
     undoRemovePart(part, muse::indexOf(m_parts, part));
+
+    if (!hasSharedParts()) {
+        undoChangeStyleVal(Sid::enableStaveSharing, false);
+    }
 }
 
 //---------------------------------------------------------
@@ -3121,6 +3111,7 @@ void Score::padToggle(Pad p, bool toggleForSelectionOnly)
 
                     for (const NoteVal& nval : m_is.notes()) {
                         if (chord && chord->findNote(nval.pitch)) {
+                            m_is.moveToNextInputPos();
                             continue;
                         }
 
@@ -4428,6 +4419,7 @@ std::vector<Spanner*> Score::spannerList() const
 {
     std::vector<Spanner*> result;
     const std::multimap<int, Spanner*>& spannerMap = m_spanner.map();
+    result.reserve(spannerMap.size());
     for (auto it = spannerMap.begin(); it != spannerMap.end(); ++it) {
         result.push_back(it->second);
     }
@@ -5779,6 +5771,29 @@ size_t Score::visiblePartCount() const
         }
     }
     return count;
+}
+
+std::vector<SharedPart*> Score::sharedParts() const
+{
+    std::vector<SharedPart*> sharedParts;
+    for (Part* part : m_parts) {
+        if (part->isSharedPart()) {
+            sharedParts.push_back(toSharedPart(part));
+        }
+    }
+
+    return sharedParts;
+}
+
+bool Score::hasSharedParts() const
+{
+    for (Part* part : m_parts) {
+        if (part->isSharedPart()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 size_t Score::visibleStavesCount() const

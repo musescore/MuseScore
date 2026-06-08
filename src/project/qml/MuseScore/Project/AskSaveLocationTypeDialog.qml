@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -75,7 +75,7 @@ StyledDialogView {
             }
 
             SaveLocationOption {
-                title: qsTrc("project/save", "To the Cloud (free)")
+                title: qsTrc("project/save", "To the cloud (free)")
                 description: qsTrc("project/save", "Files are saved privately on your own personal account. \
 You can share drafts with others and publish your finished scores publicly too.")
                 buttonText: qsTrc("project/save", "Save to the cloud")

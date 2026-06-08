@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -210,11 +210,11 @@ public:
 
     void scanElements(std::function<void(EngravingItem*)> func) override;
 
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-
-    void setVisible(bool f) override;
 
     void setTrack(track_idx_t val) override;
 

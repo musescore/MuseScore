@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -80,6 +80,8 @@ public:
 
     String accessibleInfo() const override;
 
+    Sid defaultPosSid() const override;
+
 protected:
     void added() override;
     void removed() override;
@@ -88,8 +90,6 @@ private:
 
     friend class Factory;
     Fermata(EngravingItem* parent);
-
-    Sid getPropertyStyle(Pid) const override;
 
     SymId m_symId = SymId::noSym;
     double m_timeStretch = -1.0;

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -190,6 +190,8 @@ FlatButton {
                 text: qsTrc("project/newscore", "Hint: You can also add & delete measures after you have created your score")
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
+
+                displayTruncatedTextOnHover: true
             }
         }
     }

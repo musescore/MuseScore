@@ -24,16 +24,18 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">tst_copy_symbol_list</metaTag>
     <Part id="1">
+      <eid>2JGCLp7p+7P_2JGCLp7p+7P</eid>
       <Staff>
-        <eid>2JGCLp7p+7P_2JGCLp7p+7P</eid>
+        <eid>3JGCLp7p+7P_3JGCLp7p+7P</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Violin</trackName>
       <Instrument id="violin">
-        <longName>Violin</longName>
-        <shortName>Vln.</shortName>
+        <InstrumentLabel>
+          <longName>Violin</longName>
+          <shortName>Vln.</shortName>
+          </InstrumentLabel>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -75,16 +77,18 @@
         </Instrument>
       </Part>
     <Part id="2">
+      <eid>4JGCLp7p+7P_4JGCLp7p+7P</eid>
       <Staff>
-        <eid>3JGCLp7p+7P_3JGCLp7p+7P</eid>
+        <eid>5JGCLp7p+7P_5JGCLp7p+7P</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
         </Staff>
-      <trackName>Viola</trackName>
       <Instrument id="viola">
-        <longName>Viola</longName>
-        <shortName>Vla.</shortName>
+        <InstrumentLabel>
+          <longName>Viola</longName>
+          <shortName>Vla.</shortName>
+          </InstrumentLabel>
         <trackName>Viola</trackName>
         <minPitchP>48</minPitchP>
         <maxPitchP>93</maxPitchP>
@@ -242,7 +246,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>4JGCLp7p+7P_4JGCLp7p+7P</eid>
+              <eid>6JGCLp7p+7P_6JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>fgr+iUgex5J_CfqOydeSuiI</eid>
@@ -255,7 +259,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>5JGCLp7p+7P_5JGCLp7p+7P</eid>
+              <eid>7JGCLp7p+7P_7JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>yZaIhd7L8yC_jJ7cSNBlr5M</eid>
@@ -268,7 +272,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>6JGCLp7p+7P_6JGCLp7p+7P</eid>
+              <eid>8JGCLp7p+7P_8JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>hJcB2Hnn51O_qsr+1/UJerD</eid>
@@ -281,7 +285,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articTenutoAbove</subtype>
-              <eid>7JGCLp7p+7P_7JGCLp7p+7P</eid>
+              <eid>9JGCLp7p+7P_9JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>E5/QTkaG8UJ_TpwykCA9umM</eid>
@@ -394,7 +398,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>8JGCLp7p+7P_8JGCLp7p+7P</eid>
+              <eid>+JGCLp7p+7P_+JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>hNJH8hSvaYD_SzBQH7Av3VJ</eid>
@@ -407,7 +411,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>9JGCLp7p+7P_9JGCLp7p+7P</eid>
+              <eid>/JGCLp7p+7P_/JGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>TgXfmP5Ga+F_MQyui4UTdgC</eid>
@@ -420,7 +424,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>+JGCLp7p+7P_+JGCLp7p+7P</eid>
+              <eid>AKGCLp7p+7P_AKGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>lcM3Ru48f0O_lzreB12OeZN</eid>
@@ -433,7 +437,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
-              <eid>/JGCLp7p+7P_/JGCLp7p+7P</eid>
+              <eid>BKGCLp7p+7P_BKGCLp7p+7P</eid>
               </Articulation>
             <Note>
               <eid>Rthk9fKlgcO_zNxal0DmZ1P</eid>

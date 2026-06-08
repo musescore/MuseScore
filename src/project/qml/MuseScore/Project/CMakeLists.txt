@@ -4,7 +4,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2021 MuseScore Limited and others
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -60,7 +60,7 @@ qt_add_qml_module(project_qml
         AudioGenerationSettings.qml
         AudioGenerationSettingsDialog.qml
         ExportDialog.qml
-        internal/Export/AudioSettingsPage.qml
+        internal/Export/AudioSettings.qml
         internal/Export/ExportOptionItem.qml
         internal/Export/ExportOptionsView.qml
         internal/Export/ExportScoresListView.qml
@@ -70,8 +70,12 @@ qt_add_qml_module(project_qml
         internal/Export/MidiSettingsPage.qml
         internal/Export/MnxSettingsPage.qml
         internal/Export/Mp3SettingsPage.qml
-        internal/Export/MusicXmlSettingsPage.qml
         internal/Export/OggSettingsPage.qml
+        internal/Export/FlacSettingsPage.qml
+        internal/Export/WavSettingsPage.qml
+        internal/Export/AacSettingsPage.qml
+        internal/Export/Mp4SettingsPage.qml
+        internal/Export/MusicXmlSettingsPage.qml
         internal/Export/PdfSettingsPage.qml
         internal/Export/PngSettingsPage.qml
         internal/Export/SvgSettingsPage.qml
@@ -98,9 +102,15 @@ qt_add_qml_module(project_qml
         internal/Properties/PropertyItem.qml
         internal/SaveToCloud/SaveLocationOption.qml
         internal/ScoresPage/CloudScoreIndicatorButton.qml
+        internal/ScoresPage/CloudScoresGridView.qml
+        internal/ScoresPage/CloudScoresListView.qml
+        internal/ScoresPage/CloudScoresView.qml
         internal/ScoresPage/RecentScoresView.qml
         internal/ScoresPage/ScoreGridItem.qml
         internal/ScoresPage/ScoreListItem.qml
+        internal/ScoresPage/ScoresGridView.qml
+        internal/ScoresPage/ScoresListView.qml
+        internal/ScoresPage/ScoresView.qml
         internal/ScoresPage/ScoreThumbnail.qml
         Message.qml
         MigrationDialog.qml
@@ -108,10 +118,7 @@ qt_add_qml_module(project_qml
         ProjectPropertiesDialog.qml
         ProjectUploadedDialog.qml
         SaveToCloudDialog.qml
-        ScoresGridView.qml
-        ScoresListView.qml
         ScoresPage.qml
-        ScoresView.qml
         UploadProgressDialog.qml
     RESOURCES
         internal/Migration/migration.png
@@ -125,6 +132,7 @@ qt_add_qml_module(project_qml
         resources/AudioCom_Waveform.png
         resources/PublishScores.png
     IMPORTS
+        TARGET muse_cloud_qml
         TARGET muse_ui_qml
         TARGET muse_uicomponents_qml
         TARGET notationscene_qml

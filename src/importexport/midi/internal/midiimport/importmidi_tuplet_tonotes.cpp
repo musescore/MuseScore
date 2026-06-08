@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -86,7 +86,7 @@ void createTupletNotes(
         tuplet->setBaseLen(baseLen);
 
         tuplet->setTrack(track);
-//            tuplet->setTick(tupletData.onTime.ticks());
+        tuplet->setTick(tupletData.onTime.fraction());
         tuplet->setVoice(tupletData.voice);
         tuplet->setParent(measure);
 

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -949,43 +949,15 @@ void MeasureLayout::checkStaffMoveValidity(Measure* measure, const LayoutContext
 
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
-    IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
+    if (!currentMB || !currentMB->isMeasure()) {
         return;
     }
-
-    if (!currentMB) {
-        return;
-    }
-
-    if (!currentMB->isMeasure()) {
-        assert(currentMB->tick() == ctx.state().tick());
-
-        const LayoutBreak* layoutBreak = currentMB->sectionBreakElement();
-        if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-            ctx.mutState().setMeasureNumber(0);
-        }
-
-        return;
-    }
-
-    //-----------------------------------------
-    //    process one measure
-    //-----------------------------------------
 
     Measure* measure = toMeasure(currentMB);
 
-    int measureNumber = adjustMeasureNumber(measure, ctx.state().measureNumber());
-    LAYOUT_CALL() << LAYOUT_ITEM_INFO(measure) << " measureNumber: " << measureNumber;
-
-    ctx.mutState().setMeasureNumber(measureNumber);
-
-    createMultiMeasureRestsIfNeed(measure, ctx);
-
-    currentMB = ctx.mutState().curMeasure();
-    measure = toMeasure(currentMB);
-
-    measure->moveTicks(ctx.state().tick() - measure->tick());
-    ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
+    if (!measure->ldata()->needLayout()) {
+        return;
+    }
 
     if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
         return;
@@ -994,6 +966,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     if (ctx.dom().allStavesInvisible()) {
         return;
     }
+
+    measure->mutldata()->setNeedLayout(false);
 
     // Check if requested cross-staff is possible
     // This must happen before cmdUpdateNotes
@@ -1185,7 +1159,49 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 
     moveToNextMeasure(ctx);
 
-    layoutMeasure(ctx.mutState().curMeasure(), ctx);
+    updateTicksMeasNumbersAndMMRests(ctx.mutState().curMeasure(), ctx);
+
+    MeasureBase* mb = ctx.mutState().curMeasure();
+    if (mb && mb->isMeasure()) {
+        toMeasure(mb)->mutldata()->setNeedLayout(true);
+    }
+}
+
+void MeasureLayout::updateTicksMeasNumbersAndMMRests(MeasureBase* currentMB, LayoutContext& ctx)
+{
+    IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
+        return;
+    }
+
+    if (!currentMB) {
+        return;
+    }
+
+    if (!currentMB->isMeasure()) {
+        assert(currentMB->tick() == ctx.state().tick());
+
+        const LayoutBreak* layoutBreak = currentMB->sectionBreakElement();
+        if (layoutBreak && layoutBreak->startWithMeasureOne()) {
+            ctx.mutState().setMeasureNumber(0);
+        }
+
+        return;
+    }
+
+    Measure* measure = toMeasure(currentMB);
+
+    int measureNumber = adjustMeasureNumber(measure, ctx.state().measureNumber());
+
+    ctx.mutState().setMeasureNumber(measureNumber);
+
+    createMultiMeasureRestsIfNeed(measure, ctx);
+
+    currentMB = ctx.mutState().curMeasure();
+    measure = toMeasure(currentMB);
+
+    measure->moveTicks(ctx.state().tick() - measure->tick());
+
+    ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
 }
 
 //---------------------------------------------------------

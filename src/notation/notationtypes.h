@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -47,6 +47,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sharedpart.h"
 #include "engraving/dom/realizedharmony.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -63,6 +64,7 @@
 namespace mu::notation {
 using Page = mu::engraving::Page;
 using System = mu::engraving::System;
+using SysStaff = mu::engraving::SysStaff;
 using EngravingItem = mu::engraving::EngravingItem;
 using ElementType = mu::engraving::ElementType;
 using PropertyValue = engraving::PropertyValue;
@@ -83,6 +85,7 @@ using KeyMode = mu::engraving::KeyMode;
 using TimeSigType = mu::engraving::TimeSigType;
 using TimeSignature = mu::engraving::TimeSig;
 using Part = mu::engraving::Part;
+using SharedPart = mu::engraving::SharedPart;
 using Staff = mu::engraving::Staff;
 using NoteHead = mu::engraving::NoteHead;
 using SharpFlat = mu::engraving::PreferSharpFlat;
@@ -122,7 +125,8 @@ using BracketType = mu::engraving::BracketType;
 using StaffGroup = mu::engraving::StaffGroup;
 using StaffType = mu::engraving::StaffType;
 using StaffTypeId = mu::engraving::StaffTypes;
-using StaffName = mu::engraving::StaffName;
+using StaffLabel = mu::engraving::StaffLabel;
+using InstrumentLabel = mu::engraving::InstrumentLabel;
 using Segment = mu::engraving::Segment;
 using TextStyleType = mu::engraving::TextStyleType;
 using TraitType = mu::engraving::TraitType;

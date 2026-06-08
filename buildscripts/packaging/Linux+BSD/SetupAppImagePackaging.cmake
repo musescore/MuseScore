@@ -15,7 +15,7 @@ if(MUSE_APP_UNSTABLE)
     set(DESKTOP_LAUNCHER_NAME "MU ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
 else(MUSE_APP_UNSTABLE)
     # Use full name for stable releases
-    set(DESKTOP_LAUNCHER_NAME "${MUSE_APP_TITLE} ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
+    set(DESKTOP_LAUNCHER_NAME "${MUSE_APP_NAME_HUMAN_READABLE} ${MUSE_APP_VERSION_MAJ_MIN}") # Muse X.Y
 endif(MUSE_APP_UNSTABLE)
 
 if(${MUSE_APP_INSTALL_SUFFIX} MATCHES "dev")
@@ -62,9 +62,9 @@ endif(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable")
 # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
 # App's main window to find out what string to use here.
 if(MUSE_APP_UNSTABLE)
-    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}Development")
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR}Development")
 else()
-    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}")
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE}${MUSE_APP_VERSION_MAJOR}")
 endif()
 
 # Install desktop file (perform variable substitution first)

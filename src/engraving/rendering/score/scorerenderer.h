@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -34,6 +34,7 @@ public:
 
     // Main interface
     void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
+    void layoutHeadersFooters(Score* score) const override;
 
     SizeF pageSizeInch(const Score* score) const override;
     SizeF pageSizeInch(const Score* score, const ScorePaintOptions& opt) const override;
@@ -51,6 +52,8 @@ public:
 
     void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) override;
     void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF()) override;
+
+    bool scoreHasTimestampHeadersFooters(const Score* score) const override;
 
 private:
     // Layout Single Item

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -71,6 +71,7 @@
 #include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
+#include "dom/page.h"
 #include "dom/palmmute.h"
 #include "dom/pedal.h"
 #include "dom/playcounttext.h"
@@ -780,7 +781,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->bracketWidth = ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
     }
     break;
-    case BracketType::SQUARE: {
+    case BracketType::SQUARE:
+    {
         double w = ctx.style().styleAbsolute(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
@@ -805,11 +807,46 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         ldata->bracketWidth = 0.67 * ctx.style().styleAbsolute(Sid::bracketWidth) + ctx.style().styleAbsolute(Sid::bracketDistance);
     }
     break;
+    case BracketType::GROUP:
+        layoutGroupBracket(item, ctx);
+        break;
     case BracketType::NO_BRACKET:
         break;
     }
 
     ldata->shape = shape;
+}
+
+void SingleLayout::layoutGroupBracket(Bracket* item, const Context& ctx)
+{
+    Bracket::LayoutData* ldata = item->mutldata();
+    ldata->bracketHeight = 12 * item->spatium();
+    double w = ctx.style().styleAbsolute(Sid::staffLineWidth) * 0.5;
+    double x = 0.0;
+    double y = -w;
+    double h = (ldata->bracketHeight * 0.5 + w) * 2;
+    double width = item->spatium();
+    ldata->setBbox(RectF(x, y, width, h));
+    ldata->shape.add(ldata->bbox());
+
+    ldata->bracketWidth = width;
+
+    if (!item->text()) {
+        const_cast<Bracket*>(item)->setText(new Text(const_cast<Bracket*>(item)));
+        item->text()->setParent(const_cast<Bracket*>(item));
+    }
+
+    Text* text = item->text();
+    text->setAlign(Align(AlignH::HCENTER, AlignV::VCENTER));
+    text->setPosition(AlignH::HCENTER);
+    text->setTextAngle(-90);
+    text->setXmlText(item->bracketItem()->longName());
+    layout(text, ctx);
+    text->mutldata()->setPos(0.0, item->ldata()->bbox().height() / 2);
+
+    double textPadding = 0.5 * item->spatium();
+    RectF mask = text->ldata()->bbox().translated(text->pos()).padded(textPadding);
+    ldata->setMask(mask);
 }
 
 void SingleLayout::layout(Breath* item, const Context&)
@@ -2049,11 +2086,18 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
         t.setY(t.y() + yoff);
     }
 
-    bb.translate(0.0, yoff);
+    shape.translateY(yoff);
+    ldata->setShape(shape);
 
-    ldata->setBbox(bb);
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
+    }
+
+    if (!muse::RealIsNull(item->textAngle())) {
+        Transform t;
+        t.rotate(item->textAngle());
+        ldata->setShape(shape.transform(t));
+        ldata->highResShape.mut_value().transform(t);
     }
 }
 
@@ -2183,6 +2227,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         item->text()->setXmlText(tl->beginText());
         item->text()->setFamily(tl->beginFontFamily());
         item->text()->setSize(tl->beginFontSize());
+        item->text()->setSymbolScale(tl->beginTextMusicalSymbolsScale());
+        item->text()->setSymbolSize(tl->beginTextMusicSymbolsSize());
         item->text()->setOffset(tl->beginTextOffset() * item->mag());
         item->text()->setAlign(tl->beginTextAlign());
         item->text()->setPosition(tl->beginTextPosition());
@@ -2191,6 +2237,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         item->text()->setXmlText(tl->continueText());
         item->text()->setFamily(tl->continueFontFamily());
         item->text()->setSize(tl->continueFontSize());
+        item->text()->setSymbolScale(tl->continueTextMusicalSymbolsScale());
+        item->text()->setSymbolSize(tl->continueTextMusicSymbolsSize());
         item->text()->setOffset(tl->continueTextOffset() * item->mag());
         item->text()->setAlign(tl->continueTextAlign());
         item->text()->setPosition(tl->continueTextPosition());
@@ -2205,6 +2253,8 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         item->endText()->setXmlText(tl->endText());
         item->endText()->setFamily(tl->endFontFamily());
         item->endText()->setSize(tl->endFontSize());
+        item->endText()->setSymbolScale(tl->endTextMusicalSymbolsScale());
+        item->endText()->setSymbolSize(tl->endTextMusicSymbolsSize());
         item->endText()->setOffset(tl->endTextOffset() * item->mag());
         item->endText()->setAlign(tl->endTextAlign());
         item->endText()->setPosition(tl->endTextPosition());

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -184,7 +184,7 @@ Item {
 
         // Fixed width prevents items from jumping around; but we
         // scale it according to the font size to prevent clipping
-        readonly property real tempoViewWidth: 60 * (ui.theme.bodyFont.pixelSize / ui.theme.defaultFont.pixelSize)
+        readonly property real tempoViewWidth: 5 * ui.theme.bodyFont.pixelSize
 
         sourceComponent: root.floating ? tempoViewComponent : tempoButtonComponent
 

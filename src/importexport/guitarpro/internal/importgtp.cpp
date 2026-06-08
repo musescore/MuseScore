@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -61,6 +61,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
+#include "engraving/dom/tapping.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textline.h"
@@ -71,6 +72,8 @@
 #include "engraving/dom/stringtunings.h"
 #include "engraving/rw/xmlwriter.h"
 #include "engraving/types/symid.h"
+
+#include "engraving/editing/editchord.h"
 
 #include "log.h"
 
@@ -1517,7 +1520,6 @@ bool GuitarPro2::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
 
         //
@@ -2266,7 +2268,6 @@ bool GuitarPro3::read(IODevice* io)
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
         //
         // determine clef
@@ -2528,7 +2529,7 @@ bool GuitarPro3::read(IODevice* io)
                         art->setSymId(SymId::guitarFadeOut);
                         art->setAnchor(ArticulationAnchor::TOP);
                         art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-                        if (!score->toggleArticulation(cr, art)) {
+                        if (!EditChord::toggleArticulation(score, cr, art)) {
                             delete art;
                         }
                     }

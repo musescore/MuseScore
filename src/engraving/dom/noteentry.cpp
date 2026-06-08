@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@
 #include "translation.h"
 
 #include "../editing/editmeasures.h"
+#include "../editing/editnote.h"
 #include "../editing/inserttime.h"
 #include "../editing/transpose.h"
 #include "infrastructure/messagebox.h"
@@ -206,7 +207,12 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     }
 
     if (!is.cr()) {
-        handleOverlappingChordRest(is);
+        ChordRest* prevCr = is.segment()->nextChordRest(is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > is.tick()) {
+            const InputState inputStateToRestore = is; // because truncateChordRest will alter the input state
+            truncateChordRest(prevCr, is.tick(), /*fillWithRest*/ true);
+            is = inputStateToRestore;
+        }
     }
 
     Measure* measure = is.segment()->measure();
@@ -294,7 +300,7 @@ Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalIn
             return false;
         }
         Note* n = ch->notes().at(0);
-        return n->tieFor() || n->tieBack();
+        return (n->tieFor() && !n->tieFor()->isLaissezVib()) || n->tieBack();
     };
 
     Note* note = nullptr;
@@ -436,7 +442,12 @@ Ret Score::putNote(const Position& p, bool replace)
 
     // If there's an overlapping ChordRest at the current input position, shorten it...
     if (!m_is.cr()) {
-        handleOverlappingChordRest(m_is);
+        ChordRest* prevCr = m_is.segment()->nextChordRest(m_is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > m_is.tick()) {
+            const InputState inputStateToRestore = m_is; // because truncateChordRest will alter the input state
+            truncateChordRest(prevCr, m_is.tick(), /*fillWithRest*/ true);
+            m_is = inputStateToRestore;
+        }
     }
 
     ChordRest* cr = m_is.cr();
@@ -446,7 +457,8 @@ Ret Score::putNote(const Position& p, bool replace)
             return false;
         }
         auto ch = toChord(cr);
-        return !ch->notes().empty() && !ch->notes()[0]->tieBack() && ch->notes()[0]->tieFor();
+        return (!ch->notes().empty() && !ch->notes()[0]->tieBack())
+               && (ch->notes()[0]->tieFor() && !ch->notes()[0]->tieFor()->isLaissezVib());
     };
 
     bool addToChord = false;
@@ -479,7 +491,7 @@ Ret Score::putNote(const Position& p, bool replace)
                         // set fret number (original or combined) in all linked notes
                         int tpc1 = note->tpc1default(nval.pitch);
                         int tpc2 = note->tpc2default(nval.pitch);
-                        undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
+                        EditNote::undoChangeFretting(this, note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                         setPlayNote(true);
                         return muse::make_ok();
                     }
@@ -547,30 +559,30 @@ Ret Score::putNote(const Position& p, bool replace)
     return ret;
 }
 
-void Score::handleOverlappingChordRest(InputState& inputState)
+void Score::truncateChordRest(ChordRest* cr, const Fraction& tick, bool fillWithRest)
 {
     MasterScore* ms = masterScore();
-    ChordRest* prevCr = inputState.segment()->nextChordRest(inputState.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
-    if (prevCr && prevCr->endTick() > inputState.tick()) {
-        const Fraction overlapDuration = prevCr->endTick() - inputState.tick();
-        const Fraction desiredDuration = prevCr->ticks() - overlapDuration;
+    IF_ASSERT_FAILED(ms && cr && cr->endTick() > tick) {
+        return;
+    }
 
-        const InputState inputStateToRestore = inputState; // because changeCRlen will alter the input state
-        ms->changeCRlen(prevCr, desiredDuration, /*fillWithRest*/ true);
+    const Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
+    Tuplet* tuplet = cr->tuplet();
+    const Fraction overlapDuration = (cr->endTick() - tick) / actualTicks(Fraction(1, 1), tuplet, timeStretch);
+    const Fraction desiredDuration = cr->ticks() - overlapDuration;
 
-        // Fill the difference with tied notes if necessary...
-        const Fraction difference = desiredDuration - prevCr->ticks();
-        if (prevCr->isChord() && difference.isNotZero()) {
-            Fraction startTick = prevCr->endTick();
-            Chord* prevChord = toChord(prevCr);
-            const std::vector<TDuration> durationList = toDurationList(difference, true);
-            for (const TDuration& dur : durationList) {
-                prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
-                startTick += dur.fraction();
-            }
+    ms->changeCRlen(cr, desiredDuration, fillWithRest);
+
+    // Fill the difference with tied notes if necessary...
+    const Fraction difference = desiredDuration - cr->ticks();
+    if (cr->isChord() && difference.isNotZero()) {
+        Fraction startTick = cr->endTick();
+        Chord* prevChord = toChord(cr);
+        const std::vector<TDuration> durationList = toDurationList(difference, true);
+        for (const TDuration& dur : durationList) {
+            prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
+            startTick += actualTicks(dur.fraction(), prevChord->tuplet(), prevChord->staff()->timeStretch(startTick));
         }
-
-        inputState = inputStateToRestore;
     }
 }
 
@@ -710,7 +722,7 @@ std::pair<Note*, Note*> Score::repitchReplaceNote(Chord* chord, const NoteVal& n
                 firstTiedNote = tn;
             }
             lastTiedNote = tn;
-            undoChangePitch(tn, note->pitch(), note->tpc1(), note->tpc2());
+            EditNote::undoChangePitch(this, tn, note->pitch(), note->tpc1(), note->tpc2());
             if (tn->tieFor()) {
                 tn = tn->tieFor()->endNote();
             } else {

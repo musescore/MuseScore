@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -365,15 +365,9 @@ void Lyrics::removeFromScore()
     }
 
     if (!plainText().isEmpty()) {
-        for (auto sp : score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks())) {
-            if (!sp.value->isPartialLyricsLine() || sp.value->track() != track()) {
-                continue;
-            }
-            PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-            if (partialLine->isEndMelisma() || partialLine->verse() != verse() || partialLine->placement() != placement()) {
-                continue;
-            }
-            score()->undoRemoveElement(partialLine);
+        PartialLyricsLine* partialDash = findPrevPartialLyricsLineDash(this);
+        if (partialDash) {
+            score()->undoRemoveElement(partialDash);
         }
     }
 
@@ -471,6 +465,12 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::AVOID_BARLINES:
         m_avoidBarlines = v.toBool();
         break;
+    case Pid::VISIBLE:
+        setVisible(v.toBool());
+        if (separator()) {
+            separator()->setVisible(v.toBool());
+        }
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;
@@ -557,6 +557,8 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::VERSE && verse() != v.toInt()) {
+        PartialLyricsLine* prevPartial = findPrevPartialLyricsLineDash(this);
+
         for (Lyrics* l : chordRest()->lyrics()) {
             if (l->verse() == v.toInt()) {
                 // verse already exists, swap
@@ -568,6 +570,10 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             }
         }
         TextBase::undoChangeProperty(id, v, ps);
+        if (prevPartial && prevPartial->verse() != v.toInt()) {
+            // Skip logic to update Lyrics by calling parent class
+            prevPartial->LyricsLine::undoChangeProperty(id, v, ps);
+        }
         return;
     }
 

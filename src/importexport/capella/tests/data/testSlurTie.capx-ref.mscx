@@ -26,14 +26,14 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
+      <eid>C_C</eid>
       <Staff>
-        <eid>C_C</eid>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName></trackName>
       <Instrument>
         <trackName></trackName>
         <Channel>
@@ -44,26 +44,30 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <eid>D_D</eid>
+        <eid>E_E</eid>
         </VBox>
       <Measure>
-        <eid>E_E</eid>
+        <eid>F_F</eid>
         <LayoutBreak>
-          <eid>F_F</eid>
+          <eid>G_G</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <KeySig>
+            <eid>H_H</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
-            <eid>G_G</eid>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <eid>H_H</eid>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
-                <eid>I_I</eid>
+                <eid>K_K</eid>
                 </Slur>
               <next>
                 <location>
@@ -72,19 +76,19 @@
                 </next>
               </Spanner>
             <Note>
-              <eid>J_J</eid>
+              <eid>L_L</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>K_K</eid>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>N_N</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>M_M</eid>
+                  <eid>O_O</eid>
                   </Tie>
                 <next>
                   <location>
@@ -97,10 +101,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>N_N</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -113,7 +117,7 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -123,7 +127,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>S_S</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>

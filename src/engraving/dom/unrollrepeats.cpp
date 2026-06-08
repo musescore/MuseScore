@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -137,6 +137,7 @@ MasterScore* MasterScore::unrollRepeats()
 
     // remove excerpts for now (they are re-created after unrolling master score)
     std::vector<Excerpt*> excerpts;
+    excerpts.reserve(score->excerpts().size());
     for (Excerpt* e : score->excerpts()) {
         excerpts.push_back(new Excerpt(*e, false));
         score->masterScore()->deleteExcerpt(e);

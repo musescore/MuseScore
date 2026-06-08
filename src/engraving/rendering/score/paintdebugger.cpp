@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -181,9 +181,9 @@ void PaintDebugger::drawText(const PointF& point, const String& text)
     m_real->drawText(point, text);
 }
 
-void PaintDebugger::drawText(const RectF& rect, int flags, const String& text)
+void PaintDebugger::drawText(const RectF& rect, Alignment alignment, TextFlags textFlags, const String& text)
 {
-    m_real->drawText(rect, flags, text);
+    m_real->drawText(rect, alignment, textFlags, text);
 }
 
 void PaintDebugger::drawSymbol(const PointF& point, char32_t ucs4Code)

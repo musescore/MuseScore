@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -114,7 +114,7 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
     for (int i = row; i < row + count; ++i) {
         const AbstractLayoutPanelTreeItem* child = childAtRow(i);
 
-        if (child->type() == LayoutPanelItemType::PART) {
+        if (child->type() == LayoutPanelItemType::PART || child->type() == LayoutPanelItemType::SHARED_PART) {
             partIds.push_back(child->id());
         } else if (child->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER) {
             stavesIds.push_back(child->id());

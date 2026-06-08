@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -228,7 +228,7 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
 
         TLayout::layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
 
-        //! reset the skip wich was added above
+        //! reset the skip which was added above
         fretDiagram->mutldata()->setIsSkipDraw(false);
         harmony->mutldata()->setIsSkipDraw(false);
 
@@ -244,9 +244,13 @@ void BoxLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layo
     const double columnGap = item->columnGap().val() * spatium;
 
     //! The height of each row is determined by the height of the tallest cell in that row
+    const size_t numRows = chordsPerRow > 0 ? (totalDiagrams + chordsPerRow - 1) / chordsPerRow : 0;
     std::vector<double> rowHeights;
+    rowHeights.reserve(numRows);
     std::vector<double> harmonyHeights;
+    harmonyHeights.reserve(numRows);
     std::vector<double> harmonyBaselines;
+    harmonyBaselines.reserve(numRows);
     for (size_t i = 0; i < totalDiagrams; i += chordsPerRow) {
         size_t itemsInRow = std::min(chordsPerRow, totalDiagrams - i);
         double maxRowHeight = 0.0;

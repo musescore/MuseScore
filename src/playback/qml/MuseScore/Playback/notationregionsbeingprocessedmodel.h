@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -51,8 +51,8 @@ class NotationRegionsBeingProcessedModel : public QAbstractListModel, public mus
 
     muse::GlobalInject<IPlaybackConfiguration> configuration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
-    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
     muse::ContextInject<muse::audio::IPlayback> playback = { this };
+    muse::ContextInject<mu::context::IGlobalContext> globalContext = { this };
     muse::ContextInject<IPlaybackController> playbackController = { this };
 
 public:

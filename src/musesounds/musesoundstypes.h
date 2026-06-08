@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
- * MuseScore
+ * MuseScore Studio
  * Music Composition & Notation
  *
  * Copyright (C) 2024 MuseScore Limited and others
@@ -34,10 +34,10 @@ struct SoundLibraryInfo {
 };
 using SoundLibraryInfoList = std::vector<SoundLibraryInfo>;
 
-struct SoundCatalogueInfo {
+struct SoundCatalogInfo {
     muse::String title;
 
     SoundLibraryInfoList soundLibraries;
 };
-using SoundCatalogueInfoList = std::vector<SoundCatalogueInfo>;
+using SoundCatalogInfoList = std::vector<SoundCatalogInfo>;
 }

@@ -71,16 +71,18 @@
         </section>
       </Order>
     <Part id="1">
+      <eid>gHTzGDb6kWP_gHTzGDb6kWP</eid>
       <Staff>
-        <eid>gHTzGDb6kWP_gHTzGDb6kWP</eid>
+        <eid>hHTzGDb6kWP_hHTzGDb6kWP</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Flute</trackName>
       <Instrument id="flute">
-        <longName>Flute</longName>
-        <shortName>Fl.</shortName>
+        <InstrumentLabel>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          </InstrumentLabel>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -129,17 +129,17 @@ FocusScope {
             Repeater {
                 model: museSoundsModel
 
-                delegate: SoundCatalogueListView {
-                    required property string catalogueTitle
-                    required property var catalogueSoundsLibraries
+                delegate: SoundCatalogListView {
+                    required property string catalogTitle
+                    required property var catalogSoundsLibraries
                     required property int index
 
                     width: parent.width
 
-                    title: catalogueTitle
+                    title: catalogTitle
                     visible: count > 0
 
-                    model: catalogueSoundsLibraries
+                    model: catalogSoundsLibraries
 
                     flickableItem: column
 

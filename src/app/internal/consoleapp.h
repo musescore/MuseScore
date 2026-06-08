@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,7 +27,7 @@
 #include <memory>
 #include <map>
 
-#include "global/internal/baseapplication.h"
+#include "global/internal/consoleapplication.h"
 #include "../cmdoptions.h"
 
 #include "global/globalmodule.h"
@@ -37,8 +37,7 @@
 #include "global/iapplication.h"
 #include "converter/iconvertercontroller.h"
 #include "engraving/devtools/drawdata/idiagnosticdrawprovider.h"
-#include "autobot/iautobot.h"
-#include "audioplugins/iregisteraudiopluginsscenario.h"
+#include "testflow/itestflow.h"
 
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
@@ -52,7 +51,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 
 namespace mu::app {
-class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_this<ConsoleApp>
+class MuseScoreConsoleApp : public muse::ConsoleApplication
 {
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
     muse::GlobalInject<notation::INotationConfiguration> notationConfiguration;
@@ -63,48 +62,20 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::GlobalInject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::GlobalInject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
     muse::GlobalInject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
-    muse::GlobalInject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario;
-    muse::GlobalInject<converter::IConverterController> converter;
     muse::GlobalInject<engraving::IDiagnosticDrawProvider> diagnosticDrawProvider;
-    muse::ContextInject<muse::autobot::IAutobot> autobot = { this };
-    muse::ContextInject<playback::ISoundProfilesRepository> soundProfilesRepository = { this };
 
 public:
-    ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);
+    MuseScoreConsoleApp(const std::shared_ptr<MuseScoreCmdOptions>& options);
 
-    void addModule(muse::modularity::IModuleSetup* module);
-
-    void setup() override;
-    void finish() override;
-
-    muse::modularity::ContextPtr setupNewContext(const muse::StringList& args = {}) override;
-    void destroyContext(const muse::modularity::ContextPtr& ctx) override;
-    size_t contextCount() const override;
-    std::vector<muse::modularity::ContextPtr> contexts() const override;
+    void showSplash() override;
 
 private:
-    void applyCommandLineOptions(const CmdOptions& options, muse::IApplication::RunMode runMode);
-    int processConverter(const CmdOptions::ConverterTask& task);
-    int processDiagnostic(const CmdOptions::Diagnostic& task);
-    int processAudioPluginRegistration(const CmdOptions::AudioPluginRegistration& task);
-    void processAutobot(const CmdOptions::Autobot& task);
-
-    std::vector<muse::modularity::IContextSetup*>& contextSetups(const muse::modularity::ContextPtr& ctx);
-
-    CmdOptions m_options;
-
-    //! NOTE Separately to initialize logger and profiler as early as possible
-    muse::GlobalModule* m_globalModule = nullptr;
-
-    std::vector<muse::modularity::IModuleSetup*> m_modules;
-    muse::modularity::ContextPtr m_context;
-
-    struct Context {
-        muse::modularity::ContextPtr ctx;
-        std::vector<muse::modularity::IContextSetup*> setups;
-    };
-
-    std::vector<Context> m_contexts;
+    void applyCommandLineOptions(const std::shared_ptr<muse::CmdOptions>& options) override;
+    void doStartupScenario(const muse::modularity::ContextPtr& ctxId) override;
+    int processConverter(const MuseScoreCmdOptions::ConverterTask& task, const muse::modularity::ContextPtr& ctx);
+    int processDiagnostic(const MuseScoreCmdOptions::Diagnostic& task, const muse::modularity::ContextPtr& ctx);
+    int processAudioPluginRegistration(const MuseScoreCmdOptions::AudioPluginRegistration& task, const muse::modularity::ContextPtr& ctx);
+    void processTestflow(const MuseScoreCmdOptions::Testflow& task, const muse::modularity::ContextPtr& ctx);
 };
 }
 

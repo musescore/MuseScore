@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,8 +37,6 @@ class PalmMuteSegment final : public TextLineBaseSegment
     OBJECT_ALLOCATOR(engraving, PalmMuteSegment)
     DECLARE_CLASSOF(ElementType::PALM_MUTE_SEGMENT)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     PalmMuteSegment(PalmMute* sp, System* parent);
 
@@ -58,8 +56,6 @@ class PalmMute final : public ChordTextLineBase
     OBJECT_ALLOCATOR(engraving, PalmMute)
     DECLARE_CLASSOF(ElementType::PALM_MUTE)
 
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     PalmMute(EngravingItem* parent);
 
@@ -71,6 +67,9 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
 
     void setChannel();
+
+protected:
+    Sid defaultPosSid() const override;
 
     friend class PalmMuteLine;
 };

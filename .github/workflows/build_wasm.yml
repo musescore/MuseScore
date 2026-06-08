@@ -16,16 +16,20 @@ on:
         type: string
         required: true
 
+concurrency:
+  # If run via workflow_call, ${{ github.workflow }} is the root workflow's name (e.g. 'Deploy'),
+  # which is the same for all workflows called in that run, hence we must add a unique suffix here.
+  group: ${{ github.workflow }} ${{ github.event_name }} ${{ github.ref }} wasm
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.13.1
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v6
+      with:
+        submodules: recursive
     - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -53,8 +53,6 @@ public:
     void symbolLine(SymId start, SymId fill, SymId end);
 
 private:
-    virtual Sid getPropertyStyle(Pid) const override;
-
     SymIdList m_symbols;
 };
 
@@ -91,9 +89,6 @@ public:
     TranslatableString subtypeUserName() const override;
 
 private:
-
-    Sid getPropertyStyle(Pid) const override;
-
     VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
 };
 } // namespace mu::engraving

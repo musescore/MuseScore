@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -79,7 +79,7 @@ void NoteInputPreferencesModel::load()
         emit playPreviewNotesInInputByDurationChanged(playPreviewNotesInInputByDuration());
     });
 
-    shortcutsConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
+    midiRemoteConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
         emit advanceToNextNoteOnKeyReleaseChanged(value);
     });
 
@@ -159,7 +159,7 @@ bool NoteInputPreferencesModel::startNoteInputAtSelectedNoteRestWhenPressingMidi
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
-    return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
+    return midiRemoteConfiguration()->advanceToNextNoteOnKeyRelease();
 }
 
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -273,7 +273,7 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
         return;
     }
 
-    shortcutsConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
+    midiRemoteConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
 }
 
 void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(int delay)

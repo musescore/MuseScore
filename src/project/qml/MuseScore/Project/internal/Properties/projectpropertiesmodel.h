@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,7 +29,7 @@
 #include <qqmlintegration.h>
 
 #include "modularity/ioc.h"
-#include "interactive/iinteractive.h"
+#include "interactive/iplatforminteractive.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::project {
@@ -45,8 +45,8 @@ class ProjectPropertiesModel : public QAbstractListModel, public QQmlParserStatu
 
     QML_ELEMENT
 
+    muse::GlobalInject<muse::IPlatformInteractive> platformInteractive;
     muse::ContextInject<context::IGlobalContext> context = { this };
-    muse::ContextInject<muse::IInteractive> interactive = { this };
 
 public:
     explicit ProjectPropertiesModel(QObject* parent = nullptr);

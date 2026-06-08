@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -57,8 +57,8 @@ Notation::Notation(MasterNotation* master, const muse::modularity::ContextPtr& i
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack, iocContext());
     m_accessibility = std::make_shared<NotationAccessibility>(this);
-    m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_style = std::make_shared<NotationStyle>(this, m_undoStack);
+    m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack, m_style);
     m_elements = std::make_shared<NotationElements>(this);
 
     m_interaction->noteInput()->noteAdded().onNotify(this, [this]() {
@@ -114,6 +114,11 @@ Notation::~Notation()
     //! NOTE: The master score will be deleted later from ~EngravingProject()
     //! Its excerpts will be deleted directly in ~MasterScore()
     m_score = nullptr;
+}
+
+const muse::modularity::ContextPtr& Notation::iocContext() const
+{
+    return muse::Contextable::iocContext();
 }
 
 mu::project::INotationProject* Notation::project() const

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -59,13 +59,18 @@ static const ElementStyle voltaStyle {
     { Sid::voltaOffset,                        Pid::BEGIN_TEXT_OFFSET },
     { Sid::voltaOffset,                        Pid::CONTINUE_TEXT_OFFSET },
     { Sid::voltaOffset,                        Pid::END_TEXT_OFFSET },
+    { Sid::voltaMusicalSymbolSize,             Pid::BEGIN_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::voltaMusicalSymbolSize,             Pid::CONTINUE_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::voltaMusicalSymbolSize,             Pid::END_TEXT_MUSIC_SYMBOLS_SIZE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::BEGIN_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::CONTINUE_TEXT_MUSICAL_SYMBOLS_SCALE },
+    { Sid::dummyMusicalSymbolsScale,           Pid::END_TEXT_MUSICAL_SYMBOLS_SCALE },
     { Sid::voltaLineWidth,                     Pid::LINE_WIDTH },
     { Sid::voltaLineStyle,                     Pid::LINE_STYLE },
     { Sid::voltaDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::voltaDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT },
     { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT },
-    { Sid::voltaPosAbove,                      Pid::OFFSET },
     { Sid::voltaFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
@@ -149,7 +154,6 @@ String Volta::text() const
 //---------------------------------------------------------
 
 static const ElementStyle voltaSegmentStyle {
-    { Sid::voltaPosAbove,                      Pid::OFFSET },
     { Sid::voltaMinDistance,                   Pid::MIN_DISTANCE },
 };
 
@@ -433,5 +437,10 @@ void Volta::setVoltaType(Type val)
 Volta::Type Volta::voltaType() const
 {
     return endHookType() != HookType::NONE ? Type::CLOSED : Type::OPEN;
+}
+
+Sid Volta::defaultPosSid() const
+{
+    return Sid::voltaPosAbove;
 }
 }

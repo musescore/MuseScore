@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -74,10 +74,14 @@ using namespace mu::engraving;
 using namespace muse::draw;
 using namespace muse::actions;
 
-PaletteWidget::PaletteWidget(QWidget* parent)
+PaletteWidget::PaletteWidget(QWidget* parent, bool setIocContext)
     : QWidget(parent), muse::Contextable(muse::iocCtxForQWidget(this))
 {
-    m_palette = std::make_shared<Palette>(iocContext());
+    if (setIocContext) {
+        m_palette = std::make_shared<Palette>(iocContext());
+    } else {
+        m_palette = std::make_shared<Palette>(nullptr);
+    }
 
     //! NOTE: need for accessibility
     m_palette->setParent(this);
@@ -86,6 +90,11 @@ PaletteWidget::PaletteWidget(QWidget* parent)
 
     setReadOnly(false);
     setMouseTracking(true);
+}
+
+void PaletteWidget::setIocContext()
+{
+    m_palette->setContext(iocContext());
 }
 
 void PaletteWidget::setPalette(PalettePtr palette)
@@ -431,6 +440,16 @@ void PaletteWidget::setUseDoubleClickForApplyingElements(bool val)
     m_useDoubleClickForApplyingElements = val;
 }
 
+bool PaletteWidget::ignoreInputEvents() const
+{
+    return m_ignoreInputEvents;
+}
+
+void PaletteWidget::setIgnoreInputEvents(bool val)
+{
+    m_ignoreInputEvents = val;
+}
+
 void PaletteWidget::applyCurrentElementToScore()
 {
     applyElementAtIndex(m_currentIdx);
@@ -653,6 +672,10 @@ QSize PaletteWidget::sizeHint() const
 bool PaletteWidget::event(QEvent* ev)
 {
     if (!m_palette) {
+        return false;
+    }
+
+    if (m_ignoreInputEvents && ev->isInputEvent()) {
         return false;
     }
 
@@ -1019,7 +1042,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             Font font(painter.font());
             font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY));
             painter.setFont(font);
-            painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
+            painter.drawText(rShift, AlignLeft | AlignTop, {}, tag);
         }
 
         muse::draw::Pen pen(linesColor);

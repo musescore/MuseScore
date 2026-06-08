@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -37,6 +37,7 @@ public:
 
     EID newEIDForItem(const EngravingObject* item);
     void registerItemEID(const EID& eid, const EngravingObject* item);
+    void removeItem(const EngravingObject* item);
 
     EngravingObject* itemFromEID(const EID& eid) const;
     EID EIDFromItem(const EngravingObject* item) const;

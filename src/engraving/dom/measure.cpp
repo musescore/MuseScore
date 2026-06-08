@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -858,18 +858,12 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::MEASURE_NUMBER:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMeasureNumber(toMeasureNumber(e));
         }
         break;
 
     case ElementType::MMREST_RANGE:
         if (e->staffIdx() < m_mstaves.size()) {
-            if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
-            }
             m_mstaves[e->staffIdx()]->setMMRangeText(toMMRestRange(e));
         }
         break;
@@ -1384,7 +1378,7 @@ bool Measure::acceptDrop(EditData& data) const
     MuseScoreView* viewer = data.view();
     const EngravingItem* e = data.dropElement;
 
-    if (data.track == muse::nidx) {
+    if (data.track == muse::nidx || !system()) {
         return false;
     }
 
@@ -1559,19 +1553,19 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::BRACKET:
     {
-        Bracket* b = toBracket(e);
+        Selection sel = score()->selection();
+        staff_idx_t firstStaff = sel.staffStart();
+        staff_idx_t lastStaff = sel.staffEnd() - 1;
         size_t level = 0;
-        staff_idx_t firstStaff = 0;
-        for (Staff* s : score()->staves()) {
-            for (const BracketItem* bi : s->brackets()) {
-                staff_idx_t lastStaff = firstStaff + bi->bracketSpan() - 1;
-                if (staffIdx >= firstStaff && staffIdx <= lastStaff) {
-                    ++level;
+        for (staff_idx_t idx = 0; idx < score()->nstaves(); ++idx) {
+            for (const BracketItem* bi : score()->staff(idx)->brackets()) {
+                if (bi->intersects(firstStaff, lastStaff)) {
+                    level = std::max(level, bi->column() + 1);
                 }
             }
-            firstStaff++;
         }
-        Selection sel = score()->selection();
+
+        Bracket* b = toBracket(e);
         if (sel.isRange()) {
             score()->undoAddBracket(staff, level, b->bracketType(), sel.staffEnd() - sel.staffStart());
         } else {
@@ -2280,6 +2274,7 @@ void Measure::createVoice(int track)
 void Measure::sortStaves(std::vector<staff_idx_t>& dst)
 {
     std::vector<MStaff*> ms;
+    ms.reserve(dst.size());
     for (staff_idx_t idx : dst) {
         ms.push_back(m_mstaves[idx]);
     }
@@ -2303,41 +2298,6 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
     }
 
     score()->undoUpdatePlayCountText(this);
-}
-
-//---------------------------------------------------------
-//   exchangeVoice
-//---------------------------------------------------------
-
-void Measure::exchangeVoice(track_idx_t strack, track_idx_t dtrack, staff_idx_t staffIdx)
-{
-    for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        s->swapElements(strack, dtrack);
-    }
-
-    auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), endTick().ticks() - 1);
-    Fraction start = tick();
-    Fraction end = start + ticks();
-    for (auto i = spanners.begin(); i < spanners.end(); i++) {
-        Spanner* sp = i->value;
-        Fraction spStart = sp->tick();
-        Fraction spEnd = spStart + sp->ticks();
-        LOGD("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
-             start.ticks(), end.ticks());
-        if (sp->isSlur() && (spStart >= start || spEnd < end)) {
-            if (sp->track() == strack && spStart >= start) {
-                sp->setTrack(dtrack);
-            } else if (sp->track() == dtrack && spStart >= start) {
-                sp->setTrack(strack);
-            }
-            if (sp->track2() == strack && spEnd < end) {
-                sp->setTrack2(dtrack);
-            } else if (sp->track2() == dtrack && spEnd < end) {
-                sp->setTrack2(strack);
-            }
-        }
-    }
-    checkMultiVoices(staffIdx);     // probably true, but check for invisible notes & rests
 }
 
 //---------------------------------------------------------
@@ -2949,12 +2909,15 @@ bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
         break;
     case Pid::REPEAT_END:
         setRepeatEnd(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_START:
         setRepeatStart(value.toBool());
+        score()->setPlaylistDirty();
         break;
     case Pid::REPEAT_JUMP:
         setRepeatJump(value.toBool());
+        score()->setPlaylistDirty();
         break;
     default:
         return MeasureBase::setProperty(propertyId, value);

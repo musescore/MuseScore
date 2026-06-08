@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,11 +21,15 @@
  */
 
 #include "editpart.h"
+#include "editscoreproperties.h"
 #include "editstaff.h"
 #include "transpose.h"
 
 #include "../dom/excerpt.h"
+#include "../dom/factory.h"
 #include "../dom/instrchange.h"
+#include "../dom/instrtemplate.h"
+#include "../dom/scoreorder.h"
 #include "../dom/masterscore.h"
 #include "../dom/mscore.h"
 #include "../dom/part.h"
@@ -122,19 +126,16 @@ void SetSoloist::redo(EditData*)
 //   ChangePart
 //---------------------------------------------------------
 
-ChangePart::ChangePart(Part* _part, Instrument* i, const String& s)
+ChangePart::ChangePart(Part* _part, Instrument* i)
 {
     instrument = i;
     part       = _part;
-    partName   = s;
 }
 
 void ChangePart::flip(EditData*)
 {
     Instrument* oi = part->instrument(); //tick?
-    String s      = part->partName();
     part->setInstrument(instrument);
-    part->setPartName(partName);
 
     part->updateHarmonyChannels(false);
 
@@ -148,7 +149,6 @@ void ChangePart::flip(EditData*)
 
     score->setLayoutAll();
 
-    partName   = s;
     instrument = oi;
 }
 
@@ -193,12 +193,54 @@ void ChangeInstrumentShort::flip(EditData*)
 }
 
 //---------------------------------------------------------
+//   ChangeInstrumentLong
+//---------------------------------------------------------
+
+ChangeInstrumentGroupOptions::ChangeInstrumentGroupOptions(const Fraction& _tick, Part* p, bool useCustom, const String& longName,
+                                                           const String& shortName)
+    : part(p), tick(_tick), useCustom(useCustom), longName(longName), shortName(shortName)
+{
+}
+
+void ChangeInstrumentGroupOptions::flip(EditData*)
+{
+    InstrumentLabel& label = part->instrument(tick)->instrumentLabel();
+
+    bool curUseCustom = label.useCustomGroupName();
+    const String& curLong = label.customNameLongGroup();
+    const String& curShort = label.customNameShortGroup();
+
+    label.setUseCustomGroupName(useCustom);
+    label.setCustomNameLongGroup(longName);
+    label.setCustomNameShortGroup(shortName);
+
+    useCustom = curUseCustom;
+    longName = curLong;
+    shortName = curShort;
+
+    part->score()->setLayoutAll();
+}
+
+ChangeInstrumentNumber::ChangeInstrumentNumber(const Fraction& _tick, Part* p, int v)
+    : part(p), tick(_tick), number(v)
+{
+}
+
+void ChangeInstrumentNumber::flip(EditData*)
+{
+    int v = part->number(tick);
+    part->setNumber(number, tick);
+    number = v;
+    part->score()->setLayoutAll();
+}
+
+//---------------------------------------------------------
 //   ChangeDrumset
 //---------------------------------------------------------
 
 void ChangeDrumset::flip(EditData*)
 {
-    Drumset d = *instrument->drumset();
+    Drumset d = instrument->drumset() ? *instrument->drumset() : Drumset();
     instrument->setDrumset(&drumset);
     drumset = d;
 
@@ -300,15 +342,13 @@ static InstrumentChange* findInstrumentChange(Score* score, const Part* part, co
 }
 
 void EditPart::replacePartInstrument(Score* score, Part* part, const Instrument& newInstrument,
-                                     const StaffType* newStaffType, const String& partName)
+                                     const StaffType* newStaffType)
 {
     if (!score || !part) {
         return;
     }
 
-    // Change the part's instrument and name
-    String newPartName = partName.isEmpty() ? newInstrument.trackName() : partName;
-    score->undo(new ChangePart(part, new Instrument(newInstrument), newPartName));
+    score->undo(new ChangePart(part, new Instrument(newInstrument)));
 
     // Update clefs and staff type for all staves in the part
     for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
@@ -405,6 +445,16 @@ void EditPart::setInstrumentAbbreviature(Score* score, Part* part, const Fractio
     }
 
     score->undo(new ChangeInstrumentShort(tick, part, abbreviature));
+}
+
+void EditPart::setInstrumentGroupNameOptions(Score* score, Part* part, const Fraction& tick, bool useCustom, const String& longName,
+                                             const String& shortName)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    score->undo(new ChangeInstrumentGroupOptions(tick, part, useCustom, longName, shortName));
 }
 
 void EditPart::setStaffType(Score* score, Staff* staff, StaffTypes typeId)
@@ -636,4 +686,125 @@ void EditPart::moveSystemObjects(Score* score, Staff* sourceStaff, Staff* destin
             item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
         }
     }
+}
+
+void EditPart::doAppendStaff(Score* score, Staff* staff, Part* destinationPart, bool createRests)
+{
+    if (!score || !staff || !destinationPart) {
+        return;
+    }
+
+    staff_idx_t staffLocalIndex = destinationPart->nstaves();
+    KeyList keyList = *destinationPart->staff(staffLocalIndex - 1)->keyList();
+
+    staff->setScore(score);
+    staff->setPart(destinationPart);
+
+    score->undoInsertStaff(staff, staffLocalIndex, createRests);
+
+    staff_idx_t staffGlobalIndex = staff->idx();
+    score->adjustKeySigs(staffGlobalIndex, staffGlobalIndex + 1, keyList);
+
+    score->updateBracesAndBarlines(destinationPart, staffLocalIndex);
+
+    destinationPart->instrument()->setClefType(staffLocalIndex, staff->defaultClefType());
+}
+
+Staff* EditPart::appendStaff(Score* score, Part* destinationPart)
+{
+    if (!score || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart);
+    return staff;
+}
+
+Staff* EditPart::appendLinkedStaff(Score* score, Staff* sourceStaff, Part* destinationPart)
+{
+    if (!score || !sourceStaff || !destinationPart) {
+        return nullptr;
+    }
+
+    Staff* staff = Factory::createStaff(destinationPart);
+    doAppendStaff(score, staff, destinationPart, false);
+
+    staff->setLinks(nullptr);
+    Excerpt::cloneStaff(sourceStaff, staff);
+
+    return staff;
+}
+
+bool EditPart::setVoiceVisible(Score* score, Staff* staff, int voiceIndex, bool visible)
+{
+    if (!score || !staff) {
+        return false;
+    }
+
+    if (!score->excerpt()) {
+        return false;
+    }
+
+    if (!visible && !staff->canDisableVoice()) {
+        return false;
+    }
+
+    score->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
+    return true;
+}
+
+void EditPart::insertPart(Score* score, const InstrumentTemplate* templ, size_t index)
+{
+    if (!score || !templ) {
+        return;
+    }
+
+    Part* part = new Part(score);
+    part->initFromInstrTemplate(templ);
+
+    for (staff_idx_t i = 0; i < templ->staffCount; ++i) {
+        Staff* staff = Factory::createStaff(part);
+        StaffType* stt = staff->staffType(Fraction(0, 1));
+        staff->init(templ, stt, int(i));
+        score->undoInsertStaff(staff, i);
+    }
+
+    score->undoInsertPart(part, index);
+    score->setUpTempoMapLater();
+    score->masterScore()->rebuildMidiMapping();
+}
+
+void EditPart::replacePart(Score* score, Part* oldPart, const InstrumentTemplate* templ)
+{
+    if (!score || !oldPart || !templ) {
+        return;
+    }
+
+    size_t partIndex = muse::indexOf(score->parts(), oldPart);
+    score->cmdRemovePart(oldPart);
+    insertPart(score, templ, partIndex);
+}
+
+void EditPart::replaceDrumset(Score* score, Part* part, const Fraction& tick, const Drumset& newDrumset)
+{
+    if (!score || !part) {
+        return;
+    }
+
+    Instrument* instrument = part->instrument(tick);
+    if (instrument) {
+        score->undo(new ChangeDrumset(instrument, newDrumset, part));
+    }
+}
+
+void EditPart::setScoreOrder(Score* score, const ScoreOrder& order)
+{
+    if (!score) {
+        return;
+    }
+
+    score->undo(new ChangeScoreOrder(score, order));
+    ScoreOrder mutableOrder = order;
+    mutableOrder.setBracketsAndBarlines(score);
 }

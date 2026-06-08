@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -196,7 +196,14 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         newPosX -= fd->pos().x();
     }
 
-    return PointF(newPosX, newPosY);
+    PointF newPos = PointF(newPosX, newPosY);
+
+    if (!alignToFretDiagram) {
+        PointF defaultPos = item->defaultPos();
+        newPos += defaultPos;
+    }
+
+    return newPos;
 }
 
 void HarmonyLayout::layoutModifierParentheses(const Harmony* item, const LayoutContext& ctx)

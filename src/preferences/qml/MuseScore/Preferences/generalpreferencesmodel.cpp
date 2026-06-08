@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -56,6 +56,10 @@ void GeneralPreferencesModel::load()
 
     configuration()->welcomeDialogShowOnStartupChanged().onNotify(this, [this]() {
         emit showWelcomeDialogChanged();
+    });
+
+    updateConfiguration()->needCheckForUpdateChanged().onNotify(this, [this]() {
+        emit needCheckForNewAppVersionChanged(needCheckForNewAppVersion());
     });
 }
 
@@ -257,4 +261,29 @@ void GeneralPreferencesModel::setShowWelcomeDialog(bool show)
     }
 
     configuration()->setWelcomeDialogShowOnStartup(show);
+}
+
+bool GeneralPreferencesModel::isAppUpdatable() const
+{
+    return updateConfiguration()->isAppUpdatable();
+}
+
+bool GeneralPreferencesModel::needCheckForNewAppVersion() const
+{
+    return updateConfiguration()->needCheckForUpdate();
+}
+
+void GeneralPreferencesModel::setNeedCheckForNewAppVersion(bool value)
+{
+    if (value == needCheckForNewAppVersion()) {
+        return;
+    }
+
+    updateConfiguration()->setNeedCheckForUpdate(value);
+    emit needCheckForNewAppVersionChanged(value);
+}
+
+QString GeneralPreferencesModel::museScorePrivacyPolicyUrl() const
+{
+    return QString::fromStdString(updateConfiguration()->privacyPolicyUrl());
 }

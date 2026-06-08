@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -60,8 +60,8 @@ mu::engraving::NoteHeadScheme noteHeadSchemes[] = {
 //   EditStaffType
 //---------------------------------------------------------
 
-EditStaffType::EditStaffType(QWidget* parent)
-    : QDialog(parent), muse::Contextable(muse::iocCtxForQWidget(this))
+EditStaffType::EditStaffType(const muse::modularity::ContextPtr& ctx, QWidget* parent)
+    : QDialog(parent), muse::Contextable(ctx)
 {
     setObjectName("EditStaffType");
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -157,7 +157,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
 
-    connect(editTextStyleButton, &QPushButton::clicked, this, [=]() {
+    connect(editTextStyleButton, &QPushButton::clicked, this, [this]() {
         UriQuery uri("musescore://notation/style");
         uri.addParam("currentPageCode", Val("text-styles"));
         uri.addParam("currentSubPageCode", Val("tab-fret-number"));
@@ -272,7 +272,6 @@ Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::
         s->setLayoutAll();
     }
     score->updateChannel();
-    score->setSaved(true);
     score->update();
 
     return score->sanityCheck();

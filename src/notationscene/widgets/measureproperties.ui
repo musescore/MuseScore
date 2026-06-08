@@ -513,7 +513,7 @@
   <tabstop>staves</tabstop>
   <tabstop>actualZ</tabstop>
   <tabstop>actualN</tabstop>
-  <tabstop>irregular</tabstop>
+  <tabstop>excludeFromNumbering</tabstop>
   <tabstop>breakMultiMeasureRest</tabstop>
   <tabstop>measureNumberMode</tabstop>
   <tabstop>layoutStretch</tabstop>

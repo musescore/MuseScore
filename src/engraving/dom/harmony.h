@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -214,7 +214,7 @@ class Harmony final : public TextBase
     DECLARE_CLASSOF(ElementType::HARMONY)
 
 public:
-    Harmony(Segment* parent = 0);
+    Harmony(EngravingItem* parent = 0); // Segment or FretDiagram
     Harmony(const Harmony&);
     ~Harmony();
 
@@ -313,6 +313,8 @@ public:
     void setFontStyle(const FontStyle& val) override { m_fontStyle = val; }
     void setFamily(const String& val) override { m_fontFamily = val; }
     void setSize(const double& val) override { m_fontSize = val; }
+
+    bool collectForDrawing() const override;
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.

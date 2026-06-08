@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,8 @@
 
 #include "translation.h"
 #include "ui/view/iconcodes.h"
+
+#include "muse_framework_config.h"
 
 using namespace mu::preferences;
 using namespace muse::ui;
@@ -173,8 +175,13 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("audio-midi", QT_TRANSLATE_NOOP("preferences", "Audio & MIDI"), IconCode::Code::AUDIO,
                  "Preferences/AudioMidiPreferencesPage.qml"),
 
+#ifdef MUSE_MODULE_MIDIREMOTE
         makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
+#endif
+
+        makeItem("video", QT_TRANSLATE_NOOP("preferences", "Video"), IconCode::Code::VIDEO,
+                 "Preferences/VideoPreferencesPage.qml"),
 
         makeItem("percussion", QT_TRANSLATE_NOOP("preferences", "Percussion"), IconCode::Code::PERCUSSION,
                  "Preferences/PercussionPreferencesPage.qml"),
@@ -184,9 +191,6 @@ void PreferencesModel::load(const QString& currentPageId)
 
         makeItem("shortcuts", QT_TRANSLATE_NOOP("preferences", "Shortcuts"), IconCode::Code::SHORTCUTS,
                  "Preferences/ShortcutsPreferencesPage.qml"),
-
-        makeItem("update", QT_TRANSLATE_NOOP("preferences", "Update"), IconCode::Code::UPDATE,
-                 "Preferences/UpdatePreferencesPage.qml"),
 
         makeItem("general-folders", QT_TRANSLATE_NOOP("preferences", "Folders"), IconCode::Code::OPEN_FILE,
                  "Preferences/FoldersPreferencesPage.qml"),

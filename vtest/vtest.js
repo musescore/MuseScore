@@ -57,14 +57,14 @@ function main()
 {
     api.log.info("Hello from VTest.js")
 
-    api.autobot.setInterval(100)
-    api.autobot.runTestCase(testCase)
+    api.testflow.setInterval(100)
+    api.testflow.runTestCase(testCase)
 }
 
 function fatalIfFailed(r)
 {
     if (!r.success) {
-        api.autobot.fatal(r.text)
+        api.testflow.fatal(r.text)
     }
 }
 

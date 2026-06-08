@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -69,10 +69,6 @@ static constexpr double PPI       = 72.0; // typographical points per inch
 // INTERNAL DRAWING UNITS
 static constexpr double DPI = 1200;
 static constexpr double DPMM = DPI / INCH;
-
-// NOTE: the SMuFL default is actually 20pt. We use 10 for historical reasons
-// and back-compatibility, but this will be multiplied x2 during layout.
-static constexpr double MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE = 10.0;
 
 static constexpr double UI_ICONS_DEFAULT_FONT_SIZE = 12.0;
 

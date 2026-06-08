@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -62,6 +62,8 @@
 #include "engraving/dom/volta.h"
 #include "engraving/types/symid.h"
 #include "engraving/dom/stringtunings.h"
+
+#include "engraving/editing/editchord.h"
 
 #include "guitarprodrumset.h"
 #include "utils.h"
@@ -385,6 +387,11 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             }
             delnote.clear();
         }
+        if (cr && cr->isChord()) {
+            Chord* chord = toChord(cr);
+            chord->sortNotes();
+            mu::iex::guitarpro::utils::createGhostNoteParenGroups(chord);
+        }
         createSlur(hasSlur, staffIdx, cr);
         if (lyrics) {
             cr->add(lyrics);
@@ -592,7 +599,6 @@ bool GuitarPro5::readTracks()
         Instrument* instr = part->instrument();
         instr->setStringData(stringData);
         instr->setSingleNoteDynamics(false);
-        part->setPartName(name);
         part->setPlainLongName(name);
         stringDatas.insert_or_assign(part->id().toUint64(), stringData);
 
@@ -1489,7 +1495,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
     if (noteBits & NOTE_MARCATO) {
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articMarcatoAbove);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }
@@ -1498,7 +1504,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
         note->add(art);
-        if (!note->score()->toggleArticulation(note, art)) {
+        if (!EditChord::toggleArticulation(note->score(), note, art)) {
             delete art;
         }
     }

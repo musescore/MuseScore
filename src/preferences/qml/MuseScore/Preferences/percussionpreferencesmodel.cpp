@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -33,10 +33,6 @@ PercussionPreferencesModel::PercussionPreferencesModel(QObject* parent)
 
 void PercussionPreferencesModel::init()
 {
-    configuration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
-        emit useNewPercussionPanelChanged();
-    });
-
     configuration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
         emit percussionPanelAutoShowModeChanged();
     });
@@ -103,16 +99,6 @@ bool PercussionPreferencesModel::autoClosePercussionPanel() const
 void PercussionPreferencesModel::setAutoClosePercussionPanel(bool autoClose)
 {
     configuration()->setAutoClosePercussionPanel(autoClose);
-}
-
-bool PercussionPreferencesModel::useNewPercussionPanel() const
-{
-    return configuration()->useNewPercussionPanel();
-}
-
-void PercussionPreferencesModel::setUseNewPercussionPanel(bool use)
-{
-    configuration()->setUseNewPercussionPanel(use);
 }
 
 bool PercussionPreferencesModel::showPercussionPanelPadSwapDialog() const

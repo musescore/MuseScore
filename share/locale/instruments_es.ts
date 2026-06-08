@@ -10423,14 +10423,14 @@ Afinada en Do.</translation>
         <source>Steel Pans</source>
         <comment>steel-drums trackName</comment>
         <extracomment>trackName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambores metálicos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3509"/>
         <source>Steel Pans</source>
         <comment>steel-drums longName</comment>
         <extracomment>longName for Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tambores metálicos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3511"/>
@@ -10444,21 +10444,21 @@ Afinada en Do.</translation>
         <source>Bass steel pans.</source>
         <comment>bass-steel-drums description</comment>
         <extracomment>description for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bombos metálicos de bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3516"/>
         <source>Bass Steel Pans</source>
         <comment>bass-steel-drums trackName</comment>
         <extracomment>trackName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bombos metálicos de bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3518"/>
         <source>Bass Steel Pans</source>
         <comment>bass-steel-drums longName</comment>
         <extracomment>longName for Bass Steel Pans; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bombos metálicos de bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3520"/>
@@ -10472,14 +10472,14 @@ Afinada en Do.</translation>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Staff notation).</source>
         <comment>timple-canario description</comment>
         <extracomment>description for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pequeña guitarra de 5 cuerdas originaria de las Islas Canarias. Similar a un ukelele, con una cuerda de Do agudo (reentrante) y una cuerda adicional de Re. (Notación en pentagrama).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6287"/>
         <source>Canarian Timple</source>
         <comment>timple-canario trackName</comment>
         <extracomment>trackName for Canarian Timple; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6289"/>
@@ -10493,14 +10493,14 @@ Afinada en Do.</translation>
         <source>Small 5-string guitar originating in the Canary Islands. Like a ukulele with a high C string (re-entrant) and an added D string. (Tablature).</source>
         <comment>timple-canario-tablature description</comment>
         <extracomment>description for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pequeña guitarra de 5 cuerdas originaria de las Islas Canarias. Similar a un ukelele, con una cuerda de Do agudo (reentrante) y una cuerda adicional de Re. (Tablatura).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6296"/>
         <source>Canarian Timple (tablature)</source>
         <comment>timple-canario-tablature trackName</comment>
         <extracomment>trackName for Canarian Timple (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Timple (tablatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6298"/>
@@ -20637,7 +20637,7 @@ Afinada en Do.</translation>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Guzhengs</source>
-        <translation type="unfinished"/>
+        <translation>Guzhengs</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>

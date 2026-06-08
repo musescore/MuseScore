@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -29,6 +29,7 @@
 using namespace mu::playback;
 using namespace muse;
 using namespace muse::audio;
+using namespace mu::project;
 
 static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = volume_dbfs_t::make(0.f);   // 100%
 static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = volume_dbfs_t::make(-60.f); // 0%
@@ -429,7 +430,7 @@ void MixerChannelItem::setVolumeLevel(float volumeLevel)
 
     m_outParams.volume = volumeLevel;
     emit volumeLevelChanged(m_outParams.volume);
-    emit outputParamsChanged(m_outParams);
+    emit controlParamsChanged(m_outParams);
 }
 
 void MixerChannelItem::setBalance(int balance)
@@ -440,7 +441,7 @@ void MixerChannelItem::setBalance(int balance)
 
     m_outParams.balance = balance / BALANCE_SCALING_FACTOR;
     emit balanceChanged(balance);
-    emit outputParamsChanged(m_outParams);
+    emit controlParamsChanged(m_outParams);
 }
 
 void MixerChannelItem::setSolo(bool solo)
@@ -541,7 +542,7 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
         }
 
         if (auxParamsChanged) {
-            emit outputParamsChanged(m_outParams);
+            emit auxSendsParamsChanged(m_outParams);
         }
     });
 
@@ -581,7 +582,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
             m_outParams.fxChain.insert({ item->params().chainOrder, item->params() });
         }
 
-        emit outputParamsChanged(m_outParams);
+        emit fxChainParamsChanged(m_outParams);
     });
 
     connect(newItem, &OutputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
@@ -623,7 +624,7 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
         }
 
         m_outParams.auxSends[index].active = active;
-        emit outputParamsChanged(m_outParams);
+        emit auxSendsParamsChanged(m_outParams);
     });
 
     connect(newItem, &AuxSendItem::audioSignalPercentageChanged, this, [this, index](int percentage) {
@@ -632,7 +633,7 @@ AuxSendItem* MixerChannelItem::buildAuxSendItem(aux_channel_idx_t index, const A
         }
 
         m_outParams.auxSends[index].signalAmount = static_cast<float>(percentage) / 100.f;
-        emit outputParamsChanged(m_outParams);
+        emit auxSendsParamsChanged(m_outParams);
     });
 
     return newItem;
@@ -645,6 +646,7 @@ void MixerChannelItem::openEditor(AbstractAudioResourceItem* item, const actions
             // make and send close
             actions::ActionQuery closeAction = item->editorAction();
             closeAction.addParam("operation", Val("close"));
+            closeAction.addParam("sync", Val(true));
             dispatcher()->dispatch(closeAction);
         }
         // set new action
@@ -659,6 +661,7 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
     // make and send close
     actions::ActionQuery closeAction = item->editorAction();
     closeAction.addParam("operation", Val("close"));
+    closeAction.addParam("sync", Val(true));
     dispatcher()->dispatch(closeAction);
 
     item->setEditorAction(UriQuery());

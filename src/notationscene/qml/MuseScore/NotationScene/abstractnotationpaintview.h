@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationconfiguration.h"
+#include "notation/inotationcontextconfiguration.h"
 
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -64,7 +65,10 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     Q_PROPERTY(QVariant matrix READ matrix NOTIFY matrixChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
+    Q_PROPERTY(QVariant automationLinesData READ automationLinesData NOTIFY automationLinesDataChanged)
+
     Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
+    Q_PROPERTY(bool automationMode READ automationMode NOTIFY automationModeChanged)
 
     Q_PROPERTY(bool isMainView READ isMainView WRITE setIsMainView NOTIFY isMainViewChanged)
 
@@ -72,6 +76,7 @@ class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, p
     muse::GlobalInject<INotationSceneConfiguration> configuration;
     muse::GlobalInject<engraving::IEngravingConfiguration> engravingConfiguration;
     muse::GlobalInject<muse::ui::IUiConfiguration> uiConfiguration;
+    muse::ContextInject<INotationContextConfiguration> notationContextConfiguration = { this };
     muse::ContextInject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::ContextInject<context::IGlobalContext> globalContext = { this };
     muse::ContextInject<playback::IPlaybackController> playbackController = { this };
@@ -99,6 +104,8 @@ public:
     Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
+
+    Q_INVOKABLE void requestChangeAutomationPoint(qsizetype lineIdx, qsizetype pointIdx, qreal x, qreal y);
 
     qreal width() const override;
     qreal height() const override;
@@ -148,8 +155,12 @@ public:
     muse::RectF viewport() const;
     QRectF viewport_property() const;
 
+    QVariant automationLinesData() const;
+
     bool publishMode() const;
     void setPublishMode(bool arg);
+
+    bool automationMode() const;
 
     bool isMainView() const;
     void setIsMainView(bool isMainView);
@@ -169,6 +180,9 @@ signals:
     void matrixChanged();
     void viewportChanged();
     void publishModeChanged();
+    void automationModeChanged();
+
+    void automationLinesDataChanged();
 
     void activeFocusRequested();
 
@@ -208,6 +222,7 @@ private:
     INotationElementsPtr notationElements() const;
     INotationStylePtr notationStyle() const;
     INotationSelectionPtr notationSelection() const;
+    INotationAutomationPtr notationAutomation() const;
 
     void clear();
     void initBackground();

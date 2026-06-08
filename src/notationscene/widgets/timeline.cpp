@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -706,8 +706,8 @@ QString TRowLabels::cursorIsOn()
 //   Timeline
 //---------------------------------------------------------
 
-Timeline::Timeline(QSplitter* splitter)
-    : QGraphicsView(splitter), muse::Contextable(muse::iocCtxForQWidget(this))
+Timeline::Timeline(QSplitter* splitter, const muse::modularity::ContextPtr& iocCtx)
+    : QGraphicsView(splitter), muse::Contextable(iocCtx)
 {
     TRACEFUNC;
 
@@ -2310,6 +2310,27 @@ void Timeline::mousePressEvent(QMouseEvent* event)
     } else {
         interaction()->clearSelection();
     }
+
+    this->seekSelection();
+}
+
+void Timeline::seekSelection()
+{
+    const INotationSelectionPtr selection = interaction()->selection();
+    const std::vector<EngravingItem*>& elements = selection->elements();
+    if (elements.empty()) {
+        return;
+    }
+
+    EngravingItem* elementToSeek = elements.front();
+    for (EngravingItem* element : elements) {
+        if (element->tick() > elementToSeek->tick()) {
+            continue;
+        }
+        elementToSeek = element;
+    }
+
+    playbackController()->seekElement(elementToSeek);
 }
 
 //---------------------------------------------------------

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -35,6 +35,8 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
+
+#include "engraving/editing/editnote.h"
 
 #include "log.h"
 
@@ -639,7 +641,7 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     TRACEFUNC;
 
-    score()->toggleAccidental(accidentalType);
+    mu::engraving::EditNote::toggleAccidental(score(), accidentalType);
 
     notifyAboutStateChanged();
 

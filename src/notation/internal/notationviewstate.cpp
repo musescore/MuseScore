@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -136,7 +136,7 @@ void NotationViewState::setMatrix(const Transform& matrix, NotationPaintView* se
     m_matrix = matrix;
     m_matrixChanged.send(matrix, sender);
 
-    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11(), iocContext());
+    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11());
     if (m_zoomPercentage.val != newZoomPercentage) {
         m_zoomPercentage.set(newZoomPercentage);
     }

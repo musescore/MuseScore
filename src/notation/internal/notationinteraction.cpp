@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -90,11 +90,14 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editchord.h"
+#include "engraving/editing/editnote.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/exchangevoices.h"
+#include "engraving/editing/implodeexplode.h"
 #include "engraving/editing/splitjoinmeasure.h"
-#include "engraving/editing/transpose.h"
 #include "engraving/editing/textedit.h"
+#include "engraving/editing/transpose.h"
 #include "engraving/rw/rwregister.h"
 #include "engraving/rw/xmlreader.h"
 
@@ -492,11 +495,6 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
 
     const mu::engraving::Instrument* instr = staff->part()->instrument(tick);
 
-    // in any empty measure, pos will be right next to barline
-    // so pad this by barNoteDistance
-    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance) * mag, 0.0);
-
     mu::engraving::NoteHeadGroup noteheadGroup = mu::engraving::NoteHeadGroup::HEAD_NORMAL;
     mu::engraving::NoteHeadType noteHead = params.duration.headType();
 
@@ -562,6 +560,22 @@ bool NotationInteraction::doShowShadowNote(ShadowNote& shadowNote, ShadowNotePar
         shadowNote.setState(symNotehead, params.duration, false, params.position.beyondScore, params.accidentalType,
                             params.articulationIds);
     }
+
+    // if upscaled, note appears by default a distance away from the segment start,
+    // as described in ChordLayout::centreChords
+    if (mag > 1.0) {
+        qreal xOffset = (mag - 1.0) * 0.5 * shadowNote.symWidth(symNotehead);
+        if (shadowNote.computeUp()) {
+            position.pos.rx() += xOffset;
+        } else {
+            position.pos.rx() -= xOffset;
+        }
+    }
+
+    // in any empty measure, pos will be right next to barline
+    // so pad this by barNoteDistance
+    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
+    position.pos.rx() -= qMin(relX - score()->style().styleAbsolute(mu::engraving::Sid::barNoteDistance), 0.0);
 
     score()->renderer()->layoutItem(&shadowNote);
 
@@ -1973,14 +1987,12 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     score()->addRefresh(edd.ed.dropElement->canvasBoundingRect());
     ElementType et = edd.ed.dropElement->type();
     switch (et) {
-    case ElementType::TEXTLINE:
-        systemStavesOnly = edd.ed.dropElement->systemFlag();
-        [[fallthrough]];
     case ElementType::VOLTA:
     case ElementType::GRADUAL_TEMPO_CHANGE:
         // voltas drop to system staves by default, or closest staff if Control is held
-        systemStavesOnly = systemStavesOnly || !(edd.ed.modifiers & Qt::ControlModifier);
+        systemStavesOnly = !(edd.ed.modifiers & Qt::ControlModifier);
         [[fallthrough]];
+    case ElementType::TEXTLINE:
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::PEDAL:
@@ -1990,6 +2002,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::HAIRPIN:
     case ElementType::WHAMMY_BAR:
     {
+        systemStavesOnly |=  edd.ed.dropElement->systemFlag();
         mu::engraving::Spanner* spanner = ptr::checked_cast<mu::engraving::Spanner>(edd.ed.dropElement);
         score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
@@ -3449,7 +3462,7 @@ double NotationInteraction::getVRaster() const
 
 double NotationInteraction::currentScaling(Painter* painter) const
 {
-    qreal guiScaling = configuration()->guiScaling(iocContext());
+    qreal guiScaling = contextConfiguration()->guiScaling();
     return painter->worldTransform().m11() / guiScaling;
 }
 
@@ -4231,13 +4244,17 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
         return;
     }
-
-    if (score()->selection().element() && score()->selection().element()->isRest()) {
+    EngravingItem* selected = score()->selection().element();
+    if (selected && selected->isRest()) {
+        if (noteInput()->state().staffGroup() == mu::engraving::StaffGroup::TAB) {
+            // The rest won't be visible - don't try to move it...
+            return;
+        }
         startEdit(TranslatableString("undoableAction", "Change vertical position"));
-        score()->cmdMoveRest(toRest(score()->selection().element()), toDirection(d));
+        score()->cmdMoveRest(toRest(selected), toDirection(d));
     } else {
         startEdit(TranslatableString("undoableAction", "Change pitch"));
-        score()->upDown(MoveDirection::Up == d, mode);
+        EditNote::upDown(score(), MoveDirection::Up == d, mode);
     }
 
     apply();
@@ -4958,17 +4975,19 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
-    // Brackets may be deleted and replaced
+    // Brackets get deleted during layout with their system, so the best we can do to maintain
+    // the bracket selected is to store their indices and use them to find the new ones
     bool isBracket = m_editData.element->isBracket();
-    const mu::engraving::System* system = nullptr;
     size_t bracketIndex = muse::nidx;
+    size_t systemIndex = muse::nidx;
 
     if (isBracket) {
-        const mu::engraving::Bracket* bracket = mu::engraving::toBracket(m_editData.element);
-        system = bracket->system();
+        const Bracket* bracket = toBracket(m_editData.element);
+        System* system = bracket->system();
 
         if (system) {
             bracketIndex = muse::indexOf(system->brackets(), bracket);
+            systemIndex = muse::indexOf(score()->systems(), system);
         }
     } else if (m_editData.element->isHarmony()) {
         if (isTextEditingStarted() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
@@ -4982,10 +5001,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
     }
 
     if (handleKeyPress(event)) {
-        if (isBracket && system && bracketIndex != muse::nidx) {
-            mu::engraving::EngravingItem* bracket = system->brackets().at(bracketIndex);
-            m_editData.element = bracket;
-            select({ bracket }, SelectType::SINGLE);
+        if (isBracket && bracketIndex != muse::nidx && systemIndex != muse::nidx) {
+            // Try to restore selected bracket
+            System* system = systemIndex < score()->systems().size() ? score()->systems().at(systemIndex) : nullptr;
+            EngravingItem* bracket = system && bracketIndex < system->brackets().size() ? system->brackets().at(bracketIndex) : nullptr;
+            if (bracket) {
+                m_editData.element = bracket;
+                select({ bracket }, SelectType::SINGLE);
+            }
         }
 
         if (isGripEditStarted()) {
@@ -5755,9 +5778,9 @@ void NotationInteraction::toggleAccidentalForSelection(AccidentalType type)
     startEdit(TranslatableString("undoableAction", "Toggle accidental"));
 
     if (accidentalAlreadyAdded) {
-        score()->changeAccidental(AccidentalType::NONE);
+        mu::engraving::EditNote::changeAccidental(score(), AccidentalType::NONE);
     } else {
-        score()->changeAccidental(type);
+        mu::engraving::EditNote::changeAccidental(score(), type);
     }
 
     apply();
@@ -6127,7 +6150,7 @@ void NotationInteraction::swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceI
     }
 
     startEdit(TranslatableString("undoableAction", "Swap voices"));
-    score()->cmdExchangeVoice(voiceIndex1, voiceIndex2);
+    ExchangeVoices::exchangeVoicesInSelection(score(), voiceIndex1, voiceIndex2);
     apply();
 }
 
@@ -6442,7 +6465,7 @@ void NotationInteraction::explodeSelectedStaff()
     }
 
     startEdit(TranslatableString("undoableAction", "Explode"));
-    if (score()->cmdExplode()) {
+    if (ImplodeExplode::explode(score())) {
         apply();
     } else {
         rollback();
@@ -6458,7 +6481,7 @@ void NotationInteraction::implodeSelectedStaff()
     }
 
     startEdit(TranslatableString("undoableAction", "Implode"));
-    if (score()->cmdImplode()) {
+    if (ImplodeExplode::implode(score())) {
         apply();
     } else {
         rollback();
@@ -6975,6 +6998,8 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
+    PartialLyricsLine* prevPartialLyricsLine = findPrevPartialLyricsLineDash(lyrics);
+
     endEditText();
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
@@ -7017,6 +7042,7 @@ void NotationInteraction::navigateToNextSyllable()
 
         if (hasPrecedingRepeat) {
             score()->endCmd();
+            score()->startCmd(TranslatableString("undoableAction", "Add partial lyrics dash"));
             // No from lyrics - create incoming partial dash
             PartialLyricsLine* dash = Factory::createPartialLyricsLine(score()->dummy());
             dash->setIsEndMelisma(false);
@@ -7102,20 +7128,6 @@ void NotationInteraction::navigateToNextSyllable()
         }
     }
 
-    PartialLyricsLine* prevPartialLyricsLine = nullptr;
-
-    for (auto sp : score()->spannerMap().findOverlapping(initialCR->tick().ticks(), initialCR->tick().ticks())) {
-        if (!sp.value->isPartialLyricsLine() || sp.value->track() != track) {
-            continue;
-        }
-        PartialLyricsLine* partialLine = toPartialLyricsLine(sp.value);
-        if (partialLine->isEndMelisma() || partialLine->verse() != lyrics->verse() || partialLine->placement() != lyrics->placement()) {
-            continue;
-        }
-        prevPartialLyricsLine = partialLine;
-        break;
-    }
-
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics || hasPrecedingRepeat) {
         // Don't advance cursor if we are after a repeat, there is no partial dash present and we are inputting a dash
@@ -7173,6 +7185,7 @@ void NotationInteraction::navigateToNextSyllable()
     } else if (prevPartialLyricsLine) {
         const Fraction tickDiff = cr->tick() - prevPartialLyricsLine->tick2();
         prevPartialLyricsLine->undoMoveEnd(tickDiff);
+        score()->undoAddElement(prevPartialLyricsLine);
         prevPartialLyricsLine->triggerLayout();
     }
 
@@ -8371,12 +8384,16 @@ void NotationInteraction::execute(void (mu::engraving::Score::* function)(P), P 
 
 void NotationInteraction::toggleArticulation(mu::engraving::SymId symId)
 {
-    execute(&mu::engraving::Score::toggleArticulation, symId, TranslatableString("undoableAction", "Toggle articulation"));
+    startEdit(TranslatableString("undoableAction", "Toggle articulation"));
+    mu::engraving::EditChord::toggleArticulation(score(), symId);
+    apply();
 }
 
 void NotationInteraction::toggleOrnament(mu::engraving::SymId symId)
 {
-    execute(&mu::engraving::Score::toggleOrnament, symId, TranslatableString("undoableAction", "Toggle ornament"));
+    startEdit(TranslatableString("undoableAction", "Toggle ornament"));
+    mu::engraving::EditNote::toggleOrnament(score(), symId);
+    apply();
 }
 
 void NotationInteraction::toggleAutoplace(bool all)
@@ -8397,7 +8414,9 @@ void NotationInteraction::insertClef(ClefType type)
 
 void NotationInteraction::changeAccidental(mu::engraving::AccidentalType accidental)
 {
-    execute(&mu::engraving::Score::changeAccidental, accidental, TranslatableString("undoableAction", "Add accidental"));
+    startEdit(TranslatableString("undoableAction", "Add accidental"));
+    mu::engraving::EditNote::changeAccidental(score(), accidental);
+    apply();
 }
 
 void NotationInteraction::transposeSemitone(int steps)

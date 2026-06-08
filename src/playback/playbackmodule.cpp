@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -89,7 +89,6 @@ void PlaybackContext::resolveImports()
 
 void PlaybackContext::onInit(const IApplication::RunMode& mode)
 {
-    m_soundProfileRepo->init();
     m_playbackController->init();
 
     if (mode != IApplication::RunMode::GuiApp) {
@@ -97,4 +96,5 @@ void PlaybackContext::onInit(const IApplication::RunMode& mode)
     }
 
     m_playbackUiActions->init();
+    m_soundProfileRepo->init();
 }

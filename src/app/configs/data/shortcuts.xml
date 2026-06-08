@@ -920,7 +920,7 @@
     <seq>O</seq>
     </SC>
   <SC>
-    <key>inspector</key>
+    <key>toggle-properties-panel</key>
     <seq>F8</seq>
     <autorepeat>0</autorepeat>
     </SC>
