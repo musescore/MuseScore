@@ -43,7 +43,8 @@ void HeaderFooterLayout::layoutHeaderFooter(LayoutContext& ctx, Page* page)
 
     const page_idx_t n = page->pageNumber() + 1 + page->score()->pageNumberOffset();
 
-    if (ctx.conf().styleB(Sid::showHeader) && (page->pageNumber() || ctx.conf().styleB(Sid::headerFirstPage))) {
+    if (ctx.conf().styleB(Sid::showHeader)
+        && ((page->pageNumber() && n != 1) || ctx.conf().styleB(Sid::headerFirstPage))) {
         const bool odd = (n & 1) || !ctx.conf().styleB(Sid::headerOddEven);
         createUpdateHeaderText(ctx, page, 0, ctx.conf().styleSt(odd ? Sid::oddHeaderL : Sid::evenHeaderL));
         createUpdateHeaderText(ctx, page, 1, ctx.conf().styleSt(odd ? Sid::oddHeaderC : Sid::evenHeaderC));
@@ -54,7 +55,8 @@ void HeaderFooterLayout::layoutHeaderFooter(LayoutContext& ctx, Page* page)
         }
     }
 
-    if (ctx.conf().styleB(Sid::showFooter) && (page->pageNumber() || ctx.conf().styleB(Sid::footerFirstPage))) {
+    if (ctx.conf().styleB(Sid::showFooter)
+        && ((page->pageNumber() && n != 1) || ctx.conf().styleB(Sid::footerFirstPage))) {
         const bool odd = (n & 1) || !ctx.conf().styleB(Sid::footerOddEven);
         createUpdateFooterText(ctx, page, 0, ctx.conf().styleSt(odd ? Sid::oddFooterL : Sid::evenFooterL));
         createUpdateFooterText(ctx, page, 1, ctx.conf().styleSt(odd ? Sid::oddFooterC : Sid::evenFooterC));
@@ -449,7 +451,8 @@ double HeaderFooterLayout::headerExtension(const LayoutContext& ctx, const Page*
         return 0.0;
     }
 
-    if (ctx.conf().styleB(Sid::showHeader) && (page->pageNumber() || ctx.conf().styleB(Sid::headerFirstPage))) {
+    const page_idx_t n = page->pageNumber() + 1 + page->score()->pageNumberOffset();
+    if (ctx.conf().styleB(Sid::showHeader) && ((page->pageNumber() && n != 1) || ctx.conf().styleB(Sid::headerFirstPage))) {
         double maxHeight = 0.0;
         for (int area = 0; area < MAX_HEADERS; ++area) {
             if (Text* text = page->headerText(area)) {
@@ -473,7 +476,8 @@ double HeaderFooterLayout::footerExtension(const LayoutContext& ctx, const Page*
         return 0.0;
     }
 
-    if (ctx.conf().styleB(Sid::showFooter) && (page->pageNumber() || ctx.conf().styleB(Sid::footerFirstPage))) {
+    const page_idx_t n = page->pageNumber() + 1 + page->score()->pageNumberOffset();
+    if (ctx.conf().styleB(Sid::showFooter) && ((page->pageNumber() && n != 1) || ctx.conf().styleB(Sid::footerFirstPage))) {
         double maxHeight = 0.0;
         for (int area = 0; area < MAX_FOOTERS; ++area) {
             if (Text* text = page->footerText(area)) {
