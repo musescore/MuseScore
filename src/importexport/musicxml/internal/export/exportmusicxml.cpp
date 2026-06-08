@@ -5760,13 +5760,17 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 
     String lineEnd;
     switch (hookType) {
+    case HookType::HOOK_90:
+        lineEnd = (hookHeight < 0.0) ? u"up" : u"down";
+        rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
+        break;
     case HookType::HOOK_90T:
         lineEnd = u"both";
         rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 20));
         break;
-    case HookType::HOOK_90:
-        lineEnd = (hookHeight < 0.0) ? u"up" : u"down";
-        rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
+    case HookType::ARROW:
+    case HookType::ARROW_FILLED:
+        lineEnd = u"arrow";
         break;
     case HookType::NONE:
         lineEnd = u"none";
