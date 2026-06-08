@@ -261,8 +261,8 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
                 switch (nc.toAscii()) {
-                case 'p': // not on first page 1
-                    if (!page->pageNumber()) {
+                case 'p': // not on first page of the project nor page number 1
+                    if (!page->pageNumber() || static_cast<int>(page->pageNumber()) + 1 + page->score()->pageNumberOffset() <= 1) {
                         break;
                     }
                     [[fallthrough]];
