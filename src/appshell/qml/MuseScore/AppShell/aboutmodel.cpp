@@ -48,6 +48,25 @@ QString AboutModel::museScoreRevision() const
            .arg(QString::fromStdString(configuration()->museScoreRevision()));
 }
 
+QString AboutModel::museScoreBuildDateTime() const
+{
+    auto buildDateISO = []() -> QString {
+        // Attempt to convert __DATE__ into ISO 8601 format (YYYY-MM-DD)
+        QDate date = QDate::fromString(__DATE__, "MMM dd yyyy");
+        if (!date.isValid()) {
+            date = QDate::fromString(__DATE__, "MMM  d yyyy");
+        }
+        return date.isValid() ? date.toString(Qt::ISODate) : __DATE__;
+    };
+
+    QString dateTime;
+    dateTime += buildDateISO();
+    dateTime += " ";
+    dateTime += __TIME__;
+
+    return dateTime;
+}
+
 QVariantMap AboutModel::museScoreUrl() const
 {
     QUrl museScoreUrl(QString::fromStdString(configuration()->museScoreUrl()));
