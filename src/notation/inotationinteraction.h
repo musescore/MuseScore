@@ -242,8 +242,8 @@ public:
     virtual void toggleScoreLock() = 0;
     virtual void makeIntoSystem() = 0;
     virtual void applySystemLock() = 0;
-    virtual void moveMeasureToPrevPage() = 0;
-    virtual void moveMeasureToNextPage() = 0;
+    virtual void moveSystemToPrevPage() = 0;
+    virtual void moveSystemToNextPage() = 0;
     virtual void togglePageLock() = 0;
     virtual void makeIntoPage() = 0;
     virtual void applyPageLock() = 0;

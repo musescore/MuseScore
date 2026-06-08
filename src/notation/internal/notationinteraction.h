@@ -252,8 +252,8 @@ public:
     void toggleScoreLock() override;
     void makeIntoSystem() override;
     void applySystemLock() override;
-    void moveMeasureToPrevPage() override;
-    void moveMeasureToNextPage() override;
+    void moveSystemToPrevPage() override;
+    void moveSystemToNextPage() override;
     void togglePageLock() override;
     void makeIntoPage() override;
     void applyPageLock() override;
