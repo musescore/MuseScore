@@ -106,6 +106,15 @@ StyledDialogView {
                     }
                 }
             }
+            StyledTextLabel {
+                Layout.fillWidth: true
+
+                text: qsTrc("appshell/about", "Build date: %1")
+                      .arg(aboutModel.museScoreBuildDateTime())
+
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
+            }
 
             StyledTextLabel {
                 Layout.fillWidth: true
