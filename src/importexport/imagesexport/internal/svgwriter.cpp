@@ -236,7 +236,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     for (const mu::engraving::EngravingItem* element : elements) {
         // Always exclude invisible elements
-        if (!element->visible()) {
+        if (!element->collectForDrawing()) {
             continue;
         }
 
