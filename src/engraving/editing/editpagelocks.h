@@ -53,7 +53,7 @@ public:
 
     static void applyLockToSelection(Transaction& tx, Score* score);
 
-    static void removeLayoutBreaksOnAddPageLock(Transaction& tx, Score* score, const RangeLock* lock);
+    static void removeLayoutBreaksOnAddPageLock(Transaction& tx, const RangeLock* lock);
     static void removePageLocksOnAddLayoutBreak(Transaction& tx, Score* score, LayoutBreakType breakType, const MeasureBase* measure);
     static void removePageLocksOnRemoveMeasures(Transaction& tx, Score* score, const MeasureBase* m1, const MeasureBase* m2);
     static void removePageLocksContainingMMRests(Transaction& tx, Score* score);

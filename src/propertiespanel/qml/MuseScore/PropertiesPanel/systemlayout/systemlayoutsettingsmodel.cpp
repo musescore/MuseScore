@@ -245,6 +245,10 @@ int SystemLayoutSettingsModel::pageCount() const
 
 void SystemLayoutSettingsModel::updateScoreIsInPageView()
 {
+    if (!currentNotation()) {
+        return;
+    }
+
     bool isInPageView = currentNotation()->viewMode() != LayoutMode::LINE;
 
     if (m_scoreIsInPageView != isInPageView) {

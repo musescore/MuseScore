@@ -119,7 +119,7 @@ public:
 
 void EditPageLocks::undoAddPageLock(Transaction& tx, Score* score, const RangeLock* lock)
 {
-    removeLayoutBreaksOnAddPageLock(tx, score, lock);
+    removeLayoutBreaksOnAddPageLock(tx, lock);
     score->undo(new AddPageLock(lock));
 }
 
@@ -184,6 +184,7 @@ void EditPageLocks::toggleScoreLock(Transaction& tx, Score* score)
 
 void EditPageLocks::addRemovePageLocks(Transaction& tx, Score* score, int interval, bool lock)
 {
+    // Should only be called on range selection of whole score
     MeasureBase* startMeasure = score->selection().startMeasureBase();
     MeasureBase* endMeasure = score->selection().endMeasureBase();
     if (!endMeasure) {
@@ -238,32 +239,32 @@ void EditPageLocks::addRemovePageLocks(Transaction& tx, Score* score, int interv
 
 void EditPageLocks::makeIntoPage(Transaction& tx, Score* score, MeasureBase* first, MeasureBase* last)
 {
-    const RangeLock* lockContainingfirst = score->pageLocks()->lockContaining(first);
-    const RangeLock* lockContaininglast = score->pageLocks()->lockContaining(last);
+    const RangeLock* lockContainingFirst = score->pageLocks()->lockContaining(first);
+    const RangeLock* lockContainingLast = score->pageLocks()->lockContaining(last);
 
-    if (lockContainingfirst) {
-        undoRemovePageLock(tx, score, lockContainingfirst);
-        if (lockContainingfirst->startMB()->isBefore(first)) {
+    if (lockContainingFirst) {
+        undoRemovePageLock(tx, score, lockContainingFirst);
+        if (lockContainingFirst->startMB()->isBefore(first)) {
             MeasureBase* oneBeforeFirst = first->prevMM();
-            RangeLock* newLockBefore = new RangeLock(lockContainingfirst->startMB(), oneBeforeFirst);
+            RangeLock* newLockBefore = new RangeLock(lockContainingFirst->startMB(), oneBeforeFirst);
             undoAddPageLock(tx, score, newLockBefore);
         }
     }
 
-    if (lockContaininglast) {
-        if (lockContaininglast != lockContainingfirst) {
-            undoRemovePageLock(tx, score, lockContaininglast);
+    if (lockContainingLast) {
+        if (lockContainingLast != lockContainingFirst) {
+            undoRemovePageLock(tx, score, lockContainingLast);
         }
-        if (last->isBefore(lockContaininglast->endMB())) {
+        if (last->isBefore(lockContainingLast->endMB())) {
             MeasureBase* oneAfterLast = last->nextMM();
-            RangeLock* newLockAfter = new RangeLock(oneAfterLast, lockContaininglast->endMB());
+            RangeLock* newLockAfter = new RangeLock(oneAfterLast, lockContainingLast->endMB());
             undoAddPageLock(tx, score, newLockAfter);
         }
     }
 
     std::vector<const RangeLock*> locksContainedInRange = score->pageLocks()->locksContainedInRange(first, last);
     for (const RangeLock* lock : locksContainedInRange) {
-        if (lock != lockContainingfirst && lock != lockContaininglast) {
+        if (lock != lockContainingFirst && lock != lockContainingLast) {
             undoRemovePageLock(tx, score, lock);
         }
     }
@@ -389,7 +390,7 @@ void EditPageLocks::removePageLocksOnAddLayoutBreak(Transaction& tx, Score* scor
     }
 }
 
-void EditPageLocks::removeLayoutBreaksOnAddPageLock(Transaction&, Score* score, const RangeLock* lock)
+void EditPageLocks::removeLayoutBreaksOnAddPageLock(Transaction&, const RangeLock* lock)
 {
     for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mb->nextMM()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);

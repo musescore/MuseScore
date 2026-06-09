@@ -3292,7 +3292,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::PAGE_LOCK_INDICATOR:
     {
         const RangeLock* pageLock = toPageLockIndicator(el)->pageLock();
-        EditPageLocks::undoRemovePageLock(this, pageLock);
+        EditPageLocks::undoRemovePageLock(tx, this, pageLock);
     }
     break;
 
