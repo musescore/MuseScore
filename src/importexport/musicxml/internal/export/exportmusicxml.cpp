@@ -1838,7 +1838,7 @@ void ExportMusicXml::barlineLeft(const Measure* const m, const track_idx_t track
     if (rs) {
         XmlWriter::Attributes attrs = { { "direction", "forward" } };
         if (m_score->style().styleB(Sid::repeatBarTips)) {
-             attrs.push_back({ "winged", "curved" });
+            attrs.push_back({ "winged", "curved" });
         }
         m_xml.tag("repeat", attrs);
     }
@@ -2114,7 +2114,7 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
             attrs.push_back({ "times", m->repeatCount() });
         }
         if (m_score->style().styleB(Sid::repeatBarTips)) {
-             attrs.push_back({ "winged", "curved" });
+            attrs.push_back({ "winged", "curved" });
         }
         m_xml.tag("repeat", attrs);
     }
