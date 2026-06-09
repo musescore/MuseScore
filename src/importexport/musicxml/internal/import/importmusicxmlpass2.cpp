@@ -752,10 +752,16 @@ static void setPartInstruments(MusicXmlLogger* logger, const XmlStreamReader* xm
 //---------------------------------------------------------
 
 /**
- Convert SMuFL code points to MuseScore <sym>...</sym>
+ Convert SMuFL code points to MuseScore <sym>...</sym> notation.
+ When \p isDolet is true (i.e. the file was produced by Dolet and the text comes
+ from a MusicXML \c \<words\> or \c \<rehearsal\> element), every occurrence of \c $
+ or \c Ø within the text is treated as a Dolet-plugin segno/coda shorthand and replaced
+ with the corresponding SMuFL symbol — including when embedded in longer strings such as
+ "Dal $ al Ø" or "To Ø".  In all other contexts (non-Dolet files, or lyric text) the
+ characters are preserved as-is.
  */
 namespace xmlpass2 {
-static String text2syms(const String& t)
+static String text2syms(const String& t, bool isDolet = false)
 {
     //QTime time;
     //time.start();
@@ -780,9 +786,10 @@ static String text2syms(const String& t)
         }
     }
 
-    // Special case Dolet inference (TODO: put behind a setting or export type flag)
-    map.insert({ u"$", SymId::segno });
-    map.insert({ u"Ø", SymId::coda });
+    if (isDolet) {
+        map.insert({ u"$", SymId::segno });
+        map.insert({ u"Ø", SymId::coda });
+    }
 
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
@@ -827,12 +834,8 @@ static String text2syms(const String& t)
 
 // TODO: probably should be shared between pass 1 and 2
 
-/**
- Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
- */
-
 namespace xmlpass2 {
-static String nextPartOfFormattedString(XmlStreamReader& e)
+static String nextPartOfFormattedString(XmlStreamReader& e, bool isDolet = false)
 {
     //String lang       = e.attribute(String("xml:lang"), "it");
     String fontWeight = e.attribute("font-weight");
@@ -846,7 +849,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
     String txt = e.readText();
     // replace HTML entities
     txt = String::decodeXmlEntities(txt);
-    String syms = xmlpass2::text2syms(txt);
+    String syms = xmlpass2::text2syms(txt, isDolet);
 
     String importedtext;
 
@@ -4031,7 +4034,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "words") {
             m_enclosure = m_e.attribute("enclosure");
             m_fontFamily = m_e.attribute("font-family");
-            String nextPart = xmlpass2::nextPartOfFormattedString(m_e);
+            String nextPart = xmlpass2::nextPartOfFormattedString(m_e, m_pass1.dolet());
 
             textToDynamic(nextPart);
             textToCrescLine(nextPart);
@@ -4042,7 +4045,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             if (m_enclosure.empty()) {
                 m_enclosure = u"square";          // note different default
             }
-            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e);
+            m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e, m_pass1.dolet());
         } else if (m_e.name() == "harp-pedals") {
             harpPedal();
         } else if (m_e.name() == "pedal") {

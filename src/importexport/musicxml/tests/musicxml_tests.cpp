@@ -928,6 +928,9 @@ TEST_F(MusicXml_Tests, lyricExtension3) {
 TEST_F(MusicXml_Tests, lyricExtension4) {
     musicXmlImportTestRef("testLyricExtension2");
 }
+TEST_F(MusicXml_Tests, lyricsNorwegianOSlash) {
+    musicXmlImportTestRef("testLyricsNorwegianOSlash");
+}
 TEST_F(MusicXml_Tests, lyricsVoice2a) {
     musicXmlIoTest("testLyricsVoice2a");
 }
