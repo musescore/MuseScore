@@ -2706,7 +2706,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     MeasureBase* localInsertMeasureBase = nullptr;
     if (type == ElementType::MEASURE) {
         if (MeasureBase* masterInsertMeasure = masterScore()->insertMeasure(beforeMeasure, options)) {
-            localInsertMeasureBase = tick2measureBase(masterInsertMeasure->tick());
+            localInsertMeasureBase = measureAtTick(masterInsertMeasure->tick());
         }
     } else {
         localInsertMeasureBase = insertBox(type, beforeMeasure, options);

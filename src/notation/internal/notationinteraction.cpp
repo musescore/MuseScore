@@ -1963,7 +1963,7 @@ bool NotationInteraction::updateDropRange(const PointF& pos, std::optional<bool>
         // Invalidate BSP tree of affected pages
         System* lastSeenSystem = nullptr;
         Page* lastSeenPage = nullptr;
-        for (MeasureBase* mb = score()->tick2measureBase(showAnchors.startTickExtendedRegion);
+        for (MeasureBase* mb = score()->measureAtTick(showAnchors.startTickExtendedRegion);
              mb && mb->tick() <= showAnchors.endTickExtendedRegion;
              mb = mb->next()) {
             System* s = mb->system();
