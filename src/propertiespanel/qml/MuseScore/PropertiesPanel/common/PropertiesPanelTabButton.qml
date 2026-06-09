@@ -24,6 +24,16 @@ import QtQuick
 import Muse.UiComponents
 
 StyledTabButton {
-    fillWidth: true
+    fillWidth: false
     font: ui.theme.bodyBoldFont
+    leftPadding: 2
+    rightPadding: 2
+
+    contentItem: StyledTextLabel {
+        text: parent.text
+        font: parent.font
+        anchors.fill: parent
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
 }
