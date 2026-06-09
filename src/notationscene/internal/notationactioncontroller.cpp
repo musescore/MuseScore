@@ -313,8 +313,8 @@ void NotationActionController::init()
     registerAction("toggle-score-lock", &Interaction::toggleScoreLock);
     registerAction("make-into-system", &Interaction::makeIntoSystem);
     registerAction("apply-page-lock", &Interaction::applyPageLock);
-    registerAction("move-measure-to-prev-page", &Interaction::moveSystemToPrevPage);
-    registerAction("move-measure-to-next-page", &Interaction::moveSystemToNextPage);
+    registerAction("move-system-to-prev-page", &Interaction::moveSystemToPrevPage);
+    registerAction("move-system-to-next-page", &Interaction::moveSystemToNextPage);
     registerAction("toggle-page-lock", &Interaction::togglePageLock);
     registerAction("make-into-page", &Interaction::makeIntoPage);
 

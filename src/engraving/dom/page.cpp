@@ -302,5 +302,5 @@ bool Page::isLocked() const
 const RangeLock* Page::pageLock() const
 {
     MeasureBase* firstMeasure = firstMeasureBase();
-    return firstMeasure->pageLock();
+    return firstMeasure ? firstMeasure->pageLock() : nullptr;
 }

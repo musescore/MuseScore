@@ -871,7 +871,6 @@ public:
     const RangeLocks* pageLocks() const { return &m_pageLocks; }
     void addPageLock(const RangeLock* lock);
     void removePageLock(const RangeLock* lock);
-    void clearPageLocks() { m_pageLocks.clear(); }
 
     void rebuildFretBox();
 
