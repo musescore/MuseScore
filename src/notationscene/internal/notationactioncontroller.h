@@ -134,6 +134,7 @@ private:
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
+    void selectAllChordNotes();
     void openSelectionMoreOptions();
 
     void startEditSelectedElement(const muse::actions::ActionData& args);

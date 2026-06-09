@@ -820,6 +820,10 @@
     <seq>Ctrl+A</seq>
     </SC>
   <SC>
+    <key>notation-select-all-chord</key>
+    <seq>Ctrl+Alt+A</seq>
+    </SC>
+  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     <seq>Enter</seq>
