@@ -5844,11 +5844,13 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             endingText = m_e.readText();
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attribute("direction");
-            count = m_e.attribute("times");
-            if (count.empty()) {
-                count = u"2";
+            int count = m_e.attribute("times").toInt();
+            if (!count) {
+                count = 2;
             }
-            measure->setRepeatCount(count.toInt());
+            measure->setRepeatCount(count);
+            bool repeatBarTips = !m_e.attribute("winged").empty() && m_e.attribute("winged") != "none";
+            m_score->undoChangeStyleVal(Sid::repeatBarTips, repeatBarTips);
             m_e.skipCurrentElement();
         } else {
             skipLogCurrElem();
