@@ -2766,15 +2766,15 @@ double Segment::minRight() const
 
 double Segment::minLeft() const
 {
-    double distance = -DBL_MAX;
+    double distance = DBL_MAX;
     for (Shape sh : shapes()) {
         sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         double l = sh.left();
-        if (l > distance) {
+        if (l < distance) {
             distance = l;
         }
     }
-    return distance != -DBL_MAX ? distance : 0.0;
+    return distance != DBL_MAX ? -distance : 0.0;
 }
 
 void Segment::setSpacing(double val)

@@ -588,7 +588,7 @@ double HorizontalSpacing::spaceLyricsAgainstBarlines(Segment* firstSeg, Segment*
                 staff_idx_t lyricsStaffIdx = lyrics->staffIdx();
                 if ((lyricsStaffIdx == staffIdx && lyrics->placeBelow()) || (lyricsStaffIdx == nextStaff && lyrics->placeAbove())) {
                     Shape lyricsShape = lyrics->shape().translate(lyrics->pos());
-                    double minDist = crSegIsBefore ? lyricsShape.right() + barlineShape.left() : lyricsShape.left() + barlineShape.right();
+                    double minDist = crSegIsBefore ? lyricsShape.right() - barlineShape.left() : barlineShape.right() - lyricsShape.left();
                     const double padding = 0.3 * lyrics->fontMetrics().xHeight();
                     minDist += padding;
                     w = std::max(w, minDist);

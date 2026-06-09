@@ -1994,7 +1994,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
             const Rest* rest = toRest(e);
             x = rest->x() + rest->centerX();
         } else {
-            x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
+            x = e->x() + e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
         }
     }
 
@@ -2442,8 +2442,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
         } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             double left = note->shape().left();
-            if (left - note->x() > 0.0) {
-                ldata->moveX(-left);
+            if (left + note->x() < 0.0) {
+                ldata->moveX(left);
             } else {
                 ldata->moveX(-note->x());
             }

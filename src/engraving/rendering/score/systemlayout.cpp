@@ -2686,7 +2686,7 @@ bool SystemLayout::whammyBarShouldBeCenteredBetweenStaves(const WhammyBarSegment
 
 bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
 {
-    double elemShapeLeft = -elementShape.left();
+    double elemShapeLeft = elementShape.left();
     double elemShapeRight = elementShape.right();
     double elemShapeTop = elementShape.top();
     double elemShapeBottom = elementShape.bottom();
