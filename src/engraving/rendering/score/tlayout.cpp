@@ -5476,12 +5476,14 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
 
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
+    double expectedMag = item->staff() ? item->staff()->staffMag(item->tick()) : ldata->mag();
+
+    if (ldata->isValid() && RealIsEqual(ldata->mag(), expectedMag)) {
         return;
     }
 
     if (item->staff()) {
-        ldata->setMag(item->staff()->staffMag(item->tick()));
+        ldata->setMag(expectedMag);
     }
     ldata->setBbox(item->scoreFont()
                    ? item->scoreFont()->bbox(item->sym(), item->magS() * item->symbolsSize())
