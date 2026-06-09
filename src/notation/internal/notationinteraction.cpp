@@ -2473,8 +2473,10 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
             return;
         }
         case ActionIconType::PARENTHESES: {
-            score->cmdAddParenthesesToNotes();
-            return;
+            if (!sel.noteList().empty()) {
+                score->cmdAddParenthesesToNotes();
+                return;
+            }
         }
         default:
             break;
