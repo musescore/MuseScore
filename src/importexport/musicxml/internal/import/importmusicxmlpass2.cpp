@@ -5743,17 +5743,20 @@ Regular barlines should not be added at the start or end of a measure, as that c
 
 void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const Fraction& tick)
 {
-    String loc = m_e.attribute("location");
+    AsciiStringView loc = m_e.asciiAttribute("location");
     if (loc.empty()) {
-        loc = u"right";
+        loc = "right";
     }
     // Place barline in correct place
     Fraction locTick = tick;
-    if (loc == u"left") {
+    if (loc == "left") {
         locTick = measure->tick();
-    } else if (loc == u"right") {
+    } else if (loc == "right") {
         locTick = measure->endTick();
     }
+
+    const String codaLabel = m_e.attribute("coda");
+    const String segnoLabel = m_e.attribute("segno");
 
     String barStyle;
     Color barlineColor;
@@ -5769,12 +5772,50 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
         if (m_e.name() == "bar-style") {
             barlineColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             barStyle = m_e.readText();
-        } else if (m_e.name() == "ending") {
-            endingNumber = m_e.attribute("number");
-            endingType   = m_e.attribute("type");
-            endingColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-            printEnding = m_e.asciiAttribute("print-object") != "no";
-            endingText = m_e.readText();
+        } else if (m_e.name() == "segno") {
+            const Color segnoColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            const AsciiStringView segnoSymbol = m_e.asciiAttribute("smufl");
+            Measure* markedMeasure = (loc == "left") ? measure : measure->nextMeasure();
+            if (markedMeasure == nullptr) {
+                m_logger->logError(u"coda or segno marker cannot be placed at the end of the score", &m_e);
+                m_e.skipCurrentElement();
+                continue;
+            }
+            Marker* m = Factory::createMarker(markedMeasure);
+            m->setMarkerType(MarkerType::SEGNO);
+            if (!segnoSymbol.empty()) {
+                m->setXmlText(u"<sym>" + String::fromAscii(segnoSymbol.ascii()) + u"</sym>");
+            }
+            if (!segnoLabel.empty()) {
+                m->setLabel(segnoLabel);
+            }
+            if (segnoColor.isValid()) {
+                colorItem(m, segnoColor);
+            }
+            addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
+            m_e.skipCurrentElement();
+        } else if (m_e.name() == "coda") {
+            const Color codaColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            const AsciiStringView codaSymbol = m_e.asciiAttribute("smufl");
+            Measure* markedMeasure = (loc == "left") ? measure : measure->nextMeasure();
+            if (markedMeasure == nullptr) {
+                m_logger->logError(u"coda or segno marker cannot be placed at the end of the score", &m_e);
+                m_e.skipCurrentElement();
+                continue;
+            }
+            Marker* m = Factory::createMarker(markedMeasure);
+            m->setMarkerType(MarkerType::CODA);
+            if (!codaSymbol.empty()) {
+                m->setXmlText(u"<sym>" + String::fromAscii(codaSymbol.ascii()) + u"</sym>");
+            }
+            if (!codaLabel.empty()) {
+                m->setLabel(codaLabel);
+            }
+            if (codaColor.isValid()) {
+                colorItem(m, codaColor);
+            }
+            addElemOffset(m, 0, u"above", markedMeasure, markedMeasure->tick());
+            m_e.skipCurrentElement();
         } else if (m_e.name() == "fermata") {
             const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             const String fermataType = m_e.attribute("type");
@@ -5795,6 +5836,12 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
             // Terminate tempo lines
             const InferredTempoLineStack& lines = getInferredTempoLine();
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), locTick, track);
+        } else if (m_e.name() == "ending") {
+            endingNumber = m_e.attribute("number");
+            endingType   = m_e.attribute("type");
+            endingColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            printEnding = m_e.asciiAttribute("print-object") != "no";
+            endingText = m_e.readText();
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attribute("direction");
             count = m_e.attribute("times");
