@@ -183,7 +183,7 @@ StyledFlickable {
             title: qsTrc("notation/editstyle/instrumentnames", "Numerals")
 
             ColumnLayout {
-                spacing: 12
+                spacing: 16
 
                 ColumnLayout {
                     spacing: 8
@@ -198,7 +198,7 @@ StyledFlickable {
                     }
 
                     StyleToggle {
-                        text: qsTrc("notation/editstyle/instrumentnames", "On combined multiple instruments")
+                        text: qsTrc("notation/editstyle/instrumentnames", "On multiple combined instruments")
                         styleItem: instrumentNamesModel.instrumentNumeralsTrailingDotMultiple
                     }
                 }
@@ -207,22 +207,69 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/instrumentnames", "Align combined two-instrument numerals")
+                        text: qsTrc("notation/editstyle/instrumentnames", "Align combined instrument numerals")
                     }
 
-                    Repeater {
-                        model: [
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Horizontally"), value: 2 },
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Vertically"), value: 1 },
-                            { text: qsTrc("notation/editstyle/instrumentnames", "Following voice assignment"), value: 0 },
-                        ]
+                    RowLayout {
+                        spacing: 8
 
                         RoundedRadioButton {
-                            required property var modelData
-                            text: modelData.text
-                            checked: instrumentNamesModel.twoInstrumentNumeralsAlignVertical.value === modelData.value
-                            onClicked: instrumentNamesModel.twoInstrumentNumeralsAlignVertical.value = modelData.value
+                            text: qsTrc("notation/editstyle/instrumentnames", "Horizontally, up to")
+                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 2
+                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 2
                         }
+
+                        IncrementalPropertyControl {
+                            Layout.preferredWidth: 60
+                            width: 60
+                            decimals: 0
+                            step: 1
+                            minValue: 1
+                            maxValue: 100
+                            currentValue: instrumentNamesModel.instrumentNumeralsHorizontalThreshold.value
+                            onValueEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNumeralsHorizontalThreshold.value = newValue
+                            }
+                        }
+
+                        StyledTextLabel {
+                            horizontalAlignment: Qt.AlignLeft
+                            text: qsTrc("notation/editstyle/instrumentnames", "instruments, then follow voice assignment")
+                        }
+                    }
+
+                    RowLayout {
+                        spacing: 8
+
+                        RoundedRadioButton {
+                            text: qsTrc("notation/editstyle/instrumentnames", "Vertically, up to")
+                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 1
+                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 1
+                        }
+
+                        IncrementalPropertyControl {
+                            Layout.preferredWidth: 60
+                            width: 60
+                            decimals: 0
+                            step: 1
+                            minValue: 1
+                            maxValue: 100
+                            currentValue: instrumentNamesModel.instrumentNumeralsVerticalThreshold.value
+                            onValueEditingFinished: function(newValue) {
+                                instrumentNamesModel.instrumentNumeralsVerticalThreshold.value = newValue
+                            }
+                        }
+
+                        StyledTextLabel {
+                            horizontalAlignment: Qt.AlignLeft
+                            text: qsTrc("notation/editstyle/instrumentnames", "instruments, then follow voice assignment")
+                        }
+                    }
+
+                    RoundedRadioButton {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Always follow voice assignment")
+                        checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 0
+                        onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 0
                     }
                 }
 
@@ -230,9 +277,10 @@ StyledFlickable {
                     Layout.fillWidth: false
                     spacing: 8
 
-                    StyledTextLabel {
-                        horizontalAlignment: Qt.AlignLeft
-                        text: qsTrc("notation/editstyle/instrumentnames", "Show numerals as interval when the number of consecutive combined instruments exceeds")
+                    CheckBox {
+                        text: qsTrc("notation/editstyle/instrumentnames", "Show numerals as interval when the number of consecutive instruments exceeds")
+                        checked: instrumentNamesModel.instrumentNumeralsHyphenEnable.value === true
+                        onClicked: instrumentNamesModel.instrumentNumeralsHyphenEnable.value = !instrumentNamesModel.instrumentNumeralsHyphenEnable.value
                     }
 
                     IncrementalPropertyControl {
@@ -242,14 +290,14 @@ StyledFlickable {
                         step: 1
                         minValue: 1
                         maxValue: 100
-                        currentValue: instrumentNamesModel.instrumentNumeralsHyphenateMoreThan.value
+                        currentValue: instrumentNamesModel.instrumentNumeralsHyphenThreshold.value
                         onValueEditingFinished: function(newValue) {
-                            instrumentNamesModel.instrumentNumeralsHyphenateMoreThan.value = newValue
+                            instrumentNamesModel.instrumentNumeralsHyphenThreshold.value = newValue
                         }
                     }
 
                     StyleResetButton {
-                        styleItem: instrumentNamesModel.instrumentNumeralsHyphenateMoreThan
+                        styleItem: instrumentNamesModel.instrumentNumeralsHyphenThreshold
                     }
                 }
             }

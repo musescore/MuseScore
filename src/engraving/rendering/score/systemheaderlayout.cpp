@@ -1126,7 +1126,10 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     const MStyle& style = score->style();
     bool trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
     bool trailingDotMultiple = style.styleB(Sid::instrumentNumeralsTrailingDotMultiple);
-    int hyphenLimit = style.styleI(Sid::instrumentNumeralsHyphenateMoreThan);
+    SharedLabelOrientation orientation = style.styleV(Sid::instrumentNumeralsOrientation).value<SharedLabelOrientation>();
+    int horizontalLimit = style.styleI(Sid::instrumentNumeralsHorizontalThreshold);
+    int verticalLimit = style.styleI(Sid::instrumentNumeralsVerticalThreshold);
+    int hyphenLimit = style.styleB(Sid::instrumentNumeralsHyphenEnable) ? style.styleI(Sid::instrumentNumeralsHyphenThreshold) : INT_MAX;
 
     std::vector<Instrument*> instrumentsMappedToFirstVoice;
     std::vector<Instrument*> instrumentsMappedToSecondVoice;
@@ -1140,10 +1143,37 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         }
     }
 
-    if (instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size() == 2) {
-        AutoOnOff vertical = style.styleV(Sid::twoInstrumentNumeralsAlignVertical).value<AutoOnOff>();
-        return formatTwoInstrumentSharedStaffLabel(instrumentsMappedToFirstVoice, instrumentsMappedToSecondVoice, vertical,
-                                                   trailingDotSingle, trailingDotMultiple, hyphenLimit);
+    int totInstrumentCount = instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size();
+
+    SharedLabelOrientation actualOrientation;
+    switch (orientation) {
+    case SharedLabelOrientation::VOICE:
+        actualOrientation = orientation;
+        break;
+    case SharedLabelOrientation::HORIZONTAL:
+        actualOrientation = totInstrumentCount > horizontalLimit ? SharedLabelOrientation::VOICE : orientation;
+        break;
+    case SharedLabelOrientation::VERTICAL:
+        actualOrientation = totInstrumentCount > verticalLimit ? SharedLabelOrientation::VOICE : orientation;
+        break;
+    }
+
+    if (actualOrientation == SharedLabelOrientation::HORIZONTAL || actualOrientation == SharedLabelOrientation::VERTICAL) {
+        // Put all instruments in single vector
+        instrumentsMappedToFirstVoice.insert(instrumentsMappedToFirstVoice.end(),
+                                             instrumentsMappedToSecondVoice.begin(), instrumentsMappedToSecondVoice.end());
+        std::sort(instrumentsMappedToFirstVoice.begin(), instrumentsMappedToFirstVoice.end(),
+                  [](Instrument* a, Instrument* b) { return a->number() < b->number(); });
+
+        String result;
+
+        if (actualOrientation == SharedLabelOrientation::HORIZONTAL) {
+            result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
+        } else {
+            result = formatVerticalSharedLabel(instrumentsMappedToFirstVoice, trailingDotSingle);
+        }
+
+        return result;
     }
 
     String result = formatVoice(instrumentsMappedToFirstVoice, /*isFirstVoice*/ true, trailingDotSingle, trailingDotMultiple, hyphenLimit);
@@ -1157,74 +1187,20 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     return result;
 }
 
-String SystemHeaderLayout::formatTwoInstrumentSharedStaffLabel(const std::vector<Instrument*>& instrumentsMappedToFirstVoice,
-                                                               const std::vector<Instrument*>& instrumentsMappedToSecondVoice,
-                                                               AutoOnOff vertical, bool trailingDotSingle, bool trailingDotMultiple,
-                                                               int hyphenLimit)
+String SystemHeaderLayout::formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle)
 {
-    std::array<int, 2> instrNumberPair;
-    size_t curIdx = 0;
-    for (Instrument* i : instrumentsMappedToFirstVoice) {
-        instrNumberPair[curIdx] = i->instrumentLabel().number();
-        ++curIdx;
-    }
-    for (Instrument* i : instrumentsMappedToSecondVoice) {
-        instrNumberPair[curIdx] = i->instrumentLabel().number();
-        ++curIdx;
-    }
-
-    Orientation orientation;
-    switch (vertical) {
-    case AutoOnOff::AUTO:
-        if (!instrumentsMappedToFirstVoice.empty() && !instrumentsMappedToSecondVoice.empty()) {
-            orientation = Orientation::VERTICAL;
-        } else {
-            orientation = Orientation::HORIZONTAL;
-        }
-        break;
-    case AutoOnOff::ON:
-        orientation = Orientation::VERTICAL;
-        break;
-    case AutoOnOff::OFF:
-        orientation = Orientation::HORIZONTAL;
-        break;
-    }
-
     String result;
 
-    if (orientation == Orientation::VERTICAL) {
-        result += String::number(instrNumberPair.front());
+    for (Instrument* instr : instruments) {
+        if (!result.empty()) {
+            result += '\n';
+        }
+
+        result += String::number(instr->number());
 
         if (trailingDotSingle) {
             result += '.';
         }
-
-        result += '\n';
-        result += String::number(instrNumberPair.back());
-
-        if (trailingDotSingle) {
-            result += '.';
-        }
-
-        return result;
-    }
-
-    result += String::number(instrNumberPair.front());
-
-    if (trailingDotMultiple) {
-        result += '.';
-    }
-
-    if (hyphenLimit < 2) {
-        result += u'–';
-    } else if (result.back() != '.') {
-        result += '.';
-    }
-
-    result += String::number(instrNumberPair.back());
-
-    if (trailingDotMultiple) {
-        result += '.';
     }
 
     return result;

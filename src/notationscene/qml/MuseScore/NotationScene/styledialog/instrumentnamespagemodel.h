@@ -47,8 +47,11 @@ class InstrumentNamesPageModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotSingle READ instrumentNumeralsTrailingDotSingle CONSTANT)
     Q_PROPERTY(StyleItem * instrumentNumeralsTrailingDotMultiple READ instrumentNumeralsTrailingDotMultiple CONSTANT)
-    Q_PROPERTY(StyleItem * twoInstrumentNumeralsAlignVertical READ twoInstrumentNumeralsAlignVertical CONSTANT)
-    Q_PROPERTY(StyleItem * instrumentNumeralsHyphenateMoreThan READ instrumentNumeralsHyphenateMoreThan CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsOrientation READ instrumentNumeralsOrientation CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsVerticalThreshold READ instrumentNumeralsVerticalThreshold CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHorizontalThreshold READ instrumentNumeralsHorizontalThreshold CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHyphenEnable READ instrumentNumeralsHyphenEnable CONSTANT)
+    Q_PROPERTY(StyleItem * instrumentNumeralsHyphenThreshold READ instrumentNumeralsHyphenThreshold CONSTANT)
 
     QML_ELEMENT
 
@@ -73,7 +76,10 @@ public:
 
     StyleItem* instrumentNumeralsTrailingDotSingle() const;
     StyleItem* instrumentNumeralsTrailingDotMultiple() const;
-    StyleItem* twoInstrumentNumeralsAlignVertical() const;
-    StyleItem* instrumentNumeralsHyphenateMoreThan() const;
+    StyleItem* instrumentNumeralsOrientation() const;
+    StyleItem* instrumentNumeralsHyphenThreshold() const;
+    StyleItem* instrumentNumeralsVerticalThreshold() const;
+    StyleItem* instrumentNumeralsHyphenEnable() const;
+    StyleItem* instrumentNumeralsHorizontalThreshold() const;
 };
 }

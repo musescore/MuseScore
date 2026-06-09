@@ -351,6 +351,12 @@ enum class Orientation : signed char {
     HORIZONTAL
 };
 
+enum class SharedLabelOrientation : signed char {
+    HORIZONTAL,
+    VERTICAL,
+    VOICE,
+};
+
 enum class AutoOnOff : unsigned char {
     AUTO,
     ON,

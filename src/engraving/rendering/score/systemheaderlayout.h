@@ -71,9 +71,7 @@ private:
     static String formattedGroupName(System* system, Part* part, const Fraction& tick);
 
     static String formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap, const std::vector<Part*>& originParts);
-    static String formatTwoInstrumentSharedStaffLabel(const std::vector<Instrument*>& instrumentsMappedToFirstVoice,
-                                                      const std::vector<Instrument*>& instrumentsMappedToSecondVoice, AutoOnOff vertical,
-                                                      bool trailingDotSingle, bool trailingDotMultiple, int hyphenLimit);
+    static String formatVerticalSharedLabel(const std::vector<Instrument*>& instruments, bool trailingDotSingle);
     static String formatVoice(const std::vector<Instrument*>& instruments, bool isFirstVoice, bool trailingDotSingle,
                               bool trailingDotMultiple, int hyphenLimit);
 
