@@ -1272,11 +1272,6 @@
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
-            <BarLine>
-              <subtype>end</subtype>
-              <eid>oD_oD</eid>
-              <linkedTo>1C_1C</linkedTo>
-              </BarLine>
             </voice>
           </Measure>
         </Staff>

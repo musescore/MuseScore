@@ -431,9 +431,7 @@ private:
 
     Fraction m_timesig;
 
-    int m_mmRestCount = 0;      // > 0 if this is a multimeasure rest
-                                // 0 if this is the start of am mmrest (m_mmRest != 0)
-                                // < 0 if this measure is covered by an mmrest
+    int m_mmRestCount = 0;      // number of measures an mmrest spans
 
     int m_playbackCount = 0;    // temp. value used in RepeatList
                                 // counts how many times this measure was already played

@@ -618,7 +618,7 @@ TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
     EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
     Segment* tsSegMMR = m3MMR->findSegmentR(SegmentType::TimeSig, m3MMR->ticks());
     EXPECT_TRUE(tsSegMMR && tsSegMMR->endOfMeasureChange());
-    EngravingItem* tsItemMMR = tsSeg->element(0);
+    EngravingItem* tsItemMMR = tsSegMMR->element(0);
     EXPECT_TRUE(tsItemMMR && tsItemMMR->isTimeSig());
 }
 
