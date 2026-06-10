@@ -254,7 +254,7 @@ void NotationActionController::init()
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff, &Controller::hasSelection);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange, &Controller::hasSelection);
     registerAction("select-dialog", &Controller::openSelectionMoreOptions, &Controller::hasSelection);
-    registerAction("notation-select-all-chord", &Controller::selectAllChordNotes, &Controller::hasSelection);
+    registerAction("select-notes-in-chord", &Controller::selectAllNotesInChord, &Controller::hasSelection);
     registerAction("notation-select-all", &Interaction::selectAll);
     registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
@@ -1627,7 +1627,7 @@ void NotationActionController::selectAllSimilarElementsInRange()
     }
 }
 
-void NotationActionController::selectAllChordNotes()
+void NotationActionController::selectAllNotesInChord()
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();

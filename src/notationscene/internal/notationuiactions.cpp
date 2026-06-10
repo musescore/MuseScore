@@ -373,7 +373,7 @@ const UiActionList NotationUiActions::s_actions = {
              TranslatableString("action", "Select sectio&n"),
              TranslatableString("action", "Select section")
              ),
-    UiAction("notation-select-all-chord",
+    UiAction("select-notes-in-chord",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Select all &notes in chord"),
