@@ -835,39 +835,50 @@ void Harmony::endEdit(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
+    const bool textEdited = textWasEdited(ed);
+
     TextBase::endEdit(ed);
 
-    if (links()) {
-        for (EngravingObject* e : *links()) {
-            if (e == this) {
-                continue;
-            }
-            Harmony* h = toHarmony(e);
-            // transpose if necessary
-            // at this point chord will already have been rendered in same key as original
-            // (as a result of TextBase::endEdit() calling setText() for linked elements)
-            // we may now need to change the TPC's and the text, and re-render
-            if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
-                Staff* staffDest = h->staff();
-                Segment* segment = getParentSeg();
-                Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-                Interval interval = staffDest->transpose(tick);
-                if (!interval.isZero()) {
-                    if (!h->style().styleB(Sid::concertPitch)) {
-                        interval.flip();
-                    }
-                    for (HarmonyInfo* info : h->m_chords) {
-                        int rootTpc = Transpose::transposeTpc(info->rootTpc(), interval, true);
-                        int bassTpc = Transpose::transposeTpc(info->bassTpc(), interval, true);
-                        info->setRootTpc(rootTpc);
-                        info->setBassTpc(bassTpc);
-                        // score()->undoTransposeHarmony(h, rootTpc, bassTpc);
-                        h->setPlainText(h->harmonyName());
-                        h->setHarmony(h->plainText());
-                        h->triggerLayout();
-                    }
-                }
-            }
+    if (!links() || !textEdited) {
+        return;
+    }
+
+    const bool thisConcertPitch = style().styleB(Sid::concertPitch);
+    const Interval thisInterval = thisConcertPitch ? Interval(0, 0) : staff()->transpose(tick());
+
+    for (EngravingObject* e : *links()) {
+        if (e == this) {
+            continue;
+        }
+        Harmony* h = toHarmony(e);
+        // transpose if necessary
+        // at this point chord will already have been rendered in same key as original
+        // (as a result of TextBase::endEdit() calling setText() for linked elements)
+        // we may now need to change the TPC's and the text, and re-render
+        const bool linkedConcertPitch = h->style().styleB(Sid::concertPitch);
+        if (thisConcertPitch == linkedConcertPitch) {
+            continue;
+        }
+
+        Score* linkedScore = h->score();
+        const Staff* linkedStaff = h->staff();
+        const Interval linkedInterval = linkedConcertPitch ? Interval(0, 0) : linkedStaff->transpose(h->tick());
+        const Interval transposeDiff(thisInterval.diatonic - linkedInterval.diatonic, thisInterval.chromatic - linkedInterval.chromatic);
+        if (transposeDiff.isZero()) {
+            continue;
+        }
+
+        UndoStack* undoStack = linkedScore->undoStack();
+        const size_t undoIdx = undoStack->currentIndex();
+
+        linkedScore->startCmd(TranslatableString("undoableAction", "Transpose harmony"));
+        Transpose::undoTransposeHarmony(h->score(), h, transposeDiff);
+        linkedScore->endCmd();
+
+        // Merge with end of text editing
+        if (undoIdx != undoStack->currentIndex() && undoStack->currentIndex() >= 2) {
+            const size_t penultimateCmdIdx = undoStack->currentIndex() - 2;
+            undoStack->mergeCommands(penultimateCmdIdx);
         }
     }
 }
