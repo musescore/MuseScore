@@ -8010,7 +8010,11 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie, bool undo)
 void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
 {
     const size_t undoIdx = undoStack()->currentIndex();
-    if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
+
+    const ChordRest* startCR = slur ? slur->startCR() : nullptr;
+    IF_ASSERT_FAILED(startCR) {
+        LOGE() << "Slur is corrupted";
+    } else if (!startCR->hasPrecedingJumpItem() && slur->isIncoming()) {
         if (undo) {
             startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
             slur->undoSetIncoming(false);
@@ -8020,7 +8024,10 @@ void Score::doUndoResetPartialSlur(Slur* slur, bool undo)
         }
     }
 
-    if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
+    const ChordRest* endCR = slur ? slur->endCR() : nullptr;
+    IF_ASSERT_FAILED(endCR) {
+        LOGE() << "Slur is corrupted";
+    } else if (!endCR->hasFollowingJumpItem() && slur->isOutgoing()) {
         if (undo) {
             startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
             slur->undoSetOutgoing(false);
