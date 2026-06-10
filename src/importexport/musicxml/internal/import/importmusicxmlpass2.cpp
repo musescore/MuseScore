@@ -5765,7 +5765,6 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
     Color endingColor;
     String endingText;
     String repeat;
-    String count;
     bool printEnding = true;
 
     while (m_e.readNextStartElement()) {
@@ -5821,7 +5820,13 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "fermata") {
             const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             const String fermataType = m_e.attribute("type");
-            Segment* const segment = measure->getSegment(SegmentType::EndBarLine, locTick);
+            SegmentType st = SegmentType::BarLine;
+            if (locTick == measure->endTick()) {
+                st = SegmentType::EndBarLine;
+            } else if (locTick == measure->tick()) {
+                st = SegmentType::BeginBarLine;
+            }
+            Segment* const segment = measure->getSegment(st, locTick);
             const track_idx_t track = m_pass1.trackForPart(partId);
             Fermata* fermata = Factory::createFermata(segment);
             fermata->setSymId(convertFermataToSymId(m_e.readText()));
