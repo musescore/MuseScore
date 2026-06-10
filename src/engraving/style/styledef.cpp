@@ -77,7 +77,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(instrumentNumeralsVerticalThreshold,            2),
     styleDef(instrumentNumeralsHorizontalThreshold,          2),
     styleDef(instrumentNumeralsHyphenEnable,                 true),
-    styleDef(instrumentNumeralsHyphenThreshold,              2),
+    styleDef(instrumentNumeralsHyphenThreshold,              1),
 
     styleDef(windsNameByGroup,                           true),
     styleDef(vocalsNameByGroup,                          true),

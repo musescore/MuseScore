@@ -1022,29 +1022,44 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
     Instrument* instr = part->instrument(tick);
     const InstrumentLabel& label = instr->instrumentLabel();
 
+    const MStyle& style = system->style();
+    bool trailingDot = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
+
     if (muse::contains(system->ldata()->partsWithGroupName(), part)) {
         if (label.useCustomIndividualName()) {
             return longNames ? label.customNameLongIndividual() : label.customNameShortIndividual();
         }
 
         int number = part->number(tick);
-        return number > 0 ? String::number(number) : String();
+        String result = number > 0 ? String::number(number) : String();
+        if (!result.isEmpty() && trailingDot) {
+            result += '.';
+        }
+
+        return result;
     }
 
     if (label.useCustomName()) {
         return longNames ? label.customNameLong() : label.customNameShort();
     }
 
-    const MStyle& style = system->style();
-
     String instrName = longNames ? instr->longName() : instr->shortName();
-
-    bool showNumber = longNames ? label.showNumberLong() : label.showNumberShort();
-    String number = instr->number() > 0 && showNumber ? String::number(instr->number()) : String();
 
     bool showTranspo = longNames ? label.showTranspositionLong() : label.showTranspositionShort();
     showTranspo &= style.styleB(longNames ? Sid::instrumentNamesShowTranspositionLong : Sid::instrumentNamesShowTranspositionShort);
     String transposition = showTranspo ? instr->transposition() : String();
+
+    bool showNumber = longNames ? label.showNumberLong() : label.showNumberShort();
+    String number = instr->number() > 0 && showNumber ? String::number(instr->number()) : String();
+
+    InstrumentNamesFormat nameFormat
+        = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
+
+    bool addTrailingDot = trailingDot && (transposition.empty() || nameFormat == InstrumentNamesFormat::NAME_IN_TRANSP_NUM
+                                          || nameFormat == InstrumentNamesFormat::TRANSP_NAME_NUM);
+    if (addTrailingDot) {
+        number += '.';
+    }
 
     if (transposition.empty()) {
         String result = instrName;
@@ -1053,9 +1068,6 @@ String SystemHeaderLayout::formattedInstrumentName(System* system, Part* part, c
         }
         return result;
     }
-
-    InstrumentNamesFormat nameFormat
-        = style.styleV(longNames ? Sid::instrumentNamesFormatLong : Sid::instrumentNamesFormatShort).value<InstrumentNamesFormat>();
 
     //: For instrument transposition, e.g. Horn in F
     String in = TranslatableString("notation", "in").translated();

@@ -215,8 +215,8 @@ StyledFlickable {
 
                         RoundedRadioButton {
                             text: qsTrc("notation/editstyle/instrumentnames", "Horizontally, up to")
-                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 2
-                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 2
+                            checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 0
+                            onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 0
                         }
 
                         IncrementalPropertyControl {
@@ -268,8 +268,8 @@ StyledFlickable {
 
                     RoundedRadioButton {
                         text: qsTrc("notation/editstyle/instrumentnames", "Always follow voice assignment")
-                        checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 0
-                        onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 0
+                        checked: instrumentNamesModel.instrumentNumeralsOrientation.value === 2
+                        onClicked: instrumentNamesModel.instrumentNumeralsOrientation.value = 2
                     }
                 }
 
