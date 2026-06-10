@@ -91,6 +91,8 @@
       <slurMidWidth>0.21</slurMidWidth>
       <tieEndWidth>0.05</tieEndWidth>
       <tieMidWidth>0.21</tieMidWidth>
+      <maskSlurs>1</maskSlurs>
+      <maskTies>1</maskTies>
       <musicalSymbolFont>Leland</musicalSymbolFont>
       <musicalTextFont>Leland Text</musicalTextFont>
       <showHeader>1</showHeader>

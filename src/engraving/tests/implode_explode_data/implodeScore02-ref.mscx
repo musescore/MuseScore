@@ -17,6 +17,8 @@
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <concertPitch>1</concertPitch>
       <minMMRestWidth>0</minMMRestWidth>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>

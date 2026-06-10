@@ -636,7 +636,7 @@ ControlElementPosition MeiImporter::findStart(const libmei::Element& meiElement,
         pos.chordRest = m_startIdChordRests.at(startId);
         pos.measure = pos.chordRest->measure();
         pos.tick = pos.chordRest->tick();
-        pos.track = static_cast<int>(pos.chordRest->track());
+        pos.track = pos.chordRest->track();
     } else {
         // No @startid, try a lookup based on the @tstamp. This is only for files not written via MuseScore
         const libmei::AttTimestampLog* timestampLogAtt = dynamic_cast<const libmei::AttTimestampLog*>(&meiElement);
@@ -685,7 +685,7 @@ ControlElementPosition MeiImporter::findEnd(pugi::xml_node controlNode, Spanner*
         pos.chordRest = m_endIdChordRests.at(endId);
         pos.measure = pos.chordRest->measure();
         pos.tick = pos.chordRest->tick();
-        pos.track = static_cast<int>(pos.chordRest->track());
+        pos.track = pos.chordRest->track();
     } else {
         // No @endid, try a lookup based on the @tstamp2. This is only for files not written via MuseScore
         libmei::InstTimestamp2Log timestamp2LogAtt;
@@ -727,7 +727,7 @@ ControlElementPosition MeiImporter::findEnd(pugi::xml_node controlNode, Spanner*
                             : track2voice(spanner->track());
 
         pos.tick = measure->tick() + tstampFraction;
-        pos.track = static_cast<int>(staffIdx * VOICES + layer);
+        pos.track = staffIdx * VOICES + layer;
         pos.chordRest = measure->findChordRest(pos.tick, pos.track);
     }
 

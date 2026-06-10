@@ -3695,7 +3695,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos.toAbsolute(spatium);
         double y = ks.line * step;
-        keySigShape.add(item->symBbox(ks.sym).translated(x, y), item);
+        Shape ksShape = item->symShapeWithCutouts(ks.sym);
+        for (const ShapeElement& ksElem : ksShape.elements()) {
+            keySigShape.add(ksElem.translated(x, y), item);
+        }
     }
     ldata->setShape(keySigShape);
 }
@@ -5603,12 +5606,14 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
 
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
+    double expectedMag = item->staff() ? item->staff()->staffMag(item->tick()) : ldata->mag();
+
+    if (ldata->isValid() && RealIsEqual(ldata->mag(), expectedMag)) {
         return;
     }
 
     if (item->staff()) {
-        ldata->setMag(item->staff()->staffMag(item->tick()));
+        ldata->setMag(expectedMag);
     }
     ldata->setBbox(item->scoreFont()
                    ? item->scoreFont()->bbox(item->sym(), item->magS() * item->symbolsSize())

@@ -133,6 +133,22 @@ StyledGroupBox {
             StyleResetButton {
                 styleItem: root.pageModel.slurMinDistance
             }
+
+            CheckBox {
+                id: maskSlursCheckbox
+                text: qsTrc("notation/editstyle/slursandties", "Mask slurs over clefs, key and time signatures")
+                checked: root.pageModel.maskSlurs.value
+                width: parent.width
+                Layout.columnSpan: 2
+
+                onClicked: {
+                    root.pageModel.maskSlurs.value = !maskSlursCheckbox.checked
+                }
+            }
+
+            StyleResetButton {
+                styleItem: root.pageModel.maskSlurs
+            }
         }
 
         ColumnLayout {

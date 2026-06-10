@@ -11,6 +11,8 @@
       <dividerRightAlignToSystemBarline>0</dividerRightAlignToSystemBarline>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
+      <maskSlurs>0</maskSlurs>
+      <maskTies>0</maskTies>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -152,7 +154,7 @@
               <Image>
                 <Image>
                   <eid>M_M</eid>
-                  <z>9499</z>
+                  <z>11299</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <size w="32.12" h="32.16"/>
                   </Image>

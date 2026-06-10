@@ -6072,31 +6072,7 @@ void MusicXmlParserPass2::key(const String& partId, Measure* measure, const Frac
             key.setConcertKey(cKey);
             key.setKey(tKey);
         } else if (m_e.name() == "mode") {
-            String m = m_e.readText();
-            if (m == u"none") {
-                key.setCustom(true);
-                key.setMode(KeyMode::NONE);
-            } else if (m == u"major") {
-                key.setMode(KeyMode::MAJOR);
-            } else if (m == u"minor") {
-                key.setMode(KeyMode::MINOR);
-            } else if (m == u"dorian") {
-                key.setMode(KeyMode::DORIAN);
-            } else if (m == u"phrygian") {
-                key.setMode(KeyMode::PHRYGIAN);
-            } else if (m == u"lydian") {
-                key.setMode(KeyMode::LYDIAN);
-            } else if (m == u"mixolydian") {
-                key.setMode(KeyMode::MIXOLYDIAN);
-            } else if (m == u"aeolian") {
-                key.setMode(KeyMode::AEOLIAN);
-            } else if (m == u"ionian") {
-                key.setMode(KeyMode::IONIAN);
-            } else if (m == u"locrian") {
-                key.setMode(KeyMode::LOCRIAN);
-            } else {
-                m_logger->logError(String(u"Unsupported mode '%1'").arg(m), &m_e);
-            }
+            key.setMode(TConv::fromXml(m_e.readText().toAscii().constChar(), KeyMode::UNKNOWN));
         } else if (m_e.name() == "cancel") {
             skipLogCurrElem();        // TODO ??
         } else if (m_e.name() == "key-step") {

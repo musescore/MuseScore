@@ -85,6 +85,7 @@
               <fret>12</fret>
               <string>3</string>
               <ghost>1</ghost>
+              <hideGeneratedParentheses>1</hideGeneratedParentheses>
               </Note>
             <NoteParenGroup>
               <Notes>
