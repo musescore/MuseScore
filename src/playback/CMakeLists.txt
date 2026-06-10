@@ -43,6 +43,8 @@ target_sources(playback PRIVATE
     internal/soundprofilesrepository.h
     internal/drumsetloader.cpp
     internal/drumsetloader.h
+    internal/knownaudiopluginsconfigurator.cpp
+    internal/knownaudiopluginsconfigurator.h
 )
 
 if (MUE_BUILD_PLAYBACK_TESTS)

@@ -34,6 +34,7 @@
 #include "internal/playbackcommandsstate.h"
 #include "internal/playbackconfiguration.h"
 #include "internal/soundprofilesrepository.h"
+#include "internal/knownaudiopluginsconfigurator.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -65,6 +66,9 @@ void PlaybackModule::resolveImports()
     if (cr) {
         cr->reg(std::make_shared<PlaybackCommandsRegister>());
     }
+
+    // must run before the audioplugins cache loads in onInit
+    KnownAudioPluginsConfigurator().init();
 }
 
 void PlaybackModule::onInit(const IApplication::RunMode&)
