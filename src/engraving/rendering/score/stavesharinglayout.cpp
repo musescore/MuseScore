@@ -390,9 +390,23 @@ void StaveSharingLayout::disconnectAll(SharedPart* p, StaveSharingContext& ctx)
             if (!cr) {
                 continue;
             }
+
+            for (DurationElement* de = cr; de;) {
+                Tuplet* tuplet = de->tuplet();
+                if (!tuplet) {
+                    break;
+                }
+
+                if (de == tuplet->elements().front()) {
+                    EngravingItem::disconnectAllOriginItems(tuplet);
+                }
+                de = tuplet;
+            }
+
             if (cr->isRest()) {
                 EngravingItem::disconnectAllOriginItems(cr);
             }
+
             if (cr->isChord()) {
                 for (Note* note : toChord(cr)->notes()) {
                     EngravingItem::disconnectAllOriginItems(note);
@@ -438,6 +452,38 @@ void StaveSharingLayout::makeSharedNotation(SharedPart* p, StaveSharingContext& 
                 score->undoAddElement(sharedCR);
             }
 
+            DurationElement* sharedDE = sharedCR;
+            for (DurationElement* originDE = originCR; originDE;) {
+                Tuplet* originTuplet = originDE->tuplet();
+                if (!originTuplet) {
+                    break;
+                }
+
+                Tuplet* sharedTuplet = nullptr;
+                if (originDE == originTuplet->elements().front()) {
+                    sharedTuplet = sharedDE->tuplet();
+                    if (!sharedTuplet) {
+                        sharedTuplet = toTuplet(originTuplet->clone());
+                        sharedTuplet->setTrack(sharedTrack);
+                        sharedTuplet->setParent(originTuplet->measure());
+                        score->undoAddElement(sharedTuplet);
+
+                        EngravingItem::connectSharedItem(sharedTuplet, originTuplet);
+                    }
+                } else {
+                    sharedTuplet = toTuplet(originTuplet->sharedItem());
+                }
+
+                IF_ASSERT_FAILED(sharedTuplet) {
+                    break;
+                }
+
+                sharedTuplet->add(sharedDE);
+
+                originDE = originTuplet;
+                sharedDE = sharedTuplet;
+            }
+
             if (originCR->isRest()) {
                 EngravingItem::connectSharedItem(sharedCR, originCR);
             }
@@ -479,6 +525,13 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
             if (!cr) {
                 continue;
             }
+
+            for (Tuplet* tuplet = cr->tuplet(); tuplet; tuplet = tuplet->tuplet()) {
+                if (tuplet->originItems().empty()) {
+                    score->undoRemoveElement(tuplet);
+                }
+            }
+
             if (cr->isRest()) {
                 bool barRestOnFirstVoice = toRest(cr)->isFullMeasureRest() && cr->voice() == 0;
                 if (barRestOnFirstVoice) {
@@ -488,6 +541,7 @@ void StaveSharingLayout::cleanup(SharedPart* p, StaveSharingContext& ctx)
                     score->undoRemoveElement(cr);
                 }
             }
+
             if (cr->isChord()) {
                 Chord* c = toChord(cr);
                 std::vector<Note*> notes = c->notes();     // copy because may be removed
