@@ -30,7 +30,7 @@ enum class InstrumentNameType : char {
     LONG, SHORT
 };
 enum class InstrumentNameRole : char {
-    STAFF, PART, GROUP
+    STAFF, SHARED_STAFF, PART, GROUP
 };
 
 class System;

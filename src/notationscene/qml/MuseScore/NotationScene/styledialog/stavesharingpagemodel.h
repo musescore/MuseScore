@@ -31,7 +31,21 @@ class StaveSharingPageModel : public AbstractStyleDialogModel
 
     QML_ELEMENT
 
+    Q_PROPERTY(
+        bool isStaveSharingEnabled READ isStaveSharingEnabled WRITE setIsStaveSharingEnabled NOTIFY isStaveSharingEnabledChanged FINAL)
+
+    Q_PROPERTY(StyleItem * allowVoiceCrossing READ allowVoiceCrossing CONSTANT)
+
 public:
     explicit StaveSharingPageModel(QObject* parent = nullptr);
+
+    bool isStaveSharingEnabled() const;
+    void setIsStaveSharingEnabled(bool v);
+
+signals:
+    void isStaveSharingEnabledChanged(bool enabled);
+
+public:
+    StyleItem* allowVoiceCrossing() const;
 };
 }

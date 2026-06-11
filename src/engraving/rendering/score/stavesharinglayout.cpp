@@ -23,6 +23,7 @@
 #include "stavesharinglayout.h"
 
 #include "measurelayout.h"
+#include "systemheaderlayout.h"
 
 #include "dom/chord.h"
 #include "dom/measure.h"
@@ -63,6 +64,8 @@ void StaveSharingLayout::updateStaveSharingForLastAddedMeasure(System* system, L
     updateStaveSharing(ssctx);
 
     if (ssctx.trackMapChanged) {
+        SystemHeaderLayout::updateSystemHeaderWidth(system, ctx);
+
         for (MeasureBase* mb = system->first(); mb && mb != system->last(); mb = mb->next()) {
             if (mb->isMeasure()) {
                 // TODO: only relayout shared staves

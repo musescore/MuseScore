@@ -28,7 +28,7 @@
 */
 
 #include "engravingitem.h"
-#include "stafflabel.h"
+#include "instrumentname.h"
 
 namespace mu::engraving {
 class Box;
@@ -51,9 +51,10 @@ public:
     SysStaff() {}
     ~SysStaff();
 
-    InstrumentName* groupName = nullptr;
-    InstrumentName* instrumentName = nullptr;
-    InstrumentName* individualStaffName = nullptr;
+    const std::unordered_map<InstrumentNameRole, InstrumentName*>& instrumentNames() const { return m_instrumentNames; }
+    InstrumentName* name(InstrumentNameRole role) const;
+    void addInstrumentName(InstrumentName* n);
+    void removeInstrumentName(InstrumentNameRole role);
 
     const RectF& bbox() const { return m_bbox; }
     RectF& bbox() { return m_bbox; }
@@ -77,6 +78,8 @@ public:
     Skyline& skyline() { return m_skyline; }
 
 private:
+    std::unordered_map<InstrumentNameRole, InstrumentName*> m_instrumentNames;
+
     RectF m_bbox;               // Bbox of StaffLines.
     Skyline m_skyline;
     double m_yOff = 0.0;            // offset of top staff line within bbox
