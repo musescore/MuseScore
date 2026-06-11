@@ -394,12 +394,6 @@ public:
     void resetCrossBeams();
 
     void cmdAddBracket();
-    void cmdToggleParentheses();
-    void cmdToggleParentheses(EngravingItem* el);
-    void cmdAddParenthesesToNotes(std::list<Note*>& notes);
-    void cmdRemoveParenthesesFromNotes(std::list<Note*>& notes);
-    void cmdAddParenthesesToNotes();
-    void cmdRemoveParenthesesFromNotes();
     void cmdAddBraces();
     void cmdAddFret(int fret);
     void cmdSetBeamMode(BeamMode);
@@ -1135,8 +1129,6 @@ private:
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
     FBox* findFretBox() const;
-
-    void cmdToggleParenthesesOnNotes();
 
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;

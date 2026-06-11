@@ -23,7 +23,6 @@
 #include "editenharmonicspelling.h"
 
 #include <algorithm>
-#include <list>
 #include <vector>
 
 #include "transpose.h"
@@ -448,7 +447,7 @@ void EditEnharmonicSpelling::changeEnharmonicSpelling(Score* score, bool both)
         31, 19,  7,        // 71  A##  B   Cb
     };
 
-    std::list<Note*> notes = score->selection().uniqueNotes();
+    std::vector<Note*> notes = score->selection().uniqueNotes();
     for (Note* note : notes) {
         Staff* staff = note->staff();
         if (staff->part()->instrument(note->tick())->useDrumset()) {

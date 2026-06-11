@@ -34,6 +34,8 @@
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
+#include "../editing/editparentheses.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1862,8 +1864,8 @@ EngravingItem* Note::drop(EditData& data)
         }
 
         case ActionIconType::PARENTHESES: {
-            std::list<Note*> note = { this };
-            score()->cmdAddParenthesesToNotes(note);
+            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+            EditParentheses::addParenthesesToNotes(tx, { this });
             break;
         }
         case ActionIconType::STANDARD_BEND:

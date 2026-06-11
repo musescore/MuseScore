@@ -1563,9 +1563,9 @@ const std::list<EngravingItem*> Selection::uniqueElements() const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-std::list<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
+std::vector<Note*> Selection::uniqueNotes(track_idx_t track, bool tied) const
 {
-    std::list<Note*> l;
+    std::vector<Note*> l;
 
     auto addNote = [&l](Note* note) {
         bool alreadyThere = false;

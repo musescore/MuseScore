@@ -23,6 +23,7 @@
 #include "editnote.h"
 #include "editchord.h"
 
+#include <algorithm>
 #include <set>
 
 #include "dom/accidental.h"
@@ -477,9 +478,9 @@ void EditNote::upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, i
 
 void EditNote::upDown(Score* score, bool up, UpDownMode mode)
 {
-    std::list<Note*> el = score->selection().uniqueNotes();
+    std::vector<Note*> el = score->selection().uniqueNotes();
 
-    el.sort([up](Note* a, Note* b) {
+    std::sort(el.begin(), el.end(), [up](Note* a, Note* b) {
         if (up) {
             return a->string() < b->string();
         } else {
