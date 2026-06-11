@@ -167,6 +167,8 @@ public:
     void scanElements(std::function<void(EngravingItem*)> func) override;
     void setTrack(track_idx_t val) override;
 
+    staff_idx_t vStaffIdx() const override;
+
     int playTicks() const;
     Fraction playTicksFraction() const;
 

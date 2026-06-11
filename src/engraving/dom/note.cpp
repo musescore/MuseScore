@@ -4134,4 +4134,10 @@ bool Note::transpose(Interval interval, bool useDoubleSharpsFlats)
     EditNote::undoChangePitch(score(), this, npitch, ntpc1, ntpc2);
     return true;
 }
+
+staff_idx_t Note::vStaffIdx() const
+{
+    const Chord* c = chord();
+    return c ? c->vStaffIdx() : EngravingItem::vStaffIdx();
+}
 }
