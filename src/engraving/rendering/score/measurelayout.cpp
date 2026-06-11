@@ -481,37 +481,39 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
             }
         }
         size_t tracks = ctx.dom().ntracks();
-        if (s->isChordRestType()) {
-            bool restFound = false;
-            for (track_idx_t track = 0; track < tracks; ++track) {
-                if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
-                    track += VOICES - 1;
-                    continue;
-                }
-                if (s->element(track)) {
-                    if (!s->element(track)->isRest()) {
-                        return false;
-                    } else {
-                        bool isNonEmptyIrregular = m->isIrregular() && !toRest(s->element(track))->isFullMeasureRest();
-                        if (isNonEmptyIrregular) {
-                            return false;
-                        }
-                    }
-                    restFound = true;
-                }
+        if (!s->isChordRestType()) {
+            continue;
+        }
+        bool restFound = false;
+        for (track_idx_t track = 0; track < tracks; ++track) {
+            if ((track % VOICES) == 0 && !ctx.dom().staff(track / VOICES)->show()) {
+                track += VOICES - 1;
+                continue;
             }
-            for (const EngravingItem* e : s->annotations()) {
-                if (e->isFermata()) {
+            if (!s->element(track)) {
+                continue;
+            }
+            if (!s->element(track)->isRest()) {
+                return false;
+            } else {
+                bool isNonEmptyIrregular = m->isIrregular() && !toRest(s->element(track))->isFullMeasureRest();
+                if (isNonEmptyIrregular) {
                     return false;
                 }
             }
-            if (restFound) {
-                ++n;
-            }
-            // measure is not empty if there is more than one rest
-            if (n > 1) {
+            restFound = true;
+        }
+        for (const EngravingItem* e : s->annotations()) {
+            if (e->isFermata()) {
                 return false;
             }
+        }
+        if (restFound) {
+            ++n;
+        }
+        // measure is not empty if there is more than one rest
+        if (n > 1) {
+            return false;
         }
     }
     return true;
@@ -519,30 +521,6 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
 
 bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutContext& ctx)
 {
-    // break for marker in this measure
-    for (EngravingItem* e : measure->el()) {
-        if (e->isMarker()) {
-            Marker* mark = toMarker(e);
-            if (!(mark->align() == AlignH::RIGHT)) {
-                return true;
-            }
-        }
-    }
-
-    // break for marker & jump in previous measure
-    if (prevMeasure) {
-        for (EngravingItem* e : prevMeasure->el()) {
-            if (e->isJump()) {
-                return true;
-            } else if (e->isMarker()) {
-                Marker* mark = toMarker(e);
-                if (mark->align() == AlignH::RIGHT) {
-                    return true;
-                }
-            }
-        }
-    }
-
     auto breakForAnnotation = [&](EngravingItem* e) {
         if (muse::contains(ALWAYS_BREAK_TYPES, e->type())) {
             return true;
@@ -554,44 +532,17 @@ bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutCont
         return false;
     };
 
-    // Break for annotations found mid-way into the previous measure
-    if (prevMeasure) {
-        for (Segment* s = prevMeasure->first(); s; s = s->next()) {
-            // Break for breath segments in previous measure
-            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-                if (!ctx.dom().staff(staffIdx)->show()) {
-                    continue;
-                }
-                EngravingItem* e = s->element(staffIdx * VOICES);
-                if (!e || e->generated()) {
-                    continue;
-                }
-                if (s->isBreathType()) {
-                    return true;
-                }
-            }
-
-            for (EngravingItem* e : s->annotations()) {
-                if (!e->visible()) {
-                    continue;
-                }
-                bool isInMidMeasure = e->rtick() > Fraction(0, 1);
-                if (!isInMidMeasure) {
-                    continue;
-                }
-                if (breakForAnnotation(e)) {
-                    return true;
-                }
-                // break for fermatas on the end barline in previous measure
-                if (e->isFermata()) {
-                    return true;
-                }
+    // break for marker in this measure
+    for (EngravingItem* e : measure->el()) {
+        if (e->isMarker()) {
+            Marker* mark = toMarker(e);
+            if (!(mark->align() == AlignH::RIGHT)) {
+                return true;
             }
         }
     }
 
     for (Segment* s = measure->first(); s; s = s->next()) {
-        // Break for annotations in this measure
         for (EngravingItem* e : s->annotations()) {
             if (!e->visible()) {
                 continue;
@@ -621,52 +572,99 @@ bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutCont
             }
         }
     }
-    if (prevMeasure) {
-        Segment* s = prevMeasure->findSegmentR(SegmentType::EndBarLine, prevMeasure->ticks());
-        if (s) {
-            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-                BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
-                if (bl) {
-                    BarLineType t = bl->barLineType();
-                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated()) {
-                        return true;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        // Check for courtesy clefs at the end of the previous measure
-        // Only break if the clef is on a visible staff
-        auto hasVisibleElement = [&ctx](Segment* seg) ->bool {
-            for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-                if (!ctx.dom().staff(staffIdx)->show()) {
-                    continue;
-                }
-                EngravingItem* e = seg->element(staffIdx * VOICES);
-                if (e && !e->generated()) {
-                    return true;
-                }
-            }
-            return false;
-        };
 
-        if (Segment* clefSeg = prevMeasure->findSegment(SegmentType::Clef, measure->tick())) {
-            if (hasVisibleElement(clefSeg)) {
-                return true;
-            }
-        }
-        if (Segment* tsSeg = prevMeasure->findSegment(SegmentType::TimeSigTypes, measure->tick())) {
-            if (hasVisibleElement(tsSeg)) {
-                return true;
-            }
-        }
-        if (Segment* ksSeg = prevMeasure->findSegment(SegmentType::KeySigTypes, measure->tick())) {
-            if (hasVisibleElement(ksSeg)) {
+    if (!prevMeasure) {
+        return false;
+    }
+
+    // break for marker & jump in previous measure
+    for (EngravingItem* e : prevMeasure->el()) {
+        if (e->isJump()) {
+            return true;
+        } else if (e->isMarker()) {
+            Marker* mark = toMarker(e);
+            if (mark->align() == AlignH::RIGHT) {
                 return true;
             }
         }
     }
+
+    // Break for breaths and annotations found mid-way into the previous measure
+    for (Segment* s = prevMeasure->first(); s; s = s->next()) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            if (!ctx.dom().staff(staffIdx)->show()) {
+                continue;
+            }
+            EngravingItem* e = s->element(staffIdx * VOICES);
+            if (!e || e->generated()) {
+                continue;
+            }
+            if (s->isBreathType()) {
+                return true;
+            }
+        }
+
+        for (EngravingItem* e : s->annotations()) {
+            if (!e->visible()) {
+                continue;
+            }
+            if (e->rtick() == Fraction(0, 1)) {
+                continue;
+            }
+            if (breakForAnnotation(e) || e->isFermata()) {
+                return true;
+            }
+        }
+    }
+
+    // Break for non-normal end barline in previous measure
+    Segment* endBarSeg = prevMeasure->findSegmentR(SegmentType::EndBarLine, prevMeasure->ticks());
+    if (endBarSeg) {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            BarLine* bl = toBarLine(endBarSeg->element(staffIdx * VOICES));
+            if (!bl) {
+                continue;
+            }
+            BarLineType t = bl->barLineType();
+            if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated()) {
+                return true;
+            } else {
+                break;
+            }
+        }
+    }
+
+    // Break for courtesy clefs/sigs at the end of the previous measure,
+    // only if the element is on a visible staff
+    auto hasVisibleElement = [&ctx](Segment* seg) -> bool {
+        for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            if (!ctx.dom().staff(staffIdx)->show()) {
+                continue;
+            }
+            EngravingItem* e = seg->element(staffIdx * VOICES);
+            if (e && !e->generated()) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (Segment* clefSeg = prevMeasure->findSegment(SegmentType::Clef, measure->tick())) {
+        if (hasVisibleElement(clefSeg)) {
+            return true;
+        }
+    }
+    if (Segment* tsSeg = prevMeasure->findSegment(SegmentType::TimeSigTypes, measure->tick())) {
+        if (hasVisibleElement(tsSeg)) {
+            return true;
+        }
+    }
+    if (Segment* ksSeg = prevMeasure->findSegment(SegmentType::KeySigTypes, measure->tick())) {
+        if (hasVisibleElement(ksSeg)) {
+            return true;
+        }
+    }
+
     return false;
 }
 
