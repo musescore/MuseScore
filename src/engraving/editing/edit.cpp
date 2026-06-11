@@ -2839,16 +2839,6 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::KEYSIG:
     {
         KeySig* k = toKeySig(el);
-        Measure* m = k->measure();
-        if (m->isMMRest()) {
-            m = m->mmRestFirst();
-            if (Segment* s = m->findSegment(SegmentType::KeySig, k->tick())) {
-                k = toKeySig(s->element(k->track()));
-            }
-            if (!k || k->generated()) {
-                return;
-            }
-        }
         Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
         bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
                                                          el->part()->startTrack(), el->part()->endTrack() - 1);
@@ -3132,52 +3122,22 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::BRACKET:
         undoRemoveBracket(toBracket(el));
         break;
-
-    case ElementType::LAYOUT_BREAK:
-    {
-        undoRemoveElement(el);
-        LayoutBreak* lb = toLayoutBreak(el);
-        MeasureBase* mb = lb->measure();
-        Measure* m = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
-        if (m && m->isMMRest()) {
-            // propagate to original measure
-            m = m->mmRestLast();
-            for (EngravingItem* e : m->el()) {
-                if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == toLayoutBreak(el)->layoutBreakType()) {
-                    undoRemoveElement(e);
-                    break;
-                }
-            }
-        }
-    }
-    break;
-
     case ElementType::CLEF:
     {
         Clef* clef = toClef(el);
         Measure* m = clef->measure();
-        if (m->isMMRest()) {
-            // propagate to original measure
-            m = m->mmRestLast();
-            Segment* s = m->findSegment(SegmentType::Clef, clef->segment()->tick());
-            if (s && s->element(clef->track())) {
-                Clef* c = toClef(s->element(clef->track()));
-                undoRemoveElement(c);
-            }
-        } else {
-            if (clef->generated()) {
-                // find the real clef if this is a cautionary one
-                if (m && m->prevMeasure()) {
-                    Fraction tick = m->tick();
-                    m = m->prevMeasure();
-                    Segment* s = m->findSegment(SegmentType::Clef, tick);
-                    if (s && s->element(clef->track())) {
-                        clef = toClef(s->element(clef->track()));
-                    }
+        if (clef->generated()) {
+            // find the real clef if this is a cautionary one
+            if (m && m->prevMeasure()) {
+                Fraction tick = m->tick();
+                m = m->prevMeasure();
+                Segment* s = m->findSegment(SegmentType::Clef, tick);
+                if (s && s->element(clef->track())) {
+                    clef = toClef(s->element(clef->track()));
                 }
             }
-            undoRemoveElement(clef);
         }
+        undoRemoveElement(clef);
     }
     break;
 
@@ -3207,29 +3167,6 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
-    case ElementType::REHEARSAL_MARK:
-    case ElementType::TEMPO_TEXT:
-    {
-        Segment* s = toSegment(el->explicitParent());
-        Measure* m = s->measure();
-        if (m->isMMRest()) {
-            // propagate to original measure/element
-            m = m->mmRestFirst();
-            Segment* ns = m->findSegment(SegmentType::ChordRest, s->tick());
-            const auto annotations = ns->annotations(); // make a copy since we alter the list
-            for (EngravingItem* e : annotations) {
-                if (e->type() == el->type() && e->track() == el->track()) {
-                    el = e;
-                    undoRemoveElement(el);
-                    break;
-                }
-            }
-        } else {
-            undoRemoveElement(el);
-        }
-    }
-    break;
-
     case ElementType::LYRICSLINE_SEGMENT:
     {
         el = toLyricsLineSegment(el)->lyricsLine();
@@ -3341,53 +3278,6 @@ void Score::deleteItem(EngravingItem* el)
         }
     }
     break;
-
-    case ElementType::MARKER:
-    {
-        Measure* m = toMeasure(el->explicitParent());
-        if (m->isMMRest()) {
-            // find corresponding marker in underlying measure
-            bool found = false;
-            // the marker may be in the first measure...
-            for (EngravingItem* e : m->mmRestFirst()->el()) {
-                if (e->isMarker() && e->subtype() == el->subtype()) {
-                    undoRemoveElement(e);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                // ...or it may be in the last measure
-                for (EngravingItem* e : m->mmRestLast()->el()) {
-                    if (e->isMarker() && e->subtype() == el->subtype()) {
-                        undoRemoveElement(e);
-                        break;
-                    }
-                }
-            }
-        }
-        // whether m is an mmrest or not, we still need to remove el
-        undoRemoveElement(el);
-    }
-    break;
-
-    case ElementType::JUMP:
-    {
-        Measure* m = toMeasure(el->explicitParent());
-        if (m->isMMRest()) {
-            // find corresponding jump in underlying measure
-            for (EngravingItem* e : m->mmRestLast()->el()) {
-                if (e->isJump() && e->subtype() == el->subtype()) {
-                    undoRemoveElement(e);
-                    break;
-                }
-            }
-        }
-        // whether m is an mmrest or not, we still need to remove el
-        undoRemoveElement(el);
-    }
-    break;
-
     case ElementType::SYSTEM_LOCK_INDICATOR:
     {
         const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
