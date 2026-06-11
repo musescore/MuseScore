@@ -826,7 +826,7 @@ void Measure::add(EngravingItem* e)
         }
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
-                if (seg->isType(SegmentType::BarLineType)) {
+                if (seg->isType(SegmentType::BarLineTypes)) {
                     // Barline segments are regenerated every layout
                     // We need to remove the regenerated segment when undoing to ensure the original element is added back to the score
                     m_segments.remove(s);
@@ -1535,7 +1535,7 @@ EngravingItem* Measure::drop(EditData& data)
             return nullptr;
         }
         staffIdx = staff->idx();
-        Segment* parentSeg = first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        Segment* parentSeg = first(SegmentType::Duration);
         if (!parentSeg) {
             delete e;
             return nullptr;
@@ -1872,7 +1872,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigType | SegmentType::CourtesyKeySigType)) {
+                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::CourtesyTimeSigTypes | SegmentType::CourtesyKeySigTypes)) {
                     seg->setRtick(nl);
                 }
             }
@@ -3385,7 +3385,7 @@ double Measure::endingXForOpenEndedLines() const
     double systemEndX = sys->ldata()->bbox().width();
 
     Segment* lastSeg = last();
-    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineTypes)) {
         lastSeg = lastSeg->prevEnabled();
     }
     if (!lastSeg) {

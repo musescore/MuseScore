@@ -502,7 +502,7 @@ TEST_F(Engraving_TimesigTests, endOfMeasureMMRTimeSigChange)
     score->endCmd();
 
     // Check part2 m1 (mmr) ts is 6/8
-    Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigType, part2M1MM->ticks());
+    Segment* part2M1MMRTimeSigSeg = part2M1MM->findSegmentR(SegmentType::TimeSigTypes, part2M1MM->ticks());
     EXPECT_TRUE(part2M1MMRTimeSigSeg);
     TimeSig* topTimeSig = toTimeSig(part2M1MMRTimeSigSeg->element(0));
     EXPECT_TRUE(topTimeSig);

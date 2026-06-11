@@ -513,7 +513,7 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
 
     Segment* nextSeg = s->nextActive();
     if (!nextSeg) {
-        nextSeg = s->next(SegmentType::BarLineType);
+        nextSeg = s->next(SegmentType::BarLineTypes);
     }
 
     if (nextSeg) {

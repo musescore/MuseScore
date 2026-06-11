@@ -3656,7 +3656,7 @@ Ret Read206::readScoreFile(Score* score, XmlReader& e, ReadInOutData* out)
     read114::Read114::setBarLineSpanToStaves(score, ctx);
 
     // set local overrides to bar lines
-    constexpr auto st = SegmentType::BarLineType;
+    constexpr auto st = SegmentType::BarLineTypes;
     const size_t numStaves = score->nstaves();
     for (Segment* s = score->firstSegment(st); s; s = s->next1(st)) {
         // optional local bar line span override of this segment

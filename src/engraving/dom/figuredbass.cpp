@@ -1006,8 +1006,8 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, track_idx_t trac
         // locate previous FB for same staff
         Segment* prevSegm;
         FiguredBass* prevFB = 0;
-        for (prevSegm = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); prevSegm;
-             prevSegm = prevSegm->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+        for (prevSegm = seg->prev1(SegmentType::Duration); prevSegm;
+             prevSegm = prevSegm->prev1(SegmentType::Duration)) {
             for (EngravingItem* e : prevSegm->annotations()) {
                 if (e->isFiguredBass() && (e->track()) == track) {
                     prevFB = toFiguredBass(e);             // previous FB found

@@ -656,12 +656,12 @@ bool breakMMRForElement(Measure* measure, Measure* prevMeasure, const LayoutCont
                 return true;
             }
         }
-        if (Segment* tsSeg = prevMeasure->findSegment(SegmentType::TimeSigType, measure->tick())) {
+        if (Segment* tsSeg = prevMeasure->findSegment(SegmentType::TimeSigTypes, measure->tick())) {
             if (hasVisibleElement(tsSeg)) {
                 return true;
             }
         }
-        if (Segment* ksSeg = prevMeasure->findSegment(SegmentType::KeySigType, measure->tick())) {
+        if (Segment* ksSeg = prevMeasure->findSegment(SegmentType::KeySigTypes, measure->tick())) {
             if (hasVisibleElement(ksSeg)) {
                 return true;
             }
@@ -899,7 +899,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         track_idx_t endTrack  = startTrack + VOICES;
 
         for (const Segment& segment : measure->segments()) {
-            if (!staff->show() && !segment.isType(SegmentType::TimeSigType)) {
+            if (!staff->show() && !segment.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
 
@@ -1213,7 +1213,7 @@ void MeasureLayout::layoutPlayCountText(Measure* m, LayoutContext& ctx)
         }
         track_idx_t track = staff2track(staffIdx);
 
-        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        Segment* endBarSeg = m->last(SegmentType::BarLineTypes);
         PlayCountText* playCount
             = endBarSeg ? toPlayCountText(endBarSeg->findAnnotation(ElementType::PLAY_COUNT_TEXT, track, track)) : nullptr;
         if (!playCount) {
@@ -2122,9 +2122,9 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             return false;
         }
         const StaffType* st = staff->staffType(seg->tick());
-        const bool noTimesig = st && seg->isType(SegmentType::TimeSigType) && !st->genTimesig();
-        const bool noKeysig = st && seg->isType(SegmentType::KeySigType) && !st->genKeysig();
-        const bool noClef = st && seg->isType(SegmentType::ClefType) && !st->genClef();
+        const bool noTimesig = st && seg->isType(SegmentType::TimeSigTypes) && !st->genTimesig();
+        const bool noKeysig = st && seg->isType(SegmentType::KeySigTypes) && !st->genKeysig();
+        const bool noClef = st && seg->isType(SegmentType::ClefTypes) && !st->genClef();
         if (noTimesig || noKeysig || noClef) {
             return false;
         }
@@ -2161,7 +2161,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             rightItem->setParenthesesMode(rightItem->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
             rightParen = rightItem->rightParen();
         }
-        bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(SegmentType::TimeSigType)
+        bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(SegmentType::TimeSigTypes)
                                      && ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
                                      != TimeSigPlacement::NORMAL;
         if ((ctx.conf().styleB(Sid::smallParens) || needsBigTimeSigAdjust) && leftParen && rightParen) {
@@ -2987,7 +2987,7 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
 
         Segment* nextSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
         if (!(nextSeg && nextSeg->isActive())) {
-            nextSeg = m->findSegmentR(SegmentType::BarLineType, refCRSeg->rtick() + refCRSeg->ticks());
+            nextSeg = m->findSegmentR(SegmentType::BarLineTypes, refCRSeg->rtick() + refCRSeg->ticks());
         }
         double width = nextSeg ? nextSeg->x() - refCRSeg->x() : refCRSeg->width();
 
@@ -3063,7 +3063,7 @@ void MeasureLayout::updateKeySignatures(const Measure* measure, LayoutContext& c
         return;
     }
     for (const Segment& seg : measure->segments()) {
-        if (!seg.isType(SegmentType::KeySigType)) {
+        if (!seg.isType(SegmentType::KeySigTypes)) {
             continue;
         }
 

@@ -365,7 +365,7 @@ PointF Volta::linePos(Grip grip, System** system) const
         }
     }
 
-    if (start && !segment->isType(SegmentType::BarLineType) && style().styleB(Sid::voltaAlignStartBeforeKeySig)) {
+    if (start && !segment->isType(SegmentType::BarLineTypes) && style().styleB(Sid::voltaAlignStartBeforeKeySig)) {
         Segment* prev = segment;
         while (prev && !prev->isType(SegmentType::KeySig) && prev->tick() == segment->tick()) {
             prev = prev->prev1MMenabled();
@@ -389,7 +389,7 @@ PointF Volta::linePos(Grip grip, System** system) const
                 PointF cutoutNW = score()->engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0);
                 x += cutoutNW.x();
             }
-        } else if (segment->segmentType() & SegmentType::BarLineType && !isAtSystemStart) {
+        } else if (segment->segmentType() & SegmentType::BarLineTypes && !isAtSystemStart) {
             x += segment->width();
             const BarLine* barline = toBarLine(segment->element(track()));
             alignLeftOfRepeatBarLine = barline && barline->barLineType() == BarLineType::END_REPEAT
@@ -407,7 +407,7 @@ PointF Volta::linePos(Grip grip, System** system) const
             }
             x += segment->staffShape(si).right();
             x -= 0.5 * absoluteFromSpatium(lineWidth());
-        } else if (segment->segmentType() & SegmentType::BarLineType) {
+        } else if (segment->segmentType() & SegmentType::BarLineTypes) {
             BarLine* barLine = toBarLine(segment->element(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
                 x += symWidth(SymId::repeatDot) + style().styleAbsolute(Sid::repeatBarlineDotSeparation);

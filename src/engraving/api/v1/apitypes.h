@@ -882,13 +882,13 @@ enum class SegmentType {
     //--
     All                        = int(mu::engraving::SegmentType::All),
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType                = int(mu::engraving::SegmentType::BarLineType),
-    CourtesyTimeSigType        = int(mu::engraving::SegmentType::CourtesyTimeSigType),
-    CourtesyKeySigType         = int(mu::engraving::SegmentType::CourtesyKeySigType),
-    CourtesyClefType           = int(mu::engraving::SegmentType::CourtesyClefType),
-    TimeSigType                = int(mu::engraving::SegmentType::TimeSigType),
-    KeySigType                 = int(mu::engraving::SegmentType::KeySigType),
-    ClefType                   = int(mu::engraving::SegmentType::ClefType),
+    BarLineType                = int(mu::engraving::SegmentType::BarLineTypes),
+    CourtesyTimeSigType        = int(mu::engraving::SegmentType::CourtesyTimeSigTypes),
+    CourtesyKeySigType         = int(mu::engraving::SegmentType::CourtesyKeySigTypes),
+    CourtesyClefType           = int(mu::engraving::SegmentType::CourtesyClefTypes),
+    TimeSigType                = int(mu::engraving::SegmentType::TimeSigTypes),
+    KeySigType                 = int(mu::engraving::SegmentType::KeySigTypes),
+    ClefType                   = int(mu::engraving::SegmentType::ClefTypes),
     ///\}
 };
 Q_ENUM_NS(SegmentType);
