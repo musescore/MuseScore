@@ -1159,7 +1159,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         }
     }
 
-    int totInstrumentCount = instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size();
+    size_t totInstrumentCount = instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size();
 
     SharedLabelOrientation actualOrientation;
     switch (orientation) {
