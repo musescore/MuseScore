@@ -117,7 +117,6 @@
       </SharedPart>
     <Part id="1">
       <eid>1atiKODg0XJ_HWST2TrqAtN</eid>
-      <sharedPart>RUdY8jndx3P_RUdY8jndx3P</sharedPart>
       <Staff>
         <eid>9wZjKYHcvuO_Kb4hWil9vIN</eid>
         <StaffType group="pitched">
@@ -153,10 +152,10 @@
           <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
+      <sharedPart>RUdY8jndx3P_RUdY8jndx3P</sharedPart>
       </Part>
     <Part id="2">
       <eid>bb3kNqrRkeH_9S+ETAilgYH</eid>
-      <sharedPart>RUdY8jndx3P_RUdY8jndx3P</sharedPart>
       <Staff>
         <eid>lL+Y0ZDQz+E_m4/6pP+j2fB</eid>
         <StaffType group="pitched">
@@ -181,6 +180,7 @@
           <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
+      <sharedPart>RUdY8jndx3P_RUdY8jndx3P</sharedPart>
       </Part>
     <Staff id="1">
       <VBox>
