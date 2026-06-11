@@ -106,18 +106,6 @@ void mu::engraving::SharedPart::removeMapsBetweenTicks(const Fraction& startTick
     }
 }
 
-bool SharedPart::hasTracksMappedToStaff(staff_idx_t absStaffIdx, const Fraction& tick) const
-{
-    const SharedTrackMap& trackMap = trackMapAtTick(tick);
-    for (const auto& pair : trackMap) {
-        if (track2staff(pair.second) == absStaffIdx) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void SharedPart::computeIsSameInstruments()
 {
     if (m_originParts.empty()) {

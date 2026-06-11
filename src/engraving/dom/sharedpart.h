@@ -51,7 +51,6 @@ public:
     const SharedTrackMap& trackMapAtTick(const Fraction& tick) const;
     void setTrackMapAtTick(const SharedTrackMap& map, const Fraction& tick);
     void removeMapsBetweenTicks(const Fraction& startTick, const Fraction& endTick);
-    bool hasTracksMappedToStaff(staff_idx_t absStaffIdx, const Fraction& tick) const;
 
     bool isSameInstruments() const { return m_isSameInstruments; }
 
