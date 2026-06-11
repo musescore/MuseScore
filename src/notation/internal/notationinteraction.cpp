@@ -93,6 +93,7 @@
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/editsystemlocks.h"
@@ -2383,6 +2384,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::engraving::Score* score,
                                                     const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers)
 {
+    engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     const ElementType elementType = element->type();
 
     ChordRest* cr1 = sel.firstChordRest();
@@ -2472,13 +2475,12 @@ void NotationInteraction::applyPaletteElementToList(EngravingItem* element, mu::
         const ActionIcon* icon = toActionIcon(element);
         switch (icon->actionType()) {
         case ActionIconType::SYSTEM_LOCK: {
-            engraving::Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
             EditSystemLocks::applyLockToSelection(tx, score);
             return;
         }
         case ActionIconType::PARENTHESES: {
             if (!sel.noteList().empty()) {
-                score->cmdAddParenthesesToNotes();
+                EditParentheses::addParenthesesToNotes(tx, score);
                 return;
             }
         }
@@ -2725,7 +2727,7 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, mu:
             return;
         }
         case ActionIconType::PARENTHESES: {
-            score->cmdAddParenthesesToNotes();
+            EditParentheses::addParenthesesToNotes(tx, score);
             return;
         }
         case ActionIconType::STANDARD_BEND:
@@ -5766,8 +5768,8 @@ void NotationInteraction::addBracketsToSelection(BracketsType type)
         });
         break;
     case BracketsType::Parentheses:
-        transaction(TranslatableString("undoableAction", "Add parentheses"), [&](auto&) {
-            score()->cmdToggleParentheses();
+        transaction(TranslatableString("undoableAction", "Add parentheses"), [&](auto& tx) {
+            EditParentheses::toggleParentheses(tx, score());
         });
         break;
     }

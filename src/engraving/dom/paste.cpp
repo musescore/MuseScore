@@ -25,8 +25,10 @@
 #include "imimedata.h"
 
 #include "../editing/editmeasures.h"
+#include "../editing/editparentheses.h"
 #include "../editing/editstaff.h"
 #include "../editing/mscoreview.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
 #include "rw/read400/tread.h"
@@ -286,6 +288,7 @@ bool Score::cmdRepeatListSelection()
     TRACEFUNC;
 
     InputState& is = inputState();
+    Transaction& tx = transactionManager()->currentOrDummyTransaction();
 
     std::vector<Note*> notes = m_selection.noteList();
     std::sort(notes.begin(), notes.end(), [](const Note* a, const Note* b) {
@@ -299,7 +302,7 @@ bool Score::cmdRepeatListSelection()
     // Parenthesis logic: group new notes by the left parenthesis (if any) of their old equivalent. Once all
     // new notes have been created we can call cmdAddParentheses on each group...
     // Use a vector of pairs to preserve insertion order
-    using NoteList = std::list<Note*>;
+    using NoteList = std::vector<Note*>;
     std::vector<std::pair<const Parenthesis*, NoteList> > parenEntries;
 
     for (Note* n : notes) {
@@ -381,7 +384,7 @@ bool Score::cmdRepeatListSelection()
     }
 
     for (auto& [paren, noteList] : parenEntries) {
-        cmdAddParenthesesToNotes(noteList);
+        EditParentheses::addParenthesesToNotes(tx, noteList);
     }
 
     select(toSelect, SelectType::ADD);
