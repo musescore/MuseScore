@@ -158,6 +158,7 @@ void UndoStack::pushWithoutPerforming(UndoableCommand* cmd)
         if (!ScoreLoad::loading()) {
             LOGW("no active transaction, UndoStack %p", this);
         }
+        delete cmd;
         return;
     }
     m_activeTransaction->appendCommand(cmd);
