@@ -50,9 +50,11 @@ static const std::map<TripletFeelType, String> tupletSymbols =
                                                "%1textBlackNoteFrac16thShortStem%2"
                                                " = "
                                                "%1textBlackNoteShortStem%2"
+                                               "%1textTupletBracketStartShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
                                                "%1textTuplet3ShortStem%2"
-                                               "%1textBlackNoteFrac16thShortStem%2") },
+                                               "%1textBlackNoteFrac16thShortStem%2"
+                                               "%1textTupletBracketEndShortStem%2") },
 
     { TripletFeelType::DOTTED_8TH,      String(u"%1textBlackNoteShortStem%2"
                                                "%1textCont8thBeamShortStem%2"
