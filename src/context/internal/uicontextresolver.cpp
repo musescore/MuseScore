@@ -49,11 +49,15 @@ constexpr int CURRENT_URI_CHANGED_TIMEOUT = 500; // msec
 
 void UiContextResolver::init()
 {
+    m_currentUriChangedTimer.setSingleShot(true);
+    m_currentUriChangedTimer.setInterval(CURRENT_URI_CHANGED_TIMEOUT);
+    QObject::connect(&m_currentUriChangedTimer, &QTimer::timeout, [this]() {
+        updateCurrentUiContext();
+    });
+
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE Let the page/dialog open and show itself first
-        QTimer::singleShot(CURRENT_URI_CHANGED_TIMEOUT, [this]() {
-            updateCurrentUiContext();
-        });
+        m_currentUriChangedTimer.start();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
