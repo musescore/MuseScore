@@ -90,6 +90,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/editing/editchord.h"
+#include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editpart.h"
@@ -5954,11 +5955,13 @@ void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
         return;
     }
 
-    startEdit(steps > 0 // negative: increase, positive: decrease
-              ? TranslatableString("undoableAction", "Decrease duration")
-              : TranslatableString("undoableAction", "Increase duration"));
-    score()->cmdIncDecDuration(steps, stepByDots);
-    apply();
+    m_undoStack->transaction(steps > 0 // negative: increase, positive: decrease
+                             ? TranslatableString("undoableAction", "Decrease duration")
+                             : TranslatableString("undoableAction", "Increase duration"),
+                             [&](Transaction& tx) {
+        EditDuration::incDecDuration(tx, score(), steps, stepByDots);
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::autoFlipHairpinsType(Dynamic* selDyn)
@@ -6522,9 +6525,10 @@ void NotationInteraction::extendToNextNote()
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Extend to next note"));
-    score()->cmdExtendToNextNote();
-    apply();
+    m_undoStack->transaction(TranslatableString("undoableAction", "Extend to next note"), [&](mu::engraving::Transaction& tx) {
+        EditDuration::extendToNextNote(tx, score());
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::removeSelectedMeasures()
