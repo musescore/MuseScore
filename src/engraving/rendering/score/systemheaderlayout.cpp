@@ -1134,6 +1134,10 @@ String SystemHeaderLayout::formattedGroupName(System* system, Part* part, const 
 String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const SharedTrackMap& trackMap,
                                                      const std::vector<Part*>& originParts)
 {
+    if (originParts.empty()) {
+        return String();
+    }
+
     Score* score = originParts.front()->score();
     const MStyle& style = score->style();
     bool trailingDotSingle = style.styleB(Sid::instrumentNumeralsTrailingDotSingle);
@@ -1405,6 +1409,8 @@ void SystemHeaderLayout::setSharedPartNames(SharedPart* sharedPart, staff_idx_t 
             updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::SHARED_STAFF);
             updateName(system, globalStaffIdx, ctx, String(), type, InstrumentNameRole::STAFF);
         }
+
+        return;
     }
 
     if (!sharedPart->isSameInstruments()) {
