@@ -1172,6 +1172,10 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
     case SharedLabelOrientation::VERTICAL:
         actualOrientation = totInstrumentCount > verticalLimit ? SharedLabelOrientation::VOICE : orientation;
         break;
+    default: // should not happen, but don't leave actualOrientation uninitialized
+        ASSERT_X("Unexpected SharedLabelOrientation value: " << static_cast<int>(orientation));
+        actualOrientation = SharedLabelOrientation::VOICE;
+        break;
     }
 
     if (actualOrientation == SharedLabelOrientation::HORIZONTAL || actualOrientation == SharedLabelOrientation::VERTICAL) {
