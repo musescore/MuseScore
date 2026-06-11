@@ -19,9 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -31,17 +28,14 @@ import Muse.UiComponents
 import MuseScore.Project
 import MuseScore.NotationScene
 
-FlatButton {
+PopupButton {
     id: root
 
     property AdditionalInfoModel model: null
     property string currentValueAccessibleName: model.tempoAccessibleName(root.model.tempo.noteIcon,
                                                                           root.model.tempo.withDot) + " " + root.model.tempo.value
 
-    property alias popupAnchorItem: popup.anchorItem
-
     height: 96
-    accentButton: popup.isOpened
 
     TempoView {
         anchors.centerIn: parent
@@ -55,15 +49,7 @@ FlatButton {
         noteSymbolTopPadding: 22
     }
 
-    onClicked: {
-        if (!popup.isOpened) {
-            popup.open()
-        } else {
-            popup.close()
-        }
-    }
-
-    StyledPopupView {
+    popupComponent: StyledPopupView {
         id: popup
 
         margins: 0

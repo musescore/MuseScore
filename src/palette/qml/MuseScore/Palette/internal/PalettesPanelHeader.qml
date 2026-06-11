@@ -35,7 +35,7 @@ Item {
     readonly property bool isSearchFieldFocused: searchField.activeFocus
     readonly property string searchText: searchField.searchText
 
-    property alias popupMaxHeight: addPalettesPopup.maxHeight
+    property int popupMaxHeight: 400
     property var popupAnchorItem: null
 
     property alias navigation: navPanel
@@ -68,46 +68,7 @@ Item {
         }
     }
 
-    QtObject {
-        id: prv
-
-        property var openedPopup: null
-        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
-
-        function openPopup(popup, model) {
-            if (isPopupOpened) {
-                if (openedPopup === popup) {
-                    resetOpenedPopup()
-                    return
-                }
-
-                resetOpenedPopup()
-            }
-
-            if (Boolean(popup)) {
-                openedPopup = popup
-
-                if (Boolean(model)) {
-                    popup.model = model
-                }
-
-                popup.open()
-            }
-        }
-
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                resetOpenedPopup()
-            }
-        }
-
-        function resetOpenedPopup() {
-            openedPopup.close()
-            openedPopup = null
-        }
-    }
-
-    FlatButton {
+    PopupButton {
         id: addPalettesButton
         objectName: "AddPalettesBtn"
 
@@ -122,30 +83,31 @@ Item {
         visible: !root.isSearchOpened
         enabled: visible
 
-        onClicked: {
-            prv.openPopup(addPalettesPopup, root.paletteProvider.availableExtraPalettesModel())
-        }
+        popupAnchorItem: root.popupAnchorItem
 
-        AddPalettesPopup {
-            id: addPalettesPopup
+        popupComponent: AddPalettesPopup {
             paletteProvider: root.paletteProvider
-
+            model: root.paletteProvider ? root.paletteProvider.availableExtraPalettesModel() : null
             popupAvailableWidth: root.width
-            anchorItem: root.popupAnchorItem
+            maxHeight: root.popupMaxHeight
 
             onAddCustomPaletteRequested: {
-                prv.openPopup(createCustomPalettePopup)
+                addPalettesButton.close()
+                createCustomPalettePopupLoader.toggleOpened()
             }
         }
 
-        CreateCustomPalettePopup {
-            id: createCustomPalettePopup
+        StyledPopupLoader {
+            id: createCustomPalettePopupLoader
 
-            popupAvailableWidth: root.width
-            anchorItem: root.popupAnchorItem
+            popupAnchorItem: root.popupAnchorItem
 
-            onAddCustomPaletteRequested: function(paletteName) {
-                root.addCustomPaletteRequested(paletteName)
+            sourceComponent: CreateCustomPalettePopup {
+                popupAvailableWidth: root.width
+
+                onAddCustomPaletteRequested: function(paletteName) {
+                    root.addCustomPaletteRequested(paletteName)
+                }
             }
         }
     }
@@ -165,7 +127,8 @@ Item {
         enabled: visible
 
         onClicked: {
-            prv.closeOpenedPopup()
+            addPalettesButton.close()
+            createCustomPalettePopupLoader.close()
             root.startSearch()
         }
     }

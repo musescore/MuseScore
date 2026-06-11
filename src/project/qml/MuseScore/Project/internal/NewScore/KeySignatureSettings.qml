@@ -19,24 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 
+import QtQuick
 import QtQuick.Layouts
 
 import Muse.Ui
 import Muse.UiComponents
 import MuseScore.Project
 
-FlatButton {
+PopupButton {
     id: root
 
     property var model: null
-    readonly property var mode: bar.currentIndex === 0 ? "major" : "minor"
+    property string mode: "major"
     property string currentValueAccessibleName: title.text
 
-    property alias popupAnchorItem: popup.anchorItem
-
     height: 96
-    accentButton: popup.isOpened
 
     KeySignature {
         id: title
@@ -44,15 +41,7 @@ FlatButton {
         text: root.mode === "major" ? root.model.keySignature.titleMajor : root.model.keySignature.titleMinor
     }
 
-    onClicked: {
-        if (!popup.isOpened) {
-            popup.open()
-        } else {
-            popup.close()
-        }
-    }
-
-    StyledPopupView {
+    popupComponent: StyledPopupView {
         id: popup
 
         margins: 20
@@ -72,6 +61,12 @@ FlatButton {
             StyledTabBar {
                 id: bar
                 Layout.alignment: Qt.AlignHCenter
+
+                currentIndex: root.mode === "major" ? 0 : 1
+
+                onCurrentIndexChanged: {
+                    root.mode = currentIndex === 0 ? "major" : "minor"
+                }
 
                 onCurrentItemChanged: {
                     if (currentItem && currentItem.navigation) {

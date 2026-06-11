@@ -250,7 +250,7 @@ qt_add_qml_module(propertiespanel_qml
         common/PropertiesPanelTabButton.qml
         common/OffsetSection.qml
         common/PlacementSection.qml
-        common/PopupViewButton.qml
+        common/PropertiesPanelPopupButton.qml
         common/PropertyCheckBox.qml
         common/PropertyResetButton.qml
         common/PropertyToggle.qml
