@@ -245,6 +245,13 @@ void EngravingCompat::adjustVBoxDistances(MasterScore* masterScore)
     }
 }
 
+static constexpr std::array<ElementType, 6> OFFSET_UNIT_CONVERT_TYPES = {
+    ElementType::FINGERING,
+    ElementType::HAMMER_ON_PULL_OFF_TEXT,
+    ElementType::LYRICS,
+    ElementType::TAPPING
+};
+
 void EngravingCompat::pre470TextCompat(MasterScore* masterScore)
 {
     auto doCompat = [](EngravingItem* item) {
@@ -256,6 +263,17 @@ void EngravingCompat::pre470TextCompat(MasterScore* masterScore)
 
         if (!text->isStyled(Pid::FRAME_ROUND)) {
             text->setFrameRound(compat::CompatUtils::convertPre470FrameRadius(text->frameRound().val()));
+        }
+
+        // Text offset could have been in mm for these types prior to 4.7
+        // Convert actual distance to spatium
+        if (muse::contains(OFFSET_UNIT_CONVERT_TYPES, item->type()) && !item->sizeIsSpatiumDependent()) {
+            PointF offset = item->offset();
+            double spatium = item->style().spatium();
+            offset /= spatium;
+            offset *= DPMM;
+
+            item->setProperty(Pid::OFFSET, offset);
         }
 
         // Staff text, system text, and harp pedal diagrams are the only types which are attached to notes and weren't already
