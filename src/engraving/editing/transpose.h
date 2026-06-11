@@ -44,6 +44,8 @@ public:
     static int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
     static void undoTransposeHarmony(Score* score, Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+    static void doUndoTransposeHarmony(Harmony* harmony, Interval interval, bool doubleSharpFlat = true);
+    static void doUndoTransposeHarmonyDiatonic(Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);
 
 private:
     static void undoTransposeHarmonyDiatonic(Score* score, Harmony* harmony, int interval, bool doubleSharpFlat, bool transposeKeys);

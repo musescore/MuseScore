@@ -869,6 +869,19 @@ static void collectTieEndPoints(TieMap& tieMap)
     }
 }
 
+static void transposeHarmony(Harmony* harmony, const Staff* srcStaff, bool scoreConcertPitch)
+{
+    Interval interval = srcStaff->part()->instrument()->transpose();
+    if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
+        return;
+    }
+
+    if (!scoreConcertPitch) {
+        interval.flip();
+    }
+    Transpose::doUndoTransposeHarmony(harmony, interval);
+}
+
 static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* oscore,
                                  const std::vector<staff_idx_t>& sourceStavesIndexes,
                                  const TracksMap& trackList, TieMap& tieMap)
@@ -1482,6 +1495,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     bool firstVoiceVisible = dstStaff->isVoiceVisible(0);
 
+    const bool oscoreConcertPitch = oscore->style().styleB(Sid::concertPitch);
+    const bool scoreConcertPitch = score->style().styleB(Sid::concertPitch);
+    const bool needsTransposition = oscoreConcertPitch != scoreConcertPitch;
+
     auto addElement = [score](EngravingItem* element) {
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
@@ -1560,6 +1577,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     ne1->setScore(score);
                     ne1->styleChanged();
                     addElement(ne1);
+
+                    if (e->isHarmony()) {
+                        transposeHarmony(toHarmony(ne1), srcStaff, scoreConcertPitch);
+                    }
                 }
 
                 EngravingItem* oe = oseg->element(srcTrack);
@@ -1680,11 +1701,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         cloneSpanner(s, score, dstTrack, dstTrack2);
     }
 
-    bool oscoreConcertPitch = oscore->style().styleB(Sid::concertPitch);
-    bool scoreConcertPitch = score->style().styleB(Sid::concertPitch);
-
-    if ((oscoreConcertPitch && !scoreConcertPitch)
-        || (!oscoreConcertPitch && scoreConcertPitch)) {
+    if (needsTransposition) {
         Interval interval = srcStaff->part()->instrument()->transpose();
         if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
             return;
