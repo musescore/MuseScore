@@ -871,7 +871,7 @@ static void collectTieEndPoints(TieMap& tieMap)
 
 static void transposeHarmony(Harmony* harmony, const Staff* srcStaff, bool scoreConcertPitch)
 {
-    Interval interval = srcStaff->part()->instrument()->transpose();
+    Interval interval = srcStaff->transpose(harmony->tick());
     if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
         return;
     }
@@ -1578,7 +1578,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     ne1->styleChanged();
                     addElement(ne1);
 
-                    if (e->isHarmony()) {
+                    if (e->isHarmony() && needsTransposition) {
                         transposeHarmony(toHarmony(ne1), srcStaff, scoreConcertPitch);
                     }
                 }
@@ -1703,15 +1703,13 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     if (needsTransposition) {
         Interval interval = srcStaff->part()->instrument()->transpose();
-        if (interval.isZero() && srcStaff->part()->instruments().size() == 1) {
-            return;
-        }
+        if (!interval.isZero() || srcStaff->part()->instruments().size() != 1) {
+            if (!scoreConcertPitch) {
+                interval.flip();
+            }
 
-        if (!scoreConcertPitch) {
-            interval.flip();
+            Transpose::transposeKeys(score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
         }
-
-        Transpose::transposeKeys(score, dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
 
     collectTieEndPoints(tieMap);
