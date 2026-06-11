@@ -353,7 +353,7 @@ bool Read500::preparePasteDurationElement(Score* score, const Fraction& tick, co
 
 bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale)
 {
-    assert(dst->isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE));
+    assert(dst->isType(SegmentType::Duration));
 
     Score* score = dst->score();
     ReadContext ctx(score);

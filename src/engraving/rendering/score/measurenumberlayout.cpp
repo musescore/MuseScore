@@ -165,7 +165,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     if (alignToBarline || hPlacement == AlignH::LEFT) {
         for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick() && seg->system() == measure->system();
              seg = seg->prev1MMenabled()) {
-            if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
+            if (seg->isType(SegmentType::BarLineTypes) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
             }
@@ -173,7 +173,7 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     } else {
         for (Segment* seg = measure->first(SegmentType::ChordRest);
              seg && seg->tick() <= measure->endTick() && seg->system() == measure->system(); seg = seg->next1enabled()) {
-            if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
+            if (seg->isType(SegmentType::BarLineTypes) && seg->isActive()) {
                 barlineSeg = seg;
                 break;
             }

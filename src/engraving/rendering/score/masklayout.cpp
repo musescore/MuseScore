@@ -60,7 +60,7 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 
             if (maskBarlines) {
                 for (const Segment& seg : measure->segments()) {
-                    if (seg.isType(SegmentType::BarLineType)) {
+                    if (seg.isType(SegmentType::BarLineTypes)) {
                         computeBarlineMasks(&seg, system, allSystemText, ctx);
                     }
                 }
@@ -235,7 +235,7 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
             }
         }
         for (const Segment& s : measure->segments()) {
-            if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
+            if (!s.isType(SegmentType::Duration) || !s.enabled()) {
                 continue;
             }
             for (EngravingItem* annotation : s.annotations()) {
@@ -376,7 +376,7 @@ void MaskLayout::computeSlurTieMasks(SlurTieSegment* slurTieSegment)
     const Segment* endSeg = spanner->endSegment();
     for (const Segment* seg = startSeg; seg && seg != endSeg; seg = seg->next1()) {
         if (!seg->enabled()
-            || !seg->isType(SegmentType::KeySigType | SegmentType::TimeSigType | SegmentType::ClefType)
+            || !seg->isType(SegmentType::KeySigTypes | SegmentType::TimeSigTypes | SegmentType::ClefTypes)
             || seg->system() != slurTieSegment->system()) {
             continue;
         }

@@ -800,7 +800,7 @@ void SystemLayout::updateTimeSigAboveStavesXPos(System* system, LayoutContext& c
         }
         Measure* measure = toMeasure(mb);
         for (Segment& seg : measure->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
 
@@ -903,7 +903,7 @@ void SystemLayout::clearBigTimeSigNotShown(System* system, LayoutContext& ctx)
             continue;
         }
         for (Segment& seg : toMeasure(mb)->segments()) {
-            if (!seg.isType(SegmentType::TimeSigType)) {
+            if (!seg.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
@@ -1038,7 +1038,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
 
     for (Parenthesis* e : elementsToLayout.parenthesis) {
         Segment* s = toSegment(e->parentItem());
-        if (s->isType(SegmentType::TimeSigType)) {
+        if (s->isType(SegmentType::TimeSigTypes)) {
             EngravingItem* el = s->element(e->track());
             TimeSig* timeSig = el ? toTimeSig(el) : nullptr;
             if (!timeSig) {
@@ -1435,7 +1435,7 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 continue;
             }
 
-            if (s->isType(SegmentType::BarLineType)) {
+            if (s->isType(SegmentType::BarLineTypes)) {
                 if (BarLine* bl = toBarLine(s->element(track))) {
                     elements.barlines.push_back(bl);
                 }
@@ -1640,12 +1640,12 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                     continue;
                 }
                 PointF p(s.pos() + m->pos());
-                if (s.isType(SegmentType::BarLineType)) {
+                if (s.isType(SegmentType::BarLineTypes)) {
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         skyline.add(bl->shape().translated(bl->pos() + p + bl->staffOffset()));
                     }
-                } else if (s.isType(SegmentType::TimeSigType)) {
+                } else if (s.isType(SegmentType::TimeSigTypes)) {
                     TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
                     if (ts && ts->addToSkyline() && ts->showOnThisStaff()) {
                         TimeSigPlacement timeSigPlacement = ts->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
@@ -2603,7 +2603,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
             continue;
         }
         for (Segment& segment : toMeasure(mb)->segments()) {
-            if (!segment.isType(SegmentType::TimeSigType)) {
+            if (!segment.isType(SegmentType::TimeSigTypes)) {
                 continue;
             }
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {

@@ -300,7 +300,7 @@ Segment* nextSeg1(Segment* seg)
 {
     Segment* nextSeg = seg;
     while (nextSeg && nextSeg->rtick() == seg->rtick()) {
-        nextSeg = nextSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        nextSeg = nextSeg->next1(SegmentType::Duration);
     }
     return nextSeg;
 }
@@ -313,7 +313,7 @@ Segment* prevSeg1(Segment* seg)
 {
     Segment* prevSeg = seg;
     while (prevSeg && prevSeg->rtick() == seg->rtick()) {
-        prevSeg = prevSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        prevSeg = prevSeg->prev1(SegmentType::Duration);
     }
     return prevSeg;
 }
@@ -1102,7 +1102,7 @@ bool dragPositionToSegment(const PointF& pos, const Measure* measure, const staf
     const track_idx_t etrack = strack + VOICES;
 
     const double x = pos.x() - measure->canvasPos().x();
-    const SegmentType st = allowTimeAnchor ? Segment::CHORD_REST_OR_TIME_TICK_TYPE : SegmentType::ChordRest;
+    const SegmentType st = allowTimeAnchor ? SegmentType::Duration : SegmentType::ChordRest;
     Segment* s = measure->searchSegment(x, st, strack, etrack, *segment, spacingFactor);
     if (!s) {
         return false;
@@ -1281,7 +1281,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
         }
 
         for (const Segment& seg : measure->segments()) {
-            if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE | SegmentType::EndBarLine)) {
+            if (seg.isType(SegmentType::Duration | SegmentType::EndBarLine)) {
                 for (EngravingItem* annotation : seg.annotations()) {
                     if (!annotation || !annotation->systemFlag()) {
                         continue;
@@ -1297,7 +1297,7 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                 }
             }
 
-            if (isOnStaffTimeSig && seg.isType(SegmentType::TimeSigType)) {
+            if (isOnStaffTimeSig && seg.isType(SegmentType::TimeSigTypes)) {
                 for (EngravingItem* item : seg.elist()) {
                     if (!item || !item->isTimeSig()) {
                         continue;
@@ -1720,7 +1720,7 @@ bool isValidBarLineForRepeatSection(const Segment* firstSeg, const Segment* seco
     if (!firstSeg || !secondSeg) {
         return false;
     }
-    if (!firstSeg->isType(SegmentType::BarLineType)) {
+    if (!firstSeg->isType(SegmentType::BarLineTypes)) {
         return false;
     }
 

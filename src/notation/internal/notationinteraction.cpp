@@ -1760,7 +1760,7 @@ static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
 {
     Segment* endSegment = score->tick2rightSegment(endTick,
                                                    true,
-                                                   Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+                                                   SegmentType::Duration);
 
     if (endSegment && !endSegment->enabled()) {
         endSegment = endSegment->next1MMenabled();
@@ -1839,7 +1839,7 @@ static bool dropRangePosition(Score* score, const PointF& pos,
 
     if (preserveMeasureAlignment) {
         *targetStartSegment = segmentOrChordRestSegmentAtSameTick(
-            targetStartMeasure->findSegment(Segment::CHORD_REST_OR_TIME_TICK_TYPE, targetStartTick));
+            targetStartMeasure->findSegment(SegmentType::Duration, targetStartTick));
     } else {
         static constexpr double spacingFactor = 0.5;
         static constexpr bool useTimeAnchors = true;
