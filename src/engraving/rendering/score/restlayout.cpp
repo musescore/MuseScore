@@ -624,8 +624,8 @@ void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutCont
                 const EngravingItem* shapeItem = shapeEl.item();
                 return shapeItem && ((shapeItem->isRest() && toRest(shapeItem)->isFullMeasureRest())
                                      || (shapeItem->type() == ElementType::FERMATA
-                                        && shapeItem->explicitParent() == fullMeasureRest->segment()
-                                        && shapeItem->track() == fullMeasureRest->track())
+                                         && shapeItem->explicitParent() == fullMeasureRest->segment()
+                                         && shapeItem->track() == fullMeasureRest->track())
                                      || shapeItem->isBarLine() || shapeItem->isAccidental());
             });
 
