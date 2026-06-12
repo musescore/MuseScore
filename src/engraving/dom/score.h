@@ -396,8 +396,6 @@ public:
     void cmdAddBracket();
     void cmdAddBraces();
     void cmdAddFret(int fret);
-    void cmdSetBeamMode(BeamMode);
-    void cmdBeamSelectedRange();
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
@@ -420,7 +418,6 @@ public:
     void cmdFlipHorizontally();
     void resetUserStretch();
     void cmdResetToDefaultLayout();
-    void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
     void cmdResetAllStyles(const StyleIdSet& exceptTheseOnes = {});
     void cmdResetMeasuresLayout();

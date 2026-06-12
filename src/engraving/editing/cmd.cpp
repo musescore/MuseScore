@@ -2004,58 +2004,6 @@ void Score::cmdResetToDefaultLayout()
     EditSystemLocks::undoRemoveAllLocks(tx, this);
 }
 
-//---------------------------------------------------------
-//   cmdResetBeamMode
-//---------------------------------------------------------
-
-void Score::cmdResetBeamMode()
-{
-    bool noSelection = selection().isNone();
-    if (noSelection) {
-        cmdSelectAll();
-    } else if (!selection().isRange()) {
-        LOGD("no system or staff selected");
-        return;
-    }
-
-    ChordRest* firstCr = selection().firstChordRest();
-    if (!firstCr) {
-        LOGD("no chord/rest in selection");
-        return;
-    }
-
-    const track_idx_t trackStart = staff2track(selection().staffStart());
-    const track_idx_t trackEnd = staff2track(selection().staffEnd());
-    const Fraction endTick = selection().tickEnd();
-    const SelectionFilter filter = selectionFilter();
-
-    for (Segment* seg = firstCr->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
-        for (track_idx_t track = trackStart; track < trackEnd; ++track) {
-            if (!filter.canSelectVoice(track)) {
-                continue;
-            }
-
-            ChordRest* cr = toChordRest(seg->element(track));
-            if (!cr) {
-                continue;
-            }
-            if (cr->isChord()) {
-                if (cr->beamMode() != BeamMode::AUTO) {
-                    cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
-                }
-            } else if (cr->isRest()) {
-                if (cr->beamMode() != BeamMode::NONE) {
-                    cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
-                }
-            }
-        }
-    }
-
-    if (noSelection) {
-        deselectAll();
-    }
-}
-
 void Score::cmdResetTextStyleOverrides()
 {
     TRACEFUNC;
