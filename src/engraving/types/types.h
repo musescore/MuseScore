@@ -225,6 +225,35 @@ enum class ElementType : unsigned char {
 
 constexpr size_t TOT_ELEMENT_TYPES = static_cast<size_t>(ElementType::MAXTYPE);
 
+const static std::unordered_set<ElementType> TEXTBASE_TYPES {
+    ElementType::TEXT,
+    ElementType::LYRICS,
+    ElementType::DYNAMIC,
+    ElementType::EXPRESSION,
+    ElementType::FINGERING,
+    ElementType::HARMONY,
+    ElementType::MARKER,
+    ElementType::JUMP,
+    ElementType::STAFF_TEXT,
+    ElementType::SYSTEM_TEXT,
+    ElementType::TRIPLET_FEEL,
+    ElementType::PLAY_COUNT_TEXT,
+    ElementType::PLAYTECH_ANNOTATION,
+    ElementType::CAPO,
+    ElementType::STRING_TUNINGS,
+    ElementType::REHEARSAL_MARK,
+    ElementType::INSTRUMENT_CHANGE,
+    ElementType::FIGURED_BASS,
+    ElementType::TEMPO_TEXT,
+    ElementType::INSTRUMENT_NAME,
+    ElementType::MEASURE_NUMBER,
+    ElementType::MMREST_RANGE,
+    ElementType::STICKING,
+    ElementType::HARP_DIAGRAM,
+    ElementType::GUITAR_BEND_TEXT,
+    ElementType::HAMMER_ON_PULL_OFF_TEXT,
+};
+
 using ElementTypeSet = std::unordered_set<ElementType>;
 
 // ========================================

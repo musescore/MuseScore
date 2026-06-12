@@ -61,12 +61,18 @@ private:
     static bool isUnison(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool canGoToSameVoice(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx, const TrackGroup& curTrackGroup,
                                  std::unordered_set<Note*>& localUnisonNotes);
+    static bool checkAnnotationsForSameVoice(Segment* segment, track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
     static bool canGoToSameStave(track_idx_t prevTrack, track_idx_t nextTrack, StaveSharingContext& ctx);
 
     static void updateNotation(SharedPart* p, StaveSharingContext& ctx);
     static void computeSegmentsToUpdate(StaveSharingContext& ctx);
     static void disconnectAll(SharedPart* p, StaveSharingContext& ctx);
+
     static void makeSharedNotation(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedChordRests(SharedPart* p, StaveSharingContext& ctx);
+    static void makeSharedAnnotations(SharedPart* p, StaveSharingContext& ctx);
+    static bool annotationRefersToBothVoices(EngravingItem* sharedAnnotation, StaveSharingContext& ctx);
+
     static void cleanup(SharedPart* p, StaveSharingContext& ctx);
 };
 }
