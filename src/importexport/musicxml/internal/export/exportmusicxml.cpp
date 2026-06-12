@@ -5850,12 +5850,13 @@ inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 {
     static const std::set<String> validMusicXmlDynamics {
-        u"f", u"ff", u"fff", u"ffff", u"fffff", u"ffffff",
-        u"fp", u"fz",
-        u"mf", u"mp",
         u"p", u"pp", u"ppp", u"pppp", u"ppppp", u"pppppp",
-        u"rf", u"rfz",
-        u"sf", u"sffz", u"sfp", u"sfpp", u"sfz"
+        u"f", u"ff", u"fff", u"ffff", u"fffff", u"ffffff",
+        u"mp", u"mf",
+        u"sf", u"sfp", u"sfpp",
+        u"fp", u"rf", u"rfz",
+        u"sfz", u"sffz", u"fz",
+        u"n", u"pf", u"sfzp"
     };
 
     directionTag(m_xml, m_attr, dyn);
