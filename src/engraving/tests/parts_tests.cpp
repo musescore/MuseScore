@@ -42,6 +42,9 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 
+#include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
@@ -899,7 +902,7 @@ MasterScore* Engraving_PartsTests::doAddMeasureRepeat()
     Measure* m = score->firstMeasure()->nextMeasure();
 
     score->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
-    score->cmdAddMeasureRepeat(m, 4, 0); // test with 4-measure repeat in first staff
+    EditMeasureRepeat::addMeasureRepeat(score->transactionManager()->currentOrDummyTransaction(), score, m, 4, 0); // test with 4-measure repeat in first staff
     score->setLayoutAll();
     score->endCmd();
 

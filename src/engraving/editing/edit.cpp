@@ -248,24 +248,6 @@ Fraction Score::pos()
     return Fraction(0, 1);
 }
 
-//---------------------------------------------------------
-//   addMeasureRepeat
-//    create one MeasureRepeat at tick of subtype numMeasures
-//    create segment if necessary
-//    does NOT set measureRepeatCount or do anything else with measure(s)!
-//---------------------------------------------------------
-
-MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, track_idx_t track, int numMeasures)
-{
-    Measure* measure = tick2measure(tick);
-    MeasureRepeat* mr = Factory::createMeasureRepeat(this->dummy()->segment());
-    mr->setNumMeasures(numMeasures);
-    mr->setTicks(measure->stretchedLen(staff(track2staff(track))));
-    mr->setTrack(track);
-    undoAddCR(mr, measure, tick);
-    return mr;
-}
-
 Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType)
 {
     if (destinationChordRest->durationType() < TDuration(DurationType::V_512TH)
