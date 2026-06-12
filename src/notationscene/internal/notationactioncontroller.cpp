@@ -28,6 +28,8 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
+#include "engraving/editing/noteinput.h"
+
 #include "notation/notationtypes.h"
 
 #include "qml/MuseScore/NotationScene/abstractelementpopupmodel.h"
@@ -803,7 +805,7 @@ void NotationActionController::handleNoteAction(NoteName note, NoteAddingMode ad
 
     NoteInputParams params;
     const bool addFlag = addingMode == NoteAddingMode::CurrentChord;
-    bool ok = currentNotationScore()->resolveNoteInputParams(static_cast<int>(note), addFlag, params);
+    bool ok = mu::engraving::NoteInput::resolveNoteInputParams(currentNotationScore(), static_cast<int>(note), addFlag, params);
     if (!ok) {
         LOGE() << "Could not resolve note input params, note: " << (int)note << ", addFlag: " << addFlag;
         return;

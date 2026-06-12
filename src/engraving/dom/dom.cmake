@@ -208,7 +208,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteval.h
     ${CMAKE_CURRENT_LIST_DIR}/notedot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notedot.h
-    ${CMAKE_CURRENT_LIST_DIR}/noteentry.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteevent.h
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp

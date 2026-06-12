@@ -87,6 +87,7 @@
 
 #include "editchord.h"
 #include "editnote.h"
+#include "noteinput.h"
 #include "editproperty.h"
 #include "editspanner.h"
 #include "editstaff.h"
@@ -898,7 +899,8 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
             // Create grace note
             Note* graceNote = gracesBefore.empty()
                               ? setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2)
-                              : addNote(gracesBefore.back(), note->noteVal());
+                              : NoteInput::addNote(transactionManager()->currentOrDummyTransaction(), this, gracesBefore.back(),
+                                                   note->noteVal());
             graceNote->transposeDiatonic(type == GuitarBendType::PRE_DIVE ? 1 : -1, true, false);
             GuitarBend::fixNotesFrettingForGraceBend(graceNote, note);
 
@@ -2616,8 +2618,9 @@ void Score::realtimeAdvance(bool allowTransposition)
     } else {
         Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
         bool partOfChord = false;
+        Transaction& tx = transactionManager()->currentOrDummyTransaction();
         for (const MidiInputEvent& ev : midiPitches) {
-            addTiedMidiPitch(ev.pitch, partOfChord, prevChord, allowTransposition);
+            NoteInput::addTiedMidiPitch(tx, this, ev.pitch, partOfChord, prevChord, allowTransposition);
             partOfChord = true;
         }
     }
@@ -3144,102 +3147,6 @@ void Score::cmdPitchDownOctave()
     }
 }
 
-void Score::cmdPadNoteIncreaseTAB()
-{
-    switch (m_is.duration().type()) {
-// cycle back from longest to shortest?
-//          case TDuration::V_LONG:
-//                padToggle(Pad::NOTE128);
-//                break;
-    case DurationType::V_BREVE:
-        padToggle(Pad::NOTE00);
-        break;
-    case DurationType::V_WHOLE:
-        padToggle(Pad::NOTE0);
-        break;
-    case DurationType::V_HALF:
-        padToggle(Pad::NOTE1);
-        break;
-    case DurationType::V_QUARTER:
-        padToggle(Pad::NOTE2);
-        break;
-    case DurationType::V_EIGHTH:
-        padToggle(Pad::NOTE4);
-        break;
-    case DurationType::V_16TH:
-        padToggle(Pad::NOTE8);
-        break;
-    case DurationType::V_32ND:
-        padToggle(Pad::NOTE16);
-        break;
-    case DurationType::V_64TH:
-        padToggle(Pad::NOTE32);
-        break;
-    case DurationType::V_128TH:
-        padToggle(Pad::NOTE64);
-        break;
-    case DurationType::V_256TH:
-        padToggle(Pad::NOTE128);
-        break;
-    case DurationType::V_512TH:
-        padToggle(Pad::NOTE256);
-        break;
-    case DurationType::V_1024TH:
-        padToggle(Pad::NOTE512);
-        break;
-    default:
-        break;
-    }
-}
-
-void Score::cmdPadNoteDecreaseTAB()
-{
-    switch (m_is.duration().type()) {
-    case DurationType::V_LONG:
-        padToggle(Pad::NOTE0);
-        break;
-    case DurationType::V_BREVE:
-        padToggle(Pad::NOTE1);
-        break;
-    case DurationType::V_WHOLE:
-        padToggle(Pad::NOTE2);
-        break;
-    case DurationType::V_HALF:
-        padToggle(Pad::NOTE4);
-        break;
-    case DurationType::V_QUARTER:
-        padToggle(Pad::NOTE8);
-        break;
-    case DurationType::V_EIGHTH:
-        padToggle(Pad::NOTE16);
-        break;
-    case DurationType::V_16TH:
-        padToggle(Pad::NOTE32);
-        break;
-    case DurationType::V_32ND:
-        padToggle(Pad::NOTE64);
-        break;
-    case DurationType::V_64TH:
-        padToggle(Pad::NOTE128);
-        break;
-    case DurationType::V_128TH:
-        padToggle(Pad::NOTE256);
-        break;
-    case DurationType::V_256TH:
-        padToggle(Pad::NOTE512);
-        break;
-    case DurationType::V_512TH:
-        padToggle(Pad::NOTE1024);
-        break;
-// cycle back from shortest to longest?
-//          case DurationType::V_1024TH:
-//                padToggle(Pad::NOTE00);
-//                break;
-    default:
-        break;
-    }
-}
-
 //---------------------------------------------------------
 //   cmdToggleLayoutBreak
 //---------------------------------------------------------
@@ -3431,147 +3338,6 @@ void Score::cmdUnsetVisible()
     }
 }
 
-bool Score::resolveNoteInputParams(int note, bool addFlag, NoteInputParams& out) const
-{
-    const InputState& is = inputState();
-
-    //! NOTE: Drumset params should be defined explicitly (see NotationViewInputController::tryPercussionShortcut)
-    if (!is.isValid() || is.drumset()) {
-        return false;
-    }
-
-    int octave = 4;
-
-    static const int tab[] = { 0, 2, 4, 5, 7, 9, 11 };
-
-    // if adding notes, add above the upNote of the current chord
-    EngravingItem* el = selection().element();
-    if (addFlag && el && el->isNote()) {
-        Chord* chord = toNote(el)->chord();
-        Note* n      = chord->upNote();
-        int tpc = n->tpc();
-        octave = (n->epitch() - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
-        if (note <= tpc2step(tpc)) {
-            octave++;
-        }
-    } else {
-        int curPitch = 60;
-        if (is.segment()) {
-            Staff* staff = Score::staff(is.track() / VOICES);
-            Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
-            while (seg) {
-                if (seg->isChordRestType()) {
-                    EngravingItem* p = seg->element(is.track());
-                    if (p && p->isChord()) {
-                        Note* n = toChord(p)->downNote();
-                        // forget any accidental and/or adjustment due to key signature
-                        curPitch = n->epitch() - static_cast<int>(tpc2alter(n->tpc()));
-                        break;
-                    }
-                } else if (seg->isClefType() || seg->isHeaderClefType()) {
-                    EngravingItem* p = seg->element(trackZeroVoice(is.track()));                  // clef on voice 1
-                    if (p && p->isClef()) {
-                        Clef* clef = toClef(p);
-                        // check if it's an actual change or just a courtesy
-                        ClefType ctb = staff->clef(clef->tick() - Fraction::eps());
-                        if (ctb != clef->clefType() || clef->tick().isZero()) {
-                            curPitch = line2pitch(4, clef->clefType(), Key::C);                     // C 72 for treble clef
-                            break;
-                        }
-                    }
-                }
-                seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
-            }
-            octave = curPitch / 12;
-        }
-
-        int delta = octave * 12 + tab[note] - curPitch;
-        if (delta > 6) {
-            --octave;
-        } else if (delta < -6) {
-            ++octave;
-        }
-    }
-
-    out.step = octave * 7 + note;
-    return true;
-}
-
-//---------------------------------------------------------
-//   cmdAddPitch
-///   insert note or add note to chord
-//---------------------------------------------------------
-void Score::cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert)
-{
-    InputState& is = inputState();
-    if (!is.isValid()) {
-        LOGD("cannot enter notes here (no chord rest at current position)");
-        return;
-    }
-
-    is.setRest(false);
-
-    const Drumset* ds = is.drumset();
-    if (ds) {
-        is.setDrumNote(params.drumPitch);
-        is.setVoice(ds->voice(params.drumPitch));
-    }
-
-    cmdAddPitch(params.step, addFlag, insert);
-}
-
-void Score::cmdAddPitch(int step, bool addFlag, bool insert)
-{
-    insert = insert || inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
-    Position pos;
-    if (addFlag) {
-        EngravingItem* el = selection().element();
-        if (el && el->isNote()) {
-            Note* selectedNote = toNote(el);
-            Chord* chord  = selectedNote->chord();
-            Segment* seg  = chord->segment();
-            pos.segment   = seg;
-            pos.staffIdx  = chord->vStaffIdx();
-            ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
-            pos.line      = relStep(step, clef);
-            bool error;
-            NoteVal nval = noteValForPosition(pos, m_is.accidentalType(), error);
-            if (error) {
-                return;
-            }
-            bool forceAccidental = false;
-            if (m_is.accidentalType() != AccidentalType::NONE) {
-                NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
-                forceAccidental = (nval.pitch == nval2.pitch);
-            }
-            if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
-                addPitchToChord(nval, chord, /* externalInputState */ nullptr, forceAccidental);
-            } else {
-                addNote(chord, nval, forceAccidental, m_is.articulationIds());
-            }
-            m_is.setAccidentalType(AccidentalType::NONE);
-            return;
-        }
-    }
-
-    pos.segment   = inputState().segment();
-    pos.staffIdx  = inputState().track() / VOICES;
-    ClefType clef = staff(pos.staffIdx)->clef(pos.segment->tick());
-    pos.line      = relStep(step, clef);
-    pos.beyondScore = inputState().beyondScore();
-
-    if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
-        repitchNote(pos, !addFlag);
-    } else {
-        if (insert) {
-            insertChordByInsertingTime(pos);
-        } else {
-            putNote(pos, !addFlag);
-        }
-    }
-    m_is.setAccidentalType(AccidentalType::NONE);
-}
-
 void Score::cmdToggleVisible()
 {
     bool allVisible = true;
@@ -3588,31 +3354,6 @@ void Score::cmdToggleVisible()
     for (EngravingItem* item : selection().elements()) {
         undoChangeVisible(item, newVisible);
     }
-}
-
-//---------------------------------------------------------
-//   cmdAddFret
-///   insert note with given fret on current string
-//---------------------------------------------------------
-
-void Score::cmdAddFret(int fret)
-{
-    InputState& is = inputState();
-    if (is.track() == muse::nidx) { // invalid state
-        return;
-    }
-    if (!is.segment()) {
-        LOGD("cannot enter notes here (no chord rest at current position)");
-        return;
-    }
-    is.setRest(false);
-    Position pos;
-    pos.segment   = is.segment();
-    pos.staffIdx  = is.track() / VOICES;
-    pos.line      = staff(pos.staffIdx)->staffType(is.tick())->physStringToVisual(is.string());
-    pos.fret      = fret;
-    pos.beyondScore = is.beyondScore();
-    putNote(pos, false);
 }
 
 //---------------------------------------------------------

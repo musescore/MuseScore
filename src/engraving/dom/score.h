@@ -30,7 +30,6 @@
 #include <set>
 #include <memory>
 #include <optional>
-#include <utility>
 
 #include "global/async/channel.h"
 #include "global/types/ret.h"
@@ -395,17 +394,10 @@ public:
 
     void cmdAddBracket();
     void cmdAddBraces();
-    void cmdAddFret(int fret);
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
     void addNoteLine();
-    void padToggle(Pad p, bool toggleForSelectionOnly = false);
-
-    bool resolveNoteInputParams(int noteIdx, bool addFlag, NoteInputParams& out) const;
-
-    void cmdAddPitch(const NoteInputParams& params, bool addFlag, bool insert);
-    void cmdAddPitch(int note, bool addFlag, bool insert);
 
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
@@ -426,8 +418,6 @@ public:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
-    void cmdPadNoteIncreaseTAB();
-    void cmdPadNoteDecreaseTAB();
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
     void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
@@ -534,14 +524,6 @@ public:
     void removeElement(EngravingItem*);
     void doUndoRemoveElement(EngravingItem*);
 
-    Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
-    Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
-    Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
-                  InputState* externalInputState = nullptr);
-
-    NoteVal noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition) const;
-    NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
-
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
     TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr);
 
@@ -554,11 +536,6 @@ public:
                                         const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
     void cmdFullMeasureRest();
 
-    muse::Ret putNote(const PointF&, bool replace, bool insert);
-    muse::Ret insertChordByInsertingTime(const Position&);
-
-    muse::Ret repitchNote(const Position& pos, bool replace);
-    std::pair<Note*, Note*> repitchReplaceNote(Chord*, const NoteVal&, bool forceAccidental = false);   // returns new note and last tied note
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
     void startCmd(const TranslatableString& actionName);             // start undoable command
@@ -802,7 +779,6 @@ public:
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
 
-    void nextInputPos(const ChordRest* cr, bool);
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }
     virtual const std::vector<Page*>& pages() const { return m_pages; }
@@ -1081,9 +1057,6 @@ private:
     bool trySelectSimilarInRange(EngravingItem* e);
     bool tryExtendSingleSelectionToRange(EngravingItem* e, staff_idx_t staffIdx);
 
-    muse::Ret putNote(const Position&, bool replace);
-    void truncateChordRest(ChordRest* cr, const Fraction& tick, bool fillWithRest);
-
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
     void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
@@ -1109,10 +1082,6 @@ private:
     void assignIdIfNeed(Part& part) const;
 
     void updateStavesNumberForSystems();
-
-    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr, bool forceAccidental = false);
-    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
-    Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
     FBox* findFretBox() const;
 

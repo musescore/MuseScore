@@ -32,6 +32,8 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tie.h"
 
+#include "engraving/editing/noteinput.h"
+
 #include "braille.h"
 #include "braillecode.h"
 #include "brailleinput.h"
@@ -550,7 +552,7 @@ void NotationBraille::setKeys(const QString& sequence)
 
             NoteInputParams params;
             const int note = static_cast<int>(brailleInput()->noteName());
-            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ false, params);
+            bool ok = mu::engraving::NoteInput::resolveNoteInputParams(score(), note, /*addFlag*/ false, params);
             if (!ok) {
                 return;
             }
@@ -613,7 +615,7 @@ void NotationBraille::setKeys(const QString& sequence)
 
             NoteInputParams params;
             const int note = static_cast<int>(brailleInput()->noteName());
-            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ true, params);
+            bool ok = mu::engraving::NoteInput::resolveNoteInputParams(score(), note, /*addFlag*/ true, params);
             if (!ok) {
                 return;
             }

@@ -22,6 +22,7 @@
 
 #include "editnote.h"
 #include "editchord.h"
+#include "noteinput.h"
 
 #include <algorithm>
 #include <set>
@@ -227,7 +228,8 @@ void EditNote::applyAccidentalToInputNotes(Score* score, AccidentalType accident
         pos.line = noteValToLine(oldVal, score->inputState().staff(), score->inputState().tick());
 
         bool error = false;
-        const NoteVal newVal = score->noteValForPosition(pos, accidentalType, error);
+        const NoteVal newVal = NoteInput::noteValForPosition(score->transactionManager()->currentOrDummyTransaction(), score, pos,
+                                                             accidentalType, error);
 
         if (error) {
             notes.push_back(oldVal);

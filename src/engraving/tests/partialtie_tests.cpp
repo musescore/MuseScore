@@ -29,6 +29,8 @@
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/editing/edittie.h"
+#include "engraving/editing/noteinput.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -536,7 +538,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->cmdAddPitch(pitchC, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, pitchC, false, false);
     score->endCmd();
 
     Chord* tieToChord = m2->findChord(Fraction(4, 4), 0);
@@ -578,7 +580,7 @@ TEST_F(Engraving_PartialTieTests, toggleTiePartialThenRestore)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->cmdAddPitch(pitchC, false, false);
+    NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, pitchC, false, false);
     score->endCmd();
 
     Chord* newTieToChord = m2->findChord(Fraction(4, 4), 0);

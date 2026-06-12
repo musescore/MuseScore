@@ -23,6 +23,8 @@
 #include "../editing/editdata.h"
 #include "../editing/elementeditdata.h"
 #include "../editing/editnote.h"
+#include "../editing/noteinput.h"
+#include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
 #include "accidental.h"
@@ -293,7 +295,7 @@ Note* GuitarBend::createEndNote(Note* startNote, GuitarBendType bendType)
         endNote = endChord ? endChord->upNote() : nullptr;
     } else if (item->isChord()) {
         Chord* chord = toChord(item);
-        endNote = score->addNote(chord, noteVal);
+        endNote = NoteInput::addNote(score->transactionManager()->currentOrDummyTransaction(), score, chord, noteVal);
     }
 
     if (endNote) {
