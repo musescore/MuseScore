@@ -302,6 +302,7 @@ void UndoableTransaction::unwind()
         UndoableCommand* command = muse::takeLast(m_commands);
         LOG_UNDO() << "unwind: " << command->name();
         command->undo(nullptr);
+        command->cleanup(false);
         delete command;
     }
 }
