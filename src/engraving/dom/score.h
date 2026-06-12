@@ -392,8 +392,6 @@ public:
     void resetAutoplace();
     void resetCrossBeams();
 
-    void cmdAddBracket();
-    void cmdAddBraces();
     void cmdRemovePart(Part*);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
