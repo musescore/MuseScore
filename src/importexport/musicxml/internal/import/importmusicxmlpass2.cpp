@@ -6929,7 +6929,11 @@ Note* MusicXmlParserPass2::note(const String& partId,
     Color beamColor;
     bool noteheadParentheses = false;
     String noteheadFilled;
-    int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
+    // velocity as a percentage of the MIDI 1.0 default forte value of 90;
+    // an explicit dynamics="0" means a silent note, which the score model can
+    // only represent as velocity 1 (velocity 0 means "unset")
+    const bool hasDynamics = m_e.hasAttribute("dynamics");
+    const int velocity = std::clamp(int(round(m_e.doubleAttribute("dynamics") * 0.9)), 1, 127);
     bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
     bool printLyric = (printObject && m_e.asciiAttribute("print-lyric") != "no") || m_e.asciiAttribute("print-lyric") == "yes";
@@ -7260,7 +7264,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
         }
 
-        if (velocity > 0) {
+        if (hasDynamics) {
             note->setUserVelocity(velocity);
         }
 
