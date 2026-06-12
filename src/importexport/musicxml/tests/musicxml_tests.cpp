@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 
 #include "engraving/engravingerrors.h"
+#include "engraving/dom/jump.h"
+#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 
 #include "settings.h"
@@ -520,10 +522,41 @@ TEST_F(MusicXml_Tests, dalSegno) {
     musicXmlIoTest("testDalSegno");
 }
 TEST_F(MusicXml_Tests, dcalCoda) {
-    musicXmlIoTest("testDCalCoda");
+    // "D.C. al Coda" with <sound dacapo="yes"/> imports as a D.C. al Coda jump,
+    // so the exported <sound tocoda> attribute becomes linked to the coda marker
+    musicXmlIoTestRef("testDCalCoda");
 }
 TEST_F(MusicXml_Tests, dcalFine) {
     musicXmlIoTest("testDCalFine");
+}
+TEST_F(MusicXml_Tests, dcalFineNoInferTextType) {
+    // Explicit <sound dacapo="yes"/> and <sound fine="yes"/> attributes must be
+    // imported as Jump/Marker elements even when text type inference is disabled
+    MScore::debugMode = true;
+
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(false));
+
+    MasterScore* score = readScore(XML_IO_DATA_DIR + u"testDCalFine.xml");
+    ASSERT_TRUE(score);
+
+    const Jump* jump = nullptr;
+    const Marker* marker = nullptr;
+    for (const MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        for (const EngravingItem* el : mb->el()) {
+            if (el->isJump()) {
+                jump = toJump(el);
+            } else if (el->isMarker()) {
+                marker = toMarker(el);
+            }
+        }
+    }
+
+    ASSERT_TRUE(jump);
+    EXPECT_EQ(jump->jumpType(), JumpType::DC_AL_FINE);
+    ASSERT_TRUE(marker);
+    EXPECT_EQ(marker->markerType(), MarkerType::FINE);
+
+    delete score;
 }
 TEST_F(MusicXml_Tests, directions1) {
     musicXmlIoTestRef("testDirections1");

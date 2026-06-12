@@ -4644,26 +4644,27 @@ static String countSegno(const String& plainWords)
 void MusicXmlParserDirection::handleRepeats(Measure* measure, const Fraction tick, bool& measureHasCoda,
                                             SegnoStack& segnos, DelayedDirectionsList& delayedDirections)
 {
-    if (!configuration()->inferTextType()) {
-        return;
-    }
     // Try to recognize the various repeats
+    // The explicit repeat attributes of the <sound> element are always honoured;
+    // only the purely text-based fallback depends on the inferTextType preference
     String repeat;
     const String plainWords = MScoreTextToMusicXml::toPlainText(m_wordsText.toLower().simplified());
+    const String wordsRepeat = matchRepeat(plainWords);
     if (!m_sndCoda.empty()) {
         repeat = u"coda";
     } else if (!m_sndDacapo.empty()) {
-        repeat = u"daCapo";
+        // the accompanying words may refine the jump type (e.g. "D.C. al Fine")
+        repeat = wordsRepeat.startsWith(u"daCapo") ? wordsRepeat : u"daCapo";
     } else if (!m_sndDalsegno.empty()) {
-        repeat = u"dalSegno";
+        repeat = wordsRepeat.startsWith(u"dalSegno") ? wordsRepeat : u"dalSegno";
     } else if (!m_sndFine.empty()) {
         repeat = u"fine";
     } else if (!m_sndSegno.empty()) {
         repeat = u"segno";
     } else if (!m_sndToCoda.empty()) {
         repeat = u"toCoda";
-    } else {
-        repeat = matchRepeat(plainWords);
+    } else if (configuration()->inferTextType()) {
+        repeat = wordsRepeat;
     }
     // Check if repeat number has become detached
     if (repeat == u"coda" || repeat == u"segno") {
