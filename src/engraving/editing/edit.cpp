@@ -110,6 +110,7 @@
 #include "editnote.h"
 #include "editpart.h"
 #include "editproperty.h"
+#include "editrehearsalmark.h"
 #include "editscoreproperties.h"
 #include "editspanner.h"
 #include "editstaff.h"
@@ -671,7 +672,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         textBox->setParent(chordRest->segment());
         textBox->setTrack(0);
         RehearsalMark* r = toRehearsalMark(textBox);
-        textBox->setXmlText(score()->createRehearsalMarkText(r));
+        textBox->setXmlText(EditRehearsalMark::createRehearsalMarkText(this, r));
         chordRest->undoAddAnnotation(textBox);
         break;
     }

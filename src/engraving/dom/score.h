@@ -950,7 +950,6 @@ public:
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
-    void cmdResequenceRehearsalMarks();
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
@@ -958,8 +957,6 @@ public:
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
     std::shared_ptr<muse::draw::Pixmap> createThumbnail();
-    String createRehearsalMarkText(RehearsalMark* current) const;
-    String nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
     muse::Ret sanityCheckLocal();
 
