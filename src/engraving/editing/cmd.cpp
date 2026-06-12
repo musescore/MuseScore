@@ -3134,46 +3134,6 @@ void Score::cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system,
 }
 
 //---------------------------------------------------------
-//   cmdSetVisible
-//---------------------------------------------------------
-
-void Score::cmdSetVisible()
-{
-    for (EngravingItem* e : selection().elements()) {
-        undo(new ChangeProperty(e, Pid::VISIBLE, true));
-    }
-}
-
-//---------------------------------------------------------
-//   cmdUnsetVisible
-//---------------------------------------------------------
-
-void Score::cmdUnsetVisible()
-{
-    for (EngravingItem* e : selection().elements()) {
-        undo(new ChangeProperty(e, Pid::VISIBLE, false));
-    }
-}
-
-void Score::cmdToggleVisible()
-{
-    bool allVisible = true;
-
-    for (EngravingItem* item : selection().elements()) {
-        if (!item->visible()) {
-            allVisible = false;
-            break;
-        }
-    }
-
-    bool newVisible = !allVisible;
-
-    for (EngravingItem* item : selection().elements()) {
-        undoChangeVisible(item, newVisible);
-    }
-}
-
-//---------------------------------------------------------
 //   cmdToggleAutoplace
 //---------------------------------------------------------
 

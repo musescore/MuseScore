@@ -97,6 +97,7 @@
 #include "engraving/editing/editbrackets.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editrehearsalmark.h"
+#include "engraving/editing/editvisibility.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
@@ -640,9 +641,22 @@ muse::async::Channel<bool> NotationInteraction::shadowNoteChanged() const
 
 void NotationInteraction::toggleVisible()
 {
-    transaction(TranslatableString("undoableAction", "Toggle visible"), [this](Transaction&) {
-        score()->cmdToggleVisible();
+    transaction(TranslatableString("undoableAction", "Toggle visible"), [this](Transaction& tx) {
+        EditVisibility::toggleVisible(tx, score());
     });
+}
+
+void NotationInteraction::setSelectionVisible(bool visible)
+{
+    if (visible) {
+        transaction(TranslatableString("undoableAction", "Make element(s) visible"), [this](Transaction& tx) {
+            EditVisibility::setSelectedElementsVisible(tx, score());
+        });
+    } else {
+        transaction(TranslatableString("undoableAction", "Make element(s) invisible"), [this](Transaction& tx) {
+            EditVisibility::setSelectedElementsInvisible(tx, score());
+        });
+    }
 }
 
 EngravingItem* NotationInteraction::hitElement(const PointF& pos, float width) const

@@ -24,6 +24,9 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/harmony.h"
 
+#include "engraving/editing/editvisibility.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "translation.h"
 
 using namespace mu::propertiespanel;
@@ -159,7 +162,7 @@ void GeneralSettingsModel::onVisibleChanged(bool visible)
     Score* score = currentNotation()->elements()->msScore();
 
     for (EngravingItem* item : m_elementList) {
-        score->undoChangeVisible(item, visible);
+        EditVisibility::undoChangeVisible(score->transactionManager()->currentOrDummyTransaction(), item, visible);
     }
 
     updateNotation();

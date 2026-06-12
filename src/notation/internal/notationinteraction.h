@@ -85,6 +85,7 @@ public:
 
     // Visibility
     void toggleVisible() override;
+    void setSelectionVisible(bool visible) override;
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;

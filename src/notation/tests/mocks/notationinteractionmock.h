@@ -40,6 +40,7 @@ public:
     MOCK_METHOD(muse::async::Channel<bool>, shadowNoteChanged, (), (const, override));
 
     MOCK_METHOD(void, toggleVisible, (), (override));
+    MOCK_METHOD(void, setSelectionVisible, (bool), (override));
 
     MOCK_METHOD(EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
     MOCK_METHOD(std::vector<EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
