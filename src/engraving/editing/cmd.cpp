@@ -2532,31 +2532,6 @@ EngravingItem* Score::selectMove(const String& cmd)
 }
 
 //---------------------------------------------------------
-//   cmdMirrorNoteHead
-//---------------------------------------------------------
-
-void Score::cmdMirrorNoteHead()
-{
-    const std::vector<EngravingItem*>& el = selection().elements();
-    for (EngravingItem* e : el) {
-        if (e->isNote()) {
-            Note* note = toNote(e);
-            if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
-                e->undoChangeProperty(Pid::DEAD, !note->deadNote());
-            } else {
-                DirectionH d = note->userMirror();
-                if (d == DirectionH::AUTO) {
-                    d = note->chord()->up() ? DirectionH::RIGHT : DirectionH::LEFT;
-                } else {
-                    d = d == DirectionH::LEFT ? DirectionH::RIGHT : DirectionH::LEFT;
-                }
-                note->undoChangeProperty(Pid::MIRROR_HEAD, d);
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmdAddBracket
 //---------------------------------------------------------
 

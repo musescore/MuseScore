@@ -98,6 +98,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/editsystemlocks.h"
+#include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
 #include "engraving/editing/implodeexplode.h"
 #include "engraving/editing/splitjoinmeasure.h"
@@ -5577,8 +5578,8 @@ void NotationInteraction::flipSelection()
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Flip direction"), [&](auto&) {
-        score()->cmdFlip();
+    transaction(TranslatableString("undoableAction", "Flip direction"), [&](auto& tx) {
+        Flip::flip(tx, score());
     });
 
     updateGripAnchorLines();
@@ -5590,9 +5591,22 @@ void NotationInteraction::flipSelectionHorizontally()
         return;
     }
 
-    transaction(TranslatableString("undoableAction", "Flip horizontally"), [&](auto&) {
-        score()->cmdFlipHorizontally();
+    transaction(TranslatableString("undoableAction", "Flip horizontally"), [&](auto& tx) {
+        Flip::flipHorizontally(tx, score());
     });
+}
+
+void NotationInteraction::mirrorNotes()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    transaction(TranslatableString("undoableAction", "Mirror notehead"), [&](auto& tx) {
+        Flip::mirrorNoteHead(tx, score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addTieToSelection()

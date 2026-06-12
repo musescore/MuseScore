@@ -213,6 +213,7 @@ public:
     void deleteSelection() override;
     void flipSelection() override;
     void flipSelectionHorizontally() override;
+    void mirrorNotes() override;
     void addTieToSelection() override;
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
