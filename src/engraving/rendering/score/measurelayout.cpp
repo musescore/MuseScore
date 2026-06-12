@@ -192,12 +192,14 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
 
 void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len)
 {
+    std::vector<Measure*> oldMMRMeasures;
     int numMeasuresInMMRest = 1;
     if (firstMeasure != lastMeasure) {
         for (Measure* m = firstMeasure->nextMeasure(); m; m = m->nextMeasure()) {
             ++numMeasuresInMMRest;
             m->setMMRestCount(0);
-            if (m->mmRest()) {
+            if (Measure* oldMMRest = m->mmRest()) {
+                oldMMRMeasures.push_back(oldMMRest);
                 ctx.mutDom().undo(new ChangeMMRest(m, nullptr));
             }
             if (m == lastMeasure) {
@@ -258,6 +260,10 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     }
 
     changeMeasureElParents(firstMeasure, lastMeasure, mmrMeasure, ctx);
+
+    for (Measure* oldMMRMeasure : oldMMRMeasures) {
+        changeMeasureElParents(oldMMRMeasure, oldMMRMeasure, mmrMeasure, ctx);
+    }
 
     MeasureBase* nm = ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure();
     mmrMeasure->setNext(nm);
