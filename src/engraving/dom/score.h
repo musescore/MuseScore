@@ -568,9 +568,6 @@ public:
 
     virtual muse::async::Channel<ScoreChanges> changesChannel() const;
 
-    void cmdRemoveTimeSig(TimeSig*);
-    void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
-
     virtual void setUpdateAll();
     void setLayoutAll(staff_idx_t staff = muse::nidx, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
@@ -1073,8 +1070,6 @@ private:
 
     void checkScore();
 
-    bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, staff_idx_t staffIdx);
-    bool rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffIdx);
     std::vector<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
