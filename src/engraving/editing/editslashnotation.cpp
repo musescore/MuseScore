@@ -22,6 +22,8 @@
 
 #include "editslashnotation.h"
 
+#include "noteinput.h"
+
 #include "containers.h"
 
 #include "../dom/chord.h"
@@ -44,7 +46,7 @@ using namespace mu::engraving;
 ///   fills selected region with slashes
 //---------------------------------------------------------
 
-void EditSlashNotation::slashFill(Transaction&, Score* score)
+void EditSlashNotation::slashFill(Transaction& tx, Score* score)
 {
     staff_idx_t startStaff = score->selection().staffStart();
     staff_idx_t endStaff = score->selection().staffEnd();
@@ -145,7 +147,7 @@ void EditSlashNotation::slashFill(Transaction&, Score* score)
                 p.line = line;
                 p.fret = INVALID_FRET_INDEX;
                 score->inputState().setRest(false);             // needed for tab
-                nv = score->noteValForPosition(p, AccidentalType::NONE, error);
+                nv = NoteInput::noteValForPosition(tx, score, p, AccidentalType::NONE, error);
             }
             if (error) {
                 continue;

@@ -95,6 +95,7 @@
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editparentheses.h"
+#include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
 #include "engraving/editing/edittie.h"
@@ -5387,10 +5388,10 @@ void NotationInteraction::repeatSelection()
             }
         }
         if (c) {
-            transaction(TranslatableString("undoableAction", "Repeat selection"), [&](engraving::Transaction&) {
+            transaction(TranslatableString("undoableAction", "Repeat selection"), [&](engraving::Transaction& tx) {
                 for (Note* note : c->notes()) {
                     NoteVal nval = note->noteVal();
-                    score()->addPitch(nval, note != c->notes()[0]);
+                    NoteInput::addPitch(tx, score(), nval, note != c->notes()[0]);
                 }
             });
         }
@@ -5870,9 +5871,11 @@ void NotationInteraction::toggleDotsForSelection(Pad dots)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Toggle augmentation dots"));
-    score()->padToggle(dots, true /*toggleForSelectionOnly*/);
-    apply();
+    transaction(TranslatableString("undoableAction", "Toggle augmentation dots"), [&](auto& tx) {
+        NoteInput::padToggle(tx, score(), dots, true /*toggleForSelectionOnly*/);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
@@ -6242,9 +6245,11 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
 
 void NotationInteraction::addFret(int fretIndex)
 {
-    startEdit(TranslatableString("undoableAction", "Enter note at fret %1").arg(fretIndex));
-    score()->cmdAddFret(fretIndex);
-    apply();
+    transaction(TranslatableString("undoableAction", "Enter note at fret %1").arg(fretIndex), [&](auto& tx) {
+        NoteInput::addFret(tx, score(), fretIndex);
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::changeSelectedElementsVoice(voice_idx_t voiceIndex)

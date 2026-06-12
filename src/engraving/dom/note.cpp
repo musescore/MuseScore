@@ -35,6 +35,7 @@
 #include "../editing/editchord.h"
 #include "../editing/editnote.h"
 #include "../editing/editparentheses.h"
+#include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "types/typesconv.h"
@@ -2014,9 +2015,10 @@ EngravingItem* Note::drop(EditData& data)
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
         const ChordRest* cr = nullptr;
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
         if (data.modifiers & ShiftModifier) {
             // add note to chord
-            score()->addNote(ch, nval);
+            NoteInput::addNote(tx, score(), ch, nval);
         } else {
             // replace current chord
             Segment* seg = score()->setNoteRest(ch->segment(), t, nval,
@@ -2024,7 +2026,7 @@ EngravingItem* Note::drop(EditData& data)
             cr = seg ? toChordRest(seg->element(t)) : nullptr;
         }
         if (cr) {
-            score()->nextInputPos(cr, false);
+            NoteInput::nextInputPos(tx, score(), cr, false);
         }
         delete e;
     }

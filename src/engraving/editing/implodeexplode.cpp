@@ -34,6 +34,8 @@
 #include "../rw/xmlreader.h"
 
 #include "clonevoice.h"
+#include "noteinput.h"
+#include "transaction/transaction.h"
 
 using namespace mu::engraving;
 
@@ -301,7 +303,8 @@ bool ImplodeExplode::implode(Score* score)
                                 continue;
                             }
                             bool forceAccidental = n->accidental() && n->accidental()->role() == AccidentalRole::USER;
-                            Note* nn = score->addNote(dstChord, nv, forceAccidental);
+                            Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+                            Note* nn = NoteInput::addNote(tx, score, dstChord, nv, forceAccidental);
                             // move articulations
                             for (Articulation* artic : srcChord->articulations()) {
                                 if (dstChord->hasArticulation(artic)) {

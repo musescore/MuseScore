@@ -35,6 +35,8 @@
 #include "../dom/utils.h"
 
 #include "editchord.h"
+#include "noteinput.h"
+#include "transaction/transaction.h"
 
 #include "log.h"
 
@@ -115,6 +117,8 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
     score->startCmd(TranslatableString("undoableAction", "Add tie"));
     Chord* lastAddedChord = nullptr;
 
+    Transaction& tx = score->transactionManager()->currentOrDummyTransaction();
+
     InputState& is = score->inputState();
 
     for (Note* note : noteList) {
@@ -175,7 +179,7 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
         // if no note to re-use, create one
         NoteVal nval(note->noteVal());
         if (!n) {
-            n = score->addPitch(nval, addFlag);
+            n = NoteInput::addPitch(tx, score, nval, addFlag);
             if (staffMove != 0) {
                 score->undo(new ChangeChordStaffMove(n->chord(), staffMove));
             }
@@ -202,7 +206,7 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
                 } else {
                     note = nnote;
                     is.setLastSegment(is.segment());
-                    nnote = score->addPitch(nval, true);
+                    nnote = NoteInput::addPitch(tx, score, nval, true);
                 }
             }
             if (staffMove != 0) {
@@ -214,7 +218,7 @@ void EditTie::cmdAddTie(Score* score, bool addToChord)
         toSelect.push_back(n);
     }
     if (lastAddedChord) {
-        score->nextInputPos(lastAddedChord, false);
+        NoteInput::nextInputPos(tx, score, lastAddedChord, false);
     }
     for (EngravingItem* e : toSelect) {
         if (score->canReselectItem(e)) {

@@ -41,6 +41,7 @@
 #include "../dom/tie.h"
 #include "../dom/utils.h"
 
+#include "noteinput.h"
 #include "transaction/transaction.h"
 
 #include "log.h"
@@ -73,7 +74,7 @@ void EditDuration::decDurationDotted(Transaction& tx, Score* score)
 //     When stepDotted is true, will step by nearest dotted or undotted note
 //---------------------------------------------------------
 
-void EditDuration::incDecDuration(Transaction&, Score* score, int nSteps, bool stepDotted)
+void EditDuration::incDecDuration(Transaction& tx, Score* score, int nSteps, bool stepDotted)
 {
     Selection& selection = score->selection();
     InputState& is = score->inputState();
@@ -148,7 +149,7 @@ void EditDuration::incDecDuration(Transaction&, Score* score, int nSteps, bool s
                 return;
             }
             is.setDuration(cr->durationType());
-            score->nextInputPos(cr, false);
+            NoteInput::nextInputPos(tx, score, cr, false);
         }
     }
 }
@@ -157,7 +158,7 @@ void EditDuration::incDecDuration(Transaction&, Score* score, int nSteps, bool s
 //   extendToNextNote
 //---------------------------------------------------------
 
-void EditDuration::extendToNextNote(Transaction&, Score* score)
+void EditDuration::extendToNextNote(Transaction& tx, Score* score)
 {
     Selection& selection = score->selection();
     InputState& is = score->inputState();
@@ -211,7 +212,7 @@ void EditDuration::extendToNextNote(Transaction&, Score* score)
                 for (size_t i = 0; i < notesToExtend.size(); i++) {
                     Note* note = notesToExtend[i];
                     NoteVal nval(note->noteVal());
-                    nn = score->addPitch(nval, i != 0);
+                    nn = NoteInput::addPitch(tx, score, nval, i != 0);
 
                     Tie* tie =  Factory::createTie(note);
                     tie->setStartNote(note);

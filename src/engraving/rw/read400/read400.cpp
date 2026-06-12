@@ -22,6 +22,7 @@
 #include "read400.h"
 
 #include "../editing/mscoreview.h"
+#include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
@@ -355,7 +356,8 @@ bool Read400::preparePasteDurationElement(Score* score, const Fraction& tick, co
     if (Segment* leftSeg = score->tick2leftSegment(tick)) {
         ChordRest* prevCr = leftSeg->nextChordRest(track, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
         if (prevCr && prevCr->endTick() > tick) {
-            score->truncateChordRest(prevCr, tick, /*fillWithRest*/ false);
+            NoteInput::truncateChordRest(
+                score->transactionManager()->currentOrDummyTransaction(), score, prevCr, tick, /*fillWithRest*/ false);
         }
     }
 

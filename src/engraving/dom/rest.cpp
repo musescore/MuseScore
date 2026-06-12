@@ -30,6 +30,8 @@
 
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
+#include "../editing/noteinput.h"
+#include "../editing/transaction/transaction.h"
 
 #include "actionicon.h"
 #include "articulation.h"
@@ -218,7 +220,7 @@ EngravingItem* Rest::drop(EditData& data)
             if (seg) {
                 const ChordRest* cr = toChordRest(seg->element(track()));
                 if (cr) {
-                    score()->nextInputPos(cr, false);
+                    NoteInput::nextInputPos(score()->transactionManager()->currentOrDummyTransaction(), score(), cr, false);
                 }
             }
         }

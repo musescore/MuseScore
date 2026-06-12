@@ -41,6 +41,7 @@
 #include "engraving/dom/tuplet.h"
 
 #include "engraving/editing/edittimesig.h"
+#include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
 
 using namespace mu::engraving::apiv1;
@@ -460,7 +461,7 @@ void Cursor::addNote(int pitch, bool addToChord)
         setDuration(1, 4);
     }
     NoteVal nval(pitch);
-    m_score->addPitch(nval, addToChord, is.get());
+    NoteInput::addPitch(m_score->transactionManager()->currentOrDummyTransaction(), m_score, nval, addToChord, is.get());
 }
 
 //---------------------------------------------------------

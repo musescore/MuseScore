@@ -28,6 +28,7 @@
 #include "engraving/dom/segment.h"
 
 #include "engraving/editing/editduration.h"
+#include "engraving/editing/noteinput.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -59,7 +60,7 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
     score->inputState().setNoteEntryMode(true);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Half duration tests"), [&](Transaction& tx) {
-        score->cmdAddPitch(42, false, false);
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
         Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -88,7 +89,7 @@ TEST_F(Engraving_DurationTypeTests, doubleDuration)
     score->inputState().setNoteEntryMode(true);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Double duration tests"), [&](Transaction& tx) {
-        score->cmdAddPitch(42, false, false);
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
         Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(1, 128));
@@ -117,7 +118,7 @@ TEST_F(Engraving_DurationTypeTests, decDurationDotted)
     score->inputState().setNoteEntryMode(true);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Decrease duration dotted tests"), [&](Transaction& tx) {
-        score->cmdAddPitch(42, false, false);
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
         Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -150,7 +151,7 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
     score->inputState().setNoteEntryMode(true);
 
     score->transactionManager()->transaction(TranslatableString::untranslatable("Increase duration dotted tests"), [&](Transaction& tx) {
-        score->cmdAddPitch(42, false, false);
+        NoteInput::addPitch(score->transactionManager()->currentOrDummyTransaction(), score, 42, false, false);
 
         Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         EXPECT_EQ(c->ticks(), Fraction(1, 128));

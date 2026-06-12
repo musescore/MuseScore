@@ -28,6 +28,7 @@
 #include "../editing/editparentheses.h"
 #include "../editing/editstaff.h"
 #include "../editing/mscoreview.h"
+#include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 
@@ -333,7 +334,7 @@ bool Score::cmdRepeatListSelection()
         }
 
         NoteVal nval = n->noteVal();
-        Note* newNote = addPitch(nval, addFlag);
+        Note* newNote = NoteInput::addPitch(transactionManager()->currentOrDummyTransaction(), this, nval, addFlag);
         IF_ASSERT_FAILED(newNote) {
             continue;
         }
