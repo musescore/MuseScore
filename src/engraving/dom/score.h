@@ -939,6 +939,8 @@ public:
                                const InsertMeasureOptions& options = InsertMeasureOptions());
     MeasureBase* insertBox(ElementType type, MeasureBase* beforeMeasure = nullptr,
                            const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertBox(MeasureBase* box, MeasureBase* beforeMeasure = nullptr,
+                           const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return m_audio; }
     void setAudio(Audio* a) { m_audio = a; }
