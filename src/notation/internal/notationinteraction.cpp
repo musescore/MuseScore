@@ -96,6 +96,7 @@
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editbrackets.h"
 #include "engraving/editing/editparentheses.h"
+#include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
@@ -6694,9 +6695,11 @@ void NotationInteraction::regroupNotesAndRests()
 
 void NotationInteraction::resequenceRehearsalMarks()
 {
-    startEdit(TranslatableString("undoableAction", "Resequence rehearsal marks"));
-    score()->cmdResequenceRehearsalMarks();
-    apply();
+    transaction(TranslatableString("undoableAction", "Resequence rehearsal marks"), [&](Transaction& tx) {
+        EditRehearsalMark::resequenceRehearsalMarks(tx, score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::resetStretch()

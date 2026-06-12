@@ -57,6 +57,7 @@
 #include "utils.h"
 #include "volta.h"
 
+#include "editing/editrehearsalmark.h"
 #include "editing/splitjoinmeasure.h"
 #include "editing/transaction/transaction.h"
 #include "editing/transpose.h"
@@ -346,7 +347,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         e->setTrack(trackZeroVoice(track()));
         if (e->isRehearsalMark() && fromPalette) {
             RehearsalMark* r = toRehearsalMark(e);
-            r->setXmlText(score()->createRehearsalMarkText(r));
+            r->setXmlText(EditRehearsalMark::createRehearsalMarkText(score(), r));
         } else if (e->isHarpPedalDiagram() && fromPalette && part()) {
             // Match pedal config with previous diagram's
             if (HarpPedalDiagram* prevDiagram = part()->prevHarpDiagram(segment()->tick())) {

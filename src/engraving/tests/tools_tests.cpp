@@ -25,6 +25,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editslashnotation.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
@@ -113,7 +114,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -138,7 +139,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -163,7 +164,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -188,7 +189,7 @@ TEST_F(Engraving_ToolsTests, undoResequencePart)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdResequenceRehearsalMarks();
+    EditRehearsalMark::resequenceRehearsalMarks(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

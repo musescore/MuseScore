@@ -2885,45 +2885,6 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 }
 
 //---------------------------------------------------------
-//   cmdResequenceRehearsalMarks
-///   resequences rehearsal marks within a range selection
-///   or, if nothing is selected, the entire score
-//---------------------------------------------------------
-
-void Score::cmdResequenceRehearsalMarks()
-{
-    bool noSelection = !selection().isRange();
-
-    if (noSelection) {
-        cmdSelectAll();
-    } else if (!selection().isRange()) {
-        return;
-    }
-
-    RehearsalMark* last = nullptr;
-    for (Segment* s = selection().startSegment(); s && s != selection().endSegment(); s = s->next1()) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->type() == ElementType::REHEARSAL_MARK) {
-                RehearsalMark* rm = toRehearsalMark(e);
-                if (rm->isTopSystemObject()) {
-                    if (last) {
-                        String rmText = nextRehearsalMarkText(last, rm);
-                        for (EngravingObject* le : rm->linkList()) {
-                            le->undoChangeProperty(Pid::TEXT, rmText);
-                        }
-                    }
-                    last = rm;
-                }
-            }
-        }
-    }
-
-    if (noSelection) {
-        deselectAll();
-    }
-}
-
-//---------------------------------------------------------
 //   cmdRemoveEmptyTrailingMeasures
 //---------------------------------------------------------
 
