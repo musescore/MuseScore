@@ -162,6 +162,8 @@ target_sources(engraving PRIVATE
     editing/editsystemlocks.h
     editing/edittie.cpp
     editing/edittie.h
+    editing/edittimesig.cpp
+    editing/edittimesig.h
     editing/edittremolo.cpp
     editing/edittremolo.h
     editing/elementeditdata.h

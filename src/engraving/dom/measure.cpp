@@ -30,6 +30,7 @@
 #include "../editing/editmeasures.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
+#include "../editing/edittimesig.h"
 #include "../editing/inserttime.h"
 #include "../editing/mscoreview.h"
 #include "../editing/transaction/transaction.h"
@@ -1601,9 +1602,11 @@ EngravingItem* Measure::drop(EditData& data)
         break;
     }
 
-    case ElementType::TIMESIG:
-        score()->cmdAddTimeSig(this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
+    case ElementType::TIMESIG: {
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditTimeSig::addTimeSig(tx, score(), this, staffIdx, toTimeSig(e), data.modifiers & ControlModifier);
         break;
+    }
 
     case ElementType::LAYOUT_BREAK: {
         LayoutBreak* b = toLayoutBreak(e);

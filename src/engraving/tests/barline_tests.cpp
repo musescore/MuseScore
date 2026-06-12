@@ -32,6 +32,8 @@
 #include "engraving/dom/timesig.h"
 
 #include "engraving/editing/editproperty.h"
+#include "engraving/editing/edittimesig.h"
+#include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -123,7 +125,7 @@ TEST_F(Engraving_BarlineTests, barline02)
     TimeSig* ts  = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
-    score->cmdAddTimeSig(msr, 0, ts, false);
+    EditTimeSig::addTimeSig(score->transactionManager()->currentOrDummyTransaction(), score, msr, 0, ts, false);
     score->doLayout();
 
     msr = score->firstMeasure();

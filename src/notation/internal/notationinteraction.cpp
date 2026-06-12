@@ -98,6 +98,7 @@
 #include "engraving/editing/editpart.h"
 #include "engraving/editing/editslashnotation.h"
 #include "engraving/editing/edittie.h"
+#include "engraving/editing/edittimesig.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
 #include "engraving/editing/exchangevoices.h"
@@ -6492,7 +6493,8 @@ Measure* NotationInteraction::selectedMeasure() const
 void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
 {
     startEdit(TranslatableString("undoableAction", "Add time signature"));
-    score()->cmdAddTimeSig(measure, staffIndex, timeSignature, true);
+    Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+    EditTimeSig::addTimeSig(tx, score(), measure, staffIndex, timeSignature, true);
     apply();
 }
 
