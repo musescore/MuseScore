@@ -28,6 +28,7 @@
 #include "measure.h"
 
 #include "../editing/editmeasures.h"
+#include "../editing/editmeasurerepeat.h"
 #include "../editing/editstaff.h"
 #include "../editing/editsystemlocks.h"
 #include "../editing/edittimesig.h"
@@ -1774,7 +1775,8 @@ EngravingItem* Measure::drop(EditData& data)
     {
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
-        score()->cmdAddMeasureRepeat(this, numMeasures, staffIdx);
+        Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+        EditMeasureRepeat::addMeasureRepeat(tx, score(), this, numMeasures, staffIdx);
         break;
     }
     case ElementType::ACTION_ICON:

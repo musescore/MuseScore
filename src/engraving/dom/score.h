@@ -402,8 +402,6 @@ public:
     void cmdResetNoteAndRestGroupings();
     void cmdResetAllPositions(bool undoable = true);
     void cmdToggleLayoutBreak(LayoutBreakType);
-    void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
-    bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void resetUserStretch();
     void cmdResetToDefaultLayout();
     void cmdResetTextStyleOverrides();
@@ -505,7 +503,6 @@ public:
     Rest* addRest(const Fraction& tick, track_idx_t track, TDuration, Tuplet*);
     Rest* addRest(Segment* seg, track_idx_t track, TDuration d, Tuplet*);
     Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
-    MeasureRepeat* addMeasureRepeat(const Fraction& tick, track_idx_t track, int numMeasures);
 
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 

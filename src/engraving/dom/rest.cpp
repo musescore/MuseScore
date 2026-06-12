@@ -30,6 +30,7 @@
 
 #include "../editing/addremoveelement.h"
 #include "../editing/editchord.h"
+#include "../editing/editmeasurerepeat.h"
 #include "../editing/noteinput.h"
 #include "../editing/transaction/transaction.h"
 
@@ -231,7 +232,8 @@ EngravingItem* Rest::drop(EditData& data)
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
         if (durationType().type() == DurationType::V_MEASURE) {
-            score()->cmdAddMeasureRepeat(measure(), numMeasures, staffIdx());
+            Transaction& tx = score()->transactionManager()->currentOrDummyTransaction();
+            EditMeasureRepeat::addMeasureRepeat(tx, score(), measure(), numMeasures, staffIdx());
         }
         break;
     }
