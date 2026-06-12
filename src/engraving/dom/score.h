@@ -414,8 +414,6 @@ public:
     void cmdToggleLayoutBreak(LayoutBreakType);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
-    void cmdFlip();
-    void cmdFlipHorizontally();
     void resetUserStretch();
     void cmdResetToDefaultLayout();
     void cmdResetTextStyleOverrides();
@@ -808,8 +806,6 @@ public:
     int utime2utick(double utime) const;
 
     void nextInputPos(const ChordRest* cr, bool);
-    void cmdMirrorNoteHead();
-
     virtual size_t npages() const { return m_pages.size(); }
     virtual page_idx_t pageIdx(const Page* page) const { return muse::indexOf(m_pages, page); }
     virtual const std::vector<Page*>& pages() const { return m_pages; }

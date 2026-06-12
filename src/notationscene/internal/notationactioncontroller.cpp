@@ -487,8 +487,7 @@ void NotationActionController::init()
     registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty,
                    TranslatableString("undoableAction", "Toggle empty staves"));
 
-    registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead,
-                   TranslatableString("undoableAction", "Mirror notehead"));
+    registerAction("mirror-note", &Interaction::mirrorNotes, &Controller::hasSelection);
 
     registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
     registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });

@@ -165,6 +165,8 @@ target_sources(engraving PRIVATE
     editing/elementeditdata.h
     editing/exchangevoices.cpp
     editing/exchangevoices.h
+    editing/flip.cpp
+    editing/flip.h
     editing/implodeexplode.cpp
     editing/implodeexplode.h
     editing/inserttime.cpp
