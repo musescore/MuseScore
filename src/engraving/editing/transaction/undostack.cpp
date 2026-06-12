@@ -240,7 +240,7 @@ void UndoStack::reopen()
     assert(m_currentIndex > 0);
     --m_currentIndex;
     m_activeTransaction = muse::takeAt(m_transactions, m_currentIndex);
-    m_states.erase(m_states.begin() + m_currentIndex);
+    m_states.erase(m_states.begin() + m_currentIndex + 1);
     for (auto i : m_activeTransaction->commands()) {
         LOG_UNDO() << "   " << i->name();
     }
