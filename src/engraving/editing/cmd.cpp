@@ -412,12 +412,30 @@ void MasterScore::undoRedo(bool undo, EditData* ed)
         return;
     }
 
+    IF_ASSERT_FAILED(!undoStack()->hasActiveTransaction()) {
+        LOGW() << "cannot undo/redo while transaction is active";
+        return;
+    }
+
+    if (undo) {
+        IF_ASSERT_FAILED(undoStack()->canUndo()) {
+            LOGW() << "cannot undo";
+            return;
+        }
+    } else {
+        IF_ASSERT_FAILED(undoStack()->canRedo()) {
+            LOGW() << "cannot redo";
+            return;
+        }
+    }
+
+    cmdState().reset();
+
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
     UndoableTransaction::ChangesInfo changes;
 
-    cmdState().reset();
     if (undo) {
         changes = changesInfo(undoStack(), undo);
         undoStack()->undo(ed);
