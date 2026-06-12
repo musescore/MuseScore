@@ -89,6 +89,7 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
+#include "engraving/editing/editbeam.h"
 #include "engraving/editing/editchord.h"
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
@@ -5935,9 +5936,10 @@ void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Set beam type"));
-    score()->cmdSetBeamMode(mode);
-    apply();
+    transaction(TranslatableString("undoableAction", "Set beam type"), [&](Transaction& tx) {
+        EditBeam::setBeamMode(tx, score(), mode);
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::beamSelectedRange()
@@ -5946,9 +5948,10 @@ void NotationInteraction::beamSelectedRange()
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Beam selected"));
-    score()->cmdBeamSelectedRange();
-    apply();
+    transaction(TranslatableString("undoableAction", "Beam selected"), [&](Transaction& tx) {
+        EditBeam::beamSelectedRange(tx, score());
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
@@ -6685,9 +6688,10 @@ void NotationInteraction::resetTextStyleOverrides()
 
 void NotationInteraction::resetBeamMode()
 {
-    startEdit(TranslatableString("undoableAction", "Reset beams"));
-    score()->cmdResetBeamMode();
-    apply();
+    transaction(TranslatableString("undoableAction", "Reset beams"), [&](Transaction& tx) {
+        EditBeam::resetBeamMode(tx, score());
+    });
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::resetShapesAndPosition()
