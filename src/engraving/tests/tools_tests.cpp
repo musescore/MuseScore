@@ -25,6 +25,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/editing/editenharmonicspelling.h"
+#include "engraving/editing/editslashnotation.h"
+#include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transaction/undostack.h"
 
 #include "utils/scorerw.h"
@@ -56,7 +58,7 @@ TEST_F(Engraving_ToolsTests, undoSlashFill)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdSlashFill();
+    EditSlashNotation::slashFill(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
@@ -86,7 +88,7 @@ TEST_F(Engraving_ToolsTests, undoSlashRhythm)
 
     // do
     score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdSlashRhythm();
+    EditSlashNotation::slashRhythm(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

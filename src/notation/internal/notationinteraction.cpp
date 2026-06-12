@@ -96,6 +96,7 @@
 #include "engraving/editing/editnote.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editpart.h"
+#include "engraving/editing/editslashnotation.h"
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/editsystemlocks.h"
 #include "engraving/editing/flip.h"
@@ -6620,9 +6621,11 @@ void NotationInteraction::fillSelectionWithSlashes()
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Fill with slashes"));
-    score()->cmdSlashFill();
-    apply();
+    transaction(TranslatableString("undoableAction", "Fill with slashes"), [&](auto& tx) {
+        EditSlashNotation::slashFill(tx, score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::replaceSelectedNotesWithSlashes()
@@ -6631,9 +6634,11 @@ void NotationInteraction::replaceSelectedNotesWithSlashes()
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Toggle rhythmic slash notation"));
-    score()->cmdSlashRhythm();
-    apply();
+    transaction(TranslatableString("undoableAction", "Toggle rhythmic slash notation"), [&](auto& tx) {
+        EditSlashNotation::slashRhythm(tx, score());
+    });
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::changeEnharmonicSpelling(bool both)
