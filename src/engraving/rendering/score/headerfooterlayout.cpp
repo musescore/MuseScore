@@ -257,6 +257,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
         }
 
         for (size_t i = 0, n = s.size(); i < n; ++i) {
+            auto dateFormat = muse::DateFormat::ISODate;
             Char c = s.at(i);
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
@@ -306,17 +307,15 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     newFragments.back().text += page->score()->masterScore()->fileInfo()->path().toString();
                     break;
                 case 'd':
-                    newFragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
+                    newFragments.back().text += muse::Date::currentDate().toString(dateFormat);
                     break;
                 case 'D':
                 {
                     String creationDate = page->score()->metaTag(u"creationDate");
                     if (creationDate.isEmpty()) {
-                        newFragments.back().text += page->score()->masterScore()->fileInfo()->birthTime().date().toString(
-                            muse::DateFormat::ISODate);
+                        newFragments.back().text += page->score()->masterScore()->fileInfo()->birthTime().date().toString(dateFormat);
                     } else {
-                        newFragments.back().text += muse::Date::fromStringISOFormat(creationDate).toString(
-                            muse::DateFormat::ISODate);
+                        newFragments.back().text += muse::Date::fromStringISOFormat(creationDate).toString(dateFormat);
                     }
                 }
                 break;
@@ -325,7 +324,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     if (fileInfo->isNewlyCreated()) {
                         newFragments.back().text += String(u"HH:mm:ss");
                     } else {
-                        newFragments.back().text += fileInfo->lastModified().time().toString(muse::DateFormat::ISODate);
+                        newFragments.back().text += fileInfo->lastModified().time().toString(dateFormat);
                     }
                 }
                 break;
@@ -334,7 +333,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     if (fileInfo->isNewlyCreated()) {
                         newFragments.back().text += String(u"YYYY-MM-DD");
                     } else {
-                        newFragments.back().text += fileInfo->lastModified().date().toString(muse::DateFormat::ISODate);
+                        newFragments.back().text += fileInfo->lastModified().date().toString(dateFormat);
                     }
                 }
                 break;
