@@ -101,27 +101,6 @@ using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static UndoableTransaction::ChangesInfo changesInfo(const UndoStack* stack, bool undo = false)
-{
-    IF_ASSERT_FAILED(stack) {
-        static UndoableTransaction::ChangesInfo empty;
-        return empty;
-    }
-
-    const UndoableTransaction* transaction = stack->activeTransaction();
-
-    if (!transaction) {
-        transaction = stack->last();
-    }
-
-    if (!transaction) {
-        static UndoableTransaction::ChangesInfo empty;
-        return empty;
-    }
-
-    return transaction->changesInfo(undo);
-}
-
 static ScoreChanges buildScoreChanges(const CmdState& cmdState, const UndoableTransaction::ChangesInfo& changes)
 {
     int startTick = cmdState.startTick().ticks();
@@ -437,11 +416,11 @@ void MasterScore::undoRedo(bool undo, EditData* ed)
     UndoableTransaction::ChangesInfo changes;
 
     if (undo) {
-        changes = changesInfo(undoStack(), undo);
+        changes = undoStack()->last()->changesInfo(true);
         undoStack()->undo(ed);
     } else {
         undoStack()->redo(ed);
-        changes = changesInfo(undoStack());
+        changes = undoStack()->last()->changesInfo(false);
     }
 
     update(false);
@@ -487,7 +466,7 @@ void MasterScore::endCmd(bool rollback, bool layoutAllParts)
 
     ScoreChanges changes;
     if (!rollback) {
-        changes = buildScoreChanges(cmdState(), changesInfo(undoStack()));
+        changes = buildScoreChanges(cmdState(), undoStack()->activeTransaction()->changesInfo());
     }
 
     LOGD() << "Undo stack current transaction commands count: " << undoStack()->activeTransaction()->commands().size();
