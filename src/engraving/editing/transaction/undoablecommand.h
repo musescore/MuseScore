@@ -175,7 +175,7 @@ public:
     virtual void undo(EditData*);
     virtual void redo(EditData*);
 
-    virtual void cleanup(bool /*undo*/) {}
+    virtual void cleanup(bool /*wasDone*/) {}
 
     virtual std::vector<EngravingObject*> objectItems() const { return {}; }
     virtual const char* name() const { return "UndoableCommand"; }

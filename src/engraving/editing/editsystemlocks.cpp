@@ -56,9 +56,9 @@ public:
         score->addSystemLock(m_systemLock);
     }
 
-    void cleanup(bool undo) override
+    void cleanup(bool wasDone) override
     {
-        if (!undo) {
+        if (!wasDone) {
             delete m_systemLock;
             m_systemLock = nullptr;
         }
@@ -97,9 +97,9 @@ public:
         score->removeSystemLock(m_systemLock);
     }
 
-    void cleanup(bool undo) override
+    void cleanup(bool wasDone) override
     {
-        if (undo) {
+        if (wasDone) {
             delete m_systemLock;
             m_systemLock = nullptr;
         }

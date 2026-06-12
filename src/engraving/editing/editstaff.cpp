@@ -52,9 +52,9 @@ void InsertStaff::redo(EditData*)
     staff->score()->insertStaff(staff, ridx);
 }
 
-void InsertStaff::cleanup(bool undo)
+void InsertStaff::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete staff;
         staff = nullptr;
     }
@@ -87,9 +87,9 @@ void RemoveStaff::redo(EditData*)
     }
 }
 
-void RemoveStaff::cleanup(bool undo)
+void RemoveStaff::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete staff;
         staff = nullptr;
     }

@@ -83,9 +83,9 @@ AddElement::AddElement(EngravingItem* e)
     element = e;
 }
 
-void AddElement::cleanup(bool undo)
+void AddElement::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete element;
         element = nullptr;
     }
@@ -233,9 +233,9 @@ RemoveElement::RemoveElement(EngravingItem* e)
     }
 }
 
-void RemoveElement::cleanup(bool undo)
+void RemoveElement::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete element;
         element = nullptr;
     }

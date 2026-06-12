@@ -62,9 +62,9 @@ void InsertPart::redo(EditData*)
     m_part->score()->insertPart(m_part, m_targetPartIdx);
 }
 
-void InsertPart::cleanup(bool undo)
+void InsertPart::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_part;
         m_part = nullptr;
     }
@@ -94,9 +94,9 @@ void RemovePart::redo(EditData*)
     m_part->score()->removePart(m_part);
 }
 
-void RemovePart::cleanup(bool undo)
+void RemovePart::cleanup(bool wasDone)
 {
-    if (undo) {
+    if (wasDone) {
         delete m_part;
         m_part = nullptr;
     }

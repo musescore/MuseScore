@@ -113,7 +113,7 @@ class AddNoteParenthesisInfo : public UndoableCommand
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;
@@ -133,7 +133,7 @@ class RemoveNoteParenthesisInfo : public UndoableCommand
     void redo(EditData*) override;
     void undo(EditData*) override;
 
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     Chord* m_chord = nullptr;
     NoteParenthesisInfo* m_noteParenInfo = nullptr;

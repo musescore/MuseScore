@@ -118,7 +118,7 @@ public:
     AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx);
     void undo(EditData*) override;
     void redo(EditData*) override;
-    void cleanup(bool undo) override;
+    void cleanup(bool wasDone) override;
 
     UNDO_TYPE(CommandType::AddPartToExcerpt)
     UNDO_NAME("AddPartToExcerpt")

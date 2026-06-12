@@ -162,9 +162,9 @@ void AddPartToExcerpt::redo(EditData*)
     }
 }
 
-void AddPartToExcerpt::cleanup(bool undo)
+void AddPartToExcerpt::cleanup(bool wasDone)
 {
-    if (!undo) {
+    if (!wasDone) {
         delete m_part;
         m_part = nullptr;
     }

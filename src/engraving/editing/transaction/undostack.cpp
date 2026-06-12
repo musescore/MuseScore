@@ -288,10 +288,10 @@ UndoableTransaction::~UndoableTransaction()
     }
 }
 
-void UndoableTransaction::cleanup(bool undo)
+void UndoableTransaction::cleanup(bool wasDone)
 {
     for (UndoableCommand* command : m_commands) {
-        command->cleanup(undo);
+        command->cleanup(wasDone);
     }
 }
 
