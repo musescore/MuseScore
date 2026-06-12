@@ -1159,7 +1159,7 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         }
     }
 
-    int totInstrumentCount = instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size();
+    size_t totInstrumentCount = instrumentsMappedToFirstVoice.size() + instrumentsMappedToSecondVoice.size();
 
     SharedLabelOrientation actualOrientation;
     switch (orientation) {
@@ -1171,6 +1171,10 @@ String SystemHeaderLayout::formattedSharedStaffLabel(staff_idx_t staffIdx, const
         break;
     case SharedLabelOrientation::VERTICAL:
         actualOrientation = totInstrumentCount > verticalLimit ? SharedLabelOrientation::VOICE : orientation;
+        break;
+    default: // should not happen, but don't leave actualOrientation uninitialized
+        ASSERT_X("Unexpected SharedLabelOrientation value: " << static_cast<int>(orientation));
+        actualOrientation = SharedLabelOrientation::VOICE;
         break;
     }
 
