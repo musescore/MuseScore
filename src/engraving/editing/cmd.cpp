@@ -2534,34 +2534,6 @@ EngravingItem* Score::selectMove(const String& cmd)
 }
 
 //---------------------------------------------------------
-//   cmdAddBracket
-//---------------------------------------------------------
-
-void Score::cmdAddBracket()
-{
-    for (EngravingItem* el : selection().elements()) {
-        if (el->isAccidental()) {
-            Accidental* acc = toAccidental(el);
-            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   cmdAddBraces
-//---------------------------------------------------------
-
-void Score::cmdAddBraces()
-{
-    for (EngravingItem* el : selection().elements()) {
-        if (el->isAccidental()) {
-            Accidental* acc = toAccidental(el);
-            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE));
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmdMoveRest
 //---------------------------------------------------------
 

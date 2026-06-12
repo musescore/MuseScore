@@ -94,6 +94,7 @@
 #include "engraving/editing/editduration.h"
 #include "engraving/editing/editenharmonicspelling.h"
 #include "engraving/editing/editnote.h"
+#include "engraving/editing/editbrackets.h"
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
@@ -5776,13 +5777,13 @@ void NotationInteraction::addBracketsToSelection(BracketsType type)
 
     switch (type) {
     case BracketsType::Brackets:
-        transaction(TranslatableString("undoableAction", "Add brackets"), [&](auto&) {
-            score()->cmdAddBracket();
+        transaction(TranslatableString("undoableAction", "Add brackets"), [&](auto& tx) {
+            EditBrackets::addBracket(tx, score());
         });
         break;
     case BracketsType::Braces:
-        transaction(TranslatableString("undoableAction", "Add braces"), [&](auto&) {
-            score()->cmdAddBraces();
+        transaction(TranslatableString("undoableAction", "Add braces"), [&](auto& tx) {
+            EditBrackets::addBraces(tx, score());
         });
         break;
     case BracketsType::Parentheses:
