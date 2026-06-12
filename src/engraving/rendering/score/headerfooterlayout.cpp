@@ -257,7 +257,12 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
         }
 
         for (size_t i = 0, n = s.size(); i < n; ++i) {
-            auto dateFormat = muse::DateFormat::ISODate;
+            auto dateFormat = muse::DateFormat::LocaleShortFormat;
+            const char* locale = "de"; // TODO: get the actual locale from the score's style settings
+            if (!std::setlocale(LC_TIME, locale)) {
+                LOGW() << "Failed to set LC_TIME locale for language code:" << locale << "using ISO format instead";
+                dateFormat = muse::DateFormat::ISODate;
+            }
             Char c = s.at(i);
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
@@ -322,7 +327,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                 case 'm': {
                     IFileInfoProviderPtr fileInfo = page->score()->masterScore()->fileInfo();
                     if (fileInfo->isNewlyCreated()) {
-                        newFragments.back().text += String(u"HH:mm:ss");
+                        newFragments.back().text += muse::Time::currentTime().toString(dateFormat);
                     } else {
                         newFragments.back().text += fileInfo->lastModified().time().toString(dateFormat);
                     }
@@ -331,7 +336,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                 case 'M': {
                     IFileInfoProviderPtr fileInfo = page->score()->masterScore()->fileInfo();
                     if (fileInfo->isNewlyCreated()) {
-                        newFragments.back().text += String(u"YYYY-MM-DD");
+                        newFragments.back().text += muse::Date::currentDate().toString(dateFormat);
                     } else {
                         newFragments.back().text += fileInfo->lastModified().date().toString(dateFormat);
                     }
