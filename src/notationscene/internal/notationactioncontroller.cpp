@@ -505,10 +505,8 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
                    TranslatableString("undoableAction", "Enter full-measure rest"));
-    registerAction("set-visible", &Interaction::execute, &mu::engraving::Score::cmdSetVisible,
-                   TranslatableString("undoableAction", "Make element(s) visible"));
-    registerAction("unset-visible", &Interaction::execute, &mu::engraving::Score::cmdUnsetVisible,
-                   TranslatableString("undoableAction", "Make element(s) invisible"));
+    registerAction("set-visible", &Interaction::setSelectionVisible, true);
+    registerAction("unset-visible", &Interaction::setSelectionVisible, false);
     registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
     registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
 

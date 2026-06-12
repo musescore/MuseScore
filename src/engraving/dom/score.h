@@ -417,8 +417,6 @@ public:
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
     void cmdSetHideStaffIfEmptyOverride(staff_idx_t staffIdx, System* system, engraving::AutoOnOff value);
-    void cmdSetVisible();
-    void cmdUnsetVisible();
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
@@ -460,7 +458,6 @@ public:
     void undoInsertPart(Part* part, size_t targetPartIndex);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, staff_idx_t idx, bool createRests=true);
-    void undoChangeVisible(EngravingItem* item, bool visible);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr);
     bool undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue,
@@ -980,7 +977,6 @@ public:
     void doTimeDelete(Segment* startSegment, Segment* endSegment);
     void doTimeDeleteForMeasure(Measure*, Segment*, const Fraction&);
 
-    void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
     void createPaddingTable();
