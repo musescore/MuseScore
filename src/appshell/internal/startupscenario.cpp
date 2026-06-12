@@ -273,6 +273,15 @@ void StartupScenario::showStartupDialogsIfNeed(StartupModeType modeType)
         return;
     }
 
+    //! NOTE: When in-place auto-install is available, download the update silently
+    //! in the background and surface it via the home screen banner, rather than
+    //! interrupting startup with a modal update dialog.
+    if (appUpdateScenario()->canAutoInstall()) {
+        appUpdateScenario()->downloadUpdateInBackground();
+        showWelcomeDialogAndSamplerUpdateIfNeed();
+        return;
+    }
+
     auto promise = appUpdateScenario()->showUpdate();
     promise.onResolve(this, [showWelcomeDialogAndSamplerUpdateIfNeed](const Ret& ret) {
         if (ret.code() == static_cast<int>(Ret::Code::Ok)) {
