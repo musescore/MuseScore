@@ -41,9 +41,9 @@ void HeaderFooterLayout::layoutHeaderFooter(LayoutContext& ctx, Page* page)
         return;
     }
 
-    const page_idx_t n = page->pageNumber() + 1 + page->score()->pageNumberOffset();
+    const int n = page->getDisplayPageNumber();
 
-    if (ctx.conf().styleB(Sid::showHeader) && (page->pageNumber() || ctx.conf().styleB(Sid::headerFirstPage))) {
+    if (mustShowHeadersForPage(ctx, page)) {
         const bool odd = (n & 1) || !ctx.conf().styleB(Sid::headerOddEven);
         createUpdateHeaderText(ctx, page, 0, ctx.conf().styleSt(odd ? Sid::oddHeaderL : Sid::evenHeaderL));
         createUpdateHeaderText(ctx, page, 1, ctx.conf().styleSt(odd ? Sid::oddHeaderC : Sid::evenHeaderC));
@@ -54,7 +54,7 @@ void HeaderFooterLayout::layoutHeaderFooter(LayoutContext& ctx, Page* page)
         }
     }
 
-    if (ctx.conf().styleB(Sid::showFooter) && (page->pageNumber() || ctx.conf().styleB(Sid::footerFirstPage))) {
+    if (mustShowFootersForPage(ctx, page)) {
         const bool odd = (n & 1) || !ctx.conf().styleB(Sid::footerOddEven);
         createUpdateFooterText(ctx, page, 0, ctx.conf().styleSt(odd ? Sid::oddFooterL : Sid::evenFooterL));
         createUpdateFooterText(ctx, page, 1, ctx.conf().styleSt(odd ? Sid::oddFooterC : Sid::evenFooterC));
@@ -261,8 +261,8 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
                 switch (nc.toAscii()) {
-                case 'p': // not on first page 1
-                    if (!page->pageNumber()) {
+                case 'p': // not on first page of the project nor page number 1
+                    if (!page->pageNumber() || page->getDisplayPageNumber() <= 1) {
                         break;
                     }
                     [[fallthrough]];
@@ -274,7 +274,7 @@ TextBlock HeaderFooterLayout::replaceTextMacros(LayoutContext& ctx, const Page* 
                     [[fallthrough]];
                 case 'P': // on all pages
                 {
-                    const int no = static_cast<int>(page->pageNumber()) + 1 + page->score()->pageNumberOffset();
+                    const int no = page->getDisplayPageNumber();
                     if (no > 0) {
                         const String pageNumberString = String::number(no);
                         const CharFormat pageNumberFormat = formatForMacro(ctx, String('$' + nc));
@@ -449,7 +449,7 @@ double HeaderFooterLayout::headerExtension(const LayoutContext& ctx, const Page*
         return 0.0;
     }
 
-    if (ctx.conf().styleB(Sid::showHeader) && (page->pageNumber() || ctx.conf().styleB(Sid::headerFirstPage))) {
+    if (mustShowHeadersForPage(ctx, page)) {
         double maxHeight = 0.0;
         for (int area = 0; area < MAX_HEADERS; ++area) {
             if (Text* text = page->headerText(area)) {
@@ -473,7 +473,7 @@ double HeaderFooterLayout::footerExtension(const LayoutContext& ctx, const Page*
         return 0.0;
     }
 
-    if (ctx.conf().styleB(Sid::showFooter) && (page->pageNumber() || ctx.conf().styleB(Sid::footerFirstPage))) {
+    if (mustShowFootersForPage(ctx, page)) {
         double maxHeight = 0.0;
         for (int area = 0; area < MAX_FOOTERS; ++area) {
             if (Text* text = page->footerText(area)) {
@@ -524,4 +524,18 @@ bool HeaderFooterLayout::scoreHasTimestampHeadersFooters(const Score* score)
     }
 
     return false;
+}
+
+bool HeaderFooterLayout::mustShowHeadersForPage(const LayoutContext& ctx, const Page* page)
+{
+    return ctx.conf().styleB(Sid::showHeader)
+           && ((page->pageNumber() && page->getDisplayPageNumber() != 1)
+               || ctx.conf().styleB(Sid::headerFirstPage));
+}
+
+bool HeaderFooterLayout::mustShowFootersForPage(const LayoutContext& ctx, const Page* page)
+{
+    return ctx.conf().styleB(Sid::showFooter)
+           && ((page->pageNumber() && page->getDisplayPageNumber() != 1)
+               || ctx.conf().styleB(Sid::footerFirstPage));
 }
