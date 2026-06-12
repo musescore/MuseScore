@@ -982,8 +982,6 @@ public:
 
     void cmdInsertClef(Clef* clef, ChordRest* cr);
 
-    void cmdSlashFill();
-    void cmdSlashRhythm();
     void cmdResequenceRehearsalMarks();
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
