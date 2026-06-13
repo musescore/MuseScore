@@ -730,6 +730,35 @@ TEST_F(Tst_Structure, section_markers_and_dotted_barline)
     delete score;
 }
 
+// Regression: after a Case B pickup shift, a hairpin's search boundary must use the post-shift tick, or a
+// stale (too-large) boundary resolves its endpoint in the wrong measure.
+TEST_F(Tst_Structure, pickup_caseb_hairpin_maxendtick_not_stale)
+{
+    MasterScore* score = readEncoreScore("structure_pickup_caseb_hairpin.enc");
+    ASSERT_NE(score, nullptr);
+
+    Measure* m1 = measureAt(score, 1);
+    ASSERT_NE(m1, nullptr);
+
+    int hairpinCount = 0;
+    bool hairpinEndsInM1 = false;
+    for (const auto& kv : score->spanner()) {
+        Spanner* sp = kv.second;
+        if (sp && sp->isHairpin()) {
+            ++hairpinCount;
+            const Fraction tick2 = sp->tick2();
+            if (tick2 >= m1->tick() && tick2 <= m1->endTick()) {
+                hairpinEndsInM1 = true;
+            }
+        }
+    }
+
+    EXPECT_GE(hairpinCount, 1) << "At least one hairpin must be imported";
+    EXPECT_TRUE(hairpinEndsInM1) << "Hairpin must end within measure 1 (stale maxEndTick would push it past)";
+
+    delete score;
+}
+
 // SystemLocks lock each Encore system to exactly its LINE measureCount.
 TEST_F(Tst_Structure, fit_spatium_first_system_measure_count)
 {
