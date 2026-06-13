@@ -400,13 +400,8 @@ public:
     void cmdAddStretch(double);
     void cmdAddGrace(NoteType, int);
     void cmdResetNoteAndRestGroupings();
-    void cmdResetAllPositions(bool undoable = true);
     void cmdToggleLayoutBreak(LayoutBreakType);
     void resetUserStretch();
-    void cmdResetToDefaultLayout();
-    void cmdResetTextStyleOverrides();
-    void cmdResetAllStyles(const StyleIdSet& exceptTheseOnes = {});
-    void cmdResetMeasuresLayout();
     bool canInsertClef(ClefType) const;
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);

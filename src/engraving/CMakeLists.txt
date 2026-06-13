@@ -185,6 +185,8 @@ target_sources(engraving PRIVATE
     editing/mscoreview.h
     editing/noteinput.cpp
     editing/noteinput.h
+    editing/reset.cpp
+    editing/reset.h
     editing/splitjoinmeasure.cpp
     editing/splitjoinmeasure.h
     editing/textedit.cpp
