@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
-
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
@@ -66,42 +64,6 @@ void Score::linkMeasures(Score* score)
         mb->linkTo(mbMaster);
         mbMaster = mbMaster->next();
     }
-}
-
-//---------------------------------------------------------
-//   createThumbnail
-//---------------------------------------------------------
-
-std::shared_ptr<Pixmap> Score::createThumbnail()
-{
-    TRACEFUNC;
-
-    LayoutMode mode = layoutMode();
-    switchToPageMode();
-
-    Page* page = pages().at(0);
-    RectF fr = page->pageBoundingRect();
-    double mag = 512.0 / std::max(fr.width(), fr.height());
-    int w = int(fr.width() * mag);
-    int h = int(fr.height() * mag);
-
-    int dpm = lrint(DPMM * 1000.0);
-
-    auto pixmap = imageProvider()->createPixmap(w, h, dpm, configuration()->thumbnailBackgroundColor());
-
-    auto painterProvider = imageProvider()->painterForImage(pixmap);
-    Painter p(painterProvider, "thumbnail");
-
-    p.setAntialiasing(true);
-    p.scale(mag, mag);
-    print(&p, 0);
-    p.endDraw();
-
-    if (layoutMode() != mode) {
-        setLayoutMode(mode);
-        doLayout();
-    }
-    return pixmap;
 }
 
 //---------------------------------------------------------
