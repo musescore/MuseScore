@@ -23,6 +23,7 @@
 
 #include "../editing/mscoreview.h"
 #include "../editing/noteinput.h"
+#include "../editing/paste.h"
 #include "../editing/transaction/transaction.h"
 #include "../editing/transpose.h"
 #include "../types/types.h"
@@ -662,7 +663,7 @@ bool Read500::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                 continue;
                             }
                         }
-                        score->pasteChordRest(cr, tick);
+                        Paste::pasteChordRest(tx, score, cr, tick);
                     }
                 } else if (tag == "Spanner") {
                     TRead::readSpanner(e, ctx, score, ctx.track());
