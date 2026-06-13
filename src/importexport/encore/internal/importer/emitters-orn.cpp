@@ -219,6 +219,81 @@ static void handleTempoOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
     }
 }
 
+static void handleWedgeStart(BuildCtx& ctx, const MeasEmitCtx& mc,
+                             const NoteElemCtx& ec, const EncOrnament* eo)
+{
+    const EncMeasure& encMeas = *mc.encMeas;
+    const Fraction measTick = mc.measTick;
+    const int staffIdx = ec.staffIdx;
+    const track_idx_t track = ec.track;
+    const int voice = ec.voice;
+    const int measIdx = mc.measIdx;
+    const EncMeasureElem* e = ec.e;
+
+    // On grand staves (staffWithin > 0) the cumTick-based elemTick is wrong: the WEDGESTART ORN
+    // is always voice=0 but the notes may be voice=1+, a different trackKey. Compute the tick from
+    // the raw Encore element tick instead. Single-staff (staffWithin == 0) cumTick is correct.
+    const int wholeTicks2 = (e->staffWithin > 0) ? encWholeNoteTicks(encMeas) : 0;
+    const Fraction rawElemTick = (wholeTicks2 > 0)
+                                 ? measTick + Fraction(static_cast<int>(e->tick), wholeTicks2).reduced()
+                                 : ec.elemTick;
+
+    // No WEDGESTOP in .enc; alMezuro = forward measure count (upper bound). Precise tick2 resolved in post-pass.
+    int endIdx = measIdx + static_cast<int>(eo->alMezuro);
+    if (endIdx < 0 || endIdx >= static_cast<int>(ctx.measuresByIdx.size())) {
+        endIdx = measIdx;
+    }
+    Measure* endMeas = ctx.measuresByIdx[endIdx];
+    Fraction maxEnd = endMeas->tick() + endMeas->ticks();
+    const Fraction snappedStart = snapStartTickByXoffset(rawElemTick, encMeas, staffIdx,
+                                                         static_cast<int>(eo->xoffset), measTick);
+    if (maxEnd <= snappedStart) {
+        return;
+    }
+    // Encore 5 sets bit 1 too (0x02=cresc, 0x03=dim); test bit 0 only.
+    const HairpinType hpType
+        = ((eo->speguleco & 0x01) == 0)
+          ? HairpinType::CRESC_HAIRPIN
+          : HairpinType::DIM_HAIRPIN;
+    // On grand staves (staffWithin > 0) the WEDGESTART ORN is voice=0 but the notes may be a
+    // different Encore voice. Find the voice of the first note on the same sub-staff so the hairpin
+    // lands on the track it spans, not the measure-rest-only voice 0 (which cannot be positioned).
+    track_idx_t resolvedTrack = track;
+    int resolvedEncVoice = voice;
+    if (e->staffWithin > 0) {
+        for (const auto& elem : encMeas.elements) {
+            const EncMeasureElem* em = elem.get();
+            if (em->type != static_cast<quint8>(EncElemType::NOTE)
+                && em->type != static_cast<quint8>(EncElemType::REST)) {
+                continue;
+            }
+            if (static_cast<int>(em->staffIdx) != static_cast<int>(e->staffIdx)
+                || static_cast<int>(em->staffWithin) != static_cast<int>(e->staffWithin)) {
+                continue;
+            }
+            const int emEncVoice = static_cast<int>(em->voice);
+            const int vBase = static_cast<int>(e->staffWithin) * (static_cast<int>(VOICES) / 2);
+            const int emMsVoice = (emEncVoice >= vBase) ? emEncVoice - vBase : emEncVoice;
+            resolvedTrack    = static_cast<track_idx_t>(staffIdx * VOICES + emMsVoice);
+            resolvedEncVoice = emEncVoice;
+            break;
+        }
+    }
+
+    PendingHairpin ph;
+    ph.startTick = snappedStart;
+    ph.maxEndTick = maxEnd;
+    ph.track = resolvedTrack;
+    ph.type = hpType;
+    ph.endMeasIdx = endIdx;
+    ph.hairpinXoffset2 = static_cast<int>(eo->xoffset2);
+    // Raw Encore staffIdx (rawStaff & 0x3F), not the MuseScore-mapped slot: resolveHairpinEndByXoffset
+    // compares against em->staffIdx on note elements which also use rawStaff & 0x3F.
+    ph.staffIdx = static_cast<int>(e->staffIdx);
+    ph.encVoice = resolvedEncVoice;
+    ctx.pendingHairpins.push_back(ph);
+}
+
 static void handleTrillOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
                                 const NoteElemCtx& ec, const EncOrnament* eo)
 {
@@ -236,7 +311,8 @@ static void handleTrillOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
     PendingTrill pt;
     pt.isAlt    = (eo->ornType() != EncOrnamentType::TRILL_START);
     pt.isSimple = (eo->ornType() == EncOrnamentType::TRILL_TR
-                   || eo->ornType() == EncOrnamentType::TRILL_SHORT);
+                   || eo->ornType() == EncOrnamentType::TRILL_SHORT
+                   || eo->ornType() == EncOrnamentType::DOUBLE_MORDENT);
     if (pt.isSimple) {
         // Snap to visual position; 20px threshold ignores small alignment nudges.
         const int ornXoff = static_cast<int>(eo->xoffset);
@@ -258,8 +334,12 @@ static void handleTrillOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
             }
         }
         constexpr int TRILL_SNAP_THRESHOLD = 20;
+        // The "tr" text (TRILL_TR) is drawn left of its note by convention, so its xoffset must not
+        // pull it to an earlier note: when a note sits at its own tick, that note is the target.
+        // Only the short-trill glyph (TRILL_SHORT), which sits above a specific note, is snapped.
+        const bool trTextOnOwnNote = (eo->ornType() == EncOrnamentType::TRILL_TR);
         if (crXoffAtTick >= 0) {
-            if (ornXoff < crXoffAtTick - TRILL_SNAP_THRESHOLD) {
+            if (!trTextOnOwnNote && ornXoff < crXoffAtTick - TRILL_SNAP_THRESHOLD) {
                 pt.tick = snapStartTickByXoffset(elemTick, encMeas, staffIdx,
                                                  static_cast<int>(eo->xoffset), measTick);
             } else {
@@ -275,7 +355,8 @@ static void handleTrillOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
             pt.tick = snapStartTickByXoffset(rawTick, encMeas, staffIdx,
                                              static_cast<int>(eo->xoffset), measTick);
         }
-        pt.simpleSymId = (eo->ornType() == EncOrnamentType::TRILL_SHORT)
+        pt.simpleSymId = (eo->ornType() == EncOrnamentType::TRILL_SHORT
+                          || eo->ornType() == EncOrnamentType::DOUBLE_MORDENT)
                          ? SymId::ornamentShortTrill
                          : SymId::ornamentTrill;
     } else {
@@ -317,10 +398,15 @@ static void handleFingerOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
     const int n = static_cast<int>(eo->ornType())
                   - static_cast<int>(EncOrnamentType::FINGER_1) + 1;
     const int orn_tick = static_cast<int>(e->tick);
-    // cm: ORN at last voice=0 tick with no voice=4 note there; belongs to first chord of next measure.
+    // cm: ORNs at the last voice=0 tick with no voice=4 note there float to the next measure's first
+    // chord, but only when they OVERFLOW the voice=0 notes present here; when the fingering count fits
+    // the voice=0 chord at this tick (e.g. a 3-note chord with 3 fingerings) they belong to it.
+    const int fingCountHere = ornFingCountAtTick.count(orn_tick) ? ornFingCountAtTick.at(orn_tick) : 0;
+    const int v0CountHere = v0NoteCountAtTick.count(orn_tick) ? v0NoteCountAtTick.at(orn_tick) : 0;
     const bool cm = !voice4NoteTicks.empty()
                     && !voice4NoteTicks.count(orn_tick)
-                    && orn_tick == maxVoice0Tick;
+                    && orn_tick == maxVoice0Tick
+                    && fingCountHere > v0CountHere;
     // ps: excess FINGER ORNs beyond voice=0 note count target the voice=4 (2nd staff) chord.
     const bool ps = !cm
                     && voice4NoteTicks.count(orn_tick)
@@ -392,6 +478,7 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     case EncOrnamentType::SLURSTOP:
         break;
     case EncOrnamentType::WEDGESTART:
+        handleWedgeStart(ctx, mc, ec, eo);
         break;
     case EncOrnamentType::WEDGESTOP:
         break;
@@ -418,6 +505,9 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     case EncOrnamentType::TRILL_ALT:
     case EncOrnamentType::TRILL_TR:
     case EncOrnamentType::TRILL_SHORT:
+    // 0xB8 is a standalone trill zigzag (never a genuine double mordent in the corpus: it appears
+    // once, right after a TRILL_START, and Encore renders it as a wavy trill mark). See ENCORE_FORMAT.md.
+    case EncOrnamentType::DOUBLE_MORDENT:
         handleTrillOrnament(ctx, mc, ec, eo);
         break;
     case EncOrnamentType::TRILL_END:
@@ -488,8 +578,6 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
             .arg(measIdx)
             .arg(staffIdx)
             .arg(static_cast<int>(e->tick));
-        break;
-    case EncOrnamentType::DOUBLE_MORDENT:       pushBowing(SymId::ornamentPrallMordent);
         break;
     case EncOrnamentType::TREMOLO_16: {
         PendingOrnTremolo pt;
