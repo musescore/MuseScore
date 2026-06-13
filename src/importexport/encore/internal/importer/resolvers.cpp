@@ -30,5 +30,6 @@ namespace mu::iex::enc {
 void resolveAll(BuildCtx& ctx)
 {
     resolveOrnaments(ctx);
+    resolveVoltas(ctx);
 }
 } // namespace mu::iex::enc
