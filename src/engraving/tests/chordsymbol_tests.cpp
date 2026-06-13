@@ -33,6 +33,7 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
+#include "engraving/editing/realizechordsymbols.h"
 #include "engraving/editing/transaction/transaction.h"
 #include "engraving/editing/transpose.h"
 
@@ -102,7 +103,7 @@ void Engraving_ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voic
         }
     }
     score->startCmd(TranslatableString::untranslatable("Realize selection voiced"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
 }
 
@@ -290,7 +291,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeConcertPitch)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-concert-pitch");
 }
@@ -311,7 +312,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-transpose");
 }
@@ -326,7 +327,8 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeOverrides)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY, HDuration::SEGMENT_DURATION);
+    RealizeChordSymbols::realizeChordSymbols(
+        score->transactionManager()->currentOrDummyTransaction(), score, true, Voicing::ROOT_ONLY, HDuration::SEGMENT_DURATION);
     score->endCmd();
     test_post(score, u"realize-override");
 }
@@ -340,7 +342,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTriplet)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-triplet");
 }
@@ -355,7 +357,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeDuration)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-duration");
 }
@@ -370,7 +372,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
     //realize all chord symbols
     selectAllChordSymbols(score);
     score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
-    score->cmdRealizeChordSymbols();
+    RealizeChordSymbols::realizeChordSymbols(score->transactionManager()->currentOrDummyTransaction(), score);
     score->endCmd();
     test_post(score, u"realize-jazz");
 }
