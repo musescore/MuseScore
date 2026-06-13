@@ -35,6 +35,7 @@
 
 #include "clonevoice.h"
 #include "noteinput.h"
+#include "paste.h"
 #include "transaction/transaction.h"
 
 using namespace mu::engraving;
@@ -115,7 +116,7 @@ bool ImplodeExplode::explode(Score* score)
             ChordRest* cr = toChordRest(firstCRSegment->element(track));
             if (cr) {
                 XmlReader e(mimeData);
-                score->pasteStaff(e, cr->segment(), cr->staffIdx());
+                Paste::pasteStaff(score->transactionManager()->currentOrDummyTransaction(), score, e, cr->segment(), cr->staffIdx());
             }
         }
 

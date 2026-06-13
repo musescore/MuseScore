@@ -34,6 +34,9 @@
 #include "engraving/dom/note.h"
 #include "engraving/dom/segment.h"
 
+#include "engraving/editing/paste.h"
+#include "engraving/editing/transaction/transaction.h"
+
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
 #include "utils/testutils.h"
@@ -87,7 +90,7 @@ void Engraving_CopyPasteTests::copypaste(const char* idx)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -223,7 +226,7 @@ void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -260,7 +263,7 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste13.mscx"),
@@ -300,7 +303,7 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice5)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copypaste17.mscx"),
@@ -339,7 +342,7 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste20.mscx"),
@@ -375,7 +378,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste18.mscx"),
@@ -411,7 +414,7 @@ void Engraving_CopyPasteTests::copypastestaff(const char* idx)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste%1.mscx").arg(String::fromUtf8(idx)),
@@ -448,7 +451,7 @@ TEST_F(Engraving_CopyPasteTests, copypastePartial)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_partial_01.mscx"),
@@ -482,7 +485,7 @@ void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
     score->select(dest);
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tuplet_%1.mscx").arg(String::fromUtf8(idx)),
@@ -519,7 +522,7 @@ void Engraving_CopyPasteTests::copypastenote(const String& idx, Fraction scale)
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
-    score->cmdPaste(&ma, 0, scale);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0, scale);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "copypasteNote" + idx + ".mscx",
                                             COPYPASTE_DATA_DIR + "copypasteNote" + idx + "-ref.mscx"));
@@ -605,7 +608,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBar)
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit01.mscx"),
@@ -639,7 +642,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitTiedNoteOverBar)
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit02.mscx"),
@@ -667,7 +670,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverManyBars)
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit03.mscx"),
@@ -694,7 +697,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBarDrumStave)
     score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(&mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit04.mscx"),
@@ -736,7 +739,7 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     // create a range selection on 2nd to 4th beat (voice 0) of first measure
@@ -754,7 +757,7 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
     score->select(m3->first()->element(0));
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tremolo.mscx"),
@@ -797,7 +800,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteparts)
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_parts.mscx"),
@@ -824,7 +827,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 1.2 [WHEN] The note is selected and repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 
@@ -841,7 +844,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 2.2 [WHEN] All notes in both chords are selected and repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 
@@ -858,7 +861,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 3.2 [WHEN] The partial selection is repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 
@@ -877,7 +880,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 4.2 [WHEN] The partial selection is repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 
@@ -894,7 +897,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 5.2 [WHEN] All notes in both chords are selected and repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 
@@ -913,7 +916,7 @@ TEST_F(Engraving_CopyPasteTests, repeatListSelection)
     //! 6.2 [WHEN] The note is selected and repeated...
     score->deselectAll();
     score->select({ notes.begin(), notes.end() }, SelectType::ADD); // List selection
-    score->cmdRepeatListSelection();
+    Paste::repeatListSelection(score->transactionManager()->currentOrDummyTransaction(), score);
 
     //! --
 

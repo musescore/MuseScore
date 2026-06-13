@@ -687,18 +687,6 @@ public:
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
 
-    bool cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-
-    // TODO: Not ideal that these are public but it's very convenient for testing purposes (a copy/paste refactor is coming soon)...
-    bool cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction scale = Fraction(1, 1));
-    bool cmdPasteStaffList(muse::ByteArray& data, Fraction scale = Fraction(1, 1));
-    bool cmdPasteSymbolList(muse::ByteArray& data);
-
-    bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
-    void pasteSymbols(XmlReader& e, ChordRest* dst);
-
-    bool cmdRepeatListSelection();
-
     BeatType tick2beatType(const Fraction& tick) const;
 
     int mscVersion() const { return m_mscVersion; }
@@ -1024,7 +1012,6 @@ private:
     void checkScore();
 
     std::vector<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
-    void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);

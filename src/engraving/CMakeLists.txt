@@ -187,6 +187,8 @@ target_sources(engraving PRIVATE
     editing/mscoreview.h
     editing/noteinput.cpp
     editing/noteinput.h
+    editing/paste.cpp
+    editing/paste.h
     editing/realizechordsymbols.cpp
     editing/realizechordsymbols.h
     editing/reset.cpp

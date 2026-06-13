@@ -99,6 +99,7 @@
 #include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editvisibility.h"
 #include "engraving/editing/editvoice.h"
+#include "engraving/editing/paste.h"
 #include "engraving/editing/realizechordsymbols.h"
 #include "engraving/editing/reset.h"
 #include "engraving/editing/noteinput.h"
@@ -2289,7 +2290,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     }
 
     XmlReader e(data);
-    bool succeeded = score()->pasteStaff(e, segment, staffIdx);
+    bool succeeded = Paste::pasteStaff(score()->transactionManager()->currentOrDummyTransaction(), score(), e, segment, staffIdx);
 
     endDrop();
 
@@ -5429,7 +5430,7 @@ void NotationInteraction::repeatSelection()
             return;
         }
         startEdit(TranslatableString("undoableAction", "Repeat selection"));
-        if (!score()->cmdRepeatListSelection()) {
+        if (!Paste::repeatListSelection(score()->transactionManager()->currentOrDummyTransaction(), score())) {
             rollback();
             MScore::setError(MsError::CANNOT_REPEAT_SELECTION);
             return;
@@ -5466,7 +5467,7 @@ void NotationInteraction::repeatSelection()
         }
 
         ChordRest* cr = toChordRest(e);
-        if (!score()->pasteStaff(xml, cr->segment(), cr->staffIdx())) {
+        if (!Paste::pasteStaff(score()->transactionManager()->currentOrDummyTransaction(), score(), xml, cr->segment(), cr->staffIdx())) {
             rollback();
             checkAndShowError();
             return;
@@ -5494,7 +5495,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        succeeded = score()->cmdPaste(&ma, nullptr, scale);
+        succeeded = Paste::paste(score()->transactionManager()->currentOrDummyTransaction(), score(), &ma, nullptr, scale);
         m_editData.element = nullptr;
     }
 

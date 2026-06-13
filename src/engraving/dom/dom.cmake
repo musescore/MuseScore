@@ -227,7 +227,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palmmute.h
     ${CMAKE_CURRENT_LIST_DIR}/part.cpp
     ${CMAKE_CURRENT_LIST_DIR}/part.h
-    ${CMAKE_CURRENT_LIST_DIR}/paste.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pedal.h
     ${CMAKE_CURRENT_LIST_DIR}/pickscrape.cpp

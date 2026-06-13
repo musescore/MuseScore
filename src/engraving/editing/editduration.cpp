@@ -42,6 +42,7 @@
 #include "../dom/utils.h"
 
 #include "noteinput.h"
+#include "paste.h"
 #include "transaction/transaction.h"
 
 #include "log.h"
@@ -105,7 +106,7 @@ void EditDuration::incDecDuration(Transaction& tx, Score* score, int nSteps, boo
         XmlReader e(mimeData);
         score->deleteRange(selection.startSegment(), selection.endSegment(), staff2track(selection.staffStart()),
                            staff2track(selection.staffEnd()), score->selectionFilter(), selection.rangeContainsMultiNoteChords());
-        score->pasteStaff(e, selection.startSegment(), selection.staffStart(), scale);
+        Paste::pasteStaff(tx, score, e, selection.startSegment(), selection.staffStart(), scale);
     } else if (selection.isList()) {
         const std::vector<Note*> notes = selection.noteList();
         const std::set<ChordRest*> crsSet = score->getSelectedChordRests();

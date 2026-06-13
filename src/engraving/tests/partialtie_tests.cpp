@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
 #include <QMimeData>
 
 #include "engraving/dom/chord.h"
@@ -30,6 +31,7 @@
 
 #include "engraving/editing/edittie.h"
 #include "engraving/editing/noteinput.h"
+#include "engraving/editing/paste.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -462,7 +464,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     score->select(m1->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
     QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials01.mscx"),
@@ -472,7 +474,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m3->first(SegmentType::ChordRest)->element(0));
     score->select(m3->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials02.mscx"),
@@ -482,7 +484,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials03.mscx"),
@@ -492,7 +494,7 @@ TEST_F(Engraving_PartialTieTests, copyPartialTiesAndSlurs)
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(4));
     score->select(m4->first(SegmentType::ChordRest)->element(4));
     score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    score->cmdPaste(&ma, 0);
+    Paste::paste(score->transactionManager()->currentOrDummyTransaction(), score, &ma, 0);
     score->endCmd();
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"copyPastePartials04.mscx"),
@@ -659,10 +661,10 @@ TEST_F(Engraving_PartialTieTests, copyPasteRemoveInvalidPartialTies)
     // Paste at measure 4
     EXPECT_TRUE(m4->first(SegmentType::ChordRest)->element(0));
     score->select(m4->first(SegmentType::ChordRest)->element(0));
-    score->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-    QMimeDataAdapter ma(mimeData);
-    score->cmdPaste(&ma, 0);
-    score->endCmd();
+    score->transactionManager()->transaction(TranslatableString::untranslatable("Partial tie tests"), [&](Transaction& tx) {
+        QMimeDataAdapter ma(mimeData);
+        Paste::paste(tx, score, &ma, 0);
+    });
     score->doLayout();
 
     // Measure 4 beat 1 — no ties expected
