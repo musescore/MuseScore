@@ -190,6 +190,17 @@ struct PendingOttava {
     mu::engraving::OttavaType ottavaType;
 };
 
+// A volta bracket and the measures it covers. The bracket is built while its first measure is
+// emitted, but any measure can still change length afterwards (pickup shorten, irregular fill),
+// which moves every tick behind it. Holding the measures instead of the ticks keeps the bracket
+// on the bars Encore marked, and a bracket whose end tick outlives the score has no end element
+// and cannot be written.
+struct PendingVolta {
+    mu::engraving::Volta* volta { nullptr };
+    mu::engraving::Measure* firstMeasure { nullptr };
+    mu::engraving::Measure* lastMeasure { nullptr };
+};
+
 // Segno/Coda markers (tipo 0xA2/0xA6).
 struct PendingMarker {
     Fraction tick;
@@ -263,6 +274,7 @@ struct BuildCtx
     // Volta being coalesced: equal-bitmask runs collapse into one Volta.
     Volta* activeVolta { nullptr };
     quint8 activeVoltaBits { 0 };
+    std::vector<PendingVolta> pendingVoltas {};
     // Bitmask of all volta endings already labelled in earlier brackets of the current repeat
     // block; suppresses re-labelling them (e.g. after "1.-3." a {2,4} bracket shows only "4.").
     quint8 usedVoltaBits { 0 };
