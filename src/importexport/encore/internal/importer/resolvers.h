@@ -37,6 +37,7 @@
 namespace mu::iex::enc {
 void resolveAll(BuildCtx& ctx);
 void resolveOrnaments(BuildCtx& ctx);
+void resolveVoltas(BuildCtx& ctx);
 
 // A track derived from untrusted Encore staff/voice bytes can exceed the score's track
 // count; Segment::element(track) indexes a fixed-size vector, so an out-of-range track is
