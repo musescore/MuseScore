@@ -219,6 +219,81 @@ static void handleTempoOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
     }
 }
 
+static void handleWedgeStart(BuildCtx& ctx, const MeasEmitCtx& mc,
+                             const NoteElemCtx& ec, const EncOrnament* eo)
+{
+    const EncMeasure& encMeas = *mc.encMeas;
+    const Fraction measTick = mc.measTick;
+    const int staffIdx = ec.staffIdx;
+    const track_idx_t track = ec.track;
+    const int voice = ec.voice;
+    const int measIdx = mc.measIdx;
+    const EncMeasureElem* e = ec.e;
+
+    // On grand staves (staffWithin > 0) the cumTick-based elemTick is wrong: the WEDGESTART ORN
+    // is always voice=0 but the notes may be voice=1+, a different trackKey. Compute the tick from
+    // the raw Encore element tick instead. Single-staff (staffWithin == 0) cumTick is correct.
+    const int wholeTicks2 = (e->staffWithin > 0) ? encWholeNoteTicks(encMeas) : 0;
+    const Fraction rawElemTick = (wholeTicks2 > 0)
+                                 ? measTick + Fraction(static_cast<int>(e->tick), wholeTicks2).reduced()
+                                 : ec.elemTick;
+
+    // No WEDGESTOP in .enc; alMezuro = forward measure count (upper bound). Precise tick2 resolved in post-pass.
+    int endIdx = measIdx + static_cast<int>(eo->alMezuro);
+    if (endIdx < 0 || endIdx >= static_cast<int>(ctx.measuresByIdx.size())) {
+        endIdx = measIdx;
+    }
+    Measure* endMeas = ctx.measuresByIdx[endIdx];
+    Fraction maxEnd = endMeas->tick() + endMeas->ticks();
+    const Fraction snappedStart = snapStartTickByXoffset(rawElemTick, encMeas, staffIdx,
+                                                         static_cast<int>(eo->xoffset), measTick);
+    if (maxEnd <= snappedStart) {
+        return;
+    }
+    // Encore 5 sets bit 1 too (0x02=cresc, 0x03=dim); test bit 0 only.
+    const HairpinType hpType
+        = ((eo->speguleco & 0x01) == 0)
+          ? HairpinType::CRESC_HAIRPIN
+          : HairpinType::DIM_HAIRPIN;
+    // On grand staves (staffWithin > 0) the WEDGESTART ORN is voice=0 but the notes may be a
+    // different Encore voice. Find the voice of the first note on the same sub-staff so the hairpin
+    // lands on the track it spans, not the measure-rest-only voice 0 (which cannot be positioned).
+    track_idx_t resolvedTrack = track;
+    int resolvedEncVoice = voice;
+    if (e->staffWithin > 0) {
+        for (const auto& elem : encMeas.elements) {
+            const EncMeasureElem* em = elem.get();
+            if (em->type != static_cast<quint8>(EncElemType::NOTE)
+                && em->type != static_cast<quint8>(EncElemType::REST)) {
+                continue;
+            }
+            if (static_cast<int>(em->staffIdx) != static_cast<int>(e->staffIdx)
+                || static_cast<int>(em->staffWithin) != static_cast<int>(e->staffWithin)) {
+                continue;
+            }
+            const int emEncVoice = static_cast<int>(em->voice);
+            const int vBase = static_cast<int>(e->staffWithin) * (static_cast<int>(VOICES) / 2);
+            const int emMsVoice = (emEncVoice >= vBase) ? emEncVoice - vBase : emEncVoice;
+            resolvedTrack    = static_cast<track_idx_t>(staffIdx * VOICES + emMsVoice);
+            resolvedEncVoice = emEncVoice;
+            break;
+        }
+    }
+
+    PendingHairpin ph;
+    ph.startTick = snappedStart;
+    ph.maxEndTick = maxEnd;
+    ph.track = resolvedTrack;
+    ph.type = hpType;
+    ph.endMeasIdx = endIdx;
+    ph.hairpinXoffset2 = static_cast<int>(eo->xoffset2);
+    // Raw Encore staffIdx (rawStaff & 0x3F), not the MuseScore-mapped slot: resolveHairpinEndByXoffset
+    // compares against em->staffIdx on note elements which also use rawStaff & 0x3F.
+    ph.staffIdx = static_cast<int>(e->staffIdx);
+    ph.encVoice = resolvedEncVoice;
+    ctx.pendingHairpins.push_back(ph);
+}
+
 static void handleTrillOrnament(BuildCtx& ctx, const MeasEmitCtx& mc,
                                 const NoteElemCtx& ec, const EncOrnament* eo)
 {
@@ -392,6 +467,7 @@ void handleOrnament(BuildCtx& ctx, MeasEmitCtx& mc, NoteElemCtx& ec)
     case EncOrnamentType::SLURSTOP:
         break;
     case EncOrnamentType::WEDGESTART:
+        handleWedgeStart(ctx, mc, ec, eo);
         break;
     case EncOrnamentType::WEDGESTOP:
         break;

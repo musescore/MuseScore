@@ -29,6 +29,7 @@ using namespace mu::engraving;
 namespace mu::iex::enc {
 void resolveAll(BuildCtx& ctx)
 {
+    resolveHairpins(ctx);
     resolveOrnaments(ctx);
 }
 } // namespace mu::iex::enc
