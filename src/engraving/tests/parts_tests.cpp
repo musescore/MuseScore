@@ -43,6 +43,7 @@
 #include "engraving/dom/staff.h"
 
 #include "engraving/editing/editmeasurerepeat.h"
+#include "engraving/editing/editvoice.h"
 #include "engraving/editing/transaction/transaction.h"
 
 #include "utils/scorerw.h"
@@ -1285,7 +1286,7 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
 
     part->startCmd(TranslatableString::untranslatable("Engraving parts tests"));
     part->select(n);
-    part->changeSelectedElementsVoice(1);
+    EditVoice::changeSelectedElementsVoice(part->transactionManager()->currentOrDummyTransaction(), part, 1);
     part->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-visible-tracks-score.mscx",

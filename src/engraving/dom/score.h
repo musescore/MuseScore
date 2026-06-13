@@ -554,9 +554,6 @@ public:
     void addRefresh(const RectF&);
     void clearRefreshRect() { m_updateState.refresh = RectF(); }
 
-    void changeSelectedElementsVoice(voice_idx_t);
-    void changeSelectedElementsVoiceAssignment(VoiceAssignment);
-
     const std::vector<Part*>& parts() const;
     size_t visiblePartCount() const;
     std::vector<Part*> visibleParts() const;

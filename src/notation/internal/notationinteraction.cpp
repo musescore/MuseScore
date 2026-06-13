@@ -98,6 +98,7 @@
 #include "engraving/editing/editparentheses.h"
 #include "engraving/editing/editrehearsalmark.h"
 #include "engraving/editing/editvisibility.h"
+#include "engraving/editing/editvoice.h"
 #include "engraving/editing/reset.h"
 #include "engraving/editing/noteinput.h"
 #include "engraving/editing/editpart.h"
@@ -6280,7 +6281,7 @@ void NotationInteraction::changeSelectedElementsVoice(voice_idx_t voiceIndex)
     }
 
     startEdit(TranslatableString("undoableAction", "Change voice"));
-    score()->changeSelectedElementsVoice(voiceIndex);
+    EditVoice::changeSelectedElementsVoice(score()->transactionManager()->currentOrDummyTransaction(), score(), voiceIndex);
     apply();
 }
 
@@ -6291,7 +6292,8 @@ void NotationInteraction::changeSelectedElementsVoiceAssignment(VoiceAssignment 
     }
 
     startEdit(TranslatableString("undoableAction", "Change voice assignment"));
-    score()->changeSelectedElementsVoiceAssignment(voiceAssignment);
+    EditVoice::changeSelectedElementsVoiceAssignment(score()->transactionManager()->currentOrDummyTransaction(), score(),
+                                                     voiceAssignment);
     apply();
 }
 
