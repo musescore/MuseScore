@@ -576,8 +576,11 @@ static void coalesceVolta(BuildCtx& ctx, Measure* measure,
     const bool voltaClosed = (encMeas.endBarline() == EncBarlineType::REPEATEND);
     if (encMeas.repeatAlternative != 0) {
         if (ctx.activeVolta && ctx.activeVoltaBits == encMeas.repeatAlternative) {
-            ctx.activeVolta->setTick2(measTick + measure->ticks());
             // The volta now ends at this later measure; its hook follows that measure's barline.
+            // The end tick is set in resolveVoltas, once no measure can change length again.
+            if (!ctx.pendingVoltas.empty() && ctx.pendingVoltas.back().volta == ctx.activeVolta) {
+                ctx.pendingVoltas.back().lastMeasure = measure;
+            }
             ctx.activeVolta->setVoltaType(voltaClosed ? Volta::Type::CLOSED : Volta::Type::OPEN);
         } else {
             // Accumulate the bits of the bracket being closed so the next bracket can filter out
@@ -614,6 +617,7 @@ static void coalesceVolta(BuildCtx& ctx, Measure* measure,
             voltaText += u".";
             volta->setText(voltaText);
             ctx.score->addElement(volta);
+            ctx.pendingVoltas.push_back({ volta, measure, measure });
             ctx.activeVolta = volta;
             ctx.activeVoltaBits = rawBits;
         }
@@ -1031,6 +1035,14 @@ void emitMeasures(BuildCtx& ctx)
         mc.lineSlotByRawByte = &lineSlotByRawByte;
 
         resetPerMeasureState(ctx);
+
+        EncRepeatType rt = encMeas.repeatMark();
+        if (rt != EncRepeatType::NONE) {
+            addRepeatMark(score, measure, rt);
+        }
+
+        // Consecutive measures with equal repeatAlternative bitmask coalesce into one Volta.
+        coalesceVolta(ctx, measure, encMeas, measTick);
 
         flushPendingKeySigs(score, measure, measTick, encMeas, pendingKeySigs);
 
