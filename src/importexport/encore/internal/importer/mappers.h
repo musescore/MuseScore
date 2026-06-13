@@ -72,6 +72,7 @@ void addInitialTimeSig(mu::engraving::MasterScore* score, int nstaves, mu::engra
                        mu::engraving::TimeSigType tsType = mu::engraving::TimeSigType::NORMAL);
 void addInitialClef(mu::engraving::MasterScore* score, int staffIdx, EncClefType ct);
 void addInitialClef(mu::engraving::MasterScore* score, int staffIdx, mu::engraving::ClefType clef);
+void addRepeatMark(mu::engraving::Score* score, mu::engraving::Measure* measure, EncRepeatType rt);
 
 QString normalizeEncoreInstrName(const QString& name);
 

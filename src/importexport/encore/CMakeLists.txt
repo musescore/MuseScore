@@ -44,6 +44,7 @@ target_sources(iex_encore PRIVATE
     internal/parser/readers-v0xc4.cpp
     internal/parser/elem.h
     internal/importer/mappers-clefs.cpp
+    internal/importer/mappers-title.cpp
     internal/importer/mappers-instruments.cpp
     internal/importer/mappers-tempo.cpp
     internal/importer/mappers-articulations.cpp

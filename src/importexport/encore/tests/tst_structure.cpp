@@ -596,6 +596,140 @@ TEST_F(Tst_Structure, timesig_v0c2_common_time_glyph_uppercase_preserved)
     delete score;
 }
 
+// All ten Encore navigation options (Segno/Coda/ToCoda/Fine + 6 DC/DS variants) survive import.
+TEST_F(Tst_Structure, all_encore_navigation_options)
+{
+    MasterScore* score = readEncoreScore("structure_jump_marks_all.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int segnoMarkers = 0;
+    int codaMarkers = 0;
+    int toCodaMarkers = 0;
+    int fineMarkers = 0;
+    std::set<JumpType> jumpTypes;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (EngravingItem* e : mb->el()) {
+            if (e && e->isMarker()) {
+                MarkerType mt = toMarker(e)->markerType();
+                if (mt == MarkerType::SEGNO) {
+                    ++segnoMarkers;
+                } else if (mt == MarkerType::CODA) {
+                    ++codaMarkers;
+                } else if (mt == MarkerType::TOCODA) {
+                    ++toCodaMarkers;
+                } else if (mt == MarkerType::FINE) {
+                    ++fineMarkers;
+                }
+            } else if (e && e->isJump()) {
+                jumpTypes.insert(toJump(e)->jumpType());
+            }
+        }
+    }
+    // Segno comes from ORN 0xA2 AND coda byte 0x88; both add a Marker.
+    EXPECT_GE(segnoMarkers, 1) << "ORN 0xA2 must produce a Segno Marker";
+    // Coda from ORN 0xA6 + byte 0x89; byte 0x85 produces TOCODA instead.
+    EXPECT_GE(codaMarkers, 1) << "ORN 0xA6 must produce a Coda Marker";
+    // "To Coda" comes from ORN 0xA5 AND coda byte 0x85 (CODA1).
+    EXPECT_GE(toCodaMarkers, 1) << "ORN 0xA5 must produce a TOCODA Marker";
+    // Fine comes from coda byte 0x86.
+    EXPECT_EQ(fineMarkers, 1) << "coda byte 0x86 must produce a FINE Marker";
+    // Every Jump variant must appear at least once.
+    const std::set<JumpType> expectedJumps = {
+        JumpType::DC, JumpType::DS,
+        JumpType::DC_AL_FINE, JumpType::DS_AL_FINE,
+        JumpType::DC_AL_CODA, JumpType::DS_AL_CODA,
+    };
+    for (JumpType j : expectedJumps) {
+        EXPECT_TRUE(jumpTypes.count(j) > 0)
+            << "missing Jump variant for the Encore-UI option";
+    }
+    delete score;
+}
+
+// Jump marks come from the MEAS coda byte and To Coda from an ORN tipo; both must import as markers/jumps.
+TEST_F(Tst_Structure, jump_marks_dc_ds_tocoda)
+{
+    MasterScore* score = readEncoreScore("structure_jump_marks.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<std::pair<int, String> > seen;  // measure number (1-based), text
+    int measIdx = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        ++measIdx;
+        for (EngravingItem* e : mb->el()) {
+            if (e && e->isMarker()) {
+                seen.emplace_back(measIdx, toMarker(e)->plainText());
+            } else if (e && e->isJump()) {
+                seen.emplace_back(measIdx, toJump(e)->plainText());
+            }
+        }
+    }
+    // Marker (TOCODA) lands on m1; Jumps land on m2 and m3.
+    ASSERT_EQ(seen.size(), 3u);
+    EXPECT_EQ(seen[0].first, 1);
+    EXPECT_TRUE(seen[0].second.contains(u"Coda"))
+        << "expected To Coda Marker on m1";
+    EXPECT_EQ(seen[1].first, 2);
+    EXPECT_TRUE(seen[1].second.contains(u"D.S."))
+        << "expected D.S. al Coda Jump on m2";
+    EXPECT_EQ(seen[2].first, 3);
+    EXPECT_TRUE(seen[2].second.contains(u"D.C."))
+        << "expected D.C. Jump on m3";
+    delete score;
+}
+
+// Section markers (Segno/Coda) from ORN tipos and a dotted end barline must import.
+TEST_F(Tst_Structure, section_markers_and_dotted_barline)
+{
+    MasterScore* score = readEncoreScore("structure_section_markers.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    std::vector<MarkerType> seenMarkers;
+    BarLineType m3Bar = BarLineType::NORMAL;
+    int measIdx = 0;
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        ++measIdx;
+        for (EngravingItem* e : mb->el()) {
+            if (e && e->isMarker()) {
+                seenMarkers.push_back(toMarker(e)->markerType());
+            }
+        }
+        if (measIdx == 3) {
+            Measure* m3 = toMeasure(mb);
+            Segment* seg = m3->findSegment(SegmentType::EndBarLine, m3->endTick());
+            if (seg) {
+                if (EngravingItem* el = seg->element(0)) {
+                    if (el->isBarLine()) {
+                        m3Bar = toBarLine(el)->barLineType();
+                    }
+                }
+            }
+        }
+    }
+    const std::vector<MarkerType> expectedMarkers = {
+        MarkerType::SEGNO, MarkerType::CODA,
+    };
+    EXPECT_EQ(seenMarkers, expectedMarkers);
+    EXPECT_EQ(m3Bar, BarLineType::DOTTED)
+        << "m3 end barline must be DOTTED (barTypeEnd=0x08)";
+    delete score;
+}
+
 // SystemLocks lock each Encore system to exactly its LINE measureCount.
 TEST_F(Tst_Structure, fit_spatium_first_system_measure_count)
 {
