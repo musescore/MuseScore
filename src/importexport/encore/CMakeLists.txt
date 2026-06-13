@@ -80,6 +80,7 @@ target_sources(iex_encore PRIVATE
     internal/importer/emitters.cpp
     internal/importer/resolvers.h
     internal/importer/resolvers.cpp
+    internal/importer/resolvers-slur.cpp
     internal/importer/resolvers-hairpin.cpp
     internal/importer/resolvers-ornaments.cpp
     internal/importer/import.h
