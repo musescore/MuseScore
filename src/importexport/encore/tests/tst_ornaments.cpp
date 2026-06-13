@@ -389,6 +389,43 @@ TEST_F(Tst_Ornaments, trill_no_end_marker_creates_glyph_not_spanner)
 }
 
 // ===========================================================================
+// FEATURE: TRILL_START with alMezuro=2 creates a Trill spanner spanning
+// to the end of the 2nd measure after the start measure.
+// ===========================================================================
+TEST_F(Tst_Ornaments, trill_cross_measure_span_from_almezuro)
+{
+    MasterScore* score = readEncoreScore("ornaments_trill_cross_measure.enc");
+    ASSERT_NE(score, nullptr);
+    muse::Ret ret = score->sanityCheck();
+    EXPECT_TRUE(ret) << ret.text();
+
+    int trillSpanners = 0;
+    Fraction spanStart, spanEnd;
+    for (auto& [tick, sp] : score->spannerMap().map()) {
+        if (sp->isTrill()) {
+            ++trillSpanners;
+            spanStart = sp->tick();
+            spanEnd   = sp->tick2();
+        }
+    }
+    EXPECT_EQ(trillSpanners, 1)
+        << "alMezuro=2 must create exactly one Trill spanner";
+
+    if (trillSpanners == 1) {
+        // The spanner starts at tick=0 (start of TRILL_START note).
+        EXPECT_EQ(spanStart, Fraction(0, 1))
+            << "Trill spanner must start at tick=0 (TRILL_START note)";
+        // alMezuro=2 targets ctx.measuresByIdx[0+2] = measure 2.
+        // In 4/4, each measure = Fraction(1,1) whole note, so measure 2 ends at Fraction(3,1).
+        // The span end must reach past measure 1 (Fraction(2,1)).
+        EXPECT_GT(spanEnd, Fraction(2, 1))
+            << "Trill spanner with alMezuro=2 must end at or beyond the 2nd measure boundary";
+    }
+
+    delete score;
+}
+
+// ===========================================================================
 // FEATURE: Fermata anchored on segment (not chord); direction from artic slot: articUp=0x20 (above), articDown=0x21 (below).
 // ===========================================================================
 TEST_F(Tst_Ornaments, fermatas_emit_segment_anchored_element)

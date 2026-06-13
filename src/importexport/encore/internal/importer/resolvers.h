@@ -36,6 +36,7 @@
 
 namespace mu::iex::enc {
 void resolveAll(BuildCtx& ctx);
+void resolveSlurs(BuildCtx& ctx);
 void resolveHairpins(BuildCtx& ctx);
 void resolveOrnaments(BuildCtx& ctx);
 
